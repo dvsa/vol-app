@@ -14,7 +14,11 @@
 </div>
 
 <div class="one-fifth--right">
-  <div class="record-actions">
+    <?php
+    echo $this->showMarkers();
+    ?>
+
+    <div class="record-actions">
     <?php
     if (!isset($this->hideQuickActions) || $this->hideQuickActions === false) {
         ?>
@@ -31,16 +35,18 @@
     ?>
   </div>
 
-      <?php
-    /* @var $nav \Zend\View\Helper\Navigation\Menu */
-    $nav = $this->navigation('right-sidebar')
-        ->menu($this->navigation()->findOneBy('id', 'operator-decisions'))
-        ->setPartial('partials/record-actions__group');
-    ?>
-    <?php if ($nav->getContainer()->hasPages(true)): ?>
-        <div class="record-actions">
-            <h5><?php echo $this->translate('decisions'); ?></h5>
-            <?php echo $nav; ?>
-        </div>
+    <?php
+    if (!$this->disable):
+        /* @var $nav \Zend\View\Helper\Navigation\Menu */
+        $nav = $this->navigation('right-sidebar')
+            ->menu($this->navigation()->findOneBy('id', 'operator-decisions'))
+            ->setPartial('partials/record-actions__group');
+        ?>
+        <?php if ($nav->getContainer()->hasPages(true)): ?>
+            <div class="record-actions">
+                <h5><?php echo $this->translate('decisions'); ?></h5>
+                <?php echo $nav; ?>
+            </div>
+        <?php endif; ?>
     <?php endif; ?>
 </div>

@@ -31,7 +31,7 @@ return array(
         array(
             'title' => 'Added via',
             'formatter' => function ($data, $column, $sl) {
-                $string = $sl->get('translator')->translate($data['addedVia']['description']) . ' '
+                $string = $sl->get('translator')->translate($data['addedVia']) . ' '
                     .$data['parentId'];
                 return $string;
             }
@@ -51,7 +51,7 @@ return array(
         array(
             'title' => 'Attached to',
             'formatter' => function ($data, $column, $sm) {
-                $attachedTo = $data['attachedTo']['id'] == 'cat_oc' ? 'OC' : 'Licence';
+                $attachedTo = $data['attachedTo'] == 'Operating Centre' ? 'OC' : $data['attachedTo'];
                 return $sm->get('translator')->translate($attachedTo);
             }
         ),
@@ -66,6 +66,11 @@ return array(
             'width' => '350px',
             'formatter' => 'Address',
             'name' => 'OcAddress'
+        ),
+        array(
+            'title' => 'Notes',
+            'name' => 'notes',
+            'formatter' => 'Comment',
         ),
         array(
             'title' => '',

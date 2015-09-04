@@ -9,7 +9,6 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Helper\Navigation\PluginManager as ViewHelperManager;
 
 /**
  * Class TransportManagerMarker
@@ -19,113 +18,45 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
 {
     use ListenerAggregateTrait;
 
-    /**
-     * @var TransportManagerMarker service
-     */
-    protected $transportManagerMarkerService;
+    private $annotationBuilderService;
+    private $queryService;
 
     /**
-     * @var ViewHelperManager
+     * @var \Olcs\Service\Marker\MarkerService
      */
-    protected $viewHelperManager;
+    protected $markerService;
 
-    /**
-     * @var TransportManagerService
-     */
-    protected $transportManagerService;
-
-    /**
-     * @var TransportManagerLicenceService
-     */
-    protected $transportManagerLicenceService;
-
-    /**
-     * @var TransportManagerApplicationService
-     */
-    protected $transportManagerApplicationService;
-
-    /**
-     * @param \Zend\View\Helper\Navigation\PluginManager $viewHelperManager
-     * @return $this
-     */
-    public function setViewHelperManager($viewHelperManager)
+    public function getAnnotationBuilderService()
     {
-        $this->viewHelperManager = $viewHelperManager;
+        return $this->annotationBuilderService;
+    }
+
+    public function getQueryService()
+    {
+        return $this->queryService;
+    }
+
+    public function getMarkerService()
+    {
+        return $this->markerService;
+    }
+
+    public function setAnnotationBuilderService($annotationBuilderService)
+    {
+        $this->annotationBuilderService = $annotationBuilderService;
         return $this;
     }
 
-    /**
-     * @return \Zend\View\Helper\Navigation\PluginManager
-     */
-    public function getViewHelperManager()
+    public function setQueryService($queryService)
     {
-        return $this->viewHelperManager;
-    }
-
-    /**
-     * @param \Olcs\Service\Marker\TransportManagerMarkers $transportManagerMarkerService
-     * @return $this
-     */
-    public function setTransportManagerMarkerService($transportManagerMarkerService)
-    {
-        $this->transportManagerMarkerService = $transportManagerMarkerService;
+        $this->queryService = $queryService;
         return $this;
     }
 
-    /**
-     * @return \Olcs\Service\Marker\TransportManagerMarkers
-     */
-    public function getTransportManagerMarkerService()
+    public function setMarkerService(\Olcs\Service\Marker\MarkerService $markerService)
     {
-        return $this->transportManagerMarkerService;
-    }
-
-    /**
-     * @param \Common\Service\Entity\TransportManager $transportManagerService
-     */
-    public function setTransportManagerService($transportManagerService)
-    {
-        $this->transportManagerService = $transportManagerService;
-    }
-
-    /**
-     * @return \Common\Service\Entity\TransportManager
-     */
-    public function getTransportManagerService()
-    {
-        return $this->transportManagerService;
-    }
-
-    /**
-     * @param \Common\Service\Entity\TransportManagerLicence $transportManagerLicenceService
-     */
-    public function setTransportManagerLicenceService($transportManagerLicenceService)
-    {
-        $this->transportManagerLicenceService = $transportManagerLicenceService;
-    }
-
-    /**
-     * @return \Common\Service\Entity\TransportManagerLicence
-     */
-    public function getTransportManagerLicenceService()
-    {
-        return $this->transportManagerLicenceService;
-    }
-
-    /**
-     * @param \Common\Service\Entity\TransportManagerApplication $transportManagerApplicationService
-     */
-    public function setTransportManagerApplicationService($transportManagerApplicationService)
-    {
-        $this->transportManagerApplicationService = $transportManagerApplicationService;
-    }
-
-    /**
-     * @return \Common\Service\Entity\TransportManagerApplication
-     */
-    public function getTransportManagerApplicationService()
-    {
-        return $this->transportManagerApplicationService;
+        $this->markerService = $markerService;
+        return $this;
     }
 
     /**
@@ -162,14 +93,18 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
      */
     public function onTransportManagerMarker(RouteParam $e)
     {
-        $placeholder = $this->getViewHelperManager()->get('placeholder');
-
-        $details = $this->getTransportManagerService()->getTmForMarkers($e->getValue());
-        $transportManager = ['transportManager' => $details];
-        $markers = $this->getTransportManagerMarkerService()
-            ->generateMarkerTypes(['transportManager'], ['transportManager' => $transportManager]);
-
-        $placeholder->getContainer('tmMarkers')->set($markers);
+        $this->getMarkerService()->addData(
+            'transportManager',
+            $this->getTransportManager($e->getValue())
+        );
+        $this->getMarkerService()->addData(
+            'transportManagerApplications',
+            $this->getTransportManagerApplicationData(null, $e->getValue())
+        );
+        $this->getMarkerService()->addData(
+            'transportManagerLicences',
+            $this->getTransportManagerLicenceData(null, $e->getValue())
+        );
     }
 
     /**
@@ -177,13 +112,10 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
      */
     public function onLicenceTransportManagerMarker(RouteParam $e)
     {
-        $placeholder = $this->getViewHelperManager()->get('placeholder');
-        $details = $this->getTransportManagerLicenceService()->getTmForLicence($e->getValue())['Results'];
-        $transportManagers = ['licenceTransportManagers' => $details];
-        $markers = $this->getTransportManagerMarkerService()
-            ->generateMarkerTypes(['licenceTransportManagers'], ['licenceTransportManagers' => $transportManagers]);
-
-        $placeholder->getContainer('tmMarkers')->set($markers);
+        $this->getMarkerService()->addData(
+            'transportManagerLicences',
+            $this->getTransportManagerLicenceData($e->getValue())
+        );
     }
 
     /**
@@ -191,16 +123,10 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
      */
     public function onApplicationTransportManagerMarker(RouteParam $e)
     {
-        $placeholder = $this->getViewHelperManager()->get('placeholder');
-        $details = $this->getTransportManagerApplicationService()->getTmForApplication($e->getValue())['Results'];
-        $transportManagers = ['applicationTransportManagers' => $details];
-        $markers = $this->getTransportManagerMarkerService()
-            ->generateMarkerTypes(
-                ['applicationTransportManagers'],
-                ['applicationTransportManagers' => $transportManagers]
-            );
-
-        $placeholder->getContainer('tmMarkers')->set($markers);
+        $this->getMarkerService()->addData(
+            'transportManagerApplications',
+            $this->getTransportManagerApplicationData($e->getValue())
+        );
     }
 
     /**
@@ -211,25 +137,78 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
+        $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
+        $this->setAnnotationBuilderService($serviceLocator->get('TransferAnnotationBuilder'));
+        $this->setQueryService($serviceLocator->get('QueryService'));
 
-        $this->setTransportManagerService(
-            $serviceLocator->get('Entity\TransportManager')
-        );
-
-        $this->setTransportManagerLicenceService(
-            $serviceLocator->get('Entity\TransportManagerLicence')
-        );
-
-        $this->setTransportManagerApplicationService(
-            $serviceLocator->get('Entity\TransportManagerApplication')
-        );
-
-        $transportManagerMarkerService = $serviceLocator
-            ->get('Olcs\Service\Marker\MarkerPluginManager')
-            ->get('Olcs\Service\Marker\TransportManagerMarkers');
-
-        $this->setTransportManagerMarkerService($transportManagerMarkerService);
         return $this;
+    }
+
+    public function getTransportManager($tmId)
+    {
+        $query = $this->getAnnotationBuilderService()->createQuery(
+            \Dvsa\Olcs\Transfer\Query\Tm\TransportManager::create(
+                [
+                    'id' => $tmId
+                ]
+            )
+        );
+
+        $response = $this->getQueryService()->send($query);
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error getting TransportManager data');
+        }
+
+        return $response->getResult();
+    }
+
+    /**
+     * Get Transport Manager Application data fot either an applciation or a transport manager
+     *
+     * @param int $applicationId
+     * @param int $tmId
+     *
+     * @return type
+     * @throws \RuntimeException
+     */
+    protected function getTransportManagerApplicationData($applicationId, $tmId = null)
+    {
+        $query = $this->getAnnotationBuilderService()->createQuery(
+            \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(
+                ['application' => $applicationId, 'transportManager' => $tmId]
+            )
+        );
+
+        $response = $this->getQueryService()->send($query);
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error getting TransportManagerApplication data');
+        }
+
+        return $response->getResult()['result'];
+    }
+
+    /**
+     * Get Transport Manager Licence data fot either a licence or a transport manager
+     *
+     * @param int $licenceId
+     * @param int $tmId
+     *
+     * @return array
+     * @throws \RuntimeException
+     */
+    protected function getTransportManagerLicenceData($licenceId, $tmId = null)
+    {
+        $query = $this->getAnnotationBuilderService()->createQuery(
+            \Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetList::create(
+                ['licence' => $licenceId, 'transportManager' => $tmId]
+            )
+        );
+
+        $response = $this->getQueryService()->send($query);
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error getting TransportManagerLicence data');
+        }
+
+        return $response->getResult()['results'];
     }
 }

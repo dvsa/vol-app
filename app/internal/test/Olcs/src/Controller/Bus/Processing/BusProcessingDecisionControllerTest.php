@@ -4,186 +4,127 @@
  */
 namespace OlcsTest\Controller\Bus\Processing;
 
-use Olcs\Controller\Bus\Processing\BusProcessingDecisionController;
-use Common\Service\BusRegistration;
+use Olcs\Controller\Bus\Processing\BusProcessingDecisionController as Sut;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\TestHelpers\ControllerPluginManagerHelper;
+use Common\RefData;
 
 /**
  * Bus Registration decision controller tests
  */
 class BusProcessingDecisionControllerTest extends MockeryTestCase
 {
-    /**
-     * @var m\MockInterface|\Zend\Mvc\Controller\PluginManager
-     */
-    protected $pluginManager;
-
     protected $sut;
 
-    /**
-     * @todo These tests require a real service manager to run, as they are not mocking all dependencies,
-     * these tests should be addresses
-     */
     public function setUp()
     {
-        $this->sut = new BusProcessingDecisionController();
-        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
+        $this->sut = m::mock(Sut::class)
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
         parent::setUp();
     }
 
     /**
-     * Test the republish action
-     *
-     * @param $busRegData
-     * @param $expectedPublishData
-     * @param $expectedTrafficAreas
-     * @param $expectedFilter
-     * @param $expectedSuccess
-     *
-     * @dataProvider republishActionDataProvider
+     * @dataProvider grantActionDataProvider
      */
-    public function testRepublishAction(
+    public function testGrantAction(
+        $busRegId,
         $busRegData,
-        $expectedPublishData,
-        $expectedTrafficAreas,
-        $expectedFilter,
-        $expectedSuccess
+        $expectedHandleCommand,
+        $expectedProcessGrantVariation
     ) {
-        $this->markTestSkipped();
+        $params = m::mock()
+            ->shouldReceive('fromRoute')->with('busRegId')->andReturn($busRegId)
+            ->getMock();
 
-        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
-            [
-                'params' => 'Params',
-                'FlashMessenger' => 'FlashMessenger',
-                'redirect' => 'Redirect'
-            ]
-        );
-        $mockParams = $mockPluginManager->get('params', '');
-        $mockParams->shouldReceive('fromRoute')->with('busRegId')->andReturn($busRegData['id']);
+        $sl = m::mock()
+            ->shouldReceive('get')->with('Helper\FlashMessenger')->andReturnSelf()
+            ->shouldReceive('addErrorMessage')
+            ->shouldReceive('addSuccessMessage')
+            ->getMock();
 
-        $mockFlashMessenger = $mockPluginManager->get('FlashMessenger', '');
-        $mockFlashMessenger->shouldReceive('addSuccessMessage')->times($expectedSuccess ? 1 : 0);
-        $mockFlashMessenger->shouldReceive('addErrorMessage')->times($expectedSuccess ? 0 : 1);
-
-        $mockRedirect = $mockPluginManager->get('redirect', '');
-        $mockRedirect->shouldReceive('toRouteAjax')
-            ->once()
-            ->with(
-                null,
-                ['action'=>'index', 'busRegId' => $busRegData['id'], 'status' => null],
+        $redirect = m::mock()
+            ->shouldReceive('toRouteAjax')->with(
+                'licence/bus-processing/decisions',
+                ['action' => 'details'],
                 ['code' => '303'],
                 true
-            )
-            ->andReturn('redirectResponse');
+            )->andReturn('redirectResponse')
+            ->getMock();
 
-        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
-
-        $this->sut->setPluginManager($mockPluginManager);
-
-        $busRegService = m::mock('Common\Service\Data\BusReg')
-            ->shouldReceive('fetchOne')
-            ->with($busRegData['id'])
+        $response = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(!empty($busRegData))
+            ->shouldReceive('getResult')
             ->andReturn($busRegData)
             ->getMock();
 
-        $mockPublicationHelper = m::mock('Olcs\Service\Utility\PublicationHelper')
-            ->shouldReceive('publishMultiple')
-            ->times($expectedSuccess ? 1 : 0)
-            ->with(
-                $expectedPublishData,
-                $expectedTrafficAreas,
-                'N&P',
-                $expectedFilter
-            )
-            ->getMock();
+        $this->sut
+            ->shouldReceive('params')
+            ->andReturn($params)
+            ->shouldReceive('handleQuery')
+            ->once()
+            ->andReturn($response)
+            ->shouldReceive('getServiceLocator')
+            ->andReturn($sl)
+            ->shouldReceive('handleCommand')
+            ->times($expectedHandleCommand ? 1 :0)
+            ->andReturn($response)
+            ->shouldReceive('processGrantVariation')
+            ->times($expectedProcessGrantVariation ? 1 :0)
+            ->andReturn('redirectResponse')
+            ->shouldReceive('redirect')
+            ->andReturn($redirect);
 
-        $mockServiceManager = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockServiceManager->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockServiceManager->shouldReceive('get')->with('Common\Service\Data\BusReg')->andReturn($busRegService);
-        $mockServiceManager->shouldReceive('get')->with('Olcs\Service\Utility\PublicationHelper')
-            ->andReturn($mockPublicationHelper);
-
-        $this->sut->setServiceLocator($mockServiceManager);
-
-        $this->assertEquals('redirectResponse', $this->sut->republishAction());
+        $this->assertEquals('redirectResponse', $this->sut->grantAction());
     }
 
-    public function republishActionDataProvider()
+    public function grantActionDataProvider()
     {
         return [
-            // BusRegistration::STATUS_NEW
+            // record not found
             [
-                [
-                    'id' => 69,
-                    'licence' => [
-                        'id' => 110,
-                    ],
-                    'revertStatus' => ['id' => BusRegistration::STATUS_NEW],
-                    'trafficAreas' => [
-                        ['id' => 'A'],
-                        ['id' => 'B']
-                    ]
-                ],
-                ['busReg' => 69, 'licence' => 110, 'previousStatus' => BusRegistration::STATUS_NEW],
-                ['A', 'B'],
-                'BusRegGrantNewPublicationFilter',
-                true
+                100,
+                [],
+                false,
+                false,
             ],
-            // BusRegistration::STATUS_CANCEL
+            // non-grantable
             [
+                100,
                 [
-                    'id' => 69,
-                    'licence' => [
-                        'id' => 110,
-                    ],
-                    'revertStatus' => ['id' => BusRegistration::STATUS_CANCEL],
-                    'trafficAreas' => [
-                        ['id' => 'A'],
-                        ['id' => 'B']
-                    ]
+                    'id' => 100,
+                    'isGrantable' => false,
                 ],
-                ['busReg' => 69, 'licence' => 110, 'previousStatus' => BusRegistration::STATUS_CANCEL],
-                ['A', 'B'],
-                'BusRegGrantCancelPublicationFilter',
-                true
+                false,
+                false,
             ],
-            // BusRegistration::STATUS_VAR
+            // grantable - new
             [
+                100,
                 [
-                    'id' => 69,
-                    'licence' => [
-                        'id' => 110,
+                    'id' => 100,
+                    'isGrantable' => true,
+                    'status' => [
+                        'id' => RefData::BUSREG_STATUS_NEW,
                     ],
-                    'revertStatus' => ['id' => BusRegistration::STATUS_VAR],
-                    'trafficAreas' => [
-                        ['id' => 'A'],
-                        ['id' => 'B']
-                    ]
                 ],
-                ['busReg' => 69, 'licence' => 110, 'previousStatus' => BusRegistration::STATUS_VAR],
-                ['A', 'B'],
-                'BusRegGrantVarPublicationFilter',
-                true
+                true,
+                false,
             ],
-            // Status which is not mapped
+            // grantable - variation
             [
+                100,
                 [
-                    'id' => 69,
-                    'licence' => [
-                        'id' => 110,
+                    'id' => 100,
+                    'isGrantable' => true,
+                    'status' => [
+                        'id' => RefData::BUSREG_STATUS_VARIATION,
                     ],
-                    'revertStatus' => ['id' => 'NOT_MAPPED'],
-                    'trafficAreas' => [
-                        ['id' => 'A'],
-                        ['id' => 'B']
-                    ]
                 ],
-                null,
-                null,
-                null,
-                false
+                false,
+                true,
             ],
         ];
     }

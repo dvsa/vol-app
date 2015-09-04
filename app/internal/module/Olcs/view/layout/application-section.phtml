@@ -1,4 +1,3 @@
-<?php $tmMarkers = $this->placeholder('tmMarkers')->getValue(); ?>
 <div class="four-fifths--left">
     <?php
         echo $this->navigation('navigation')
@@ -11,9 +10,11 @@
 </div>
 
 <div class="one-fifth--right">
-  <?php if (isset($tmMarkers) && is_array($tmMarkers)): ?>
-    <?php echo $this->markers($tmMarkers, 'applicationTransportManagers') ?>
-  <?php endif; ?>
+
+    <?php
+    echo $this->showMarkers();
+    ?>
+
   <?php
   /**
    * Application quick actions

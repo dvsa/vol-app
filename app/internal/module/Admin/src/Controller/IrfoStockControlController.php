@@ -1,117 +1,103 @@
 <?php
+
 /**
  * IRFO Stock Control Controller
  */
-
 namespace Admin\Controller;
 
-use Olcs\Controller\CrudAbstract;
+use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPermitStock as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPermitStock as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPermitStockList as ListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Data\Mapper\IrfoStockControl as Mapper;
+use Admin\Form\Model\Form\IrfoStockControl as Form;
+use Admin\Form\Model\Form\IrfoStockControlFilter as FilterForm;
+use Common\RefData;
 
 /**
  * IRFO Stock Control Controller
  */
-
-class IrfoStockControlController extends CrudAbstract
+class IrfoStockControlController extends AbstractInternalController implements
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'admin-irfo-stock-control';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'admin-printing-section';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'IrfoPermitStock';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'admin-dashboard/admin-printing/irfo-stock-control';
 
     /**
-     * Holds the Data Bundle
-     *
      * @var array
      */
-    protected $dataBundle = [
-        'children' => [
-            'status',
-        ]
+    protected $inlineScripts = [
+        'indexAction' => ['table-actions'],
     ];
 
-    /**
-     * @var array
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $inlineScripts = ['table-actions'];
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'serialNo';
+    protected $tableName = 'admin-irfo-stock-control';
+    protected $listDto = ListDto::class;
+    protected $filterForm = FilterForm::class;
 
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'IrfoStockControl';
+    protected $crudConfig = [
+        'in-stock' => ['requireRows' => true],
+        'issued' => ['requireRows' => true],
+        'void' => ['requireRows' => true],
+        'returned' => ['requireRows' => true],
+    ];
 
-    /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields'
-            )
-        )
-    );
-
-    /**
-     * Extend the render view method
-     *
-     * @param string|\Zend\View\Model\ViewModel $view
-     * @param string|null $pageTitle
-     * @param string|null $pageSubTitle
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
+    public function getPageLayout()
     {
-        if (is_null($pageTitle)) {
-            $pageTitle = 'IRFO stock control';
-        }
+        return 'layout/admin-printing-section';
+    }
 
-        return parent::renderView($view, $pageTitle, $pageSubTitle);
+    public function getPageInnerLayout()
+    {
+        return 'layout/wide-layout';
     }
 
     /**
-     * Index Action.
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
      */
-    public function indexAction()
-    {
-        $this->checkForCrudAction();
+    protected $formClass = Form::class;
+    protected $mapperClass = Mapper::class;
 
-        // set defaults
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    private function setPageTitle()
+    {
+        $this->placeholder()->setPlaceholder('pageTitle', 'IRFO stock control');
+    }
+
+    private function setFilterDefaults()
+    {
+        /* @var $request \Zend\Http\Request */
+        $request = $this->getRequest();
+
         $filters = array_merge(
             [
                 'validForYear' => $this->getServiceLocator()->get('Helper\Date')->getDate('Y'),
-                'page' => 1,
-                'sort' => 'serialNo',
                 'order' => 'ASC',
                 'limit' => 25
             ],
-            $this->getRequest()->getQuery()->toArray()
+            $request->getQuery()->toArray()
         );
 
         if (empty($filters['irfoCountry'])) {
@@ -123,136 +109,84 @@ class IrfoStockControlController extends CrudAbstract
             }
         }
 
-        // get filtered data
-        $results = $this->getServiceLocator()->get('Admin\Service\Data\IrfoPermitStock')
-            ->fetchIrfoPermitStockList(
-                $filters,
-                [
-                    'children' => [
-                        'status',
-                    ]
-                ]
-            );
-
-        // set table
-        $table = $this->getTable(
-            'admin-irfo-stock-control',
-            !empty($results) ? $results : [],
-            array_merge(
-                $filters,
-                array('query' => $this->getRequest()->getQuery())
-            )
-        );
-
-        // set table filter form
-        $form = $this->getForm('IrfoStockControlFilter');
-        $form->remove('csrf'); //we never post
-        $form->setData($filters);
-        $this->setTableFilters($form);
-
-        // render table view
-        $view = $this->getView(['table' => $table]);
-        $view->setTemplate('partials/table');
-
-        return $this->renderView($view);
+        $request->getQuery()->fromArray($filters);
     }
 
-    /**
-     * Complete section and save
-     *
-     * @param array $data
-     * @return \Zend\Http\Response
-     */
-    public function processSave($data)
+    public function indexAction()
     {
-        // IRFO stock control is NOT a standard CRUD
-        // It needs to find all existing IrfoPermitStock records where
-        // - serialNo is between serialNoStart and serialNoEnd (inclusive)
-        // - validForYear is the one selected on the form
-        // - irfoCountry is the one selected on the form
-        // and update status of the record (if already exists) or create a new record
+        $this->setPageTitle();
 
-        // TODO - following functionality to be moved to its new home as part of "Separation of Business Logic"
-        $irfoPermitStockService = $this->getServiceLocator()->get('Admin\Service\Data\IrfoPermitStock');
+        $this->setFilterDefaults();
 
-        // find all existing records
-        $filters = [
-            'validForYear' => $data['fields']['validForYear'],
-            'irfoCountry' => $data['fields']['irfoCountry'],
-            ['serialNo' => '>= ' . $data['fields']['serialNoStart']],
-            ['serialNo' => '<= ' . $data['fields']['serialNoEnd']],
-            'sort' => 'serialNo',
-            'order' => 'ASC',
-            // forms max_diff set to 100 so we should never get more than 101 records to update
-            'limit' => 101,
-        ];
-        $results = $irfoPermitStockService->fetchIrfoPermitStockList($filters);
+        return parent::indexAction();
+    }
 
-        // map serialNo to Index in the results table (serialNo => resultsIndex)
-        $serialNoToResultsIndex = !empty($results) ? array_flip(array_column($results['Results'], 'serialNo')) : [];
+    public function detailsAction()
+    {
+        return $this->notFoundAction();
+    }
 
-        $success = true;
+    public function editAction()
+    {
+        return $this->notFoundAction();
+    }
 
-        for ($i = $data['fields']['serialNoStart']; $i <= $data['fields']['serialNoEnd']; $i++) {
-            // set updated data
-            $dataToSave = array_merge(
-                isset($serialNoToResultsIndex[$i]) ?
-                // use existing data
-                $results['Results'][$serialNoToResultsIndex[$i]] :
-                // create new
-                [
-                    'serialNo' => $i,
-                    'validForYear' => $data['fields']['validForYear'],
-                    'irfoCountry' => $data['fields']['irfoCountry'],
-                ],
-                // overwrite with updated status
-                [
-                    'status' => $data['fields']['status']
-                ]
-            );
+    public function deleteAction()
+    {
+        return $this->notFoundAction();
+    }
 
-            $dataObject = $irfoPermitStockService->createWithData($dataToSave);
+    public function inStockAction()
+    {
+        return $this->update(RefData::IRFO_STOCK_CONTROL_STATUS_IN_STOCK);
+    }
 
-            if (!$irfoPermitStockService->save($dataObject)) {
-                // exit on the first failure
-                $success = false;
-                break;
-            }
-        }
+    public function issuedAction()
+    {
+        return $this->update(RefData::IRFO_STOCK_CONTROL_STATUS_ISSUED);
+    }
 
-        $this->setIsSaved(true);
+    public function voidAction()
+    {
+        return $this->update(RefData::IRFO_STOCK_CONTROL_STATUS_VOID);
+    }
 
-        if ($success) {
-            $this->addSuccessMessage('Saved successfully');
+    public function returnedAction()
+    {
+        return $this->update(RefData::IRFO_STOCK_CONTROL_STATUS_RETURNED);
+    }
+
+    protected function update($status)
+    {
+        return $this->process(
+            UpdateDto::class,
+            [
+                'ids' => explode(',', $this->params()->fromRoute('id')),
+                'status' => $status
+            ]
+        );
+    }
+
+    private function process($command, $data)
+    {
+        $response = $this->handleCommand($command::create($data));
+
+        if ($response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
         } else {
-            $this->addErrorMessage('Sorry; there was a problem. Please try again.');
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
         return $this->redirectToIndex();
     }
 
-    /**
-     * Simple redirect to the edit form
-     *
-     * @return \Zend\Http\Response
-     */
-    public function redirectToIndex()
+    private function redirectToIndex()
     {
-        return $this->redirectToRouteAjax(
+        return $this->redirect()->toRouteAjax(
             null,
             ['action' => 'index'],
             ['code' => '303'],
-            true
+            false
         );
-    }
-
-    /**
-     * Sets the table filters.
-     *
-     * @param mixed $filters
-     */
-    public function setTableFilters($filters)
-    {
-        $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
     }
 }

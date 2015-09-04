@@ -10,7 +10,6 @@ use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
-use Common\Service\Data\GenericAwareTrait as GenericServiceAwareTrait;
 use Olcs\Service\Nr\RestHelper as NrRestHelper;
 
 /**
@@ -20,8 +19,17 @@ use Olcs\Service\Nr\RestHelper as NrRestHelper;
 class TransportManager implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
-    use GenericServiceAwareTrait;
     use ViewHelperManagerAwareTrait;
+
+    /**
+     * @var \Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder
+     */
+    protected $annotationBuilder;
+
+    /**
+     * @var \Common\Service\Cqrs\Query\QueryService
+     */
+    protected $queryService;
 
     /**
      * @var \Olcs\Service\Nr\RestHelper
@@ -32,6 +40,32 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
      * @var \Zend\Navigation\Navigation
      */
     protected $sidebarNavigation;
+
+    /**
+     * @return \Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder
+     */
+    public function getAnnotationBuilder()
+    {
+        return $this->annotationBuilder;
+    }
+
+    /**
+     * @return \Common\Service\Cqrs\Query\QueryService
+     */
+    public function getQueryService()
+    {
+        return $this->queryService;
+    }
+
+    public function setAnnotationBuilder($annotationBuilder)
+    {
+        $this->annotationBuilder = $annotationBuilder;
+    }
+
+    public function setQueryService($queryService)
+    {
+        $this->queryService = $queryService;
+    }
 
     /**
      * @return \Zend\Navigation\Navigation
@@ -88,17 +122,16 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
     public function onTransportManager(RouteParam $e)
     {
         $id = $e->getValue();
-
         $context = $e->getContext();
-
-        $data = $this->getGenericService()->fetchOne($id);
+        $data = $this->getTransportManager($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('transportManager')->set($data);
 
         //only show print form link for one controller and action
         if ($context['controller'] == 'TMDetailsResponsibilityController'
-             && $context['action'] == 'edit-tm-application'){
+             && $context['action'] == 'edit-tm-application'
+        ) {
              $this->getSidebarNavigation()
                  ->findById('transport_manager_details_review')
                  ->setVisible(true);
@@ -115,25 +148,50 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
                  ->setUri($reputeUrl);
         }
 
+        if (!is_null($data['removedDate'])) {
+            $this->getSidebarNavigation()
+                ->findById('transport-manager-quick-actions-remove')
+                ->setVisible(false);
+        }
+
         $this->doTitles($data);
+        $this->hideShowMergeButtons($data);
     }
 
-    public function doTitles($data)
+    private function doTitles($data)
     {
         $this->getViewHelperManager()->get('placeholder')
             ->getContainer('pageTitle')->prepend($this->createTitle($data));
     }
 
-    public function createTitle($data)
+    private function createTitle($data)
     {
         $url = $this->getViewHelperManager()
             ->get('url')
             ->__invoke('transport-manager/details/details', ['transportManager' => $data['id']], [], true);
 
-        $pageTitle = '<a href="'. $url . '">' . $data['homeCd']['person']['forename'] . ' ';
-        $pageTitle .= $data['homeCd']['person']['familyName'] . '</a>';
+        $pageTitle = sprintf(
+            '<a href="%s">%s %s</a>',
+            $url,
+            $data['homeCd']['person']['forename'],
+            $data['homeCd']['person']['familyName']
+        );
 
         return $pageTitle;
+    }
+
+    /**
+     * Toggle visibility of the TM merge buttins
+     *
+     * @param array $tmData
+     */
+    private function hideShowMergeButtons($tmData)
+    {
+        if (!empty($tmData['removedDate']) || $tmData['hasBeenMerged']) {
+            $this->getSidebarNavigation()
+                ->findById('transport-manager-quick-actions-merge')
+                ->setVisible(false);
+        }
     }
 
     /**
@@ -144,15 +202,35 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        $this->setAnnotationBuilder($serviceLocator->get('TransferAnnotationBuilder'));
+        $this->setQueryService($serviceLocator->get('QueryService'));
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-
-        $this->setGenericService(
-            $serviceLocator->get('DataServiceManager')->get('Generic\Service\Data\TransportManager')
-        );
-
         $this->setSidebarNavigation($serviceLocator->get('right-sidebar'));
         $this->setNrService($serviceLocator->get(NrRestHelper::class));
 
         return $this;
+    }
+
+    /**
+     * Get the TransportManager data
+     *
+     * @param int   $id Transport Manager ID
+     *
+     * @return array
+     * @throws ResourceNotFoundException
+     */
+    private function getTransportManager($id)
+    {
+        $query = $this->getAnnotationBuilder()->createQuery(
+            \Dvsa\Olcs\Transfer\Query\Tm\TransportManager::create(['id' => $id])
+        );
+
+        $response = $this->getQueryService()->send($query);
+
+        if (!$response->isOk()) {
+            throw new \RuntimeException("Error cannot get Transport Manager id [$id]");
+        }
+
+        return $response->getResult();
     }
 }

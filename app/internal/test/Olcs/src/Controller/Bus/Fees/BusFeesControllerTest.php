@@ -88,8 +88,8 @@ class BusFeesControllerTest extends AbstractHttpControllerTestCase
                     [
                         ['status', $status],
                         ['page', 1, 1],
-                        ['sort', 'receivedDate', 'receivedDate'],
-                        ['order', 'DESC', 'DESC'],
+                        ['sort', 'id', 'id'],
+                        ['order', 'ASC', 'ASC'],
                         ['limit', 10, 10],
                     ]
                 )
@@ -102,15 +102,15 @@ class BusFeesControllerTest extends AbstractHttpControllerTestCase
         $feesParams = [
             'licence' => 1,
             'page'    => '1',
-            'sort'    => 'receivedDate',
-            'order'   => 'DESC',
+            'sort'    => 'id',
+            'order'   => 'ASC',
             'limit'   => 10,
             'busReg'  => 123,
             'status'  => $status,
         ];
 
         $fees = [
-            'Results' => [
+            'results' => [
                 [
                     'id' => 1,
                     'invoiceStatus' => 'is',
@@ -125,7 +125,10 @@ class BusFeesControllerTest extends AbstractHttpControllerTestCase
                     ]
                 ]
             ],
-            'Count' => 1
+            'count' => 1,
+            'extra' => [
+                'allowFeePayments' => true,
+            ],
         ];
 
         $this->controller->expects($this->once())

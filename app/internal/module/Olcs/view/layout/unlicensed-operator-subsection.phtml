@@ -1,0 +1,29 @@
+<?php if (!$this->disable): ?>
+<div class="one-fifth--left">
+    <?php
+    if (!isset($navigation)) {
+
+        $navigation = $this->navigation('navigation');
+
+        if ($navigation) {
+            $active = $navigation->findAllBy('active', true);
+            $navigation = array_pop($active)->getParent();
+        }
+    }
+
+    if ($navigation):
+
+    ?>
+    <h4><?php echo $this->translate($navigation->getLabel()); ?></h4>
+    <?php
+        echo $this->navigation($navigation)
+            ->menu()->setPartial('partials/vertical-navigation');
+
+    endif;
+    ?>
+</div>
+<?php endif; ?>
+<div class="four-fifths  js-body__main">
+    <?php echo $this->flashMessengerAll(); ?>
+    <?php echo $this->content; ?>
+</div>

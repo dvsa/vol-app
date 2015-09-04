@@ -6,10 +6,10 @@ namespace Olcs\Controller;
 
 use Olcs\Listener\CrudListener;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Olcs\Mvc\Controller\ParameterProvider\DeleteItem;
+use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
-use Olcs\Mvc\Controller\ParameterProvider\ParamterProviderInterface;
+use Olcs\Mvc\Controller\ParameterProvider\ParameterProviderInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Stdlib\ArrayUtils;
 use Zend\View\Model\ViewModel;
@@ -153,8 +153,32 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     protected $deleteParams = ['id'];
     protected $deleteCommand = '';
-    protected $deleteModalTitle = 'internal.delete-action-trait.title';
+    protected $deleteModalTitle = 'Delete record';
+    protected $deleteConfirmMessage = 'Are you sure you want to permanently delete the selected record(s)?';
+    protected $deleteSuccessMessage = 'Record deleted';
     protected $hasMultiDelete = false;
+
+    /**
+     * Variables for controlling the close action.
+     * Command is required, as are itemParams from above
+     */
+    protected $closeParams = ['id'];
+    protected $closeCommand = '';
+    protected $closeModalTitle = 'Close';
+    protected $closeConfirmMessage = 'Are you sure you want to close the selected record(s)?';
+    protected $closeSuccessMessage = 'Record closed';
+    protected $hasMultiClose = false;
+
+    /**
+     * Variables for controlling the reopen action.
+     * Command is required, as are itemParams from above
+     */
+    protected $reopenParams = ['id'];
+    protected $reopenCommand = '';
+    protected $reopenModalTitle = 'Reopen';
+    protected $reopenConfirmMessage = 'Are you sure you want to reopen the selected record(s)?';
+    protected $reopenSuccessMessage = 'Record reopened';
+    protected $hasMultiReopen = false;
 
     /**
      * Allows override of default behaviour for redirects. See Case Overview Controller
@@ -266,16 +290,50 @@ abstract class AbstractInternalController extends AbstractActionController
 
     public function deleteAction()
     {
-        return $this->delete(
-            new DeleteItem($this->deleteParams, $this->hasMultiDelete),
+        return $this->confirmCommand(
+            new ConfirmItem($this->deleteParams, $this->hasMultiDelete),
             $this->deleteCommand,
-            $this->deleteModalTitle
+            $this->deleteModalTitle,
+            $this->deleteConfirmMessage,
+            $this->deleteSuccessMessage
+        );
+    }
+
+    /**
+     * Closes an entity
+     *
+     * @return array|mixed|ViewModel
+     */
+    public function closeAction()
+    {
+        return $this->confirmCommand(
+            new ConfirmItem($this->closeParams, $this->hasMultiClose),
+            $this->closeCommand,
+            $this->closeModalTitle,
+            $this->closeConfirmMessage,
+            $this->closeSuccessMessage
+        );
+    }
+
+    /**
+     * Reopens an entity
+     *
+     * @return array|mixed|ViewModel
+     */
+    public function reopenAction()
+    {
+        return $this->confirmCommand(
+            new ConfirmItem($this->reopenParams, $this->hasMultiReopen),
+            $this->reopenCommand,
+            $this->reopenModalTitle,
+            $this->reopenConfirmMessage,
+            $this->reopenSuccessMessage
         );
     }
 
     final protected function index(
         $listDto,
-        ParamterProviderInterface $paramProvider,
+        ParameterProviderInterface $paramProvider,
         $tableViewPlaceholderName,
         $tableName,
         $tableViewTemplate,
@@ -299,9 +357,14 @@ abstract class AbstractInternalController extends AbstractActionController
         if ($response->isOk()) {
             $data = $response->getResult();
             $this->listData = $data;
+
+            $table = $this->table()->buildTable($tableName, $data, $listParams);
+
+            $table = $this->alterTable($table, $data);
+
             $this->placeholder()->setPlaceholder(
                 $tableViewPlaceholderName,
-                $this->table()->buildTable($tableName, $data, $listParams)->render()
+                $table->render()
             );
         }
 
@@ -319,7 +382,7 @@ abstract class AbstractInternalController extends AbstractActionController
 
     final protected function details(
         $itemDto,
-        ParamterProviderInterface $paramProvider,
+        ParameterProviderInterface $paramProvider,
         $detailsViewPlaceHolderName,
         $detailsViewTemplate
     ) {
@@ -375,7 +438,7 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     final protected function add(
         $formClass,
-        ParamterProviderInterface $defaultDataProvider,
+        ParameterProviderInterface $defaultDataProvider,
         $createCommand,
         $mapperClass,
         $editViewTemplate = 'pages/crud-form',
@@ -441,7 +504,7 @@ abstract class AbstractInternalController extends AbstractActionController
     /**
      * @param $formClass
      * @param $itemDto
-     * @param ParamterProviderInterface $paramProvider
+     * @param ParameterProviderInterface $paramProvider
      * @param $updateCommand
      * @param \Olcs\Data\Mapper\GenericFields $mapperClass
      * @param string $editViewTemplate
@@ -452,7 +515,7 @@ abstract class AbstractInternalController extends AbstractActionController
     final protected function edit(
         $formClass,
         $itemDto,
-        ParamterProviderInterface $paramProvider,
+        ParameterProviderInterface $paramProvider,
         $updateCommand,
         $mapperClass,
         $editViewTemplate = 'pages/crud-form',
@@ -513,6 +576,7 @@ abstract class AbstractInternalController extends AbstractActionController
 
             if ($response->isOk()) {
                 $result = $response->getResult();
+
                 $formData = $mapperClass::mapFromResult($result);
 
                 if (method_exists($this, 'alterFormFor' . $action)) {
@@ -529,25 +593,27 @@ abstract class AbstractInternalController extends AbstractActionController
     /*
      * Handle single delete and multiple delete as well
      */
-    final protected function delete(ParamterProviderInterface $paramProvider, $deleteCommand, $modalTitle)
-    {
+    final protected function confirmCommand(
+        ParameterProviderInterface $paramProvider,
+        $confirmCommand,
+        $modalTitle,
+        $confirmMessage,
+        $successMessage
+    ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
 
         $paramProvider->setParams($this->plugin('params'));
         $params = $paramProvider->provideParameters();
 
-        $confirm = $this->confirm(
-            'Are you sure you want to permanently delete the selected record(s)?'
-        );
+        $confirm = $this->confirm($confirmMessage);
 
         if ($confirm instanceof ViewModel) {
             $this->placeholder()->setPlaceholder('pageTitle', $modalTitle);
             return $this->viewBuilder()->buildView($confirm);
         }
 
-        /** @var \Dvsa\Olcs\Transfer\Command\AbstractDeleteCommand $deleteCommand */
-        $response = $this->handleCommand($deleteCommand::create($params));
+        $response = $this->handleCommand($confirmCommand::create($params));
 
         if ($response->isNotFound()) {
             return $this->notFoundAction();
@@ -558,7 +624,7 @@ abstract class AbstractInternalController extends AbstractActionController
         }
 
         if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Deleted record');
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
         }
 
         return $this->redirectTo($response->getResult());
@@ -762,5 +828,19 @@ abstract class AbstractInternalController extends AbstractActionController
     public function getLogger()
     {
         return $this->getServiceLocator()->get('Logger');
+    }
+
+    /**
+     * Override in derived classes to alter table *presentation* based on the
+     * list data
+     *
+     * @param Table $table
+     * @param array $data
+     * @return Table
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function alterTable($table, $data)
+    {
+        return $table;
     }
 }

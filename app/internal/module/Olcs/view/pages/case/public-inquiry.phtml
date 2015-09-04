@@ -1,23 +1,45 @@
 <?php
-$pi = current($this->placeholder('pi')->getArrayCopy());
-$actions = [];
-if (isset($closeAction) && is_array($closeAction)) {
-    $closeActionUrl = [
-        'label' => $closeAction['label'],
-        'url' => $this->url(
-            $closeAction['route'], $closeAction['params']
-        )
-    ];
-    array_push($actions, $closeActionUrl);
-}
-echo $this->render('partials/read-only/main',
-    [
-        'header' => 'Public Inquiry',
-        'actions' => $actions
-    ]
-);
 
-if (isset($pi['agreedDate'])):
+$pi = current($this->placeholder('pi')->getArrayCopy());
+
+if (!$pi) {
+    echo $this->render(
+        'partials/pi-empty.phtml',
+        array(
+            'heading' => 'Agreed and legislation',
+            'shortHeading' => 'Public Inquiry',
+            'route' => 'case_pi_agreed',
+            'readonly' => false
+        )
+    );
+} else {
+    $readonly = $pi['isClosed'];
+
+    $actions = [];
+
+    if ($pi['canReopen']) {
+        $newAction = [
+            'label' => 'Reopen',
+            'url' => $this->url(null, ['action' => 'reopen'], [], true),
+            'class' => 'js-modal-ajax action--secondary'
+        ];
+        array_push($actions, $newAction);
+    } else if ($pi['canClose']) {
+        $newAction = [
+            'label' => 'Close',
+            'url' => $this->url(null, ['action' => 'close'], [], true),
+            'class' => 'js-modal-ajax action--secondary'
+        ];
+        array_push($actions, $newAction);
+    }
+
+    echo $this->render('partials/read-only/main',
+        [
+            'header' => 'Public Inquiry',
+            'actions' => $actions
+        ]
+    );
+
     echo $this->render('partials/pi-agreed.phtml', array('pi' => $pi, 'readonly' => $readonly));
 
     //we have a Pi so a hearing can be added
@@ -50,15 +72,4 @@ if (isset($pi['agreedDate'])):
     endif;
 
     echo $this->render('partials/pi-sla.phtml', array('pi' => $pi, 'readonly' => $readonly));
-
-else:
-    echo $this->render(
-        'partials/pi-empty.phtml',
-        array(
-            'heading' => 'Agreed and legislation',
-            'shortHeading' => 'Public Inquiry',
-            'route' => 'case_pi_agreed',
-            'readonly' => $readonly
-        )
-    );
-endif;
+}

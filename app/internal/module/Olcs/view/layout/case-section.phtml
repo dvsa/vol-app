@@ -1,10 +1,6 @@
 <?php
 
 $case = $this->placeholder('case')->getValue();
-$markers = $this->placeholder('markers')->getValue();
-
-$application = $this->placeholder('application')->getValue();
-
 $transportManager = $this->placeholder('transportManager')->getValue();
 
 ?>
@@ -56,7 +52,6 @@ $transportManager = $this->placeholder('transportManager')->getValue();
   <?php endif; ?>
 
     <?php
-    $transportManager = $this->placeholder('transportManager')->getValue();
     if ($transportManager) :
     ?>
     <div class="small-module">
@@ -86,10 +81,15 @@ $transportManager = $this->placeholder('transportManager')->getValue();
     </div>
     <?php endif; ?>
 
-  <?php if (isset($markers) && is_array($markers)): ?>
-    <?php echo $this->markers($markers, 'appeal') ?>
-    <?php echo $this->markers($markers, 'stay') ?>
-  <?php endif; ?>
+    <?php
+    echo $this->showMarkers(
+        [
+            \Olcs\Service\Marker\CaseAppealMarker::class,
+            \Olcs\Service\Marker\CaseStayMarker::class,
+            \Olcs\Service\Marker\DisqualificationMarker::class,
+        ]
+    );
+    ?>
 
     <?php
     /**

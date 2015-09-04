@@ -7,6 +7,8 @@
  */
 namespace Olcs\Controller\Licence;
 
+use Common\RefData;
+use Dvsa\Olcs\Transfer\Query\Cases\ByLicence as CasesByLicenceQry;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Traits;
@@ -79,20 +81,24 @@ class LicenceController extends AbstractController implements LicenceControllerI
         $params = [
             'licence' => $this->getQueryOrRouteParam('licence'),
             'page'    => $this->getQueryOrRouteParam('page', 1),
-            'sort'    => $this->getQueryOrRouteParam('sort', 'createdOn'),
+            'sort'    => $this->getQueryOrRouteParam('sort', 'createdOn, id'),
             'order'   => $this->getQueryOrRouteParam('order', 'DESC'),
             'limit'   => $this->getQueryOrRouteParam('limit', 10),
         ];
 
         $params['query'] = $this->getRequest()->getQuery()->toArray();
 
-        $bundle = array(
-            'children' => array(
-                'caseType' => array()
-            )
-        );
+        $response = $this->handleQuery(CasesByLicenceQry::create($params));
+        $results = $response->getResult();
 
-        $results = $this->makeRestCall('Cases', 'GET', $params, $bundle);
+        // If this is an 'unlicensed' licence, redirect to the Unlicensed
+        // Operator version of the page
+        if ($results['extra']['licence']['status']['id'] === RefData::LICENCE_STATUS_UNLICENSED) {
+            return $this->redirect()->toRoute(
+                'operator-unlicensed/cases',
+                ['organisation' => $results['extra']['organisation']['id']]
+            );
+        }
 
         $view->{'table'} = $this->getTable('cases', $results, $params);
 

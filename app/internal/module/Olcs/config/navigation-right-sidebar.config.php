@@ -172,11 +172,10 @@ return array(
                         array(
                             'id' => 'case-decisions-transport-manager-repute-not-lost',
                             'label' => 'Repute not lost',
-                            'route' => 'processing_decisions',
+                            'route' => 'processing_decisions/repute-not-lost',
                             'use_route_match' => true,
                             'params' => [
                                 'action' => 'add',
-                                'decision' => 'tm_decision_rnl',
                             ],
                             'caseType' => 'tm',
                             'class' => 'action--secondary js-modal-ajax'
@@ -184,11 +183,10 @@ return array(
                         array(
                             'id' => 'case-decisions-transport-manager-declare-unfit',
                             'label' => 'Declare unfit',
-                            'route' => 'processing_decisions',
+                            'route' => 'processing_decisions/declare-unfit',
                             'use_route_match' => true,
                             'params' => [
                                 'action' => 'add',
-                                'decision' => 'tm_decision_rl',
                             ],
                             'caseType' => 'tm',
                             'class' => 'action--secondary js-modal-ajax'
@@ -196,11 +194,10 @@ return array(
                         array(
                             'id' => 'case-decisions-transport-manager-no-further-action',
                             'label' => 'No further action',
-                            'route' => 'processing_decisions',
+                            'route' => 'processing_decisions/no-further-action',
                             'use_route_match' => true,
                             'params' => [
                                 'action' => 'add',
-                                'decision' => 'tm_decision_noa',
                             ],
                             'caseType' => 'tm',
                             'class' => 'action--secondary js-modal-ajax'
@@ -258,8 +255,7 @@ return array(
                             'route' => 'licence/bus-processing/decisions',
                             'use_route_match' => true,
                             'params' => [
-                                'action' => 'status',
-                                'status' => 'breg_s_withdrawn'
+                                'action' => 'withdraw',
                             ],
                             'class' => 'action--secondary js-modal-ajax'
                         )
@@ -286,8 +282,7 @@ return array(
                             'route' => 'licence/bus-processing/decisions',
                             'use_route_match' => true,
                             'params' => [
-                                'action' => 'status',
-                                'status' => 'sn_refused'
+                                'action' => 'refuse-by-short-notice'
                             ],
                             'class' => 'action--secondary js-modal-ajax'
                         ),
@@ -297,8 +292,7 @@ return array(
                             'route' => 'licence/bus-processing/decisions',
                             'use_route_match' => true,
                             'params' => [
-                                'action' => 'status',
-                                'status' => 'breg_s_refused'
+                                'action' => 'refuse'
                             ],
                             'class' => 'action--secondary js-modal-ajax'
                         ),
@@ -308,8 +302,7 @@ return array(
                             'route' => 'licence/bus-processing/decisions',
                             'use_route_match' => true,
                             'params' => [
-                                'action' => 'status',
-                                'status' => 'breg_s_admin'
+                                'action' => 'cancel'
                             ],
                             'class' => 'action--secondary js-modal-ajax'
                         ),
@@ -454,6 +447,20 @@ return array(
                             'target' => '_blank',
                             'visible' => false
                         ),
+                        array(
+                            'id' => 'transport-manager-quick-actions-remove',
+                            'label' => 'tm-quick-action-remove',
+                            'route' => 'transport-manager/can-remove',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'transport-manager-quick-actions-merge',
+                            'label' => 'tm-quick-action-merge',
+                            'route' => 'transport-manager/merge',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
                     ),
                 ),
             ),
@@ -472,9 +479,17 @@ return array(
                     'pages' => array(
                         array(
                             'id' => 'operator-decisions-disqualify',
-                            'label' => 'Disqualify',
-                            'route' => 'dashboard',
+                            'label' => 'Disqualify operator',
+                            'route' => 'operator/disqualify',
                             'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'operator-decisions-merge',
+                            'label' => 'Merge operator',
+                            'route' => 'operator/merge',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
                         ),
                     ),
                 ),

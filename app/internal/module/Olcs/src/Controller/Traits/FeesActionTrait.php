@@ -13,11 +13,13 @@ use Common\Form\Elements\Validators\FeeAmountValidator;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
-use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
-use Dvsa\Olcs\Transfer\Command\Fee\UpdateFee as UpdateFeeCmd;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
+use Dvsa\Olcs\Transfer\Command\Fee\ApproveWaive as ApproveWaiveCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\RecommendWaive as RecommendWaiveCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
-use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
-use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
 
 /**
  * Fees action trait
@@ -117,7 +119,7 @@ trait FeesActionTrait
         $view = new ViewModel(
             [
                 'table' => $table,
-                'form'  => $this->getFeeFilterForm($filters)
+                'filterForm'  => $this->getFeeFilterForm($filters)
             ]
         );
         $view->setTemplate($template);
@@ -186,8 +188,8 @@ trait FeesActionTrait
             $this->getFeesTableParams(),
             [
                 'page'    => $this->params()->fromQuery('page', 1),
-                'sort'    => $this->params()->fromQuery('sort', 'receivedDate'),
-                'order'   => $this->params()->fromQuery('order', 'DESC'),
+                'sort'    => $this->params()->fromQuery('sort', 'id'),
+                'order'   => $this->params()->fromQuery('order', 'ASC'),
                 'limit'   => $this->params()->fromQuery('limit', 10)
             ]
         );
@@ -201,7 +203,7 @@ trait FeesActionTrait
         $tableParams = array_merge($params, ['query' => $this->getRequest()->getQuery()]);
         $table = $this->getTable('fees', $results, $tableParams);
 
-        return $this->alterFeeTable($table);
+        return $this->alterFeeTable($table, $results);
     }
 
     protected function getFees($params)
@@ -227,53 +229,42 @@ trait FeesActionTrait
 
         $fee = $this->getFee($id);
 
-        $form = null;
-
-        if ($fee['allowEdit'] == true) {
-            $form = $this->alterFeeForm($this->getForm('fee'), $fee['feeStatus']['id']);
-            $form = $this->setDataFeeForm($fee, $form);
-            $this->processForm($form);
-        }
+        $form = $this->alterFeeForm($this->getForm('fee'), $fee);
+        $form = $this->setDataFeeForm($fee, $form);
+        $this->processForm($form);
 
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
         }
 
+        $feeTransactions = array_filter(
+            $fee['feeTransactions'],
+            function ($feeTransaction) {
+                // @TODO confirm AC - not sure about hiding non-complete transactions?
+                // return $feeTransaction['transaction']['status']['id'] === RefData::TRANSACTION_STATUS_COMPLETE;
+                return true;
+            }
+        );
+        $table = $this->getTable('fee-transactions', $feeTransactions, []);
+
         $viewParams = [
             'form' => $form,
+            'table' => $table,
             'invoiceNo' => $fee['id'],
             'description' => $fee['description'],
             'amount' => $fee['amount'],
             'created' => $fee['invoicedDate'],
+            'outstanding' => $fee['outstanding'],
             'status' => isset($fee['feeStatus']['description']) ? $fee['feeStatus']['description'] : '',
-            'receiptNo' => $fee['receiptNo'],
-            'receivedAmount' => $fee['receivedAmount'],
-            'receivedDate' => $fee['receivedDate'],
-            'paymentMethod' => isset($fee['paymentMethod']['description']) ? $fee['paymentMethod']['description'] : '',
-            'processedBy' => isset($fee['lastModifiedBy']['name']) ? $fee['lastModifiedBy']['name'] : '',
-            'payer' => isset($fee['payerName']) ? $fee['payerName'] : '',
-            'slipNo' => isset($fee['payingInSlipNumber']) ? $fee['payingInSlipNumber'] : '',
-            'chequeNo' => '',
-            'poNo' => '',
+            'fee' => $fee,
         ];
-        // ensure cheque/PO number goes in the correct field
-        if (isset($fee['chequePoNumber']) && !empty($fee['chequePoNumber'])) {
-            switch ($fee['paymentMethod']['id']) {
-                case Refdata::FEE_PAYMENT_METHOD_CHEQUE:
-                    $viewParams['chequeNo'] = $fee['chequePoNumber'];
-                    break;
-                case Refdata::FEE_PAYMENT_METHOD_POSTAL_ORDER:
-                    $viewParams['poNo'] = $fee['chequePoNumber'];
-                    break;
-                default:
-                    break;
-            }
-        }
+
+        $this->loadScripts(['forms/fee-details']);
 
         $view = new ViewModel($viewParams);
-        $view->setTemplate('pages/licence/edit-fee.phtml');
+        $view->setTemplate('pages/fee-details.phtml');
 
-        return $this->renderView($view, 'No # ' . $fee['id']);
+        return $this->renderLayout($view, 'No # ' . $fee['id']);
     }
 
     /**
@@ -358,32 +349,51 @@ trait FeesActionTrait
      * Alter fee form
      *
      * @param \Zend\Form\Form $form
+     * @param array $fee
      * @return \Zend\Form\Form
      */
-    protected function alterFeeForm($form, $status)
+    protected function alterFeeForm($form, $fee)
     {
-        switch ($status) {
-            case RefData::FEE_STATUS_OUTSTANDING:
-                $form->get('form-actions')->remove('approve');
-                $form->get('form-actions')->remove('reject');
-                break;
+        $status = $fee['feeStatus']['id'];
 
-            case RefData::FEE_STATUS_WAIVE_RECOMMENDED:
-                $form->get('form-actions')->remove('recommend');
-                break;
+        if ($status !== RefData::FEE_STATUS_OUTSTANDING) {
+            $form->get('form-actions')->remove('approve');
+            $form->get('form-actions')->remove('reject');
+            $form->get('form-actions')->remove('recommend');
+            // don't remove whole fieldset as we need to keep 'back' button
 
-            case RefData::FEE_STATUS_WAIVED:
-                $form->remove('form-actions');
-                $form->get('fee-details')->get('waiveReason')->setAttribute('disabled', 'disabled');
-                break;
+            $form->get('fee-details')->remove('waiveRemainder'); // checkbox
+            $form->get('fee-details')->remove('waiveReason'); // textbox
+
+            return $form;
         }
+
+        if ($fee['hasOutstandingWaiveTransaction']) {
+            $form->get('fee-details')->remove('waiveRemainder');
+            $form->get('form-actions')->remove('recommend');
+        } else {
+            $form->get('form-actions')->remove('approve');
+            $form->get('form-actions')->remove('reject');
+        }
+
         return $form;
     }
 
-    protected function alterFeeTable($table)
+    /**
+     * @param Table $table
+     * @param array $results
+     * @return Table
+     */
+    protected function alterFeeTable($table, $results)
     {
         // remove the 'new' action by default
         $table->removeAction('new');
+
+        // disable 'pay' button if appropriate
+        if ($results['extra']['allowFeePayments'] == false) {
+            $table->disableAction('pay');
+        }
+
         return $table;
     }
 
@@ -414,16 +424,15 @@ trait FeesActionTrait
      */
     protected function recommendWaive($data)
     {
-        $dto = UpdateFeeCmd::create(
+        $dto = RecommendWaiveCmd::create(
             [
                 'id' => $data['fee-details']['id'],
                 'version' => $data['fee-details']['version'],
                 'waiveReason' => $data['fee-details']['waiveReason'],
-                'status' => RefData::FEE_STATUS_WAIVE_RECOMMENDED,
             ]
         );
 
-        $this->updateFeeAndRedirectToList($dto);
+        $this->updateFeeAndRedirectToList($dto, 'Waive recommended');
     }
 
     /**
@@ -433,15 +442,14 @@ trait FeesActionTrait
      */
     protected function rejectWaive($data)
     {
-        $dto = UpdateFeeCmd::create(
+        $dto = RejectWaiveCmd::create(
             [
                 'id' => $data['fee-details']['id'],
                 'version' => $data['fee-details']['version'],
-                'status' => RefData::FEE_STATUS_OUTSTANDING,
             ]
         );
 
-        return $this->updateFeeAndRedirectToList($dto, 'The fee waive recommendation has been rejected');
+        return $this->updateFeeAndRedirectToList($dto, 'Waive rejected');
     }
 
     /**
@@ -451,17 +459,15 @@ trait FeesActionTrait
      */
     protected function approveWaive($data)
     {
-        $dto = UpdateFeeCmd::create(
+        $dto = ApproveWaiveCmd::create(
             [
                 'id' => $data['fee-details']['id'],
                 'version' => $data['fee-details']['version'],
                 'waiveReason' => $data['fee-details']['waiveReason'],
-                'paymentMethod' => RefData::FEE_PAYMENT_METHOD_WAIVE,
-                'status' => RefData::FEE_STATUS_WAIVED,
             ]
         );
 
-        return $this->updateFeeAndRedirectToList($dto, 'The selected fee has been waived');
+        return $this->updateFeeAndRedirectToList($dto, 'Waive approved');
     }
 
     /**
@@ -478,8 +484,6 @@ trait FeesActionTrait
             $this->addSuccessMessage($message);
         }
 
-        $this->triggerListenerFromFeeId($command->getId());
-
         $this->redirectToList();
     }
 
@@ -495,7 +499,9 @@ trait FeesActionTrait
         if ($form) {
             $form->get('fee-details')->get('id')->setValue($fee['id']);
             $form->get('fee-details')->get('version')->setValue($fee['version']);
-            $form->get('fee-details')->get('waiveReason')->setValue($fee['waiveReason']);
+            if (isset($fee['waiveReason'])) {
+                $form->get('fee-details')->get('waiveReason')->setValue($fee['waiveReason']);
+            }
         }
         return $form;
     }
@@ -536,14 +542,14 @@ trait FeesActionTrait
                 $response = $this->handleCommand($dto);
 
                 // Look up the new payment in order to get the redirect data
-                $paymentId = $response->getResult()['id']['payment'];
-                $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
-                $payment = $response->getResult();
+                $transactionId = $response->getResult()['id']['transaction'];
+                $response = $this->handleQuery(PaymentByIdQry::create(['id' => $transactionId]));
+                $transaction = $response->getResult();
                 $view = new ViewModel(
                     [
-                        'gateway' => $payment['gatewayUrl'],
+                        'gateway' => $transaction['gatewayUrl'],
                         'data' => [
-                            'receipt_reference' => $payment['guid']
+                            'receipt_reference' => $transaction['reference']
                         ]
                     ]
                 );
@@ -595,9 +601,6 @@ trait FeesActionTrait
         $response = $this->handleCommand($dto);
 
         if ($response->isOk()) {
-            foreach ($feeIds as $feeId) {
-                $this->triggerListenerFromFeeId($feeId); // @TODO remove
-            }
             $this->addSuccessMessage('The fee(s) have been paid successfully');
         } else {
             $this->addErrorMessage('The fee(s) have NOT been paid. Please try again');
@@ -627,19 +630,18 @@ trait FeesActionTrait
         }
 
         // check payment status and redirect accordingly
-        $paymentId = $response->getResult()['id']['payment'];
-        $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
-        $payment = $response->getResult();
+        $transactionId = $response->getResult()['id']['transaction'];
+        $response = $this->handleQuery(PaymentByIdQry::create(['id' => $transactionId]));
+        $transaction = $response->getResult();
 
-        switch ($payment['status']['id']) {
-            case RefData::PAYMENT_STATUS_PAID:
-                $this->triggerListenerFromPaymentId($paymentId); // @TODO remove
+        switch ($transaction['status']['id']) {
+            case RefData::TRANSACTION_STATUS_COMPLETE:
                 $this->addSuccessMessage('The fee(s) have been paid successfully');
                 break;
-            case RefData::PAYMENT_STATUS_CANCELLED:
+            case RefData::TRANSACTION_STATUS_CANCELLED:
                 $this->addWarningMessage('The fee payment was cancelled');
                 break;
-            case RefData::PAYMENT_STATUS_FAILED:
+            case RefData::TRANSACTION_STATUS_FAILED:
                 $this->addErrorMessage('The fee payment failed');
                 break;
             default:
@@ -689,57 +691,5 @@ trait FeesActionTrait
             isset($data['details']['paymentType'])
             && $data['details']['paymentType'] == RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE
         );
-    }
-
-    /**
-     * Trigger the fee event listener - this is only here to avoid regressing
-     * the app during the Great Rewrite of 2015™.
-     *
-     * @todo remove this and all calls to it when backend side-effects are implemented
-     * @codeCoverageIgnore temporary hack
-     */
-    protected function triggerListenerFromFeeId($feeId)
-    {
-        $dto = \Dvsa\Olcs\Transfer\Query\Fee\Fee::create(['id' => $feeId]);
-        $response = $this->handleQuery($dto);
-        $fee = $response->getResult();
-
-        switch ($fee['feeStatus']['id']) {
-            case RefData::FEE_STATUS_WAIVED:
-                $eventType = \Common\Service\Listener\FeeListenerService::EVENT_WAIVE;
-                break;
-            case RefData::FEE_STATUS_PAID:
-                $eventType = \Common\Service\Listener\FeeListenerService::EVENT_PAY;
-                break;
-            default:
-                $eventType = null;
-                break;
-        }
-
-        if (!is_null($eventType)) {
-            return $this->getServiceLocator()->get('Listener\Fee')->trigger($feeId, $eventType);
-        }
-    }
-
-    /**
-     * @todo remove this and all calls to it when backend side-effects are implemented
-     * @codeCoverageIgnore temporary hack
-     */
-    protected function triggerListenerFromPaymentId($paymentId)
-    {
-        $feeIds = [];
-
-        $dto = \Dvsa\Olcs\Transfer\Query\Payment\Payment::create(['id' => $paymentId]);
-        $response = $this->handleQuery($dto);
-        $payment = $response->getResult();
-        if (is_array($payment['feePayments'])) {
-            foreach ($payment['feePayments'] as $fp) {
-                $feeIds[] = $fp['fee']['id'];
-            }
-        }
-
-        foreach ($feeIds as $feeId) {
-            $this->triggerListenerFromFeeId($feeId);
-        }
     }
 }

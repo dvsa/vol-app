@@ -12,11 +12,11 @@ use CommonTest\Traits\MockDateTrait;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\CreateChangeOfEntity as CreateChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\UpdateChangeOfEntity as UpdateChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\DeleteChangeOfEntity as DeleteChangeOfEntityCmd;
-use Dvsa\Olcs\Transfer\Command\Payment\CompletePayment as CompletePaymentCmd;
-use Dvsa\Olcs\Transfer\Command\Payment\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
 use Dvsa\Olcs\Transfer\Query\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
-use Dvsa\Olcs\Transfer\Query\Payment\Payment as PaymentByIdQry;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
@@ -601,14 +601,14 @@ class ApplicationControllerTest extends MockeryTestCase
             'feeStatus' => [
                 'id' => 'lfs_ot'
             ],
-            'feePayments' => []
+            'feeTransactions' => []
         ];
         $fee2 = [
             'amount' => 10,
             'feeStatus' => [
                 'id' => 'lfs_ot'
             ],
-            'feePayments' => []
+            'feeTransactions' => []
         ];
         $fees = [$fee1, $fee2];
         $this->sut->shouldReceive('getFees')->andReturn(
@@ -757,7 +757,7 @@ class ApplicationControllerTest extends MockeryTestCase
             'feeStatus' => [
                 'id' => 'lfs_ot'
             ],
-            'feePayments' => []
+            'feeTransactions' => []
         ];
 
         $this->postPayFeesActionWithCardSetUp($fee);
@@ -770,7 +770,7 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn(
                 [
                     'id' => [
-                        'payment' => $paymentId,
+                        'transaction' => $paymentId,
                     ],
                     'messages' => [
                         'payment created',
@@ -792,7 +792,7 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn(
                 [
                     'id' => $paymentId,
-                    'guid' => 'foo-bar',
+                    'reference' => 'foo-bar',
                     'gatewayUrl' => 'http://gateway',
                 ]
             )
@@ -841,7 +841,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $paymentId = 69;
         $result = [
             'id' => [
-                'payment' => $paymentId,
+                'transaction' => $paymentId,
             ],
         ];
         $response = m::mock()
@@ -875,11 +875,6 @@ class ApplicationControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($response2);
 
-        // mock this, it will get removed later
-        $this->sut
-            ->shouldReceive('triggerListenerFromPaymentId')
-            ->with($paymentId);
-
         $this->sut->shouldReceive('redirectToList')
             ->once()
             ->andReturn('redirect');
@@ -894,10 +889,10 @@ class ApplicationControllerTest extends MockeryTestCase
     public function paymentResultValidStatusProvider()
     {
         return [
-            [RefData::PAYMENT_STATUS_PAID, 'addSuccessMessage'],
-            [RefData::PAYMENT_STATUS_FAILED, 'addErrorMessage'],
+            [RefData::TRANSACTION_STATUS_COMPLETE, 'addSuccessMessage'],
+            [RefData::TRANSACTION_STATUS_FAILED, 'addErrorMessage'],
             // no flash at all for cancelled
-            [RefData::PAYMENT_STATUS_CANCELLED, null],
+            [RefData::TRANSACTION_STATUS_CANCELLED, null],
             // duff payment status
             [null, 'addErrorMessage']
         ];
@@ -952,7 +947,7 @@ class ApplicationControllerTest extends MockeryTestCase
             'id' => 1,
             'amount' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
-            'feePayments' => []
+            'feeTransactions' => []
         ];
         $fees = array($fee1);
 
@@ -972,9 +967,6 @@ class ApplicationControllerTest extends MockeryTestCase
             ->once()
             ->with(m::type(PayOutstandingFeesCmd::class))
             ->andReturn($response);
-
-        // mock this, it will get removed later
-        $this->sut->shouldReceive('triggerListenerFromFeeId');
 
         $this->sut->shouldReceive($expectedFlashMessageMethod)->once();
 
@@ -1041,7 +1033,7 @@ class ApplicationControllerTest extends MockeryTestCase
             'id' => 1,
             'amount' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
-            'feePayments' => []
+            'feeTransactions' => []
         ];
         $fees = array($fee1);
 
@@ -1120,7 +1112,7 @@ class ApplicationControllerTest extends MockeryTestCase
             'id' => 1,
             'amount' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
-            'feePayments' => []
+            'feeTransactions' => []
         ];
 
         $this->sut->shouldReceive('getFees')->andReturn(
@@ -1165,9 +1157,6 @@ class ApplicationControllerTest extends MockeryTestCase
                 )
             )
             ->andReturn($response);
-
-        // mock this, it will get removed later
-        $this->sut->shouldReceive('triggerListenerFromFeeId');
 
         $this->sut->shouldReceive('addSuccessMessage')->once();
 
@@ -1238,7 +1227,7 @@ class ApplicationControllerTest extends MockeryTestCase
             'id' => 1,
             'amount' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
-            'feePayments' => []
+            'feeTransactions' => []
         ];
 
         $this->sut->shouldReceive('getFees')->andReturn(
@@ -1283,9 +1272,6 @@ class ApplicationControllerTest extends MockeryTestCase
                 )
             )
             ->andReturn($response);
-
-        // mock this, it will get removed later
-        $this->sut->shouldReceive('triggerListenerFromFeeId');
 
         $this->sut->shouldReceive('addSuccessMessage')->once();
 

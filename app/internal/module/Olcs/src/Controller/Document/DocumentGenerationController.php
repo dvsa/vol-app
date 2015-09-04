@@ -11,6 +11,9 @@ namespace Olcs\Controller\Document;
 use Dvsa\Olcs\Transfer\Command\Document\CreateLetter;
 use Dvsa\Olcs\Transfer\Query\Document\TemplateParagraphs;
 use Zend\View\Model\ViewModel;
+use Zend\Form\Form;
+use Zend\Form\Fieldset;
+use Common\Form\Elements\InputFilters\MultiCheckboxEmpty;
 
 /**
  * Document Generation Controller
@@ -27,7 +30,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
     public function generateAction()
     {
-        $form = $this->generateForm('generate-document', 'processGenerate');
+        $form = $this->generateForm('GenerateDocument', 'processGenerate');
 
         $this->loadScripts(['generate-document']);
 
@@ -40,9 +43,9 @@ class DocumentGenerationController extends AbstractDocumentController
 
     public function listTemplateBookmarksAction()
     {
-        $form = new \Zend\Form\Form();
+        $form = new Form();
 
-        $fieldset = new \Zend\Form\Fieldset();
+        $fieldset = new Fieldset();
         $fieldset->setLabel('documents.bookmarks');
         $fieldset->setName('bookmarks');
 
@@ -59,13 +62,6 @@ class DocumentGenerationController extends AbstractDocumentController
 
     /**
      * Wrap the callback with a try/catch to handle any bookmark errors.
-     *
-     * For this to work, application must be configured with:
-     *  'halt_on_error' => true
-     * ... otherwise the olcs-logging module swallows errors and we don't get
-     * exceptions raised properly :-/
-     *
-     * @see Olcs\Logging\Helper\LogError::logError
      */
     public function processGenerate($data)
     {
@@ -82,13 +78,7 @@ class DocumentGenerationController extends AbstractDocumentController
     {
         $routeParams = $this->params()->fromRoute();
 
-        $queryData = array_merge(
-            $data,
-            $routeParams,
-            [
-                'user' => $this->getLoggedInUser()
-            ]
-        );
+        $queryData = array_merge($data, $routeParams);
 
         // if both the entityType and the entityId has some values then add it into $queryData
         if (!empty($routeParams['entityType']) && !empty($routeParams['entityId'])) {
@@ -100,18 +90,17 @@ class DocumentGenerationController extends AbstractDocumentController
             case 'application':
                 $queryData['licence'] = $this->getLicenceIdForApplication();
                 break;
-
             case 'case':
-                $queryData = array_merge(
-                    $queryData,
-                    $this->getCaseData()
-                );
+                $queryData = array_merge($queryData, $this->getCaseData());
                 break;
-
             case 'busReg':
                 $queryData['licence'] = $routeParams['licence'];
                 break;
-
+            // fixing irfoOrganisation / organisation ambiguity
+            case 'irfoOrganisation':
+                $queryData['irfoOrganisation'] = $routeParams['organisation'];
+                unset($queryData['organisation']);
+                break;
             default:
                 break;
         }
@@ -122,7 +111,8 @@ class DocumentGenerationController extends AbstractDocumentController
             'meta' => json_encode(['details' => $data['details'], 'bookmarks' => $data['bookmarks']])
         ];
 
-        $response = $this->handleCommand(CreateLetter::create($dtoData));
+        $dto = CreateLetter::create($dtoData);
+        $response = $this->handleCommand($dto);
 
         if (!$response->isOk()) {
             throw new \ErrorException('Error creating letter');
@@ -133,41 +123,36 @@ class DocumentGenerationController extends AbstractDocumentController
         $redirectParams = array_merge(
             $routeParams,
             [
-                'tmpId' => $response->getResult()['id']['file']
+                'doc' => $response->getResult()['id']['document']
             ]
         );
+
+        $redirectParams['action'] = null;
 
         return $this->redirectToDocumentRoute($routeParams['type'], 'finalise', $redirectParams);
     }
 
     protected function alterFormBeforeValidation($form)
     {
-        $categories = $this->getListDataFromBackend(
-            'Category',
-            ['isDocCategory' => true],
-            'description',
-            'id',
-            false
-        );
-
+        $categories = $this->getListDataFromBackend('Category', ['isDocCategory' => true], 'description', 'id', false);
         $entityType = $this->getFromRoute('entityType');
-        $categoryMapType
-            = !empty($entityType) ? $this->getFromRoute('entityType') : $this->params('type');
+
+        $categoryMapType = !empty($entityType) ? $this->getFromRoute('entityType') : $this->params('type');
 
         $defaultData = [
-            'details' => [
-                'category' => $this->getCategoryForType($categoryMapType)
-            ]
+            'details' => ['category' => $this->getCategoryForType($categoryMapType)]
         ];
+
         $data = [];
         $filters = [];
         $docTemplates = ['' => self::EMPTY_LABEL];
 
         if ($this->getRequest()->isPost()) {
             $data = (array)$this->getRequest()->getPost();
-        } elseif ($this->params('tmpId')) {
-            $data = $this->fetchTmpData();
-            $this->removeTmpData();
+        } elseif ($this->params('doc')) {
+
+            $data = $this->fetchDocData();
+            $this->removeDocument($this->params('doc'));
         }
 
         $data = array_merge($defaultData, $data);
@@ -177,39 +162,19 @@ class DocumentGenerationController extends AbstractDocumentController
         $filters['category'] = $details['category'];
         $filters['isDoc'] = true;
 
-        $subCategories = $this->getListDataFromBackend(
-            'SubCategory',
-            $filters,
-            'subCategoryName'
-        );
+        $subCategories = $this->getListDataFromBackend('SubCategory', $filters, 'subCategoryName');
 
         if (isset($details['documentSubCategory'])) {
             $filters['subCategory'] = $details['documentSubCategory'];
-            $docTemplates = $this->getListDataFromBackend(
-                'DocTemplate',
-                $filters
-            );
+            $docTemplates = $this->getListDataFromBackend('DocTemplate', $filters);
         }
 
-        $selects = [
-            'details' => [
-                'category' => $categories,
-                'documentSubCategory' => $subCategories,
-                'documentTemplate' => $docTemplates
-            ]
-        ];
-
-        foreach ($selects as $fieldset => $inputs) {
-            foreach ($inputs as $name => $options) {
-                $form->get($fieldset)->get($name)->setValueOptions($options);
-            }
-        }
+        $form->get('details')->get('category')->setValueOptions($categories);
+        $form->get('details')->get('documentSubCategory')->setValueOptions($subCategories);
+        $form->get('details')->get('documentTemplate')->setValueOptions($docTemplates);
 
         if (isset($details['documentTemplate'])) {
-            $this->addTemplateBookmarks(
-                $details['documentTemplate'],
-                $form->get('bookmarks')
-            );
+            $this->addTemplateBookmarks($details['documentTemplate'], $form->get('bookmarks'));
         }
 
         $form->setData($data);
@@ -217,18 +182,6 @@ class DocumentGenerationController extends AbstractDocumentController
         return $form;
     }
 
-    public function downloadTmpAction()
-    {
-        return $this->getUploader()->download(
-            $this->params('id'),
-            $this->params('filename'),
-            self::TMP_STORAGE_PATH
-        );
-    }
-
-    /**
-     * @NOTE Migrated
-     */
     private function addTemplateBookmarks($id, $fieldset)
     {
         if (empty($id)) {
@@ -255,7 +208,7 @@ class DocumentGenerationController extends AbstractDocumentController
                 $description = $bookmark['name'];
             }
 
-            $element = new \Common\Form\Elements\InputFilters\MultiCheckboxEmpty;
+            $element = new MultiCheckboxEmpty();
             $element->setLabel($description);
             $element->setName($bookmark['name']);
             // user-supplied bookmarks are *all* optional

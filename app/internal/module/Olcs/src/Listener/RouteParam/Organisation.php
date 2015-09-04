@@ -26,6 +26,22 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
     private $sidebarNavigationService;
 
     /**
+     * @var \Olcs\Service\Marker\MarkerService
+     */
+    protected $markerService;
+
+    public function getMarkerService()
+    {
+        return $this->markerService;
+    }
+
+    public function setMarkerService(\Olcs\Service\Marker\MarkerService $markerService)
+    {
+        $this->markerService = $markerService;
+        return $this;
+    }
+
+    /**
      * Attach one or more listeners
      *
      * Implementors may add an optional $priority argument; the EventManager
@@ -62,6 +78,8 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
             $sidebarNav = $this->getSidebarNavigationService();
             $sidebarNav->findById('operator-decisions-disqualify')->setVisible(false);
         }
+
+        $this->getMarkerService()->addData('organisation', $organisation);
     }
 
     /**
@@ -75,7 +93,7 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
     private function getOrganisation($id)
     {
         $query = $this->getAnnotationBuilder()->createQuery(
-            \Dvsa\Olcs\Transfer\Query\Organisation\Organisation::create(['id' => $id])
+            \Dvsa\Olcs\Transfer\Query\Organisation\People::create(['id' => $id])
         );
 
         $response = $this->getQueryService()->send($query);
@@ -99,7 +117,7 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
         $this->setQueryService($serviceLocator->get('QueryService'));
         $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setServiceLocator($serviceLocator);
+        $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
 
         return $this;
     }

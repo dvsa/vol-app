@@ -52,6 +52,16 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     )
                 )
                 ->andReturn('GRACE_PERIOD_URL')
+                ->shouldReceive('fromRoute')
+                ->with(
+                    'search',
+                    array(
+                        'index' => 'application',
+                        'action' => 'search',
+                    ),
+                    ['query' => ['search' => $licenceData['licNo']]]
+                )
+                ->andReturn('APP_SEARCH_URL')
                 ->getMock()
         );
 
@@ -123,7 +133,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'operatorId'                 => 72,
                     'numberOfLicences'           => 3,
                     'tradingName'                => 'JSH Logistics',
-                    'currentApplications'        => 4,
+                    'currentApplications'        => '4 (<a href="APP_SEARCH_URL">view</a>)',
                     'licenceNumber'              => 'OB1234567',
                     'licenceStartDate'           => '2014-03-02',
                     'licenceType'                => RefData::LICENCE_TYPE_STANDARD_NATIONAL,
@@ -215,7 +225,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'operatorId'                 => 72,
                     'numberOfLicences'           => 3,
                     'tradingName'                => 'None',
-                    'currentApplications'        => 2,
+                    'currentApplications'        => '2 (<a href="APP_SEARCH_URL">view</a>)',
                     'licenceNumber'              => 'PD2737280',
                     'licenceStartDate'           => '2014-03-02',
                     'licenceType'                => RefData::LICENCE_TYPE_RESTRICTED,

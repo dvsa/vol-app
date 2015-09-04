@@ -316,8 +316,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             'bookmarks' => array()
         );
 
-        $file = new \Dvsa\Jackrabbit\Data\Object\File();
-        $file->setMimeType('application/rtf');
+        $file = new \Dvsa\Olcs\DocumentShare\Data\Object\File();
         $file->setContent('dummy content');
 
         $this->contentStoreMock = $this->getMock('\stdClass', ['read']);
@@ -424,8 +423,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             'bookmarks' => array()
         );
 
-        $file = new \Dvsa\Jackrabbit\Data\Object\File();
-        $file->setMimeType('application/rtf');
+        $file = new \Dvsa\Olcs\DocumentShare\Data\Object\File();
         $file->setContent('dummy content');
 
         $this->contentStoreMock = $this->getMock('\stdClass', ['read']);

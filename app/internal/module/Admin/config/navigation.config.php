@@ -149,6 +149,23 @@ return [
                             'id' => 'admin-dashboard/admin-payment-processing/misc-fees',
                             'label' => 'Miscellaneous fees',
                             'route' => 'admin-dashboard/admin-payment-processing/misc-fees',
+                            'pages' => [
+                                [
+                                    'id' => 'admin-dashboard/admin-payment-processing/misc-fees/details',
+                                    'label' => 'Fee details',
+                                    'route' => 'admin-dashboard/admin-payment-processing/misc-fees/fee_action',
+                                ],
+                            ],
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-payment-processing/cpid-class',
+                            'label' => 'CPID Classification',
+                            'route' => 'admin-dashboard/admin-payment-processing/cpid-class',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-payment-processing/cpid-exports',
+                            'label' => 'CPID Exports',
+                            'route' => 'admin-dashboard/admin-payment-processing/cpid-exports',
                         ],
                     ]
                 ],

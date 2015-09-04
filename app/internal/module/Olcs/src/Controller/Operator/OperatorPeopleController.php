@@ -50,12 +50,14 @@ class OperatorPeopleController extends AbstractInternalController implements Ope
 
     public function getPageLayout()
     {
-        return 'layout/operator-section';
+        $organisation = $this->loadOrganisationData();
+        return 'layout/' . ($organisation['isUnlicensed'] ? 'unlicensed-' : '') . 'operator-section';
     }
 
     public function getPageInnerLayout()
     {
-        return 'layout/operator-subsection';
+        $organisation = $this->loadOrganisationData();
+        return 'layout/' . ($organisation['isUnlicensed'] ? 'unlicensed-' : '') . 'operator-subsection';
     }
 
     public function indexAction()
@@ -101,6 +103,7 @@ class OperatorPeopleController extends AbstractInternalController implements Ope
             // set the row as the person data
             $row = $op['person'];
             // but set the id to be the OrganisationPerson ID as that is what we are editing
+            $row['personId'] = $row['id'];
             $row['id'] = $op['id'];
             $row['position'] = $op['position'];
             $tableData['results'][] = $row;
@@ -186,9 +189,26 @@ class OperatorPeopleController extends AbstractInternalController implements Ope
         $data = $this->loadOrganisationData();
 
         // if org type is not Other, then remove position element
-        if ($data['type']['id'] !== 'org_t_pa') {
+        if ($data['type']['id'] !== \Common\RefData::ORG_TYPE_OTHER) {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'data->position');
         }
+        // if not a sole trader OR no person OR already disqualified then hide the disqualify button
+        if ($data['type']['id'] !== \Common\RefData::ORG_TYPE_SOLE_TRADER ||
+            !isset($data['organisationPersons'][0]['person']['id']) ||
+            $data['organisationPersons'][0]['person']['disqualificationStatus'] !== 'None'
+        ) {
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->disqualify');
+        } else {
+            // put the correct link onto the form disqualify button
+            $personId = $data['organisationPersons'][0]['person']['id'];
+            $form->get('form-actions')->get('disqualify')->setValue(
+                $this->url()->fromRoute(
+                    'operator/disqualify_person',
+                    ['organisation' => $data['id'], 'person' => $personId]
+                )
+            );
+        }
+
         if (!$showAddAnotherButton) {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->addAnother');
         }

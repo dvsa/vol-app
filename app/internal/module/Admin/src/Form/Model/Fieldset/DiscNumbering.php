@@ -17,7 +17,7 @@ class DiscNumbering
      * @Form\Options({
      *     "label": "admin_disc-printing.startNumber"
      * })
-     * @Form\Type("\Common\Form\Elements\InputFilters\GoodsDiscStartNumber")
+     * @Form\Type("Text")
      */
     public $startNumber = null;
 

@@ -95,7 +95,7 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             'lastName' => 'last',
             'personId' => '1',
             'personVersion' => '1',
-            'natureOfBusiness' => [1]
+            'natureOfBusiness' => 'stuff',
         ],
         'operator-business-type' => [
             'type' => OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY,
@@ -175,7 +175,6 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             '\StdClass',
             [
                 'getBusinessDetailsData',
-                'getNatureOfBusinessesForSelect',
                 'save',
                 'forceUpdate',
             ]
@@ -184,11 +183,6 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
             ->method('getBusinessDetailsData')
             ->with($this->equalTo(1))
             ->will($this->returnValue($organisation));
-
-        $mockOrganisation->expects($this->any())
-            ->method('getNatureOfBusinessesForSelect')
-            ->with(1)
-            ->will($this->returnValue($nob));
 
         if ($this->newOrganisation) {
             $mockOrganisation->expects($this->any())
@@ -506,21 +500,6 @@ class OperatorBusinessDetailsControllerTest extends AbstractHttpControllerTestCa
         $this->setUpAction(1, true, true);
         $response = $this->controller->indexAction();
         $this->assertInstanceOf('Zend\Http\Response', $response);
-    }
-
-    /**
-     * Test index action with nature of business added
-     *
-     * @group operatorBusinessDetailsController
-     */
-    public function testIndexActionWithNatureOfBusinessAdded()
-    {
-        $this->organisationType = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
-        $this->post['operator-business-type']['type'] = OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY;
-        $this->post['operator-details']['natureOfBusiness'] = [1,2];
-        $this->setUpAction(1, true);
-        $response = $this->controller->indexAction();
-        $this->assertEquals('view', $response);
     }
 
     /**

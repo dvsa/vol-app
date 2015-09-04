@@ -16,7 +16,7 @@ class OperatorBusinessDetailsTest extends MockeryTestCase
         $mockForm = m::mock(Form::class)->makePartial();
         $errors = [
             'name' => ['error1'],
-            'addressLine1' => ['error2'],
+            'address' => ['addressLine1' => ['error2']],
             'companyNumber' => ['error3'],
             'general' => ['error4']
         ];
@@ -37,7 +37,7 @@ class OperatorBusinessDetailsTest extends MockeryTestCase
                     'company_number' => '12345678'
                 ],
                 'name' => 'name',
-                'natureOfBusinesses' => 'nob',
+                'natureOfBusiness' => 'nob',
                 'firstName' => 'fname',
                 'lastName' => 'lname',
                 'personId' => 1,
@@ -61,7 +61,8 @@ class OperatorBusinessDetailsTest extends MockeryTestCase
             'id' => 3,
             'version' => 4,
             'address' => 'address',
-            'isIrfo' => 'Y'
+            'isIrfo' => 'Y',
+            'cpid' => null
         ];
 
         $this->assertEquals($expected, Sut::mapFromForm($data));
@@ -75,6 +76,9 @@ class OperatorBusinessDetailsTest extends MockeryTestCase
             'name' => 'name',
             'isIrfo' => 'Y',
             'companyOrLlpNo' => '12345678',
+            'cpid'  => [
+                'id' => 'type'
+            ],
             'type' => [
                 'id' => 'type'
             ],
@@ -91,14 +95,13 @@ class OperatorBusinessDetailsTest extends MockeryTestCase
                     ]
                 ]
             ],
-            'natureOfBusinesses' => [
-                [
-                    'id' => 5
-                ]
-            ]
+            'natureOfBusiness' => 'nob'
         ];
 
         $expected = [
+            'operator-cpid' => [
+                'type' => 'type'
+            ],
             'operator-business-type' => [
                 'type' => 'type'
             ],
@@ -114,7 +117,7 @@ class OperatorBusinessDetailsTest extends MockeryTestCase
                 'lastName' => 'lname',
                 'personId' => 3,
                 'personVersion' => 4,
-                'natureOfBusinesses' => [5]
+                'natureOfBusiness' => 'nob'
             ],
             'registeredAddress' => 'address'
         ];

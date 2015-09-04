@@ -1,4 +1,4 @@
-<?php if (!$this->disable): ?>
+<?php if (!$this->disable && (!isset($documents) || !$documents)): ?>
 <div class="one-fifth--left">
     <?php
     if (!isset($navigation)) {
@@ -25,6 +25,11 @@
 
     endif;
     ?>
+    <?php if (isset($documents) && $documents && isset($filterForm)): ?>
+        <div class="filters">
+            <?php echo $this->form($filterForm); ?>
+        </div>
+    <?php endif;?>
 </div>
 <?php endif; ?>
 <div class="four-fifths  js-body__main">

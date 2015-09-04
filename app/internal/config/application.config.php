@@ -2,12 +2,13 @@
 $config = array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
+        'Dvsa\Olcs\Utils',
         'Dvsa\Olcs\Transfer',
         'ZfcBase',
         'ZfcUser',
         'ZfcRbac',
         'Olcs\Logging',
-        'Dvsa\Jackrabbit',
+        'Dvsa\Olcs\DocumentShare',
         'Dvsa\Olcs\Transfer',
         // Common should be included before our applications modules, so we can override common behaviour
         'Common',
@@ -15,8 +16,7 @@ $config = array(
         'Olcs',
         'Admin',
         'DoctrineModule',
-        'DoctrineORMModule',
-        'CpmsClient'
+        'DoctrineORMModule'
     ),
 
     // These are various options for the listeners attached to the ModuleManager

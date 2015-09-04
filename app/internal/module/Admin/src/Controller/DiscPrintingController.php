@@ -12,6 +12,14 @@ use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Common\Service\Entity\LicenceEntityService;
 
+use Dvsa\Olcs\Transfer\Command\GoodsDisc\PrintDiscs as PrintDiscsGoodsDto;
+use Dvsa\Olcs\Transfer\Command\PsvDisc\PrintDiscs as PrintDiscsPsvDto;
+use Dvsa\Olcs\Transfer\Command\GoodsDisc\ConfirmPrinting as ConfirmPrintingGoodsDto;
+use Dvsa\Olcs\Transfer\Command\PsvDisc\ConfirmPrinting as ConfirmPrintingPsvDto;
+use Dvsa\Olcs\Transfer\Query\DiscSequence\DiscPrefixes as DiscPrefixesQry;
+use Dvsa\Olcs\Transfer\Query\DiscSequence\DiscsNumbering as DiscsNumberingQry;
+use Admin\Data\Mapper\DiscPrinting as DiscPrintingMapper;
+
 /**
  * Disc Printing Controller
  *
@@ -45,7 +53,7 @@ class DiscPrintingController extends AbstractActionController
     /**
      * Index action
      *
-     * @return Zend\ViewModel\ViewModel
+     * @return ViewModel
      */
     public function indexAction()
     {
@@ -61,12 +69,13 @@ class DiscPrintingController extends AbstractActionController
             }
         }
         $successStatus = $this->params()->fromRoute('success', null);
-        $view = new ViewModel(
-            [
-                'form' => $form,
-                'successStatus' => $successStatus
-            ]
-        );
+        $params = [
+            'form' => $form
+        ];
+        if (!$this->getRequest()->isPost()) {
+            $params['successStatus'] = $successStatus;
+        }
+        $view = new ViewModel($params);
         $this->loadScripts($inlineScripts);
         $view->setTemplate('disc-printing/index');
         return $this->renderView($view);
@@ -78,170 +87,46 @@ class DiscPrintingController extends AbstractActionController
      * @param array $data
      * @return mixed
      */
-    protected function processForm($data)
+    protected function processForm($data, $form)
     {
         $params = $this->getFlattenParams($data);
 
-        // get disc prefix using disc sequence and licence type
-        $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
-        $discPrefix = $discSequenceService->getDiscPrefix($params['discSequence'], $params['licenceType']);
+        $this->hasDiscsToPrint = false;
         // get discs to print
         if ($params['operatorType'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
-
-            $this->hasDiscsToPrint = $this->printDiscsPsv(
-                $params['licenceType'],
-                $params['startNumber'],
-                $discPrefix
-            );
+            $dataToSend = [
+                'licenceType'  => $params['licenceType'],
+                'startNumber'  => $params['startNumber'],
+                'discSequence' =>  $params['discSequence']
+            ];
+            $dtoClass = PrintDiscsPsvDto::class;
         } else {
-
-            $this->hasDiscsToPrint = $this->printDiscsGoods(
-                $params['niFlag'],
-                $params['operatorType'],
-                $params['licenceType'],
-                $params['startNumber'],
-                $discPrefix
-            );
+            $dataToSend = [
+                'niFlag'      => $params['niFlag'],
+                'licenceType' => $params['licenceType'],
+                'startNumber' => $params['startNumber'],
+                'discSequence' =>  $params['discSequence']
+            ];
+            $dtoClass = PrintDiscsGoodsDto::class;
         }
-    }
-
-    protected function printDiscsPsv($licenceType, $startNo, $discPrefix)
-    {
-        $discService = $this->getServiceLocator()->get('Admin\Service\Data\PsvDisc');
-        $discsToPrint = $discService->getDiscsToPrint(
-            $licenceType,
-            $discPrefix
+        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand(
+            $dtoClass::create($dataToSend)
         );
+        /** @var \Common\Service\Cqrs\Response $response */
+        $response = $this->getServiceLocator()->get('CommandService')->send($command);
 
-        if (!count($discsToPrint)) {
-            return false;
-        }
-
-        $this->printDiscs(
-            'PSV',
-            $startNo,
-            $discsToPrint
-        );
-
-        $queries = [];
-        $bookmarks = [];
-        foreach ($discsToPrint as $disc) {
-            $id = $disc['licence']['id'];
-
-            if (!isset($bookmarks[$id])) {
-                $bookmarks[$id] = [
-                    'NO_DISCS_PRINTED' => ['count' => 0]
-                ];
+        if ($response->isClientError()) {
+            $errors = DiscPrintingMapper::mapFromErrors($form, $response->getResult()['messages']);
+            foreach ($errors as $message) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($message);
             }
-
-            $bookmarks[$id]['NO_DISCS_PRINTED']['count'] ++;
-
-            $queries[$id] = [
-                'licence' => $id,
-                'user'    => $this->getLoggedInUser()
-            ];
         }
-
-        $this->getServiceLocator()
-            ->get('VehicleList')
-            ->setQueryData($queries)
-            ->setBookmarkData($bookmarks)
-            ->setTemplate('PSVVehiclesList')
-            ->setDescription('PSV Vehicle List')
-            ->generateVehicleList();
-
-        $discService->setIsPrintingOn($discsToPrint);
-        return true;
-    }
-
-    protected function printDiscsGoods($niFlag, $operatorType, $licenceType, $startNo, $discPrefix)
-    {
-        $discService = $this->getServiceLocator()->get('Admin\Service\Data\GoodsDisc');
-        $discsToPrint = $discService->getDiscsToPrint(
-            $niFlag,
-            $operatorType,
-            $licenceType,
-            $discPrefix
-        );
-
-        if (!count($discsToPrint)) {
-            return false;
+        if ($response->isServerError()) {
+            $this->addErrorMessage('unknown-error');
         }
-
-        $this->printDiscs(
-            'Goods',
-            $startNo,
-            $discsToPrint
-        );
-
-        $queries = [];
-        foreach ($discsToPrint as $disc) {
-            $id = $disc['licenceVehicle']['licence']['id'];
-            $queries[$id] = [
-                'licence' => $id,
-                'user' => $this->getLoggedInUser()
-            ];
+        if ($response->isOk()) {
+            $this->hasDiscsToPrint = true;
         }
-
-        // generate vehicle list for all licences which are affected by new discs
-
-        $this->getServiceLocator()
-            ->get('VehicleList')
-            ->setQueryData($queries)
-            ->setTemplate('GVVehiclesList')
-            ->setDescription('Goods Vehicle List')
-            ->generateVehicleList();
-
-        $discService->setIsPrintingOn($discsToPrint);
-
-        return true;
-    }
-
-    protected function printDiscs($type, $startNo, $discsToPrint)
-    {
-        $bookmark = $this->templateParams[$type]['bookmark'];
-        $filename = $this->templateParams[$type]['template'] . '.rtf';
-        $template = '/templates/' . $filename;
-
-        $queryData = [];
-        foreach ($discsToPrint as $disc) {
-            $queryData[] = $disc['id'];
-        }
-
-        $documentService = $this->getServiceLocator()->get('Document');
-
-        $file = $this->getServiceLocator()
-            ->get('ContentStore')
-            ->read($template);
-
-        $query = $documentService->getBookmarkQueries($file, $queryData);
-
-        $result = $this->makeRestCall('BookmarkSearch', 'GET', [], $query);
-
-        $discNumber = (int)$startNo;
-
-        // NB the loop-by-reference here
-        foreach ($result[$bookmark] as &$row) {
-            $row['discNo'] = $discNumber ++;
-        }
-
-        $content = $documentService->populateBookmarks($file, $result);
-
-        $storedFile = $this->getServiceLocator()
-            ->get('Helper\DocumentGeneration')
-            ->uploadGeneratedContent(
-                $content,
-                // @TODO: must swap these back once we stop attaching
-                // docs to a licence; this is only used because to download a
-                // document it needs to live in the 'documents' namespace
-                //self::STORAGE_PATH,
-                'documents',
-                $filename
-            );
-
-        $this->getServiceLocator()
-            ->get('PrintScheduler')
-            ->enqueueFile($storedFile, $type . ' Disc List');
     }
 
     /**
@@ -287,33 +172,13 @@ class DiscPrintingController extends AbstractActionController
         $discSequence = $form->get('prefix')->get('discSequence')->getValue();
         $startNumberEntered = $form->get('discs-numbering')->get('startNumber')->getValue();
 
-        // get disc prefix using disc sequence and licence type
-        $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
-        $discPrefix = $discSequenceService->getDiscPrefix($discSequence, $licenceType);
-
-        // set up start number validator
-        $goodsDiscNumberValidator = $this->getServiceLocator()->get('goodsDiscStartNumberValidator');
-        $numbering = [];
-        if ($licenceType && $discPrefix && $discSequence && (($niFlag == 'N' && $operatorType) || $niFlag == 'Y')) {
-            $numbering = $this->processDiscNumbering(
-                $niFlag,
-                $licenceType,
-                $operatorType,
-                $discPrefix,
-                $discSequence,
-                $startNumberEntered
-            );
-        }
-        if (isset($numbering['startNumber'])) {
-            $goodsDiscNumberValidator->setOriginalStartNumber($numbering['startNumber']);
-        }
-
-        $startNumberValidatorChain = $form
-                                        ->getInputFilter()
-                                        ->get('discs-numbering')
-                                        ->get('startNumber')
-                                        ->getValidatorChain();
-        $startNumberValidatorChain->attach($goodsDiscNumberValidator);
+        $numbering = $this->processDiscNumbering(
+            $niFlag,
+            $licenceType,
+            $operatorType,
+            $discSequence,
+            $startNumberEntered
+        );
 
         if (isset($numbering['endNumber'])) {
             $form->get('discs-numbering')->get('endNumber')->setValue($numbering['endNumber']);
@@ -329,16 +194,6 @@ class DiscPrintingController extends AbstractActionController
     }
 
     /**
-     * Get disc prefixes
-     *
-     * @return Zend\ViewModel\JsonModel
-     */
-    public function discPrefixesListAction()
-    {
-        return new JsonModel($this->populateDiscPrefixes());
-    }
-
-    /**
      * Get disc numbering data
      *
      * @return Zend\ViewModel\JsonModel
@@ -346,27 +201,13 @@ class DiscPrintingController extends AbstractActionController
     public function discNumberingAction()
     {
         $params = $this->getFlattenParams();
-        $flProcess = true;
-        $viewResults = [];
-
-        // checking params which needed to calculate goods discs start/end numbers,
-        // we can't process further without having it defined
-        if (!$params['niFlag'] || ($params['niFlag'] == 'N' && !$params['operatorType']) || !$params['licenceType'] ||
-            !$params['discSequence'] || !$params['discPrefix']) {
-            $flProcess = false;
-        }
-
-        // calculate start and end numbers, number of pages
-        if ($flProcess) {
-            $viewResults = $this->processDiscNumbering(
-                $params['niFlag'],
-                $params['licenceType'],
-                $params['operatorType'],
-                $params['discPrefix'],
-                $params['discSequence'],
-                $params['startNumber']
-            );
-        }
+        $viewResults = $this->processDiscNumbering(
+            $params['niFlag'],
+            $params['licenceType'],
+            $params['operatorType'],
+            $params['discSequence'],
+            $params['startNumber']
+        );
 
         return new JsonModel($viewResults);
     }
@@ -386,62 +227,54 @@ class DiscPrintingController extends AbstractActionController
         $niFlag,
         $licenceType,
         $operatorType,
-        $discPrefix,
         $discSequence,
         $startNumberEntered = null
     ) {
         $retv = [];
-
-        $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
-
-        // calculate start and end numbers, number of pages
-        $retv['startNumber'] = $discSequenceService->getDiscNumber($discSequence, $licenceType);
-
-        if ($operatorType === LicenceEntityService::LICENCE_CATEGORY_PSV) {
-            $psvDiscService = $this->getServiceLocator()->get('Admin\Service\Data\PsvDisc');
-            $retv['discsToPrint'] = count(
-                $psvDiscService->getDiscsToPrint($licenceType, $discPrefix)
+        $queryToSend = $this->getServiceLocator()
+            ->get('TransferAnnotationBuilder')
+            ->createQuery(
+                DiscsNumberingQry::create(
+                    [
+                        'niFlag' => $niFlag,
+                        'operatorType' => $operatorType,
+                        'licenceType' => $licenceType,
+                        'discSequence' => $discSequence,
+                        'startNumberEntered' => $startNumberEntered
+                    ]
+                )
             );
-        } else {
-            $goodsDiscService = $this->getServiceLocator()->get('Admin\Service\Data\GoodsDisc');
-            $retv['discsToPrint'] = count(
-                $goodsDiscService->getDiscsToPrint($niFlag, $operatorType, $licenceType, $discPrefix)
-            );
+        $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
+        if ($response->isServerError() || $response->isClientError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
-        $retv['endNumber'] = (int) ($retv['discsToPrint'] ? $retv['startNumber'] + $retv['discsToPrint'] - 1 : 0);
-        $retv['originalEndNumber'] = $retv['endNumber'];
-        $originalStartNumber = $retv['startNumber'];
-
-        // if we received start number this means that user changed this value and we need to validate it
-        // do not allow to decrease start number
-        if ($startNumberEntered && $startNumberEntered < $retv['startNumber']) {
-            $retv['error'] = 'Decreasing the start number is not permitted';
-        } elseif ($startNumberEntered && $startNumberEntered > $retv['startNumber']) {
-            // increasing start and end numbers
-            $delta = $startNumberEntered - $retv['startNumber'];
-            $retv['startNumber'] = $startNumberEntered;
-            $retv['endNumber'] += $delta;
+        if ($response->isOk()) {
+            $retv = $response->getResult()['results'];
         }
-        /*
-         * we have two end numbers, one original, which calculated based on start number entered by user
-         * and another one calculated by rounding up to nearest integer divided by 6. that's because
-         * there are numbers already printed on the discs pages, 6 discs pere page, and even we need to print
-         * only one disc, other numbers will be used voided.
-         */
-        $retv['endNumberIncreased'] = $retv['endNumber'];
-        if ($retv['endNumber']) {
-            $retv['endNumber'] =
-                $retv['startNumber'] +
-                $retv['discsToPrint'] +
-                ((6 - $retv['discsToPrint'] % self::DISCS_ON_PAGE) % 6) - 1;
-        }
-        $retv['totalPages'] = $retv['discsToPrint'] ?
-            (ceil(($retv['endNumber'] - $originalStartNumber) / self::DISCS_ON_PAGE)) -
-            (floor(($retv['startNumber'] - $originalStartNumber) / self::DISCS_ON_PAGE)) :
-            0;
 
         return $retv;
+    }
+
+    /**
+     * Get disc prefixes
+     *
+     * @return Zend\ViewModel\JsonModel
+     */
+    public function discPrefixesListAction()
+    {
+        return new JsonModel($this->populateDiscPrefixes());
+    }
+
+    /**
+     * Check parameters and populate disc prefixes
+     *
+     * @return array
+     */
+    protected function populateDiscPrefixes()
+    {
+        $params = $this->getFlattenParams();
+        return $this->getDiscPrefixes($params['niFlag'], $params['operatorType'], $params['licenceType']);
     }
 
     /**
@@ -454,42 +287,28 @@ class DiscPrintingController extends AbstractActionController
      */
     protected function getDiscPrefixes($niFlag, $operatorType, $licenceType)
     {
-        $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
-        $prefixes = $discSequenceService->fetchListOptions(
-            [
-            'niFlag' => $niFlag,
-            'goodsOrPsv' => $operatorType,
-            'licenceType' => $licenceType
-            ]
-        );
-
-        $retv = array();
-
-        // sort prefixes alphabetically by label
-        asort($prefixes);
-
-        foreach ($prefixes as $id => $result) {
-            $retv[] = array(
-                'value' => $id,
-                'label' => $result
+        $queryToSend = $this->getServiceLocator()
+            ->get('TransferAnnotationBuilder')
+            ->createQuery(
+                DiscPrefixesQry::create(
+                    [
+                        'niFlag' => $niFlag,
+                        'operatorType' => $operatorType,
+                        'licenceType' => $licenceType
+                    ]
+                )
             );
+        $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
+
+        $retv = [];
+        if ($response->isOk()) {
+            $retv = DiscPrintingMapper::mapFromResultForPrefixes($response->getResult()['results']);
+        }
+
         return $retv;
-    }
-
-    /**
-     * Check parameters and populate disc prefixes
-     *
-     * @return array
-     */
-    protected function populateDiscPrefixes()
-    {
-        $params = $this->getFlattenParams();
-        if (($params['niFlag'] == 'N' && !$params['operatorType']) || !$params['licenceType']) {
-            return [];
-        }
-
-        return $this->getDiscPrefixes($params['niFlag'], $params['operatorType'], $params['licenceType']);
     }
 
     /**
@@ -501,27 +320,7 @@ class DiscPrintingController extends AbstractActionController
     protected function getFlattenParams($data = null)
     {
         $params = is_array($data) ? $data : $this->getRequest()->getPost()->toArray();
-        $flattenParams = [];
-        $flattenParams['niFlag'] =
-            isset($params['operator-location']['niFlag']) ? $params['operator-location']['niFlag'] :
-            (isset($params['niFlag']) ? $params['niFlag'] : '');
-        $flattenParams['operatorType'] =
-            isset($params['operator-type']['goodsOrPsv']) ? $params['operator-type']['goodsOrPsv'] :
-            (isset($params['operatorType']) ? $params['operatorType'] : '');
-        $flattenParams['licenceType'] =
-            isset($params['licence-type']['licenceType']) ? $params['licence-type']['licenceType'] :
-            (isset($params['licenceType']) ? $params['licenceType'] : '');
-        $flattenParams['startNumber'] =
-            isset($params['discs-numbering']['startNumber']) ? $params['discs-numbering']['startNumber'] :
-            (isset($params['startNumberEntered']) ? $params['startNumberEntered'] : null);
-        $flattenParams['discSequence'] =
-            isset($params['prefix']['discSequence']) ? $params['prefix']['discSequence'] :
-            (isset($params['discSequence']) ? $params['discSequence'] : '');
-        $flattenParams['discPrefix'] =isset($params['discPrefix']) ? $params['discPrefix'] : '';
-        $flattenParams['isSuccessfull'] =isset($params['isSuccessfull']) ? $params['isSuccessfull'] : '';
-        $flattenParams['endNumber'] =isset($params['endNumber']) ? $params['endNumber'] : '';
-
-        return $flattenParams;
+        return DiscPrintingMapper::mapFromForm($params);
     }
 
     /**
@@ -532,38 +331,46 @@ class DiscPrintingController extends AbstractActionController
     {
         $params = $this->getFlattenParams();
         $retv = [];
-        $discSequenceService = $this->getServiceLocator()->get('Admin\Service\Data\DiscSequence');
 
         if ($params['operatorType'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
-            $discService = $this->getServiceLocator()->get('Admin\Service\Data\PsvDisc');
-            $discsToPrint = $discService->getDiscsToPrint(
-                $params['licenceType'],
-                $params['discPrefix']
-            );
+            $dtoClass = ConfirmPrintingPsvDto::class;
+            $data = [
+                'licenceType' => $params['licenceType'],
+                'startNumber' => $params['startNumber'],
+                'endNumber' => $params['endNumber'],
+                'discSequence' => $params['discSequence'],
+                'isSuccessfull' => $params['isSuccessfull']
+            ];
         } else {
-            $discService = $this->getServiceLocator()->get('Admin\Service\Data\GoodsDisc');
-            $discsToPrint = $discService->getDiscsToPrint(
-                $params['niFlag'],
-                $params['operatorType'],
-                $params['licenceType'],
-                $params['discPrefix']
-            );
+            $dtoClass = ConfirmPrintingGoodsDto::class;
+            $data = [
+                'niFlag' => $params['niFlag'],
+                'licenceType' => $params['licenceType'],
+                'startNumber' => $params['startNumber'],
+                'endNumber' => $params['endNumber'],
+                'discSequence' => $params['discSequence'],
+                'isSuccessfull' => $params['isSuccessfull']
+            ];
         }
 
-        try {
-            if ($params['isSuccessfull']) {
-                $discService->setIsPrintingOffAndAssignNumber($discsToPrint, $params['startNumber']);
-                $discSequenceService->setNewStartNumber(
-                    $params['licenceType'],
-                    $params['discSequence'],
-                    $params['endNumber'] + 1
-                );
-            } else {
-                $discService->setIsPrintingOff($discsToPrint);
+        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand(
+            $dtoClass::create($data)
+        );
+        /** @var \Common\Service\Cqrs\Response $response */
+        $response = $this->getServiceLocator()->get('CommandService')->send($command);
+
+        if ($response->isClientError()) {
+            foreach ($response->getResult()['messages'] as $message) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($message);
             }
-        } catch (\Exception $e) {
+        }
+        if ($response->isServerError()) {
+            $this->addErrorMessage('unknown-error');
+        }
+        if (!$response->isOk()) {
             $retv['status'] = 500;
         }
+
         return new JsonModel($retv);
     }
 }

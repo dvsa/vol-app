@@ -98,10 +98,6 @@ trait LicenceControllerTrait
 
         $params = $this->getHeaderParams();
 
-        $licenceLayout->setVariable(
-            'markers',
-            $this->setupMarkers($this->getLicence())
-        );
         $params = array_merge($params, $variables);
 
         $view = new Layout($licenceLayout, $params);

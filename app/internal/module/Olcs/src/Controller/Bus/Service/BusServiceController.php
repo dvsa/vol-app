@@ -97,8 +97,7 @@ class BusServiceController extends AbstractInternalController implements
     {
         $query = ConditionUndertakingListDto::class;
         $data = [
-            'licence' => $this->params()->fromRoute('licence'),
-            'conditionType' => self::CONDITION_TYPE_CONDITION
+            'licence' => $this->params()->fromRoute('licence')
         ];
 
         $response = $this->handleQuery($query::create($data));
@@ -135,7 +134,7 @@ class BusServiceController extends AbstractInternalController implements
         }
 
         // If Scottish rules identified by busNoticePeriod = 1, remove radio and replace with hidden field
-        if ($formData['fields']['busNoticePeriod'] !== 1) {
+        if ((int)$formData['fields']['busNoticePeriod'] !== 1) {
             $form->get('fields')->remove('opNotifiedLaPte');
         } else {
             $form->get('fields')->remove('opNotifiedLaPteHidden');

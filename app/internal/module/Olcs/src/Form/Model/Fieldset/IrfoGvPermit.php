@@ -47,17 +47,14 @@ class IrfoGvPermit extends OrganisationBase
     public $yearRequired = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"irfoPermitStatusHtml", "required": false})
      * @Form\Options({
      *     "label": "Status",
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a status",
-     *     "category": "irfo_permit_status"
      * })
-     * @Form\Type("DynamicSelect")
+     * @Form\Type("Common\Form\Elements\Types\Html")
      */
-    public $irfoPermitStatus = null;
+    public $irfoPermitStatusHtml = null;
 
     /**
      * @Form\Required(false)
@@ -85,14 +82,39 @@ class IrfoGvPermit extends OrganisationBase
     public $inForceDate;
 
     /**
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"expiryDateHtml", "required": false})
+     * @Form\Attributes({"id":"expiryDate"})
      * @Form\Options({
      *     "label": "Expiry date",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false,
+     *     "max_year_delta": "+2",
+     *     "min_year_delta": "-40",
+     *     "hint": "The calculated expiry date is <span id=calculatedExpiryDateText>dd/mm/yyyy</span>",
      * })
-     * @Form\Type("Common\Form\Elements\Types\Html")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     *
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "expiryDate",
+     *          "context_values": {"--"},
+     *          "context_truth": false,
+     *          "allow_empty" : true,
+     *          "validators": {
+     *              {"name": "Date", "options": {"format": "Y-m-d"}},
+     *              {
+     *                  "name": "DateCompare",
+     *                  "options": {
+     *                      "compare_to":"inForceDate",
+     *                      "compare_to_label":"In force date",
+     *                      "operator": "gte",
+     *                  }
+     *              }
+     *          }
+     *      }
+     * })
      */
-    public $expiryDateHtml;
+    public $expiryDate;
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Fee exempt"})

@@ -1,8 +1,8 @@
 <?php
+
 /**
  * Publication Controller
  */
-
 namespace Admin\Controller;
 
 use Olcs\Controller\CrudAbstract;
@@ -18,7 +18,6 @@ use Common\Exception\DataServiceException;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-
 class PublicationController extends CrudAbstract
 {
     /**
@@ -112,7 +111,7 @@ class PublicationController extends CrudAbstract
      *
      * @var array
      */
-    protected $inlineScripts = array('table-actions');
+    protected $inlineScripts = array('table-actions', 'file-link');
 
     /**
      * Entity display name (used by confirm plugin via deleteActionTrait)
@@ -189,26 +188,6 @@ class PublicationController extends CrudAbstract
         $view = $elasticSearch->generateResults($view);
 
         return $this->renderView($view, 'Publications');
-    }
-
-    /**
-     * Makes file available for download
-     *
-     * @return mixed
-     */
-    public function downloadAction()
-    {
-        //we need to get the publication so we can work out the path
-        $publication = $this->loadCurrent();
-        $urlParams = $this->getPublicationService()->getFilePathVariablesFromPublication($publication);
-        $uploader = $this->getUploader();
-        $documentPath = $uploader->buildPathNamespace($urlParams);
-
-        return $uploader->download(
-            $this->params()->fromRoute('docIdentifier'),
-            $publication['document']['filename'],
-            $documentPath
-        );
     }
 
     /**

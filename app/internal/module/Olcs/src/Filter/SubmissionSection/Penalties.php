@@ -31,6 +31,7 @@ class Penalties extends AbstractSubmissionSectionFilter
             $seriousInfringement['siCategory']['description'] : '';
         $dataToReturnArray['overview']['categoryType'] = isset($seriousInfringement['siCategoryType']['description']) ?
             $seriousInfringement['siCategoryType']['description'] : '';
+
         $dataToReturnArray['overview']['transportUndertakingName'] = isset
         ($data['erruTransportUndertakingName']) ? $data['erruTransportUndertakingName'] : '';
         $dataToReturnArray['overview']['memberState'] = isset($seriousInfringement['memberStateCode']['countryDesc']) ?

@@ -18,6 +18,14 @@ class IrfoGvPermit implements MapperInterface
      */
     public static function mapFromResult(array $data)
     {
+        // TODO - find better way of injecting to mappers
+        if (!empty($data['now'])) {
+            $now = $data['now'];
+            unset($data['now']);
+        } else {
+            $now = new \DateTime();
+        }
+
         $formData['fields'] = $data;
 
         foreach ($formData['fields'] as $key => $value) {
@@ -26,16 +34,24 @@ class IrfoGvPermit implements MapperInterface
             }
         }
 
+        if (empty($formData['fields']['yearRequired'])) {
+            // defaults to the current year
+            $formData['fields']['yearRequired'] = $now->format('Y');
+        }
+
+        // set status for HTML element
+        $formData['fields']['irfoPermitStatusHtml']
+            = (!empty($data['irfoPermitStatus']['description'])) ? $data['irfoPermitStatus']['description'] : 'Pending';
+
         if (!empty($formData['fields']['createdOn'])) {
             // format createOn date
             $createdOn = new \DateTime($formData['fields']['createdOn']);
             $formData['fields']['createdOnHtml'] = $createdOn->format('d/m/Y');
         }
 
-        if (!empty($formData['fields']['expiryDate'])) {
-            // format expiryDate date
-            $expiryDate = new \DateTime($formData['fields']['expiryDate']);
-            $formData['fields']['expiryDateHtml'] = $expiryDate->format('d/m/Y');
+        if (empty($formData['fields']['inForceDate'])) {
+            // defaults to now
+            $formData['fields']['inForceDate'] = $now;
         }
 
         if (!empty($formData['fields']['id'])) {

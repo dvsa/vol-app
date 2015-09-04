@@ -46,7 +46,6 @@ return [
                                             ]
                                         ]
                                     ],
-                                    'natureOfBusinesses' => []
                                 ]
                             ]
                         ]
@@ -126,7 +125,7 @@ return [
                 ]
             ]
         ],
-        'persons' => [
+        'people' => [
             'subcategoryId' => 120,
             'config' => [],
             'section_type' => ['list'],

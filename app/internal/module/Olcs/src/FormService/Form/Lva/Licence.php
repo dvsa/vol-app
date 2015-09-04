@@ -20,6 +20,6 @@ class Licence extends CommonLicence
     {
         parent::alterForm($form);
 
-        $form->get('form-actions')->get('save')->setLabel('save');
+        $form->get('form-actions')->get('save')->setLabel('internal.save.button');
     }
 }

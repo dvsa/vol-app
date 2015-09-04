@@ -115,11 +115,8 @@ class Submission extends AbstractData implements CloseableInterface
      *
      * @return array
      */
-    public function extractSelectedSubmissionSectionsData($submission)
+    public function extractSelectedSubmissionSectionsData($submission, $submissionSectionRefData, $submissionConfig)
     {
-        $submissionSectionRefData = $this->getRefDataService()->fetchListOptions('submission_section');
-        $submissionConfig = $this->getSubmissionConfig();
-
         $selectedSectionsArray = json_decode($submission['dataSnapshot'], true);
 
         // add section description text from ref data

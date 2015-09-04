@@ -4,15 +4,14 @@ namespace Olcs\Listener\RouteParam;
 
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
+use \Dvsa\Olcs\Transfer\Query\Cases\Cases as ItemDto;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Helper\Navigation\PluginManager as ViewHelperManager;
-use Common\Service\Data\Licence as LicenceService;
-use Olcs\Service\Data\Cases as CaseService;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
+use Common\Exception\ResourceNotFoundException;
 
 /**
  * Class Cases
@@ -24,71 +23,37 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     use ViewHelperManagerAwareTrait;
 
     /**
-     * @var LicenceService
-     */
-    protected $licenceService;
-
-    /**
-     * @var ApplicationService
-     */
-    protected $applicationService;
-
-    /**
-     * @var CaseService
-     */
-    protected $caseService;
-
-    /**
-     * @var NavigationService
+     * @var \Zend\Navigation\Navigation
      */
     protected $navigationService;
 
     /**
-     * @param \Olcs\Service\Data\Cases $caseService
+     * @var \Zend\Navigation\Navigation
      */
-    public function setCaseService($caseService)
+    protected $sidebarNavigationService;
+
+    protected $annotationBuilder;
+
+    protected $queryService;
+
+    public function getAnnotationBuilder()
     {
-        $this->caseService = $caseService;
+        return $this->annotationBuilder;
     }
 
-    /**
-     * @return \Olcs\Service\Data\Cases
-     */
-    public function getCaseService()
+    public function getQueryService()
     {
-        return $this->caseService;
+        return $this->queryService;
     }
 
-    /**
-     * @param \Common\Service\Data\Licence $licenceService
-     */
-    public function setLicenceService($licenceService)
+    public function setAnnotationBuilder($annotationBuilder)
     {
-        $this->licenceService = $licenceService;
+        $this->annotationBuilder = $annotationBuilder;
     }
 
-    /**
-     * @return \Common\Service\Data\Licence
-     */
-    public function getLicenceService()
+    public function setQueryService($queryService)
     {
-        return $this->licenceService;
-    }
-
-    /**
-     * @param \Common\Service\Data\Application $applicationService
-     */
-    public function setApplicationService($applicationService)
-    {
-        $this->applicationService = $applicationService;
-    }
-
-    /**
-     * @return \Common\Service\Data\Application
-     */
-    public function getApplicationService()
-    {
-        return $this->applicationService;
+        $this->queryService = $queryService;
     }
 
     /**
@@ -101,28 +66,47 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param \Zend\Navigation\Navigation $navigationService
+     * @return $this
      */
     public function setNavigationService($navigationService)
     {
         $this->navigationService = $navigationService;
+        return $this;
     }
 
     /**
-     * Gets the sidebar nav
-     *
      * @return \Zend\Navigation\Navigation
      */
-    public function getSidebarNavigation()
+    public function getSidebarNavigationService()
     {
         return $this->sidebarNavigationService;
     }
 
     /**
      * @param \Zend\Navigation\Navigation $sidebarNavigationService
+     * @return $this
      */
     public function setSidebarNavigationService($sidebarNavigationService)
     {
         $this->sidebarNavigationService = $sidebarNavigationService;
+        return $this;
+    }
+
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->setAnnotationBuilder($serviceLocator->get('TransferAnnotationBuilder'));
+        $this->setQueryService($serviceLocator->get('QueryService'));
+        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
+        $this->setNavigationService($serviceLocator->get('Navigation'));
+        $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
+
+        return $this;
     }
 
     /**
@@ -145,42 +129,27 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
      */
     public function onCase(RouteParam $e)
     {
-        $context = $e->getContext();
-        $case = $this->getCaseService()->fetchCaseData($e->getValue());
+        $case = $this->getCase($e->getValue());
 
         $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
-        $placeholder->getContainer('pageTitle')->append('Case ' . $case['id']);
-        $placeholder->getContainer('pageSubtitle')->append('Case subtitle');
-
+        $placeholder->getContainer('pageTitle')->append($this->getPageTitle($case));
+        $placeholder->getContainer('status')->set($this->getStatusArray($case));
         $placeholder->getContainer('case')->set($case);
 
-        $status = [
-            'colour' => $case['closedDate'] !== null ? 'Grey' : 'Orange',
-            'value' => $case['closedDate'] !== null ? 'Closed' : 'Open',
-        ];
-
-        $placeholder->getContainer('status')->set($status);
-
-        // if we already have licence data, no sense in getting it again.
         if (isset($case['licence']['id'])) {
-            $this->getLicenceService()->setData($case['licence']['id'], $case['licence']);
-
             // Trigger the licence now - it won't trigger twice.
             $e->getTarget()->trigger('licence', $case['licence']['id']);
         }
 
-        // if we already have application data, no sense in getting it again.
         if (isset($case['application']['id'])) {
-            $this->getApplicationService()->setData($case['application']['id'], $case['application']);
-
             // Trigger the application now - it won't trigger twice.
             $e->getTarget()->trigger('application', $case['application']['id']);
         }
 
-        // If we have a transportManager, get it here.
-        if ($case->isTm()) {
+        if (isset($case['transportManager']['id'])) {
+            // If we have a transportManager, get it here.
             $this->getNavigationService()->findOneById('case_opposition')->setVisible(false);
             $this->getNavigationService()->findOneById('case_details_legacy_offence')->setVisible(false);
             $this->getNavigationService()->findOneById('case_details_annual_test_history')->setVisible(false);
@@ -194,7 +163,7 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
             $e->getTarget()->trigger('transportManager', $case['transportManager']['id']);
 
             if (!empty($case['tmDecisions'])) {
-                $sidebarNav = $this->getSidebarNavigation();
+                $sidebarNav = $this->getSidebarNavigationService();
                 $sidebarNav->findOneById('case-decisions-transport-manager-repute-not-lost')->setVisible(false);
                 $sidebarNav->findOneById('case-decisions-transport-manager-declare-unfit')->setVisible(false);
                 $sidebarNav->findOneById('case-decisions-transport-manager-no-further-action')->setVisible(false);
@@ -206,22 +175,56 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * Create service
+     * Get the Case data
      *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
+     * @param id $id
+     * @return array
+     * @throws ResourceNotFoundException
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    private function getCase($id)
     {
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setCaseService($serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\Cases'));
-        $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
-        $this->setApplicationService(
-            $serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Application')
+        $query = $this->getAnnotationBuilder()->createQuery(
+            ItemDto::create(['id' => $id])
         );
-        $this->setNavigationService($serviceLocator->get('Navigation'));
-        $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
 
-        return $this;
+        $response = $this->getQueryService()->send($query);
+
+        if (!$response->isOk()) {
+            throw new ResourceNotFoundException("Case id [$id] not found");
+        }
+
+        return $response->getResult();
+    }
+
+    private function getPageTitle($case)
+    {
+        $pageTitle = 'Case ' . $case['id'];
+
+        if (isset($case['application']['id'])) {
+            // prepend with application link
+            $appUrl = $this->getViewHelperManager()->get('Url')
+                ->__invoke('lva-application/case', ['application' => $case['application']['id']], [], true);
+
+            $pageTitle = sprintf('<a href="%1$s">%2$s</a> / %3$s', $appUrl, $case['application']['id'], $pageTitle);
+        }
+
+        return $pageTitle;
+    }
+
+    /**
+     * Get status array.
+     *
+     * @param $case
+     *
+     * @return array
+     */
+    private function getStatusArray($case)
+    {
+        $status = [
+            'colour' => isset($case['closedDate']) ? 'Grey' : 'Orange',
+            'value' => isset($case['closedDate']) ? 'Closed' : 'Open',
+        ];
+
+        return $status;
     }
 }

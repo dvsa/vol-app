@@ -1,4 +1,5 @@
 <?php
+
 namespace Olcs\Controller\Traits;
 
 use Zend\View\Model\ViewModel;
@@ -9,8 +10,8 @@ use Zend\View\Model\ViewModel;
  */
 trait DeleteActionTrait
 {
-
     abstract protected function redirectToIndex();
+
     /**
      * Performs a delete action and redirects to the index
      */

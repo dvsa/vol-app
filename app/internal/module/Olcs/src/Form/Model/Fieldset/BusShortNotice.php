@@ -393,4 +393,12 @@ class BusShortNotice extends Base
      * })
      */
     public $isLatestVariation = null;
+
+    /**
+     * @Form\Type("Hidden")
+     * @Form\Attributes({
+     *      "id":"fields[busRegStatus]"
+     * })
+     */
+    public $busRegStatus = null;
 }

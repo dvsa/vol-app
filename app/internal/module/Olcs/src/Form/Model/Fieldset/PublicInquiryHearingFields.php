@@ -171,7 +171,7 @@ class PublicInquiryHearingFields extends Base
      * })
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("SlaDateTimeSelect")
+     * @Form\Type("DateTimeSelect")
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{

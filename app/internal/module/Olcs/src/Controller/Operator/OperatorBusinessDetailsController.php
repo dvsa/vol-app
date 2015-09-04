@@ -44,6 +44,10 @@ class OperatorBusinessDetailsController extends OperatorController
      */
     public function indexAction()
     {
+        if ($this->isUnlicensed()) {
+            return $this->redirectToRoute('operator-unlicensed/business-details', [], [], true);
+        }
+
         $operator = $this->params()->fromRoute('organisation');
         $this->loadScripts(['operator-profile']);
         $post = $this->params()->fromPost();
@@ -167,7 +171,7 @@ class OperatorBusinessDetailsController extends OperatorController
     protected function mapErrors($form, array $errors)
     {
         $mapper = $this->mapperClass;
-        $mapper::mapFromErrors($form, $errors);
+        $errors = $mapper::mapFromErrors($form, $errors);
         if (!empty($errors)) {
             $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
             foreach ($errors as $error) {
@@ -208,7 +212,7 @@ class OperatorBusinessDetailsController extends OperatorController
                 break;
             case RefData::ORG_TYPE_IRFO:
                 $formHelper->remove($form, 'operator-details->companyNumber');
-                $formHelper->remove($form, 'operator-details->natureOfBusinesses');
+                $formHelper->remove($form, 'operator-details->natureOfBusiness');
                 $formHelper->remove($form, 'operator-details->information');
                 $formHelper->remove($form, 'operator-details->firstName');
                 $formHelper->remove($form, 'operator-details->lastName');

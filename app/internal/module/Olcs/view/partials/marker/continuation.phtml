@@ -1,0 +1,7 @@
+<p class="notice--danger">
+    <strong><?php echo $this->translate('Licence continuation') ?></strong><br>
+    <?php echo $this->dateTime->format('m/Y'); ?><br>
+    <a href="<?php echo $this->url('licence/update-continuation', ['licence' => $this->licenceId]) ?>" class="js-modal-ajax">
+        <?php echo $this->translate('Update details') ?>
+    </a>
+</p>

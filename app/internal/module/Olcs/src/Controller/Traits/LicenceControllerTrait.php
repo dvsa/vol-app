@@ -30,7 +30,6 @@ trait LicenceControllerTrait
         }
 
         $variables['licence'] = $licence;
-        $variables['markers'] = $this->setupMarkers($licence);
 
         $view = $this->getView($variables);
 
@@ -53,81 +52,9 @@ trait LicenceControllerTrait
             $id = $this->params()->fromRoute('licence');
         }
 
+        // @todo This needs migrating to new API
         /** @var \Common\Service\Data\Licence $dataService */
         $dataService = $this->getServiceLocator()->get('Common\Service\Data\Licence');
         return $dataService->fetchLicenceData($id);
-    }
-
-    /**
-     * Gets markers for the licence. Calls CaseMarkers plugin to generate markers and return as placeholder
-     *
-     * @param array $licence
-     * @return array $markers
-     */
-    public function setupMarkers($licence)
-    {
-        $markers = [];
-
-        $licenceMarkerPlugin = $this->getServiceLocator()
-                ->get('Olcs\Service\Marker\MarkerPluginManager')
-                ->get('Olcs\Service\Marker\LicenceMarkers');
-
-        if (!empty($licence['cases'])) {
-            foreach ($licence['cases'] as $case) {
-
-                $caseMarkers = $licenceMarkerPlugin->generateMarkerTypes(
-                    ['appeal', 'stay'],
-                    [
-                        'case' => $case,
-                        'licence' => $licence
-                    ]
-                );
-                $markers[] = $caseMarkers;
-            }
-        }
-
-        $licenceMarkerData = $this->getLicenceMarkerData($licence['id']);
-        $markers[] = $licenceMarkerPlugin->generateMarkerTypes(
-            ['status', 'statusRule', 'continuation'],
-            [
-                'licence' => $licence,
-                'licenceStatusRule' => $this->getLicenceStatusRule($licence['id']),
-                'continuationDetails' => $licenceMarkerData['continuationMarker']
-            ]
-        );
-
-        return $markers;
-    }
-
-    /**
-     * Get the data required for displaying licence markers
-     *
-     * @param int $licenceId
-     *
-     * @return array
-     * @throws \RuntimeException
-     */
-    protected function getLicenceMarkerData($licenceId)
-    {
-        $response = $this->handleQuery(
-            \Dvsa\Olcs\Transfer\Query\Licence\Markers::create(['id' => $licenceId])
-        );
-        if (!$response->isOk()) {
-            throw new \RuntimeException('Error getting licence markers');
-        }
-
-        return $response->getResult();
-    }
-
-    protected function getLicenceStatusRule($licenceId)
-    {
-        $rules = $this->getServiceLocator()->get('Helper\LicenceStatus')
-            ->getCurrentOrPendingRulesForLicence($licenceId);
-
-        if ($rules) {
-            return array_shift($rules);
-        }
-
-        return null;
     }
 }

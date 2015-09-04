@@ -18,8 +18,12 @@
             "type": "vcs"
         },
         {
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-utils.git",
+            "type": "vcs"
+        },
+        {
             "type": "vcs",
-            "url": "git@gitlab.inf.mgt.mtpdvsa:sc/jackrabbit.git"
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-document-share.git"
         },
         {
             "type": "vcs",
@@ -32,10 +36,6 @@
         {
             "type": "vcs",
             "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-autoload.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.inf.mgt.mtpdvsa:cpms/cpms-client.git"
         }
     ],
     "require": {
@@ -46,11 +46,11 @@
         "symfony/Filesystem": "~2.6.0",
         "zf-commons/zfc-rbac": "~2.4.0",
         "zf-commons/zfc-user": "~1.2.2",
-        "dvsa/jackrabbit": "~1.1.2",
-        "cpms/client": "0.1.x-dev",
+        "olcs/dvsa/document-share": "dev-develop",
         "olcs/autoload": "dev-develop",
         "olcs/OlcsCommon": "dev-develop",
         "olcs/olcs-transfer": "dev-develop",
+        "olcs/olcs-utils": "dev-develop",
         "olcs/olcs-logging": "dev-develop",
         "zendframework/zend-developer-tools": "dev-master",
         "soflomo/purifier": "~0.1.0"

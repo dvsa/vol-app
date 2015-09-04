@@ -27,7 +27,7 @@ class SubmissionSectionDetails extends AbstractHelper
         'case-outline'                      => 'SubmissionSectionOverview',
         'outstanding-applications'          => 'SubmissionSectionTable',
         'most-serious-infringement'         => 'SubmissionSectionOverview',
-        'persons'                           => 'SubmissionSectionTable',
+        'people'                            => 'SubmissionSectionTable',
         'operating-centres'                 => 'SubmissionSectionTable',
         'conditions-and-undertakings'       => 'SubmissionSectionMultipleTables',
         'intelligence-unit-check'           => 'SubmissionSectionOverview',

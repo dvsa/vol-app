@@ -130,4 +130,13 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
 
         return $request->isPost() && isset($data['form-actions'][$button]);
     }
+
+    public function alterFormForIndex($form, $data)
+    {
+        if (isset($data['removedDate']) && !is_null($data['removedDate'])) {
+            $form->setOption('readonly', true);
+        }
+
+        return $form;
+    }
 }

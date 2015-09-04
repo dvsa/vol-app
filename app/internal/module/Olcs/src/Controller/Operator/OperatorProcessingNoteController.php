@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\Note as AddForm;
@@ -22,7 +22,7 @@ use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
  * Note Controller
  */
 class OperatorProcessingNoteController extends AbstractInternalController implements
-    CaseControllerInterface,
+    OperatorControllerInterface,
     PageLayoutProvider,
     PageInnerLayoutProvider
 {
@@ -47,12 +47,12 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
 
     public function getPageLayout()
     {
-        return 'layout/operator-section';
+        return 'layout/' . ($this->isUnlicensed() ? 'unlicensed-' : '') . 'operator-section';
     }
 
     public function getPageInnerLayout()
     {
-        return 'layout/operator-subsection';
+        return 'layout/' . ($this->isUnlicensed() ? 'unlicensed-' : '') . 'operator-subsection';
     }
 
     /**
@@ -113,4 +113,30 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
     protected $inlineScripts = [
         'indexAction' => ['forms/filter', 'table-actions']
     ];
+
+    protected function isUnlicensed()
+    {
+        // need to determine if this is an unlicensed operator or not
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Organisation\Organisation::create(
+                [
+                    'id' => $this->params('organisation'),
+                ]
+            )
+        );
+
+        $organisation = $response->getResult();
+
+        return $organisation['isUnlicensed'];
+    }
+
+    public function onDispatch(\Zend\Mvc\MvcEvent $e)
+    {
+        if ($this->isUnlicensed()) {
+            $this->navigationId = 'unlicensed_operator_processing_notes';
+            $this->setNavigationCurrentLocation();
+        }
+
+        return parent::onDispatch($e);
+    }
 }

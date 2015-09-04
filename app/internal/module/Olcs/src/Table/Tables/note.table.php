@@ -51,7 +51,25 @@ return array(
         array(
             'title' => 'Note type',
             'formatter' => function ($data) {
-                return $data['noteType']['description'];
+
+                /**
+                 * @see https://jira.i-env.net/browse/OLCS-10256
+                 */
+                switch ($data['noteType']['id']) {
+
+                    case 'note_t_lic':
+                    case 'note_t_tm':
+                    case 'note_t_org':
+                        return $data['noteType']['description'];
+                        break;
+
+                    case 'note_t_app':
+                    case 'note_t_case':
+                        return $data['noteType']['description'] . ' ' . $data['case']['id'];
+                        break;
+                }
+
+                return 'BR ' . $data['busReg']['regNo'];
             }
         ),
         array(

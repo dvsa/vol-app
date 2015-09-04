@@ -156,6 +156,24 @@ class BusServiceControllerTest extends MockeryTestCase
                 // $opNotifiedLaPteHiddenRemoved
                 true,
             ],
+            // latest variation - registered - Scottish - busNoticePeriod as string
+            [
+                [
+                    'fields' => [
+                        'isLatestVariation' => true,
+                        'status' => 'breg_s_registered',
+                        'busNoticePeriod' => '1',
+                    ],
+                ],
+                // $readonly
+                true,
+                // $timetableRemoved
+                false,
+                // $opNotifiedLaPteRemoved
+                false,
+                // $opNotifiedLaPteHiddenRemoved
+                true,
+            ],
             // latest variation - registered - Other
             [
                 [
