@@ -79,6 +79,14 @@ class TransportManagerTest extends MockeryTestCase
                     ->with(false)
                     ->getMock()
             );
+        $sidebarNav->shouldReceive('findById')
+            ->with('transport-manager-quick-actions-merge')
+            ->andReturn(
+                m::mock(PageMvc::class)
+                    ->shouldReceive('setVisible')
+                    ->with(false)
+                    ->getMock()
+            );
 
         $this->setupGetTransportManager($sut, $tm);
 

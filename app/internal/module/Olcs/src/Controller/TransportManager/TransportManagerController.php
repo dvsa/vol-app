@@ -90,4 +90,120 @@ class TransportManagerController extends AbstractController implements Transport
         }
         return $this->tmDetailsCache[$tmId];
     }
+
+    /**
+     * Merge a transport manager
+     */
+    public function mergeAction()
+    {
+        $transportManagerId = (int) $this->params()->fromRoute('transportManager');
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = (array)$request->getPost();
+        } else {
+            $tmData = $this->getTransportManager($transportManagerId);
+            $data['fromTmName'] = $tmData['id'] .' '.
+                $tmData['homeCd']['person']['forename'] .' '.
+                $tmData['homeCd']['person']['familyName'];
+            if (isset($tmData['users'][0])) {
+                $data['fromTmName'] .= ' (associated user: '. $tmData['users'][0]['loginId'] .')';
+            }
+        }
+
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        /* @var $form \Common\Form\Form */
+        $form = $formHelper->createForm('TransportManagerMerge');
+        $form->setData($data);
+        $formHelper->setFormActionFromRequest($form, $request);
+
+        if ($request->isPost() && $form->isValid()) {
+            $toTmId = (int) $form->getData()['toTmId'];
+            /* @var $response \Common\Service\Cqrs\Response */
+            $response = $this->handleCommand(
+                \Dvsa\Olcs\Transfer\Command\Tm\Merge::create(
+                    ['id' => $transportManagerId, 'recipientTransportManager' => $toTmId]
+                )
+            );
+
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('form.tm-merge.success');
+
+                return $this->redirect()->toRouteAjax('transport-manager', ['transportManager' => $transportManagerId]);
+            } elseif ($response->isNotFound()) {
+                $formMessages['toTmId'][] = 'form.tm-merge.to-tm-id.validation.not-found';
+                $form->setMessages($formMessages);
+            } else {
+                if (isset($response->getResult()['messages'])) {
+                    foreach (array_keys($response->getResult()['messages']) as $key) {
+                        $formMessages['toTmId'][] = 'form.tm-merge.to-tm-id.validation.'. $key;
+                    }
+                    $form->setMessages($formMessages);
+                } else {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                        ->addErrorMessage('unknown-error');
+                }
+            }
+        }
+
+        $this->getServiceLocator()->get('Script')->loadFile('tm-merge');
+
+        // unset layout file
+        $this->layoutFile = null;
+        $this->pageLayout = null;
+
+        $view = new \Zend\View\Model\ViewModel(['form' => $form]);
+        $view->setTemplate('partials/form');
+
+        return $this->renderView($view, 'Merge transport manager');
+    }
+
+    /**
+     * Get TransportManager data
+     *
+     * @param int $id TransportManager ID
+     *
+     * @return array
+     * @throws \RuntimeException
+     */
+    protected function getTransportManager($id)
+    {
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Tm\TransportManager::create(['id' => $id])
+        );
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error getting TransportManager');
+        }
+
+        return $response->getResult();
+    }
+
+    /**
+     * Ajax lookup of transport manager name
+     *
+     * @return \Zend\View\Model\JsonModel
+     */
+    public function lookupAction()
+    {
+        $transportManagerId = (int) $this->params()->fromRoute('transportManager');
+        $view = new \Zend\View\Model\JsonModel();
+
+        try {
+            $tmData = $this->getTransportManager($transportManagerId);
+            $name = $tmData['homeCd']['person']['forename'] .' '. $tmData['homeCd']['person']['familyName'];
+            if (isset($tmData['users'][0])) {
+                $name .= ' (associated user: '. $tmData['users'][0]['loginId'] .')';
+            }
+            $view->setVariables(
+                [
+                    'id' => $tmData['id'],
+                    'name' => $name,
+                ]
+            );
+        } catch (\RuntimeException $e) {
+            $this->getResponse()->setStatusCode(404);
+        }
+
+        return $view;
+    }
 }
