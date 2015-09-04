@@ -2122,17 +2122,18 @@ $routes = [
                     ],
                 ],
             ],
-            'lookup' => [
-                'type' => 'literal',
-                'options' => [
-                    'route' => '/lookup',
-                    'defaults' => [
-                        'controller' => 'TMController',
-                        'action' => 'lookup'
-                    ],
-                ],
+        ],
+    ],
+    'transport-manager-lookup' => [
+        'type' => 'literal',
+        'options' => [
+            'route' => '/transport-manager/lookup',
+            'defaults' => [
+                'controller' => 'TMController',
+                'action' => 'lookup',
             ],
         ],
+        'may_terminate' => true,
     ],
     'create_transport_manager' => [
         'type' => 'segment',

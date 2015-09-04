@@ -37,12 +37,9 @@ class TransportManagerMerge
      *     "unchecked_value":"N",
      *     "label":"form.tm-merge.confirm",
      *     "short-label":"form.tm-merge.confirm",
+     *     "must_be_value": "Y"
      *  })
-     * @Form\Type("OlcsCheckbox")
-     * @Form\Validator({"name":"Zend\Validator\Identical","options": {
-     *  "token":"Y",
-     *  "message":"form.tm-merge.confirm.validation"
-     * }})
+     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
      */
     public $confirm = null;
 

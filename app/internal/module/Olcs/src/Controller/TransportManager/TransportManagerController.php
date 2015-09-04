@@ -103,6 +103,9 @@ class TransportManagerController extends AbstractController implements Transport
             $data = (array)$request->getPost();
         } else {
             $tmData = $this->getTransportManager($transportManagerId);
+            if (!$tmData) {
+                return $this->notFoundAction();
+            }
             $data['fromTmName'] = $tmData['id'] .' '.
                 $tmData['homeCd']['person']['forename'] .' '.
                 $tmData['homeCd']['person']['familyName'];
@@ -116,6 +119,7 @@ class TransportManagerController extends AbstractController implements Transport
         $form = $formHelper->createForm('TransportManagerMerge');
         $form->setData($data);
         $formHelper->setFormActionFromRequest($form, $request);
+        $form->get('toTmId')->setAttribute('data-lookup-url', $this->url()->fromRoute('transport-manager-lookup'));
 
         if ($request->isPost() && $form->isValid()) {
             $toTmId = (int) $form->getData()['toTmId'];
@@ -168,9 +172,13 @@ class TransportManagerController extends AbstractController implements Transport
      */
     protected function getTransportManager($id)
     {
+        /* @var $response \Common\Service\Cqrs\Response */
         $response = $this->handleQuery(
             \Dvsa\Olcs\Transfer\Query\Tm\TransportManager::create(['id' => $id])
         );
+        if ($response->isNotFound()) {
+            return null;
+        }
         if (!$response->isOk()) {
             throw new \RuntimeException('Error getting TransportManager');
         }
@@ -185,25 +193,23 @@ class TransportManagerController extends AbstractController implements Transport
      */
     public function lookupAction()
     {
-        $transportManagerId = (int) $this->params()->fromRoute('transportManager');
+        $transportManagerId = (int) $this->params()->fromQuery('transportManager');
         $view = new \Zend\View\Model\JsonModel();
 
-        try {
-            $tmData = $this->getTransportManager($transportManagerId);
-            $name = $tmData['homeCd']['person']['forename'] .' '. $tmData['homeCd']['person']['familyName'];
-            if (isset($tmData['users'][0])) {
-                $name .= ' (associated user: '. $tmData['users'][0]['loginId'] .')';
-            }
-            $view->setVariables(
-                [
-                    'id' => $tmData['id'],
-                    'name' => $name,
-                ]
-            );
-        } catch (\RuntimeException $e) {
-            $this->getResponse()->setStatusCode(404);
+        $tmData = $this->getTransportManager($transportManagerId);
+        if (!$tmData) {
+            return $this->notFoundAction();
         }
-
+        $name = $tmData['homeCd']['person']['forename'] .' '. $tmData['homeCd']['person']['familyName'];
+        if (isset($tmData['users'][0])) {
+            $name .= ' (associated user: '. $tmData['users'][0]['loginId'] .')';
+        }
+        $view->setVariables(
+            [
+                'id' => $tmData['id'],
+                'name' => $name,
+            ]
+        );
         return $view;
     }
 }
