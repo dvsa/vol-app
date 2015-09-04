@@ -130,7 +130,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         $id = $e->getValue();
         $application = $this->getApplication($id);
 
-        $this->getMarkerService()->addData('organisation', $application['licence']['organisation']);
+        $e->getTarget()->trigger('licence', $application['licence']['id']);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('application')->set($application);

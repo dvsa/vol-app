@@ -91,6 +91,7 @@ class ApplicationTest extends MockeryTestCase
             'isVariation' => $type,
             'licence' => [
                 'organisation' => 'ORGANISATION',
+                'id' => 101,
             ]
         ];
 
@@ -98,6 +99,11 @@ class ApplicationTest extends MockeryTestCase
 
         $event = new RouteParam();
         $event->setValue($applicationId);
+        $event->setTarget(
+            m::mock()
+            ->shouldReceive('trigger')->once()->with('licence', 101)
+            ->getMock()
+        );
 
         $mockApplicationCaseNavigationService = m::mock('\StdClass');
         $mockApplicationCaseNavigationService->shouldReceive('setVisible')->times($expectedCallsNo)->with(false);
