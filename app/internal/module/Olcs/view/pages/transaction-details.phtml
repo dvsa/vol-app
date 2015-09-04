@@ -29,5 +29,9 @@ if ($table) {
 }
 
 ?>
-<a href="<?php echo $backLink; ?>" class="action--secondary">Back</a>
+<div class="actions-container">
+    <button class="action--primary disabled" disabled="disabled">Reverse payment</button>
+    <button class="action--primary disabled" disabled="disabled">Refund payment</button>
+    <a href="<?php echo $backLink; ?>" class="action--secondary">Back</a>
+</div>
 </div>

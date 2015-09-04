@@ -60,6 +60,6 @@ return array(
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',
             'type' => 'Checkbox',
-        )
+        ),
     )
 );

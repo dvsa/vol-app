@@ -5,6 +5,16 @@ return array(
         'title' => 'Fees',
     ),
     'settings' => array(
+        'crud' => array(
+            'actions' => array(
+                'partRefund' => array(
+                    'class' => 'primary js-require--multiple',
+                    'value' => 'partRefund',
+                    'label' => 'Part refund',
+                    'requireRows' => true
+                ),
+            )
+        ),
     ),
     'attributes' => array(
     ),
@@ -35,5 +45,11 @@ return array(
             'formatter' => 'FeeAmount',
             'align' => 'right',
         ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/checkbox]}}',
+            'type' => 'Checkbox',
+        )
     ),
 );
