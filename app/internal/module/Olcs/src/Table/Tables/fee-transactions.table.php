@@ -13,7 +13,7 @@ return array(
         array(
             'title' => 'Transaction No.',
             'stack' => 'transaction->id',
-            'formatter' => 'TransactionNo',
+            'formatter' => 'TransactionNoAndStatus',
         ),
         array(
             'title' => 'Date',
