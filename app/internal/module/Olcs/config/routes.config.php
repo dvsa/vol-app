@@ -2112,7 +2112,28 @@ $routes = [
                     ],
                 ],
             ],
+            'merge' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/merge',
+                    'defaults' => [
+                        'controller' => 'TMController',
+                        'action' => 'merge'
+                    ],
+                ],
+            ],
         ],
+    ],
+    'transport-manager-lookup' => [
+        'type' => 'literal',
+        'options' => [
+            'route' => '/transport-manager/lookup',
+            'defaults' => [
+                'controller' => 'TMController',
+                'action' => 'lookup',
+            ],
+        ],
+        'may_terminate' => true,
     ],
     'create_transport_manager' => [
         'type' => 'segment',

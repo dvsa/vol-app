@@ -155,6 +155,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         }
 
         $this->doTitles($data);
+        $this->hideShowMergeButtons($data);
     }
 
     private function doTitles($data)
@@ -177,6 +178,20 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         );
 
         return $pageTitle;
+    }
+
+    /**
+     * Toggle visibility of the TM merge buttins
+     *
+     * @param array $tmData
+     */
+    private function hideShowMergeButtons($tmData)
+    {
+        if (!empty($tmData['removedDate']) || $tmData['hasBeenMerged']) {
+            $this->getSidebarNavigation()
+                ->findById('transport-manager-quick-actions-merge')
+                ->setVisible(false);
+        }
     }
 
     /**
