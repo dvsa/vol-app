@@ -12,6 +12,9 @@ use Common\Service\Data\CategoryDataService;
 use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmission as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Submission\DeleteSubmission as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmission as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Submission\RefreshSubmissionSections as RefreshDto;
+use Dvsa\Olcs\Transfer\Command\Submission\FilterSubmissionSections as FilterDto;
+
 use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Submission\SubmissionList as ListDto;
 
@@ -355,33 +358,34 @@ class SubmissionController extends AbstractInternalController implements
      */
     public function refreshTable()
     {
-        $params['case'] = $this->params()->fromRoute('case');
-        $params['section'] = $this->params()->fromRoute('section');
-        $params['subSection'] = $this->params()->fromRoute('subSection', $params['section']);
-        $params['submission'] = $this->params()->fromRoute('submission');
+        $paramProvider = new GenericItem($this->itemParams);
 
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
+var_dump($params);exit;
 
-        $configService = $this->getServiceLocator()->get('config');
-        $submissionConfig = $configService['submission_config'];
+        $commandData = [
+            'id' => 1,
+            'version' => '2',
+            'sections' => ['people']
+        ];
+        $response = $this->handleCommand(RefreshDto::create($commandData));
 
-        $snapshotData = json_decode($this->getSubmissionData()['dataSnapshot'], true);
-
-        if (array_key_exists($params['section'], $snapshotData)) {
-            // get fresh data
-            $refreshData = $submissionService->createSubmissionSection(
-                $params['case'],
-                $params['section'],
-                $submissionConfig['sections'][$params['section']]
-            );
-            // replace snapshot data
-            $snapshotData[$params['section']]['data']['tables'][$params['subSection']] =
-                $refreshData['tables'][$params['subSection']];
-            $data['id'] = $params['submission'];
-            $data['version'] = $submission['version'];
-            $data['dataSnapshot'] = json_encode($snapshotData);
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
         }
 
-        $this->callParentSave($data);
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            $data = $response->getResult();
+
+            if (isset($data)) {
+                $this->setSubmissionData($data);
+            }
+        }
     }
 
     /**
