@@ -8,13 +8,6 @@ $categories = isset($case['categorys']) && is_array($case['categorys']) ?
 $outcomes = isset($case['outcomes']) && is_array($case['outcomes']) ?
     implode(', ', array_map(function($item){return $item['description'];}, $case['outcomes'])) :
     'None selected';
-$actions = [
-    [
-        'label' => 'Edit case',
-        'url' => $this->url('case', ['case' => $case['id'], 'action' => 'edit'], [], true),
-        'class' => 'action--secondary js-modal-ajax'
-    ],
-];
 
 $actions = [];
 
@@ -24,7 +17,7 @@ if (!$case['isClosed']) {
         'url' => $this->url(null, ['action' => 'edit'], [], true),
         'class' => 'js-modal-ajax action--secondary'
     ];
-    array_push($actions, $editAction);
+    $actions[] = $editAction;
 }
 
 if ($case['canReopen']) {
@@ -33,14 +26,14 @@ if ($case['canReopen']) {
         'url' => $this->url(null, ['action' => 'reopen'], [], true),
         'class' => 'js-modal-ajax action--secondary'
     ];
-    array_push($actions, $reopenAction);
+    $actions[] = $reopenAction;
 } else if ($case['canClose']) {
     $closeAction = [
         'label' => 'Close',
         'url' => $this->url(null, ['action' => 'close'], [], true),
         'class' => 'js-modal-ajax action--secondary'
     ];
-    array_push($actions, $closeAction);
+    $actions[] = $closeAction;
 }
 
 //case overview
