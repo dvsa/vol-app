@@ -18,19 +18,19 @@ if (!$pi) {
     $actions = [];
 
     if ($pi['canReopen']) {
-        $newAction = [
+        $reopenAction = [
             'label' => 'Reopen',
             'url' => $this->url(null, ['action' => 'reopen'], [], true),
             'class' => 'js-modal-ajax action--secondary'
         ];
-        $actions[] = $newAction;
+        $actions[] = $reopenAction;
     } else if ($pi['canClose']) {
-        $newAction = [
+        $closeAction = [
             'label' => 'Close',
             'url' => $this->url(null, ['action' => 'close'], [], true),
             'class' => 'js-modal-ajax action--secondary'
         ];
-        $actions[] = $newAction;
+        $actions[] = $closeAction;
     }
 
     echo $this->render('partials/read-only/main',
