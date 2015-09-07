@@ -1,0 +1,39 @@
+<?php
+$header = $this->navigation('navigation')->findOneBy('active', 1)->getLabel();
+
+$entity = $this->placeholder('details')->getValue();
+
+$actions = [];
+if ($entity['isApprovable']) {
+    $actions[] = [
+        'url' => $this->url(null, ['action' => 'approve'], [], true),
+        'label' => 'Approve',
+        'class' => 'action--primary'
+    ];
+}
+if ($entity['irfoPermitStatus']['id'] !== 'irfo_perm_s_pending') {
+    $actions[] = [
+        'url' => $this->url(null, ['action' => 'reset'], [], true),
+        'label' => 'Reset',
+        'class' => 'action--secondary'
+    ];
+}
+
+echo $this->render('partials/read-only/main',
+    [
+        'header' => $header,
+        'items' => [
+            ['label' => 'Permit No', 'value' => $entity['id']],
+            ['label' => 'Permit type', 'value' => $entity['irfoGvPermitType']['description'], 'class' => 'full-width'],
+            ['label' => 'Year', 'value' => $entity['yearRequired']],
+            ['label' => 'Status', 'value' => $entity['irfoPermitStatus']['description']],
+            ['label' => 'Create date', 'date' => $entity['createdOn']],
+            ['label' => 'In force date', 'date' => $entity['inForceDate'], 'dateFormat' => 'Y-m-d'],
+            ['label' => 'Expiry date', 'date' => $entity['expiryDate'], 'dateFormat' => 'Y-m-d'],
+            ['label' => 'Fee exempt', 'value' => $entity['isFeeExempt']],
+            ['label' => 'Exemption reason', 'value' => $entity['exemptionDetails'], 'class' => 'full-width'],
+            ['label' => 'No of copies required', 'numeric' => $entity['noOfCopies']],
+        ],
+        'actions' => $actions
+    ]
+);

@@ -11,16 +11,6 @@ use Zend\Form\Annotation as Form;
 class IrfoGvPermit extends OrganisationBase
 {
     /**
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"idHtml", "required": false})
-     * @Form\Options({
-     *     "label": "Permit No",
-     * })
-     * @Form\Type("Common\Form\Elements\Types\Html")
-     */
-    public $idHtml = null;
-
-    /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Permit type",
@@ -45,26 +35,6 @@ class IrfoGvPermit extends OrganisationBase
      * @Form\Validator({"name":"Digits"})
      */
     public $yearRequired = null;
-
-    /**
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"irfoPermitStatusHtml", "required": false})
-     * @Form\Options({
-     *     "label": "Status",
-     * })
-     * @Form\Type("Common\Form\Elements\Types\Html")
-     */
-    public $irfoPermitStatusHtml = null;
-
-    /**
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"createdOnHtml", "required": false})
-     * @Form\Options({
-     *     "label": "Create date",
-     * })
-     * @Form\Type("Common\Form\Elements\Types\Html")
-     */
-    public $createdOnHtml = null;
 
     /**
      * @Form\Attributes({"id":""})
