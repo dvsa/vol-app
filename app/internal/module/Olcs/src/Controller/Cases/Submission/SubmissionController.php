@@ -215,7 +215,7 @@ class SubmissionController extends AbstractInternalController implements
     {
         $paramProvider = new GenericItem($this->itemParams);
         $request = $this->getRequest();
-        $action = ucfirst($this->params()->fromRoute('action'));
+
         $form = $this->getForm($this->formClass);
         $this->placeholder()->setPlaceholder('form', $form);
 
@@ -242,7 +242,7 @@ class SubmissionController extends AbstractInternalController implements
             }
 
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Submission updated');
                 return $this->redirectTo($response->getResult());
             }
 
@@ -337,9 +337,23 @@ class SubmissionController extends AbstractInternalController implements
         $this->extractSubmissionData();
 
         if ($formAction == 'refresh-table') {
-            $this->refreshTable();
+            $response = $this->refreshTable();
         } elseif ($formAction == 'delete-row') {
-            $this->deleteTableRows();
+            $response = $this->deleteTableRows();
+        } else {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Submission updated');
         }
 
         return $this->redirect()->toRoute(
@@ -362,30 +376,16 @@ class SubmissionController extends AbstractInternalController implements
 
         $paramProvider->setParams($this->plugin('params'));
         $params = $paramProvider->provideParameters();
-var_dump($params);exit;
 
         $commandData = [
-            'id' => 1,
-            'version' => '2',
-            'sections' => ['people']
+            'id' => $this->params('submission'),
+            'version' => $this->params()->fromPost('submissionVersion'),
+            'sections' => [$this->params()->fromPost('table')]
         ];
+
         $response = $this->handleCommand(RefreshDto::create($commandData));
 
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
-
-        if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
-
-        if ($response->isOk()) {
-            $data = $response->getResult();
-
-            if (isset($data)) {
-                $this->setSubmissionData($data);
-            }
-        }
+        return $response;
     }
 
     /**
