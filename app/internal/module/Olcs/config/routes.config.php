@@ -1550,7 +1550,7 @@ $routes = [
                         'options' => [
                             'route' => '/gv-permits[/:action][/:id]',
                             'constraints' => [
-                                'action' => '(add|details|reset|approve)',
+                                'action' => '(add|details|reset|approve|withdraw|refuse)',
                                 'id' => '[0-9]+'
                             ],
                             'defaults' => [
