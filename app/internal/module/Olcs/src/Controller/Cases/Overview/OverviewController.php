@@ -9,6 +9,8 @@ use Olcs\Controller\AbstractInternalController;
 use Dvsa\Olcs\Transfer\Command\Cases\CreateCase as CreateCaseCommand;
 use Dvsa\Olcs\Transfer\Command\Cases\UpdateCase as UpdateCaseCommand;
 use Dvsa\Olcs\Transfer\Command\Cases\DeleteCase as DeleteCaseCommand;
+use Dvsa\Olcs\Transfer\Command\Cases\CloseCase as CloseCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\ReopenCase as ReopenCmd;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases as CasesDto;
 use Olcs\Data\Mapper\GenericFields as GenericMapper;
 use Olcs\Form\Model\Form\Cases as CaseForm;
@@ -42,6 +44,20 @@ class OverviewController extends AbstractInternalController implements
     protected $deleteCommand = DeleteCaseCommand::class;
     protected $mapperClass = GenericMapper::class;
 
+    /** Close */
+    protected $closeCommand = CloseCmd::class;
+    protected $closeParams = ['id' => 'case'];
+    protected $closeModalTitle = 'Close the case';
+    protected $closeConfirmMessage = 'Are you sure you want to close the case?';
+    protected $closeSuccessMessage = 'Case closed';
+
+    /** Reopen */
+    protected $reopenCommand = ReopenCmd::class;
+    protected $reopenParams = ['id' => 'case'];
+    protected $reopenModalTitle = 'Reopen the Case?';
+    protected $reopenConfirmMessage = 'Are you sure you want to reopen the case?';
+    protected $reopenSuccessMessage = 'Case reopened';
+
     protected $redirectConfig = [
         'add' => [
             'action' => 'details',
@@ -50,6 +66,12 @@ class OverviewController extends AbstractInternalController implements
             ]
         ],
         'edit' => [
+            'action' => 'details'
+        ],
+        'close' => [
+            'action' => 'details'
+        ],
+        'reopen' => [
             'action' => 'details'
         ]
     ];

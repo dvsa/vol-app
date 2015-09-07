@@ -82,7 +82,7 @@ $routes = [
             '/case/:action[/:case][/licence/:licence][/transportManager/:transportManager][/application/:application]',
             'constraints' => [
                 'case' => '|[0-9]+',
-                'action' => '(add|edit|details|redirect|delete)',
+                'action' => '(add|edit|details|redirect|delete|close|reopen)',
                 'licence' => '|[0-9]+',
                 'transportManager' => '|[0-9]+',
                 'application' => '|[0-9]+'
