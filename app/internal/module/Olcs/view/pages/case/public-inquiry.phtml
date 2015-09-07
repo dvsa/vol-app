@@ -23,14 +23,14 @@ if (!$pi) {
             'url' => $this->url(null, ['action' => 'reopen'], [], true),
             'class' => 'js-modal-ajax action--secondary'
         ];
-        array_push($actions, $newAction);
+        $actions[] = $newAction;
     } else if ($pi['canClose']) {
         $newAction = [
             'label' => 'Close',
             'url' => $this->url(null, ['action' => 'close'], [], true),
             'class' => 'js-modal-ajax action--secondary'
         ];
-        array_push($actions, $newAction);
+        $actions[] = $newAction;
     }
 
     echo $this->render('partials/read-only/main',
