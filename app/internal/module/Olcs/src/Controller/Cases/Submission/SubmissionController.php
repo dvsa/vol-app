@@ -320,6 +320,107 @@ class SubmissionController extends AbstractInternalController implements
         return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
     }
 
+
+    /**
+     * Updates a section table, to either refresh the data or delete rows
+     *
+     * @return \Zend\Http\Response
+     */
+    public function updateTableAction()
+    {
+        $params['submission'] = $this->params()->fromRoute('submission');
+        $formAction = strtolower($this->params()->fromPost('formAction'));
+
+        $this->extractSubmissionData();
+
+        if ($formAction == 'refresh-table') {
+            $this->refreshTable();
+        } elseif ($formAction == 'delete-row') {
+            $this->deleteTableRows();
+        }
+
+        return $this->redirect()->toRoute(
+            'submission',
+            ['action' => 'details', 'submission' => $params['submission']],
+            [],
+            true
+        );
+    }
+
+    /**
+     * Refreshes a single section within the dataSnapshot field of a submission with the latest data
+     * from the rest of the database. Redirects back to details page.
+     *
+     * @return void
+     */
+    public function refreshTable()
+    {
+        $params['case'] = $this->params()->fromRoute('case');
+        $params['section'] = $this->params()->fromRoute('section');
+        $params['subSection'] = $this->params()->fromRoute('subSection', $params['section']);
+        $params['submission'] = $this->params()->fromRoute('submission');
+
+
+        $configService = $this->getServiceLocator()->get('config');
+        $submissionConfig = $configService['submission_config'];
+
+        $snapshotData = json_decode($this->getSubmissionData()['dataSnapshot'], true);
+
+        if (array_key_exists($params['section'], $snapshotData)) {
+            // get fresh data
+            $refreshData = $submissionService->createSubmissionSection(
+                $params['case'],
+                $params['section'],
+                $submissionConfig['sections'][$params['section']]
+            );
+            // replace snapshot data
+            $snapshotData[$params['section']]['data']['tables'][$params['subSection']] =
+                $refreshData['tables'][$params['subSection']];
+            $data['id'] = $params['submission'];
+            $data['version'] = $submission['version'];
+            $data['dataSnapshot'] = json_encode($snapshotData);
+        }
+
+        $this->callParentSave($data);
+    }
+
+    /**
+     * Deletes a single row from a section's list data, reassigns and persists the new data back to dataSnapshot field
+     * from the rest of the database. Redirects back to details page.
+     *
+     * @return \Zend\Http\Response
+     */
+    public function deleteTableRows()
+    {
+        $params['case'] = $this->params()->fromRoute('case');
+        $params['section'] = $this->params()->fromRoute('section');
+        $params['subSection'] = $this->params()->fromRoute('subSection', $params['section']);
+        $params['submission'] = $this->params()->fromRoute('submission');
+
+        $rowsToDelete = $this->params()->fromPost('id');
+        /** @var \Olcs\Service\Data\Submission $submissionService */
+        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
+
+        $submission = $submissionService->fetchData($params['submission']);
+        $snapshotData = json_decode($submission['dataSnapshot'], true);
+
+        if (array_key_exists($params['section'], $snapshotData) &&
+            is_array($snapshotData[$params['section']]['data']['tables'][$params['subSection']])) {
+            foreach ($snapshotData[$params['section']]['data']['tables'][$params['subSection']] as $key => $dataRow) {
+                if (in_array($dataRow['id'], $rowsToDelete)) {
+                    unset($snapshotData[$params['section']]['data']['tables'][$params['subSection']][$key]);
+                }
+            }
+            ksort($snapshotData[$params['section']]['data']['tables'][$params['subSection']]);
+
+            $data['id'] = $params['submission'];
+            $data['version'] = $submission['version'];
+            $data['dataSnapshot'] = json_encode($snapshotData);
+
+            $this->callParentSave($data);
+        }
+    }
+
     private function generateSelectedSectionsArray($submission, $allSectionsRefData, $submissionConfig)
     {
         $submissionService = $this->getServiceLocator()
@@ -462,7 +563,7 @@ class SubmissionController extends AbstractInternalController implements
                 ];
 
                 if ($this->uploadFile($file, $data)) {
-                    $this->refreshSubmissionDocuments();
+                    $this->extractSubmissionData();
                 }
             }
         }
@@ -490,7 +591,7 @@ class SubmissionController extends AbstractInternalController implements
     /**
      * Queries backend (not cached) and refresh document list for the submission
      */
-    private function refreshSubmissionDocuments()
+    private function extractSubmissionData()
     {
         $paramProvider = new GenericItem($this->itemParams);
 
@@ -514,8 +615,11 @@ class SubmissionController extends AbstractInternalController implements
 
             if (isset($data)) {
                 $this->setSubmissionData($data);
+
+                return $data;
             }
         }
+        return null;
     }
 
     /**
@@ -527,7 +631,7 @@ class SubmissionController extends AbstractInternalController implements
     public function deleteSubmissionAttachment($documentId)
     {
         if ($this->deleteFile($documentId)) {
-            $this->refreshSubmissionDocuments();
+            $this->extractSubmissionData();
         }
         return true;
     }
