@@ -5,7 +5,7 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'people']
         ],
-        'title' => 'people',
+        'title' => 'People',
         'id' => 'people'
     ),
     'settings' => array(
