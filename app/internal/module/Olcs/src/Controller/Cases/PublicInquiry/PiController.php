@@ -112,74 +112,60 @@ class PiController extends AbstractInternalController implements
     {
         $pi = $this->getPi();
 
-        if (isset($pi['id'])) {
-            if ($this->getRequest()->isPost()) {
-                $action = strtolower($this->params()->fromPost('action'));
-                $id = $this->params()->fromPost('id');
-
-                $actionsAllowable = ['addhearing', 'edithearing', 'generate'];
-
-                //we need the hearing controller for this, so this code is necessary for compatibility with the table
-                //actions script
-                if (in_array($action, $actionsAllowable)) {
-                    switch ($action) {
-                        case 'addhearing':
-                            return $this->redirect()->toRoute(
-                                'case_pi_hearing',
-                                ['action' => 'add', 'id' => null, 'pi' => $pi['id']],
-                                ['code' => '303'], // Why? No cache is set with a 303 :)
-                                true
-                            );
-                        case 'edithearing':
-                            if (!$id) { //js off and no row selected
-                                $this->getServiceLocator()
-                                    ->get('Helper\FlashMessenger')
-                                    ->addWarningMessage('Please select a row');
-                                break;
-                            }
-
-                            return $this->redirect()->toRoute(
-                                'case_pi_hearing',
-                                ['action' => 'edit', 'id' => $id, 'pi' => $pi['id']],
-                                ['code' => '303'], // Why? No cache is set with a 303 :)
-                                true
-                            );
-                        case 'generate':
-                            if (!$id) { //js off and no row selected
-                                $this->getServiceLocator()
-                                    ->get('Helper\FlashMessenger')
-                                    ->addWarningMessage('Please select a row');
-                                break;
-                            }
-
-                            return $this->redirect()->toRoute(
-                                'case_pi_hearing',
-                                ['action' => 'generate', 'id' => $id, 'pi' => $pi['id']],
-                                ['code' => '303'], // Why? No cache is set with a 303 :)
-                                true
-                            );
-                    }
-                }
-            }
-
-            $this->forward()->dispatch(
-                'PublicInquiry\HearingController',
-                array(
-                    'action' => 'index',
-                    'case' => $pi['case']['id'],
-                    'pi' => $pi['id']
-                )
-            );
-
-            return $this->details(
-                $this->itemDto,
-                new GenericItem($this->itemParams),
-                $this->detailsViewPlaceholderName,
-                $this->detailsViewTemplate
-            );
+        //if we don't have a Pi, display the add Pi page
+        if (!isset($pi['id'])) {
+            return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
         }
 
-        return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
+        //if there's a post, check for possible redirects
+        if ($this->getRequest()->isPost()) {
+            $action = strtolower($this->params()->fromPost('action'));
+            $id = $this->params()->fromPost('id');
+
+            $actionsAllowable = ['addhearing', 'edithearing', 'generate'];
+
+            //we need the hearing controller for this, so this code is necessary for compatibility with the table
+            //actions script
+            if (in_array($action, $actionsAllowable)) {
+                switch ($action) {
+                    case 'addhearing':
+                        $redirectParams = $this->getHearingRedirectParams('add', null, $pi['id']);
+                        break;
+                    case 'edithearing':
+                        if ($this->checkValidHearingId($id)) {
+                            $redirectParams = $this->getHearingRedirectParams('edit', $id, $pi['id']);
+                        }
+                        break;
+                    case 'generate':
+                        if ($this->checkValidHearingId($id)) {
+                            $redirectParams = $this->getHearingRedirectParams('generate', $id, $pi['id']);
+                        }
+                        break;
+                }
+
+                //if no matched action, or no valid id, we won't have redirect params
+                if (isset($redirectParams)) {
+                    return $this->redirect()->toRoute($redirectParams);
+                }
+            }
+        }
+
+        //if we've got this far then we're loading the Pi details page
+        $this->forward()->dispatch(
+            'PublicInquiry\HearingController',
+            array(
+                'action' => 'index',
+                'case' => $pi['case']['id'],
+                'pi' => $pi['id']
+            )
+        );
+
+        return $this->details(
+            $this->itemDto,
+            new GenericItem($this->itemParams),
+            $this->detailsViewPlaceholderName,
+            $this->detailsViewTemplate
+        );
     }
 
     /**
@@ -221,6 +207,38 @@ class PiController extends AbstractInternalController implements
             $this->updateSlaCommand,
             $this->mapperClass
         );
+    }
+
+    /**
+     * Parameters for redirect to the hearing controller
+     *
+     * @param string $action
+     * @param int|null $id
+     * @param int $pi
+     * @return array
+     */
+    private function getHearingRedirectParams($action, $id, $pi)
+    {
+        return [
+            'case_pi_hearing',
+            ['action' => $action, 'id' => $id, 'pi' => $pi],
+            ['code' => '303'], // Why? No cache is set with a 303 :)
+            true
+        ];
+    }
+
+    private function checkValidHearingId($id)
+    {
+        if (!(int)$id) {
+            //no row selected, probably Js switched off
+            $this->getServiceLocator()
+                ->get('Helper\FlashMessenger')
+                ->addWarningMessage('Please select a row');
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
