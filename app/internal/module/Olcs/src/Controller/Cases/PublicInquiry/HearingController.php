@@ -5,8 +5,6 @@ namespace Olcs\Controller\Cases\PublicInquiry;
 use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\PiHearing as PiHearingMapper;
@@ -17,6 +15,7 @@ use Dvsa\Olcs\Transfer\Query\Cases\Pi\Hearing as PiHearingDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Pi\HearingList as PiHearingListDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Pi as PiDto;
 use Olcs\Mvc\Controller\ParameterProvider\PreviousPiHearingData;
+use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 
 /**
  * Class HearingController
@@ -27,7 +26,7 @@ class HearingController extends AbstractInternalController implements
     PageLayoutProvider,
     PageInnerLayoutProvider
 {
-    use ControllerTraits\GenerateActionTrait;
+    const MSG_CLOSED_PI = 'The Pi has already been closed';
 
     protected $listVars = ['pi'];
     protected $navigationId = 'case_hearings_appeals_public_inquiry';
@@ -47,7 +46,12 @@ class HearingController extends AbstractInternalController implements
         'edit' => [
             'route' => 'case_pi',
             'action' => 'index'
+        ],
+        'generate' => [
+            'route' => 'case_pi',
+            'action' => 'index'
         ]
+
     ];
 
     protected $inlineScripts = [
@@ -56,24 +60,61 @@ class HearingController extends AbstractInternalController implements
         'indexAction' => ['table-actions']
     ];
 
+    /**
+     * @return string
+     */
     public function getPageInnerLayout()
     {
         return 'layout/case-details-subsection';
     }
 
+    /**
+     * @return string
+     */
     public function getPageLayout()
     {
         return 'layout/case-section';
     }
 
     /**
-     * @var int $licenceId cache of licence id for a given case
+     * @return ViewModel
      */
-    protected $licenceId;
+    public function indexAction()
+    {
+        $pi = $this->getPi();
+        $slaData = ['agreedDate' => $pi['agreedDate']];
+        $this->getServiceLocator()->get('Common\Service\Data\Sla')->setContext('pi_hearing', $slaData);
 
+        if ($pi['isClosed']) {
+            $this->tableName = 'piHearingReadOnly';
+        }
+
+        return $this->index(
+            $this->listDto,
+            new GenericList($this->listVars, $this->defaultTableSortField),
+            $this->tableViewPlaceholderName,
+            $this->tableName,
+            $this->tableViewTemplate,
+            $this->filterForm
+        );
+    }
+
+
+
+    /**
+     * Adds a Pi Hearing, redirects to the Pi index page with a message if the Pi is closed
+     *
+     * @return ViewModel|\Zend\Http\Response
+     */
     public function addAction()
     {
         $pi = $this->getPi();
+
+        if ($pi['isClosed']) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage(self::MSG_CLOSED_PI);
+            return $this->redirectTo([]);
+        }
+
         $slaData = ['agreedDate' => $pi['agreedDate']];
         $this->getServiceLocator()->get('Common\Service\Data\Sla')->setContext('pi_hearing', $slaData);
 
@@ -86,6 +127,11 @@ class HearingController extends AbstractInternalController implements
         );
     }
 
+    /**
+     * Edits a Pi Hearing. No check for whether Pi is closed - if it's closed then read only version is shown
+     *
+     * @return array|ViewModel
+     */
     public function editAction()
     {
         $data = $this->getHearing();
@@ -93,6 +139,31 @@ class HearingController extends AbstractInternalController implements
         $this->getServiceLocator()->get('Common\Service\Data\Sla')->setContext('pi_hearing', $data);
 
         return parent::editAction();
+    }
+
+    /**
+     * Link to generate a hearing letter, redirects to the Pi index page with a message if the Pi is closed
+     *
+     * @return \Zend\Http\Response
+     */
+    public function generateAction()
+    {
+        $pi = $this->getPi();
+
+        if ($pi['isClosed']) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage(self::MSG_CLOSED_PI);
+            return $this->redirectTo([]);
+        }
+
+        return $this->redirect()->toRoute(
+            'case_licence_docs_attachments/entity/generate',
+            [
+                'case' => $this->params()->fromRoute('case'),
+                'licence' => (isset($pi['case']['licence']['id']) ? $pi['case']['licence']['id'] : null),
+                'entityType' => 'hearing',
+                'entityId' => $this->params()->fromRoute('id')
+            ]
+        );
     }
 
     /**
@@ -166,62 +237,36 @@ class HearingController extends AbstractInternalController implements
     {
         $data = $this->getHearing();
 
-        // set the label to republish if *any* publication has NOT been printed
-        if (!empty($data['pi']['publicationLinks'])) {
-            foreach ($data['pi']['publicationLinks'] as $pl) {
-                if (isset($pl['publication']) && $pl['publication']['pubStatus']['id'] != 'pub_s_printed') {
-                    $form->get('form-actions')->get('publish')->setLabel('Republish');
-                    break;
-                }
+        if ($data['pi']['isClosed']) {
+            if (isset($data['piVenue']['id'])) {
+                $form->get('fields')->remove('piVenueOther');
+            } else {
+                $form->get('fields')->remove('piVenue');
+                $form->get('fields')->get('piVenueOther')->setLabel('Venue');
             }
-        }
 
-        //only need to specify a pub type and traffic area if it's a tm case
-        if (!($data['isTm'])) {
             $form->get('fields')->remove('pubType');
             $form->get('fields')->remove('trafficAreas');
+            $form->get('fields')->remove('definition');
+            $form->setOption('readonly', true);
+        } else {
+            // set the label to republish if *any* publication has NOT been printed
+            if (!empty($data['pi']['publicationLinks'])) {
+                foreach ($data['pi']['publicationLinks'] as $pl) {
+                    if (isset($pl['publication']) && $pl['publication']['pubStatus']['id'] != 'pub_s_printed') {
+                        $form->get('form-actions')->get('publish')->setLabel('Republish');
+                        break;
+                    }
+                }
+            }
+
+            //only need to specify a pub type and traffic area if it's a tm case
+            if (!($data['isTm'])) {
+                $form->get('fields')->remove('pubType');
+                $form->get('fields')->remove('trafficAreas');
+            }
         }
 
         return $form;
-    }
-
-    /**
-     * Route for document generate action redirects
-     * @see Olcs\Controller\Traits\GenerateActionTrait
-     * @return string
-     */
-    protected function getDocumentGenerateRoute()
-    {
-        return 'case_licence_docs_attachments/entity/generate';
-    }
-
-    /**
-     * Route params for document generate action redirects
-     * @see Olcs\Controller\Traits\GenerateActionTrait
-     * @return array
-     */
-    protected function getDocumentGenerateRouteParams()
-    {
-        return [
-            'case' => $this->getFromRoute('case'),
-            'licence' => $this->getLicenceIdForCase(),
-            'entityType' => 'hearing',
-            'entityId' => $this->getFromRoute('id')
-        ];
-    }
-
-    /**
-     * Gets licence id from route or backend, caching it in member variable
-     */
-    protected function getLicenceIdForCase()
-    {
-        if (is_null($this->licenceId)) {
-            $this->licenceId = $this->getQueryOrRouteParam('licence');
-            if (empty($this->licenceId)) {
-                $case = $this->getCase();
-                $this->licenceId = $case['licence']['id'];
-            }
-        }
-        return $this->licenceId;
     }
 }
