@@ -168,6 +168,7 @@ class OperatorControllerTest extends MockeryTestCase
                 return $mockResponse;
             }
         );
+        $mockResponse->shouldReceive('isNotFound')->with()->once()->andReturn(false);
         $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
         $mockResponse->shouldReceive('getResult')->with()->once()->andReturn(['RESULT']);
 
@@ -184,6 +185,7 @@ class OperatorControllerTest extends MockeryTestCase
                 return $mockResponse;
             }
         );
+        $mockResponse->shouldReceive('isNotFound')->with()->once()->andReturn(false);
         $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(false);
 
         $this->setExpectedException(\RuntimeException::class, 'Error getting organisation');
@@ -191,9 +193,24 @@ class OperatorControllerTest extends MockeryTestCase
         $this->assertSame(['RESULT'], $this->sut->getOrganisation(24));
     }
 
+    public function testGetOrganisationNotFound()
+    {
+        $mockResponse = m::mock();
+
+        $this->sut->shouldReceive('handleQuery')->once()->andReturnUsing(
+            function ($dto) use ($mockResponse) {
+                $this->assertSame(['id' => 24], $dto->getArrayCopy());
+                return $mockResponse;
+            }
+        );
+        $mockResponse->shouldReceive('isNotFound')->with()->once()->andReturn(true);
+
+        $this->assertNull($this->sut->getOrganisation(24));
+    }
+
     public function testLookupAction()
     {
-        $this->sut->shouldReceive('params->fromRoute')->with('organisation')->once()->andReturn(24);
+        $this->sut->shouldReceive('params->fromQuery')->with('organisation')->once()->andReturn(24);
         $this->sut->shouldReceive('getOrganisation')->with(24)->once()->andReturn(['id' => 24, 'name' => 'Acme Ltd']);
 
         $return = $this->sut->lookupAction();
