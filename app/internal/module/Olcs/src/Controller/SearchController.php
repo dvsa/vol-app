@@ -23,6 +23,8 @@ use Zend\Session\Container;
  */
 class SearchController extends AbstractController
 {
+    use \Common\Controller\Lva\Traits\CrudActionTrait;
+
     protected $navigationId = 'mainsearch';
 
     /**
@@ -72,8 +74,14 @@ class SearchController extends AbstractController
 
     public function searchAction()
     {
+        if ($this->getRequest()->isPost()) {
+            return $this->handleCrudAction($this->params()->fromPost());
+        }
+
         /** @var \Common\Controller\Plugin\ElasticSearch $elasticSearch */
         $elasticSearch = $this->ElasticSearch();
+
+        $this->loadScripts(['table-actions']);
 
         $elasticSearch->getFiltersForm();
         $elasticSearch->processSearchData();
@@ -84,6 +92,68 @@ class SearchController extends AbstractController
         $view = $elasticSearch->generateResults($view);
 
         return $this->renderView($view, 'Search results');
+    }
+
+    /**
+     * Remove Vehicle Section 28 marker
+     */
+    protected function vehicleremove26Action()
+    {
+        if ($this->getRequest()->isPost()) {
+            $ids = explode(',', $this->params('child_id'));
+            $response = $this->handleCommand(
+                \Dvsa\Olcs\Transfer\Command\Vehicle\UpdateSection26::create(
+                    ['ids' => $ids, 'section26' => 'N']
+                )
+            );
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')
+                    ->addSuccessMessage('form.vehicle.removeSection26.success');
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+            return $this->redirect()->toRouteAjax('search', array('index' => 'vehicle', 'action' => 'search'));
+        }
+
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createFormWithRequest('GenericConfirmation', $this->getRequest());
+        $form->get('messages')->get('message')->setValue('form.vehicle.removeSection26.confirm');
+
+        $view = new ViewModel(array('form' => $form));
+        $view->setTemplate('partials/form');
+
+        return $this->renderView($view, 'Remove section 26');
+    }
+
+    /**
+     * Set Vehicle Section 28 marker
+     */
+    protected function vehicleset26Action()
+    {
+        if ($this->getRequest()->isPost()) {
+            $ids = explode(',', $this->params('child_id'));
+            $response = $this->handleCommand(
+                \Dvsa\Olcs\Transfer\Command\Vehicle\UpdateSection26::create(
+                    ['ids' => $ids, 'section26' => 'Y']
+                )
+            );
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')
+                    ->addSuccessMessage('form.vehicle.setSection26.success');
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+            return $this->redirect()->toRouteAjax('search', array('index' => 'vehicle', 'action' => 'search'));
+        }
+
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createFormWithRequest('GenericConfirmation', $this->getRequest());
+        $form->get('messages')->get('message')->setValue('form.vehicle.setSection26.confirm');
+
+        $view = new ViewModel(array('form' => $form));
+        $view->setTemplate('partials/form');
+
+        return $this->renderView($view, 'Remove section 26');
     }
 
     /**
