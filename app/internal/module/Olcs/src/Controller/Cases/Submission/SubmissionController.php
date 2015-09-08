@@ -167,8 +167,6 @@ class SubmissionController extends AbstractInternalController implements
 
         $defaultDataProvider->setParams($this->plugin('params'));
 
-        $action = ucfirst($this->params()->fromRoute('action'));
-
         /** @var \Zend\Form\Form $form */
         $form = $this->getForm($this->formClass);
         $initialData = SubmissionMapper::mapFromResult($defaultDataProvider->provideParameters());
@@ -489,7 +487,7 @@ class SubmissionController extends AbstractInternalController implements
                     // generate a unique attachment form for this section
                     $attachmentsForm = $this->getSectionForm($this->sectionId);
 
-                    $hasProcessedFiles = $this->processFiles(
+                    $this->processFiles(
                         $attachmentsForm,
                         'attachments',
                         array($this, 'processSectionFileUpload'),
