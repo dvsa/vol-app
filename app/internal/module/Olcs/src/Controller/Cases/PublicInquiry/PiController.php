@@ -87,16 +87,27 @@ class PiController extends AbstractInternalController implements
         ]
     ];
 
+    /**
+     * @return string
+     */
     public function getPageInnerLayout()
     {
         return 'layout/case-details-subsection';
     }
 
+    /**
+     * @return string
+     */
     public function getPageLayout()
     {
         return 'layout/case-section';
     }
 
+    /**
+     * Index action
+     *
+     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $pi = $this->getPi();
@@ -106,18 +117,48 @@ class PiController extends AbstractInternalController implements
                 $action = strtolower($this->params()->fromPost('action'));
                 $id = $this->params()->fromPost('id');
 
-                if (!($action == 'edit' && !is_numeric($id))) {
-                    //if we have an add action make sure there's no row selected
-                    if ($action == 'add') {
-                        $id = null;
-                    }
+                $actionsAllowable = ['addhearing', 'edithearing', 'generate'];
 
-                    return $this->redirect()->toRouteAjax(
-                        'case_pi_hearing',
-                        ['action' => $action, 'id' => $id, 'pi' => $pi['id']],
-                        ['code' => '303'], // Why? No cache is set with a 303 :)
-                        true
-                    );
+                //we need the hearing controller for this, so this code is necessary for compatibility with the table
+                //actions script
+                if (in_array($action, $actionsAllowable)) {
+                    switch ($action) {
+                        case 'addhearing':
+                            return $this->redirect()->toRoute(
+                                'case_pi_hearing',
+                                ['action' => 'add', 'id' => null, 'pi' => $pi['id']],
+                                ['code' => '303'], // Why? No cache is set with a 303 :)
+                                true
+                            );
+                        case 'edithearing':
+                            if (!$id) { //js off and no row selected
+                                $this->getServiceLocator()
+                                    ->get('Helper\FlashMessenger')
+                                    ->addWarningMessage('Please select a row');
+                                break;
+                            }
+
+                            return $this->redirect()->toRoute(
+                                'case_pi_hearing',
+                                ['action' => 'edit', 'id' => $id, 'pi' => $pi['id']],
+                                ['code' => '303'], // Why? No cache is set with a 303 :)
+                                true
+                            );
+                        case 'generate':
+                            if (!$id) { //js off and no row selected
+                                $this->getServiceLocator()
+                                    ->get('Helper\FlashMessenger')
+                                    ->addWarningMessage('Please select a row');
+                                break;
+                            }
+
+                            return $this->redirect()->toRoute(
+                                'case_pi_hearing',
+                                ['action' => 'generate', 'id' => $id, 'pi' => $pi['id']],
+                                ['code' => '303'], // Why? No cache is set with a 303 :)
+                                true
+                            );
+                    }
                 }
             }
 
