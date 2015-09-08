@@ -282,7 +282,7 @@ trait FeesActionTrait
                 $this->addErrorMessage('You can only pay outstanding fees');
                 return $this->redirectToList();
             }
-            $maxAmount += $fee['amount'];
+            $maxAmount += $fee['outstanding'];
         }
 
         $form = $this->getForm('FeePayment');
