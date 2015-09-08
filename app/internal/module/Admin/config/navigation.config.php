@@ -154,20 +154,14 @@ return [
                                     'id' => 'admin-dashboard/admin-payment-processing/misc-fees/details',
                                     'label' => 'Fee details',
                                     'route' => 'admin-dashboard/admin-payment-processing/misc-fees/fee_action',
-                                    // 'pages' => [
-                                    //     [
-                                    //         // @todo fee id missing in breadcrumb due to conflicting actions
-                                    //         // if we nest this navigation :(
-                                    //         // 'id' => 'admin-dashboard/admin-payment-processing/misc-fees/transaction',
-                                    //         // 'label' => 'Transaction details',
-                                    //         // 'route' => 'admin-dashboard/admin-payment-processing/misc-fees/fee_action/transaction',
-                                    //     ],
-                                    // ],
                                 ],
                                 [
+                                    // note, we can't nest the transaction breadcrumb under fee details
+                                    // due to conflicting 'action' params :(
                                     'id' => 'admin-dashboard/admin-payment-processing/misc-fees/transaction',
                                     'label' => 'Transaction details',
-                                    'route' => 'admin-dashboard/admin-payment-processing/misc-fees/fee_action/transaction',
+                                    'route' =>
+                                        'admin-dashboard/admin-payment-processing/misc-fees/fee_action/transaction',
                                 ],
                             ],
                         ],
