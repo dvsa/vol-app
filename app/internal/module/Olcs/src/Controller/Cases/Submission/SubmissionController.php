@@ -367,25 +367,18 @@ class SubmissionController extends AbstractInternalController implements
     /**
      * Refreshes a single section within the dataSnapshot field of a submission with the latest data
      * from the rest of the database. Redirects back to details page.
-     *
-     * @return void
+     * @return \Common\Service\Cqrs\Response
      */
     public function refreshTable()
     {
-        $paramProvider = new GenericItem($this->itemParams);
-
-        $paramProvider->setParams($this->plugin('params'));
-        $params = $paramProvider->provideParameters();
-
         $commandData = [
             'id' => $this->params('submission'),
             'version' => $this->params()->fromPost('submissionVersion'),
-            'sections' => [$this->params()->fromPost('table')]
+            'section' => $this->params()->fromRoute('section'),
+            'subSection' => $this->params()->fromPost('table')
         ];
 
-        $response = $this->handleCommand(RefreshDto::create($commandData));
-
-        return $response;
+        return $this->handleCommand(RefreshDto::create($commandData));
     }
 
     /**
@@ -396,33 +389,17 @@ class SubmissionController extends AbstractInternalController implements
      */
     public function deleteTableRows()
     {
-        $params['case'] = $this->params()->fromRoute('case');
-        $params['section'] = $this->params()->fromRoute('section');
-        $params['subSection'] = $this->params()->fromRoute('subSection', $params['section']);
-        $params['submission'] = $this->params()->fromRoute('submission');
+        $commandData = [
+            'id' => $this->params('submission'),
+            'version' => $this->params()->fromPost('submissionVersion'),
+            'section' => $this->params()->fromRoute('section'),
+            'subSection' => $this->params()->fromPost('table'),
+            'rowsToFilter' => $this->params()->fromPost('id')
+        ];
 
-        $rowsToDelete = $this->params()->fromPost('id');
-        /** @var \Olcs\Service\Data\Submission $submissionService */
-        $submissionService = $this->getServiceLocator()->get('Olcs\Service\Data\Submission');
+        $response = $this->handleCommand(FilterDto::create($commandData));
 
-        $submission = $submissionService->fetchData($params['submission']);
-        $snapshotData = json_decode($submission['dataSnapshot'], true);
-
-        if (array_key_exists($params['section'], $snapshotData) &&
-            is_array($snapshotData[$params['section']]['data']['tables'][$params['subSection']])) {
-            foreach ($snapshotData[$params['section']]['data']['tables'][$params['subSection']] as $key => $dataRow) {
-                if (in_array($dataRow['id'], $rowsToDelete)) {
-                    unset($snapshotData[$params['section']]['data']['tables'][$params['subSection']][$key]);
-                }
-            }
-            ksort($snapshotData[$params['section']]['data']['tables'][$params['subSection']]);
-
-            $data['id'] = $params['submission'];
-            $data['version'] = $submission['version'];
-            $data['dataSnapshot'] = json_encode($snapshotData);
-
-            $this->callParentSave($data);
-        }
+        return $response;
     }
 
     private function generateSelectedSectionsArray($submission, $allSectionsRefData, $submissionConfig)
