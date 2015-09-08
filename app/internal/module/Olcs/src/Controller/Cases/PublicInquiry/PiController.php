@@ -145,7 +145,12 @@ class PiController extends AbstractInternalController implements
 
                 //if no matched action, or no valid id, we won't have redirect params
                 if (isset($redirectParams)) {
-                    return $this->redirect()->toRoute($redirectParams);
+                    return $this->redirect()->toRoute(
+                        'case_pi_hearing',
+                        $redirectParams,
+                        ['code' => '303'], // Why? No cache is set with a 303 :)
+                        true
+                    );
                 }
             }
         }
@@ -219,12 +224,7 @@ class PiController extends AbstractInternalController implements
      */
     private function getHearingRedirectParams($action, $id, $pi)
     {
-        return [
-            'case_pi_hearing',
-            ['action' => $action, 'id' => $id, 'pi' => $pi],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        ];
+        return ['action' => $action, 'id' => $id, 'pi' => $pi];
     }
 
     private function checkValidHearingId($id)
