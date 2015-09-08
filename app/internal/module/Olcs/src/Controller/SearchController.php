@@ -95,7 +95,7 @@ class SearchController extends AbstractController
     }
 
     /**
-     * Remove Vehicle Section 28 marker
+     * Remove Vehicle Section 26 marker
      */
     protected function vehicleremove26Action()
     {
@@ -126,7 +126,7 @@ class SearchController extends AbstractController
     }
 
     /**
-     * Set Vehicle Section 28 marker
+     * Set Vehicle Section 26 marker
      */
     protected function vehicleset26Action()
     {
