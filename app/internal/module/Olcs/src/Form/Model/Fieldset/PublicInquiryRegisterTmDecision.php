@@ -109,7 +109,8 @@ class PublicInquiryRegisterTmDecision extends CaseBase
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
      *     "service_name": "\Olcs\Service\Data\PublicInquiryDefinition",
-     *     "use_groups": true
+     *     "use_groups": true,
+     *     "empty_option": "Add definition option"
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(false)
@@ -117,7 +118,7 @@ class PublicInquiryRegisterTmDecision extends CaseBase
     public $definition = null;
 
     /**
-     * @Form\Attributes({"id":"decisionNotes","class":"extra-long    js-definition-target"})
+     * @Form\Attributes({"id":"decisionNotes","class":"extra-long js-definition-target"})
      * @Form\Options({
      *     "label": "Details to be published",
      *     "label_attributes": {

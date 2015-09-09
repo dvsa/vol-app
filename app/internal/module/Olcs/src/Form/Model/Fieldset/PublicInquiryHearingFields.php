@@ -216,7 +216,8 @@ class PublicInquiryHearingFields extends Base
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
      *     "service_name": "\Olcs\Service\Data\PublicInquiryDefinition",
-     *     "use_groups": true
+     *     "use_groups": true,
+     *     "empty_option": "Add definition option"
      * })
      * @Form\Type("DynamicSelect")
      */
