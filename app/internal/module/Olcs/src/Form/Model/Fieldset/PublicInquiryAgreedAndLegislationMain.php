@@ -66,7 +66,7 @@ class PublicInquiryAgreedAndLegislationMain
     /**
      * @Form\Attributes({
      *      "id":"","placeholder":"",
-     *      "class":"chosen-select-medium js-definition-source",
+     *      "class":"chosen-select-medium",
      *      "multiple" : true
      * })
      * @Form\Options({
@@ -81,7 +81,7 @@ class PublicInquiryAgreedAndLegislationMain
     public $reasons = null;
 
     /**
-     * @Form\Attributes({"id":"","class":"extra-long js-definition-target"})
+     * @Form\Attributes({"id":"","class":"extra-long"})
      * @Form\Options({
      *     "label": "Comments",
      *     "label_attributes": {
