@@ -122,36 +122,32 @@ class PiController extends AbstractInternalController implements
             $action = strtolower($this->params()->fromPost('action'));
             $id = $this->params()->fromPost('id');
 
-            $actionsAllowable = ['addhearing', 'edithearing', 'generate'];
-
             //we need the hearing controller for this, so this code is necessary for compatibility with the table
             //actions script
-            if (in_array($action, $actionsAllowable)) {
-                switch ($action) {
-                    case 'addhearing':
-                        $redirectParams = $this->getHearingRedirectParams('add', null, $pi['id']);
-                        break;
-                    case 'edithearing':
-                        if ($this->checkValidHearingId($id)) {
-                            $redirectParams = $this->getHearingRedirectParams('edit', $id, $pi['id']);
-                        }
-                        break;
-                    case 'generate':
-                        if ($this->checkValidHearingId($id)) {
-                            $redirectParams = $this->getHearingRedirectParams('generate', $id, $pi['id']);
-                        }
-                        break;
-                }
+            switch ($action) {
+                case 'addhearing':
+                    $redirectParams = $this->getHearingRedirectParams('add', null, $pi['id']);
+                    break;
+                case 'edithearing':
+                    if ($this->checkValidHearingId($id)) {
+                        $redirectParams = $this->getHearingRedirectParams('edit', $id, $pi['id']);
+                    }
+                    break;
+                case 'generate':
+                    if ($this->checkValidHearingId($id)) {
+                        $redirectParams = $this->getHearingRedirectParams('generate', $id, $pi['id']);
+                    }
+                    break;
+            }
 
-                //if no matched action, or no valid id, we won't have redirect params
-                if (isset($redirectParams)) {
-                    return $this->redirect()->toRoute(
-                        'case_pi_hearing',
-                        $redirectParams,
-                        ['code' => '303'], // Why? No cache is set with a 303 :)
-                        true
-                    );
-                }
+            //if no matched action, or no valid id, we won't have redirect params
+            if (isset($redirectParams)) {
+                return $this->redirect()->toRoute(
+                    'case_pi_hearing',
+                    $redirectParams,
+                    ['code' => '303'], // Why? No cache is set with a 303 :)
+                    true
+                );
             }
         }
 
