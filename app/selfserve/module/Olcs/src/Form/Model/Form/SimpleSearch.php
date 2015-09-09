@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class SimpleSearch
 {
     /**
-     * @Form\Attributes({"class": "long", "placeholder": "", "label":"some"})
+     * @Form\Attributes({"class": "extra-long", "placeholder": "", "label":"some"})
      * @Form\Type("Text")
      * @Form\Validator({"name": "NotEmpty"})
      * @Form\Options({"label": "search.form.label", "hint": "search.form.hint"})
