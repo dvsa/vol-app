@@ -11,7 +11,18 @@ if ($entity['isApprovable']) {
         'class' => 'action--primary'
     ];
 }
-if ($entity['irfoPermitStatus']['id'] !== 'irfo_perm_s_pending') {
+if ($entity['irfoPermitStatus']['id'] === 'irfo_perm_s_pending') {
+    $actions[] = [
+        'url' => $this->url(null, ['action' => 'withdraw'], [], true),
+        'label' => 'Withdraw',
+        'class' => 'action--secondary'
+    ];
+    $actions[] = [
+        'url' => $this->url(null, ['action' => 'refuse'], [], true),
+        'label' => 'Refuse',
+        'class' => 'action--secondary'
+    ];
+} else {
     $actions[] = [
         'url' => $this->url(null, ['action' => 'reset'], [], true),
         'label' => 'Reset',
