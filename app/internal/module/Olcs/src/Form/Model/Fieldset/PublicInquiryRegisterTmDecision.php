@@ -103,8 +103,7 @@ class PublicInquiryRegisterTmDecision extends CaseBase
     public $notificationDate = null;
 
     /**
-     * @Form\Attributes({"id":"definition","placeholder":"","class":"chosen-select-large js-definition-source",
-     *     "multiple":true})
+     * @Form\Attributes({"id":"definition","placeholder":"","class":"chosen-select-large js-definition-source"})
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,
