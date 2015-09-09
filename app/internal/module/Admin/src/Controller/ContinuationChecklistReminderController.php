@@ -1,19 +1,23 @@
 <?php
 
 /**
- * CContinuationChecklistReminderController
+ * ContinuationChecklistReminderController
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace Admin\Controller;
 
 use Zend\View\Model\ViewModel;
 use Common\Controller\Lva\Traits\CrudActionTrait;
+use Dvsa\Olcs\Transfer\Query\ContinuationDetail\ChecklistReminders as ChecklistRemindersQry;
+use Dvsa\Olcs\Transfer\Command\ContinuationDetail\QueueLetters as QueueLettersCmd;
 
 /**
  * ContinuationChecklistReminderController
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class ContinuationChecklistReminderController extends AbstractController
 {
@@ -42,12 +46,29 @@ class ContinuationChecklistReminderController extends AbstractController
             list($year, $month) = explode('-', $filterForm->getData()['filters']['date']);
         }
 
-        $results = $this->getServiceLocator()->get('Entity\ContinuationDetail')
-            ->getChecklistReminderList($month, $year);
+        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createQuery(
+            ChecklistRemindersQry::create(
+                [
+                    'month' => $month,
+                    'year' => $year
+                ]
+            )
+        );
+        /** @var \Common\Service\Cqrs\Response $response */
+        $response = $this->getServiceLocator()->get('QueryService')->send($query);
+        if ($response->isServerError() || $response->isClientError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+        $results = [];
+        $total = 0;
+        if ($response->isOk()) {
+            $results = $response->getResult()['results'];
+            $total = $response->getResult()['count'];
+        }
 
-        $table = $this->getTable($results['Results']);
+        $table = $this->getTable($results);
         $subTitle = date('M Y', strtotime($year . '-' . $month . '-01'));
-        $table->setVariable('title', $subTitle .': '. $results['Count'] . ' licence(s)');
+        $table->setVariable('title', $subTitle .': '. $total . ' licence(s)');
 
         $this->getServiceLocator()->get('Script')->loadFiles(['forms/filter', 'forms/crud-table-handler']);
 
@@ -100,15 +121,23 @@ class ContinuationChecklistReminderController extends AbstractController
     {
         $continuationDetailIds = explode(',', $this->params('child_id'));
 
-        $response = $this->getServiceLocator()->get('BusinessServiceManager')
-              ->get('ContinuationChecklistReminderQueueLetters')
-              ->process(['continuationDetailIds' => $continuationDetailIds]);
+        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand(
+            QueueLettersCmd::create(
+                [
+                    'ids' => $continuationDetailIds
+                ]
+            )
+        );
+        /** @var \Common\Service\Cqrs\Response $response */
+        $response = $this->getServiceLocator()->get('CommandService')->send($command);
 
         $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        if ($response->isClientError() || $response->isServerError()) {
+            $flashMessenger->addErrorMessage('The checklist reminder letters could not be generated, please try again');
+        }
+
         if ($response->isOk()) {
             $flashMessenger->addSuccessMessage('The checklist reminder letters have been generated.');
-        } else {
-            $flashMessenger->addErrorMessage('The checklist reminder letters could not be generated, please try again');
         }
 
         return $this->redirect()->toRouteAjax(null, ['action' => null, 'child_id' => null], [], true);
@@ -121,23 +150,21 @@ class ContinuationChecklistReminderController extends AbstractController
     {
         $continuationDetailIds = explode(',', $this->params('child_id'));
 
-        // @note The isn't a way of retieving a set of entities by their ID!
-        // therefore retrieve all of them that are currently visible and filter to the checked ones
-        // month and year parameters won't be used here as values will come from saved state
-        $filterForm = $this->getChecklistReminderFilterForm(1, 2000);
-        $filterForm->isValid();
-        list($year, $month) = explode('-', $filterForm->getData()['filters']['date']);
-
-        $results = $this->getServiceLocator()->get('Entity\ContinuationDetail')
-            ->getChecklistReminderList($month, $year);
-
-        $filteredResults = [];
-        foreach ($results['Results'] as $result) {
-            if (in_array($result['id'], $continuationDetailIds)) {
-                $filteredResults[] = $result;
-            }
+        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createQuery(
+            ChecklistRemindersQry::create(['ids' => $continuationDetailIds])
+        );
+        /** @var \Common\Service\Cqrs\Response $response */
+        $response = $this->getServiceLocator()->get('QueryService')->send($query);
+        if ($response->isServerError() || $response->isClientError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->redirect()->toRouteAjax(null, ['action' => null, 'child_id' => null], [], true);
         }
-        $table = $this->getTable($filteredResults);
+        $results = [];
+        if ($response->isOk()) {
+            $results = $response->getResult()['results'];
+        }
+
+        $table = $this->getTable($results);
 
         $helper = $this->getServiceLocator()->get('Helper\Response');
         return $helper->tableToCsv($this->getResponse(), $table, 'Checklist reminder list');
