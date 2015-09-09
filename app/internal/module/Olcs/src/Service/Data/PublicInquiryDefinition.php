@@ -20,7 +20,7 @@ class PublicInquiryDefinition extends AbstractPublicInquiryData
     public function formatDataForGroups($data)
     {
         $groups = [];
-        $optionData = ['' => 'Add definition option'];
+        $optionData = [];
 
         foreach ($data as $datum) {
             if (isset($datum['piDefinitionCategory'])) {
@@ -32,7 +32,6 @@ class PublicInquiryDefinition extends AbstractPublicInquiryData
             $optionData[$parent]['options'] = $this->formatData($groupData);
             $optionData[$parent]['label'] = $parent;
         }
-
         return $optionData;
     }
 }
