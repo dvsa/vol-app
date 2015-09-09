@@ -382,7 +382,7 @@ $routes = [
             'constraints' => [
                 'case' => '[0-9]+',
                 'pi' => '[0-9]+',
-                'action' => '(add|edit|index)',
+                'action' => '(add|edit|index|generate)',
                 'id' => '[0-9]+',
             ],
             'defaults' => [
