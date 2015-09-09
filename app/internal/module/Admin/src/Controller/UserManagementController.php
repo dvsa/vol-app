@@ -86,8 +86,6 @@ class UserManagementController extends CrudAbstract
      */
     protected $dataBundle = array(
         'children' => [
-            'hintQuestion1',
-            'hintQuestion2',
             'team',
             'transportManager',
             'partnerContactDetails',
@@ -237,10 +235,6 @@ class UserManagementController extends CrudAbstract
 
             $data['userLoginSecurity']['loginId'] = $data['loginId'];
             $data['userLoginSecurity']['memorableWord'] = $data['memorableWord'];
-            $data['userLoginSecurity']['hintQuestion1'] = $data['hintQuestion1'];
-            $data['userLoginSecurity']['hintAnswer1'] = $data['hintAnswer1'];
-            $data['userLoginSecurity']['hintQuestion2'] = $data['hintQuestion2'];
-            $data['userLoginSecurity']['hintAnswer2'] = $data['hintAnswer2'];
             $data['userLoginSecurity']['mustResetPassword'] = $data['mustResetPassword'];
             $data['userLoginSecurity']['accountDisabled'] = $data['accountDisabled'];
             $data['userLoginSecurity']['lockedDate'] = $data['lockedDate'];
@@ -274,6 +268,10 @@ class UserManagementController extends CrudAbstract
 
             if (isset($data['contactDetails']['phoneContacts'])) {
                 foreach ($data['contactDetails']['phoneContacts'] as $phoneContact) {
+                    if (empty($phoneContact['phoneContactType'])) {
+                        continue;
+                    }
+
                     if ($phoneContact['phoneContactType']['id'] == 'phone_t_tel') {
                         $data['userContactDetails']['phone'] = $phoneContact['phoneNumber'];
                     } elseif ($phoneContact['phoneContactType']['id'] == 'phone_t_fax') {
