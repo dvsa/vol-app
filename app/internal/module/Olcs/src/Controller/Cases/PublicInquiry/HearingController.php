@@ -159,7 +159,6 @@ class HearingController extends AbstractInternalController implements
             'case_licence_docs_attachments/entity/generate',
             [
                 'case' => $this->params()->fromRoute('case'),
-                'licence' => (isset($pi['case']['licence']['id']) ? $pi['case']['licence']['id'] : null),
                 'entityType' => 'hearing',
                 'entityId' => $this->params()->fromRoute('id')
             ]
