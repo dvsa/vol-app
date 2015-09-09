@@ -597,7 +597,8 @@ class ApplicationControllerTest extends MockeryTestCase
             ->andReturn(7);
 
         $fee1 = [
-            'amount' => 5.5,
+            'amount' => 6,
+            'outstanding' => 5.5,
             'feeStatus' => [
                 'id' => 'lfs_ot'
             ],
@@ -605,6 +606,7 @@ class ApplicationControllerTest extends MockeryTestCase
         ];
         $fee2 = [
             'amount' => 10,
+            'outstanding' => 10,
             'feeStatus' => [
                 'id' => 'lfs_ot'
             ],
@@ -653,6 +655,7 @@ class ApplicationControllerTest extends MockeryTestCase
 
         $fee = [
             'amount' => 5.5,
+            'outstanding' => 5.5,
             'feeStatus' => [
                 'id' => 'lfs_pd'
             ]
@@ -754,6 +757,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $fee = [
             'id' => 1,
             'amount' => 5.5,
+            'outstanding' => 5.5,
             'feeStatus' => [
                 'id' => 'lfs_ot'
             ],
@@ -946,6 +950,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $fee1 = [
             'id' => 1,
             'amount' => 123.45,
+            'outstanding' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
             'feeTransactions' => []
         ];
@@ -1032,6 +1037,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $fee1 = [
             'id' => 1,
             'amount' => 123.45,
+            'outstanding' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
             'feeTransactions' => []
         ];
@@ -1111,6 +1117,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $fee = [
             'id' => 1,
             'amount' => 123.45,
+            'outstanding' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
             'feeTransactions' => []
         ];
@@ -1226,6 +1233,7 @@ class ApplicationControllerTest extends MockeryTestCase
         $fee = [
             'id' => 1,
             'amount' => 123.45,
+            'outstanding' => 123.45,
             'feeStatus' => ['id' => 'lfs_ot'],
             'feeTransactions' => []
         ];
