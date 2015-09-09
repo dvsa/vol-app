@@ -13,6 +13,7 @@ class TextSearch
 {
     /**
      * @Form\Attributes({"value":""})
+     * @Form\Options({"label":"Keywords", "class":"extra-long"})
      * @Form\Type("Text")
      */
     public $search = null;
