@@ -8,10 +8,11 @@
 namespace Admin\Controller;
 
 use Zend\View\Model\ViewModel;
-use Common\Service\Entity\ContinuationEntityService;
 use Common\BusinessService\Response;
 use Common\Service\Entity\LicenceEntityService;
 use Common\Controller\Lva\Traits\CrudActionTrait;
+use Dvsa\Olcs\Transfer\Query\ContinuationDetail\GetList as GetListQry;
+use Dvsa\Olcs\Transfer\Command\Continuation\Create as CreateCmd;
 
 /**
  * Continuation Controller
@@ -21,6 +22,9 @@ use Common\Controller\Lva\Traits\CrudActionTrait;
 class ContinuationController extends AbstractController
 {
     use CrudActionTrait;
+
+    // @note temporary, remove after irfo functionality developed
+    const CONTINUATION_TYPE_IRFO = 'irfo';
 
     protected $defaultFilters = [
         'licenceStatus' => [
@@ -51,7 +55,7 @@ class ContinuationController extends AbstractController
             $data = $form->getData();
 
             // AC Says to redirect to placeholder page until irfo is developed
-            if ($data['details']['type'] === ContinuationEntityService::TYPE_IRFO) {
+            if ($data['details']['type'] === self::CONTINUATION_TYPE_IRFO) {
                 return $this->redirect()->toRoute(null, ['action' => 'irfo']);
             }
 
@@ -63,30 +67,24 @@ class ContinuationController extends AbstractController
                 'trafficArea' => $data['details']['trafficArea']
             ];
 
-            $continuation = $this->getServiceLocator()->get('Entity\Continuation')->find($criteria);
-
-            if ($continuation !== null) {
-                return $this->redirect()->toRoute($this->detailRoute, ['id' => $continuation['id']]);
-            }
-
-            // Create continuation
-            $response = $this->getServiceLocator()->get('BusinessServiceManager')
-                ->get('Admin\Continuation')
-                ->process(['data' => $criteria]);
-
-            // We treat success and no_op differently in this case
-            if ($response->getType() === Response::TYPE_SUCCESS) {
-
-                $id = $response->getData()['id'];
-                return $this->redirect()->toRoute($this->detailRoute, ['id' => $id]);
-            }
+            $response = $this->handleCommand(
+                CreateCmd::create($criteria)
+            );
 
             $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
+            if ($response->isServerError() || $response->isClientError()) {
+                $fm->addCurrentErrorMessage('unknown-error');
+            }
+            if ($response->isOk()) {
+                $continuationId = $response->getResult()['id']['continuation'];
 
-            if ($response->getType() === Response::TYPE_NO_OP) {
-                $fm->addCurrentInfoMessage('admin-continuations-no-licences-found');
-            } else {
-                $fm->addCurrentErrorMessage($response->getMessage());
+                // no licences found
+                if (!$continuationId) {
+                    $fm->addCurrentInfoMessage('admin-continuations-no-licences-found');
+                } else {
+                // continuation created or already exists
+                    return $this->redirect()->toRoute($this->detailRoute, ['id' => $continuationId]);
+                }
             }
         }
 
@@ -116,10 +114,15 @@ class ContinuationController extends AbstractController
         $id = $this->params('id');
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $continuationEntity = $this->getServiceLocator()->get('Entity\Continuation');
         $tableHelper = $this->getServiceLocator()->get('Table');
 
-        $data = $continuationEntity->getHeaderData($id);
+        $filterForm = $this->getDetailFilterForm();
+        if ($filterForm->isValid()) {
+            $filters = $filterForm->getData()['filters'];
+        } else {
+            $filters = [];
+        }
+        list($tableData, $data) = $this->getContinuationData($id, $filters);
 
         $period = date('M Y', strtotime($data['year'] . '-' . $data['month'] . '-01'));
 
@@ -128,18 +131,8 @@ class ContinuationController extends AbstractController
             [$period, $data['trafficArea']['name']]
         );
 
-        $filterForm = $this->getDetailFilterForm();
-
-        if ($filterForm->isValid()) {
-            $filters = $filterForm->getData()['filters'];
-        } else {
-            $filters = [];
-        }
-
-        $tableData = $this->getContinuationDetailTableData($id, $filters);
-
         $table = $tableHelper->prepareTable('admin-continuations', $tableData);
-        $table->setVariable('title', $tableData['Count'] . ' licence(s)');
+        $table->setVariable('title', $tableData['count'] . ' licence(s)');
 
         $this->getServiceLocator()->get('Script')->loadFiles(['forms/filter', 'table-actions']);
 
@@ -218,10 +211,26 @@ class ContinuationController extends AbstractController
             ->setData(['filters' => $filters]);
     }
 
-    protected function getContinuationDetailTableData($id, $filters)
+    protected function getContinuationData($id, $filters)
     {
-        return $this->getServiceLocator()->get('Entity\ContinuationDetail')
-            ->getListData($id, $filters);
+        $filters = array_merge($filters, ['continuationId' => $id]);
+        if (!$filters['method']) {
+            $filters['method'] = 'all';
+        }
+        $response = $this->handleQuery(GetListQry::create($filters));
+        if ($response->isOk()) {
+            $result = $response->getResult();
+            $header = $response->getResult()['extra']['header'];
+        }
+        if ($response->isServerError() || $response->isClientError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $result = [];
+            $header = [];
+        }
+        return [
+            $result,
+            $header
+        ];
     }
 
     protected function getContinuationForm()

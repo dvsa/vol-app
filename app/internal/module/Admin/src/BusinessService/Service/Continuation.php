@@ -15,7 +15,7 @@ use Common\Service\Entity\ContinuationDetailEntityService;
 
 /**
  * Continuation
- *
+ * @todo remove
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 class Continuation implements BusinessServiceInterface, ServiceLocatorAwareInterface
