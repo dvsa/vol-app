@@ -46,7 +46,7 @@ class ContinuationChecklistReminderController extends AbstractController
             list($year, $month) = explode('-', $filterForm->getData()['filters']['date']);
         }
 
-        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createQuery(
+        $response = $this->handleQuery(
             ChecklistRemindersQry::create(
                 [
                     'month' => $month,
@@ -54,8 +54,6 @@ class ContinuationChecklistReminderController extends AbstractController
                 ]
             )
         );
-        /** @var \Common\Service\Cqrs\Response $response */
-        $response = $this->getServiceLocator()->get('QueryService')->send($query);
         if ($response->isServerError() || $response->isClientError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
@@ -121,16 +119,13 @@ class ContinuationChecklistReminderController extends AbstractController
     {
         $continuationDetailIds = explode(',', $this->params('child_id'));
 
-        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand(
+        $response = $this->handleCommand(
             QueueLettersCmd::create(
                 [
                     'ids' => $continuationDetailIds
                 ]
             )
         );
-        /** @var \Common\Service\Cqrs\Response $response */
-        $response = $this->getServiceLocator()->get('CommandService')->send($command);
-
         $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
         if ($response->isClientError() || $response->isServerError()) {
             $flashMessenger->addErrorMessage('The checklist reminder letters could not be generated, please try again');
@@ -150,11 +145,9 @@ class ContinuationChecklistReminderController extends AbstractController
     {
         $continuationDetailIds = explode(',', $this->params('child_id'));
 
-        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createQuery(
+        $response = $this->handleQuery(
             ChecklistRemindersQry::create(['ids' => $continuationDetailIds])
         );
-        /** @var \Common\Service\Cqrs\Response $response */
-        $response = $this->getServiceLocator()->get('QueryService')->send($query);
         if ($response->isServerError() || $response->isClientError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             $this->redirect()->toRouteAjax(null, ['action' => null, 'child_id' => null], [], true);
