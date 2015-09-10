@@ -8,7 +8,7 @@ return array(
             'backend' => 'http://olcs-backend/',
             'postcode' => 'http://dvsa-postcode.olcspv-ap01.olcs.npm/',
             'nr' => 'http://olcs-nr/',
-            'email' => 'http://olcs-email/'
+            'email' => 'http://olcs-email/',
             'companies_house' => array(
                 'url' => 'https://api.companieshouse.gov.uk/',
                 'options' => array(

@@ -51,7 +51,7 @@ $routes = [
     'search' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/search[/:index[/:action]]',
+            'route' => '/search[/:index[/:action][/:child_id]]',
             'defaults' => [
                 'controller' => SearchController::class,
                 'action' => 'post',
@@ -382,7 +382,7 @@ $routes = [
             'constraints' => [
                 'case' => '[0-9]+',
                 'pi' => '[0-9]+',
-                'action' => '(add|edit|index)',
+                'action' => '(add|edit|index|generate)',
                 'id' => '[0-9]+',
             ],
             'defaults' => [
@@ -1550,7 +1550,7 @@ $routes = [
                         'options' => [
                             'route' => '/gv-permits[/:action][/:id]',
                             'constraints' => [
-                                'action' => '(add|details|reset|approve)',
+                                'action' => '(add|details|reset|approve|withdraw|refuse)',
                                 'id' => '[0-9]+'
                             ],
                             'defaults' => [

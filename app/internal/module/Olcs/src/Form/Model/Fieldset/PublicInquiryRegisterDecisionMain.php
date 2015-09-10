@@ -183,14 +183,14 @@ class PublicInquiryRegisterDecisionMain
     public $notificationDate = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-large js-definition-source",
-     *     "multiple":true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"js-definition-source chosen-select-large"})
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
      *     "service_name": "\Olcs\Service\Data\PublicInquiryDefinition",
-     *     "use_groups": true
+     *     "use_groups": true,
+     *     "empty_option": "Add definition option"
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(false)
@@ -198,7 +198,7 @@ class PublicInquiryRegisterDecisionMain
     public $definition = null;
 
     /**
-     * @Form\Attributes({"id":"","class":"extra-long    js-definition-target"})
+     * @Form\Attributes({"id":"","class":"extra-long js-definition-target"})
      * @Form\Options({
      *     "label": "Details to be published",
      *     "label_attributes": {

@@ -3,14 +3,14 @@ return array(
     'variables' => array(
         'action_route' => [
             'route' => 'submission_update_table',
-            'params' => ['section' => 'persons']
+            'params' => ['section' => 'people']
         ],
-        'title' => 'Persons',
-        'id' => 'persons'
+        'title' => 'People',
+        'id' => 'people'
     ),
     'settings' => array(
         'crud' => array(
-            'formName' => 'persons',
+            'formName' => 'people',
             'actions' => array(
                 'refresh-table' => array('label' => 'Refresh table', 'class' => 'secondary', 'requireRows' => false),
                 'delete-row' => array('label' => 'Delete row', 'class' => 'secondary', 'requireRows' => true)
@@ -20,7 +20,7 @@ return array(
         'submission_section' => 'display'
     ),
     'attributes' => array(
-        'name' => 'persons'
+        'name' => 'people'
     ),
     'columns' => array(
         array(
