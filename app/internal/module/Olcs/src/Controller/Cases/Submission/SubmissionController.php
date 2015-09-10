@@ -140,7 +140,10 @@ class SubmissionController extends AbstractInternalController implements
             ]
         ],
         'edit' => [
-            'action' => 'details'
+            'action' => 'details',
+            'resultIdMap' => [
+                'submission' => 'submission'
+            ]
         ]
     ];
 
@@ -453,7 +456,7 @@ class SubmissionController extends AbstractInternalController implements
 
         // Intercept Submission type submit button to prevent saving
         if (isset($postData['submissionSections']['submissionTypeSubmit']) ||
-            !(empty($initialData['submissionType']))) {
+            !(empty($initialData['fields']['submissionType']))) {
             $this->persist = false;
         } else {
             // remove form-actions
