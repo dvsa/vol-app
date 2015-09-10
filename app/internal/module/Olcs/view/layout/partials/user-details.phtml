@@ -1,5 +1,5 @@
 <ul class="user-menu">
-    <li class="user-menu__item">Sam Quayle:</li>
+    <li class="user-menu__item"><?php echo $this->currentUser()->getFullName()?>:</li>
     <?php foreach ($this->container as $page): ?>
         <?php if($page->isVisible(true)): ?>
             <li class="user-menu__item">
