@@ -597,7 +597,6 @@ $routes = [
         'options' => [
             'route' => '/case/:case/processing/history',
             'defaults' => [
-                //'controller' => 'Crud\Case\EventHistoryController',
                 'controller' => 'CaseHistoryController',
                 'action' => 'index'
             ]
@@ -868,7 +867,6 @@ $routes = [
                 'options' => [
                     'route' => '/event-history',
                     'defaults' => [
-                        //'controller' => 'Crud\Licence\EventHistoryController',
                         'controller' => 'LicenceHistoryController',
                         'action' => 'index',
                     ]
@@ -2002,7 +2000,6 @@ $routes = [
                             'route' => '/event-history',
                             'defaults' => [
                                 'controller' => 'TransportManagerHistoryController',
-                                //'controller' => 'Crud\TransportManager\EventHistoryController',
                                 'action' => 'index',
                             ]
                         ],
