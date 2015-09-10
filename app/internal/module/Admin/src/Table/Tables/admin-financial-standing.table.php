@@ -7,9 +7,9 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'primary', 'requireRows' => false),
-                'edit' => array('class' => 'secondary', 'requireRows' => true),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'add' => array('class' => 'primary'),
+                'edit' => array('class' => 'secondary js-require--one'),
+                'delete' => array('class' => 'secondary js-require--multiple')
             )
         )
     ),

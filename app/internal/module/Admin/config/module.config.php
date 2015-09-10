@@ -259,7 +259,7 @@ return [
                                 'id' => '[0-9\,]+'
                             ],
                             'defaults' => [
-                                'controller' => 'Crud\FinancialStandingController',
+                                'controller' => 'Admin\FinancialStandingRateController',
                                 'action' => 'index',
                             ]
                         ],
@@ -460,6 +460,7 @@ return [
             'Admin\ContinuationChecklistReminderController' =>
                 'Admin\Controller\ContinuationChecklistReminderController',
             'Admin\CompaniesHouseAlertController' => 'Admin\Controller\CompaniesHouseAlertController',
+            'Admin\FinancialStandingRateController' => 'Admin\Controller\FinancialStandingRateController',
         ]
     ],
     'view_manager' => [
