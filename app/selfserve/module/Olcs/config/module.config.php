@@ -842,17 +842,17 @@ return array(
                         'use_route_match' => true,
                         'class' => 'proposition-nav__item',
                     ),
+                    array(
+                        'id' => 'manage-users',
+                        'label' => 'Manage Users',
+                        'route' => 'user',
+                        'use_route_match' => true,
+                        'class' => 'proposition-nav__item',
+                    )
 
                     /*array(
                         'id' => 'my-account',
                         'label' => 'My Account',
-                        'route' => 'user',
-                        'use_route_match' => true,
-                        'class' => 'proposition-nav__item',
-                    ),
-                    array(
-                        'id' => 'manage-users',
-                        'label' => 'Manage Users',
                         'route' => 'user',
                         'use_route_match' => true,
                         'class' => 'proposition-nav__item',
@@ -926,6 +926,9 @@ return array(
 
                 // Dashboard Page
                 'dashboard' => ['selfserve-nav-dashboard'],
+
+                // User Page
+                'user' => ['selfserve-nav-manage-users'],
 
                 // Search and who can access them
                 'search-operating-centre' => [
