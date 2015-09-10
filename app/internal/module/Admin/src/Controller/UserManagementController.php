@@ -101,11 +101,7 @@ class UserManagementController extends CrudAbstract
                     ]
                 ]
             ],
-            'userRoles' => [
-                'children' => [
-                    'role'
-                ]
-            ]
+            'roles'
         ]
     );
 
@@ -253,10 +249,8 @@ class UserManagementController extends CrudAbstract
 
             $data['userType']['roles'] = [];
 
-            if (isset($data['userRoles'])) {
-                foreach ($data['userRoles'] as $userRole) {
-                    $data['userType']['roles'][] = $userRole['role']['id'];
-                }
+            if (isset($data['roles'])) {
+                $data['userType']['roles'] = array_column($data['roles'], 'id');
             }
 
             // set up contact data

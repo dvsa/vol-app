@@ -462,12 +462,8 @@ class UserManagementControllerTest extends MockeryTestCase
             'partnerContactDetails' => [
                 'id' => 5
             ],
-            'userRoles' => [
-                0 => [
-                    'role' => [
-                        'id' => 99
-                    ]
-                ]
+            'roles' => [
+                ['id' => 99]
             ],
             'contactDetails' => [
                 'id' => 111,
