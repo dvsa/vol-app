@@ -21,7 +21,8 @@ foreach ($allSections as $sectionId => $sectionDescription) {
         $freetext .= $this->submissionSectionDetails(
             $sectionId,
             $selectedSectionsArray[$sectionId],
-            $readonly
+            $readonly,
+            $submission['version']
         );
         if (isset($submissionConfig[$sectionId]['allow_comments']) && $submissionConfig[$sectionId]['allow_comments']) {
             $freetext .= $this->partial('partials/submission-comments',
