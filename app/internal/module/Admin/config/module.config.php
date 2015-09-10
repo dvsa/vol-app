@@ -396,11 +396,6 @@ return [
             __DIR__ . '/../src/Table/Tables/'
         ]
     ],
-    'crud_service_manager' => [
-        'invokables' => [
-            'FinancialStandingCrudService' => 'Admin\Service\Crud\FinancialStandingCrudService',
-        ]
-    ],
     'crud-config' => [
         /**
          * Sample crud config
@@ -411,36 +406,7 @@ return [
          * ]
          */
     ],
-    /**
-     * This config array contains the config for dynamic / generic controllers
-     */
-    'crud_controller_config' => [
-        'Crud\FinancialStandingController' => [
-            'index' => [
-                'pageLayout' => 'admin-layout',
-                'table' => 'admin-financial-standing',
-                'route' => '',
-                'scripts' => [
-                    'table-actions'
-                ]
-            ],
-            'add' => [
-                'pageLayout' => 'admin-layout',
-                'table' => 'admin-financial-standing',
-                'route' => ''
-            ],
-            'edit' => [
-                'pageLayout' => 'admin-layout',
-                'table' => 'admin-financial-standing',
-                'route' => ''
-            ]
-        ],
-    ],
     'controllers' => [
-        'factories' => [
-            // Crud controllers
-            'Crud\FinancialStandingController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
-        ],
         'invokables' => [
             'Admin\IndexController' => 'Admin\Controller\IndexController',
             'Admin\PrintingController' => 'Admin\Controller\PrintingController',
