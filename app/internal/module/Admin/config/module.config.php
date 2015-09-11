@@ -475,12 +475,6 @@ return [
             'UserDetailsNavigation' => 'Admin\Navigation\UserDetailsNavigationFactory',
         )
     ),
-    'business_service_manager' => [
-        'invokables' => [
-            'Admin\Continuation' => 'Admin\BusinessService\Service\Continuation',
-            'Admin\ContinuationDetailMessage' => 'Admin\BusinessService\Service\ContinuationDetailMessage',
-        ]
-    ],
     'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],
     //-------- Start navigation -----------------
     'navigation' => array(

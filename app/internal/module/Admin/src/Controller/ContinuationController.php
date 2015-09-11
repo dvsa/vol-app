@@ -13,6 +13,7 @@ use Common\Service\Entity\LicenceEntityService;
 use Common\Controller\Lva\Traits\CrudActionTrait;
 use Dvsa\Olcs\Transfer\Query\ContinuationDetail\GetList as GetListQry;
 use Dvsa\Olcs\Transfer\Command\Continuation\Create as CreateCmd;
+use Dvsa\Olcs\Transfer\Command\ContinuationDetail\PrepareContinuations as PrepareCmd;
 
 /**
  * Continuation Controller
@@ -82,7 +83,7 @@ class ContinuationController extends AbstractController
                 if (!$continuationId) {
                     $fm->addCurrentInfoMessage('admin-continuations-no-licences-found');
                 } else {
-                // continuation created or already exists
+                    // continuation created or already exists
                     return $this->redirect()->toRoute($this->detailRoute, ['id' => $continuationId]);
                 }
             }
@@ -167,20 +168,19 @@ class ContinuationController extends AbstractController
 
             $ids = explode(',', $this->params('child_id'));
 
-            $response = $this->getServiceLocator()->get('BusinessServiceManager')
-                ->get('Admin\ContinuationDetailMessage')
-                ->process(['ids' => $ids]);
-
+            $response = $this->handleCommand(
+                PrepareCmd::create(
+                    [
+                        'ids' => $ids
+                    ]
+                )
+            );
             $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
-
             if ($response->isOk()) {
                 $flashMessenger->addSuccessMessage('The selected licence(s) have been queued');
-            } else {
-                $message = $response->getMessage();
-                if ($message === null) {
-                    $message = 'The selected licence(s) could not be queued, please try again';
-                }
-                $flashMessenger->addErrorMessage($message);
+            }
+            if ($response->isServerError() || $response->isClientError()) {
+                $flashMessenger->addErrorMessage('The selected licence(s) could not be queued, please try again');
             }
 
             return $this->redirect()->toRouteAjax(null, ['action' => null, 'child_id' => null], [], true);

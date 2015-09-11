@@ -11,7 +11,7 @@ namespace Admin\Controller;
 use Zend\View\Model\ViewModel;
 use Common\Controller\Lva\Traits\CrudActionTrait;
 use Dvsa\Olcs\Transfer\Query\ContinuationDetail\ChecklistReminders as ChecklistRemindersQry;
-use Dvsa\Olcs\Transfer\Command\ContinuationDetail\QueueLetters as QueueLettersCmd;
+use Dvsa\Olcs\Transfer\Command\ContinuationDetail\Queue as QueueCmd;
 
 /**
  * ContinuationChecklistReminderController
@@ -21,6 +21,8 @@ use Dvsa\Olcs\Transfer\Command\ContinuationDetail\QueueLetters as QueueLettersCm
  */
 class ContinuationChecklistReminderController extends AbstractController
 {
+    const TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER = 'que_typ_cont_check_rem_gen_let';
+
     use CrudActionTrait;
 
     /**
@@ -120,9 +122,10 @@ class ContinuationChecklistReminderController extends AbstractController
         $continuationDetailIds = explode(',', $this->params('child_id'));
 
         $response = $this->handleCommand(
-            QueueLettersCmd::create(
+            QueueCmd::create(
                 [
-                    'ids' => $continuationDetailIds
+                    'ids' => $continuationDetailIds,
+                    'type' => self::TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER
                 ]
             )
         );
