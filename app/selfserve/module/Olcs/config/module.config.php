@@ -497,7 +497,7 @@ foreach (['application', 'variation'] as $lva) {
 
 $applicationNavigation = array(
     'id' => 'dashboard-applications',
-    'label' => 'Applications',
+    'label' => 'Home',
     'route' => 'dashboard',
     'class' => 'proposition-nav__item',
     'pages' => array(
@@ -831,6 +831,8 @@ return array(
                 'route' => 'index',
                 'pages' => array(
 
+                    $applicationNavigation,
+
                     $searchNavigation,
 
                     array(
@@ -840,19 +842,17 @@ return array(
                         'use_route_match' => true,
                         'class' => 'proposition-nav__item',
                     ),
-
-                    $applicationNavigation,
+                    array(
+                        'id' => 'manage-users',
+                        'label' => 'Manage Users',
+                        'route' => 'user',
+                        'use_route_match' => true,
+                        'class' => 'proposition-nav__item',
+                    )
 
                     /*array(
                         'id' => 'my-account',
                         'label' => 'My Account',
-                        'route' => 'user',
-                        'use_route_match' => true,
-                        'class' => 'proposition-nav__item',
-                    ),
-                    array(
-                        'id' => 'manage-users',
-                        'label' => 'Manage Users',
                         'route' => 'user',
                         'use_route_match' => true,
                         'class' => 'proposition-nav__item',
@@ -923,6 +923,12 @@ return array(
     'zfc_rbac' => [
         'guards' => [
             'ZfcRbac\Guard\RoutePermissionsGuard' => [
+
+                // Dashboard Page
+                'dashboard' => ['selfserve-nav-dashboard'],
+
+                // User Page
+                'user' => ['selfserve-nav-manage-users'],
 
                 // Search and who can access them
                 'search-operating-centre' => [
