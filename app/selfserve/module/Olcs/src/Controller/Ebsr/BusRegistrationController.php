@@ -36,6 +36,7 @@ class BusRegistrationController extends AbstractActionController
 
         $params = [];
         $params['ebsrSubmissionType'] = $this->params()->fromRoute('subType');
+        $params['ebsrSubmissionStatus'] = $this->params()->fromRoute('status');
         $params['sort'] = $this->params()->fromRoute('sort');
         $params['order'] = $this->params()->fromRoute('order');
         $params['page'] = $this->params()->fromRoute('page');
@@ -47,7 +48,8 @@ class BusRegistrationController extends AbstractActionController
             'processSearch',
             [
                 'fields' => [
-                    'subType' => $params['ebsrSubmissionType']
+                    'subType' => $params['ebsrSubmissionType'],
+                    'status' => $params['ebsrSubmissionStatus']
                 ]
             ]
         );
@@ -100,6 +102,9 @@ class BusRegistrationController extends AbstractActionController
         $params = [];
         if (!empty($data['fields']['subType'])) {
             $params['subType'] = $data['fields']['subType'];
+        }
+        if (!empty($data['fields']['status'])) {
+            $params['status'] = $data['fields']['status'];
         }
         $this->setCaughtResponse(
             $this->redirectToRoute(

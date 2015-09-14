@@ -161,7 +161,7 @@ $routes = array(
         'type' => 'segment',
         'options' =>  array(
             'route' =>
-                '/bus-registration/:action[/busreg/:busRegId][/sub-type/:subType][/page/:page]' .
+                '/bus-registration/:action[/busreg/:busRegId][/sub-type/:subType][/status/:status][/page/:page]' .
                 '[/limit/:limit][/sort/:sort][/order/:order]',
             'defaults' => array(
                 'controller' => 'Olcs\Ebsr\BusRegistration',
@@ -170,7 +170,14 @@ $routes = array(
                 'limit' => 25,
                 'sort' => 'submittedDate',
                 'order' => 'DESC'
-            )
+            ),
+            'constraints' => [
+                'busRegId' => '[0-9]+',
+                'sub-type' => '[a-z_]+',
+                'status' => '[a-z_]+',
+                'page' => '[0-9]+',
+
+            ]
         )
     ),
     'dashboard' => array(
