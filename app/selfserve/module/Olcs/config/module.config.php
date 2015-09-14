@@ -173,7 +173,7 @@ $routes = array(
             ),
             'constraints' => [
                 'busRegId' => '[0-9]+',
-                'sub-type' => '[a-z_]+',
+                'subType' => '[a-z_]+',
                 'status' => '[a-z_]+',
                 'page' => '[0-9]+',
 
