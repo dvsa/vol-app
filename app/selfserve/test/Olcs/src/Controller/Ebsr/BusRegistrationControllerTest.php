@@ -221,6 +221,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         $subType = 'ebsrt_new';
+        $status = 'ebsrs_expired';
         $busRegistrations = [
             [
                 'id' => 2
@@ -233,6 +234,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         $mockPluginManager = $pluginManagerHelper->getMockPluginManager(['url' => 'Url','params' => 'Params']);
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('subType')->andReturn($subType);
+        $mockParams->shouldReceive('fromRoute')->with('status')->andReturn($status);
         $mockParams->shouldReceive('fromRoute')->with('sort')->andReturn('foo');
         $mockParams->shouldReceive('fromRoute')->with('limit')->andReturn(10);
         $mockParams->shouldReceive('fromRoute')->with('order')->andReturn('DESC');
@@ -282,6 +284,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
     public function testPostSearchIndexAction()
     {
         $subType = 'foo';
+        $status = 'st1';
         $busRegistrations = [
             [
                 'id' => 2
@@ -290,12 +293,14 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
 
         $postArray = [
             'fields' => [
-                'subType' => $subType
+                'subType' => $subType,
+                'status' => $status
             ]
         ];
 
         $redirectParams = [
-            'subType' => $subType
+            'subType' => $subType,
+            'status' => $status
         ];
 
         $sut = new BusRegistrationController();
@@ -312,6 +317,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         );
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('subType')->andReturn($subType);
+        $mockParams->shouldReceive('fromRoute')->with('status')->andReturn($status);
         $mockParams->shouldReceive('fromRoute')->with('sort')->andReturn('foo');
         $mockParams->shouldReceive('fromRoute')->with('limit')->andReturn(10);
         $mockParams->shouldReceive('fromRoute')->with('order')->andReturn('DESC');
