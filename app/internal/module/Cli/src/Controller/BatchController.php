@@ -42,23 +42,6 @@ class BatchController extends AbstractConsoleController
     }
 
     /**
-     * @return void
-     */
-    public function continuationNotSoughtAction()
-    {
-        $dryRun = $this->getRequest()->getParam('dryrun') || $this->getRequest()->getParam('d');
-
-        /* @var $batchService \Cli\Service\Processing\ContinuationNotSought */
-        $batchService = $this->getService('BatchContinuationNotSought');
-        $batchService->process(['dryRun' => $dryRun]);
-
-        // send the email
-        if (!$dryRun) {
-            $this->getServiceLocator()->get('Email\ContinuationNotSought')->send();
-        }
-    }
-
-    /**
      * @return Zend\View\Model\ConsoleModel
      */
     public function processInboxDocumentsAction()
