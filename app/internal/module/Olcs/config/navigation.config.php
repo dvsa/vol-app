@@ -499,6 +499,11 @@ $nav = array(
                                             'label' => 'Fee details',
                                             'route' => 'licence/bus-fees/fee_action',
                                         ),
+                                        array(
+                                            'id' => 'licence_bus_fees_transaction',
+                                            'label' => 'Transaction details',
+                                            'route' => 'licence/bus-fees/fee_action/transaction',
+                                        ),
                                     )
                                 ),
                             )
@@ -578,6 +583,11 @@ $nav = array(
                                     'id' => 'licence_fees_details',
                                     'label' => 'Fee details',
                                     'route' => 'licence/fees/fee_action',
+                                ),
+                                array(
+                                    'id' => 'licence_fees_transaction',
+                                    'label' => 'Transaction details',
+                                    'route' => 'licence/fees/fee_action/transaction',
                                 ),
                             ),
                         ),
@@ -790,6 +800,11 @@ $nav = array(
                                     'label' => 'Fee details',
                                     'route' => 'operator/fees/fee_action',
                                 ),
+                                array(
+                                    'id' => 'operator_fees_transaction',
+                                    'label' => 'Transaction details',
+                                    'route' => 'operator/fees/fee_action/transaction',
+                                ),
                             ),
                         ),
                         array(
@@ -972,6 +987,11 @@ $nav = array(
                             'id' => 'application_fee_details',
                             'label' => 'Fee details',
                             'route' => 'lva-application/fees/fee_action',
+                        ),
+                        array(
+                            'id' => 'application_fee_transaction',
+                            'label' => 'Transaction details',
+                            'route' => 'lva-application/fees/fee_action/transaction',
                         ),
                     ),
                 ),

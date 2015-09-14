@@ -155,6 +155,14 @@ return [
                                     'label' => 'Fee details',
                                     'route' => 'admin-dashboard/admin-payment-processing/misc-fees/fee_action',
                                 ],
+                                [
+                                    // note, we can't nest the transaction breadcrumb under fee details
+                                    // due to conflicting 'action' params :(
+                                    'id' => 'admin-dashboard/admin-payment-processing/misc-fees/transaction',
+                                    'label' => 'Transaction details',
+                                    'route' =>
+                                        'admin-dashboard/admin-payment-processing/misc-fees/fee_action/transaction',
+                                ],
                             ],
                         ],
                         [

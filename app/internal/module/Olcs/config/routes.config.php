@@ -13,6 +13,33 @@ use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteCo
 
 use Olcs\Controller\SearchController as SearchController;
 
+$feeActionRoute = [
+    // child route config that is used in multiple places
+    'type' => 'segment',
+    'options' => [
+        'route' => '/:action/:fee',
+        'constraints' => [
+            'fee' => '([0-9]+,?)+',
+        ],
+    ],
+    'may_terminate' => true,
+    'child_routes' => [
+        'transaction' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/transaction/:transaction',
+                'constraints' => [
+                    'transaction' => '([0-9]+,?)+',
+                ],
+                'defaults' => [
+                    'action' => 'transaction',
+                ]
+            ],
+            'may_terminate' => true,
+        ],
+    ],
+];
+
 $routes = [
     'dashboard' => [
         'type' => 'Literal',
@@ -1269,16 +1296,7 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'fee_action' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/:action/:fee',
-                            'constraints' => [
-                                'fee' => '([0-9]+,?)+',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                    ],
+                    'fee_action' => $feeActionRoute,
                 ]
             ],
             'cases' => [
@@ -1439,16 +1457,7 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'fee_action' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/:action/:fee',
-                            'constraints' => [
-                                'fee' => '([0-9]+,?)+',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                    ],
+                    'fee_action' => $feeActionRoute,
                 ]
             ],
             'update-continuation' => [
@@ -1634,16 +1643,7 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'fee_action' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/:action/:fee',
-                            'constraints' => [
-                                'fee' => '([0-9]+,?)+',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                    ],
+                    'fee_action' => $feeActionRoute,
                 ]
             ],
             'documents' => [
@@ -2620,7 +2620,7 @@ $routes['lva-application']['child_routes'] = array_merge(
         'fees' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'fees[/]',
+                'route' => 'fees',
                 'defaults' => array(
                     'controller' => 'ApplicationController',
                     'action' => 'fees',
@@ -2628,22 +2628,13 @@ $routes['lva-application']['child_routes'] = array_merge(
             ),
             'may_terminate' => true,
             'child_routes' => array(
-                'fee_action' => array(
-                    'type' => 'segment',
-                    'options' => array(
-                        'route' => ':action/:fee',
-                        'constraints' => array(
-                            'fee' => '([0-9]+,?)+',
-                        ),
-                    ),
-                    'may_terminate' => true,
-                ),
+                'fee_action' => $feeActionRoute
             )
         ),
         'interim' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'interim[/:action][/]',
+                'route' => '/interim[/:action][/]',
                 'defaults' => array(
                     'controller' => 'InterimApplicationController',
                     'action' => 'index'
@@ -2653,7 +2644,7 @@ $routes['lva-application']['child_routes'] = array_merge(
         'undertakings' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'undertakings[/]',
+                'route' => '/undertakings[/]',
                 'defaults' => array(
                     'controller' => 'LvaApplication/Undertakings',
                     'action' => 'index'

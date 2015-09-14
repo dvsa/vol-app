@@ -268,6 +268,54 @@ trait FeesActionTrait
     }
 
     /**
+     * Redirect back to fee details page
+     */
+    protected function redirectToFeeDetails()
+    {
+        $route = $this->getFeesRoute() . '/fee_action';
+        return $this->redirect()->toRoute($route, ['action' => 'edit-fee'], [], true);
+    }
+
+    /**
+     * Display transaction info
+     */
+    public function transactionAction()
+    {
+        $id = $this->params()->fromRoute('transaction', null);
+
+        $query = PaymentByIdQry::create(['id' => $id]);
+        $response = $this->handleQuery($query);
+
+        if (!$response->isOk()) {
+            if ($response->isNotFound()) {
+                return $this->notFoundAction();
+            }
+            $this->addErrorMessage('unknown-error');
+            return $this->redirectToFeeDetails();
+        }
+
+        $transaction = $response->getResult();
+
+        $fees = $transaction['fees'];
+
+        $table = $this->getTable('transaction-fees', $fees);
+
+        $backLink = $this->getServiceLocator()->get('Helper\Url')
+            ->fromRoute($this->getFeesRoute() . '/fee_action', ['action' => 'edit-fee'], [], true);
+
+        $viewParams = [
+            'table' => $table,
+            'transaction' => $transaction,
+            'backLink' => $backLink,
+        ];
+
+        $view = new ViewModel($viewParams);
+        $view->setTemplate('pages/transaction-details.phtml');
+
+        return $this->renderLayout($view, 'Transaction # ' . $transaction['id']);
+    }
+
+    /**
      * Common logic when handling payFeesAction
      */
     protected function commonPayFeesAction()
