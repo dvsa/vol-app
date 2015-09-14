@@ -932,16 +932,13 @@ return array(
 
                 // Search and who can access them
                 'search-operating-centre' => [
-                    'partner-user',
-                    'partner-admin'
+                    'partner-user'
                 ],
                 'search-person' => [
-                    'partner-user',
-                    'partner-admin'
+                    'partner-user'
                 ],
                 'search-vehicle-external' => [
-                    'partner-user',
-                    'partner-admin'
+                    'partner-user'
                 ],
 
                 // Bus reg stuff and who can access
@@ -959,7 +956,6 @@ return array(
                 'lva-variation/transport_manager_details*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
                 'manage-user' => ['selfserve-manage-user'], // route -> permission
-                'user' => ['selfserve-manage-user'],
                 'zfcuser/login' => ['*'],
                 'zfcuser/logout' => ['*'],
                 'search*' => ['*'],
