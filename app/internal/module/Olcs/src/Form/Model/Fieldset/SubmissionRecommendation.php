@@ -22,7 +22,6 @@ class SubmissionRecommendation extends Base
      */
     public $actionTypes = null;
 
-
     /**
      * @Form\Required(true)
      * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium js-sub-legislation",
