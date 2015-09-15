@@ -49,11 +49,7 @@ return array(
         array(
             'title' => 'Role',
             'formatter' => function ($data) {
-                $html = '';
-                foreach ($data['userRoles'] as $role) {
-                    $html .= $role['role']['description'] . '<br />';
-                }
-                return substr($html, 0, -6);
+                return implode('<br />', array_column($data['roles'], 'description'));
             }
         ),
         array(

@@ -452,10 +452,6 @@ class UserManagementControllerTest extends MockeryTestCase
             'id' => 1,
             'loginId' => 'l',
             'memorableWord' => 'mem',
-            'hintQuestion1' => 1,
-            'hintQuestion2' => 2,
-            'hintAnswer1' => 'ans1',
-            'hintAnswer2' => 'ans2',
             'mustRestPassword' => 'Y',
             'accountDisabled' => 'Y',
             'lockedDate' => '2015-01-01',
@@ -466,12 +462,8 @@ class UserManagementControllerTest extends MockeryTestCase
             'partnerContactDetails' => [
                 'id' => 5
             ],
-            'userRoles' => [
-                0 => [
-                    'role' => [
-                        'id' => 99
-                    ]
-                ]
+            'roles' => [
+                ['id' => 99]
             ],
             'contactDetails' => [
                 'id' => 111,
