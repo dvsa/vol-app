@@ -22,8 +22,9 @@ class SubmissionRecommendation extends Base
      */
     public $actionTypes = null;
 
+
     /**
-     * @Form\Required(false)
+     * @Form\Required(true)
      * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium js-sub-legislation",
      * "multiple" : true, "required":false})
      * @Form\Options({
@@ -36,6 +37,16 @@ class SubmissionRecommendation extends Base
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DynamicSelect")
+     * @Form\Validator({"name": "ValidateIfMultiple",
+     *      "options":{
+     *          "context_field": "actionTypes",
+     *          "context_values": {"sub_st_rec_pi", "sub_st_rec_ptr"},
+     *          "allow_empty": false,
+     *          "validators": {
+     *              {"name": "\Zend\Validator\NotEmpty"}
+     *          }
+     *      }
+     * })
      */
     public $reasons = null;
 
