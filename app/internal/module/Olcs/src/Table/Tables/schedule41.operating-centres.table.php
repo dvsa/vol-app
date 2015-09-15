@@ -15,8 +15,6 @@ return array(
     'columns' => array(
         array(
             'title' => 'schedule41.operating-centre.table.address',
-            'type' => 'Action',
-            'action' => 'edit',
             'formatter' => 'Address',
             'name' => 'address'
         ),
