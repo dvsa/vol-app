@@ -27,4 +27,18 @@ class BusRegFilterFields
      * @Form\Type("DynamicSelect")
      */
     public $subType;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Options({
+     *     "label": "Status",
+     *     "empty_option": "All",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\RefData",
+     *     "category": "ebsr_sub_status"
+     * })
+     * @Form\Attributes({"id":"status","placeholder":""})
+     * @Form\Type("DynamicSelect")
+     */
+    public $status;
 }

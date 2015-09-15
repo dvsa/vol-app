@@ -515,7 +515,7 @@ class FeesControllerTest extends MockeryTestCase
                     'reference' => 'OLCS-foo-123',
                     'gatewayUrl' => 'GATEWAY_URL',
                     'status' => [
-                        'id' => RefData::PAYMENT_STATUS_PAID
+                        'id' => RefData::TRANSACTION_STATUS_COMPLETE
                     ],
                 ]
             );
@@ -643,7 +643,7 @@ class FeesControllerTest extends MockeryTestCase
                 [
                     'id' => $paymentId,
                     'status' => [
-                        'id' => RefData::PAYMENT_STATUS_PAID
+                        'id' => RefData::TRANSACTION_STATUS_COMPLETE
                     ],
                 ]
             );
@@ -732,8 +732,8 @@ class FeesControllerTest extends MockeryTestCase
     public function handleResultFailedProvider()
     {
         return [
-            [RefData::PAYMENT_STATUS_FAILED, true],
-            [RefData::PAYMENT_STATUS_CANCELLED, false],
+            [RefData::TRANSACTION_STATUS_FAILED, true],
+            [RefData::TRANSACTION_STATUS_CANCELLED, false],
             ['invalid', true],
         ];
     }

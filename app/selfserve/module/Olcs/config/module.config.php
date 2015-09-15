@@ -161,7 +161,7 @@ $routes = array(
         'type' => 'segment',
         'options' =>  array(
             'route' =>
-                '/bus-registration/:action[/busreg/:busRegId][/sub-type/:subType][/page/:page]' .
+                '/bus-registration/:action[/busreg/:busRegId][/sub-type/:subType][/status/:status][/page/:page]' .
                 '[/limit/:limit][/sort/:sort][/order/:order]',
             'defaults' => array(
                 'controller' => 'Olcs\Ebsr\BusRegistration',
@@ -170,7 +170,14 @@ $routes = array(
                 'limit' => 25,
                 'sort' => 'submittedDate',
                 'order' => 'DESC'
-            )
+            ),
+            'constraints' => [
+                'busRegId' => '[0-9]+',
+                'subType' => '[a-z_]+',
+                'status' => '[a-z_]+',
+                'page' => '[0-9]+',
+
+            ]
         )
     ),
     'dashboard' => array(
@@ -497,7 +504,7 @@ foreach (['application', 'variation'] as $lva) {
 
 $applicationNavigation = array(
     'id' => 'dashboard-applications',
-    'label' => 'Applications',
+    'label' => 'Home',
     'route' => 'dashboard',
     'class' => 'proposition-nav__item',
     'pages' => array(
@@ -831,6 +838,8 @@ return array(
                 'route' => 'index',
                 'pages' => array(
 
+                    $applicationNavigation,
+
                     $searchNavigation,
 
                     array(
@@ -840,19 +849,17 @@ return array(
                         'use_route_match' => true,
                         'class' => 'proposition-nav__item',
                     ),
-
-                    $applicationNavigation,
+                    array(
+                        'id' => 'manage-users',
+                        'label' => 'Manage Users',
+                        'route' => 'user',
+                        'use_route_match' => true,
+                        'class' => 'proposition-nav__item',
+                    )
 
                     /*array(
                         'id' => 'my-account',
                         'label' => 'My Account',
-                        'route' => 'user',
-                        'use_route_match' => true,
-                        'class' => 'proposition-nav__item',
-                    ),
-                    array(
-                        'id' => 'manage-users',
-                        'label' => 'Manage Users',
                         'route' => 'user',
                         'use_route_match' => true,
                         'class' => 'proposition-nav__item',
@@ -924,18 +931,21 @@ return array(
         'guards' => [
             'ZfcRbac\Guard\RoutePermissionsGuard' => [
 
+                // Dashboard Page
+                'dashboard' => ['selfserve-nav-dashboard'],
+
+                // User Page
+                'user' => ['selfserve-nav-manage-users'],
+
                 // Search and who can access them
                 'search-operating-centre' => [
-                    'partner-user',
-                    'partner-admin'
+                    'partner-user'
                 ],
                 'search-person' => [
-                    'partner-user',
-                    'partner-admin'
+                    'partner-user'
                 ],
                 'search-vehicle-external' => [
-                    'partner-user',
-                    'partner-admin'
+                    'partner-user'
                 ],
 
                 // Bus reg stuff and who can access
@@ -953,7 +963,6 @@ return array(
                 'lva-variation/transport_manager_details*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
                 'manage-user' => ['selfserve-manage-user'], // route -> permission
-                'user' => ['selfserve-manage-user'],
                 'zfcuser/login' => ['*'],
                 'zfcuser/logout' => ['*'],
                 'search*' => ['*'],

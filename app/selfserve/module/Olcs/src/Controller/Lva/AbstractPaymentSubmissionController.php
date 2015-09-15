@@ -131,11 +131,11 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
         $payment = $response->getResult();
         switch ($payment['status']['id']) {
-            case RefData::PAYMENT_STATUS_PAID:
+            case RefData::TRANSACTION_STATUS_COMPLETE:
                 return $this->redirectToSummary($reference);
-            case RefData::PAYMENT_STATUS_CANCELLED:
+            case RefData::TRANSACTION_STATUS_CANCELLED:
                 break;
-            case RefData::PAYMENT_STATUS_FAILED:
+            case RefData::TRANSACTION_STATUS_FAILED:
             default:
                 $this->addErrorMessage('feeNotPaidError');
                 break;
