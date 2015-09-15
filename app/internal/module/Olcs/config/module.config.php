@@ -77,6 +77,7 @@ return array(
             'LvaApplication/NotTakenUp' => 'Olcs\Controller\Lva\Application\NotTakenUpController',
             'LvaApplication/ReviveApplication' => 'Olcs\Controller\Lva\Application\ReviveApplicationController',
             'LvaApplication/Undertakings' => 'Olcs\Controller\Lva\Application\UndertakingsController',
+            'LvaApplication/DeclarationsInternal' => 'Olcs\Controller\Lva\Application\DeclarationsInternalController',
             'ApplicationSchedule41Controller' => 'Olcs\Controller\Application\ApplicationSchedule41Controller',
             'VariationSchedule41Controller' => 'Olcs\Controller\Variation\VariationSchedule41Controller',
             'LvaLicence' => 'Olcs\Controller\Lva\Licence\OverviewController',
@@ -120,6 +121,7 @@ return array(
             'LvaVariation/Withdraw' => 'Olcs\Controller\Lva\Variation\WithdrawController',
             'LvaVariation/Refuse' => 'Olcs\Controller\Lva\Variation\RefuseController',
             'LvaVariation/Revive' => 'Olcs\Controller\Lva\Variation\ReviveApplicationController',
+            'LvaVariation/DeclarationsInternal' => 'Olcs\Controller\Lva\Variation\DeclarationsInternalController',
         ),
         'invokables' => array(
             \Olcs\Controller\Cases\PublicInquiry\PiController::class
