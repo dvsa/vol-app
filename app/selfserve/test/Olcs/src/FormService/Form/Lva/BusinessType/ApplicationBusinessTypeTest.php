@@ -31,14 +31,18 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
 
     protected $fh;
 
+    protected $sm;
+
     public function setUp()
     {
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
         $this->fh = m::mock(FormHelperService::class)->makePartial();
+        $this->sm = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
 
         $this->sut = new ApplicationBusinessType();
         $this->sut->setFormServiceLocator($this->fsm);
         $this->sut->setFormHelper($this->fh);
+        $this->fsm->setServiceLocator($this->sm); // main service locator is accessed via form service manager
     }
 
     public function testGetFormWithoutInforceLicences()
@@ -88,6 +92,17 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
             ->with($mockForm);
 
         $this->fsm->setService('lva-application', $mockApplication);
+
+        $this->sm
+            ->shouldReceive('get')
+            ->with('Helper\Guidance')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('append')
+                    ->with('business-type.locked.message')
+                    ->once()
+                    ->getMock()
+            );
 
         $form = $this->sut->getForm(true);
 
