@@ -24,7 +24,7 @@ class Module implements ConsoleUsageProviderInterface
      * @param ConsoleAdapterInterface $console
      *
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
     public function getConsoleUsage(ConsoleAdapterInterface $console)
     {
@@ -33,10 +33,8 @@ class Module implements ConsoleUsageProviderInterface
             'batch-licence-status [--verbose|-v]' => 'Process licence status change rules',
             'inspection-request-email [--verbose|-v]' => 'Process inspection request emails',
             'process-inbox [--verbose|-v]' => 'Process inbox documents',
-            'batch-cns  [--verbose|-v] [--dryrun|-d]' => 'Process Licences for Continuation Not Sought',
             // Describe parameters
             array( '--verbose|-v', '(optional) turn on verbose mode'),
-            array( '--dryrun|-d', '(optional) dryrun, nothing is actually changed'),
 
             'process-queue' => 'Process the queue',
             array( '--type|-t', '(optional) queue message type to process'),

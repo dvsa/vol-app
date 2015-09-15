@@ -22,15 +22,6 @@ return [
                         ],
                     ],
                 ],
-                'batch-cns' => [
-                    'options' => [
-                        'route' => 'batch-cns [--verbose|-v] [--dryrun|-d]',
-                        'defaults' => [
-                            'controller' => 'BatchController',
-                            'action' => 'continuationNotSought'
-                        ],
-                    ],
-                ],
                 'inspection-request-email' => [
                     'options' => [
                         'route' => 'inspection-request-email [--verbose|-v]',
@@ -66,7 +57,6 @@ return [
         'invokables' => [
             'BatchLicenceStatus' => 'Cli\Service\Processing\BatchLicenceStatusProcessingService',
             'BatchInspectionRequestEmail' => 'Cli\Service\Processing\BatchInspectionRequestEmailProcessingService',
-            'BatchContinuationNotSought' => 'Cli\Service\Processing\ContinuationNotSought',
             'BatchInboxDocuments' => 'Cli\Service\Processing\BatchInboxDocumentsProcessingService',
             'Queue' => 'Cli\Service\Queue\QueueProcessor',
         ],
