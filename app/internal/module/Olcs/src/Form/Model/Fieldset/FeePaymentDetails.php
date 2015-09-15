@@ -52,6 +52,16 @@ class FeePaymentDetails
      *          "allow_empty": false,
      *          "validators": {
      *              {"name": "NotEmpty"},
+     *              {
+     *                   "name": "Zend\Validator\GreaterThan",
+     *                   "options": {
+     *                        "min": 0,
+     *                        "messages": {
+     *                             "notGreaterThan": "The payment amount must be greater than %min%"
+     *                        }
+     *                   },
+     *                   "break_chain_on_failure": true
+     *              },
      *              {"name": "\Common\Form\Elements\Validators\ReceivedAmount"}
      *          }
      *      }
