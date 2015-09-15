@@ -46,23 +46,6 @@ class UserDetails extends Base
     public $familyName = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({
-     *     "label": "Birth date",
-     *     "create_empty_option": true,
-     *     "render_delimiters": false
-     * })
-     * @Form\Type("DateSelect")
-     * @Form\AllowEmpty(true)
-     * @Form\Required(false)
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
-     */
-    public $birthDate = null;
-
-    /**
      * @Form\Attributes({"class":"medium"})
      * @Form\Options({"label":"Email address"})
      * @Form\Type("Text")
@@ -80,16 +63,4 @@ class UserDetails extends Base
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      */
     public $emailConfirm = null;
-
-    /**
-     * @Form\AllowEmpty(true)
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"memorableWord","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({"label":"Memorable word"})
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":10}})
-     */
-    public $memorableWord = null;
 }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Dashboard Controller
+ * User Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
@@ -11,7 +11,11 @@ use Common\Controller\Lva\AbstractController;
 use Common\Controller\Lva\Traits\CrudTableTrait;
 use Olcs\View\Model\User;
 use Olcs\View\Model\Form;
-use Zend\Http\Request as Request;
+use Dvsa\Olcs\Transfer\Query\User\UserListSelfserve as ListDto;
+use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as ItemDto;
+use Dvsa\Olcs\Transfer\Command\User\CreateUserSelfserve as CreateDto;
+use Dvsa\Olcs\Transfer\Command\User\UpdateUserSelfserve as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\User\DeleteUserSelfserve as DeleteDto;
 
 /**
  * User Controller
@@ -24,24 +28,15 @@ class UserController extends AbstractController
     use CrudTableTrait;
 
     /**
-     * @var string
-     */
-    protected $serviceName = 'Entity\User';
-
-    /**
-     * @var \Common\Service\Entity\UserEntityService
-     */
-    protected $service = null;
-
-    /**
      * Dashboard index action
      */
     public function indexAction()
     {
-        $this->checkForCrudAction();
+        $crudAction = $this->checkForCrudAction();
 
-        /** @var \Common\Service\Entity\UserEntityService $service */
-        $service = $this->getEntityService();
+        if (isset($crudAction)) {
+            return $crudAction;
+        }
 
         $params = [
             'page'    => $this->getPluginManager()->get('params')->fromQuery('page', 1),
@@ -52,7 +47,18 @@ class UserController extends AbstractController
 
         $params['query'] = $this->getPluginManager()->get('params')->fromQuery();
 
-        $users = $service->getList($params);
+        $response = $this->handleQuery(
+            ListDto::create(
+                $params
+            )
+        );
+
+        if ($response->isOk()) {
+            $users = $response->getResult();
+        } else {
+            $this->getFlashMessenger()->addErrorMessage('unknown-error');
+            $users = [];
+        }
 
         $view = new User();
         $view->setServiceLocator($this->getServiceLocator());
@@ -71,22 +77,40 @@ class UserController extends AbstractController
         $id = $this->params()->fromRoute('id', null);
 
         if ($this->getRequest()->isPost()) {
-            $data = $this->params()->fromPost();
-            $form->setData($data);
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $data = $this->formatSaveData($form->getData());
+
+                if ((!empty($data['id']))) {
+                    $command = UpdateDto::create($data);
+                    $successMessage = 'manage-users.update.success';
+                } else {
+                    $command = CreateDto::create($data);
+                    $successMessage = 'manage-users.create.success';
+                }
+                $response = $this->handleCommand($command);
+
+                if ($response->isOk()) {
+                    $this->getFlashMessenger()->addSuccessMessage($successMessage);
+                    return $this->redirectToIndex();
+                } else {
+                    $this->getFlashMessenger()->addErrorMessage('unknown-error');
+                }
+            }
         } elseif ($id) {
-            $data = $this->getEntityService()->getUserDetails($id);
-            $data = $this->formatLoadData($data);
+            $response = $this->handleQuery(
+                ItemDto::create(
+                    ['id' => $id]
+                )
+            );
+            if (!$response->isOk()) {
+                $this->getFlashMessenger()->addErrorMessage('unknown-error');
+                return $this->redirectToIndex();
+            }
+
+            $data = $this->formatLoadData($response->getResult());
             $form->setData($data);
-        }
-
-        if ($this->getRequest()->isPost() && $form->isValid()) {
-
-            $data = $form->getData();
-            $data = $this->formatSaveData($data);
-            $this->getEntityService()->save($data);
-
-            $this->getFlashMessenger()->addSuccessMessage('User updated successfully.');
-            return $this->redirect()->toRouteAjax('user', ['action' => 'index'], [], false);
         }
 
         $view = new Form();
@@ -100,13 +124,21 @@ class UserController extends AbstractController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $id = $this->params()->fromRoute('id', null);
+            $response = $this->handleCommand(
+                DeleteDto::create(
+                    ['id' => $this->params()->fromRoute('id', null)]
+                )
+            );
 
-            $this->getEntityService()->delete($id);
+            if ($response->isOk()) {
+                $this->getFlashMessenger()->addSuccessMessage('manage-users.delete.success');
+            } elseif ($response->isClientError()) {
+                $this->getFlashMessenger()->addErrorMessage('manage-users.delete.error');
+            } else {
+                $this->getFlashMessenger()->addErrorMessage('unknown-error');
+            }
 
-            $this->getFlashMessenger()->addSuccessMessage('User deleted successfully.');
-
-            return $this->redirect()->toRouteAjax('user', ['action' => 'index'], array(), false);
+            return $this->redirectToIndex();
         }
 
         $form = $this->getServiceLocator()->get('Helper\Form')
@@ -177,6 +209,8 @@ class UserController extends AbstractController
                 return $this->handleCrudAction($crudAction, ['add'], 'id', null);
             }
         }
+
+        return null;
     }
 
     /**
@@ -218,13 +252,10 @@ class UserController extends AbstractController
     }
 
     /**
-     * Returns an instance of a service.
-     *
-     * @return \Common\Service\Entity\UserEntityService
+     * Redirects to index
      */
-    protected function getEntityService()
+    private function redirectToIndex()
     {
-        /** @var \Common\Service\Entity\UserEntityService $service */
-        return $this->getServiceLocator()->get($this->serviceName);
+        return $this->redirect()->toRouteAjax('user', ['action' => 'index'], array(), false);
     }
 }
