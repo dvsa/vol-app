@@ -37,6 +37,7 @@ class TransportManagerTest extends MockeryTestCase
         $tm['homeCd']['person']['forename'] = 'A';
         $tm['homeCd']['person']['familyName'] = 'B';
         $tm['removedDate'] = 'notnull';
+        $tm['hasBeenMerged'] = false;
 
         $url = '#';
 
@@ -79,6 +80,22 @@ class TransportManagerTest extends MockeryTestCase
                     ->with(false)
                     ->getMock()
             );
+        $sidebarNav->shouldReceive('findById')
+            ->with('transport-manager-quick-actions-merge')
+            ->andReturn(
+                m::mock(PageMvc::class)
+                    ->shouldReceive('setVisible')
+                    ->with(false)
+                    ->getMock()
+            );
+        $sidebarNav->shouldReceive('findById')
+            ->with('transport-manager-quick-actions-unmerge')
+            ->andReturn(
+                m::mock(PageMvc::class)
+                    ->shouldReceive('setVisible')
+                    ->with(false)
+                    ->getMock()
+            );
 
         $this->setupGetTransportManager($sut, $tm);
 
@@ -98,6 +115,142 @@ class TransportManagerTest extends MockeryTestCase
         $sut->setViewHelperManager($mockViewHelperManager);
         $sut->setNrService($mockNr);
         $sut->setSidebarNavigation($sidebarNav);
+        $sut->onTransportManager($event);
+    }
+
+    public function testOnTransportManagerNotMerged()
+    {
+        $tmId = 1;
+        $context = [
+            'controller' => 'foo',
+            'action' => 'bar'
+        ];
+
+        $tm = ['id' => $tmId];
+        $tm['homeCd']['person']['forename'] = 'A';
+        $tm['homeCd']['person']['familyName'] = 'B';
+        $tm['removedDate'] = null;
+        $tm['hasBeenMerged'] = false;
+
+        $url = '#';
+        $pageTitle = '<a href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
+        $pageTitle .= $tm['homeCd']['person']['familyName'] . '</a>';
+
+        $sut = new SystemUnderTest();
+
+        $mockUrl = m::mock('stdClass');
+        $mockUrl->shouldReceive('__invoke')
+            ->with('transport-manager/details/details', ['transportManager' => $tm['id']], [], true)
+            ->andReturn($url);
+
+        $sidebarNav = m::mock(Navigation::class);
+        $sidebarNav->shouldReceive('findById')
+            ->with('transport-manager-quick-actions-merge')
+            ->andReturn(
+                m::mock(PageMvc::class)
+                    ->shouldReceive('setVisible')
+                    ->with(false)
+                    ->getMock()
+            );
+
+        $this->setupGetTransportManager($sut, $tm);
+
+        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
+        $mockContainer->shouldReceive('prepend')->with($pageTitle);
+        $mockContainer->shouldReceive('set')->with($tm);
+
+        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
+        $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
+        $mockPlaceholder->shouldReceive('getContainer')->with('transportManager')->andReturn($mockContainer);
+
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
+        $mockViewHelperManager->shouldReceive('get')->with('pageTitle')->andReturn($mockContainer);
+        $mockViewHelperManager->shouldReceive('get')->with('url')->andReturn($mockUrl);
+
+        $sut->setViewHelperManager($mockViewHelperManager);
+        $sut->setSidebarNavigation($sidebarNav);
+
+        $sidebarNav->shouldReceive('findById')
+            ->with('transport-manager-quick-actions-unmerge')
+            ->andReturn(
+                m::mock(PageMvc::class)
+                    ->shouldReceive('setVisible')
+                    ->with(false)
+                    ->getMock()
+            );
+
+        $event = new RouteParam();
+        $event->setValue($tmId);
+        $event->setContext($context);
+        $sut->onTransportManager($event);
+    }
+
+    public function testOnTransportManagerMerged()
+    {
+        $tmId = 1;
+        $context = [
+            'controller' => 'foo',
+            'action' => 'bar'
+        ];
+
+        $tm = ['id' => $tmId];
+        $tm['homeCd']['person']['forename'] = 'A';
+        $tm['homeCd']['person']['familyName'] = 'B';
+        $tm['removedDate'] = null;
+        $tm['hasBeenMerged'] = true;
+
+        $url = '#';
+        $pageTitle = '<a href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
+        $pageTitle .= $tm['homeCd']['person']['familyName'] . '</a>';
+
+        $sut = new SystemUnderTest();
+
+        $mockUrl = m::mock('stdClass');
+        $mockUrl->shouldReceive('__invoke')
+            ->with('transport-manager/details/details', ['transportManager' => $tm['id']], [], true)
+            ->andReturn($url);
+
+        $sidebarNav = m::mock(Navigation::class);
+        $sidebarNav->shouldReceive('findById')
+            ->with('transport-manager-quick-actions-merge')
+            ->andReturn(
+                m::mock(PageMvc::class)
+                    ->shouldReceive('setVisible')
+                    ->with(false)
+                    ->getMock()
+            );
+
+        $this->setupGetTransportManager($sut, $tm);
+
+        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
+        $mockContainer->shouldReceive('prepend')->with($pageTitle);
+        $mockContainer->shouldReceive('set')->with($tm);
+
+        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
+        $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
+        $mockPlaceholder->shouldReceive('getContainer')->with('transportManager')->andReturn($mockContainer);
+
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
+        $mockViewHelperManager->shouldReceive('get')->with('pageTitle')->andReturn($mockContainer);
+        $mockViewHelperManager->shouldReceive('get')->with('url')->andReturn($mockUrl);
+
+        $sut->setViewHelperManager($mockViewHelperManager);
+        $sut->setSidebarNavigation($sidebarNav);
+
+        $sidebarNav->shouldReceive('findById')
+            ->with('transport-manager-quick-actions-merge')
+            ->andReturn(
+                m::mock(PageMvc::class)
+                    ->shouldReceive('setVisible')
+                    ->with(false)
+                    ->getMock()
+            );
+
+        $event = new RouteParam();
+        $event->setValue($tmId);
+        $event->setContext($context);
         $sut->onTransportManager($event);
     }
 

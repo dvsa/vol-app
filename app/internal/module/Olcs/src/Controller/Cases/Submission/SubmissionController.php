@@ -12,6 +12,9 @@ use Common\Service\Data\CategoryDataService;
 use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmission as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Submission\DeleteSubmission as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmission as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Submission\RefreshSubmissionSections as RefreshDto;
+use Dvsa\Olcs\Transfer\Command\Submission\FilterSubmissionSections as FilterDto;
+
 use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Submission\SubmissionList as ListDto;
 
@@ -137,7 +140,10 @@ class SubmissionController extends AbstractInternalController implements
             ]
         ],
         'edit' => [
-            'action' => 'details'
+            'action' => 'details',
+            'resultIdMap' => [
+                'submission' => 'submission'
+            ]
         ]
     ];
 
@@ -163,8 +169,6 @@ class SubmissionController extends AbstractInternalController implements
         $defaultDataProvider =  new AddFormDefaultData($this->defaultData);
 
         $defaultDataProvider->setParams($this->plugin('params'));
-
-        $action = ucfirst($this->params()->fromRoute('action'));
 
         /** @var \Zend\Form\Form $form */
         $form = $this->getForm($this->formClass);
@@ -212,7 +216,7 @@ class SubmissionController extends AbstractInternalController implements
     {
         $paramProvider = new GenericItem($this->itemParams);
         $request = $this->getRequest();
-        $action = ucfirst($this->params()->fromRoute('action'));
+
         $form = $this->getForm($this->formClass);
         $this->placeholder()->setPlaceholder('form', $form);
 
@@ -239,7 +243,7 @@ class SubmissionController extends AbstractInternalController implements
             }
 
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Submission updated');
                 return $this->redirectTo($response->getResult());
             }
 
@@ -320,6 +324,85 @@ class SubmissionController extends AbstractInternalController implements
         return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
     }
 
+
+    /**
+     * Updates a section table, to either refresh the data or delete rows
+     *
+     * @return \Zend\Http\Response
+     */
+    public function updateTableAction()
+    {
+        $params['submission'] = $this->params()->fromRoute('submission');
+        $formAction = strtolower($this->params()->fromPost('formAction'));
+
+        $this->extractSubmissionData();
+
+        if ($formAction == 'refresh-table') {
+            $response = $this->refreshTable();
+        } elseif ($formAction == 'delete-row') {
+            $response = $this->deleteTableRows();
+        } else {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Submission updated');
+        }
+
+        return $this->redirect()->toRoute(
+            'submission',
+            ['action' => 'details', 'submission' => $params['submission']],
+            [],
+            true
+        );
+    }
+
+    /**
+     * Refreshes a single section within the dataSnapshot field of a submission with the latest data
+     * from the rest of the database. Redirects back to details page.
+     * @return \Common\Service\Cqrs\Response
+     */
+    public function refreshTable()
+    {
+        $commandData = [
+            'id' => $this->params('submission'),
+            'version' => $this->params()->fromPost('submissionVersion'),
+            'section' => $this->params()->fromRoute('section'),
+            'subSection' => $this->params()->fromPost('table')
+        ];
+
+        return $this->handleCommand(RefreshDto::create($commandData));
+    }
+
+    /**
+     * Deletes a single row from a section's list data, reassigns and persists the new data back to dataSnapshot field
+     * from the rest of the database. Redirects back to details page.
+     *
+     * @return \Zend\Http\Response
+     */
+    public function deleteTableRows()
+    {
+        $commandData = [
+            'id' => $this->params('submission'),
+            'version' => $this->params()->fromPost('submissionVersion'),
+            'section' => $this->params()->fromRoute('section'),
+            'subSection' => $this->params()->fromPost('table'),
+            'rowsToFilter' => $this->params()->fromPost('id')
+        ];
+
+        $response = $this->handleCommand(FilterDto::create($commandData));
+
+        return $response;
+    }
+
     private function generateSelectedSectionsArray($submission, $allSectionsRefData, $submissionConfig)
     {
         $submissionService = $this->getServiceLocator()
@@ -373,7 +456,7 @@ class SubmissionController extends AbstractInternalController implements
 
         // Intercept Submission type submit button to prevent saving
         if (isset($postData['submissionSections']['submissionTypeSubmit']) ||
-            !(empty($initialData['submissionType']))) {
+            !(empty($initialData['fields']['submissionType']))) {
             $this->persist = false;
         } else {
             // remove form-actions
@@ -407,7 +490,7 @@ class SubmissionController extends AbstractInternalController implements
                     // generate a unique attachment form for this section
                     $attachmentsForm = $this->getSectionForm($this->sectionId);
 
-                    $hasProcessedFiles = $this->processFiles(
+                    $this->processFiles(
                         $attachmentsForm,
                         'attachments',
                         array($this, 'processSectionFileUpload'),
@@ -462,7 +545,7 @@ class SubmissionController extends AbstractInternalController implements
                 ];
 
                 if ($this->uploadFile($file, $data)) {
-                    $this->refreshSubmissionDocuments();
+                    $this->extractSubmissionData();
                 }
             }
         }
@@ -490,7 +573,7 @@ class SubmissionController extends AbstractInternalController implements
     /**
      * Queries backend (not cached) and refresh document list for the submission
      */
-    private function refreshSubmissionDocuments()
+    private function extractSubmissionData()
     {
         $paramProvider = new GenericItem($this->itemParams);
 
@@ -514,8 +597,11 @@ class SubmissionController extends AbstractInternalController implements
 
             if (isset($data)) {
                 $this->setSubmissionData($data);
+
+                return $data;
             }
         }
+        return null;
     }
 
     /**
@@ -527,7 +613,7 @@ class SubmissionController extends AbstractInternalController implements
     public function deleteSubmissionAttachment($documentId)
     {
         if ($this->deleteFile($documentId)) {
-            $this->refreshSubmissionDocuments();
+            $this->extractSubmissionData();
         }
         return true;
     }

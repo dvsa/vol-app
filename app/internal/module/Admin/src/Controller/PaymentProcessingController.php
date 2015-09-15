@@ -143,7 +143,7 @@ class PaymentProcessingController extends AbstractActionController
         $view = new ViewModel(
             [
                 'table' => $table,
-                'form' => $cpidFilterForm,
+                'filterForm' => $cpidFilterForm,
             ]
         );
 
@@ -198,7 +198,7 @@ class PaymentProcessingController extends AbstractActionController
         $layout = $this->getView((array)$view->getVariables());
 
         $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')
-            ->set($view->getVariable('form'));
+            ->set($view->getVariable('filterForm'));
 
         $layout->setTemplate('layout/admin-payment-processing-section');
         $layout->addChild($view, 'content');

@@ -26,11 +26,13 @@ class Submission implements MapperInterface
                 $formData['fields'][$key] = $value['id'];
             }
         }
-        /** @to-do complete sections once data snapshot is completed */
+
         if (isset($data['submissionType']['id'])) {
+            $snapshot = json_decode($data['dataSnapshot'], true);
+
             $formData['fields']['submissionSections'] = [
                 'submissionType' => $data['submissionType']['id'],
-                'sections' => $data['submissionType']['sections']
+                'sections' => array_keys($snapshot)
             ];
         }
 

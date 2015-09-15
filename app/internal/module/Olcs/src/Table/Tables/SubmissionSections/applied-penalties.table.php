@@ -34,12 +34,10 @@ return array(
         ),
         array(
             'title' => 'Start Date',
-            'formatter' => 'Date',
             'name' => 'startDate'
         ),
         array(
             'title' => 'End Date',
-            'formatter' => 'Date',
             'name' => 'endDate'
         ),
         array(

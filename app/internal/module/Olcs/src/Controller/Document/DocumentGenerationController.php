@@ -96,6 +96,11 @@ class DocumentGenerationController extends AbstractDocumentController
             case 'busReg':
                 $queryData['licence'] = $routeParams['licence'];
                 break;
+            // fixing irfoOrganisation / organisation ambiguity
+            case 'irfoOrganisation':
+                $queryData['irfoOrganisation'] = $routeParams['organisation'];
+                unset($queryData['organisation']);
+                break;
             default:
                 break;
         }

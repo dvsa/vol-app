@@ -13,6 +13,33 @@ use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteCo
 
 use Olcs\Controller\SearchController as SearchController;
 
+$feeActionRoute = [
+    // child route config that is used in multiple places
+    'type' => 'segment',
+    'options' => [
+        'route' => '/:action/:fee',
+        'constraints' => [
+            'fee' => '([0-9]+,?)+',
+        ],
+    ],
+    'may_terminate' => true,
+    'child_routes' => [
+        'transaction' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/transaction/:transaction',
+                'constraints' => [
+                    'transaction' => '([0-9]+,?)+',
+                ],
+                'defaults' => [
+                    'action' => 'transaction',
+                ]
+            ],
+            'may_terminate' => true,
+        ],
+    ],
+];
+
 $routes = [
     'dashboard' => [
         'type' => 'Literal',
@@ -51,7 +78,7 @@ $routes = [
     'search' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/search[/:index[/:action]]',
+            'route' => '/search[/:index[/:action][/:child_id]]',
             'defaults' => [
                 'controller' => SearchController::class,
                 'action' => 'post',
@@ -82,7 +109,7 @@ $routes = [
             '/case/:action[/:case][/licence/:licence][/transportManager/:transportManager][/application/:application]',
             'constraints' => [
                 'case' => '|[0-9]+',
-                'action' => '(add|edit|details|redirect|delete)',
+                'action' => '(add|edit|details|redirect|delete|close|reopen)',
                 'licence' => '|[0-9]+',
                 'transportManager' => '|[0-9]+',
                 'application' => '|[0-9]+'
@@ -382,7 +409,7 @@ $routes = [
             'constraints' => [
                 'case' => '[0-9]+',
                 'pi' => '[0-9]+',
-                'action' => '(add|edit|index)',
+                'action' => '(add|edit|index|generate)',
                 'id' => '[0-9]+',
             ],
             'defaults' => [
@@ -597,7 +624,6 @@ $routes = [
         'options' => [
             'route' => '/case/:case/processing/history',
             'defaults' => [
-                //'controller' => 'Crud\Case\EventHistoryController',
                 'controller' => 'CaseHistoryController',
                 'action' => 'index'
             ]
@@ -868,7 +894,6 @@ $routes = [
                 'options' => [
                     'route' => '/event-history',
                     'defaults' => [
-                        //'controller' => 'Crud\Licence\EventHistoryController',
                         'controller' => 'LicenceHistoryController',
                         'action' => 'index',
                     ]
@@ -1269,16 +1294,7 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'fee_action' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/:action/:fee',
-                            'constraints' => [
-                                'fee' => '([0-9]+,?)+',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                    ],
+                    'fee_action' => $feeActionRoute,
                 ]
             ],
             'cases' => [
@@ -1439,16 +1455,7 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'fee_action' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => '/:action/:fee',
-                            'constraints' => [
-                                'fee' => '([0-9]+,?)+',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                    ],
+                    'fee_action' => $feeActionRoute,
                 ]
             ],
             'update-continuation' => [
@@ -1550,7 +1557,7 @@ $routes = [
                         'options' => [
                             'route' => '/gv-permits[/:action][/:id]',
                             'constraints' => [
-                                'action' => '(add|edit|reset)',
+                                'action' => '(add|details|reset|approve|withdraw|refuse)',
                                 'id' => '[0-9]+'
                             ],
                             'defaults' => [
@@ -1634,17 +1641,75 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'fee_action' => [
+                    'fee_action' => $feeActionRoute,
+                ]
+            ],
+            'documents' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/documents',
+                    'defaults' => [
+                        'action' => 'documents',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'generate' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/:action/:fee',
-                            'constraints' => [
-                                'fee' => '([0-9]+,?)+',
-                            ],
+                            'route' => '/generate[/:doc]',
+                            'defaults' => [
+                                'type' => 'irfoOrganisation',
+                                'controller' => 'DocumentGenerationController',
+                                'action' => 'generate'
+                            ]
                         ],
-                        'may_terminate' => true,
                     ],
-                ]
+                    'finalise' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/finalise/:doc[/:action]',
+                            'defaults' => [
+                                'type' => 'irfoOrganisation',
+                                'controller' => 'DocumentFinaliseController',
+                                'action' => 'finalise'
+                            ]
+                        ],
+                    ],
+                    'upload' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/upload',
+                            'defaults' => [
+                                'type' => 'irfoOrganisation',
+                                'controller' => 'DocumentUploadController',
+                                'action' => 'upload'
+                            ]
+                        ],
+                    ],
+                    'delete' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/delete/:doc',
+                            'defaults' => [
+                                'type' => 'irfoOrganisation',
+                                'controller' => 'OperatorController',
+                                'action' => 'delete-document'
+                            ]
+                        ],
+                    ],
+                    'relink' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/relink/:doc',
+                            'defaults' => [
+                                'type' => 'irfoOrganisation',
+                                'controller' => 'DocumentRelinkController',
+                                'action' => 'relink'
+                            ]
+                        ],
+                    ],
+                ],
             ],
             'disqualify' => [
                 'type' => 'literal',
@@ -1681,7 +1746,7 @@ $routes = [
     'operator-lookup' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/operator/lookup/:organisation',
+            'route' => '/operator/lookup',
             'defaults' => [
                 'controller' => 'OperatorController',
                 'action' => 'lookup',
@@ -1935,7 +2000,6 @@ $routes = [
                             'route' => '/event-history',
                             'defaults' => [
                                 'controller' => 'TransportManagerHistoryController',
-                                //'controller' => 'Crud\TransportManager\EventHistoryController',
                                 'action' => 'index',
                             ]
                         ],
@@ -2045,7 +2109,38 @@ $routes = [
                     ],
                 ],
             ],
+            'merge' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/merge',
+                    'defaults' => [
+                        'controller' => 'TMController',
+                        'action' => 'merge'
+                    ],
+                ],
+            ],
+            'unmerge' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/unmerge',
+                    'defaults' => [
+                        'controller' => 'TMController',
+                        'action' => 'unmerge'
+                    ],
+                ],
+            ],
         ],
+    ],
+    'transport-manager-lookup' => [
+        'type' => 'literal',
+        'options' => [
+            'route' => '/transport-manager/lookup',
+            'defaults' => [
+                'controller' => 'TMController',
+                'action' => 'lookup',
+            ],
+        ],
+        'may_terminate' => true,
     ],
     'create_transport_manager' => [
         'type' => 'segment',
@@ -2522,7 +2617,7 @@ $routes['lva-application']['child_routes'] = array_merge(
         'fees' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'fees[/]',
+                'route' => 'fees',
                 'defaults' => array(
                     'controller' => 'ApplicationController',
                     'action' => 'fees',
@@ -2530,22 +2625,13 @@ $routes['lva-application']['child_routes'] = array_merge(
             ),
             'may_terminate' => true,
             'child_routes' => array(
-                'fee_action' => array(
-                    'type' => 'segment',
-                    'options' => array(
-                        'route' => ':action/:fee',
-                        'constraints' => array(
-                            'fee' => '([0-9]+,?)+',
-                        ),
-                    ),
-                    'may_terminate' => true,
-                ),
+                'fee_action' => $feeActionRoute
             )
         ),
         'interim' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'interim[/:action][/]',
+                'route' => '/interim[/:action][/]',
                 'defaults' => array(
                     'controller' => 'InterimApplicationController',
                     'action' => 'index'
@@ -2555,7 +2641,7 @@ $routes['lva-application']['child_routes'] = array_merge(
         'undertakings' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'undertakings[/]',
+                'route' => '/undertakings[/]',
                 'defaults' => array(
                     'controller' => 'LvaApplication/Undertakings',
                     'action' => 'index'

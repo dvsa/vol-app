@@ -21,9 +21,11 @@ OLCS.ready(function() {
   }
 
   $(document).on("change", select, function() {
-    var values = $(this).val();
-    for (var i = 0, j = values.length; i < j; i++) {
-      updateText(values[i]);
+    var selectedValue = $(this).val();
+
+    if (selectedValue != '') {
+      updateText(selectedValue);
+      $(this).val('').trigger('chosen:updated'); //jquery chosen plugin - refreshes the displayed value
     }
   });
 });

@@ -14,7 +14,9 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
-use Dvsa\Olcs\Transfer\Command\Fee\UpdateFee as UpdateFeeCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\ApproveWaive as ApproveWaiveCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\RecommendWaive as RecommendWaiveCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
@@ -117,7 +119,7 @@ trait FeesActionTrait
         $view = new ViewModel(
             [
                 'table' => $table,
-                'form'  => $this->getFeeFilterForm($filters)
+                'filterForm'  => $this->getFeeFilterForm($filters)
             ]
         );
         $view->setTemplate($template);
@@ -227,54 +229,90 @@ trait FeesActionTrait
 
         $fee = $this->getFee($id);
 
-        $form = null;
-
-        if ($fee['allowEdit'] == true) {
-            $form = $this->alterFeeForm($this->getForm('fee'), $fee['feeStatus']['id']);
-            $form = $this->setDataFeeForm($fee, $form);
-            $this->processForm($form);
-        }
+        $form = $this->alterFeeForm($this->getForm('fee'), $fee);
+        $form = $this->setDataFeeForm($fee, $form);
+        $this->processForm($form);
 
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
         }
 
+        $feeTransactions = array_filter(
+            $fee['feeTransactions'],
+            function ($feeTransaction) {
+                // @TODO confirm AC - not sure about hiding non-complete transactions?
+                // return $feeTransaction['transaction']['status']['id'] === RefData::TRANSACTION_STATUS_COMPLETE;
+                return true;
+            }
+        );
+        $table = $this->getTable('fee-transactions', $feeTransactions, []);
+
         $viewParams = [
             'form' => $form,
+            'table' => $table,
             'invoiceNo' => $fee['id'],
             'description' => $fee['description'],
             'amount' => $fee['amount'],
             'created' => $fee['invoicedDate'],
+            'outstanding' => $fee['outstanding'],
             'status' => isset($fee['feeStatus']['description']) ? $fee['feeStatus']['description'] : '',
-            'receiptNo' => $fee['receiptNo'],
-            'receivedAmount' => $fee['receivedAmount'],
-            'receivedDate' => $fee['receivedDate'],
-            'paymentMethod' => $fee['paymentMethod']['description'],
-            'processedBy' => $fee['processedBy'],
-            'payer' => $fee['payer'],
-            'slipNo' => $fee['slipNo'],
-            'chequeNo' => '',
-            'poNo' => '',
+            'fee' => $fee,
         ];
 
-        // ensure cheque/PO number goes in the correct field
-        if (isset($fee['chequePoNumber']) && !empty($fee['chequePoNumber'])) {
-            switch ($fee['paymentMethod']['id']) {
-                case Refdata::FEE_PAYMENT_METHOD_CHEQUE:
-                    $viewParams['chequeNo'] = $fee['chequePoNumber'];
-                    break;
-                case Refdata::FEE_PAYMENT_METHOD_POSTAL_ORDER:
-                    $viewParams['poNo'] = $fee['chequePoNumber'];
-                    break;
-                default:
-                    break;
-            }
-        }
+        $this->loadScripts(['forms/fee-details']);
 
         $view = new ViewModel($viewParams);
-        $view->setTemplate('pages/licence/edit-fee.phtml');
+        $view->setTemplate('pages/fee-details.phtml');
 
-        return $this->renderView($view, 'No # ' . $fee['id']);
+        return $this->renderLayout($view, 'No # ' . $fee['id']);
+    }
+
+    /**
+     * Redirect back to fee details page
+     */
+    protected function redirectToFeeDetails()
+    {
+        $route = $this->getFeesRoute() . '/fee_action';
+        return $this->redirect()->toRoute($route, ['action' => 'edit-fee'], [], true);
+    }
+
+    /**
+     * Display transaction info
+     */
+    public function transactionAction()
+    {
+        $id = $this->params()->fromRoute('transaction', null);
+
+        $query = PaymentByIdQry::create(['id' => $id]);
+        $response = $this->handleQuery($query);
+
+        if (!$response->isOk()) {
+            if ($response->isNotFound()) {
+                return $this->notFoundAction();
+            }
+            $this->addErrorMessage('unknown-error');
+            return $this->redirectToFeeDetails();
+        }
+
+        $transaction = $response->getResult();
+
+        $fees = $transaction['fees'];
+
+        $table = $this->getTable('transaction-fees', $fees);
+
+        $backLink = $this->getServiceLocator()->get('Helper\Url')
+            ->fromRoute($this->getFeesRoute() . '/fee_action', ['action' => 'edit-fee'], [], true);
+
+        $viewParams = [
+            'table' => $table,
+            'transaction' => $transaction,
+            'backLink' => $backLink,
+        ];
+
+        $view = new ViewModel($viewParams);
+        $view->setTemplate('pages/transaction-details.phtml');
+
+        return $this->renderLayout($view, 'Transaction # ' . $transaction['id']);
     }
 
     /**
@@ -292,7 +330,7 @@ trait FeesActionTrait
                 $this->addErrorMessage('You can only pay outstanding fees');
                 return $this->redirectToList();
             }
-            $maxAmount += $fee['amount'];
+            $maxAmount += $fee['outstanding'];
         }
 
         $form = $this->getForm('FeePayment');
@@ -359,25 +397,33 @@ trait FeesActionTrait
      * Alter fee form
      *
      * @param \Zend\Form\Form $form
+     * @param array $fee
      * @return \Zend\Form\Form
      */
-    protected function alterFeeForm($form, $status)
+    protected function alterFeeForm($form, $fee)
     {
-        switch ($status) {
-            case RefData::FEE_STATUS_OUTSTANDING:
-                $form->get('form-actions')->remove('approve');
-                $form->get('form-actions')->remove('reject');
-                break;
+        $status = $fee['feeStatus']['id'];
 
-            case RefData::FEE_STATUS_WAIVE_RECOMMENDED:
-                $form->get('form-actions')->remove('recommend');
-                break;
+        if ($status !== RefData::FEE_STATUS_OUTSTANDING) {
+            $form->get('form-actions')->remove('approve');
+            $form->get('form-actions')->remove('reject');
+            $form->get('form-actions')->remove('recommend');
+            // don't remove whole fieldset as we need to keep 'back' button
 
-            case RefData::FEE_STATUS_WAIVED:
-                $form->remove('form-actions');
-                $form->get('fee-details')->get('waiveReason')->setAttribute('disabled', 'disabled');
-                break;
+            $form->get('fee-details')->remove('waiveRemainder'); // checkbox
+            $form->get('fee-details')->remove('waiveReason'); // textbox
+
+            return $form;
         }
+
+        if ($fee['hasOutstandingWaiveTransaction']) {
+            $form->get('fee-details')->remove('waiveRemainder');
+            $form->get('form-actions')->remove('recommend');
+        } else {
+            $form->get('form-actions')->remove('approve');
+            $form->get('form-actions')->remove('reject');
+        }
+
         return $form;
     }
 
@@ -426,16 +472,15 @@ trait FeesActionTrait
      */
     protected function recommendWaive($data)
     {
-        $dto = UpdateFeeCmd::create(
+        $dto = RecommendWaiveCmd::create(
             [
                 'id' => $data['fee-details']['id'],
                 'version' => $data['fee-details']['version'],
                 'waiveReason' => $data['fee-details']['waiveReason'],
-                'status' => RefData::FEE_STATUS_WAIVE_RECOMMENDED,
             ]
         );
 
-        $this->updateFeeAndRedirectToList($dto);
+        $this->updateFeeAndRedirectToList($dto, 'Waive recommended');
     }
 
     /**
@@ -445,15 +490,14 @@ trait FeesActionTrait
      */
     protected function rejectWaive($data)
     {
-        $dto = UpdateFeeCmd::create(
+        $dto = RejectWaiveCmd::create(
             [
                 'id' => $data['fee-details']['id'],
                 'version' => $data['fee-details']['version'],
-                'status' => RefData::FEE_STATUS_OUTSTANDING,
             ]
         );
 
-        return $this->updateFeeAndRedirectToList($dto, 'The fee waive recommendation has been rejected');
+        return $this->updateFeeAndRedirectToList($dto, 'Waive rejected');
     }
 
     /**
@@ -463,17 +507,15 @@ trait FeesActionTrait
      */
     protected function approveWaive($data)
     {
-        $dto = UpdateFeeCmd::create(
+        $dto = ApproveWaiveCmd::create(
             [
                 'id' => $data['fee-details']['id'],
                 'version' => $data['fee-details']['version'],
                 'waiveReason' => $data['fee-details']['waiveReason'],
-                'paymentMethod' => RefData::FEE_PAYMENT_METHOD_WAIVE,
-                'status' => RefData::FEE_STATUS_WAIVED,
             ]
         );
 
-        return $this->updateFeeAndRedirectToList($dto, 'The selected fee has been waived');
+        return $this->updateFeeAndRedirectToList($dto, 'Waive approved');
     }
 
     /**
@@ -641,13 +683,13 @@ trait FeesActionTrait
         $transaction = $response->getResult();
 
         switch ($transaction['status']['id']) {
-            case RefData::PAYMENT_STATUS_PAID:
+            case RefData::TRANSACTION_STATUS_COMPLETE:
                 $this->addSuccessMessage('The fee(s) have been paid successfully');
                 break;
-            case RefData::PAYMENT_STATUS_CANCELLED:
+            case RefData::TRANSACTION_STATUS_CANCELLED:
                 $this->addWarningMessage('The fee payment was cancelled');
                 break;
-            case RefData::PAYMENT_STATUS_FAILED:
+            case RefData::TRANSACTION_STATUS_FAILED:
                 $this->addErrorMessage('The fee payment failed');
                 break;
             default:

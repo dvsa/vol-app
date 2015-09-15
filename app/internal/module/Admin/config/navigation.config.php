@@ -129,6 +129,7 @@ return [
                     ]
                 ],
                 [
+                    'id' => 'admin-dashboard/admin-financial-standing',
                     'label' => 'Financial standing rates',
                     'route' => 'admin-dashboard/admin-financial-standing',
                 ],
@@ -149,6 +150,21 @@ return [
                             'id' => 'admin-dashboard/admin-payment-processing/misc-fees',
                             'label' => 'Miscellaneous fees',
                             'route' => 'admin-dashboard/admin-payment-processing/misc-fees',
+                            'pages' => [
+                                [
+                                    'id' => 'admin-dashboard/admin-payment-processing/misc-fees/details',
+                                    'label' => 'Fee details',
+                                    'route' => 'admin-dashboard/admin-payment-processing/misc-fees/fee_action',
+                                ],
+                                [
+                                    // note, we can't nest the transaction breadcrumb under fee details
+                                    // due to conflicting 'action' params :(
+                                    'id' => 'admin-dashboard/admin-payment-processing/misc-fees/transaction',
+                                    'label' => 'Transaction details',
+                                    'route' =>
+                                        'admin-dashboard/admin-payment-processing/misc-fees/fee_action/transaction',
+                                ],
+                            ],
                         ],
                         [
                             'id' => 'admin-dashboard/admin-payment-processing/cpid-class',

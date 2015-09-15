@@ -293,76 +293,7 @@ return array(
             'ContinuationController' => 'Olcs\Controller\Licence\ContinuationController',
             Olcs\Controller\DisqualifyController::class => Olcs\Controller\DisqualifyController::class,
         ),
-        'factories' => [
-            // Event History Controllers / Factories
-            'Crud\Licence\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
-            'Crud\TransportManager\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
-            'Crud\BusReg\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
-            'Crud\Case\EventHistoryController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
-        ],
     ),
-    /**
-     * This config array contains the config for dynamic / generic controllers
-     */
-    'crud_controller_config' => [
-        'Crud\Licence\EventHistoryController' => [
-            'index' => [
-                'pageLayout' => 'licence-section',
-                'innerLayout' => 'licence-details-subsection',
-                'table' => 'event-history',
-                'navigation' => 'licence_processing_event-history',
-                'route' => 'licence/event-history',
-                'requiredParams' => [
-                    'licence'
-                ]
-            ]
-        ],
-        'Crud\TransportManager\EventHistoryController' => [
-            'index' => [
-                'pageLayout' => 'transport-manager-section-crud',
-                'innerLayout' => 'transport-manager-subsection',
-                'table' => 'event-history',
-                'navigation' => 'transport_manager_processing_event-history',
-                'route' => 'transport-manager/processing/event-history',
-                'requiredParams' => [
-                    'transportManager'
-                ]
-            ]
-        ],
-        'Crud\BusReg\EventHistoryController' => [
-            'index' => [
-                'pageLayout' => 'bus-registrations-section',
-                'innerLayout' => 'bus-registration-subsection',
-                'table' => 'event-history',
-                'navigation' => 'licence_bus_processing_event-history',
-                'route' => 'licence/bus-processing/event-history',
-                'requiredParams' => [
-                    'busRegId',
-                ],
-                'requiredParamsAliases' => [
-                    // Incomming => what it should be.
-                    'busRegId' => 'busReg',
-                ]
-            ]
-        ],
-        'Crud\Case\EventHistoryController' => [
-            'index' => [
-                'pageLayout' => 'case-section',
-                'innerLayout' => 'case-details-subsection',
-                'table' => 'event-history',
-                'navigation' => 'case_processing_history',
-                'route' => 'processing_history',
-                'requiredParams' => [
-                    'case',
-                ]
-            ]
-        ]
-    ],
-    'crud_service_manager' => [
-        'invokables' => [
-            'EventHistoryCrudService' => 'Olcs\Service\Crud\EventHistoryCrudService'
-        ]
-    ],
     'controller_plugins' => array(
         'invokables' => array(
             'Olcs\Mvc\Controller\Plugin\Confirm' => 'Olcs\Mvc\Controller\Plugin\Confirm',
@@ -556,17 +487,6 @@ return array(
         'Olcs\Controller\Interfaces\OperatorControllerInterface' => [
             'Olcs\Listener\RouteParam\Organisation'
         ],
-        'Common\Controller\Crud\GenericCrudController' => [
-            'Olcs\Listener\RouteParam\Cases',
-            LicenceListener::class,
-            'Olcs\Listener\RouteParam\LicenceTitle',
-            'Olcs\Listener\RouteParam\CaseMarker',
-            ApplicationListener::class,
-            'Olcs\Listener\RouteParam\BusRegId',
-            'Olcs\Listener\RouteParam\TransportManager',
-            'Olcs\Listener\RouteParam\Action',
-            'Olcs\Listener\HeaderSearch'
-        ]
     ],
     'search' => [
         'invokables' => [

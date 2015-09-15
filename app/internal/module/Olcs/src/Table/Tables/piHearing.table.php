@@ -2,17 +2,17 @@
 
 return array(
     'variables' => array(
-        'action_route' => [
-            'route' => 'case_pi',
-            'params' => ['action' => 'index']
-        ],
         'title' => 'Hearings',
     ),
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'primary'),
-                'edit' => array('class' => 'secondary js-require--one', 'requireRows' => true),
+                'addHearing' => array('class' => 'primary', 'label' => 'Add'),
+                'editHearing' => array(
+                    'class' => 'secondary js-require--one',
+                    'requireRows' => true,
+                    'label' => 'Edit'
+                ),
                 'generate' => array(
                     'requireRows' => true,
                     'class' => 'secondary js-require--multiple',

@@ -29,7 +29,7 @@ class DocumentRelinkDetails
      *          "busReg":"Bus Registration",
      *          "case":"Case",
      *          "licence":"Licence",
-     *          "irfo":"IRFO",
+     *          "irfoOrganisation":"IRFO",
      *          "transportManager":"Transport Manager"
      *      },
      * })

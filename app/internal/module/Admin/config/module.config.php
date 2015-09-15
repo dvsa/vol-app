@@ -259,7 +259,7 @@ return [
                                 'id' => '[0-9\,]+'
                             ],
                             'defaults' => [
-                                'controller' => 'Crud\FinancialStandingController',
+                                'controller' => 'Admin\FinancialStandingRateController',
                                 'action' => 'index',
                             ]
                         ],
@@ -382,6 +382,21 @@ return [
                                             ],
                                         ],
                                         'may_terminate' => true,
+                                        'child_routes' => [
+                                            'transaction' => [
+                                                'type' => 'segment',
+                                                'options' => [
+                                                    'route' => '/transaction/:transaction',
+                                                    'constraints' => [
+                                                        'transaction' => '([0-9]+,?)+',
+                                                    ],
+                                                    'defaults' => [
+                                                        'action' => 'transaction',
+                                                    ]
+                                                ],
+                                                'may_terminate' => true,
+                                            ],
+                                        ],
                                     ],
                                 ],
                             ],
@@ -396,11 +411,6 @@ return [
             __DIR__ . '/../src/Table/Tables/'
         ]
     ],
-    'crud_service_manager' => [
-        'invokables' => [
-            'FinancialStandingCrudService' => 'Admin\Service\Crud\FinancialStandingCrudService',
-        ]
-    ],
     'crud-config' => [
         /**
          * Sample crud config
@@ -411,36 +421,7 @@ return [
          * ]
          */
     ],
-    /**
-     * This config array contains the config for dynamic / generic controllers
-     */
-    'crud_controller_config' => [
-        'Crud\FinancialStandingController' => [
-            'index' => [
-                'pageLayout' => 'admin-layout',
-                'table' => 'admin-financial-standing',
-                'route' => '',
-                'scripts' => [
-                    'table-actions'
-                ]
-            ],
-            'add' => [
-                'pageLayout' => 'admin-layout',
-                'table' => 'admin-financial-standing',
-                'route' => ''
-            ],
-            'edit' => [
-                'pageLayout' => 'admin-layout',
-                'table' => 'admin-financial-standing',
-                'route' => ''
-            ]
-        ],
-    ],
     'controllers' => [
-        'factories' => [
-            // Crud controllers
-            'Crud\FinancialStandingController' => '\Common\Controller\Crud\GenericCrudControllerFactory',
-        ],
         'invokables' => [
             'Admin\IndexController' => 'Admin\Controller\IndexController',
             'Admin\PrintingController' => 'Admin\Controller\PrintingController',
@@ -460,6 +441,7 @@ return [
             'Admin\ContinuationChecklistReminderController' =>
                 'Admin\Controller\ContinuationChecklistReminderController',
             'Admin\CompaniesHouseAlertController' => 'Admin\Controller\CompaniesHouseAlertController',
+            'Admin\FinancialStandingRateController' => 'Admin\Controller\FinancialStandingRateController',
         ]
     ],
     'view_manager' => [
@@ -475,12 +457,6 @@ return [
             'UserDetailsNavigation' => 'Admin\Navigation\UserDetailsNavigationFactory',
         )
     ),
-    'business_service_manager' => [
-        'invokables' => [
-            'Admin\Continuation' => 'Admin\BusinessService\Service\Continuation',
-            'Admin\ContinuationDetailMessage' => 'Admin\BusinessService\Service\ContinuationDetailMessage',
-        ]
-    ],
     'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],
     //-------- Start navigation -----------------
     'navigation' => array(

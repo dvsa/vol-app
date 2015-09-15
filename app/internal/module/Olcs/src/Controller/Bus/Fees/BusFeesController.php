@@ -65,4 +65,9 @@ class BusFeesController extends BusController
     {
         return $this->renderView($view);
     }
+
+    public function redirectToIndex()
+    {
+        return $this->redirectToList();
+    }
 }
