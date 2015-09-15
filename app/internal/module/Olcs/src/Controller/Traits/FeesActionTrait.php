@@ -321,7 +321,8 @@ trait FeesActionTrait
     protected function commonPayFeesAction()
     {
         $feeIds = explode(',', $this->params('fee'));
-        $fees = $this->getFees(['ids' => $feeIds])['results'];
+        $feeData = $this->getFees(['ids' => $feeIds]);['results'];
+        $fees = $feeData['results'];
         $maxAmount = 0;
 
         foreach ($fees as $fee) {
@@ -330,8 +331,10 @@ trait FeesActionTrait
                 $this->addErrorMessage('You can only pay outstanding fees');
                 return $this->redirectToList();
             }
-            $maxAmount += $fee['outstanding'];
         }
+
+        $minAmount = $feeData['extra']['minPayment'];
+        $maxAmount = $feeData['extra']['maxPayment'];
 
         $form = $this->getForm('FeePayment');
 
@@ -346,10 +349,13 @@ trait FeesActionTrait
             ->get('maxAmount')
             ->setValue('£' . number_format($maxAmount, 2));
 
-        // conditional validation needs a numeric value to compare
+        // conditional validation needs numeric values to compare
         $form->get('details')
-            ->get('feeAmountForValidator')
+            ->get('maxAmountForValidator')
             ->setValue($maxAmount);
+        $form->get('details')
+            ->get('minAmountForValidator')
+            ->setValue($minAmount);
 
         $form->getInputFilter()
             ->get('details')
@@ -359,6 +365,7 @@ trait FeesActionTrait
                 new FeeAmountValidator(
                     [
                         'max' => $maxAmount,
+                        'min' => $minAmount,
                         'inclusive' => true
                     ]
                 )
@@ -531,6 +538,8 @@ trait FeesActionTrait
         if ($response->isOk() && $message) {
             $this->addSuccessMessage($message);
         }
+
+        // @todo add error message if not isOk :)
 
         $this->redirectToList();
     }
