@@ -39,17 +39,7 @@ return array(
         [
             'title' => 'Role(s)',
             'formatter' => function ($row, $column) {
-
-                $roles = implode(
-                    ', ', array_map(
-                        function ($item) {
-                            return $item['role']['description'];
-                        },
-                        $row['userRoles']
-                    )
-                );
-
-                return $roles;
+                return implode(', ', array_column($row['roles'], 'description'));
             }
         ],
         array(
