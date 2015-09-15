@@ -35,10 +35,12 @@ class LicenceBusinessTypeTest extends MockeryTestCase
     {
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
         $this->fh = m::mock(FormHelperService::class)->makePartial();
+        $this->sm = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
 
         $this->sut = new LicenceBusinessType();
         $this->sut->setFormServiceLocator($this->fsm);
         $this->sut->setFormHelper($this->fh);
+        $this->fsm->setServiceLocator($this->sm);
     }
 
     /**
@@ -68,6 +70,17 @@ class LicenceBusinessTypeTest extends MockeryTestCase
         $mockLicence->shouldReceive('alterForm')
             ->once()
             ->with($mockForm);
+
+        $this->sm
+            ->shouldReceive('get')
+            ->with('Helper\Guidance')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('append')
+                    ->with('business-type.locked.message')
+                    ->once()
+                    ->getMock()
+            );
 
         $this->fsm->setService('lva-licence', $mockLicence);
 
