@@ -19,6 +19,9 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = Addresses::class;
 
+    /**
+     * @group test123
+     */
     public function testGetForm()
     {
         // Mocks
@@ -45,6 +48,32 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
                     )
                     ->getMock()
             )
+            ->shouldReceive('getInputFilter')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('contact')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('get')
+                    ->with('email')
+                    ->andReturn(
+                        m::mock()
+                        ->shouldReceive('setRequired')
+                        ->with(false)
+                        ->once()
+                        ->shouldReceive('setAllowEmpty')
+                        ->with(true)
+                        ->once()
+                        ->getMock()
+                    )
+                    ->twice()
+                    ->getMock()
+                )
+                ->twice()
+                ->getMock()
+            )
+            ->twice()
             ->getMock();
 
         $form = $this->sut->getForm('ltyp_sn');
