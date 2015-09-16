@@ -780,7 +780,11 @@ trait FeesActionTrait
      */
     protected function shouldConfirmPayment(array $feeData, array $postData)
     {
-        $received = number_format($postData['details']['received'], 2, '.' , '');
+        if ($this->isCardPayment($postData)) {
+            return false;
+        }
+
+        $received = number_format((float)$postData['details']['received'], 2, '.' , '');
         $total = number_format($feeData['extra']['totalOutstanding'], 2, '.' , '');
         return ($received !== $total);
     }
