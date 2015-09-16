@@ -889,16 +889,6 @@ $routes = [
         ],
         'may_terminate' => true,
         'child_routes' => [
-            'event-history' => [
-                'type' => 'literal',
-                'options' => [
-                    'route' => '/event-history',
-                    'defaults' => [
-                        'controller' => 'LicenceHistoryController',
-                        'action' => 'index',
-                    ]
-                ],
-            ],
             'active-licence-check' => [
                 'type' => 'segment',
                 'options' => [
@@ -1442,7 +1432,17 @@ $routes = [
                                 'action' => 'index'
                             ]
                         ],
-                    ]
+                    ],
+                    'event-history' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/event-history',
+                            'defaults' => [
+                                'controller' => 'LicenceHistoryController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                 ]
             ],
             'fees' => [
