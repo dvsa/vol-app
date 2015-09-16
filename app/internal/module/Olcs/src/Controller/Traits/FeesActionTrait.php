@@ -321,7 +321,7 @@ trait FeesActionTrait
     protected function commonPayFeesAction()
     {
         $feeIds = explode(',', $this->params('fee'));
-        $feeData = $this->getFees(['ids' => $feeIds]);['results'];
+        $feeData = $this->getFees(['ids' => $feeIds]);
         $fees = $feeData['results'];
         $title = 'Pay fee' . (count($fees) !== 1 ? 's' : '');
         $confirmMessage = $this->getConfirmPaymentMessage($feeData);
@@ -562,7 +562,9 @@ trait FeesActionTrait
             $this->addSuccessMessage($message);
         }
 
-        // @todo add error message if not isOk :)
+        if (!$response->isOk()) {
+            $this->addErrorMessage('unknown-error');
+        }
 
         $this->redirectToList();
     }
@@ -784,8 +786,8 @@ trait FeesActionTrait
             return false;
         }
 
-        $received = number_format((float)$postData['details']['received'], 2, '.' , '');
-        $total = number_format($feeData['extra']['totalOutstanding'], 2, '.' , '');
+        $received = number_format((float)$postData['details']['received'], 2, '.', '');
+        $total = number_format($feeData['extra']['totalOutstanding'], 2, '.', '');
         return ($received !== $total);
     }
 

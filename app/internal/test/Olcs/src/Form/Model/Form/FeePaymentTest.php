@@ -99,7 +99,6 @@ class FeePaymentTest extends AbstractFormTest
                 new F\Value(F\Value::INVALID, '0', $cashContext),
                 new F\Value(F\Value::INVALID, null, $cashContext),
                 new F\Value(F\Value::INVALID, 'not a number', $cashContext)
-
             ),
             new F\Test(
                 new F\Stack(['details', 'receiptDate']),
