@@ -13,7 +13,6 @@ $address = isset($this->result['correspondenceAddress']['address']) ?
 $items[] = [0 => ['label' => 'search-result-label-address', 'value' => $address]];
 
 $phoneContacts = $this->result['organisation']['contactDetails']['phoneContacts'];
-
 if (!empty($phoneContacts)) {
     for($i = 0; $i<count($phoneContacts);$i++) {
         if ($phoneContacts[$i]['phoneContactType']['id'] === RefData::TYPE_FAX) {
@@ -50,13 +49,14 @@ if (empty($faxList)) {
     ];
 }
 
-$additional[] = $phoneList;
-$additional[] = $faxList;
-
-if (!empty($additional)) {
-    $items = array_merge($items, $additional);
-}
-
+$items[] = $phoneList;
+$items[] = $faxList;
+$items[] = [
+    0 => [
+        'label' => 'search-result-label-email',
+        'value' => $this->result['organisation']['contactDetails']['emailAddress']
+    ]
+];
 
 echo $this->render('partials/read-only/main',
     [
