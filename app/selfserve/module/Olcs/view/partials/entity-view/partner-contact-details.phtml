@@ -49,18 +49,14 @@ if (empty($faxList)) {
     ];
 }
 
-$additional[] = $phoneList;
-$additional[] = $faxList;
-$additional[] = [
+$items[] = $phoneList;
+$items[] = $faxList;
+$items[] = [
     0 => [
         'label' => 'search-result-label-email',
         'value' => $this->result['organisation']['contactDetails']['emailAddress']
     ]
 ];
-
-if (!empty($additional)) {
-    $items = array_merge($items, $additional);
-}
 
 echo $this->render('partials/read-only/main',
     [
