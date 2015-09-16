@@ -3,7 +3,8 @@
 
 namespace OlcsTest\Service;
 
-use Common\Service\Entity\DocumentEntityService;
+use Common\Service\Cqrs\Command\CommandSender;
+use Dvsa\Olcs\Transfer\Command\Document\Upload;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Service\Ebsr;
 use Mockery as m;
@@ -19,24 +20,22 @@ class EbsrTest extends TestCase
     {
         $mockValidationChain = m::mock('Zend\InputFilter\Input');
         $mockDataService = m::mock('Olcs\Service\Data\EbsrPack');
-        $mockFileService = m::mock('Dvsa\Olcs\Api\Service\File\FileUploaderInterface');
-        $mockEntityService = m::mock(DocumentEntityService::class);
+        $mockCommandSender = m::mock(CommandSender::class);
 
         $mockSl = m::mock('\Zend\ServiceManager\ServiceManager');
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('Olcs\InputFilter\EbsrPackInput')->andReturn($mockValidationChain);
         $mockSl->shouldReceive('get')->with('Olcs\Service\Data\EbsrPack')->andReturn($mockDataService);
-        $mockSl->shouldReceive('get')->with('FileUploader')->andReturn($mockFileService);
-        $mockSl->shouldReceive('get')->with('Entity\Document')->andReturn($mockEntityService);
+        $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);
 
         $sut = new Ebsr();
+        /** @var Ebsr $service */
         $service = $sut->createService($mockSl);
 
         $this->assertInstanceOf('\Olcs\Service\Ebsr', $service);
         $this->assertSame($mockValidationChain, $service->getValidationChain());
         $this->assertSame($mockDataService, $service->getDataService());
-        $this->assertSame($mockFileService, $service->getFileService());
-        $this->assertEquals($mockEntityService, $service->getDocumentEntityService());
+        $this->assertSame($mockCommandSender, $service->getCommandSender());
     }
 
     public function testProcessPackUpload()
@@ -52,26 +51,47 @@ class EbsrTest extends TestCase
         $mockRestClient = m::mock('Olcs\Service\Data\EbsrPack');
         $mockRestClient->shouldReceive('sendPackList')->andReturn($packResult);
 
-        $mockFile = m::mock('Dvsa\Olcs\Api\Service\File\File');
-
-        $mockFileService = m::mock('Dvsa\Olcs\Api\Service\File\FileUploaderInterface');
-        $mockFileService->shouldReceive('setFile');
-        $mockFileService->shouldReceive('upload')->with('ebsr')->andReturn($mockFile);
-
-        $mockEntityService = m::mock(DocumentEntityService::class);
-        $mockEntityService->shouldReceive('createFromFile')->with($mockFile, m::type('array'))->andReturn(
-            [
-                'id' => 2473
-            ]
-        );
-
         $data['fields']['file']['extracted_dir'] = vfsStream::url('tmp');
+
+        $mockCommandSender = m::mock(CommandSender::class);
+        $mockCommandSender->shouldReceive('send')
+            ->with(m::type(Upload::class))
+            ->andReturnUsing(
+                function(Upload $command) {
+                    $data = $command->getArrayCopy();
+
+                    $expected = [
+                        'content' => 'test',
+                        'category' => 3,
+                        'subCategory' => 36,
+                        'filename' => 'pack.zip',
+                        'description' => 'EBSR pack file',
+                        'isExternal' => true
+                    ];
+
+                    foreach ($expected as $key => $value) {
+                        $this->assertEquals($value, $data[$key]);
+                    }
+
+                    $response = m::mock();
+                    $response->shouldReceive('getResult')
+                        ->andReturn(
+                            [
+                                'id' => [
+                                    'document' => 2473,
+                                    'identifier' => 'pack.zip'
+                                ]
+                            ]
+                        );
+
+                    return $response;
+                }
+            );
 
         $sut = new Ebsr();
         $sut->setValidationChain($mockValidator);
         $sut->setDataService($mockRestClient);
-        $sut->setFileService($mockFileService);
-        $sut->setDocumentEntityService($mockEntityService);
+        $sut->setCommandSender($mockCommandSender);
 
         $result = $sut->processPackUpload($data, 'ebsrt_refresh');
 
@@ -97,22 +117,47 @@ class EbsrTest extends TestCase
         $mockRestClient = m::mock('Olcs\Service\Data\EbsrPack');
         $mockRestClient->shouldReceive('sendPackList')->andThrow(new \RuntimeException('Error uploading packs'));
 
-        $mockFile = m::mock('Dvsa\Olcs\Api\Service\File\File');
-
-        $mockFileService = m::mock('Dvsa\Olcs\Api\Service\File\FileUploaderInterface');
-        $mockFileService->shouldReceive('setFile');
-        $mockFileService->shouldReceive('upload')->with('ebsr')->andReturn($mockFile);
-
-        $mockEntityService = m::mock(DocumentEntityService::class);
-        $mockEntityService->shouldReceive('createFromFile')->with($mockFile, m::type('array'))->andReturn(2473);
-
         $data['fields']['file']['extracted_dir'] = vfsStream::url('tmp');
+
+        $mockCommandSender = m::mock(CommandSender::class);
+        $mockCommandSender->shouldReceive('send')
+            ->with(m::type(Upload::class))
+            ->andReturnUsing(
+                function(Upload $command) {
+                    $data = $command->getArrayCopy();
+
+                    $expected = [
+                        'content' => 'test',
+                        'category' => 3,
+                        'subCategory' => 36,
+                        'filename' => 'pack.zip',
+                        'description' => 'EBSR pack file',
+                        'isExternal' => true
+                    ];
+
+                    foreach ($expected as $key => $value) {
+                        $this->assertEquals($value, $data[$key]);
+                    }
+
+                    $response = m::mock();
+                    $response->shouldReceive('getResult')
+                        ->andReturn(
+                            [
+                                'id' => [
+                                    'document' => 2473,
+                                    'identifier' => 'pack.zip'
+                                ]
+                            ]
+                        );
+
+                    return $response;
+                }
+            );
 
         $sut = new Ebsr();
         $sut->setValidationChain($mockValidator);
         $sut->setDataService($mockRestClient);
-        $sut->setFileService($mockFileService);
-        $sut->setDocumentEntityService($mockEntityService);
+        $sut->setCommandSender($mockCommandSender);
 
         $result = $sut->processPackUpload($data, m::type('string'));
         $this->assertArrayHasKey('errors', $result);
