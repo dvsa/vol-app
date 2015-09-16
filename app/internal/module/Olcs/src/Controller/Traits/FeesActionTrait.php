@@ -791,11 +791,7 @@ trait FeesActionTrait
 
     protected function getConfirmPaymentMessage(array $feeData)
     {
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
-
-        $keySuffix = $feeData['count'] > 1 ? 'multiple' : 'single';
-        $messageKey = 'internal.fee-payment.part-payment-' . $keySuffix;
-
-        return $translator->translate($messageKey);
+        $suffix = $feeData['count'] > 1 ? 'multiple' : 'single';
+        return 'internal.fee-payment.part-payment-' . $suffix;
     }
 }
