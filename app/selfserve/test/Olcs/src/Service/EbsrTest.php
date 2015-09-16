@@ -57,7 +57,7 @@ class EbsrTest extends TestCase
         $mockCommandSender->shouldReceive('send')
             ->with(m::type(Upload::class))
             ->andReturnUsing(
-                function(Upload $command) {
+                function (Upload $command) {
                     $data = $command->getArrayCopy();
 
                     $expected = [
@@ -123,7 +123,7 @@ class EbsrTest extends TestCase
         $mockCommandSender->shouldReceive('send')
             ->with(m::type(Upload::class))
             ->andReturnUsing(
-                function(Upload $command) {
+                function (Upload $command) {
                     $data = $command->getArrayCopy();
 
                     $expected = [
