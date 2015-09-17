@@ -786,8 +786,9 @@ trait FeesActionTrait
             return false;
         }
 
-        $received = number_format((float)$postData['details']['received'], 2, '.', '');
-        $total = number_format($feeData['extra']['totalOutstanding'], 2, '.', '');
+        // force the amounts to be in the same format, we can't compare floats for equality
+        $received = number_format((float)$postData['details']['received'], 2);
+        $total = number_format((float)$feeData['extra']['totalOutstanding'], 2);
         return ($received !== $total);
     }
 
