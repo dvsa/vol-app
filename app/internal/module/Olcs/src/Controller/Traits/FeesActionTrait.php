@@ -324,7 +324,6 @@ trait FeesActionTrait
         $feeData = $this->getFees(['ids' => $feeIds]);
         $fees = $feeData['results'];
         $title = 'Pay fee' . (count($fees) !== 1 ? 's' : '');
-        $confirmMessage = $this->getConfirmPaymentMessage($feeData);
 
         foreach ($fees as $fee) {
             // bail early if any of the fees prove to be the wrong status
@@ -343,6 +342,11 @@ trait FeesActionTrait
 
             $data = (array)$this->getRequest()->getPost();
 
+            // check if we need to recover serialized data from confirm step
+            if ($this->isButtonPressed('confirm') && isset($data['custom'])) {
+                $data = unserialize($data['custom']);
+            }
+
             if ($this->isCardPayment($data)) {
                 // remove field and validator if this is a card payment
                 $this->getServiceLocator()
@@ -350,12 +354,8 @@ trait FeesActionTrait
                     ->remove($form, 'details->received');
             }
 
+            $confirmMessage = $this->getConfirmPaymentMessage($feeData, $data);
             $confirm = $this->confirm($confirmMessage, false, serialize($data));
-            if ($confirm === true) {
-                // if we confirmed, retrieve the previously serialized data and proceed
-                $confirmedData = unserialize($data['custom']);
-                $data = $confirmedData;
-            }
 
             $form->setData($data);
 
@@ -439,20 +439,6 @@ trait FeesActionTrait
         $form->get('details')
             ->get('minAmountForValidator')
             ->setValue($minAmount);
-
-        $form->getInputFilter()
-            ->get('details')
-            ->get('received')
-            ->getValidatorChain()
-            ->addValidator(
-                new FeeAmountValidator(
-                    [
-                        'max' => $maxAmount,
-                        'min' => $minAmount,
-                        'inclusive' => true
-                    ]
-                )
-            );
 
         return $form;
     }
@@ -718,7 +704,7 @@ trait FeesActionTrait
 
         switch ($transaction['status']['id']) {
             case RefData::TRANSACTION_STATUS_COMPLETE:
-                $this->addSuccessMessage('The fee(s) have been paid successfully');
+                $this->addSuccessMessage('The payment was made successfully');
                 break;
             case RefData::TRANSACTION_STATUS_CANCELLED:
                 $this->addWarningMessage('The fee payment was cancelled');
@@ -792,8 +778,27 @@ trait FeesActionTrait
         return ($received !== $total);
     }
 
-    protected function getConfirmPaymentMessage(array $feeData)
+    /**
+     * @param array $feeData from FeeList query response
+     * @param array $postData
+     * @return string message (translation key)
+     */
+    protected function getConfirmPaymentMessage(array $feeData, $postData)
     {
+        $received = $postData['details']['received'];
+        $total = $feeData['extra']['totalOutstanding'];
+
+        if ($received > $total) {
+            // overpayment
+            if ($received > ($total * 2)) {
+                // A slightly altered warning message is displayed if the payment amount
+                // is more than double the amount outstanding in order to avoid mis-keying:
+                return 'internal.fee-payment.over-payment-double';
+            }
+            return 'internal.fee-payment.over-payment-standard';
+        }
+
+        // underpayment (different message for one or multiple fees)
         $suffix = $feeData['count'] > 1 ? 'multiple' : 'single';
         return 'internal.fee-payment.part-payment-' . $suffix;
     }

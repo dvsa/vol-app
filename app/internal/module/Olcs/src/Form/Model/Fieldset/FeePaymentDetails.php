@@ -51,7 +51,6 @@ class FeePaymentDetails
      *          "context_truth": false,
      *          "allow_empty": false,
      *          "validators": {
-     *              {"name": "NotEmpty"},
      *              {
      *                   "name": "Zend\Validator\GreaterThan",
      *                   "options": {
