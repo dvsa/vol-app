@@ -15,7 +15,7 @@ return array(
                     'backend' => [
                         'options' => [
                             // Backend service URI *Environment specific*
-                            'route' => 'olcs-backend'
+                            'route' => 'olcs-backend.olcs.gov.uk'
                         ]
                     ]
                 ]
@@ -35,7 +35,7 @@ return array(
                 ]
             ],
             'backend' => [
-                'url' => 'http://olcs-backend/',
+                'url' => 'http://olcs-backend.olcs.gov.uk/',
                 'options' => [
                     'adapter' => \Zend\Http\Client\Adapter\Curl::class,
                     'timeout' => 60,

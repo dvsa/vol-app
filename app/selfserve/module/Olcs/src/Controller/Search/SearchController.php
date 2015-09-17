@@ -5,7 +5,6 @@
  */
 namespace Olcs\Controller\Search;
 
-use Olcs\View\Model\Dashboard;
 use Common\Controller\Lva\AbstractController;
 use Zend\View\Model\ViewModel;
 use Olcs\Form\Model\Form\SimpleSearch;
@@ -24,11 +23,6 @@ class SearchController extends AbstractController
 {
     use ViewHelperManagerAware;
 
-    public function jumpAction()
-    {
-        return $this->redirect()->toRoute('index', [], ['code' => 303], true);
-    }
-
     /**
      * Search index action
      *
@@ -36,6 +30,15 @@ class SearchController extends AbstractController
      */
     public function indexAction()
     {
+        $index = $this->params()->fromRoute('index');
+
+        if (empty($index)) {
+            // show index page if index empty
+            $view = new ViewModel();
+            $view->setTemplate('search/index');
+            return $view;
+        }
+
         /** @var \Zend\Form\Form $form */
         $form = $this->getIndexForm(SimpleSearch::class);
 
@@ -61,7 +64,7 @@ class SearchController extends AbstractController
             }
         }
 
-        $form->get('index')->setValue($this->params()->fromRoute('index'));
+        $form->get('index')->setValue($index);
 
         $view = new ViewModel(['searchForm' => $form]);
         $view->setTemplate('search/index-' . $this->params()->fromRoute('index') . '.phtml');

@@ -7,22 +7,22 @@
  */
 namespace Olcs\Controller;
 
-use Olcs\View\Model\Dashboard;
 use Common\Controller\Lva\AbstractController;
-use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
+use Common\RefData;
 
 /**
  * Index Controller
  */
 class IndexController extends AbstractController
 {
-    /**
-     * Dashboard index action
-     */
     public function indexAction()
     {
-        $view = new \Zend\View\Model\ViewModel();
-        $view->setTemplate('index');
-        return $view;
+        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_DASHBOARD)) {
+            // redir to the dashboard
+            return $this->redirect()->toRoute('dashboard', [], ['code' => 303], false);
+        }
+
+        // redir to the search page
+        return $this->redirect()->toRoute('search', [], ['code' => 303], false);
     }
 }
