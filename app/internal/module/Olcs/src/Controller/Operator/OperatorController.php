@@ -82,7 +82,8 @@ class OperatorController extends OlcsController\CrudAbstract implements
                 [
                     'organisation' => $this->params('organisation'),
                     'receivedDate' => $data['receivedDate'],
-                    'trafficArea' => $data['trafficArea']
+                    'trafficArea' => $data['trafficArea'],
+                    'appliedVia' => $data['appliedVia']
                 ]
             );
 
