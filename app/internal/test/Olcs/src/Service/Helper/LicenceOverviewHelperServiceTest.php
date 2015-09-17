@@ -96,6 +96,9 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                             ['id' => 203],
                         ],
                         'leadTcArea' => ['id' => 'B'],
+                        'organisationUsers' => [
+                            ['isAdministrator' => 'Y']
+                        ]
                     ],
                     'licenceVehicles' => [
                         ['id' => 1],
@@ -148,7 +151,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'openCases'                  => '3',
                     'currentReviewComplaints'    => 0,
                     'receivesMailElectronically' => 'Y',
-                    'registeredForSelfService'   => null,
+                    'registeredForSelfService'   => 'Yes',
                     'previousOperatorName'       => 'TEST',
                     'previousLicenceNumber'      => 'TEST',
                     'isPsv'                      => false,
@@ -189,6 +192,9 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                             ['id' => 203],
                         ],
                         'leadTcArea' => ['id' => 'B'],
+                        'organisationUsers' => [
+                            ['isAdministrator' => 'N']
+                        ]
                     ],
                     'licenceVehicles' => [
                         ['id' => 1],
@@ -242,7 +248,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'previousOperatorName'       => null,
                     'previousLicenceNumber'      => null,
                     'receivesMailElectronically' => 'N',
-                    'registeredForSelfService'   => null,
+                    'registeredForSelfService'   => 'No',
                     'isPsv'                      => true,
                     'licenceGracePeriods'        => 'Active (<a href="GRACE_PERIOD_URL">manage</a>)'
                 ],
@@ -275,6 +281,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                             ['id' => 210],
                         ],
                         'leadTcArea' => ['id' => 'B'],
+                        'organisationUsers' => []
                     ],
                     'licenceVehicles' => [
                         ['id' => 1],
@@ -314,7 +321,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'previousOperatorName'       => null,
                     'previousLicenceNumber'      => null,
                     'receivesMailElectronically' => 'Y',
-                    'registeredForSelfService'   => null,
+                    'registeredForSelfService'   => 'No',
                     'isPsv'                      => true,
                     'licenceGracePeriods'        => 'None (<a href="GRACE_PERIOD_URL">manage</a>)'
                 ],
