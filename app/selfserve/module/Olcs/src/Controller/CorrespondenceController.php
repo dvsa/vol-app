@@ -117,8 +117,7 @@ class CorrespondenceController extends AbstractController
         return $this->redirect()->toRoute(
             'getfile',
             array(
-                'file' => $correspondence['document']['identifier'],
-                'name' => $correspondence['document']['filename']
+                'identifier' => base64_encode($correspondence['document']['identifier'])
             )
         );
     }

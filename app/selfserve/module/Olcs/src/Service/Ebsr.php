@@ -2,8 +2,10 @@
 
 namespace Olcs\Service;
 
+use Dvsa\Olcs\Transfer\Command\Document\Upload;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Common\Service\Cqrs\Command\CommandSender;
 
 /**
  * Class Ebsr
@@ -14,27 +16,38 @@ class Ebsr implements FactoryInterface
     /**
      * @var \Zend\InputFilter\Input
      */
-    protected $validationChain;
+    private $validationChain;
 
     /**
      * @var Data\EbsrPack
      */
-    protected $dataService;
-
-    /**
-     * @var \Common\Service\File\FileUploaderInterface
-     */
-    protected $fileService;
-
-    /**
-     * @var \Common\Service\Entity\DocumentEntityService
-     */
-    protected $documentEntityService;
+    private $dataService;
 
     /*
      * @var array
      */
-    protected $filenameMap;
+    private $filenameMap;
+
+    /**
+     * @var CommandSender
+     */
+    private $commandSender;
+
+    /**
+     * @return CommandSender
+     */
+    public function getCommandSender()
+    {
+        return $this->commandSender;
+    }
+
+    /**
+     * @param CommandSender $commandSender
+     */
+    public function setCommandSender($commandSender)
+    {
+        $this->commandSender = $commandSender;
+    }
 
     /**
      * @param \Zend\InputFilter\Input $validationChain
@@ -73,40 +86,6 @@ class Ebsr implements FactoryInterface
     }
 
     /**
-     * @param \Common\Service\File\FileUploaderInterface $fileService
-     * @return $this
-     */
-    public function setFileService($fileService)
-    {
-        $this->fileService = $fileService;
-        return $this;
-    }
-
-    /**
-     * @return \Common\Service\File\FileUploaderInterface
-     */
-    public function getFileService()
-    {
-        return $this->fileService;
-    }
-
-    /**
-     * @return \Common\Service\Entity\DocumentEntityService
-     */
-    public function getDocumentEntityService()
-    {
-        return $this->documentEntityService;
-    }
-
-    /**
-     * @param \Common\Service\Entity\DocumentEntityService $documentEntityService
-     */
-    public function setDocumentEntityService($documentEntityService)
-    {
-        $this->documentEntityService = $documentEntityService;
-    }
-
-    /**
      * @param $data
      * @return array
      */
@@ -136,8 +115,7 @@ class Ebsr implements FactoryInterface
     {
         $this->setValidationChain($serviceLocator->get('Olcs\InputFilter\EbsrPackInput'));
         $this->setDataService($serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\EbsrPack'));
-        $this->setFileService($serviceLocator->get('FileUploader')->getUploader());
-        $this->setDocumentEntityService($serviceLocator->get('Entity\Document'));
+        $this->setCommandSender($serviceLocator->get('CommandSender'));
 
         return $this;
     }
@@ -146,7 +124,7 @@ class Ebsr implements FactoryInterface
      * @param $data
      * @return array
      */
-    protected function validatePacks($data)
+    private function validatePacks($data)
     {
         $validator = $this->getValidationChain();
 
@@ -160,21 +138,22 @@ class Ebsr implements FactoryInterface
         foreach ($dir as $ebsrPack) {
             $validator->setValue($ebsrPack);
             if ($validator->isValid()) {
-                $this->getFileService()->setFile(['content' => file_get_contents($ebsrPack)]);
-                $file = $this->getFileService()->upload('ebsr');
 
-                $documentData = [
-                    'category' => ['id' => 3], //bus reg
-                    'subCategory' => ['id' => 36], //EBSR
+                $dtoData = [
+                    'content' => file_get_contents($ebsrPack),
+                    'category' => 3,
+                    'subCategory' => 36,
                     'filename' => basename($ebsrPack),
                     'description' => 'EBSR pack file',
                     'isExternal' => true
                 ];
 
-                $documentId = $this->getDocumentEntityService()->createFromFile($file, $documentData);
+                $response = $this->getCommandSender()->send(Upload::create($dtoData));
 
-                $packs[] = $documentId['id'];
-                $this->filenameMap[$documentId['id']] = $documentData['filename'];
+                $documentId = $response->getResult()['id']['document'];
+
+                $packs[] = $documentId;
+                $this->filenameMap[$documentId] = $response->getResult()['id']['identifier'];
             }
         }
 
@@ -185,7 +164,7 @@ class Ebsr implements FactoryInterface
      * @param $packResults
      * @return array
      */
-    protected function handleResult($packResults)
+    private function handleResult($packResults)
     {
         $packs = $packResults['valid'] + $packResults['errors'];
 
