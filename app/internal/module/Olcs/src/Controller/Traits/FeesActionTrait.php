@@ -669,7 +669,7 @@ trait FeesActionTrait
         $response = $this->handleCommand($dto);
 
         if ($response->isOk()) {
-            $this->addSuccessMessage('The fee(s) have been paid successfully');
+            $this->addSuccessMessage('The payment was made successfully');
         } else {
             $this->addErrorMessage('The fee(s) have NOT been paid. Please try again');
         }
@@ -704,7 +704,7 @@ trait FeesActionTrait
 
         switch ($transaction['status']['id']) {
             case RefData::TRANSACTION_STATUS_COMPLETE:
-                $this->addSuccessMessage('The payment was made successfully');
+                $this->addSuccessMessage('The fee(s) have been paid successfully');
                 break;
             case RefData::TRANSACTION_STATUS_CANCELLED:
                 $this->addWarningMessage('The fee payment was cancelled');
