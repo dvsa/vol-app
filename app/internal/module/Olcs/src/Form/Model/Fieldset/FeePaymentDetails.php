@@ -20,7 +20,12 @@ class FeePaymentDetails
     /**
      * @Form\Type("Hidden")
      */
-    public $feeAmountForValidator = null;
+    public $minAmountForValidator = null;
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $maxAmountForValidator = null;
 
     /**
      * @Form\Options({
@@ -39,10 +44,6 @@ class FeePaymentDetails
      *      "label_attributes": {"id": "label-received"}
      * })
      * @Form\Type("Text")
-     * @Form\Validator({
-     *     "name": "Zend\Validator\GreaterThan",
-     *     "options": {"min": 0}
-     * })
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "paymentType",
@@ -50,10 +51,18 @@ class FeePaymentDetails
      *          "context_truth": false,
      *          "allow_empty": false,
      *          "validators": {
+     *              {"name": "NotEmpty"},
      *              {
-     *                  "name": "\Common\Form\Elements\Validators\FeeExactAmountValidator",
-     *                  "options": {"strict": false, "token": "feeAmountForValidator"}
-     *              }
+     *                   "name": "Zend\Validator\GreaterThan",
+     *                   "options": {
+     *                        "min": 0,
+     *                        "messages": {
+     *                             "notGreaterThan": "The payment amount must be greater than %min%"
+     *                        }
+     *                   },
+     *                   "break_chain_on_failure": true
+     *              },
+     *              {"name": "\Common\Form\Elements\Validators\ReceivedAmount"}
      *          }
      *      }
      * })

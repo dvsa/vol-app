@@ -321,8 +321,10 @@ trait FeesActionTrait
     protected function commonPayFeesAction()
     {
         $feeIds = explode(',', $this->params('fee'));
-        $fees = $this->getFees(['ids' => $feeIds])['results'];
-        $maxAmount = 0;
+        $feeData = $this->getFees(['ids' => $feeIds]);
+        $fees = $feeData['results'];
+        $title = 'Pay fee' . (count($fees) !== 1 ? 's' : '');
+        $confirmMessage = $this->getConfirmPaymentMessage($feeData);
 
         foreach ($fees as $fee) {
             // bail early if any of the fees prove to be the wrong status
@@ -330,43 +332,15 @@ trait FeesActionTrait
                 $this->addErrorMessage('You can only pay outstanding fees');
                 return $this->redirectToList();
             }
-            $maxAmount += $fee['outstanding'];
         }
 
         $form = $this->getForm('FeePayment');
-
-        // default the receipt date to 'today'
-        $today = $this->getServiceLocator()->get('Helper\Date')->getDateObject();
-        $form->get('details')
-            ->get('receiptDate')
-            ->setValue($today);
-
-        // add the fee amount and validator to the form
-        $form->get('details')
-            ->get('maxAmount')
-            ->setValue('£' . number_format($maxAmount, 2));
-
-        // conditional validation needs a numeric value to compare
-        $form->get('details')
-            ->get('feeAmountForValidator')
-            ->setValue($maxAmount);
-
-        $form->getInputFilter()
-            ->get('details')
-            ->get('received')
-            ->getValidatorChain()
-            ->addValidator(
-                new FeeAmountValidator(
-                    [
-                        'max' => $maxAmount,
-                        'inclusive' => true
-                    ]
-                )
-            );
+        $form = $this->alterPaymentForm($form, $feeData);
 
         $this->loadScripts(['forms/fee-payment']);
 
         if ($this->getRequest()->isPost()) {
+
             $data = (array)$this->getRequest()->getPost();
 
             if ($this->isCardPayment($data)) {
@@ -376,9 +350,21 @@ trait FeesActionTrait
                     ->remove($form, 'details->received');
             }
 
+            $confirm = $this->confirm($confirmMessage, false, serialize($data));
+            if ($confirm === true) {
+                // if we confirmed, retrieve the previously serialized data and proceed
+                $confirmedData = unserialize($data['custom']);
+                $data = $confirmedData;
+            }
+
             $form->setData($data);
 
             if ($form->isValid()) {
+
+                if ($confirm instanceof ViewModel && $this->shouldConfirmPayment($feeData, $data)) {
+                    return $this->renderView($confirm);
+                }
+
                 return $this->initiatePaymentRequest($feeIds, $form->getData()['details']);
             }
         }
@@ -386,10 +372,6 @@ trait FeesActionTrait
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('partials/form');
 
-        $title = 'Pay fee';
-        if (count($fees) !== 1) {
-            $title .= 's';
-        }
         return $this->renderView($view, $title);
     }
 
@@ -423,6 +405,54 @@ trait FeesActionTrait
             $form->get('form-actions')->remove('approve');
             $form->get('form-actions')->remove('reject');
         }
+
+        return $form;
+    }
+
+    /**
+     * Alter fee payment form
+     *
+     * @param \Zend\Form\Form $form
+     * @param array $feeData from FeeList query
+     * @return \Zend\Form\Form
+     */
+    protected function alterPaymentForm($form, $feeData)
+    {
+        $minAmount = $feeData['extra']['minPayment'];
+        $maxAmount = $feeData['extra']['totalOutstanding'];
+
+        // default the receipt date to 'today'
+        $today = $this->getServiceLocator()->get('Helper\Date')->getDateObject();
+        $form->get('details')
+            ->get('receiptDate')
+            ->setValue($today);
+
+        // add the fee amount and validator to the form
+        $form->get('details')
+            ->get('maxAmount')
+            ->setValue('£' . number_format($maxAmount, 2));
+
+        // conditional validation needs numeric values to compare
+        $form->get('details')
+            ->get('maxAmountForValidator')
+            ->setValue($maxAmount);
+        $form->get('details')
+            ->get('minAmountForValidator')
+            ->setValue($minAmount);
+
+        $form->getInputFilter()
+            ->get('details')
+            ->get('received')
+            ->getValidatorChain()
+            ->addValidator(
+                new FeeAmountValidator(
+                    [
+                        'max' => $maxAmount,
+                        'min' => $minAmount,
+                        'inclusive' => true
+                    ]
+                )
+            );
 
         return $form;
     }
@@ -530,6 +560,10 @@ trait FeesActionTrait
 
         if ($response->isOk() && $message) {
             $this->addSuccessMessage($message);
+        }
+
+        if (!$response->isOk()) {
+            $this->addErrorMessage('unknown-error');
         }
 
         $this->redirectToList();
@@ -739,5 +773,28 @@ trait FeesActionTrait
             isset($data['details']['paymentType'])
             && $data['details']['paymentType'] == RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE
         );
+    }
+
+    /**
+     * @param array $feeData from FeeList query
+     * @param array $postData
+     * @return boolean
+     */
+    protected function shouldConfirmPayment(array $feeData, array $postData)
+    {
+        if ($this->isCardPayment($postData)) {
+            return false;
+        }
+
+        // force the amounts to be in the same format, we can't compare floats for equality
+        $received = number_format((float)$postData['details']['received'], 2);
+        $total = number_format((float)$feeData['extra']['totalOutstanding'], 2);
+        return ($received !== $total);
+    }
+
+    protected function getConfirmPaymentMessage(array $feeData)
+    {
+        $suffix = $feeData['count'] > 1 ? 'multiple' : 'single';
+        return 'internal.fee-payment.part-payment-' . $suffix;
     }
 }

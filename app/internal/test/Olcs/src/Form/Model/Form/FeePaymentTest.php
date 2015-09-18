@@ -65,7 +65,8 @@ class FeePaymentTest extends AbstractFormTest
         $cashContext = new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cash');
         $chequeContext = new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_cheque');
         $poContext = new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_po');
-        $feeAmountContext = new F\Context(new F\Stack(['details', 'feeAmountForValidator']), '250');
+        $maxAmountContext = new F\Context(new F\Stack(['details', 'maxAmountForValidator']), '250');
+        $minAmountContext = new F\Context(new F\Stack(['details', 'minAmountForValidator']), '20');
 
         return [
             new F\Test(
@@ -76,26 +77,28 @@ class FeePaymentTest extends AbstractFormTest
             ),
             new F\Test(
                 new F\Stack(['details', 'received']),
+                // for card, received amount ignored
                 new F\Value(F\Value::VALID, '1', $cardContext),
                 new F\Value(F\Value::VALID, '1.01', $cardContext),
-                new F\Value(F\Value::INVALID, '-1'),
-                new F\Value(F\Value::INVALID, '0'),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::INVALID, 'not a number'),
-                // for card, received amount ignored
-                new F\Value(F\Value::VALID, '10', $cardContext, $feeAmountContext),
-                // for cash, received amount must match fee amount
-                new F\Value(F\Value::INVALID, '10', $cashContext, $feeAmountContext),
-                new F\Value(F\Value::VALID, '250', $cashContext, $feeAmountContext),
-                new F\Value(F\Value::VALID, '250.00', $cashContext, $feeAmountContext),
-                // for cheques, received amount must match fee amount
-                new F\Value(F\Value::INVALID, '10', $chequeContext, $feeAmountContext),
-                new F\Value(F\Value::VALID, '250', $chequeContext, $feeAmountContext),
-                new F\Value(F\Value::VALID, '250.00', $chequeContext, $feeAmountContext),
-                // for Postal Orders, received amount must match fee amount
-                new F\Value(F\Value::INVALID, '10', $poContext, $feeAmountContext),
-                new F\Value(F\Value::VALID, '250', $poContext, $feeAmountContext),
-                new F\Value(F\Value::VALID, '250.00', $poContext, $feeAmountContext)
+                new F\Value(F\Value::VALID, '251', $cardContext, $maxAmountContext, $minAmountContext),
+                new F\Value(F\Value::VALID, '10', $cardContext, $maxAmountContext, $minAmountContext),
+                // for cash, received amount must be between min and max amounts
+                new F\Value(F\Value::INVALID, '10', $cashContext, $maxAmountContext, $minAmountContext),
+                new F\Value(F\Value::VALID, '250', $cashContext, $maxAmountContext, $minAmountContext),
+                new F\Value(F\Value::VALID, '250.00', $cashContext, $maxAmountContext, $minAmountContext),
+                // for cheques, received amount must be between min and max amounts
+                new F\Value(F\Value::INVALID, '10', $chequeContext, $maxAmountContext, $minAmountContext),
+                new F\Value(F\Value::VALID, '250', $chequeContext, $maxAmountContext, $minAmountContext),
+                new F\Value(F\Value::VALID, '250.00', $chequeContext, $maxAmountContext, $minAmountContext),
+                // for Postal Orders, received amount must be between min and max amounts
+                new F\Value(F\Value::INVALID, '10', $poContext, $maxAmountContext, $minAmountContext),
+                new F\Value(F\Value::VALID, '250', $poContext, $maxAmountContext, $minAmountContext),
+                new F\Value(F\Value::VALID, '250.00', $poContext, $maxAmountContext, $minAmountContext),
+                // disallow daft values
+                new F\Value(F\Value::INVALID, '-1', $cashContext),
+                new F\Value(F\Value::INVALID, '0', $cashContext),
+                new F\Value(F\Value::INVALID, null, $cashContext),
+                new F\Value(F\Value::INVALID, 'not a number', $cashContext)
             ),
             new F\Test(
                 new F\Stack(['details', 'receiptDate']),
