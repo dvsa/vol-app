@@ -28,6 +28,7 @@ class UserMappingContactDetails implements BusinessRuleInterface
         $output['main']['id']            = $data['id'];
         $output['main']['version']       = $data['version'];
         $output['main']['loginId']       = $data['loginId'];
+        $output['main']['isAdministrator'] = $data['isAdministrator'];
 
         $output['main']['emailAddress']  = $data['contactDetails']['emailAddress'];
         $output['main']['emailConfirm']  = $data['contactDetails']['emailAddress'];
@@ -53,6 +54,7 @@ class UserMappingContactDetails implements BusinessRuleInterface
         $output['version'] = $data['main']['version'];
 
         $output['loginId'] = $data['main']['loginId'];
+        $output['isAdministrator'] = $data['main']['isAdministrator'];
 
         $output['contactDetails']['emailAddress'] = $data['main']['emailAddress'];
 

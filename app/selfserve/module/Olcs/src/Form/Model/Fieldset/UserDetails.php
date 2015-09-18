@@ -63,4 +63,14 @@ class UserDetails extends Base
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      */
     public $emailConfirm = null;
+
+    /**
+     * @Form\Options({
+     *     "checked_value": "Y",
+     *     "unchecked_value":"N",
+     *     "label": "manage-users.field.is_administrator.label"
+     * })
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $isAdministrator;
 }

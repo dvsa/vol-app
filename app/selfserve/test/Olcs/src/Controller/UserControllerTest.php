@@ -93,25 +93,18 @@ class UserControllerTest extends TestCase
             'id' => 3,
             'version' => 1,
             'loginId' => 'stevefox',
-            'memorableWord' => null,
-            'emailAddress' => 'stevefox@test9876.com',
             'contactDetails' => array(
-                'familyName' => 'Fox',
-                'forename' => 'Steve',
-                'writtenPermissionToEngage' => 'N',
                 'emailAddress' => 'steve@example.com',
                 'id' => 106,
                 'version' => 1,
                 'person' => array(
-                    'birthPlace' => 'Zurich',
-                    'otherName' => null,
-                    'birthDate' => '1975-04-15',
                     'familyName' => 'Fox',
                     'forename' => 'Steve',
                     'id' => 82,
                     'version' => 1,
                 ),
-            )
+            ),
+            'isAdministrator' => 'N',
         );
 
         $id = 3;
@@ -164,22 +157,12 @@ class UserControllerTest extends TestCase
                 'loginId' => 'stevefox',
                 'forename' => 'Steve',
                 'familyName' => 'Fox',
-                'birthDate' => array (
-                    'day' => '15',
-                    'month' => '04',
-                    'year' => '1975',
-                ),
                 'emailAddress' => 'steve@example.com',
                 'emailConfirm' => 'steve@example.com',
-                'memorableWord' => 'one',
+                'isAdministrator' => 'Y',
                 'id' => '3',
                 'version' => '1',
             ),
-            'contactDetailsId' => '106',
-            'contactDetailsVersion' => '1',
-            'personId' => '82',
-            'personVersion' => '1',
-            'contactType' => 'ct_team_user',
         );
 
         $response = m::mock('stdClass');
