@@ -11,7 +11,6 @@ use Common\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Common\Service\Entity\LicenceEntityService;
-
 use Dvsa\Olcs\Transfer\Command\GoodsDisc\PrintDiscs as PrintDiscsGoodsDto;
 use Dvsa\Olcs\Transfer\Command\PsvDisc\PrintDiscs as PrintDiscsPsvDto;
 use Dvsa\Olcs\Transfer\Command\GoodsDisc\ConfirmPrinting as ConfirmPrintingGoodsDto;
@@ -36,17 +35,6 @@ class DiscPrintingController extends AbstractActionController
      * Where we store generated lists of discs in JR
      */
     const STORAGE_PATH = 'discs';
-
-    private $templateParams = [
-        'PSV' => [
-            'template' => 'PSVDiscTemplate',
-            'bookmark' => 'Psv_Disc_Page'
-        ],
-        'Goods' => [
-            'template' => 'GVDiscTemplate',
-            'bookmark' => 'Disc_List'
-        ]
-    ];
 
     private $hasDiscsToPrint = false;
 
@@ -109,11 +97,8 @@ class DiscPrintingController extends AbstractActionController
             ];
             $dtoClass = PrintDiscsGoodsDto::class;
         }
-        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand(
-            $dtoClass::create($dataToSend)
-        );
-        /** @var \Common\Service\Cqrs\Response $response */
-        $response = $this->getServiceLocator()->get('CommandService')->send($command);
+
+        $response = $this->handleCommand($dtoClass::create($dataToSend));
 
         if ($response->isClientError()) {
             $errors = DiscPrintingMapper::mapFromErrors($form, $response->getResult()['messages']);
@@ -231,20 +216,17 @@ class DiscPrintingController extends AbstractActionController
         $startNumberEntered = null
     ) {
         $retv = [];
-        $queryToSend = $this->getServiceLocator()
-            ->get('TransferAnnotationBuilder')
-            ->createQuery(
-                DiscsNumberingQry::create(
-                    [
-                        'niFlag' => $niFlag,
-                        'operatorType' => $operatorType,
-                        'licenceType' => $licenceType,
-                        'discSequence' => $discSequence,
-                        'startNumberEntered' => $startNumberEntered
-                    ]
-                )
-            );
-        $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
+
+        $data = [
+            'niFlag' => $niFlag,
+            'operatorType' => $operatorType,
+            'licenceType' => $licenceType,
+            'discSequence' => $discSequence,
+            'startNumberEntered' => $startNumberEntered
+        ];
+
+        $response = $this->handleQuery(DiscsNumberingQry::create($data));
+
         if ($response->isServerError() || $response->isClientError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
@@ -287,18 +269,14 @@ class DiscPrintingController extends AbstractActionController
      */
     protected function getDiscPrefixes($niFlag, $operatorType, $licenceType)
     {
-        $queryToSend = $this->getServiceLocator()
-            ->get('TransferAnnotationBuilder')
-            ->createQuery(
-                DiscPrefixesQry::create(
-                    [
-                        'niFlag' => $niFlag,
-                        'operatorType' => $operatorType,
-                        'licenceType' => $licenceType
-                    ]
-                )
-            );
-        $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
+        $data = [
+            'niFlag' => $niFlag,
+            'operatorType' => $operatorType,
+            'licenceType' => $licenceType
+        ];
+
+        $response = $this->handleQuery(DiscPrefixesQry::create($data));
+
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
@@ -353,11 +331,7 @@ class DiscPrintingController extends AbstractActionController
             ];
         }
 
-        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand(
-            $dtoClass::create($data)
-        );
-        /** @var \Common\Service\Cqrs\Response $response */
-        $response = $this->getServiceLocator()->get('CommandService')->send($command);
+        $response = $this->handleCommand($dtoClass::create($data));
 
         if ($response->isClientError()) {
             foreach ($response->getResult()['messages'] as $message) {

@@ -90,16 +90,6 @@ abstract class AbstractDocumentController extends AbstractController
         }
     }
 
-    protected function getContentStore()
-    {
-        return $this->getServiceLocator()->get('ContentStore');
-    }
-
-    protected function getDocumentService()
-    {
-        return $this->getServiceLocator()->get('Document');
-    }
-
     protected function fetchDocData()
     {
         $response = $this->handleQuery(Letter::create(['id' => $this->params('doc')]));
@@ -114,11 +104,6 @@ abstract class AbstractDocumentController extends AbstractController
     protected function removeDocument($id)
     {
         return $this->handleCommand(DeleteDocument::create(['id' => $id]));
-    }
-
-    protected function formatFilename($input)
-    {
-        return str_replace([' ', '/'], '_', $input);
     }
 
     protected function redirectToDocumentRoute($type, $action, $routeParams, $ajax = false)
@@ -188,12 +173,5 @@ abstract class AbstractDocumentController extends AbstractController
         }
 
         return $data;
-    }
-
-    public function getDocumentTimestamp()
-    {
-        return $this->getServiceLocator()
-            ->get('Helper\Date')
-            ->getDate(self::DOCUMENT_TIMESTAMP_FORMAT);
     }
 }

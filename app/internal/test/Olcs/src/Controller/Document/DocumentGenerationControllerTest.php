@@ -600,11 +600,7 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
     {
         switch ($service) {
             case 'FileUploader':
-                $fileUploaderMock = $this->getMock('\stdClass', ['getUploader']);
-                $fileUploaderMock->expects($this->any())
-                    ->method('getUploader')
-                    ->will($this->returnValue($this->fileStoreMock));
-                return $fileUploaderMock;
+                return $this->fileStoreMock;
             case 'ContentStore':
                 return $this->contentStoreMock;
             case 'Document':
