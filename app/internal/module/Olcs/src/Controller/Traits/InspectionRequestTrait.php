@@ -10,6 +10,7 @@ namespace Olcs\Controller\Traits;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Zend\View\Model\ViewModel;
 use Common\Service\Entity\InspectionRequestEntityService;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Inspection Request Trait
@@ -33,7 +34,7 @@ trait InspectionRequestTrait
         $this->setUpOcListbox();
         return parent::add(
             $this->formClass,
-            $this->defaultData,
+            new AddFormDefaultData($this->defaultData),
             $this->createCommand,
             $this->mapperClass,
             $this->editViewTemplate,

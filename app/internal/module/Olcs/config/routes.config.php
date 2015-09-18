@@ -624,7 +624,6 @@ $routes = [
         'options' => [
             'route' => '/case/:case/processing/history',
             'defaults' => [
-                //'controller' => 'Crud\Case\EventHistoryController',
                 'controller' => 'CaseHistoryController',
                 'action' => 'index'
             ]
@@ -890,17 +889,6 @@ $routes = [
         ],
         'may_terminate' => true,
         'child_routes' => [
-            'event-history' => [
-                'type' => 'literal',
-                'options' => [
-                    'route' => '/event-history',
-                    'defaults' => [
-                        //'controller' => 'Crud\Licence\EventHistoryController',
-                        'controller' => 'LicenceHistoryController',
-                        'action' => 'index',
-                    ]
-                ],
-            ],
             'active-licence-check' => [
                 'type' => 'segment',
                 'options' => [
@@ -1444,7 +1432,17 @@ $routes = [
                                 'action' => 'index'
                             ]
                         ],
-                    ]
+                    ],
+                    'event-history' => [
+                        'type' => 'literal',
+                        'options' => [
+                            'route' => '/event-history',
+                            'defaults' => [
+                                'controller' => 'LicenceHistoryController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                 ]
             ],
             'fees' => [
@@ -2002,7 +2000,6 @@ $routes = [
                             'route' => '/event-history',
                             'defaults' => [
                                 'controller' => 'TransportManagerHistoryController',
-                                //'controller' => 'Crud\TransportManager\EventHistoryController',
                                 'action' => 'index',
                             ]
                         ],

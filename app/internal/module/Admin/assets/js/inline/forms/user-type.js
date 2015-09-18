@@ -16,7 +16,7 @@ $(function () {
         "licenceNumber": hasValue("userType", "userType", "self-service"),
         "partnerContactDetails": hasValue("userType", "userType", "partner")
       },
-      "userType\\[applicationTransportManagers\\]": {
+      "userType[applicationTransportManagers]": {
         "*": hasValue("userType", "userType", "transport-manager")
       }
     }

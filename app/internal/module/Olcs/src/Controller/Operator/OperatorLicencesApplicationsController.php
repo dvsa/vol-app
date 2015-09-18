@@ -58,7 +58,10 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
         /* @var $request \Zend\Http\Request */
         $request = $this->getRequest();
         // exclude certain licence statuses
-        $request->getQuery()->set('excludeStatuses', ['lsts_not_submitted', 'lsts_consideration', 'lsts_granted']);
+        $request->getQuery()->set(
+            'excludeStatuses',
+            ['lsts_not_submitted', 'lsts_consideration', 'lsts_granted', 'lsts_withdrawn', 'lsts_refused']
+        );
         // order by licNo
         $request->getQuery()->set('sort', 'inForceDate');
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Partner Controller
+ * Companies House Alert Controller
  */
 namespace Admin\Controller;
 
@@ -14,7 +14,7 @@ use Olcs\Form\Model\Form\CompaniesHouseAlertFilters as FilterForm;
 use Zend\View\Model\ViewModel;
 
 /**
- * Partner Controller
+ * Companies House Alert Controller
  */
 class CompaniesHouseAlertController extends AbstractInternalController implements
     PageLayoutProvider,

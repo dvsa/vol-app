@@ -217,10 +217,6 @@ class TaskController extends AbstractController
         $details->get('link')->setValue($url);
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
 
-        if ($this->isButtonPressed('close')) {
-            $type = 'Close';
-        }
-
         if (isset($data['assignedByUser']['contactDetails']['person']['familyName'])) {
             $person = $data['assignedByUser']['contactDetails']['person'];
             $data['assignedByUserName'] = $person['forename'] . ' ' . $person['familyName'];
