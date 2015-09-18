@@ -24,19 +24,6 @@ class TaskFormActions
     public $submit = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"close"})
-     * @Form\Options({
-     *     "label": "Close",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
-     * })
-     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
-     */
-    public $close = null;
-
-    /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
      * @Form\Options({
      *     "label": "Cancel",
