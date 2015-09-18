@@ -25,34 +25,4 @@ class User
      * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $contactDetailsId = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $contactDetailsVersion = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $personId = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $personVersion = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $contactType = null;
 }
