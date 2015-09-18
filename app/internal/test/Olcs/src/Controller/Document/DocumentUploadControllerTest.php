@@ -8,7 +8,7 @@
 namespace OlcsTest\Controller\Document;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-use Common\Service\File\Exception as FileException;
+use Dvsa\Olcs\Api\Service\File\Exception as FileException;
 
 /**
  * Document upload controller tests
@@ -508,11 +508,7 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
     {
         switch ($service) {
             case 'FileUploader':
-                $fileUploaderMock = $this->getMock('\stdClass', ['getUploader']);
-                $fileUploaderMock->expects($this->any())
-                    ->method('getUploader')
-                    ->will($this->returnValue($this->fileStoreMock));
-                return $fileUploaderMock;
+                return $this->fileStoreMock;
             case 'ContentStore':
                 return $this->contentStoreMock;
             case 'Document':

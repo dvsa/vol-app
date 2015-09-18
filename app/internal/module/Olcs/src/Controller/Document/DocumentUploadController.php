@@ -10,8 +10,8 @@
 namespace Olcs\Controller\Document;
 
 use Dvsa\Olcs\Transfer\Command\Document\CreateDocument;
+use Dvsa\Olcs\Transfer\Command\Document\Upload;
 use Zend\View\Model\ViewModel;
-use Common\Service\File\Exception as FileException;
 
 /**
  * Document Generation Controller
@@ -68,37 +68,18 @@ class DocumentUploadController extends AbstractDocumentController
             return $this->redirectToDocumentRoute($type, 'upload', $routeParams);
         }
 
-        $uploader = $this->getUploader();
-        $uploader->setFile($files['file']);
-
-        try {
-            $file = $uploader->upload();
-        } catch (FileException $ex) {
-            $this->addErrorMessage('The document store is unavailable. Please try again later');
-            return $this->redirectToDocumentRoute($type, 'upload', $routeParams);
-        }
-
-        $routeParams = array_merge(
-            $routeParams,
+        $data = array_merge(
+            $data,
             [
-                'doc' => $file->getIdentifier()
+                'filename' => $files['file']['name'],
+                'content' => base64_encode(file_get_contents($files['file']['tmp_name'])),
+                'description'   => $data['details']['description'],
+                'category'      => $data['details']['category'],
+                'subCategory'   => $data['details']['documentSubCategory'],
+                'isExternal'    => false,
+                'isReadOnly'    => true
             ]
         );
-
-        $fileName = $this->getDocumentTimestamp()
-            . '_' . $this->formatFilename($files['file']['name'])
-            . '.' . $file->getExtension();
-
-        $data = [
-            'identifier'    => $file->getIdentifier(),
-            'description'   => $data['details']['description'],
-            'filename'      => $fileName,
-            'category'      => $data['details']['category'],
-            'subCategory'   => $data['details']['documentSubCategory'],
-            'isExternal'    => false,
-            'isReadOnly'    => true,
-            'size'          => $file->getSize()
-        ];
 
         $key = $this->getRouteParamKeyForType($type);
         $data[$type] = $routeParams[$key];
@@ -124,11 +105,16 @@ class DocumentUploadController extends AbstractDocumentController
                 break;
         }
 
-        $response = $this->handleCommand(CreateDocument::create($data));
+        $response = $this->handleCommand(Upload::create($data));
 
-        if (!$response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnkownError();
-        }
+        $identifier = $response->getResult()['id']['identifier'];
+
+        $routeParams = array_merge(
+            $routeParams,
+            [
+                'doc' => $identifier
+            ]
+        );
 
         return $this->redirectToDocumentRoute($type, null, $routeParams);
     }
