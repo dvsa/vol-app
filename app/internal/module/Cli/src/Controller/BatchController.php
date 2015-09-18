@@ -42,22 +42,6 @@ class BatchController extends AbstractConsoleController
     }
 
     /**
-     * @return Zend\View\Model\ConsoleModel
-     */
-    public function processInboxDocumentsAction()
-    {
-        /* @var $batchService \Cli\Service\Processing\BatchInboxDocumentsProcessingService */
-        $batchService = $this->getServiceLocator()->get('BatchInboxDocuments');
-        if ($this->isVerbose()) {
-            $batchService->setConsoleAdapter($this->getConsole());
-        }
-
-        $result = $batchService->process();
-
-        return $this->handleExitStatus($result);
-    }
-
-    /**
      * Wrapper function to get service and set the console adapter on it if
      * we're in verbose mode
      *
