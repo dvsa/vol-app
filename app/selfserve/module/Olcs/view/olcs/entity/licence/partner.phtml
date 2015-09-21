@@ -49,6 +49,23 @@ if (!empty($operatingCentresTable)) {
 ?>
 
 <?php
+if (!empty($oppositionsTable)) {
+    ?>
+    <div class="read-only">
+        <div class="read-only__header">
+            <h4 id="operating-centres" class="read-only__title"><?php echo $this->translate
+                ('search-result-label-oppositions'); ?></h4>
+        </div>
+        <!-- read-only__header -->
+        <?php
+        echo $oppositionsTable;
+        ?>
+    </div>
+    <?php
+}
+?>
+
+<?php
 if (!empty($transportManagerTable)) {
     ?>
     <div class="read-only">

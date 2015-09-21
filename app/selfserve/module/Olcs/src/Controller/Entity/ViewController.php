@@ -176,6 +176,12 @@ class ViewController extends AbstractController
             $data['operatingCentres']
         );
 
+        // Using OCs again, just using different data
+        $tables['oppositionsTable'] = $tableService->buildTable(
+            'entity-view-oppositions-' . $this->userType,
+            $data['operatingCentres']
+        );
+
         if ($this->userType == self::USER_TYPE_PARTNER) {
 
             $tables['vehiclesTable'] = $tableService->buildTable(
