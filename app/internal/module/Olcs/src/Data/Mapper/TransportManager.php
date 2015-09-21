@@ -154,6 +154,7 @@ class TransportManager
         if (isset($data['version'])) {
             $tmDetails['version'] = $data['version'];
         }
+        $tmDetails['removedDate'] = $data['removedDate'];
         return [
             'transport-manager-details' => $tmDetails,
             'home-address' => $homeAddress,

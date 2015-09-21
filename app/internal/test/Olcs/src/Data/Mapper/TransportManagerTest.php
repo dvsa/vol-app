@@ -133,7 +133,8 @@ class TransportManagerTest extends MockeryTestCase
             ],
             'tmStatus' => [
                 'id' => 'status'
-            ]
+            ],
+            'removedDate' => 'REMOVED_DATE',
         ];
         $expected = [
             'transport-manager-details' => [
@@ -150,7 +151,8 @@ class TransportManagerTest extends MockeryTestCase
                 'birthDate'     => '2015-01-01',
                 'birthPlace'    => 'bp',
                 'title'         => 'title',
-                'emailAddress'  => 'email@address.com'
+                'emailAddress'  => 'email@address.com',
+                'removedDate' => 'REMOVED_DATE',
             ],
             'home-address' => [
                 'id'           => 1,
