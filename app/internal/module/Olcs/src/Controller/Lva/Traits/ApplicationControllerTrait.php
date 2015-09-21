@@ -86,16 +86,17 @@ trait ApplicationControllerTrait
      */
     protected function getSectionsForView()
     {
-        $applicationStatuses = $this->getCompletionStatuses($this->getApplicationId());
+        $applicationCompletion = $this->getApplicationData($this->getApplicationId());
+        $applicationStatuses = $applicationCompletion['applicationCompletion'];
         $filter = $this->getServiceLocator()->get('Helper\String');
 
         $sections = array(
             'overview' => array('class' => 'no-background', 'route' => 'lva-application', 'enabled' => true)
         );
 
-        $status = $this->getServiceLocator()->get('Entity\Application')->getStatus($this->getApplicationId());
+        $status = $applicationCompletion['status']['id'];
         // if status is valid then only show Overview section
-        if ($status === \Common\Service\Entity\ApplicationEntityService::APPLICATION_STATUS_VALID) {
+        if ($status === \Common\RefData::APPLICATION_STATUS_VALID) {
             return $sections;
         }
 
@@ -125,5 +126,30 @@ trait ApplicationControllerTrait
         }
 
         return $sections;
+    }
+
+    /**
+     * Get application data
+     *
+     * @param int $applicationId
+     *
+     * @return null|array
+     * @throws \RuntimeException
+     */
+    protected function getApplicationData($applicationId)
+    {
+        /* @var $response \Common\Service\Cqrs\Response */
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Application\Application::create(['id' => $applicationId])
+        );
+
+        if ($response->isNotFound()) {
+            return null;
+        }
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Failed to get Application data');
+        }
+
+        return $response->getResult();
     }
 }
