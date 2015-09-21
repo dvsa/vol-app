@@ -1037,7 +1037,7 @@ class ApplicationControllerTest extends MockeryTestCase
     {
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
-        $data = ['details' => ['paymentType' => 'INVALID']];
+        $data = ['details' => ['received' => '10', 'paymentType' => 'INVALID']];
         $this->setPost($data);
 
         $form = m::mock()

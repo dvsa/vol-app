@@ -354,15 +354,17 @@ trait FeesActionTrait
                     ->remove($form, 'details->received');
             }
 
-            $confirmMessage = $this->getConfirmPaymentMessage($feeData, $data);
-            $confirm = $this->confirm($confirmMessage, false, serialize($data));
-
             $form->setData($data);
 
             if ($form->isValid()) {
 
-                if ($confirm instanceof ViewModel && $this->shouldConfirmPayment($feeData, $data)) {
-                    return $this->renderView($confirm);
+                if ($this->shouldConfirmPayment($feeData, $data)) {
+                    $confirmMessage = $this->getConfirmPaymentMessage($feeData, $data);
+                    $confirm = $this->confirm($confirmMessage, false, serialize($data));
+
+                    if ($confirm instanceof ViewModel) {
+                        return $this->renderView($confirm);
+                    }
                 }
 
                 return $this->initiatePaymentRequest($feeIds, $form->getData()['details']);
