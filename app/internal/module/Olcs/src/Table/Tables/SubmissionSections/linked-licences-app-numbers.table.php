@@ -52,6 +52,7 @@ return array(
             'name' => 'trailersInPossession'
         ),
         array(
+            'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',

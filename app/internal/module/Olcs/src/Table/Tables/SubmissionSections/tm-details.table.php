@@ -54,7 +54,8 @@ return array(
             'formatter' => 'Address',
             'name' => 'address'
         ),
-       array(
+        array(
+            'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',

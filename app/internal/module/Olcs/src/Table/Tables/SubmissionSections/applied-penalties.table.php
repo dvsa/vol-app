@@ -45,6 +45,7 @@ return array(
             'name' => 'imposed'
         ),
         array(
+            'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',

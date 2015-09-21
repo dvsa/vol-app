@@ -59,6 +59,7 @@ return array(
             'name' => 'vrm'
         ),
         array(
+            'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',
