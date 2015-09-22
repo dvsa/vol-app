@@ -12,10 +12,13 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'primary'),
-                'delete' => array('class' => 'secondary', 'requireRows' => true),
+                'add' => array('class' => 'primary', 'id' => 'addMedium'),
+                'delete' => array('class' => 'secondary', 'requireRows' => true, 'id' => 'deleteMedium'),
                 'transfer' => array(
-                    'label' => 'Transfer', 'class' => 'secondary js-require--multiple', 'requireRows' => true
+                    'label' => 'Transfer',
+                    'class' => 'secondary js-require--multiple',
+                    'requireRows' => true,
+                    'id' => 'transferMedium'
                 )
             )
         ),
