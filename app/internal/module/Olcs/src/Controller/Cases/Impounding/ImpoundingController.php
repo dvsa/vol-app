@@ -102,7 +102,8 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
      * Command is required, as are itemParams from above
      */
     protected $deleteCommand = DeleteDto::class;
-    protected $deleteModalTitle = 'internal.delete-action-trait.title';
+    protected $deleteParams = ['id' => 'impounding'];
+    protected $deleteModalTitle = 'Delete Impounding';
 
     /**
      * Any inline scripts needed in this section

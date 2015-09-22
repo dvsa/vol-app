@@ -217,10 +217,6 @@ class TaskController extends AbstractController
         $details->get('link')->setValue($url);
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
 
-        if ($this->isButtonPressed('close')) {
-            $type = 'Close';
-        }
-
         if (isset($data['assignedByUser']['contactDetails']['person']['familyName'])) {
             $person = $data['assignedByUser']['contactDetails']['person'];
             $data['assignedByUserName'] = $person['forename'] . ' ' . $person['familyName'];
@@ -526,11 +522,15 @@ class TaskController extends AbstractController
 
         switch ($taskType) {
             case 'transport manager':
-                return ['tm', $taskDetails['linkId'], $taskDetails['linkDisplay']];
+                return ['tm', $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
             case 'bus registration':
-                return ['busreg', $taskDetails['linkId'], $taskDetails['linkDisplay']];
+                return ['busreg', $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
+            case 'irfo organisation':
+                return ['organisation', $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
+            case 'submission':
+                return ['submission', $taskDetails['linkId'], $taskDetails['linkDisplay'], $taskDetails['caseId']];
             default:
-                return [$taskType, $taskDetails['linkId'], $taskDetails['linkDisplay']];
+                return [$taskType, $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
         }
     }
 
@@ -541,11 +541,11 @@ class TaskController extends AbstractController
      */
     protected function getLinkForTaskForm()
     {
-        list($taskType, $taskTypeId, $linkDisplay) = $this->getTaskTypeDetails();
+        list($taskType, $taskTypeId, $linkDisplay, $caseId) = $this->getTaskTypeDetails();
 
         $method = 'getLinkForTaskFormFor' . ucfirst($taskType);
         if (method_exists($this, $method)) {
-            return $this->$method($taskTypeId, $linkDisplay);
+            return $this->$method($taskTypeId, $linkDisplay, $caseId);
         }
 
         return '';
@@ -607,6 +607,16 @@ class TaskController extends AbstractController
     protected function getLinkForTaskFormForOrganisation($taskTypeId, $linkDisplay)
     {
         $url = $this->url()->fromRoute('operator', ['organisation' => $taskTypeId]);
+
+        return $this->getLinkMarkup($url, $linkDisplay, $taskTypeId);
+    }
+
+    protected function getLinkForTaskFormForSubmission($taskTypeId, $linkDisplay, $caseId)
+    {
+        $url = $this->url()->fromRoute(
+            'submission',
+            ['submission' => $taskTypeId, 'case' => $caseId, 'action' => 'details']
+        );
 
         return $this->getLinkMarkup($url, $linkDisplay, $taskTypeId);
     }

@@ -10,7 +10,6 @@ namespace Olcs\Controller\Document;
 use Dvsa\Olcs\Transfer\Command\Document\PrintLetter;
 use Dvsa\Olcs\Transfer\Command\Document\UpdateDocumentLinks;
 use Zend\View\Model\ViewModel;
-use Common\Service\File\Exception as FileException;
 
 /**
  * Document Upload Controller

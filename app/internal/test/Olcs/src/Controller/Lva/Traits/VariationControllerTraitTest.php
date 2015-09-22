@@ -47,12 +47,6 @@ class VariationControllerTraitTest extends MockeryTestCase
             ]
         ];
 
-        $mockStatuses = [
-            'type_of_licence' => VariationCompletionEntityService::STATUS_UPDATED,
-            'business_type' => VariationCompletionEntityService::STATUS_UNCHANGED,
-            'business_details' => VariationCompletionEntityService::STATUS_REQUIRES_ATTENTION,
-        ];
-
         $expected = [
             'overview' => [
                 'class' => 'no-background',
@@ -75,23 +69,22 @@ class VariationControllerTraitTest extends MockeryTestCase
             ]
         ];
 
+        $applicationData = [
+            'applicationCompletion' => [
+                'typeOfLicenceStatus' => VariationCompletionEntityService::STATUS_UPDATED,
+                'businessTypeStatus' => VariationCompletionEntityService::STATUS_UNCHANGED,
+                'businessDetailsStatus' => VariationCompletionEntityService::STATUS_REQUIRES_ATTENTION,
+            ],
+            'status' => [
+                'id' => 'XXX'
+            ]
+        ];
+
+        $this->setupGetApplicationData($applicationData);
+
         // Setup
         $this->sut->setApplicationId($id);
         $this->sut->setAccessibleSections($accessibleSections);
-
-        // Mocks
-        $mockVariationCompletion = m::mock();
-        $this->sm->setService('Entity\VariationCompletion', $mockVariationCompletion);
-
-        $mockApplicationEntityService = m::mock();
-        $this->sm->setService('Entity\Application', $mockApplicationEntityService);
-
-        // Expectations
-        $mockVariationCompletion->shouldReceive('getCompletionStatuses')
-            ->with($id)
-            ->andReturn($mockStatuses);
-
-        $mockApplicationEntityService->shouldReceive('getStatus')->with($id)->once()->andReturn(false);
 
         $response = $this->sut->callGetSectionsForView();
 
@@ -114,12 +107,6 @@ class VariationControllerTraitTest extends MockeryTestCase
             ]
         ];
 
-        $mockStatuses = [
-            'type_of_licence' => VariationCompletionEntityService::STATUS_UPDATED,
-            'business_type' => VariationCompletionEntityService::STATUS_UNCHANGED,
-            'business_details' => VariationCompletionEntityService::STATUS_REQUIRES_ATTENTION,
-        ];
-
         $expected = [
             'overview' => [
                 'class' => 'no-background',
@@ -127,27 +114,42 @@ class VariationControllerTraitTest extends MockeryTestCase
             ],
         ];
 
+        $applicationData = [
+            'applicationCompletion' => [
+                'typeOfLicenceStatus' => VariationCompletionEntityService::STATUS_UPDATED,
+                'businessTypeStatus' => VariationCompletionEntityService::STATUS_UNCHANGED,
+                'businessDetailsStatus' => VariationCompletionEntityService::STATUS_REQUIRES_ATTENTION,
+            ],
+            'status' => [
+                'id' => \Common\RefData::APPLICATION_STATUS_VALID
+            ]
+        ];
+
+        $this->setupGetApplicationData($applicationData);
+
         // Setup
         $this->sut->setApplicationId($id);
         $this->sut->setAccessibleSections($accessibleSections);
 
-        // Mocks
-        $mockVariationCompletion = m::mock();
-        $this->sm->setService('Entity\VariationCompletion', $mockVariationCompletion);
-
-        $mockApplicationEntityService = m::mock();
-        $this->sm->setService('Entity\Application', $mockApplicationEntityService);
-
-        // Expectations
-        $mockVariationCompletion->shouldReceive('getCompletionStatuses')
-            ->with($id)
-            ->andReturn($mockStatuses);
-
-        $mockApplicationEntityService->shouldReceive('getStatus')->with($id)->once()
-            ->andReturn(\Common\Service\Entity\ApplicationEntityService::APPLICATION_STATUS_VALID);
-
         $response = $this->sut->callGetSectionsForView();
 
         $this->assertEquals($expected, $response);
+    }
+
+    /**
+     * Setup a mock to handle getting application Data
+     *
+     * @param array $applicationData
+     */
+    protected function setupGetApplicationData($applicationData)
+    {
+        $mockResponse = m::mock();
+        $mockResponse->shouldReceive('isNotFound')->andReturn(false);
+        $mockResponse->shouldReceive('isOk')->andReturn(true);
+        $mockResponse->shouldReceive('getResult')->andReturn($applicationData);
+
+        $mockPluginManager = m::mock(\Zend\Mvc\Controller\PluginManager::class)->makePartial();
+        $this->sut->setPluginManager($mockPluginManager);
+        $mockPluginManager->shouldReceive('get')->with('handleQuery', null)->andReturn($mockResponse);
     }
 }

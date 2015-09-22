@@ -39,24 +39,9 @@ class IrfoGvPermit implements MapperInterface
             $formData['fields']['yearRequired'] = $now->format('Y');
         }
 
-        // set status for HTML element
-        $formData['fields']['irfoPermitStatusHtml']
-            = (!empty($data['irfoPermitStatus']['description'])) ? $data['irfoPermitStatus']['description'] : 'Pending';
-
-        if (!empty($formData['fields']['createdOn'])) {
-            // format createOn date
-            $createdOn = new \DateTime($formData['fields']['createdOn']);
-            $formData['fields']['createdOnHtml'] = $createdOn->format('d/m/Y');
-        }
-
         if (empty($formData['fields']['inForceDate'])) {
             // defaults to now
             $formData['fields']['inForceDate'] = $now;
-        }
-
-        if (!empty($formData['fields']['id'])) {
-            // set id for HTML element
-            $formData['fields']['idHtml'] = $formData['fields']['id'];
         }
 
         return $formData;

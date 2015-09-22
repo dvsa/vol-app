@@ -133,7 +133,10 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
 
     public function alterFormForIndex($form, $data)
     {
-        if (isset($data['removedDate']) && !is_null($data['removedDate'])) {
+        // if TM has removedDate then make the form readonly
+        if (isset($data['transport-manager-details']['removedDate']) &&
+            $data['transport-manager-details']['removedDate'] !== null
+        ) {
             $form->setOption('readonly', true);
         }
 

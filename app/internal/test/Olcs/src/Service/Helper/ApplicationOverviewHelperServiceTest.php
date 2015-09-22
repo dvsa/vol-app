@@ -44,7 +44,12 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
         $lva = 'application';
 
         // mocks
-        $licenceOverviewHelperMock = m::mock();
+        $licenceOverviewHelperMock = m::mock()
+            ->shouldReceive('hasAdminUsers')
+            ->with($overviewData['licence'])
+            ->andReturn(true)
+            ->once()
+            ->getMock();
         $urlHelperMock = m::mock();
         $this->sm->shouldReceive('get')->with('Helper\LicenceOverview')->andReturn($licenceOverviewHelperMock);
         $this->sm->shouldReceive('get')->with('Helper\Url')->andReturn($urlHelperMock);
@@ -176,7 +181,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'outOfRepresentation' => null,
                     'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
                     'receivesMailElectronically' => 'Y',
-                    'registeredForSelfService' => null,
+                    'registeredForSelfService' => 'Yes',
                     'licenceGracePeriods' => 'None (<a href="GRACE_PERIOD_URL">manage</a>)',
                     'outOfOpposition' => '1966-06-21',
                     'outOfRepresentation' => '1996-07-02',
@@ -267,7 +272,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'outOfRepresentation' => null,
                     'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
                     'receivesMailElectronically' => 'N',
-                    'registeredForSelfService' => null,
+                    'registeredForSelfService' => 'Yes',
                     'licenceGracePeriods' => 'Active (<a href="GRACE_PERIOD_URL">manage</a>)',
                     'outOfOpposition' => 'Not applicable',
                     'outOfRepresentation' => 'Not applicable',

@@ -6,8 +6,10 @@
 namespace Olcs\Controller\Operator;
 
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoGvPermit as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoGvPermit as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\ResetIrfoGvPermit as ResetDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\ApproveIrfoGvPermit as ApproveDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\WithdrawIrfoGvPermit as WithdrawDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\RefuseIrfoGvPermit as RefuseDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermit as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermitList as ListDto;
 use Olcs\Controller\AbstractInternalController;
@@ -38,11 +40,6 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
         'addAction' => ['forms/irfo-gv-permit'],
-        'editAction' => ['forms/irfo-gv-permit'],
-    ];
-
-    protected $crudConfig = [
-        'reset' => ['requireRows' => true],
     ];
 
     /*
@@ -70,6 +67,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
+    protected $detailsViewTemplate = 'pages/operator/irfo-gv-permit';
     protected $itemDto = ItemDto::class;
 
     /**
@@ -78,7 +76,6 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
      * itemDto (see above) is also required.
      */
     protected $formClass = Form::class;
-    protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
 
     /**
@@ -102,7 +99,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
         'irfoPermitStatus' => 'irfo_perm_s_pending'
     ];
 
-    public function detailsAction()
+    public function editAction()
     {
         return $this->notFoundAction();
     }
@@ -116,6 +113,30 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     {
         return $this->process(
             ResetDto::class,
+            $this->getDefaultData()
+        );
+    }
+
+    public function approveAction()
+    {
+        return $this->process(
+            ApproveDto::class,
+            $this->getDefaultData()
+        );
+    }
+
+    public function withdrawAction()
+    {
+        return $this->process(
+            WithdrawDto::class,
+            $this->getDefaultData()
+        );
+    }
+
+    public function refuseAction()
+    {
+        return $this->process(
+            RefuseDto::class,
             $this->getDefaultData()
         );
     }

@@ -38,6 +38,21 @@ class NewApplication
     public $trafficArea = null;
 
     /**
+     * @Form\Type("Radio")
+     * @Form\Options({
+     *      "label": "Method of application",
+     *      "value_options":{
+     *          "applied_via_post":"Post",
+     *          "applied_via_phone":"Phone"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
+     *      }
+     * })
+     */
+    protected $appliedVia = null;
+
+    /**
      * @Form\Name("form-actions")
      * @Form\ComposedObject("Common\Form\Model\Fieldset\CreateButtons")
      */

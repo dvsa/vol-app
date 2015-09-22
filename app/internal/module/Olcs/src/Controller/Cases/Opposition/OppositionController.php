@@ -98,6 +98,8 @@ class OppositionController extends AbstractInternalController implements
      * Command is required, as are itemParams from above
      */
     protected $deleteCommand = DeleteDto::class;
+    protected $deleteParams = ['id' => 'opposition'];
+    protected $deleteModalTitle = 'Delete Opposition';
 
     /**
      * Any inline scripts needed in this section

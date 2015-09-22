@@ -82,7 +82,8 @@ class OperatorController extends OlcsController\CrudAbstract implements
                 [
                     'organisation' => $this->params('organisation'),
                     'receivedDate' => $data['receivedDate'],
-                    'trafficArea' => $data['trafficArea']
+                    'trafficArea' => $data['trafficArea'],
+                    'appliedVia' => $data['appliedVia']
                 ]
             );
 
@@ -154,6 +155,9 @@ class OperatorController extends OlcsController\CrudAbstract implements
             $data = (array)$request->getPost();
         } else {
             $organisationData = $this->getOrganisation($organisationId);
+            if (!$organisationData) {
+                return $this->notFoundAction();
+            }
 
             $data = ['fromOperatorName' => $organisationData['name']];
         }
@@ -163,6 +167,7 @@ class OperatorController extends OlcsController\CrudAbstract implements
         $form = $formHelper->createForm('OperatorMerge');
         $form->setData($data);
         $formHelper->setFormActionFromRequest($form, $request);
+        $form->get('toOperatorId')->setAttribute('data-lookup-url', $this->url()->fromRoute('operator-lookup'));
 
         if ($request->isPost() && $form->isValid()) {
             $toOperatorId = (int) $form->getData()['toOperatorId'];
@@ -207,7 +212,9 @@ class OperatorController extends OlcsController\CrudAbstract implements
         $response = $this->handleQuery(
             \Dvsa\Olcs\Transfer\Query\Organisation\Organisation::create(['id' => $id])
         );
-
+        if ($response->isNotFound()) {
+            return null;
+        }
         if (!$response->isOk()) {
             throw new \RuntimeException('Error getting organisation');
         }
@@ -222,20 +229,19 @@ class OperatorController extends OlcsController\CrudAbstract implements
      */
     public function lookupAction()
     {
-        $organisationId = (int) $this->params()->fromRoute('organisation');
+        $organisationId = (int) $this->params()->fromQuery('organisation');
         $view = new \Zend\View\Model\JsonModel();
 
-        try {
-            $data = $this->getOrganisation($organisationId);
-            $view->setVariables(
-                [
-                    'id' => $data['id'],
-                    'name' => $data['name'],
-                ]
-            );
-        } catch (\RuntimeException $e) {
-            $this->getResponse()->setStatusCode(404);
+        $data = $this->getOrganisation($organisationId);
+        if (!$data) {
+            return $this->notFoundAction();
         }
+        $view->setVariables(
+            [
+                'id' => $data['id'],
+                'name' => $data['name'],
+            ]
+        );
 
         return $view;
     }

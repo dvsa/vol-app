@@ -35,8 +35,7 @@ trait DocumentActionTrait
                 $data = $response->getResult();
 
                 $docParams = [
-                    'file' => $data['identifier'],
-                    'name' => $data['filename']
+                    'identifier' => base64_encode($data['identifier'])
                 ];
 
                 $currentUrl = $this->url()->fromRoute(null, [], [], true);

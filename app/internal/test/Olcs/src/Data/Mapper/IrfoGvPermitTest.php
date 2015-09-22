@@ -35,7 +35,6 @@ class IrfoGvPermitTest extends MockeryTestCase
                 [
                     'fields' => [
                         'yearRequired' => $now->format('Y'),
-                        'irfoPermitStatusHtml' => 'Pending',
                         'inForceDate' => $now,
                     ]
                 ]
@@ -59,11 +58,8 @@ class IrfoGvPermitTest extends MockeryTestCase
                         'organisation' => 100,
                         'yearRequired' => '2010',
                         'irfoPermitStatus' => 'other_status',
-                        'irfoPermitStatusHtml' => 'other status',
                         'createdOn' => '2015-05-05',
-                        'createdOnHtml' => '05/05/2015',
                         'inForceDate' => '2015-05-20',
-                        'idHtml' => 987,
                     ],
                 ]
             ]

@@ -83,7 +83,6 @@ class PublicInquiryRegisterTmDecision extends CaseBase
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
      * @Form\Options({"label": "Number of witnesses"})
      * @Form\Type("Text")
-     * @Form\Required(false)
      * @Form\Validator({"name":"Digits"})
      */
     public $witnesses = null;
@@ -104,14 +103,14 @@ class PublicInquiryRegisterTmDecision extends CaseBase
     public $notificationDate = null;
 
     /**
-     * @Form\Attributes({"id":"definition","placeholder":"","class":"chosen-select-large js-definition-source",
-     *     "multiple":true})
+     * @Form\Attributes({"id":"definition","placeholder":"","class":"chosen-select-large js-definition-source"})
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
      *     "service_name": "\Olcs\Service\Data\PublicInquiryDefinition",
-     *     "use_groups": true
+     *     "use_groups": true,
+     *     "empty_option": "Add definition option"
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(false)
@@ -119,7 +118,7 @@ class PublicInquiryRegisterTmDecision extends CaseBase
     public $definition = null;
 
     /**
-     * @Form\Attributes({"id":"decisionNotes","class":"extra-long    js-definition-target"})
+     * @Form\Attributes({"id":"decisionNotes","class":"extra-long js-definition-target"})
      * @Form\Options({
      *     "label": "Details to be published",
      *     "label_attributes": {
