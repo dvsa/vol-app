@@ -257,6 +257,7 @@ trait FeesActionTrait
             'outstanding' => $fee['outstanding'],
             'status' => isset($fee['feeStatus']['description']) ? $fee['feeStatus']['description'] : '',
             'fee' => $fee,
+            'title' => 'internal.fee-details.title',
         ];
 
         $this->loadScripts(['forms/fee-details']);
@@ -307,6 +308,7 @@ trait FeesActionTrait
             'table' => $table,
             'transaction' => $transaction,
             'backLink' => $backLink,
+            'title' => 'internal.transaction-details.title',
         ];
 
         $view = new ViewModel($viewParams);
