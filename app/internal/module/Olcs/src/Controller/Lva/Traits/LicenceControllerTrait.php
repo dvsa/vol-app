@@ -14,7 +14,7 @@ use Common\View\Model\Section;
 use Olcs\View\Model\Licence\SectionLayout;
 use Olcs\View\Model\Licence\Layout;
 use Olcs\View\Model\Licence\LicenceLayout;
-use Common\Service\Entity\LicenceEntityService;
+use Common\RefData;
 use Olcs\Controller\Traits;
 use Zend\Session\Container;
 
@@ -129,9 +129,14 @@ trait LicenceControllerTrait
      */
     protected function getHeaderParams()
     {
-        $data = $this->getServiceLocator()->get('Entity\Licence')->getHeaderParams($this->getLicenceId());
 
-        if ($data['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Licence\Licence::create(['id' => $this->getLicenceId()])
+        );
+
+        $data = $response->getResult();
+
+        if ($data['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
         }
 
