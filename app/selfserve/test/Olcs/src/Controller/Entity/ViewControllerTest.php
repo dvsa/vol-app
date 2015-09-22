@@ -84,6 +84,10 @@ class ViewControllerTest extends MockeryTestCase
             ->with('entity-view-operating-centres-anonymous', $mockResult['operatingCentres'])
             ->andReturn('operatingCentresTableResult');
 
+        $mockTable->shouldReceive('buildTable')
+            ->with('entity-view-oppositions-anonymous', $mockResult['operatingCentres'])
+            ->andReturn('operatingCentresTableResult2');
+
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
@@ -167,6 +171,10 @@ class ViewControllerTest extends MockeryTestCase
         $mockTable->shouldReceive('buildTable')
             ->with('entity-view-operating-centres-partner', $mockResult['operatingCentres'])
             ->andReturn('operatingCentresTableResult');
+
+        $mockTable->shouldReceive('buildTable')
+            ->with('entity-view-oppositions-partner', $mockResult['operatingCentres'])
+            ->andReturn('operatingCentresTableResult2');
 
         $mockTable->shouldReceive('buildTable')
             ->with('entity-view-vehicles-partner', $mockResult['vehicles'])
