@@ -51,6 +51,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
             'previousLicenceNumber'     => $previousEntityData['licence'],
             'isPsv'                     => $isPsv,
             'receivesMailElectronically' => $licence['organisation']['allowEmail'],
+            'numberOfBusRegistrations'  => $licence['busCount'],
 
             // out of scope for OLCS-5209
             'registeredForSelfService'   => null,
