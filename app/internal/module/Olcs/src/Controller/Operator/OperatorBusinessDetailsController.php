@@ -147,7 +147,8 @@ class OperatorBusinessDetailsController extends OperatorController
         $response = $this->handleCommand($dto);
 
         if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('The operator has been updated successfully');
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addSuccessMessage('The operator has been updated successfully');
         } else {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnknownError();
         }
@@ -224,7 +225,7 @@ class OperatorBusinessDetailsController extends OperatorController
 
             $label = $translation->translateReplace('BUS_TYP_REQ_CONF', [implode('', $labels)]);
 
-            return $this->confirm($label, false, json_encode($dto->getArrayCopy()));
+            return $this->confirm($label, $this->getRequest()->isXmlHttpRequest(), json_encode($dto->getArrayCopy()));
         }
 
         if ($response->isClientError()) {
