@@ -49,7 +49,7 @@ class PartnerController extends AbstractInternalController implements
 
     public function getPageLayout()
     {
-        return 'layout/admin-partner-section';
+        return 'layout/admin-user-management-section';
     }
 
     public function getPageInnerLayout()

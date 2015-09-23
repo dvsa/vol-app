@@ -12,12 +12,10 @@ $(function () {
         "*": true,
         "team": hasValue("userType", "userType", "internal"),
         "localAuthority": hasValue("userType", "userType", "local-authority"),
+        "#applicationTransportManagers": hasValue("userType", "userType", "transport-manager"),
         "transportManager": hasValue("userType", "userType", "transport-manager"),
-        "licenceNumber": hasValue("userType", "userType", "self-service"),
+        "licenceNumber": hasValue("userType", "userType", "operator"),
         "partnerContactDetails": hasValue("userType", "userType", "partner")
-      },
-      "userType[applicationTransportManagers]": {
-        "*": hasValue("userType", "userType", "transport-manager")
       }
     }
   });

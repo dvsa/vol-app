@@ -147,6 +147,8 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     protected $crudConfig = [];
 
+    protected $persist = true;
+
     /**
      * Variables for controlling the delete action.
      * Command is required, as are itemParams from above
@@ -469,7 +471,7 @@ abstract class AbstractInternalController extends AbstractActionController
         $hasProcessed =
             $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
-        if (!$hasProcessed && $this->getRequest()->isPost() && $form->isValid()) {
+        if (!$hasProcessed && $this->persist && $this->getRequest()->isPost() && $form->isValid()) {
             $data = ArrayUtils::merge($initialData, $form->getData());
             $commandData = $mapperClass::mapFromForm($data);
             $response = $this->handleCommand($createCommand::create($commandData));
@@ -541,7 +543,7 @@ abstract class AbstractInternalController extends AbstractActionController
         $hasProcessed =
             $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
-        if (!$hasProcessed && $request->isPost() && $form->isValid()) {
+        if (!$hasProcessed && $this->persist && $request->isPost() && $form->isValid()) {
             $commandData = $mapperClass::mapFromForm($form->getData());
             $response = $this->handleCommand($updateCommand::create($commandData));
 
