@@ -1,3 +1,13 @@
+<?php
+if (isset($title)) {
+    ?>
+    <div class="content__header js-title">
+        <h3><?php echo $this->translate($title); ?></h3>
+    </div>
+    <?php
+}
+?>
+
 <div class="js-body__main">
 <?php
 

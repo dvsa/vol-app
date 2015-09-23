@@ -514,7 +514,7 @@ class TaskController extends AbstractController
                 throw new BadRequestException('No task id provided');
             }
 
-            return [$taskType, $this->params('typeId'), null];
+            return [$taskType, $this->params('typeId'), null, null];
         }
 
         $taskDetails = $this->getTaskDetails($taskId);
