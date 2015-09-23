@@ -43,14 +43,13 @@ class SubmissionSectionTable extends AbstractHelper
      * @param bool $readonly
      * @return string
      */
-    public function __invoke($submissionSection = '', $data = array(), $readonly = false)
+    public function __invoke($submissionSection = '', $data = array(), $readonly = false, $submissionVersion = null)
     {
-
         if (empty($submissionSection)) {
             return '';
         }
 
-        return $this->render($submissionSection, $data, $readonly);
+        return $this->render($submissionSection, $data, $readonly, $submissionVersion);
     }
 
     /**
@@ -59,12 +58,13 @@ class SubmissionSectionTable extends AbstractHelper
      * @param String $submissionSection
      * @param Array $data
      * @param bool $readonly
+     * @param int $submissionVersion
      *
      * @return string
      */
-    public function render($submissionSection, $data, $readonly)
+    public function render($submissionSection, $data, $readonly, $submissionVersion = null)
     {
-        $params = [];
+        $params = ['submissionVersion' => $submissionVersion];
 
         $tableConfig = isset($this->tableMap[$submissionSection]) ?
             $this->tableMap[$submissionSection] : 'SubmissionSections/' . $submissionSection;

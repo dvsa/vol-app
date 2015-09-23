@@ -79,32 +79,23 @@ trait VariationControllerTrait
     }
 
     /**
-     * Get application status
-     *
-     * @params int $applicationId
-     * @return array
-     */
-    protected function getCompletionStatuses($applicationId)
-    {
-        return $this->getServiceLocator()->get('Entity\VariationCompletion')->getCompletionStatuses($applicationId);
-    }
-
-    /**
      * Get the sections for the view
      *
      * @return array
      */
     protected function getSectionsForView()
     {
-        $variationStatuses = $this->getCompletionStatuses($this->getApplicationId());
+        $applicationData = $this->getApplicationData($this->getApplicationId());
+        $variationStatuses = $applicationData['applicationCompletion'];
+        $filter = $this->getServiceLocator()->get('Helper\String');
 
         $sections = array(
             'overview' => array('class' => 'no-background', 'route' => 'lva-variation')
         );
 
-        $status = $this->getServiceLocator()->get('Entity\Application')->getStatus($this->getApplicationId());
+        $status = $applicationData['status']['id'];
         // if status is valid then only show Overview section
-        if ($status === \Common\Service\Entity\ApplicationEntityService::APPLICATION_STATUS_VALID) {
+        if ($status === \Common\RefData::APPLICATION_STATUS_VALID) {
             return $sections;
         }
 
@@ -112,8 +103,10 @@ trait VariationControllerTrait
 
         foreach ($accessibleSections as $section => $settings) {
 
+            $statusIndex = lcfirst($filter->underscoreToCamel($section)) . 'Status';
+
             $class = '';
-            switch ($variationStatuses[$section]) {
+            switch ($variationStatuses[$statusIndex]) {
                 case VariationCompletionEntityService::STATUS_UPDATED:
                     $class = 'edited';
                     break;

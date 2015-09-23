@@ -206,13 +206,21 @@ class ConditionUndertakingController extends AbstractInternalController implemen
         return $caseData;
     }
 
+    /**
+     * Extracts the addresses for each operating centre and formats them using the address view helper (not ideal)
+     *
+     * @param $caseData
+     * @return array
+     */
     private function getOperatingCentreListOptions($caseData)
     {
         $optionList = [];
         if (isset($caseData['licence']['operatingCentres'])) {
+            $viewHelperManager = $this->getServiceLocator()->get('ViewHelperManager');
+            $addressViewHelper = $viewHelperManager->get('Address');
             foreach ($caseData['licence']['operatingCentres'] as $operatingCentreDetails) {
                 $optionList[$operatingCentreDetails['operatingCentre']['id']] =
-                    TableAddressFormatter::format($operatingCentreDetails['operatingCentre']['address']);
+                    $addressViewHelper($operatingCentreDetails['operatingCentre']['address']);
             }
         }
 

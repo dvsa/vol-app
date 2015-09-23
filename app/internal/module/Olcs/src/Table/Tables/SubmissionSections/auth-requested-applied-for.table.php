@@ -53,6 +53,7 @@ return array(
             'name' => 'requestedTrailerAuthorisation'
         ),
         array(
+            'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',

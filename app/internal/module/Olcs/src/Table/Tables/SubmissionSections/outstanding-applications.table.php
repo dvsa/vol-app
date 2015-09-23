@@ -11,7 +11,7 @@ return array(
     ),
     'settings' => array(
         'crud' => array(
-            'formName' => 'oppositions',
+            'formName' => 'outstanding-applications',
             'actions' => array(
                 'refresh-table' => array('label' => 'Refresh table', 'class' => 'secondary', 'requireRows' => false),
                 'delete-row' => array('label' => 'Delete row', 'class' => 'secondary', 'requireRows' => true)
@@ -62,6 +62,7 @@ return array(
             }
         ),
         array(
+            'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',

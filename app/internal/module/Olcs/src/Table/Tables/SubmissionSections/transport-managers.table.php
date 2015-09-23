@@ -55,6 +55,7 @@ return array(
             'name' => 'tmType'
         ),
         array(
+            'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',

@@ -52,9 +52,9 @@ class LicenceOverviewHelperService extends AbstractHelperService
             'isPsv'                     => $isPsv,
             'receivesMailElectronically' => $licence['organisation']['allowEmail'],
             'numberOfBusRegistrations'  => $licence['busCount'],
-
             // out of scope for OLCS-5209
             'registeredForSelfService'   => null,
+            'registeredForSelfService'   => $this->hasAdminUsers($licence) ? 'Yes' : 'No',
         ];
 
         return $viewData;
@@ -209,5 +209,17 @@ class LicenceOverviewHelperService extends AbstractHelperService
         $url = $urlHelper->fromRoute('licence/grace-periods', ['licence' => $licence['id']]);
 
         return sprintf('%s (<a href="%s">manage</a>)', $status, $url);
+    }
+
+    public function hasAdminUsers($licence)
+    {
+        if (isset($licence['organisation']['organisationUsers'])) {
+            foreach ($licence['organisation']['organisationUsers'] as $user) {
+                if ($user['isAdministrator'] === 'Y') {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

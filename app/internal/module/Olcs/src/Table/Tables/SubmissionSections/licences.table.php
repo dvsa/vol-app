@@ -48,6 +48,7 @@ return array(
             'name' => 'status',
         ),
         array(
+            'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',

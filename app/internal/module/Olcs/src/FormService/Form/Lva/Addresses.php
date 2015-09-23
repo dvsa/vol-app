@@ -21,6 +21,8 @@ class Addresses extends CommonAddresses
         parent::alterForm($form, $params);
 
         $form->get('form-actions')->get('save')->setLabel('internal.save.button');
+        $form->getInputFilter()->get('contact')->get('email')->setRequired(false);
+        $form->getInputFilter()->get('contact')->get('email')->setAllowEmpty(true);
 
         return $form;
     }

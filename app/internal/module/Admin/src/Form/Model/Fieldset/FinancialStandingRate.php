@@ -2,15 +2,17 @@
 
 namespace Admin\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Common\Form\Model\Form\Traits\IdTrait;
 use Common\Form\Model\Form\Traits\VersionTrait;
+use Zend\Form\Annotation as Form;
 
 /**
  * Financial Standing Fieldset
  */
 class FinancialStandingRate
 {
-    use VersionTrait;
+    use VersionTrait,
+        IdTrait;
 
     /**
      * @Form\Name("goodsOrPsv")

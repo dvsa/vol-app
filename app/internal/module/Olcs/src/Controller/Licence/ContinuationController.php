@@ -11,6 +11,7 @@ use Olcs\Controller\AbstractController;
 use Zend\View\Model\ViewModel;
 use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Entity\ContinuationDetailEntityService;
+use Olcs\Data\Mapper\Continuation as ContinuationMapper;
 
 /**
  * Continuation Controller
@@ -51,16 +52,16 @@ class ContinuationController extends AbstractController
                 if ($this->isButtonPressed('submit')) {
                     $this->updateContinuation($continuationDetail, $form->getData());
                     $this->addSuccessMessage('update-continuation.saved');
+                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
                 }
 
                 if ($this->isButtonPressed('continueLicence')) {
                     $this->updateContinuation($continuationDetail, $form->getData());
-                    $this->continueLicence($continuationDetail['licence']);
-
-                    $this->addSuccessMessage('update-continuation.success');
+                    if ($this->continueLicence($continuationDetail['licence'], $form)) {
+                        $this->addSuccessMessage('update-continuation.success');
+                        return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                    }
                 }
-
-                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
             }
         }
         $view = new ViewModel(['form' => $form]);
@@ -128,6 +129,15 @@ class ContinuationController extends AbstractController
         if (isset($formData['fields']['totalVehicleAuthorisation'])) {
             $params['totAuthVehicles'] = $formData['fields']['totalVehicleAuthorisation'];
         }
+        if (isset($formData['fields']['totAuthSmallVehicles'])) {
+            $params['totAuthSmallVehicles'] = $formData['fields']['totAuthSmallVehicles'];
+        }
+        if (isset($formData['fields']['totAuthMediumVehicles'])) {
+            $params['totAuthMediumVehicles'] = $formData['fields']['totAuthMediumVehicles'];
+        }
+        if (isset($formData['fields']['totAuthLargeVehicles'])) {
+            $params['totAuthLargeVehicles'] = $formData['fields']['totAuthLargeVehicles'];
+        }
         if (isset($formData['fields']['numberOfDiscs'])) {
             $params['totPsvDiscs'] = $formData['fields']['numberOfDiscs'];
         }
@@ -145,18 +155,28 @@ class ContinuationController extends AbstractController
      * Continue a Licence
      *
      * @param array $licence Licence data
-     * @throws \RuntimeException
+     * @param Form $form
+     * @return bool
      */
-    protected function continueLicence(array $licence)
+    protected function continueLicence(array $licence, $form)
     {
         $response = $this->handleCommand(
             \Dvsa\Olcs\Transfer\Command\Licence\ContinueLicence::create(
                 ['id' => $licence['id'], 'version' => $licence['version']]
             )
         );
-        if (!$response->isOk()) {
-            throw new \RuntimeException('Error Continuing Licence');
+        if ($response->isClientError()) {
+            $errors = ContinuationMapper::mapFromErrors($form, $response->getResult()['messages']);
+            if ($errors) {
+                foreach ($errors as $error) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
+                }
+            }
         }
+        if ($response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('Unknown error');
+        }
+        return $response->isOk();
     }
 
     /**
@@ -173,6 +193,9 @@ class ContinuationController extends AbstractController
                 'received' => $continuationDetail['received'],
                 'checklistStatus' => $continuationDetail['status']['id'],
                 'totalVehicleAuthorisation' => $continuationDetail['totAuthVehicles'],
+                'totAuthSmallVehicles' => $continuationDetail['totAuthSmallVehicles'],
+                'totAuthMediumVehicles' => $continuationDetail['totAuthMediumVehicles'],
+                'totAuthLargeVehicles' => $continuationDetail['totAuthLargeVehicles'],
                 'numberOfCommunityLicences' => $continuationDetail['totCommunityLicences'],
                 'numberOfDiscs' => $continuationDetail['totPsvDiscs'],
             ]
@@ -180,6 +203,15 @@ class ContinuationController extends AbstractController
         // if values not in continuationDetails then get from licence
         if ($data['fields']['totalVehicleAuthorisation'] == null) {
             $data['fields']['totalVehicleAuthorisation'] = $licence['totAuthVehicles'];
+        }
+        if ($data['fields']['totAuthSmallVehicles'] == null) {
+            $data['fields']['totAuthSmallVehicles'] = $licence['totAuthSmallVehicles'];
+        }
+        if ($data['fields']['totAuthMediumVehicles'] == null) {
+            $data['fields']['totAuthMediumVehicles'] = $licence['totAuthMediumVehicles'];
+        }
+        if ($data['fields']['totAuthLargeVehicles'] == null) {
+            $data['fields']['totAuthLargeVehicles'] = $licence['totAuthLargeVehicles'];
         }
         if ($data['fields']['numberOfCommunityLicences'] == null) {
             $data['fields']['numberOfCommunityLicences'] = $licence['totCommunityLicences'];
@@ -206,6 +238,7 @@ class ContinuationController extends AbstractController
         $this->alterFormReceived($form, $continuationDetail);
         $this->alterFormChecklistStatus($form, $continuationDetail);
         $this->alterFormTotalVehicleAuthorisation($form, $continuationDetail);
+        $this->alterFormTotSmallMediumLargeVehicleAuthorisation($form, $continuationDetail);
         $this->alterFormNumberOfDiscs($form, $continuationDetail, $postData);
         $this->alterFormNumberOfCommunityLicences($form, $continuationDetail, $postData);
 
@@ -333,6 +366,31 @@ class ContinuationController extends AbstractController
             }
         } else {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'fields->totalVehicleAuthorisation');
+        }
+    }
+
+    /**
+     * Only show the small, medium or large total vehicle authorisation elements for certain licence types
+     *
+     * @param \Zend\Form\Form $form
+     * @param array $continuationDetail
+     */
+    protected function alterFormTotSmallMediumLargeVehicleAuthorisation($form, $continuationDetail)
+    {
+        $licence = $continuationDetail['licence'];
+        if (!($licence['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_PSV &&
+            ($licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_RESTRICTED
+                || $licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+                || $licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL))
+        ) {
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'fields->totAuthSmallVehicles');
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'fields->totAuthMediumVehicles');
+        }
+        if (!($licence['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_PSV &&
+            ($licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
+                || $licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL))
+        ) {
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'fields->totAuthLargeVehicles');
         }
     }
 

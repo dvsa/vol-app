@@ -47,6 +47,7 @@ return array(
             'name' => 'executed'
         ),
         array(
+            'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',

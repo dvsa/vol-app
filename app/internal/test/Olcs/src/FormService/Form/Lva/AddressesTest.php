@@ -45,6 +45,32 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
                     )
                     ->getMock()
             )
+            ->shouldReceive('getInputFilter')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('contact')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('get')
+                    ->with('email')
+                    ->andReturn(
+                        m::mock()
+                        ->shouldReceive('setRequired')
+                        ->with(false)
+                        ->once()
+                        ->shouldReceive('setAllowEmpty')
+                        ->with(true)
+                        ->once()
+                        ->getMock()
+                    )
+                    ->twice()
+                    ->getMock()
+                )
+                ->twice()
+                ->getMock()
+            )
+            ->twice()
             ->getMock();
 
         $form = $this->sut->getForm('ltyp_sn');

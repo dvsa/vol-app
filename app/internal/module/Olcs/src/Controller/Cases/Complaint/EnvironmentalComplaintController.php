@@ -118,6 +118,8 @@ class EnvironmentalComplaintController extends AbstractInternalController implem
      * Command is required, as are itemParams from above
      */
     protected $deleteCommand = DeleteDto::class;
+    protected $deleteParams = ['id' => 'complaint'];
+    protected $deleteModalTitle = 'Delete Environmental Complaint';
 
     public function indexAction()
     {
