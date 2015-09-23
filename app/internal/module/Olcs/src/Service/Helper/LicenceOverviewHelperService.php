@@ -53,7 +53,6 @@ class LicenceOverviewHelperService extends AbstractHelperService
             'receivesMailElectronically' => $licence['organisation']['allowEmail'],
             'numberOfBusRegistrations'  => $licence['busCount'],
             // out of scope for OLCS-5209
-            'registeredForSelfService'   => null,
             'registeredForSelfService'   => $this->hasAdminUsers($licence) ? 'Yes' : 'No',
         ];
 
