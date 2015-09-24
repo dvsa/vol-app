@@ -2310,7 +2310,17 @@ $routes['lva-variation']['child_routes'] = array_merge(
                     )
                 )
             )
-        )
+        ),
+        'publish' => array(
+            'type' => 'literal',
+            'options' => array(
+                'route' => 'publish',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Publish',
+                    'action' => 'index'
+                )
+            )
+        ),
     )
 );
 
@@ -2647,7 +2657,17 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'action' => 'index'
                 )
             )
-        )
+        ),
+        'publish' => array(
+            'type' => 'literal',
+            'options' => array(
+                'route' => 'publish',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/Publish',
+                    'action' => 'index'
+                )
+            )
+        ),
     )
 );
 
