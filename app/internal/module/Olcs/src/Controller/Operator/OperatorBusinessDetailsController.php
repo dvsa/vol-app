@@ -53,6 +53,10 @@ class OperatorBusinessDetailsController extends OperatorController
         $post = $this->params()->fromPost();
         $validateAndSave = true;
 
+        if ($this->getRequest()->isPost() && isset($post['custom'])) {
+            return $this->saveConfirmForm();
+        }
+
         if ($this->isButtonPressed('cancel')) {
             // user pressed cancel button in edit form
             if ($operator) {
@@ -85,7 +89,8 @@ class OperatorBusinessDetailsController extends OperatorController
             $validateAndSave = false;
         }
 
-        /* if we are in edit mode and just changed the business type or
+        /**
+         * if we are in edit mode and just changed the business type or
          * this is not a post we need to populate form with
          * original values, otherwise we use POST values
          */
@@ -96,8 +101,6 @@ class OperatorBusinessDetailsController extends OperatorController
                 $originalData['operator-business-type']['type'] = $operatorType;
             }
             $form->setData($originalData);
-        } else {
-            $form->setData($post);
         }
 
         // process company lookup
@@ -111,55 +114,120 @@ class OperatorBusinessDetailsController extends OperatorController
             if (!$this->getEnabledCsrf()) {
                 $this->getServiceLocator()->get('Helper\Form')->remove($form, 'csrf');
             }
-            if ($form->isValid()) {
 
-                $action = $operator ? 'edit' : 'add';
-                $this->saveForm($form, $action);
+            $action = $operator ? 'edit' : 'add';
+            $response = $this->saveForm($form, $action);
 
-                // we need to process redirect and catch flashMessenger messages if available
-                if ($this->getResponse()->getStatusCode() == 302) {
-                    return $this->getResponse();
-                }
+            if ($response !== null) {
+                return $response;
             }
         }
 
+        return $this->renderForm($form);
+    }
+
+    protected function renderForm($form)
+    {
         $view = $this->getView(['form' => $form]);
         $view->setTemplate('partials/form');
         return $this->renderView($view);
     }
 
+    protected function saveConfirmForm()
+    {
+        $operator = $this->params()->fromRoute('organisation');
+        $postData = (array)$this->getRequest()->getPost();
+
+        $dtoData = json_decode($postData['custom'], true);
+        $dtoData['confirm'] = true;
+
+        $commandClass = $this->updateDtoClass;
+        $dto = $commandClass::create($dtoData);
+
+        $response = $this->handleCommand($dto);
+
+        if ($response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addSuccessMessage('The operator has been updated successfully');
+        } else {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnknownError();
+        }
+
+        return $this->redirectToBusinessDetails($operator);
+    }
+
     /**
      * Save form
      *
-     * @param Zend\Form\Form $form
-     * @param strring $action
+     * @param \Zend\Form\Form $form
+     * @param string $action
      * @return mixed
      */
     protected function saveForm($form, $action)
     {
-        $data = $form->getData();
+        $postData = (array)$this->getRequest()->getPost();
 
-        $mapper = $this->mapperClass;
-        $params = $mapper::mapFromForm($data);
+        if ($action === 'edit' && isset($postData['custom'])) {
+
+            $dtoData = json_decode($postData['custom'], true);
+            $dtoData['confirm'] = true;
+
+            $commandClass = $this->updateDtoClass;
+            $dto = $commandClass::create($dtoData);
+
+        } else {
+            $form->setData($postData);
+
+            if (!$form->isValid()) {
+                return $this->renderForm($form);
+            }
+
+            $data = $form->getData();
+
+            $mapper = $this->mapperClass;
+            $params = $mapper::mapFromForm($data);
+
+            if ($action == 'edit') {
+                $commandClass = $this->updateDtoClass;
+                $dto = $commandClass::create($params);
+            } else {
+                $commandClass = $this->createDtoClass;
+                $dto = $commandClass::create($params);
+            }
+        }
 
         if ($action == 'edit') {
             $message = 'The operator has been updated successfully';
-            $commandClass = $this->updateDtoClass;
-            $dto = $commandClass::create($params);
         } else {
             $message = 'The operator has been created successfully';
-            $commandClass = $this->createDtoClass;
-            $dto = $commandClass::create($params);
         }
 
-        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
-        /** @var \Common\Service\Cqrs\Response $response */
-        $response = $this->getServiceLocator()->get('CommandService')->send($command);
+        $response = $this->handleCommand($dto);
+
         if ($response->isOk()) {
             $this->flashMessenger()->addSuccessMessage($message);
             $orgId = $response->getResult()['id']['organisation'];
             return $this->redirectToBusinessDetails($orgId);
         }
+
+        $messages = $response->getResult()['messages'];
+
+        if (isset($messages['BUS_TYP_REQ_CONF'])) {
+            $transitions = json_decode($messages['BUS_TYP_REQ_CONF']);
+
+            $labels = [];
+
+            $translation = $this->getServiceLocator()->get('Helper\Translation');
+
+            foreach ($transitions as $transition) {
+                $labels[] = $translation->translate($transition);
+            }
+
+            $label = $translation->translateReplace('BUS_TYP_REQ_CONF', [implode('', $labels)]);
+
+            return $this->confirm($label, $this->getRequest()->isXmlHttpRequest(), json_encode($dto->getArrayCopy()));
+        }
+
         if ($response->isClientError()) {
             $this->mapErrors($form, $response->getResult()['messages']);
         }
@@ -184,8 +252,8 @@ class OperatorBusinessDetailsController extends OperatorController
      * Make form alterations
      *
      * @param string $businessType
-     * @param Zend\Form\Form $form
-     * @return form
+     * @param \Zend\Form\Form $form
+     * @return \Zend\Form\Form
      */
     private function makeFormAlterations($businessType, $form)
     {
