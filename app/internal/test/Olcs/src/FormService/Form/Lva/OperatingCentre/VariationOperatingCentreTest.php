@@ -12,6 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
 use Olcs\FormService\Form\Lva\OperatingCentre\VariationOperatingCentre;
+use Zend\Validator\Identical as ValidatorIdentical;
 
 /**
  * Variation Operating Centre Test
@@ -36,22 +37,16 @@ class VariationOperatingCentreTest extends MockeryTestCase
     {
         $form = m::mock(Form::class);
 
+        $this->formHelper
+            ->shouldReceive('removeValidator')
+            ->with($form, 'data->permission', ValidatorIdentical::class)
+            ->once()
+            ->shouldReceive('removeValidator')
+            ->with($form, 'data->sufficientParking', ValidatorIdentical::class)
+            ->once();
         $form->shouldReceive('getInputFilter')
             ->andReturn(
                 m::mock()
-                    ->shouldReceive('get')
-                    ->with('data')
-                    ->andReturn(
-                        m::mock()
-                            ->shouldReceive('remove')
-                            ->with('permission')
-                            ->once()
-                            ->shouldReceive('remove')
-                            ->with('sufficientParking')
-                            ->once()
-                            ->getMock()
-                    )
-                    ->twice()
                     ->shouldReceive('get')
                     ->with('address')
                     ->andReturn(
@@ -70,7 +65,7 @@ class VariationOperatingCentreTest extends MockeryTestCase
                     )
                     ->getMock()
             )
-            ->times(3);
+            ->once(3);
 
         $params = [
             'isPsv' => false,
