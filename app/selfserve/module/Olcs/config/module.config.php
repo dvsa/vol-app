@@ -2,14 +2,13 @@
 
 use Olcs\Controller\IndexController;
 use Olcs\Controller\Search\SearchController;
+use Olcs\Controller\MyDetailsController;
 
 use Olcs\Form\Element\SearchFilterFieldsetFactory;
 use Olcs\Form\Element\SearchFilterFieldset;
 use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
 use Olcs\Form\Element\SearchDateRangeFieldset;
 
-use \Common\Service\Data\Search\SearchType;
-use Common\Data\Object\Search\Licence as LicenceSearch;
 use Common\Data\Object\Search\LicenceSelfserve as LicenceSelfserve;
 use Common\Data\Object\Search\OperatingCentreSelfserve as OperatingCentreSearchIndex;
 use Common\Data\Object\Search\PeopleSelfserve as PeopleSelfserveSearchIndex;
@@ -293,6 +292,16 @@ $routes = array(
             'defaults' => array(
                 'controller' => 'User',
                 'action' => 'index'
+            )
+        )
+    ),
+    'my-details' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/my-details',
+            'defaults' => array(
+                'controller' => MyDetailsController::class,
+                'action' => 'edit'
             )
         )
     ),
@@ -750,6 +759,7 @@ return array(
             'Correspondence' => 'Olcs\Controller\CorrespondenceController',
             'User' => 'Olcs\Controller\UserController',
             IndexController::class => IndexController::class,
+            MyDetailsController::class => MyDetailsController::class,
             SearchController::class => SearchController::class,
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             'Entity\View' => 'Olcs\Controller\Entity\ViewController',
