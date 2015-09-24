@@ -1,6 +1,10 @@
 <?php
 
 return array(
+    'version' => [
+        'environment' => 'Local Dev',
+        'release' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : '')
+    ],
     'halt_on_error' => true,
     'service_api_mapping' => array(
         'endpoints' => array(
