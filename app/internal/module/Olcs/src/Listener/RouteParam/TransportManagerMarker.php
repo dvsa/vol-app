@@ -184,7 +184,7 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
             throw new \RuntimeException('Error getting TransportManagerApplication data');
         }
 
-        return $response->getResult()['result'];
+        return $response->getResult()['results'];
     }
 
     /**
