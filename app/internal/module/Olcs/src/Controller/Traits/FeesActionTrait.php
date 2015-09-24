@@ -613,6 +613,11 @@ trait FeesActionTrait
                 $dto = PayOutstandingFeesCmd::create($dtoData);
                 $response = $this->handleCommand($dto);
 
+                if (!$response->isOk()) {
+                    $this->addErrorMessage('unknown-error');
+                    return $this->redirectToList();
+                }
+
                 // Look up the new payment in order to get the redirect data
                 $transactionId = $response->getResult()['id']['transaction'];
                 $response = $this->handleQuery(PaymentByIdQry::create(['id' => $transactionId]));
