@@ -341,9 +341,11 @@ return array(
                             'target' => '_blank',
                         ),
                         array(
-                            'id' => 'application-quick-actions-generate-publication',
-                            'label' => 'Generate publication',
-                            'route' => 'dashboard',
+                            'id' => 'application-quick-actions-publish-application',
+                            'label' => 'Publish application',
+                            'route' => 'lva-application/publish',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
                         )
                     ),
                 ),
