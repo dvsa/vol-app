@@ -37,13 +37,11 @@ class ApplicationTest extends MockeryTestCase
         $form = m::mock(Form::class);
         $formActions = m::mock(Fieldset::class);
 
-        $form->shouldReceive('get')
-            ->with('form-actions')
-            ->andReturn($formActions);
+        $form->shouldReceive('has')->with('form-actions')->andReturn(true);
+        $form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
-        $formActions->shouldReceive('get->setLabel')
-            ->once()
-            ->with('internal.save.button');
+        $formActions->shouldReceive('has')->with('save')->andReturn(true);
+        $formActions->shouldReceive('get->setLabel')->once()->with('internal.save.button');
 
         $this->sut->alterForm($form);
     }

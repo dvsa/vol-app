@@ -1,20 +1,20 @@
 <?php
 
 /**
- * PsvVehicles Form
+ * Licence Psv Vehicles
  *
- * @author Dan Eggleston <dan@stolenegg.com>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\PsvVehicles as CommonPsvVehicles;
 
 /**
- * PsvVehicles Form
+ * Licence Psv Vehicles
  *
- * @author Dan Eggleston <dan@stolenegg.com>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
-class PsvVehicles extends CommonPsvVehicles
+class LicencePsvVehicles extends CommonPsvVehicles
 {
     /**
      * Make form alterations
@@ -26,7 +26,7 @@ class PsvVehicles extends CommonPsvVehicles
     {
         parent::alterForm($form);
 
-        $form->get('form-actions')->get('save')->setLabel('internal.save.button');
+        $this->removeStandardFormActions($form);
 
         return $form;
     }

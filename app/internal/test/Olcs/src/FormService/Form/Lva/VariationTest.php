@@ -37,13 +37,17 @@ class VariationTest extends MockeryTestCase
         $form = m::mock(Form::class);
         $formActions = m::mock(Fieldset::class);
 
-        $form->shouldReceive('get')
-            ->with('form-actions')
-            ->andReturn($formActions);
+        $form->shouldReceive('has')->with('form-actions')->andReturn(true);
+        $form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
-        $formActions->shouldReceive('get->setLabel')
-            ->once()
-            ->with('internal.save.button');
+        $mockSave = m::mock();
+        $mockSave->shouldReceive('setLabel')->once()->with('internal.save.button');
+        $mockSave->shouldReceive('setAttribute')->once()->with('class', 'action--primary large');
+
+        $formActions->shouldReceive('has')->with('save')->andReturn(true);
+        $formActions->shouldReceive('get')->with('save')->andReturn($mockSave);
+        $formActions->shouldReceive('has')->with('saveAndContinue')->andReturn(true);
+        $formActions->shouldReceive('remove')->once()->with('saveAndContinue');
 
         $this->sut->alterForm($form);
     }
