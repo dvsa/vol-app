@@ -168,7 +168,7 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
      * @param int $applicationId
      * @param int $tmId
      *
-     * @return type
+     * @return array
      * @throws \RuntimeException
      */
     protected function getTransportManagerApplicationData($applicationId, $tmId = null)
@@ -184,7 +184,7 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
             throw new \RuntimeException('Error getting TransportManagerApplication data');
         }
 
-        return $response->getResult()['result'];
+        return $response->getResult()['results'];
     }
 
     /**
