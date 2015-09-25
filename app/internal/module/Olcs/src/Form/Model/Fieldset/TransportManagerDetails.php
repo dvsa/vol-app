@@ -24,6 +24,13 @@ class TransportManagerDetails
     public $version = null;
 
     /**
+     * @Form\Options({"label": "internal-transport-manager-id"})
+     * @Form\Name("transport-manager-id")
+     * @Form\Type("\Common\Form\Elements\Types\Readonly")
+     */
+    public $transportManagerId = null;
+
+    /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "empty_option": "Please Select",

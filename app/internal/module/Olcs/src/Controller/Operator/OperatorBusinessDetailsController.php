@@ -81,7 +81,7 @@ class OperatorBusinessDetailsController extends OperatorController
             $operatorType = $organisation['type']['id'];
         }
 
-        $form = $this->makeFormAlterations($operatorType, $this->getForm('Operator'));
+        $form = $this->makeFormAlterations($operatorType, $this->getForm('Operator'), $operator);
         // don't need validate form and save data if user just changed organisation's type
         if (isset($post['operator-business-type']['refresh'])) {
             // non-js version of form
@@ -122,6 +122,9 @@ class OperatorBusinessDetailsController extends OperatorController
                 return $response;
             }
         }
+        if ($operator) {
+            $this->placeholder()->setPlaceholder('operatorId', $operator);
+        }
 
         return $this->renderForm($form);
     }
@@ -130,6 +133,7 @@ class OperatorBusinessDetailsController extends OperatorController
     {
         $view = $this->getView(['form' => $form]);
         $view->setTemplate('partials/form');
+        $this->placeholder()->setPlaceholder('subsectionTitle', 'Business details');
         return $this->renderView($view);
     }
 
@@ -253,9 +257,10 @@ class OperatorBusinessDetailsController extends OperatorController
      *
      * @param string $businessType
      * @param \Zend\Form\Form $form
+     * @param int $operatorId
      * @return \Zend\Form\Form
      */
-    private function makeFormAlterations($businessType, $form)
+    private function makeFormAlterations($businessType, $form, $operatorId)
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         switch ($businessType) {
@@ -289,6 +294,12 @@ class OperatorBusinessDetailsController extends OperatorController
                 $formHelper->remove($form, 'registeredAddress');
                 break;
         }
+        if (!$operatorId) {
+            $formHelper->remove($form, 'operator-id');
+        } else {
+            $form->get('operator-id')->get('operator-id')->setValue($operatorId);
+        }
+
         return $form;
     }
 

@@ -139,6 +139,15 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
         ) {
             $form->setOption('readonly', true);
         }
+        if (!$data['transport-manager-details']['id']) {
+            $this->getServiceLocator()
+                ->get('Helper\Form')
+                ->remove($form, 'transport-manager-details->transport-manager-id');
+        } else {
+            $form->get('transport-manager-details')
+                ->get('transport-manager-id')
+                ->setValue($data['transport-manager-details']['id']);
+        }
 
         return $form;
     }
