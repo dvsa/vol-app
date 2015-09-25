@@ -102,11 +102,18 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $progress = null;
         $showEditAction = false;
         $showViewAction = false;
+        $showResendAction = false;
 
         $viewActionUrl = $this->url()->fromRoute('transport_manager_review', ['id' => $tmaId]);
         $editActionUrl = $this->url()->fromRoute(
             "lva-{$this->lva}/transport_manager_details/action",
             ['action' => 'edit'],
+            [],
+            true
+        );
+        $resendActionUrl = $this->url()->fromRoute(
+            "lva-{$this->lva}/transport_manager_details/action",
+            ['action' => 'resend'],
             [],
             true
         );
@@ -121,6 +128,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     // Show form currently on detailsAction
                     return $this->details($tma);
                 }
+                $showResendAction = true;
                 // Show ref 3
                 $content = $translationHelper->translate('markup-tma-3');
                 break;
@@ -136,6 +144,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     $content = $translationHelper->translate('markup-tma-5');
                     $progress = 1;
                     $showViewAction = true;
+                    $showResendAction = true;
                 }
                 break;
             case TransportManagerApplicationEntityService::STATUS_TM_SIGNED:
@@ -150,6 +159,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     $content = $translationHelper->translateReplace('markup-tma-7', [$viewActionUrl]);
                     $progress = 2;
                     $showViewAction = true;
+                    $showResendAction = true;
                 }
                 break;
             case TransportManagerApplicationEntityService::STATUS_OPERATOR_SIGNED:
@@ -173,9 +183,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
         $view->setVariable('tmaStatus', $tma['tmApplicationStatus']);
         $view->setVariable('content', $content);
-        $view->setVariable('actions', ['view' => $showViewAction, 'edit' => $showEditAction]);
+        $view->setVariable(
+            'actions',
+            ['view' => $showViewAction, 'edit' => $showEditAction, 'resend' => $showResendAction]
+        );
         $view->setVariable('viewActionUrl', $viewActionUrl);
         $view->setVariable('editActionUrl', $editActionUrl);
+        $view->setVariable('resendActionUrl', $resendActionUrl);
         $view->setVariable('referenceNo', $tma['transportManager']['id']);
         $view->setVariable('userIsThisTransportManager', $userIsThisTransportManager);
         $view->setVariable(
@@ -1014,5 +1028,52 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $response = $this->getServiceLocator()->get('CommandService')->send($command);
 
         return $response->isOk();
+    }
+
+    public function resendAction()
+    {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
+        }
+        // Get confirmation form
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createForm('GenericConfirmation');
+        $form->get('form-actions')->get('submit')->setLabel('Send');
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
+
+        $tmaId = (int) $this->params('child_id');
+        $tma = $this->getTmaDetails($tmaId);
+        if ($this->getRequest()->isPost()) {
+
+            $response = $this->handleCommand(
+                Command\TransportManagerApplication\SendTmApplication::create(['id' => $tmaId])
+            );
+
+            if ($response->isOk()) {
+                $this->getServiceLocator()
+                    ->get('Helper\FlashMessenger')
+                    ->addSuccessMessage('transport-manager-application.resend-form.success');
+            }
+            if ($response->isServerError() || $response->isClientError()) {
+                $this->getServiceLocator()
+                    ->get('Helper\FlashMessenger')
+                    ->addErrorMessage('transport-manager-application.resend-form.error');
+            }
+
+            return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
+        }
+        $tmName = $tma['transportManager']['homeCd']['person']['forename'] . ' ' .
+            $tma['transportManager']['homeCd']['person']['familyName'];
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        return $this->render(
+            'transport-manager-application.resend-form',
+            $form,
+            [
+                'sectionText' => $translationHelper->translateReplace(
+                    'transport-manager-application.resend-form.confirmation',
+                    [$tmName]
+                )
+            ]
+        );
     }
 }
