@@ -122,9 +122,6 @@ class OperatorBusinessDetailsController extends OperatorController
                 return $response;
             }
         }
-        if ($operator) {
-            $this->placeholder()->setPlaceholder('operatorId', $operator);
-        }
 
         return $this->renderForm($form);
     }
