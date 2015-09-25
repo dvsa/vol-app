@@ -2,7 +2,10 @@
 
 return array(
     'variables' => array(
-        'title' => 'transport-manager.competences.table.qualification'
+        'title' => 'transport-manager.competences.table.qualification',
+        'dataAttributes' => [
+            'data-hard-refresh' => 1
+        ]
     ),
     'settings' => array(
         'crud' => array(
