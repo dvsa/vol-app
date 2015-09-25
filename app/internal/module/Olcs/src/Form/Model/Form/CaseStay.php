@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("case-stay")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Stay", "action_lcfirst": true})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class CaseStay
 {

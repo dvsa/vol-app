@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\TransportManager\Details;
 
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use Zend\View\Model\ViewModel;
@@ -14,8 +15,6 @@ use Olcs\Controller\AbstractInternalController;
 use Dvsa\Olcs\Transfer\Query\TmQualification\TmQualificationsList as TmQualificationsListQry;
 use Dvsa\Olcs\Transfer\Query\TmQualification\TmQualification as TmQualificationQry;
 use Dvsa\Olcs\Transfer\Query\Tm\Documents as DocumentsQry;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 use Common\Controller\Traits\GenericUpload;
 use Olcs\Data\Mapper\TmQualification as Mapper;
@@ -30,23 +29,21 @@ use Dvsa\Olcs\Transfer\Command\TmQualification\Delete as DeleteDto;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class TransportManagerDetailsCompetenceController extends AbstractInternalController implements
-    PageLayoutProvider,
-    PageInnerLayoutProvider,
-    TransportManagerControllerInterface
+    TransportManagerControllerInterface,
+    LeftViewProvider
 {
     use GenericUpload;
 
     /**
      * @var string
      */
-    protected $section = 'details-competences';
     protected $documents = null;
 
     /* for list */
     protected $listDto = TmQualificationsListQry::class;
     protected $listVars = ['transportManager'];
     protected $tableViewPlaceholderName = 'table';
-    protected $tableViewTemplate = 'pages/transport-manager/tm-competence';
+    protected $tableViewTemplate = 'sections/transport-manager/pages/tm-competence';
     protected $defaultTableSortField = 'id';
     protected $tableName = 'tm.qualifications';
 
@@ -58,6 +55,8 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
     protected $formClass = TmQualificationForm::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add qualification';
+    protected $editContentTitle = 'Edit qualification';
 
     /* for add */
     protected $createCommand = CreateDto::class;
@@ -79,11 +78,11 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
     /**
      * Index action
      *
-     * @return Zend\View\Model\ViewModel
+     * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $this->placeholder()->setPlaceholder('section', 'details-competences');
+        $this->placeholder()->setPlaceholder('contentTitle', 'Competences');
         $response = $this->index(
             $this->listDto,
             new GenericList($this->listVars, $this->defaultTableSortField),
@@ -105,32 +104,25 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
         return $response;
     }
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            return 'layout/wide-layout';
-        }
-        return 'layout/transport-manager-section-migrated';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/transport-manager/partials/details-left');
 
-    public function getPageInnerLayout()
-    {
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            return 'layout/wide-layout';
-        }
-        return 'pages/transport-manager/tm-competence';
+        return $view;
     }
 
     public function editAction()
     {
-        $this->placeholder()->setPlaceholder('section', 'details-competences');
         return $this->edit(
             $this->formClass,
             $this->itemDto,
             new GenericItem($this->itemParams),
             $this->updateCommand,
             $this->mapperClass,
-            $this->editViewTemplate
+            $this->editViewTemplate,
+            'Updated record',
+            $this->editContentTitle
         );
     }
 

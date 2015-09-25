@@ -1,3 +1,9 @@
+/**
+ * @todo Not sure why this section has been done differently. This JS file is essentially constructing a view which is
+ * the controllers job. Think this may be due to the fact that the previous page POSTs back to the controller and a
+ * modal is optionally shown. This should be handled in the same way as type-of-licence i.e. we submit the previous form
+ * using js which means we can catch the response and display in a modal.
+ */
 $(function() {
 
   "use strict";

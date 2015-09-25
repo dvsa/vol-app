@@ -9,8 +9,6 @@ namespace Olcs\Controller\Lva\Traits;
 
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
-use Olcs\View\Model\Application\SectionLayout;
-use Common\View\Model\Section;
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
 use Common\Service\Entity\ApplicationCompletionEntityService;
 use Olcs\Controller\Traits\ApplicationControllerTrait as GenericInternalApplicationControllerTrait;
@@ -54,29 +52,41 @@ trait ApplicationControllerTrait
     protected function render($content, Form $form = null, $variables = array())
     {
         if (! ($content instanceof ViewModel)) {
-
             $sectionParams = array_merge(
-                array('title' => 'lva.section.title.' . $content, 'form' => $form),
+                [
+                    'form' => $form
+                ],
                 $variables
             );
 
-            $content = new Section($sectionParams);
+            $title = 'lva.section.title.' . $content;
+
+            $content = new ViewModel($sectionParams);
+            $content->setTemplate('sections/lva/lva-details');
+
+            return $this->genericRender($content, $title, $variables);
         }
 
+        return $this->genericRender($content, $content->getVariable('title'), $variables);
+    }
+
+    protected function getLeft(array $variables = [])
+    {
         $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
 
-        $params = array_merge(
-            array(
-                'sections'     => $this->getSectionsForView(),
-                'currentRoute' => $routeName,
-                'lvaId'        => $this->getIdentifier()
-            ),
-            $variables
+        $left = new ViewModel(
+            array_merge(
+                [
+                    'sections'     => $this->getSectionsForView(),
+                    'currentRoute' => $routeName,
+                    'lvaId'        => $this->getIdentifier()
+                ],
+                $variables
+            )
         );
-        $sectionLayout = new SectionLayout($params);
-        $sectionLayout->addChild($content, 'content');
+        $left->setTemplate('sections/application/partials/left');
 
-        return $this->genericRender($sectionLayout);
+        return $left;
     }
 
     /**

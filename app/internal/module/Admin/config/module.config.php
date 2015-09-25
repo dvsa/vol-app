@@ -335,7 +335,7 @@ return [
                         'options' => [
                             'route' => '/payment-processing',
                             'defaults' => [
-                                'controller' => 'Admin\PaymentProcessingController',
+                                'controller' => 'Admin\PaymentProcessingFeesController',
                                 'action' => 'redirect',
                             ]
                         ],
@@ -367,7 +367,7 @@ return [
                                 'options' => [
                                     'route' => '/misc-fees',
                                     'defaults' => [
-                                        'controller' => 'Admin\PaymentProcessingController',
+                                        'controller' => 'Admin\PaymentProcessingFeesController',
                                         'action' => 'index'
                                     ]
                                 ],
@@ -437,6 +437,7 @@ return [
             'Admin\DiscPrintingController' => 'Admin\Controller\DiscPrintingController',
             'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController',
             'Admin\PaymentProcessingController' => 'Admin\Controller\PaymentProcessingController',
+            'Admin\PaymentProcessingFeesController' => 'Admin\Controller\PaymentProcessingFeesController',
             'Admin\PartnerController' => 'Admin\Controller\PartnerController',
             'Admin\ContinuationChecklistReminderController' =>
                 'Admin\Controller\ContinuationChecklistReminderController',

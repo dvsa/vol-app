@@ -8,17 +8,15 @@ namespace Admin\Controller;
 use Dvsa\Olcs\Transfer\Command\MyAccount\UpdateMyAccount as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as ItemDto;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\MyDetails as Mapper;
 use Admin\Form\Model\Form\MyDetails as Form;
+use Zend\View\Model\ViewModel;
 
 /**
  * My Details Controller
  */
-class MyDetailsController extends AbstractInternalController implements
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class MyDetailsController extends AbstractInternalController implements LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -27,14 +25,17 @@ class MyDetailsController extends AbstractInternalController implements
      */
     protected $navigationId = 'admin-dashboard/admin-my-account';
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/admin-my-details';
-    }
+        $view = new ViewModel(
+            [
+                'navigationId' => 'admin-dashboard/admin-my-account',
+                'navigationTitle' => 'My account'
+            ]
+        );
+        $view->setTemplate('admin/sections/admin/partials/generic-left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/wide-layout';
+        return $view;
     }
 
     /**
@@ -53,6 +54,8 @@ class MyDetailsController extends AbstractInternalController implements
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
 
+    protected $editContentTitle = 'My details';
+
     public function indexAction()
     {
         return $this->redirectToIndex();
@@ -66,6 +69,13 @@ class MyDetailsController extends AbstractInternalController implements
     public function addAction()
     {
         return $this->notFoundAction();
+    }
+
+    public function editAction()
+    {
+        $this->placeholder()->setPlaceholder('pageTitle', 'My account');
+
+        return parent::editAction();
     }
 
     public function deleteAction()

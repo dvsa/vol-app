@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("appeal")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Appeal", "action_lcfirst":true})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class Appeal
 {

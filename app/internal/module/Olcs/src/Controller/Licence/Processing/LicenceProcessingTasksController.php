@@ -10,7 +10,6 @@ use Zend\View\Model\ViewModel;
 /**
  * Licence Processing Tasks Controller
  *
- * @NOTE Migrated
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
@@ -48,7 +47,7 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
 
         $view = new ViewModel(['table' => $table]);
 
-        $view->setTemplate('partials/table');
+        $view->setTemplate('pages/table');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         return $this->renderView($view);

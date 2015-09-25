@@ -1,0 +1,9 @@
+<?php
+$navigation = $this->navigation('navigation')->findOneBy('id', $navigationId);
+
+if (isset($navigation)): ?>
+    <h4><?php  echo $this->translate($navigationTitle); ?></h4>
+<?php
+endif;
+
+echo $this->navigation('navigation')->menu($navigation)->setPartial('partials/vertical-navigation');

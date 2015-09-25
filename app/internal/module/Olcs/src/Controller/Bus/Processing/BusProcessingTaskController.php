@@ -73,7 +73,7 @@ class BusProcessingTaskController extends BusController
         $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
 
         $view = $this->getView(['table' => $table]);
-        $view->setTemplate('partials/table');
+        $view->setTemplate('pages/table');
 
         return $this->renderView($view);
     }

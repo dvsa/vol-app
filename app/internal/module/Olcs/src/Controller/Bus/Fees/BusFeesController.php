@@ -19,8 +19,6 @@ class BusFeesController extends BusController
 {
     use Traits\FeesActionTrait;
 
-    protected $layoutFile = 'layout/wide-layout';
-
     protected $section = 'fees';
     protected $subNavRoute = 'licence_bus_fees';
 

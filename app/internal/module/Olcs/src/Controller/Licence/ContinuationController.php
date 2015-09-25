@@ -20,9 +20,6 @@ use Olcs\Data\Mapper\Continuation as ContinuationMapper;
  */
 class ContinuationController extends AbstractController
 {
-    /**
-     *
-     */
     public function updateContinuationAction()
     {
         $licenceId = (int) $this->params()->fromRoute('licence', null);
@@ -32,7 +29,6 @@ class ContinuationController extends AbstractController
         $hasOutstandingContinuationFee = $data['hasOutstandingContinuationFee'];
         $numNotCeasedDiscs = $data['numNotCeasedDiscs'];
 
-        $this->pageLayout = null;
         /* @var $form \Zend\Form\Form */
         $form = $this->getForm('update-continuation');
         $this->alterForm($form, $continuationDetail, $hasOutstandingContinuationFee);
@@ -65,7 +61,7 @@ class ContinuationController extends AbstractController
             }
         }
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form-with-fm');
+        $view->setTemplate('pages/form');
 
         $this->getServiceLocator()->get('Script')->loadFile('forms/update-continuation');
 

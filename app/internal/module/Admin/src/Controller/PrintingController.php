@@ -1,8 +1,8 @@
 <?php
+
 /**
  * Printing Controller
  */
-
 namespace Admin\Controller;
 
 use Common\Controller\AbstractActionController;
@@ -12,7 +12,6 @@ use Common\Controller\AbstractActionController;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-
 class PrintingController extends AbstractActionController
 {
     /**

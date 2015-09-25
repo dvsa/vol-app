@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\TransportManager\Details;
 
-use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
 use Zend\Http\Response;
 use Common\Controller\Lva\Traits\CrudActionTrait;
@@ -17,14 +17,18 @@ use Common\Controller\Lva\Traits\CrudActionTrait;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TransportManagerDetailsPreviousHistoryController extends AbstractTransportManagerDetailsController
+class TransportManagerDetailsPreviousHistoryController extends AbstractTransportManagerDetailsController implements
+    LeftViewProvider
 {
     use CrudActionTrait;
 
-    /**
-     * @var string
-     */
-    protected $section = 'details-previous-history';
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/transport-manager/partials/details-left');
+
+        return $view;
+    }
 
     /**
      * Index action
@@ -57,6 +61,8 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
         $this->loadScripts(['forms/crud-table-handler', 'tm-previous-history']);
 
         $form = $this->getPreviousHistoryForm();
+
+        $this->placeholder()->setPlaceholder('contentTitle', 'Previous history');
 
         $view = $this->getViewWithTm(['form' => $form]);
         $view->setTemplate('pages/form');
@@ -160,7 +166,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
         }
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView(
             $view,

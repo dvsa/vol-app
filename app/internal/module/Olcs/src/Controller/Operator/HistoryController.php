@@ -24,7 +24,7 @@ class HistoryController extends OperatorController
     {
         $view = $this->getView();
 
-        $view->setTemplate('partials/table');
+        $view->setTemplate('pages/table');
         $view->setTerminal($this->getRequest()->isXmlHttpRequest());
 
         $response = $this->getListData();

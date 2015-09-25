@@ -25,49 +25,8 @@ use Zend\View\Model\ViewModel;
  */
 class ApplicationController extends AbstractController implements ApplicationControllerInterface
 {
-    protected $headerViewTemplate = 'partials/application-header.phtml';
-    protected $pageLayout = 'application-section';
-
     use Traits\LicenceControllerTrait,
-        Traits\FeesActionTrait,
-        Traits\DocumentSearchTrait,
-        Traits\DocumentActionTrait,
         Traits\ApplicationControllerTrait;
-
-    /**
-     * Route (prefix) for fees action redirects
-     * @see Olcs\Controller\Traits\FeesActionTrait
-     * @return string
-     */
-    protected function getFeesRoute()
-    {
-        return 'lva-application/fees';
-    }
-
-    /**
-     * The fees route redirect params
-     * @see Olcs\Controller\Traits\FeesActionTrait
-     * @return array
-     */
-    protected function getFeesRouteParams()
-    {
-        return [
-            'application' => $this->getFromRoute('application')
-        ];
-    }
-
-    /**
-     * The controller specific fees table params
-     * @see Olcs\Controller\Traits\FeesActionTrait
-     * @return array
-     */
-    protected function getFeesTableParams()
-    {
-        return [
-            'licence' => $this->getLicenceIdForApplication(),
-            'status' => 'current',
-        ];
-    }
 
     /**
      * Placeholder stub
@@ -110,7 +69,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
             ->get('Olcs\Service\Data\Cases')->fetchList($params);
 
         $view = new ViewModel(['table' => $this->getTable('cases', $results, $params)]);
-        $view->setTemplate('partials/table');
+        $view->setTemplate('pages/table');
 
         $this->loadScripts(['table-actions']);
 
@@ -212,17 +171,10 @@ class ApplicationController extends AbstractController implements ApplicationCon
 
         $form->get('messages')->get('message')->setValue('confirm-undo-grant-application');
 
-        $this->pageLayout = null;
-
         $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Undo grant application');
-    }
-
-    protected function renderLayout($view)
-    {
-        return $this->render($view);
     }
 
     protected function getLicenceIdForApplication($applicationId = null)
@@ -235,44 +187,6 @@ class ApplicationController extends AbstractController implements ApplicationCon
         $result = $response->getResult();
 
         return $result['licence']['id'];
-    }
-
-    /**
-     * Route (prefix) for document action redirects
-     * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return string
-     */
-    protected function getDocumentRoute()
-    {
-        return 'lva-application/documents';
-    }
-
-    /**
-     * Route params for document action redirects
-     * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return array
-     */
-    protected function getDocumentRouteParams()
-    {
-        return ['application' => $this->getFromRoute('application')];
-    }
-
-    /**
-     * Get view model for document action
-     * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return ViewModel
-     */
-    protected function getDocumentView()
-    {
-        $application = $this->getFromRoute('application');
-        $licence = $this->getLicenceIdForApplication($application);
-
-        $filters = $this->mapDocumentFilters(['licence' => $licence]);
-
-        $table = $this->getDocumentsTable($filters);
-        $form  = $this->getDocumentForm($filters);
-
-        return $this->getViewWithApplication(['table' => $table, 'form'  => $form]);
     }
 
     /**
@@ -355,9 +269,8 @@ class ApplicationController extends AbstractController implements ApplicationCon
             }
         }
 
-        $this->pageLayout = null;
         $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Change Entity');
     }

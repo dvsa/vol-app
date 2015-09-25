@@ -14,8 +14,6 @@ class OperatorFeesController extends OperatorController
 {
     use Traits\FeesActionTrait;
 
-    protected $layoutFile = 'layout/wide-layout';
-
     /**
      * @var string
      */

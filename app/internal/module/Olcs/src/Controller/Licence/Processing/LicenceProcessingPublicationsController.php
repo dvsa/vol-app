@@ -10,20 +10,19 @@ use Dvsa\Olcs\Transfer\Query\Publication\PublicationLink as PublicationLinkDto;
 use Dvsa\Olcs\Transfer\Command\Publication\DeletePublicationLink;
 use Dvsa\Olcs\Transfer\Command\Publication\UpdatePublicationLink;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Data\Mapper\PublicationLink as PublicationLinkMapper;
 use Olcs\Form\Model\Form\Publication as PublicationForm;
 use Olcs\Form\Model\Form\PublicationNotNew as PublicationNotNewForm;
+use Zend\View\Model\ViewModel;
 
 /**
  * Licence Processing Publication Controller
  */
 class LicenceProcessingPublicationsController extends AbstractInternalController implements
     LicenceControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider
 {
     protected $navigationId = 'licence_processing_publications';
     protected $defaultTableSortField = 'createdOn';
@@ -36,21 +35,15 @@ class LicenceProcessingPublicationsController extends AbstractInternalController
     protected $updateCommand = UpdatePublicationLink::class;
     protected $deleteCommand = DeletePublicationLink::class;
     protected $inlineScripts = array('indexAction' => ['table-actions']);
+    protected $addContentTitle = 'Add publication';
+    protected $editContentTitle = 'Edit publication';
 
-    /**
-     * @return string
-     */
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/licence-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/processing/partials/left');
 
-    /**
-     * @return string
-     */
-    public function getPageInnerLayout()
-    {
-        return 'layout/processing-subsection';
+        return $view;
     }
 
     /**

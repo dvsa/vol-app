@@ -131,11 +131,7 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     {
         $case = $this->getCase($e->getValue());
 
-        $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
-
         $placeholder = $this->getViewHelperManager()->get('placeholder');
-        $placeholder->getContainer('pageTitle')->append($this->getPageTitle($case));
-        $placeholder->getContainer('status')->set($this->getStatusArray($case));
         $placeholder->getContainer('case')->set($case);
 
         if (isset($case['licence']['id'])) {
@@ -194,37 +190,5 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
         }
 
         return $response->getResult();
-    }
-
-    private function getPageTitle($case)
-    {
-        $pageTitle = 'Case ' . $case['id'];
-
-        if (isset($case['application']['id'])) {
-            // prepend with application link
-            $appUrl = $this->getViewHelperManager()->get('Url')
-                ->__invoke('lva-application/case', ['application' => $case['application']['id']], [], true);
-
-            $pageTitle = sprintf('<a href="%1$s">%2$s</a> / %3$s', $appUrl, $case['application']['id'], $pageTitle);
-        }
-
-        return $pageTitle;
-    }
-
-    /**
-     * Get status array.
-     *
-     * @param $case
-     *
-     * @return array
-     */
-    private function getStatusArray($case)
-    {
-        $status = [
-            'colour' => isset($case['closedDate']) ? 'Grey' : 'Orange',
-            'value' => isset($case['closedDate']) ? 'Closed' : 'Open',
-        ];
-
-        return $status;
     }
 }

@@ -9,7 +9,6 @@ namespace Olcs\Controller\Traits;
 
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Zend\View\Model\ViewModel;
-use Common\Service\Entity\InspectionRequestEntityService;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
@@ -21,34 +20,35 @@ trait InspectionRequestTrait
 {
     public function addAction()
     {
-        $this->placeholder()->setPlaceholder(
-            'enforcementAreaName',
-            $this->getEnforcementAreaName()
-        );
+        $this->placeholder()->setPlaceholder('enforcementAreaName', $this->getEnforcementAreaName());
+
         if (!$this->enforcementAreaName) {
             $this->getServiceLocator()
                 ->get('Helper\FlashMessenger')
                 ->addErrorMessage('internal-inspection-request.area-not-set');
+
             return $this->redirectToIndex();
         }
+
         $this->setUpOcListbox();
+
         return parent::add(
             $this->formClass,
             new AddFormDefaultData($this->defaultData),
             $this->createCommand,
             $this->mapperClass,
             $this->editViewTemplate,
-            'internal-inspection-request-inspection-request-added'
+            'internal-inspection-request-inspection-request-added',
+            $this->addContentTitle
         );
     }
 
     public function editAction()
     {
-        $this->placeholder()->setPlaceholder(
-            'enforcementAreaName',
-            $this->getEnforcementAreaName()
-        );
+        $this->placeholder()->setPlaceholder('enforcementAreaName', $this->getEnforcementAreaName());
+
         $this->setUpOcListbox();
+
         return $this->edit(
             $this->formClass,
             $this->itemDto,
@@ -56,7 +56,8 @@ trait InspectionRequestTrait
             $this->updateCommand,
             $this->mapperClass,
             $this->editViewTemplate,
-            'internal-inspection-request-inspection-request-updated'
+            'internal-inspection-request-inspection-request-updated',
+            $this->editContentTitle
         );
     }
 

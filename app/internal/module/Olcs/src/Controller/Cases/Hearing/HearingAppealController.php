@@ -16,11 +16,11 @@ use Dvsa\Olcs\Transfer\Query\Cases\Hearing\StayList as StayDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\AppealList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\Appeal as FormClass;
 use Olcs\Data\Mapper\GenericFields as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Zend\View\Model\ViewModel;
 
 /**
  * Hearing Appeal Controller
@@ -28,10 +28,7 @@ use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class HearingAppealController extends AbstractInternalController implements
-    CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class HearingAppealController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -52,21 +49,11 @@ class HearingAppealController extends AbstractInternalController implements
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
 
-    public function getPageLayout()
-    {
-        return 'layout/case-section';
-    }
-
-    public function getPageInnerLayout()
-    {
-        return 'layout/case-details-subsection';
-    }
-
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/appeals-stays';
+    protected $detailsViewTemplate = 'sections/cases/pages/appeals-stays';
     protected $detailsViewPlaceholderName = 'appeal';
     protected $itemDto = AppealDto::class;
     // 'id' => 'conviction', to => from
@@ -80,6 +67,8 @@ class HearingAppealController extends AbstractInternalController implements
     protected $formClass = FormClass::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add appeal';
+    protected $editContentTitle = 'Edit appeal';
 
     /**
      * Variables for controlling edit view rendering
@@ -118,6 +107,14 @@ class HearingAppealController extends AbstractInternalController implements
             'action' => 'details'
         ]
     ];
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
+
+        return $view;
+    }
 
     /**
      * Ensure index action redirects to details action

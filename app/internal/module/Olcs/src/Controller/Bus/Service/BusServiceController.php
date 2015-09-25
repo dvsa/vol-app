@@ -10,8 +10,6 @@ use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Dvsa\Olcs\Transfer\Query\ConditionUndertaking\GetList as ConditionUndertakingListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 use Olcs\Data\Mapper\BusRegisterService as Mapper;
 use Olcs\Form\Model\Form\BusRegisterService as Form;
 use Common\RefData;
@@ -19,10 +17,7 @@ use Common\RefData;
 /**
  * Bus Service Controller
  */
-class BusServiceController extends AbstractInternalController implements
-    BusRegControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class BusServiceController extends AbstractInternalController implements BusRegControllerInterface
 {
     const CONDITION_TYPE_CONDITION = 'cdt_con';
 
@@ -39,16 +34,6 @@ class BusServiceController extends AbstractInternalController implements
         ]
     ];
 
-    public function getPageLayout()
-    {
-        return 'layout/bus-registrations-section';
-    }
-
-    public function getPageInnerLayout()
-    {
-        return 'layout/wide-layout';
-    }
-
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
@@ -64,6 +49,8 @@ class BusServiceController extends AbstractInternalController implements
     protected $formClass = Form::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+
+    protected $editContentTitle = 'Register service';
 
     /**
      * @param $name

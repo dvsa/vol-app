@@ -5,7 +5,7 @@ namespace Olcs\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Options({"prefer_form_input_filter": true, "label":"Add vehicle"})
+ * @Form\Options({"prefer_form_input_filter": true})
  * @Form\Name("unlicensed-goods-vehicles-vehicle")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")

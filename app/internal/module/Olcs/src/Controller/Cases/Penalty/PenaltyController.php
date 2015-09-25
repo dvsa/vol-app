@@ -12,13 +12,15 @@ namespace Olcs\Controller\Cases\Penalty;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Zend\View\Model\ViewModel;
 
 /**
  * Case Penalty Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PenaltyController extends OlcsController\CrudAbstract implements CaseControllerInterface
+class PenaltyController extends OlcsController\CrudAbstract implements CaseControllerInterface, LeftViewProvider
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -50,22 +52,6 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
      * @var string
      */
     protected $commentBoxName = 'penaltiesNote';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    /**
-     * For most case crud controllers, we use the layout/case-details-subsection
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -123,6 +109,14 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
             'memberStateCode' => array()
         )
     );
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
+
+        return $view;
+    }
 
     /**
      * Simple redirect to index.
@@ -202,7 +196,7 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
             $this->getErruTable('erru-applied', 'appliedPenalties');
         }
 
-        $view->setTemplate('pages/case/penalties');
+        $view->setTemplate('sections/cases/pages/penalties');
 
         return $this->renderView($view);
     }

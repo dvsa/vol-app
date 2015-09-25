@@ -1,9 +1,0 @@
-<?php
-$form = $this->placeholder('form')->getValue();
-$table = $this->placeholder('table')->getValue();
-?>
-<?php echo $this->flashMessengerAll(); ?>
-<?php echo $table; ?>
-<?php if (isset($form)): ?>
-    <?php echo $this->form($form); ?>
-<?php endif; ?>

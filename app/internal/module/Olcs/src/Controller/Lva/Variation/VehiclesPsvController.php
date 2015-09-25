@@ -9,14 +9,14 @@ namespace Olcs\Controller\Lva\Variation;
 
 use Common\Controller\Lva\AbstractVehiclesPsvController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Olcs\Controller\Interfaces\VariationControllerInterface;
 
 /**
  * Internal Variation Vehicles PSV Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class VehiclesPsvController extends AbstractVehiclesPsvController implements ApplicationControllerInterface
+class VehiclesPsvController extends AbstractVehiclesPsvController implements VariationControllerInterface
 {
     use VariationControllerTrait;
 

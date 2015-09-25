@@ -15,10 +15,10 @@ use Dvsa\Olcs\Transfer\Query\Cases\Hearing\Stay as StayDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\StayList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\CaseStay as FormClass;
 use Olcs\Data\Mapper\Stay as Mapper;
+use Zend\View\Model\ViewModel;
 
 /**
  * Stay Controller
@@ -26,10 +26,7 @@ use Olcs\Data\Mapper\Stay as Mapper;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class StayController extends AbstractInternalController implements
-    CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class StayController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -52,14 +49,12 @@ class StayController extends AbstractInternalController implements
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/case-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/case-details-subsection';
+        return $view;
     }
 
     /**
@@ -83,6 +78,8 @@ class StayController extends AbstractInternalController implements
     protected $formClass = FormClass::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add stay';
+    protected $editContentTitle = 'Edit stay';
 
     /**
      * Variables for controlling edit view rendering

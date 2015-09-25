@@ -10,15 +10,15 @@ namespace Olcs\Controller\TransportManager\Details;
 use Dvsa\Olcs\Transfer\Command\Tm\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Tm\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Tm\TransportManager as TransportManagerQry;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\TransportManager as Mapper;
 use Common\Service\Entity\TransportManagerEntityService;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 use Olcs\Form\Model\Form\TransportManager as TransportManagerForm;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Zend\View\Model\ViewModel;
 
 /**
  * Transport Manager Details Detail Controller
@@ -26,9 +26,8 @@ use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class TransportManagerDetailsDetailController extends AbstractInternalController implements
-    PageLayoutProvider,
-    PageInnerLayoutProvider,
-    TransportManagerControllerInterface
+    TransportManagerControllerInterface,
+    LeftViewProvider
 {
     protected $section = 'transport-manager';
 
@@ -53,7 +52,7 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
     protected $redirectConfig = [
         'index' => [
             'action' => 'index',
-            'route' => 'transport-manager/details/details',
+            'route' => 'transport-manager/details',
             'reUseParams' => true,
             'resultIdMap' => [
                 'transportManager' => 'transportManager'
@@ -61,14 +60,17 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
         ]
     ];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/transport-manager-section-migrated';
-    }
+        $tmId = $this->params()->fromRoute('transportManager');
 
-    public function getPageInnerLayout()
-    {
-        return 'pages/crud-form';
+        if ($tmId) {
+            $view = new ViewModel();
+            $view->setTemplate('sections/transport-manager/partials/details-left');
+            return $view;
+        }
+
+        return null;
     }
 
     public function indexAction()
@@ -84,9 +86,7 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
             }
         }
 
-        $this->placeholder()->setPlaceholder('section', 'details-details');
         if ($tmId) {
-            $this->placeholder()->setPlaceholder('disabled', false);
             return $this->edit(
                 $this->formClass,
                 $this->itemDto,
@@ -94,21 +94,19 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
                 $this->updateCommand,
                 $this->mapperClass,
                 $this->editViewTemplate,
-                'internal-transport-manager-updated'
+                'internal-transport-manager-updated',
+                'Transport manager details'
             );
         } else {
-            $this->placeholder()->setPlaceholder('disabled', true);
-            $title = $this->getServiceLocator()
-                ->get('translator')
-                ->translate('internal-transport-manager-new-transport-manager');
-            $this->placeholder()->setPlaceholder('pageTitle', $title);
+            $this->placeholder()->setPlaceholder('pageTitle', 'internal-transport-manager-new-transport-manager');
             return $this->add(
                 $this->formClass,
                 new AddFormDefaultData($this->defaultData),
                 $this->createCommand,
                 $this->mapperClass,
                 $this->editViewTemplate,
-                'internal-transport-manager-created'
+                'internal-transport-manager-created',
+                null
             );
         }
     }
@@ -139,7 +137,7 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
         ) {
             $form->setOption('readonly', true);
         }
-        if (!$data['transport-manager-details']['id']) {
+        if (empty($data['transport-manager-details']['id'])) {
             $this->getServiceLocator()
                 ->get('Helper\Form')
                 ->remove($form, 'transport-manager-details->transport-manager-id');

@@ -170,14 +170,4 @@ trait BusControllerTrait
     {
         return $this->item;
     }
-
-    /**
-     * Returns the layout file
-     *
-     * @return string
-     */
-    public function getLayoutFile()
-    {
-        return $this->layoutFile;
-    }
 }

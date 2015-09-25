@@ -72,7 +72,6 @@ class IndexControllerTest extends MockeryTestCase
         $this->assertEquals('placeholder', $content[0]->getTemplate());
         $this->assertEquals('layout/admin-layout', $content[1]->getTemplate());
 
-        // Assert that placeholder is actually child of admin-layout
         $this->assertSame($content[0], $content[1]->getChildren()[0]);
     }
 }

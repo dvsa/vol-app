@@ -10,6 +10,7 @@
  */
 namespace Olcs\Controller;
 
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Olcs\Controller\Traits\TaskSearchTrait;
@@ -24,14 +25,11 @@ use Olcs\Controller\Traits\TaskSearchTrait;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class IndexController extends AbstractController
+class IndexController extends AbstractController implements LeftViewProvider
 {
     use TaskSearchTrait;
 
     const MAX_LIMIT = 100;
-
-    protected $pageTitle = 'Home';
-    protected $pageSubTitle = '';
 
     protected $entityListMap = [
         'users' => [
@@ -87,16 +85,20 @@ class IndexController extends AbstractController
 
         $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
 
-        $view = new ViewModel(
-            [
-                'table' => $this->getTaskTable($filters, true),
-                'form'  => $this->getTaskForm($filters),
-            ]
-        );
-        $view->setTemplate('pages/index');
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+        $view = new ViewModel(['table' => $this->getTaskTable($filters, true)]);
+        $view->setTemplate('pages/table');
 
-        return $this->renderView($view);
+        return $this->renderView($view, 'Home');
+    }
+
+    public function getLeftView()
+    {
+        $filters = $this->mapTaskFilters();
+
+        $left = new ViewModel(['form' => $this->getTaskForm($filters)]);
+        $left->setTemplate('sections/home/partials/left');
+
+        return $left;
     }
 
     /**

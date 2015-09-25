@@ -9,10 +9,9 @@ namespace Olcs\Controller\Bus\Details;
 
 use Dvsa\Olcs\Transfer\Query\Bus\BusReg;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use \Olcs\Data\Mapper\BusReg as BusRegMapper;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\BusServiceNumberAndType as ServiceForm;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateServiceDetails as UpdateServiceCmd;
 use Olcs\Form\Model\Form\BusRegTa as TaForm;
@@ -23,6 +22,7 @@ use Olcs\Form\Model\Form\BusRegQuality as QualityForm;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateQualitySchemes as UpdateQualityCmd;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Common\RefData;
+use Zend\View\Model\ViewModel;
 
 /**
  * Bus Details Controller
@@ -31,17 +31,14 @@ use Common\RefData;
  */
 class BusDetailsController extends AbstractInternalController implements
     BusRegControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider
 {
-    public function getPageInnerLayout()
+    public function getLeftView()
     {
-        return 'layout/bus-registration-subsection';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/bus/partials/left');
 
-    public function getPageLayout()
-    {
-        return 'layout/bus-registrations-section';
+        return $view;
     }
 
     protected $redirectConfig = [
@@ -79,7 +76,10 @@ class BusDetailsController extends AbstractInternalController implements
             $this->itemDto,
             new GenericItem($this->itemParams),
             UpdateServiceCmd::class,
-            $this->mapperClass
+            $this->mapperClass,
+            $editViewTemplate = 'pages/crud-form',
+            $successMessage = 'Updated record',
+            $contentTitle = 'Service No. & type'
         );
     }
 
@@ -93,7 +93,10 @@ class BusDetailsController extends AbstractInternalController implements
             $this->itemDto,
             new GenericItem($this->itemParams),
             UpdateTaCmd::class,
-            $this->mapperClass
+            $this->mapperClass,
+            $editViewTemplate = 'pages/crud-form',
+            $successMessage = 'Updated record',
+            $contentTitle = 'TA\'s & authorities'
         );
     }
 
@@ -107,7 +110,10 @@ class BusDetailsController extends AbstractInternalController implements
             $this->itemDto,
             new GenericItem($this->itemParams),
             UpdateStopCmd::class,
-            $this->mapperClass
+            $this->mapperClass,
+            $editViewTemplate = 'pages/crud-form',
+            $successMessage = 'Updated record',
+            $contentTitle = 'Stops, manoeuvres & subsidies'
         );
     }
 
@@ -121,7 +127,10 @@ class BusDetailsController extends AbstractInternalController implements
             $this->itemDto,
             new GenericItem($this->itemParams),
             UpdateQualityCmd::class,
-            $this->mapperClass
+            $this->mapperClass,
+            $editViewTemplate = 'pages/crud-form',
+            $successMessage = 'Updated record',
+            $contentTitle = 'Quality schemes'
         );
     }
 

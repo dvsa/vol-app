@@ -20,16 +20,6 @@ use Olcs\Data\Mapper\UnlicensedOperatorBusinessDetails as Mapper;
  */
 class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsController
 {
-    /**
-     * @var string
-     */
-    protected $pageLayout = 'unlicensed-operator-section';
-
-    /**
-     * @var string
-     */
-    protected $layoutFile = 'layout/unlicensed-operator-subsection';
-
     protected $subNavRoute = 'unlicensed_operator_profile';
 
     protected $mapperClass = Mapper::class;
@@ -96,7 +86,8 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
         }
 
         $view = $this->getView(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
+
         return $this->renderView($view);
     }
 

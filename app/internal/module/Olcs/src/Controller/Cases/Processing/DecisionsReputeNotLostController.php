@@ -11,18 +11,17 @@ use Dvsa\Olcs\Transfer\Command\TmCaseDecision\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Query\TmCaseDecision\GetByCase as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\TmCaseDecision as Mapper;
 use Olcs\Form\Model\Form\TmCaseRepute as Form;
+use Zend\View\Model\ViewModel;
 
 /**
  * Case Decisions ReputeNotLost Controller
  */
 class DecisionsReputeNotLostController extends AbstractInternalController implements
     CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -43,14 +42,12 @@ class DecisionsReputeNotLostController extends AbstractInternalController implem
         ],
     ];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/case-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/case-details-subsection';
+        return $view;
     }
 
     /**
@@ -69,6 +66,8 @@ class DecisionsReputeNotLostController extends AbstractInternalController implem
     protected $formClass = Form::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add repute not lost';
+    protected $editContentTitle = 'Edit repute not lost';
 
     /**
      * Variables for controlling edit view rendering

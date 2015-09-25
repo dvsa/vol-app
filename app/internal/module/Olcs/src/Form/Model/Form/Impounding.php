@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("Impounding")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Impounding", "action_lcfirst": true})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class Impounding
 {

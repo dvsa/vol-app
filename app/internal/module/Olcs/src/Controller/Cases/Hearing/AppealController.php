@@ -15,10 +15,10 @@ use Dvsa\Olcs\Transfer\Query\Cases\Hearing\Appeal as AppealDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\AppealList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\Appeal as FormClass;
 use Olcs\Data\Mapper\Appeal as Mapper;
+use Zend\View\Model\ViewModel;
 
 /**
  * Hearing Appeal Controller
@@ -26,10 +26,7 @@ use Olcs\Data\Mapper\Appeal as Mapper;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class AppealController extends AbstractInternalController implements
-    CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class AppealController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -52,21 +49,19 @@ class AppealController extends AbstractInternalController implements
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/case-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/case-details-subsection';
+        return $view;
     }
 
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/appeals-stays';
+    protected $detailsViewTemplate = 'sections/cases/pages/appeals-stays';
     protected $detailsViewPlaceholderName = '  ';
     protected $itemDto = AppealDto::class;
     // 'id' => 'conviction', to => from
@@ -83,6 +78,8 @@ class AppealController extends AbstractInternalController implements
     protected $formClass = FormClass::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add appeal';
+    protected $editContentTitle = 'Edit appeal';
 
     /**
      * Variables for controlling edit view rendering

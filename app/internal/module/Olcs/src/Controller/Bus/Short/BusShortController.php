@@ -10,8 +10,6 @@ namespace Olcs\Controller\Bus\Short;
 use Olcs\Controller\AbstractInternalController;
 use \Olcs\Data\Mapper\BusRegShortNotice as ShortNoticeMapper;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\BusShortNotice as ShortNoticeForm;
 use Dvsa\Olcs\Transfer\Query\Bus\ShortNoticeByBusReg as ShortNoticeDto;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateShortNotice as UpdateShortNoticeCmd;
@@ -22,10 +20,7 @@ use Common\RefData;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusShortController extends AbstractInternalController implements
-    BusRegControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class BusShortController extends AbstractInternalController implements BusRegControllerInterface
 {
     protected $navigationId = 'licence_bus_short';
     protected $itemDto = ShortNoticeDto::class;
@@ -33,16 +28,7 @@ class BusShortController extends AbstractInternalController implements
     protected $formClass = ShortNoticeForm::class;
     protected $updateCommand = UpdateShortNoticeCmd::class;
     protected $mapperClass = ShortNoticeMapper::class;
-
-    public function getPageInnerLayout()
-    {
-        return 'layout/wide-layout';
-    }
-
-    public function getPageLayout()
-    {
-        return 'layout/bus-registrations-section';
-    }
+    protected $editContentTitle = 'Bus Short Notice';
 
     /**
      * @param \Common\Form\Form $form

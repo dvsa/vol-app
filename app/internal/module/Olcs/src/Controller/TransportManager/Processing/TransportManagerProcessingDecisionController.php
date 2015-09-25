@@ -9,7 +9,6 @@ namespace Olcs\Controller\TransportManager\Processing;
 
 use Dvsa\Olcs\Transfer\Command\Tm;
 use Dvsa\Olcs\Transfer\Query\Tm\TransportManager;
-use Olcs\Controller\TransportManager\Processing\AbstractTransportManagerProcessingController;
 
 /**
  * Transport Manager Processing Decision Controller
@@ -19,11 +18,6 @@ use Olcs\Controller\TransportManager\Processing\AbstractTransportManagerProcessi
 class TransportManagerProcessingDecisionController extends AbstractTransportManagerProcessingController
 {
     /**
-     * @var string
-     */
-    protected $section = 'processing-decisions';
-
-    /**
      * Placeholder stub
      *
      * @return ViewModel
@@ -32,6 +26,7 @@ class TransportManagerProcessingDecisionController extends AbstractTransportMana
     {
         $view = $this->getViewWithTm();
         $view->setTemplate('pages/placeholder');
+
         return $this->renderView($view);
     }
 
@@ -69,20 +64,13 @@ class TransportManagerProcessingDecisionController extends AbstractTransportMana
                 $this->getRequest()
             );
 
-        $form->get('messages')
-            ->get('message')
-            ->setValue(
-                implode('<br />', $messages)
-            );
-
+        $form->get('messages')->get('message')->setValue(implode('<br />', $messages));
         $form->get('form-actions')->remove('continue');
 
-        $view = $this->getViewWithTm(
-            [
-                'form' => $form
-            ]
-        );
-        $view->setTemplate('partials/form');
+        $view = $this->getViewWithTm(['form' => $form]);
+
+        $view->setTemplate('pages/form');
+
         return $this->renderView($view, 'transport-manager-remove');
     }
 
@@ -117,12 +105,9 @@ class TransportManagerProcessingDecisionController extends AbstractTransportMana
             }
         }
 
-        $view = $this->getViewWithTm(
-            [
-                'form' => $form
-            ]
-        );
-        $view->setTemplate('partials/form');
+        $view = $this->getViewWithTm(['form' => $form]);
+        $view->setTemplate('pages/form');
+
         return $this->renderView($view, 'transport-manager-remove');
     }
 }

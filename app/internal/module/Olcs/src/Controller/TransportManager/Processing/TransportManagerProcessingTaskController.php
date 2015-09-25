@@ -23,11 +23,6 @@ class TransportManagerProcessingTaskController extends AbstractTransportManagerP
     use TaskSearchTrait;
 
     /**
-     * @var string
-     */
-    protected $section = 'processing-tasks';
-
-    /**
      * Render the tasks list or redirect if processing
      *
      * @return \Zend\View\Model\ViewModel
@@ -58,7 +53,7 @@ class TransportManagerProcessingTaskController extends AbstractTransportManagerP
         $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
 
         $view = $this->getViewWithTm(['table' => $table]);
-        $view->setTemplate('partials/table');
+        $view->setTemplate('pages/table');
 
         return $this->renderView($view);
     }

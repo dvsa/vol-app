@@ -7,18 +7,20 @@
 namespace Olcs\Controller\Licence;
 
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Dvsa\Olcs\Transfer\Query\Bus\SearchViewList as ListDto;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\BusRegList as FilterForm;
+use Zend\View\Model\ViewModel;
 
 /**
  * Licence Bus Reg Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class BusRegistrationController extends AbstractInternalController implements LicenceControllerInterface,
-    PageLayoutProvider
+class BusRegistrationController extends AbstractInternalController implements
+    LicenceControllerInterface,
+    LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -33,7 +35,7 @@ class BusRegistrationController extends AbstractInternalController implements Li
      * listVars probably needs to be defined every time but will work without
      */
     protected $tableViewPlaceholderName = 'table';
-    protected $tableViewTemplate = 'layout/bus-registrations-list';
+    protected $tableViewTemplate = 'pages/table';
     protected $defaultTableSortField = 'regNo';
     protected $tableName = 'busreg';
     protected $listDto = ListDto::class;
@@ -41,11 +43,6 @@ class BusRegistrationController extends AbstractInternalController implements Li
         'licId' => 'licence'
     ];
     protected $filterForm = FilterForm::class;
-
-    public function getPageLayout()
-    {
-        return 'layout/licence-section';
-    }
 
     /**
      * Any inline scripts needed in this section
@@ -55,4 +52,12 @@ class BusRegistrationController extends AbstractInternalController implements Li
     protected $inlineScripts = array(
         'indexAction' => ['forms/filter', 'table-actions']
     );
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/bus/partials/list-left');
+
+        return $view;
+    }
 }

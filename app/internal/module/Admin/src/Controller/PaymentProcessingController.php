@@ -1,86 +1,31 @@
 <?php
+
 /**
  * Payment Processing Controller
  */
-
 namespace Admin\Controller;
 
 use Common\Category;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
-
 use Common\Controller\AbstractActionController;
 use Dvsa\Olcs\Transfer\Query\Organisation\CpidOrganisation;
 use Dvsa\Olcs\Transfer\Command\Organisation\CpidOrganisationExport;
 use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
-use Olcs\Controller\Traits\FeesActionTrait;
 
 /**
  * Payment Processing Controller
  */
-class PaymentProcessingController extends AbstractActionController
+class PaymentProcessingController extends AbstractActionController implements LeftViewProvider
 {
-    use FeesActionTrait;
-
-    /**
-     * @inheritdoc
-     */
-    protected function alterFeeTable($table, $results)
-    {
-        // no-op
-        return $table;
-    }
-
-    /**
-     * Route (prefix) for fees action redirects
-     * @see Olcs\Controller\Traits\FeesActionTrait
-     * @return string
-     */
-    protected function getFeesRoute()
-    {
-        return 'admin-dashboard/admin-payment-processing/misc-fees';
-    }
-
-    /**
-     * The fees route redirect params
-     * @see Olcs\Controller\Traits\FeesActionTrait
-     * @return array
-     */
-    protected function getFeesRouteParams()
-    {
-        return [];
-    }
-
-    /**
-     * The controller specific fees table params
-     * @see Olcs\Controller\Traits\FeesActionTrait
-     * @return array
-     */
-    protected function getFeesTableParams()
-    {
-        return [
-            'isMiscellaneous' => 1,
-            'status' => 'current',
-        ];
-    }
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
      * represented by a single navigation id.
      */
     protected $navigationId = 'admin-dashboard/admin-payment-processing';
-
-    /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function indexAction()
-    {
-        return $this->feesAction('partials/table');
-    }
 
     /**
      * Export and list the organsations by CPID.
@@ -147,7 +92,7 @@ class PaymentProcessingController extends AbstractActionController
             ]
         );
 
-        $view->setTemplate('partials/table');
+        $view->setTemplate('pages/table');
         return $this->renderLayout($view);
     }
 
@@ -179,13 +124,9 @@ class PaymentProcessingController extends AbstractActionController
             $data
         );
 
-        $view = new ViewModel(
-            [
-                'table' => $table,
-            ]
-        );
+        $view = new ViewModel(['table' => $table]);
+        $view->setTemplate('pages/table');
 
-        $view->setTemplate('partials/table');
         return $this->renderLayout($view);
     }
 
@@ -194,15 +135,23 @@ class PaymentProcessingController extends AbstractActionController
      */
     protected function renderLayout($view, $pageTitle = null, $pageSubTitle = null)
     {
-        // This is a zend\view\variables object - cast it to an array.
-        $layout = $this->getView((array)$view->getVariables());
-
         $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')
             ->set($view->getVariable('filterForm'));
 
-        $layout->setTemplate('layout/admin-payment-processing-section');
-        $layout->addChild($view, 'content');
-        return parent::renderView($layout, 'Payment processing', $pageSubTitle);
+        return parent::renderView($view, 'Payment processing', $pageSubTitle);
+    }
+
+    public function getLeftView()
+    {
+        $view = new ViewModel(
+            [
+                'navigationId' => 'admin-dashboard/admin-payment-processing',
+                'navigationTitle' => 'Payment Processing'
+            ]
+        );
+        $view->setTemplate('admin/sections/admin/partials/generic-left');
+
+        return $view;
     }
 
     /**
@@ -231,17 +180,8 @@ class PaymentProcessingController extends AbstractActionController
     {
         $cpidFilterForm = $this->getForm('cpid-filter');
         $cpidFilterForm->remove('security');
-        $cpidFilterForm->setData(
-            [
-                'status' => $status
-            ]
-        );
-
-        $cpidFilterForm->get('status')->addValueOption(
-            [
-                RefData::OPERATOR_CPID_ALL => 'All'
-            ]
-        );
+        $cpidFilterForm->setData(['status' => $status]);
+        $cpidFilterForm->get('status')->addValueOption([RefData::OPERATOR_CPID_ALL => 'All']);
 
         return $cpidFilterForm;
     }

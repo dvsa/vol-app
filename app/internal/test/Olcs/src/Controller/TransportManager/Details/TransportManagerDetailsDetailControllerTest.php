@@ -633,7 +633,7 @@ class TransportManagerDetailsDetailControllerTest extends AbstractHttpController
 
         $this->sut
             ->shouldReceive('redirectToRoute')
-            ->with('transport-manager/details/details', ['transportManager' => 1])
+            ->with('transport-manager/details', ['transportManager' => 1])
             ->andReturn(new \Zend\Http\Response());
 
         $responseMock = m::mock('\Zend\Http\Response')

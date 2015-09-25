@@ -5,9 +5,10 @@
  */
 namespace Olcs\Controller\Licence\Processing;
 
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Licence\LicenceController;
-use Olcs\Helper\LicenceProcessingHelper;
 use Olcs\Controller\Traits\ProcessingControllerTrait;
+use Zend\View\Model\ViewModel;
 
 /**
  * Abstract Licence Processing Controller
@@ -15,17 +16,9 @@ use Olcs\Controller\Traits\ProcessingControllerTrait;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-abstract class AbstractLicenceProcessingController extends LicenceController
+abstract class AbstractLicenceProcessingController extends LicenceController implements LeftViewProvider
 {
     use ProcessingControllerTrait;
-
-    /**
-     * Anything using renderView in this section will
-     * inherit this layout
-     *
-     * @var string
-     */
-    protected $pageLayout = 'licence-section';
 
     protected $helperClass = '\Olcs\Helper\LicenceProcessingHelper';
 
@@ -39,16 +32,11 @@ abstract class AbstractLicenceProcessingController extends LicenceController
         );
     }
 
-    protected function getProcessingLayout($view, $variables)
+    public function getLeftView()
     {
-        $layout = $this->getViewWithLicence(
-            array_merge($variables, (array)$view->getVariables())
-        );
-        $layout->setTemplate('layout/processing-subsection');
+        $view = new ViewModel();
+        $view->setTemplate('sections/processing/partials/left');
 
-        $layout->addChild($view, 'content');
-
-        return $layout;
-
+        return $view;
     }
 }

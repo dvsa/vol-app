@@ -12,22 +12,19 @@ use Dvsa\Olcs\Transfer\Command\Cases\NonPi\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Cases\NonPi\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Cases\NonPi\Single as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\NonPi\Listing as ListDto;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\NonPi as MapperClass;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\NonPi as FormClass;
+use Zend\View\Model\ViewModel;
 
 /**
  * Case Conviction Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class NonPublicInquiryController extends AbstractInternalController implements
-    CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class NonPublicInquiryController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -48,21 +45,19 @@ class NonPublicInquiryController extends AbstractInternalController implements
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/case-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/case-details-subsection';
+        return $view;
     }
 
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/non-public-inquiry';
+    protected $detailsViewTemplate = 'sections/cases/pages/non-public-inquiry';
     protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = ItemDto::class;
     // 'id' => 'conviction', to => from
@@ -76,6 +71,8 @@ class NonPublicInquiryController extends AbstractInternalController implements
     protected $formClass = FormClass::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = MapperClass::class;
+    protected $addContentTitle = 'Add non-public inquiry';
+    protected $editContentTitle = 'Edit non-public inquiry';
 
     /**
      * Variables for controlling edit view rendering
@@ -116,6 +113,8 @@ class NonPublicInquiryController extends AbstractInternalController implements
 
     /**
      * Action called if matched action does not exist
+     *
+     * @todo really?
      *
      * @return array
      */

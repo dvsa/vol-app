@@ -6,13 +6,10 @@
 namespace Olcs\Controller\Licence;
 
 use Common\Service\Entity\LicenceStatusRuleEntityService;
-
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Traits\LicenceControllerTrait;
-
 use Dvsa\Olcs\Transfer\Query\Licence\LicenceDecisions;
 use Dvsa\Olcs\Transfer\Query\LicenceStatusRule\LicenceStatusRule;
-
 use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\CreateLicenceStatusRule;
 use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\UpdateLicenceStatusRule;
 use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\DeleteLicenceStatusRule;
@@ -89,7 +86,7 @@ class LicenceDecisionsController extends AbstractController
             )
         );
 
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, $pageTitle);
     }
@@ -320,14 +317,10 @@ class LicenceDecisionsController extends AbstractController
             }
         }
 
-        return $this->renderView(
-            $this->getView(
-                array(
-                    'form' => $form,
-                )
-            )->setTemplate('partials/form'),
-            $pageTitle
-        );
+        $view = $this->getView(['form' => $form]);
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, $pageTitle);
     }
 
     /**
@@ -516,15 +509,11 @@ class LicenceDecisionsController extends AbstractController
      */
     private function renderDecisionView($form = null, $pageTitle = null)
     {
-        $view = $this->getViewWithLicence(
-            array(
-                'form' => $form
-            )
-        );
+        $view = $this->getViewWithLicence(['form' => $form]);
 
         $this->getServiceLocator()->get('Script')->loadFiles(['forms/licence-decision']);
 
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, $pageTitle);
     }

@@ -7,12 +7,10 @@
  */
 namespace Olcs\Controller\Lva\Traits;
 
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Common\View\Model\Section;
-use Olcs\View\Model\Variation\VariationLayout;
-use Olcs\View\Model\Application\Layout;
-use Olcs\View\Model\Variation\SectionLayout;
 use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
 use Common\Service\Entity\VariationCompletionEntityService;
 
@@ -30,6 +28,50 @@ trait VariationControllerTrait
             CommonVariationControllerTrait::goToNextSection insteadof ApplicationControllerTrait;
         }
 
+    protected function renderPage($content, $title, array $variables = [])
+    {
+        $this->placeholder()->setPlaceholder('contentTitle', $title);
+
+        $layout = $this->viewBuilder()->buildView($content);
+
+        if (!($this instanceof LeftViewProvider)) {
+            $left = $this->getLeft($variables);
+
+            if ($left !== null) {
+                $layout->setLeft($this->getLeft($variables));
+            }
+        }
+
+        return $layout;
+    }
+
+    protected function getLeft(array $variables = [])
+    {
+        $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
+
+        $left = new ViewModel(
+            array_merge(
+                [
+                    'sections'     => $this->getSectionsForView(),
+                    'currentRoute' => $routeName,
+                    'lvaId'        => $this->getIdentifier()
+                ],
+                $variables
+            )
+        );
+        $left->setTemplate('sections/variation/partials/left');
+
+        return $left;
+    }
+
+    protected function getRight()
+    {
+        $right = new ViewModel();
+        $right->setTemplate('sections/variation/partials/right');
+
+        return $right;
+    }
+
     /**
      * Render the section
      *
@@ -42,40 +84,20 @@ trait VariationControllerTrait
     {
         if (!($content instanceof ViewModel)) {
             $sectionParams = array_merge(
-                array('title' => 'lva.section.title.' . $content, 'form' => $form),
+                [
+                    'form' => $form
+                ],
                 $variables
             );
 
+            $title = 'lva.section.title.' . $content;
+
             $content = new Section($sectionParams);
+
+            return $this->renderPage($content, $title, $variables);
         }
 
-        $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
-
-        $sectionLayout = new SectionLayout(
-            array_merge(
-                $variables,
-                array(
-                    'sections'     => $this->getSectionsForView(),
-                    'currentRoute' => $routeName,
-                    'lvaId'        => $this->getIdentifier()
-                )
-            )
-        );
-        $sectionLayout->addChild($content, 'content');
-
-        $applicationLayout = new VariationLayout();
-
-        $applicationLayout->addChild($sectionLayout, 'content');
-
-        $params = $this->getHeaderParams();
-
-        $layout = new Layout($applicationLayout, $params);
-
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $layout->setTemplate('layout/ajax');
-        }
-
-        return $layout;
+        return $this->renderPage($content, $content->getVariable('title'), $variables);
     }
 
     /**

@@ -1,0 +1,41 @@
+<?php
+$licence = $this->placeholder('licence')->getValue();
+?>
+<div class="small-module">
+    <h4 class="small-module__title">Operator details</h4>
+    <p class="small-module__details">
+        <a href="<?php echo $this->url('operator', ['organisation' => $licence['organisation']['id']], [], true);?>">
+            <?php echo $this->escapeHtml($licence['organisation']['name']); ?>
+        </a>
+    </p>
+</div>
+
+<?php
+echo $this->showMarkers();
+
+$nav = $this->navigation('right-sidebar')
+    ->menu($this->navigation()->findOneBy('id', 'licence-quick-actions'))
+    ->setPartial('partials/record-actions__group');
+
+if ($nav->getContainer()->hasPages(true)): ?>
+    <div class="record-actions">
+        <h5>Quick actions</h5>
+        <?php echo $nav; ?>
+    </div>
+<?php endif;
+
+$nav = $this->navigation('right-sidebar')
+    ->menu($this->navigation()->findOneBy('id', 'licence-decisions'))
+    ->setPartial('partials/record-actions__group');
+
+if ($nav->getContainer()->hasPages(true)): ?>
+    <div class="record-actions">
+        <h5>Decisions</h5>
+        <?php echo $nav; ?>
+    </div>
+<?php endif; ?>
+
+<div class="latest-note">
+    <p class="latest-note__details">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidid...</p>
+    <a class="latest-note__link">View all 13 notes</a>
+</div><!-- end .small-details -->

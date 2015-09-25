@@ -215,7 +215,7 @@ trait NotesActionTrait
         $this->loadScripts(['forms/filter', 'table-actions']);
 
         $view = $this->getView(['table' => $table]);
-        $view->setTemplate('partials/table');
+        $view->setTemplate('pages/table');
 
         return $view;
     }
@@ -266,7 +266,7 @@ trait NotesActionTrait
 
         $view = $this->getView(['form' => $form]);
 
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'internal-application-processing-notes-add-title');
     }
@@ -343,7 +343,7 @@ trait NotesActionTrait
             ->setAttribute('disabled', 'disabled');
 
         $view = $this->getView(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'internal-application-processing-notes-modify-title');
     }

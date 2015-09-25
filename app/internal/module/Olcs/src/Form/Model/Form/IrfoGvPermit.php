@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("IrfoGvPermit")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"IRFO GV Permit", "action_lcfirst": false})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class IrfoGvPermit
 {

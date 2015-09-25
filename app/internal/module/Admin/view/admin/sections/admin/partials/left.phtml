@@ -1,0 +1,12 @@
+<?php
+$navigationId = $this->getPlaceholder('navigationId')->asString();
+
+if (!empty($navigationId)) :
+
+    $navigation = $this->navigation('navigation')->findOneBy('id', $navigationId);
+    echo $this->partial(
+        'admin/sections/admin/partials/generic-left',
+        ['navigationId' => $navigationId, 'navigationTitle' => $navigation->getLabel()]
+    );
+
+endif;

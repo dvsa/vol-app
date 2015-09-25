@@ -10,18 +10,13 @@ use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmissionSectionComment as Upda
 use Dvsa\Olcs\Transfer\Query\Submission\SubmissionSectionComment as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Data\Mapper\SubmissionSectionComment as Mapper;
 use Olcs\Form\Model\Form\SubmissionSectionComment as Form;
 
 /**
- * SubmissionSectionComment Controller
+ * Submission Section Comment Controller
  */
-class SubmissionSectionCommentController extends AbstractInternalController implements
-    CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class SubmissionSectionCommentController extends AbstractInternalController implements CaseControllerInterface
 {
     /**
      * Holds the navigation ID,
@@ -46,16 +41,6 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
         ]
     ];
 
-    public function getPageLayout()
-    {
-        return 'layout/case-section';
-    }
-
-    public function getPageInnerLayout()
-    {
-        return 'layout/wide-layout';
-    }
-
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
@@ -70,6 +55,8 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
     protected $formClass = Form::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add comment';
+    protected $editContentTitle = 'Edit comment';
 
     /**
      * Variables for controlling edit view rendering

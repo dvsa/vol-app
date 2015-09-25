@@ -10,19 +10,18 @@ use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPsvAuth as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuth as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthList as ListDto;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Data\Mapper\IrfoPsvAuth as Mapper;
 use Olcs\Form\Model\Form\IrfoPsvAuth as Form;
+use Zend\View\Model\ViewModel;
 
 /**
  * Operator Irfo Psv Authorisations Controller
  */
 class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController implements
     OperatorControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -51,14 +50,12 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     protected $listDto = ListDto::class;
     protected $listVars = ['organisation'];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/operator-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/operator/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/operator-subsection';
+        return $view;
     }
 
     /**
@@ -75,6 +72,8 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     protected $formClass = Form::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add IRFO PSV Authorisation';
+    protected $editContentTitle = 'Edit IRFO PSV Authorisation';
 
     /**
      * Variables for controlling edit view rendering

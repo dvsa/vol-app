@@ -10,21 +10,20 @@ use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\Note as AddForm;
 use Olcs\Form\Model\Form\NoteEdit as EditForm;
 use Olcs\Data\Mapper\GenericFields as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Zend\View\Model\ViewModel;
 
 /**
  * Note Controller
  */
 class OperatorProcessingNoteController extends AbstractInternalController implements
     OperatorControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -45,22 +44,18 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
     protected $listDto = ListDto::class;
     protected $listVars = ['organisation'];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/' . ($this->isUnlicensed() ? 'unlicensed-' : '') . 'operator-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/operator/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/' . ($this->isUnlicensed() ? 'unlicensed-' : '') . 'operator-subsection';
+        return $view;
     }
 
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/offence';
-    protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = ItemDto::class;
     // 'id' => 'conviction', to => from
     protected $itemParams = ['organisation', 'id' => 'id'];
@@ -69,6 +64,8 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
      * Form class for add form. If this has a value, then this will be used, otherwise $formClass will be used.
      */
     protected $addFormClass = AddForm::class;
+    protected $addContentTitle = 'Add note';
+    protected $editContentTitle = 'Edit note';
 
     /**
      * Variables for controlling edit view rendering
@@ -128,15 +125,5 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
         $organisation = $response->getResult();
 
         return $organisation['isUnlicensed'];
-    }
-
-    public function onDispatch(\Zend\Mvc\MvcEvent $e)
-    {
-        if ($this->isUnlicensed()) {
-            $this->navigationId = 'unlicensed_operator_processing_notes';
-            $this->setNavigationCurrentLocation();
-        }
-
-        return parent::onDispatch($e);
     }
 }

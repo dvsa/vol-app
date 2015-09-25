@@ -7,20 +7,19 @@ namespace Olcs\Controller\Cases\AnnualTestHistory;
 
 use Dvsa\Olcs\Transfer\Query\Cases\AnnualTestHistory as AnnualTestHistoryQuery;
 use Dvsa\Olcs\Transfer\Command\Cases\UpdateAnnualTestHistory as UpdateAnnualTestHistoryCommand;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\AnnualTestHistory as AnnualTestHistoryMapper;
 use Olcs\Form\Model\Form\AnnualTestHistory as AnnualTestHistoryForm;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Zend\View\Model\ViewModel;
 
 /**
  * Class AnnualTestHistoryController
  */
 class AnnualTestHistoryController extends AbstractInternalController implements
     CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -39,14 +38,13 @@ class AnnualTestHistoryController extends AbstractInternalController implements
     protected $updateCommand = UpdateAnnualTestHistoryCommand::class;
     protected $mapperClass = AnnualTestHistoryMapper::class;
     protected $formClass = AnnualTestHistoryForm::class;
+    protected $editContentTitle = 'Edit Annual Test History';
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/case-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/case-details-subsection';
+        return $view;
     }
 }

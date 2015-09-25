@@ -10,7 +10,7 @@ namespace Olcs\Controller\Lva\Variation;
 
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Olcs\Controller\Interfaces\VariationControllerInterface;
 
 /**
  * Internal Variation Addresses Controller
@@ -18,7 +18,7 @@ use Olcs\Controller\Interfaces\ApplicationControllerInterface;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class AddressesController extends Lva\AbstractAddressesController implements ApplicationControllerInterface
+class AddressesController extends Lva\AbstractAddressesController implements VariationControllerInterface
 {
     use VariationControllerTrait;
 

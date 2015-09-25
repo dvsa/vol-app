@@ -73,7 +73,7 @@ class ContinuationChecklistReminderController extends AbstractController
         $this->getServiceLocator()->get('Script')->loadFiles(['forms/filter', 'forms/crud-table-handler']);
 
         $view = new ViewModel(['table' => $table, 'filterForm' => $filterForm]);
-        $view->setTemplate('partials/table');
+        $view->setTemplate('pages/table');
 
         $this->getServiceLocator()->get('viewHelperManager')->get('placeholder')
             ->getContainer('tableFilters')->set($filterForm);

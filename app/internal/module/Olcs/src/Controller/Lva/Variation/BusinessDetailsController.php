@@ -10,7 +10,7 @@ namespace Olcs\Controller\Lva\Variation;
 
 use Common\Controller\Lva\AbstractBusinessDetailsController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Olcs\Controller\Interfaces\VariationControllerInterface;
 
 /**
  * Internal Variation Business Details Controller
@@ -18,7 +18,7 @@ use Olcs\Controller\Interfaces\ApplicationControllerInterface;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class BusinessDetailsController extends AbstractBusinessDetailsController implements ApplicationControllerInterface
+class BusinessDetailsController extends AbstractBusinessDetailsController implements VariationControllerInterface
 {
     use VariationControllerTrait;
 

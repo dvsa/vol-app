@@ -67,16 +67,30 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
         $title = isset($organisation['name']) ? $organisation['name'] : '';
         $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->append($title);
 
+        $navigationPlugin = $this->getViewHelperManager()->get('Navigation')->__invoke('navigation');
+
         $isIrfo = $organisation['isIrfo'] == 'Y';
         if (!$isIrfo) {
             // hide IRFO navigation
-            $navigationPlugin = $this->getViewHelperManager()->get('Navigation')->__invoke('navigation');
             $navigationPlugin->findById('operator_irfo')->setVisible(false);
         }
 
         if ($organisation['isDisqualified']) {
             $sidebarNav = $this->getSidebarNavigationService();
             $sidebarNav->findById('operator-decisions-disqualify')->setVisible(false);
+        }
+
+        if ($organisation['isUnlicensed']) {
+            // Removed licenced only items
+            $navigationPlugin->findById('operator_business_details')->setVisible(false);
+            $navigationPlugin->findById('operator_fees')->setVisible(false);
+            $navigationPlugin->findById('operator_documents')->setVisible(false);
+            $navigationPlugin->findById('operator_licences_applications')->setVisible(false);
+        } else {
+            // Removed unlicenced only items
+            $navigationPlugin->findById('unlicensed_operator_business_details')->setVisible(false);
+            $navigationPlugin->findById('unlicensed_operator_cases')->setVisible(false);
+            $navigationPlugin->findById('unlicensed_operator_vehicles')->setVisible(false);
         }
 
         $this->getMarkerService()->addData('organisation', $organisation);

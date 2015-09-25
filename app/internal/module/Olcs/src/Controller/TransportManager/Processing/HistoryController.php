@@ -6,9 +6,8 @@ namespace Olcs\Controller\TransportManager\Processing;
 
 use Dvsa\Olcs\Transfer\Query\Processing\History;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Common\Controller\Traits as CommonTraits;
@@ -19,8 +18,7 @@ use Zend\Mvc\MvcEvent as MvcEvent;
  */
 class HistoryController extends AbstractInternalController implements
     TransportManagerControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -38,13 +36,11 @@ class HistoryController extends AbstractInternalController implements
     protected $tableName = 'event-history';
     protected $listDto = History::class;
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/transport-manager-section-crud';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/transport-manager/partials/processing-left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/transport-manager-subsection';
+        return $view;
     }
 }

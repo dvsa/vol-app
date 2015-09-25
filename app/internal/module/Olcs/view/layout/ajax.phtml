@@ -1,20 +1,20 @@
 <?php
-$placeholderPageTitle = $this->placeholder('pageTitle')->getValue();
-if (is_array($placeholderPageTitle)) {
-    $placeholderPageTitle = reset($placeholderPageTitle);
+{
+    if (!isset($pageTitle)) {
+        $pageTitle = $this->getPlaceholder('pageTitle')->asString();
+    }
+
+    if (!isset($contentTitle)) {
+        $contentTitle = $this->getPlaceholder('contentTitle')->asString();
+    }
+
+    $title = $contentTitle ?: $pageTitle;
 }
 ?>
-
 <div class="js-response">
-    <div class="">
-        <?php if (isset($this->pageTitle)):
-            echo $this->translate($this->pageTitle);
-        elseif ($placeholderPageTitle):
-            echo $this->translate($placeholderPageTitle);
-        endif;
-        ?>
-    </div>
+    <div class="js-title"><?php echo $this->translate($title); ?></div>
     <div class="js-body">
+        <?php echo $this->flashMessengerAll(); ?>
         <div class="js-content">
             <?php echo $this->content; ?>
         </div>

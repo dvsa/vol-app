@@ -5,8 +5,6 @@
  */
 namespace Olcs\Controller\Application\Processing;
 
-use Zend\View\Model\ViewModel;
-
 /**
  * Application Processing Overview Controller
  *

@@ -1,0 +1,38 @@
+<div class="page-header">
+  <div class="page-header__wrapper">
+    <div class="user-header">
+      <?php
+        echo $this->navigation('navigation')
+          ->breadcrumbs()
+          ->setMinDepth(0)
+          ->setPartial(array('layout/partials/breadcrumbs', 'Olcs'));
+
+        $userNav = $this->navigation('user-details')
+          ->menu($this->navigation()->findOneBy('id', 'admin-my-account'))
+          ->setPartial('layout/partials/user-details');
+
+        if (count($userNav->getContainer()) > 0) {
+            echo $userNav;
+        }
+      ?>
+    </div><!-- user-header -->
+    <?php
+    if (!empty($title)) {
+        ?>
+        <h1><?php echo $this->translate($title); ?></h1>
+        <?php
+    }
+
+    if (!empty($subTitle)) {
+        ?>
+        <h3 class="page-header__subtitle"><?php echo $this->translate($subTitle); ?></h3>
+        <?php
+    }
+
+    $status = $this->placeholder('status')->getValue();
+    if (!empty($status)) {
+        echo $this->licenceStatus($status);
+    }
+    ?>
+  </div><!-- end .page-header__wrapper-->
+</div><!-- end .page-header-->

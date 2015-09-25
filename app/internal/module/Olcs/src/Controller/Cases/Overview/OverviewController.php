@@ -12,23 +12,26 @@ use Dvsa\Olcs\Transfer\Command\Cases\DeleteCase as DeleteCaseCommand;
 use Dvsa\Olcs\Transfer\Command\Cases\CloseCase as CloseCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\ReopenCase as ReopenCmd;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases as CasesDto;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Interfaces\NavigationIdProvider;
+use Olcs\Controller\Interfaces\RightViewProvider;
 use Olcs\Data\Mapper\GenericFields as GenericMapper;
 use Olcs\Form\Model\Form\Cases as CaseForm;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Zend\View\Model\ViewModel;
 
 /**
  * Overview Controller, also deals with add and edit of cases
  */
 class OverviewController extends AbstractInternalController implements
     CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider,
+    RightViewProvider,
+    NavigationIdProvider
 {
     protected $navigationId = 'case_details_overview';
-    protected $detailsViewTemplate = 'pages/case/overview';
+    protected $detailsViewTemplate = 'sections/cases/pages/overview';
     protected $itemDto = CasesDto::class;
     protected $defaultData = [
         'case' => AddFormDefaultData::FROM_ROUTE,
@@ -43,6 +46,8 @@ class OverviewController extends AbstractInternalController implements
     protected $deleteParams = ['id' => 'case'];
     protected $deleteCommand = DeleteCaseCommand::class;
     protected $mapperClass = GenericMapper::class;
+    protected $addContentTitle = 'Add case';
+    protected $editContentTitle = 'Edit case';
 
     /** Close */
     protected $closeCommand = CloseCmd::class;
@@ -76,7 +81,7 @@ class OverviewController extends AbstractInternalController implements
         ]
     ];
 
-    public function getPageLayout()
+    public function getNavigationId()
     {
         $action = $this->params()->fromRoute('action');
 
@@ -86,27 +91,24 @@ class OverviewController extends AbstractInternalController implements
                 $application = $this->params()->fromRoute('application');
                 $transportManager = $this->params()->fromRoute('transportManager');
 
-                $this->navigationId = 'case';
-                $this->setNavigationCurrentLocation();
-
                 if ($licence) {
-                    return 'layout/licence-section';
+                    return 'case';
                 }
 
                 if ($transportManager) {
-                    return 'layout/transport-manager-section-crud';
+                    return 'transport_managers';
                 }
 
                 if ($application) {
-                    return 'layout/application-section';
+                    return 'application';
                 }
-                //missing break is intentional
+            //missing break is intentional
             default:
-                return 'layout/case-section';
+                return null;
         }
     }
 
-    public function getPageInnerLayout()
+    public function getRightView()
     {
         $action = $this->params()->fromRoute('action');
 
@@ -117,19 +119,57 @@ class OverviewController extends AbstractInternalController implements
                 $transportManager = $this->params()->fromRoute('transportManager');
 
                 if ($licence) {
-                    return 'layout/licence-details-subsection';
+                    $viewModel = new ViewModel();
+                    $viewModel->setTemplate('sections/licence/partials/right');
+                    return $viewModel;
                 }
 
                 if ($transportManager) {
-                    return 'layout/wide-layout';
+                    $viewModel = new ViewModel();
+                    $viewModel->setTemplate('sections/transport-manager/partials/right');
+                    return $viewModel;
                 }
 
                 if ($application) {
-                    return 'layout/wide-layout';
+                    $viewModel = new ViewModel();
+                    $viewModel->setTemplate('sections/application/partials/right');
+                    return $viewModel;
                 }
-                //missing break is intentional
+            //missing break is intentional
             default:
-                return 'layout/case-details-subsection';
+                // Already setup in the listener
+                return null;
+        }
+    }
+
+    public function getLeftView()
+    {
+        $action = $this->params()->fromRoute('action');
+
+        switch ($action) {
+            case 'add':
+                $licence = $this->params()->fromRoute('licence');
+                $application = $this->params()->fromRoute('application');
+                $transportManager = $this->params()->fromRoute('transportManager');
+
+                if ($licence) {
+                    $viewModel = new ViewModel();
+                    $viewModel->setTemplate('sections/licence/partials/left');
+                    return $viewModel;
+                }
+
+                if ($transportManager) {
+                    return null;
+                }
+
+                if ($application) {
+                    return null;
+                }
+            //missing break is intentional
+            default:
+                $viewModel = new ViewModel();
+                $viewModel->setTemplate('sections/cases/partials/left');
+                return $viewModel;
         }
     }
 

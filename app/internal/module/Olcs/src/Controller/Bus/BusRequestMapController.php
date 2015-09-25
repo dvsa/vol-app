@@ -20,6 +20,11 @@ class BusRequestMapController extends BusController
      */
     protected $subNavRoute = 'licence_bus_processing';
 
+    public function getLeftView()
+    {
+        return null;
+    }
+
     /**
      * @return \Zend\Http\Response
      */
@@ -45,10 +50,10 @@ class BusRequestMapController extends BusController
             }
         }
 
-        $view = $this->getView();
-
         $this->setPlaceholder('form', $form);
+        $this->setPlaceholder('contentTitle', 'Request Map');
 
+        $view = $this->getView();
         $view->setTemplate('pages/crud-form');
 
         /** @var static $ctrl */

@@ -10,13 +10,18 @@ namespace Olcs\Controller\Bus;
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Common\Controller\Traits as CommonTraits;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Zend\View\Model\ViewModel;
 
 /**
  * Bus Controller
  *
+ * @NOTE Made this abstract as it is never used as a concrete
+ *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\BusRegControllerInterface
+abstract class BusController extends OlcsController\CrudAbstract implements BusRegControllerInterface, LeftViewProvider
 {
     use ControllerTraits\BusControllerTrait;
     use CommonTraits\ViewHelperManagerAware;
@@ -26,7 +31,6 @@ class BusController extends OlcsController\CrudAbstract implements OlcsControlle
     }
 
     /* bus controller properties */
-    protected $layoutFile = 'layout/bus-registration-subsection';
     protected $subNavRoute;
     protected $section;
     protected $item;
@@ -46,14 +50,6 @@ class BusController extends OlcsController\CrudAbstract implements OlcsControlle
      * @var string
      */
     protected $formName = 'none';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'bus-registrations-section';
 
     /**
      * Holds the service name
@@ -80,6 +76,14 @@ class BusController extends OlcsController\CrudAbstract implements OlcsControlle
         '',
     );
 
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/processing/partials/left');
+
+        return $view;
+    }
+
     /**
      * Renders the view
      *
@@ -90,21 +94,9 @@ class BusController extends OlcsController\CrudAbstract implements OlcsControlle
      */
     public function renderView($view, $pageTitle = null, $pageSubTitle = null)
     {
-        $this->pageLayout = 'bus-registrations-section';
+        $this->maybeAddScripts($view);
 
-        $variables = array(
-            'navigation' => $this->getSubNavigation(),
-            'section' => $this->getSection(),
-            'item' => $this->getItem()
-        );
-
-        $layout = $this->getView(array_merge($variables, (array)$view->getVariables()));
-        $layout->setTemplate($this->getLayoutFile());
-        $this->maybeAddScripts($layout);
-
-        $layout->addChild($view, 'content');
-
-        return $this->parentRenderView($layout, $pageTitle, $pageSubTitle);
+        return $this->parentRenderView($view, $pageTitle, $pageSubTitle);
     }
 
     /**

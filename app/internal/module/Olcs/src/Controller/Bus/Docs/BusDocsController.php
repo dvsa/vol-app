@@ -10,6 +10,7 @@ namespace Olcs\Controller\Bus\Docs;
 
 use Olcs\Controller\Bus\BusController;
 use Olcs\Controller\Traits;
+use Zend\View\Model\ViewModel;
 
 /**
  * Bus Docs Controller
@@ -19,14 +20,19 @@ use Olcs\Controller\Traits;
  */
 class BusDocsController extends BusController
 {
+    use Traits\DocumentActionTrait,
+        Traits\DocumentSearchTrait,
+        Traits\ListDataTrait;
 
-    use Traits\DocumentActionTrait;
-    use Traits\DocumentSearchTrait;
-    use Traits\ListDataTrait;
-
-    protected $layoutFile = 'layout/docs-attachments-list';
     protected $section = 'docs';
     protected $subNavRoute = 'licence_bus_docs';
+
+    protected function getConfiguredDocumentForm()
+    {
+        $licence = $this->getFromRoute('licence');
+        $filters = $this->mapDocumentFilters(['licence' => $licence]);
+        return $this->getDocumentForm($filters);
+    }
 
     /**
      * Route (prefix) for document action redirects
@@ -56,12 +62,10 @@ class BusDocsController extends BusController
     protected function getDocumentView()
     {
         $licence = $this->getFromRoute('licence');
-
         $filters = $this->mapDocumentFilters(['licence' => $licence]);
 
         $table = $this->getDocumentsTable($filters);
-        $form  = $this->getDocumentForm($filters);
 
-        return $this->getView(['table' => $table, 'form'  => $form]);
+        return $this->getView(['table' => $table]);
     }
 }

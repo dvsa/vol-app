@@ -63,7 +63,7 @@ class DocumentRelinkController extends AbstractDocumentController
         $translator = $this->getServiceLocator()->get('translator');
         $view = new ViewModel(['form' => $form]);
 
-        $view->setTemplate('partials/form-with-fm');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, $translator->translate('internal.documents.relink_documents'));
     }

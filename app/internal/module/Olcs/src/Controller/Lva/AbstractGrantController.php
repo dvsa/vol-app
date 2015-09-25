@@ -162,10 +162,6 @@ abstract class AbstractGrantController extends AbstractController
 
         $this->getServiceLocator()->get('Script')->loadFiles(['forms/confirm-grant']);
 
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            return $this->renderModalWithForm($form, 'internal.inspection-request.form.title.grant');
-        }
-
         return $this->render(
             'grant_application',
             $form,
@@ -216,24 +212,6 @@ abstract class AbstractGrantController extends AbstractController
     protected function checkForRedirect($lvaId)
     {
         // no-op to avoid LVA predispatch magic kicking in
-    }
-
-    /**
-     * Render modal window with form
-     *
-     * @param \Common\Form\Form $form
-     * @param string $title
-     * @return \Common\Form\Form
-     */
-    protected function renderModalWithForm($form, $title)
-    {
-        $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
-
-        $layout = new ViewModel(['pageTitle' => $title]);
-        $layout->setTemplate('layout/ajax')->setTerminal(true)->addChild($view, 'content');
-
-        return $layout;
     }
 
     /**

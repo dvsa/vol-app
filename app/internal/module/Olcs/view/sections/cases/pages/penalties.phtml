@@ -1,0 +1,74 @@
+<?php
+    $data = $this->placeholder('penalties')->getValue();
+
+    if (!empty($data)) {
+        $infringement = [
+            'header' => 'ERRU penalties',
+            'multiItems' => [
+                0 => [
+                    ['label' => 'VRM', 'value' => $data['case']['erruVrm']],
+                ],
+                1 => [
+                    ['label' => 'Infringement ID', 'value' => $data['id']],
+                    ['label' => 'Notification number', 'value' => $data['notificationNumber']],
+                ],
+                2 => [
+                    [
+                        'label' => 'Date of infringement',
+                        'date' => $data['infringementDate'],
+                        'dateFormat' => 'Y-m-d'
+                    ],
+                    ['label' => 'Date of check', 'date' => $data['checkDate'], 'dateFormat' => 'Y-m-d'],
+                    ['label' => 'Category', 'value' => $data['siCategory']['description']],
+                    [
+                        'label' => 'Type',
+                        'value' => $data['siCategoryType']['description'],
+                        'class' => 'full-width'
+                    ]
+                ],
+                3 => [
+                    [
+                        'label' => 'Transport undertaking name',
+                        'value' => $data['case']['erruTransportUndertakingName'],
+                        'class' => 'full-width'
+                    ],
+                    [
+                        'label' => 'Member state',
+                        'value' => $data['memberStateCode']['countryDesc'],
+                        'class' => 'full-width'
+                    ],
+                    [
+                        'label' => 'Originating authority',
+                        'value' => $data['case']['erruOriginatingAuthority'],
+                        'class' => 'full-width'
+                    ]
+                ]
+            ]
+        ];
+
+        if ($data['erruResponseSent'] == 'N' && !empty($data['appliedPenalties'])) {
+            $infringement['actions'] = [
+                0 => [
+                    'url' => $this->url(null, ['action' => 'send'], [], true),
+                    'label' => 'Send response',
+                    'class' => 'action--primary js-modal-ajax'
+                ]
+            ];
+        } elseif ($data['erruResponseSent'] == 'Y') {
+            $erruResponseSent = new \DateTime($data['erruResponseTime']);
+            $infringement['header'] .= ' (response sent ' . $erruResponseSent->format('jS F Y') . ')';
+        }
+
+        echo $this->render('partials/read-only/main', $infringement);
+        echo $this->placeholder('erru-imposed')->getValue() . '<br />';
+        echo $this->placeholder('erru-requested')->getValue() . '<br />';
+        echo $this->placeholder('erru-applied')->getValue() . '<br />';
+        echo $this->render('pages/comments');
+    } else {
+        echo $this->render('partials/read-only/empty',
+            [
+                'header' => 'ERRU penalties',
+                'helpText' => 'There is currently no ERRU penalties'
+            ]
+        );
+    }

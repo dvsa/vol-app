@@ -14,24 +14,20 @@ use Dvsa\Olcs\Transfer\Query\Cases\Conviction\Conviction as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Conviction\ConvictionList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\Conviction;
-
 use Dvsa\Olcs\Transfer\Query\Cases\Cases as CommentItemDto;
 use Dvsa\Olcs\Transfer\Command\Cases\UpdateConvictionNote as CommentUpdateDto;
 use Olcs\Form\Model\Form\Comment as CommentForm;
 use Olcs\Data\Mapper\ConvictionCommentBox as CommentMapper;
+use Zend\View\Model\ViewModel;
 
 /**
  * Case Conviction Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class ConvictionController extends AbstractInternalController implements
-    CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class ConvictionController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -52,22 +48,18 @@ class ConvictionController extends AbstractInternalController implements
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/case-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/case-details-subsection';
+        return $view;
     }
 
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/offence';
-    protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = ItemDto::class;
     // 'id' => 'conviction', to => from
     protected $itemParams = ['case', 'id' => 'conviction'];
@@ -80,6 +72,8 @@ class ConvictionController extends AbstractInternalController implements
     protected $formClass = Conviction::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = \Olcs\Data\Mapper\Conviction::class;
+    protected $addContentTitle = 'Add conviction';
+    protected $editContentTitle = 'Edit conviction';
 
     /**
      * Variables for controlling edit view rendering

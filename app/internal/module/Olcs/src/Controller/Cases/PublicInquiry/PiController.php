@@ -2,8 +2,7 @@
 
 namespace Olcs\Controller\Cases\PublicInquiry;
 
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\Pi as PiMapper;
@@ -21,18 +20,16 @@ use Dvsa\Olcs\Transfer\Command\Cases\Pi\Close as CloseCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\Reopen as ReopenCmd;
 use Common\Service\Data\Sla as SlaService;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Zend\View\Model\ViewModel;
 
 /**
  * Class PiController
  */
-class PiController extends AbstractInternalController implements
-    CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class PiController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /** Details view */
     protected $detailsViewPlaceholderName = 'pi';
-    protected $detailsViewTemplate = 'pages/case/public-inquiry';
+    protected $detailsViewTemplate = 'sections/cases/pages/public-inquiry';
     protected $navigationId = 'case_hearings_appeals_public_inquiry';
     protected $itemDto = PiDto::class;
 
@@ -40,6 +37,8 @@ class PiController extends AbstractInternalController implements
     protected $createCommand = CreateCmd::class;
     protected $updateCommand = UpdateCmd::class;
     protected $formClass = AgreedAndLegislationForm::class;
+    protected $addContentTitle = 'Add Traffic Commissioner agreement and legislation';
+    protected $editContentTitle = 'Edit Traffic Commissioner agreement and legislation';
 
     /** Pi Decision */
     protected $updateDecisionCommand = UpdateDecisionCmd::class;
@@ -87,20 +86,12 @@ class PiController extends AbstractInternalController implements
         ]
     ];
 
-    /**
-     * @return string
-     */
-    public function getPageInnerLayout()
+    public function getLeftView()
     {
-        return 'layout/case-details-subsection';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    /**
-     * @return string
-     */
-    public function getPageLayout()
-    {
-        return 'layout/case-section';
+        return $view;
     }
 
     /**
@@ -187,7 +178,10 @@ class PiController extends AbstractInternalController implements
             $this->itemDto,
             new GenericItem($this->itemParams),
             $this->updateDecisionCommand,
-            $this->mapperClass
+            $this->mapperClass,
+            $this->editViewTemplate,
+            'Updated record',
+            'Register decision'
         );
     }
 
@@ -206,7 +200,10 @@ class PiController extends AbstractInternalController implements
             $this->itemDto,
             new GenericItem($this->itemParams),
             $this->updateSlaCommand,
-            $this->mapperClass
+            $this->mapperClass,
+            $this->editViewTemplate,
+            'Updated record',
+            'Service level agreement'
         );
     }
 
@@ -252,7 +249,7 @@ class PiController extends AbstractInternalController implements
         }
 
         if ($response->isClientError() || $response->isServerError()) {
-            //don't display error for pi not foound on index, as it shouldn't necessarily have one
+            //don't display error for pi not found on index, as it shouldn't necessarily have one
             $action = $this->getEvent()->getRouteMatch()->getParam('action');
             if ($action !== 'index') {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');

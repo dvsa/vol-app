@@ -2,11 +2,11 @@
 
 namespace Olcs\Mvc\Controller\Plugin;
 
-use Olcs\Controller\Interfaces\HeaderTemplateProvider;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Interfaces\NavigationIdProvider;
+use Olcs\Controller\Interfaces\RightViewProvider;
 use Olcs\View\Builder\Builder;
-use Olcs\View\Builder\PageLayoutBuilder;
+use Olcs\View\Model\ViewModel;
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 
 /**
@@ -15,14 +15,8 @@ use Zend\Mvc\Controller\Plugin\AbstractPlugin;
  */
 class ViewBuilder extends AbstractPlugin
 {
-    /**
-     * @var
-     */
     private $viewBuilder;
 
-    /**
-     * @return null
-     */
     public function __invoke()
     {
         if ($this->viewBuilder === null) {
@@ -32,35 +26,40 @@ class ViewBuilder extends AbstractPlugin
         return $this->viewBuilder;
     }
 
-    /**
-     * @return \Zend\Mvc\Controller\AbstractActionController
-     */
-    public function getController()
-    {
-        return parent::getController();
-    }
-
-    /**
-     *
-     */
     private function setupViewBuilder()
     {
         $controller = $this->getController();
 
-        $baseTemplate = $controller->getRequest()->isXmlHttpRequest() ? 'ajax' : 'base';
-        $headerTemplate = ($controller instanceof HeaderTemplateProvider) ?
-            $controller->getHeaderTemplate() : 'partials/header';
+        $layout = new ViewModel();
+        $layout->setIsAjax($controller->getRequest()->isXmlHttpRequest());
 
-        $viewBuilder = new Builder($headerTemplate, $baseTemplate);
+        if ($controller instanceof LeftViewProvider) {
 
-        if ($controller instanceof PageLayoutProvider) {
-            $viewBuilder = new PageLayoutBuilder($viewBuilder, $controller->getPageLayout());
+            $left = $controller->getLeftView();
+
+            if ($left !== null) {
+                $layout->setLeft($left);
+            }
         }
 
-        if ($controller instanceof PageInnerLayoutProvider) {
-            $viewBuilder = new PageLayoutBuilder($viewBuilder, $controller->getPageInnerLayout());
+        if ($controller instanceof RightViewProvider) {
+
+            $right = $controller->getRightView();
+
+            if ($right !== null) {
+                $layout->setRight($right);
+            }
         }
 
-        $this->viewBuilder = $viewBuilder;
+        if ($controller instanceof NavigationIdProvider) {
+
+            $navigationId = $controller->getNavigationId();
+
+            if ($navigationId !== null) {
+                $layout->setHorizontalNavigationId($navigationId);
+            }
+        }
+
+        $this->viewBuilder = new Builder($layout);
     }
 }

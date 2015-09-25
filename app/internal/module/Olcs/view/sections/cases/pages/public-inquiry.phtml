@@ -1,0 +1,75 @@
+<?php
+
+$pi = current($this->placeholder('pi')->getArrayCopy());
+
+if (!$pi) {
+    echo $this->render(
+        'sections/cases/pages/pi-empty',
+        array(
+            'heading' => 'Agreed and legislation',
+            'shortHeading' => 'Public Inquiry',
+            'route' => 'case_pi_agreed',
+            'readonly' => false
+        )
+    );
+} else {
+    $readonly = $pi['isClosed'];
+
+    $actions = [];
+
+    if ($pi['canReopen']) {
+        $reopenAction = [
+            'label' => 'Reopen',
+            'url' => $this->url(null, ['action' => 'reopen'], [], true),
+            'class' => 'js-modal-ajax action--secondary'
+        ];
+        $actions[] = $reopenAction;
+    } else if ($pi['canClose']) {
+        $closeAction = [
+            'label' => 'Close',
+            'url' => $this->url(null, ['action' => 'close'], [], true),
+            'class' => 'js-modal-ajax action--secondary'
+        ];
+        $actions[] = $closeAction;
+    }
+
+    echo $this->render('partials/read-only/main',
+        [
+            'header' => 'Public Inquiry',
+            'actions' => $actions
+        ]
+    );
+
+    echo $this->render('sections/cases/pages/pi-agreed', array('pi' => $pi, 'readonly' => $readonly));
+
+    //we have a Pi so a hearing can be added
+    if (isset($pi['piHearings']) && !empty($pi['piHearings'])):
+        echo $this->render('pages/table');
+
+        //we have a hearing, so decision can be added
+        if (isset($pi['decidedByTc']) && !empty($pi['decidedByTc'])):
+            echo $this->render('sections/cases/pages/pi-decision', array('pi' => $pi, 'readonly' => $readonly));
+        else:
+            echo $this->render('sections/cases/pages/pi-empty',
+                array(
+                    'heading' => 'Decision',
+                    'shortHeading' => 'decision',
+                    'route' => 'case_pi_decision',
+                    'readonly' => $readonly
+                )
+            );
+        endif;
+    else:
+        echo $this->render('sections/cases/pages/pi-empty',
+            array('heading' => 'Hearing',
+                'shortHeading' => 'hearing',
+                'route' => 'case_pi_hearing',
+                'section' => 'hearing',
+                'pi' => $pi,
+                'readonly' => $readonly
+            )
+        );
+    endif;
+
+    echo $this->render('sections/cases/pages/pi-sla', array('pi' => $pi, 'readonly' => $readonly));
+}

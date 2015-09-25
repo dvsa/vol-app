@@ -9,17 +9,14 @@ use Dvsa\Olcs\Transfer\Query\Cases\Cases as CasesItemDto;
 use Dvsa\Olcs\Transfer\Query\TmCaseDecision\GetByCase as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Common\Exception\ResourceNotFoundException;
+use Zend\View\Model\ViewModel;
 
 /**
  * Case Decisions Controller
  */
-class DecisionsController extends AbstractInternalController implements
-    CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class DecisionsController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -28,21 +25,19 @@ class DecisionsController extends AbstractInternalController implements
      */
     protected $navigationId = 'case_processing_decisions';
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/case-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/case-details-subsection';
+        return $view;
     }
 
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/tm-decision';
+    protected $detailsViewTemplate = 'sections/cases/pages/tm-decision';
     protected $itemDto = ItemDto::class;
     // 'id' => 'conviction', to => from
     protected $itemParams = ['case'];

@@ -19,10 +19,14 @@ use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailContro
 use Olcs\Controller\SearchController as SearchController;
 
 use Olcs\Listener\RouteParam\Application as ApplicationListener;
-use Olcs\Listener\RouteParam\ApplicationTitle as ApplicationTitle;
+use Olcs\Listener\RouteParam\ApplicationFurniture;
+use Olcs\Listener\RouteParam\VariationFurniture;
 use Olcs\Listener\RouteParam\Licence as LicenceListener;
-use Olcs\Listener\RouteParam\LicenceTitle;
-use Olcs\Listener\RouteParam\LicenceTitleLink;
+use Olcs\Listener\RouteParam\LicenceFurniture;
+use Olcs\Listener\RouteParam\OrganisationFurniture;
+use Olcs\Listener\RouteParam\BusRegFurniture;
+use Olcs\Listener\RouteParam\CasesFurniture;
+use Olcs\Listener\RouteParam\TransportManagerFurniture;
 
 use Common\Data\Object\Search\Licence as LicenceSearch;
 use Olcs\Service\Marker;
@@ -135,6 +139,7 @@ return array(
             \Olcs\Controller\Cases\Overview\OverviewController::class
                 => \Olcs\Controller\Cases\Overview\OverviewController::class,
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
+            'CaseDocsController' => 'Olcs\Controller\Cases\Docs\CaseDocsController',
             'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
             'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
             CaseHearingAppealController::class => CaseHearingAppealController::class,
@@ -191,6 +196,8 @@ return array(
             'DocumentFinaliseController' => 'Olcs\Controller\Document\DocumentFinaliseController',
             'DocumentRelinkController' => 'Olcs\Controller\Document\DocumentRelinkController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
+            'LicenceDocsController' => 'Olcs\Controller\Licence\Docs\LicenceDocsController',
+            'LicenceFeesController' => 'Olcs\Controller\Licence\Fees\LicenceFeesController',
             LicenceBusController::class => LicenceBusController::class,
             'LicenceDecisionsController' => 'Olcs\Controller\Licence\LicenceDecisionsController',
             'LicenceGracePeriodsController' => 'Olcs\Controller\Licence\LicenceGracePeriodsController',
@@ -210,6 +217,8 @@ return array(
             'Olcs\Controller\Licence\Details\ConditionUndertakingController',
             'LicenceDetailsTaxiPhvController' => 'Olcs\Controller\Licence\Details\TaxiPhvController',
             'ApplicationController' => 'Olcs\Controller\Application\ApplicationController',
+            'ApplicationDocsController' => 'Olcs\Controller\Application\Docs\ApplicationDocsController',
+            'ApplicationFeesController' => 'Olcs\Controller\Application\Fees\ApplicationFeesController',
             'ApplicationProcessingTasksController'
                 => 'Olcs\Controller\Application\Processing\ApplicationProcessingTasksController',
             'ApplicationProcessingOverviewController'
@@ -225,7 +234,6 @@ return array(
             LicenceProcessingNoteController::class => LicenceProcessingNoteController::class,
             'LicenceProcessingInspectionRequestController'
                 => 'Olcs\Controller\Licence\Processing\LicenceProcessingInspectionRequestController',
-            'BusController' => 'Olcs\Controller\Bus\BusController',
             'BusRegistrationController' => 'Olcs\Controller\Bus\Registration\BusRegistrationController',
             'BusDetailsController' => 'Olcs\Controller\Bus\Details\BusDetailsController',
             'BusDetailsServiceController' => 'Olcs\Controller\Bus\Details\BusDetailsServiceController',
@@ -250,9 +258,10 @@ return array(
             'BusServiceController' => 'Olcs\Controller\Bus\Service\BusServiceController',
             'BusRequestMapController' => 'Olcs\Controller\Bus\BusRequestMapController',
             'OperatorController' => 'Olcs\Controller\Operator\OperatorController',
+            'OperatorDocsController' => 'Olcs\Controller\Operator\Docs\OperatorDocsController',
             'OperatorBusinessDetailsController' => 'Olcs\Controller\Operator\OperatorBusinessDetailsController',
             'UnlicensedBusinessDetailsController' => 'Olcs\Controller\Operator\UnlicensedBusinessDetailsController',
-            'UnlicensedOperatorController' => 'Olcs\Controller\Operator\UnlicensedOperatorController',
+            'UnlicensedCasesOperatorController' => 'Olcs\Controller\Operator\Cases\UnlicensedCasesOperatorController',
             'UnlicensedOperatorVehiclesController' => 'Olcs\Controller\Operator\UnlicensedOperatorVehiclesController',
             'OperatorPeopleController' => 'Olcs\Controller\Operator\OperatorPeopleController',
             'OperatorLicencesApplicationsController'
@@ -329,6 +338,7 @@ return array(
         'exception_template' => 'pages/500',
         'template_map' => array(
             'layout/layout' => __DIR__ . '/../view/layout/base.phtml',
+            'pages/lva-details' => __DIR__ . '/../view/sections/lva/lva-details.phtml',
             'pages/404' => __DIR__ . '/../view/pages/404.phtml',
             'pages/500' => __DIR__ . '/../view/pages/500.phtml'
         ),
@@ -404,12 +414,16 @@ return array(
             'Olcs\Listener\RouteParam\Action' => 'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\RouteParam\TransportManager' => 'Olcs\Listener\RouteParam\TransportManager',
             ApplicationListener::class => ApplicationListener::class,
-            ApplicationTitle::class => ApplicationTitle::class,
+            ApplicationFurniture::class => ApplicationFurniture::class,
+            LicenceFurniture::class => LicenceFurniture::class,
+            OrganisationFurniture::class => OrganisationFurniture::class,
+            VariationFurniture::class => VariationFurniture::class,
+            BusRegFurniture::class => BusRegFurniture::class,
+            CasesFurniture::class => CasesFurniture::class,
+            TransportManagerFurniture::class => TransportManagerFurniture::class,
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
             LicenceListener::class => LicenceListener::class,
             'Olcs\Listener\RouteParam\CaseMarker' => 'Olcs\Listener\RouteParam\CaseMarker',
-            LicenceTitle::class => LicenceTitle::class,
-            LicenceTitleLink::class => LicenceTitleLink::class,
             'Olcs\Listener\RouteParam\Organisation' => 'Olcs\Listener\RouteParam\Organisation',
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
@@ -452,9 +466,9 @@ return array(
     ],
     'route_param_listeners' => [
         'Olcs\Controller\Interfaces\CaseControllerInterface' => [
+            CasesFurniture::class,
             'Olcs\Listener\RouteParam\Cases',
             LicenceListener::class,
-            LicenceTitleLink::class,
             'Olcs\Listener\RouteParam\CaseMarker',
             ApplicationListener::class,
             'Olcs\Listener\RouteParam\TransportManager',
@@ -462,17 +476,28 @@ return array(
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\ApplicationControllerInterface' => [
+            ApplicationFurniture::class, // Decorates the layout with application stuff
             ApplicationListener::class,
-            ApplicationTitle::class,
             'Olcs\Listener\RouteParam\Cases',
             LicenceListener::class,
-            LicenceTitleLink::class,
+            'Olcs\Listener\RouteParam\CaseMarker',
+            'Olcs\Listener\RouteParam\TransportManager',
+            'Olcs\Listener\RouteParam\Action',
+            'Olcs\Listener\HeaderSearch'
+        ],
+        // @NOTE This needs to be mostly the same as ApplicationControllerInterface except for the furniture
+        'Olcs\Controller\Interfaces\VariationControllerInterface' => [
+            VariationFurniture::class, // Decorates the layout with variation stuff
+            ApplicationListener::class,
+            'Olcs\Listener\RouteParam\Cases',
+            LicenceListener::class,
             'Olcs\Listener\RouteParam\CaseMarker',
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\BusRegControllerInterface' => [
+            BusRegFurniture::class,
             'Olcs\Listener\RouteParam\CaseMarker',
             ApplicationListener::class,
             'Olcs\Listener\RouteParam\BusRegId',
@@ -482,18 +507,20 @@ return array(
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
+            TransportManagerFurniture::class,
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\CaseMarker',
             'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\LicenceControllerInterface' => [
+            LicenceFurniture::class,
             LicenceListener::class,
-            LicenceTitle::class,
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\OperatorControllerInterface' => [
-            'Olcs\Listener\RouteParam\Organisation'
+            'Olcs\Listener\RouteParam\Organisation',
+            OrganisationFurniture::class
         ],
     ],
     'search' => [

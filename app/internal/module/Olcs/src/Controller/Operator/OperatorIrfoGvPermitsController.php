@@ -13,19 +13,18 @@ use Dvsa\Olcs\Transfer\Command\Irfo\RefuseIrfoGvPermit as RefuseDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermit as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermitList as ListDto;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Data\Mapper\IrfoGvPermit as Mapper;
 use Olcs\Form\Model\Form\IrfoGvPermit as Form;
+use Zend\View\Model\ViewModel;
 
 /**
  * Operator Irfo Gv Permits Controller
  */
 class OperatorIrfoGvPermitsController extends AbstractInternalController implements
     OperatorControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -53,22 +52,21 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     protected $listDto = ListDto::class;
     protected $listVars = ['organisation'];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/operator-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/operator/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/operator-subsection';
+        return $view;
     }
 
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/operator/irfo-gv-permit';
+    protected $detailsViewTemplate = 'sections/operator/pages/irfo-gv-permit';
     protected $itemDto = ItemDto::class;
+    protected $detailsContentTitle = 'GV Permits';
 
     /**
      * Variables for controlling edit view rendering
@@ -77,6 +75,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
      */
     protected $formClass = Form::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add IRFO GV Permit';
 
     /**
      * Variables for controlling edit view rendering

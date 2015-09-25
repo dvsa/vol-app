@@ -154,30 +154,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
                 ->setVisible(false);
         }
 
-        $this->doTitles($data);
         $this->hideShowMergeButtons($data);
-    }
-
-    private function doTitles($data)
-    {
-        $this->getViewHelperManager()->get('placeholder')
-            ->getContainer('pageTitle')->prepend($this->createTitle($data));
-    }
-
-    private function createTitle($data)
-    {
-        $url = $this->getViewHelperManager()
-            ->get('url')
-            ->__invoke('transport-manager/details/details', ['transportManager' => $data['id']], [], true);
-
-        $pageTitle = sprintf(
-            '<a href="%s">%s %s</a>',
-            $url,
-            $data['homeCd']['person']['forename'],
-            $data['homeCd']['person']['familyName']
-        );
-
-        return $pageTitle;
     }
 
     /**

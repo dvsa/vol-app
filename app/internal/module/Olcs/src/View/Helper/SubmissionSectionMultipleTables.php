@@ -10,7 +10,7 @@ use Zend\View\Helper\AbstractHelper;
  */
 class SubmissionSectionMultipleTables extends AbstractHelper
 {
-    const DEFAULT_VIEW = 'partials/submission-table';
+    const DEFAULT_VIEW = 'sections/cases/pages/submission/table';
 
     /**
      * View map

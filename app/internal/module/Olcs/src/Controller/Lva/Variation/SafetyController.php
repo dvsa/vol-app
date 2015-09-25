@@ -11,7 +11,7 @@ namespace Olcs\Controller\Lva\Variation;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Common\Controller\Lva\Traits\ApplicationSafetyControllerTrait;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Olcs\Controller\Interfaces\VariationControllerInterface;
 
 /**
  * Internal Variation Safety Controller
@@ -19,7 +19,7 @@ use Olcs\Controller\Interfaces\ApplicationControllerInterface;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class SafetyController extends Lva\AbstractSafetyController implements ApplicationControllerInterface
+class SafetyController extends Lva\AbstractSafetyController implements VariationControllerInterface
 {
     use VariationControllerTrait,
         ApplicationSafetyControllerTrait;

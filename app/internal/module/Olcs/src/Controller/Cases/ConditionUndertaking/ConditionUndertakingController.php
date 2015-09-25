@@ -16,10 +16,9 @@ use Dvsa\Olcs\Transfer\Query\Cases\CasesWithLicence as CasesWithLicenceDto;
 use Common\RefData;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Common\Exception\DataServiceException;
-use Common\Service\Table\Formatter\Address as TableAddressFormatter;
+use Zend\View\Model\ViewModel;
 
 /**
  * Case ConditionUndertaking Controller
@@ -40,9 +39,9 @@ use Common\Service\Table\Formatter\Address as TableAddressFormatter;
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class ConditionUndertakingController extends AbstractInternalController implements CaseControllerInterface,
- PageLayoutProvider,
- PageInnerLayoutProvider
+class ConditionUndertakingController extends AbstractInternalController implements
+    CaseControllerInterface,
+    LeftViewProvider
 {
 
     /**
@@ -66,14 +65,12 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/case-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/case-details-subsection';
+        return $view;
     }
 
     /**
@@ -94,6 +91,8 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     protected $formClass = 'ConditionUndertaking';
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = \Olcs\Data\Mapper\ConditionUndertaking::class;
+    protected $addContentTitle = 'Add condition or undertaking';
+    protected $editContentTitle = 'Edit condition or undertaking';
 
     /**
      * Variables for controlling edit view rendering

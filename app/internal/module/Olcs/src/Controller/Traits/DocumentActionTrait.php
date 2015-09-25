@@ -17,8 +17,17 @@ trait DocumentActionTrait
     protected abstract function getDocumentRoute();
     protected abstract function getDocumentRouteParams();
     protected abstract function getDocumentView();
+    protected abstract function getConfiguredDocumentForm();
 
     protected $documentIdentifierName = 'doc';
+
+    public function getLeftView()
+    {
+        $view = new ViewModel(['form' => $this->getConfiguredDocumentForm()]);
+        $view->setTemplate('sections/docs/partials/left');
+
+        return $view;
+    }
 
     public function documentsAction()
     {
@@ -61,7 +70,7 @@ trait DocumentActionTrait
 
         $this->loadScripts(['documents', 'table-actions']);
 
-        $view->setTemplate('layout/docs-attachments-list');
+        $view->setTemplate('pages/table');
 
         return $this->renderView($view);
     }

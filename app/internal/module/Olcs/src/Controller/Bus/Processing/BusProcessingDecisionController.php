@@ -15,22 +15,21 @@ use Dvsa\Olcs\Transfer\Command\Publication\Bus as PublishDto;
 use Dvsa\Olcs\Transfer\Query\Bus\BusRegDecision as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\BusRegUpdateStatus as UpdateStatusMapper;
 use Olcs\Form\Model\Form\BusRegUpdateWithdrawn as WithdrawForm;
 use Olcs\Form\Model\Form\BusRegUpdateStatus as UpdateStatusForm;
 use Olcs\Form\Model\Form\BusRegVariationReason as VariationReasonForm;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Common\RefData;
+use Zend\View\Model\ViewModel;
 
 /**
  * Bus Processing Decision Controller
  */
 class BusProcessingDecisionController extends AbstractInternalController implements
     BusRegControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -39,21 +38,11 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
      */
     protected $navigationId = 'licence_bus_processing';
 
-    public function getPageLayout()
-    {
-        return 'layout/bus-registrations-section';
-    }
-
-    public function getPageInnerLayout()
-    {
-        return 'layout/bus-registration-subsection';
-    }
-
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/bus/processing-decision';
+    protected $detailsViewTemplate = 'sections/bus/pages/processing-decision';
     protected $itemDto = ItemDto::class;
     protected $itemParams = ['id' => 'busRegId'];
 
@@ -74,6 +63,14 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
             'action' => 'details'
         ],
     ];
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/bus/partials/left');
+
+        return $view;
+    }
 
     public function indexAction()
     {
@@ -103,7 +100,8 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
             AdminCancelDto::class,
             UpdateStatusMapper::class,
             'pages/crud-form',
-            'Updated record'
+            'Updated record',
+            'Update status'
         );
     }
 
@@ -148,7 +146,8 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
             RefuseDto::class,
             UpdateStatusMapper::class,
             'pages/crud-form',
-            'Updated record'
+            'Updated record',
+            'Update status'
         );
     }
 
@@ -160,7 +159,8 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
             RefuseByShortNoticeDto::class,
             UpdateStatusMapper::class,
             'pages/crud-form',
-            'Updated record'
+            'Updated record',
+            'Update status'
         );
     }
 
@@ -188,7 +188,8 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
             WithdrawDto::class,
             UpdateStatusMapper::class,
             'pages/crud-form',
-            'Updated record'
+            'Updated record',
+            'Update status'
         );
     }
 
@@ -205,7 +206,8 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
             GrantDto::class,
             UpdateStatusMapper::class,
             'pages/crud-form',
-            'Updated record'
+            'Updated record',
+            'Grant variation'
         );
     }
 

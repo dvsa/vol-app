@@ -14,13 +14,12 @@ use Dvsa\Olcs\Transfer\Query\Cases\Prohibition\Defect as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Prohibition\DefectList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\ProhibitionDefect as Form;
 use Olcs\Data\Mapper\GenericFields as Mapper;
-
 use Dvsa\Olcs\Transfer\Query\Cases\Prohibition\Prohibition as ProhibitionDto;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
+use Zend\View\Model\ViewModel;
 
 /**
  * Case Prohibition Controller
@@ -29,8 +28,7 @@ use Olcs\Mvc\Controller\ParameterProvider\GenericList;
  */
 class ProhibitionDefectController extends AbstractInternalController implements
     CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -45,28 +43,24 @@ class ProhibitionDefectController extends AbstractInternalController implements
      * listVars probably needs to be defined every time but will work without
      */
     protected $tableViewPlaceholderName = 'table';
-    protected $tableViewTemplate = 'pages/case/prohibition-defect';
+    protected $tableViewTemplate = 'sections/cases/pages/prohibition-defect';
     protected $defaultTableSortField = 'id';
     protected $tableName = 'prohibitionDefect';
     protected $listDto = ListDto::class;
     protected $listVars = ['prohibition'];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/case-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/case-details-subsection';
+        return $view;
     }
 
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/offence';
-    protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = ItemDto::class;
     // 'id' => 'prohibition', to => from
     protected $itemParams = ['case', 'id' => 'id'];
@@ -79,6 +73,8 @@ class ProhibitionDefectController extends AbstractInternalController implements
     protected $formClass = Form::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add prohibition defect';
+    protected $editContentTitle = 'Edit prohibition defect';
 
     /**
      * Variables for controlling edit view rendering
@@ -126,8 +122,6 @@ class ProhibitionDefectController extends AbstractInternalController implements
         if ($response->isNotFound()) {
             return $this->notFoundAction();
         }
-
-        //die('<pre>' . print_r($response->getResult(), 1));
 
         $this->placeholder()->setPlaceholder('prohibition', $response->getResult());
 

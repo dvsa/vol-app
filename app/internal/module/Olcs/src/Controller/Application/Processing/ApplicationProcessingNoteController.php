@@ -11,21 +11,20 @@ use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\Note as AddForm;
 use Olcs\Form\Model\Form\NoteEdit as EditForm;
 use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Data\Mapper\GenericFields as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Zend\View\Model\ViewModel;
 
 /**
  * Note Controller
  */
 class ApplicationProcessingNoteController extends AbstractInternalController implements
-    ApplicationControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider,
+    ApplicationControllerInterface
 {
     /**
      * Holds the navigation ID,
@@ -47,14 +46,12 @@ class ApplicationProcessingNoteController extends AbstractInternalController imp
     protected $listVars = ['application'];
     protected $filterForm = FilterForm::class;
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/application-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/processing/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/processing-subsection';
+        return $view;
     }
 
     /**

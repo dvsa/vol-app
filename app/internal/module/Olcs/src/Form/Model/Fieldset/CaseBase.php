@@ -5,9 +5,8 @@ namespace Olcs\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
- * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("case-base")
- * @Form\Options({"label":""})
+ * @Form\Attributes({"class": "visually-hidden"})
  */
 class CaseBase extends Base
 {

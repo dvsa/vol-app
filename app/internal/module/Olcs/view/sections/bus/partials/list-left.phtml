@@ -1,0 +1,6 @@
+<h4>Filter by:</h4>
+<?php
+$tableFilters = $this->placeholder('tableFilters')->getValue();
+if($tableFilters instanceof \Zend\Form\Form) {
+    echo $this->form($tableFilters);
+}

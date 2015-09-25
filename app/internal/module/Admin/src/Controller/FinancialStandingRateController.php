@@ -12,15 +12,14 @@ use Dvsa\Olcs\Transfer\Command\System\DeleteFinancialStandingRateList as DeleteD
 use Dvsa\Olcs\Transfer\Query\System\FinancialStandingRate as ItemDto;
 use Dvsa\Olcs\Transfer\Query\System\FinancialStandingRateList as ListDto;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\FinancialStandingRate as Mapper;
 use Zend\View\Model\ViewModel;
 
 /**
  * Financial Standing Rate Controller
  */
-class FinancialStandingRateController extends AbstractInternalController implements PageLayoutProvider
+class FinancialStandingRateController extends AbstractInternalController
 {
     /**
      * Holds the navigation ID,
@@ -58,11 +57,8 @@ class FinancialStandingRateController extends AbstractInternalController impleme
     protected $deleteConfirmMessage = 'Are you sure you want to permanently delete the selected rate(s)?';
     protected $deleteSuccessMessage = 'Rate(s) deleted';
 
-
-    public function getPageLayout()
-    {
-        return 'layout/admin-layout';
-    }
+    protected $addContentTitle = 'Add financial standing rate';
+    protected $editContentTitle = 'Edit financial standing rate';
 
     public function indexAction()
     {

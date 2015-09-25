@@ -9,7 +9,7 @@ namespace Olcs\Controller\Lva\Variation;
 
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Olcs\Controller\Interfaces\VariationControllerInterface;
 
 /**
  * Internal Variation Convictions and penalties Controller
@@ -17,7 +17,7 @@ use Olcs\Controller\Interfaces\ApplicationControllerInterface;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 class ConvictionsPenaltiesController extends Lva\AbstractConvictionsPenaltiesController implements
-    ApplicationControllerInterface
+    VariationControllerInterface
 {
     use VariationControllerTrait;
 

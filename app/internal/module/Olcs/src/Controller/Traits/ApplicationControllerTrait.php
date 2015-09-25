@@ -7,11 +7,9 @@
  */
 namespace Olcs\Controller\Traits;
 
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
-use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Entity\LicenceEntityService;
-use Olcs\View\Model\Application\Layout;
-use Olcs\View\Model\Application\ApplicationLayout;
 
 /**
  * Application Controller Trait
@@ -20,21 +18,39 @@ use Olcs\View\Model\Application\ApplicationLayout;
  */
 trait ApplicationControllerTrait
 {
-    protected function render($view)
+    protected function render($view, $title = null, array $variables = [])
     {
-        $applicationLayout = new ApplicationLayout();
+        if ($title === null) {
+            $title = $view->getVariable('title');
+        }
 
-        $applicationLayout->addChild($view, 'content');
+        if (empty($variables)) {
+            $variables = $view->getVariables();
+        }
 
-        $params = $this->getHeaderParams();
+        return $this->renderPage($view, $title, $variables);
+    }
 
-        $layout = new Layout($applicationLayout, $params);
+    protected function renderPage($content, $title, array $variables = [])
+    {
+        $this->placeholder()->setPlaceholder('contentTitle', $title);
 
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $layout->setTemplate('layout/ajax');
+        $layout = $this->viewBuilder()->buildView($content);
+
+        if (!($this instanceof LeftViewProvider)) {
+            $left = $this->getLeft($variables);
+
+            if ($left) {
+                $layout->setLeft($left);
+            }
         }
 
         return $layout;
+    }
+
+    protected function getLeft(array $variables = [])
+    {
+        return null;
     }
 
     /**
@@ -50,9 +66,7 @@ trait ApplicationControllerTrait
             'applicationId' => $data['id'],
             'licNo' => $data['licence']['licNo'],
             'licenceId' => $data['licence']['id'],
-            'companyName' => $data['licence']['organisation']['name'],
-            'status' => $data['status']['id'],
-            'statusColour' => $this->getColourForStatus($data['status']['id']),
+            'companyName' => $data['licence']['organisation']['name']
         );
     }
 
@@ -91,31 +105,6 @@ trait ApplicationControllerTrait
             $this->getHeaderParams()
         );
 
-        $view = $this->getView($variables);
-
-        return $view;
-    }
-
-    protected function getColourForStatus($status)
-    {
-        switch ($status) {
-            case ApplicationEntityService::APPLICATION_STATUS_VALID:
-                $colour = 'green';
-                break;
-            case ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION:
-            case ApplicationEntityService::APPLICATION_STATUS_GRANTED:
-                $colour = 'orange';
-                break;
-            case ApplicationEntityService::APPLICATION_STATUS_WITHDRAWN:
-            case ApplicationEntityService::APPLICATION_STATUS_REFUSED:
-            case ApplicationEntityService::APPLICATION_STATUS_NOT_TAKEN_UP:
-                $colour = 'red';
-                break;
-            default:
-                $colour = 'grey';
-                break;
-        }
-
-        return $colour;
+        return $this->getView($variables);
     }
 }
