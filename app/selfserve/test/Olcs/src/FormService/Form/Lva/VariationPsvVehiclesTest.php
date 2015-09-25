@@ -9,6 +9,7 @@ namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Form\Elements\InputFilters\Lva\BackToVariationActionLink;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\VariationPsvVehicles;
 
 /**
@@ -16,29 +17,22 @@ use Olcs\FormService\Form\Lva\VariationPsvVehicles;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationPsvVehiclesTest extends AbstractLvaFormServiceTestCase
+class VariationPsvVehiclesTest extends MockeryTestCase
 {
-    protected $classToTest = VariationPsvVehicles::class;
+    protected $sut;
 
-    protected $formName = 'Lva\PsvVehicles';
+    protected $formHelper;
 
-    public function testGetFormWithoutFormActions()
+    protected $fsm;
+
+    public function setUp()
     {
-        // Mocks
-        $mockForm = m::mock();
+        $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
+        $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
 
-        $mockForm->shouldReceive('has')->with('form-actions')->andReturn(false);
-
-        $this->formHelper->shouldReceive('createForm')
-            ->with($this->formName)
-            ->andReturn($mockForm)
-            ->shouldReceive('remove')
-            ->once()
-            ->with($mockForm, 'shareInfo');
-
-        $form = $this->sut->getForm();
-
-        $this->assertSame($mockForm, $form);
+        $this->sut = new VariationPsvVehicles();
+        $this->sut->setFormHelper($this->formHelper);
+        $this->sut->setFormServiceLocator($this->fsm);
     }
 
     public function testGetForm()
@@ -60,7 +54,7 @@ class VariationPsvVehiclesTest extends AbstractLvaFormServiceTestCase
         $mockForm->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
         $this->formHelper->shouldReceive('createForm')
-            ->with($this->formName)
+            ->with('Lva\PsvVehicles')
             ->andReturn($mockForm)
             ->shouldReceive('remove')
             ->once()
