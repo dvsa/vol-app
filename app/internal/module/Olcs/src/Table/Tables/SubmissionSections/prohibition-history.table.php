@@ -50,6 +50,7 @@ return array(
             'name' => 'prohibitionType'
         ),
         array(
+            'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',

@@ -217,10 +217,6 @@ class TaskController extends AbstractController
         $details->get('link')->setValue($url);
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
 
-        if ($this->isButtonPressed('close')) {
-            $type = 'Close';
-        }
-
         if (isset($data['assignedByUser']['contactDetails']['person']['familyName'])) {
             $person = $data['assignedByUser']['contactDetails']['person'];
             $data['assignedByUserName'] = $person['forename'] . ' ' . $person['familyName'];
@@ -518,7 +514,7 @@ class TaskController extends AbstractController
                 throw new BadRequestException('No task id provided');
             }
 
-            return [$taskType, $this->params('typeId'), null];
+            return [$taskType, $this->params('typeId'), null, null];
         }
 
         $taskDetails = $this->getTaskDetails($taskId);

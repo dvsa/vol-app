@@ -65,7 +65,10 @@ class ApplicationOverviewHelperService extends AbstractHelperService
 
             'outOfOpposition'            => $application['outOfOppositionDate'],
             'outOfRepresentation'        => $application['outOfRepresentationDate'],
-            'registeredForSelfService'   => null,
+            'registeredForSelfService'   =>
+                $this->getServiceLocator()
+                    ->get('Helper\LicenceOverview')
+                    ->hasAdminUsers($application['licence']) ? 'Yes' : 'No',
         ];
 
         return $viewData;

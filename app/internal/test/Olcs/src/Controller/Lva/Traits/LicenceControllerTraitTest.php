@@ -48,15 +48,22 @@ class LicenceControllerTraitTest extends MockeryTestCase
             ],
         ];
 
-        $this->sm->setService(
-            'Entity\Licence',
-            m::mock()
-                ->shouldReceive('getHeaderParams')
-                ->once()
-                ->with($licenceId)
-                ->andReturn($licenceData)
-                ->getMock()
-        );
+        $this->sut->shouldReceive('handleQuery')
+            ->with(
+                m::on(
+                    function ($query) use ($licenceId) {
+                        $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\Licence\Licence::class, $query);
+                        $this->assertEquals($licenceId, $query->getId());
+                        return true;
+                    }
+                )
+            )
+            ->andReturn(
+                m::mock(\Common\Service\Cqrs::class)
+                    ->shouldReceive('getResult')
+                    ->andReturn($licenceData)
+                    ->getMock()
+            );
 
         $expectedData = [
             'licNo' => 'OB123',

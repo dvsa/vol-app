@@ -559,11 +559,19 @@ class ApplicationControllerTest extends MockeryTestCase
                     ->getMock()
                 )
                 ->shouldReceive('get')
-                ->with('feeAmountForValidator')
+                ->with('maxAmountForValidator')
                 ->andReturn(
                     m::mock()
                     ->shouldReceive('setValue')
                     ->with('15.50')
+                    ->getMock()
+                )
+                ->shouldReceive('get')
+                ->with('minAmountForValidator')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('setValue')
+                    ->with('5.51')
                     ->getMock()
                 )
                 ->shouldReceive('get')
@@ -617,6 +625,10 @@ class ApplicationControllerTest extends MockeryTestCase
             [
                 'results' => $fees,
                 'count' => 2,
+                'extra' => [
+                    'minPayment' => '5.51',
+                    'totalOutstanding' => '15.50',
+                ],
             ]
         );
 
@@ -721,7 +733,7 @@ class ApplicationControllerTest extends MockeryTestCase
             ->shouldReceive('url')
             ->andReturn(
                 m::mock()
-                ->shouldreceive('fromRoute')
+                ->shouldReceive('fromRoute')
                 ->andReturn('http://return-url')
                 ->getMock()
             );
@@ -734,6 +746,10 @@ class ApplicationControllerTest extends MockeryTestCase
                 [
                     'results' => [$fee],
                     'count' => 1,
+                    'extra' => [
+                        'minPayment' => '0.01',
+                        'totalOutstanding' => '5.50',
+                    ],
                 ]
             )
             ->getMock();
@@ -750,6 +766,9 @@ class ApplicationControllerTest extends MockeryTestCase
                 ->with(['forms/fee-payment'])
                 ->getMock()
         );
+
+        // skip testing the confirm plugin step
+        $this->sut->shouldReceive('confirm')->andReturn(false);
     }
 
     public function testPostPayFeesActionWithCard()
@@ -960,6 +979,10 @@ class ApplicationControllerTest extends MockeryTestCase
             [
                 'results' => $fees,
                 'count' => 1,
+                'extra' => [
+                    'minPayment' => '0.01',
+                    'totalOutstanding' => '123.45',
+                ],
             ]
         );
 
@@ -990,6 +1013,9 @@ class ApplicationControllerTest extends MockeryTestCase
         $this->mockEntity('FeePayment', 'isValidPaymentType')
             ->andReturn(true);
 
+        // skip testing the confirm plugin step
+        $this->sut->shouldReceive('confirm')->andReturn(false);
+
         $result = $this->sut->payFeesAction();
         $this->assertEquals('redirect', $result);
     }
@@ -1011,7 +1037,7 @@ class ApplicationControllerTest extends MockeryTestCase
     {
         $this->mockController('\Olcs\Controller\Application\ApplicationController');
 
-        $data = ['details' => ['paymentType' => 'INVALID']];
+        $data = ['details' => ['received' => '10', 'paymentType' => 'INVALID']];
         $this->setPost($data);
 
         $form = m::mock()
@@ -1047,6 +1073,10 @@ class ApplicationControllerTest extends MockeryTestCase
             [
                 'results' => $fees,
                 'count' => 1,
+                'extra' => [
+                    'minPayment' => '0.01',
+                    'totalOutstanding' => '123.45',
+                ],
             ]
         );
 
@@ -1059,6 +1089,9 @@ class ApplicationControllerTest extends MockeryTestCase
                 ->with(['forms/fee-payment'])
                 ->getMock()
         );
+
+        // skip testing the confirm plugin step
+        $this->sut->shouldReceive('confirm')->andReturn(false);
 
         $this->sut->payFeesAction();
     }
@@ -1126,6 +1159,10 @@ class ApplicationControllerTest extends MockeryTestCase
             [
                 'results' => [$fee],
                 'count' => 1,
+                'extra' => [
+                    'minPayment' => '0.01',
+                    'totalOutstanding' => '123.45',
+                ],
             ]
         );
 
@@ -1178,6 +1215,9 @@ class ApplicationControllerTest extends MockeryTestCase
                 ->with(['forms/fee-payment'])
                 ->getMock()
         );
+
+        // skip testing the confirm plugin step
+        $this->sut->shouldReceive('confirm')->andReturn(false);
 
         $result = $this->sut->payFeesAction();
         $this->assertEquals('redirect', $result);
@@ -1242,6 +1282,10 @@ class ApplicationControllerTest extends MockeryTestCase
             [
                 'results' => [$fee],
                 'count' => 1,
+                'extra' => [
+                    'minPayment' => '0.01',
+                    'totalOutstanding' => '123.45',
+                ],
             ]
         );
 
@@ -1294,6 +1338,8 @@ class ApplicationControllerTest extends MockeryTestCase
                 ->with(['forms/fee-payment'])
                 ->getMock()
         );
+
+        $this->sut->shouldReceive('confirm')->andReturn(false);
 
         $this->sut->payFeesAction();
     }

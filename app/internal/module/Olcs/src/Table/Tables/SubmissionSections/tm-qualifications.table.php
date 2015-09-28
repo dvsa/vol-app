@@ -41,6 +41,7 @@ return array(
             'name' => 'country',
         ),
         array(
+            'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',

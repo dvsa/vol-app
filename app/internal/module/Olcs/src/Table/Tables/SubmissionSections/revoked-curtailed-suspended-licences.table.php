@@ -32,6 +32,7 @@ return array(
             'name' => 'holderName'
         ),
         array(
+            'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',

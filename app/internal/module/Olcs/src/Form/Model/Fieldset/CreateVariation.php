@@ -33,4 +33,19 @@ class CreateVariation
      * })
      */
     public $feeRequired;
+
+    /**
+     * @Form\Type("Radio")
+     * @Form\Options({
+     *      "label": "Method of application",
+     *      "value_options":{
+     *          "applied_via_post":"Post",
+     *          "applied_via_phone":"Phone"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
+     *      }
+     * })
+     */
+    protected $appliedVia = null;
 }

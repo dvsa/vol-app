@@ -50,6 +50,11 @@ class SubmissionController extends AbstractInternalController implements
 
     protected $routeIdentifier = 'submission';
 
+    /**
+     * @var array
+     */
+    protected $scriptFiles = ['tinymce/jquery.tinymce.min.js'];
+
     /*
      * Variables for controlling table/list rendering
      * tableName and listDto are required,
@@ -517,6 +522,8 @@ class SubmissionController extends AbstractInternalController implements
             ->createForm('SubmissionSectionAttachment');
 
         $form->get('sectionId')->setValue($sectionId);
+        $form->get('attachments')->get('list')->setOption('preview_images', true);
+
         $form->setAttribute('id', $sectionId . '-section-attachments');
         $form->setAttribute('name', $sectionId . '-section-attachments');
 

@@ -571,6 +571,12 @@ $nav = array(
                                     'route' => 'licence/processing/tasks',
                                     'use_route_match' => true,
                                 ),
+                                array(
+                                    'id' => 'licence_processing_event-history',
+                                    'label' => 'History',
+                                    'route' => 'licence/processing/event-history',
+                                    'use_route_match' => true,
+                                ),
                             )
                         ),
                         array(
@@ -590,12 +596,6 @@ $nav = array(
                                     'route' => 'licence/fees/fee_action/transaction',
                                 ),
                             ),
-                        ),
-                        array(
-                            'id' => 'licence_processing_event-history',
-                            'label' => 'History',
-                            'route' => 'licence/event-history',
-                            'use_route_match' => true,
                         ),
                     )
                 ),

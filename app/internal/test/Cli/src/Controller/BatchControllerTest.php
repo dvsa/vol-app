@@ -138,48 +138,4 @@ class BatchControllerTest extends AbstractConsoleControllerTestCase
 
         $this->controller->inspectionRequestEmailAction();
     }
-
-    /**
-     * Test process inbox verbose parameter turned on
-     */
-    public function testProcessInboxVerbose()
-    {
-        $mockRequest = $this->getMock('StdClass', ['getParam']);
-        $mockRequest->expects($this->any())
-            ->method('getParam')
-            ->will($this->returnValue(true));
-
-        $this->controller->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($mockRequest));
-
-        $mockBatchService = m::mock('StdClass');
-        $this->sm->setService('BatchInboxDocuments', $mockBatchService);
-        $mockBatchService->shouldReceive('setConsoleAdapter')->once();
-        $mockBatchService->shouldReceive('process')->once();
-
-        $this->controller->processInboxDocumentsAction();
-    }
-
-    /**
-     * Test process inbox verbose parameter turned off
-     */
-    public function testProcessInboxNotVerbose()
-    {
-        $mockRequest = $this->getMock('StdClass', ['getParam']);
-        $mockRequest->expects($this->any())
-            ->method('getParam')
-            ->will($this->returnValue(false));
-
-        $this->controller->expects($this->any())
-            ->method('getRequest')
-            ->will($this->returnValue($mockRequest));
-
-        $mockBatchService = m::mock();
-        $this->sm->setService('BatchInboxDocuments', $mockBatchService);
-        $mockBatchService->shouldReceive('setConsoleAdapter')->never();
-        $mockBatchService->shouldReceive('process')->once();
-
-        $this->controller->processInboxDocumentsAction();
-    }
 }
