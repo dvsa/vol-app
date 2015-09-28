@@ -190,7 +190,7 @@ class DashboardControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('currentUser->getUserData')->with()->once()->andReturn(['id' => 77]);
         $this->sut->shouldReceive('handleQuery')->once()->andReturn($mockResult);
 
-        $mockResult->shouldReceive('getResult')->with()->once()->andReturn(['result' => ['service data']]);
+        $mockResult->shouldReceive('getResult')->with()->once()->andReturn(['results' => ['service data']]);
 
         $mockDataMapper->shouldReceive('map')
             ->with(['service data'])

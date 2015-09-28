@@ -74,7 +74,7 @@ class DashboardController extends AbstractController
         $response = $this->handleQuery(
             \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(['user' => $userId])
         );
-        $results = $response->getResult()['result'];
+        $results = $response->getResult()['results'];
 
         // flatten the array
         $data = $this->getServiceLocator()->get('DataMapper\DashboardTmApplications')->map($results);
