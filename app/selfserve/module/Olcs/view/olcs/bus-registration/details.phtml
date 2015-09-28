@@ -103,10 +103,12 @@ echo $this->render('partials/read-only/main',
 ?>
     <?php echo $this->variationHistoryTable; ?>
 
-    <?php if (!empty($this->registrationDetails['documents'])):?>
+    <?php if (!empty($this->registrationDetails['txcInboxEntries'])):?>
         <h3>Documents</h3>
         <div class="files">
-            <?php foreach ($this->registrationDetails['documents'] as $document):?>
+            <?php
+            foreach ($this->registrationDetails['txcInboxEntries'] as $document):
+                ?>
                 <?php
                     $url = $this->url(
                         'getfile',
