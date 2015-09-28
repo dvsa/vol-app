@@ -5,11 +5,11 @@ namespace Olcs\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("UserDetails")
- * @Form\Attributes({"method":"post","label":"User Details"})
- * @Form\Options({"prefer_form_input_filter": true, "label": "User Details"})
+ * @Form\Name("MyDetails")
+ * @Form\Attributes({"method":"post","label":"My Details"})
+ * @Form\Options({"prefer_form_input_filter": true, "label": "My Details"})
  */
-class UserDetails extends Base
+class MyDetails extends Base
 {
     /**
      * @Form\Options({"label":"Username"})
@@ -63,14 +63,4 @@ class UserDetails extends Base
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      */
     public $emailConfirm = null;
-
-    /**
-     * @Form\Options({
-     *     "checked_value": "Y",
-     *     "unchecked_value":"N",
-     *     "label": "manage-users.field.is_administrator.label"
-     * })
-     * @Form\Type("OlcsCheckbox")
-     */
-    public $isAdministrator;
 }

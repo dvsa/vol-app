@@ -7,9 +7,7 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'primary', 'label' => 'Add user'),
-                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one', 'label' => 'Edit'),
-                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one', 'label' => 'Remove')
+                'add' => array('class' => 'primary', 'label' => 'manage-users.action.add'),
             )
         ),
         'paginate' => array(
@@ -31,21 +29,26 @@ return array(
             }
         ],
         [
-            'title' => 'Email',
+            'title' => 'Email address',
             'formatter' => function ($row) {
                 return $row['contactDetails']['emailAddress'];
             }
         ],
         [
-            'title' => 'Role(s)',
-            'formatter' => function ($row, $column) {
-                return implode(', ', array_column($row['roles'], 'description'));
+            'title' => 'Permission',
+            'formatter' => function ($row, $column, $sm) {
+                return $sm->get('translator')
+                    ->translate('manage-users.field.is_administrator.'.$row['isAdministrator']);
             }
         ],
-        array(
+        [
             'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
-        )
+            'type' => 'Action',
+            'action' => 'delete',
+            'class' => 'remove',
+            'formatter' => function () {
+                return 'Remove';
+            }
+        ],
     ]
 );

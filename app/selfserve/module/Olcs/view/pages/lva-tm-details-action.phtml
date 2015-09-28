@@ -20,6 +20,13 @@
                 </a>
             </li>
             <?php endif; ?>
+            <?php if ($this->actions['resend']): ?>
+                <li>
+                    <a href="<?php echo $this->resendActionUrl ?>" class="page-header__action js-modal-ajax">
+                        <?php echo $this->translate('tm-details-resend-form-link-text'); ?>
+                    </a>
+                </li>
+            <?php endif; ?>
         </ul>
       </div><!-- .page-header__wrapper -->
     </div><!-- .page-header-->

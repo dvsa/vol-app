@@ -5,17 +5,17 @@ namespace Olcs\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("User")
- * @Form\Attributes({"method":"post","label":"User"})
+ * @Form\Name("MyDetails")
+ * @Form\Attributes({"method":"post","label":"My Details"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label": "User"})
+ * @Form\Options({"prefer_form_input_filter": true, "label": "My Details"})
  */
-class User
+class MyDetails
 {
     /**
      * @Form\Name("main")
      * @Form\Options({"label":""})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\UserDetails")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\MyDetails")
      */
     public $fields = null;
 

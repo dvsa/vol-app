@@ -31,13 +31,6 @@ return array(
             }
         ),
         array(
-            'title' => 'entity-view-table-header-removed',
-            'formatter' => function ($data) {
-                return !empty($data['removedDate']) ?
-                    'Yes' : 'No';
-            }
-        ),
-        array(
             'title' => 'entity-view-table-header-date-added',
             'name' => 'createdOn',
             'formatter' => function ($row, $column, $sl) {
@@ -50,7 +43,10 @@ return array(
             'name' => 'deletedDate',
             'formatter' => function ($row, $column, $sl) {
                 $column['formatter'] = 'Date';
-                return $this->callFormatter($column, $row['operatingCentre']);
+                if (empty($row['deletedDate'])) {
+                    return 'NA';
+                }
+                return $this->callFormatter($column, $row['deletedDate']);
             }
         )
     )

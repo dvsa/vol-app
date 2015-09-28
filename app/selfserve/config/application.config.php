@@ -7,7 +7,6 @@ $config = array(
         'DoctrineModule',
         'DoctrineORMModule',
         'Olcs\Logging',
-        'Dvsa\Olcs\DocumentShare',
         'Common',
         'Olcs',
         'ZfcBase',

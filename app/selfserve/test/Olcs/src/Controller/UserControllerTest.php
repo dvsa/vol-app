@@ -40,11 +40,14 @@ class UserControllerTest extends TestCase
             'query'   => $query
         ];
 
-        $table = ['table'];
-
-        $sut = new UserController();
-
         $data = ['data'];
+
+        $response = m::mock('stdClass');
+        $response->shouldReceive('isOk')->andReturn(true);
+        $response->shouldReceive('getResult')->andReturn($data);
+
+        $sut = m::mock('Olcs\Controller\UserController')->makePartial();
+        $sut->shouldReceive('handleQuery')->andReturn($response);
 
         $params = m::mock('\Zend\Mvc\Controller\Plugin\Params');
         $params->shouldReceive('fromQuery')->with('page', 1)->andReturn($page);
@@ -61,20 +64,16 @@ class UserControllerTest extends TestCase
         $request->shouldReceive('isPost')->andReturn(false);
         $sut->getEvent()->setRequest($request);
 
-        $service = m::mock('stdClass');
-        $service->shouldReceive('getList')->with($paramsArr)->andReturn($data);
-
         $url = m::mock('Common\Service\Helper\UrlHelperService');
         $paramsArr['url'] = $url;
 
         $table = m::mock('Common\Service\Table\TableBuilder');
-        $table->shouldReceive('buildTable')->with('users', $data, $paramsArr, false)->andReturn($table);
+        $table->shouldReceive('buildTable')->with('users', $data, $paramsArr, false)->andReturnSelf();
 
         $script = m::mock('stdClass');
         $script->shouldReceive('loadFiles')->once()->with(['lva-crud'])->andReturnNull();
 
         $sl = m::mock('\Zend\ServiceManager\ServiceManager');
-        $sl->shouldReceive('get')->with('Entity\User')->andReturn($service);
         $sl->shouldReceive('get')->with('Helper\Url')->andReturn($url);
         $sl->shouldReceive('get')->with('Table')->andReturn($table);
         $sl->shouldReceive('get')->with('Script')->andReturn($script);
@@ -94,36 +93,28 @@ class UserControllerTest extends TestCase
             'id' => 3,
             'version' => 1,
             'loginId' => 'stevefox',
-            'memorableWord' => null,
-            'emailAddress' => 'stevefox@test9876.com',
-
             'contactDetails' => array(
-                'familyName' => 'Fox',
-                'forename' => 'Steve',
-                'writtenPermissionToEngage' => 'N',
                 'emailAddress' => 'steve@example.com',
                 'id' => 106,
                 'version' => 1,
-
                 'person' => array(
-                    'birthPlace' => 'Zurich',
-                    'otherName' => null,
-                    'birthDate' => '1975-04-15',
                     'familyName' => 'Fox',
                     'forename' => 'Steve',
                     'id' => 82,
                     'version' => 1,
                 ),
-
-                'contactType' => array(
-                    'id' => 'ct_team_user'
-                )
-            )
+            ),
+            'isAdministrator' => 'N',
         );
 
         $id = 3;
 
-        $controller = new UserController();
+        $response = m::mock('stdClass');
+        $response->shouldReceive('isOk')->andReturn(true);
+        $response->shouldReceive('getResult')->andReturn($rawEditData);
+
+        $controller = m::mock('Olcs\Controller\UserController')->makePartial();
+        $controller->shouldReceive('handleQuery')->andReturn($response);
 
         $sl = m::mock('\Zend\ServiceManager\ServiceManager');
         $controller->setServiceLocator($sl);
@@ -144,10 +135,6 @@ class UserControllerTest extends TestCase
         $params->shouldReceive('fromRoute')->with('id', null)->andReturn($id);
         $pm->shouldReceive('get')->with('params')->andReturn($params);
 
-        $service = m::mock('stdClass');
-        $service->shouldReceive('getUserDetails')->with($id)->andReturn($rawEditData);
-        $sl->shouldReceive('get')->with('Entity\User')->andReturn($service);
-
         $flashMessenger = m::mock('stdClass');
         $flashMessenger->shouldReceive('addSuccessMessage')->andReturnNull(); // we don't care about this for this test.
         $sl->shouldReceive('get')->with('Helper\FlashMessenger')->andReturn($flashMessenger);
@@ -160,9 +147,7 @@ class UserControllerTest extends TestCase
 
         $view = $controller->editAction();
 
-        $form = $view->getVariable('form');
-
-        $this->assertInstanceOf('Common\Form\Form', $form);
+        $this->assertInstanceOf('Common\Form\Form', $view->getVariable('form'));
     }
 
     public function testSaveWithPostData()
@@ -172,25 +157,19 @@ class UserControllerTest extends TestCase
                 'loginId' => 'stevefox',
                 'forename' => 'Steve',
                 'familyName' => 'Fox',
-                'birthDate' => array (
-                    'day' => '15',
-                    'month' => '04',
-                    'year' => '1975',
-                ),
                 'emailAddress' => 'steve@example.com',
                 'emailConfirm' => 'steve@example.com',
-                'memorableWord' => 'one',
+                'isAdministrator' => 'Y',
                 'id' => '3',
                 'version' => '1',
             ),
-            'contactDetailsId' => '106',
-            'contactDetailsVersion' => '1',
-            'personId' => '82',
-            'personVersion' => '1',
-            'contactType' => 'ct_team_user',
         );
 
-        $controller = new UserController();
+        $response = m::mock('stdClass');
+        $response->shouldReceive('isOk')->andReturn(true);
+
+        $controller = m::mock('Olcs\Controller\UserController')->makePartial();
+        $controller->shouldReceive('handleCommand')->andReturn($response);
 
         $sl = m::mock('\Zend\ServiceManager\ServiceManager');
         $controller->setServiceLocator($sl);
@@ -203,10 +182,6 @@ class UserControllerTest extends TestCase
         $pm->shouldReceive('setController')->with($controller);
         $controller->setPluginManager($pm);
 
-        $service = m::mock('stdClass');
-        $service->shouldReceive('save')->with($controller->formatSaveData($rawEditData));
-        $sl->shouldReceive('get')->with('Entity\User')->andReturn($service);
-
         $request = m::mock('\Zend\Http\Request');
         $request->shouldReceive('isPost')->andReturn(true); // true to simulate form submission
         $controller->getEvent()->setRequest($request);
@@ -218,7 +193,7 @@ class UserControllerTest extends TestCase
 
         $redirect = m::mock('Zend\Mvc\Controller\Plugin\Redirect');
         $redirect->shouldReceive('toRouteAjax')->with('user', ['action' => 'index'], [], false)->andReturn('redirect');
-        $pm->shouldReceive('get')->with('redirect', null)->andReturn($redirect);
+        $controller->shouldReceive('redirect')->andReturn($redirect);
 
         $flashMessenger = m::mock('stdClass');
         $flashMessenger->shouldReceive('addSuccessMessage')->andReturnNull(); // we don't care about this for this test.
