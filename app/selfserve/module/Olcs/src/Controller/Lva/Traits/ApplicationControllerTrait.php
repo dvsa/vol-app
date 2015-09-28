@@ -12,6 +12,7 @@ use Common\View\Model\Section;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
+use Common\Service\Entity\ApplicationEntityService;
 
 /**
  * EXTERNAL Abstract Application Controller
@@ -57,6 +58,15 @@ trait ApplicationControllerTrait
         }
 
         return $doesBelong;
+    }
+
+    protected function checkAppStatus($applicationId)
+    {
+        // query is already cached
+        $dto = ApplicationQry::create(['id' => $applicationId]);
+        $response = $this->handleQuery($dto);
+        $data = $response->getResult();
+        return ($data['status']['id'] === ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED);
     }
 
     /**
