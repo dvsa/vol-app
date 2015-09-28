@@ -129,6 +129,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'openCases' =>  [
                         ['id' => 2], ['id' => 3], ['id' => 4]
                     ],
+                    'busCount' => '4'
                 ],
                 // expected view data
                 [
@@ -155,7 +156,9 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'previousOperatorName'       => 'TEST',
                     'previousLicenceNumber'      => 'TEST',
                     'isPsv'                      => false,
-                    'licenceGracePeriods'        => 'None (<a href="GRACE_PERIOD_URL">manage</a>)'
+                    'licenceGracePeriods'        => 'None (<a href="GRACE_PERIOD_URL">manage</a>)',
+                    'numberOfBusRegistrations'   => '4',
+
                 ],
             ],
             'surrendered psv licence' => [
@@ -224,6 +227,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     ],
                     'complaintsCount' => 0,
                     'tradingName' => 'None',
+                    'busCount' => '4'
                 ],
                 // expectedViewData
                 [
@@ -250,7 +254,8 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'receivesMailElectronically' => 'N',
                     'registeredForSelfService'   => 'No',
                     'isPsv'                      => true,
-                    'licenceGracePeriods'        => 'Active (<a href="GRACE_PERIOD_URL">manage</a>)'
+                    'licenceGracePeriods'        => 'Active (<a href="GRACE_PERIOD_URL">manage</a>)',
+                    'numberOfBusRegistrations'   => '4',
                 ],
             ],
             'special restricted psv licence' => [
@@ -297,6 +302,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     ],
                     'gracePeriods' => [],
                     'currentApplications' => [],
+                    'busCount' => '4'
                 ],
                 // expectedViewData
                 [
@@ -323,7 +329,8 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'receivesMailElectronically' => 'Y',
                     'registeredForSelfService'   => 'No',
                     'isPsv'                      => true,
-                    'licenceGracePeriods'        => 'None (<a href="GRACE_PERIOD_URL">manage</a>)'
+                    'licenceGracePeriods'        => 'None (<a href="GRACE_PERIOD_URL">manage</a>)',
+                    'numberOfBusRegistrations'   => '4',
                 ],
             ],
         ];

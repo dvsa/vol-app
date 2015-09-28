@@ -171,6 +171,8 @@ class Application implements ListenerAggregateInterface, FactoryInterface
             // hide application case link in the navigation
             $this->getNavigationService()->findOneById('application_case')->setVisible(false);
         }
+
+        $this->setupPublishApplicationButton($application);
     }
 
     /**
@@ -302,5 +304,42 @@ class Application implements ListenerAggregateInterface, FactoryInterface
                 \Common\RefData::APPLICATION_STATUS_VALID,
             )
         );
+    }
+
+    /**
+     * Setup show/hide, change label of the publish application button
+     *
+     * @param array $applicationData Application data
+     */
+    protected function setupPublishApplicationButton($applicationData)
+    {
+        /* @var $button \Zend\Navigation\Page\Mvc */
+        $button = $this->getSidebarNavigationService()->findById('application-quick-actions-publish-application');
+
+        if ($applicationData['isVariation']) {
+            // variation application record; AND
+            $showButton =
+                // The status of the application is 'Under consideration'; AND
+                $applicationData['status']['id'] === RefData::APPLICATION_STATUS_UNDER_CONSIDERATION &&
+                // The variation is publishable; AND
+                $applicationData['isPublishable'] &&
+                // It is NOT a PSV Variation; AND
+                $applicationData['goodsOrPsv']['id'] !== RefData::LICENCE_CATEGORY_PSV;
+
+        } else {
+            // New application record; AND
+            $showButton =
+                // The application licence type is NOT special restricted; AND
+                $applicationData['licenceType']['id'] !== RefData::LICENCE_TYPE_SPECIAL_RESTRICTED &&
+                // The status of the application is 'Under consideration';
+                $applicationData['status']['id'] === RefData::APPLICATION_STATUS_UNDER_CONSIDERATION;
+        }
+
+        $button->setVisible($showButton);
+
+        // Change the label of the 'Publish application' button whenever there is an existing publication record
+        if ($applicationData['existingPublication']) {
+            $button->setLabel('Republish application');
+        }
     }
 }
