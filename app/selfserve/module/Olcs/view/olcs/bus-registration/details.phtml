@@ -103,7 +103,7 @@ echo $this->render('partials/read-only/main',
 ?>
     <?php echo $this->variationHistoryTable; ?>
 
-    <?php if (!empty($this->registrationDetails['txcInboxEntries'])):?>
+    <?php if (!empty($this->registrationDetails['txcInboxEntries'])): ?>
         <h3>Documents</h3>
         <div class="files">
             <?php
@@ -112,8 +112,12 @@ echo $this->render('partials/read-only/main',
                 <?php
                     $url = $this->url(
                         'getfile',
-                        ['file' => $document['identifier'], 'name' => $document['filename'], 'namespace' => 'ebsr']
-                    )
+                        [
+                            'identifier' => base64_encode($document['identifier']),
+                            'name' => $document['filename'],
+                            'namespace' => 'ebsr'
+                        ]
+                    );
                 ?>
                 <div class="field file-upload">
                     <p>
