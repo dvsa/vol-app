@@ -331,7 +331,7 @@ abstract class AbstractInternalController extends AbstractActionController
         );
     }
 
-    final protected function index(
+    protected function index(
         $listDto,
         ParameterProviderInterface $paramProvider,
         $tableViewPlaceholderName,

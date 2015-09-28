@@ -8,5 +8,18 @@
     ?>
 </div><!-- one-fifth-left -->
 <div class="three-fifths">
-    <?php echo $this->table ?>
+<?php
+
+if (!isset($table)) {
+    $table = $this->placeholder('table')->getValue();
+}
+
+if (!empty($table)) {
+    if (!empty($readonly)) {
+        $table->setDisabled(true);
+    }
+
+    echo $table;
+}
+?>
 </div><!-- three-fifths -->

@@ -11,6 +11,8 @@ use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController as Licenc
 use Olcs\Controller\Operator\OperatorProcessingNoteController as OperatorProcessingNoteController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 
+use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
+
 use Olcs\Controller\TransportManager\TransportManagerController;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController;
 
@@ -187,6 +189,7 @@ return array(
             'DocumentFinaliseController' => 'Olcs\Controller\Document\DocumentFinaliseController',
             'DocumentRelinkController' => 'Olcs\Controller\Document\DocumentRelinkController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
+            LicenceBusController::class => LicenceBusController::class,
             'LicenceDecisionsController' => 'Olcs\Controller\Licence\LicenceDecisionsController',
             'LicenceGracePeriodsController' => 'Olcs\Controller\Licence\LicenceGracePeriodsController',
             'TaskController' => 'Olcs\Controller\TaskController',
