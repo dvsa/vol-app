@@ -7,8 +7,8 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'generate' => array('class' => 'primary', 'requireRows' => true),
-                'publish' => array('class' => 'secondary', 'requireRows' => true)
+                'generate' => array('requireRows' => true, 'class' => 'primary js-require--one'),
+                'publish' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         ),
         'paginate' => array(
