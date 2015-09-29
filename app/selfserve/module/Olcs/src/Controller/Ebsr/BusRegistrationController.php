@@ -4,7 +4,13 @@ namespace Olcs\Controller\Ebsr;
 
 use Common\Controller\AbstractActionController;
 use Common\Exception\ResourceNotFoundException;
+<<<<<<< HEAD
 use Dvsa\Olcs\Transfer\Query\Ebsr\SubmissionList as SubmissionListQuery;
+=======
+use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList as ListDto;
+use Dvsa\Olcs\Transfer\Query\Bus\BusRegWithDocuments as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegVariationHistoryDto;
+>>>>>>> Replaced EbsrSubmissionList with TxcInbox
 
 /**
  * Class BusRegVariationController

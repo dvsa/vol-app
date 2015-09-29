@@ -169,7 +169,7 @@ $routes = array(
                 'action' => 'index',
                 'page' => 1,
                 'limit' => 25,
-                'sort' => 'submittedDate',
+                'sort' => 'createdOn',
                 'order' => 'DESC'
             ),
             'constraints' => [
