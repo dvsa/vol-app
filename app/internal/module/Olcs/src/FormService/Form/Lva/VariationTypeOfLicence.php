@@ -21,9 +21,17 @@ class VariationTypeOfLicence extends CommonVariationTypeOfLicence
     {
         parent::alterForm($form, $params);
 
-        $form->get('form-actions')->get('save')->setLabel('internal.save.button');
+        if ($form->has('form-actions')) {
+            $form->get('form-actions')->get('save')->setLabel('internal.save.button');
+        }
+
         $form->get('type-of-licence')->remove('difference'); // removes guidance text
 
         return $form;
+    }
+
+    protected function allElementsLocked(Form $form)
+    {
+        $form->remove('form-actions');
     }
 }

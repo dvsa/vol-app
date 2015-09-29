@@ -38,6 +38,7 @@ class VariationTypeOfLicenceTest extends AbstractLvaFormServiceTestCase
         $this->formHelper->shouldReceive('createForm')
             ->andReturn($mockForm);
 
+        $mockForm->shouldReceive('has')->with('form-actions')->andReturn(true);
         $mockForm
             ->shouldReceive('get')
             ->with('form-actions')

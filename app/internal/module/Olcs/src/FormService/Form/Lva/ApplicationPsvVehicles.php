@@ -1,27 +1,21 @@
 <?php
 
 /**
- * ConditionsUndertakings Form
+ * Application Psv Vehicles
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace Olcs\FormService\Form\Lva;
 
-use Common\FormService\Form\Lva\ConditionsUndertakings as CommonConditionsUndertakings;
+use Common\FormService\Form\Lva\PsvVehicles as CommonPsvVehicles;
 
 /**
- * ConditionsUndertakings Form
+ * Application Psv Vehicles
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ConditionsUndertakings extends CommonConditionsUndertakings
+class ApplicationPsvVehicles extends CommonPsvVehicles
 {
-    /**
-     * Make form alterations
-     *
-     * @param \Zend\Form\Form $form
-     * @return \Zend\Form\Form
-     */
     protected function alterForm($form)
     {
         parent::alterForm($form);
