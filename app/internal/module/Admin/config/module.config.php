@@ -76,17 +76,6 @@ return [
                                     ]
                                 ]
                             ],
-                            'published' => [
-                                'type' => 'literal',
-                                'options' => [
-                                    'route' => '/published',
-                                    'defaults' => [
-                                        'controller' => 'Admin\PublicationController',
-                                        'action' => 'published',
-                                        'index' => 'publication'
-                                    ]
-                                ]
-                            ],
                             'recipient' => [
                                 'type' => 'segment',
                                 'options' => [
