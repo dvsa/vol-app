@@ -28,11 +28,7 @@ class UserTest extends MockeryTestCase
             // add
             [
                 [],
-                [
-                    'userLoginSecurity' => [
-                        'attempts' => 0
-                    ]
-                ]
+                []
             ],
             // edit - internal
             [
@@ -40,13 +36,8 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
-                    'memorableWord' => 'mem',
-                    'mustResetPassword' => 'Y',
                     'accountDisabled' => 'Y',
-                    'attempts' => 2,
-                    'lastSuccessfulLoginDate' => '2015-04-07 12:54:23',
                     'lockedDate' => '2015-06-07 17:11:12',
-                    'resetPasswordExpiryDate' => '2015-08-09 11:11:12',
                     'userType' => 'internal',
                     'roles' => [
                         [
@@ -88,14 +79,9 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'userLoginSecurity' => [
-                        'attempts' => 2,
                         'loginId' => 'testuser',
-                        'memorableWord' => 'mem',
-                        'mustResetPassword' => 'Y',
                         'accountDisabled' => 'Y',
-                        'lastSuccessfulLogin' => '07/04/2015 12:54:23',
                         'lockedDate' => '07/06/2015 17:11:12',
-                        'resetPasswordExpiryDate' => '09/08/2015 11:11:12',
                     ],
                     'userType' => [
                         'userType' => 'internal',
@@ -130,10 +116,7 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
-                    'memorableWord' => 'mem',
-                    'mustResetPassword' => 'Y',
                     'accountDisabled' => 'Y',
-                    'attempts' => 2,
                     'userType' => 'transport-manager',
                     'roles' => [
                         [
@@ -161,10 +144,7 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'userLoginSecurity' => [
-                        'attempts' => 2,
                         'loginId' => 'testuser',
-                        'memorableWord' => 'mem',
-                        'mustResetPassword' => 'Y',
                         'accountDisabled' => 'Y',
                     ],
                     'userType' => [
@@ -194,10 +174,7 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
-                    'memorableWord' => 'mem',
-                    'mustResetPassword' => 'Y',
                     'accountDisabled' => 'Y',
-                    'attempts' => 2,
                     'userType' => 'partner',
                     'roles' => [
                         [
@@ -225,10 +202,7 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'userLoginSecurity' => [
-                        'attempts' => 2,
                         'loginId' => 'testuser',
-                        'memorableWord' => 'mem',
-                        'mustResetPassword' => 'Y',
                         'accountDisabled' => 'Y',
                     ],
                     'userType' => [
@@ -258,10 +232,7 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
-                    'memorableWord' => 'mem',
-                    'mustResetPassword' => 'Y',
                     'accountDisabled' => 'Y',
-                    'attempts' => 2,
                     'userType' => 'local-authority',
                     'roles' => [
                         [
@@ -289,10 +260,7 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'userLoginSecurity' => [
-                        'attempts' => 2,
                         'loginId' => 'testuser',
-                        'memorableWord' => 'mem',
-                        'mustResetPassword' => 'Y',
                         'accountDisabled' => 'Y',
                     ],
                     'userType' => [
@@ -340,7 +308,6 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
-                        'memorableWord' => 'mem',
                         'mustResetPassword' => 'Y',
                         'accountDisabled' => 'Y',
                     ],
@@ -372,7 +339,6 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
-                    'memorableWord' => 'mem',
                     'mustResetPassword' => 'Y',
                     'accountDisabled' => 'Y',
                     'userType' => 'internal',
@@ -412,7 +378,6 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
-                        'memorableWord' => 'mem',
                         'mustResetPassword' => 'Y',
                         'accountDisabled' => 'Y',
                     ],
@@ -444,7 +409,6 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
-                    'memorableWord' => 'mem',
                     'mustResetPassword' => 'Y',
                     'accountDisabled' => 'Y',
                     'userType' => 'transport-manager',
@@ -484,7 +448,6 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
-                        'memorableWord' => 'mem',
                         'mustResetPassword' => 'Y',
                         'accountDisabled' => 'Y',
                     ],
@@ -516,7 +479,6 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
-                    'memorableWord' => 'mem',
                     'mustResetPassword' => 'Y',
                     'accountDisabled' => 'Y',
                     'userType' => 'partner',
@@ -556,7 +518,6 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
-                        'memorableWord' => 'mem',
                         'mustResetPassword' => 'Y',
                         'accountDisabled' => 'Y',
                     ],
@@ -588,7 +549,6 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
-                    'memorableWord' => 'mem',
                     'mustResetPassword' => 'Y',
                     'accountDisabled' => 'Y',
                     'userType' => 'local-authority',
@@ -628,7 +588,6 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
-                        'memorableWord' => 'mem',
                         'mustResetPassword' => 'Y',
                         'accountDisabled' => 'Y',
                     ],
@@ -660,7 +619,6 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
-                    'memorableWord' => 'mem',
                     'mustResetPassword' => 'Y',
                     'accountDisabled' => 'Y',
                     'userType' => 'operator',
