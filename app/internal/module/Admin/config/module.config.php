@@ -68,7 +68,7 @@ return [
                                     'route' => '/pending[/:action][/:publication]',
                                     'constraints' => [
                                         'publication' => '[0-9]+',
-                                        'action' => '[a-z]+'
+                                        'action' => '(index|generate|publish)'
                                     ],
                                     'defaults' => [
                                         'controller' => 'Admin\PublicationController',
