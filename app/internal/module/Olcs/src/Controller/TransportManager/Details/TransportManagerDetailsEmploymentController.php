@@ -109,9 +109,16 @@ class TransportManagerDetailsEmploymentController extends AbstractInternalContro
 
     protected function alterTable($table, $data)
     {
+        /* @var $table \Common\Service\Table\TableBuilder */
+
         $disableTable = !is_null($data['extra']['transportManager']['removedDate']);
         if ($disableTable == true) {
             $table->setDisabled(true);
+
+            // remove hyperlink from table
+            $column = $table->getColumn('employerName');
+            unset($column['type']);
+            $table->setColumn('employerName', $column);
         }
 
         return $table;
