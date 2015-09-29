@@ -17,15 +17,8 @@
 
     <?php if (!empty($applicationId)) : ?>
 
-    <h1><?php
-        if (!empty($licNo)) {
-            ?><a href="<?php echo $this->url('lva-licence', array('licence' => $licenceId)); ?>"><?php echo $licNo; ?></a> / <?php
-      }
-      echo $applicationId;
-      ?></h1>
-    <h3 class="page-header__subtitle"><?php echo $companyName; ?>
-      <span class="status <?php echo $statusColour; ?>"><?php echo $this->translate($status); ?></span>
-    </h3>
+        <h1><?php echo $this->placeholder('pageTitle'); ?></h1>
+        <h3 class="page-header__subtitle"><?php echo $this->placeholder('pageSubtitle'); ?></h3>
     <?php endif; ?>
 
   </div><!-- end .page-header__wrapper-->
