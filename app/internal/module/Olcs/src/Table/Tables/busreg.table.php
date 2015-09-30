@@ -57,6 +57,10 @@ return array(
             'sort' => 'finishPoint'
         ),
         array(
+            'title' => 'Status',
+            'name' => 'busRegStatusDesc'
+        ),
+        array(
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
