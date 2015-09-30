@@ -39,7 +39,7 @@ return array(
 
                 $column['formatter'] = 'Name';
 
-                return $this->callFormatter($column, $data['user']['contactDetails']['person']);
+                return $this->callFormatter($column, $data['createdBy']['contactDetails']['person']);
             }
         ),
         array(
