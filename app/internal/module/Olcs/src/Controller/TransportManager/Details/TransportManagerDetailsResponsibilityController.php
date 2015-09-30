@@ -86,6 +86,13 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             return $licencesTable;
         }
 
+        $tmData  = $this->getTransportManager($this->params('transportManager'));
+        // if TM has been removed then make table readonly
+        if (!empty($tmData['removedDate'])) {
+            $applicationsTable->setDisabled(true);
+            $licencesTable->setDisabled(true);
+        }
+
         $view = $this->getViewWithTm(['tables' => [$applicationsTable, $licencesTable]]);
         $view->setTemplate('pages/multi-tables');
 
@@ -466,12 +473,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         $table = $this->getTable('tm.applications', $tableData);
 
-        $disableTable = !empty($tableData[0]['transportManager']['removedDate']);
-
-        if ($disableTable == true) {
-            $table->setDisabled(true);
-        }
-
         return $table;
     }
 
@@ -488,11 +489,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         }
 
         $table = $this->getTable('tm.licences', $tableData);
-
-        $disableTable = !empty($tableData[0]['transportManager']['removedDate']);
-        if ($disableTable == true) {
-            $table->setDisabled(true);
-        }
 
         return $table;
     }
