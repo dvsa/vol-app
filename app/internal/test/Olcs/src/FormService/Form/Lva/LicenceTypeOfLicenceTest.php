@@ -29,7 +29,6 @@ class LicenceTypeOfLicenceTest extends AbstractLvaFormServiceTestCase
         $this->sut->setFormServiceLocator($this->fsm);
     }
 
-
     public function testGetForm()
     {
         // Mocks
@@ -38,6 +37,7 @@ class LicenceTypeOfLicenceTest extends AbstractLvaFormServiceTestCase
         $this->formHelper->shouldReceive('createForm')
             ->andReturn($mockForm);
 
+        $mockForm->shouldReceive('has')->with('form-actions')->andReturn(true);
         $mockForm
             ->shouldReceive('get')
             ->with('form-actions')

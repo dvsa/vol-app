@@ -11,6 +11,8 @@ use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController as Licenc
 use Olcs\Controller\Operator\OperatorProcessingNoteController as OperatorProcessingNoteController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 
+use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
+
 use Olcs\Controller\SearchController as SearchController;
 
 $feeActionRoute = [
@@ -997,8 +999,8 @@ $routes = [
                 'options' => [
                     'route' => '/bus',
                     'defaults' => [
-                        'controller' => 'LicenceController',
-                        'action' => 'bus',
+                        'controller' => LicenceBusController::class,
+                        'action' => 'index',
                     ]
                 ],
                 'may_terminate' => true,

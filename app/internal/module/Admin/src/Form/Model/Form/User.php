@@ -49,48 +49,6 @@ class User extends Base
     public $userLoginSecurity = null;
 
     /**
-     * @Form\Attributes({"value":"ct_obj"})
-     * @Form\Type("Hidden")
-     */
-    public $contactDetailsType = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $contactDetailsId = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $contactDetailsVersion = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $personId = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $personVersion = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $phoneContactId = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $phoneContactVersion = null;
-
-    /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
      * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")

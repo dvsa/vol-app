@@ -208,63 +208,6 @@ class LicenceController extends AbstractController implements LicenceControllerI
         );
     }
 
-    public function busAction()
-    {
-        $this->checkForCrudAction('licence/bus/registration');
-
-        $searchData = array(
-            'licId' => $this->getFromRoute('licence'),
-            'page' => 1,
-            'sort' => 'regNo',
-            'order' => 'DESC',
-            'limit' => 10
-        );
-
-        $filters = array_merge(
-            $searchData,
-            $this->getRequest()->getQuery()->toArray()
-        );
-
-        // if status is set to all
-        if (isset($filters['status']) && !$filters['status']) {
-            unset($filters['status']);
-        }
-
-        $resultData = $this->makeRestCall('BusRegSearchView', 'GET', $filters, []);
-
-        $table = $this->getTable(
-            'busreg',
-            $resultData,
-            array_merge(
-                $filters,
-                array('query' => $this->getRequest()->getQuery())
-            ),
-            true
-        );
-
-        $form = $this->getForm('bus-reg-list');
-        $form->remove('csrf'); //we never post
-        $form->setData($filters);
-
-        $this->setTableFilters($form);
-
-        $this->loadScripts(['forms/filter', 'table-actions']);
-
-        $view = $this->getViewWithLicence(
-            array(
-                'table' => $table
-            )
-        );
-
-        $view->setTemplate('layout/bus-registrations-list');
-
-        $view->setTerminal(
-            $this->getRequest()->isXmlHttpRequest()
-        );
-
-        return $this->renderView($view);
-    }
-
     /**
      * This method is to assist the hierarchical nature of zend
      * navigation when parent pages need to also be siblings

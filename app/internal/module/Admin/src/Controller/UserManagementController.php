@@ -5,129 +5,92 @@
 
 namespace Admin\Controller;
 
-use Olcs\Controller\CrudAbstract;
 use Common\Service\Data\Search\Search;
-use Common\Service\Data\Search\SearchType;
-use Zend\View\Model\ViewModel;
-use Common\Exception\ResourceNotFoundException;
-use Common\Exception\BadRequestException;
+use Dvsa\Olcs\Transfer\Command\User\CreateUser as CreateDto;
+use Dvsa\Olcs\Transfer\Command\User\UpdateUser as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\User\DeleteUser as DeleteDto;
+use Dvsa\Olcs\Transfer\Query\User\User as ItemDto;
+use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList as TransportManagerApplicationListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Data\Mapper\User as Mapper;
+use Admin\Form\Model\Form\User as Form;
 
 /**
  * User Management Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class UserManagementController extends CrudAbstract
+class UserManagementController extends AbstractInternalController implements
+    PageLayoutProvider,
+    PageInnerLayoutProvider
 {
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'user';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'admin-user-management';
-
-    /**
-     * Name of comment box field.
-     *
-     * @var string
-     */
-    protected $commentBoxName = null;
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'user';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'admin-layout';
-
-    protected $defaultTableSortField = 'id';
-
-    protected $pageLayoutInner = null;
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'User';
-
-    /**
-     * Holds an array of variables for the default
-     * index list page.
-     */
-    protected $listVars = [];
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'admin-dashboard/admin-user-management';
 
+    public function getPageLayout()
+    {
+        return 'layout/admin-user-management-section';
+    }
+
+    public function getPageInnerLayout()
+    {
+        return 'layout/wide-layout';
+    }
+
     /**
-     * Holds the Data Bundle
+     * Any inline scripts needed in this section
      *
      * @var array
      */
-    protected $dataBundle = array(
-        'children' => [
-            'team',
-            'transportManager',
-            'partnerContactDetails',
-            'localAuthority',
-            'contactDetails' => [
-                'children' => [
-                    'address',
-                    'person',
-                    'phoneContacts' => [
-                        'children' => [
-                            'phoneContactType'
-                        ]
-                    ]
-                ]
-            ],
-            'roles'
-        ]
+    protected $inlineScripts = array(
+        'indexAction' => ['table-actions'],
+        'addAction' => ['forms/user-type'],
+        'editAction' => ['forms/user-type'],
     );
 
-    /**
-     * @var array
-     */
-    protected $inlineScripts = ['table-actions', 'forms/user-type'];
+    protected $routeIdentifier = 'user';
 
     /**
-     * Entity display name (used by confirm plugin via deleteActionTrait)
-     * @var string
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    protected $entityDisplayName = 'Users';
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'conviction', to => from
+    protected $itemParams = ['id' => 'user'];
 
     /**
-     * Query Elastic for list of users
-     *
-     * @return array|mixed|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
      */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
+     */
+    protected $deleteCommand = DeleteDto::class;
+    protected $deleteParams = ['id' => 'user'];
+    protected $deleteModalTitle = 'Delete User';
+
     public function indexAction()
     {
         $data['search'] = '*';
 
-        $this->checkForCrudAction(null, [], $this->getIdentifierName());
-
-        //update data with information from route, and rebind to form so that form data is correct
+        // update data with information from route, and rebind to form so that form data is correct
         $data['index'] = 'user';
 
         /** @var Search $searchService **/
@@ -138,13 +101,14 @@ class UserManagementController extends CrudAbstract
             ->setIndex($data['index'])
             ->setSearch($data['search']);
 
-        $view = new ViewModel();
+        $this->placeholder()->setPlaceholder(
+            $this->tableViewPlaceholderName,
+            $searchService->fetchResultsTable()
+        );
 
-        $view->results = $searchService->fetchResultsTable();
+        $this->placeholder()->setPlaceholder('pageTitle', 'User management');
 
-        $view->setTemplate('layout/admin-search-results');
-
-        return $this->renderView($view, 'User management');
+        return $this->viewBuilder()->buildViewFromTemplate('layout/admin-search-results');
     }
 
     /**
@@ -162,7 +126,7 @@ class UserManagementController extends CrudAbstract
         if ($request->isPost()) {
             $post = (array)$request->getPost();
 
-            if ($post['userType']['userType'] == 'transport-manager') {
+            if ($post['userType']['userType'] === 'transport-manager') {
                 $form = $this->processApplicationTransportManagerLookup($form);
             }
         }
@@ -179,10 +143,8 @@ class UserManagementController extends CrudAbstract
     protected function processApplicationTransportManagerLookup($form)
     {
         $request = $this->getRequest();
-        $post = array();
-        if ($request->isPost()) {
-            $post = (array)$request->getPost();
-        }
+
+        $post = ($request->isPost()) ? (array)$request->getPost() : [];
 
         // If we have clicked find application, persist the form
         if (isset($post['userType']['applicationTransportManagers']['search'])
@@ -200,7 +162,8 @@ class UserManagementController extends CrudAbstract
                 ->get('application')
                 ->setMessages(array('Please enter a valid application number'));
         } else {
-            $tmList = $this->getTransportManagerApplicationService()->fetchTmListOptionsByApplicationId($applicationId);
+            $tmList = $this->fetchTmListOptionsByApplicationId($applicationId);
+
             if (empty($tmList)) {
                 $form->get('userType')
                     ->get('applicationTransportManagers')
@@ -217,135 +180,36 @@ class UserManagementController extends CrudAbstract
     }
 
     /**
-     * Call formatLoad to prepare backend data for form view
-     *
-     * @param array $data
+     * Fetches a list of Transport Managers by application Id
+     * @param integer $applicationId
      * @return array
      */
-    public function processLoad($data)
+    protected function fetchTmListOptionsByApplicationId($applicationId)
     {
-        $data['attempts'] = 0;
+        $response = $this->handleQuery(
+            TransportManagerApplicationListDto::create(
+                [
+                    'application' => $applicationId
+                ]
+            )
+        );
 
-        if (isset($data['id'])) {
-            $userService = $this->getUserBusinessService();
+        if ($response->isServerError() || $response->isClientError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
 
-            $data['userLoginSecurity']['loginId'] = $data['loginId'];
-            $data['userLoginSecurity']['memorableWord'] = $data['memorableWord'];
-            $data['userLoginSecurity']['mustResetPassword'] = $data['mustResetPassword'];
-            $data['userLoginSecurity']['accountDisabled'] = $data['accountDisabled'];
-            $data['userLoginSecurity']['lockedDate'] = $data['lockedDate'];
-            $data['userType']['userType'] = $userService->determineUserType($data);
-            $data['userType']['team'] = $data['team'];
+        $optionData = [];
 
-            if (isset($data['transportManager']['id'])) {
-                $data['userType']['transportManager'] = $data['transportManager']['id'];
-            }
-            if (isset($data['localAuthority']['id'])) {
-                $data['userType']['localAuthority'] = $data['localAuthority']['id'];
-            }
-            if (isset($data['partnerContactDetails']['id'])) {
-                $data['userType']['partnerContactDetails'] = $data['partnerContactDetails']['id'];
-            }
+        if ($response->isOk()) {
+            $data = $response->getResult();
 
-            $data['userType']['roles'] = [];
-
-            if (isset($data['roles'])) {
-                $data['userType']['roles'] = array_column($data['roles'], 'id');
-            }
-
-            // set up contact data
-            $data['userPersonal']['forename'] = $data['contactDetails']['person']['forename'];
-            $data['userPersonal']['familyName'] = $data['contactDetails']['person']['familyName'];
-            $data['userPersonal']['birthDate'] = $data['contactDetails']['person']['birthDate'];
-            $data['userContactDetails']['emailAddress'] = $data['contactDetails']['emailAddress'];
-            $data['userContactDetails']['emailConfirm'] = $data['contactDetails']['emailAddress'];
-
-            if (isset($data['contactDetails']['phoneContacts'])) {
-                foreach ($data['contactDetails']['phoneContacts'] as $phoneContact) {
-                    if (empty($phoneContact['phoneContactType'])) {
-                        continue;
-                    }
-
-                    if ($phoneContact['phoneContactType']['id'] == 'phone_t_tel') {
-                        $data['userContactDetails']['phone'] = $phoneContact['phoneNumber'];
-                    } elseif ($phoneContact['phoneContactType']['id'] == 'phone_t_fax') {
-                        $data['userContactDetails']['fax'] = $phoneContact['phoneNumber'];
-                    }
-                }
-            }
-            $data['address'] = $data['contactDetails']['address'];
-
-            if (isset($data['lastSuccessfulLoginDate'])) {
-                $data['userLoginSecurity']['lastSuccessfulLogin'] = date(
-                    'd/m/Y H:i:s',
-                    strtotime($data['lastSuccessfulLoginDate'])
-                );
-            }
-
-            $data['userLoginSecurity']['attempts'] = $data['attempts'];
-
-            if (isset($data['lockedDate'])) {
-                $data['userLoginSecurity']['lockedDate'] = date(
-                    'd/m/Y H:i:s',
-                    strtotime($data['lockedDate'])
-                );
-            }
-
-            if (isset($data['resetPasswordExpiryDate'])) {
-                $data['userLoginSecurity']['resetPasswordExpiryDate'] = date(
-                    'd/m/Y H:i:s',
-                    strtotime($data['resetPasswordExpiryDate'])
-                );
+            foreach ($data['results'] as $datum) {
+                $optionData[$datum['transportManager']['id']]
+                    = $datum['transportManager']['homeCd']['person']['forename'] . ' ' .
+                        $datum['transportManager']['homeCd']['person']['familyName'];
             }
         }
 
-        return $data;
-    }
-
-    /**
-     * Form has passed validation so call the user service to save the record
-     *
-     * @param array $data
-     * @return mixed
-     */
-    public function processSave($data)
-    {
-        try {
-            $response = $this->getUserBusinessService()->process($data);
-            if ($response->isOk()) {
-                $this->addSuccessMessage('User updated successfully');
-                $this->setIsSaved(true);
-            } else {
-                $responseData = $response->getData();
-                $this->addErrorMessage($responseData['error']);
-            }
-        } catch (BadRequestException $e) {
-            $this->addErrorMessage($e->getMessage());
-        } catch (ResourceNotFoundException $e) {
-            $this->addErrorMessage($e->getMessage());
-        }
-
-        return $this->redirectToIndex();
-    }
-
-    /**
-     * Gets the user business service
-     *
-     * @return mixed
-     */
-    private function getUserBusinessService()
-    {
-        return $this->getServiceLocator()->get('BusinessServiceManager')->get('Admin\User');
-    }
-
-    /**
-    * Gets the transportManagerApplication data service
-    *
-    * @return mixed
-    */
-    private function getTransportManagerApplicationService()
-    {
-        return $this->getServiceLocator()->get('DataServiceManager')
-            ->get('Common\Service\Data\TransportManagerApplication');
+        return $optionData;
     }
 }
