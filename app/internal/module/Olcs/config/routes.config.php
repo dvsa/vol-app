@@ -1399,6 +1399,10 @@ $routes = [
                             'defaults' => [
                                 'controller' => 'LicenceProcessingPublicationsController',
                                 'action' => 'index'
+                            ],
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                                'action' => '(index|edit|delete)'
                             ]
                         ],
                     ],
@@ -1970,6 +1974,10 @@ $routes = [
                             'defaults' => [
                                 'controller' => 'TMProcessingPublicationController',
                                 'action' => 'index',
+                            ],
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                                'action' => '(index|edit|delete)'
                             ]
                         ]
                     ],
