@@ -13,10 +13,8 @@ class SearchFormActions
 {
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
-     * @Form\Options({
-     *     "label": "Update results",
-     * })
+     * @Form\Options({"label": "update-results.button"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
-    public $submit = null;
+    public $updateResults = null;
 }

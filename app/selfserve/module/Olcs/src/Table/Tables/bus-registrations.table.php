@@ -38,8 +38,8 @@ return array(
             'title' => 'Var No.',
             'formatter' => function ($data) {
                 $string = '';
-                if (isset($data['busReg']['variationNo'])) {
-                    $string = $data['busReg']['variationNo'];
+                if (isset($data['variationNo'])) {
+                    $string = $data['variationNo'];
                 }
                 return $string;
             }
@@ -62,20 +62,25 @@ return array(
         ),
         array(
             'title' => 'Submitted',
-            'formatter' => 'DateTime',
-            'name' => 'submittedDate',
-            'sort' => 'submittedDate'
+            'formatter' => function ($row) {
+                // DateTime formatter require data set at root of array
+                return date('d/m/Y H:i', strtotime($row['busReg']['ebsrSubmissions'][0]['submittedDate']));
+            }
         ),
         array(
             'title' => 'Registration type',
-            'formatter' => 'RefData',
             'name' => 'ebsrSubmissionType',
+            'formatter' => function ($row) {
+                return $row['busReg']['ebsrSubmissions'][0]['ebsrSubmissionType']['description'];
+            },
             'sort' => 'ebsrSubmissionType'
         ),
         array(
             'title' => 'File status',
-            'formatter' => 'RefData',
             'name' => 'ebsrSubmissionStatus',
+            'formatter' => function ($row) {
+                return $row['busReg']['ebsrSubmissions'][0]['ebsrSubmissionStatus']['description'];
+            },
             'sort' => 'ebsrSubmissionStatus'
         ),
         array(
