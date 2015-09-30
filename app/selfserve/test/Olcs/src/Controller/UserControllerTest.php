@@ -104,7 +104,7 @@ class UserControllerTest extends TestCase
                     'version' => 1,
                 ),
             ),
-            'isAdministrator' => 'N',
+            'permission' => 'user',
         );
 
         $id = 3;
@@ -141,8 +141,10 @@ class UserControllerTest extends TestCase
 
         $form = m::mock('Common\Form\Form');
         $form->shouldReceive('createFormWithRequest')->with('User', $request)->andReturnSelf();
-        $form->shouldReceive('isValid')->andReturn(true); // irrelevant in this test
         $form->shouldReceive('setData')->with($controller->formatLoadData($rawEditData)); // happy path.
+        $form->shouldReceive('get')->with('main')->andReturnSelf();
+        $form->shouldReceive('get')->with('permission')->andReturnSelf();
+        $form->shouldReceive('unsetValueOption')->with('tm')->once();
         $sl->shouldReceive('get')->with('Helper\Form')->andReturn($form);
 
         $view = $controller->editAction();
@@ -159,7 +161,7 @@ class UserControllerTest extends TestCase
                 'familyName' => 'Fox',
                 'emailAddress' => 'steve@example.com',
                 'emailConfirm' => 'steve@example.com',
-                'isAdministrator' => 'Y',
+                'permission' => 'admin',
                 'id' => '3',
                 'version' => '1',
             ),

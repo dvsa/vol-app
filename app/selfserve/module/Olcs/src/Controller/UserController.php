@@ -75,9 +75,11 @@ class UserController extends AbstractController
         $form = $this->getServiceLocator()->get('Helper\Form')->createFormWithRequest('User', $this->getRequest());
 
         $id = $this->params()->fromRoute('id', null);
+        $data = [];
 
         if ($this->getRequest()->isPost()) {
-            $form->setData($this->params()->fromPost());
+            $data = $this->params()->fromPost();
+            $form->setData($data);
 
             if ($form->isValid()) {
                 $data = $this->formatSaveData($form->getData());
@@ -114,9 +116,23 @@ class UserController extends AbstractController
         }
 
         $view = new Form();
-        $view->setForm($form);
+        $view->setForm(
+            $this->alterForm($form, $data)
+        );
 
         return $view;
+    }
+
+    public function alterForm($form, $data)
+    {
+        if (!isset($data['main']['currentPermission']) || ($data['main']['currentPermission'] !== 'tm')) {
+            // the option should only be available if editing already TM user
+            $form->get('main')
+                ->get('permission')
+                ->unsetValueOption('tm');
+        }
+
+        return $form;
     }
 
     public function deleteAction()

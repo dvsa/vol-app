@@ -37,8 +37,16 @@ return array(
         [
             'title' => 'Permission',
             'formatter' => function ($row, $column, $sm) {
-                return $sm->get('translator')
-                    ->translate('manage-users.field.is_administrator.'.$row['isAdministrator']);
+                return implode(
+                    ',',
+                    array_map(
+                        function ($role) use ($sm) {
+                            return $sm->get('translator')
+                                ->translate('role.'.$role['role']);
+                        },
+                        $row['roles']
+                    )
+                );
             }
         ],
         [

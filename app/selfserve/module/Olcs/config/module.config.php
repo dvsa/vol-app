@@ -855,6 +855,7 @@ return array(
                         'id' => 'selfserve-topnav-bus-registration',
                         'label' => 'Bus registrations',
                         'route' => 'bus-registration',
+                        'action' => 'index',
                         'use_route_match' => true,
                         'class' => 'proposition-nav__item',
                     ),
@@ -862,31 +863,10 @@ return array(
                         'id' => 'manage-users',
                         'label' => 'Manage Users',
                         'route' => 'user',
+                        'action' => 'index',
                         'use_route_match' => true,
                         'class' => 'proposition-nav__item',
                     )
-
-                    /*array(
-                        'id' => 'my-account',
-                        'label' => 'My Account',
-                        'route' => 'user',
-                        'use_route_match' => true,
-                        'class' => 'proposition-nav__item',
-                    ),
-                    array(
-                        'id' => 'bus-services',
-                        'label' => 'Bus Services',
-                        'route' => 'user',
-                        'use_route_match' => true,
-                        'class' => 'proposition-nav__item',
-                    ),
-                    array(
-                        'id' => 'bus-services',
-                        'label' => 'MBus Services',
-                        'route' => 'user',
-                        'use_route_match' => true,
-                        'class' => 'proposition-nav__item',
-                    )*/
                 ),
             ),
         )
