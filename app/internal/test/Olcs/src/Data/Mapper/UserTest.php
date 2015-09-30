@@ -384,6 +384,7 @@ class UserTest extends MockeryTestCase
                     'userType' => [
                         'userType' => 'transport-manager',
                         'roles' => [99],
+                        'applicationTransportManagers' => ['application' => 97],
                         'transportManager' => 3,
                     ],
                     'userPersonal' => [
@@ -413,6 +414,7 @@ class UserTest extends MockeryTestCase
                     'accountDisabled' => 'Y',
                     'userType' => 'transport-manager',
                     'roles' => [99],
+                    'application' => 97,
                     'transportManager' => 3,
                     'contactDetails' => [
                         'person' => [
