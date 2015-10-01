@@ -15,7 +15,18 @@ class OpposerContact
      * @Form\Attributes({"id":"phone","placeholder":"","class":"medium", "required":false})
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({"label":"Phone"})
-     * @Form\Type("\Common\Form\Elements\InputFilters\Phone")
+     * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({
+     *     "name": "Zend\Validator\Regex",
+     *     "options": {
+     *         "pattern": "/^[0-9 \(\)\-\+]+$/",
+     *         "messages": {
+     *             "regexNotMatch": "The input must contain only digits or spaces"
+     *         }
+     *     }
+     * })
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":20}})
      * @Form\Name("phone_business")
      */
     public $phoneBusiness = null;
