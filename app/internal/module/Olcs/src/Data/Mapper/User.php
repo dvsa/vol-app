@@ -95,6 +95,7 @@ class User implements MapperInterface
                 $commandData['team'] = $data['userType']['team'];
                 break;
             case 'transport-manager':
+                $commandData['application'] = $data['userType']['applicationTransportManagers']['application'];
                 $commandData['transportManager'] = $data['userType']['transportManager'];
                 break;
             case 'partner':
