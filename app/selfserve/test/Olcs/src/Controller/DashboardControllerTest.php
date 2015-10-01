@@ -121,7 +121,7 @@ class DashboardControllerTest extends MockeryTestCase
 
         $this->expectQuery(
             OutstandingFeesQry::class,
-            ['id' => $organisationId],
+            ['id' => $organisationId, 'hideExpired' => true],
             ['outstandingFees' => $fees]
         );
 
