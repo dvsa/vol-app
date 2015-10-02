@@ -77,7 +77,7 @@ class PublicationController extends AbstractInternalController implements PageLa
             return $this->redirectTo($response->getResult());
         }
 
-        $this->redirectTo([]);
+        return $this->redirectTo([]);
     }
 
     /**
@@ -112,6 +112,6 @@ class PublicationController extends AbstractInternalController implements PageLa
             return $this->redirectTo($response->getResult());
         }
 
-        $this->redirectTo([]);
+        return $this->redirectTo([]);
     }
 }
