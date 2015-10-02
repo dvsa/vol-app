@@ -48,7 +48,6 @@ class BusRegistrationController extends AbstractActionController
         $params['order'] = $this->params()->fromRoute('order');
         $params['page'] = $this->params()->fromRoute('page');
         $params['limit'] = $this->params()->fromRoute('limit');
-        $params['url'] = $this->plugin('url');
 
         $filterForm = $this->generateFormWithData(
             'BusRegFilterForm',
