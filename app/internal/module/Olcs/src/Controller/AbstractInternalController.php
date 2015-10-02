@@ -20,6 +20,7 @@ use Olcs\Logging\Log\ZendLogPsr3Adapter as Logger;
 use Olcs\View\Builder\BuilderInterface as ViewBuilderInterface;
 use Olcs\Mvc\Controller\Plugin;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Common\Service\Cqrs\Response;
 use Zend\Http\Response as HttpResponse;
 
@@ -35,7 +36,7 @@ use Zend\Http\Response as HttpResponse;
  * @method Plugin\Placeholder placeholder()
  * @method Plugin\Table table()
  * @method Response handleQuery(QueryInterface $query)
- * @method Response handleCommand(QueryInterface $query)
+ * @method Response handleCommand(CommandInterface $query)
  * @method Plugin\Confirm confirm($string)
  */
 abstract class AbstractInternalController extends AbstractActionController
