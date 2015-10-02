@@ -12,7 +12,6 @@ use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Cases\CaseController;
 
-
 /**
  * Case Docs Controller
  *

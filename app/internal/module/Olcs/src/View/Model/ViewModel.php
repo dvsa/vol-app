@@ -8,6 +8,7 @@
 namespace Olcs\View\Model;
 
 use Zend\View\Model\ViewModel as ZendViewModel;
+
 /**
  * View Model
  *
@@ -25,11 +26,6 @@ class ViewModel extends ZendViewModel
         'pageSubTitle' => null,
         'horizontalNavigationId' => null
     ];
-
-    public function __construct()
-    {
-
-    }
 
     public function setHorizontalNavigationId($id)
     {

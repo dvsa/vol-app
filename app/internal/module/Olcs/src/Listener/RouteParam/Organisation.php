@@ -63,10 +63,6 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
     {
         $organisation = $this->getOrganisation($e->getValue());
 
-        // set page title
-        $title = isset($organisation['name']) ? $organisation['name'] : '';
-        $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->append($title);
-
         $navigationPlugin = $this->getViewHelperManager()->get('Navigation')->__invoke('navigation');
 
         $isIrfo = $organisation['isIrfo'] == 'Y';

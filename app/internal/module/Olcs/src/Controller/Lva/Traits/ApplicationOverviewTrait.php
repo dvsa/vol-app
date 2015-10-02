@@ -71,7 +71,7 @@ trait ApplicationOverviewTrait
                 ]
             )
         );
-        $content->setTemplate('sections/application/overview');
+        $content->setTemplate('sections/application/pages/overview');
 
         return $this->render($content);
     }

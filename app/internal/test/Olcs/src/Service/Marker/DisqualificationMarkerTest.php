@@ -58,7 +58,7 @@ class DisqualificationMarkerTest extends \PHPUnit_Framework_TestCase
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/disqualification',
+                'marker/disqualification',
                 [
                     'startDateTime' => new \DateTime('2015-08-04'),
                     'endDateTime' => new \DateTime('2016-10-25'),
@@ -95,7 +95,7 @@ class DisqualificationMarkerTest extends \PHPUnit_Framework_TestCase
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/disqualification',
+                'marker/disqualification',
                 [
                     'startDateTime' => new \DateTime('2015-08-04'),
                     'endDateTime' => null,

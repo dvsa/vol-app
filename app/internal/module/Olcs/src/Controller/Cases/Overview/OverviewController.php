@@ -102,7 +102,7 @@ class OverviewController extends AbstractInternalController implements
                 if ($application) {
                     return 'application';
                 }
-            //missing break is intentional
+                // Missing break is intentional
             default:
                 return null;
         }
@@ -135,7 +135,7 @@ class OverviewController extends AbstractInternalController implements
                     $viewModel->setTemplate('sections/application/partials/right');
                     return $viewModel;
                 }
-            //missing break is intentional
+                // Missing break is intentional
             default:
                 // Already setup in the listener
                 return null;
@@ -165,7 +165,7 @@ class OverviewController extends AbstractInternalController implements
                 if ($application) {
                     return null;
                 }
-            //missing break is intentional
+                // Missing break is intentional
             default:
                 $viewModel = new ViewModel();
                 $viewModel->setTemplate('sections/cases/partials/left');

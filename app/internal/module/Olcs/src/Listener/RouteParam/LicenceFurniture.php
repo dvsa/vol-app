@@ -5,7 +5,7 @@ namespace Olcs\Listener\RouteParam;
 use Common\Exception\ResourceNotFoundException;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
-use Dvsa\Olcs\Transfer\Query\Licence\Licence;
+use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQuery;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -27,25 +27,6 @@ class LicenceFurniture implements ListenerAggregateInterface, FactoryInterface, 
         ViewHelperManagerAwareTrait,
         QuerySenderAwareTrait;
 
-    private $router;
-
-    /**
-     * @param $router
-     * @return $this
-     */
-    public function setRouter($router)
-    {
-        $this->router = $router;
-    }
-
-    /**
-     * @return \Zend\Mvc\Router\RouteStackInterface
-     */
-    public function getRouter()
-    {
-        return $this->router;
-    }
-
     /**
      * Create service
      *
@@ -56,7 +37,6 @@ class LicenceFurniture implements ListenerAggregateInterface, FactoryInterface, 
     {
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setQuerySender($serviceLocator->get('QuerySender'));
-        $this->setRouter($serviceLocator->get('Router'));
 
         return $this;
     }
@@ -87,7 +67,7 @@ class LicenceFurniture implements ListenerAggregateInterface, FactoryInterface, 
     {
         $id = $e->getValue();
 
-        $response = $this->getQuerySender()->send(Licence::create(['id' => $id]));
+        $response = $this->getQuerySender()->send(LicenceQuery::create(['id' => $id]));
 
         if (!$response->isOk()) {
             throw new ResourceNotFoundException("Licence id [$id] not found");

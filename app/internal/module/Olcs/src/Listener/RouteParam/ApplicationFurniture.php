@@ -6,7 +6,7 @@ use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
-use Dvsa\Olcs\Transfer\Query\Application\Application;
+use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQuery;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -88,7 +88,7 @@ class ApplicationFurniture implements ListenerAggregateInterface, FactoryInterfa
     {
         $id = $e->getValue();
 
-        $response = $this->getQuerySender()->send(Application::create(['id' => $id]));
+        $response = $this->getQuerySender()->send(ApplicationQuery::create(['id' => $id]));
 
         if (!$response->isOk()) {
             throw new ResourceNotFoundException("Application id [$id] not found");
@@ -108,15 +108,18 @@ class ApplicationFurniture implements ListenerAggregateInterface, FactoryInterfa
         ];
 
         if (!in_array($data['status']['id'], $inactiveAppStatuses)) {
-            $html = '<a href="%s">%s</a> / %s';
-            $licenceUrl = $this->getRouter()->assemble(['licence' => $data['licence']['id']], ['name' => 'lva-licence']);
-            $placeholder->getContainer('pageTitle')->set(sprintf($html, $licenceUrl, $data['licence']['licNo'], $id));
+            $licenceUrl = $this->getRouter()->assemble(
+                ['licence' => $data['licence']['id']],
+                ['name' => 'lva-licence']
+            );
+
+            $placeholder->getContainer('pageTitle')->set(
+                sprintf('<a href="%s">%s</a> / %s', $licenceUrl, $data['licence']['licNo'], $id)
+            );
         } elseif ($data['licence']['licNo']) {
-            $html = '%s / %s';
-            $placeholder->getContainer('pageTitle')->set(sprintf($html, $data['licence']['licNo'], $id));
+            $placeholder->getContainer('pageTitle')->set(sprintf('%s / %s', $data['licence']['licNo'], $id));
         } else {
-            $html = '%s';
-            $placeholder->getContainer('pageTitle')->set(sprintf($html, $id));
+            $placeholder->getContainer('pageTitle')->set(sprintf('%s', $id));
         }
 
         $placeholder->getContainer('pageSubtitle')->set($data['licence']['organisation']['name']);

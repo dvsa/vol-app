@@ -45,7 +45,8 @@ class TransportManagerProcessingDecisionController extends AbstractTransportMana
             $messages[] = 'transport-manager-remove-not-detached-error';
         }
         if (is_array($response->getResult()['hasUsers'])) {
-            $messages[] = 'transport-manager-remove-has-users-error' . implode(', ', $response->getResult()['hasUsers']);
+            $suffix = implode(', ', $response->getResult()['hasUsers']);
+            $messages[] = 'transport-manager-remove-has-users-error' . $suffix;
         }
 
         if (count($messages) <= 0) {

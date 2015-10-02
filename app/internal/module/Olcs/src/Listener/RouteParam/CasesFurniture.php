@@ -65,7 +65,7 @@ class CasesFurniture implements ListenerAggregateInterface, FactoryInterface, Qu
         $case = $this->getCase($e->getValue());
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
-        $placeholder->getContainer('pageTitle')->append($this->getPageTitle($case));
+        $placeholder->getContainer('pageTitle')->set($this->getPageTitle($case));
         $placeholder->getContainer('status')->set($this->getStatusArray($case));
         $placeholder->getContainer('horizontalNavigationId')->set('case');
 

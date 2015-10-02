@@ -94,7 +94,7 @@ class OverviewController extends AbstractController implements LicenceController
                 ]
             )
         );
-        $content->setTemplate('sections/licence/overview');
+        $content->setTemplate('sections/licence/pages/overview');
 
         return $this->render($content);
     }

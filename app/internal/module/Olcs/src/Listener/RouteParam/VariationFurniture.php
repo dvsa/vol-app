@@ -5,7 +5,7 @@ namespace Olcs\Listener\RouteParam;
 use Common\Exception\ResourceNotFoundException;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
-use Dvsa\Olcs\Transfer\Query\Application\Application;
+use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQuery;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -87,7 +87,7 @@ class VariationFurniture implements ListenerAggregateInterface, FactoryInterface
     {
         $id = $e->getValue();
 
-        $response = $this->getQuerySender()->send(Application::create(['id' => $id]));
+        $response = $this->getQuerySender()->send(ApplicationQuery::create(['id' => $id]));
 
         if (!$response->isOk()) {
             throw new ResourceNotFoundException("Variation id [$id] not found");

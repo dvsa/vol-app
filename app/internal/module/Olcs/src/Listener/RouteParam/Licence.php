@@ -140,7 +140,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->getMarkerService()->addData('organisation', $licence['organisation']);
         $this->getMarkerService()->addData('cases', $licence['cases']);
 
-        // Is this still required? Doesnt do any harm to leave it in!
+        // Is this still required? Doesn't do any harm to leave it in!
         $this->getLicenceService()->setId($licenceId); //set default licence id for use in forms
 
         $this->getViewHelperManager()->get('placeholder')

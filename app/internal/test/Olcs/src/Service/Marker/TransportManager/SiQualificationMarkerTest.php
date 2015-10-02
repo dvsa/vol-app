@@ -127,7 +127,7 @@ class SiQualificationMarkerTest extends \PHPUnit_Framework_TestCase
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/transport-manager/si-gb-qualification',
+                'marker/transport-manager/si-gb-qualification',
                 [
                     'person' => 'PERSON3',
                     'niFlag' => false,
@@ -136,7 +136,7 @@ class SiQualificationMarkerTest extends \PHPUnit_Framework_TestCase
             )->once()->andReturn('HTML3');
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/transport-manager/si-gb-qualification',
+                'marker/transport-manager/si-gb-qualification',
                 [
                     'person' => 'PERSON4',
                     'niFlag' => true,

@@ -18,7 +18,7 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class BusinessDetailsController extends AbstractBusinessDetailsController implements ApplicationFurnitureInterface
+class BusinessDetailsController extends AbstractBusinessDetailsController implements ApplicationControllerInterface
 {
     use ApplicationControllerTrait;
 

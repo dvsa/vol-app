@@ -131,7 +131,7 @@ class LicenceStatusRuleMarkerTest extends \PHPUnit_Framework_TestCase
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/licence-status-rule',
+                'marker/licence-status-rule',
                 [
                     'startDateTime' => new \DateTime('2014-02-25'),
                     'endDateTime' => new \DateTime('2014-12-10'),
@@ -174,7 +174,7 @@ class LicenceStatusRuleMarkerTest extends \PHPUnit_Framework_TestCase
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/licence-status-rule',
+                'marker/licence-status-rule',
                 [
                     'startDateTime' => new \DateTime('2014-02-25'),
                     'endDateTime' => null,

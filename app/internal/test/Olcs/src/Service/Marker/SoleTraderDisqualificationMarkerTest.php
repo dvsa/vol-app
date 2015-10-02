@@ -151,7 +151,7 @@ class SoleTraderDisqualificationMarkerTest extends \PHPUnit_Framework_TestCase
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/soletrader-disqualification',
+                'marker/soletrader-disqualification',
                 [
                     'startDateTime' => new \DateTime('2013-02-12'),
                     'endDateTime' => new \DateTime('2014-04-23'),
@@ -198,7 +198,7 @@ class SoleTraderDisqualificationMarkerTest extends \PHPUnit_Framework_TestCase
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/soletrader-disqualification',
+                'marker/soletrader-disqualification',
                 [
                     'startDateTime' => new \DateTime('2013-02-12'),
                     'endDateTime' => null,

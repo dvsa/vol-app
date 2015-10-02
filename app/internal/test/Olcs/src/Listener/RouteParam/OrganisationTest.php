@@ -76,6 +76,7 @@ class OrganisationTest extends MockeryTestCase
             'name' => 'org name',
             'isIrfo' => 'N',
             'isDisqualified' => true,
+            'isUnlicensed' => true
         ];
 
         $mockSideBar = m::mock();
@@ -88,14 +89,8 @@ class OrganisationTest extends MockeryTestCase
         $event = new RouteParam();
         $event->setValue($id);
 
-        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
-        $mockContainer->shouldReceive('append')->once()->with('org name');
-        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
-        $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
-        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
-
         $mockNavigation = m::mock('\StdClass');
-        $mockNavigation->shouldReceive('setVisible')->times(1)->with(false);
+        $mockNavigation->shouldReceive('setVisible')->times(5)->with(false);
 
         $mockMenu = m::mock('\Zend\Navigation\Navigation');
         $mockMenu->shouldReceive('__invoke')->with('navigation')->andReturnSelf();
@@ -116,6 +111,7 @@ class OrganisationTest extends MockeryTestCase
             'name' => 'org name',
             'isIrfo' => 'Y',
             'isDisqualified' => false,
+            'isUnlicensed' => false
         ];
 
         $mockSideBar = m::mock();
@@ -123,20 +119,21 @@ class OrganisationTest extends MockeryTestCase
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $this->sut->setViewHelperManager($mockViewHelperManager);
 
+        $mockNavigation = m::mock('\StdClass');
+        $mockNavigation->shouldReceive('setVisible')->times(3)->with(false);
+
+        $mockMenu = m::mock('\Zend\Navigation\Navigation');
+        $mockMenu->shouldReceive('__invoke')->with('navigation')->andReturnSelf();
+        $mockMenu->shouldReceive('findById')->andReturn($mockNavigation);
+        $mockViewHelperManager->shouldReceive('get')->with('Navigation')->andReturn($mockMenu);
+
         $this->setupOrganisation($orgData);
 
         $event = new RouteParam();
         $event->setValue($id);
 
-        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
-        $mockContainer->shouldReceive('append')->once()->with('org name');
-        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
-        $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
-        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
-
         $this->sut->onOrganisation($event);
     }
-
 
     public function testCreateService()
     {

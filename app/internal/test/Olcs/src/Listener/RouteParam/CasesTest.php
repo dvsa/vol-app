@@ -87,27 +87,10 @@ class CasesTest extends MockeryTestCase
             ->shouldReceive('getContainer')->once()->with('case')->andReturn(
                 m::mock()->shouldReceive('set')->once()->with($case)->getMock()
             )
-            ->shouldReceive('getContainer')->once()->with('status')->andReturn(
-                m::mock()->shouldReceive('set')->once()->getMock()
-            )
-            ->shouldReceive('getContainer')->once()->with('pageTitle')->andReturn(
-                m::mock()->shouldReceive('append')->once()->with('<a href="url">100</a> / Case 69')->getMock()
-            )
             ->getMock();
 
         $mockViewHelperManager = m::mock('\Zend\View\HelperPluginManager')
-            ->shouldReceive('get')->once()->with('headTitle')->andReturn(
-                m::mock()->shouldReceive('prepend')->once()->with('Case 69')->getMock()
-            )
             ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
-            ->shouldReceive('get')->once()->with('Url')->andReturn(
-                m::mock()
-                    ->shouldReceive('__invoke')
-                    ->once()
-                    ->with('lva-application/case', ['application' => 100], [], true)
-                    ->andReturn('url')
-                    ->getMock()
-            )
             ->getMock();
 
         $this->sut->setViewHelperManager($mockViewHelperManager);
@@ -213,42 +196,5 @@ class CasesTest extends MockeryTestCase
         $this->sut->setQueryService($mockQueryService);
 
         $this->sut->onCase($event);
-    }
-
-    /**
-     * @dataProvider getStatusArrayProvider
-     */
-    public function testGetStatusArray($case, $expected)
-    {
-        $method = new \ReflectionMethod($this->sut, 'getStatusArray');
-        $method->setAccessible(true);
-
-        $this->assertEquals($expected, $method->invoke($this->sut, $case));
-    }
-
-    public function getStatusArrayProvider()
-    {
-        return [
-            // open
-            [
-                [
-                    'closedDate' => null
-                ],
-                [
-                    'colour' => 'Orange',
-                    'value' => 'Open',
-                ],
-            ],
-            // closed
-            [
-                [
-                    'closedDate' => '2015-01-02'
-                ],
-                [
-                    'colour' => 'Grey',
-                    'value' => 'Closed',
-                ],
-            ],
-        ];
     }
 }

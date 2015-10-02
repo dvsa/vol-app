@@ -89,7 +89,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertEquals('pages/application/overview', $view->getTemplate());
+        $this->assertEquals('sections/application/pages/overview', $view->getTemplate());
 
         foreach ($viewData as $key => $value) {
             $this->assertEquals($value, $view->getVariable($key), "'$key' not as expected");
@@ -505,7 +505,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertEquals('pages/application/overview', $view->getTemplate());
+        $this->assertEquals('sections/application/pages/overview', $view->getTemplate());
     }
 
     public function testIndexPostCancel()
@@ -564,7 +564,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertEquals('pages/application/overview', $view->getTemplate());
+        $this->assertEquals('sections/application/pages/overview', $view->getTemplate());
     }
 
     protected function getMockForm()
