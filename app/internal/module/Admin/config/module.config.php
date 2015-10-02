@@ -65,7 +65,7 @@ return [
                             'pending' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/pending[/:action][/:publication]',
+                                    'route' => '/pending[/:action][/:id]',
                                     'constraints' => [
                                         'publication' => '[0-9]+',
                                         'action' => '(index|generate|publish)'
