@@ -5,204 +5,44 @@
  */
 namespace Admin\Controller;
 
-use Olcs\Controller\CrudAbstract;
-use Common\Service\Data\Search\Search;
-use Common\Service\Data\Search\SearchType;
-use Zend\View\Model\ViewModel;
-use Common\Exception\ResourceNotFoundException;
-use Common\Exception\BadRequestException;
-use Common\Exception\DataServiceException;
+use Olcs\Controller\AbstractInternalController;
+use Dvsa\Olcs\Transfer\Query\Publication\PendingList;
+use Dvsa\Olcs\Transfer\Command\Publication\Publish as PublishCmd;
+use Dvsa\Olcs\Transfer\Command\Publication\Generate as GenerateCmd;
+use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
 
 /**
  * Publication Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PublicationController extends CrudAbstract
+class PublicationController extends AbstractInternalController implements PageLayoutProvider, PageInnerLayoutProvider
 {
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'publication';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'admin-publication';
-
-    /**
-     * Name of comment box field.
-     *
-     * @var string
-     */
-    protected $commentBoxName = null;
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'publication';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'admin-publication-section';
-
-    protected $pageLayoutInner = null;
-
-    protected $defaultTableSortField = 'publicationNo';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'Publication';
-
-    /**
-     * Holds the navigation ID,
-     * required when an entire controller is
-     * represented by a single navigation id.
-     */
     protected $navigationId = 'admin-dashboard/admin-publication';
-
-    /**
-     * Holds an array of variables for the default
-     * index list page.
-     */
     protected $listVars = [];
+    protected $inlineScripts = array('indexAction' => ['table-actions', 'file-link']);
+    protected $listDto = PendingList::class;
+    protected $tableName = 'admin-publication';
+    protected $crudConfig = [
+        'generate' => ['requireRows' => true],
+        'publish' => ['requireRows' => true],
+    ];
 
     /**
-     * Data map
-     *
-     * @var array
+     * @return string
      */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields'
-            )
-        )
-    );
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'children' => [
-            'pubStatus' => [],
-            'trafficArea' => [],
-            'document' => []
-        ]
-    );
-
-    /**
-     * Any inline scripts needed in this section
-     *
-     * @var array
-     */
-    protected $inlineScripts = array('table-actions', 'file-link');
-
-    /**
-     * Entity display name (used by confirm plugin via deleteActionTrait)
-     * @var string
-     */
-    protected $entityDisplayName = 'Publication';
-
-    /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function indexAction()
+    public function getPageLayout()
     {
-        $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->append('Publications');
-
-        return parent::indexAction();
+        return 'layout/wide-layout'; //quick fix, will change with refactor of views
     }
 
     /**
-     * Gets table params
-     *
-     * @return array
+     * @return string
      */
-    public function getTableParams()
+    public function getPageInnerLayout()
     {
-        $params = parent::getTableParams();
-
-        $extraParams = [
-            'pubStatus' => 'IN ["pub_s_new", "pub_s_generated"]',
-        ];
-
-        return array_merge($params, $extraParams);
-    }
-
-    public function backAction()
-    {
-        $sd = $this->ElasticSearch()->getSearchData();
-
-        /**
-         * Remove the "index" key from the incoming parameters.
-         */
-        $index = $sd['index'];
-        unset($sd['index']);
-
-        return $this->redirect()->toRoute(
-            'admin-dashboard/admin-publication',
-            ['index' => $index, 'action' => 'search'],
-            ['query' => $sd, 'code' => 303],
-            true
-        );
-    }
-
-    /**
-     * Placeholder for published document table
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function publishedAction()
-    {
-        $options = [
-            'layout_template' => 'elastic-search-results-table',
-        ];
-        $elasticSearch =  $this->ElasticSearch($options);
-
-        $filterForm = $elasticSearch->getFiltersForm();
-
-        $this->setPlaceholder('tableFilters', $filterForm);
-
-        $elasticSearch->processSearchData();
-
-        $view = new ViewModel();
-
-        $view = $elasticSearch->generateResults($view);
-
-        return $this->renderView($view, 'Publications');
-    }
-
-    /**
-     * Redirect action
-     *
-     * @return \Zend\Http\Response
-     */
-    public function redirectAction()
-    {
-        return $this->redirectToRouteAjax(
-            'admin-dashboard/admin-publication/pending',
-            ['action'=>'index', $this->getIdentifierName() => null],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
+        return 'layout/admin-publication-section';
     }
 
     /**
@@ -212,20 +52,32 @@ class PublicationController extends CrudAbstract
      */
     public function generateAction()
     {
-        $id = $this->params()->fromRoute('publication');
+        $response = $this->handleCommand(GenerateCmd::create(['id' => $this->params()->fromRoute('id')]));
 
-        $service = $this->getPublicationService();
-
-        try {
-            $service->generate($id);
-            $this->addSuccessMessage('Publication was generated successfully');
-        } catch (DataServiceException $e) {
-            $this->addErrorMessage($e->getMessage());
-        } catch (ResourceNotFoundException $e) {
-            $this->addErrorMessage($e->getMessage());
+        if ($response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
-        return $this->redirectToIndex();
+        if ($response->isClientError()) {
+            $result = $response->getResult();
+
+            if (isset($result['messages'])) {
+                foreach ($result['messages'] as $message) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($message);
+                }
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+        }
+
+        if ($response->isOk()) {
+            $this->getServiceLocator()
+                ->get('Helper\FlashMessenger')
+                ->addSuccessMessage('Publication generated successfully');
+            return $this->redirectTo($response->getResult());
+        }
+
+        $this->redirectTo([]);
     }
 
     /**
@@ -235,29 +87,31 @@ class PublicationController extends CrudAbstract
      */
     public function publishAction()
     {
-        $id = $this->params()->fromRoute('publication');
+        $response = $this->handleCommand(PublishCmd::create(['id' => $this->params()->fromRoute('id')]));
 
-        $service = $this->getPublicationService();
-
-        try {
-            $service->publish($id);
-            $this->addSuccessMessage('Publication was published successfully');
-        } catch (DataServiceException $e) {
-            $this->addErrorMessage($e->getMessage());
-        } catch (ResourceNotFoundException $e) {
-            $this->addErrorMessage($e->getMessage());
+        if ($response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
-        return $this->redirectToIndex();
-    }
+        if ($response->isClientError()) {
+            $result = $response->getResult();
 
-    /**
-     * Gets the publication service
-     *
-     * @return mixed
-     */
-    private function getPublicationService()
-    {
-        return $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\Publication');
+            if (isset($result['messages'])) {
+                foreach ($result['messages'] as $message) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($message);
+                }
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+        }
+
+        if ($response->isOk()) {
+            $this->getServiceLocator()
+                ->get('Helper\FlashMessenger')
+                ->addSuccessMessage('Publication published successfully');
+            return $this->redirectTo($response->getResult());
+        }
+
+        $this->redirectTo([]);
     }
 }
