@@ -75,7 +75,7 @@ class PublicationController extends AbstractInternalController implements LeftVi
             return $this->redirectTo($response->getResult());
         }
 
-        $this->redirectTo([]);
+        return $this->redirectTo([]);
     }
 
     /**
@@ -110,6 +110,6 @@ class PublicationController extends AbstractInternalController implements LeftVi
             return $this->redirectTo($response->getResult());
         }
 
-        $this->redirectTo([]);
+        return $this->redirectTo([]);
     }
 }
