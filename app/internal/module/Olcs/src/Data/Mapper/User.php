@@ -21,35 +21,19 @@ class User implements MapperInterface
      */
     public static function mapFromResult(array $data)
     {
-        $formData['userLoginSecurity']['attempts'] = isset($data['attempts']) ? $data['attempts'] : 0;
+        $formData = [];
 
         if (isset($data['id'])) {
             $formData['id'] = $data['id'];
             $formData['version'] = $data['version'];
 
             $formData['userLoginSecurity']['loginId'] = $data['loginId'];
-            $formData['userLoginSecurity']['memorableWord'] = $data['memorableWord'];
-            $formData['userLoginSecurity']['mustResetPassword'] = $data['mustResetPassword'];
             $formData['userLoginSecurity']['accountDisabled'] = $data['accountDisabled'];
-
-            if (!empty($data['lastSuccessfulLoginDate'])) {
-                $formData['userLoginSecurity']['lastSuccessfulLogin'] = date(
-                    'd/m/Y H:i:s',
-                    strtotime($data['lastSuccessfulLoginDate'])
-                );
-            }
 
             if (!empty($data['lockedDate'])) {
                 $formData['userLoginSecurity']['lockedDate'] = date(
                     'd/m/Y H:i:s',
                     strtotime($data['lockedDate'])
-                );
-            }
-
-            if (!empty($data['resetPasswordExpiryDate'])) {
-                $formData['userLoginSecurity']['resetPasswordExpiryDate'] = date(
-                    'd/m/Y H:i:s',
-                    strtotime($data['resetPasswordExpiryDate'])
                 );
             }
 
@@ -100,7 +84,6 @@ class User implements MapperInterface
         $commandData['version'] = $data['version'];
 
         $commandData['loginId'] = $data['userLoginSecurity']['loginId'];
-        $commandData['memorableWord'] = $data['userLoginSecurity']['memorableWord'];
         $commandData['mustResetPassword'] = $data['userLoginSecurity']['mustResetPassword'];
         $commandData['accountDisabled'] = $data['userLoginSecurity']['accountDisabled'];
 
@@ -112,6 +95,7 @@ class User implements MapperInterface
                 $commandData['team'] = $data['userType']['team'];
                 break;
             case 'transport-manager':
+                $commandData['application'] = $data['userType']['applicationTransportManagers']['application'];
                 $commandData['transportManager'] = $data['userType']['transportManager'];
                 break;
             case 'partner':
