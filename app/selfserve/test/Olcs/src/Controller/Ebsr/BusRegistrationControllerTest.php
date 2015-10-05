@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Query\Ebsr\SubmissionList as SubmissionListQuery;
  */
 class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
 {
-    public  function setUp()
+    public function setUp()
     {
         $this->markTestSkipped();
     }
