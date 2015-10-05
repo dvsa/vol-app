@@ -203,7 +203,15 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
     protected function alterTable($table, $data)
     {
         if (!is_null($data['extra']['transportManager']['removedDate'])) {
+            /* @var $table \Common\Service\Table\TableBuilder */
             $table->setDisabled(true);
+
+            // of readonly then remove hyperlink from column
+            $column = $table->getColumn('qualificationType');
+            $column['formatter'] = function ($row) {
+                return $row['qualificationType']['description'];
+            };
+            $table->setColumn('qualificationType', $column);
         }
 
         return $table;
