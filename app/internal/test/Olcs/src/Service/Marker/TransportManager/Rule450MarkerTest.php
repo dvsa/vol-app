@@ -100,7 +100,7 @@ class Rule450MarkerTest extends \PHPUnit_Framework_TestCase
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/transport-manager/rule450',
+                'marker/transport-manager/rule450',
                 [
                     'person' => 'PERSON3',
                     'associatedOrganisationCount' => 5,
@@ -110,7 +110,7 @@ class Rule450MarkerTest extends \PHPUnit_Framework_TestCase
             )->once()->andReturn('HTML3');
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/transport-manager/rule450',
+                'marker/transport-manager/rule450',
                 [
                     'person' => 'PERSON4',
                     'associatedOrganisationCount' => 4,
@@ -120,7 +120,7 @@ class Rule450MarkerTest extends \PHPUnit_Framework_TestCase
             )->once()->andReturn('HTML4');
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/transport-manager/rule450',
+                'marker/transport-manager/rule450',
                 [
                     'person' => 'PERSON5',
                     'associatedOrganisationCount' => 8,

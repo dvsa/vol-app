@@ -30,6 +30,11 @@ class CaseControllerTest extends ControllerTestAbstract
         'indexAction' => 'redirectToRoute'
     ];
 
+    public function setUp()
+    {
+        $this->markTestSkipped();
+    }
+
     public function testGetCase()
     {
         $this->markTestSkipped();

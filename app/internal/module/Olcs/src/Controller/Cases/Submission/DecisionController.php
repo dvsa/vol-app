@@ -10,18 +10,13 @@ use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmissionAction as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Submission\SubmissionAction as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Data\Mapper\SubmissionAction as Mapper;
 use Olcs\Form\Model\Form\SubmissionDecision as Form;
 
 /**
  * Submission Decision Controller
  */
-class DecisionController extends AbstractInternalController implements
-    CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class DecisionController extends AbstractInternalController implements CaseControllerInterface
 {
     /**
      * Holds the navigation ID,
@@ -54,16 +49,6 @@ class DecisionController extends AbstractInternalController implements
         ]
     ];
 
-    public function getPageLayout()
-    {
-        return 'layout/case-section';
-    }
-
-    public function getPageInnerLayout()
-    {
-        return 'layout/wide-layout';
-    }
-
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
@@ -78,6 +63,8 @@ class DecisionController extends AbstractInternalController implements
     protected $formClass = Form::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add submission decision';
+    protected $editContentTitle = 'Edit submission decision';
 
     /**
      * Variables for controlling edit view rendering

@@ -10,20 +10,19 @@ use Dvsa\Olcs\Transfer\Query\Publication\PublicationLink as PublicationLinkDto;
 use Dvsa\Olcs\Transfer\Command\Publication\DeletePublicationLink;
 use Dvsa\Olcs\Transfer\Command\Publication\UpdatePublicationLink;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Data\Mapper\PublicationLink as PublicationLinkMapper;
 use Olcs\Form\Model\Form\Publication as PublicationForm;
 use Olcs\Form\Model\Form\PublicationNotNew as PublicationNotNewForm;
+use Zend\View\Model\ViewModel;
 
 /**
  * Transport Manager Processing Publication Controller
  */
 class PublicationController extends AbstractInternalController implements
     TransportManagerControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider
 {
     protected $navigationId = 'transport_manager_processing_publications';
 
@@ -36,17 +35,17 @@ class PublicationController extends AbstractInternalController implements
     protected $formClass = PublicationForm::class;
     protected $updateCommand = UpdatePublicationLink::class;
     protected $deleteCommand = DeletePublicationLink::class;
+    protected $addContentTitle = 'Add publication';
+    protected $editContentTitle = 'Edit publication';
 
     protected $inlineScripts = array('indexAction' => ['table-actions']);
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/transport-manager-section-crud';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/transport-manager/partials/processing-left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/transport-manager-subsection';
+        return $view;
     }
 
     public function editAction()

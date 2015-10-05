@@ -18,11 +18,6 @@ use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 class TransportManagerController extends AbstractController implements TransportManagerControllerInterface
 {
     /**
-     * @var string
-     */
-    protected $pageLayout = 'transport-manager-section';
-
-    /**
      * Memoize TM details to prevent multiple backend calls with same id
      * @var array
      */
@@ -36,7 +31,7 @@ class TransportManagerController extends AbstractController implements Transport
      */
     public function indexJumpAction()
     {
-        return $this->redirect()->toRoute('transport-manager/details/details', [], [], true);
+        return $this->redirect()->toRoute('transport-manager/details', [], [], true);
     }
 
     /**
@@ -58,27 +53,14 @@ class TransportManagerController extends AbstractController implements Transport
     /**
      * Get view with TM
      *
+     * @todo this can probably be removed now
+     *
      * @param array $variables
      * @return \Zend\View\Model\ViewModel
      */
     protected function getViewWithTm($variables = [])
     {
-        $tmId = $this->params()->fromRoute('transportManager');
-        if ($tmId) {
-            $variables['disable'] = false;
-        } else {
-            $this->pageTitle = $this->getServiceLocator()
-                ->get('translator')
-                ->translate('internal-transport-manager-new-transport-manager');
-
-            $variables['disable'] = true;
-        }
-
-        $variables['section'] = $this->section;
-
-        $view = $this->getView($variables);
-
-        return $view;
+        return $this->getView($variables);
     }
 
     public function getTmDetails($tmId, $bypassCache = false)
@@ -152,12 +134,8 @@ class TransportManagerController extends AbstractController implements Transport
 
         $this->getServiceLocator()->get('Script')->loadFile('tm-merge');
 
-        // unset layout file
-        $this->layoutFile = null;
-        $this->pageLayout = null;
-
         $view = new \Zend\View\Model\ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Merge transport manager');
     }
@@ -203,12 +181,9 @@ class TransportManagerController extends AbstractController implements Transport
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }
         }
-        // unset layout file
-        $this->layoutFile = null;
-        $this->pageLayout = null;
 
         $view = new \Zend\View\Model\ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Unmerge transport manager');
     }

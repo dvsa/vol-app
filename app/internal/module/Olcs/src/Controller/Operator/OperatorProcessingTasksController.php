@@ -54,7 +54,7 @@ class OperatorProcessingTasksController extends OperatorController
 
         $view = new ViewModel(['table' => $table]);
 
-        $view->setTemplate('partials/table');
+        $view->setTemplate('pages/table');
 
         return $this->renderView($view);
     }

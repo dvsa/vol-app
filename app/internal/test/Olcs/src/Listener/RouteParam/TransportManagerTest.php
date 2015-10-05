@@ -46,7 +46,7 @@ class TransportManagerTest extends MockeryTestCase
 
         $mockUrl = m::mock('stdClass');
         $mockUrl->shouldReceive('__invoke')
-            ->with('transport-manager/details/details', ['transportManager' => $tm['id']], [], true)
+            ->with('transport-manager/details', ['transportManager' => $tm['id']], [], true)
             ->andReturn($url);
 
         $sut = new SystemUnderTest();
@@ -140,7 +140,7 @@ class TransportManagerTest extends MockeryTestCase
 
         $mockUrl = m::mock('stdClass');
         $mockUrl->shouldReceive('__invoke')
-            ->with('transport-manager/details/details', ['transportManager' => $tm['id']], [], true)
+            ->with('transport-manager/details', ['transportManager' => $tm['id']], [], true)
             ->andReturn($url);
 
         $sidebarNav = m::mock(Navigation::class);
@@ -208,7 +208,7 @@ class TransportManagerTest extends MockeryTestCase
 
         $mockUrl = m::mock('stdClass');
         $mockUrl->shouldReceive('__invoke')
-            ->with('transport-manager/details/details', ['transportManager' => $tm['id']], [], true)
+            ->with('transport-manager/details', ['transportManager' => $tm['id']], [], true)
             ->andReturn($url);
 
         $sidebarNav = m::mock(Navigation::class);

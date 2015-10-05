@@ -89,11 +89,12 @@ class OverviewController extends AbstractController implements LicenceController
             array_merge(
                 $this->getServiceLocator()->get('Helper\LicenceOverview')->getViewData($licence),
                 [
-                    'form' => $form
+                    'form' => $form,
+                    'title' => 'Overview'
                 ]
             )
         );
-        $content->setTemplate('pages/licence/overview');
+        $content->setTemplate('sections/licence/pages/overview');
 
         return $this->render($content);
     }

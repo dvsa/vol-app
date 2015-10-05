@@ -11,17 +11,15 @@ use Dvsa\Olcs\Transfer\Command\Publication\DeleteRecipient as DeleteDto;
 use Dvsa\Olcs\Transfer\Query\Publication\Recipient as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Publication\RecipientList as ListDto;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\Recipient as Mapper;
 use Admin\Form\Model\Form\Recipient as Form;
+use Zend\View\Model\ViewModel;
 
 /**
  * Recipient Controller
  */
-class RecipientController extends AbstractInternalController implements
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class RecipientController extends AbstractInternalController implements LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -48,14 +46,20 @@ class RecipientController extends AbstractInternalController implements
     protected $tableName = 'recipient';
     protected $listDto = ListDto::class;
 
-    public function getPageLayout()
-    {
-        return 'layout/admin-publication-section';
-    }
+    protected $addContentTitle = 'Add recipient';
+    protected $editContentTitle = 'Edit recipient';
 
-    public function getPageInnerLayout()
+    public function getLeftView()
     {
-        return 'layout/wide-layout';
+        $view = new ViewModel(
+            [
+                'navigationId' => 'admin-dashboard/admin-publication',
+                'navigationTitle' => 'Publications'
+            ]
+        );
+        $view->setTemplate('admin/sections/admin/partials/generic-left');
+
+        return $view;
     }
 
     /**

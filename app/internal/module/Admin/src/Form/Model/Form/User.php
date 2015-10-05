@@ -7,9 +7,9 @@ use Olcs\Form\Model\Fieldset\Base;
 
 /**
  * @Form\Name("User")
- * @Form\Attributes({"method":"post","label":"User"})
+ * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label": "User"})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class User extends Base
 {

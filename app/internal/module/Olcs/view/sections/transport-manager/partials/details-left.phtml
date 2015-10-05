@@ -1,0 +1,8 @@
+<?php
+$verticalNavigation = $this->navigation('navigation')
+    ->menu($this->navigation()->findOneBy('id', 'transport_manager_details'));
+?>
+<h4><?php echo $this->translate('internal-navigation-transport-manager-details'); ?></h4>
+<?php echo $verticalNavigation->setUlClass('vertical-navigation')
+    ->setAddClassToListItem(true)
+    ->setPartial('partials/vertical-navigation');

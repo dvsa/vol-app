@@ -1,25 +1,27 @@
 <?php
+
 /**
  * Case Serious Infringement Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-
 namespace Olcs\Controller\Cases\SeriousInfringement;
 
-// Olcs
 use Olcs\Controller\CrudAbstract;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits as ControllerTraits;
-
 use Zend\View\Model\ViewModel;
 
 /**
- * Case Non Public Inquiry Controller
+ * Case Serious Infringement Controller
+ *
+ * @todo not sure if this is needed. Don't seem to be able to access this through the app. Spoke to John Instone and he
+ * doesn't think this is needed
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class SeriousInfringementController extends CrudAbstract implements CaseControllerInterface
+class SeriousInfringementController extends CrudAbstract implements CaseControllerInterface, LeftViewProvider
 {
     use ControllerTraits\CaseControllerTrait;
 
@@ -50,22 +52,6 @@ class SeriousInfringementController extends CrudAbstract implements CaseControll
      * @var string
      */
     protected $formName = 'Si';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    /**
-     * For most case crud controllers, we use the case/inner-layout
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the navigation ID,
@@ -135,6 +121,16 @@ class SeriousInfringementController extends CrudAbstract implements CaseControll
     ];
 
     protected $inlineScripts = [];
+
+    protected $addContentTitle = 'Add serious infringement';
+    protected $editContentTitle = 'Edit serious infringement';
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
+        return $view;
+    }
 
     public function indexAction()
     {

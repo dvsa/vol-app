@@ -7,12 +7,11 @@
  */
 namespace Olcs\Controller\Application\Processing;
 
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\InspectionRequestTrait;
 use Dvsa\Olcs\Transfer\Query\Application\EnforcementArea as AppEnforcementAreaQry;
 use Olcs\Data\Mapper\InspectionRequest as InspectionRequestMapper;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Dvsa\Olcs\Transfer\Query\InspectionRequest\ApplicationInspectionRequestList as ApplicationInspectionRequestListQry;
 use Dvsa\Olcs\Transfer\Query\InspectionRequest\InspectionRequest as InspectionRequestQry;
 use Dvsa\Olcs\Transfer\Command\InspectionRequest\Delete as DeleteDto;
@@ -21,6 +20,7 @@ use Common\Service\Entity\InspectionRequestEntityService;
 use Dvsa\Olcs\Transfer\Command\InspectionRequest\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\InspectionRequest\Update as UpdateDto;
 use Olcs\Form\Model\Form\InspectionRequest;
+use Zend\View\Model\ViewModel;
 
 /**
  * Application Processing Inspection Request Controller
@@ -28,13 +28,10 @@ use Olcs\Form\Model\Form\InspectionRequest;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class ApplicationProcessingInspectionRequestController extends AbstractInternalController implements
-    PageLayoutProvider,
-    PageInnerLayoutProvider,
+    LeftViewProvider,
     ApplicationControllerInterface
 {
     use InspectionRequestTrait;
-
-    protected $headerViewTemplate = 'partials/application-header.phtml';
 
     protected $service = 'InspectionRequest';
 
@@ -45,7 +42,7 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
     protected $enforcementAreaName = '';
 
     protected $tableViewPlaceholderName = 'table';
-    protected $tableViewTemplate = 'partials/table';
+    protected $tableViewTemplate = 'pages/table';
     protected $defaultTableSortField = 'id';
     protected $tableName = 'inspectionRequest';
     protected $listDto = ApplicationInspectionRequestListQry::class;
@@ -55,7 +52,7 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $editViewTemplate = 'partials/form-inspection-request';
+    protected $editViewTemplate = 'sections/processing/pages/form-inspection-request';
     protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = InspectionRequestQry::class;
     protected $itemParams = ['id'];
@@ -89,20 +86,18 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
      */
     protected $createCommand = CreateDto::class;
 
-    public function getPageLayout()
-    {
-        return 'layout/application-section';
-    }
-
-    public function getPageInnerLayout()
-    {
-        return 'layout/processing-subsection';
-    }
-
     /**
      * @var string
      */
     protected $section = 'inspection-request';
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/processing/partials/left');
+
+        return $view;
+    }
 
     /**
      * Get current licence

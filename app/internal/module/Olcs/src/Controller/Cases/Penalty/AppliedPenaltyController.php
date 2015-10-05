@@ -7,10 +7,10 @@
  */
 namespace Olcs\Controller\Cases\Penalty;
 
-// Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Zend\View\Model\ViewModel;
 
 /**
  * Applied Penalty Controller
@@ -20,22 +20,6 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 class AppliedPenaltyController extends OlcsController\CrudAbstract implements CaseControllerInterface
 {
     use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    /**
-     * For most case crud controllers, we use the layout/case-details-subsection
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the form name
@@ -83,6 +67,9 @@ class AppliedPenaltyController extends OlcsController\CrudAbstract implements Ca
             'seriousInfringement' => array()
         )
     );
+
+    protected $addContentTitle = 'Add ERRU penalty';
+    protected $editContentTitle = 'Edit ERRU penalty';
 
     /**
      * Simple redirect to index.

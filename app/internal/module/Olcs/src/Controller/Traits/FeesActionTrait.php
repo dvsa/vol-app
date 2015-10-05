@@ -9,7 +9,6 @@
 namespace Olcs\Controller\Traits;
 
 use Zend\View\Model\ViewModel;
-use Common\Form\Elements\Validators\FeeAmountValidator;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
@@ -52,14 +51,14 @@ trait FeesActionTrait
     /**
      * Shows fees table
      */
-    public function feesAction($template = 'layout/fees-list')
+    public function feesAction()
     {
         $response = $this->checkActionRedirect();
         if ($response) {
             return $response;
         }
 
-        return $this->commonFeesAction($template);
+        return $this->commonFeesAction();
     }
 
     /**
@@ -67,7 +66,6 @@ trait FeesActionTrait
      */
     public function payFeesAction()
     {
-        $this->pageLayout = null;
         return $this->commonPayFeesAction();
     }
 
@@ -105,25 +103,29 @@ trait FeesActionTrait
     /**
      * Common logic when rendering the list of fees
      */
-    protected function commonFeesAction($template = 'layout/fees-list')
+    private function commonFeesAction()
     {
         $this->loadScripts(['forms/filter', 'table-actions']);
 
+        $status = $this->params()->fromQuery('status');
+        $table = $this->getFeesTable($status);
+
+        $view = new ViewModel(['table' => $table]);
+        $view->setTemplate('pages/table');
+        return $this->renderLayout($view);
+    }
+
+    public function getLeftView()
+    {
         $status = $this->params()->fromQuery('status');
         $filters = [
             'status' => $status
         ];
 
-        $table = $this->getFeesTable($status);
+        $view = new ViewModel(['filterForm' => $this->getFeeFilterForm($filters)]);
+        $view->setTemplate('sections/fees/partials/left');
 
-        $view = new ViewModel(
-            [
-                'table' => $table,
-                'filterForm'  => $this->getFeeFilterForm($filters)
-            ]
-        );
-        $view->setTemplate($template);
-        return $this->renderLayout($view);
+        return $view;
     }
 
     protected function checkActionRedirect()
@@ -256,16 +258,26 @@ trait FeesActionTrait
             'created' => $fee['invoicedDate'],
             'outstanding' => $fee['outstanding'],
             'status' => isset($fee['feeStatus']['description']) ? $fee['feeStatus']['description'] : '',
-            'fee' => $fee,
-            'title' => 'internal.fee-details.title',
+            'fee' => $fee
         ];
+
+        $this->placeholder()->setPlaceholder('contentTitle', 'internal.fee-details.title');
 
         $this->loadScripts(['forms/fee-details']);
 
         $view = new ViewModel($viewParams);
-        $view->setTemplate('pages/fee-details.phtml');
+        $view->setTemplate('sections/fees/pages/fee-details');
 
-        return $this->renderLayout($view, 'No # ' . $fee['id']);
+        $layout = $this->renderLayout($view, 'No # ' . $fee['id']);
+
+        $this->maybeClearLeft($layout);
+
+        return $layout;
+    }
+
+    protected function maybeClearLeft($layout)
+    {
+        $layout->clearLeft();
     }
 
     /**
@@ -308,13 +320,18 @@ trait FeesActionTrait
             'table' => $table,
             'transaction' => $transaction,
             'backLink' => $backLink,
-            'title' => 'internal.transaction-details.title',
         ];
 
-        $view = new ViewModel($viewParams);
-        $view->setTemplate('pages/transaction-details.phtml');
+        $this->placeholder()->setPlaceholder('contentTitle', 'internal.transaction-details.title');
 
-        return $this->renderLayout($view, 'Transaction # ' . $transaction['id']);
+        $view = new ViewModel($viewParams);
+        $view->setTemplate('sections/fees/pages/transaction-details');
+
+        $layout = $this->renderLayout($view, 'Transaction # ' . $transaction['id']);
+
+        $this->maybeClearLeft($layout);
+
+        return $layout;
     }
 
     /**
@@ -374,7 +391,7 @@ trait FeesActionTrait
         }
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, $title);
     }

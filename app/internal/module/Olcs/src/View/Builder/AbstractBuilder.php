@@ -28,11 +28,6 @@ abstract class AbstractBuilder implements BuilderInterface
      */
     public function buildView(ViewModel $view)
     {
-        // no, I don't know why it's not getTerminal or isTerminal either...
-        if ($view->terminate()) {
-            return $view;
-        }
-
         return $this->decorateView($view);
     }
 

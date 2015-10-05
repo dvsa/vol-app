@@ -62,7 +62,7 @@ class DocumentFinaliseController extends AbstractDocumentController
         $this->getServiceLocator()->get('Script')->loadFile('file-link');
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
         return $this->renderView($view, 'Amend letter');
     }
 
@@ -105,7 +105,7 @@ class DocumentFinaliseController extends AbstractDocumentController
 
             $view->setVariable('form', $form);
             $view->setVariable('label', 'Would you like to email the document to the operator?');
-            $view->setTemplate('partials/confirm');
+            $view->setTemplate('pages/confirm');
 
             return $this->renderView($view, 'Send letter by email');
         }
@@ -135,7 +135,7 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         $view->setVariable('form', $form);
         $view->setVariable('label', 'Are you sure you want to abort the letter generation?');
-        $view->setTemplate('partials/confirm');
+        $view->setTemplate('pages/confirm');
 
         return $this->renderView($view, 'Abort letter generation');
     }

@@ -6,7 +6,7 @@
 namespace Olcs\Controller\Application\Processing;
 
 use Olcs\Controller\Application\ApplicationController;
-use Olcs\Helper\ApplicationProcessingHelper;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\ProcessingControllerTrait;
 
 /**
@@ -14,17 +14,9 @@ use Olcs\Controller\Traits\ProcessingControllerTrait;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-abstract class AbstractApplicationProcessingController extends ApplicationController
+abstract class AbstractApplicationProcessingController extends ApplicationController implements LeftViewProvider
 {
     use ProcessingControllerTrait;
-
-    /**
-     * Anything using renderView in this section will
-     * inherit this layout
-     *
-     * @var string
-     */
-    protected $pageLayout = 'application-section';
 
     protected $helperClass = '\Olcs\Helper\ApplicationProcessingHelper';
 
@@ -36,21 +28,5 @@ abstract class AbstractApplicationProcessingController extends ApplicationContro
             $application['id'],
             $this->section
         );
-    }
-
-    /**
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function getProcessingLayout($view, $variables)
-    {
-        $layout = $this->getViewWithApplication(
-            array_merge($variables, (array)$view->getVariables())
-        );
-        $layout->setTemplate('layout/processing-subsection');
-
-        $layout->addChild($view, 'content');
-
-        return $layout;
-
     }
 }

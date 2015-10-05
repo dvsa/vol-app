@@ -40,6 +40,11 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     protected $navigationService;
 
     /**
+     * @var \Zend\Navigation\Navigation
+     */
+    protected $mainNavigationService;
+
+    /**
      * @return \Olcs\Service\Marker\MarkerService
      */
     public function getMarkerService()
@@ -90,6 +95,24 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
+     * @param \Zend\Navigation\Navigation $navigationService
+     * @return $this
+     */
+    public function setMainNavigationService($navigationService)
+    {
+        $this->mainNavigationService = $navigationService;
+        return $this;
+    }
+
+    /**
+     * @return \Zend\Navigation\Navigation
+     */
+    public function getMainNavigationService()
+    {
+        return $this->mainNavigationService;
+    }
+
+    /**
      * Attach one or more listeners
      *
      * Implementors may add an optional $priority argument; the EventManager
@@ -117,7 +140,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->getMarkerService()->addData('organisation', $licence['organisation']);
         $this->getMarkerService()->addData('cases', $licence['cases']);
 
-        // Is this still required? Doesnt do any harm to leave it in!
+        // Is this still required? Doesn't do any harm to leave it in!
         $this->getLicenceService()->setId($licenceId); //set default licence id for use in forms
 
         $this->getViewHelperManager()->get('placeholder')
@@ -125,6 +148,10 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             ->set($licence);
 
         $this->showHideButtons($licence);
+
+        if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $this->getMainNavigationService()->findOneBy('id', 'licence_bus')->setVisible(0);
+        }
     }
 
     /**
@@ -160,6 +187,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
         $this->setNavigationService($serviceLocator->get('right-sidebar'));
+        $this->setMainNavigationService($serviceLocator->get('Navigation'));
 
         $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
         $this->setAnnotationBuilderService($serviceLocator->get('TransferAnnotationBuilder'));

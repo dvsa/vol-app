@@ -3,23 +3,23 @@
 namespace Olcs\Controller\Operator;
 
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Data\Mapper\OperatorPeople as Mapper;
 use Dvsa\Olcs\Transfer\Query\OrganisationPerson\GetSingle as ItemDto;
 use Dvsa\Olcs\Transfer\Command\OrganisationPerson\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\OrganisationPerson\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\OrganisationPerson\DeleteList as DeleteDto;
+use Zend\View\Model\ViewModel;
 
 /**
  * OperatorPeopleController
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class OperatorPeopleController extends AbstractInternalController implements OperatorControllerInterface,
- PageLayoutProvider,
- PageInnerLayoutProvider
+class OperatorPeopleController extends AbstractInternalController implements
+    OperatorControllerInterface,
+    LeftViewProvider
 {
     /**
      * Organisation data
@@ -35,6 +35,8 @@ class OperatorPeopleController extends AbstractInternalController implements Ope
     protected $mapperClass = Mapper::class;
 
     protected $formClass = \Common\Form\Model\Form\Lva\Person::class;
+    protected $addContentTitle = 'Add person';
+    protected $editContentTitle = 'Edit person';
 
     protected $itemDto = ItemDto::class;
     protected $itemParams = ['id'];
@@ -48,16 +50,12 @@ class OperatorPeopleController extends AbstractInternalController implements Ope
     protected $deleteCommand = DeleteDto::class;
     protected $hasMultiDelete = true;
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        $organisation = $this->loadOrganisationData();
-        return 'layout/' . ($organisation['isUnlicensed'] ? 'unlicensed-' : '') . 'operator-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/operator/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        $organisation = $this->loadOrganisationData();
-        return 'layout/' . ($organisation['isUnlicensed'] ? 'unlicensed-' : '') . 'operator-subsection';
+        return $view;
     }
 
     public function indexAction()
@@ -116,7 +114,7 @@ class OperatorPeopleController extends AbstractInternalController implements Ope
 
         $this->placeholder()->setPlaceholder('table', $table->render());
 
-        return $this->viewBuilder()->buildViewFromTemplate('partials/table');
+        return $this->viewBuilder()->buildViewFromTemplate('pages/table');
     }
 
     /**

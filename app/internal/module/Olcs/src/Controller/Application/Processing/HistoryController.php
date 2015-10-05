@@ -31,8 +31,11 @@ class HistoryController extends AbstractApplicationProcessingController
 
         $params['query'] = $this->getRequest()->getQuery();
 
-        $bundle = array(
-            'children' => array(
+        /**
+         * @todo need to migrate this
+         */
+        $bundle = [
+            'children' => [
                 'eventHistoryType' => [],
                 'user' => [
                     'children' => [
@@ -43,15 +46,14 @@ class HistoryController extends AbstractApplicationProcessingController
                         ]
                     ]
                 ]
-            )
-        );
+            ]
+        ];
 
         $results = $this->makeRestCall('EventHistory', 'GET', $params, $bundle);
 
-        $view->{'table'} = $this->getTable('event-history', $results, $params);
+        $view->table = $this->getTable('event-history', $results, $params);
 
-        $view->setTemplate('partials/table');
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+        $view->setTemplate('pages/table');
 
         return $this->renderView($view);
     }

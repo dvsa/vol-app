@@ -1,0 +1,16 @@
+<?php
+echo $this->showMarkers();
+
+$nav = $this->navigation('right-sidebar')
+    ->menu($this->navigation()->findById('transport-manager-quick-actions'))
+    ->setPartial('partials/record-actions__group');
+
+if ($nav->getContainer()->hasPages()) {
+    ?>
+    <div class="record-actions">
+        <h5><?php echo $this->translate('internal-transport-manager-quick-actions'); ?></h5>
+        <?php echo $nav; ?>
+    </div>
+<?php
+}
+?>

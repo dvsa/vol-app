@@ -11,14 +11,16 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Operator\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Operator\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Operator\BusinessDetails as BusinessDetailsDto;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\OperatorBusinessDetails as Mapper;
+use Zend\View\Model\ViewModel;
 
 /**
  * Operator Business Details Controller
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OperatorBusinessDetailsController extends OperatorController
+class OperatorBusinessDetailsController extends OperatorController implements LeftViewProvider
 {
     /**
      * @var string
@@ -49,6 +51,11 @@ class OperatorBusinessDetailsController extends OperatorController
         }
 
         $operator = $this->params()->fromRoute('organisation');
+
+        if (!$operator) {
+            $this->placeholder()->setPlaceholder('pageTitle', 'Create new operator');
+        }
+
         $this->loadScripts(['operator-profile']);
         $post = $this->params()->fromPost();
         $validateAndSave = true;
@@ -127,12 +134,21 @@ class OperatorBusinessDetailsController extends OperatorController
         return $this->renderForm($form);
     }
 
-    protected function renderForm($form)
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/operator/partials/left');
+
+        return $view;
+    }
+
+    protected function renderForm($form, $pageTitle = null)
     {
         $view = $this->getView(['form' => $form]);
-        $view->setTemplate('partials/form');
-        $this->placeholder()->setPlaceholder('subsectionTitle', 'Business details');
-        return $this->renderView($view);
+        $view->setTemplate('pages/form');
+        $this->placeholder()->setPlaceholder('contentTitle', 'Business details');
+
+        return $this->renderView($view, $pageTitle);
     }
 
     protected function saveConfirmForm()

@@ -30,6 +30,11 @@ class CrudAbstractTest extends AbstractHttpControllerTestCase
 
     protected $testClass = '\Olcs\Controller\CrudAbstract';
 
+    public function setUp()
+    {
+        $this->markTestSkipped();
+    }
+
     /**
      * Tests, in isolation, the public getter and setter for placeholderName.
      */

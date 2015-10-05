@@ -169,7 +169,7 @@ class CaseAppealMarkerTest extends \PHPUnit_Framework_TestCase
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/case-appeal',
+                'marker/case-appeal',
                 ['caseId' => 234, 'appealDate' => new \DateTime('2015-08-17'), 'hideCaseLink' => false]
             )
             ->once()->andReturn('HTML1');

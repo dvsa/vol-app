@@ -1,0 +1,4 @@
+<h4><?php echo $this->translate('internal-licence-processing'); ?></h4>
+<?php
+echo $this->navigation($this->navigation('navigation')->findOneByActive(true)->getParent())
+    ->menu()->setPartial('partials/vertical-navigation');

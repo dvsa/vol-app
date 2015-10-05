@@ -11,17 +11,15 @@ use Dvsa\Olcs\Transfer\Command\User\DeletePartner as DeleteDto;
 use Dvsa\Olcs\Transfer\Query\User\Partner as ItemDto;
 use Dvsa\Olcs\Transfer\Query\User\PartnerList as ListDto;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\Partner as Mapper;
 use Admin\Form\Model\Form\Partner as Form;
+use Zend\View\Model\ViewModel;
 
 /**
  * Partner Controller
  */
-class PartnerController extends AbstractInternalController implements
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class PartnerController extends AbstractInternalController implements LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -47,14 +45,17 @@ class PartnerController extends AbstractInternalController implements
     protected $tableName = 'partner';
     protected $listDto = ListDto::class;
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/admin-user-management-section';
-    }
+        $view = new ViewModel(
+            [
+                'navigationId' => 'admin-dashboard/admin-user-management',
+                'navigationTitle' => 'User management'
+            ]
+        );
+        $view->setTemplate('admin/sections/admin/partials/generic-left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/wide-layout';
+        return $view;
     }
 
     /**
@@ -71,6 +72,8 @@ class PartnerController extends AbstractInternalController implements
     protected $formClass = Form::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add partner';
+    protected $editContentTitle = 'Edit partner';
 
     /**
      * Variables for controlling edit view rendering
@@ -87,7 +90,7 @@ class PartnerController extends AbstractInternalController implements
 
     private function setPageTitle()
     {
-        $this->placeholder()->setPlaceholder('pageTitle', 'Partners');
+        $this->placeholder()->setPlaceholder('pageTitle', 'User management');
     }
 
     public function indexAction()

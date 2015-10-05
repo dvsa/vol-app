@@ -12,17 +12,15 @@ use Dvsa\Olcs\Transfer\Command\User\DeleteUser as DeleteDto;
 use Dvsa\Olcs\Transfer\Query\User\User as ItemDto;
 use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList as TransportManagerApplicationListDto;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\User as Mapper;
 use Admin\Form\Model\Form\User as Form;
+use Zend\View\Model\ViewModel;
 
 /**
  * User Management Controller
  */
-class UserManagementController extends AbstractInternalController implements
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class UserManagementController extends AbstractInternalController implements LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -30,16 +28,6 @@ class UserManagementController extends AbstractInternalController implements
      * represented by a single navigation id.
      */
     protected $navigationId = 'admin-dashboard/admin-user-management';
-
-    public function getPageLayout()
-    {
-        return 'layout/admin-user-management-section';
-    }
-
-    public function getPageInnerLayout()
-    {
-        return 'layout/wide-layout';
-    }
 
     /**
      * Any inline scripts needed in this section
@@ -70,6 +58,8 @@ class UserManagementController extends AbstractInternalController implements
     protected $formClass = Form::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add user';
+    protected $editContentTitle = 'Edit user';
 
     /**
      * Variables for controlling edit view rendering
@@ -84,7 +74,20 @@ class UserManagementController extends AbstractInternalController implements
      */
     protected $deleteCommand = DeleteDto::class;
     protected $deleteParams = ['id' => 'user'];
-    protected $deleteModalTitle = 'Delete User';
+    protected $deleteModalTitle = 'Delete user';
+
+    public function getLeftView()
+    {
+        $view = new ViewModel(
+            [
+                'navigationId' => 'admin-dashboard/admin-user-management',
+                'navigationTitle' => 'User management'
+            ]
+        );
+        $view->setTemplate('admin/sections/admin/partials/generic-left');
+
+        return $view;
+    }
 
     public function indexAction()
     {
@@ -108,7 +111,7 @@ class UserManagementController extends AbstractInternalController implements
 
         $this->placeholder()->setPlaceholder('pageTitle', 'User management');
 
-        return $this->viewBuilder()->buildViewFromTemplate('layout/admin-search-results');
+        return $this->viewBuilder()->buildViewFromTemplate('pages/table');
     }
 
     /**

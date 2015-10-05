@@ -8,7 +8,6 @@
 namespace Admin\Controller;
 
 use Zend\View\Model\ViewModel;
-use Common\BusinessService\Response;
 use Common\Service\Entity\LicenceEntityService;
 use Common\Controller\Lva\Traits\CrudActionTrait;
 use Dvsa\Olcs\Transfer\Query\ContinuationDetail\GetList as GetListQry;
@@ -90,7 +89,7 @@ class ContinuationController extends AbstractController
         }
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
         $this->setNavigationId('admin-dashboard/continuations');
         $this->getServiceLocator()->get('Script')->loadFile('continuations');
 
@@ -142,7 +141,8 @@ class ContinuationController extends AbstractController
         $this->setNavigationId('admin-dashboard/continuations');
 
         $view = new ViewModel(['table' => $table, 'filterForm' => $filterForm]);
-        $view->setTemplate('partials/table');
+        $view->setTemplate('pages/table');
+
         return $this->renderView($view, 'admin-generate-continuation-details-title', $title);
     }
 
@@ -195,8 +195,9 @@ class ContinuationController extends AbstractController
         ];
 
         $view = new ViewModel($params);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
         $this->setNavigationId('admin-dashboard/continuations');
+
         return $this->renderView($view, 'Generate checklists');
     }
 

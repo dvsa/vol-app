@@ -3,39 +3,25 @@
 namespace Olcs\Controller\Operator;
 
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Zend\View\Model\ViewModel;
 
 /**
  * OperatorLicencesApplicationsController Controller
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class OperatorLicencesApplicationsController extends AbstractInternalController implements OperatorControllerInterface,
- PageLayoutProvider,
- PageInnerLayoutProvider
+class OperatorLicencesApplicationsController extends AbstractInternalController implements
+    OperatorControllerInterface,
+    LeftViewProvider
 {
-    public function getPageLayout()
+    public function getLeftView()
     {
-        // need to determine if this is an unlicensed operator or not
-        $response = $this->handleQuery(
-            \Dvsa\Olcs\Transfer\Query\Organisation\Organisation::create(
-                [
-                    'id' => $this->params('organisation'),
-                ]
-            )
-        );
+        $view = new ViewModel();
+        $view->setTemplate('sections/operator/partials/left');
 
-        $organisation = $response->getResult();
-
-        return $organisation['isUnlicensed'] ? 'layout/unlicensed-operator-section' : 'layout/operator-section';
-
-    }
-
-    public function getPageInnerLayout()
-    {
-        return 'pages/operator/licences-and-applications';
+        return $view;
     }
 
     public function indexAction()
@@ -45,7 +31,9 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
          */
         $this->setupLicencesTable();
 
-        return $this->setupEnvironmentComplaintsTable();
+        $this->setupEnvironmentComplaintsTable();
+
+        return $this->viewBuilder()->buildViewFromTemplate('sections/operator/pages/licences-and-applications');
     }
 
     /**

@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("Register decision")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Register decision", "override_form_label": true})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class PublicInquiryRegisterTmDecision
 {

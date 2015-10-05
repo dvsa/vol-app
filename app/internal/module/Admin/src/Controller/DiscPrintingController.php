@@ -41,13 +41,15 @@ class DiscPrintingController extends AbstractActionController
     /**
      * Index action
      *
+     * @todo this needs cleaning up, the part where it attaches the disc-printing-popup js file needs refactoring
+     * to work as other sections do when showing a modal. We can't have JS files with hardcoded urls etc
+     *
      * @return ViewModel
      */
     public function indexAction()
     {
         $form = $this->getForm('DiscPrinting');
 
-        $this->pageTitle = 'admin_disc-printing.pageHeader';
         $inlineScripts = ['disc-printing'];
 
         if ($this->getRequest()->isPost()) {
@@ -61,12 +63,21 @@ class DiscPrintingController extends AbstractActionController
             'form' => $form
         ];
         if (!$this->getRequest()->isPost()) {
-            $params['successStatus'] = $successStatus;
+            if ($successStatus !== null) {
+                if ($successStatus == 1) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                        ->addCurrentSuccessMessage('Disc printing successful');
+                } else {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                        ->addCurrentErrorMessage('Disc printing failed');
+                }
+            }
         }
         $view = new ViewModel($params);
         $this->loadScripts($inlineScripts);
-        $view->setTemplate('disc-printing/index');
-        return $this->renderView($view);
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'admin_disc-printing.pageHeader');
     }
 
     /**

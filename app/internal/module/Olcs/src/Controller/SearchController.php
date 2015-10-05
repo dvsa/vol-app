@@ -9,8 +9,7 @@
  */
 namespace Olcs\Controller;
 
-use Common\Service\Data\Search\Search;
-use Common\Service\Data\Search\SearchType;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 
@@ -21,7 +20,7 @@ use Zend\Session\Container;
  * @author Rob Caiger <rob@clocal.co.uk>
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class SearchController extends AbstractController
+class SearchController extends AbstractController implements LeftViewProvider
 {
     use \Common\Controller\Lva\Traits\CrudActionTrait;
 
@@ -88,10 +87,18 @@ class SearchController extends AbstractController
 
         $view = new ViewModel();
 
-        $view = $elasticSearch->generateNavigation($view);
+        $elasticSearch->configureNavigation();
         $view = $elasticSearch->generateResults($view);
 
         return $this->renderView($view, 'Search results');
+    }
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/search/partials/left');
+
+        return $view;
     }
 
     /**
@@ -120,7 +127,7 @@ class SearchController extends AbstractController
         $form->get('messages')->get('message')->setValue('form.vehicle.removeSection26.confirm');
 
         $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Remove section 26');
     }
@@ -151,7 +158,7 @@ class SearchController extends AbstractController
         $form->get('messages')->get('message')->setValue('form.vehicle.setSection26.confirm');
 
         $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Remove section 26');
     }
@@ -164,21 +171,10 @@ class SearchController extends AbstractController
     public function processSearch($data)
     {
         $data = array_merge($data['search'], $data['search-advanced']);
-        $personSearch = array(
-            'forename',
-            'familyName',
-            'birthDate',
-            'transportManagerId'
-        );
-
-        $searchType = 'operators';
 
         foreach ($data as $key => $value) {
-
             if (empty($value)) {
                 unset($data[$key]);
-            } elseif (in_array($key, $personSearch)) {
-                $searchType = 'person';
             }
         }
 
@@ -224,7 +220,8 @@ class SearchController extends AbstractController
         $table = $this->getTable('operator', $results, $data);
 
         $view = new ViewModel(['table' => $table]);
-        $view->setTemplate('partials/table');
+        $view->setTemplate('pages/table');
+
         return $this->renderView($view, 'Search results');
     }
 

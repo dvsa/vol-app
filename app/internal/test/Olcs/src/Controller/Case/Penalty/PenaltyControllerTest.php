@@ -28,6 +28,8 @@ class PenaltyControllerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->markTestSkipped();
+
         $this->sut = new PenaltyController();
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();
         $this->routeMatchHelper = new ControllerRouteMatchHelper();

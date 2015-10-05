@@ -7,8 +7,8 @@
  */
 namespace Olcs\Controller\TransportManager\Details;
 
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\Http\Response;
-use Olcs\Controller\TransportManager\Details\AbstractTransportManagerDetailsController;
 use Zend\View\Model\ViewModel;
 use Dvsa\Olcs\Transfer\Query\TmResponsibilities\TmResponsibilitiesList;
 use Dvsa\Olcs\Transfer\Query\TmResponsibilities\GetDocumentsForResponsibilities as DocumentsQry;
@@ -35,13 +35,9 @@ use Dvsa\Olcs\Transfer\Command\OtherLicence\UpdateForTma as UpdateForTmaDto;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TransportManagerDetailsResponsibilityController extends AbstractTransportManagerDetailsController
+class TransportManagerDetailsResponsibilityController extends AbstractTransportManagerDetailsController implements
+    LeftViewProvider
 {
-    /**
-     * @var string
-     */
-    protected $section = 'details-responsibilities';
-
     protected $responsibilities = null;
 
     protected $licenceId = null;
@@ -58,6 +54,14 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     ];
 
     protected $otherLicenceForm;
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/transport-manager/partials/details-left');
+
+        return $view;
+    }
 
     /**
      * Index action
@@ -93,6 +97,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $licencesTable->setDisabled(true);
         }
 
+        $this->placeholder()->setPlaceholder('contentTitle', 'Responsibilities');
+
         $view = $this->getViewWithTm(['tables' => [$applicationsTable, $licencesTable]]);
         $view->setTemplate('pages/multi-tables');
 
@@ -115,7 +121,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $form = $this->getForm('transport-manager-application-small');
 
         $view = $this->getViewWithTm(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         $this->formPost($form, 'processAddForm');
 
@@ -270,7 +276,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
                 'licNo' => $tmAppData['application']['licence']['licNo']
             ]
         );
-        $view->setTemplate('pages/transport-manager/tm-responsibility-edit');
+        $view->setTemplate('sections/transport-manager/pages/tm-responsibility-edit');
         $this->loadScripts(['forms/crud-table-handler']);
 
         return $this->renderView($view, $title);
@@ -807,7 +813,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $form = $this->getForm('TmOtherLicence');
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         if (!$this->getRequest()->isPost()) {
             $form = $this->populateOtherLicenceEditForm($form, $type, $redirectAction, $redirectId);
@@ -816,7 +822,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $this->otherLicenceform = $form;
         $this->formPost($form, 'processOtherLicenceForm');
 
-        if ($this->getResponse()->getContent() !== "") {
+        if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
         }
 

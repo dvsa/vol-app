@@ -1,4 +1,5 @@
 <?php
+
 namespace Olcs\Controller\Traits;
 
 use Common\Service\Data\CloseableInterface;
@@ -42,7 +43,6 @@ trait CloseActionTrait
         );
 
         if ($response instanceof ViewModel) {
-            $this->pageLayoutInner = null;
             return $this->renderView($response);
         }
 
@@ -70,7 +70,6 @@ trait CloseActionTrait
         );
 
         if ($response instanceof ViewModel) {
-            $this->pageLayoutInner = null;
             return $this->renderView($response);
         }
 

@@ -11,21 +11,20 @@ use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\Note as AddForm;
 use Olcs\Form\Model\Form\NoteEdit as EditForm;
 use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Data\Mapper\BusRegNotes as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Zend\View\Model\ViewModel;
 
 /**
  * Note Controller
  */
 class BusProcessingNoteController extends AbstractInternalController implements
     BusRegControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -49,22 +48,10 @@ class BusProcessingNoteController extends AbstractInternalController implements
     ];
     protected $filterForm = FilterForm::class;
 
-    public function getPageLayout()
-    {
-        return 'layout/bus-registrations-section';
-    }
-
-    public function getPageInnerLayout()
-    {
-        return 'layout/bus-registration-subsection';
-    }
-
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/offence';
-    protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = ItemDto::class;
     // 'busReg' => 'busRegId', to => from
     protected $itemParams = [
@@ -119,4 +106,15 @@ class BusProcessingNoteController extends AbstractInternalController implements
     protected $inlineScripts = [
         'indexAction' => ['forms/filter', 'table-actions']
     ];
+
+    protected $addContentTitle = 'Add note';
+    protected $editContentTitle = 'Edit note';
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/bus/partials/left');
+
+        return $view;
+    }
 }

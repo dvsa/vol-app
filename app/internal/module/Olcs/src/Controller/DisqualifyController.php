@@ -53,13 +53,8 @@ class DisqualifyController extends AbstractController
                 return $this->closeAjax();
             }
         }
-
-        // unset layout file
-        $this->layoutFile = null;
-        $this->pageLayout = null;
-
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Disqualify');
     }

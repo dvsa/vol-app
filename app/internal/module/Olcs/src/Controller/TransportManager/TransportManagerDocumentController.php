@@ -8,6 +8,7 @@
  */
 namespace Olcs\Controller\TransportManager;
 
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits;
 
 /**
@@ -16,11 +17,11 @@ use Olcs\Controller\Traits;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TransportManagerDocumentController extends TransportManagerController
+class TransportManagerDocumentController extends TransportManagerController implements LeftViewProvider
 {
-    use Traits\DocumentActionTrait;
-    use Traits\DocumentSearchTrait;
-    use Traits\ListDataTrait;
+    use Traits\DocumentActionTrait,
+        Traits\DocumentSearchTrait,
+        Traits\ListDataTrait;
 
     /**
      * @var string
@@ -65,8 +66,16 @@ class TransportManagerDocumentController extends TransportManagerController
         $filters = $this->mapDocumentFilters(['transportManager' => $transportManager]);
 
         $table = $this->getDocumentsTable($filters);
-        $form  = $this->getDocumentForm($filters);
 
-        return $this->getViewWithTm(['table' => $table, 'form'  => $form]);
+        return $this->getViewWithTm(['table' => $table]);
+    }
+
+    protected function getConfiguredDocumentForm()
+    {
+        $transportManager = $this->getFromRoute('transportManager');
+
+        $filters = $this->mapDocumentFilters(['transportManager' => $transportManager]);
+
+        return $this->getDocumentForm($filters);
     }
 }

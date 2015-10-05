@@ -8,17 +8,19 @@ use Dvsa\Olcs\Transfer\Command\TmEmployment\DeleteList as DeleteDto;
 use Dvsa\Olcs\Transfer\Query\TmEmployment\GetSingle as ItemDto;
 use Dvsa\Olcs\Transfer\Query\TmEmployment\GetList as ListDto;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\TransportManager\EmploymentHistory as Mapper;
-//use Admin\Form\Model\Form\Partner as Form;
 use Olcs\Form\Model\Form\TmEmployment as Form;
+use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
+use Zend\View\Model\ViewModel;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Transport Manager Details Employment Controller
  */
 class TransportManagerDetailsEmploymentController extends AbstractInternalController implements
-    PageLayoutProvider,
-    \Olcs\Controller\Interfaces\TransportManagerControllerInterface
+    TransportManagerControllerInterface,
+    LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -43,13 +45,14 @@ class TransportManagerDetailsEmploymentController extends AbstractInternalContro
     protected $listDto = ListDto::class;
     protected $listVars = ['transportManager'];
 
-    protected $defaultData = [
-        'transportManager' => \Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData::FROM_ROUTE
-    ];
+    protected $defaultData = ['transportManager' => AddFormDefaultData::FROM_ROUTE];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/transport-manager-section-migrated';
+        $view = new ViewModel();
+        $view->setTemplate('sections/transport-manager/partials/details-left');
+
+        return $view;
     }
 
     /**
@@ -66,6 +69,8 @@ class TransportManagerDetailsEmploymentController extends AbstractInternalContro
     protected $formClass = Form::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add employment';
+    protected $editContentTitle = 'Edit employment';
 
     /**
      * Variables for controlling edit view rendering
@@ -82,40 +87,25 @@ class TransportManagerDetailsEmploymentController extends AbstractInternalContro
     protected $deleteCommand = DeleteDto::class;
     protected $hasMultiDelete = true;
 
-    /**
-     *
-     * @param \Zend\Mvc\MvcEvent $e
-     */
-    public function onDispatch(\Zend\Mvc\MvcEvent $e)
-    {
-        $this->placeholder()->setPlaceholder('section', 'details-employment');
-
-        parent::onDispatch($e);
-    }
-
-    /**
-     * Override
-     *
-     * @param \Zend\Form\Form $form
-     * @param type $data
-     */
     protected function alterFormForEdit(\Zend\Form\Form $form, $data)
     {
-        // remove addAnother button
         $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->addAnother');
 
         return $form;
     }
 
+    /**
+     * @param \Common\Service\Table\TableBuilder $table
+     * @param array $data
+     * @return \Common\Service\Table\TableBuilder
+     */
     protected function alterTable($table, $data)
     {
-        /* @var $table \Common\Service\Table\TableBuilder */
-
         $disableTable = !is_null($data['extra']['transportManager']['removedDate']);
+
         if ($disableTable == true) {
             $table->setDisabled(true);
 
-            // remove hyperlink from table
             $column = $table->getColumn('employerName');
             unset($column['type']);
             $table->setColumn('employerName', $column);
@@ -124,10 +114,6 @@ class TransportManagerDetailsEmploymentController extends AbstractInternalContro
         return $table;
     }
 
-    /**
-     *
-     * @return type
-     */
     public function detailsAction()
     {
         return $this->notFoundAction();

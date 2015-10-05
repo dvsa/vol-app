@@ -1,0 +1,8 @@
+<?php if (count($form) > 0): ?>
+
+<p><?php echo $this->translate($label); ?></p>
+<br/><br/>
+<?php echo $this->formErrors($form); ?>
+<?php echo $this->form($form); ?>
+
+<?php endif; ?>

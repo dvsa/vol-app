@@ -58,7 +58,7 @@ class BusRegShortNoticeRefusedTest extends \PHPUnit_Framework_TestCase
         $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);
 
         $mockPartialHelper->shouldReceive('__invoke')
-            ->with('partials/marker/busreg-notice-refused', [])->once()->andReturn('HTML1');
+            ->with('marker/busreg-notice-refused', [])->once()->andReturn('HTML1');
 
         $this->sut->setData($data);
         $this->sut->setPartialHelper($mockPartialHelper);

@@ -33,13 +33,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         'dataMap',
         'dataBundle',
         'service',
-        'pageLayout',
         'listVars'
     ];
-
-    protected $pageLayout = null;
-
-    protected $pageLayoutInner = null;
 
     protected $detailsView = null;
 
@@ -114,6 +109,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      * @var bool
      */
     private $redirectToIndex = false;
+
+    protected $addContentTitle;
+    protected $editContentTitle;
 
     /**
      * Get Entity name
@@ -197,42 +195,6 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             return $this->getIdentifierName();
         }
         return $this->placeholderName;
-    }
-
-    /**
-     * @param string $pageLayout
-     * @return $this
-     */
-    public function setPageLayout($pageLayout)
-    {
-        $this->pageLayout = $pageLayout;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPageLayout()
-    {
-        return $this->pageLayout;
-    }
-
-    /**
-     * @param string $pageLayoutInner
-     * @return $this
-     */
-    public function setPageLayoutInner($pageLayoutInner)
-    {
-        $this->pageLayoutInner = $pageLayoutInner;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPageLayoutInner()
-    {
-        return $this->pageLayoutInner;
     }
 
     /**
@@ -402,10 +364,6 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $view->setTemplate('pages/table-comments');
 
-        if (is_null($this->getPageLayoutInner())) {
-            $view->setTerminal($this->getRequest()->isXmlHttpRequest());
-        }
-
         return $this->renderView($view);
     }
 
@@ -540,6 +498,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     public function addAction()
     {
+        if ($this->addContentTitle !== null) {
+            $this->placeholder()->setPlaceholder('contentTitle', $this->addContentTitle);
+        }
         return $this->saveThis();
     }
 
@@ -550,6 +511,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     public function editAction()
     {
+        if ($this->editContentTitle !== null) {
+            $this->placeholder()->setPlaceholder('contentTitle', $this->editContentTitle);
+        }
         return $this->saveThis();
     }
 
@@ -675,24 +639,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
     {
-        $pageLayoutInner = $this->getPageLayoutInner();
-
         if (property_exists($this, 'navigationId')) {
             $this->setPlaceholder('navigationId', $this->navigationId);
-        }
-
-        if (!is_null($pageLayoutInner)) {
-
-            // This is a zend\view\variables object - cast it to an array.
-            $layout = $this->getView((array)$view->getVariables());
-
-            $layout->setTemplate($pageLayoutInner);
-
-            $this->maybeAddScripts($layout);
-
-            $layout->addChild($view, 'content');
-
-            return parent::renderView($layout, $pageTitle, $pageSubTitle);
         }
 
         $this->maybeAddScripts($view);
