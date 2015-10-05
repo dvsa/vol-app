@@ -938,8 +938,8 @@ return array(
                 // Dashboard Page
                 'dashboard' => ['selfserve-nav-dashboard'],
 
-                // User Page
-                'user' => ['selfserve-nav-manage-users'],
+                // Manage Users Page
+                'user' => ['can-manage-user-selfserve'],
 
                 // Search and who can access them
                 'search-operating-centre' => [
@@ -966,7 +966,6 @@ return array(
                 'lva-application/transport_manager_details*' => ['selfserve-tm'],
                 'lva-variation/transport_manager_details*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
-                'manage-user' => ['selfserve-manage-user'], // route -> permission
                 'zfcuser/login' => ['*'],
                 'zfcuser/logout' => ['*'],
                 'search*' => ['*'],
