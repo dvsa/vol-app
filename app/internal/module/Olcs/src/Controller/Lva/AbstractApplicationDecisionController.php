@@ -59,7 +59,7 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
         }
 
         $view = new ViewModel(['title' => $this->titleKey, 'form' => $form]);
-        $view->setTemplate('pages/lva-details');
+        $view->setTemplate('sections/lva/lva-details');
 
         return $this->render($view);
     }

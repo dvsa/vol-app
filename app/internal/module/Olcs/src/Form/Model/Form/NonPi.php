@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("Non-Public Inquiry")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Non-Public Inquiry", "action_lcfirst": false})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class NonPi
 {

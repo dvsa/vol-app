@@ -58,7 +58,7 @@ class BusRefEbsrMarkerTest extends \PHPUnit_Framework_TestCase
         $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);
 
         $mockPartialHelper->shouldReceive('__invoke')
-            ->with('partials/marker/busreg-ebsr', ['busReg' => $data['busReg']])->once()->andReturn('HTML1');
+            ->with('marker/busreg-ebsr', ['busReg' => $data['busReg']])->once()->andReturn('HTML1');
 
         $this->sut->setData($data);
         $this->sut->setPartialHelper($mockPartialHelper);

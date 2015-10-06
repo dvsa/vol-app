@@ -11,19 +11,27 @@ use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController as Licenc
 use Olcs\Controller\Operator\OperatorProcessingNoteController as OperatorProcessingNoteController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 
+use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
+
 use Olcs\Controller\TransportManager\TransportManagerController;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController;
 
 use Olcs\Controller\SearchController as SearchController;
 
 use Olcs\Listener\RouteParam\Application as ApplicationListener;
-use Olcs\Listener\RouteParam\ApplicationTitle as ApplicationTitle;
+use Olcs\Listener\RouteParam\ApplicationFurniture;
+use Olcs\Listener\RouteParam\VariationFurniture;
 use Olcs\Listener\RouteParam\Licence as LicenceListener;
-use Olcs\Listener\RouteParam\LicenceTitle;
-use Olcs\Listener\RouteParam\LicenceTitleLink;
+use Olcs\Listener\RouteParam\LicenceFurniture;
+use Olcs\Listener\RouteParam\OrganisationFurniture;
+use Olcs\Listener\RouteParam\BusRegFurniture;
+use Olcs\Listener\RouteParam\CasesFurniture;
+use Olcs\Listener\RouteParam\TransportManagerFurniture;
 
 use Common\Data\Object\Search\Licence as LicenceSearch;
 use Olcs\Service\Marker;
+
+use Olcs\FormService\Form\Lva as LvaFormService;
 
 return array(
     'router' => [
@@ -131,6 +139,7 @@ return array(
             \Olcs\Controller\Cases\Overview\OverviewController::class
                 => \Olcs\Controller\Cases\Overview\OverviewController::class,
             'CaseController' => 'Olcs\Controller\Cases\CaseController',
+            'CaseDocsController' => 'Olcs\Controller\Cases\Docs\CaseDocsController',
             'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
             'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
             CaseHearingAppealController::class => CaseHearingAppealController::class,
@@ -187,6 +196,9 @@ return array(
             'DocumentFinaliseController' => 'Olcs\Controller\Document\DocumentFinaliseController',
             'DocumentRelinkController' => 'Olcs\Controller\Document\DocumentRelinkController',
             'LicenceController' => 'Olcs\Controller\Licence\LicenceController',
+            'LicenceDocsController' => 'Olcs\Controller\Licence\Docs\LicenceDocsController',
+            'LicenceFeesController' => 'Olcs\Controller\Licence\Fees\LicenceFeesController',
+            LicenceBusController::class => LicenceBusController::class,
             'LicenceDecisionsController' => 'Olcs\Controller\Licence\LicenceDecisionsController',
             'LicenceGracePeriodsController' => 'Olcs\Controller\Licence\LicenceGracePeriodsController',
             'TaskController' => 'Olcs\Controller\TaskController',
@@ -205,6 +217,8 @@ return array(
             'Olcs\Controller\Licence\Details\ConditionUndertakingController',
             'LicenceDetailsTaxiPhvController' => 'Olcs\Controller\Licence\Details\TaxiPhvController',
             'ApplicationController' => 'Olcs\Controller\Application\ApplicationController',
+            'ApplicationDocsController' => 'Olcs\Controller\Application\Docs\ApplicationDocsController',
+            'ApplicationFeesController' => 'Olcs\Controller\Application\Fees\ApplicationFeesController',
             'ApplicationProcessingTasksController'
                 => 'Olcs\Controller\Application\Processing\ApplicationProcessingTasksController',
             'ApplicationProcessingOverviewController'
@@ -220,7 +234,6 @@ return array(
             LicenceProcessingNoteController::class => LicenceProcessingNoteController::class,
             'LicenceProcessingInspectionRequestController'
                 => 'Olcs\Controller\Licence\Processing\LicenceProcessingInspectionRequestController',
-            'BusController' => 'Olcs\Controller\Bus\BusController',
             'BusRegistrationController' => 'Olcs\Controller\Bus\Registration\BusRegistrationController',
             'BusDetailsController' => 'Olcs\Controller\Bus\Details\BusDetailsController',
             'BusDetailsServiceController' => 'Olcs\Controller\Bus\Details\BusDetailsServiceController',
@@ -245,9 +258,10 @@ return array(
             'BusServiceController' => 'Olcs\Controller\Bus\Service\BusServiceController',
             'BusRequestMapController' => 'Olcs\Controller\Bus\BusRequestMapController',
             'OperatorController' => 'Olcs\Controller\Operator\OperatorController',
+            'OperatorDocsController' => 'Olcs\Controller\Operator\Docs\OperatorDocsController',
             'OperatorBusinessDetailsController' => 'Olcs\Controller\Operator\OperatorBusinessDetailsController',
             'UnlicensedBusinessDetailsController' => 'Olcs\Controller\Operator\UnlicensedBusinessDetailsController',
-            'UnlicensedOperatorController' => 'Olcs\Controller\Operator\UnlicensedOperatorController',
+            'UnlicensedCasesOperatorController' => 'Olcs\Controller\Operator\Cases\UnlicensedCasesOperatorController',
             'UnlicensedOperatorVehiclesController' => 'Olcs\Controller\Operator\UnlicensedOperatorVehiclesController',
             'OperatorPeopleController' => 'Olcs\Controller\Operator\OperatorPeopleController',
             'OperatorLicencesApplicationsController'
@@ -324,6 +338,7 @@ return array(
         'exception_template' => 'pages/500',
         'template_map' => array(
             'layout/layout' => __DIR__ . '/../view/layout/base.phtml',
+            'pages/lva-details' => __DIR__ . '/../view/sections/lva/lva-details.phtml',
             'pages/404' => __DIR__ . '/../view/pages/404.phtml',
             'pages/500' => __DIR__ . '/../view/pages/500.phtml'
         ),
@@ -399,12 +414,16 @@ return array(
             'Olcs\Listener\RouteParam\Action' => 'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\RouteParam\TransportManager' => 'Olcs\Listener\RouteParam\TransportManager',
             ApplicationListener::class => ApplicationListener::class,
-            ApplicationTitle::class => ApplicationTitle::class,
+            ApplicationFurniture::class => ApplicationFurniture::class,
+            LicenceFurniture::class => LicenceFurniture::class,
+            OrganisationFurniture::class => OrganisationFurniture::class,
+            VariationFurniture::class => VariationFurniture::class,
+            BusRegFurniture::class => BusRegFurniture::class,
+            CasesFurniture::class => CasesFurniture::class,
+            TransportManagerFurniture::class => TransportManagerFurniture::class,
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
             LicenceListener::class => LicenceListener::class,
             'Olcs\Listener\RouteParam\CaseMarker' => 'Olcs\Listener\RouteParam\CaseMarker',
-            LicenceTitle::class => LicenceTitle::class,
-            LicenceTitleLink::class => LicenceTitleLink::class,
             'Olcs\Listener\RouteParam\Organisation' => 'Olcs\Listener\RouteParam\Organisation',
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
@@ -425,7 +444,6 @@ return array(
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
-            'Olcs\Service\Utility\PublicationHelper' => 'Olcs\Service\Utility\PublicationHelperFactory',
             'Olcs\Service\Nr\RestHelper' => 'Olcs\Service\Nr\RestHelper',
             'Olcs\Service\Data\SubmissionActionTypes' => 'Olcs\Service\Data\SubmissionActionTypes'
         )
@@ -448,9 +466,9 @@ return array(
     ],
     'route_param_listeners' => [
         'Olcs\Controller\Interfaces\CaseControllerInterface' => [
+            CasesFurniture::class,
             'Olcs\Listener\RouteParam\Cases',
             LicenceListener::class,
-            LicenceTitleLink::class,
             'Olcs\Listener\RouteParam\CaseMarker',
             ApplicationListener::class,
             'Olcs\Listener\RouteParam\TransportManager',
@@ -458,17 +476,28 @@ return array(
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\ApplicationControllerInterface' => [
+            ApplicationFurniture::class, // Decorates the layout with application stuff
             ApplicationListener::class,
-            ApplicationTitle::class,
             'Olcs\Listener\RouteParam\Cases',
             LicenceListener::class,
-            LicenceTitleLink::class,
+            'Olcs\Listener\RouteParam\CaseMarker',
+            'Olcs\Listener\RouteParam\TransportManager',
+            'Olcs\Listener\RouteParam\Action',
+            'Olcs\Listener\HeaderSearch'
+        ],
+        // @NOTE This needs to be mostly the same as ApplicationControllerInterface except for the furniture
+        'Olcs\Controller\Interfaces\VariationControllerInterface' => [
+            VariationFurniture::class, // Decorates the layout with variation stuff
+            ApplicationListener::class,
+            'Olcs\Listener\RouteParam\Cases',
+            LicenceListener::class,
             'Olcs\Listener\RouteParam\CaseMarker',
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\Action',
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\BusRegControllerInterface' => [
+            BusRegFurniture::class,
             'Olcs\Listener\RouteParam\CaseMarker',
             ApplicationListener::class,
             'Olcs\Listener\RouteParam\BusRegId',
@@ -478,18 +507,20 @@ return array(
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
+            TransportManagerFurniture::class,
             'Olcs\Listener\RouteParam\TransportManager',
             'Olcs\Listener\RouteParam\CaseMarker',
             'Olcs\Listener\RouteParam\TransportManagerMarker',
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\LicenceControllerInterface' => [
+            LicenceFurniture::class,
             LicenceListener::class,
-            LicenceTitle::class,
             'Olcs\Listener\HeaderSearch'
         ],
         'Olcs\Controller\Interfaces\OperatorControllerInterface' => [
-            'Olcs\Listener\RouteParam\Organisation'
+            'Olcs\Listener\RouteParam\Organisation',
+            OrganisationFurniture::class
         ],
     ],
     'search' => [
@@ -607,83 +638,65 @@ return array(
     'form_service_manager' => [
         'invokables' => [
             // Operating Centres
-            'lva-application-operating_centres'
-                => 'Olcs\FormService\Form\Lva\OperatingCentres\ApplicationOperatingCentres',
+            'lva-application-operating_centres' => LvaFormService\OperatingCentres\ApplicationOperatingCentres::class,
             // Operating Centre
-            'lva-application-operating_centre'
-            => 'Olcs\FormService\Form\Lva\OperatingCentre\ApplicationOperatingCentre',
-            'lva-licence-operating_centre'
-                => 'Olcs\FormService\Form\Lva\OperatingCentre\LicenceOperatingCentre',
-            'lva-variation-operating_centre'
-                => 'Olcs\FormService\Form\Lva\OperatingCentre\VariationOperatingCentre',
+            'lva-application-operating_centre' => LvaFormService\OperatingCentre\ApplicationOperatingCentre::class,
+            'lva-licence-operating_centre' => LvaFormService\OperatingCentre\LicenceOperatingCentre::class,
+            'lva-variation-operating_centre' => LvaFormService\OperatingCentre\VariationOperatingCentre::class,
             // Goods Vehicles
-            'lva-application-goods-vehicles-add-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicle::class,
-            'lva-licence-goods-vehicles-add-vehicle'
-                => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicleLicence::class,
-            'lva-variation-goods-vehicles-add-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicle::class,
-            'lva-application-goods-vehicles-edit-vehicle'
-                => \Olcs\FormService\Form\Lva\GoodsVehicles\EditVehicle::class,
-            'lva-licence-goods-vehicles-edit-vehicle'
-                => \Olcs\FormService\Form\Lva\GoodsVehicles\EditVehicleLicence::class,
-            'lva-variation-goods-vehicles-edit-vehicle' => \Olcs\FormService\Form\Lva\GoodsVehicles\EditVehicle::class,
+            'lva-licence-goods-vehicles' => LvaFormService\LicenceGoodsVehicles::class,
+            'lva-application-goods-vehicles-add-vehicle' => LvaFormService\GoodsVehicles\AddVehicle::class,
+            'lva-licence-goods-vehicles-add-vehicle' => LvaFormService\GoodsVehicles\AddVehicleLicence::class,
+            'lva-variation-goods-vehicles-add-vehicle' => LvaFormService\GoodsVehicles\AddVehicle::class,
+            'lva-application-goods-vehicles-edit-vehicle' => LvaFormService\GoodsVehicles\EditVehicle::class,
+            'lva-licence-goods-vehicles-edit-vehicle' => LvaFormService\GoodsVehicles\EditVehicleLicence::class,
+            'lva-variation-goods-vehicles-edit-vehicle' => LvaFormService\GoodsVehicles\EditVehicle::class,
 
-            'lva-licence' => \Olcs\FormService\Form\Lva\Licence::class,
-            'lva-variation' => \Olcs\FormService\Form\Lva\Variation::class,
-            'lva-application' => \Olcs\FormService\Form\Lva\Application::class,
+            'lva-licence' => LvaFormService\Licence::class,
+            'lva-variation' => LvaFormService\Variation::class,
+            'lva-application' => LvaFormService\Application::class,
 
             // Internal common psv vehicles vehicle form service
-            'lva-psv-vehicles-vehicle' => 'Olcs\FormService\Form\Lva\PsvVehiclesVehicle',
+            'lva-psv-vehicles-vehicle' => LvaFormService\PsvVehiclesVehicle::class,
 
             // Addresses form services
-            'lva-licence-addresses' => \Olcs\FormService\Form\Lva\Addresses::class,
-            'lva-variation-addresses' => \Olcs\FormService\Form\Lva\Addresses::class,
-            'lva-application-addresses' => \Olcs\FormService\Form\Lva\Addresses::class,
+            'lva-licence-addresses' => LvaFormService\Addresses::class,
+            'lva-variation-addresses' => LvaFormService\Addresses::class,
+            'lva-application-addresses' => LvaFormService\Addresses::class,
 
-            'lva-licence-people' => \Olcs\FormService\Form\Lva\People::class,
-            'lva-variation-people' => \Olcs\FormService\Form\Lva\People::class,
-            'lva-application-people' => \Olcs\FormService\Form\Lva\People::class,
+            'lva-licence-safety' => LvaFormService\Safety::class,
+            'lva-variation-safety' => LvaFormService\Safety::class,
+            'lva-application-safety' => LvaFormService\Safety::class,
 
-            'lva-licence-community_licences' => \Olcs\FormService\Form\Lva\CommunityLicences::class,
-            'lva-variation-community_licences' => \Olcs\FormService\Form\Lva\CommunityLicences::class,
-            'lva-application-community_licences' => \Olcs\FormService\Form\Lva\CommunityLicences::class,
+            'lva-licence-financial_history' => LvaFormService\FinancialHistory::class,
+            'lva-variation-financial_history' => LvaFormService\FinancialHistory::class,
+            'lva-application-financial_history' => LvaFormService\FinancialHistory::class,
 
-            'lva-licence-safety' => \Olcs\FormService\Form\Lva\Safety::class,
-            'lva-variation-safety' => \Olcs\FormService\Form\Lva\Safety::class,
-            'lva-application-safety' => \Olcs\FormService\Form\Lva\Safety::class,
+            'lva-licence-financial_evidence' => LvaFormService\FinancialEvidence::class,
+            'lva-variation-financial_evidence' => LvaFormService\FinancialEvidence::class,
+            'lva-application-financial_evidence' => LvaFormService\FinancialEvidence::class,
 
-            'lva-licence-conditions_undertakings' => \Olcs\FormService\Form\Lva\ConditionsUndertakings::class,
-            'lva-variation-conditions_undertakings' => \Olcs\FormService\Form\Lva\ConditionsUndertakings::class,
-            'lva-application-conditions_undertakings' => \Olcs\FormService\Form\Lva\ConditionsUndertakings::class,
+            'lva-variation-undertakings' => LvaFormService\Undertakings::class,
+            'lva-application-undertakings' => LvaFormService\Undertakings::class,
 
-            'lva-licence-financial_history' => \Olcs\FormService\Form\Lva\FinancialHistory::class,
-            'lva-variation-financial_history' => \Olcs\FormService\Form\Lva\FinancialHistory::class,
-            'lva-application-financial_history' => \Olcs\FormService\Form\Lva\FinancialHistory::class,
+            'lva-licence-taxi_phv' => LvaFormService\TaxiPhv::class,
+            'lva-variation-taxi_phv' => LvaFormService\TaxiPhv::class,
+            'lva-application-taxi_phv' => LvaFormService\TaxiPhv::class,
 
-            'lva-licence-financial_evidence' => \Olcs\FormService\Form\Lva\FinancialEvidence::class,
-            'lva-variation-financial_evidence' => \Olcs\FormService\Form\Lva\FinancialEvidence::class,
-            'lva-application-financial_evidence' => \Olcs\FormService\Form\Lva\FinancialEvidence::class,
+            'lva-application-licence_history' => LvaFormService\LicenceHistory::class,
 
-            'lva-variation-undertakings' => \Olcs\FormService\Form\Lva\Undertakings::class,
-            'lva-application-undertakings' => \Olcs\FormService\Form\Lva\Undertakings::class,
+            'lva-variation-convictions_penalties' => LvaFormService\ConvictionsPenalties::class,
+            'lva-application-convictions_penalties' => LvaFormService\ConvictionsPenalties::class,
 
-            'lva-licence-taxi_phv' => \Olcs\FormService\Form\Lva\TaxiPhv::class,
-            'lva-variation-taxi_phv' => \Olcs\FormService\Form\Lva\TaxiPhv::class,
-            'lva-application-taxi_phv' => \Olcs\FormService\Form\Lva\TaxiPhv::class,
+            'lva-variation-vehicles_declarations' => LvaFormService\VehiclesDeclarations::class,
+            'lva-application-vehicles_declarations' => LvaFormService\VehiclesDeclarations::class,
 
-            'lva-application-licence_history' => \Olcs\FormService\Form\Lva\LicenceHistory::class,
+            'lva-licence-vehicles_psv' => LvaFormService\LicencePsvVehicles::class,
+            'lva-application-vehicles_psv' => LvaFormService\ApplicationPsvVehicles::class,
 
-            'lva-variation-convictions_penalties' => \Olcs\FormService\Form\Lva\ConvictionsPenalties::class,
-            'lva-application-convictions_penalties' => \Olcs\FormService\Form\Lva\ConvictionsPenalties::class,
-
-            'lva-variation-vehicles_declarations' => \Olcs\FormService\Form\Lva\VehiclesDeclarations::class,
-            'lva-application-vehicles_declarations' => \Olcs\FormService\Form\Lva\VehiclesDeclarations::class,
-
-            'lva-licence-vehicles_psv' => \Olcs\FormService\Form\Lva\PsvVehicles::class,
-            'lva-variation-vehicles_psv' => \Olcs\FormService\Form\Lva\PsvVehicles::class,
-            'lva-application-vehicles_psv' => \Olcs\FormService\Form\Lva\PsvVehicles::class,
-
-            'lva-licence-discs' => \Olcs\FormService\Form\Lva\PsvDiscs::class,
-            'lva-variation-discs' => \Olcs\FormService\Form\Lva\PsvDiscs::class,
+            'lva-licence-type-of-licence' => LvaFormService\LicenceTypeOfLicence::class,
+            'lva-application-type-of-licence' => LvaFormService\ApplicationTypeOfLicence::class,
+            'lva-variation-type-of-licence' => LvaFormService\VariationTypeOfLicence::class,
         ]
     ],
     'business_service_manager' => [

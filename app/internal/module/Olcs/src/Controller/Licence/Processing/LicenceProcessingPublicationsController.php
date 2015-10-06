@@ -1,222 +1,84 @@
 <?php
 
 /**
- * Licence Processing Publications Controller
+ * Licence Processing Publication Controller
  */
 namespace Olcs\Controller\Licence\Processing;
 
-use Common\Exception\ResourceNotFoundException;
-use Common\Exception\BadRequestException;
-use Common\Exception\DataServiceException;
-use Common\Controller as CommonController;
-use Zend\Http\Response;
+use Dvsa\Olcs\Transfer\Query\Publication\PublicationLinkLicenceList;
+use Dvsa\Olcs\Transfer\Query\Publication\PublicationLink as PublicationLinkDto;
+use Dvsa\Olcs\Transfer\Command\Publication\DeletePublicationLink;
+use Dvsa\Olcs\Transfer\Command\Publication\UpdatePublicationLink;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Interfaces\LicenceControllerInterface;
+use Olcs\Data\Mapper\PublicationLink as PublicationLinkMapper;
+use Olcs\Form\Model\Form\Publication as PublicationForm;
+use Olcs\Form\Model\Form\PublicationNotNew as PublicationNotNewForm;
+use Zend\View\Model\ViewModel;
 
 /**
- * Licence Processing Publications Controller
- * @note This does not extend from CrudAbstract, so doesn't use same processSave mechanism as other Crud forms. Not
- * sure why. What this means is that I have had to declare the isSaved flag which when set,
- * is caught and a redirect object is returned (modals used) - ShaunL
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * Licence Processing Publication Controller
  */
-class LicenceProcessingPublicationsController extends AbstractLicenceProcessingController implements
-    CommonController\CrudInterface
+class LicenceProcessingPublicationsController extends AbstractInternalController implements
+    LicenceControllerInterface,
+    LeftViewProvider
 {
-    protected $section = 'publications';
+    protected $navigationId = 'licence_processing_publications';
+    protected $defaultTableSortField = 'createdOn';
+    protected $tableName = 'publication';
+    protected $listDto = PublicationLinkLicenceList::class;
+    protected $itemDto = PublicationLinkDto::class;
+    protected $listVars = ['licence'];
+    protected $mapperClass = PublicationLinkMapper::class;
+    protected $formClass = PublicationForm::class;
+    protected $updateCommand = UpdatePublicationLink::class;
+    protected $deleteCommand = DeletePublicationLink::class;
+    protected $inlineScripts = array('indexAction' => ['table-actions']);
+    protected $addContentTitle = 'Add publication';
+    protected $editContentTitle = 'Edit publication';
 
-    /**
-     * Flag to intercept the save and determine whether to return redirect object
-     * @var bool
-     */
-    private $isSaved = false;
-
-    /**
-     * Index action
-     *
-     * @return Zend\View\Model\ViewModel
-     */
-    public function indexAction()
+    public function getLeftView()
     {
-        $this->checkForCrudAction(null, [], 'id');
+        $view = new ViewModel();
+        $view->setTemplate('sections/processing/partials/left');
 
-        $view = $this->getViewWithLicence();
-
-        $requestQuery = $this->getRequest()->getQuery();
-        $requestArray = $requestQuery->toArray();
-
-        $defaultParams = [
-            'page' => 1,
-            'limit' => 10,
-            'sort' => 'createdOn',
-            'order' => 'DESC',
-            'licence' => $this->params()->fromRoute('licence')
-        ];
-
-        $filters = array_merge(
-            $defaultParams,
-            $requestArray
-        );
-
-        $data = $this->getService()->fetchList($filters);
-
-        if (!isset($data['url'])) {
-            $data['url'] = $this->getPluginManager()->get('url');
-        }
-
-        $table = $this->getServiceLocator()->get('Table')->buildTable(
-            'publication',
-            $data,
-            array_merge(
-                $filters,
-                array('query' => $requestQuery)
-            ),
-            false
-        );
-
-        $view->setVariables(['table' => $table]);
-        $view->setTemplate('partials/table');
-        $this->loadScripts(['table-actions']);
-
-        return $this->renderView($view);
-    }
-
-    public function deleteAction()
-    {
-        $id = $this->params()->fromRoute('id');
-        $publication = $this->getService();
-
-        try {
-            $publication->delete($id);
-            $this->addErrorMessage('Record deleted successfully');
-        } catch (DataServiceException $e) {
-            $this->addErrorMessage($e->getMessage());
-        } catch (BadRequestException $e) {
-            $this->addErrorMessage($e->getMessage());
-        } catch (ResourceNotFoundException $e) {
-            $this->addErrorMessage($e->getMessage());
-        }
-
-        return $this->redirectToIndex();
+        return $view;
     }
 
     /**
-     * Edit action
-     *
-     * @return Zend\View\Model\ViewModel
+     * @return array|\Zend\View\Model\ViewModel
      */
     public function editAction()
     {
-        $id = $this->getFromRoute('id');
-        $service = $this->getService();
-        $publication = $service->fetchOne($id);
+        $publicationLink = $this->getPublicationLink();
 
-        $readOnly = [
-            'typeArea' => $publication['publication']['pubType'] . ' / ' .
-                $publication['publication']['trafficArea']['name'],
-            'publicationNo' => $publication['publication']['publicationNo'],
-            'status' => $publication['publication']['pubStatus']['description'],
-            'section' => $publication['publicationSection']['description'],
-            'trafficArea' => $publication['publication']['trafficArea']['name'],
-            'publicationDate' => date('d/m/Y', strtotime($publication['publication']['pubDate']))
-        ];
-
-        $textFields = [
-            'text1' => $publication['text1'],
-            'text2' => $publication['text2'],
-            'text3' => $publication['text3']
-        ];
-
-        if ($publication['publication']['pubStatus']['id'] == 'pub_s_new') {
-            $base = [
-                'id' => $publication['id'],
-                'version' => $publication['version']
-            ];
-
-            $data = [
-                'fields' => array_merge($textFields, $base)
-            ];
-
-            $form = 'Publication';
-        } else {
-            $data = [
-                'readOnlyText' => $textFields
-            ];
-
-            $form = 'PublicationNotNew';
+        //if publication status is not new, switch the form
+        if (!$publicationLink['isNew']) {
+            $this->formClass = PublicationNotNewForm::class;
         }
 
-        $data['readOnly'] = $readOnly;
-
-        $form = $this->generateFormWithData($form, 'processSave', $data);
-
-        if ($this->isSaved) {
-            return $this->redirectToIndex();
-        }
-
-        //having read only fields means that they aren't populated in the event of a post so we need to do it here
-        if ($this->getRequest()->isPost()) {
-            $data = array_merge(
-                $data,
-                (array)$this->params()->fromPost(),
-                $this->fieldValues
-            );
-
-            $form->setData($data);
-        }
-
-        $view = $this->getViewWithLicence();
-
-        $this->getServiceLocator()->get('viewHelperManager')
-            ->get('placeholder')
-            ->getContainer('form')
-            ->set($form);
-
-        $view->setTemplate('pages/crud-form');
-
-        return $this->renderView($view);
+        return parent::editAction();
     }
 
     /**
-     * Specific save processing functionality
+     * Gets PublicationLink information
      *
-     * @param array $data
-     * @return int
+     * @return array|mixed
      */
-    public function processSave($data)
+    private function getPublicationLink()
     {
-        $saveData = [
-            'text1' => $data['fields']['text1'],
-            'text2' => $data['fields']['text2'],
-            'text3' => $data['fields']['text3'],
-            'id' => $data['fields']['id'],
-            'version' => $data['fields']['version']
-        ];
+        $params = ['id' => $this->params()->fromRoute('id')];
+        $response = $this->handleQuery(PublicationLinkDto::create($params));
 
-        $publication = $this->getService();
-        $publication->update($data['fields']['id'], $saveData);
+        if ($response->isNotFound()) {
+            $this->notFoundAction();
+        }
 
-        $this->isSaved = true;
-    }
+        if ($response->isServerError() || $response->isClientError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
 
-    /**
-     * Redirect to ajax route
-     * @return mixed|\Zend\Http\Response
-     */
-    public function redirectToIndex()
-    {
-        return $this->redirectToRouteAjax(null, ['action' => 'index', 'id' => null], ['code' => '303'], true);
-    }
-
-    public function addAction()
-    {
-        return false;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getService()
-    {
-        return $this->getServiceLocator()->get('DataServiceManager')->get('Common\Service\Data\PublicationLink');
+        return $response->getResult();
     }
 }

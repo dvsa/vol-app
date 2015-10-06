@@ -27,6 +27,7 @@ trait ApplicationOverviewTrait
         // in order to alter the form correctly)
         $applicationId = $this->getIdentifier();
         $application = $this->getOverviewData($applicationId);
+
         $licence = $application['licence'];
 
         $form = $this->getOverviewForm();
@@ -60,13 +61,17 @@ trait ApplicationOverviewTrait
         // Render the view
         $viewData = $this->getServiceLocator()->get('Helper\ApplicationOverview')
             ->getViewData($application, $this->lva);
+
         $content = new ViewModel(
             array_merge(
                 $viewData,
-                ['form' => $form]
+                [
+                    'form' => $form,
+                    'title' => 'Overview'
+                ]
             )
         );
-        $content->setTemplate('pages/application/overview');
+        $content->setTemplate('sections/application/pages/overview');
 
         return $this->render($content);
     }

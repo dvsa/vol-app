@@ -9,6 +9,7 @@ namespace Olcs;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Zend\View\Helper\Placeholder\Container\AbstractContainer;
 use Zend\View\Model\ViewModel;
 use Common\Exception\ResourceNotFoundException;
 
@@ -33,6 +34,7 @@ class Module
 
         $headTitleHelper = $viewHelperManager->get('headTitle');
         $headTitleHelper->setSeparator(' - ');
+        //$headTitleHelper->setDefaultAttachOrder(AbstractContainer::PREPEND);
         $headTitleHelper->append('Olcs');
 
         $eventManager->attach(

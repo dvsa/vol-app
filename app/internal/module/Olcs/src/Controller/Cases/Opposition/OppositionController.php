@@ -16,8 +16,6 @@ use Dvsa\Olcs\Transfer\Query\EnvironmentalComplaint\EnvironmentalComplaintList a
 use Dvsa\Olcs\Transfer\Query\Cases\CasesWithOppositionDates as CasesWithOppositionDatesDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Data\Mapper\Opposition as Mapper;
 use Olcs\Form\Model\Form\Opposition as Form;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
@@ -28,10 +26,7 @@ use Olcs\Mvc\Controller\ParameterProvider\GenericList;
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class OppositionController extends AbstractInternalController implements
-    CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class OppositionController extends AbstractInternalController implements CaseControllerInterface
 {
     /**
      * Holds the navigation ID,
@@ -45,16 +40,6 @@ class OppositionController extends AbstractInternalController implements
     protected $crudConfig = [
         'generate' => ['requireRows' => true],
     ];
-
-    public function getPageLayout()
-    {
-        return 'layout/case-section';
-    }
-
-    public function getPageInnerLayout()
-    {
-        return 'layout/wide-layout';
-    }
 
     /**
      * Variables for controlling details view rendering
@@ -72,6 +57,8 @@ class OppositionController extends AbstractInternalController implements
     protected $formClass = Form::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add opposition';
+    protected $editContentTitle = 'Edit opposition';
 
     /**
      * Variables for controlling edit view rendering
@@ -122,7 +109,8 @@ class OppositionController extends AbstractInternalController implements
             CasesWithOppositionDatesDto::class,
             new GenericItem(['id' => 'case']),
             'details',
-            'pages/case/opposition'
+            'sections/cases/pages/opposition',
+            'Opposition details'
         );
     }
 

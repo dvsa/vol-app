@@ -7,25 +7,27 @@
  */
 namespace Admin\Controller;
 
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
+use Zend\View\Model\ViewModel;
 
 /**
  * Abstract Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-abstract class AbstractController extends AbstractActionController
+abstract class AbstractController extends AbstractActionController implements LeftViewProvider
 {
     use GenericRenderView;
 
-    /**
-     * These properties must be defined to use the GenericRenderView trait
-     */
-    protected $pageTitle = null;
-    protected $pageSubTitle = null;
-    protected $pageLayout = 'admin-layout';
-    protected $headerViewTemplate = 'partials/header';
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('admin/sections/admin/partials/left');
+
+        return $view;
+    }
 
     protected function setNavigationId($id)
     {

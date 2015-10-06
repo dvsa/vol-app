@@ -22,8 +22,6 @@ use Olcs\Form\Model\Form\Submission as SubmissionForm;
 use Olcs\Data\Mapper\Submission as SubmissionMapper;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Zend\Stdlib\ArrayUtils;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
@@ -34,10 +32,7 @@ use Common\Controller\Traits\GenericUpload;
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class SubmissionController extends AbstractInternalController implements
-    CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class SubmissionController extends AbstractInternalController implements CaseControllerInterface
 {
     use GenericUpload;
 
@@ -67,21 +62,11 @@ class SubmissionController extends AbstractInternalController implements
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
 
-    public function getPageLayout()
-    {
-        return 'layout/case-section';
-    }
-
-    public function getPageInnerLayout()
-    {
-        return 'layout/wide-layout';
-    }
-
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/submission';
+    protected $detailsViewTemplate = 'sections/cases/pages/submission';
     protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = ItemDto::class;
     // 'id' => 'complaint', to => from
@@ -135,8 +120,6 @@ class SubmissionController extends AbstractInternalController implements
 
     protected $persist = true;
 
-    protected $editViewTemplate = 'pages/crud-form';
-
     protected $redirectConfig = [
         'add' => [
             'action' => 'details',
@@ -183,6 +166,7 @@ class SubmissionController extends AbstractInternalController implements
 
         $form->setData($initialData);
         $this->placeholder()->setPlaceholder('form', $form);
+        $this->placeholder()->setPlaceholder('contentTitle', 'Add submission');
 
         if ($this->getRequest()->isPost()) {
             $form->setData((array) $this->params()->fromPost());
@@ -224,6 +208,7 @@ class SubmissionController extends AbstractInternalController implements
 
         $form = $this->getForm($this->formClass);
         $this->placeholder()->setPlaceholder('form', $form);
+        $this->placeholder()->setPlaceholder('contentTitle', 'Edit submission');
 
         if ($request->isPost()) {
             $dataFromPost = (array) $this->params()->fromPost();

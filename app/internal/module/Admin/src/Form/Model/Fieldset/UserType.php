@@ -55,6 +55,7 @@ class UserType
     /**
      * @Form\Options({"label":"Application"})
      * @Form\Required(false)
+     * @Form\Attributes({"id":"applicationTransportManagers"})
      * @Form\Type("Common\Form\Elements\Types\ApplicationTransportManagers")
      */
     public $applicationTransportManagers = null;

@@ -6,17 +6,14 @@ use Dvsa\Olcs\Transfer\Query\Cases\LegacyOffence;
 use Dvsa\Olcs\Transfer\Query\Cases\LegacyOffenceList;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 /**
  * Class LegacyOffenceController
  */
-class LegacyOffenceController extends AbstractInternalController implements
-    CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class LegacyOffenceController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -31,28 +28,27 @@ class LegacyOffenceController extends AbstractInternalController implements
      * listVars probably needs to be defined every time but will work without
      */
     protected $tableViewPlaceholderName = 'table';
-    protected $tableViewTemplate = 'partials/table';
+    protected $tableViewTemplate = 'pages/table';
     protected $defaultTableSortField = 'id';
     protected $tableName = 'legacyOffences';
     protected $listDto = LegacyOffenceList::class;
     protected $listVars = ['case'];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/case-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/case-details-subsection';
+        return $view;
     }
 
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/offence';
+    protected $detailsViewTemplate = 'sections/cases/pages/offence';
     protected $detailsViewPlaceholderName = 'details';
+    protected $detailsContentTitle = 'Legacy offence details';
     protected $itemDto = LegacyOffence::class;
     protected $itemParams = ['case', 'id'];
 }

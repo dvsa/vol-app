@@ -31,13 +31,7 @@ trait LicenceControllerTrait
 
         $variables['licence'] = $licence;
 
-        $view = $this->getView($variables);
-
-        $this->pageTitle = $licence['licNo'];
-        $this->pageSubTitle = $licence['organisation']['name']
-            . ' ' . $licence['status']['description'];
-
-        return $view;
+        return $this->getView($variables);
     }
 
     /**

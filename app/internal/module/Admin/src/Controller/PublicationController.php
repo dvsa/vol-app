@@ -6,11 +6,9 @@
 namespace Admin\Controller;
 
 use Olcs\Controller\CrudAbstract;
-use Common\Service\Data\Search\Search;
-use Common\Service\Data\Search\SearchType;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
 use Common\Exception\ResourceNotFoundException;
-use Common\Exception\BadRequestException;
 use Common\Exception\DataServiceException;
 
 /**
@@ -18,7 +16,7 @@ use Common\Exception\DataServiceException;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PublicationController extends CrudAbstract
+class PublicationController extends CrudAbstract implements LeftViewProvider
 {
     /**
      * Identifier name
@@ -47,16 +45,6 @@ class PublicationController extends CrudAbstract
      * @var string
      */
     protected $formName = 'publication';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'admin-publication-section';
-
-    protected $pageLayoutInner = null;
 
     protected $defaultTableSortField = 'publicationNo';
 
@@ -131,6 +119,19 @@ class PublicationController extends CrudAbstract
         return parent::indexAction();
     }
 
+    public function getLeftView()
+    {
+        $view = new ViewModel(
+            [
+                'navigationId' => 'admin-dashboard/admin-publication',
+                'navigationTitle' => 'Publications'
+            ]
+        );
+        $view->setTemplate('admin/sections/admin/partials/generic-left');
+
+        return $view;
+    }
+
     /**
      * Gets table params
      *
@@ -172,10 +173,7 @@ class PublicationController extends CrudAbstract
      */
     public function publishedAction()
     {
-        $options = [
-            'layout_template' => 'elastic-search-results-table',
-        ];
-        $elasticSearch =  $this->ElasticSearch($options);
+        $elasticSearch =  $this->ElasticSearch();
 
         $filterForm = $elasticSearch->getFiltersForm();
 
@@ -184,7 +182,6 @@ class PublicationController extends CrudAbstract
         $elasticSearch->processSearchData();
 
         $view = new ViewModel();
-
         $view = $elasticSearch->generateResults($view);
 
         return $this->renderView($view, 'Publications');

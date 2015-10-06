@@ -10,22 +10,21 @@ use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Form\Model\Form\Note as AddForm;
 use Olcs\Form\Model\Form\NoteEdit as EditForm;
 use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Data\Mapper\GenericFields as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Zend\View\Model\ViewModel;
 
 /**
  * Note Controller
  */
 class TransportManagerProcessingNoteController extends AbstractInternalController implements
     TransportManagerControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -49,22 +48,18 @@ class TransportManagerProcessingNoteController extends AbstractInternalControlle
     ];
     protected $filterForm = FilterForm::class;
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/transport-manager-section-crud';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/transport-manager/partials/processing-left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/transport-manager-subsection';
+        return $view;
     }
 
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/offence';
-    protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = ItemDto::class;
     // 'id' => 'conviction', to => from
     protected $itemParams = [
@@ -85,6 +80,8 @@ class TransportManagerProcessingNoteController extends AbstractInternalControlle
     protected $formClass = EditForm::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add note';
+    protected $editContentTitle = 'Edit note';
 
     /**
      * Variables for controlling edit view rendering
@@ -103,7 +100,7 @@ class TransportManagerProcessingNoteController extends AbstractInternalControlle
      * @var array
      */
     protected $defaultData = [
-        'transportManager' => \Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData::FROM_ROUTE,
+        'transportManager' => AddFormDefaultData::FROM_ROUTE,
         'noteType' => 'note_t_tm',
         'id' => -1,
         'version' => -1

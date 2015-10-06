@@ -10,7 +10,7 @@ namespace Olcs\Controller\Lva\Variation;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Common\Controller\Lva\Traits\VariationOperatingCentresControllerTrait;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Olcs\Controller\Interfaces\VariationControllerInterface;
 use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Entity\ApplicationEntityService;
 
@@ -20,7 +20,7 @@ use Common\Service\Entity\ApplicationEntityService;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 class OperatingCentresController extends Lva\AbstractOperatingCentresController implements
-    ApplicationControllerInterface
+    VariationControllerInterface
 {
     use VariationControllerTrait,
         VariationOperatingCentresControllerTrait;

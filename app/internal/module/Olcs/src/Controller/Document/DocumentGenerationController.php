@@ -36,7 +36,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $view = new ViewModel(['form' => $form]);
 
-        $view->setTemplate('partials/form-with-fm');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Generate letter');
     }
@@ -54,8 +54,7 @@ class DocumentGenerationController extends AbstractDocumentController
         $this->addTemplateBookmarks($this->params('id'), $fieldset);
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
-        $view->setTerminal(true);
+        $view->setTemplate('pages/form');
 
         return $view;
     }

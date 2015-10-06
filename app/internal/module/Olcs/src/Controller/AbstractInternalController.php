@@ -80,7 +80,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * you can specify a key => value pair to map route param (value) to dto param (key)
      */
     protected $tableViewPlaceholderName = 'table';
-    protected $tableViewTemplate = 'partials/table';
+    protected $tableViewTemplate = 'pages/table';
     protected $defaultTableSortField = 'id';
     protected $tableName = '';
     protected $listDto = '';
@@ -95,6 +95,7 @@ abstract class AbstractInternalController extends AbstractActionController
     protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = '';
     protected $itemParams = ['id'];
+    protected $detailsContentTitle;
 
     /**
      * Variables for controlling edit view rendering
@@ -111,11 +112,15 @@ abstract class AbstractInternalController extends AbstractActionController
      * Form class for add form. If this has a value, then this will be used, otherwise $formClass will be used.
      */
     protected $addFormClass = '';
+    protected $addContentTitle = 'Add';
+    protected $addSuccessMessage = 'Created record';
 
     /**
      * Custom view template for add / edit form
      */
     protected $editViewTemplate = 'pages/crud-form';
+    protected $editContentTitle = 'Edit';
+    protected $editSuccessMessage = 'Updated record';
 
     /**
      * Variables for controlling edit view rendering
@@ -146,6 +151,8 @@ abstract class AbstractInternalController extends AbstractActionController
      * @var array
      */
     protected $crudConfig = [];
+
+    protected $persist = true;
 
     /**
      * Variables for controlling the delete action.
@@ -261,7 +268,8 @@ abstract class AbstractInternalController extends AbstractActionController
             $this->itemDto,
             new GenericItem($this->itemParams),
             $this->detailsViewPlaceholderName,
-            $this->detailsViewTemplate
+            $this->detailsViewTemplate,
+            $this->detailsContentTitle
         );
     }
 
@@ -272,7 +280,9 @@ abstract class AbstractInternalController extends AbstractActionController
             new AddFormDefaultData($this->defaultData),
             $this->createCommand,
             $this->mapperClass,
-            $this->editViewTemplate
+            $this->editViewTemplate,
+            $this->addSuccessMessage,
+            $this->addContentTitle
         );
     }
 
@@ -284,7 +294,9 @@ abstract class AbstractInternalController extends AbstractActionController
             new GenericItem($this->itemParams),
             $this->updateCommand,
             $this->mapperClass,
-            $this->editViewTemplate
+            $this->editViewTemplate,
+            $this->editSuccessMessage,
+            $this->editContentTitle
         );
     }
 
@@ -362,6 +374,10 @@ abstract class AbstractInternalController extends AbstractActionController
 
             $table = $this->alterTable($table, $data);
 
+            /**
+             * @todo in some cases we only care about putting the table into this placeholder, we then don't care
+             * about constructing a view, so maybe we need a wa
+             */
             $this->placeholder()->setPlaceholder(
                 $tableViewPlaceholderName,
                 $table->render()
@@ -384,10 +400,13 @@ abstract class AbstractInternalController extends AbstractActionController
         $itemDto,
         ParameterProviderInterface $paramProvider,
         $detailsViewPlaceHolderName,
-        $detailsViewTemplate
+        $detailsViewTemplate,
+        $contentTitle = null
     ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
+
+        $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
 
         $paramProvider->setParams($this->plugin('params'));
         $params = $paramProvider->provideParameters();
@@ -442,7 +461,8 @@ abstract class AbstractInternalController extends AbstractActionController
         $createCommand,
         $mapperClass,
         $editViewTemplate = 'pages/crud-form',
-        $successMessage = 'Created record'
+        $successMessage = 'Created record',
+        $contentTitle = null
     ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
@@ -461,6 +481,7 @@ abstract class AbstractInternalController extends AbstractActionController
 
         $form->setData($initialData);
         $this->placeholder()->setPlaceholder('form', $form);
+        $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
 
         if ($this->getRequest()->isPost()) {
             $form->setData((array) $this->params()->fromPost());
@@ -469,7 +490,7 @@ abstract class AbstractInternalController extends AbstractActionController
         $hasProcessed =
             $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
-        if (!$hasProcessed && $this->getRequest()->isPost() && $form->isValid()) {
+        if (!$hasProcessed && $this->persist && $this->getRequest()->isPost() && $form->isValid()) {
             $data = ArrayUtils::merge($initialData, $form->getData());
             $commandData = $mapperClass::mapFromForm($data);
             $response = $this->handleCommand($createCommand::create($commandData));
@@ -519,7 +540,8 @@ abstract class AbstractInternalController extends AbstractActionController
         $updateCommand,
         $mapperClass,
         $editViewTemplate = 'pages/crud-form',
-        $successMessage = 'Updated record'
+        $successMessage = 'Updated record',
+        $contentTitle = null
     ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
@@ -528,6 +550,7 @@ abstract class AbstractInternalController extends AbstractActionController
         $action = ucfirst($this->params()->fromRoute('action'));
         $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
+        $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
 
         if ($request->isPost()) {
             $dataFromPost = (array) $this->params()->fromPost();
@@ -541,7 +564,7 @@ abstract class AbstractInternalController extends AbstractActionController
         $hasProcessed =
             $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
-        if (!$hasProcessed && $request->isPost() && $form->isValid()) {
+        if (!$hasProcessed && $this->persist && $request->isPost() && $form->isValid()) {
             $commandData = $mapperClass::mapFromForm($form->getData());
             $response = $this->handleCommand($updateCommand::create($commandData));
 

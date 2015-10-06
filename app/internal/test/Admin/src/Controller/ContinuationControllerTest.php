@@ -530,7 +530,7 @@ class ContinuationControllerTest extends MockeryTestCase
 
         $contentView = $this->assertRenderView($response);
 
-        $this->assertEquals('partials/table', $contentView->getTemplate());
+        $this->assertEquals('pages/table', $contentView->getTemplate());
         $this->assertEquals(['table' => $mockTable, 'filterForm' => $mockForm], $contentView->getVariables());
     }
 
@@ -631,7 +631,7 @@ class ContinuationControllerTest extends MockeryTestCase
 
         $contentView = $this->assertRenderView($response);
 
-        $this->assertEquals('partials/table', $contentView->getTemplate());
+        $this->assertEquals('pages/table', $contentView->getTemplate());
         $this->assertEquals(['table' => $mockTable, 'filterForm' => $mockForm], $contentView->getVariables());
     }
 
@@ -734,7 +734,7 @@ class ContinuationControllerTest extends MockeryTestCase
 
         $contentView = $this->assertRenderView($response);
 
-        $this->assertEquals('partials/table', $contentView->getTemplate());
+        $this->assertEquals('pages/table', $contentView->getTemplate());
         $this->assertEquals(['table' => $mockTable, 'filterForm' => $mockForm], $contentView->getVariables());
     }
 
@@ -784,7 +784,6 @@ class ContinuationControllerTest extends MockeryTestCase
         $this->assertEquals('partials/header', $header[0]->getTemplate());
         $this->assertEquals('layout/admin-layout', $content[1]->getTemplate());
 
-        // Assert that placeholder is actually child of admin-layout
         $this->assertSame($content[0], $content[1]->getChildren()[0]);
 
         return $content[0];
@@ -840,7 +839,7 @@ class ContinuationControllerTest extends MockeryTestCase
         $contentView = $this->assertRenderView($response);
 
         $this->assertEquals('admin-generate-continuations-title', $response->getVariable('pageTitle'));
-        $this->assertEquals('partials/form', $contentView->getTemplate());
+        $this->assertEquals('pages/form', $contentView->getTemplate());
         $this->assertSame($mockForm, $contentView->getVariable('form'));
     }
 

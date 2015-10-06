@@ -9,11 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("Serious infringement")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true,
- *      "label":"Serious infringement",
- *      "action_lcfirst": false,
- *      "override_form_label":true
- * })
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class Si
 {

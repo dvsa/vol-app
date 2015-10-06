@@ -10,18 +10,15 @@ use Dvsa\Olcs\Transfer\Command\Cases\ProposeToRevoke\UpdateProposeToRevoke as Up
 use Dvsa\Olcs\Transfer\Query\Cases\ProposeToRevoke\ProposeToRevokeByCase as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\Revoke as Mapper;
 use Olcs\Form\Model\Form\Revoke as Form;
+use Zend\View\Model\ViewModel;
 
 /**
  * Revoke Controller
  */
-class RevokeController extends AbstractInternalController implements
-    CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class RevokeController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -30,21 +27,19 @@ class RevokeController extends AbstractInternalController implements
      */
     protected $navigationId = 'case_processing_in_office_revocation';
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/case-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/case-details-subsection';
+        return $view;
     }
 
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/in-office-revocation';
+    protected $detailsViewTemplate = 'sections/cases/pages/in-office-revocation';
     protected $detailsViewPlaceholderName = 'proposeToRevoke';
     protected $itemDto = ItemDto::class;
     // 'id' => 'conviction', to => from
@@ -58,6 +53,8 @@ class RevokeController extends AbstractInternalController implements
     protected $formClass = Form::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add in-office revocation';
+    protected $editContentTitle = 'Edit in-office revocation';
 
     /**
      * Variables for controlling edit view rendering

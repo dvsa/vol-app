@@ -372,7 +372,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
     {
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('partials/form')
+            ->with('pages/form')
             ->getMock();
 
         $this->sut
@@ -474,7 +474,7 @@ class TransportManagerDetailsResponsibilityControllerTest extends MockeryTestCas
 
         $mockView = m::mock()
             ->shouldReceive('setTemplate')
-            ->with('partials/form')
+            ->with('pages/form')
             ->getMock();
 
         $mockApplication = m::mock()

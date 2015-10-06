@@ -7,8 +7,7 @@ namespace Olcs\Controller\Bus\Processing;
 use Dvsa\Olcs\Transfer\Query\Bus\HistoryList as BusRegHistoryList;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Common\Controller\Traits as CommonTraits;
@@ -17,10 +16,7 @@ use Zend\Mvc\MvcEvent as MvcEvent;
 /**
  * History Controller
  */
-class HistoryController extends AbstractInternalController implements
-    BusRegControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class HistoryController extends AbstractInternalController implements BusRegControllerInterface, LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -38,13 +34,11 @@ class HistoryController extends AbstractInternalController implements
     protected $tableName = 'event-history';
     protected $listDto = BusRegHistoryList::class;
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/bus-registrations-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/bus/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/bus-registration-subsection';
+        return $view;
     }
 }

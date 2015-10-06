@@ -45,6 +45,23 @@ class OverviewController extends AbstractController implements LicenceController
                 ['organisation' => $licence['organisation']['id']]
             );
         }
+        $statusesForRedirect = [
+            RefData::LICENCE_STATUS_NOT_SUBMITTED,
+            RefData::LICENCE_STATUS_CONSIDERATION,
+            RefData::LICENCE_STATUS_GRANTED,
+            RefData::LICENCE_STATUS_NOT_TAKEN_UP,
+            RefData::LICENCE_STATUS_WITHDRAWN,
+            RefData::LICENCE_STATUS_REFUSED
+        ];
+        if (in_array($licence['status']['id'], $statusesForRedirect)) {
+            if (count($licence['applications']) > 0) {
+                return $this->redirect()->toRoute(
+                    'lva-application',
+                    // we should have only 1 application for a licence
+                    ['application' => $licence['applications'][0]['id']]
+                );
+            }
+        }
 
         $this->alterForm($form, $licence);
 
@@ -72,11 +89,12 @@ class OverviewController extends AbstractController implements LicenceController
             array_merge(
                 $this->getServiceLocator()->get('Helper\LicenceOverview')->getViewData($licence),
                 [
-                    'form' => $form
+                    'form' => $form,
+                    'title' => 'Overview'
                 ]
             )
         );
-        $content->setTemplate('pages/licence/overview');
+        $content->setTemplate('sections/licence/pages/overview');
 
         return $this->render($content);
     }

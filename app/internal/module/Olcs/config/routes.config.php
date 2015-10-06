@@ -11,6 +11,8 @@ use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController as Licenc
 use Olcs\Controller\Operator\OperatorProcessingNoteController as OperatorProcessingNoteController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 
+use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
+
 use Olcs\Controller\SearchController as SearchController;
 
 $feeActionRoute = [
@@ -716,7 +718,7 @@ $routes = [
                 'case' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseController',
+                'controller' => 'CaseDocsController',
                 'action' => 'documents'
             ]
         ],
@@ -997,8 +999,8 @@ $routes = [
                 'options' => [
                     'route' => '/bus',
                     'defaults' => [
-                        'controller' => 'LicenceController',
-                        'action' => 'bus',
+                        'controller' => LicenceBusController::class,
+                        'action' => 'index',
                     ]
                 ],
                 'may_terminate' => true,
@@ -1317,6 +1319,7 @@ $routes = [
                 'options' => [
                     'route' => '/documents',
                     'defaults' => [
+                        'controller' => 'LicenceDocsController',
                         'action' => 'documents',
                     ]
                 ],
@@ -1397,6 +1400,10 @@ $routes = [
                             'defaults' => [
                                 'controller' => 'LicenceProcessingPublicationsController',
                                 'action' => 'index'
+                            ],
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                                'action' => '(index|edit|delete)'
                             ]
                         ],
                     ],
@@ -1450,6 +1457,7 @@ $routes = [
                 'options' => [
                     'route' => '/fees',
                     'defaults' => [
+                        'controller' => 'LicenceFeesController',
                         'action' => 'fees',
                     ]
                 ],
@@ -1649,6 +1657,7 @@ $routes = [
                 'options' => [
                     'route' => '/documents',
                     'defaults' => [
+                        'controller' => 'OperatorDocsController',
                         'action' => 'documents',
                     ]
                 ],
@@ -1806,7 +1815,7 @@ $routes = [
                 'options' => [
                     'route' => '/cases',
                     'defaults' => [
-                        'controller' => 'UnlicensedOperatorController',
+                        'controller' => 'UnlicensedCasesOperatorController',
                         'action' => 'cases',
                     ]
                 ]
@@ -1869,21 +1878,14 @@ $routes = [
             'details' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/details'
+                    'route' => '/details',
+                    'defaults' => [
+                        'controller' => 'TMDetailsDetailController',
+                        'action' => 'index',
+                    ]
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'details' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/details',
-                            'defaults' => [
-                                'controller' => 'TMDetailsDetailController',
-                                'action' => 'index',
-                            ]
-                        ],
-                        'may_terminate' => true
-                    ],
                     'competences' => [
                         'type' => 'segment',
                         'options' => [
@@ -1968,6 +1970,10 @@ $routes = [
                             'defaults' => [
                                 'controller' => 'TMProcessingPublicationController',
                                 'action' => 'index',
+                            ],
+                            'constraints' => [
+                                'id' => '[0-9]+',
+                                'action' => '(index|edit|delete)'
                             ]
                         ]
                     ],
@@ -2495,7 +2501,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => [
                 'route' => 'documents',
                 'defaults' => [
-                    'controller' => 'ApplicationController',
+                    'controller' => 'ApplicationDocsController',
                     'action' => 'documents',
                 ]
             ],
@@ -2540,7 +2546,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                         'route' => '/delete/:doc',
                         'defaults' => [
                             'type' => 'application',
-                            'controller' => 'ApplicationController',
+                            'controller' => 'ApplicationDocsController',
                             'action' => 'delete-document'
                         ]
                     ],
@@ -2629,7 +2635,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'fees',
                 'defaults' => array(
-                    'controller' => 'ApplicationController',
+                    'controller' => 'ApplicationFeesController',
                     'action' => 'fees',
                 )
             ),

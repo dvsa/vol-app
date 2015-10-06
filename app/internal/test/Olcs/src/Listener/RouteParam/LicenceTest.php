@@ -2,14 +2,11 @@
 
 namespace OlcsTest\Listener\RouteParam;
 
-//use Common\Service\Entity\LicenceStatusRuleEntityService;
-//use OlcsTest\Bootstrap;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\Licence;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
-//use Common\Service\Entity\RefData;
 use Common\RefData;
 
 /**
@@ -18,6 +15,9 @@ use Common\RefData;
  */
 class LicenceTest extends TestCase
 {
+    /**
+     * @var Licence
+     */
     protected $sut;
 
     public function setUp()
@@ -123,6 +123,11 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
         $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
         $this->sut->setNavigationService($mockSidebar);
+
+        $mainNav = m::mock();
+        $mainNav->shouldReceive('findOneBy->setVisible')->with(0);
+
+        $this->sut->setMainNavigationService($mainNav);
 
         $event = new RouteParam();
         $event->setValue($licenceId);
@@ -243,6 +248,11 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
         $this->sut->setNavigationService($mockSidebar);
 
+        $mainNav = m::mock();
+        $mainNav->shouldReceive('findOneBy->setVisible')->with(0);
+
+        $this->sut->setMainNavigationService($mainNav);
+
         $event = new RouteParam();
         $event->setValue($licenceId);
 
@@ -330,6 +340,11 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
         $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
         $this->sut->setNavigationService($mockSidebar);
+
+        $mainNav = m::mock();
+        $mainNav->shouldReceive('findOneBy->setVisible')->with(0);
+
+        $this->sut->setMainNavigationService($mainNav);
 
         $event = new RouteParam();
         $event->setValue($licenceId);
@@ -422,6 +437,11 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
         $this->sut->setNavigationService($mockSidebar);
 
+        $mainNav = m::mock();
+        $mainNav->shouldReceive('findOneBy->setVisible')->with(0);
+
+        $this->sut->setMainNavigationService($mainNav);
+
         $event = new RouteParam();
         $event->setValue($licenceId);
 
@@ -436,6 +456,7 @@ class LicenceTest extends TestCase
         $mockAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
         $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
+        $mainNav = m::mock();
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
@@ -445,6 +466,7 @@ class LicenceTest extends TestCase
         $mockSl->shouldReceive('get')->with(\Olcs\Service\Marker\MarkerService::class)->andReturn($mockMarkerService);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockAnnotationBuilder);
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
+        $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mainNav);
 
         $sut = new Licence();
         $service = $sut->createService($mockSl);
@@ -456,6 +478,7 @@ class LicenceTest extends TestCase
         $this->assertSame($mockMarkerService, $sut->getMarkerService());
         $this->assertSame($mockAnnotationBuilder, $sut->getAnnotationBuilderService());
         $this->assertSame($mockQueryService, $sut->getQueryService());
+        $this->assertSame($mainNav, $sut->getMainNavigationService());
     }
 
     /**

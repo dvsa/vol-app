@@ -1,8 +1,8 @@
 <?php
+
 /**
  * Scanning Controller
  */
-
 namespace Admin\Controller;
 
 use Common\Controller\AbstractActionController;
@@ -102,7 +102,8 @@ class ScanningController extends AbstractActionController
         }
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
+
         return $this->renderView($view, 'Scanning');
     }
 

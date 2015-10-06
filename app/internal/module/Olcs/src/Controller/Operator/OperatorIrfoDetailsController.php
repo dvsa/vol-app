@@ -8,19 +8,18 @@ namespace Olcs\Controller\Operator;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoDetails as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoDetails as ItemDto;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Data\Mapper\IrfoDetails as Mapper;
 use Olcs\Form\Model\Form\IrfoDetails as Form;
+use Zend\View\Model\ViewModel;
 
 /**
  * Operator Irfo Details Controller
  */
 class OperatorIrfoDetailsController extends AbstractInternalController implements
     OperatorControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -45,14 +44,12 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
         ]
     ];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/operator-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/operator/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/operator-subsection';
+        return $view;
     }
 
     /**
@@ -70,6 +67,7 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
     protected $formClass = Form::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $editContentTitle = 'IRFO Details';
 
     public function indexAction()
     {

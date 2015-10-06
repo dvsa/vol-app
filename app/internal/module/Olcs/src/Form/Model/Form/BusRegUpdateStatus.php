@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("bus-reg-update-status")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Update status", "override_form_label": true})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class BusRegUpdateStatus
 {
