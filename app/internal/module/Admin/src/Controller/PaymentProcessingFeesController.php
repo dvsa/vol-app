@@ -97,6 +97,9 @@ class PaymentProcessingFeesController extends AbstractActionController implement
         return $view;
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function maybeClearLeft($layout)
     {
         $this->placeholder()->setPlaceholder('tableFilters', null);
