@@ -20,7 +20,6 @@ use Zend\View\Model\ViewModel;
 class PublicationController extends AbstractInternalController implements LeftViewProvider
 {
     protected $navigationId = 'admin-dashboard/admin-publication';
-    
     protected $listVars = [];
     protected $inlineScripts = array('indexAction' => ['table-actions', 'file-link']);
     protected $listDto = PendingList::class;
