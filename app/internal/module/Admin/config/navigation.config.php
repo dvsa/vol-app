@@ -99,6 +99,11 @@ return [
                             'label' => 'Companies House alerts',
                             'route' => 'admin-dashboard/admin-report/ch-alerts'
                         ],
+                        [
+                            'id' => 'admin-dashboard/admin-report/cpms',
+                            'label' => 'CPMS Financial report',
+                            'route' => 'admin-dashboard/admin-report/cpms'
+                        ],
                     ],
                 ],
                 [
