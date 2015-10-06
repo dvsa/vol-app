@@ -2580,8 +2580,8 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => [
                         'route' => '/publications[/:action][/:id]',
                         'defaults' => [
-                            'controller' => 'ApplicationController',
-                            'action' => 'publications'
+                            'controller' => 'ApplicationProcessingPublicationsController',
+                            'action' => 'index'
                         ]
                     ],
                 ],
