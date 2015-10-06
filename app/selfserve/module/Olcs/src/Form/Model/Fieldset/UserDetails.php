@@ -65,12 +65,27 @@ class UserDetails extends Base
     public $emailConfirm = null;
 
     /**
+     * @Form\Name("permission")
      * @Form\Options({
-     *     "checked_value": "Y",
-     *     "unchecked_value":"N",
-     *     "label": "manage-users.field.is_administrator.label"
+     *     "label": "manage-users.field.permission.label",
+     *     "value_options":{
+     *          "tm":"manage-users.field.permission.tm.label",
+     *          "user":"manage-users.field.permission.user.label",
+     *          "admin":"manage-users.field.permission.admin.label",
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"checkbox"
+     *      }
      * })
-     * @Form\Type("OlcsCheckbox")
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"permission", "placeholder":"", "value":"user"})
+     * @Form\Type("Radio")
      */
-    public $isAdministrator;
+    public $permission;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $currentPermission = null;
 }

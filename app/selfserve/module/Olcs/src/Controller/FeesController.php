@@ -148,7 +148,7 @@ class FeesController extends AbstractController
 
     protected function getOutstandingFeesForOrganisation($organisationId)
     {
-        $query = OutstandingFees::create(['id' => $organisationId]);
+        $query = OutstandingFees::create(['id' => $organisationId, 'hideExpired' => true]);
         $response = $this->handleQuery($query);
         return $response->getResult()['outstandingFees'];
     }

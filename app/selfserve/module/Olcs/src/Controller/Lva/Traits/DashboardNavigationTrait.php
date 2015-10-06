@@ -50,7 +50,7 @@ trait DashboardNavigationTrait
     protected function getFeeCount()
     {
         $organisationId = $this->getCurrentOrganisationId();
-        $query = OutstandingFees::create(['id' => $organisationId]);
+        $query = OutstandingFees::create(['id' => $organisationId, 'hideExpired' => true]);
         $response = $this->handleQuery($query);
 
         if ($response->isOk()) {

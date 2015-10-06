@@ -10,7 +10,7 @@ namespace Olcs\Controller\Lva\Traits;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Common\View\Model\Section;
-use Dvsa\Olcs\Transfer\Query\User\User as UserQry;
+use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as UserQry;
 
 /**
  * Abstract External Controller
@@ -80,6 +80,19 @@ trait ExternalControllerTrait
     {
         if (!$this->checkAccess($lvaId)) {
             return $this->redirect()->toRoute('dashboard');
+        }
+
+        if ($this->lva === 'application' || $this->lva === 'variation') {
+
+            $submissionRouteName = 'lva-' . $this->lva . '/submission-summary';
+            $tmDetailsRouteName = 'lva-' . $this->lva . '/transport_manager_details';
+            $matchedRouteName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
+
+            if ($matchedRouteName !== $submissionRouteName && $matchedRouteName !== $tmDetailsRouteName &&
+                !$this->checkAppStatus($lvaId)
+            ) {
+                $this->redirect()->toRoute($submissionRouteName, ['application' => $lvaId]);
+            }
         }
 
         return parent::checkForRedirect($lvaId);

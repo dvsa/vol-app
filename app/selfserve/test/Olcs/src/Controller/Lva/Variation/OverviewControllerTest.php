@@ -9,7 +9,7 @@ namespace OlcsTest\Controller\Lva\Variation;
 
 use Common\Service\Entity\VariationCompletionEntityService as Completion;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
-use Dvsa\Olcs\Transfer\Query\User\User as UserQry;
+use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as UserQry;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
