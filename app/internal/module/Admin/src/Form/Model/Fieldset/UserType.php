@@ -160,16 +160,15 @@ class UserType
 
     /**
      * @Form\Options({
-     *     "label": "Roles",
+     *     "label": "Role",
+     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Use CTRL to select multiple",
      *     "service_name": "Common\Service\Data\Role",
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(true)
-     * @Form\Attributes({"id":"roles","placeholder":"","class":"chosen-select-medium","required":false,
-     *      "multiple":"multiple"})
+     * @Form\Attributes({"id":"role","placeholder":"","required":false})
      */
-    public $roles = null;
+    public $role = null;
 }

@@ -85,7 +85,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'internal',
-                        'roles' => [99],
+                        'role' => 99,
                         'team' => 3,
                     ],
                     'userPersonal' => [
@@ -149,7 +149,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'transport-manager',
-                        'roles' => [99],
+                        'role' => 99,
                         'transportManager' => 3,
                     ],
                     'userPersonal' => [
@@ -207,7 +207,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'partner',
-                        'roles' => [99],
+                        'role' => 99,
                         'partnerContactDetails' => 3,
                     ],
                     'userPersonal' => [
@@ -265,7 +265,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'local-authority',
-                        'roles' => [99],
+                        'role' => 99,
                         'localAuthority' => 3,
                     ],
                     'userPersonal' => [
@@ -313,7 +313,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'internal',
-                        'roles' => [99],
+                        'role' => 99,
                         'team' => 3,
                     ],
                     'userPersonal' => [
@@ -383,7 +383,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'transport-manager',
-                        'roles' => [99],
+                        'role' => 99,
                         'applicationTransportManagers' => ['application' => 97],
                         'transportManager' => 3,
                     ],
@@ -455,7 +455,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'partner',
-                        'roles' => [99],
+                        'role' => 99,
                         'partnerContactDetails' => 3,
                     ],
                     'userPersonal' => [
@@ -525,7 +525,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'local-authority',
-                        'roles' => [99],
+                        'role' => 99,
                         'localAuthority' => 3,
                     ],
                     'userPersonal' => [
@@ -595,7 +595,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'operator',
-                        'roles' => [99],
+                        'role' => 99,
                         'licenceNumber' => 'licNo',
                     ],
                     'userPersonal' => [
