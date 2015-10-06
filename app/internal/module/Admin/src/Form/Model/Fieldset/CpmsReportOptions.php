@@ -9,6 +9,7 @@ use Zend\Form\Annotation as Form;
  */
 class CpmsReportOptions
 {
+    // this is currently the only report available, as per OLCS-8021 A/C
     const DAILY_BALANCE_REPORT_ID = 'ED7AAFBC';
 
     /**

@@ -34,17 +34,7 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
 
     public function indexAction()
     {
-        return $this->redirectToIndex();
-    }
-
-    public function detailsAction()
-    {
-        return $this->notFoundAction();
-    }
-
-    public function addAction()
-    {
-        return $this->notFoundAction();
+        return $this->redirectToGenerate();
     }
 
     public function generateAction()
@@ -89,12 +79,7 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
         return $this->viewBuilder()->buildViewFromTemplate($editViewTemplate);
     }
 
-    public function deleteAction()
-    {
-        return $this->notFoundAction();
-    }
-
-    public function redirectToIndex()
+    public function redirectToGenerate()
     {
         return $this->redirect()->toRouteAjax(
             'admin-dashboard/admin-report/cpms',
