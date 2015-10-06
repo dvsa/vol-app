@@ -29,6 +29,7 @@ class CpmsReportOptions
     /**
      * @Form\Options({
      *     "label": "Start date",
+     *     "short-label": "Start date",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
@@ -44,6 +45,7 @@ class CpmsReportOptions
     /**
      * @Form\Options({
      *     "label": "End date",
+     *     "short-label": "End date",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
