@@ -10,7 +10,7 @@ namespace Olcs\Controller\Lva\Traits;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Common\View\Model\Section;
-use Dvsa\Olcs\Transfer\Query\User\User as UserQry;
+use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as UserQry;
 
 /**
  * Abstract External Controller
