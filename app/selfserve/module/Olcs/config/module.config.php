@@ -955,7 +955,7 @@ return array(
                 // Bus reg stuff and who can access
                 'ebsr' => ['selfserve-ebsr'],
                 'bus-registration' => [
-                    'selfserve-landing-page-bus-registration'
+                    'selfserve-ebsr'
                 ],
 
                 // Selfserve search
