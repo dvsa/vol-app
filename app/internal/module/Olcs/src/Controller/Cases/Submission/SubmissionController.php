@@ -132,6 +132,14 @@ class SubmissionController extends AbstractInternalController implements CaseCon
             'resultIdMap' => [
                 'submission' => 'submission'
             ]
+        ],
+        'cancel' => [
+            'route' => 'submission',
+            'action' => 'index',
+            'routeMap' => [
+                'case' => 'case'
+            ],
+            'reUseParams' => false
         ]
     ];
 
