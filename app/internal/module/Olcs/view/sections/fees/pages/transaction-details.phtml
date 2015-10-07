@@ -18,6 +18,20 @@ echo $this->render(
                     'value' => \Common\Service\Table\Formatter\TransactionStatus::format(['transaction' => $transaction]),
                     'class' => 'full-width',
                 ],
+                [
+                    'label' => 'Recommended by:',
+                    'value' => isset($transaction['waiveRecommenderUser']['loginId'])
+                        ? $transaction['waiveRecommenderUser']['loginId']
+                        : '',
+                    'hideIfEmpty' => true,
+                    'class' => 'full-width',
+                ],
+                [
+                    'label' => 'Comment:',
+                    'value' => $transaction['comment'],
+                    'hideIfEmpty' => true,
+                    'class' => 'full-width',
+                ],
             ],
         ]
     ]
