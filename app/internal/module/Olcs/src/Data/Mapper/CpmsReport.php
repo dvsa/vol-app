@@ -43,6 +43,7 @@ class CpmsReport implements MapperInterface
      * @param FormInterface $form
      * @param array $errors
      * @return array
+     * @inheritdoc
      */
     public static function mapFromErrors(FormInterface $form, array $errors)
     {

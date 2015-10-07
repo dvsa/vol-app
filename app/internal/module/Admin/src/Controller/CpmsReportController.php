@@ -45,7 +45,6 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
         $this->placeholder()->setPlaceholder('pageTitle', 'CPMS Financial report');
 
         $request = $this->getRequest();
-        $action = ucfirst($this->params()->fromRoute('action'));
         $form = $this->getForm(Form::class);
         $this->placeholder()->setPlaceholder('form', $form);
 
