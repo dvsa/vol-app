@@ -39,6 +39,7 @@ class OperatorDetails
     public $name = null;
 
     /**
+     * @Form\Attributes({"class":"extra-long"})
      * @Form\Options({
      *     "label": "Nature of Business",
      *     "help-block": "Please select a nature of business"
