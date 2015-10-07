@@ -65,25 +65,14 @@ return [
                             'pending' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/pending[/:action][/:publication]',
+                                    'route' => '/pending[/:action][/:id]',
                                     'constraints' => [
                                         'publication' => '[0-9]+',
-                                        'action' => '[a-z]+'
+                                        'action' => '(index|generate|publish)'
                                     ],
                                     'defaults' => [
                                         'controller' => 'Admin\PublicationController',
                                         'action' => 'index'
-                                    ]
-                                ]
-                            ],
-                            'published' => [
-                                'type' => 'literal',
-                                'options' => [
-                                    'route' => '/published',
-                                    'defaults' => [
-                                        'controller' => 'Admin\PublicationController',
-                                        'action' => 'published',
-                                        'index' => 'publication'
                                     ]
                                 ]
                             ],
