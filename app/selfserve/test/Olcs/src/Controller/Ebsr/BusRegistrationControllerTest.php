@@ -4,8 +4,9 @@ namespace OlcsTest\Controller\Ebsr;
 
 use Olcs\Controller\Ebsr\BusRegistrationController;
 use Mockery as m;
-use Sortable\Fixture\Transport\Bus;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
+use Dvsa\Olcs\Transfer\Query\Ebsr\SubmissionList as SubmissionListQuery;
 
 /**
  * Class BusRegistrationControllerTest
@@ -98,7 +99,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests no BusRegId
-     * @expectedException Common\Exception\ResourceNotFoundException
+     * @expectedException \Common\Exception\ResourceNotFoundException
      */
     public function testDetailsActionInvalidBusRegId()
     {
@@ -222,16 +223,23 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
     {
         $subType = 'ebsrt_new';
         $status = 'ebsrs_expired';
+        $busRegResult = [
+            'id' => 2
+        ];
+
+        $resultCount = 1;
+
         $busRegistrations = [
-            [
-                'id' => 2
-            ]
+            'result' => $busRegResult,
+            'count' => $resultCount
         ];
 
         $sut = new BusRegistrationController();
 
         $pluginManagerHelper = new ControllerPluginManagerHelper();
-        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(['url' => 'Url','params' => 'Params']);
+        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(
+            ['url' => 'Url','params' => 'Params', 'handleQuery' => 'HandleQuery']
+        );
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('subType')->andReturn($subType);
         $mockParams->shouldReceive('fromRoute')->with('status')->andReturn($status);
@@ -240,11 +248,14 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         $mockParams->shouldReceive('fromRoute')->with('order')->andReturn('DESC');
         $mockParams->shouldReceive('fromRoute')->with('page')->andReturn(1);
 
+        $mockHandleQuery = $mockPluginManager->get('handleQuery', '');
+        $mockHandleQuery->shouldReceive('getResult')->andReturn($busRegistrations);
+
         $sut->setPluginManager($mockPluginManager);
 
         $mockTable = m::mock('Common\Service\Table\TableBuilder');
         $mockTable->shouldReceive('buildTable')
-            ->with('bus-registrations', ['Results' => $busRegistrations, 'Count' => 10], m::type('array'), false)
+            ->with('bus-registrations', ['Results' => $busRegResult, 'Count' => $resultCount], m::type('array'), false)
             ->andReturn('table');
 
         $mockForm = m::mock('Zend\Form\Form');
@@ -260,16 +271,11 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         $mockStringHelper = m::mock('Common\Form\View\Helper\String');
         $mockStringHelper->shouldReceive('dashToCamel')->withAnyArgs()->andReturn('BusRegFilterForm');
 
-        $mockEbsrService = m::mock('\Generic\Service\Data\EbsrSubmission');
-        $mockEbsrService->shouldReceive('fetchList')->with(m::type('array'))->andReturn($busRegistrations);
-        $mockEbsrService->shouldReceive('getCount')->with('list')->andReturn(10);
-
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
         $mockSl->shouldReceive('get')->with('Helper\Form')->andReturn($mockFormHelper);
         $mockSl->shouldReceive('get')->with('Helper\String')->andReturn($mockStringHelper);
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')->with('Generic\Service\Data\EbsrSubmission')->andReturn($mockEbsrService);
 
         $sut->setServiceLocator($mockSl);
 
@@ -285,10 +291,16 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
     {
         $subType = 'foo';
         $status = 'st1';
+
+        $busRegResult = [
+            'id' => 2
+        ];
+
+        $resultCount = 1;
+
         $busRegistrations = [
-            [
-                'id' => 2
-            ]
+            'result' => $busRegResult,
+            'count' => $resultCount
         ];
 
         $postArray = [
@@ -304,6 +316,7 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $sut = new BusRegistrationController();
+
         $sut->getRequest()->setMethod('post');
         $sut->getRequest()->getPost()->set('fields', $postArray['fields']);
 
@@ -312,7 +325,8 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
             [
                 'url' => 'Url',
                 'params' => 'Params',
-                'redirect' => 'Redirect'
+                'redirect' => 'Redirect',
+                'handleQuery' => 'HandleQuery'
             ]
         );
         $mockParams = $mockPluginManager->get('params', '');
@@ -326,11 +340,14 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         $mockRedirect = $mockPluginManager->get('redirect', '');
         $mockRedirect->shouldReceive('toRoute')->with(null, $redirectParams, [], false)->andReturn($subType);
 
+        $mockHandleQuery = $mockPluginManager->get('handleQuery', '');
+        $mockHandleQuery->shouldReceive('getResult')->andReturn($busRegistrations);
+
         $sut->setPluginManager($mockPluginManager);
 
         $mockTable = m::mock('Common\Service\Table\TableBuilder');
         $mockTable->shouldReceive('buildTable')
-            ->with('bus-registrations', ['Results' => $busRegistrations, 'Count' => 10], m::type('array'), false)
+            ->with('bus-registrations', ['Results' => $busRegResult, 'Count' => $resultCount], m::type('array'), false)
             ->andReturn('table');
 
         $mockForm = m::mock('Zend\Form\Form');
@@ -348,16 +365,11 @@ class BusRegistrationControllerTest extends \PHPUnit_Framework_TestCase
         $mockStringHelper = m::mock('Common\Form\View\Helper\String');
         $mockStringHelper->shouldReceive('dashToCamel')->withAnyArgs()->andReturn('BusRegFilterForm');
 
-        $mockEbsrService = m::mock('\Generic\Service\Data\EbsrSubmission');
-        $mockEbsrService->shouldReceive('fetchList')->with(m::type('array'))->andReturn($busRegistrations);
-        $mockEbsrService->shouldReceive('getCount')->with('list')->andReturn(10);
-
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
         $mockSl->shouldReceive('get')->with('Helper\Form')->andReturn($mockFormHelper);
         $mockSl->shouldReceive('get')->with('Helper\String')->andReturn($mockStringHelper);
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')->with('Generic\Service\Data\EbsrSubmission')->andReturn($mockEbsrService);
 
         $sut->setServiceLocator($mockSl);
 

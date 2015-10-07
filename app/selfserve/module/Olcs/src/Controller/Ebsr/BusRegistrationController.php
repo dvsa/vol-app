@@ -4,6 +4,7 @@ namespace Olcs\Controller\Ebsr;
 
 use Common\Controller\AbstractActionController;
 use Common\Exception\ResourceNotFoundException;
+use Dvsa\Olcs\Transfer\Query\Ebsr\SubmissionList as SubmissionListQuery;
 
 /**
  * Class BusRegVariationController
@@ -54,14 +55,13 @@ class BusRegistrationController extends AbstractActionController
             ]
         );
 
-        $ebsrSubmissionDataService = $this->getEbsrSubmissionDataService();
+        $response = $this->handleQuery(SubmissionListQuery::create($params));
 
-        $busRegistrationList = $ebsrSubmissionDataService->fetchList($params);
-        $resultsTotal = $ebsrSubmissionDataService->getCount('list');
+        $busRegistrationList = $response->getResult();
 
         $busRegistrationTable = $tableBuilder->buildTable(
             'bus-registrations',
-            ['Results' => $busRegistrationList, 'Count' => $resultsTotal],
+            ['Results' => $busRegistrationList['result'], 'Count' => $busRegistrationList['count']],
             $params,
             false
         );
@@ -257,19 +257,6 @@ class BusRegistrationController extends AbstractActionController
         $dataService = $this->getServiceLocator()
             ->get('DataServiceManager')
             ->get('Common\Service\Data\BusReg');
-        return $dataService;
-    }
-
-    /**
-     * @return \Generic\Service\Data\EbsrSubmission
-     */
-    public function getEbsrSubmissionDataService()
-    {
-        /** @var \Generic\Service\Data\EbsrSubmission $dataService */
-        $dataService = $this->getServiceLocator()
-            ->get('DataServiceManager')
-            ->get('Generic\Service\Data\EbsrSubmission');
-
         return $dataService;
     }
 }
