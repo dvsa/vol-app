@@ -15,6 +15,7 @@ use Admin\Form\Model\Form\IrfoStockControl as Form;
 use Admin\Form\Model\Form\IrfoStockControlFilter as FilterForm;
 use Common\RefData;
 use Zend\View\Model\ViewModel;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * IRFO Stock Control Controller
@@ -161,35 +162,9 @@ class IrfoStockControlController extends AbstractInternalController implements L
 
     protected function update($status)
     {
-        return $this->process(
-            UpdateDto::class,
-            [
-                'ids' => explode(',', $this->params()->fromRoute('id')),
-                'status' => $status
-            ]
-        );
-    }
-
-    private function process($command, $data)
-    {
-        $response = $this->handleCommand($command::create($data));
-
-        if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
-        } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
-
-        return $this->redirectToIndex();
-    }
-
-    private function redirectToIndex()
-    {
-        return $this->redirect()->toRouteAjax(
-            null,
-            ['action' => 'index'],
-            ['code' => '303'],
-            false
+        return $this->processCommand(
+            new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id')), 'status' => $status]),
+            UpdateDto::class
         );
     }
 }

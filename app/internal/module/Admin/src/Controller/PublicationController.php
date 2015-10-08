@@ -11,6 +11,7 @@ use Dvsa\Olcs\Transfer\Command\Publication\Publish as PublishCmd;
 use Dvsa\Olcs\Transfer\Command\Publication\Generate as GenerateCmd;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
 /**
  * Publication Controller
@@ -49,32 +50,13 @@ class PublicationController extends AbstractInternalController implements LeftVi
      */
     public function generateAction()
     {
-        $response = $this->handleCommand(GenerateCmd::create(['id' => $this->params()->fromRoute('id')]));
-
-        if ($response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
-
-        if ($response->isClientError()) {
-            $result = $response->getResult();
-
-            if (isset($result['messages'])) {
-                foreach ($result['messages'] as $message) {
-                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($message);
-                }
-            } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            }
-        }
-
-        if ($response->isOk()) {
-            $this->getServiceLocator()
-                ->get('Helper\FlashMessenger')
-                ->addSuccessMessage('Publication generated successfully');
-            return $this->redirectTo($response->getResult());
-        }
-
-        return $this->redirectTo([]);
+        return $this->processCommand(
+            new GenericItem(['id' => 'id']),
+            GenerateCmd::class,
+            false,
+            true,
+            'Publication was generated, a new publication was also created'
+        );
     }
 
     /**
@@ -84,31 +66,6 @@ class PublicationController extends AbstractInternalController implements LeftVi
      */
     public function publishAction()
     {
-        $response = $this->handleCommand(PublishCmd::create(['id' => $this->params()->fromRoute('id')]));
-
-        if ($response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
-
-        if ($response->isClientError()) {
-            $result = $response->getResult();
-
-            if (isset($result['messages'])) {
-                foreach ($result['messages'] as $message) {
-                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($message);
-                }
-            } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            }
-        }
-
-        if ($response->isOk()) {
-            $this->getServiceLocator()
-                ->get('Helper\FlashMessenger')
-                ->addSuccessMessage('Publication published successfully');
-            return $this->redirectTo($response->getResult());
-        }
-
-        return $this->redirectTo([]);
+        return $this->processCommand(new GenericItem(['id' => 'id']), PublishCmd::class);
     }
 }
