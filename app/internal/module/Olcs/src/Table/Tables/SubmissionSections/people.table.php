@@ -41,6 +41,10 @@ return array(
             'name' => 'birthDate'
         ),
         array(
+            'title' => 'Disqual.',
+            'name' => 'disqualificationStatus'
+        ),
+        array(
             'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
