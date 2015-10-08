@@ -182,6 +182,19 @@ return [
                                     ]
                                 ],
                             ],
+                            'cpms' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/cpms[/:action][/:id][/]',
+                                    'constraints' => [
+                                        'id' => '[0-9\,]+'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => 'Admin\CpmsReportController',
+                                        'action' => 'index',
+                                    ]
+                                ],
+                            ],
                         ],
                     ],
                     'admin-user-management' => [
@@ -432,6 +445,7 @@ return [
                 'Admin\Controller\ContinuationChecklistReminderController',
             'Admin\CompaniesHouseAlertController' => 'Admin\Controller\CompaniesHouseAlertController',
             'Admin\FinancialStandingRateController' => 'Admin\Controller\FinancialStandingRateController',
+            'Admin\CpmsReportController' => 'Admin\Controller\CpmsReportController',
         ]
     ],
     'view_manager' => [
