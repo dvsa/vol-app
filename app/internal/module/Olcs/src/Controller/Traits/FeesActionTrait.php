@@ -239,14 +239,7 @@ trait FeesActionTrait
             return $this->getResponse();
         }
 
-        $feeTransactions = array_filter(
-            $fee['feeTransactions'],
-            function ($feeTransaction) {
-                // @TODO confirm AC - not sure about hiding non-complete transactions?
-                // return $feeTransaction['transaction']['status']['id'] === RefData::TRANSACTION_STATUS_COMPLETE;
-                return true;
-            }
-        );
+        $feeTransactions = array_filter($fee['feeTransactions'], [$this, 'ftDisplayFilter']);
         $table = $this->getTable('fee-transactions', $feeTransactions, []);
 
         $viewParams = [
@@ -273,6 +266,27 @@ trait FeesActionTrait
         $this->maybeClearLeft($layout);
 
         return $layout;
+    }
+
+    /**
+     * Alter which feeTransactions are displayed in the table,
+     * called as array_filter callback
+     *
+     * @param array $feeTransaction
+     * @return boolean
+     */
+    public function ftDisplayFilter($feeTransaction)
+    {
+        // OLCS-10687 exclude outstanding waive transactions
+        if (
+            $feeTransaction['transaction']['status']['id'] === RefData::TRANSACTION_STATUS_OUTSTANDING
+            &&
+            $feeTransaction['transaction']['type']['id'] === RefData::TRANSACTION_TYPE_WAIVE
+        ) {
+            return false;
+        }
+
+        return true;
     }
 
     protected function maybeClearLeft($layout)
