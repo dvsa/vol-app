@@ -194,7 +194,8 @@ class UserControllerTest extends TestCase
         $pm->shouldReceive('get')->with('params')->andReturn($params);
 
         $redirect = m::mock('Zend\Mvc\Controller\Plugin\Redirect');
-        $redirect->shouldReceive('toRouteAjax')->with('user', ['action' => 'index'], [], false)->andReturn('redirect');
+        $redirect->shouldReceive('toRouteAjax')->with('manage-user', ['action' => 'index'], [], false)
+            ->andReturn('redirect');
         $controller->shouldReceive('redirect')->andReturn($redirect);
 
         $flashMessenger = m::mock('stdClass');
