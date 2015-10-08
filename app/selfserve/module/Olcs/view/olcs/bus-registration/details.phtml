@@ -95,7 +95,7 @@ echo $this->render('partials/read-only/main',
             8 => $localAuthoritiesList,
             9 => $trafficAreasList,
             10 => [
-                ['label' => 'N&P Reference', 'value' => $this->registrationDetails['npRreferenceNo']]
+                ['label' => 'N&P Reference', 'value' => $this->registrationDetails['npPublicationNo']]
             ]
         ]
     ]
@@ -103,15 +103,24 @@ echo $this->render('partials/read-only/main',
 ?>
     <?php echo $this->variationHistoryTable; ?>
 
-    <?php if (!empty($this->registrationDetails['documents'])):?>
+    <?php
+
+    if (!empty($documents)): ?>
         <h3>Documents</h3>
         <div class="files">
-            <?php foreach ($this->registrationDetails['documents'] as $document):?>
+            <?php
+
+            foreach ($documents as $document):
+                ?>
                 <?php
                     $url = $this->url(
                         'getfile',
-                        ['file' => $document['identifier'], 'name' => $document['filename'], 'namespace' => 'ebsr']
-                    )
+                        [
+                            'identifier' => base64_encode($document['identifier']),
+                            'name' => $document['filename'],
+                            'namespace' => 'ebsr'
+                        ]
+                    );
                 ?>
                 <div class="field file-upload">
                     <p>
