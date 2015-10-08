@@ -8,7 +8,7 @@
 namespace OlcsTest\Controller\Lva\Application;
 
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
-use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as UserQry;
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
@@ -88,9 +88,7 @@ class OverviewControllerTest extends MockeryTestCase
             ->andReturn($applicationId);
 
         $this->expectQuery(ApplicationQry::class, ['id' => $applicationId], $applicationData, true, 2);
-        $this->expectQuery(UserQry::class, ['id' => $userId], $userData);
-
-        $this->sut->shouldReceive('currentUser->getUserData')->andReturn(['id' => $userId]);
+        $this->expectQuery(MyAccount::class, [], $userData);
 
         $this->sut->shouldReceive('url')->andReturn(
             m::mock()
