@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Traits;
 
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Common\View\Model\Section;
@@ -50,9 +51,7 @@ trait ExternalControllerTrait
      */
     protected function getCurrentOrganisation()
     {
-        $user = $this->getCurrentUser();
-
-        $dto = UserQry::create(['id' => $user['id']]);
+        $dto = MyAccount::create([]);
         $response = $this->handleQuery($dto);
         $data = $response->getResult();
 
