@@ -2100,7 +2100,7 @@ $routes = [
                 'options' => [
                     'route' => '/can-remove',
                     'defaults' => [
-                        'controller' => 'TMProcessingDecisionController',
+                        'controller' => 'TMController',
                         'action' => 'canRemove'
                     ],
                 ],
@@ -2110,7 +2110,7 @@ $routes = [
                 'options' => [
                     'route' => '/remove',
                     'defaults' => [
-                        'controller' => 'TMProcessingDecisionController',
+                        'controller' => 'TMController',
                         'action' => 'remove'
                     ],
                 ],
