@@ -78,24 +78,4 @@ class ProcessSubmissionController extends AbstractInternalController implements 
     {
         return $this->editAction();
     }
-
-    public function addAction()
-    {
-        return $this->notFoundAction();
-    }
-
-    public function indexAction()
-    {
-        return $this->notFoundAction();
-    }
-
-    public function detailsAction()
-    {
-        return $this->notFoundAction();
-    }
-
-    public function deleteAction()
-    {
-        return $this->notFoundAction();
-    }
 }
