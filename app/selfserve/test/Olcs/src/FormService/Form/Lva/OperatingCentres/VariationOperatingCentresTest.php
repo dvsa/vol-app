@@ -89,16 +89,6 @@ class VariationOperatingCentresTest extends MockeryTestCase
 
         $tableElement = $this->mockPopulateFormTable([]);
 
-        $fields = [
-            'totAuthSmallVehicles',
-            'totAuthMediumVehicles',
-            'totAuthLargeVehicles'
-        ];
-
-        $this->mockFormHelper->shouldReceive('removeFieldList')
-            ->once()
-            ->with($this->form, 'data', $fields);
-
         $this->mockFormHelper->shouldReceive('getValidator->setMessage')
             ->with('OperatingCentreNoOfOperatingCentres.required', 'required');
 
