@@ -2,7 +2,7 @@
 <ul class="app-navigation" role="menu">
     <?php foreach ($sections as $reference => $details) : ?>
         <?php $current = ($details['route'] === $currentRoute); ?>
-        <li class="app-navigation__item <?php echo $current ? 'current' : $details['class']; ?>">
+        <li class="app-navigation__item <?php echo $details['class']; ?> <?php echo $current ? 'current' : ''; ?>">
             <?php if (!$current) : ?>
             <a href="<?php echo $this->url($details['route'], ['application' => $lvaId]); ?>">
                 <?php endif; ?>
