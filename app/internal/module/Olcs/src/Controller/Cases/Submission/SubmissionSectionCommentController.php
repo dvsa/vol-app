@@ -38,6 +38,9 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
             'route' => 'submission',
             'action' => 'details',
             'reUseParams' => true,
+            'resultIdMap' => [
+                'section' => 'submissionSection'
+            ]
         ]
     ];
 
