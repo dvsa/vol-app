@@ -35,45 +35,6 @@ class UpdateContinuation
 
     /**
      * @Form\Options({
-     *     "label": "Small vehicle authorisation",
-     * })
-     * @Form\Validator({
-     *     "name": "Zend\Validator\GreaterThan",
-     *     "options": {"min": 0,"inclusive":true}
-     * })
-     * @Form\Type("Text")
-     * @Form\Validator({"name":"Digits"})
-     */
-    public $totAuthSmallVehicles = null;
-
-    /**
-     * @Form\Options({
-     *     "label": "Medium vehicle authorisation",
-     * })
-     * @Form\Validator({
-     *     "name": "Zend\Validator\GreaterThan",
-     *     "options": {"min": 0,"inclusive":true}
-     * })
-     * @Form\Type("Text")
-     * @Form\Validator({"name":"Digits"})
-     */
-    public $totAuthMediumVehicles = null;
-
-    /**
-     * @Form\Options({
-     *     "label": "Large vehicle authorisation",
-     * })
-     * @Form\Validator({
-     *     "name": "Zend\Validator\GreaterThan",
-     *     "options": {"min": 0,"inclusive":true}
-     * })
-     * @Form\Type("Text")
-     * @Form\Validator({"name":"Digits"})
-     */
-    public $totAuthLargeVehicles = null;
-
-    /**
-     * @Form\Options({
      *     "label": "Total vehicle authorisation",
      * })
      * @Form\Type("Text")
