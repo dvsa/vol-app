@@ -34,6 +34,10 @@ class SearchController extends AbstractController implements LeftViewProvider
     {
         $sd = $this->ElasticSearch()->getSearchData();
 
+        if ($this->params()->fromRoute('index', null) != $this->params()->fromPost('index', null)) {
+            if (isset($sd['page'])) unset($sd['page']);
+        }
+
         /**
          * Remove the "index" key from the incoming parameters.
          */
@@ -91,6 +95,29 @@ class SearchController extends AbstractController implements LeftViewProvider
         $view = $elasticSearch->generateResults($view);
 
         return $this->renderView($view, 'Search results');
+    }
+
+    public function resetAction()
+    {
+        /** @var \Common\Controller\Plugin\ElasticSearch $elasticSearch */
+        $elasticSearch = $this->ElasticSearch();
+
+        $sd = $elasticSearch->getSearchData();
+
+        /**
+         * Remove the "index" key from the incoming parameters.
+         */
+        $index = $sd['index'];
+        unset($sd['index']);
+
+        $elasticSearch->resetSearchSession($sd['search']);
+
+        return $this->redirect()->toRoute(
+            'search',
+            ['index' => $index, 'action' => 'search'],
+            ['query' => ['search' => $sd['search']], 'code' => 303],
+            true
+        );
     }
 
     public function getLeftView()
