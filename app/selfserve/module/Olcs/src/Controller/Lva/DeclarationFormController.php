@@ -8,7 +8,7 @@
 namespace Olcs\Controller\Lva;
 
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Query\Application\Application;
+use Dvsa\Olcs\Transfer\Query\Application\DeclarationUndertakings;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
@@ -23,7 +23,7 @@ class DeclarationFormController extends AbstractActionController
     {
         $applicationId = $this->params('application');
 
-        $response = $this->handleQuery(Application::create(['id' => $applicationId]));
+        $response = $this->handleQuery(DeclarationUndertakings::create(['id' => $applicationId]));
 
         if (!$response->isOk()) {
             return $this->notFoundAction();
@@ -37,6 +37,7 @@ class DeclarationFormController extends AbstractActionController
             'name' => $applicationData['licence']['organisation']['name'],
             'title' => $this->determineTitle($applicationData),
             'signatureLabel' => $this->determineSignatureLabel($applicationData),
+            'undertakings' => $applicationData['undertakings']
         ];
 
         $view = new ViewModel($params);
