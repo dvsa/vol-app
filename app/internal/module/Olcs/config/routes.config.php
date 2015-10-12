@@ -718,7 +718,7 @@ $routes = [
                 'case' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseController',
+                'controller' => 'CaseDocsController',
                 'action' => 'documents'
             ]
         ],
@@ -1319,6 +1319,7 @@ $routes = [
                 'options' => [
                     'route' => '/documents',
                     'defaults' => [
+                        'controller' => 'LicenceDocsController',
                         'action' => 'documents',
                     ]
                 ],
@@ -1456,6 +1457,7 @@ $routes = [
                 'options' => [
                     'route' => '/fees',
                     'defaults' => [
+                        'controller' => 'LicenceFeesController',
                         'action' => 'fees',
                     ]
                 ],
@@ -1655,6 +1657,7 @@ $routes = [
                 'options' => [
                     'route' => '/documents',
                     'defaults' => [
+                        'controller' => 'OperatorDocsController',
                         'action' => 'documents',
                     ]
                 ],
@@ -1812,7 +1815,7 @@ $routes = [
                 'options' => [
                     'route' => '/cases',
                     'defaults' => [
-                        'controller' => 'UnlicensedOperatorController',
+                        'controller' => 'UnlicensedCasesOperatorController',
                         'action' => 'cases',
                     ]
                 ]
@@ -1875,21 +1878,14 @@ $routes = [
             'details' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/details'
+                    'route' => '/details',
+                    'defaults' => [
+                        'controller' => 'TMDetailsDetailController',
+                        'action' => 'index',
+                    ]
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'details' => [
-                        'type' => 'literal',
-                        'options' => [
-                            'route' => '/details',
-                            'defaults' => [
-                                'controller' => 'TMDetailsDetailController',
-                                'action' => 'index',
-                            ]
-                        ],
-                        'may_terminate' => true
-                    ],
                     'competences' => [
                         'type' => 'segment',
                         'options' => [
@@ -2104,7 +2100,7 @@ $routes = [
                 'options' => [
                     'route' => '/can-remove',
                     'defaults' => [
-                        'controller' => 'TMProcessingDecisionController',
+                        'controller' => 'TMController',
                         'action' => 'canRemove'
                     ],
                 ],
@@ -2114,7 +2110,7 @@ $routes = [
                 'options' => [
                     'route' => '/remove',
                     'defaults' => [
-                        'controller' => 'TMProcessingDecisionController',
+                        'controller' => 'TMController',
                         'action' => 'remove'
                     ],
                 ],
@@ -2505,7 +2501,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => [
                 'route' => 'documents',
                 'defaults' => [
-                    'controller' => 'ApplicationController',
+                    'controller' => 'ApplicationDocsController',
                     'action' => 'documents',
                 ]
             ],
@@ -2550,7 +2546,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                         'route' => '/delete/:doc',
                         'defaults' => [
                             'type' => 'application',
-                            'controller' => 'ApplicationController',
+                            'controller' => 'ApplicationDocsController',
                             'action' => 'delete-document'
                         ]
                     ],
@@ -2584,8 +2580,8 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => [
                         'route' => '/publications[/:action][/:id]',
                         'defaults' => [
-                            'controller' => 'ApplicationProcessingPublicationsController',
-                            'action' => 'index'
+                            'controller' => 'ApplicationController',
+                            'action' => 'publications'
                         ]
                     ],
                 ],
@@ -2639,7 +2635,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'fees',
                 'defaults' => array(
-                    'controller' => 'ApplicationController',
+                    'controller' => 'ApplicationFeesController',
                     'action' => 'fees',
                 )
             ),
