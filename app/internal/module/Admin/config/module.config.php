@@ -195,6 +195,27 @@ return [
                                     ]
                                 ],
                             ],
+                            'cpid-class' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/cpid-classification[/:status]',
+                                    'defaults' => [
+                                        'controller' => 'Admin\ReportController',
+                                        'action' => 'cpidClassification',
+                                        'status' => null
+                                    ]
+                                ]
+                            ],
+                            'exported-reports' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/exported-reports',
+                                    'defaults' => [
+                                        'controller' => 'Admin\ReportController',
+                                        'action' => 'exportedReports'
+                                    ]
+                                ]
+                            ],
                         ],
                     ],
                     'admin-user-management' => [
@@ -343,27 +364,6 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes' => [
-                            'cpid-class' => [
-                                'type' => 'segment',
-                                'options' => [
-                                    'route' => '/cpid-classification[/:status]',
-                                    'defaults' => [
-                                        'controller' => 'Admin\PaymentProcessingController',
-                                        'action' => 'cpidClassification',
-                                        'status' => null
-                                    ]
-                                ]
-                            ],
-                            'cpid-exports' => [
-                                'type' => 'segment',
-                                'options' => [
-                                    'route' => '/cpid-exports',
-                                    'defaults' => [
-                                        'controller' => 'Admin\PaymentProcessingController',
-                                        'action' => 'cpidExports'
-                                    ]
-                                ]
-                            ],
                             'misc-fees' => [
                                 'type' => 'segment',
                                 'options' => [
@@ -438,7 +438,6 @@ return [
             'Admin\SystemMessageController' => 'Admin\Controller\SystemMessageController',
             'Admin\DiscPrintingController' => 'Admin\Controller\DiscPrintingController',
             'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController',
-            'Admin\PaymentProcessingController' => 'Admin\Controller\PaymentProcessingController',
             'Admin\PaymentProcessingFeesController' => 'Admin\Controller\PaymentProcessingFeesController',
             'Admin\PartnerController' => 'Admin\Controller\PartnerController',
             'Admin\ContinuationChecklistReminderController' =>

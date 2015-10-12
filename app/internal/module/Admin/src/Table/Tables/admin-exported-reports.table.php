@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Exports',
+        'title' => 'Exported reports',
     ),
     'settings' => array(
         'paginate' => array(

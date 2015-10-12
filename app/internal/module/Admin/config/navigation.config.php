@@ -99,6 +99,16 @@ return [
                             'label' => 'CPMS Financial report',
                             'route' => 'admin-dashboard/admin-report/cpms'
                         ],
+                        [
+                            'id' => 'admin-dashboard/admin-report/cpid-class',
+                            'label' => 'CPID classification',
+                            'route' => 'admin-dashboard/admin-report/cpid-class',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-report/exported-reports',
+                            'label' => 'Exported reports',
+                            'route' => 'admin-dashboard/admin-report/exported-reports',
+                        ],
                     ],
                 ],
                 [
@@ -165,16 +175,6 @@ return [
                                         'admin-dashboard/admin-payment-processing/misc-fees/fee_action/transaction',
                                 ],
                             ],
-                        ],
-                        [
-                            'id' => 'admin-dashboard/admin-payment-processing/cpid-class',
-                            'label' => 'CPID Classification',
-                            'route' => 'admin-dashboard/admin-payment-processing/cpid-class',
-                        ],
-                        [
-                            'id' => 'admin-dashboard/admin-payment-processing/cpid-exports',
-                            'label' => 'CPID Exports',
-                            'route' => 'admin-dashboard/admin-payment-processing/cpid-exports',
                         ],
                     ]
                 ],
