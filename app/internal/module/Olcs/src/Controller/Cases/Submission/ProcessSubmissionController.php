@@ -52,27 +52,6 @@ class ProcessSubmissionController extends AbstractInternalController implements 
     protected $mapperClass = Mapper::class;
     protected $editContentTitle = 'Assign submission';
 
-    /**
-     * Variables for controlling edit view rendering
-     * all these variables are required
-     * itemDto (see above) is also required.
-     */
-    protected $createCommand = UpdateDto::class;
-
-    /**
-     * Form data for the add form.
-     *
-     * Format is name => value
-     * name => "route" means get value from route,
-     * see conviction controller
-     *
-     * @var array
-     */
-    protected $defaultData = [
-        'case' => 'route',
-        'submission' => 'route'
-    ];
-
     public function assignAction()
     {
         return $this->editAction();
