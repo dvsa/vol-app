@@ -103,9 +103,6 @@ class SearchController extends AbstractController implements LeftViewProvider
         /**
          * Remove the "index" key from the incoming parameters.
          */
-        $index = $sd['index'];
-        unset($sd['index']);
-
         $elasticSearch->resetSearchSession($sd['search']);
 
         return $this->redirect()->toRoute(
