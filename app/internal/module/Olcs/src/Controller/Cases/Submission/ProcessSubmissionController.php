@@ -1,112 +1,59 @@
 <?php
-
 /**
- * ProcessSubmissionController
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
+ * Submission Decision Controller
  */
 namespace Olcs\Controller\Cases\Submission;
 
+use Dvsa\Olcs\Transfer\Command\Submission\AssignSubmission as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
+use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Zend\View\Model\ViewModel;
-use Olcs\Controller\Traits as ControllerTraits;
-use Common\Controller\AbstractActionController;
-use Common\Controller\Traits\GenericUpload;
+use Olcs\Data\Mapper\Submission as Mapper;
+use Olcs\Form\Model\Form\SubmissionSendTo as Form;
 
 /**
- * ProcessSubmissionController
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
+ * Process Submission Controller
  */
-class ProcessSubmissionController extends AbstractActionController implements CaseControllerInterface
+class ProcessSubmissionController extends AbstractInternalController implements CaseControllerInterface
 {
-    use ControllerTraits\CaseControllerTrait;
-    use GenericUpload;
-
-    protected $submissionConfig;
-
-    protected $submission;
+    /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
+     */
+    protected $navigationId = 'case_submissions';
 
     /**
-     * Flag to intercept the save and determine whether to return redirect object
-     * @var bool
+     * @var array
      */
-    private $isSaved = false;
+    protected $redirectConfig = [
+        'assign' => [
+            'route' => 'submission',
+            'action' => 'details',
+            'reUseParams' => true,
+        ]
+    ];
 
     /**
-     * Processes the send to Form
-     *
-     * @return \Zend\View\Model\ViewModel
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
+    protected $itemDto = ItemDto::class;
+
+    protected $itemParams = ['id' => 'submission'];
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+    protected $editContentTitle = 'Assign submission';
+
     public function assignAction()
     {
-        $this->getSubmission();
-
-        $this->fieldValues = $this->params()->fromPost('fields');
-
-        $form = $this->generateFormWithData('submissionSendTo', 'processAssignSave');
-
-        if ($this->isSaved) {
-            return $this->redirectToIndex();
-        }
-
-        $view = $this->getView(['form' => $form, 'title' => $form->getLabel()]);
-
-        $view->setTemplate('pages/form');
-        $view->setTerminal(true);
-
-        return $view;
-    }
-
-    public function processAssignSave($data)
-    {
-        $this->getSubmission();
-
-        $data['fields']['senderUser'] = $this->getLoggedInUser();
-        $data['fields']['id'] = $this->submission['id'];
-        $data['fields']['version'] = $this->submission['version'];
-
-        $response = $this->getServiceLocator()->get('BusinessServiceManager')
-            ->get('Cases\Submission\Submission')
-            ->process(
-                [
-                    'data' => $data['fields'],
-                ]
-            );
-
-        if ($response->isOk()) {
-            $this->addSuccessMessage('Saved successfully');
-            $this->isSaved = true;
-        } else {
-            $this->addErrorMessage('Sorry; there was a problem. Please try again.');
-        }
-
-        return $this->redirectToIndex();
-    }
-
-    /**
-     * Simple redirect to index.
-     */
-    public function redirectToIndex()
-    {
-        return $this->redirectToRouteAjax(
-            'submission',
-            ['action' => 'details'],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
-    }
-
-    private function getSubmission()
-    {
-        if (empty($this->submission)) {
-            $submissionId = $this->params()->fromRoute('submission');
-
-            $submissionService = $this->getServiceLocator()
-                ->get('Olcs\Service\Data\Submission');
-
-            $this->submission = $submissionService->fetchData($submissionId);
-        }
-        return $this->submission;
+        return $this->editAction();
     }
 }

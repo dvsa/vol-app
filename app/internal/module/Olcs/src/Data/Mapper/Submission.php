@@ -49,7 +49,10 @@ class Submission implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
-        $data['fields'] += $data['fields']['submissionSections'];
+        if (isset($data['fields']['submissionSections'])) {
+            $data['fields'] += $data['fields']['submissionSections'];
+        }
+
         unset($data['fields']['submissionSections']);
 
         return $data['fields'];
