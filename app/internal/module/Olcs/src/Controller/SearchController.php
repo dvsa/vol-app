@@ -93,6 +93,23 @@ class SearchController extends AbstractController implements LeftViewProvider
         return $this->renderView($view, 'Search results');
     }
 
+    public function resetAction()
+    {
+        /** @var \Common\Controller\Plugin\ElasticSearch $elasticSearch */
+        $elasticSearch = $this->ElasticSearch();
+
+        $sd = $elasticSearch->getSearchData();
+
+        $elasticSearch->resetSearchSession($sd['search']);
+
+        return $this->redirect()->toRoute(
+            'search',
+            ['index' => $sd['index'], 'action' => 'search'],
+            ['query' => ['search' => $sd['search']], 'code' => 303],
+            true
+        );
+    }
+
     public function getLeftView()
     {
         $view = new ViewModel();
