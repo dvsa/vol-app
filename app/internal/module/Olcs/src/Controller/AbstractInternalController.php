@@ -655,6 +655,64 @@ abstract class AbstractInternalController extends AbstractActionController
     }
 
     /**
+     * Processes a command, and populates flash messages for the user
+     *
+     * @param ParameterProviderInterface $paramProvider
+     * @param $command
+     * @param bool|true $displayApiSuccess
+     * @param bool|true $displayApiErrors
+     * @param string $successMessage
+     * @param string $errorMessage
+     * @return array|mixed
+     */
+    final protected function processCommand(
+        ParameterProviderInterface $paramProvider,
+        $command,
+        $displayApiSuccess = true,
+        $displayApiErrors = true,
+        $successMessage = 'Update successful',
+        $errorMessage = 'unknown-error'
+    ) {
+        $this->getLogger()->debug(__FILE__);
+        $this->getLogger()->debug(__METHOD__);
+
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
+
+        $response = $this->handleCommand($command::create($params));
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($errorMessage);
+        }
+
+        if ($response->isClientError()) {
+            if ($displayApiErrors && isset($result['messages']) && !empty($result['messages'])) {
+                foreach ($result['messages'] as $message) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($message);
+                }
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($errorMessage);
+            }
+        }
+
+        if ($response->isOk()) {
+            if ($displayApiSuccess && isset($result['messages']) && !empty($result['messages'])) {
+                foreach ($result['messages'] as $message) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($message);
+                }
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
+            }
+        }
+
+        return $this->redirectTo($response->getResult());
+    }
+
+    /**
      * @param array $restResponse
      * @return array
      */
