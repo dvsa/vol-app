@@ -70,8 +70,7 @@ class ProcessSubmissionController extends AbstractInternalController implements 
      */
     protected $defaultData = [
         'case' => 'route',
-        'submission' => 'route',
-        'isDecision' => 'Y',
+        'submission' => 'route'
     ];
 
     public function assignAction()
