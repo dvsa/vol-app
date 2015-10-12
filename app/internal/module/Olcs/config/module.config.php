@@ -230,6 +230,8 @@ return array(
                 => 'Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController',
             'LicenceProcessingPublicationsController'
                 => 'Olcs\Controller\Licence\Processing\LicenceProcessingPublicationsController',
+            'ApplicationProcessingPublicationsController'
+                => Olcs\Controller\Application\Processing\ApplicationProcessingPublicationsController::class,
             'LicenceProcessingTasksController' => 'Olcs\Controller\Licence\Processing\LicenceProcessingTasksController',
             LicenceProcessingNoteController::class => LicenceProcessingNoteController::class,
             'LicenceProcessingInspectionRequestController'
