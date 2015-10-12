@@ -70,7 +70,7 @@ class SubmissionController extends AbstractInternalController implements CaseCon
     protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = ItemDto::class;
     // 'id' => 'complaint', to => from
-    protected $itemParams = ['id' => 'submission'];
+    protected $itemParams = ['id' => 'submission', 'section' => 'section', 'case' => 'case'];
 
     /**
      * Variables for controlling edit view rendering
@@ -274,6 +274,17 @@ class SubmissionController extends AbstractInternalController implements CaseCon
 
         $paramProvider->setParams($this->plugin('params'));
         $params = $paramProvider->provideParameters();
+
+        // if we have the section in the route, redirect using anchor (fragment).
+        // This action does not need the section and redirecting fulfills OLCS-8693
+        if (isset($params['section'])) {
+            return $this->redirect()->toRoute(
+                'submission',
+                ['section' => null],
+                ['code' => 303, 'fragment' => $params['section']],
+                true
+            );
+        }
 
         $query = ItemDto::create($params);
 
