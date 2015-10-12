@@ -7,8 +7,8 @@
         <a href="<?php echo $this->url('operator', ['organisation' => $licence['organisation']['id']], [], true);?>">
             <?php echo $this->escapeHtml($licence['organisation']['name']); ?>
         </a>
-        <?php echo $this->escapeHtml($licence['licNo']); ?><br />
-        <?php echo $this->escapeHtml($licence['status']['description']); ?>
+        <?php echo $this->escapeHtml($licence['licNo']); ?>
+        <?php echo $this->licenceStatus($licence['status']['id']); ?>
     </p>
 </div>
 
