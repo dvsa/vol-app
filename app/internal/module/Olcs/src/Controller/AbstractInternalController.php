@@ -718,8 +718,14 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     public function redirectConfig(array $restResponse)
     {
+
         $action = $this->params()->fromRoute('action', null);
         $action = strtolower($action);
+
+        // intercept cancelled forms to allow alternative redirect config
+        if ($this->hasCancelledForm() && isset($this->redirectConfig['cancel'])) {
+            $action = 'cancel';
+        }
 
         if (!isset($this->redirectConfig[$action])) {
             return[];
@@ -849,6 +855,24 @@ abstract class AbstractInternalController extends AbstractActionController
         $globalScripts = array_filter($this->inlineScripts, $callback);
 
         return array_merge($scripts, $globalScripts);
+    }
+
+    /**
+     * Intercepts form posts that have been cancelled in order to set the action to cancelled and override the redirect.
+     *
+     * @return bool true if cancelled
+     */
+    private function hasCancelledForm()
+    {
+        $request = $this->getRequest();
+
+        if (!$request->isPost()) {
+            return false;
+        }
+
+        $postData = (array)$request->getPost();
+
+        return isset($postData['form-actions']['cancel']);
     }
 
     /**
