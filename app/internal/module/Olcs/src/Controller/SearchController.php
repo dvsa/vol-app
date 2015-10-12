@@ -34,10 +34,6 @@ class SearchController extends AbstractController implements LeftViewProvider
     {
         $sd = $this->ElasticSearch()->getSearchData();
 
-        if ($this->params()->fromRoute('index', null) != $this->params()->fromPost('index', null)) {
-            if (isset($sd['page'])) unset($sd['page']);
-        }
-
         /**
          * Remove the "index" key from the incoming parameters.
          */
