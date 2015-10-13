@@ -9,7 +9,15 @@
             <li>
                 <a href="<?php echo $this->url('lva-' . $lva . '/review', [], [], true); ?>" target="_blank" class="page-header__action"><?php echo $this->translate('view-full-application') ?></a>
             </li>
-            <li><a href="#Coming-soon" class="page-header__action">Cancel application</a></li>
+            <?php if ($canWithdraw): ?>
+              <li>
+                  <a
+                      href="<?php echo $this->url('lva-' . $lva . '/withdraw', [], [], true); ?>"
+                      class="page-header__action js-modal-ajax">
+                      <?php echo $this->translate('application.withdraw'); ?>
+                  </a>
+              </li>
+            <?php endif; ?>
         </ul>
     </div><!-- .page-header__wrapper -->
 </div><!-- .page-header -->

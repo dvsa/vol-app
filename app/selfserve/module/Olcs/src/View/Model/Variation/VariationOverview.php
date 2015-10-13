@@ -8,6 +8,7 @@
 namespace Olcs\View\Model\Variation;
 
 use Olcs\View\Model\LvaOverview;
+use Common\RefData;
 
 /**
  * Variation Overview View Model
@@ -39,6 +40,7 @@ class VariationOverview extends LvaOverview
         $this->setVariable('receivedDate', $data['receivedDate']);
         $this->setVariable('completionDate', $data['targetCompletionDate']);
         $this->setVariable('submissionForm', $submissionForm);
+        $this->setVariable('canCancel', $data['status']['id'] === RefData::APPLICATION_STATUS_NOT_SUBMITTED);
 
         parent::__construct($data, $sections);
     }

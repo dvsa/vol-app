@@ -11,12 +11,15 @@ namespace Olcs\Controller\Lva;
 use Common\Controller\Lva\AbstractController;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
+use Dvsa\Olcs\Transfer\Command\Application\CancelApplication as CancelApplicationCmd;
+use Dvsa\Olcs\Transfer\Command\Application\WithdrawApplication as WithdrawApplicationCmd;
 
 /**
  * Abstract External Overview Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 abstract class AbstractOverviewController extends AbstractController
 {
@@ -55,6 +58,66 @@ abstract class AbstractOverviewController extends AbstractController
 
         return $this->getOverviewView($data, $sections, $form);
 
+    }
+
+    public function cancelAction()
+    {
+        if ($this->getRequest()->isPost() && $this->isButtonPressed('submit')) {
+            $dto = CancelApplicationCmd::create(['id' => $this->params()->fromRoute('application')]);
+            $response = $this->handleCommand($dto);
+
+            if (!$response->isOk()) {
+                $this->addErrorMessage('unknown-error');
+                return $this->redirect()->toRouteAjax('lva-' . $this->lva, [], [], true);
+            }
+
+            $this->addSuccessMessage('external.cancel_application.confirm.cancel_message');
+            return $this->redirect()->toRouteAjax('dashboard', [], [], true);
+        }
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createForm('GenericConfirmation');
+        $form->get('form-actions')->get('submit')->setLabel('external.cancel_application.confirm.confirm_button');
+        $form->get('form-actions')->get('cancel')->setLabel('external.cancel_application.confirm.back_button');
+        $form->get('messages')->get('message')->setValue('external.cancel_application.confirm.message');
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
+        return $this->render('cancel_appliction_confirmation', $form);
+    }
+
+    public function withdrawAction()
+    {
+        if ($this->getRequest()->isPost() && $this->isButtonPressed('submit')) {
+            $dto = WithdrawApplicationCmd::create(
+                [
+                    'id' => $this->params()->fromRoute('application'),
+                    'reason' => RefData::APPLICATION_WITHDRAW_REASON_WITHDRAWN
+                ]
+            );
+            $response = $this->handleCommand($dto);
+
+            if (!$response->isOk()) {
+                $this->addErrorMessage('unknown-error');
+                return $this->redirect()->toRouteAjax('lva-' . $this->lva, [], [], true);
+            }
+
+            $this->addSuccessMessage('external.withdraw_application.confirm.cancel_message');
+            return $this->redirect()->toRouteAjax('dashboard', [], [], true);
+        }
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createForm('GenericConfirmation');
+        $form->get('form-actions')->get('submit')->setLabel('external.withdraw_application.confirm.confirm_button');
+        $form->get('form-actions')->get('cancel')->setLabel('external.withdraw_application.confirm.back_button');
+        $form->get('messages')->get('message')->setValue('external.withdraw_application.confirm.message');
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
+        return $this->render('withdraw_application_confirmation', $form);
+    }
+
+    protected function checkForRedirect($lvaId)
+    {
+        if ($this->isButtonPressed('cancel') &&
+            ($this->params('action') === 'cancel' || $this->params('action') === 'withdraw')) {
+            return $this->redirect()->toRoute('lva-' . $this->lva, [], [], true);
+        }
+        return parent::checkForRedirect($lvaId);
     }
 
     protected function getOverviewData($applicationId)
