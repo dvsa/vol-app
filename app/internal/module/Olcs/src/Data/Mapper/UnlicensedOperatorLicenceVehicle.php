@@ -37,7 +37,6 @@ class UnlicensedOperatorLicenceVehicle implements MapperInterface
                 [
                     'vrm' => self::getFromDataIfSet($data['vehicle'], 'vrm'),
                     'platedWeight' => self::getFromDataIfSet($data['vehicle'], 'platedWeight'),
-                    'psvType' => self::getFromDataIfSet($data['vehicle']['psvType'], 'id'),
                 ]
             );
         }
