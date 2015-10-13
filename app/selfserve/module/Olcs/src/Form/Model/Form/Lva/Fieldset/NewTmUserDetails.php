@@ -119,7 +119,7 @@ class NewTmUserDetails
     /**
      * @Form\Attributes({
      *     "value": "markup-lva-tm-add-user-without-email-guidance",
-     *     "data-container-class": "tm-guidance-no-email js-visible"
+     *     "data-container-class": "tm-guidance-no-email"
      * })
      * @Form\Type("\Common\Form\Elements\Types\GuidanceTranslated")
      */
