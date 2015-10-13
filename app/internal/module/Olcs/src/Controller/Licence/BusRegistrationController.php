@@ -58,28 +58,6 @@ class BusRegistrationController extends AbstractInternalController implements
         'indexAction' => ['forms/filter', 'table-actions']
     );
 
-    /**
-     * @var array
-     */
-    protected $redirectConfig = [
-        'add' => [
-            'route' => 'submission',
-            'action' => 'details',
-            'reUseParams' => true,
-            'resultIdMap' => [
-                'section' => 'submissionSection'
-            ]
-        ],
-        'edit' => [
-            'route' => 'submission',
-            'action' => 'details',
-            'reUseParams' => true,
-            'resultIdMap' => [
-                'section' => 'submissionSection'
-            ]
-        ]
-    ];
-
     public function getLeftView()
     {
         $view = new ViewModel();
