@@ -3,6 +3,7 @@
 use Olcs\Controller\IndexController;
 use Olcs\Controller\Search\SearchController;
 use Olcs\Controller\MyDetailsController;
+use Olcs\Controller\UserRegistrationController;
 
 use Olcs\Form\Element\SearchFilterFieldsetFactory;
 use Olcs\Form\Element\SearchFilterFieldset;
@@ -169,7 +170,7 @@ $routes = array(
                 'action' => 'index',
                 'page' => 1,
                 'limit' => 25,
-                'sort' => 'submittedDate',
+                'sort' => 'createdOn',
                 'order' => 'DESC'
             ),
             'constraints' => [
@@ -287,10 +288,24 @@ $routes = array(
             )
         )
     ),
-    'user' => array(
+    'user-registration' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/register',
+            'defaults' => array(
+                'controller' => UserRegistrationController::class,
+                'action' => 'add'
+            )
+        )
+    ),
+    'manage-user' => array(
         'type' => 'segment',
         'options' => array(
             'route' => '/manage-user[/:action][/:id]',
+            'constraints' => array(
+                'action' => '(index|add|edit|delete)',
+                'id' => '[0-9]+',
+            ),
             'defaults' => array(
                 'controller' => 'User',
                 'action' => 'index'
@@ -758,6 +773,7 @@ return array(
             'Correspondence' => 'Olcs\Controller\CorrespondenceController',
             'User' => 'Olcs\Controller\UserController',
             IndexController::class => IndexController::class,
+            UserRegistrationController::class => UserRegistrationController::class,
             MyDetailsController::class => MyDetailsController::class,
             SearchController::class => SearchController::class,
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
@@ -862,7 +878,7 @@ return array(
                     array(
                         'id' => 'manage-users',
                         'label' => 'Manage Users',
-                        'route' => 'user',
+                        'route' => 'manage-user',
                         'action' => 'index',
                         'use_route_match' => true,
                         'class' => 'proposition-nav__item',
@@ -939,7 +955,7 @@ return array(
                 'dashboard' => ['selfserve-nav-dashboard'],
 
                 // Manage Users Page
-                'user' => ['can-manage-user-selfserve'],
+                'manage-user' => ['can-manage-user-selfserve'],
 
                 // Search and who can access them
                 'search-operating-centre' => [
@@ -955,7 +971,7 @@ return array(
                 // Bus reg stuff and who can access
                 'ebsr' => ['selfserve-ebsr'],
                 'bus-registration' => [
-                    'selfserve-landing-page-bus-registration'
+                    'selfserve-ebsr'
                 ],
 
                 // Selfserve search
@@ -970,6 +986,7 @@ return array(
                 'zfcuser/logout' => ['*'],
                 'search*' => ['*'],
                 'index' => ['*'],
+                'user-registration' => ['*'],
                 '*' => ['selfserve-user'],
             ]
         ]

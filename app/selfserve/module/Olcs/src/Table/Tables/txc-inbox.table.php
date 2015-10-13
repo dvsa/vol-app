@@ -5,6 +5,16 @@ return array(
         'title' => 'Registration history'
     ),
     'settings' => array(
+        'crud' => array(
+            'formName' => 'txc-inbox',
+            'actions' => array(
+                'mark-as-read' => array(
+                    'value' => 'Mark as read',
+                    'class' => 'secondary',
+                    'requireRows' => true
+                )
+            )
+        ),
         'paginate' => array(
             'limit' => array(
                 'default' => 25,

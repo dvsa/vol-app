@@ -4,25 +4,18 @@ namespace Olcs\Controller\Ebsr;
 
 use Common\Controller\AbstractActionController;
 use Common\Exception\ResourceNotFoundException;
+use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList as ListDto;
+use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxByBusReg as ItemDto;
+use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\UpdateTxcInbox as UpdateTxcInboxDto;
+use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegVariationHistoryDto;
+use Common\Controller\Lva\AbstractController;
+use Zend\View\Model\ViewModel;
 
 /**
- * Class BusRegVariationController
+ * Class BusRegistrationController
  */
-class BusRegistrationController extends AbstractActionController
+class BusRegistrationController extends AbstractController
 {
-
-    protected $txcBundle = [
-        'children' => [
-            'pdfDocument' => [
-                'criteria' => [
-                    'subCategory' => 108,
-                ]
-            ],
-            'routeDocument',
-            'zipDocument',
-            'busReg'
-        ]
-    ];
 
     /**
      * Lists all EBSR's with filter search form
@@ -31,8 +24,16 @@ class BusRegistrationController extends AbstractActionController
      */
     public function indexAction()
     {
-        /** @var \Common\Service\Table\TableBuilder $tableBuilder */
-        $tableBuilder = $this->getServiceLocator()->get('Table');
+        if ($this->getRequest()->isPost()) {
+            $request = $this->getRequest();
+
+            $postData = $request->getPost();
+
+            if (isset($postData['action']) && isset($postData['table']) && $postData['table'] == 'txc-inbox') {
+                return $this->processMarkAsRead($postData);
+            }
+            return $this->processSearch($postData);
+        }
 
         $params = [];
         $params['ebsrSubmissionType'] = $this->params()->fromRoute('subType');
@@ -41,39 +42,46 @@ class BusRegistrationController extends AbstractActionController
         $params['order'] = $this->params()->fromRoute('order');
         $params['page'] = $this->params()->fromRoute('page');
         $params['limit'] = $this->params()->fromRoute('limit');
-        $params['url'] = $this->plugin('url');
 
-        $filterForm = $this->generateFormWithData(
-            'BusRegFilterForm',
-            'processSearch',
-            [
-                'fields' => [
-                    'subType' => $params['ebsrSubmissionType'],
-                    'status' => $params['ebsrSubmissionStatus']
-                ]
-            ]
-        );
+        $query = ListDto::create($params);
 
-        $ebsrSubmissionDataService = $this->getEbsrSubmissionDataService();
+        $response = $this->handleQuery($query);
 
-        $busRegistrationList = $ebsrSubmissionDataService->fetchList($params);
-        $resultsTotal = $ebsrSubmissionDataService->getCount('list');
+        // handle response
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
 
-        $busRegistrationTable = $tableBuilder->buildTable(
-            'bus-registrations',
-            ['Results' => $busRegistrationList, 'Count' => $resultsTotal],
-            $params,
-            false
-        );
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
 
-        $content = $this->getView(
-            [
-                'busRegistrationTable' => $busRegistrationTable,
-            ]
-        );
-        $content->setTemplate('olcs/bus-registration/index');
+        $busRegistrationTable = '';
+        if ($response->isOk()) {
+            $result = $response->getResult();
 
-        $layout = $this->getView(
+
+            /** @var \Common\Service\Table\TableBuilder $tableBuilder */
+            $tableBuilder = $this->getServiceLocator()->get('Table');
+
+            $busRegistrationTable = $tableBuilder->buildTable(
+                'txc-inbox',
+                ['Results' => $result['results'], 'Count' => $result['count']],
+                $params,
+                false
+            );
+
+            // set disabled so non-LA's dont get a pointless 'mark as read' button
+            $userData = $this->currentUser()->getUserData();
+            if (empty($userData['localAuthorityId'])) {
+                $busRegistrationTable->setDisabled(true);
+            }
+        }
+
+        $filterForm = $this->getFilterForm($params);
+
+        // setup layout and view
+        $layout = $this->generateLayout(
             [
                 'pageTitle' => 'bus-registrations-index-title',
                 'pageHeaderText'=> 'bus-registrations-index-subtitle',
@@ -87,17 +95,59 @@ class BusRegistrationController extends AbstractActionController
                 ]
             ]
         );
-        $layout->setTemplate('layouts/search');
+
+        $content = $this->generateContent(
+            'olcs/bus-registration/index',
+            [
+                'busRegistrationTable' => $busRegistrationTable,
+            ]
+        );
+
         $layout->addChild($content, 'content');
 
         return $layout;
     }
 
     /**
+     * Process those marked in table as read
+     *
+     * @param $data
+     * @return array
+     */
+    public function processMarkAsRead($data)
+    {
+        $command = UpdateTxcInboxDto::create(
+            [
+                'ids' => $data['id'],
+            ]
+        );
+
+        $response = $this->handleCommand($command);
+
+        // handle response
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+
+            $params['subType'] = $this->params()->fromRoute('subType');
+            $params['status'] = $this->params()->fromRoute('status');
+
+            return $this->redirect()->toRoute(null, $params, [], false);
+        }
+    }
+
+    /**
      * Process the search, simply sets up the GET params and redirects
+     *
      * @param $data
      */
-    protected function processSearch($data)
+    private function processSearch($data)
     {
         $params = [];
         if (!empty($data['fields']['subType'])) {
@@ -106,170 +156,152 @@ class BusRegistrationController extends AbstractActionController
         if (!empty($data['fields']['status'])) {
             $params['status'] = $data['fields']['status'];
         }
-        $this->setCaughtResponse(
-            $this->redirectToRoute(
-                null,
-                $params,
-                [],
-                false
-            )
-        );
+
+        return $this->redirect()->toRoute(null, $params, [], false);
     }
 
     /**
      * Bus registration details page
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return array|ViewModel
+     * @throws ResourceNotFoundException
      */
     public function detailsAction()
     {
         $id = $this->params()->fromRoute('busRegId');
 
-        $busRegDataService = $this->getBusRegDataService();
+        $query = ItemDto::create(['busReg' => $id]);
 
-        $registrationDetails = $busRegDataService->fetchDetail($id);
+        $response = $this->handleQuery($query);
 
-        if (empty($registrationDetails)) {
-            throw new ResourceNotFoundException('Bus registration could not be found');
+        // handle response
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
         }
 
-        // call method to check permission to view docs
-        $registrationDetails['documents'] = $this->getDocuments($registrationDetails);
-        $latestPublication = $this->getLatestPublicationByType(
-            $registrationDetails['licence'],
-            'N&P'
-        );
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
 
-        $registrationDetails['npRreferenceNo'] = $latestPublication['publicationNo'];
+        if ($response->isOk()) {
+            $results = $response->getResult();
+        }
 
-        return $this->getView(
+        // setup layout and view
+        $content = $this->generateContent(
+            'olcs/bus-registration/details',
             [
-                'registrationDetails' => $registrationDetails,
-                'variationHistoryTable' => $this->fetchVariationHistoryTable($registrationDetails)
+                'registrationDetails' => $results['busReg'],
+                'documents' =>  [
+                    $results['pdfDocument'],
+                    $results['routeDocument'],
+                    $results['zipDocument'],
+                ],
+                'variationHistoryTable' => $this->fetchVariationHistoryTable($results['busReg']['id'])
             ]
         );
+
+        return $content;
     }
 
     /**
      * Method to generate the Variation History table
      *
-     * @param $registrationDetails
-     * @return string
+     * @param $busRegId
+     * @return array|string
      */
-    private function fetchVariationHistoryTable($registrationDetails)
+    private function fetchVariationHistoryTable($busRegId)
     {
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
         $tableBuilder = $this->getServiceLocator()->get('Table');
 
-        $busRegDataService = $this->getBusRegDataService();
-
-        $variationHistory = $busRegDataService->fetchVariationHistory($registrationDetails['regNo']);
-
-        $table = $tableBuilder->buildTable(
-            'bus-reg-variation-history',
-            $variationHistory,
-            ['url' => $this->plugin('url')],
-            false
+        $query = BusRegVariationHistoryDto::create(
+            [
+                'id' => $busRegId,
+                'page' => 1,
+                'limit' => 50,
+                'sort' => 'variationNo',
+                'order' => 'DESC'
+            ]
         );
 
-        return $table;
-    }
+        $response = $this->handleQuery($query);
 
-    /**
-     * Function to get documents from registrationDetails data
-     * Based on permission 'selfserve-ebsr-documents' being granted
-     *
-     * @param $registrationDetails
-     * @return null
-     */
-    private function getDocuments($registrationDetails)
-    {
-        $documents = [];
-
-        $authService = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
-        if ($authService->isGranted('selfserve-ebsr-documents')) {
-
-            $userDetails = $this->getUserDetails();
-
-            $txcInboxEntityService = $this->getTxcInboxEntityService();
-            $documents =  $txcInboxEntityService->fetchBusRegDocuments(
-                $registrationDetails['id'],
-                $userDetails['localAuthority']
-            );
-
+        // handle response
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
         }
-        return $documents;
-    }
 
-    /**
-     * Returns the current logged in user details array
-     * @return array
-     */
-    private function getUserDetails()
-    {
-        return $this->getServiceLocator()->get('Entity\User')->getUserDetails(
-            $this->getLoggedInUser()
-        );
-    }
-
-    /**
-     * Returns the latest publication by type from a licence
-     *
-     * @param $licence
-     * @param $type string
-     * @return array|null
-     */
-    private function getLatestPublicationByType($licence, $type)
-    {
-        if (isset($licence['publicationLinks'][0]['publication'])) {
-            usort(
-                $licence['publicationLinks'],
-                function ($a, $b) {
-                    return strtotime($b['publication']['pubDate']) - strtotime($a['publication']['pubDate']);
-                }
-            );
-            foreach ($licence['publicationLinks'] as $publicationLink) {
-                if ($publicationLink['publication']['pubType'] == $type) {
-                    return $publicationLink['publication'];
-                }
-            }
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
+
+        if ($response->isOk()) {
+            $result = $response->getResult();
+
+            return $tableBuilder->buildTable(
+                'bus-reg-variation-history',
+                $result,
+                ['url' => $this->plugin('url')],
+                false
+            );
+        }
+
         return null;
     }
 
     /**
-     * @return \Common\Service\Entity\TxcInboxEntityService
+     * Set up the layout with title, subtitle and content
+     *
+     * @param null $title
+     * @param null $subtitle
+     * @return \Zend\View\Model\ViewModel
      */
-    public function getTxcInboxEntityService()
+    private function generateLayout($data = [])
     {
-        $entityService = $this->getServiceLocator()
-            ->get('Entity\TxcInbox');
+        $layout = new \Zend\View\Model\ViewModel(
+            $data
+        );
 
-        return $entityService;
+        $layout->setTemplate('layouts/search');
+
+        return $layout;
     }
 
     /**
-     * @return \Common\Service\Data\BusReg
+     * Generate page content
+     *
+     * @param $template
+     * @param array $data
+     * @return ViewModel
      */
-    public function getBusRegDataService()
+    private function generateContent($template, $data = [])
     {
-        /** @var \Generic\Service\Data\BusReg $dataService */
-        $dataService = $this->getServiceLocator()
-            ->get('DataServiceManager')
-            ->get('Common\Service\Data\BusReg');
-        return $dataService;
+        $content = new ViewModel($data);
+
+        $content->setTemplate($template);
+        return $content;
     }
 
     /**
-     * @return \Generic\Service\Data\EbsrSubmission
+     * Get and setup the filter form
+     *
+     * @param $params
+     * @return mixed
      */
-    public function getEbsrSubmissionDataService()
+    public function getFilterForm($params)
     {
-        /** @var \Generic\Service\Data\EbsrSubmission $dataService */
-        $dataService = $this->getServiceLocator()
-            ->get('DataServiceManager')
-            ->get('Generic\Service\Data\EbsrSubmission');
+        $filterForm = $this->getServiceLocator()->get('Helper\Form')
+            ->createForm('BusRegFilterForm');
+        $filterForm->setData(
+            [
+                'fields' => [
+                    'subType' => $params['ebsrSubmissionType'],
+                    'status' => $params['ebsrSubmissionStatus']
+                ]
+            ]
+        );
 
-        return $dataService;
+        return $filterForm;
     }
 }

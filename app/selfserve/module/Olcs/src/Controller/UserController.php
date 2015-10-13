@@ -272,6 +272,6 @@ class UserController extends AbstractController
      */
     private function redirectToIndex()
     {
-        return $this->redirect()->toRouteAjax('user', ['action' => 'index'], array(), false);
+        return $this->redirect()->toRouteAjax('manage-user', ['action' => 'index'], array(), false);
     }
 }
