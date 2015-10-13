@@ -15,7 +15,15 @@
     <h1><?php echo $this->translate('application.overview.title'); ?></h1>
   </div><!-- end .page-header__wrapper -->
   <ul class="page-header__actions">
-    <li><a href="" class="page-header__action"><?php echo $this->translate('application.cancel'); ?></a></li>
+    <?php if ($canCancel): ?>
+      <li>
+        <a
+          href="<?php echo $this->url('lva-variation/cancel', [], [], true); ?>"
+          class="page-header__action js-modal-ajax">
+          <?php echo $this->translate('application.cancel'); ?>
+        </a>
+      </li>
+    <?php endif; ?>
   </ul>
 </div>
 <div class="two-thirds border">

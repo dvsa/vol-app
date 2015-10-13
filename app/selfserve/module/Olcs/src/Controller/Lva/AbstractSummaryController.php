@@ -71,7 +71,8 @@ abstract class AbstractSummaryController extends AbstractController
                 $data['goodsOrPsv']['id'],
                 $data['licenceType']['id']
             ),
-            'actions' => []
+            'actions' => [],
+            'canWithdraw' => ($data['status']['id'] === RefData::APPLICATION_STATUS_UNDER_CONSIDERATION)
         ];
 
         if (!empty($data['transportManagers'])) {

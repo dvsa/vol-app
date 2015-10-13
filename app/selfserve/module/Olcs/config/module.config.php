@@ -379,7 +379,27 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
 
                 )
             )
-        )
+        ),
+        'cancel' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'cancel[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication',
+                    'action' => 'cancel'
+                )
+            )
+        ),
+        'withdraw' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'withdraw[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication',
+                    'action' => 'withdraw'
+                )
+            )
+        ),
     )
 );
 
@@ -437,6 +457,26 @@ $configRoutes['lva-variation']['child_routes'] = array_merge(
                     'controller' => 'LvaVariation/PaymentSubmission',
                     'action' => 'payment-result',
 
+                )
+            )
+        ),
+        'cancel' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'cancel[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation',
+                    'action' => 'cancel'
+                )
+            )
+        ),
+        'withdraw' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'withdraw[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation',
+                    'action' => 'withdraw'
                 )
             )
         ),

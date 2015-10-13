@@ -57,6 +57,9 @@ class SummaryControllerTest extends MockeryTestCase
                 'id' => $licenceCategory,
             ],
             'transportManagers' => $tmResults,
+            'status' => [
+                'id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
+            ]
         ];
 
         // Mocks
@@ -84,6 +87,7 @@ class SummaryControllerTest extends MockeryTestCase
         $this->assertEquals(3, $params['application']);
         $this->assertEquals($expectedWarningText, $params['warningText']);
         $this->assertEquals($expectedActions, $params['actions']);
+        $this->assertEquals(true, $params['canWithdraw']);
     }
 
     /**
@@ -113,7 +117,8 @@ class SummaryControllerTest extends MockeryTestCase
             ],
             'transportManagers' => $tmResults,
             'status' => [
-                'description' => 'some status'
+                'description' => 'some status',
+                'id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
             ],
             'receivedDate' => '2014-01-01',
             'targetCompletionDate' => '2014-02-01',
@@ -149,6 +154,7 @@ class SummaryControllerTest extends MockeryTestCase
         $this->assertEquals('some status', $params['status']);
         $this->assertEquals('01 January 2014', $params['submittedDate']);
         $this->assertEquals('01 February 2014', $params['targetCompletionDate']);
+        $this->assertEquals(true, $params['canWithdraw']);
     }
 
     public function indexActionProvider()
