@@ -40,7 +40,9 @@ class FeesController extends AbstractController
             return $response;
         }
 
-        $fees = $this->getOutstandingFeesForOrganisation($this->getCurrentOrganisationId());
+        $organisationId = $this->getCurrentOrganisationId();
+
+        $fees = $this->getOutstandingFeesForOrganisation($organisationId);
 
         $table = $this->getServiceLocator()->get('Table')
             ->buildTable('fees', $fees, [], false);
@@ -49,7 +51,7 @@ class FeesController extends AbstractController
         $view->setTemplate('pages/fees/home');
 
         // populate the navigation tabs with correct counts
-        $this->populateTabCounts(count($fees), $this->getCorrespondenceCount());
+        $this->populateTabCounts(count($fees), $this->getCorrespondenceCount($organisationId));
 
         $this->getServiceLocator()->get('Script')->loadFile('dashboard-fees');
 
@@ -146,11 +148,23 @@ class FeesController extends AbstractController
         return $view;
     }
 
-    protected function getOutstandingFeesForOrganisation($organisationId)
+    protected function getOutstandingFeeDataForOrganisation($organisationId)
     {
         $query = OutstandingFees::create(['id' => $organisationId, 'hideExpired' => true]);
         $response = $this->handleQuery($query);
-        return $response->getResult()['outstandingFees'];
+        return $response->getResult();
+    }
+
+    protected function getOutstandingFeesForOrganisation($organisationId)
+    {
+        $result = $this->getOutstandingFeeDataForOrganisation($organisationId);
+        return $result['outstandingFees'];
+    }
+
+    protected function getCorrespondenceCount($organisationId)
+    {
+        $data = $this->getOutstandingFeeDataForOrganisation($organisationId);
+        return $data['correspondenceCount'];
     }
 
     /**

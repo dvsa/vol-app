@@ -20,10 +20,10 @@ trait DashboardNavigationTrait
     /**
      * Populate tab counts
      *
-     * @param int $feeCount optionally pass in the fee count to save calculating it twice
-     * @param int $feeCount optionally pass in the correspondence count to save calculating it twice
+     * @param int $feeCount
+     * @param int $correspondenceCount
      */
-    protected function populateTabCounts($feeCount = null, $correspondenceCount = null)
+    protected function populateTabCounts($feeCount, $correspondenceCount)
     {
         $nav = $this->getServiceLocator()->get('navigation');
 
@@ -42,43 +42,5 @@ trait DashboardNavigationTrait
         $navItem->set('count', $correspondenceCount);
 
         return $this;
-    }
-
-    /**
-     * Get count of outstanding fees to display in nav tab
-     */
-    protected function getFeeCount()
-    {
-        $organisationId = $this->getCurrentOrganisationId();
-        $query = OutstandingFees::create(['id' => $organisationId, 'hideExpired' => true]);
-        $response = $this->handleQuery($query);
-
-        if ($response->isOk()) {
-            return count($response->getResult()['outstandingFees']);
-        }
-    }
-
-    /**
-     * Get count of unread correspondence inbox messages to display in nav tab
-     *
-     * @return int
-     */
-    protected function getCorrespondenceCount()
-    {
-        $organisationId = $this->getCurrentOrganisationId();
-        $query = Correspondences::create(['organisation' => $organisationId]);
-        $response = $this->handleQuery($query);
-
-        if ($response->isOk()) {
-            $correspondence = $response->getResult();
-            $count = 0;
-            array_walk(
-                $correspondence['results'],
-                function ($record) use (&$count) {
-                    $count = ($record['accessed'] === 'N' ? $count + 1 : $count);
-                }
-            );
-            return $count;
-        }
     }
 }
