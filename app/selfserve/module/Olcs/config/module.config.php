@@ -351,6 +351,16 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'declaration' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'declaration[/]',
+                'defaults' => array(
+                    'controller' => 'DeclarationFormController',
+                    'action' => 'index'
+                )
+            )
+        ),
         'payment' => array(
             'type' => 'segment',
             'options' => array(
@@ -766,6 +776,7 @@ return array(
             'LvaVariation/Review'                   => \Common\Controller\Lva\ReviewController::class,
         ),
         'invokables' => array(
+            'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
             'Olcs\Ebsr\BusRegistration' => 'Olcs\Controller\Ebsr\BusRegistrationController',
             'Dashboard' => 'Olcs\Controller\DashboardController',
