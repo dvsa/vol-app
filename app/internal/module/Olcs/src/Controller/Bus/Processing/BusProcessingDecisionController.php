@@ -23,6 +23,7 @@ use Olcs\Form\Model\Form\BusRegVariationReason as VariationReasonForm;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Common\RefData;
 use Zend\View\Model\ViewModel;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
 /**
  * Bus Processing Decision Controller
@@ -62,6 +63,15 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
         'withdraw' => [
             'action' => 'details'
         ],
+        'reset' => [
+            'action' => 'details'
+        ],
+        'republish' => [
+            'action' => 'details'
+        ],
+        'index' => [
+            'action' => 'details'
+        ]
     ];
 
     public function getLeftView()
@@ -74,7 +84,7 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
 
     public function indexAction()
     {
-        return $this->redirectToDetails();
+        return $this->redirectTo([]);
     }
 
     public function addAction()
@@ -117,25 +127,22 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
                 // not grantable
                 $this->getServiceLocator()->get('Helper\FlashMessenger')
                     ->addErrorMessage('The record is not grantable');
-                return $this->redirectToDetails();
+                return $this->redirectTo([]);
             }
 
             if ($busReg['status']['id'] === RefData::BUSREG_STATUS_VARIATION) {
                 // variation reason needed
                 return $this->processGrantVariation();
             } else {
-                // grant
-                return $this->process(
-                    GrantDto::class,
-                    $this->getDefaultData()
-                );
+                //grant
+                return $this->processCommand(new GenericItem($this->itemParams), GrantDto::class);
             }
         } else {
             // can't get the record
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
-        return $this->redirectToDetails();
+        return $this->redirectTo([]);
     }
 
     public function refuseAction()
@@ -166,18 +173,12 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
 
     public function republishAction()
     {
-        return $this->process(
-            PublishDto::class,
-            $this->getDefaultData()
-        );
+        return $this->processCommand(new GenericItem($this->itemParams), PublishDto::class);
     }
 
     public function resetAction()
     {
-        return $this->process(
-            ResetDto::class,
-            $this->getDefaultData()
-        );
+        return $this->processCommand(new GenericItem($this->itemParams), ResetDto::class);
     }
 
     public function withdrawAction()
@@ -208,29 +209,6 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
             'pages/crud-form',
             'Updated record',
             'Grant variation'
-        );
-    }
-
-    private function process($command, $data)
-    {
-        $response = $this->handleCommand($command::create($data));
-
-        if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
-        } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
-
-        return $this->redirectToDetails();
-    }
-
-    private function redirectToDetails()
-    {
-        return $this->redirect()->toRouteAjax(
-            'licence/bus-processing/decisions',
-            ['action' => 'details'],
-            ['code' => '303'],
-            true
         );
     }
 }

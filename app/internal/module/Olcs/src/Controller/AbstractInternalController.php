@@ -20,6 +20,7 @@ use Olcs\Logging\Log\ZendLogPsr3Adapter as Logger;
 use Olcs\View\Builder\BuilderInterface as ViewBuilderInterface;
 use Olcs\Mvc\Controller\Plugin;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Common\Service\Cqrs\Response;
 use Zend\Http\Response as HttpResponse;
 
@@ -35,7 +36,7 @@ use Zend\Http\Response as HttpResponse;
  * @method Plugin\Placeholder placeholder()
  * @method Plugin\Table table()
  * @method Response handleQuery(QueryInterface $query)
- * @method Response handleCommand(QueryInterface $query)
+ * @method Response handleCommand(CommandInterface $query)
  * @method Plugin\Confirm confirm($string)
  */
 abstract class AbstractInternalController extends AbstractActionController
@@ -654,13 +655,77 @@ abstract class AbstractInternalController extends AbstractActionController
     }
 
     /**
+     * Processes a command, and populates flash messages for the user
+     *
+     * @param ParameterProviderInterface $paramProvider
+     * @param $command
+     * @param bool|true $displayApiSuccess
+     * @param bool|true $displayApiErrors
+     * @param string $successMessage
+     * @param string $errorMessage
+     * @return array|mixed
+     */
+    final protected function processCommand(
+        ParameterProviderInterface $paramProvider,
+        $command,
+        $displayApiSuccess = true,
+        $displayApiErrors = true,
+        $successMessage = 'Update successful',
+        $errorMessage = 'unknown-error'
+    ) {
+        $this->getLogger()->debug(__FILE__);
+        $this->getLogger()->debug(__METHOD__);
+
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
+
+        $response = $this->handleCommand($command::create($params));
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($errorMessage);
+        }
+
+        if ($response->isClientError()) {
+            if ($displayApiErrors && isset($result['messages']) && !empty($result['messages'])) {
+                foreach ($result['messages'] as $message) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($message);
+                }
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($errorMessage);
+            }
+        }
+
+        if ($response->isOk()) {
+            if ($displayApiSuccess && isset($result['messages']) && !empty($result['messages'])) {
+                foreach ($result['messages'] as $message) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($message);
+                }
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
+            }
+        }
+
+        return $this->redirectTo($response->getResult());
+    }
+
+    /**
      * @param array $restResponse
      * @return array
      */
     public function redirectConfig(array $restResponse)
     {
+
         $action = $this->params()->fromRoute('action', null);
         $action = strtolower($action);
+
+        // intercept cancelled forms to allow alternative redirect config
+        if ($this->hasCancelledForm() && isset($this->redirectConfig['cancel'])) {
+            $action = 'cancel';
+        }
 
         if (!isset($this->redirectConfig[$action])) {
             return[];
@@ -790,6 +855,24 @@ abstract class AbstractInternalController extends AbstractActionController
         $globalScripts = array_filter($this->inlineScripts, $callback);
 
         return array_merge($scripts, $globalScripts);
+    }
+
+    /**
+     * Intercepts form posts that have been cancelled in order to set the action to cancelled and override the redirect.
+     *
+     * @return bool true if cancelled
+     */
+    private function hasCancelledForm()
+    {
+        $request = $this->getRequest();
+
+        if (!$request->isPost()) {
+            return false;
+        }
+
+        $postData = (array)$request->getPost();
+
+        return isset($postData['form-actions']['cancel']);
     }
 
     /**

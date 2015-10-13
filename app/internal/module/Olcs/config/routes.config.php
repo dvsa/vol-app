@@ -2100,7 +2100,7 @@ $routes = [
                 'options' => [
                     'route' => '/can-remove',
                     'defaults' => [
-                        'controller' => 'TMProcessingDecisionController',
+                        'controller' => 'TMController',
                         'action' => 'canRemove'
                     ],
                 ],
@@ -2110,7 +2110,7 @@ $routes = [
                 'options' => [
                     'route' => '/remove',
                     'defaults' => [
-                        'controller' => 'TMProcessingDecisionController',
+                        'controller' => 'TMController',
                         'action' => 'remove'
                     ],
                 ],
@@ -2580,8 +2580,8 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => [
                         'route' => '/publications[/:action][/:id]',
                         'defaults' => [
-                            'controller' => 'ApplicationController',
-                            'action' => 'publications'
+                            'controller' => 'ApplicationProcessingPublicationsController',
+                            'action' => 'index'
                         ]
                     ],
                 ],

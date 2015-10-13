@@ -365,6 +365,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 ];
                 break;
             case 'submission_type_o_mlh_otc':
+            case 'submission_type_o_ni_tru':
                 $sections = [
                     'operating-centres',
                     'conditions-and-undertakings',

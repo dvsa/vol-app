@@ -38,7 +38,10 @@ class User implements MapperInterface
             }
 
             $formData['userType']['userType'] = $data['userType'];
-            $formData['userType']['roles'] = array_column($data['roles'], 'id');
+
+            // get the first role from the list (it should be only one)
+            $formData['userType']['role']
+                = !empty($data['roles']) ? array_shift($data['roles'])['id'] : null;
 
             switch ($data['userType']) {
                 case 'internal':
@@ -88,7 +91,7 @@ class User implements MapperInterface
         $commandData['accountDisabled'] = $data['userLoginSecurity']['accountDisabled'];
 
         $commandData['userType'] = $data['userType']['userType'];
-        $commandData['roles'] = $data['userType']['roles'];
+        $commandData['roles'] = [$data['userType']['role']];
 
         switch ($data['userType']['userType']) {
             case 'internal':

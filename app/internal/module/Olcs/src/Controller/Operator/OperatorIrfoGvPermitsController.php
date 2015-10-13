@@ -18,6 +18,7 @@ use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Data\Mapper\IrfoGvPermit as Mapper;
 use Olcs\Form\Model\Form\IrfoGvPermit as Form;
 use Zend\View\Model\ViewModel;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
 /**
  * Operator Irfo Gv Permits Controller
@@ -110,61 +111,21 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
 
     public function resetAction()
     {
-        return $this->process(
-            ResetDto::class,
-            $this->getDefaultData()
-        );
+        return $this->processCommand(new GenericItem(['id' => 'id']), ResetDto::class);
     }
 
     public function approveAction()
     {
-        return $this->process(
-            ApproveDto::class,
-            $this->getDefaultData()
-        );
+        return $this->processCommand(new GenericItem(['id' => 'id']), ApproveDto::class);
     }
 
     public function withdrawAction()
     {
-        return $this->process(
-            WithdrawDto::class,
-            $this->getDefaultData()
-        );
+        return $this->processCommand(new GenericItem(['id' => 'id']), WithdrawDto::class);
     }
 
     public function refuseAction()
     {
-        return $this->process(
-            RefuseDto::class,
-            $this->getDefaultData()
-        );
-    }
-
-    private function getDefaultData()
-    {
-        return ['id' => $this->params()->fromRoute('id')];
-    }
-
-    private function process($command, $data)
-    {
-        $response = $this->handleCommand($command::create($data));
-
-        if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
-        } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
-
-        return $this->redirectToIndex();
-    }
-
-    private function redirectToIndex()
-    {
-        return $this->redirect()->toRouteAjax(
-            null,
-            ['action' => 'index', 'id' => null],
-            ['code' => '303'],
-            true
-        );
+        return $this->processCommand(new GenericItem(['id' => 'id']), RefuseDto::class);
     }
 }

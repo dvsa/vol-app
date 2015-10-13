@@ -10,15 +10,19 @@ use Zend\Form\Annotation as Form;
  */
 class SubmissionSendTo extends Base
 {
+
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium js-sub-user",
+     * "required":false})
+     * @Form\Type("DynamicSelect")
      * @Form\Options({
      *     "label": "Send to",
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "service_name": "Olcs\Service\Data\User"
+     *     "service_name": "Olcs\Service\Data\User",
+     *     "disable_inarray_validator": true,
+     *     "help-block": "Please select a user",
+     *     "use_groups":false
      * })
-     * @Form\Type("DynamicSelect")
      */
     public $recipientUser = null;
 

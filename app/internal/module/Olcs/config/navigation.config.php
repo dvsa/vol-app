@@ -889,6 +889,12 @@ $nav = array(
                     'use_route_match' => true,
                     'pages' => array(
                         array(
+                            'id' => 'application_processing_publications',
+                            'label' => 'internal-licence-processing-publications',
+                            'route' => 'lva-application/processing/publications',
+                            'use_route_match' => true,
+                        ),
+                        array(
                             'id' => 'application_processing_inspection_request',
                             'label' => 'internal-application-processing-inspection-request',
                             'route' => 'lva-application/processing/inspection-request',
