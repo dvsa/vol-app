@@ -29,6 +29,11 @@ class BusRegistrationController extends AbstractInternalController implements
      */
     protected $navigationId = 'licence_bus';
 
+    protected $crudConfig = [
+        'add' => ['route' => 'licence/bus/registration', 'requireRows' => false],
+        'edit' => ['route' => 'licence/bus/registration', 'requireRows' => true]
+    ];
+
     /*
      * Variables for controlling table/list rendering
      * tableName and listDto are required,
@@ -52,6 +57,28 @@ class BusRegistrationController extends AbstractInternalController implements
     protected $inlineScripts = array(
         'indexAction' => ['forms/filter', 'table-actions']
     );
+
+    /**
+     * @var array
+     */
+    protected $redirectConfig = [
+        'add' => [
+            'route' => 'submission',
+            'action' => 'details',
+            'reUseParams' => true,
+            'resultIdMap' => [
+                'section' => 'submissionSection'
+            ]
+        ],
+        'edit' => [
+            'route' => 'submission',
+            'action' => 'details',
+            'reUseParams' => true,
+            'resultIdMap' => [
+                'section' => 'submissionSection'
+            ]
+        ]
+    ];
 
     public function getLeftView()
     {
