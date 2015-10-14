@@ -71,11 +71,10 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
             if ($form->isValid()) {
 
                 $action = $operator ? 'edit' : 'add';
-                $this->saveForm($form, $action);
-
+                $response = $this->saveForm($form, $action, 'operator-unlicensed');
                 // we need to process redirect and catch flashMessenger messages if available
-                if ($this->getResponse()->getStatusCode() == 302) {
-                    return $this->getResponse();
+                if ($response !== null) {
+                    return $response;
                 }
             }
         } elseif ($operator) {
@@ -85,10 +84,7 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
             $form->setData($originalData);
         }
 
-        $view = $this->getView(['form' => $form]);
-        $view->setTemplate('pages/form');
-
-        return $this->renderView($view);
+        return $this->renderForm($form);
     }
 
     /**
@@ -98,10 +94,5 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
     protected function getBusinessDetailsData($organisationId)
     {
         return $this->getOrganisation($organisationId);
-    }
-
-    protected function redirectToBusinessDetails($orgId)
-    {
-        return $this->redirectToRoute('operator-unlicensed/business-details', ['organisation' => $orgId]);
     }
 }
