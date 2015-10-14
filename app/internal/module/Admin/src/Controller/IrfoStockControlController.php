@@ -9,19 +9,18 @@ use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPermitStock as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPermitStock as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPermitStockList as ListDto;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\IrfoStockControl as Mapper;
 use Admin\Form\Model\Form\IrfoStockControl as Form;
 use Admin\Form\Model\Form\IrfoStockControlFilter as FilterForm;
 use Common\RefData;
+use Zend\View\Model\ViewModel;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * IRFO Stock Control Controller
  */
-class IrfoStockControlController extends AbstractInternalController implements
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class IrfoStockControlController extends AbstractInternalController implements LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -56,16 +55,6 @@ class IrfoStockControlController extends AbstractInternalController implements
         'returned' => ['requireRows' => true],
     ];
 
-    public function getPageLayout()
-    {
-        return 'layout/admin-printing-section';
-    }
-
-    public function getPageInnerLayout()
-    {
-        return 'layout/wide-layout';
-    }
-
     /**
      * Variables for controlling edit view rendering
      * all these variables are required
@@ -80,6 +69,21 @@ class IrfoStockControlController extends AbstractInternalController implements
      * itemDto (see above) is also required.
      */
     protected $createCommand = CreateDto::class;
+
+    protected $addContentTitle = 'Add IRFO Stock Control';
+
+    public function getLeftView()
+    {
+        $view = new ViewModel(
+            [
+                'navigationId' => 'admin-dashboard/admin-printing',
+                'navigationTitle' => 'Printing'
+            ]
+        );
+        $view->setTemplate('admin/sections/admin/partials/generic-left');
+
+        return $view;
+    }
 
     private function setPageTitle()
     {
@@ -158,35 +162,9 @@ class IrfoStockControlController extends AbstractInternalController implements
 
     protected function update($status)
     {
-        return $this->process(
-            UpdateDto::class,
-            [
-                'ids' => explode(',', $this->params()->fromRoute('id')),
-                'status' => $status
-            ]
-        );
-    }
-
-    private function process($command, $data)
-    {
-        $response = $this->handleCommand($command::create($data));
-
-        if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Updated record');
-        } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
-
-        return $this->redirectToIndex();
-    }
-
-    private function redirectToIndex()
-    {
-        return $this->redirect()->toRouteAjax(
-            null,
-            ['action' => 'index'],
-            ['code' => '303'],
-            false
+        return $this->processCommand(
+            new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id')), 'status' => $status]),
+            UpdateDto::class
         );
     }
 }

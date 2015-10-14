@@ -18,11 +18,9 @@ use Olcs\Controller\Traits as ControllerTraits;
  */
 class CaseController extends OlcsController\CrudAbstract implements OlcsController\Interfaces\CaseControllerInterface
 {
-    use ControllerTraits\CaseControllerTrait;
-    use ControllerTraits\DocumentActionTrait;
-    use ControllerTraits\DocumentSearchTrait;
-    use ControllerTraits\ListDataTrait;
-    use ControllerTraits\CloseActionTrait;
+    use ControllerTraits\CaseControllerTrait,
+        ControllerTraits\ListDataTrait,
+        ControllerTraits\CloseActionTrait;
 
     /**
      * Identifier name
@@ -44,16 +42,6 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
      * @var string
      */
     protected $formName = 'cases';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the service name
@@ -223,55 +211,6 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
     }
 
     /**
-     * Route (prefix) for document action redirects
-     * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return string
-     */
-    protected function getDocumentRoute()
-    {
-        return 'case_licence_docs_attachments';
-    }
-
-    /**
-     * Route params for document action redirects
-     * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return array
-     */
-    protected function getDocumentRouteParams()
-    {
-        return ['case' => $this->getFromRoute('case')];
-    }
-
-    /**
-     * Get view model for document action
-     * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return ViewModel
-     */
-    protected function getDocumentView()
-    {
-        $case = $this->getCase();
-
-        $filters = ['case' => $case['id']];
-        switch ($case['caseType']['id']) {
-            case 'case_t_tm':
-                $filters['transportManager'] = $case['transportManager']['id'];
-                break;
-            default:
-                $filters['licence'] = $case['licence']['id'];
-                break;
-        }
-
-        $filters = $this->mapDocumentFilters($filters);
-
-        $table = $this->getDocumentsTable($filters);
-        $form  = $this->getDocumentForm($filters);
-
-        $this->setPageLayoutInner(null);
-
-        return $this->getView(['table' => $table, 'form'  => $form]);
-    }
-
-    /**
      * Gets licence id from route or backend, caching it in member variable
      */
     protected function getLicenceIdForCase()
@@ -300,41 +239,48 @@ class CaseController extends OlcsController\CrudAbstract implements OlcsControll
      */
     public function alterForm($form)
     {
-        $licence
-            = !empty($this->getCase()['licence']['id']) ?
-                $this->getCase()['licence']['id'] :
-                $this->params()->fromRoute('licence', '');
-        $application
-            = !empty($this->getCase()['application']['id']) ?
-                $this->getCase()['application']['id'] :
-                $this->params()->fromRoute('application', '');
-        $transportManager
-            = !empty($this->getCase()['transportManager']['id']) ?
-                $this->getCase()['transportManager']['id'] :
-                $this->params()->fromRoute('transportManager', '');
+        $case = $this->getCase();
+
+        if (!empty($case['licence']['id'])) {
+            $licence = $case['licence']['id'];
+        } else {
+            $licence = $this->params()->fromRoute('licence', '');
+        }
+
+        if (!empty($case['application']['id'])) {
+            $application = $case['application']['id'];
+        } else {
+            $application = $this->params()->fromRoute('application', '');
+        }
+
+        if (!empty($case['transportManager']['id'])) {
+            $transportManager = $case['transportManager']['id'];
+        } else {
+            $transportManager = $this->params()->fromRoute('transportManager', '');
+        }
 
         $unwantedOptions = [];
 
         if (!empty($application)) {
+
             $unwantedOptions = ['case_t_tm' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
-            $form->get('fields')
-                ->get('caseType')
-                ->setEmptyOption(null);
+
+            $form->get('fields')->get('caseType')->setEmptyOption(null);
+
         } elseif (!empty($transportManager)) {
+
             $unwantedOptions = ['case_t_imp' => '', 'case_t_app' => '', 'case_t_lic' => ''];
-            $form->get('fields')
-                ->get('caseType')
-                ->setEmptyOption(null);
+
+            $form->get('fields')->get('caseType')->setEmptyOption(null);
+
         } elseif (!empty($licence)) {
+
             $unwantedOptions = ['case_t_tm' => '', 'case_t_app' => ''];
         }
 
-        $options = $form->get('fields')
-        ->get('caseType')
-        ->getValueOptions();
+        $options = $form->get('fields')->get('caseType')->getValueOptions();
 
-        $form->get('fields')
-            ->get('caseType')
+        $form->get('fields')->get('caseType')
             ->setValueOptions(array_diff_key($options, $unwantedOptions));
 
         return $form;

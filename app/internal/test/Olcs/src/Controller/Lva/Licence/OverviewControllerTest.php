@@ -111,7 +111,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->mockRender();
 
         $view = $this->sut->indexAction();
-        $this->assertEquals('pages/licence/overview', $view->getTemplate());
+        $this->assertEquals('sections/licence/pages/overview', $view->getTemplate());
 
         foreach ($viewData as $key => $value) {
             $this->assertEquals($value, $view->getVariable($key), "'$key' not as expected");
@@ -421,7 +421,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->mockRender();
 
         $view = $this->sut->indexAction();
-        $this->assertEquals('pages/licence/overview', $view->getTemplate());
+        $this->assertEquals('sections/licence/pages/overview', $view->getTemplate());
     }
 
     public function testIndexActionPostInvalid()
@@ -487,7 +487,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->mockRender();
 
         $view = $this->sut->indexAction();
-        $this->assertEquals('pages/licence/overview', $view->getTemplate());
+        $this->assertEquals('sections/licence/pages/overview', $view->getTemplate());
     }
 
     protected function mockTcAreaSelect($form)

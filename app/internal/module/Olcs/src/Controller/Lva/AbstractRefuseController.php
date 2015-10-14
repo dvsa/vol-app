@@ -7,7 +7,6 @@
  */
 namespace Olcs\Controller\Lva;
 
-use Olcs\Controller\Lva\AbstractApplicationDecisionController;
 use Dvsa\Olcs\Transfer\Command\Application\RefuseApplication;
 
 /**

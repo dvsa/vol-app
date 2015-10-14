@@ -96,7 +96,9 @@ class NonPiFields extends CaseBase
      * @Form\Options({"label": "Number of witnesses"})
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Validator({"name":"Digits"})
+     * @Form\Filter({"name":"Digits"})
+     * @Form\Validator({"name":"Zend\Validator\Digits"})
+     * @Form\Validator({"name":"Zend\Validator\Between","options":{"min":0,"max":99,"inclusive":true}})
      */
     public $witnessCount;
 

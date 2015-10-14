@@ -11,6 +11,7 @@ namespace Olcs\Controller\Document;
 
 use Dvsa\Olcs\Transfer\Command\Document\CreateDocument;
 use Dvsa\Olcs\Transfer\Command\Document\Upload;
+use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -49,11 +50,11 @@ class DocumentUploadController extends AbstractDocumentController
 
         $view = new ViewModel(['form' => $form]);
 
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
         return $this->renderView($view, 'Upload document');
     }
 
-    public function processUpload($data)
+    public function processUpload($data, Form $form)
     {
         $routeParams = $this->params()->fromRoute();
         $type = $routeParams['type'];
@@ -71,8 +72,8 @@ class DocumentUploadController extends AbstractDocumentController
         $data = array_merge(
             $data,
             [
-                'filename' => $files['file']['name'],
-                'content' => base64_encode(file_get_contents($files['file']['tmp_name'])),
+                'filename'      => $files['file']['name'],
+                'content'       => base64_encode(file_get_contents($files['file']['tmp_name'])),
                 'description'   => $data['details']['description'],
                 'category'      => $data['details']['category'],
                 'subCategory'   => $data['details']['documentSubCategory'],
@@ -107,15 +108,48 @@ class DocumentUploadController extends AbstractDocumentController
 
         $response = $this->handleCommand(Upload::create($data));
 
-        $identifier = $response->getResult()['id']['identifier'];
+        if ($response->isOk()) {
+            $identifier = $response->getResult()['id']['identifier'];
 
-        $routeParams = array_merge(
-            $routeParams,
-            [
-                'doc' => $identifier
+            $routeParams = array_merge(
+                $routeParams,
+                [
+                    'doc' => $identifier
+                ]
+            );
+
+            return $this->redirectToDocumentRoute($type, null, $routeParams);
+        }
+
+        if ($response->isClientError()) {
+            $messages = $response->getResult()['messages'];
+
+            if (isset($messages['ERR_MIME'])) {
+
+                $formMessages = [
+                    'details' => [
+                        'file' => [
+                            'ERR_MIME'
+                        ]
+                    ]
+                ];
+
+                $form->setMessages($formMessages);
+
+                return $form;
+            }
+        }
+
+        $formMessages = [
+            'details' => [
+                'file' => [
+                    'unknown_error'
+                ]
             ]
-        );
+        ];
 
-        return $this->redirectToDocumentRoute($type, null, $routeParams);
+        $form->setMessages($formMessages);
+
+        return $form;
     }
 }

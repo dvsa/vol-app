@@ -15,6 +15,11 @@ use Mockery as m;
  */
 class BusRegIdTest extends MockeryTestCase
 {
+    /**
+     * @var BusRegId
+     */
+    protected $sut;
+
     public function setUp()
     {
         $this->sut = new BusRegId();
@@ -98,61 +103,13 @@ class BusRegIdTest extends MockeryTestCase
                 ->with($busReg)
                 ->getMock()
             )
-            ->shouldReceive('getContainer')
-            ->once()
-            ->with('status')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('set')
-                ->once()
-                ->getMock()
-            )
-            ->shouldReceive('getContainer')
-            ->once()
-            ->with('pageTitle')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('append')
-                ->once()
-                ->getMock()
-            )
-            ->shouldReceive('getContainer')
-            ->once()
-            ->with('pageSubtitle')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('append')
-                ->once()
-                ->with('org name, Variation 3')
-                ->getMock()
-            )
             ->getMock();
 
         $mockViewHelperManager = m::mock('\Zend\View\HelperPluginManager')
             ->shouldReceive('get')
             ->once()
-            ->with('headTitle')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('prepend')
-                ->once()
-                ->with('reg no')
-                ->getMock()
-            )
-            ->shouldReceive('get')
-            ->once()
             ->with('placeholder')
             ->andReturn($mockPlaceholder)
-            ->shouldReceive('get')
-            ->once()
-            ->with('Url')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('__invoke')
-                ->once()
-                ->with('licence/bus', ['licence' => 101], [], true)
-                ->getMock()
-            )
             ->getMock();
 
         $this->sut->setViewHelperManager($mockViewHelperManager);
@@ -226,94 +183,5 @@ class BusRegIdTest extends MockeryTestCase
         $this->sut->setQueryService($mockQueryService);
 
         $this->sut->onBusRegId($event);
-    }
-
-    /**
-     * @dataProvider getStatusArrayProvider
-     */
-    public function testGetStatusArray($statusKey, $statusString, $expected)
-    {
-        $method = new \ReflectionMethod($this->sut, 'getStatusArray');
-        $method->setAccessible(true);
-
-        $this->assertEquals($expected, $method->invoke($this->sut, $statusKey, $statusString));
-    }
-
-    public function getStatusArrayProvider()
-    {
-        return [
-            [
-                RefData::BUSREG_STATUS_ADMIN,
-                'value',
-                [
-                    'colour' => 'grey',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_REGISTERED,
-                'value',
-                [
-                    'colour' => 'green',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_REFUSED,
-                'value',
-                [
-                    'colour' => 'grey',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_CANCELLATION,
-                'value',
-                [
-                    'colour' => 'orange',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_WITHDRAWN,
-                'value',
-                [
-                    'colour' => 'grey',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_VARIATION,
-                'value',
-                [
-                    'colour' => 'orange',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_CNS,
-                'value',
-                [
-                    'colour' => 'grey',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_CANCELLED,
-                'value',
-                [
-                    'colour' => 'grey',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_NEW,
-                'value',
-                [
-                    'colour' => 'orange',
-                    'value' => 'value',
-                ],
-            ],
-        ];
     }
 }

@@ -14,20 +14,17 @@ use Dvsa\Olcs\Transfer\Query\Cases\Statement\Statement as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Statement\StatementList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\Statement;
 use Olcs\Controller\Traits as ControllerTraits;
+use Zend\View\Model\ViewModel;
 
 /**
  * Case Statement Controller
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class StatementController extends AbstractInternalController implements
-    CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class StatementController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     use ControllerTraits\GenerateActionTrait;
 
@@ -52,22 +49,18 @@ class StatementController extends AbstractInternalController implements
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/case-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/case-details-subsection';
+        return $view;
     }
 
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/statement';
-    protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = ItemDto::class;
     // 'id' => 'statement', to => from
     protected $itemParams = ['case', 'id' => 'statement'];
@@ -80,6 +73,8 @@ class StatementController extends AbstractInternalController implements
     protected $formClass = Statement::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = \Olcs\Data\Mapper\Statement::class;
+    protected $addContentTitle = 'Add statement';
+    protected $editContentTitle = 'Edit statement';
 
     /**
      * Variables for controlling edit view rendering

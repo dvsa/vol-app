@@ -1,0 +1,48 @@
+<?php
+    $licence = $this->placeholder('licence')->getValue();
+?>
+<div class="small-module">
+    <h4 class="small-module__title">Licence details</h4>
+    <p class="small-module__details">
+        <a href="<?php echo $this->url('operator', ['organisation' => $licence['organisation']['id']], [], true);?>">
+            <?php echo $this->escapeHtml($licence['organisation']['name']); ?>
+        </a>
+        <?php echo $this->escapeHtml($licence['licNo']); ?>
+        <?php echo $this->licenceStatus($licence['status']['id']); ?>
+    </p>
+</div>
+
+<?php
+echo $this->showMarkers();
+
+/**
+ * Application quick actions
+ *
+ * @var \Zend\Navigation\Navigation
+ */
+$nav = $this->navigation('right-sidebar')
+    ->menu($this->navigation()->findOneBy('id', 'application-quick-actions'))
+    ->setPartial('partials/record-actions__group');
+
+if ($nav->getContainer()->hasPages(true) && $nav->getContainer()->isVisible()): ?>
+    <div class="record-actions">
+        <h5>Quick actions</h5>
+        <?php echo $nav; ?>
+    </div>
+<?php endif;
+
+/**
+ * Decisions quick actions
+ *
+ * @var \Zend\Navigation\Navigation
+ */
+$nav = $this->navigation('right-sidebar')
+    ->menu($this->navigation()->findOneBy('id', 'application-decisions'))
+    ->setPartial('partials/record-actions__group');
+
+if ($nav->getContainer()->hasPages(true)): ?>
+    <div class="record-actions">
+        <h5>Decisions</h5>
+        <?php echo $nav; ?>
+    </div>
+<?php endif;

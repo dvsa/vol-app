@@ -20,6 +20,8 @@ class Application extends CommonApplication
     {
         parent::alterForm($form);
 
-        $form->get('form-actions')->get('save')->setLabel('internal.save.button');
+        if ($form->has('form-actions') && $form->get('form-actions')->has('save')) {
+            $form->get('form-actions')->get('save')->setLabel('internal.save.button');
+        }
     }
 }

@@ -49,7 +49,7 @@ class ContinuationDetailMarkerTest extends \PHPUnit_Framework_TestCase
         $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);
 
         $mockPartialHelper->shouldReceive('__invoke')
-            ->with('partials/marker/continuation', ['dateTime' => new \DateTime('2015-07-01'), 'licenceId' => 63])
+            ->with('marker/continuation', ['dateTime' => new \DateTime('2015-07-01'), 'licenceId' => 63])
             ->once()->andReturn('HTML1');
 
         $this->sut->setData($data);

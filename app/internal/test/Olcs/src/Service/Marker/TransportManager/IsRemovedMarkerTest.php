@@ -41,7 +41,7 @@ class IsRemovedMarkerTest extends \PHPUnit_Framework_TestCase
         $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/transport-manager/is-removed',
+                'marker/transport-manager/is-removed',
                 [
                     'date' => new \DateTime('1990-2-10 10:00')
                 ]

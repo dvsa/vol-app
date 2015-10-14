@@ -2,8 +2,7 @@
 
 namespace Olcs\Controller\Cases\PublicInquiry;
 
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\AbstractInternalController;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
@@ -21,10 +20,7 @@ use Olcs\Mvc\Controller\ParameterProvider\GenericList;
  * Class HearingController
  * @package Olcs\Controller\Cases\PublicInquiry
  */
-class HearingController extends AbstractInternalController implements
-    CaseControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class HearingController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     const MSG_CLOSED_PI = 'The Pi has already been closed';
 
@@ -37,6 +33,8 @@ class HearingController extends AbstractInternalController implements
     protected $createCommand = CreateCmd::class;
     protected $updateCommand = UpdateCmd::class;
     protected $mapperClass = PiHearingMapper::class;
+    protected $addContentTitle = 'Add hearing';
+    protected $editContentTitle = 'Edit hearing';
 
     protected $redirectConfig = [
         'add' => [
@@ -60,20 +58,12 @@ class HearingController extends AbstractInternalController implements
         'indexAction' => ['table-actions']
     ];
 
-    /**
-     * @return string
-     */
-    public function getPageInnerLayout()
+    public function getLeftView()
     {
-        return 'layout/case-details-subsection';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    /**
-     * @return string
-     */
-    public function getPageLayout()
-    {
-        return 'layout/case-section';
+        return $view;
     }
 
     /**
@@ -123,7 +113,9 @@ class HearingController extends AbstractInternalController implements
             new PreviousPiHearingData($pi),
             $this->createCommand,
             $this->mapperClass,
-            $this->editViewTemplate
+            $this->editViewTemplate,
+            'Create record',
+            $this->addContentTitle
         );
     }
 

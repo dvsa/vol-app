@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("bus-reg-stop")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Stops, manoeuvres & subsidies"})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class BusRegStop
 {

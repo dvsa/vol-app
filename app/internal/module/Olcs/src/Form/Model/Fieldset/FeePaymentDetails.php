@@ -51,7 +51,6 @@ class FeePaymentDetails
      *          "context_truth": false,
      *          "allow_empty": false,
      *          "validators": {
-     *              {"name": "NotEmpty"},
      *              {
      *                   "name": "Zend\Validator\GreaterThan",
      *                   "options": {
@@ -215,7 +214,10 @@ class FeePaymentDetails
      *          "validators": {
      *              {"name": "NotEmpty"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
-     *              {"name": "\Common\Form\Elements\Validators\ChequeDate"}
+     *              {"name": "\Common\Form\Elements\Validators\ChequeDate"},
+     *              {
+     *                  "name": "\Common\Form\Elements\Validators\DateNotInFuture",
+     *                  "options":{"messageTemplates":{"inFuture":"Cheque date cannot be in the future"}}}
      *          }
      *      }
      * })

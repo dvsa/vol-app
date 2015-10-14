@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("bus-reg-ta")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"TA's & authorities"})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class BusRegTa
 {

@@ -10,7 +10,6 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Common\RefData;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
 
@@ -108,18 +107,8 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
     {
         $busReg = $this->getBusReg($e->getValue());
 
-        $this->getViewHelperManager()->get('headTitle')->prepend($busReg['regNo']);
-
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('busReg')->set($busReg);
-        $placeholder->getContainer('status')->set(
-            $this->getStatusArray(
-                $busReg['status']['id'],
-                $busReg['status']['description']
-            )
-        );
-        $placeholder->getContainer('pageTitle')->append($this->getPageTitle($busReg));
-        $placeholder->getContainer('pageSubtitle')->append($this->getSubTitle($busReg));
 
         if ($busReg['isShortNotice'] === 'N') {
             // hide short notice navigation
@@ -153,47 +142,5 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
         }
 
         return $response->getResult();
-    }
-
-    private function getPageTitle($busReg)
-    {
-        $urlPlugin = $this->getViewHelperManager()->get('Url');
-        $licUrl = $urlPlugin->__invoke('licence/bus', ['licence' => $busReg['licence']['id']], [], true);
-        return '<a href="' . $licUrl . '">' . $busReg['licence']['licNo'] . '</a>' . '/' . $busReg['routeNo'];
-    }
-
-    private function getSubTitle($busReg)
-    {
-        return $busReg['licence']['organisation']['name'] . ', Variation ' . $busReg['variationNo'];
-    }
-
-    /**
-     * Get status array.
-     *
-     * @param $statusKey
-     * @param $statusString
-     *
-     * @return array
-     */
-    private function getStatusArray($statusKey, $statusString)
-    {
-        $map = [
-            RefData::BUSREG_STATUS_ADMIN        => 'grey',
-            RefData::BUSREG_STATUS_REGISTERED   => 'green',
-            RefData::BUSREG_STATUS_REFUSED      => 'grey',
-            RefData::BUSREG_STATUS_CANCELLATION => 'orange',
-            RefData::BUSREG_STATUS_WITHDRAWN    => 'grey',
-            RefData::BUSREG_STATUS_VARIATION    => 'orange',
-            RefData::BUSREG_STATUS_CNS          => 'grey',
-            RefData::BUSREG_STATUS_CANCELLED    => 'grey',
-            RefData::BUSREG_STATUS_NEW          => 'orange'
-        ];
-
-        $status = [
-            'colour' => $map[$statusKey],
-            'value' => $statusString,
-        ];
-
-        return $status;
     }
 }

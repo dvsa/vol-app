@@ -5,10 +5,9 @@ namespace Olcs\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("EnvironmentalComplaint")
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Environmental complaint", "action_lcfirst": false})
+ * @Form\Options({"prefer_form_input_filter": true})
  * @Form\Attributes({"method":"post"})
  */
 class EnvironmentalComplaint

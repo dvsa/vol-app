@@ -2,6 +2,7 @@
 
 namespace OlcsTest;
 
+use Zend\Mvc\I18n\Translator;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
 use Mockery as m;
@@ -75,6 +76,15 @@ class Bootstrap
         $config = $serviceManager->get('Config');
         $config['service_api_mapping']['endpoints']['backend'] = 'http://some-fake-backend/';
         $serviceManager->setService('Config', $config);
+
+        $translator = m::mock(\Zend\I18n\Translator\Translator::class)->makePartial();
+        /** @var Translator $mvcTranslator */
+        $mvcTranslator = m::mock(Translator::class, [$translator])->makePartial();
+
+        $mvcTranslator->shouldReceive('getLocale')
+            ->andReturn($translator->getLocale());
+
+        $serviceManager->setService('MvcTranslator', $mvcTranslator);
 
         return $serviceManager;
     }

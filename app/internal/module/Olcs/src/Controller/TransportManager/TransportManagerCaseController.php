@@ -14,17 +14,13 @@ use Dvsa\Olcs\Transfer\Query\Cases\ByTransportManager as CasesByTmDto;
 use Olcs\Data\Mapper\GenericFields as GenericMapper;
 use Olcs\Form\Model\Form\Cases as CaseForm;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Transport Manager Case Controller
  */
 class TransportManagerCaseController extends AbstractInternalController implements
-    TransportManagerControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    TransportManagerControllerInterface
 {
     protected $navigationId = 'transport_manager_cases';
     protected $listDto = CasesByTmDto::class;
@@ -39,6 +35,8 @@ class TransportManagerCaseController extends AbstractInternalController implemen
     protected $deleteCommand = DeleteCaseCommand::class;
     protected $mapperClass = GenericMapper::class;
     protected $tableName = 'cases';
+    protected $addContentTitle = 'Add case';
+    protected $editContentTitle = 'Edit case';
 
     protected $inlineScripts = ['indexAction' => ['table-actions']];
 
@@ -52,16 +50,6 @@ class TransportManagerCaseController extends AbstractInternalController implemen
             'reUseParams' => false
         ],
     ];
-
-    public function getPageLayout()
-    {
-        return 'layout/transport-manager-section-crud';
-    }
-
-    public function getPageInnerLayout()
-    {
-        return 'layout/wide-layout';
-    }
 
     /**
      * Alter Form to remove case type options depending on where the case was added from.

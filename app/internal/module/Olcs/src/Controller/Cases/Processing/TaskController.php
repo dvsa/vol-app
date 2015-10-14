@@ -12,6 +12,8 @@ use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Zend\View\Model\ViewModel;
 
 /**
  * Case Task controller
@@ -21,27 +23,11 @@ use Dvsa\Olcs\Transfer\Query\Cases\Cases;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TaskController extends OlcsController\CrudAbstract implements CaseControllerInterface
+class TaskController extends OlcsController\CrudAbstract implements CaseControllerInterface, LeftViewProvider
 {
     use ControllerTraits\TaskSearchTrait,
         ControllerTraits\CaseControllerTrait,
         ControllerTraits\ListDataTrait;
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case-section';
-
-    /**
-     * For most case crud controllers, we use the layout/case-details-subsection
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'layout/case-details-subsection';
 
     /**
      * Holds the navigation ID,
@@ -49,6 +35,14 @@ class TaskController extends OlcsController\CrudAbstract implements CaseControll
      * represented by a single navigation id.
      */
     protected $navigationId = 'case_processing_tasks';
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/processing/partials/left');
+
+        return $view;
+    }
 
     /**
      * Render the tasks list or redirect if processing
@@ -83,7 +77,7 @@ class TaskController extends OlcsController\CrudAbstract implements CaseControll
         $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
 
         $view = $this->getView(['table' => $table]);
-        $view->setTemplate('partials/table');
+        $view->setTemplate('pages/table');
 
         return $this->renderView($view);
     }

@@ -92,7 +92,9 @@ class ApplicationTest extends MockeryTestCase
             'licence' => [
                 'organisation' => 'ORGANISATION',
                 'id' => 101,
-            ]
+            ],
+            'licenceType' => ['id' => 'foo'],
+            'existingPublication' => false,
         ];
 
         $quickViewActionsVisible = ($status !== ApplicationEntityService::APPLICATION_STATUS_VALID);
@@ -177,6 +179,176 @@ class ApplicationTest extends MockeryTestCase
                 ApplicationEntityService::APPLICATION_TYPE_VARIATION,
                 false,
                 1
+            ],
+        ];
+    }
+
+    public function testSetupPublishApplicationButtonExistingPublicationTrue()
+    {
+        $applicationData = [
+            'id' => 1066,
+            'licence' => [
+                'organisation' => [],
+                'id' => 99,
+            ],
+            'status' => ['id' => 'xx'],
+            's4s' => [],
+            'isVariation' => false,
+            'canCreateCase' => false,
+            'licenceType' => ['id' => 'xx'],
+            'existingPublication' => true,
+        ];
+
+        $this->setupMockApplication(1066, $applicationData);
+
+        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
+        $mockContainer->shouldReceive('set')->with($applicationData);
+
+        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
+        $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer);
+
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
+        $this->sut->setViewHelperManager($mockViewHelperManager);
+
+        $mockNavigationService = m::mock('Zend\Navigation\Navigation');
+        $mockNavigationService->shouldReceive('findOneById')->andReturn(
+            m::mock()->shouldReceive('setVisible')->getMock()
+        );
+        $this->sut->setNavigationService($mockNavigationService);
+
+        $mockButton = m::mock();
+        $mockButton->shouldReceive('setLabel')->with('Republish application')->once();
+        $mockButton->shouldReceive('setVisible');
+
+        $mockSidebar = m::mock();
+        $mockSidebar->shouldReceive('findById')->andReturn($mockButton);
+        $this->sut->setSidebarNavigationService($mockSidebar);
+
+        $event = new RouteParam();
+        $event->setValue(1066);
+        $event->setTarget(
+            m::mock()->shouldReceive('trigger')->once()->with('licence', 99)->getMock()
+        );
+
+        $this->sut->onApplication($event);
+    }
+
+    public function testSetupPublishApplicationButtonExistingPublicationFalse()
+    {
+        $applicationData = [
+            'id' => 1066,
+            'licence' => [
+                'organisation' => [],
+                'id' => 99,
+            ],
+            'status' => ['id' => 'xx'],
+            's4s' => [],
+            'isVariation' => false,
+            'canCreateCase' => false,
+            'licenceType' => ['id' => 'xx'],
+            'existingPublication' => false,
+        ];
+
+        $this->setupMockApplication(1066, $applicationData);
+
+        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
+        $mockContainer->shouldReceive('set')->with($applicationData);
+
+        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
+        $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer);
+
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
+        $this->sut->setViewHelperManager($mockViewHelperManager);
+
+        $mockNavigationService = m::mock('Zend\Navigation\Navigation');
+        $mockNavigationService->shouldReceive('findOneById')->andReturn(
+            m::mock()->shouldReceive('setVisible')->getMock()
+        );
+        $this->sut->setNavigationService($mockNavigationService);
+
+        $mockButton = m::mock();
+        $mockButton->shouldReceive('setVisible');
+
+        $mockSidebar = m::mock();
+        $mockSidebar->shouldReceive('findById')->andReturn($mockButton);
+        $this->sut->setSidebarNavigationService($mockSidebar);
+
+        $event = new RouteParam();
+        $event->setValue(1066);
+        $event->setTarget(
+            m::mock()->shouldReceive('trigger')->once()->with('licence', 99)->getMock()
+        );
+
+        $this->sut->onApplication($event);
+    }
+
+    public function testSetupPublishApplicationButton()
+    {
+        $applicationData = [
+            'id' => 1066,
+            'licence' => [
+                'organisation' => [],
+                'id' => 99,
+            ],
+            'status' => ['id' => 'xx'],
+            's4s' => [],
+            'isVariation' => false,
+            'canCreateCase' => false,
+            'licenceType' => ['id' => 'xx'],
+            'existingPublication' => false,
+        ];
+
+        $this->setupMockApplication(1066, $applicationData);
+
+        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
+        $mockContainer->shouldReceive('set')->with($applicationData);
+
+        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
+        $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer);
+
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
+        $this->sut->setViewHelperManager($mockViewHelperManager);
+
+        $mockNavigationService = m::mock('Zend\Navigation\Navigation');
+        $mockNavigationService->shouldReceive('findOneById')->andReturn(
+            m::mock()->shouldReceive('setVisible')->getMock()
+        );
+        $this->sut->setNavigationService($mockNavigationService);
+
+        $mockSidebar = m::mock()->shouldReceive('findById')->andReturn(
+            m::mock()->shouldReceive('setVisible')->getMock()
+        )->getMock();
+        $this->sut->setSidebarNavigationService($mockSidebar);
+
+        $event = new RouteParam();
+        $event->setValue(1066);
+        $event->setTarget(
+            m::mock()->shouldReceive('trigger')->once()->with('licence', 99)->getMock()
+        );
+
+        $this->sut->onApplication($event);
+    }
+
+    public function dataProviderSetupPublishApplicationButton()
+    {
+        return [
+            // isVariation, status, isPublishable, goodsOrPsv, licenceType, isVisible
+            [
+                true,
+                RefData::APPLICATION_STATUS_UNDER_CONSIDERATION,
+                true,
+                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+                true,
+            ],
+            [
+                true,
+                RefData::APPLICATION_STATUS_VALID,
+                true,
+                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+                false,
             ],
         ];
     }

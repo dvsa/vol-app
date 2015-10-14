@@ -90,7 +90,7 @@ class TaskController extends AbstractController
         $this->loadScripts(['forms/task']);
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
         $tasks = $this->params('task');
 
         $tasksCount = count(explode('-', $tasks));
@@ -122,7 +122,7 @@ class TaskController extends AbstractController
         $this->loadScripts(['forms/task']);
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         $formTitle = ($tasksCount == 1) ? 'Close task' : 'Close (' . $tasksCount . ') tasks';
 
@@ -237,7 +237,7 @@ class TaskController extends AbstractController
         $this->loadScripts(['forms/task']);
 
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, $type . ' task');
     }
@@ -514,7 +514,7 @@ class TaskController extends AbstractController
                 throw new BadRequestException('No task id provided');
             }
 
-            return [$taskType, $this->params('typeId'), null];
+            return [$taskType, $this->params('typeId'), null, null];
         }
 
         $taskDetails = $this->getTaskDetails($taskId);

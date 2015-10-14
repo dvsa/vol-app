@@ -1,28 +1,46 @@
 <?php
 
 return array(
-    'halt_on_error' => true,
+    // Debugging, display environment and version on interface
+//    'version' => [
+//        'environment' => 'Local Dev',
+//        'release' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : '')
+//    ],
+
+    // New Backend service
+    'api_router' => [
+        'routes' => [
+            'api' => [
+                'child_routes' => [
+                    'backend' => [
+                        'options' => [
+                            // Backend service URI *Environment specific*
+                            'route' => 'olcs-backend'
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ],
+
+    // Service addresses
     'service_api_mapping' => array(
         'endpoints' => array(
-            'payments' => 'http://olcspayment.dev/api/',
+            // Backend service URI *Environment specific*
             'backend' => 'http://olcs-backend/',
-            'postcode' => 'http://dvsa-postcode.olcspv-ap01.olcs.npm/',
-            'nr' => 'http://olcs-nr/',
-            'email' => 'http://olcs-email/',
-            'companies_house' => array(
-                'url' => 'https://api.companieshouse.gov.uk/',
-                'options' => array(
-                    'sslcapath' => '/etc/ssl/certs',
-                    'sslverifypeer' => false,
-                ),
-                'auth' => array (
-                    'username' => 'API_KEY',
-                    'password' => '',
-                ),
-            ),
+            // Postcode/Address service URI *Environment specific*
+            'postcode' => 'http://postcode.cit.olcs.mgt.mtpdvsa/',
+            // EBSR service URI *Environment specific* (to be depricated in future releases)
+            'ebsr' => 'http://demo_dvsa-ebsr.web03.olcs.app.mtpdvsa',
         )
     ),
+
+    // Document service
     'document_share' => array(
-        'uri_pattern' => '\\\\fs01.olcs.mgt.mtpdvsa\\OLCS\\olcs\\%s'
-    )
+        // File hyperlink to document
+        'uri_pattern' => 'file://fs01.olcs.mgt.mtpdvsa/OLCS/olcs/%s'
+    ),
+
+    // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific*
+    'asset_path' => 'https://demo-olcs-static.i-env.net',
 );

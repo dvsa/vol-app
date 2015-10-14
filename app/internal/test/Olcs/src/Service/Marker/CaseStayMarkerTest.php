@@ -166,10 +166,10 @@ class CaseStayMarkerTest extends \PHPUnit_Framework_TestCase
         $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);
 
         $mockPartialHelper->shouldReceive('__invoke')
-            ->with('partials/marker/case-stay', ['caseId' => 99, 'stay' => 'STAY1', 'hideCaseLink' => false])
+            ->with('marker/case-stay', ['caseId' => 99, 'stay' => 'STAY1', 'hideCaseLink' => false])
             ->once()->andReturn('HTML1');
         $mockPartialHelper->shouldReceive('__invoke')
-            ->with('partials/marker/case-stay', ['caseId' => 99, 'stay' => 'STAY2', 'hideCaseLink' => false])
+            ->with('marker/case-stay', ['caseId' => 99, 'stay' => 'STAY2', 'hideCaseLink' => false])
             ->once()->andReturn('HTML2');
 
         $this->sut->setData($data);
@@ -196,7 +196,7 @@ class CaseStayMarkerTest extends \PHPUnit_Framework_TestCase
         $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);
 
         $mockPartialHelper->shouldReceive('__invoke')
-            ->with('partials/marker/case-stay', ['caseId' => 99, 'stay' => 'STAY2', 'hideCaseLink' => false])
+            ->with('marker/case-stay', ['caseId' => 99, 'stay' => 'STAY2', 'hideCaseLink' => false])
             ->once()->andReturn('HTML2');
 
         $this->sut->setData($data);

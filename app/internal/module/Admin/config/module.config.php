@@ -65,25 +65,14 @@ return [
                             'pending' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/pending[/:action][/:publication]',
+                                    'route' => '/pending[/:action][/:id]',
                                     'constraints' => [
                                         'publication' => '[0-9]+',
-                                        'action' => '[a-z]+'
+                                        'action' => '(index|generate|publish)'
                                     ],
                                     'defaults' => [
                                         'controller' => 'Admin\PublicationController',
                                         'action' => 'index'
-                                    ]
-                                ]
-                            ],
-                            'published' => [
-                                'type' => 'literal',
-                                'options' => [
-                                    'route' => '/published',
-                                    'defaults' => [
-                                        'controller' => 'Admin\PublicationController',
-                                        'action' => 'published',
-                                        'index' => 'publication'
                                     ]
                                 ]
                             ],
@@ -192,6 +181,40 @@ return [
                                         'action' => 'index',
                                     ]
                                 ],
+                            ],
+                            'cpms' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/cpms[/:action][/:id][/]',
+                                    'constraints' => [
+                                        'id' => '[0-9\,]+'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => 'Admin\CpmsReportController',
+                                        'action' => 'index',
+                                    ]
+                                ],
+                            ],
+                            'cpid-class' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/cpid-classification[/:status]',
+                                    'defaults' => [
+                                        'controller' => 'Admin\ReportController',
+                                        'action' => 'cpidClassification',
+                                        'status' => null
+                                    ]
+                                ]
+                            ],
+                            'exported-reports' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/exported-reports',
+                                    'defaults' => [
+                                        'controller' => 'Admin\ReportController',
+                                        'action' => 'exportedReports'
+                                    ]
+                                ]
                             ],
                         ],
                     ],
@@ -335,39 +358,18 @@ return [
                         'options' => [
                             'route' => '/payment-processing',
                             'defaults' => [
-                                'controller' => 'Admin\PaymentProcessingController',
+                                'controller' => 'Admin\PaymentProcessingFeesController',
                                 'action' => 'redirect',
                             ]
                         ],
                         'may_terminate' => true,
                         'child_routes' => [
-                            'cpid-class' => [
-                                'type' => 'segment',
-                                'options' => [
-                                    'route' => '/cpid-classification[/:status]',
-                                    'defaults' => [
-                                        'controller' => 'Admin\PaymentProcessingController',
-                                        'action' => 'cpidClassification',
-                                        'status' => null
-                                    ]
-                                ]
-                            ],
-                            'cpid-exports' => [
-                                'type' => 'segment',
-                                'options' => [
-                                    'route' => '/cpid-exports',
-                                    'defaults' => [
-                                        'controller' => 'Admin\PaymentProcessingController',
-                                        'action' => 'cpidExports'
-                                    ]
-                                ]
-                            ],
                             'misc-fees' => [
                                 'type' => 'segment',
                                 'options' => [
                                     'route' => '/misc-fees',
                                     'defaults' => [
-                                        'controller' => 'Admin\PaymentProcessingController',
+                                        'controller' => 'Admin\PaymentProcessingFeesController',
                                         'action' => 'index'
                                     ]
                                 ],
@@ -436,12 +438,13 @@ return [
             'Admin\SystemMessageController' => 'Admin\Controller\SystemMessageController',
             'Admin\DiscPrintingController' => 'Admin\Controller\DiscPrintingController',
             'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController',
-            'Admin\PaymentProcessingController' => 'Admin\Controller\PaymentProcessingController',
+            'Admin\PaymentProcessingFeesController' => 'Admin\Controller\PaymentProcessingFeesController',
             'Admin\PartnerController' => 'Admin\Controller\PartnerController',
             'Admin\ContinuationChecklistReminderController' =>
                 'Admin\Controller\ContinuationChecklistReminderController',
             'Admin\CompaniesHouseAlertController' => 'Admin\Controller\CompaniesHouseAlertController',
             'Admin\FinancialStandingRateController' => 'Admin\Controller\FinancialStandingRateController',
+            'Admin\CpmsReportController' => 'Admin\Controller\CpmsReportController',
         ]
     ],
     'view_manager' => [

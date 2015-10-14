@@ -107,7 +107,7 @@ class LicenceStatusMarkerTest extends \PHPUnit_Framework_TestCase
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/licence-status',
+                'marker/licence-status',
                 [
                     'startDateTime' => new \DateTime('2014-04-16'),
                     'endDateTime' => new \DateTime('2015-08-22'),
@@ -150,7 +150,7 @@ class LicenceStatusMarkerTest extends \PHPUnit_Framework_TestCase
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/licence-status',
+                'marker/licence-status',
                 [
                     'startDateTime' => new \DateTime('2014-04-16'),
                     'endDateTime' => null,
@@ -190,7 +190,7 @@ class LicenceStatusMarkerTest extends \PHPUnit_Framework_TestCase
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/licence-status',
+                'marker/licence-status',
                 [
                     'startDateTime' => new \DateTime('2014-06-23'),
                     'endDateTime' => null,
@@ -230,7 +230,7 @@ class LicenceStatusMarkerTest extends \PHPUnit_Framework_TestCase
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/licence-status',
+                'marker/licence-status',
                 [
                     'startDateTime' => new \DateTime('2015-12-16'),
                     'endDateTime' => null,
@@ -270,7 +270,7 @@ class LicenceStatusMarkerTest extends \PHPUnit_Framework_TestCase
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
-                'partials/marker/licence-status',
+                'marker/licence-status',
                 [
                     'startDateTime' => new \DateTime('2014-04-19'),
                     'endDateTime' => null,

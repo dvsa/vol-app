@@ -8,13 +8,10 @@
  */
 namespace Olcs\Controller\Lva\Traits;
 
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
-use Common\View\Model\Section;
-use Olcs\View\Model\Licence\SectionLayout;
-use Olcs\View\Model\Licence\Layout;
-use Olcs\View\Model\Licence\LicenceLayout;
-use Common\Service\Entity\LicenceEntityService;
+use Common\RefData;
 use Olcs\Controller\Traits;
 use Zend\Session\Container;
 
@@ -52,6 +49,42 @@ trait LicenceControllerTrait
         return $this->getIdentifier();
     }
 
+    protected function renderPage($content, $title, array $variables = [])
+    {
+        $this->placeholder()->setPlaceholder('contentTitle', $title);
+
+        $layout = $this->viewBuilder()->buildView($content);
+
+        if (!($this instanceof LeftViewProvider)) {
+            $left = $this->getLeft($variables);
+
+            if ($left !== null) {
+                $layout->setLeft($this->getLeft($variables));
+            }
+        }
+
+        return $layout;
+    }
+
+    protected function getLeft(array $variables = [])
+    {
+        $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
+
+        $left = new ViewModel(
+            array_merge(
+                [
+                    'sections'     => $this->getSectionsForView(),
+                    'currentRoute' => $routeName,
+                    'lvaId'        => $this->getIdentifier()
+                ],
+                $variables
+            )
+        );
+        $left->setTemplate('sections/licence/partials/left');
+
+        return $left;
+    }
+
     /**
      * Render the section
      *
@@ -70,39 +103,21 @@ trait LicenceControllerTrait
 
         if (! ($content instanceof ViewModel)) {
             $sectionParams = array_merge(
-                array('title' => 'lva.section.title.' . $content, 'form' => $form),
+                [
+                    'form' => $form
+                ],
                 $variables
             );
 
-            $content = new Section($sectionParams);
+            $title = 'lva.section.title.' . $content;
+
+            $content = new ViewModel($sectionParams);
+            $content->setTemplate('sections/lva/lva-details');
+
+            return $this->renderPage($content, $title, $variables);
         }
 
-        $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
-
-        $sectionLayout = new SectionLayout(
-            array_merge(
-                array(
-                    'sections'     => $this->getSectionsForView(),
-                    'currentRoute' => $routeName,
-                    'lvaId'        => $this->getIdentifier()
-                ),
-                $variables
-            )
-        );
-
-        $sectionLayout->addChild($content, 'content');
-
-        $licenceLayout = new LicenceLayout();
-
-        $licenceLayout->addChild($sectionLayout, 'content');
-
-        $params = $this->getHeaderParams();
-
-        $params = array_merge($params, $variables);
-
-        $view = new Layout($licenceLayout, $params);
-        $view->setVariable('searchForm', $this->getSearchForm());
-        return $view;
+        return $this->renderPage($content, $content->getVariable('title'), $variables);
     }
 
     /**
@@ -120,26 +135,6 @@ trait LicenceControllerTrait
         }
 
         return $this->searchForm;
-    }
-
-    /**
-     * Get headers params
-     *
-     * @return array
-     */
-    protected function getHeaderParams()
-    {
-        $data = $this->getServiceLocator()->get('Entity\Licence')->getHeaderParams($this->getLicenceId());
-
-        if ($data['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
-            $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
-        }
-
-        return array(
-            'licNo' => $data['licNo'],
-            'companyName' => $data['organisation']['name'],
-            'status' => $data['status']['id'],
-        );
     }
 
     /**

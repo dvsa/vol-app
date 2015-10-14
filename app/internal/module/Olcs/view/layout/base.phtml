@@ -1,80 +1,119 @@
-<?php echo $this->doctype(); ?>
+<?php
+{
+    $title = null;
+    if (isset($this->pageTitle)) {
+        $title = $this->pageTitle;
+    } else {
+        $title = $this->getPlaceholder('pageTitle')->asString();
+    }
+
+    $subTitle = null;
+    if (isset($pageSubTitle)) {
+        $subTitle = $pageSubTitle;
+    } else {
+        $subTitle = $this->getPlaceholder('pageSubtitle')->asString();
+    }
+
+    if (!isset($contentTitle)) {
+        $contentTitle = $this->getPlaceholder('contentTitle')->asString();
+    }
+
+    // We may have right content in a placeholder
+    if (!isset($right)) {
+        $right = $this->getPlaceholder('right')->asView();
+    }
+
+    // We may have nav id in a placeholder
+    if (!isset($horizontalNavigationId)) {
+        $horizontalNavigationId = $this->getPlaceholder('horizontalNavigationId')->asString();
+    }
+
+    if (!isset($horizontalNavigationContainer)) {
+        $horizontalNavigationContainer = $this->getPlaceholder('horizontalNavigationContainer')->asObject();
+    }
+}
+
+$this->doctype();
+?>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <?php echo $this->headTitle($this->translate('')); ?>
-    <?php echo $this->headMeta() ->appendName('viewport', 'width=device-width, initial-scale=1.0') ->appendHttpEquiv('X-UA-Compatible', 'IE=edge') ?>
-    <?php /* echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico')); */
-      echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css')) ?>
-    <?php echo $this->headScript(); ?>
+    <?php
+    {
+        echo $this->headTitle(strip_tags($title));
+        echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')->appendHttpEquiv('X-UA-Compatible', 'IE=edge');
+        /* echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico')); */
+        echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css'));
+        echo $this->headScript();
+    }
+    ?>
   </head>
   <body class="internal">
+    <?php echo $this->version(); ?>
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
-
-    <div role="banner" class="global-header">
-      <div class="global-header__wrapper">
-        <h2 class="global-header__title"><a href="/">OLCS</a></h2>
-
-        <div class="search">
-          <div class="search__wrapper">
-            <?php
-            $searchForm = $this->placeholder('headerSearch')->getValue();
-            if (!empty($searchForm)):
-            ?>
-              <form action="<?php echo $this->url('search')?>" method="POST">
-                <?php echo $this->formInput($searchForm->get('search')); ?>
-                <div class="search__select">
-                  <?php echo $this->formSelect($searchForm->get('index')); ?>
-                </div><!-- .search__select -->
-                <?php echo $this->formSubmit($searchForm->get('submit')); ?>
-              </form>
-          <?php endif?>
-          </div>
-        </div><!--  search -->
-
-        <ul class="admin">
-          <li class="admin__title"><?php echo $this->translate('Admin'); ?>
-            <div class="admin__menu">
-              <span class="admin__arrow"></span>
-              <ul class="admin__submenu">
-                <li class="admin__item"><a href="/admin/scanning"><?php echo $this->translate('Scanning'); ?></a></li>
-                <li class="admin__item"><a href="/admin/printing"><?php echo $this->translate('Printing'); ?></a></li>
-                <li class="admin__item"><a href="/admin/disc-printing"><?php echo $this->translate('Disc Printing'); ?></a></li>
-                <li class="admin__item"><a href="/admin/publication"><?php echo $this->translate('Publications'); ?></a></li>
-                <li class="admin__item"><a href="/admin/continuation"><?php echo $this->translate('Continuations'); ?></a></li>
-                <li class="admin__item"><a href="/admin/report"><?php echo $this->translate('Reports'); ?></a></li>
-              </ul>
-              <ul class="admin__submenu">
-                <li class="admin__item"><a href="/admin/user-management/users"><?php echo $this->translate('User
-                management'); ?></a></li>
-                <li class="admin__item"><a href="/admin/financial-standing"><?php echo $this->translate('Financial standing rates'); ?></a></li>
-                <li class="admin__item"><a href="/admin/public-holiday"><?php echo $this->translate('Public holidays'); ?></a></li>
-                <li class="admin__item"><a href="/admin/system-message"><?php echo $this->translate('System messages'); ?></a></li>
-                <li class="admin__item"><a href="/admin/payment-processing"><?php echo $this->translate('Payment processing'); ?></a></li>
-              </ul><!-- admin__submenu -->
-            </div><!-- admin__menu -->
-          </li>
-        </ul><!-- admin -->
-      </div><!-- end global-header__wrapper -->
-    </div><!-- end global-header -->
-
-    <?php echo $this->header; ?>
-
+    <?php
+    echo $this->partial('layout/partials/global-header');
+    echo $this->partial('layout/partials/header', ['title' => $title, 'subTitle' => $subTitle]); ?>
     <div class="page-wrapper">
       <div id="main" role="main">
-        <?php echo $this->content; ?>
-      </div>
+<?php if (isset($right)): ?>
+        <div class="four-fifths--left">
+<?php endif; ?>
+
+<?php
+if (!empty($horizontalNavigationId)) {
+    echo $this->navigation('navigation')
+        ->menu($this->navigation()->findOneBy('id', $horizontalNavigationId))
+        ->setPartial('partials/horizontal-navigation');
+} elseif(!empty($horizontalNavigationContainer)) {
+    echo $this->navigation($horizontalNavigationContainer)->menu()->setPartial('partials/horizontal-navigation');
+}
+?>
+          <div class="content">
+<?php if (isset($this->left)): ?>
+            <div class="one-fifth--left">
+              <?php echo $this->left; ?>
+            </div><!-- End: one-fifth--left -->
+            <div class="three-fifths">
+<?php endif;
+
+if (!empty($contentTitle)): ?>
+              <div class="content__header js-title">
+                <h3><?php echo $this->translate($contentTitle); ?></h3>
+              </div><!-- End: js-title -->
+<?php endif; ?>
+              <div class="js-body">
+                <?php
+                  echo $this->flashMessengerAll();
+                  echo $this->content;
+                ?>
+              </div><!-- End: js-body -->
+<?php if (isset($this->left)): ?>
+            </div><!-- End: three-fifths -->
+<?php endif; ?>
+          </div><!-- End: content -->
+<?php
+
+if (isset($right)): ?>
+        </div><!-- End: four-fifths--left -->
+<?php endif;
+
+if (!empty($right)): ?>
+        <div class="one-fifth--right">
+          <?php echo $this->render($right); ?>
+        </div><!-- one-fifth-right -->
+<?php endif; ?>
+      </div><!-- End: main -->
     </div><!-- .page-wrapper-->
 
-    <!-- Start: Global and Inline Script -->
-    <?php echo $this->inlineScript()
-        ->prependFile($this->assetPath('js/' . $this->applicationName() . '.js')) ?>
-    <!-- End: Global and Inline Script -->
+  <!-- Start: Global and Inline Script -->
+  <?php echo $this->inlineScript()->prependFile($this->assetPath('js/' . $this->applicationName() . '.js')); ?>
+  <!-- End: Global and Inline Script -->
 
-    <script>
-      OLCS.ready(function() {
-        OLCS.eventEmitter.emit("render");
-      });
-    </script>
-    </body>
+  <script>
+    OLCS.ready(function() {
+      OLCS.eventEmitter.emit("render");
+    });
+  </script>
+  </body>
 </html>

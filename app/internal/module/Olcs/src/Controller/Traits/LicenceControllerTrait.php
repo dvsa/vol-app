@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Traits;
 
-use Common\Service\Entity\LicenceEntityService;
+use Common\RefData;
 
 /**
  * Licence Controller Trait
@@ -25,19 +25,13 @@ trait LicenceControllerTrait
     protected function getViewWithLicence($variables = array())
     {
         $licence = $this->getLicence();
-        if ($licence['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
+        if ($licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
         }
 
         $variables['licence'] = $licence;
 
-        $view = $this->getView($variables);
-
-        $this->pageTitle = $licence['licNo'];
-        $this->pageSubTitle = $licence['organisation']['name']
-            . ' ' . $licence['status']['description'];
-
-        return $view;
+        return $this->getView($variables);
     }
 
     /**
@@ -52,9 +46,18 @@ trait LicenceControllerTrait
             $id = $this->params()->fromRoute('licence');
         }
 
-        // @todo This needs migrating to new API
-        /** @var \Common\Service\Data\Licence $dataService */
-        $dataService = $this->getServiceLocator()->get('Common\Service\Data\Licence');
-        return $dataService->fetchLicenceData($id);
+        /* @var $response \Common\Service\Cqrs\Response */
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Licence\Licence::create(['id' => $id])
+        );
+
+        if ($response->isNotFound()) {
+            return null;
+        }
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Failed to get Licence data');
+        }
+
+        return $response->getResult();
     }
 }

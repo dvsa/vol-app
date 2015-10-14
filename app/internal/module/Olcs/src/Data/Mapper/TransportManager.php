@@ -107,9 +107,12 @@ class TransportManager
                 'addressLine3' => $data['homeCd']['address']['addressLine3'],
                 'addressLine4' => $data['homeCd']['address']['addressLine4'],
                 'town' => $data['homeCd']['address']['town'],
-                'postcode' => $data['homeCd']['address']['postcode'],
-                'countryCode' => $data['homeCd']['address']['countryCode']['id']
+                'postcode' => $data['homeCd']['address']['postcode']
             ];
+
+            if (isset($data['homeCd']['address']['countryCode']['id'])) {
+                $homeAddress['countryCode'] = $data['homeCd']['address']['countryCode']['id'];
+            }
         }
         if (isset($data['workCd']['address'])) {
             $workAddress = [
@@ -120,9 +123,12 @@ class TransportManager
                 'addressLine3' => $data['workCd']['address']['addressLine3'],
                 'addressLine4' => $data['workCd']['address']['addressLine4'],
                 'town' => $data['workCd']['address']['town'],
-                'postcode' => $data['workCd']['address']['postcode'],
-                'countryCode' => $data['workCd']['address']['countryCode']['id']
+                'postcode' => $data['workCd']['address']['postcode']
             ];
+
+            if (isset($data['workCd']['address']['countryCode']['id'])) {
+                $workAddress['countryCode'] = $data['workCd']['address']['countryCode']['id'];
+            }
         }
         if (isset($data['homeCd']['person'])) {
             $tmDetails['personId'] = $data['homeCd']['person']['id'];
@@ -154,7 +160,11 @@ class TransportManager
         if (isset($data['version'])) {
             $tmDetails['version'] = $data['version'];
         }
-        $tmDetails['removedDate'] = $data['removedDate'];
+
+        if (isset($data['removedDate'])) {
+            $tmDetails['removedDate'] = $data['removedDate'];
+        }
+
         return [
             'transport-manager-details' => $tmDetails,
             'home-address' => $homeAddress,

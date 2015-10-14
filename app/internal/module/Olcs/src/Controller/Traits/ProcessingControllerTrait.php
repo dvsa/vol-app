@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Traits;
 
 use Zend\Navigation\Navigation;
+use Zend\View\Model\ViewModel;
 
 /**
  * ProcessingControllerTrait
@@ -34,6 +35,14 @@ trait ProcessingControllerTrait
      * @var string
      */
     protected $entity;
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/processing/partials/left');
+
+        return $view;
+    }
 
     /**
      * @return string
@@ -73,34 +82,5 @@ trait ProcessingControllerTrait
         }
 
         return $navigation;
-    }
-
-    /**
-     * Extend the render view method
-     *
-     * @param \Zend\View\Model\ViewModel $view
-     * @param string $pageTitle
-     * @param string $pageSubTitle
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
-    {
-        // @NOTE it's not ideal repeating logic from the parent renderView
-        // method in this one but it's the quickest way out of this method
-        // plus, even though it's not particularly DRY, we know that there's
-        // nothing else we can possibly do to a terminal view so our parent
-        // method couldn't help us out anyway
-        if ($view->terminate()) {
-            return $view;
-        }
-
-        $variables = array(
-            'navigation' => $this->getSubNavigation(),
-            'section' => $this->section
-        );
-
-        $layout = $this->getProcessingLayout($view, $variables);
-
-        return parent::renderView($layout, $pageTitle, $pageSubTitle);
     }
 }

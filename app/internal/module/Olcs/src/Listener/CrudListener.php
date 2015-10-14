@@ -102,6 +102,7 @@ class CrudListener implements ListenerAggregateInterface
         }
 
         $actionConfig = $crudConfig[$requestedAction];
+
         $ids = $this->formatIds($postData);
 
         if ($actionConfig['requireRows'] && $ids === null) {
@@ -111,8 +112,21 @@ class CrudListener implements ListenerAggregateInterface
 
         $params = ['action' => $requestedAction];
 
-        if ($actionConfig['requireRows']) {
+        if (isset($actionConfig['requireRows']) && $actionConfig['requireRows']) {
             $params[$this->identifier] = $ids;
+        }
+
+        // permits controller to send actions to different routes with different controllers (see OLCS-10851)
+        if (isset($actionConfig['route'])) {
+            return $this->setResult(
+                $e,
+                $this->controller->redirect()->toRoute(
+                    $actionConfig['route'],
+                    $params,
+                    [],
+                    true
+                )
+            );
         }
 
         return $this->setResult($e, $this->controller->redirect()->toRoute(null, $params, [], true));

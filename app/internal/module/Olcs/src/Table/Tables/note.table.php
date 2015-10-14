@@ -39,7 +39,7 @@ return array(
 
                 $column['formatter'] = 'Name';
 
-                return $this->callFormatter($column, $data['user']['contactDetails']['person']);
+                return $this->callFormatter($column, $data['createdBy']['contactDetails']['person']);
             }
         ),
         array(
@@ -61,12 +61,10 @@ return array(
                     case 'note_t_tm':
                     case 'note_t_org':
                         return $data['noteType']['description'];
-                        break;
 
                     case 'note_t_app':
                     case 'note_t_case':
                         return $data['noteType']['description'] . ' ' . $data['case']['id'];
-                        break;
                 }
 
                 return 'BR ' . $data['busReg']['regNo'];

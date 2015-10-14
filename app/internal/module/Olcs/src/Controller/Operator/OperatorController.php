@@ -8,32 +8,21 @@
 namespace Olcs\Controller\Operator;
 
 use Dvsa\Olcs\Transfer\Command\Application\CreateApplication;
-use Olcs\Controller as OlcsController;
+use Olcs\Controller\CrudAbstract;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\OperatorControllerInterface;
 
 /**
  * Operator Controller
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OperatorController extends OlcsController\CrudAbstract implements
-    OlcsController\Interfaces\OperatorControllerInterface
+class OperatorController extends CrudAbstract implements OperatorControllerInterface, LeftViewProvider
 {
     use Traits\OperatorControllerTrait,
-        Traits\DocumentSearchTrait,
-        Traits\DocumentActionTrait,
         Traits\ListDataTrait;
-
-    /**
-     * @var string
-     */
-    protected $pageLayout = 'operator-section';
-
-    /**
-     * @var string
-     */
-    protected $layoutFile = 'layout/operator-subsection';
 
     /**
      * @var string
@@ -44,6 +33,14 @@ class OperatorController extends OlcsController\CrudAbstract implements
      * @var string
      */
     protected $section;
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/operator/partials/left');
+
+        return $view;
+    }
 
     /**
      * Redirect to the first menu section
@@ -57,8 +54,6 @@ class OperatorController extends OlcsController\CrudAbstract implements
 
     public function newApplicationAction()
     {
-        $this->pageLayout = null;
-
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -103,24 +98,10 @@ class OperatorController extends OlcsController\CrudAbstract implements
                 ->addErrorMessage('unknown-error');
         }
 
-        // unset layout file
-        $this->layoutFile = null;
-
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Create new application');
-    }
-
-    public function onDispatch(\Zend\Mvc\MvcEvent $e)
-    {
-        $organisationId = $this->params('organisation');
-
-        if (!empty($organisationId)) {
-            $this->pageLayout = $this->isUnlicensed() ? 'unlicensed-operator-section' : 'operator-section';
-        }
-
-        return parent::onDispatch($e);
     }
 
     protected function isUnlicensed()
@@ -189,12 +170,8 @@ class OperatorController extends OlcsController\CrudAbstract implements
 
         $this->getServiceLocator()->get('Script')->loadFile('operator-merge');
 
-        // unset layout file
-        $this->layoutFile = null;
-        $this->pageLayout = null;
-
         $view = new ViewModel(['form' => $form]);
-        $view->setTemplate('partials/form');
+        $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Merge operator');
     }
@@ -244,43 +221,5 @@ class OperatorController extends OlcsController\CrudAbstract implements
         );
 
         return $view;
-    }
-
-    /**
-     * Route (prefix) for document action redirects
-     * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return string
-     */
-    protected function getDocumentRoute()
-    {
-        return 'operator/documents';
-    }
-
-    /**
-     * Route params for document action redirects
-     * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return array
-     */
-    protected function getDocumentRouteParams()
-    {
-        return ['organisation' => $this->getFromRoute('organisation')];
-    }
-
-    /**
-     * Get view model for document action
-     * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return ViewModel
-     */
-    protected function getDocumentView()
-    {
-        $filters = $this->mapDocumentFilters(['irfoOrganisation' => $this->getFromRoute('organisation')]);
-
-        return $this->getViewWithOrganisation(
-            [
-                'table' => $this->getDocumentsTable($filters),
-                'form'  => $this->getDocumentForm($filters),
-                'documents' => true
-            ]
-        );
     }
 }

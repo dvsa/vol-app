@@ -8,17 +8,14 @@ namespace Admin\Controller;
 use Dvsa\Olcs\Transfer\Command\CompaniesHouse\CloseAlerts as CloseDto;
 use Dvsa\Olcs\Transfer\Query\CompaniesHouse\AlertList as ListDto;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\CompaniesHouseAlertFilters as FilterForm;
 use Zend\View\Model\ViewModel;
 
 /**
  * Companies House Alert Controller
  */
-class CompaniesHouseAlertController extends AbstractInternalController implements
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+class CompaniesHouseAlertController extends AbstractInternalController implements LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -55,14 +52,17 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
         ]
     ];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/admin-report-section';
-    }
+        $view = new ViewModel(
+            [
+                'navigationId' => 'admin-dashboard/admin-report',
+                'navigationTitle' => 'Reports'
+            ]
+        );
+        $view->setTemplate('admin/sections/admin/partials/generic-left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/wide-layout';
+        return $view;
     }
 
     public function indexAction()

@@ -614,7 +614,7 @@ $nav = array(
                                 array(
                                     'id' => 'transport_manager_details_details',
                                     'label' => 'internal-navigation-transport-manager-details-details',
-                                    'route' => 'transport-manager/details/details',
+                                    'route' => 'transport-manager/details',
                                     'use_route_match' => true
                                 ),
                                 array(
@@ -716,6 +716,12 @@ $nav = array(
                             'use_route_match' => true,
                             'pages' => array(
                                 array(
+                                    'id' => 'unlicensed_operator_business_details',
+                                    'label' => 'internal-navigation-operator-business_details',
+                                    'route' => 'operator-unlicensed/business-details',
+                                    'use_route_match' => true,
+                                ),
+                                array(
                                     'id' => 'operator_business_details',
                                     'label' => 'internal-navigation-operator-business_details',
                                     'route' => 'operator/business-details',
@@ -732,7 +738,13 @@ $nav = array(
                                     'label' => 'internal-navigation-operator-licences_applications',
                                     'route' => 'operator/licences-applications',
                                     'use_route_match' => true,
-                                )
+                                ),
+                                array(
+                                    'id' => 'unlicensed_operator_vehicles',
+                                    'label' => 'internal-navigation-operator-vehicles',
+                                    'route' => 'operator-unlicensed/vehicles',
+                                    'use_route_match' => true,
+                                ),
                             )
                         ),
                         array(
@@ -762,6 +774,12 @@ $nav = array(
                                     'use_route_match' => true,
                                 )
                             )
+                        ),
+                        array(
+                            'id' => 'unlicensed_operator_cases',
+                            'label' => 'internal-navigation-operator-cases',
+                            'route' => 'operator-unlicensed/cases',
+                            'use_route_match' => true,
                         ),
                         array(
                             'id' => 'operator_processing',
@@ -814,73 +832,6 @@ $nav = array(
                             'use_route_match' => true,
                         ),
                     )
-                ),
-                array(
-                    'id' => 'unlicensed_operator',
-                    'label' => 'internal-navigation-operator',
-                    'route' => 'operator-unlicensed',
-                    'use_route_match' => true,
-                    'pages' => array(
-                        array(
-                            'id' => 'unlicensed_operator_profile',
-                            'label' => 'internal-navigation-unlicensed-operator-profile',
-                            'route' => 'operator-unlicensed',
-                            'use_route_match' => true,
-                            'pages' => array(
-                                array(
-                                    'id' => 'unlicensed_operator_business_details',
-                                    'label' => 'internal-navigation-operator-business_details',
-                                    'route' => 'operator-unlicensed/business-details',
-                                    'use_route_match' => true,
-                                ),
-                                array(
-                                    'id' => 'unlicensed_operator_people',
-                                    'label' => 'internal-navigation-operator-people',
-                                    'route' => 'operator/people',
-                                    'use_route_match' => true,
-                                    'action' => 'index',
-                                ),
-                                array(
-                                    'id' => 'unlicensed_operator_vehicles',
-                                    'label' => 'internal-navigation-operator-vehicles',
-                                    'route' => 'operator-unlicensed/vehicles',
-                                    'use_route_match' => true,
-                                ),
-                            )
-                        ),
-                        array(
-                            'id' => 'unlicensed_operator_cases',
-                            'label' => 'internal-navigation-operator-cases',
-                            'route' => 'operator-unlicensed/cases',
-                            'use_route_match' => true,
-                        ),
-                        array(
-                            'id' => 'unlicensed_operator_processing',
-                            'label' => 'internal-navigation-operator-processing',
-                            'route' => 'operator/processing/history',
-                            'use_route_match' => true,
-                            'pages' => array(
-                                array(
-                                    'id' => 'unlicensed_operator_processing_history',
-                                    'label' => 'internal-navigation-operator-processing-history',
-                                    'route' => 'operator/processing/history',
-                                    'use_route_match' => true,
-                                ),
-                                array(
-                                    'id' => 'unlicensed_operator_processing_notes',
-                                    'label' => 'internal-navigation-operator-processing-notes',
-                                    'route' => 'operator/processing/notes',
-                                    'use_route_match' => true,
-                                ),
-                                array(
-                                    'id' => 'unlicensed_operator_processing_tasks',
-                                    'label' => 'internal-navigation-operator-processing-tasks',
-                                    'route' => 'operator/processing/tasks',
-                                    'use_route_match' => true,
-                                ),
-                            )
-                        ),
-                    ),
                 ),
             ),
         ),
@@ -937,6 +888,12 @@ $nav = array(
                     'route' => 'lva-application/processing',
                     'use_route_match' => true,
                     'pages' => array(
+                        array(
+                            'id' => 'application_processing_publications',
+                            'label' => 'internal-licence-processing-publications',
+                            'route' => 'lva-application/processing/publications',
+                            'use_route_match' => true,
+                        ),
                         array(
                             'id' => 'application_processing_inspection_request',
                             'label' => 'internal-application-processing-inspection-request',

@@ -16,6 +16,11 @@ return array(
             'formatter' => 'TransactionNoAndStatus',
         ),
         array(
+            'title' => 'Type',
+            'stack' => 'transaction->type->description',
+            'formatter' => 'StackValue',
+        ),
+        array(
             'title' => 'Date',
             'stack' => 'transaction->completedDate',
             'formatter' => 'FeeTransactionDate',
@@ -23,12 +28,6 @@ return array(
         array(
             'title' => 'Method',
             'stack' => 'transaction->paymentMethod->description',
-            'formatter' => 'StackValue',
-        ),
-        // @todo type was not in AC - remove?
-        array(
-            'title' => 'Type',
-            'stack' => 'transaction->type->description',
             'formatter' => 'StackValue',
         ),
         array(

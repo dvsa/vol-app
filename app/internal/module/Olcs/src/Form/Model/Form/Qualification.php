@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("qualification")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "action_lcfirst": true})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class Qualification
 {

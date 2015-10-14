@@ -34,6 +34,8 @@ class BusProcessingDecisionControllerTest extends MockeryTestCase
         $expectedHandleCommand,
         $expectedProcessGrantVariation
     ) {
+        $this->markTestSkipped();
+
         $params = m::mock()
             ->shouldReceive('fromRoute')->with('busRegId')->andReturn($busRegId)
             ->getMock();

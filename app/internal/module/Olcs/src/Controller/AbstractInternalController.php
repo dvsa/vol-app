@@ -20,6 +20,7 @@ use Olcs\Logging\Log\ZendLogPsr3Adapter as Logger;
 use Olcs\View\Builder\BuilderInterface as ViewBuilderInterface;
 use Olcs\Mvc\Controller\Plugin;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Common\Service\Cqrs\Response;
 use Zend\Http\Response as HttpResponse;
 
@@ -35,7 +36,7 @@ use Zend\Http\Response as HttpResponse;
  * @method Plugin\Placeholder placeholder()
  * @method Plugin\Table table()
  * @method Response handleQuery(QueryInterface $query)
- * @method Response handleCommand(QueryInterface $query)
+ * @method Response handleCommand(CommandInterface $query)
  * @method Plugin\Confirm confirm($string)
  */
 abstract class AbstractInternalController extends AbstractActionController
@@ -80,7 +81,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * you can specify a key => value pair to map route param (value) to dto param (key)
      */
     protected $tableViewPlaceholderName = 'table';
-    protected $tableViewTemplate = 'partials/table';
+    protected $tableViewTemplate = 'pages/table';
     protected $defaultTableSortField = 'id';
     protected $tableName = '';
     protected $listDto = '';
@@ -95,6 +96,7 @@ abstract class AbstractInternalController extends AbstractActionController
     protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = '';
     protected $itemParams = ['id'];
+    protected $detailsContentTitle;
 
     /**
      * Variables for controlling edit view rendering
@@ -111,11 +113,15 @@ abstract class AbstractInternalController extends AbstractActionController
      * Form class for add form. If this has a value, then this will be used, otherwise $formClass will be used.
      */
     protected $addFormClass = '';
+    protected $addContentTitle = 'Add';
+    protected $addSuccessMessage = 'Created record';
 
     /**
      * Custom view template for add / edit form
      */
     protected $editViewTemplate = 'pages/crud-form';
+    protected $editContentTitle = 'Edit';
+    protected $editSuccessMessage = 'Updated record';
 
     /**
      * Variables for controlling edit view rendering
@@ -146,6 +152,8 @@ abstract class AbstractInternalController extends AbstractActionController
      * @var array
      */
     protected $crudConfig = [];
+
+    protected $persist = true;
 
     /**
      * Variables for controlling the delete action.
@@ -261,7 +269,8 @@ abstract class AbstractInternalController extends AbstractActionController
             $this->itemDto,
             new GenericItem($this->itemParams),
             $this->detailsViewPlaceholderName,
-            $this->detailsViewTemplate
+            $this->detailsViewTemplate,
+            $this->detailsContentTitle
         );
     }
 
@@ -272,7 +281,9 @@ abstract class AbstractInternalController extends AbstractActionController
             new AddFormDefaultData($this->defaultData),
             $this->createCommand,
             $this->mapperClass,
-            $this->editViewTemplate
+            $this->editViewTemplate,
+            $this->addSuccessMessage,
+            $this->addContentTitle
         );
     }
 
@@ -284,7 +295,9 @@ abstract class AbstractInternalController extends AbstractActionController
             new GenericItem($this->itemParams),
             $this->updateCommand,
             $this->mapperClass,
-            $this->editViewTemplate
+            $this->editViewTemplate,
+            $this->editSuccessMessage,
+            $this->editContentTitle
         );
     }
 
@@ -362,6 +375,10 @@ abstract class AbstractInternalController extends AbstractActionController
 
             $table = $this->alterTable($table, $data);
 
+            /**
+             * @todo in some cases we only care about putting the table into this placeholder, we then don't care
+             * about constructing a view, so maybe we need a wa
+             */
             $this->placeholder()->setPlaceholder(
                 $tableViewPlaceholderName,
                 $table->render()
@@ -384,10 +401,13 @@ abstract class AbstractInternalController extends AbstractActionController
         $itemDto,
         ParameterProviderInterface $paramProvider,
         $detailsViewPlaceHolderName,
-        $detailsViewTemplate
+        $detailsViewTemplate,
+        $contentTitle = null
     ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
+
+        $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
 
         $paramProvider->setParams($this->plugin('params'));
         $params = $paramProvider->provideParameters();
@@ -442,7 +462,8 @@ abstract class AbstractInternalController extends AbstractActionController
         $createCommand,
         $mapperClass,
         $editViewTemplate = 'pages/crud-form',
-        $successMessage = 'Created record'
+        $successMessage = 'Created record',
+        $contentTitle = null
     ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
@@ -461,6 +482,7 @@ abstract class AbstractInternalController extends AbstractActionController
 
         $form->setData($initialData);
         $this->placeholder()->setPlaceholder('form', $form);
+        $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
 
         if ($this->getRequest()->isPost()) {
             $form->setData((array) $this->params()->fromPost());
@@ -469,7 +491,7 @@ abstract class AbstractInternalController extends AbstractActionController
         $hasProcessed =
             $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
-        if (!$hasProcessed && $this->getRequest()->isPost() && $form->isValid()) {
+        if (!$hasProcessed && $this->persist && $this->getRequest()->isPost() && $form->isValid()) {
             $data = ArrayUtils::merge($initialData, $form->getData());
             $commandData = $mapperClass::mapFromForm($data);
             $response = $this->handleCommand($createCommand::create($commandData));
@@ -519,7 +541,8 @@ abstract class AbstractInternalController extends AbstractActionController
         $updateCommand,
         $mapperClass,
         $editViewTemplate = 'pages/crud-form',
-        $successMessage = 'Updated record'
+        $successMessage = 'Updated record',
+        $contentTitle = null
     ) {
         $this->getLogger()->debug(__FILE__);
         $this->getLogger()->debug(__METHOD__);
@@ -528,6 +551,7 @@ abstract class AbstractInternalController extends AbstractActionController
         $action = ucfirst($this->params()->fromRoute('action'));
         $form = $this->getForm($formClass);
         $this->placeholder()->setPlaceholder('form', $form);
+        $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
 
         if ($request->isPost()) {
             $dataFromPost = (array) $this->params()->fromPost();
@@ -541,7 +565,7 @@ abstract class AbstractInternalController extends AbstractActionController
         $hasProcessed =
             $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
-        if (!$hasProcessed && $request->isPost() && $form->isValid()) {
+        if (!$hasProcessed && $this->persist && $request->isPost() && $form->isValid()) {
             $commandData = $mapperClass::mapFromForm($form->getData());
             $response = $this->handleCommand($updateCommand::create($commandData));
 
@@ -631,13 +655,77 @@ abstract class AbstractInternalController extends AbstractActionController
     }
 
     /**
+     * Processes a command, and populates flash messages for the user
+     *
+     * @param ParameterProviderInterface $paramProvider
+     * @param $command
+     * @param bool|true $displayApiSuccess
+     * @param bool|true $displayApiErrors
+     * @param string $successMessage
+     * @param string $errorMessage
+     * @return array|mixed
+     */
+    final protected function processCommand(
+        ParameterProviderInterface $paramProvider,
+        $command,
+        $displayApiSuccess = true,
+        $displayApiErrors = true,
+        $successMessage = 'Update successful',
+        $errorMessage = 'unknown-error'
+    ) {
+        $this->getLogger()->debug(__FILE__);
+        $this->getLogger()->debug(__METHOD__);
+
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
+
+        $response = $this->handleCommand($command::create($params));
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($errorMessage);
+        }
+
+        if ($response->isClientError()) {
+            if ($displayApiErrors && isset($result['messages']) && !empty($result['messages'])) {
+                foreach ($result['messages'] as $message) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($message);
+                }
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($errorMessage);
+            }
+        }
+
+        if ($response->isOk()) {
+            if ($displayApiSuccess && isset($result['messages']) && !empty($result['messages'])) {
+                foreach ($result['messages'] as $message) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($message);
+                }
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
+            }
+        }
+
+        return $this->redirectTo($response->getResult());
+    }
+
+    /**
      * @param array $restResponse
      * @return array
      */
     public function redirectConfig(array $restResponse)
     {
+
         $action = $this->params()->fromRoute('action', null);
         $action = strtolower($action);
+
+        // intercept cancelled forms to allow alternative redirect config
+        if ($this->hasCancelledForm() && isset($this->redirectConfig['cancel'])) {
+            $action = 'cancel';
+        }
 
         if (!isset($this->redirectConfig[$action])) {
             return[];
@@ -767,6 +855,24 @@ abstract class AbstractInternalController extends AbstractActionController
         $globalScripts = array_filter($this->inlineScripts, $callback);
 
         return array_merge($scripts, $globalScripts);
+    }
+
+    /**
+     * Intercepts form posts that have been cancelled in order to set the action to cancelled and override the redirect.
+     *
+     * @return bool true if cancelled
+     */
+    private function hasCancelledForm()
+    {
+        $request = $this->getRequest();
+
+        if (!$request->isPost()) {
+            return false;
+        }
+
+        $postData = (array)$request->getPost();
+
+        return isset($postData['form-actions']['cancel']);
     }
 
     /**

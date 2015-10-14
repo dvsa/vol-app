@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("bus-request-map")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Request Map", "override_form_label":true})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class BusRequestMap
 {

@@ -30,7 +30,7 @@ abstract class AbstractDeclarationsInternalController extends AbstractController
                         [
                             'id' => $this->getApplicationId(),
                             'version' => $formData['version'],
-                            'authSignature' =>$formData['declarations']['declarationConfirmation'],
+                            'authSignature' => $formData['declarations']['declarationConfirmation'],
                         ]
                     )
                 );

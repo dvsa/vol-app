@@ -23,9 +23,10 @@ return array(
             'title' => 'Created',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'Date';
+                $lva = (isset($column['lva'])) ? $column['lva'] : 'licence';
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'edit', 'id' => $data['id']),
-                    'licence/processing/publications',
+                    $lva .'/processing/publications',
                     true
                 ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },

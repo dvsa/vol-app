@@ -42,7 +42,7 @@ class Confirm extends AbstractPlugin
         if ($setTerminal) {
             $view->setTerminal(true);
         }
-        $view->setTemplate('partials/confirm');
+        $view->setTemplate('pages/confirm');
 
         return $view;
     }

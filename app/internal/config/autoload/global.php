@@ -1,7 +1,6 @@
 <?php
 
 return array(
-    'version' => (file_exists('../version') ? file_get_contents('../version'): ''),
     'halt_on_error' => true, // this stops the olcs-logging module from swallowing error exceptions
     'service_api_mapping' => array(
         array(

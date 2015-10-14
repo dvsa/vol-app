@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("TmCaseRepute")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"No further action"})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class TmCaseNoFurtherAction
 {

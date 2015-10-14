@@ -11,21 +11,20 @@ use Dvsa\Olcs\Transfer\Command\LicenceVehicle\UpdateUnlicensedOperatorLicenceVeh
 use Dvsa\Olcs\Transfer\Query\Operator\UnlicensedVehicles as ListDto;
 use Dvsa\Olcs\Transfer\Query\LicenceVehicle\LicenceVehicle as ItemDto;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
 use Olcs\Data\Mapper\UnlicensedOperatorLicenceVehicle as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
+use Zend\View\Model\ViewModel;
 
 /**
  * Unlicensed Operator Vehicles Controller
  */
 class UnlicensedOperatorVehiclesController extends AbstractInternalController implements
     OperatorControllerInterface,
-    PageLayoutProvider,
-    PageInnerLayoutProvider
+    LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -46,14 +45,12 @@ class UnlicensedOperatorVehiclesController extends AbstractInternalController im
     protected $listDto = ListDto::class;
     protected $listVars = ['organisation'];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/unlicensed-operator-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/operator/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/unlicensed-operator-subsection';
+        return $view;
     }
 
     /**
@@ -67,18 +64,14 @@ class UnlicensedOperatorVehiclesController extends AbstractInternalController im
     protected $itemParams = ['organisation', 'id' => 'id'];
 
     /**
-     * Form class for add form. If this has a value, then this will be used, otherwise $formClass will be used.
-     */
-    protected $addFormClass = AddForm::class;
-
-    /**
      * Variables for controlling edit view rendering
      * all these variables are required
      * itemDto (see above) is also required.
      */
-    protected $formClass = EditForm::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add vehicle';
+    protected $editContentTitle = 'Edit vehicle';
 
     /**
      * Variables for controlling edit view rendering
@@ -137,7 +130,9 @@ class UnlicensedOperatorVehiclesController extends AbstractInternalController im
             new AddFormDefaultData($this->defaultData),
             $this->createCommand,
             $this->mapperClass,
-            $this->editViewTemplate
+            $this->editViewTemplate,
+            'Created record',
+            $this->addContentTitle
         );
     }
 
@@ -149,7 +144,9 @@ class UnlicensedOperatorVehiclesController extends AbstractInternalController im
             new GenericItem($this->itemParams),
             $this->updateCommand,
             $this->mapperClass,
-            $this->editViewTemplate
+            $this->editViewTemplate,
+            'Updated record',
+            $this->editContentTitle
         );
     }
 

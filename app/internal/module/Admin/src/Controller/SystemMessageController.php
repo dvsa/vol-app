@@ -18,7 +18,10 @@ class SystemMessageController extends AbstractActionController
     public function indexAction()
     {
         $view = $this->getView();
-        $view->setTemplate('system-message/index');
-        return $view;
+        $view->setTemplate('placeholder');
+
+        $this->placeholder()->setPlaceholder('pageTitle', 'System messages');
+
+        return $this->viewBuilder()->buildView($view);
     }
 }

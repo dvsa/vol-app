@@ -7,9 +7,9 @@ use Olcs\Form\Model\Fieldset\Base;
 
 /**
  * @Form\Name("User")
- * @Form\Attributes({"method":"post","label":"User"})
+ * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label": "User"})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class User extends Base
 {
@@ -47,48 +47,6 @@ class User extends Base
      * @Form\ComposedObject("Admin\Form\Model\Fieldset\UserLoginSecurity")
      */
     public $userLoginSecurity = null;
-
-    /**
-     * @Form\Attributes({"value":"ct_obj"})
-     * @Form\Type("Hidden")
-     */
-    public $contactDetailsType = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $contactDetailsId = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $contactDetailsVersion = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $personId = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $personVersion = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $phoneContactId = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $phoneContactVersion = null;
 
     /**
      * @Form\Name("form-actions")

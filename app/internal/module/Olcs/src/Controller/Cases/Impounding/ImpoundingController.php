@@ -14,18 +14,16 @@ use Dvsa\Olcs\Transfer\Query\Cases\Impounding\Impounding as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Impounding\ImpoundingList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\PageInnerLayoutProvider;
-use Olcs\Controller\Interfaces\PageLayoutProvider;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\Impounding;
+use Zend\View\Model\ViewModel;
 
 /**
  * Case Impounding Controller
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class ImpoundingController extends AbstractInternalController implements CaseControllerInterface,
- PageLayoutProvider,
- PageInnerLayoutProvider
+class ImpoundingController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -48,22 +46,18 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
 
-    public function getPageLayout()
+    public function getLeftView()
     {
-        return 'layout/case-section';
-    }
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    public function getPageInnerLayout()
-    {
-        return 'layout/case-details-subsection';
+        return $view;
     }
 
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/impounding';
-    protected $detailsViewPlaceholderName = 'details';
     protected $itemDto = ItemDto::class;
     // 'id' => 'impounding', to => from
     protected $itemParams = ['case', 'id' => 'impounding'];
@@ -76,6 +70,8 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
     protected $formClass = Impounding::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = \Olcs\Data\Mapper\Impounding::class;
+    protected $addContentTitle = 'Add impounding';
+    protected $editContentTitle = 'Edit impounding';
 
     /**
      * Variables for controlling edit view rendering
