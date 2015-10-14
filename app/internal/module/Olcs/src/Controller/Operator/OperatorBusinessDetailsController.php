@@ -94,6 +94,12 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
             // non-js version of form
             unset($post['operator-business-type']['refresh']);
             $validateAndSave = false;
+            $newOperatorData = [
+                'operator-business-type' => [
+                    'type' => $operatorType
+                ]
+            ];
+            $form->setData($newOperatorData);
         }
 
         /**
