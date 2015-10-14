@@ -7,8 +7,14 @@ use Zend\Form\Annotation as Form;
 /**
  * @Form\Name("bus-request-map-fields")
  */
-class BusRequestMap extends Base
+class BusRequestMap
 {
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $id;
+
     /**
      * @Form\Type("Radio")
      * @Form\Options({
