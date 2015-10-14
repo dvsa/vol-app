@@ -2,14 +2,20 @@
 
 namespace Olcs\Controller\Bus;
 
-use Olcs\Service\Data\RequestMap;
-use Zend\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\RequestMap as RequestMapCmd;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Data\Mapper\BusRequestMap as Mapper;
+use Olcs\Form\Model\Form\BusRequestMap as BusRequestMapForm;
 
 /**
  * Class BusRequestMapController
  * @package Olcs\Controller\Bus
  */
-class BusRequestMapController extends BusController
+class BusRequestMapController extends AbstractInternalController implements
+    BusRegControllerInterface,
+    LeftViewProvider
 {
     /**
      * @var string
@@ -20,45 +26,26 @@ class BusRequestMapController extends BusController
      */
     protected $subNavRoute = 'licence_bus_processing';
 
+    protected $redirectConfig = [
+        'add' => [
+            'route' => 'licence/bus-docs',
+            'action' => 'documents'
+        ]
+    ];
+
+    protected $formClass = BusRequestMapForm::class;
+    protected $createCommand = RequestMapCmd::class;
+    protected $mapperClass = Mapper::class;
+    protected $addSuccessMessage = 'Map created successfully';
+    protected $addContentTitle = 'Request map';
+
+
+    protected $defaultData = [
+        'busRegId' => 'route'
+    ];
+
     public function getLeftView()
     {
         return null;
-    }
-
-    /**
-     * @return \Zend\Http\Response
-     */
-    public function requestMapAction()
-    {
-        /** @var \Zend\Form\Form $form */
-        $form = $this->getServiceLocator()->get('Helper\Form')
-            ->createFormWithRequest('BusRequestMap', $this->getRequest());
-
-        if ($this->getRequest()->isPost()) {
-            $form->setData($this->params()->fromPost());
-            if ($form->isValid()) {
-
-                $data = $form->getData()['fields'];
-
-                /** @var RequestMap $ds */
-                $ds = $this->getServiceLocator()->get('DataServiceManager')->get(RequestMap::class);
-                $ds->requestMap($this->params()->fromRoute('busRegId'), $data['scale']);
-
-                $this->flashMessenger()->addSuccessMessage('Map created successfully');
-
-                return $this->redirectToRouteAjax('licence/bus-docs', [], [], true);
-            }
-        }
-
-        $this->setPlaceholder('form', $form);
-        $this->setPlaceholder('contentTitle', 'Request Map');
-
-        $view = $this->getView();
-        $view->setTemplate('pages/crud-form');
-
-        /** @var static $ctrl */
-        $ctrl = $this->getServiceLocator()->get('ControllerManager')->get('BusRequestMapController');
-
-        return $ctrl->renderView($view);
     }
 }

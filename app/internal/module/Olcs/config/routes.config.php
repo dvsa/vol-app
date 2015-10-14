@@ -1054,7 +1054,7 @@ $routes = [
                                     'busRegId' => '[0-9]+',
                                 ],
                                 'controller' => 'BusRequestMapController',
-                                'action' => 'requestMap'
+                                'action' => 'add'
                             ]
                         ]
                     ],
