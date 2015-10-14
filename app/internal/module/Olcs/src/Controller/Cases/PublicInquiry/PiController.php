@@ -51,16 +51,16 @@ class PiController extends AbstractInternalController implements CaseControllerI
     /** Close */
     protected $closeCommand = CloseCmd::class;
     protected $closeParams = ['id' => 'case'];
-    protected $closeModalTitle = 'Close the Pi';
-    protected $closeConfirmMessage = 'Are you sure you want to close the Pi?';
-    protected $closeSuccessMessage = 'Pi closed';
+    protected $closeModalTitle = 'Close the PI';
+    protected $closeConfirmMessage = 'Are you sure you want to close the PI?';
+    protected $closeSuccessMessage = 'PI closed';
 
     /** Reopen */
     protected $reopenCommand = ReopenCmd::class;
     protected $reopenParams = ['id' => 'case'];
-    protected $reopenModalTitle = 'Reopen the Pi?';
-    protected $reopenConfirmMessage = 'Are you sure you want to reopen the Pi?';
-    protected $reopenSuccessMessage = 'Pi reopened';
+    protected $reopenModalTitle = 'Reopen the PI?';
+    protected $reopenConfirmMessage = 'Are you sure you want to reopen the PI?';
+    protected $reopenSuccessMessage = 'PI reopened';
 
     protected $itemParams = ['id' => 'case'];
     protected $defaultData = ['case' => AddFormDefaultData::FROM_ROUTE];
