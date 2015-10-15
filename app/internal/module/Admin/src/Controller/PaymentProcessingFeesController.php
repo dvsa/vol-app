@@ -104,4 +104,19 @@ class PaymentProcessingFeesController extends AbstractActionController implement
     {
         $this->placeholder()->setPlaceholder('tableFilters', null);
     }
+
+    /**
+     * Redirect action
+     *
+     * @return \Zend\Http\Response
+     */
+    public function redirectAction()
+    {
+        return $this->redirectToRouteAjax(
+            'admin-dashboard/admin-payment-processing/misc-fees',
+            ['action'=>'index'],
+            ['code' => '303'],
+            true
+        );
+    }
 }
