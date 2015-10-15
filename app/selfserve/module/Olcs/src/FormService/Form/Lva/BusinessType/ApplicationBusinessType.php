@@ -22,7 +22,12 @@ class ApplicationBusinessType extends CommonApplicationBusinessType
         parent::alterForm($form, $params);
 
         if ($params['inForceLicences']) {
-            $this->lockForm($form);
+
+            $this->removeFormAction($form, 'save');
+            $this->removeFormAction($form, 'cancel');
+            $this->addBackToOverviewLink($form, $this->lva, false);
+
+            $this->lockForm($form, false);
         }
     }
 }

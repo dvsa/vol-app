@@ -996,6 +996,10 @@ return array(
 
             'lva-licence-discs' => LvaFormService\PsvDiscs\LicencePsvDiscs::class,
             'lva-variation-discs' => LvaFormService\PsvDiscs\VariationPsvDiscs::class,
+
+            'lva-licence-taxi_phv' => LvaFormService\LicenceTaxiPhv::class,
+            'lva-variation-taxi_phv' => LvaFormService\TaxiPhv::class,
+            'lva-application-taxi_phv' => LvaFormService\ApplicationTaxiPhv::class,
         ],
     ],
     'zfc_rbac' => [
