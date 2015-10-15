@@ -300,6 +300,7 @@ return array(
                 => 'Olcs\Controller\TransportManager\TransportManagerCaseController',
             'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController',
             'InterimApplicationController' => 'Olcs\Controller\Lva\Application\InterimController',
+            'InterimVariationController' => 'Olcs\Controller\Lva\Variation\InterimController',
             'SplitScreenController' => 'Olcs\Controller\SplitScreenController',
 
             // Event History Controllers
