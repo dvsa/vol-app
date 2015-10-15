@@ -20,9 +20,6 @@ class LicenceOperatingCentres extends CommonLicenceOperatingCentres
     protected $mainTableConfigName = 'lva-licence-operating-centres';
 
     private $lockElements = [
-        'totAuthSmallVehicles',
-        'totAuthMediumVehicles',
-        'totAuthLargeVehicles',
         'totAuthVehicles',
         'totAuthTrailers'
     ];
