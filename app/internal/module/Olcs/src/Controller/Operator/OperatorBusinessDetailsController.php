@@ -94,6 +94,12 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
             // non-js version of form
             unset($post['operator-business-type']['refresh']);
             $validateAndSave = false;
+            $newOperatorData = [
+                'operator-business-type' => [
+                    'type' => $operatorType
+                ]
+            ];
+            $form->setData($newOperatorData);
         }
 
         /**
@@ -181,7 +187,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
      * @param string $action
      * @return mixed
      */
-    protected function saveForm($form, $action)
+    protected function saveForm($form, $action, $routePrefix = 'operator')
     {
         $postData = (array)$this->getRequest()->getPost();
 
@@ -225,7 +231,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         if ($response->isOk()) {
             $this->flashMessenger()->addSuccessMessage($message);
             $orgId = $response->getResult()['id']['organisation'];
-            return $this->redirectToBusinessDetails($orgId);
+            return $this->redirectToBusinessDetails($orgId, $routePrefix);
         }
 
         $messages = $response->getResult()['messages'];
@@ -332,8 +338,8 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         return $this->organisation;
     }
 
-    protected function redirectToBusinessDetails($orgId)
+    protected function redirectToBusinessDetails($orgId, $routePrefix = 'operator')
     {
-        return $this->redirectToRoute('operator/business-details', ['organisation' => $orgId]);
+        return $this->redirect()->toRouteAjax($routePrefix . '/business-details', ['organisation' => $orgId]);
     }
 }
