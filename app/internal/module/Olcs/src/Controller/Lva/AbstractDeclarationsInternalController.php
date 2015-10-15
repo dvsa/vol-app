@@ -19,6 +19,7 @@ abstract class AbstractDeclarationsInternalController extends AbstractController
         $request = $this->getRequest();
 
         $form = $this->getForm();
+        $this->alterFormForLva($form);
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();

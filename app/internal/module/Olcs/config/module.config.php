@@ -681,10 +681,6 @@ return array(
             'lva-variation-undertakings' => LvaFormService\Undertakings::class,
             'lva-application-undertakings' => LvaFormService\Undertakings::class,
 
-            'lva-licence-taxi_phv' => LvaFormService\TaxiPhv::class,
-            'lva-variation-taxi_phv' => LvaFormService\TaxiPhv::class,
-            'lva-application-taxi_phv' => LvaFormService\TaxiPhv::class,
-
             'lva-application-licence_history' => LvaFormService\LicenceHistory::class,
 
             'lva-variation-convictions_penalties' => LvaFormService\ConvictionsPenalties::class,
