@@ -36,63 +36,91 @@
             <?php endif; ?>
         </div>
         <?php endif; ?>
-        <h2><?php echo $this->translate('What do I need to do next?'); ?></h2>
-        <p><?php echo $this->translate('application-summary-what-next-text'); ?></p>
+        <?php if (empty($actions)): ?>
+            <h2><?php echo $this->translate('What happens next?'); ?></h2>
+            <p><?php echo $this->translate('application-summary-complete-what-next-text'); ?></p>
+        <?php else: ?>
+            <h2><?php echo $this->translate('What do I need to do next?'); ?></h2>
+            <p><?php echo $this->translate('application-summary-what-next-text'); ?></p>
+        <?php endif; ?>
     </div>
     <div class="article">
 
-        <?php // <---- START: Out of scope [Just Placeholder Markup] ---> ?>
-        <div class="incomplete-section">
-            <h3><?php echo $this->translate('print-sign-return-declaration-form'); ?></h3>
-            <p>
-                If you haven't already, an owner or Director of the business must sign the declaration form and return
-                it to the <?php echo $this->translate('opening-times-link'); ?>.
-            </p>
-            <p>
-                <a href="<?php echo $this->url('lva-' . $lva . '/declaration', [], [], true); ?>" target="_blank" class="download">
-                    Print declaration form
-                </a>
-            </p>
-            <hr>
-        </div>
+        <?php if (array_key_exists('PRINT_SIGN_RETURN', $actions)): ?>
+            <div class="incomplete-section">
+                <h3><?php echo $this->translate('print-sign-return-declaration-form'); ?></h3>
+                <p><?php echo $this->translate('print-sign-return-declaration-form-text'); ?></p>
+                <p>
+                    <a href="<?php echo $this->url('lva-' . $lva . '/declaration', [], [], true); ?>" target="_blank" class="download">
+                        <?php echo $this->translate('print-declaration-form'); ?>
+                    </a>
+                </p>
+                <hr>
+            </div>
+        <?php endif; ?>
 
-        <div class="incomplete-section">
-            <h3>Supply supporting evidence</h3>
-            <p>You did not upload the following documents:<br>• <b>Financial evidence</b></p>
-            <p>
-                You will need to send these documents to the
-                <?php echo $this->translate('opening-times-link'); ?>
-                along with your application reference number (<?php echo $licence . '/' . $application; ?>).
-            </p>
-        </div>
+        <?php if (array_key_exists('SUPPLY_SUPPORTING_EVIDENCE', $actions)): ?>
+            <div class="incomplete-section">
+                <h3><?php echo $this->translate('supply-supporting-evidence'); ?></h3>
+                <p><?php echo $this->translate('supply-supporting-evidence-text-1'); ?></p>
+                <ul>
+                    <?php
+                    foreach ($actions['SUPPLY_SUPPORTING_EVIDENCE'] as $evidence) {
+                        ?>
+                        <li><b><?php echo $this->translate($evidence); ?></b></li>
+                        <?php
+                    }
+                    ?>
+                </ul>
+                <p>
+                    <?php echo $this->translate('supply-supporting-evidence-text-2'); ?> (<?php echo $licence . '/' . $application; ?>).
+                </p>
+            </div>
+        <?php endif; ?>
 
-        <div class="incomplete-section">
-            <h3><?php echo $this->translate('approve-tm.title'); ?></h3>
-            <div class="table__wrapper">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>DOB</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="">
-                        <td>Morgan Patel <span class="status green">Approved</span></td>
-                        <td>7 May 1962</td>
-                        <td><a class="remove" href="">View details</a></td>
-                    </tr>
-                    <tr class="">
-                        <td>Dave Willis <span class="status red">Awaiting approval</span></td>
-                        <td>13 May 1978</td>
-                        <td><a class="remove" href="">View details</a></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div><!-- .table__wrapper -->
-        </div>
-        <?php // <---- END: Out of scope---> ?>
+        <?php if (array_key_exists('APPROVE_TM', $actions)): ?>
+            <div class="incomplete-section">
+                <h3><?php echo $this->translate('approve-tm.title'); ?></h3>
+                <div class="table__wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>DOB</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach ($transportManagers as $transportManager) {
+
+                            $tmPerson = $transportManager['transportManager']['homeCd']['person'];
+                            $tmName = sprintf('%s %s', $tmPerson['forename'], $tmPerson['familyName']);
+                            $tmStatus = $transportManager['tmApplicationStatus'];
+                            $tmLink = $this->url(
+                                'lva-' . $lva . '/transport_manager_details',
+                                ['action' => null, 'child_id' => $transportManager['id']],
+                                [],
+                                true
+                            );
+
+                            ?>
+                            <tr>
+                                <td>
+                                    <?php echo $tmName; ?>
+                                    <?php echo $this->transportManagerApplicationStatus($tmStatus['id'], $tmStatus['description']); ?>
+                                </td>
+                                <td><?php echo date('d F Y', strtotime($tmPerson['birthDate'])); ?></td>
+                                <td><a class="remove" href="<?php echo $tmLink; ?>"><?php echo $this->translate('View details'); ?></a></td>
+                            </tr>
+                            <?php
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </div><!-- .table__wrapper -->
+            </div>
+        <?php endif; ?>
 
         <h3 class="important"><?php echo $this->translate('lva-summary-important'); ?></h3>
         <p><?php echo $this->translate('application-summary-important-text'); ?></p>

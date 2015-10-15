@@ -10,7 +10,7 @@ namespace Olcs\Controller\Lva;
 use Common\Controller\Lva\AbstractController;
 use Zend\View\Model\ViewModel;
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Query\Application\TransportManagers as Qry;
+use Dvsa\Olcs\Transfer\Query\Application\Summary as Qry;
 
 /**
  * External Abstract Summary Controller
@@ -56,7 +56,9 @@ abstract class AbstractSummaryController extends AbstractController
             'status' => $data['status']['description'],
             'submittedDate' => $data['receivedDate'],
             'completionDate' => $data['targetCompletionDate'],
-            'paymentRef' => $this->params()->fromRoute('reference')
+            'paymentRef' => $this->params()->fromRoute('reference'),
+            'actions' => $data['actions'],
+            'transportManagers' => $data['transportManagers'] ? $data['transportManagers'] : []
         ];
     }
 }
