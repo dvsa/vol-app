@@ -40,9 +40,9 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         $uriPattern = $this->getServiceLocator()->get('Config')['document_share']['uri_pattern'];
 
-        $url = sprintf($uriPattern, 'documents/' . $data['data']['identifier']);
+        $url = sprintf($uriPattern, $data['data']['identifier']);
 
-        $fileUrl = 'file:///Z:/olcs/documents/' . $data['data']['identifier'];
+        $fileUrl = 'file:///Z:/olcs/' . $data['data']['identifier'];
 
         $link = sprintf('<a href="%s" data-file-url="%s" target="blank">%s</a>', $url, $fileUrl, $templateName);
 
