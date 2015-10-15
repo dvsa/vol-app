@@ -83,8 +83,10 @@ trait ExternalControllerTrait
 
         if ($this->lva === 'application' || $this->lva === 'variation') {
 
+            $summaryRouteName = 'lva-' . $this->lva . '/summary';
             $submissionRouteName = 'lva-' . $this->lva . '/submission-summary';
             $allowedRoutes = [
+                $summaryRouteName,
                 $submissionRouteName,
                 'lva-' . $this->lva . '/transport_manager_details',
                 'lva-' . $this->lva . '/withdraw'
