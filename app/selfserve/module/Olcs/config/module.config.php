@@ -1022,7 +1022,10 @@ return array(
                 // Bus reg stuff and who can access
                 'ebsr' => ['selfserve-ebsr'],
                 'bus-registration' => [
-                    'selfserve-ebsr'
+                    '*'
+                ],
+                'entity-view' => [
+                    '*'
                 ],
 
                 // Selfserve search

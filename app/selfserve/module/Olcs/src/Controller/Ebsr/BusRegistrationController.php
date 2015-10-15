@@ -183,23 +183,37 @@ class BusRegistrationController extends AbstractController
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
+        //die($response->getBody());
+
         if ($response->isOk()) {
             $results = $response->getResult();
         }
 
-        // setup layout and view
-        $content = $this->generateContent(
-            'olcs/bus-registration/details',
-            [
-                'registrationDetails' => $results['busReg'],
-                'documents' =>  [
-                    $results['pdfDocument'],
-                    $results['routeDocument'],
-                    $results['zipDocument'],
-                ],
-                'variationHistoryTable' => $this->fetchVariationHistoryTable($results['busReg']['id'])
-            ]
-        );
+        if ($this->isGranted('selfserve-ebsr-documents')) {
+            // setup layout and view
+            $content = $this->generateContent(
+                'olcs/bus-registration/details',
+                [
+                    'registrationDetails' => $results['busReg'],
+                    'documents' => [
+                        $results['pdfDocument'],
+                        $results['routeDocument'],
+                        $results['zipDocument'],
+                    ],
+                    'variationHistoryTable' => $this->fetchVariationHistoryTable($results['busReg']['id'])
+                ]
+            );
+        } else {
+            // setup layout and view
+            $content = $this->generateContent(
+                'olcs/bus-registration/details',
+                [
+                    'registrationDetails' => $results['busReg'],
+                    'documents' => [],
+                    'variationHistoryTable' => $this->fetchVariationHistoryTable($results['busReg']['id'])
+                ]
+            );
+        }
 
         return $content;
     }

@@ -1,9 +1,15 @@
 <?php
+
+//die('<pre>' . print_r($this->registrationDetails, 1));
+
 echo $this->render(
     '/partials/page-header.phtml',
     array(
         'pageTitle' => $this->translate('Bus registration details'),
-        'pageSubTitle'=> $this->registrationDetails['regNo'],
+        'pageSubTitle'=>
+            '<a href="' . $this->url('entity-view', ['entity' => 'licence', 'entityId' =>
+                $this->registrationDetails['licence']['id']]). '">' .
+            $this->registrationDetails['licence']['licNo'] . '</a>',
     )
 );
 ?>
