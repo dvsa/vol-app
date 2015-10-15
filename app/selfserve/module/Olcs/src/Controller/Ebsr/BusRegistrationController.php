@@ -183,8 +183,6 @@ class BusRegistrationController extends AbstractController
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
-        //die($response->getBody());
-
         if ($response->isOk()) {
             $results = $response->getResult();
         }
