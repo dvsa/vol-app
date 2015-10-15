@@ -21,12 +21,12 @@ use Zend\View\Helper\Placeholder;
  */
 class CookieBanner implements FactoryInterface
 {
+    const KEY = 'cookie_seen';
+
     /**
      * @var SetCookie
      */
     private $requestCookie;
-
-    private $key = 'cookie_seen';
 
     private $seen;
 
@@ -40,22 +40,26 @@ class CookieBanner implements FactoryInterface
      */
     private $response;
 
+    private $cookie;
+
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $cookie = $serviceLocator->get('Request')->getCookie();
-
-        $this->placeholder = $serviceLocator->get('ViewHelperManager')->get('Placeholder');
+        $this->cookie = $serviceLocator->get('Request')->getCookie();
         $this->response = $serviceLocator->get('Response');
-
-        if ($cookie instanceof Cookie && isset($cookie[$this->key])) {
-            $this->seen = $cookie[$this->key];
-        }
+        $this->placeholder = $serviceLocator->get('ViewHelperManager')->get('Placeholder');
 
         return $this;
     }
 
+    /**
+     * That is the question
+     */
     public function toSeeOrNotToSee()
     {
+        if ($this->cookie instanceof Cookie && isset($this->cookie[self::KEY])) {
+            $this->seen = $this->cookie[self::KEY];
+        }
+
         if ($this->seen !== null) {
             $this->placeholder->getContainer('showCookieBanner')->set(false);
         } else {
@@ -67,7 +71,7 @@ class CookieBanner implements FactoryInterface
     protected function markAsSeen()
     {
         $this->requestCookie = new SetCookie();
-        $this->requestCookie->setName($this->key);
+        $this->requestCookie->setName(self::KEY);
         $this->requestCookie->setValue(1);
         $this->requestCookie->setPath('/');
         $this->requestCookie->setExpires(strtotime('+1 month'));
