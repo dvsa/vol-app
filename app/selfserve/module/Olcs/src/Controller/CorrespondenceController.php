@@ -68,7 +68,7 @@ class CorrespondenceController extends AbstractController
             }
         );
 
-        $this->populateTabCounts($this->getFeeCount(), $count);
+        $this->populateTabCounts($correspondence['extra']['feeCount'], $count);
 
         return $view;
     }
