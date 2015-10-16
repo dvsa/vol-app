@@ -340,7 +340,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             ]
         );
 
-        $view->setTemplate('pages/transport-manager/tm-responsibility-edit');
+        $view->setTemplate('sections/transport-manager/pages/tm-responsibility-edit');
         $this->loadScripts(['forms/crud-table-handler']);
 
         return $this->renderView($view, 'Edit licence');
