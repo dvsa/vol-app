@@ -7,6 +7,7 @@
  */
 namespace OlcsTest\FormService\Form\Lva\BusinessType;
 
+use Common\Form\Elements\InputFilters\Lva\BackToApplicationActionLink;
 use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -70,10 +71,26 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
     {
         $mockElement = m::mock(Element::class);
 
+        $formActions = m::mock();
+        $formActions->shouldReceive('has')->with('save')->andReturn(true);
+        $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
+
+        $formActions->shouldReceive('remove')->once()->with('save');
+        $formActions->shouldReceive('remove')->once()->with('cancel');
+
+        $formActions->shouldReceive('add')->once()->with(m::type(BackToApplicationActionLink::class));
+
         $mockForm = m::mock(Form::class);
-        $mockForm->shouldReceive('get->get')
-            ->with('type')
-            ->andReturn($mockElement);
+        $mockForm->shouldReceive('get')->with('data')
+            ->andReturn(
+                m::mock()->shouldReceive('get')
+                    ->with('type')
+                    ->andReturn($mockElement)
+                    ->getMock()
+            );
+
+        $mockForm->shouldReceive('has')->with('form-actions')->andReturn(true);
+        $mockForm->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
         $this->fh->shouldReceive('createForm')
             ->once()
