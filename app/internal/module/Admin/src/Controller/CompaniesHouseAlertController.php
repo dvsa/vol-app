@@ -10,6 +10,7 @@ use Dvsa\Olcs\Transfer\Query\CompaniesHouse\AlertList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\CompaniesHouseAlertFilters as FilterForm;
+use Olcs\Logging\Log\Logger;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -87,8 +88,8 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
 
     public function closeAction()
     {
-        $this->getLogger()->debug(__FILE__);
-        $this->getLogger()->debug(__METHOD__);
+        Logger::debug(__FILE__);
+        Logger::debug(__METHOD__);
 
         $confirmMessage = $this->getServiceLocator()->get('Helper\Translation')
             ->translate('companies-house-alert.close.confirm');
