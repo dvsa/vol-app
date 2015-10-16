@@ -70,15 +70,6 @@ class FeesControllerTest extends MockeryTestCase
             ],
         ];
 
-        $correspondence = [
-            'count' => '3',
-            'results' => [
-                ['id' => 1, 'accessed' => 'N'],
-                ['id' => 2, 'accessed' => 'Y'],
-                ['id' => 3, 'accessed' => 'Y'],
-            ],
-        ];
-
         $organisationId = 99;
 
         // mocks
@@ -86,7 +77,6 @@ class FeesControllerTest extends MockeryTestCase
         $this->sm->setService('navigation', $mockNavigation);
 
         $mockFeesResponse = m::mock();
-        $mockCorrespondenceResponse = m::mock();
 
         $mockTableService = m::mock();
         $this->sm->setService('Table', $mockTableService);
@@ -110,18 +100,12 @@ class FeesControllerTest extends MockeryTestCase
             ->shouldReceive('isOk')
             ->andReturn(true)
             ->shouldReceive('getResult')
-            ->andReturn(['outstandingFees' => $fees]);
-
-        $this->sut
-            ->shouldReceive('handleQuery')
-            ->with(m::type(CorresepondenceQry::class))
-            ->andReturn($mockCorrespondenceResponse);
-
-        $mockCorrespondenceResponse
-            ->shouldReceive('isOk')
-            ->andReturn(true)
-            ->shouldReceive('getResult')
-            ->andReturn($correspondence);
+            ->andReturn(
+                [
+                    'outstandingFees' => $fees,
+                    'correspondenceCount' => 123,
+                ]
+            );
 
         $mockNavigation
             ->shouldReceive('findOneById')
@@ -137,7 +121,7 @@ class FeesControllerTest extends MockeryTestCase
             ->andReturn(
                 m::mock()
                     ->shouldReceive('set')
-                    ->with('count', 1)
+                    ->with('count', 123)
                     ->getMock()
             );
 

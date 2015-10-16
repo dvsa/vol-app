@@ -9,6 +9,7 @@
 namespace Olcs;
 
 use Zend\Mvc\ModuleRouteListener;
+use Zend\Mvc\MvcEvent;
 
 /**
  * Module.php
@@ -41,10 +42,19 @@ class Module
         );
     }
 
-    public function onBootstrap($e)
+    /**
+     * @param MvcEvent $e
+     */
+    public function onBootstrap(MvcEvent $e)
     {
-        $eventManager = $e->getApplication()->getEventManager();
+        $application = $e->getApplication();
+        $sm = $application->getServiceManager();
+
+        $eventManager = $application->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+        $cookieBannerListener = $sm->get('CookieBannerListener');
+        $cookieBannerListener->attach($eventManager, 1);
     }
 }
