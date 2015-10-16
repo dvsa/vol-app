@@ -20,8 +20,6 @@ use Mockery as m;
 class CrudAbstractTest extends AbstractHttpControllerTestCase
 {
     protected $traitsRequired = array(
-        'Zend\Log\LoggerAwareTrait',
-        'Common\Util\LoggerTrait',
         'Common\Util\FlashMessengerTrait',
         'Common\Util\RestCallTrait',
         'Common\Controller\Traits\ViewHelperManagerAware',
