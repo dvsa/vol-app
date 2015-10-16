@@ -187,31 +187,26 @@ class BusRegistrationController extends AbstractController
             $results = $response->getResult();
         }
 
+        $documents = [];
+
         if ($this->isGranted('selfserve-ebsr-documents')) {
-            // setup layout and view
-            $content = $this->generateContent(
-                'olcs/bus-registration/details',
-                [
-                    'registrationDetails' => $results['busReg'],
-                    'documents' => [
-                        $results['pdfDocument'],
-                        $results['routeDocument'],
-                        $results['zipDocument'],
-                    ],
-                    'variationHistoryTable' => $this->fetchVariationHistoryTable($results['busReg']['id'])
-                ]
-            );
-        } else {
-            // setup layout and view
-            $content = $this->generateContent(
-                'olcs/bus-registration/details',
-                [
-                    'registrationDetails' => $results['busReg'],
-                    'documents' => [],
-                    'variationHistoryTable' => $this->fetchVariationHistoryTable($results['busReg']['id'])
-                ]
-            );
+
+            $documents = [
+                $results['pdfDocument'],
+                $results['routeDocument'],
+                $results['zipDocument'],
+            ];
         }
+        
+        // setup layout and view
+        $content = $this->generateContent(
+            'olcs/bus-registration/details',
+            [
+                'registrationDetails' => $results['busReg'],
+                'documents' => $documents,
+                'variationHistoryTable' => $this->fetchVariationHistoryTable($results['busReg']['id'])
+            ]
+        );
 
         return $content;
     }
