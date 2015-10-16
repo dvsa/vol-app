@@ -34,18 +34,24 @@ return array(
             'formatter' => 'FeeAmount',
             'align' => 'right',
         ),
+        array(
+            'title' => 'pay-fees.outstanding',
+            'name' => 'outstanding',
+            'formatter' => 'FeeAmount',
+            'align' => 'right',
+        ),
     ),
     'footer' => array(
         'total' => array(
             'type' => 'th',
             'content' => 'dashboard-fees-total',
             'formatter' => 'Translate',
-            'colspan' => 4
+            'colspan' => 5,
         ),
         array(
             'type' => 'th',
             'formatter' => 'FeeAmountSum',
-            'name' => 'amount',
+            'name' => 'outstanding',
             'align' => 'right',
         ),
     ),
