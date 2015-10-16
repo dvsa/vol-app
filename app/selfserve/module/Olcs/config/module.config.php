@@ -61,6 +61,16 @@ $routes = array(
             )
         )
     ),
+    'cookies' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/cookies[/]',
+            'defaults' => array(
+                'controller' => \Olcs\Controller\CookiesController::class,
+                'action' => 'index'
+            )
+        )
+    ),
     'search' => array(
         'type' => 'segment',
         'options' =>  array(
@@ -829,6 +839,7 @@ return array(
             SearchController::class => SearchController::class,
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             'Entity\View' => 'Olcs\Controller\Entity\ViewController',
+            \Olcs\Controller\CookiesController::class => \Olcs\Controller\CookiesController::class,
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -856,6 +867,8 @@ return array(
                 => 'Olcs\Service\Email\TransportManagerCompleteDigitalForm',
         ),
         'factories' => array(
+            'CookieBannerListener' => \Olcs\Mvc\CookieBannerListener::class,
+            'CookieBanner' => \Olcs\Mvc\CookieBanner::class,
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
             'Olcs\Service\Ebsr' => 'Olcs\Service\Ebsr',
             'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
@@ -1038,6 +1051,7 @@ return array(
                 'search*' => ['*'],
                 'index' => ['*'],
                 'user-registration' => ['*'],
+                'cookies' => ['*'],
                 '*' => ['selfserve-user'],
             ]
         ]

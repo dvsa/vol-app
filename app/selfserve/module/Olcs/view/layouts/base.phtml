@@ -37,6 +37,22 @@
       </div><!-- end .global-header__wrapper -->
     </div><!-- end .global-header -->
 
+    <?php
+
+    $showCookieBanner = $this->getPlaceholder('showCookieBanner')->asBool();
+    if ($showCookieBanner === true) {
+        ?>
+        <div class="cookie-banner">
+            <div class="cookie-banner__wrapper">
+                <p><?php echo $this->translate('cookie-banner'); ?> <a
+                        href="<?php echo $this->url('cookies'); ?>"><?php echo $this->translate('Find out more'); ?></a>
+                </p>
+            </div>
+        </div>
+        <?php
+    }
+    ?>
+
     <div class="page-wrapper">
 
       <div class="user-header">
