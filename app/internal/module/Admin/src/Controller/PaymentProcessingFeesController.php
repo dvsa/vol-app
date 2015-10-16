@@ -29,6 +29,15 @@ class PaymentProcessingFeesController extends AbstractActionController implement
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function alterCreateFeeForm($form)
+    {
+        // no-op
+        return $form;
+    }
+
+    /**
      * Route (prefix) for fees action redirects
      * @see Olcs\Controller\Traits\FeesActionTrait
      * @return string

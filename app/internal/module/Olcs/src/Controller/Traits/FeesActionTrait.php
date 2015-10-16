@@ -75,6 +75,7 @@ trait FeesActionTrait
     public function addFeeAction()
     {
         $form = $this->getForm('create-fee');
+        $form = $this->alterCreateFeeForm($form);
 
         if ($this->getRequest()->isPost()) {
             if ($this->isButtonPressed('cancel')) {
@@ -93,11 +94,7 @@ trait FeesActionTrait
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
 
-        // currently only one route to create fees so we don't need to pass the
-        // title in to this method
-        $title = 'fees.create.title';
-
-        return $this->renderView($view, $title);
+        return $this->renderView($view, 'fees.create.title');
     }
 
     /**
@@ -490,15 +487,26 @@ trait FeesActionTrait
     }
 
     /**
+     * Alter create fee form
+     *
+     * @param \Zend\Form\Form $form
+     * @return \Zend\Form\Form
+     */
+    protected function alterCreateFeeForm($form)
+    {
+        $this->getServiceLocator()->get('Helper\Form')
+            ->disableElement($form, 'fee-details->amount');
+
+        return $form;
+    }
+
+    /**
      * @param Table $table
      * @param array $results
      * @return Table
      */
     protected function alterFeeTable($table, $results)
     {
-        // remove the 'new' action by default
-        $table->removeAction('new');
-
         // disable 'pay' button if appropriate
         if ($results['extra']['allowFeePayments'] == false) {
             $table->disableAction('pay');

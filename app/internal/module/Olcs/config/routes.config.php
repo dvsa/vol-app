@@ -19,7 +19,7 @@ $feeActionRoute = [
     // child route config that is used in multiple places
     'type' => 'segment',
     'options' => [
-        'route' => '/:action/:fee',
+        'route' => '/:action[/:fee]',
         'constraints' => [
             'fee' => '([0-9]+,?)+',
         ],
