@@ -1051,6 +1051,7 @@ return array(
                 'search*' => ['*'],
                 'index' => ['*'],
                 'user-registration' => ['*'],
+                'cookies' => ['*'],
                 '*' => ['selfserve-user'],
             ]
         ]
