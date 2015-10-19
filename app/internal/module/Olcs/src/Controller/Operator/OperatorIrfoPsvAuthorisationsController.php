@@ -15,6 +15,8 @@ use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Data\Mapper\IrfoPsvAuth as Mapper;
 use Olcs\Form\Model\Form\IrfoPsvAuth as Form;
 use Zend\View\Model\ViewModel;
+use Common\RefData;
+use Zend\Form\Form as ZendForm;
 
 /**
  * Operator Irfo Psv Authorisations Controller
@@ -104,5 +106,46 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     public function deleteAction()
     {
         return $this->notFoundAction();
+    }
+
+    /**
+     * Method to alter the form based on status
+     *
+     * @param $form
+     * @param $formData
+     * @return mixed
+     */
+    protected function alterFormForEdit(ZendForm $form, $formData)
+    {
+        $status = isset($formData['fields']['status']) ? $formData['fields']['status'] : '';
+        $readOnlyfields = [];
+        switch($status)
+        {
+            case RefData::IRFO_PSV_AUTH_STATUS_PENDING:
+                $readOnlyfields = ['irfoPsvAuthType', 'status', 'isFeeExemptApplication'];
+                break;
+            case RefData::IRFO_PSV_AUTH_STATUS_RENEW:
+                $readOnlyfields = ['irfoPsvAuthType', 'status'];
+                break;
+            case RefData::IRFO_PSV_AUTH_STATUS_GRANTED:
+            case RefData::IRFO_PSV_AUTH_STATUS_APPROVED:
+                $readOnlyfields = ['irfoPsvAuthType', 'status', 'validityPeriod', 'isFeeExemptApplication',
+                    'isFeeExemptAnnual', 'exemptionDetails', 'copiesRequired', 'copiesRequiredTotal'
+                ];
+                break;
+            case RefData::IRFO_PSV_AUTH_STATUS_CNS:
+            case RefData::IRFO_PSV_AUTH_STATUS_REFUSED:
+            case RefData::IRFO_PSV_AUTH_STATUS_WITHDRAWN:
+            default:
+                // Every status needs to be handled here to avoid displaying a form where data shouldn't be edited.
+                $form->setOption('readonly', true);
+        }
+
+        foreach ($readOnlyfields as $field) {
+            $field = $form->get('fields')->get($field);
+            $field->setAttribute('disabled', 'disabled');
+        }
+
+        return $form;
     }
 }
