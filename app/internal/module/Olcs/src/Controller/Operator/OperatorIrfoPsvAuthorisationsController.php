@@ -17,6 +17,7 @@ use Olcs\Form\Model\Form\IrfoPsvAuth as Form;
 use Zend\View\Model\ViewModel;
 use Common\RefData;
 use Zend\Form\Form as ZendForm;
+use Common\Form\Elements\InputFilters\ActionButton;
 
 /**
  * Operator Irfo Psv Authorisations Controller
@@ -146,6 +147,52 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
             $field->setAttribute('disabled', 'disabled');
         }
 
+        $form = $this->addPossibleActions($form);
+
         return $form;
+    }
+
+    /**
+     * Adds possible action buttons to the bottom of the page.
+     *
+     * @param ZendForm $form
+     * @return ZendForm
+     */
+    private function addPossibleActions(ZendForm $form)
+    {
+        $form->get('form-actions')->add($this->generateActionButton('refuse'));
+        $form->get('form-actions')->add($this->generateActionButton('grant'));
+        $form->get('form-actions')->add($this->generateActionButton('approve'));
+        $form->get('form-actions')->add($this->generateActionButton('generateDocument', 'Generate document'));
+        $form->get('form-actions')->add($this->generateActionButton('cns', 'CNS'));
+        $form->get('form-actions')->add($this->generateActionButton('withdraw'));
+        $form->get('form-actions')->add($this->generateActionButton('refuse'));
+        $form->get('form-actions')->add($this->generateActionButton('reset'));
+
+        return $form;
+    }
+
+    /**
+     * Generates and returns an action button.
+     *
+     * @param $action
+     * @param null $label
+     * @return ActionButton
+     */
+    private function generateActionButton($action, $label = null)
+    {
+        $button = new ActionButton(strtolower($action));
+        $button->setAttributes(['id' => strtolower($action), 'type' => 'submit', 'class' => 'action--secondary large']);
+        $button->setOptions(
+            [
+                'label' => !empty($label) ? $label : ucfirst($action),
+                'label_attributes' => [
+                    'class' => 'col-sm-2'
+                ],
+                'column-size' => 'sm-10'
+            ]
+        );
+
+        return $button;
     }
 }
