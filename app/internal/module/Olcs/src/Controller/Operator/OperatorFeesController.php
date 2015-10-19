@@ -63,4 +63,9 @@ class OperatorFeesController extends OperatorController
     {
         return $this->renderView($view);
     }
+
+    protected function getFeeTypeDtoData()
+    {
+        return ['organisation' => $this->params()->fromRoute('organisation')];
+    }
 }

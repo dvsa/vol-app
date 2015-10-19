@@ -33,6 +33,9 @@ class PaymentProcessingFeesController extends AbstractActionController implement
      */
     protected function alterCreateFeeForm($form)
     {
+        $options = $this->fetchFeeTypeValueOptions();
+        $form->get('fee-details')->get('feeType')->setValueOptions($options);
+
         // no-op
         return $form;
     }

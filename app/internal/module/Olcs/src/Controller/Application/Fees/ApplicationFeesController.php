@@ -60,4 +60,9 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
             'status' => 'current',
         ];
     }
+
+    protected function getFeeTypeDtoData()
+    {
+        return ['application' => $this->params()->fromRoute('application')];
+    }
 }

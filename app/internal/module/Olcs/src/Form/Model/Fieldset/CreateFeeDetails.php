@@ -27,10 +27,9 @@ class CreateFeeDetails
      *     "label": "fees.type",
      *     "short-label": "fees.type",
      *     "label_attributes": {"id": "label-type"},
-     *     "empty_option": "Please select",
-     *     "service_name":"Olcs\Service\Data\MiscellaneousFeeType"
+     *     "empty_option": "Please select"
      * })
-     * @Form\Type("DynamicSelect")
+     * @Form\Type("Select")
      * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      */
     public $feeType = null;

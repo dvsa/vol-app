@@ -68,4 +68,9 @@ class BusFeesController extends BusController
     {
         return $this->redirectToList();
     }
+
+    protected function getFeeTypeDtoData()
+    {
+        return ['licence' => $this->params()->fromRoute('licence')];
+    }
 }

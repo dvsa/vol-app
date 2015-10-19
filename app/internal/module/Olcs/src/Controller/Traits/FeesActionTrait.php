@@ -19,6 +19,7 @@ use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList as FeeTypeListQry;
 
 /**
  * Fees action trait
@@ -497,7 +498,38 @@ trait FeesActionTrait
         $this->getServiceLocator()->get('Helper\Form')
             ->disableElement($form, 'fee-details->amount');
 
+        $options = $this->fetchFeeTypeValueOptions();
+
+        $form->get('fee-details')->get('feeType')->setValueOptions($options);
+
         return $form;
+    }
+
+    /**
+     * Get value options array for create fee type form
+     *
+     * @return array
+     */
+    protected function fetchFeeTypeValueOptions()
+    {
+        $valueOptions = [];
+        $response = $this->handleQuery(
+            FeeTypeListQry::create($this->getFeeTypeDtoData())
+        );
+
+        if ($response->isOk()) {
+            $data = $response->getResult();
+            foreach ($data['results'] as $result) {
+                $valueOptions[$result['id']] = $result['description'];
+            }
+        }
+
+        return $valueOptions;
+    }
+
+    protected function getFeeTypeDtoData()
+    {
+        return ['isMiscellaneous' => 1];
     }
 
     /**

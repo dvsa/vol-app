@@ -62,4 +62,9 @@ class LicenceFeesController extends LicenceController implements LeftViewProvide
             'status' => 'current',
         ];
     }
+
+    protected function getFeeTypeDtoData()
+    {
+        return ['licence' => $this->params()->fromRoute('licence')];
+    }
 }
