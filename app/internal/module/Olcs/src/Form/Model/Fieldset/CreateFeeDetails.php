@@ -23,6 +23,7 @@ class CreateFeeDetails
     public $version = null;
 
     /**
+     * @Form\Attributes({"id":"feeType"})
      * @Form\Options({
      *     "label": "fees.type",
      *     "short-label": "fees.type",
@@ -43,7 +44,7 @@ class CreateFeeDetails
      *      "label_attributes": {"id": "label-createdDate"}
      * })
      * @Form\Required(true)
-     * @Form\Attributes({"required":false})
+     * @Form\Attributes({"required":false, "id":"createdDate"})
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})

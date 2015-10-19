@@ -95,6 +95,8 @@ trait FeesActionTrait
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
 
+        $this->loadScripts(['forms/create-fee']);
+
         return $this->renderView($view, 'fees.create.title');
     }
 
