@@ -26,11 +26,24 @@ return array(
     // Service addresses
     'service_api_mapping' => array(
         'endpoints' => array(
-            // Backend service URI *Environment specific*
-            'backend' => 'http://olcs-backend/',
-            // Postcode/Address service URI *Environment specific*
-            'postcode' => 'http://postcode.cit.olcs.mgt.mtpdvsa/',
-            // EBSR service URI *Environment specific* (to be depricated in future releases)
+            'payments' => [
+                'url' => 'http://olcspayment.dev/api/',
+                'options' => [
+                    'adapter' => \Zend\Http\Client\Adapter\Curl::class,
+                ]
+            ],
+            'backend' => [
+                'url' => 'http://olcs-backend/',
+                'options' => [
+                    'adapter' => \Zend\Http\Client\Adapter\Curl::class,
+                ]
+            ],
+            'postcode' => [
+                'url' => 'http://postcode.cit.olcs.mgt.mtpdvsa/',
+                'options' => [
+                    'adapter' => \Zend\Http\Client\Adapter\Curl::class,
+                ]
+            ],
             'ebsr' => 'http://demo_dvsa-ebsr.web03.olcs.app.mtpdvsa',
         )
     ),
