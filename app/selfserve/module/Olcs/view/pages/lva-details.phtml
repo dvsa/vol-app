@@ -49,6 +49,20 @@ if (isset($sectionText)) {
   }
   ?>
 
+  <?php
+
+  $messages = $this->flashMessenger('prominent-error');
+
+  foreach ($messages as $message) {
+      ?>
+      <div class="validation-summary">
+          <?php echo $this->translate($message); ?>
+      </div>
+      <?php
+  }
+
+  ?>
+
   <?php echo $this->flashMessengerAll(); ?>
 
   <?php if (isset($table)): ?>
