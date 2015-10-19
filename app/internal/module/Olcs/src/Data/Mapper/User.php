@@ -130,6 +130,14 @@ class User implements MapperInterface
      */
     public static function mapFromErrors(FormInterface $form, array $errors)
     {
+        if (isset($errors['messages']['loginId'])) {
+            $messages = [
+                'userLoginSecurity' => ['loginId' => $errors['messages']['loginId']]
+            ];
+            $form->setMessages($messages);
+            unset($errors['messages']['loginId']);
+        }
+
         return $errors;
     }
 }
