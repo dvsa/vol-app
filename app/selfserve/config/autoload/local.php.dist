@@ -31,23 +31,24 @@ return array(
                 'url' => 'http://olcspayment.dev/api/',
                 'options' => [
                     'adapter' => \Zend\Http\Client\Adapter\Curl::class,
+                    'timeout' => 60,
                 ]
             ],
             'backend' => [
                 'url' => 'http://olcs-backend/',
                 'options' => [
                     'adapter' => \Zend\Http\Client\Adapter\Curl::class,
+                    'timeout' => 60,
                 ]
             ],
             'postcode' => [
                 'url' => 'http://postcode.cit.olcs.mgt.mtpdvsa/',
                 'options' => [
                     'adapter' => \Zend\Http\Client\Adapter\Curl::class,
+                    'timeout' => 60,
                 ]
-            ],
-            // EBSR service URI *Environment specific* (possibly depricated in future releases)
-            'ebsr' => 'http://demo_dvsa-ebsr.web03.olcs.app.mtpdvsa',
-        ),
+            ]
+        )
     ),
 
     // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific*
