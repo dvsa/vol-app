@@ -140,6 +140,8 @@ trait ApplicationOverviewTrait
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->translateToWelsh');
         }
 
+        $this->alterFormForLva($form);
+
         return $form;
     }
 

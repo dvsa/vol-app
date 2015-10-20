@@ -41,7 +41,7 @@ class User implements MapperInterface
 
             // get the first role from the list (it should be only one)
             $formData['userType']['role']
-                = !empty($data['roles']) ? array_shift($data['roles'])['id'] : null;
+                = !empty($data['roles']) ? array_shift($data['roles'])['role'] : null;
 
             switch ($data['userType']) {
                 case 'internal':
@@ -130,6 +130,14 @@ class User implements MapperInterface
      */
     public static function mapFromErrors(FormInterface $form, array $errors)
     {
+        if (isset($errors['messages']['loginId'])) {
+            $messages = [
+                'userLoginSecurity' => ['loginId' => $errors['messages']['loginId']]
+            ];
+            $form->setMessages($messages);
+            unset($errors['messages']['loginId']);
+        }
+
         return $errors;
     }
 }

@@ -10,6 +10,7 @@ namespace Olcs\Controller\Document;
 
 use Dvsa\Olcs\Transfer\Command\Document\CreateLetter;
 use Dvsa\Olcs\Transfer\Query\Document\TemplateParagraphs;
+use Olcs\Logging\Log\Logger;
 use Zend\View\Model\ViewModel;
 use Zend\Form\Form;
 use Zend\Form\Fieldset;
@@ -67,7 +68,7 @@ class DocumentGenerationController extends AbstractDocumentController
         try {
             return $this->processGenerateDocument($data);
         } catch (\ErrorException $e) {
-            $this->getLogger()->warn($e->getMessage());
+            Logger::warn($e->getMessage());
             $this->getServiceLocator()->get('Helper\FlashMessenger')
                 ->addCurrentErrorMessage('Unable to generate the document');
         }

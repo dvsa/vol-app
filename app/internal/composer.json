@@ -1,5 +1,5 @@
 {
-    "name": "OLCS Internal",
+    "name": "olcs/olcs-internal",
     "description": "OLCS Internal Web Site",
     "repositories": [
         {

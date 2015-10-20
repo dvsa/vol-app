@@ -10,7 +10,6 @@ namespace Cli\Service\Processing;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapter;
-use Common\Util\LoggerTrait;
 use Zend\Log\Logger;
 
 /**
@@ -20,10 +19,7 @@ use Zend\Log\Logger;
  */
 abstract class AbstractBatchProcessingService implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait,
-        LoggerTrait {
-        LoggerTrait::log as traitLog;
-    }
+    use ServiceLocatorAwareTrait;
 
     const EXIT_CODE_ERROR = 1;
     const EXIT_CODE_SUCCESS = 0;
@@ -71,6 +67,6 @@ abstract class AbstractBatchProcessingService implements ServiceLocatorAwareInte
     public function log($message, $priority = Logger::INFO, $extra = array())
     {
         $this->outputLine($message);
-        return $this->traitLog($message, $priority, $extra);
+        return \Olcs\Logging\Log\Logger::log($priority, $message, $extra);
     }
 }

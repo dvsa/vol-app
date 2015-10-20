@@ -4,7 +4,12 @@ if (!isset($navigation)) {
     $navigation = $this->navigation('navigation');
 
     if ($navigation) {
-        $active = $navigation->findOneBy('active', true);
+        $routes = $navigation->findAllBy('active', true);
+
+        $active = null;
+        if (!empty($routes)) {
+            $active = array_pop($routes);
+        }
 
         if ($active) {
             $navigation = $active->getParent();

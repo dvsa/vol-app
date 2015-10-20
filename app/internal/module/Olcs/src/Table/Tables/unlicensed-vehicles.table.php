@@ -38,12 +38,6 @@ return array(
             'name' => 'weight',
         ),
         array(
-            'title' => $translationPrefix . '.type',
-            'stack' => 'vehicle->psvType->id',
-            'formatter' => 'UnlicensedVehiclePsvType',
-            'name' => 'type',
-        ),
-        array(
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}'

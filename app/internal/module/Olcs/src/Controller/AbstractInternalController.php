@@ -5,6 +5,7 @@
 namespace Olcs\Controller;
 
 use Olcs\Listener\CrudListener;
+use Olcs\Logging\Log\Logger;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
@@ -14,7 +15,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Stdlib\ArrayUtils;
 use Zend\View\Model\ViewModel;
 use Zend\Mvc\MvcEvent as MvcEvent;
-use Olcs\Logging\Log\ZendLogPsr3Adapter as Logger;
 
 // for type hints
 use Olcs\View\Builder\BuilderInterface as ViewBuilderInterface;
@@ -352,8 +352,8 @@ abstract class AbstractInternalController extends AbstractActionController
         $tableViewTemplate,
         $filterForm = ''
     ) {
-        $this->getLogger()->debug(__FILE__);
-        $this->getLogger()->debug(__METHOD__);
+        Logger::debug(__FILE__);
+        Logger::debug(__METHOD__);
 
         $paramProvider->setParams($this->plugin('params'));
         $listParams = $paramProvider->provideParameters();
@@ -404,8 +404,8 @@ abstract class AbstractInternalController extends AbstractActionController
         $detailsViewTemplate,
         $contentTitle = null
     ) {
-        $this->getLogger()->debug(__FILE__);
-        $this->getLogger()->debug(__METHOD__);
+        Logger::debug(__FILE__);
+        Logger::debug(__METHOD__);
 
         $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
 
@@ -465,8 +465,8 @@ abstract class AbstractInternalController extends AbstractActionController
         $successMessage = 'Created record',
         $contentTitle = null
     ) {
-        $this->getLogger()->debug(__FILE__);
-        $this->getLogger()->debug(__METHOD__);
+        Logger::debug(__FILE__);
+        Logger::debug(__METHOD__);
 
         $defaultDataProvider->setParams($this->plugin('params'));
 
@@ -544,8 +544,8 @@ abstract class AbstractInternalController extends AbstractActionController
         $successMessage = 'Updated record',
         $contentTitle = null
     ) {
-        $this->getLogger()->debug(__FILE__);
-        $this->getLogger()->debug(__METHOD__);
+        Logger::debug(__FILE__);
+        Logger::debug(__METHOD__);
 
         $request = $this->getRequest();
         $action = ucfirst($this->params()->fromRoute('action'));
@@ -624,8 +624,8 @@ abstract class AbstractInternalController extends AbstractActionController
         $confirmMessage,
         $successMessage
     ) {
-        $this->getLogger()->debug(__FILE__);
-        $this->getLogger()->debug(__METHOD__);
+        Logger::debug(__FILE__);
+        Logger::debug(__METHOD__);
 
         $paramProvider->setParams($this->plugin('params'));
         $params = $paramProvider->provideParameters();
@@ -673,8 +673,8 @@ abstract class AbstractInternalController extends AbstractActionController
         $successMessage = 'Update successful',
         $errorMessage = 'unknown-error'
     ) {
-        $this->getLogger()->debug(__FILE__);
-        $this->getLogger()->debug(__METHOD__);
+        Logger::debug(__FILE__);
+        Logger::debug(__METHOD__);
 
         $paramProvider->setParams($this->plugin('params'));
         $params = $paramProvider->provideParameters();
@@ -924,16 +924,6 @@ abstract class AbstractInternalController extends AbstractActionController
         $form = $this->getServiceLocator()->get('Helper\Form')->createForm($name);
         $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
         return $form;
-    }
-
-    /**
-     * Utility method that returns an instance of the logger.
-     *
-     * @return Logger
-     */
-    public function getLogger()
-    {
-        return $this->getServiceLocator()->get('Logger');
     }
 
     /**

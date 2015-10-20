@@ -84,6 +84,27 @@ return [
                         ]
                     ]
                 ],
+                // @NOTE Duplicate of the above but with a slightly different structure, to allow the user to click
+                // back to the generate page
+                [
+                    'id' => 'admin-dashboard/continuations-details',
+                    'label' => 'admin-continuations-title',
+                    'route' => 'admin-dashboard/admin-continuation',
+                    'pages' => [
+                        [
+                            'label' => 'admin-generate-continuations-title',
+                            'route' => 'admin-dashboard/admin-continuation'
+                        ],
+                        [
+                            'label' => 'admin-generate-continuation-details-title',
+                            'route' => 'admin-dashboard/admin-continuation/detail'
+                        ],
+                        [
+                            'label' => 'admin-continuations-checklist-reminders-title',
+                            'route' => 'admin-dashboard/admin-continuation/checklist-reminder',
+                        ]
+                    ]
+                ],
                 [
                     'label' => 'Reports',
                     'id' => 'admin-dashboard/admin-report',
