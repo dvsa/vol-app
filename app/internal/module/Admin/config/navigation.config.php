@@ -117,11 +117,6 @@ return [
                     'route' => 'admin-dashboard/admin-user-management',
                     'pages' => [
                         [
-                            'id' => 'admin-dashboard/admin-user-management',
-                            'label' => 'Users',
-                            'route' => 'admin-dashboard/admin-user-management'
-                        ],
-                        [
                             'id' => 'admin-dashboard/admin-team-management',
                             'label' => 'Teams',
                             'route' => 'admin-dashboard/admin-team-management',
