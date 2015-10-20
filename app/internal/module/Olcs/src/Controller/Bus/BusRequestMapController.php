@@ -39,7 +39,6 @@ class BusRequestMapController extends AbstractInternalController implements
     protected $addSuccessMessage = 'Map created successfully';
     protected $addContentTitle = 'Request map';
 
-
     protected $defaultData = [
         'busRegId' => 'route'
     ];
