@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Attributes({"method":"post","label":"user-registration.form.label"})
  * @Form\Options({"prefer_form_input_filter": true, "label": "user-registration.form.label"})
  */
-class UserRegistration extends Base
+class UserRegistration
 {
     /**
      * @Form\Options({"label":"Username"})
@@ -71,7 +71,7 @@ class UserRegistration extends Base
      *      }
      * })
      * @Form\Required(true)
-     * @Form\Attributes({"id":"isLicenceHolder", "placeholder":"", "value":"N"})
+     * @Form\Attributes({"id":"isLicenceHolder", "placeholder":"", "required":false})
      * @Form\Type("Radio")
      */
     public $isLicenceHolder;

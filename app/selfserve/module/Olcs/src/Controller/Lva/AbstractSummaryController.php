@@ -10,7 +10,7 @@ namespace Olcs\Controller\Lva;
 use Common\Controller\Lva\AbstractController;
 use Zend\View\Model\ViewModel;
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Query\Application\TransportManagers as Qry;
+use Dvsa\Olcs\Transfer\Query\Application\Summary as Qry;
 
 /**
  * External Abstract Summary Controller
@@ -23,95 +23,42 @@ abstract class AbstractSummaryController extends AbstractController
 
     public function indexAction()
     {
-        $data = $this->getData();
-        $view = new ViewModel($this->buildSummaryParams($data));
+        return $this->renderSummary($this->getParams(true));
+    }
+
+    public function postSubmitSummaryAction()
+    {
+        return $this->renderSummary($this->getParams());
+    }
+
+    public function renderSummary($params)
+    {
+        $view = new ViewModel($params);
         $view->setTemplate('pages/application-summary');
 
         return $this->render($view);
     }
 
-    public function postSubmitSummaryAction()
-    {
-        $application = $this->getData();
-        $params = $this->buildSummaryParams($application);
-
-        $params['lva'] = $this->lva;
-        $params['status'] = $application['status']['description'];
-        $params['submittedDate'] = date('d F Y', strtotime($application['receivedDate']));
-        $params['targetCompletionDate'] = date('d F Y', strtotime($application['targetCompletionDate']));
-        $params['interimStatus'] = $application['interimStatus']
-            ? $application['interimStatus']['description']
-            : null;
-        $params['interimStartDate'] = $application['interimStart'];
-
-        $view = new ViewModel($params);
-        $view->setTemplate('pages/application-post-submit-summary');
-
-        return $this->render($view);
-    }
-
-    protected function getData()
+    protected function getParams($justPaid = false)
     {
         $id = $this->getIdentifier();
 
         $dto = Qry::create(['id' => $id]);
         $response = $this->handleQuery($dto);
+        $data = $response->getResult();
 
-        if ($response->isOk()) {
-            return $response->getResult();
-        }
-    }
-
-    protected function buildSummaryParams($data)
-    {
-        $params = [
+        return [
+            'justPaid' => $justPaid,
+            'lva' => $this->lva,
             'licence' => $data['licence']['licNo'],
             'application' => $data['id'],
-            'warningText' => $this->getWarningTextTranslationKey(
-                $data['goodsOrPsv']['id'],
-                $data['licenceType']['id']
-            ),
-            'actions' => []
+            'canWithdraw' => ($data['status']['id'] === RefData::APPLICATION_STATUS_UNDER_CONSIDERATION),
+            'status' => $data['status']['description'],
+            'submittedDate' => $data['receivedDate'],
+            'completionDate' => $data['targetCompletionDate'],
+            'paymentRef' => $this->params()->fromRoute('reference'),
+            'actions' => $data['actions'],
+            'transportManagers' => $data['transportManagers'] ? $data['transportManagers'] : []
         ];
-
-        if (!empty($data['transportManagers'])) {
-            $params['actions'][] = 'summary-application-actions-transport-managers';
-        }
-
-        // The conditional for this is out of scope for this story, insert here when in scope
-        //if () {
-        $params['actions'][] = 'markup-summary-application-actions-document';
-        //}
-
-        // get payment reference from route, if any
-        $params['paymentRef'] = $this->params()->fromRoute('reference');
-
-        return $params;
-    }
-
-    /**
-     * @param string $goodsOrPsv
-     * @param string $licenceType
-     * @return string
-     */
-    protected function getWarningTextTranslationKey($goodsOrPsv, $licenceType)
-    {
-        if ($this->lva === 'application') {
-            if ($goodsOrPsv === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
-                return 'markup-summary-warning-new-goods-application';
-            }
-
-            if ($licenceType === RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
-                return 'markup-summary-warning-new-psv-sr-application';
-            }
-
-            return 'markup-summary-warning-new-psv-application';
-        } else {
-            if ($goodsOrPsv === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
-                return 'markup-summary-warning-variation-goods-application';
-            }
-
-            return 'markup-summary-warning-variation-psv-application';
-        }
     }
 }

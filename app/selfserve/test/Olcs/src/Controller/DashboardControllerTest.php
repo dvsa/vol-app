@@ -81,12 +81,6 @@ class DashboardControllerTest extends MockeryTestCase
     {
         $organisationId = 45;
 
-        $fees = [
-            ['id' => 1, 'description' => 'fee 1'],
-            ['id' => 2, 'description' => 'fee 2'],
-            ['id' => 3, 'description' => 'fee 3'],
-        ];
-
         $mockDashboardProcessingService = m::mock();
         $this->sm->setService('DashboardProcessingService', $mockDashboardProcessingService);
 
@@ -105,38 +99,26 @@ class DashboardControllerTest extends MockeryTestCase
             ->with()
             ->andReturn($organisationId);
 
+        $dashboardData = [
+            'licences' => [],
+            'application' => [],
+            'variations' => [],
+            'feeCount' => 99,
+            'correspondenceCount' => 123,
+        ];
         $this->expectQuery(
             DashboardQry::class,
             ['id' => $organisationId],
             [
                 'id' => $organisationId,
-                'dashboard' => ['DASHBOARD_DATA'],
+                'dashboard' => $dashboardData,
             ]
         );
 
         $mockDashboardProcessingService->shouldReceive('getTables')
-            ->with(['DASHBOARD_DATA'])
+            ->with($dashboardData)
             ->once()
             ->andReturn(['applications' => ['apps'], 'variations' => ['vars'], 'licences' => ['lics']]);
-
-        $this->expectQuery(
-            OutstandingFeesQry::class,
-            ['id' => $organisationId, 'hideExpired' => true],
-            ['outstandingFees' => $fees]
-        );
-
-        $this->expectQuery(
-            CorrespondenceQry::class,
-            ['organisation' => $organisationId],
-            [
-                'count' => '3',
-                'results' => [
-                    ['id' => 1, 'accessed' => 'N'],
-                    ['id' => 2, 'accessed' => 'Y'],
-                    ['id' => 3, 'accessed' => 'Y'],
-                ],
-            ]
-        );
 
         $mockNavigation
             ->shouldReceive('findOneById')
@@ -144,7 +126,7 @@ class DashboardControllerTest extends MockeryTestCase
             ->andReturn(
                 m::mock()
                     ->shouldReceive('set')
-                    ->with('count', 3)
+                    ->with('count', 99)
                     ->getMock()
             )
             ->shouldReceive('findOneById')
@@ -152,7 +134,7 @@ class DashboardControllerTest extends MockeryTestCase
             ->andReturn(
                 m::mock()
                     ->shouldReceive('set')
-                    ->with('count', 1)
+                    ->with('count', 123)
                     ->getMock()
             );
 

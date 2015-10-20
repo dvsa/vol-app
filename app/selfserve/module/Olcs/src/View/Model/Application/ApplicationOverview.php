@@ -8,6 +8,7 @@
 namespace Olcs\View\Model\Application;
 
 use Olcs\View\Model\LvaOverview;
+use Common\RefData;
 
 /**
  * Application Overview View Model
@@ -39,6 +40,7 @@ class ApplicationOverview extends LvaOverview
         $this->setVariable('submissionForm', $submissionForm);
         $this->setVariable('receivedDate', $data['receivedDate']);
         $this->setVariable('completionDate', $data['targetCompletionDate']);
+        $this->setVariable('canCancel', $data['status']['id'] === RefData::APPLICATION_STATUS_NOT_SUBMITTED);
 
         $completedSections = array_filter(
             $sections,

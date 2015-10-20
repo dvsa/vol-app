@@ -83,13 +83,17 @@ trait ExternalControllerTrait
 
         if ($this->lva === 'application' || $this->lva === 'variation') {
 
+            $summaryRouteName = 'lva-' . $this->lva . '/summary';
             $submissionRouteName = 'lva-' . $this->lva . '/submission-summary';
-            $tmDetailsRouteName = 'lva-' . $this->lva . '/transport_manager_details';
+            $allowedRoutes = [
+                $summaryRouteName,
+                $submissionRouteName,
+                'lva-' . $this->lva . '/transport_manager_details',
+                'lva-' . $this->lva . '/withdraw'
+            ];
             $matchedRouteName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
 
-            if ($matchedRouteName !== $submissionRouteName && $matchedRouteName !== $tmDetailsRouteName &&
-                !$this->checkAppStatus($lvaId)
-            ) {
+            if (!in_array($matchedRouteName, $allowedRoutes) && !$this->checkAppStatus($lvaId)) {
                 $this->redirect()->toRoute($submissionRouteName, ['application' => $lvaId]);
             }
         }

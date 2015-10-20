@@ -61,6 +61,16 @@ $routes = array(
             )
         )
     ),
+    'cookies' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/cookies[/]',
+            'defaults' => array(
+                'controller' => \Olcs\Controller\CookiesController::class,
+                'action' => 'index'
+            )
+        )
+    ),
     'search' => array(
         'type' => 'segment',
         'options' =>  array(
@@ -351,6 +361,16 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'declaration' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'declaration[/]',
+                'defaults' => array(
+                    'controller' => 'DeclarationFormController',
+                    'action' => 'index'
+                )
+            )
+        ),
         'payment' => array(
             'type' => 'segment',
             'options' => array(
@@ -394,7 +414,27 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
 
                 )
             )
-        )
+        ),
+        'cancel' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'cancel[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication',
+                    'action' => 'cancel'
+                )
+            )
+        ),
+        'withdraw' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'withdraw[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication',
+                    'action' => 'withdraw'
+                )
+            )
+        ),
     )
 );
 
@@ -452,6 +492,26 @@ $configRoutes['lva-variation']['child_routes'] = array_merge(
                     'controller' => 'LvaVariation/PaymentSubmission',
                     'action' => 'payment-result',
 
+                )
+            )
+        ),
+        'cancel' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'cancel[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation',
+                    'action' => 'cancel'
+                )
+            )
+        ),
+        'withdraw' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'withdraw[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation',
+                    'action' => 'withdraw'
                 )
             )
         ),
@@ -766,6 +826,7 @@ return array(
             'LvaVariation/Review'                   => \Common\Controller\Lva\ReviewController::class,
         ),
         'invokables' => array(
+            'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
             'Olcs\Ebsr\BusRegistration' => 'Olcs\Controller\Ebsr\BusRegistrationController',
             'Dashboard' => 'Olcs\Controller\DashboardController',
@@ -778,6 +839,7 @@ return array(
             SearchController::class => SearchController::class,
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             'Entity\View' => 'Olcs\Controller\Entity\ViewController',
+            \Olcs\Controller\CookiesController::class => \Olcs\Controller\CookiesController::class,
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -805,6 +867,8 @@ return array(
                 => 'Olcs\Service\Email\TransportManagerCompleteDigitalForm',
         ),
         'factories' => array(
+            'CookieBannerListener' => \Olcs\Mvc\CookieBannerListener::class,
+            'CookieBanner' => \Olcs\Mvc\CookieBanner::class,
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
             'Olcs\Service\Ebsr' => 'Olcs\Service\Ebsr',
             'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
@@ -945,6 +1009,9 @@ return array(
 
             'lva-licence-discs' => LvaFormService\PsvDiscs\LicencePsvDiscs::class,
             'lva-variation-discs' => LvaFormService\PsvDiscs\VariationPsvDiscs::class,
+
+            'lva-licence-taxi_phv' => LvaFormService\LicenceTaxiPhv::class,
+            'lva-application-taxi_phv' => LvaFormService\ApplicationTaxiPhv::class,
         ],
     ],
     'zfc_rbac' => [
@@ -971,7 +1038,10 @@ return array(
                 // Bus reg stuff and who can access
                 'ebsr' => ['selfserve-ebsr'],
                 'bus-registration' => [
-                    'selfserve-ebsr'
+                    '*'
+                ],
+                'entity-view' => [
+                    '*'
                 ],
 
                 // Selfserve search
@@ -987,6 +1057,7 @@ return array(
                 'search*' => ['*'],
                 'index' => ['*'],
                 'user-registration' => ['*'],
+                'cookies' => ['*'],
                 '*' => ['selfserve-user'],
             ]
         ]

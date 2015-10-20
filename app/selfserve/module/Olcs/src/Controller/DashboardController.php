@@ -59,7 +59,10 @@ class DashboardController extends AbstractController
         $view->setTemplate('dashboard');
 
         // populate the navigation tabs with correct counts
-        $this->populateTabCounts();
+        $this->populateTabCounts(
+            $dashboardData['feeCount'],
+            $dashboardData['correspondenceCount']
+        );
 
         return $view;
     }
