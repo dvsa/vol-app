@@ -61,6 +61,26 @@ $routes = array(
             )
         )
     ),
+    'not-found' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/404[/]',
+            'defaults' => array(
+                'controller' => \Olcs\Controller\ErrorController::class,
+                'action' => 'notFound'
+            )
+        )
+    ),
+    'server-error' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/error[/]',
+            'defaults' => array(
+                'controller' => \Olcs\Controller\ErrorController::class,
+                'action' => 'serverError'
+            )
+        )
+    ),
     'cookies' => array(
         'type' => 'segment',
         'options' =>  array(
@@ -840,6 +860,7 @@ return array(
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             'Entity\View' => 'Olcs\Controller\Entity\ViewController',
             \Olcs\Controller\CookiesController::class => \Olcs\Controller\CookiesController::class,
+            \Olcs\Controller\ErrorController::class => \Olcs\Controller\ErrorController::class,
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -1047,6 +1068,8 @@ return array(
                 'index' => ['*'],
                 'user-registration' => ['*'],
                 'cookies' => ['*'],
+                'not-found' => ['*'],
+                'server-error' => ['*'],
                 '*' => ['selfserve-user'],
             ]
         ]
