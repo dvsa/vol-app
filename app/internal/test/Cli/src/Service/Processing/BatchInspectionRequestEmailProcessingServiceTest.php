@@ -9,6 +9,7 @@ namespace CliTest\Service\Processing;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\Logging\Log\Logger;
 use OlcsTest\Bootstrap;
 use Cli\Service\Processing\BatchInspectionRequestEmailProcessingService;
 use Common\BusinessService\Response;
@@ -21,22 +22,24 @@ use Common\BusinessService\Response;
 class BatchInspectionRequestEmailProcessingServiceTest extends MockeryTestCase
 {
     protected $sm;
+
+    /**
+     * @var BatchInspectionRequestEmailProcessingService
+     */
     protected $sut;
     protected $logWriter;
     protected $mockConsole;
 
     public function setUp()
     {
+        Bootstrap::setupLogger();
         $this->sm = Bootstrap::getServiceManager();
         $this->sut = new BatchInspectionRequestEmailProcessingService();
         $this->sut->setServiceLocator($this->sm);
 
-        $this->logWriter = new \Zend\Log\Writer\Mock();
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($this->logWriter);
-        $this->sm->setService('Zend\Log', $logger);
-
         $this->mockConsole = m::mock('\Zend\Console\Adapter\Posix');
+
+        $this->logWriter = Logger::getLogger()->getWriters()->toArray()[0];
     }
 
     /**
@@ -131,10 +134,6 @@ class BatchInspectionRequestEmailProcessingServiceTest extends MockeryTestCase
         // mocks
         $mockRestHelper = m::mock();
         $this->sm->setService('Helper\Rest', $mockRestHelper);
-        $logWriter = new \Zend\Log\Writer\Mock();
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($logWriter);
-        $this->sm->setService('Zend\Log', $logger);
 
         // expectations
         $mockRestHelper
@@ -150,7 +149,7 @@ class BatchInspectionRequestEmailProcessingServiceTest extends MockeryTestCase
 
         $this->sut->process();
 
-        $this->assertRegexp('/Could not retrieve email 4355/', $logWriter->events[0]['message']);
+        $this->assertRegexp('/Could not retrieve email 4355/', $this->logWriter->events[0]['message']);
     }
 
     /**
@@ -169,10 +168,6 @@ class BatchInspectionRequestEmailProcessingServiceTest extends MockeryTestCase
         // mocks
         $mockRestHelper = m::mock();
         $this->sm->setService('Helper\Rest', $mockRestHelper);
-        $logWriter = new \Zend\Log\Writer\Mock();
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($logWriter);
-        $this->sm->setService('Zend\Log', $logger);
 
         // expectations
         $mockRestHelper
@@ -192,7 +187,7 @@ class BatchInspectionRequestEmailProcessingServiceTest extends MockeryTestCase
 
         $this->assertRegexp(
             '/Unable to parse email subject line: spam!/',
-            $logWriter->events[0]['message']
+            $this->logWriter->events[0]['message']
         );
     }
 

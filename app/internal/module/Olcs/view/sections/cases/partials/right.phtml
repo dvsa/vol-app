@@ -44,7 +44,7 @@ if ($transportManager) :
     <p class="small-module__details">
 
     <?php if (isset($transportManager['homeCd']['person'])): ?>
-        <p><strong><a href="<?php echo $this->url('transport-manager/details/details', ['transportManager' => $transportManager['id']], [], true); ?>">
+        <p><strong><a href="<?php echo $this->url('transport-manager/details', ['transportManager' => $transportManager['id']], [], true); ?>">
             <?php echo $transportManager['homeCd']['person']['forename']
                 . ' ' . $transportManager['homeCd']['person']['familyName']; ?></a></strong>
         </p>

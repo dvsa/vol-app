@@ -521,18 +521,13 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
             ->once()
             ->with('Unable to generate the document')
             ->getMock();
-        $mockLogger = m::mock('\Zend\Log\LoggerInterface')
-            ->shouldReceive('warn')
-            ->once()
-            ->getMock();
+
         $mockServiceLocator = m::mock('Zend\ServiceManager\ServiceLocatorInterface')
             ->shouldReceive('get')
-                ->with('Helper\FlashMessenger')
-                ->andReturn($mockFm)
-            ->shouldReceive('get')
-                ->with('Zend\Log')
-                ->andReturn($mockLogger)
+            ->with('Helper\FlashMessenger')
+            ->andReturn($mockFm)
             ->getMock();
+
         $sut->setServiceLocator($mockServiceLocator);
 
         $sut->processGenerate($data);
@@ -645,11 +640,6 @@ class DocumentGenerationControllerTest extends AbstractHttpControllerTestCase
                     ->with('Olcs\Service\Data\Cases')
                     ->will($this->returnValue($caseMock));
                 return $dsMock;
-            case 'Zend\Log':
-                $logWriter = new \Zend\Log\Writer\Mock();
-                $logger = new \Zend\Log\Logger();
-                $logger->addWriter($logWriter);
-                return $logger;
             case 'Helper\FlashMessenger':
                 $fmMock = $this->getMock('\StdClass', ['addCurrentErrorMessage']);
                 $fmMock->expects($this->once())

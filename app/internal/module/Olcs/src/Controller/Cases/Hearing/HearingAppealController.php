@@ -19,6 +19,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\Appeal as FormClass;
 use Olcs\Data\Mapper\GenericFields as Mapper;
+use Olcs\Logging\Log\Logger;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Zend\View\Model\ViewModel;
 
@@ -128,8 +129,8 @@ class HearingAppealController extends AbstractInternalController implements Case
 
     public function detailsAction()
     {
-        $this->getLogger()->debug(__FILE__);
-        $this->getLogger()->debug(__METHOD__);
+        Logger::debug(__FILE__);
+        Logger::debug(__METHOD__);
 
         $this->placeholder()->setPlaceholder('case', $this->params()->fromRoute('case'));
 
