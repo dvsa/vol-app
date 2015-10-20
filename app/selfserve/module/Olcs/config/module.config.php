@@ -1024,17 +1024,6 @@ return array(
                 // Manage Users Page
                 'manage-user' => ['can-manage-user-selfserve'],
 
-                // Search and who can access them
-                'search-operating-centre' => [
-                    'partner-user'
-                ],
-                'search-person' => [
-                    'partner-user'
-                ],
-                'search-vehicle-external' => [
-                    'partner-user'
-                ],
-
                 // Bus reg stuff and who can access
                 'ebsr' => ['selfserve-ebsr'],
                 'bus-registration' => [
