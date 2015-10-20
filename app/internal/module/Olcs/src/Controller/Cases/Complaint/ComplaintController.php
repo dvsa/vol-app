@@ -102,6 +102,7 @@ class ComplaintController extends AbstractInternalController implements
      */
     protected $deleteCommand = DeleteDto::class;
     protected $deleteModalTitle = 'internal.delete-action-trait.title';
+    protected $deleteParams = ['id' => 'complaint'];
 
     /**
      * Any inline scripts needed in this section
