@@ -1,5 +1,9 @@
 <?php
 
-return array(
-    'application-name' => 'selfserve'
-);
+return [
+    'application-name' => 'selfserve',
+    'cqrs_client' => [
+        'adapter' => \Zend\Http\Client\Adapter\Curl::class,
+        'timeout' => 60,
+    ]
+];

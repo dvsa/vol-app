@@ -97,7 +97,17 @@ class UserController extends AbstractController
                     $this->getFlashMessenger()->addSuccessMessage($successMessage);
                     return $this->redirectToIndex();
                 } else {
-                    $this->getFlashMessenger()->addErrorMessage('unknown-error');
+                    $result = $response->getResult();
+
+                    if (!empty($result['messages'])) {
+                        $form->setMessages(
+                            [
+                                'main' => $result['messages']
+                            ]
+                        );
+                    } else {
+                        $this->getFlashMessenger()->addErrorMessage('unknown-error');
+                    }
                 }
             }
         } elseif ($id) {

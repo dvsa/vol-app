@@ -5,6 +5,7 @@
 namespace OlcsTest\Controller;
 
 use Dvsa\Olcs\Transfer\Command\User\RegisterUserSelfserve as CreateDto;
+use Dvsa\Olcs\Transfer\Query\Licence\LicenceRegisteredAddress as LicenceByNumberDto;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Controller\UserRegistrationController as Sut;
@@ -63,28 +64,17 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $mockForm = m::mock('Common\Form\Form');
-        $mockForm->shouldReceive('setData')->never();
-
-        $mockFormHelper = m::mock();
-        $mockFormHelper
-            ->shouldReceive('createFormWithRequest')
-            ->with('UserRegistration', $mockRequest)
-            ->once()
-            ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
-
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(true);
 
         $this->sut->shouldReceive('redirect->toRoute')
-            ->with(null, ['action' => 'add'], array(), false)
+            ->with('index')
             ->once()
             ->andReturn('REDIRECT');
 
         $this->assertEquals('REDIRECT', $this->sut->addAction());
     }
 
-    public function testAddActionForPost()
+    public function testAddActionForPostWithOrg()
     {
         $postData = [
             'fields' => [
@@ -117,6 +107,7 @@ class UserRegistrationControllerTest extends TestCase
         $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
+        $this->sut->shouldReceive('isButtonPressed')->with('postAccount')->once()->andReturn(false);
 
         $mockParams = m::mock();
         $mockParams->shouldReceive('fromPost')->once()->andReturn($postData);
@@ -129,9 +120,195 @@ class UserRegistrationControllerTest extends TestCase
         $view = $this->sut->addAction();
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertEquals('olcs/user-registration/check-email', $view->getTemplate());
     }
 
-    public function testAddActionForPostWithError()
+    public function testAddActionForPostWithOrgError()
+    {
+        $postData = [
+            'fields' => [
+                'loginId' => 'stevefox',
+                'emailAddress' => 'steve@example.com',
+                'emailConfirm' => 'steve@example.com',
+                'familyName' => 'Fox',
+                'forename' => 'Steve',
+                'isLicenceHolder' => 'N',
+                'organisationName' => 'Org name',
+                'businessType' => 'type'
+            ]
+        ];
+
+        $mockRequest = m::mock();
+        $mockRequest->shouldReceive('isPost')->andReturn(true);
+        $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
+
+        $mockForm = m::mock('Common\Form\Form');
+        $mockForm->shouldReceive('setData')->twice()->with($postData);
+        $mockForm->shouldReceive('isValid')->once()->andReturn(true);
+        $mockForm->shouldReceive('getData')->once()->andReturn($postData);
+
+        $mockFormHelper = m::mock();
+        $mockFormHelper
+            ->shouldReceive('createFormWithRequest')
+            ->with('UserRegistration', $mockRequest)
+            ->twice()
+            ->andReturn($mockForm);
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
+        $this->sut->shouldReceive('isButtonPressed')->with('postAccount')->once()->andReturn(false);
+
+        $mockParams = m::mock();
+        $mockParams->shouldReceive('fromPost')->once()->andReturn($postData);
+        $this->sut->shouldReceive('params')->once()->andReturn($mockParams);
+
+        $response = m::mock('stdClass');
+        $response->shouldReceive('isOk')->andReturn(false);
+        $response->shouldReceive('getResult')->andReturn([]);
+        $this->sut->shouldReceive('handleCommand')->with(m::type(CreateDto::class))->andReturn($response);
+
+        $mockFlashMessengerHelper = m::mock();
+        $mockFlashMessengerHelper
+            ->shouldReceive('addErrorMessage')
+            ->once()
+            ->with('unknown-error');
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessengerHelper);
+
+        $mockScript = m::mock();
+        $mockScript
+            ->shouldReceive('loadFile')
+            ->with('user-registration')
+            ->once();
+        $this->sm->setService('Script', $mockScript);
+
+        $view = $this->sut->addAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+    }
+
+    public function testAddActionForPostWithLic()
+    {
+        $postData = [
+            'fields' => [
+                'loginId' => 'stevefox',
+                'emailAddress' => 'steve@example.com',
+                'emailConfirm' => 'steve@example.com',
+                'familyName' => 'Fox',
+                'forename' => 'Steve',
+                'isLicenceHolder' => 'Y',
+                'licenceNumber' => 'licNo'
+            ]
+        ];
+
+        $mockRequest = m::mock();
+        $mockRequest->shouldReceive('isPost')->andReturn(true);
+        $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
+
+        $mockForm = m::mock('Common\Form\Form');
+        $mockForm->shouldReceive('setData')->once()->with($postData);
+        $mockForm->shouldReceive('isValid')->once()->andReturn(true);
+        $mockForm->shouldReceive('getData')->once()->andReturn($postData);
+
+        $mockFormAddress = m::mock('Common\Form\Form');
+        $mockFormAddress->shouldReceive('setData')->once()->with($postData);
+
+        $mockFormHelper = m::mock();
+        $mockFormHelper
+            ->shouldReceive('createFormWithRequest')
+            ->with('UserRegistration', $mockRequest)
+            ->once()
+            ->andReturn($mockForm);
+        $mockFormHelper
+            ->shouldReceive('createFormWithRequest')
+            ->with('UserRegistrationAddress', $mockRequest)
+            ->once()
+            ->andReturn($mockFormAddress);
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
+        $this->sut->shouldReceive('isButtonPressed')->with('postAccount')->once()->andReturn(false);
+
+        $mockParams = m::mock();
+        $mockParams->shouldReceive('fromPost')->once()->andReturn($postData);
+        $this->sut->shouldReceive('params')->once()->andReturn($mockParams);
+
+        $licData = [
+            'correspondenceCd' => [
+                'address' => ['address']
+            ],
+            'organisation' => [
+                'name' => ['org name']
+            ],
+        ];
+        $response = m::mock('stdClass');
+        $response->shouldReceive('isOk')->andReturn(true);
+        $response->shouldReceive('getResult')->andReturn($licData);
+        $this->sut->shouldReceive('handleQuery')->with(m::type(LicenceByNumberDto::class))->andReturn($response);
+
+        $view = $this->sut->addAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertEquals('olcs/user-registration/check-details', $view->getTemplate());
+    }
+
+    public function testAddActionForPostWithLicError()
+    {
+        $postData = [
+            'fields' => [
+                'loginId' => 'stevefox',
+                'emailAddress' => 'steve@example.com',
+                'emailConfirm' => 'steve@example.com',
+                'familyName' => 'Fox',
+                'forename' => 'Steve',
+                'isLicenceHolder' => 'Y',
+                'licenceNumber' => 'licNo'
+            ]
+        ];
+
+        $mockRequest = m::mock();
+        $mockRequest->shouldReceive('isPost')->andReturn(true);
+        $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
+
+        $mockForm = m::mock('Common\Form\Form');
+        $mockForm->shouldReceive('setData')->twice()->with($postData);
+        $mockForm->shouldReceive('isValid')->once()->andReturn(true);
+        $mockForm->shouldReceive('getData')->once()->andReturn($postData);
+        $mockForm->shouldReceive('setMessages')->once()->with(m::type('array'));
+
+        $mockFormHelper = m::mock();
+        $mockFormHelper
+            ->shouldReceive('createFormWithRequest')
+            ->with('UserRegistration', $mockRequest)
+            ->twice()
+            ->andReturn($mockForm);
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
+        $this->sut->shouldReceive('isButtonPressed')->with('postAccount')->once()->andReturn(false);
+
+        $mockParams = m::mock();
+        $mockParams->shouldReceive('fromPost')->once()->andReturn($postData);
+        $this->sut->shouldReceive('params')->once()->andReturn($mockParams);
+
+        $response = m::mock('stdClass');
+        $response->shouldReceive('isOk')->andReturn(false);
+        $response->shouldReceive('isNotFound')->andReturn(false);
+        $response->shouldReceive('getResult')->andReturn(['messages' => ['err']]);
+        $this->sut->shouldReceive('handleQuery')->with(m::type(LicenceByNumberDto::class))->andReturn($response);
+
+        $mockScript = m::mock();
+        $mockScript
+            ->shouldReceive('loadFile')
+            ->with('user-registration')
+            ->once();
+        $this->sm->setService('Script', $mockScript);
+
+        $view = $this->sut->addAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+    }
+
+    public function testAddActionForPostWithLicConfirmed()
     {
         $postData = [
             'fields' => [
@@ -163,6 +340,56 @@ class UserRegistrationControllerTest extends TestCase
         $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
+        $this->sut->shouldReceive('isButtonPressed')->with('postAccount')->once()->andReturn(true);
+
+        $mockParams = m::mock();
+        $mockParams->shouldReceive('fromPost')->once()->andReturn($postData);
+        $this->sut->shouldReceive('params')->once()->andReturn($mockParams);
+
+        $response = m::mock('stdClass');
+        $response->shouldReceive('isOk')->andReturn(true);
+        $this->sut->shouldReceive('handleCommand')->with(m::type(CreateDto::class))->andReturn($response);
+
+        $view = $this->sut->addAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertEquals('olcs/user-registration/account-created', $view->getTemplate());
+    }
+
+    public function testAddActionForPostWithLicConfirmedError()
+    {
+        $postData = [
+            'fields' => [
+                'loginId' => 'stevefox',
+                'emailAddress' => 'steve@example.com',
+                'emailConfirm' => 'steve@example.com',
+                'familyName' => 'Fox',
+                'forename' => 'Steve',
+                'isLicenceHolder' => 'Y',
+                'licenceNumber' => 'licNo'
+            ]
+        ];
+
+        $mockRequest = m::mock();
+        $mockRequest->shouldReceive('isPost')->andReturn(true);
+        $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
+
+        $mockForm = m::mock('Common\Form\Form');
+        $mockForm->shouldReceive('setData')->twice()->with($postData);
+        $mockForm->shouldReceive('isValid')->once()->andReturn(true);
+        $mockForm->shouldReceive('getData')->once()->andReturn($postData);
+        $mockForm->shouldReceive('setMessages')->once()->with(m::type('array'));
+
+        $mockFormHelper = m::mock();
+        $mockFormHelper
+            ->shouldReceive('createFormWithRequest')
+            ->with('UserRegistration', $mockRequest)
+            ->twice()
+            ->andReturn($mockForm);
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
+        $this->sut->shouldReceive('isButtonPressed')->with('postAccount')->once()->andReturn(true);
 
         $mockParams = m::mock();
         $mockParams->shouldReceive('fromPost')->once()->andReturn($postData);
@@ -170,14 +397,8 @@ class UserRegistrationControllerTest extends TestCase
 
         $response = m::mock('stdClass');
         $response->shouldReceive('isOk')->andReturn(false);
+        $response->shouldReceive('getResult')->andReturn(['messages' => ['err']]);
         $this->sut->shouldReceive('handleCommand')->with(m::type(CreateDto::class))->andReturn($response);
-
-        $mockFlashMessengerHelper = m::mock();
-        $mockFlashMessengerHelper
-            ->shouldReceive('addErrorMessage')
-            ->once()
-            ->with('unknown-error');
-        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessengerHelper);
 
         $mockScript = m::mock();
         $mockScript

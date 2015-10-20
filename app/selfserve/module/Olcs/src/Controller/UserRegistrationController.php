@@ -7,6 +7,7 @@ namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
 use Dvsa\Olcs\Transfer\Command\User\RegisterUserSelfserve as RegisterDto;
+use Dvsa\Olcs\Transfer\Query\Licence\LicenceRegisteredAddress as LicenceByNumberDto;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -16,28 +17,44 @@ class UserRegistrationController extends AbstractController
 {
     public function addAction()
     {
-        /** @var \Common\Form\Form $form */
-        $form = $this->getServiceLocator()->get('Helper\Form')
-            ->createFormWithRequest('UserRegistration', $this->getRequest());
-
         if ($this->getRequest()->isPost()) {
             if ($this->isButtonPressed('cancel')) {
-                return $this->redirectToIndex();
+                return $this->redirectToHome();
             }
+
+            /** @var \Common\Form\Form $form */
+            $form = $this->getServiceLocator()->get('Helper\Form')
+                ->createFormWithRequest('UserRegistration', $this->getRequest());
 
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
-                $data = $this->formatSaveData($form->getData());
-
-                $hasProcessed = $this->processUserRegistration($data);
-
-                if ($hasProcessed instanceof ViewModel) {
-                    return $hasProcessed;
-                }
+                return $this->processUserRegistration($form->getData());
             }
         }
 
+        return $this->generateContentForUserRegistration();
+    }
+
+    private function generateContentForUserRegistration(array $formData = [], array $errors = [])
+    {
+        /** @var \Common\Form\Form $form */
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createFormWithRequest('UserRegistration', $this->getRequest());
+
+        if (!empty($formData)) {
+            $form->setData($formData);
+        }
+
+        if (!empty($errors)) {
+            $form->setMessages(
+                [
+                    'fields' => $errors
+                ]
+            );
+        }
+
+        // register page
         $view = new ViewModel(
             [
                 'form' => $form
@@ -50,25 +67,130 @@ class UserRegistrationController extends AbstractController
         return $view;
     }
 
-    public function processUserRegistration($data)
+    private function processUserRegistration($formData)
     {
+        if ($this->isButtonPressed('postAccount')) {
+            // create a user for an existing licence
+            return $this->createUserWithLic($formData);
+        } elseif ('Y' === $formData['fields']['isLicenceHolder']) {
+            // show licence details to confirm an address
+            return $this->showLicence($formData);
+        } else {
+            // create a user for a new org
+            return $this->createUserWithOrg($formData);
+        }
+    }
+
+    private function showLicence($formData)
+    {
+        $response = $this->handleQuery(
+            LicenceByNumberDto::create(
+                [
+                    'licenceNumber' => $formData['fields']['licenceNumber']
+                ]
+            )
+        );
+
+        if ($response->isOk()) {
+            // return check details page on success
+            $result = $response->getResult();
+
+            /** @var \Common\Form\Form $form */
+            $form = $this->getServiceLocator()->get('Helper\Form')
+                ->createFormWithRequest('UserRegistrationAddress', $this->getRequest());
+
+            $form->setData($formData);
+
+            $view = new ViewModel(
+                [
+                    'form' => $form,
+                    'address' => $result['correspondenceCd']['address'],
+                    'organisationName' => $result['organisation']['name'],
+                ]
+            );
+            $view->setTemplate('olcs/user-registration/check-details');
+
+            return $view;
+        }
+
+        // process errors and display the main page
+        $errors = [];
+
+        if ($response->isNotFound()) {
+            $errors = [
+                'licenceNumber' => ['record-not-found']
+            ];
+        } else {
+            $result = $response->getResult();
+
+            if (!empty($result['messages'])) {
+                $errors = $result['messages'];
+            } else {
+                $this->getFlashMessenger()->addErrorMessage('unknown-error');
+            }
+        }
+
+        return $this->generateContentForUserRegistration($formData, $errors);
+    }
+
+    private function createUserWithLic($formData)
+    {
+        $hasProcessed = $this->createUser($formData);
+
+        if ($hasProcessed instanceof ViewModel) {
+            return $hasProcessed;
+        }
+
+        // account created page
+        $content = new ViewModel();
+        $content->setTemplate('olcs/user-registration/account-created');
+
+        return $content;
+    }
+
+    private function createUserWithOrg($formData)
+    {
+        $hasProcessed = $this->createUser($formData);
+
+        if ($hasProcessed instanceof ViewModel) {
+            return $hasProcessed;
+        }
+
+        // check your email page
+        $content = new ViewModel(
+            [
+                'emailAddress' => $formData['fields']['emailAddress']
+            ]
+        );
+        $content->setTemplate('olcs/user-registration/check-email');
+
+        return $content;
+    }
+
+    private function createUser($formData)
+    {
+        $data = $this->formatSaveData($formData);
+
         $response = $this->handleCommand(
             RegisterDto::create($data)
         );
 
         if ($response->isOk()) {
-            // check your email page
-            $content = new ViewModel(
-                [
-                    'emailAddress' => $data['contactDetails']['emailAddress']
-                ]
-            );
-            $content->setTemplate('olcs/user-registration/check-email');
+            // return on success
+            return null;
+        }
 
-            return $content;
+        // process errors and display the main page
+        $result = $response->getResult();
+        $errors = [];
+
+        if (!empty($result['messages'])) {
+            $errors = $result['messages'];
         } else {
             $this->getFlashMessenger()->addErrorMessage('unknown-error');
         }
+
+        return $this->generateContentForUserRegistration($formData, $errors);
     }
 
     /**
@@ -125,10 +247,10 @@ class UserRegistrationController extends AbstractController
     }
 
     /**
-     * Redirects to index
+     * Redirects to home
      */
-    private function redirectToIndex()
+    private function redirectToHome()
     {
-        return $this->redirect()->toRoute(null, ['action' => 'add'], array(), false);
+        return $this->redirect()->toRoute('index');
     }
 }
