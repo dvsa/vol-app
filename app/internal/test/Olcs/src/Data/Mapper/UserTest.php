@@ -41,7 +41,8 @@ class UserTest extends MockeryTestCase
                     'userType' => 'internal',
                     'roles' => [
                         [
-                            'id' => 99
+                            'id' => 99,
+                            'role' => 'role',
                         ]
                     ],
                     'team' => [
@@ -85,7 +86,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'internal',
-                        'role' => 99,
+                        'role' => 'role',
                         'team' => 3,
                     ],
                     'userPersonal' => [
@@ -120,7 +121,8 @@ class UserTest extends MockeryTestCase
                     'userType' => 'transport-manager',
                     'roles' => [
                         [
-                            'id' => 99
+                            'id' => 99,
+                            'role' => 'role',
                         ]
                     ],
                     'transportManager' => [
@@ -149,7 +151,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'transport-manager',
-                        'role' => 99,
+                        'role' => 'role',
                         'transportManager' => 3,
                     ],
                     'userPersonal' => [
@@ -178,7 +180,8 @@ class UserTest extends MockeryTestCase
                     'userType' => 'partner',
                     'roles' => [
                         [
-                            'id' => 99
+                            'id' => 99,
+                            'role' => 'role',
                         ]
                     ],
                     'partnerContactDetails' => [
@@ -207,7 +210,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'partner',
-                        'role' => 99,
+                        'role' => 'role',
                         'partnerContactDetails' => 3,
                     ],
                     'userPersonal' => [
@@ -236,7 +239,8 @@ class UserTest extends MockeryTestCase
                     'userType' => 'local-authority',
                     'roles' => [
                         [
-                            'id' => 99
+                            'id' => 99,
+                            'role' => 'role',
                         ]
                     ],
                     'localAuthority' => [
@@ -265,7 +269,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'local-authority',
-                        'role' => 99,
+                        'role' => 'role',
                         'localAuthority' => 3,
                     ],
                     'userPersonal' => [
@@ -313,7 +317,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'internal',
-                        'role' => 99,
+                        'role' => 'role',
                         'team' => 3,
                     ],
                     'userPersonal' => [
@@ -342,7 +346,7 @@ class UserTest extends MockeryTestCase
                     'mustResetPassword' => 'Y',
                     'accountDisabled' => 'Y',
                     'userType' => 'internal',
-                    'roles' => [99],
+                    'roles' => ['role'],
                     'team' => 3,
                     'contactDetails' => [
                         'person' => [
@@ -383,7 +387,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'transport-manager',
-                        'role' => 99,
+                        'role' => 'role',
                         'applicationTransportManagers' => ['application' => 97],
                         'transportManager' => 3,
                     ],
@@ -413,7 +417,7 @@ class UserTest extends MockeryTestCase
                     'mustResetPassword' => 'Y',
                     'accountDisabled' => 'Y',
                     'userType' => 'transport-manager',
-                    'roles' => [99],
+                    'roles' => ['role'],
                     'application' => 97,
                     'transportManager' => 3,
                     'contactDetails' => [
@@ -455,7 +459,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'partner',
-                        'role' => 99,
+                        'role' => 'role',
                         'partnerContactDetails' => 3,
                     ],
                     'userPersonal' => [
@@ -484,7 +488,7 @@ class UserTest extends MockeryTestCase
                     'mustResetPassword' => 'Y',
                     'accountDisabled' => 'Y',
                     'userType' => 'partner',
-                    'roles' => [99],
+                    'roles' => ['role'],
                     'partnerContactDetails' => 3,
                     'contactDetails' => [
                         'person' => [
@@ -525,7 +529,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'local-authority',
-                        'role' => 99,
+                        'role' => 'role',
                         'localAuthority' => 3,
                     ],
                     'userPersonal' => [
@@ -554,7 +558,7 @@ class UserTest extends MockeryTestCase
                     'mustResetPassword' => 'Y',
                     'accountDisabled' => 'Y',
                     'userType' => 'local-authority',
-                    'roles' => [99],
+                    'roles' => ['role'],
                     'localAuthority' => 3,
                     'contactDetails' => [
                         'person' => [
@@ -595,7 +599,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'userType' => [
                         'userType' => 'operator',
-                        'role' => 99,
+                        'role' => 'role',
                         'licenceNumber' => 'licNo',
                     ],
                     'userPersonal' => [
@@ -624,7 +628,7 @@ class UserTest extends MockeryTestCase
                     'mustResetPassword' => 'Y',
                     'accountDisabled' => 'Y',
                     'userType' => 'operator',
-                    'roles' => [99],
+                    'roles' => ['role'],
                     'licenceNumber' => 'licNo',
                     'contactDetails' => [
                         'person' => [
