@@ -4,28 +4,14 @@
       <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
       <div class="page-header__wrapper">
         <h3 class="page-header__subtitle"><?php echo $this->tmFullName ?></h3>
-        <h1><?php echo $this->translate('tm-details-heading'); ?></h1>
+        <h1><?php echo $this->translate($this->title); ?></h1>
         <ul class="page-header__actions">
-            <?php if ($this->actions['edit']): ?>
-            <li>
-                <a href="<?php echo $this->editActionUrl ?>" class="page-header__action js-modal-ajax">
-                    <?php echo $this->translate('tm-details-edit-form-link-text'); ?>
-                </a>
-            </li>
-            <?php endif; ?>
-            <?php if ($this->actions['view']): ?>
+            <?php if ($this->viewActionUrl): ?>
             <li>
                 <a href="<?php echo $this->viewActionUrl ?>" class="page-header__action" target="_blank">
                     <?php echo $this->translate('tm-details-view-form-link-text'); ?>
                 </a>
             </li>
-            <?php endif; ?>
-            <?php if ($this->actions['resend']): ?>
-                <li>
-                    <a href="<?php echo $this->resendActionUrl ?>" class="page-header__action js-modal-ajax">
-                        <?php echo $this->translate('tm-details-resend-form-link-text'); ?>
-                    </a>
-                </li>
             <?php endif; ?>
         </ul>
       </div><!-- .page-header__wrapper -->
@@ -54,53 +40,34 @@
         ?>
 
         <?php echo $this->content ?>
-    </div>
-    <div class="one-third sidebar">
-        <dl class="meta">
-          <dt><?php echo $this->translate('tm-details-reference-no'); ?></dt>
-          <dd><?php echo $this->referenceNo ?></dd>
-          <dt><?php echo $this->translate('tm-details-licence-application-no'); ?></dt>
-          <dd><?php echo $this->licenceApplicationNo ?></dd>
-          <dt><?php echo $this->translate('tm-details-status'); ?></dt>
-          <dd><?php echo $this->translate($this->tmaStatus['description']); ?></dd>
-        </dl>
 
-        <?php if (isset($this->progress)): ?>
-            <h4>Progress</h4>
-            <ul class="progress">
-
-                <li class="progress__item">
-                    <span class="progress__box<?php if ((int) $this->progress >= 1) echo ' checked' ?>"></span>
-                    <p>
-                        <?php
-                        if ($this->userIsThisTransportManager) {
-                            echo $this->translate('transport-managers.progress.1.isTm');
-                        } else {
-                            echo $this->translate('transport-managers.progress.1');
-                        }
-                        ?>
-                    </p>
-                </li>
-
-                <li class="progress__item">
-                    <span class="progress__box<?php if ((int) $this->progress >= 2) echo ' checked' ?>"></span>
-                    <p>
-                        <?php
-                        if ($this->userIsThisTransportManager) {
-                            echo $this->translate('transport-managers.progress.2.isTm');
-                        } else {
-                            echo $this->translate('transport-managers.progress.2');
-                        }
-                        ?>
-                    </p>
-                </li>
-
-                <li class="progress__item">
-                    <span class="progress__box<?php if ((int) $this->progress >= 3) echo ' checked' ?>"></span>
-                    <p><?php echo $this->translate('transport-managers.progress.3'); ?></p>
-                </li>
-            </ul>
+        <?php if (isset($resendForm)): ?>
+            <details class="help">
+                <summary class="help__summary">Resend link to Transport Manager</summary>
+                <?php
+                $resendForm->prepare();
+                echo $this->formErrors($resendForm);
+                echo $this->form($resendForm);
+                ?>
+            </details>
         <?php endif; ?>
 
+        <?php if (isset($form)): ?>
+          <?php
+          $form->prepare();
+          echo $this->formErrors($form);
+          echo $this->form($form);
+          ?>
+        <?php endif; ?>
+
+        <p>
+            <a href="<?php echo $this->backLink ?>" class="action--tertiary list">
+                <?php echo $this->translate($this->backText); ?>
+            </a>
+        </p>
+    </div>
+
+    <div class="one-third sidebar">
+      <?php echo $this->translate('markup-support-contact-address'); ?>
     </div>
 </div>
