@@ -8,14 +8,17 @@
                     'label' => 'pay-fees.success.operator-name',
                     'value' => $operatorName,
                 ],
-                // 'paid by' descoped from OLCS-8792
                 [
                     'label' => 'pay-fees.success.payment-reference',
-                    'value' => $payment['reference'],
+                    'value' => $payment['id'],
                 ],
                 [
                     'label' => 'pay-fees.success.received',
                     'date' => $payment['completedDate'],
+                ],
+                [
+                    'label' => 'pay-fees.success.amount',
+                    'date' => $payment['amount'],
                 ],
             ],
           ],

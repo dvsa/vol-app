@@ -38,8 +38,8 @@ return array(
             'formatter' => 'Date',
         ),
         array(
-            'title' => 'Amount',
-            'name' => 'amount',
+            'title' => 'Outstanding',
+            'name' => 'outstanding',
             'formatter' => 'FeeAmount',
             'align' => 'right',
         ),
