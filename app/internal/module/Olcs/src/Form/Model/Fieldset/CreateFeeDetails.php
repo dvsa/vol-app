@@ -59,7 +59,7 @@ class CreateFeeDetails
      * })
      * @Form\Type("Text")
      * @Form\Required(true)
-     * @Form\Attributes({"required":false})
+     * @Form\Attributes({"required":false, "id":"amount"})
      * @Form\AllowEmpty(false)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Validator({"name": "Common\Form\Elements\Validators\Money"})

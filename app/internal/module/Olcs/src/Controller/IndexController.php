@@ -149,4 +149,31 @@ class IndexController extends AbstractController implements LeftViewProvider
 
         return new JsonModel($viewResults);
     }
+
+    /**
+     * @todo move this?
+     */
+    public function feeTypeAction()
+    {
+        $id = $this->params('id');
+
+        if ($id) {
+            $response = $this->handleQuery(
+                \Dvsa\Olcs\Transfer\Query\Fee\FeeType::create(['id' => $this->params('id')])
+            );
+            $feeType = $response->getResult();
+            $value = ($feeType['fixedValue'] > 0) ? $feeType['fixedValue'] : $feeType['fiveYearValue'];
+            return new JsonModel(['value' => $value]);
+        }
+
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList::create(
+                [
+                // 'id' => $this->params('id')
+                ]
+            )
+        );
+        $feeTypes = $response->getResult();
+        return new JsonModel($feeTypes);
+    }
 }

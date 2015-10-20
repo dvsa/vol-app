@@ -6,7 +6,7 @@ OLCS.ready(function() {
   OLCS.cascadeInput({
     source: form + " #feeType",
     dest: form + " #amount",
-    url: "/list/fee-type"
+    url: "/fee-type"
   });
 
 });

@@ -862,6 +862,16 @@ $routes = [
             ]
         ]
     ],
+    'fee_types' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/fee-type[/:id]',
+            'defaults' => [
+                'controller' => 'IndexController',
+                'action' => 'feeType'
+            ]
+        ]
+    ],
     'template_lists' => [
         'type' => 'segment',
         'options' => [
