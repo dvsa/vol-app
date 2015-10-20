@@ -4,7 +4,7 @@ namespace OlcsTest\Data\Mapper;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\User as Sut;
-use Zend\Form\FormInterface;
+use Zend\Form\Form;
 
 /**
  * User Mapper Test
@@ -656,11 +656,26 @@ class UserTest extends MockeryTestCase
         ];
     }
 
+
     public function testMapFromErrors()
     {
-        $mockForm = m::mock(FormInterface::class);
-        $errors = ['field' => 'data'];
+        $errors = [
+            'messages' => [
+                'loginId' => ['err'],
+                'general' => 'error'
+            ]
+        ];
+        $expected = [
+            'messages' => [
+                'general' => 'error'
+            ]
+        ];
+        $mockForm = m::mock(Form::class)
+            ->shouldReceive('setMessages')
+            ->with(['userLoginSecurity' => ['loginId' => ['err']]])
+            ->once()
+            ->getMock();
 
-        $this->assertEquals($errors, Sut::mapFromErrors($mockForm, $errors));
+        $this->assertEquals($expected, Sut::mapFromErrors($mockForm, $errors));
     }
 }
