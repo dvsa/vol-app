@@ -40,4 +40,5 @@ class SearchFilter
      * @Form\Type("\Zend\Form\Element\Button")
      */
     public $submit = null;
+
 }
