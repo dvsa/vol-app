@@ -840,6 +840,8 @@ trait FeesActionTrait
             'amount' => $data['fee-details']['amount'],
         ];
 
+        // @todo get irfoGvPermit or irfoPsvAuth id from form for irfo fees
+
         $dtoData = array_merge($dtoData, $this->getCreateFeeDtoData());
 
         $dto = CreateFeeCmd::create($dtoData);
