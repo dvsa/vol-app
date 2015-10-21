@@ -105,6 +105,11 @@ class ProhibitionController extends AbstractInternalController implements CaseCo
      * Command is required, as are itemParams from above
      */
     protected $deleteCommand = DeleteDto::class;
+    /**
+     * Variables for controlling the delete action.
+     * Format is: required => supplied
+     */
+    protected $deleteParams = ['id' => 'prohibition'];
 
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
