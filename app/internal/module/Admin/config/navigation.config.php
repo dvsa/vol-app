@@ -149,7 +149,7 @@ return [
                         ],
                         [
                             'id' => 'admin-dashboard/admin-partner-management',
-                            'label' => 'Partners',
+                            'label' => 'Partner organisations',
                             'route' => 'admin-dashboard/admin-partner-management',
                         ]
                     ]
