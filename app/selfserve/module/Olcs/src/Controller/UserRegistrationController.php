@@ -123,7 +123,7 @@ class UserRegistrationController extends AbstractController
         } else {
             $result = $response->getResult();
 
-            if (!empty($result['messages'])) {
+            if (!empty($result['messages']['licenceNumber'])) {
                 $errors = $result['messages'];
             } else {
                 $this->getFlashMessenger()->addErrorMessage('unknown-error');
@@ -184,7 +184,7 @@ class UserRegistrationController extends AbstractController
         $result = $response->getResult();
         $errors = [];
 
-        if (!empty($result['messages'])) {
+        if (!empty($result['messages']['licenceNumber']) || !empty($result['messages']['loginId'])) {
             $errors = $result['messages'];
         } else {
             $this->getFlashMessenger()->addErrorMessage('unknown-error');
