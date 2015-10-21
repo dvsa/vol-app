@@ -5,15 +5,6 @@
       <div class="page-header__wrapper">
         <h3 class="page-header__subtitle"><?php echo $this->tmFullName ?></h3>
         <h1><?php echo $this->translate($this->title); ?></h1>
-        <ul class="page-header__actions">
-            <?php if ($this->viewActionUrl): ?>
-            <li>
-                <a href="<?php echo $this->viewActionUrl ?>" class="page-header__action" target="_blank">
-                    <?php echo $this->translate('tm-details-view-form-link-text'); ?>
-                </a>
-            </li>
-            <?php endif; ?>
-        </ul>
       </div><!-- .page-header__wrapper -->
     </div><!-- .page-header-->
 
@@ -41,6 +32,18 @@
 
         <?php echo $this->content ?>
 
+        <?php if (isset($form)): ?>
+          <?php
+          $form->prepare();
+          echo $this->formErrors($form);
+          echo $this->form($form);
+          ?>
+        <?php endif; ?>
+
+        <?php if (isset($this->bottomContent)): ?>
+            <?php echo $this->bottomContent ?>
+        <?php endif; ?>
+
         <?php if (isset($resendForm)): ?>
             <details class="help">
                 <summary class="help__summary">Resend link to Transport Manager</summary>
@@ -52,19 +55,13 @@
             </details>
         <?php endif; ?>
 
-        <?php if (isset($form)): ?>
-          <?php
-          $form->prepare();
-          echo $this->formErrors($form);
-          echo $this->form($form);
-          ?>
-        <?php endif; ?>
-
+        <?php if (isset($this->backLink)): ?>
         <p>
             <a href="<?php echo $this->backLink ?>" class="action--tertiary list">
                 <?php echo $this->translate($this->backText); ?>
             </a>
         </p>
+        <?php endif; ?>
     </div>
 
     <div class="one-third sidebar">

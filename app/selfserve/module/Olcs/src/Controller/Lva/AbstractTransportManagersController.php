@@ -50,29 +50,17 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     ];
 
     /**
-     * Edit Form confirmation message action
+     * Revert to editing the form
      */
     public function editAction()
     {
-        // Get confirmation form
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $formHelper->createForm('GenericConfirmation');
-        $formHelper->setFormActionFromRequest($form, $this->getRequest());
-
-        if ($this->getRequest()->isPost()) {
-            $tmaId = (int) $this->params('child_id');
-            if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
-                return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
-            } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            }
+        // move status back to incomplete
+        $tmaId = (int) $this->params('child_id');
+        if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
+            return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
+        } else {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
-
-        return $this->render(
-            'transport-manager-application.edit-form',
-            $form,
-            ['sectionText' => 'transport-manager-application.edit-form.confirmation']
-        );
     }
 
     /**
@@ -952,12 +940,18 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 $flashMessenger->addErrorMessage('unknown-error');
             }
         }
-
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $params['content'] = $translationHelper->translateReplace(
-            $this->isTmOperator($tma) ? 'markup-tma-b1-2' : 'markup-tma-a1-2',
-            [$this->getViewTmUrl(), $this->url()->fromRoute(null, [], [], true)]
-        );
+        $params = [
+            'content' => $translationHelper->translateReplace(
+                $this->isTmOperator($tma) ? 'markup-tma-b1-2' : 'markup-tma-a1-2',
+                [$this->getViewTmUrl()]
+            ),
+            'bottomContent' => $translationHelper->translateReplace(
+                '<p><a href="%s">Change your details</a></p>',
+                [$this->url()->fromRoute(null, [], [], true)]
+            ),
+            'backLink' => null,
+        ];
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         $form = $formHelper->createForm('GenericConfirmation');
@@ -984,7 +978,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $params['content'] = $translationHelper->translate('markup-tma-ab1-3');
+        $params = [
+            'content' => $translationHelper->translate('markup-tma-ab1-3'),
+            'bottomContent' => $translationHelper->translateReplace(
+                'TMA_RESEND_TM1',
+                $translationHelper->translate('TM1_FORM_LINK')
+            ),
+        ];
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         $form = $formHelper->createForm('TransportManagerApplicationResend');
@@ -1005,8 +1005,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     private function page2Point1(array $tma)
     {
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $params['content'] = $translationHelper->translateReplace('markup-tma-a2-1', [$this->getEditTmUrl()]);
-        $params['viewActionUrl'] = $this->getViewTmUrl();
+        $params = [
+            'content' => $translationHelper->translateReplace('markup-tma-a2-1', [$this->getEditTmUrl()]),
+            'backLink' => null,
+        ];
 
         return $this->renderTmAction('transport-manager-application.awaiting-operator-approval', null, $tma, $params);
     }
@@ -1041,10 +1043,14 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $params['content'] = $translationHelper->translateReplace(
-            'markup-tma-a2-2',
-            [$this->getViewTmUrl(), $this->url()->fromRoute(null, [], [], true)]
-        );
+        $params = [
+            'content' => $translationHelper->translateReplace(
+                'markup-tma-a2-2',
+                [$this->getViewTmUrl(), $this->url()->fromRoute(null, [], [], true)]
+            ),
+            'bottomContent' => $translationHelper->translate('TMA_WRONG_DETAILS'),
+            'backLink' => null,
+        ];
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         $form = $formHelper->createForm('GenericConfirmation');
@@ -1089,7 +1095,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $params['content'] = $translationHelper->translateReplace($template, [$this->getViewTmUrl()]);
-        $params['viewActionUrl'] = $this->getViewTmUrl();
 
         return $this->renderTmAction('transport-manager-application.print-sign', null, $tma, $params);
     }
@@ -1119,7 +1124,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     private function pagePostal(array $tma)
     {
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $params['content'] = $translationHelper->translateReplace('markup-tma-c-0', [$this->getViewTmUrl()]);
+        $params = [
+            'content' => $translationHelper->translateReplace('markup-tma-c-0', [$this->getViewTmUrl()]),
+            'backLink' => null,
+        ];
 
         return $this->renderTmAction('transport-manager-application.print-sign', null, $tma, $params);
     }
