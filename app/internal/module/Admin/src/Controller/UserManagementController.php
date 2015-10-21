@@ -17,17 +17,6 @@ use Olcs\Data\Mapper\User as Mapper;
 use Admin\Form\Model\Form\User as Form;
 use Zend\View\Model\ViewModel;
 
-
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Stdlib\ArrayUtils;
-use Zend\Mvc\MvcEvent as MvcEvent;
-
-use Olcs\Mvc\Controller\Plugin;
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use Dvsa\Olcs\Transfer\Command\CommandInterface;
-
-use Zend\Http\Response as HttpResponse;
-
 /**
  * User Management Controller
  *
