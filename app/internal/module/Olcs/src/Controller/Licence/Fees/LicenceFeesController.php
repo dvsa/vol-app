@@ -67,4 +67,9 @@ class LicenceFeesController extends LicenceController implements LeftViewProvide
     {
         return ['licence' => $this->params()->fromRoute('licence')];
     }
+
+    protected function getCreateFeeDtoData()
+    {
+        return ['licence' => $this->params()->fromRoute('licence')];
+    }
 }

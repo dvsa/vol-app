@@ -73,4 +73,12 @@ class BusFeesController extends BusController
     {
         return ['licence' => $this->params()->fromRoute('licence')];
     }
+
+    protected function getCreateFeeDtoData()
+    {
+        return [
+            'licence' => $this->params()->fromRoute('licence'),
+            'busReg' => $this->params()->fromRoute('busRegId'),
+        ];
+    }
 }

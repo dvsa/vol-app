@@ -542,6 +542,11 @@ trait FeesActionTrait
         return ['isMiscellaneous' => 1];
     }
 
+    protected function getCreateFeeDtoData()
+    {
+        return [];
+    }
+
     /**
      * @param Table $table
      * @param array $results
@@ -835,7 +840,7 @@ trait FeesActionTrait
             'amount' => $data['fee-details']['amount'],
         ];
 
-        $dtoData = array_merge($dtoData, $this->getFeeTypeDtoData());
+        $dtoData = array_merge($dtoData, $this->getCreateFeeDtoData());
 
         $dto = CreateFeeCmd::create($dtoData);
 
