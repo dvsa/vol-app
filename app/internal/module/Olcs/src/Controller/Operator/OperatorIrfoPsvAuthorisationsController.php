@@ -5,6 +5,7 @@
  */
 namespace Olcs\Controller\Operator;
 
+use Common\Form\Elements\Types\Html;
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPsvAuth as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPsvAuth as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuth as ItemDto;
@@ -14,6 +15,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Data\Mapper\IrfoPsvAuth as Mapper;
 use Olcs\Form\Model\Form\IrfoPsvAuth as Form;
+use Zend\Form\Element\Hidden;
 use Zend\View\Model\ViewModel;
 use Common\RefData;
 use Zend\Form\Form as ZendForm;
@@ -99,6 +101,22 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         'status' => 'irfo_auth_s_pending',
     ];
 
+    /**
+     * @var array
+     */
+    protected $redirectConfig = [
+        'add' => [
+            'route' => 'psv-authorisations',
+            'action' => 'index',
+            'reUseParams' => true,
+        ],
+        'edit' => [
+            'route' => 'psv-authorisations',
+            'action' => 'index',
+            'reUseParams' => false,
+        ]
+    ];
+
     public function detailsAction()
     {
         return $this->notFoundAction();
@@ -120,8 +138,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     {
         $status = isset($formData['fields']['status']) ? $formData['fields']['status'] : '';
         $readOnlyfields = [];
-        switch($status)
-        {
+        switch ($status) {
             case RefData::IRFO_PSV_AUTH_STATUS_PENDING:
                 $readOnlyfields = ['irfoPsvAuthType', 'status', 'isFeeExemptApplication'];
                 break;
@@ -147,6 +164,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
             $field->setAttribute('disabled', 'disabled');
         }
 
+        $form = $this->makeGeneralFormChanges($form, $formData);
         $form = $this->addPossibleActions($form);
 
         return $form;
@@ -154,20 +172,23 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
 
     /**
      * Adds possible action buttons to the bottom of the page.
+     * NB: Cancel removed and then readded to maintain correct order
      *
      * @param ZendForm $form
      * @return ZendForm
      */
     private function addPossibleActions(ZendForm $form)
     {
-        $form->get('form-actions')->add($this->generateActionButton('refuse'));
+        $form->get('form-actions')->remove('cancel');
         $form->get('form-actions')->add($this->generateActionButton('grant'));
         $form->get('form-actions')->add($this->generateActionButton('approve'));
         $form->get('form-actions')->add($this->generateActionButton('generateDocument', 'Generate document'));
         $form->get('form-actions')->add($this->generateActionButton('cns', 'CNS'));
         $form->get('form-actions')->add($this->generateActionButton('withdraw'));
         $form->get('form-actions')->add($this->generateActionButton('refuse'));
+        $form->get('form-actions')->add($this->generateActionButton('refuse'));
         $form->get('form-actions')->add($this->generateActionButton('reset'));
+        $form->get('form-actions')->add($this->generateActionButton('cancel'));
 
         return $form;
     }
@@ -194,5 +215,36 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         );
 
         return $button;
+    }
+
+    /**
+     * Make neccessary adjustments to the form. Other adjustments may also be in the data mapper
+     *
+     * @param ZendForm $form
+     * @param $formData
+     * @return ZendForm
+     */
+    private function makeGeneralFormChanges(ZendForm $form, $formData)
+    {
+        $form = $this->alterStatusField($form, $formData);
+
+        return $form;
+    }
+
+    /**
+     * Replace the disabled select for a simple label element
+     * @param ZendForm $form
+     * @param $formData
+     * @return ZendForm
+     */
+    private function alterStatusField(ZendForm $form, $formData)
+    {
+        $statusOptions = $form->get('fields')->get('status')->getValueOptions();
+        if (isset($statusOptions[$formData['fields']['status']])) {
+            $form->get('fields')->get('statusHtml')->setValue($statusOptions[$formData['fields']['status']]);
+            $form->get('fields')->get('statusHtml')->setAttribute('class', '');
+            $form->get('fields')->get('status')->setAttribute('class','visually-hidden');
+        }
+        return $form;
     }
 }
