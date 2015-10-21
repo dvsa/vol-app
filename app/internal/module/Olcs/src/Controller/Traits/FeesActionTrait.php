@@ -20,6 +20,7 @@ use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList as FeeTypeListQry;
+use Zend\View\Model\JsonModel;
 
 /**
  * Fees action trait
@@ -512,16 +513,19 @@ trait FeesActionTrait
      *
      * @return array
      */
-    protected function fetchFeeTypeValueOptions()
+    protected function fetchFeeTypeValueOptions($effectiveDate = null)
     {
         $valueOptions = [];
-        $response = $this->handleQuery(
-            FeeTypeListQry::create($this->getFeeTypeDtoData())
-        );
+
+        $dtoData = $this->getFeeTypeDtoData();
+        if ($effectiveDate) {
+            $dtoData['effectiveDate'] = $effectiveDate;
+        }
+
+        $response = $this->handleQuery(FeeTypeListQry::create($dtoData) );
 
         if ($response->isOk()) {
-            $data = $response->getResult();
-            foreach ($data['results'] as $result) {
+            foreach ($response->getResult()['results'] as $result) {
                 $valueOptions[$result['id']] = $result['description'];
             }
         }
@@ -894,5 +898,37 @@ trait FeesActionTrait
         // underpayment (different message for one or multiple fees)
         $suffix = $feeData['count'] > 1 ? 'multiple' : 'single';
         return 'internal.fee-payment.part-payment-' . $suffix;
+    }
+
+    public function feeTypeAction()
+    {
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Fee\FeeType::create(
+                [
+                    'id' => $this->params('id')
+                ]
+            )
+        );
+
+        $feeType = $response->getResult();
+
+        $value = ($feeType['fixedValue'] > 0) ? $feeType['fixedValue'] : $feeType['fiveYearValue'];
+
+        return new JsonModel(['value' => $value]);
+    }
+
+    public function feeTypeListAction()
+    {
+        $valueOptions = $this->fetchFeeTypeValueOptions($this->params('date'));
+
+        // map to format that the JS expects :-/
+        $feeTypes = array_map(function ($id, $description) {
+            return array(
+                'value' => $id,
+                'label'  => $description,
+            );
+        }, array_keys($valueOptions), $valueOptions);
+
+        return new JsonModel($feeTypes);
     }
 }

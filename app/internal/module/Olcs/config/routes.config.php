@@ -41,6 +41,42 @@ $feeActionRoute = [
         ],
     ],
 ];
+$feeTypeAjaxRoute = [
+    // child route config that is used in multiple places
+    'type' => 'segment',
+    'options' => [
+        'route' => '/ajax',
+    ],
+    'may_terminate' => false,
+    'child_routes' => [
+        'single' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/fee-type/:id',
+                'constraints' => [
+                    'id' => '([0-9]+,?)+',
+                ],
+                'defaults' => [
+                    'action' => 'feeType',
+                ]
+            ],
+            'may_terminate' => true,
+        ],
+        'list' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/fee-type-list/:date',
+                // 'constraints' => [
+                //     'date' => '([0-9]{4}\-[0-9]{2}\-[0-9]{2})',
+                // ],
+                'defaults' => [
+                    'action' => 'feeTypeList',
+                ]
+            ],
+            'may_terminate' => true,
+        ]
+    ],
+];
 
 $routes = [
     'dashboard' => [
@@ -862,13 +898,23 @@ $routes = [
             ]
         ]
     ],
-    'fee_types' => [
+    'ajax_fee_type' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/fee-type[/:id]',
+            'route' => '/ajax/fee-type/:id',
             'defaults' => [
                 'controller' => 'IndexController',
                 'action' => 'feeType'
+            ]
+        ]
+    ],
+    'ajax_fee_type_list' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/ajax/fee-type-list[/:date]',
+            'defaults' => [
+                'controller' => 'IndexController',
+                'action' => 'feeTypeList'
             ]
         ]
     ],
@@ -1317,6 +1363,7 @@ $routes = [
                 'may_terminate' => true,
                 'child_routes' => [
                     'fee_action' => $feeActionRoute,
+                    'fee_type_ajax' => $feeTypeAjaxRoute,
                 ]
             ],
             'cases' => [
@@ -1504,6 +1551,7 @@ $routes = [
                 'may_terminate' => true,
                 'child_routes' => [
                     'fee_action' => $feeActionRoute,
+                    'fee_type_ajax' => $feeTypeAjaxRoute,
                 ]
             ],
             'update-continuation' => [
@@ -1700,6 +1748,7 @@ $routes = [
                 'may_terminate' => true,
                 'child_routes' => [
                     'fee_action' => $feeActionRoute,
+                    'fee_type_ajax' => $feeTypeAjaxRoute,
                 ]
             ],
             'documents' => [
@@ -2712,7 +2761,8 @@ $routes['lva-application']['child_routes'] = array_merge(
             ),
             'may_terminate' => true,
             'child_routes' => array(
-                'fee_action' => $feeActionRoute
+                'fee_action' => $feeActionRoute,
+                'fee_type_ajax' => $feeTypeAjaxRoute,
             )
         ),
         'interim' => array(
