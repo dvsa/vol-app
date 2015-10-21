@@ -8,19 +8,20 @@
  */
 namespace Olcs\Controller\Traits;
 
-use Zend\View\Model\ViewModel;
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
-use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
-use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Dvsa\Olcs\Transfer\Command\Fee\ApproveWaive as ApproveWaiveCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RecommendWaive as RecommendWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
-use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
+use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
+use Dvsa\Olcs\Transfer\Query\Fee\FeeType as FeeTypeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList as FeeTypeListQry;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 
 /**
  * Fees action trait
@@ -902,19 +903,12 @@ trait FeesActionTrait
 
     public function feeTypeAction()
     {
-        $response = $this->handleQuery(
-            \Dvsa\Olcs\Transfer\Query\Fee\FeeType::create(
-                [
-                    'id' => $this->params('id')
-                ]
-            )
-        );
+        $id = $this->params('id');
+        $response = $this->handleQuery(FeeTypeQry::create(['id' => $id]));
 
         $feeType = $response->getResult();
 
-        $value = ($feeType['fixedValue'] > 0) ? $feeType['fixedValue'] : $feeType['fiveYearValue'];
-
-        return new JsonModel(['value' => $value]);
+        return new JsonModel(['value' => $feeType['displayValue']]);
     }
 
     public function feeTypeListAction()

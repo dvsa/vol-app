@@ -898,26 +898,6 @@ $routes = [
             ]
         ]
     ],
-    'ajax_fee_type' => [
-        'type' => 'segment',
-        'options' => [
-            'route' => '/ajax/fee-type/:id',
-            'defaults' => [
-                'controller' => 'IndexController',
-                'action' => 'feeType'
-            ]
-        ]
-    ],
-    'ajax_fee_type_list' => [
-        'type' => 'segment',
-        'options' => [
-            'route' => '/ajax/fee-type-list[/:date]',
-            'defaults' => [
-                'controller' => 'IndexController',
-                'action' => 'feeTypeList'
-            ]
-        ]
-    ],
     'template_lists' => [
         'type' => 'segment',
         'options' => [

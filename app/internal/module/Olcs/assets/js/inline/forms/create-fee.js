@@ -24,7 +24,8 @@ OLCS.ready(function() {
   OLCS.cascadeInput({
     source: form + " #feeType",
     dest: form + " #amount",
-    url: urlPrefix + "/fees/ajax/fee-type"
+    url: urlPrefix + "/fees/ajax/fee-type",
+    disableDestination: false
   });
 
   // refresh FeeType list with appropriate effectiveFrom date according to
@@ -32,12 +33,7 @@ OLCS.ready(function() {
   OLCS.cascadeInput({
     source: form + " #js-created-date",
     dest: form + " #feeType",
-    process: function(value, callback) {
-        OLCS.ajax({
-          url: urlPrefix + "/fees/ajax/fee-type-list/" + value, // + "?context=" + $(form).attr("action"),
-          success: callback
-        });
-    }
+    url: urlPrefix + "/fees/ajax/fee-type-list"
   });
 
 });
