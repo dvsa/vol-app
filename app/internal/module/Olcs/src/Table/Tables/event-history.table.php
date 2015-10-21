@@ -20,9 +20,9 @@ return array(
     'columns' => array(
         array(
             'title' => 'Date',
-            'name' => 'eventDatetime',
-            'formatter' => 'DateTime',
-            'sort' => 'eventDatetime',
+            'name' => 'createdOn',
+            'formatter' => 'Date',
+            'sort' => 'createdOn',
         ),
         array(
             'title' => 'Description',

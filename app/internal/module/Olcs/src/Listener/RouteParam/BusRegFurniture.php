@@ -2,8 +2,11 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
+use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
+use Dvsa\Olcs\Transfer\Command\Audit\ReadBusReg;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use \Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
@@ -22,11 +25,16 @@ use Zend\View\Model\ViewModel;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class BusRegFurniture implements ListenerAggregateInterface, FactoryInterface, QuerySenderAwareInterface
+class BusRegFurniture implements
+    ListenerAggregateInterface,
+    FactoryInterface,
+    QuerySenderAwareInterface,
+    CommandSenderAwareInterface
 {
     use ListenerAggregateTrait,
         ViewHelperManagerAwareTrait,
-        QuerySenderAwareTrait;
+        QuerySenderAwareTrait,
+        CommandSenderAwareTrait;
 
     /**
      * Create service
@@ -37,6 +45,7 @@ class BusRegFurniture implements ListenerAggregateInterface, FactoryInterface, Q
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $this->setQuerySender($serviceLocator->get('QuerySender'));
+        $this->setCommandSender($serviceLocator->get('CommandSender'));
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
 
         return $this;
@@ -66,7 +75,10 @@ class BusRegFurniture implements ListenerAggregateInterface, FactoryInterface, Q
      */
     public function onBusRegFurniture(RouteParam $e)
     {
-        $busReg = $this->getBusReg($e->getValue());
+        $id = $e->getValue();
+        $this->getCommandSender()->send(ReadBusReg::create(['id' => $id]));
+
+        $busReg = $this->getBusReg($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('status')->set(

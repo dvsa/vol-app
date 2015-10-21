@@ -5,6 +5,7 @@
  */
 namespace Olcs\Controller\Application\Processing;
 
+use Dvsa\Olcs\Transfer\Query\Application\History;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -19,40 +20,24 @@ class HistoryController extends AbstractApplicationProcessingController
 
     public function indexAction()
     {
-        $view = $this->getViewWithApplication();
-
         $params = [
-            'application' => $this->getQueryOrRouteParam('application'),
-            'page'    => $this->getQueryOrRouteParam('page', 1),
-            'sort'    => $this->getQueryOrRouteParam('sort', 'id'),
-            'order'   => $this->getQueryOrRouteParam('order', 'desc'),
-            'limit'   => $this->getQueryOrRouteParam('limit', 10),
+            'id'    => $this->getQueryOrRouteParam('application'),
+            'page'  => $this->getQueryOrRouteParam('page', 1),
+            'sort'  => $this->getQueryOrRouteParam('sort', 'createdOn'),
+            'order' => $this->getQueryOrRouteParam('order', 'desc'),
+            'limit' => $this->getQueryOrRouteParam('limit', 10),
         ];
 
-        $params['query'] = $this->getRequest()->getQuery();
+        $response = $this->handleQuery(History::create($params));
+        $results = $response->getResult();
+//
+//        print '<pre>';
+//        print_r($results);
+//        exit;
 
-        /**
-         * @todo need to migrate this
-         */
-        $bundle = [
-            'children' => [
-                'eventHistoryType' => [],
-                'user' => [
-                    'children' => [
-                        'contactDetails' => [
-                            'children' => [
-                                'person' => [],
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
+        $table = $this->getServiceLocator()->get('Table')->buildTable('event-history', $results, $params);
 
-        $results = $this->makeRestCall('EventHistory', 'GET', $params, $bundle);
-
-        $view->table = $this->getTable('event-history', $results, $params);
-
+        $view = new ViewModel(['table' => $table]);
         $view->setTemplate('pages/table');
 
         return $this->renderView($view);

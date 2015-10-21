@@ -3,8 +3,11 @@
 namespace Olcs\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
+use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
+use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
+use Dvsa\Olcs\Transfer\Command\Audit\ReadLicence;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQuery;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
@@ -21,11 +24,16 @@ use Zend\View\Model\ViewModel;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class LicenceFurniture implements ListenerAggregateInterface, FactoryInterface, QuerySenderAwareInterface
+class LicenceFurniture implements
+    ListenerAggregateInterface,
+    FactoryInterface,
+    QuerySenderAwareInterface,
+    CommandSenderAwareInterface
 {
     use ListenerAggregateTrait,
         ViewHelperManagerAwareTrait,
-        QuerySenderAwareTrait;
+        QuerySenderAwareTrait,
+        CommandSenderAwareTrait;
 
     /**
      * Create service
@@ -37,6 +45,7 @@ class LicenceFurniture implements ListenerAggregateInterface, FactoryInterface, 
     {
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setQuerySender($serviceLocator->get('QuerySender'));
+        $this->setCommandSender($serviceLocator->get('CommandSender'));
 
         return $this;
     }
@@ -66,6 +75,8 @@ class LicenceFurniture implements ListenerAggregateInterface, FactoryInterface, 
     public function onLicenceFurniture(RouteParam $e)
     {
         $id = $e->getValue();
+
+        $this->getCommandSender()->send(ReadLicence::create(['id' => $id]));
 
         $response = $this->getQuerySender()->send(LicenceQuery::create(['id' => $id]));
 
