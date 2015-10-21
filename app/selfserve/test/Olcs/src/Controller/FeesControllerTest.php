@@ -951,6 +951,6 @@ class FeesControllerTest extends MockeryTestCase
         $this->assertEquals($fees, $view->getVariable('fees'));
         $this->assertEquals($payment, $view->getVariable('payment'));
 
-        $this->assertInstanceOf('\Olcs\View\Model\ReceiptViewModel', $view);
+        $this->assertInstanceOf('\Common\View\Model\ReceiptViewModel', $view);
     }
 }

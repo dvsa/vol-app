@@ -10,13 +10,12 @@ namespace Olcs\Controller;
 use Common\Controller\Lva\AbstractController;
 use Common\RefData;
 use Zend\View\Model\ViewModel;
-use Olcs\View\Model\ReceiptViewModel;
 use Common\Exception\ResourceNotFoundException;
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentById;
-use Dvsa\Olcs\Transfer\Query\Transaction\TransactionByReference as PaymentByReference;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePayment;
+use Common\Controller\Traits\GenericReceipt;
 
 /**
  * Fees Controller
@@ -26,7 +25,8 @@ use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymen
 class FeesController extends AbstractController
 {
     use Lva\Traits\ExternalControllerTrait,
-        Lva\Traits\DashboardNavigationTrait;
+        Lva\Traits\DashboardNavigationTrait,
+        GenericReceipt;
 
     const PAYMENT_METHOD = RefData::FEE_PAYMENT_METHOD_CARD_ONLINE;
 
@@ -134,17 +134,6 @@ class FeesController extends AbstractController
 
         $view = new ViewModel($viewData);
         $view->setTemplate('pages/fees/payment-success');
-        return $view;
-    }
-
-    public function printAction()
-    {
-        $paymentRef = $this->params()->fromRoute('reference');
-
-        $viewData = $this->getReceiptData($paymentRef);
-
-        $view = new ReceiptViewModel($viewData);
-
         return $view;
     }
 
@@ -261,35 +250,5 @@ class FeesController extends AbstractController
         $view->setTemplate('cpms/payment');
 
         return $this->render($view);
-    }
-
-    protected function getReceiptData($paymentRef)
-    {
-        $query = PaymentByReference::create(['reference' => $paymentRef]);
-        $response = $this->handleQuery($query);
-        if ($response->isOk()) {
-            $payment = $response->getResult();
-            $fees = array_map(
-                function ($fp) {
-                    return $fp['fee'];
-                },
-                $payment['feeTransactions']
-            );
-        } else {
-            throw new ResourceNotFoundException('Payment not found');
-        }
-
-        $table = $this->getServiceLocator()->get('Table')
-            ->buildTable('pay-fees', $fees, [], false);
-
-        // override table title
-        $tableTitle = $this->getServiceLocator()->get('Helper\Translation')
-            ->translate('pay-fees.success.table.title');
-        $table->setVariable('title', $tableTitle);
-
-        // get operator name from the first fee
-        $operatorName = $fees[0]['licence']['organisation']['name'];
-
-        return compact('payment', 'fees', 'operatorName', 'table');
     }
 }
