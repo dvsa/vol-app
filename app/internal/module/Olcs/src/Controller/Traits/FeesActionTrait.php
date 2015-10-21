@@ -330,10 +330,21 @@ trait FeesActionTrait
         $backLink = $this->getServiceLocator()->get('Helper\Url')
             ->fromRoute($this->getFeesRoute() . '/fee_action', ['action' => 'edit-fee'], [], true);
 
+        $receiptLink = ($transaction['type']['id'] == RefData::TRANSACTION_TYPE_PAYMENT) ?
+            $this->getServiceLocator()->get('Helper\Url')
+                ->fromRoute(
+                    $this->getFeesRoute() . '/print-receipt',
+                    ['reference' => $transaction['reference']],
+                    [],
+                    true
+                ) :
+            '';
+
         $viewParams = [
             'table' => $table,
             'transaction' => $transaction,
             'backLink' => $backLink,
+            'receiptLink' => $receiptLink
         ];
 
         $this->placeholder()->setPlaceholder('contentTitle', 'internal.transaction-details.title');

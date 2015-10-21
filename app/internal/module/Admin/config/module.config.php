@@ -400,6 +400,19 @@ return [
                                             ],
                                         ],
                                     ],
+                                    'print-receipt' => [
+                                        'type' => 'segment',
+                                        'options' => [
+                                            'route' => '/print-receipt/:reference',
+                                            'constraints' => [
+                                                'reference' => 'OLCS-[0-9A-F\-]+',
+                                            ],
+                                            'defaults' => [
+                                                'controller' => 'Admin\PaymentProcessingFeesController',
+                                                'action' => 'print',
+                                            ],
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
