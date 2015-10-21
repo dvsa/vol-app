@@ -10,7 +10,7 @@ namespace Olcs\Controller\Traits;
 
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Fee\ApproveWaive as ApproveWaiveCmd;
-use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\CreateFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RecommendWaive as RecommendWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
@@ -499,11 +499,14 @@ trait FeesActionTrait
      */
     protected function alterCreateFeeForm($form)
     {
-        $this->getServiceLocator()->get('Helper\Form')
-            ->disableElement($form, 'fee-details->amount');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
+        // disable amount validation by default
+        $formHelper->disableElement($form, 'fee-details->amount');
+        $formHelper->disableEmptyValidationOnElement($form, 'fee-details->amount');
+
+        // populate fee type select
         $options = $this->fetchFeeTypeValueOptions();
-
         $form->get('fee-details')->get('feeType')->setValueOptions($options);
 
         return $form;
@@ -831,6 +834,8 @@ trait FeesActionTrait
             'feeType' => $data['fee-details']['feeType'],
             'amount' => $data['fee-details']['amount'],
         ];
+
+        $dtoData = array_merge($dtoData, $this->getFeeTypeDtoData());
 
         $dto = CreateFeeCmd::create($dtoData);
 
