@@ -785,6 +785,11 @@ class FeesControllerTest extends MockeryTestCase
                     'name' => 'Big Trucks Ltd.',
                 ],
             ],
+            'feeType' => [
+                'feeType' => [
+                    'id' => 'CONT'
+                ]
+            ]
         ];
         $fee2 = [
             'id' => 88,
@@ -796,6 +801,11 @@ class FeesControllerTest extends MockeryTestCase
                     'name' => 'Big Trucks Ltd.',
                 ],
             ],
+            'feeType' => [
+                'feeType' => [
+                    'id' => 'CONT'
+                ]
+            ]
         ];
         $payment = [
             'id' => $paymentId,
@@ -895,6 +905,11 @@ class FeesControllerTest extends MockeryTestCase
                     'name' => 'Big Trucks Ltd.',
                 ],
             ],
+            'feeType' => [
+                'feeType' => [
+                    'id' => 'CONT'
+                ]
+            ]
         ];
         $fee2 = [
             'id' => 88,
@@ -906,6 +921,11 @@ class FeesControllerTest extends MockeryTestCase
                     'name' => 'Big Trucks Ltd.',
                 ],
             ],
+            'feeType' => [
+                'feeType' => [
+                    'id' => 'CONT'
+                ]
+            ]
         ];
         $payment = [
             'id' => $paymentId,

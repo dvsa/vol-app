@@ -307,7 +307,8 @@ class FeesController extends AbstractController
 
         // get operator name from the first fee
         $operatorName = $fees[0]['licence']['organisation']['name'];
+        $hasContinuation = $this->hasContinuationFee($fees);
 
-        return compact('payment', 'fees', 'operatorName', 'table');
+        return compact('payment', 'fees', 'operatorName', 'table', 'hasContinuation');
     }
 }
