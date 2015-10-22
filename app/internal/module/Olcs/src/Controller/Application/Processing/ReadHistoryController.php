@@ -16,7 +16,9 @@ use Zend\View\Model\ViewModel;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ReadHistoryController extends AbstractInternalController implements ApplicationControllerInterface, LeftViewProvider
+class ReadHistoryController extends AbstractInternalController implements
+    ApplicationControllerInterface,
+    LeftViewProvider
 {
     /**
      * Holds the navigation ID,
