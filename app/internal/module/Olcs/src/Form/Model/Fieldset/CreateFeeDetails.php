@@ -36,28 +36,62 @@ class CreateFeeDetails
     public $feeType = null;
 
     /**
-     * @Form\Attributes({"id":"irfoGvPermit"})
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"irfoGvPermit","required":false})
      * @Form\Options({
      *     "label": "fees.irfoGvPermit",
      *     "short-label": "fees.irfoGvPermit",
      *     "label_attributes": {"id": "label-type"},
      *     "empty_option": "Please select"
      * })
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Select")
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     * @Form\Validator({
+     *      "name": "ValidateIf",
+     *      "options": {
+     *          "context_field": "irfoPsvAuth",
+     *          "context_values": {""},
+     *          "context_truth": true,
+     *          "allow_empty" : false,
+     *          "validators": {
+     *              {
+     *                  "name": "Zend\Validator\NotEmpty",
+     *                  "options": {"messages": {"isEmpty": "internal.create-fee.irfo-required"}}
+     *              }
+     *          }
+     *      }
+     * })
      */
     public $irfoGvPermit = null;
 
     /**
-     * @Form\Attributes({"id":"irfoPsvAuth"})
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"irfoPsvAuth","required":false})
      * @Form\Options({
      *     "label": "fees.irfoPsvAuth",
      *     "short-label": "fees.irfoPsvAuth",
      *     "label_attributes": {"id": "label-type"},
      *     "empty_option": "Please select"
      * })
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Select")
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     * @Form\Validator({
+     *      "name": "ValidateIf",
+     *      "options": {
+     *          "context_field": "irfoGvPermit",
+     *          "context_values": {""},
+     *          "context_truth": true,
+     *          "allow_empty" : false,
+     *          "validators": {
+     *              {
+     *                  "name": "Zend\Validator\NotEmpty",
+     *                  "options": {"messages": {"isEmpty": "internal.create-fee.irfo-required"}}
+     *              }
+     *          }
+     *      }
+     * })
      */
     public $irfoPsvAuth = null;
 

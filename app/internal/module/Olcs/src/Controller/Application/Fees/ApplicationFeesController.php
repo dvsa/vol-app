@@ -66,8 +66,13 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
         return ['application' => $this->params()->fromRoute('application')];
     }
 
-    protected function getCreateFeeDtoData()
+    protected function getCreateFeeDtoData($formData)
     {
-        return ['application' => $this->params()->fromRoute('application')];
+        return [
+            'user' => $this->getLoggedInUser(),
+            'invoicedDate' => $formData['fee-details']['createdDate'],
+            'feeType' => $formData['fee-details']['feeType'],
+            'application' => $this->params()->fromRoute('application'),
+        ];
     }
 }

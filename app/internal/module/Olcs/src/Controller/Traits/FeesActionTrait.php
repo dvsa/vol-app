@@ -84,7 +84,7 @@ trait FeesActionTrait
             if ($this->isButtonPressed('cancel')) {
                 return $this->redirectToList();
             }
-            $this->formPost($form, 'createFee');
+            $this->formPost($form, 'createFee', [$form]);
         }
 
         if ($this->getResponse()->getContent() !== '') {
@@ -502,7 +502,7 @@ trait FeesActionTrait
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         // disable amount validation by default
-        $formHelper->disableElement($form, 'fee-details->amount');
+        $form->get('fee-details')->get('amount')->setAttribute('readonly', true);
         $formHelper->disableEmptyValidationOnElement($form, 'fee-details->amount');
 
         // remove IRFO fields by default
@@ -548,10 +548,10 @@ trait FeesActionTrait
 
     protected function getFeeTypeDtoData()
     {
-        return ['isMiscellaneous' => 1];
+        return [];
     }
 
-    protected function getCreateFeeDtoData()
+    protected function getCreateFeeDtoData($formData)
     {
         return [];
     }
@@ -840,18 +840,9 @@ trait FeesActionTrait
      *
      * @param array $data
      */
-    protected function createFee($data)
+    protected function createFee($data, $form)
     {
-        $dtoData = [
-            'user' => $this->getLoggedInUser(),
-            'invoicedDate' => $data['fee-details']['createdDate'],
-            'feeType' => $data['fee-details']['feeType'],
-            'amount' => $data['fee-details']['amount'],
-        ];
-
-        // @todo get irfoGvPermit or irfoPsvAuth id from form for irfo fees
-
-        $dtoData = array_merge($dtoData, $this->getCreateFeeDtoData());
+        $dtoData = $this->getCreateFeeDtoData($data);
 
         $dto = CreateFeeCmd::create($dtoData);
 
@@ -859,11 +850,14 @@ trait FeesActionTrait
 
         if ($response->isOk()) {
             $this->addSuccessMessage('fees.create.success');
+            $this->redirectToList();
         } else {
-            $this->addErrorMessage('fees.create.error');
+            $errors = $response->getResult();
+            \Olcs\Data\Mapper\CreateFee::mapFromErrors($form, $errors);
+            if (!empty($errors)) {
+                $this->addErrorMessage('fees.create.error');
+            }
         }
-
-        $this->redirectToList();
     }
 
     /**
@@ -943,6 +937,8 @@ trait FeesActionTrait
                 'label'  => $description,
             );
         }, array_keys($valueOptions), $valueOptions);
+
+        array_unshift($feeTypes, ["value" => "", "label" => ""]);
 
         return new JsonModel($feeTypes);
     }

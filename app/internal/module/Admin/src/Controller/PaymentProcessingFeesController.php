@@ -133,4 +133,20 @@ class PaymentProcessingFeesController extends AbstractActionController implement
             true
         );
     }
+
+    protected function getFeeTypeDtoData()
+    {
+        return ['isMiscellaneous' => 1];
+    }
+
+    protected function getCreateFeeDtoData($formData)
+    {
+        return [
+            'user' => $this->getLoggedInUser(),
+            'invoicedDate' => $formData['fee-details']['createdDate'],
+            'feeType' => $formData['fee-details']['feeType'],
+            'amount' => $formData['fee-details']['amount'],
+        ];
+    }
+
 }

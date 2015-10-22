@@ -81,8 +81,9 @@ class OperatorFeesController extends OperatorController
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         // disable amount validation by default
-        $formHelper->disableElement($form, 'fee-details->amount');
+        // $formHelper->disableElement($form, 'fee-details->amount');
         $formHelper->disableEmptyValidationOnElement($form, 'fee-details->amount');
+        $form->get('fee-details')->get('amount')->setAttribute('readonly', true);
 
         // populate fee type select
         $options = $this->fetchFeeTypeValueOptions();
@@ -90,7 +91,7 @@ class OperatorFeesController extends OperatorController
 
         // populate GV Permit and PSV Auth dropdowns
         $data = $this->fetchFeeTypeListData();
-        var_dump($data);
+
         if (isset($data['extra']['valueOptions']['irfoGvPermit'])) {
             $form->get('fee-details')->get('irfoGvPermit')->setValueOptions(
                 $data['extra']['valueOptions']['irfoGvPermit']
@@ -104,5 +105,16 @@ class OperatorFeesController extends OperatorController
         }
 
         return $form;
+    }
+
+    protected function getCreateFeeDtoData($formData)
+    {
+        return [
+            'user' => $this->getLoggedInUser(),
+            'invoicedDate' => $formData['fee-details']['createdDate'],
+            'feeType' => $formData['fee-details']['feeType'],
+            'irfoGvPermit' => $formData['fee-details']['irfoGvPermit'],
+            'irfoPsvAuth' => $formData['fee-details']['irfoPsvAuth'],
+        ];
     }
 }
