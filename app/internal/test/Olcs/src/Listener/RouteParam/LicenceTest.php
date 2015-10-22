@@ -79,6 +79,7 @@ class LicenceTest extends TestCase
             $mockLicenceService->shouldReceive('setId')->with($licenceId);
 
             $mockViewHelperManager->shouldReceive('get->getContainer->set')->with($licenceData)->once();
+            $mockViewHelperManager->shouldReceive('get->getContainer->set')->with('latest note')->once();
         }
     }
 
@@ -112,6 +113,7 @@ class LicenceTest extends TestCase
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
             'licenceStatusRules' => [],
+            'latestNote' => ['comment' => 'latest note']
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -154,6 +156,7 @@ class LicenceTest extends TestCase
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
             'licenceStatusRules' => [],
+            'latestNote' => ['comment' => 'latest note']
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -191,6 +194,7 @@ class LicenceTest extends TestCase
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
             'licenceStatusRules' => [],
+            'latestNote' => ['comment' => 'latest note']
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -232,6 +236,7 @@ class LicenceTest extends TestCase
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
             'licenceStatusRules' => [],
+            'latestNote' => ['comment' => 'latest note']
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -278,6 +283,7 @@ class LicenceTest extends TestCase
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
             'licenceStatusRules' => [],
+            'latestNote' => ['comment' => 'latest note']
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -326,6 +332,7 @@ class LicenceTest extends TestCase
                     'licenceStatus' => ['id' => 'lsts_suspended'],
                 ]
             ],
+            'latestNote' => ['comment' => 'latest note']
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -376,6 +383,7 @@ class LicenceTest extends TestCase
                     'licenceStatus' => ['id' => 'lsts_suspended'],
                 ]
             ],
+            'latestNote' => ['comment' => 'latest note']
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -421,6 +429,7 @@ class LicenceTest extends TestCase
                     'licenceStatus' => ['id' => 'lsts_suspended'],
                 ]
             ],
+            'latestNote' => ['comment' => 'latest note']
         ];
 
         $this->onLicenceSetup($licenceId, $licence);

@@ -1,5 +1,7 @@
 <?php
     $licence = $this->placeholder('licence')->getValue();
+    $note = $this->placeholder('note')->getValue();
+    $application = $this->placeholder('application')->getValue();
 ?>
 <div class="small-module">
     <h4 class="small-module__title">Licence details</h4>
@@ -45,4 +47,14 @@ if ($nav->getContainer()->hasPages(true)): ?>
         <h5>Decisions</h5>
         <?php echo $nav; ?>
     </div>
-<?php endif;
+<?php endif; ?>
+
+<?php if ($note): ?>
+    <div class="latest-note">
+        <p class="latest-note__details"><?php echo substr($note, 0, 100); ?></p>
+        <a
+            class="latest-note__link"
+            href="<?php echo $this->url('lva-application/processing/notes', ['application' => $application['id']]); ?>"
+        >View all notes</a>
+    </div>
+<?php endif; ?>

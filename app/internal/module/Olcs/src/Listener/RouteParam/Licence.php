@@ -147,6 +147,10 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             ->getContainer('licence')
             ->set($licence);
 
+        $this->getViewHelperManager()->get('placeholder')
+            ->getContainer('note')
+            ->set($licence['latestNote']['comment']);
+
         $this->showHideButtons($licence);
 
         if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
