@@ -101,22 +101,6 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         'status' => 'irfo_auth_s_pending',
     ];
 
-    /**
-     * @var array
-     */
-    protected $redirectConfig = [
-        'add' => [
-            'route' => 'psv-authorisations',
-            'action' => 'index',
-            'reUseParams' => true,
-        ],
-        'edit' => [
-            'route' => 'psv-authorisations',
-            'action' => 'index',
-            'reUseParams' => false,
-        ]
-    ];
-
     public function detailsAction()
     {
         return $this->notFoundAction();
@@ -134,36 +118,8 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      * @param $formData
      * @return mixed
      */
-    protected function alterFormForEdit(ZendForm $form, $formData)
+    protected function alterFormForEdit($form, $formData)
     {
-        $status = isset($formData['fields']['status']) ? $formData['fields']['status'] : '';
-        $readOnlyfields = [];
-        switch ($status) {
-            case RefData::IRFO_PSV_AUTH_STATUS_PENDING:
-                $readOnlyfields = ['irfoPsvAuthType', 'status', 'isFeeExemptApplication'];
-                break;
-            case RefData::IRFO_PSV_AUTH_STATUS_RENEW:
-                $readOnlyfields = ['irfoPsvAuthType', 'status'];
-                break;
-            case RefData::IRFO_PSV_AUTH_STATUS_GRANTED:
-            case RefData::IRFO_PSV_AUTH_STATUS_APPROVED:
-                $readOnlyfields = ['irfoPsvAuthType', 'status', 'validityPeriod', 'isFeeExemptApplication',
-                    'isFeeExemptAnnual', 'exemptionDetails', 'copiesRequired', 'copiesRequiredTotal'
-                ];
-                break;
-            case RefData::IRFO_PSV_AUTH_STATUS_CNS:
-            case RefData::IRFO_PSV_AUTH_STATUS_REFUSED:
-            case RefData::IRFO_PSV_AUTH_STATUS_WITHDRAWN:
-            default:
-                // Every status needs to be handled here to avoid displaying a form where data shouldn't be edited.
-                $form->setOption('readonly', true);
-        }
-
-        foreach ($readOnlyfields as $field) {
-            $field = $form->get('fields')->get($field);
-            $field->setAttribute('disabled', 'disabled');
-        }
-
         $form = $this->makeGeneralFormChanges($form, $formData);
         $form = $this->addPossibleActions($form);
 
@@ -243,11 +199,13 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     private function alterStatusField(ZendForm $form, $formData)
     {
         $statusOptions = $form->get('fields')->get('status')->getValueOptions();
+
         if (isset($statusOptions[$formData['fields']['status']])) {
             $form->get('fields')->get('statusHtml')->setValue($statusOptions[$formData['fields']['status']]);
             $form->get('fields')->get('statusHtml')->setAttribute('class', '');
-            $form->get('fields')->get('status')->setAttribute('class','visually-hidden');
+            $form->get('fields')->get('status')->setAttribute('class', 'visually-hidden');
         }
+
         return $form;
     }
 }
