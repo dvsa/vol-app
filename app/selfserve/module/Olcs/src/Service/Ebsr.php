@@ -96,6 +96,7 @@ class Ebsr implements FactoryInterface
         if (!count($packs)) {
             return ['errors' =>['No packs were found in your upload, please verify your file and try again']];
         }
+
         try {
             $packResults = $this->getDataService()->sendPackList($packs, $submissionType);
         } catch (\RuntimeException $e) {
@@ -140,7 +141,7 @@ class Ebsr implements FactoryInterface
             if ($validator->isValid()) {
 
                 $dtoData = [
-                    'content' => file_get_contents($ebsrPack),
+                    'content' => base64_encode(file_get_contents($ebsrPack)),
                     'category' => 3,
                     'subCategory' => 36,
                     'filename' => basename($ebsrPack),
