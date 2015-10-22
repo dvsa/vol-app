@@ -36,7 +36,11 @@ class PaymentProcessingFeesController extends AbstractActionController implement
         $options = $this->fetchFeeTypeValueOptions();
         $form->get('fee-details')->get('feeType')->setValueOptions($options);
 
-        // no-op
+        // remove IRFO fields
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper->remove($form, 'fee-details->irfoGvPermit');
+        $formHelper->remove($form, 'fee-details->irfoPsvAuth');
+
         return $form;
     }
 
