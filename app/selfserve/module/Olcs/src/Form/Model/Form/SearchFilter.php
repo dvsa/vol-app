@@ -18,7 +18,7 @@ class SearchFilter
      * @Form\Type("Hidden")
      */
     public $index = null;
-    
+
     /**
      * @Form\Name("text")
      * @Form\Options({"label":"", "class":""})

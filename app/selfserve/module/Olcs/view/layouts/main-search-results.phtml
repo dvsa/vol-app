@@ -19,16 +19,16 @@ $results = $this->results;
                         ->translateReplace('search.result.subtitle.' . $this->index, [$count]); ?>
                 </p>
             </div>
-            
+
         </div><!-- .page-header__wrapper -->
     </div>
 
     <div class="three-eigths">
-        
+
         <h3>Edit search</h3>
 
         <?php echo $this->form($this->placeholder('searchFilter')->getValue()) ?>
-        
+
         <a href="<?php echo $this->url('search-jump-home'); ?>">
             <?php echo $this->translate('search.form.restart'); ?>
         </a>
