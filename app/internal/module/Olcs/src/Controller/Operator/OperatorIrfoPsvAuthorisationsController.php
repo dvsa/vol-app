@@ -121,7 +121,9 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     protected function alterFormForEdit($form, $formData)
     {
         $form = $this->makeGeneralFormChanges($form, $formData);
-        $form = $this->addPossibleActions($form);
+
+        // For now we dont want any action buttons appearing that do nothing. Hence next line is commented out.
+        //$form = $this->addPossibleActions($form);
 
         return $form;
     }
