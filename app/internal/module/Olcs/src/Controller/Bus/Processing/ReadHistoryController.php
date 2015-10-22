@@ -1,23 +1,20 @@
 <?php
 
 /**
- * History Controller
+ * Read History Controller
  */
 namespace Olcs\Controller\Bus\Processing;
 
-use Dvsa\Olcs\Transfer\Query\Bus\HistoryList as BusRegHistoryList;
+use Dvsa\Olcs\Transfer\Query\Audit\ReadBusReg;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Common\Controller\Traits as CommonTraits;
-use Zend\Mvc\MvcEvent as MvcEvent;
 
 /**
- * History Controller
+ * Read History Controller
  */
-class HistoryController extends AbstractInternalController implements BusRegControllerInterface, LeftViewProvider
+class ReadHistoryController extends AbstractInternalController implements BusRegControllerInterface, LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -30,10 +27,9 @@ class HistoryController extends AbstractInternalController implements BusRegCont
      * Holds an array of variables for the
      * default index list page.
      */
-    protected $listVars = ['busReg' => 'busRegId'];
-    protected $defaultTableSortField = 'eventDatetime';
-    protected $tableName = 'event-history';
-    protected $listDto = BusRegHistoryList::class;
+    protected $listVars = ['id' => 'busRegId'];
+    protected $tableName = 'read-history';
+    protected $listDto = ReadBusReg::class;
 
     public function getLeftView()
     {

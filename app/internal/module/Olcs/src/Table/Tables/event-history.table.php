@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Events'
+        'title' => 'Change history'
     ),
     'settings' => array(
         'paginate' => array(

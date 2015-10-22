@@ -305,11 +305,18 @@ return array(
 
             // Event History Controllers
             'CaseHistoryController' => 'Olcs\Controller\Cases\Processing\HistoryController',
+            'CaseReadHistoryController' => 'Olcs\Controller\Cases\Processing\ReadHistoryController',
             'BusRegHistoryController' => 'Olcs\Controller\Bus\Processing\HistoryController',
+            'BusRegReadHistoryController' => 'Olcs\Controller\Bus\Processing\ReadHistoryController',
             'LicenceHistoryController' => 'Olcs\Controller\Licence\Processing\HistoryController',
+            'LicenceReadHistoryController' => 'Olcs\Controller\Licence\Processing\ReadHistoryController',
             'TransportManagerHistoryController' => 'Olcs\Controller\TransportManager\Processing\HistoryController',
+            'TransportManagerReadHistoryController'
+                => 'Olcs\Controller\TransportManager\Processing\ReadHistoryController',
             'ApplicationHistoryController' => 'Olcs\Controller\Application\Processing\HistoryController',
+            'ApplicationReadHistoryController' => 'Olcs\Controller\Application\Processing\ReadHistoryController',
             'OperatorHistoryController' => 'Olcs\Controller\Operator\HistoryController',
+            'OperatorReadHistoryController' => 'Olcs\Controller\Operator\Processing\ReadHistoryController',
             'ContinuationController' => 'Olcs\Controller\Licence\ContinuationController',
             Olcs\Controller\DisqualifyController::class => Olcs\Controller\DisqualifyController::class,
         ),
