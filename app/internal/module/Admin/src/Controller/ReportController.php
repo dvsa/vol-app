@@ -49,9 +49,7 @@ class ReportController extends AbstractActionController implements LeftViewProvi
 
     public function indexAction()
     {
-        $view = new ViewModel();
-        $view->setTemplate('placeholder');
-        return $this->renderView($view, 'Reports');
+        return $this->redirectToRoute('admin-dashboard/admin-report/ch-alerts', [], null, true);
     }
 
     /**
