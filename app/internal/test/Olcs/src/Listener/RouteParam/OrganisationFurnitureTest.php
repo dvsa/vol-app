@@ -7,7 +7,9 @@
  */
 namespace OlcsTest\Listener\RouteParam;
 
+use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
+use Dvsa\Olcs\Transfer\Command\Audit\ReadOrganisation;
 use Mockery\Adapter\Phpunit\MockeryTestCase as MockeryTestCase;
 use Olcs\Event\RouteParam;
 use Mockery as m;
@@ -41,6 +43,10 @@ class OrganisationFurnitureTest extends MockeryTestCase
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResponse);
         $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
         $mockResponse->shouldReceive('getResult')->with()->once()->andReturn($orgData);
+
+        $mockCommandSender = m::mock(CommandSender::class);
+        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadOrganisation::class));
+        $this->sut->setCommandSender($mockCommandSender);
     }
 
     public function testAttach()
@@ -58,6 +64,10 @@ class OrganisationFurnitureTest extends MockeryTestCase
 
         $mockQuerySender = m::mock(QuerySender::class);
         $this->sut->setQuerySender($mockQuerySender);
+
+        $mockCommandSender = m::mock(CommandSender::class);
+        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadOrganisation::class));
+        $this->sut->setCommandSender($mockCommandSender);
 
         $mockResponse = m::mock();
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResponse);
@@ -175,15 +185,18 @@ class OrganisationFurnitureTest extends MockeryTestCase
     {
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockQuerySender = m::mock(QuerySender::class);
+        $mockCommandSender = m::mock(CommandSender::class);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('QuerySender')->andReturn($mockQuerySender);
+        $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);
 
         $service = $this->sut->createService($mockSl);
 
         $this->assertSame($this->sut, $service);
         $this->assertSame($mockViewHelperManager, $this->sut->getViewHelperManager());
         $this->assertSame($mockQuerySender, $this->sut->getQuerySender());
+        $this->assertSame($mockCommandSender, $this->sut->getCommandSender());
     }
 }

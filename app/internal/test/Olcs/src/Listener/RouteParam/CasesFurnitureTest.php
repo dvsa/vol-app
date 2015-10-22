@@ -7,7 +7,9 @@
  */
 namespace OlcsTest\Listener\RouteParam;
 
+use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
+use Dvsa\Olcs\Transfer\Command\Audit\ReadCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\CasesFurniture;
 use Olcs\Listener\RouteParams;
@@ -44,6 +46,10 @@ class CasesFurnitureTest extends MockeryTestCase
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResult);
 
         $this->sut->setQuerySender($mockQuerySender);
+
+        $mockCommandSender = m::mock(CommandSender::class);
+        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadCase::class));
+        $this->sut->setCommandSender($mockCommandSender);
     }
 
     public function testAttach()
@@ -147,16 +153,19 @@ class CasesFurnitureTest extends MockeryTestCase
     {
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockQuerySender = m::mock(QuerySender::class);
+        $mockCommandSender = m::mock(CommandSender::class);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('QuerySender')->andReturn($mockQuerySender);
+        $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);
 
         $service = $this->sut->createService($mockSl);
 
         $this->assertSame($this->sut, $service);
         $this->assertSame($mockViewHelperManager, $this->sut->getViewHelperManager());
         $this->assertSame($mockQuerySender, $this->sut->getQuerySender());
+        $this->assertSame($mockCommandSender, $this->sut->getCommandSender());
     }
 
     /**
@@ -177,6 +186,10 @@ class CasesFurnitureTest extends MockeryTestCase
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResult);
 
         $this->sut->setQuerySender($mockQuerySender);
+
+        $mockCommandSender = m::mock(CommandSender::class);
+        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadCase::class));
+        $this->sut->setCommandSender($mockCommandSender);
 
         $this->sut->onCase($event);
     }
