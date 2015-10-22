@@ -1047,6 +1047,8 @@ return array(
                 'index' => ['*'],
                 'user-registration' => ['*'],
                 'cookies' => ['*'],
+                'not-found' => ['*'],
+                'server-error' => ['*'],
                 '*' => ['selfserve-user'],
             ]
         ]
