@@ -36,6 +36,32 @@ class CreateFeeDetails
     public $feeType = null;
 
     /**
+     * @Form\Attributes({"id":"irfoGvPermit"})
+     * @Form\Options({
+     *     "label": "fees.irfoGvPermit",
+     *     "short-label": "fees.irfoGvPermit",
+     *     "label_attributes": {"id": "label-type"},
+     *     "empty_option": "Please select"
+     * })
+     * @Form\Type("Select")
+     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     */
+    public $irfoGvPermit = null;
+
+    /**
+     * @Form\Attributes({"id":"irfoPsvAuth"})
+     * @Form\Options({
+     *     "label": "fees.irfoPsvAuth",
+     *     "short-label": "fees.irfoPsvAuth",
+     *     "label_attributes": {"id": "label-type"},
+     *     "empty_option": "Please select"
+     * })
+     * @Form\Type("Select")
+     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     */
+    public $irfoPsvAuth = null;
+
+    /**
      * Created date
      *
      * @Form\Options({

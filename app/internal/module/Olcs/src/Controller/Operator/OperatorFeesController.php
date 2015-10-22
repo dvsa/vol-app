@@ -68,4 +68,41 @@ class OperatorFeesController extends OperatorController
     {
         return ['organisation' => $this->params()->fromRoute('organisation')];
     }
+
+    /**
+     * Alter create fee form
+     *
+     * @param \Zend\Form\Form $form
+     * @return \Zend\Form\Form
+     * @todo pass in effectiveDate from form post
+     */
+    protected function alterCreateFeeForm($form)
+    {
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        // disable amount validation by default
+        $formHelper->disableElement($form, 'fee-details->amount');
+        $formHelper->disableEmptyValidationOnElement($form, 'fee-details->amount');
+
+        // populate fee type select
+        $options = $this->fetchFeeTypeValueOptions();
+        $form->get('fee-details')->get('feeType')->setValueOptions($options);
+
+        // populate GV Permit and PSV Auth dropdowns
+        $data = $this->fetchFeeTypeListData();
+        var_dump($data);
+        if (isset($data['extra']['valueOptions']['irfoGvPermit'])) {
+            $form->get('fee-details')->get('irfoGvPermit')->setValueOptions(
+                $data['extra']['valueOptions']['irfoGvPermit']
+            );
+        }
+
+        if (isset($data['extra']['valueOptions']['irfoPsvAuth'])) {
+            $form->get('fee-details')->get('irfoPsvAuth')->setValueOptions(
+                $data['extra']['valueOptions']['irfoPsvAuth']
+            );
+        }
+
+        return $form;
+    }
 }

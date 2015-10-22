@@ -505,6 +505,10 @@ trait FeesActionTrait
         $formHelper->disableElement($form, 'fee-details->amount');
         $formHelper->disableEmptyValidationOnElement($form, 'fee-details->amount');
 
+        // remove IRFO fields by default
+        $formHelper->remove($form, 'fee-details->irfoGvPermit');
+        $formHelper->remove($form, 'fee-details->irfoPsvAuth');
+
         // populate fee type select
         $options = $this->fetchFeeTypeValueOptions();
         $form->get('fee-details')->get('feeType')->setValueOptions($options);
@@ -519,22 +523,27 @@ trait FeesActionTrait
      */
     protected function fetchFeeTypeValueOptions($effectiveDate = null)
     {
-        $valueOptions = [];
+        $data = $this->fetchFeeTypeListData($effectiveDate);
+        if (isset($data['extra']['valueOptions']['feeType'])) {
+            return $data['extra']['valueOptions']['feeType'];
+        }
 
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    protected function fetchFeeTypeListData($effectiveDate = null)
+    {
         $dtoData = $this->getFeeTypeDtoData();
         if ($effectiveDate) {
             $dtoData['effectiveDate'] = $effectiveDate;
         }
-
         $response = $this->handleQuery(FeeTypeListQry::create($dtoData) );
-
         if ($response->isOk()) {
-            foreach ($response->getResult()['results'] as $result) {
-                $valueOptions[$result['id']] = $result['description'];
-            }
+            return $response->getResult();
         }
-
-        return $valueOptions;
     }
 
     protected function getFeeTypeDtoData()
