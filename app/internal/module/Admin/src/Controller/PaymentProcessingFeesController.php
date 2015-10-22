@@ -9,13 +9,15 @@ use Common\Controller\AbstractActionController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\FeesActionTrait;
 use Zend\View\Model\ViewModel;
+use Common\Controller\Traits\GenericReceipt;
 
 /**
  * Payment Processing Fees Controller
  */
 class PaymentProcessingFeesController extends AbstractActionController implements LeftViewProvider
 {
-    use FeesActionTrait;
+    use FeesActionTrait,
+        GenericReceipt;
 
     /**
      * @inheritdoc
