@@ -731,21 +731,21 @@ $searchNavigation = array(
         ),
         array(
             'id' => 'search-operator',
-            'label' => 'Vehicle Operator details',
+            'label' => 'Vehicle operators',
             'route' => 'search-operator',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         ),
         array(
             'id' => 'search-bus',
-            'label' => 'Bus services',
+            'label' => 'Bus registrations',
             'route' => 'search-bus',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         ),
         array(
             'id' => 'search-traffic-commissioner-publication',
-            'label' => 'Traffic Commissioner publications',
+            'label' => 'Publications',
             'route' => 'search-traffic-commissioner-publication',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
@@ -1023,17 +1023,6 @@ return array(
 
                 // Manage Users Page
                 'manage-user' => ['can-manage-user-selfserve'],
-
-                // Search and who can access them
-                'search-operating-centre' => [
-                    'partner-user'
-                ],
-                'search-person' => [
-                    'partner-user'
-                ],
-                'search-vehicle-external' => [
-                    'partner-user'
-                ],
 
                 // Bus reg stuff and who can access
                 'ebsr' => ['selfserve-ebsr'],
