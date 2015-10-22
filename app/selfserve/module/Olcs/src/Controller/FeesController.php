@@ -81,15 +81,33 @@ class FeesController extends AbstractController
         if (count($fees) > 1) {
             $table = $this->getServiceLocator()->get('Table')
                 ->buildTable('pay-fees', $fees, [], false);
-            $view = new ViewModel(['table' => $table, 'form' => $form]);
+            $view = new ViewModel(
+                ['table' => $table, 'form' => $form, 'hasContinuation' => $this->hasContinuationFee($fees)]
+            );
             $view->setTemplate('pages/fees/pay-multi');
         } else {
             $fee = array_shift($fees);
-            $view = new ViewModel(['fee' => $fee, 'form' => $form]);
+            $view = new ViewModel(
+                [
+                    'fee' => $fee,
+                    'form' => $form,
+                    'hasContinuation' => $fee['feeType']['feeType']['id'] == RefData::FEE_TYPE_CONT
+                ]
+            );
             $view->setTemplate('pages/fees/pay-one');
         }
 
         return $view;
+    }
+
+    protected function hasContinuationFee($fees)
+    {
+        foreach ($fees as $fee) {
+            if ($fee['feeType']['feeType']['id'] == RefData::FEE_TYPE_CONT) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function handleResultAction()
@@ -289,7 +307,8 @@ class FeesController extends AbstractController
 
         // get operator name from the first fee
         $operatorName = $fees[0]['licence']['organisation']['name'];
+        $hasContinuation = $this->hasContinuationFee($fees);
 
-        return compact('payment', 'fees', 'operatorName', 'table');
+        return compact('payment', 'fees', 'operatorName', 'table', 'hasContinuation');
     }
 }
