@@ -104,6 +104,11 @@ class ConvictionController extends AbstractInternalController implements CaseCon
      * Command is required, as are itemParams from above
      */
     protected $deleteCommand = DeleteDto::class;
+    /**
+     * Variables for controlling the delete action.
+     * Format is: required => supplied
+     */
+    protected $deleteParams = ['id' => 'conviction'];
 
     protected $inlineScripts = [
         'addAction' => ['conviction'],

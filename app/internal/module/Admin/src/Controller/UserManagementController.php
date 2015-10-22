@@ -19,6 +19,8 @@ use Zend\View\Model\ViewModel;
 
 /**
  * User Management Controller
+ *
+ * @method redirect Zend\Mvc\Controller\Plugin\Redirect
  */
 class UserManagementController extends AbstractInternalController implements LeftViewProvider
 {
@@ -76,6 +78,23 @@ class UserManagementController extends AbstractInternalController implements Lef
     protected $deleteParams = ['id' => 'user'];
     protected $deleteModalTitle = 'Delete user';
 
+    /**
+     * Allows override of default behaviour for redirects. See Case Overview Controller
+     *
+     * @var array
+     */
+    protected $redirectConfig = [
+        'add' => [
+            'action' => 'index'
+        ],
+        'edit' => [
+            'action' => 'index'
+        ],
+        'delete' => [
+            'action' => 'index'
+        ]
+    ];
+
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -91,27 +110,7 @@ class UserManagementController extends AbstractInternalController implements Lef
 
     public function indexAction()
     {
-        $data['search'] = '*';
-
-        // update data with information from route, and rebind to form so that form data is correct
-        $data['index'] = 'user';
-
-        /** @var Search $searchService **/
-        $searchService = $this->getServiceLocator()->get('DataServiceManager')->get(Search::class);
-
-        $searchService->setQuery($this->getRequest()->getQuery())
-            ->setRequest($this->getRequest())
-            ->setIndex($data['index'])
-            ->setSearch($data['search']);
-
-        $this->placeholder()->setPlaceholder(
-            $this->tableViewPlaceholderName,
-            $searchService->fetchResultsTable()
-        );
-
-        $this->placeholder()->setPlaceholder('pageTitle', 'User management');
-
-        return $this->viewBuilder()->buildViewFromTemplate('pages/table');
+        return $this->redirect()->toRoute('search', ['index' => 'user'], ['code' => 303]);
     }
 
     /**

@@ -94,6 +94,14 @@ class MyDetails implements MapperInterface
      */
     public static function mapFromErrors(FormInterface $form, array $errors)
     {
+        if (isset($errors['messages']['loginId'])) {
+            $messages = [
+                'userDetails' => ['loginId' => $errors['messages']['loginId']]
+            ];
+            $form->setMessages($messages);
+            unset($errors['messages']['loginId']);
+        }
+
         return $errors;
     }
 }
