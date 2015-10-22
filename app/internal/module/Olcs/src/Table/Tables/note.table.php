@@ -55,6 +55,7 @@ return array(
                 /**
                  * @see https://jira.i-env.net/browse/OLCS-10256
                  */
+
                 switch ($data['noteType']['id']) {
 
                     case 'note_t_lic':
@@ -63,6 +64,7 @@ return array(
                         return $data['noteType']['description'];
 
                     case 'note_t_app':
+                        return $data['noteType']['description'] . ' ' . $data['application']['id'];
                     case 'note_t_case':
                         return $data['noteType']['description'] . ' ' . $data['case']['id'];
                 }
