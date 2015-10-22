@@ -17,14 +17,14 @@ class UserRegistrationController extends AbstractController
 {
     public function addAction()
     {
+        /** @var \Common\Form\Form $form */
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createFormWithRequest('UserRegistration', $this->getRequest());
+
         if ($this->getRequest()->isPost()) {
             if ($this->isButtonPressed('cancel')) {
                 return $this->redirectToHome();
             }
-
-            /** @var \Common\Form\Form $form */
-            $form = $this->getServiceLocator()->get('Helper\Form')
-                ->createFormWithRequest('UserRegistration', $this->getRequest());
 
             $form->setData($this->params()->fromPost());
 
@@ -33,7 +33,17 @@ class UserRegistrationController extends AbstractController
             }
         }
 
-        return $this->generateContentForUserRegistration();
+        // register page
+        $view = new ViewModel(
+            [
+                'form' => $form
+            ]
+        );
+        $view->setTemplate('olcs/user-registration/index');
+
+        $this->getServiceLocator()->get('Script')->loadFile('user-registration');
+
+        return $view;
     }
 
     private function generateContentForUserRegistration(array $formData = [], array $errors = [])
