@@ -1,10 +1,10 @@
 <div class="page-header">
   <div class="page-header__wrapper">
-    <h1><?php echo $this->translate('user-registration.page.check-email.title'); ?></h1>
+    <h1><?php echo $this->translate('user-forgot-username.page.check-email.title'); ?></h1>
     <div class="page-header__text"><div class="guidance"><p>
         <?php echo $this->getHelperPluginManager()
             ->getServiceLocator()->get('Helper\Translation')
-            ->translateReplace('user-registration.page.check-email.guidance', [$this->emailAddress]); ?>
+            ->translateReplace('user-forgot-username.page.check-email.guidance', [$this->emailAddress]); ?>
     </p></div></div>
   </div><!-- .page-header__wrapper -->
 </div><!-- .page-header -->
@@ -14,7 +14,7 @@
         <?php echo $this->getHelperPluginManager()
             ->getServiceLocator()->get('Helper\Translation')
             ->translateReplace(
-                'user-registration.page.check-email.content',
+                'user-forgot-username.page.check-email.content',
                 [
                     $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Url')->fromRoute('zfcuser/login')
                 ]
