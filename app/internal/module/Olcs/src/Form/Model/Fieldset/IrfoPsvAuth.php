@@ -87,7 +87,7 @@ class IrfoPsvAuth extends OrganisationBase
      * @Form\Required(false)
      * @Form\Attributes({"id":"createdOnHtml", "required": false})
      * @Form\Options({
-     *     "label": "Create date",
+     *     "label": "Created date",
      * })
      * @Form\Type("Common\Form\Elements\Types\Html")
      */
@@ -142,6 +142,16 @@ class IrfoPsvAuth extends OrganisationBase
      * })
      */
     public $expiryDate;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"renewalDateHtml", "required": false, "class":"visually-hidden"})
+     * @Form\Options({
+     *     "label": "Renewal date",
+     * })
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $renewalDateHtml;
 
     /**
      * @Form\Attributes({"id":""})

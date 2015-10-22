@@ -32,6 +32,12 @@ class IrfoPsvAuth implements MapperInterface
             $formData['fields']['createdOnHtml'] = $createdOn->format('d/m/Y');
         }
 
+        if (!empty($formData['fields']['renewalDate'])) {
+            // format renewalDate date
+            $renewalDate = new \DateTime($formData['fields']['renewalDate']);
+            $formData['fields']['renewalDateHtml'] = $renewalDate->format('d/m/Y');
+        }
+
         // default all copies fields to 0
         $formData['fields'] = array_merge(
             [

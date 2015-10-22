@@ -228,11 +228,14 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     {
         $form = $this->alterStatusField($form, $formData);
 
+        $form->get('fields')->get('renewalDateHtml')->setAttribute('class', '');
+
         return $form;
     }
 
     /**
      * Replace the disabled select for a simple label element
+     * 
      * @param ZendForm $form
      * @param $formData
      * @return ZendForm
