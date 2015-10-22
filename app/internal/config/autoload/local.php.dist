@@ -58,4 +58,13 @@ return array(
 
     // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific*
     'asset_path' => 'https://demo-olcs-static.i-env.net',
+
+    'view_manager' => array(
+        'template_map' => array(
+            // Dev versions of 404 and error
+            'error/404' => __DIR__ . '/../../module/Olcs/view/error/dev-404.phtml',
+            'error/403' => __DIR__ . '/../../module/Olcs/view/error/dev-403.phtml',
+            'error/index' => __DIR__ . '/../../module/Olcs/view/error/dev-index.phtml'
+        ),
+    ),
 );

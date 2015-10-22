@@ -1,4 +1,4 @@
-<h1><?php echo $this->translate('A 404 error occurred') ?></h1>
+<h1><?php echo $this->translate('An OLCS 404 error occurred') ?></h1>
 <h2><?php echo $this->message ?></h2>
 
 <?php if (isset($this->reason) && $this->reason): ?>
@@ -17,9 +17,6 @@ switch ($this->reason) {
         break;
     case 'error-router-no-match':
         $reasonMessage = $this->translate('The requested URL could not be matched by routing.');
-        break;
-    case 'error-resource-not-found':
-        $reasonMessage = $this->translate('The requested resource could not be found.');
         break;
     default:
         $reasonMessage = $this->translate('We cannot determine at this time why a 404 was generated.');
