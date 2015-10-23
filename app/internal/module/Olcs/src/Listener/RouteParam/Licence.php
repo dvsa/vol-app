@@ -149,7 +149,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
         $this->getViewHelperManager()->get('placeholder')
             ->getContainer('note')
-            ->set($licence['latestNote']['comment']);
+            ->set(isset($licence['latestNote']['comment']) ? $licence['latestNote']['comment'] : '');
 
         $this->showHideButtons($licence);
 

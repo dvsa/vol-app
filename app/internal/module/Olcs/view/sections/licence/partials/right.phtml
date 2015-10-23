@@ -39,7 +39,7 @@ if ($nav->getContainer()->hasPages(true)): ?>
 <?php if ($note): ?>
     <div class="latest-note">
         <p class="latest-note__details"><?php echo substr($note, 0, 100); ?></p>
-        <a class="latest-note__link" href="<?php $this->url('licence/processing/notes', ['licence' => $licence['id']]); ?>">View all notes</a>
+        <a class="latest-note__link" href="<?php echo $this->url('licence/processing/notes', ['licence' => $licence['id']]); ?>">View all notes</a>
     </div>
 <?php endif; ?>
 <!-- end .small-details -->
