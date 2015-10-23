@@ -42,9 +42,7 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         $url = sprintf($uriPattern, $data['data']['identifier']);
 
-        $fileUrl = 'file:///Z:/olcs/' . $data['data']['identifier'];
-
-        $link = sprintf('<a href="%s" data-file-url="%s" target="blank">%s</a>', $url, $fileUrl, $templateName);
+        $link = sprintf('<a href="%s" data-file-url="%s" target="blank">%s</a>', $url, $url, $templateName);
 
         $data = [
             'category'    => $category,
