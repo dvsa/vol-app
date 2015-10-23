@@ -127,6 +127,20 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     }
 
     /**
+     * Method to alter the form based on status
+     *
+     * @param $form
+     * @param $formData
+     * @return mixed
+     */
+    protected function alterFormForAdd($form, $formData)
+    {
+        $form = $this->setActionButtons($form, $formData);
+
+        return $form;
+    }
+
+    /**
      * Adds possible action buttons to the form
      *
      * @param ZendForm $form
@@ -135,7 +149,6 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      */
     private function setActionButtons(ZendForm $form, $formData)
     {
-        $form->get('form-actions')->remove('cancel');
         $form->get('form-actions')->remove('grant');
         $form->get('form-actions')->remove('approve');
         $form->get('form-actions')->remove('generateDocument');
