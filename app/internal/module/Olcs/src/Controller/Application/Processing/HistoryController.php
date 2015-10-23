@@ -5,6 +5,7 @@
  */
 namespace Olcs\Controller\Application\Processing;
 
+use Dvsa\Olcs\Transfer\Query\Audit\ReadApplication;
 use Zend\View\Model\ViewModel;
 
 /**

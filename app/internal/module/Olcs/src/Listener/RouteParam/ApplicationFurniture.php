@@ -4,8 +4,11 @@ namespace Olcs\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
+use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
+use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
+use Dvsa\Olcs\Transfer\Command\Audit\ReadApplication;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQuery;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
@@ -22,11 +25,16 @@ use Zend\View\Model\ViewModel;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationFurniture implements ListenerAggregateInterface, FactoryInterface, QuerySenderAwareInterface
+class ApplicationFurniture implements
+    ListenerAggregateInterface,
+    FactoryInterface,
+    QuerySenderAwareInterface,
+    CommandSenderAwareInterface
 {
     use ListenerAggregateTrait,
         ViewHelperManagerAwareTrait,
-        QuerySenderAwareTrait;
+        QuerySenderAwareTrait,
+        CommandSenderAwareTrait;
 
     private $router;
 
@@ -58,6 +66,7 @@ class ApplicationFurniture implements ListenerAggregateInterface, FactoryInterfa
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setQuerySender($serviceLocator->get('QuerySender'));
         $this->setRouter($serviceLocator->get('Router'));
+        $this->setCommandSender($serviceLocator->get('CommandSender'));
 
         return $this;
     }
@@ -87,6 +96,8 @@ class ApplicationFurniture implements ListenerAggregateInterface, FactoryInterfa
     public function onApplicationFurniture(RouteParam $e)
     {
         $id = $e->getValue();
+
+        $this->getCommandSender()->send(ReadApplication::create(['id' => $id]));
 
         $response = $this->getQuerySender()->send(ApplicationQuery::create(['id' => $id]));
 

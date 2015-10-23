@@ -631,6 +631,16 @@ $routes = [
             ]
         ]
     ],
+    'processing_read_history' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/processing/read-history[/]',
+            'defaults' => [
+                'controller' => 'CaseReadHistoryController',
+                'action' => 'index'
+            ]
+        ]
+    ],
     'case_processing_tasks' => [
         'type' => 'segment',
         'options' => [
@@ -1273,6 +1283,16 @@ $routes = [
                             ]
                         ],
                     ],
+                    'read-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/read-history[/]',
+                            'defaults' => [
+                                'controller' => 'BusRegReadHistoryController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                 ]
             ],
             'bus-fees' => [
@@ -1450,6 +1470,16 @@ $routes = [
                             ]
                         ],
                     ],
+                    'read-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/read-history[/]',
+                            'defaults' => [
+                                'controller' => 'LicenceReadHistoryController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                 ]
             ],
             'fees' => [
@@ -1608,6 +1638,16 @@ $routes = [
                             'route' => '/history',
                             'defaults' => [
                                 'controller' => 'OperatorHistoryController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'read-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/read-history[/]',
+                            'defaults' => [
+                                'controller' => 'OperatorReadHistoryController',
                                 'action' => 'index',
                             ]
                         ],
@@ -2010,6 +2050,16 @@ $routes = [
                             ]
                         ],
                         'may_terminate' => true,
+                    ],
+                    'read-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/read-history[/]',
+                            'defaults' => [
+                                'controller' => 'TransportManagerReadHistoryController',
+                                'action' => 'index',
+                            ]
+                        ],
                     ],
                 ],
             ],
@@ -2624,6 +2674,17 @@ $routes['lva-application']['child_routes'] = array_merge(
                         'route' => '/history',
                         'defaults' => [
                             'controller' => 'ApplicationHistoryController',
+                            'action' => 'index'
+                        ]
+                    ],
+                ],
+                'read-history' => [
+                    'type' => 'segment',
+                    'may_terminate' => true,
+                    'options' => [
+                        'route' => '/read-history[/]',
+                        'defaults' => [
+                            'controller' => 'ApplicationReadHistoryController',
                             'action' => 'index'
                         ]
                     ],

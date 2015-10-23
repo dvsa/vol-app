@@ -9,7 +9,9 @@ namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
+use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
+use Dvsa\Olcs\Transfer\Command\Audit\ReadTransportManager;
 use Dvsa\Olcs\Transfer\Query\Tm\TransportManager as TransportManagerQry;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
@@ -36,11 +38,13 @@ class TransportManagerFurnitureTest extends TestCase
 
     protected $mockViewHelperManager;
     protected $mockQuerySender;
+    protected $mockCommandSender;
 
     public function setUp()
     {
         $this->mockViewHelperManager = m::mock(HelperPluginManager::class);
         $this->mockQuerySender = m::mock(QuerySender::class);
+        $this->mockCommandSender = m::mock(CommandSender::class);
 
         $this->sut = new TransportManagerFurniture();
 
@@ -48,6 +52,7 @@ class TransportManagerFurnitureTest extends TestCase
 
         $sl->shouldReceive('get')->with('ViewHelperManager')->andReturn($this->mockViewHelperManager);
         $sl->shouldReceive('get')->with('QuerySender')->andReturn($this->mockQuerySender);
+        $sl->shouldReceive('get')->with('CommandSender')->andReturn($this->mockCommandSender);
 
         $this->sut->createService($sl);
     }
@@ -67,6 +72,8 @@ class TransportManagerFurnitureTest extends TestCase
     {
         $this->setExpectedException(ResourceNotFoundException::class);
 
+        $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadTransportManager::class));
+
         $event = m::mock(RouteParam::class);
         $event->shouldReceive('getValue')->andReturn(111);
 
@@ -84,6 +91,8 @@ class TransportManagerFurnitureTest extends TestCase
     {
         $event = m::mock(RouteParam::class);
         $event->shouldReceive('getValue')->andReturn(111);
+
+        $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadTransportManager::class));
 
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')

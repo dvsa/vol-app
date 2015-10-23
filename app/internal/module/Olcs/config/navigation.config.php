@@ -288,8 +288,15 @@ $nav = array(
                         ),
                         array(
                             'id' => 'case_processing_history',
-                            'label' => 'History',
+                            'label' => 'internal-crud-event-history',
                             'route' => 'processing_history',
+                            'action' => 'redirect',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'case_processing_read_history',
+                            'label' => 'internal-crud-read-history',
+                            'route' => 'processing_read_history',
                             'action' => 'redirect',
                             'use_route_match' => true,
                         ),
@@ -458,6 +465,12 @@ $nav = array(
                                             'use_route_match' => true,
                                         ),
                                         array(
+                                            'id' => 'licence_bus_processing_event-history',
+                                            'label' => 'internal-crud-read-history',
+                                            'route' => 'licence/bus-processing/read-history',
+                                            'use_route_match' => true,
+                                        ),
+                                        array(
                                             'id' => 'licence_bus_processing_notes',
                                             'label' => 'internal-licence-bus-processing-notes',
                                             'route' => 'licence/bus-processing/notes',
@@ -573,8 +586,14 @@ $nav = array(
                                 ),
                                 array(
                                     'id' => 'licence_processing_event-history',
-                                    'label' => 'History',
+                                    'label' => 'internal-crud-event-history',
                                     'route' => 'licence/processing/event-history',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'licence_processing_read-history',
+                                    'label' => 'internal-crud-read-history',
+                                    'route' => 'licence/processing/read-history',
                                     'use_route_match' => true,
                                 ),
                             )
@@ -688,6 +707,12 @@ $nav = array(
                                     'use_route_match' => true,
                                 ),
                                 array(
+                                    'id' => 'transport_manager_processing_read-history',
+                                    'label' => 'internal-crud-read-history',
+                                    'route' => 'transport-manager/processing/read-history',
+                                    'use_route_match' => true,
+                                ),
+                                array(
                                     'id' => 'transport_manager_processing_notes',
                                     'label' => 'internal-navigation-transport-manager-processing-notes',
                                     'route' => 'transport-manager/processing/notes',
@@ -789,8 +814,14 @@ $nav = array(
                             'pages' => array(
                                 array(
                                     'id' => 'operator_processing_history',
-                                    'label' => 'internal-navigation-operator-processing-history',
+                                    'label' => 'internal-crud-event-history',
                                     'route' => 'operator/processing/history',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'operator_processing_read_history',
+                                    'label' => 'internal-crud-read-history',
+                                    'route' => 'operator/processing/read-history',
                                     'use_route_match' => true,
                                 ),
                                 array(
@@ -930,6 +961,12 @@ $nav = array(
                             'id' => 'application_processing_history',
                             'label' => 'internal-crud-event-history',
                             'route' => 'lva-application/processing/event-history',
+                            'use_route_match' => true,
+                        ),
+                        array(
+                            'id' => 'application_processing_read_history',
+                            'label' => 'internal-crud-read-history',
+                            'route' => 'lva-application/processing/read-history',
                             'use_route_match' => true,
                         ),
                     )

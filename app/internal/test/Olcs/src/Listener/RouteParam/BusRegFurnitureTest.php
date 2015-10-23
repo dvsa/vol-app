@@ -8,7 +8,9 @@
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\RefData;
+use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
+use Dvsa\Olcs\Transfer\Command\Audit\ReadBusReg;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\BusRegFurniture;
 use Olcs\Listener\RouteParams;
@@ -33,7 +35,7 @@ class BusRegFurnitureTest extends MockeryTestCase
         $this->sut = new BusRegFurniture();
     }
 
-    public function setupMockBusReg($id, $data)
+    public function setupMockBusReg($data)
     {
         $mockResult = m::mock();
         $mockResult->shouldReceive('isOk')->with()->once()->andReturn(true);
@@ -41,8 +43,11 @@ class BusRegFurnitureTest extends MockeryTestCase
 
         $mockQuerySender = m::mock(QuerySender::class);
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResult);
-
         $this->sut->setQuerySender($mockQuerySender);
+
+        $mockCommandSender = m::mock(CommandSender::class);
+        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadBusReg::class));
+        $this->sut->setCommandSender($mockCommandSender);
     }
 
     public function testAttach()
@@ -79,7 +84,7 @@ class BusRegFurnitureTest extends MockeryTestCase
         $event = new RouteParam();
         $event->setValue($id);
 
-        $this->setupMockBusReg($id, $busReg);
+        $this->setupMockBusReg($busReg);
 
         $mockPlaceholder = m::mock()
             ->shouldReceive('getContainer')
@@ -163,16 +168,19 @@ class BusRegFurnitureTest extends MockeryTestCase
     {
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockQuerySender = m::mock(QuerySender::class);
+        $mockCommandSender = m::mock(CommandSender::class);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('QuerySender')->andReturn($mockQuerySender);
+        $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);
 
         $service = $this->sut->createService($mockSl);
 
         $this->assertSame($this->sut, $service);
         $this->assertSame($mockViewHelperManager, $this->sut->getViewHelperManager());
         $this->assertSame($mockQuerySender, $this->sut->getQuerySender());
+        $this->assertSame($mockCommandSender, $this->sut->getCommandSender());
     }
 
     /**
@@ -193,6 +201,10 @@ class BusRegFurnitureTest extends MockeryTestCase
         $mockQuerySender ->shouldReceive('send')->once()->andReturn($mockResult);
 
         $this->sut->setQuerySender($mockQuerySender);
+
+        $mockCommandSender = m::mock(CommandSender::class);
+        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadBusReg::class));
+        $this->sut->setCommandSender($mockCommandSender);
 
         $this->sut->onBusRegFurniture($event);
     }
