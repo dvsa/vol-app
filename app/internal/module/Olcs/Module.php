@@ -53,7 +53,7 @@ class Module
                             'exception' => $exception,
                         ]
                     );
-                    $model->setTemplate('pages/404');
+                    $model->setTemplate('error/404');
                     $e->getViewModel()->addChild($model);
                     $e->getResponse()->setStatusCode(404);
                     $e->stopPropagation();
