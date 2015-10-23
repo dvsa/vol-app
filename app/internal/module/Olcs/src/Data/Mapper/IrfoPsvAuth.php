@@ -26,6 +26,11 @@ class IrfoPsvAuth implements MapperInterface
             }
         }
 
+        // Add status description as used for a label
+        if (!empty($data['status']['description'])) {
+            $formData['fields']['statusHtml'] = $data['status']['description'];
+        }
+
         if (!empty($formData['fields']['createdOn'])) {
             // format createOn date
             $createdOn = new \DateTime($formData['fields']['createdOn']);

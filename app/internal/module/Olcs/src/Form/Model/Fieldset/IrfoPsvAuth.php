@@ -42,21 +42,8 @@ class IrfoPsvAuth extends OrganisationBase
     public $validityPeriod = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
-     * @Form\Options({
-     *     "label": "Status",
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a status",
-     *     "category": "irfo_auth_status"
-     * })
-     * @Form\Type("DynamicSelect")
-     */
-    public $status = null;
-
-    /**
      * @Form\Required(false)
-     * @Form\Attributes({"id":"statusHtml", "required": false, "class":"visually-hidden"})
+     * @Form\Attributes({"id":"statusHtml", "required": false})
      * @Form\Options({
      *     "label": "Status",
      * })
@@ -145,7 +132,7 @@ class IrfoPsvAuth extends OrganisationBase
 
     /**
      * @Form\Required(false)
-     * @Form\Attributes({"id":"renewalDateHtml", "required": false, "class":"visually-hidden"})
+     * @Form\Attributes({"id":"renewalDateHtml", "required": false})
      * @Form\Options({
      *     "label": "Renewal date",
      * })

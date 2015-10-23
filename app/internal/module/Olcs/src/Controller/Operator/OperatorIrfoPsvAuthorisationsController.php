@@ -120,73 +120,29 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      */
     protected function alterFormForEdit($form, $formData)
     {
-        $form = $this->makeGeneralFormChanges($form, $formData);
-
         // For now we dont want any action buttons appearing that do nothing. Hence next line is commented out.
-        //$form = $this->addPossibleActions($form);
+        $form = $this->setActionButtons($form, $formData);
 
         return $form;
     }
 
     /**
-     * Adds possible action buttons to the bottom of the page.
-     * NB: Cancel removed and then readded to maintain correct order
-     *
-     * @param ZendForm $form
-     * @return ZendForm
-     */
-    private function addPossibleActions(ZendForm $form)
-    {
-        $form->get('form-actions')->remove('cancel');
-        $form->get('form-actions')->add($this->generateActionButton('grant'));
-        $form->get('form-actions')->add($this->generateActionButton('approve'));
-        $form->get('form-actions')->add($this->generateActionButton('generateDocument', 'Generate document'));
-        $form->get('form-actions')->add($this->generateActionButton('cns', 'CNS'));
-        $form->get('form-actions')->add($this->generateActionButton('withdraw'));
-        $form->get('form-actions')->add($this->generateActionButton('refuse'));
-        $form->get('form-actions')->add($this->generateActionButton('refuse'));
-        $form->get('form-actions')->add($this->generateActionButton('reset'));
-        $form->get('form-actions')->add($this->generateActionButton('cancel'));
-
-        return $form;
-    }
-
-    /**
-     * Generates and returns an action button.
-     *
-     * @param $action
-     * @param null $label
-     * @return ActionButton
-     */
-    private function generateActionButton($action, $label = null)
-    {
-        $button = new ActionButton(strtolower($action));
-        $button->setAttributes(['id' => strtolower($action), 'type' => 'submit', 'class' => 'action--secondary large']);
-        $button->setOptions(
-            [
-                'label' => !empty($label) ? $label : ucfirst($action),
-                'label_attributes' => [
-                    'class' => 'col-sm-2'
-                ],
-                'column-size' => 'sm-10'
-            ]
-        );
-
-        return $button;
-    }
-
-    /**
-     * Make neccessary adjustments to the form. Other adjustments may also be in the data mapper
+     * Adds possible action buttons to the form
      *
      * @param ZendForm $form
      * @param $formData
      * @return ZendForm
      */
-    private function makeGeneralFormChanges(ZendForm $form, $formData)
+    private function setActionButtons(ZendForm $form, $formData)
     {
-        $form = $this->alterStatusField($form, $formData);
-
-        $form->get('fields')->get('renewalDateHtml')->setAttribute('class', '');
+        $form->get('form-actions')->remove('cancel');
+        $form->get('form-actions')->remove('grant');
+        $form->get('form-actions')->remove('approve');
+        $form->get('form-actions')->remove('generateDocument');
+        $form->get('form-actions')->remove('cns');
+        $form->get('form-actions')->remove('withdraw');
+        $form->get('form-actions')->remove('refuse');
+        $form->get('form-actions')->remove('reset');
 
         return $form;
     }
