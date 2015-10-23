@@ -51,11 +51,17 @@ class DashboardController extends AbstractController
         $response = $this->handleQuery($query);
         $dashboardData = $response->getResult()['dashboard'];
 
+        $total = count($dashboardData['licences'])
+            + count($dashboardData['applications'])
+            + count($dashboardData['variations']);
+
         // build tables
-        $tables = $this->getServiceLocator()->get('DashboardProcessingService')->getTables($dashboardData);
+        $params = $this->getServiceLocator()->get('DashboardProcessingService')->getTables($dashboardData);
+
+        $params['total'] = $total;
 
         // setup view
-        $view = new \Zend\View\Model\ViewModel($tables);
+        $view = new \Zend\View\Model\ViewModel($params);
         $view->setTemplate('dashboard');
 
         // populate the navigation tabs with correct counts
