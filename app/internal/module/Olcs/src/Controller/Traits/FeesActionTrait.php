@@ -540,7 +540,7 @@ trait FeesActionTrait
         if ($effectiveDate) {
             $dtoData['effectiveDate'] = $effectiveDate;
         }
-        $response = $this->handleQuery(FeeTypeListQry::create($dtoData) );
+        $response = $this->handleQuery(FeeTypeListQry::create($dtoData));
         if ($response->isOk()) {
             return $response->getResult();
         }
@@ -931,12 +931,16 @@ trait FeesActionTrait
         $valueOptions = $this->fetchFeeTypeValueOptions($this->params('date'));
 
         // map to format that the JS expects :-/
-        $feeTypes = array_map(function ($id, $description) {
-            return array(
-                'value' => $id,
-                'label'  => $description,
-            );
-        }, array_keys($valueOptions), $valueOptions);
+        $feeTypes = array_map(
+            function ($id, $description) {
+                return array(
+                    'value' => $id,
+                    'label'  => $description,
+                );
+            },
+            array_keys($valueOptions),
+            $valueOptions
+        );
 
         array_unshift($feeTypes, ["value" => "", "label" => ""]);
 

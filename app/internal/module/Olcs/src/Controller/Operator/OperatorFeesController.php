@@ -74,14 +74,12 @@ class OperatorFeesController extends OperatorController
      *
      * @param \Zend\Form\Form $form
      * @return \Zend\Form\Form
-     * @todo pass in effectiveDate from form post
      */
     protected function alterCreateFeeForm($form)
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         // disable amount validation by default
-        // $formHelper->disableElement($form, 'fee-details->amount');
         $formHelper->disableEmptyValidationOnElement($form, 'fee-details->amount');
         $form->get('fee-details')->get('amount')->setAttribute('readonly', true);
 

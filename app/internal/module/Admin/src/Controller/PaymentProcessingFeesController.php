@@ -152,5 +152,4 @@ class PaymentProcessingFeesController extends AbstractActionController implement
             'amount' => $formData['fee-details']['amount'],
         ];
     }
-
 }
