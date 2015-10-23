@@ -51,9 +51,16 @@ class DashboardController extends AbstractController
         $response = $this->handleQuery($query);
         $dashboardData = $response->getResult()['dashboard'];
 
-        $total = count($dashboardData['licences'])
-            + count($dashboardData['applications'])
-            + count($dashboardData['variations']);
+        $total = 0;
+
+        if (isset($dashboardData['licences'])
+            && isset($dashboardData['applications'])
+            && isset($dashboardData['variations'])) {
+
+            $total = count($dashboardData['licences'])
+                + count($dashboardData['applications'])
+                + count($dashboardData['variations']);
+        }
 
         // build tables
         $params = $this->getServiceLocator()->get('DashboardProcessingService')->getTables($dashboardData);
