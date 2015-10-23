@@ -293,7 +293,7 @@ class UserRegistrationControllerTest extends TestCase
         $response = m::mock('stdClass');
         $response->shouldReceive('isOk')->andReturn(false);
         $response->shouldReceive('isNotFound')->andReturn(false);
-        $response->shouldReceive('getResult')->andReturn(['messages' => ['err']]);
+        $response->shouldReceive('getResult')->andReturn(['messages' => ['licenceNumber' => 'err']]);
         $this->sut->shouldReceive('handleQuery')->with(m::type(LicenceByNumberDto::class))->andReturn($response);
 
         $mockScript = m::mock();
@@ -397,7 +397,7 @@ class UserRegistrationControllerTest extends TestCase
 
         $response = m::mock('stdClass');
         $response->shouldReceive('isOk')->andReturn(false);
-        $response->shouldReceive('getResult')->andReturn(['messages' => ['err']]);
+        $response->shouldReceive('getResult')->andReturn(['messages' => ['loginId' => 'err']]);
         $this->sut->shouldReceive('handleCommand')->with(m::type(CreateDto::class))->andReturn($response);
 
         $mockScript = m::mock();
