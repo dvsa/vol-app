@@ -11,7 +11,7 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Bootstrap;
 use Mockery as m;
 use Common\BusinessService\Response;
-use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\CreateFee as CreateFeeCmd;
 
 /**
  * Fees action trait tests
