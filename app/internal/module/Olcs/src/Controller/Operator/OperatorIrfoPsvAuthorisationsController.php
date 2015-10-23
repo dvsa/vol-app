@@ -146,24 +146,4 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
 
         return $form;
     }
-
-    /**
-     * Replace the disabled select for a simple label element
-     * 
-     * @param ZendForm $form
-     * @param $formData
-     * @return ZendForm
-     */
-    private function alterStatusField(ZendForm $form, $formData)
-    {
-        $statusOptions = $form->get('fields')->get('status')->getValueOptions();
-
-        if (isset($statusOptions[$formData['fields']['status']])) {
-            $form->get('fields')->get('statusHtml')->setValue($statusOptions[$formData['fields']['status']]);
-            $form->get('fields')->get('statusHtml')->setAttribute('class', '');
-            $form->get('fields')->get('status')->setAttribute('class', 'visually-hidden');
-        }
-
-        return $form;
-    }
 }
