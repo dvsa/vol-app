@@ -19,6 +19,11 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
 {
     protected $navigationId = 'admin-dashboard/admin-report';
 
+    /**
+     * @var array
+     */
+    private $reports = [];
+
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -46,6 +51,8 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
 
         $request = $this->getRequest();
         $form = $this->getForm(Form::class);
+        $this->setSelectReportList($form);
+
         $this->placeholder()->setPlaceholder('form', $form);
 
         if ($request->isPost()) {
@@ -55,6 +62,8 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
 
         if ($request->isPost() && $form->isValid()) {
             $commandData = Mapper::mapFromForm($form->getData());
+            $commandData['name'] = $this->getReportName($commandData['reportCode'])
+                .' '. $commandData['start'] .' to '. $commandData['end'];
             $response = $this->handleCommand(GenerateCmd::create($commandData));
 
             if ($response->isServerError()) {
@@ -76,6 +85,42 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
         }
 
         return $this->viewBuilder()->buildViewFromTemplate($editViewTemplate);
+    }
+
+    /**
+     * Set the list of reports in the select element
+     *
+     * @param \Common\Form\Form $form
+     */
+    private function setSelectReportList(\Common\Form\Form $form)
+    {
+        $response = $this->handleQuery(\Dvsa\Olcs\Transfer\Query\Cpms\ReportList::create([]));
+        if ($response->isOk()) {
+            $select = $form->get('reportOptions')->get('reportCode');
+            $options = [];
+            foreach ($response->getResult()['results'] as $reportData) {
+                $options[$reportData['code']] = $reportData['title'];
+            }
+            /* @var $select \Zend\Form\Element\Select */
+            $select->setValueOptions($options);
+            $this->reports = $options;
+        }
+    }
+
+    /**
+     * Get the report name from the code
+     *
+     * @param string $code
+     *
+     * @return string
+     */
+    private function getReportName($code)
+    {
+        if (isset($this->reports[$code])) {
+            return $this->reports[$code];
+        }
+
+        return "Unknown";
     }
 
     public function redirectToGenerate()
