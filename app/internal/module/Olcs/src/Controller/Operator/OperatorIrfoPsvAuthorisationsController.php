@@ -120,7 +120,6 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      */
     protected function alterFormForEdit($form, $formData)
     {
-        // For now we dont want any action buttons appearing that do nothing. Hence next line is commented out.
         $form = $this->setActionButtons($form, $formData);
 
         return $form;
@@ -149,13 +148,20 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      */
     private function setActionButtons(ZendForm $form, $formData)
     {
-        $form->get('form-actions')->remove('grant');
-        $form->get('form-actions')->remove('approve');
-        $form->get('form-actions')->remove('generateDocument');
-        $form->get('form-actions')->remove('cns');
-        $form->get('form-actions')->remove('withdraw');
-        $form->get('form-actions')->remove('refuse');
-        $form->get('form-actions')->remove('reset');
+        $allActions = ['grant', 'approve', 'generateDocument', 'cns', 'withdraw', 'refuse', 'reset'];
+        if ($this->params('action') === 'add') {
+            foreach ($allActions as $action) {
+                $form->get('form-actions')->remove($action);
+            }
+        } else {
+            foreach ($allActions as $action) {
+                // we check to see if they are set as the actions come from the backend and
+                // are not part of the posted data
+                if (!isset($formData['actions']) || !in_array($action, $formData['actions'])) {
+                    $form->get('form-actions')->remove($action);
+                }
+            }
+        }
 
         return $form;
     }
