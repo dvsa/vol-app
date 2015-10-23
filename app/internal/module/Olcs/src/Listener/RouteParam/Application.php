@@ -135,6 +135,10 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('application')->set($application);
 
+        $this->getViewHelperManager()->get('placeholder')
+            ->getContainer('note')
+            ->set(isset($application['latestNote']['comment']) ? $application['latestNote']['comment'] : '');
+
         $sidebarNav = $this->getSidebarNavigationService();
 
         $status = $application['status']['id'];
