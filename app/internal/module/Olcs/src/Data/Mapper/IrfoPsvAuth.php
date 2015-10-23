@@ -26,10 +26,21 @@ class IrfoPsvAuth implements MapperInterface
             }
         }
 
+        // Add status description as used for a label
+        if (!empty($data['status']['description'])) {
+            $formData['fields']['statusHtml'] = $data['status']['description'];
+        }
+
         if (!empty($formData['fields']['createdOn'])) {
             // format createOn date
             $createdOn = new \DateTime($formData['fields']['createdOn']);
             $formData['fields']['createdOnHtml'] = $createdOn->format('d/m/Y');
+        }
+
+        if (!empty($formData['fields']['renewalDate'])) {
+            // format renewalDate date
+            $renewalDate = new \DateTime($formData['fields']['renewalDate']);
+            $formData['fields']['renewalDateHtml'] = $renewalDate->format('d/m/Y');
         }
 
         // default all copies fields to 0

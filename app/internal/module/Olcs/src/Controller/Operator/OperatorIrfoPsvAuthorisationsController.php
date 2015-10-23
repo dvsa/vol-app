@@ -5,6 +5,7 @@
  */
 namespace Olcs\Controller\Operator;
 
+use Common\Form\Elements\Types\Html;
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPsvAuth as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPsvAuth as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuth as ItemDto;
@@ -14,9 +15,11 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Data\Mapper\IrfoPsvAuth as Mapper;
 use Olcs\Form\Model\Form\IrfoPsvAuth as Form;
+use Zend\Form\Element\Hidden;
 use Zend\View\Model\ViewModel;
 use Common\RefData;
 use Zend\Form\Form as ZendForm;
+use Common\Form\Elements\InputFilters\ActionButton;
 
 /**
  * Operator Irfo Psv Authorisations Controller
@@ -115,36 +118,44 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      * @param $formData
      * @return mixed
      */
-    protected function alterFormForEdit(ZendForm $form, $formData)
+    protected function alterFormForEdit($form, $formData)
     {
-        $status = isset($formData['fields']['status']) ? $formData['fields']['status'] : '';
-        $readOnlyfields = [];
-        switch($status)
-        {
-            case RefData::IRFO_PSV_AUTH_STATUS_PENDING:
-                $readOnlyfields = ['irfoPsvAuthType', 'status', 'isFeeExemptApplication'];
-                break;
-            case RefData::IRFO_PSV_AUTH_STATUS_RENEW:
-                $readOnlyfields = ['irfoPsvAuthType', 'status'];
-                break;
-            case RefData::IRFO_PSV_AUTH_STATUS_GRANTED:
-            case RefData::IRFO_PSV_AUTH_STATUS_APPROVED:
-                $readOnlyfields = ['irfoPsvAuthType', 'status', 'validityPeriod', 'isFeeExemptApplication',
-                    'isFeeExemptAnnual', 'exemptionDetails', 'copiesRequired', 'copiesRequiredTotal'
-                ];
-                break;
-            case RefData::IRFO_PSV_AUTH_STATUS_CNS:
-            case RefData::IRFO_PSV_AUTH_STATUS_REFUSED:
-            case RefData::IRFO_PSV_AUTH_STATUS_WITHDRAWN:
-            default:
-                // Every status needs to be handled here to avoid displaying a form where data shouldn't be edited.
-                $form->setOption('readonly', true);
-        }
+        // For now we dont want any action buttons appearing that do nothing. Hence next line is commented out.
+        $form = $this->setActionButtons($form, $formData);
 
-        foreach ($readOnlyfields as $field) {
-            $field = $form->get('fields')->get($field);
-            $field->setAttribute('disabled', 'disabled');
-        }
+        return $form;
+    }
+
+    /**
+     * Method to alter the form based on status
+     *
+     * @param $form
+     * @param $formData
+     * @return mixed
+     */
+    protected function alterFormForAdd($form, $formData)
+    {
+        $form = $this->setActionButtons($form, $formData);
+
+        return $form;
+    }
+
+    /**
+     * Adds possible action buttons to the form
+     *
+     * @param ZendForm $form
+     * @param $formData
+     * @return ZendForm
+     */
+    private function setActionButtons(ZendForm $form, $formData)
+    {
+        $form->get('form-actions')->remove('grant');
+        $form->get('form-actions')->remove('approve');
+        $form->get('form-actions')->remove('generateDocument');
+        $form->get('form-actions')->remove('cns');
+        $form->get('form-actions')->remove('withdraw');
+        $form->get('form-actions')->remove('refuse');
+        $form->get('form-actions')->remove('reset');
 
         return $form;
     }
