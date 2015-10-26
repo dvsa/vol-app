@@ -53,7 +53,7 @@ class PublicInquiryHearingFields extends Base
      *     "create_empty_option": true,
      *     "max_year": 2016,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '</div><div class=""field""><label for=hearingDate>Time of PI</label>'HH:mm:ss",
+     *     "pattern": "d MMMM y '{{SLA_HINT}}</fieldset><fieldset><div class=""field""><label for=""hearingDate"">Time of PI</label>'HH:mm:ss'</div>'",
      *     "category": "pi_hearing",
      *     "field": "hearingDate"
      * })
@@ -164,7 +164,7 @@ class PublicInquiryHearingFields extends Base
      *     "create_empty_option": true,
      *     "max_year": 2016,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '</div><div class=""field""><label for=adjournedDate>Adjourned time</label>'HH:mm:ss",
+     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""adjournedDate"">Adjourned time</label>'HH:mm:ss'</div>'",
      *     "category": "pi_hearing",
      *     "field": "adjournedDate"
      * })
