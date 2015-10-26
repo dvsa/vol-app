@@ -9,6 +9,7 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetListByVariation;
 
 /**
  * Class TransportManagerMarker
@@ -20,6 +21,7 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
 
     private $annotationBuilderService;
     private $queryService;
+    private $applicationService;
 
     /**
      * @var \Olcs\Service\Marker\MarkerService
@@ -41,6 +43,11 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
         return $this->markerService;
     }
 
+    public function getApplicationService()
+    {
+        return $this->applicationService;
+    }
+
     public function setAnnotationBuilderService($annotationBuilderService)
     {
         $this->annotationBuilderService = $annotationBuilderService;
@@ -56,6 +63,12 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
     public function setMarkerService(\Olcs\Service\Marker\MarkerService $markerService)
     {
         $this->markerService = $markerService;
+        return $this;
+    }
+
+    public function setApplicationService($applicationService)
+    {
+        $this->applicationService = $applicationService;
         return $this;
     }
 
@@ -105,6 +118,7 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
             'transportManagerLicences',
             $this->getTransportManagerLicenceData(null, $e->getValue())
         );
+        $this->getMarkerService()->addData('page', 'transportManager');
     }
 
     /**
@@ -116,6 +130,7 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
             'transportManagerLicences',
             $this->getTransportManagerLicenceData($e->getValue())
         );
+        $this->getMarkerService()->addData('page', 'transportManagerLicence');
     }
 
     /**
@@ -127,6 +142,17 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
             'transportManagerApplications',
             $this->getTransportManagerApplicationData($e->getValue())
         );
+
+        $routeName = $this->getApplicationService()->getMvcEvent()->getRouteMatch()->getMatchedRouteName();
+        if (substr($routeName, 0, 13) == 'lva-variation') {
+            $this->getMarkerService()->addData(
+                'transportManagersFromLicence',
+                $this->getTransportManagerFromLicenceData($e->getValue())
+            );
+            $this->getMarkerService()->addData('page', 'transportManagerVariation');
+        } else {
+            $this->getMarkerService()->addData('page', 'transportManagerApplication');
+        }
     }
 
     /**
@@ -140,6 +166,7 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
         $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
         $this->setAnnotationBuilderService($serviceLocator->get('TransferAnnotationBuilder'));
         $this->setQueryService($serviceLocator->get('QueryService'));
+        $this->setApplicationService($serviceLocator->get('Application'));
 
         return $this;
     }
@@ -207,6 +234,30 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
         $response = $this->getQueryService()->send($query);
         if (!$response->isOk()) {
             throw new \RuntimeException('Error getting TransportManagerLicence data');
+        }
+
+        return $response->getResult()['results'];
+    }
+
+    /**
+     * Get Transport Manager Licence data based on variation id
+     *
+     * @param int $variationId
+     *
+     * @return array
+     * @throws \RuntimeException
+     */
+    protected function getTransportManagerFromLicenceData($variationId)
+    {
+        $query = $this->getAnnotationBuilderService()->createQuery(
+            \Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetListByVariation::create(
+                ['variation' => $variationId]
+            )
+        );
+
+        $response = $this->getQueryService()->send($query);
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error getting TransportManagerLicence data using variation id ');
         }
 
         return $response->getResult()['results'];

@@ -67,18 +67,21 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
         $mockQueryService = m::mock();
         $mockAnnotationBuilderService = m::mock();
+        $mockApplicationService = m::mock();
 
         $mockSl->shouldReceive('get')->with(\Olcs\Service\Marker\MarkerService::class)->once()
             ->andReturn($mockMarkerService);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->once()
             ->andReturn($mockAnnotationBuilderService);
         $mockSl->shouldReceive('get')->with('QueryService')->once()->andReturn($mockQueryService);
+        $mockSl->shouldReceive('get')->with('Application')->once()->andReturn($mockApplicationService);
 
         $obj = $this->sut->createService($mockSl);
 
         $this->assertSame($mockAnnotationBuilderService, $obj->getAnnotationBuilderService());
         $this->assertSame($mockMarkerService, $obj->getMarkerService());
         $this->assertSame($mockQueryService, $obj->getQueryService());
+        $this->assertSame($mockApplicationService, $obj->getApplicationService());
 
         $this->assertInstanceOf('Olcs\Listener\RouteParam\TransportManagerMarker', $obj);
     }
@@ -115,13 +118,16 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $this->sut->setMarkerService($mockMarkerService);
 
         $this->mockQuery(['id' => 12], 'TM');
-        $mockMarkerService->shouldReceive('addData')->with('transportManager', array('result'=>'TM', 'results'=>'TM'))->once();
+        $mockMarkerService->shouldReceive('addData')
+            ->with('transportManager', array('result'=>'TM', 'results'=>'TM'))->once();
 
         $this->mockQuery(['user' => null, 'application' => null, 'transportManager' => 12], 'TMAs');
         $mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
 
         $this->mockQuery(['licence' => null, 'transportManager' => 12], 'TMLs');
         $mockMarkerService->shouldReceive('addData')->with('transportManagerLicences', 'TMLs')->once();
+
+        $mockMarkerService->shouldReceive('addData')->with('page', 'transportManager')->once();
 
         $event = new RouteParam();
         $event->setValue(12);
@@ -141,6 +147,7 @@ class TransportManagerMarkerTest extends MockeryTestCase
 
         $this->mockQuery(['licence' => 18, 'transportManager' => null], 'TMLs');
         $mockMarkerService->shouldReceive('addData')->with('transportManagerLicences', 'TMLs')->once();
+        $mockMarkerService->shouldReceive('addData')->with('page', 'transportManagerLicence')->once();
 
         $event = new RouteParam();
         $event->setValue(18);
@@ -173,8 +180,29 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
         $this->sut->setMarkerService($mockMarkerService);
 
+        $mockApplicationService = m::mock()
+            ->shouldReceive('getMvcEvent')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getRouteMatch')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getMatchedRouteName')
+                    ->andReturn('lva-application')
+                    ->once()
+                    ->getMock()
+                )
+                ->once()
+                ->getMock()
+            )
+            ->once()
+            ->getMock();
+
+        $this->sut->setApplicationService($mockApplicationService);
+
         $this->mockQuery(['user' => null, 'application' => 534, 'transportManager' => null], 'TMAs');
         $mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
+        $mockMarkerService->shouldReceive('addData')->with('page', 'transportManagerApplication')->once();
 
         $event = new RouteParam();
         $event->setValue(534);
@@ -182,12 +210,100 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $this->sut->onApplicationTransportManagerMarker($event);
     }
 
+    /**
+     * Test on application transport manager marker
+     *
+     * @group transportManagerMarker
+     */
+    public function testOnApplicationTransportManagerMarkerWithVariationRoute()
+    {
+        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
+        $this->sut->setMarkerService($mockMarkerService);
+
+        $mockApplicationService = m::mock()
+            ->shouldReceive('getMvcEvent')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('getRouteMatch')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('getMatchedRouteName')
+                            ->andReturn('lva-variation')
+                            ->once()
+                            ->getMock()
+                    )
+                    ->once()
+                    ->getMock()
+            )
+            ->once()
+            ->getMock();
+
+        $this->sut->setApplicationService($mockApplicationService);
+
+        $this->mockQuery(['user' => null, 'application' => 534, 'transportManager' => null], 'TMAs');
+        $mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
+
+        $this->mockQuery(['variation' => 534], 'TMAs1');
+        $mockMarkerService->shouldReceive('addData')->with('transportManagersFromLicence', 'TMAs1')->once();
+
+        $mockMarkerService->shouldReceive('addData')->with('page', 'transportManagerVariation')->once();
+
+        $event = new RouteParam();
+        $event->setValue(534);
+
+        $this->sut->onApplicationTransportManagerMarker($event);
+    }
+
+    /**
+     * @group transportManagerMarker
+     */
     public function testOnApplicationTransportManagerMarkerQueryError()
     {
         $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
         $this->sut->setMarkerService($mockMarkerService);
 
         $this->mockQuery(['user' => null, 'application' => 534, 'transportManager' => null], false);
+
+        $event = new RouteParam();
+        $event->setValue(534);
+
+        $this->setExpectedException(\RuntimeException::class);
+
+        $this->sut->onApplicationTransportManagerMarker($event);
+    }
+
+    /**
+     * @group transportManagerMarker
+     */
+    public function testOnApplicationTransportManagerMarkerWithVariationRouteQueryError()
+    {
+        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
+        $this->sut->setMarkerService($mockMarkerService);
+
+        $mockApplicationService = m::mock()
+            ->shouldReceive('getMvcEvent')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('getRouteMatch')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('getMatchedRouteName')
+                            ->andReturn('lva-variation')
+                            ->once()
+                            ->getMock()
+                    )
+                    ->once()
+                    ->getMock()
+            )
+            ->once()
+            ->getMock();
+
+        $this->sut->setApplicationService($mockApplicationService);
+
+        $this->mockQuery(['user' => null, 'application' => 534, 'transportManager' => null], 'TMAs');
+        $mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
+
+        $this->mockQuery(['variation' => 534], false);
 
         $event = new RouteParam();
         $event->setValue(534);

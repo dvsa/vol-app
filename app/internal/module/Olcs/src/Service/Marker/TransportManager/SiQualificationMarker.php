@@ -37,8 +37,7 @@ class SiQualificationMarker extends \Olcs\Service\Marker\AbstractMarker
                     'person' => $tm['homeCd']['person'],
                     'niFlag' => false,
                     // if both are set then must be on transportManager section
-                    'hideName' => isset($data['transportManagerLicences']) &&
-                        isset($data['transportManagerApplications'])
+                    'hideName' => ($data['page'] === 'transportManager')
                 ]
             );
         }
@@ -51,8 +50,7 @@ class SiQualificationMarker extends \Olcs\Service\Marker\AbstractMarker
                     'person' => $tm['homeCd']['person'],
                     'niFlag' => true,
                     // if both are set then must be on transportManager section
-                    'hideName' => isset($data['transportManagerLicences']) &&
-                        isset($data['transportManagerApplications'])
+                    'hideName' => ($data['page'] === 'transportManager')
                 ]
             );
         }
@@ -79,6 +77,16 @@ class SiQualificationMarker extends \Olcs\Service\Marker\AbstractMarker
                 $tms[$tmaOrTml['transportManager']['id']] = $tmaOrTml['transportManager'];
             }
         }
+        if (isset($data['transportManagersFromLicence'])) {
+            foreach ($data['transportManagersFromLicence'] as $tml) {
+                if ($tml['transportManager']['requireSiGbQualificationOnVariation'] &&
+                    !$tml['transportManager']['hasValidSiGbQualification']
+                ) {
+                    // add and eliminate duplicates
+                    $tms[$tml['transportManager']['id']] = $tml['transportManager'];
+                }
+            }
+        }
 
         return $tms;
     }
@@ -101,6 +109,16 @@ class SiQualificationMarker extends \Olcs\Service\Marker\AbstractMarker
             ) {
                 // add and eliminate duplicates
                 $tms[$tmaOrTml['transportManager']['id']] = $tmaOrTml['transportManager'];
+            }
+        }
+        if (isset($data['transportManagersFromLicence'])) {
+            foreach ($data['transportManagersFromLicence'] as $tml) {
+                if ($tml['transportManager']['requireSiNiQualificationOnVariation'] &&
+                    !$tml['transportManager']['hasValidSiNiQualification']
+                ) {
+                    // add and eliminate duplicates
+                    $tms[$tml['transportManager']['id']] = $tml['transportManager'];
+                }
             }
         }
 
