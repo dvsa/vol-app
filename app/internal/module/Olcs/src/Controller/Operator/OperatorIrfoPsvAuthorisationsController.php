@@ -8,6 +8,7 @@ namespace Olcs\Controller\Operator;
 use Common\Form\Elements\Types\Html;
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPsvAuth as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPsvAuth as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\GrantIrfoPsvAuth as GrantDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuth as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthList as ListDto;
 use Olcs\Controller\AbstractInternalController;
@@ -20,6 +21,8 @@ use Zend\View\Model\ViewModel;
 use Common\RefData;
 use Zend\Form\Form as ZendForm;
 use Common\Form\Elements\InputFilters\ActionButton;
+use Olcs\Logging\Log\Logger;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
 /**
  * Operator Irfo Psv Authorisations Controller
@@ -101,6 +104,109 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         'status' => 'irfo_auth_s_pending',
     ];
 
+    private function determineResponse($commandData)
+    {
+        switch ($commandData['action'])
+        {
+            case 'grant':
+                return $this->handleCommand(GrantDto::create($commandData));
+            default:
+                return $this->handleCommand(UpdateDto::create($commandData));
+        }
+    }
+
+    public function editAction()
+    {
+        $paramProvider = new GenericItem($this->itemParams);
+        $editViewTemplate = 'pages/crud-form';
+        $successMessage = 'Updated record';
+        $contentTitle = null;
+
+        Logger::debug(__FILE__);
+        Logger::debug(__METHOD__);
+
+        $request = $this->getRequest();
+        $action = ucfirst($this->params()->fromRoute('action'));
+        $form = $this->getForm($this->formClass);
+        $this->placeholder()->setPlaceholder('form', $form);
+        $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
+
+        if ($request->isPost()) {
+            $dataFromPost = (array) $this->params()->fromPost();
+            $form->setData($dataFromPost);
+        }
+
+        $hasProcessed =
+            $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
+
+        if (!$hasProcessed && $this->persist && $request->isPost() && $form->isValid()) {
+            $commandData = Mapper::mapFromForm($form->getData());
+
+            $response = $this->determineResponse($commandData);
+
+            if ($response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+
+            if ($response->isClientError()) {
+                $flashErrors = Mapper::mapFromErrors($form, $response->getResult());
+
+                foreach ($flashErrors as $error) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
+                }
+            }
+
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
+                return $this->redirectTo($response->getResult());
+            }
+
+        } elseif (!$request->isPost()) {
+            $paramProvider->setParams($this->plugin('params'));
+            $itemParams = $paramProvider->provideParameters();
+            $response = $this->handleQuery(ItemDto::create($itemParams));
+
+            if ($response->isNotFound()) {
+                return $this->notFoundAction();
+            }
+
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+
+            if ($response->isOk()) {
+                $result = $response->getResult();
+
+                $formData = Mapper::mapFromResult($result);
+
+                if (method_exists($this, 'alterFormFor' . $action)) {
+                    $form = $this->{'alterFormFor' . $action}($form, $formData);
+                }
+
+                $form->setData($formData);
+            }
+        }
+
+        return $this->viewBuilder()->buildViewFromTemplate($this->editViewTemplate);
+    }
+
+    /**
+     * Determines the action DTO to use based on posted form data
+     *
+     * @param $data
+     * @return null
+     */
+    private function determineAction($postData)
+    {
+        $allActions = ['grant', 'approve', 'generateDocument', 'cns', 'withdraw', 'refuse', 'reset'];
+        foreach ($allActions as $action) {
+            if (isset($postData['form-actions'][$action]) && !is_null($postData['form-actions'][$action])) {
+                return $action;
+            }
+        }
+        return null;
+    }
+
     public function detailsAction()
     {
         return $this->notFoundAction();
@@ -140,7 +246,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     }
 
     /**
-     * Adds possible action buttons to the form
+     * Removes action buttons not possible from the form on GET only
      *
      * @param ZendForm $form
      * @param $formData
@@ -148,17 +254,19 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      */
     private function setActionButtons(ZendForm $form, $formData)
     {
-        $allActions = ['grant', 'approve', 'generateDocument', 'cns', 'withdraw', 'refuse', 'reset'];
-        if ($this->params('action') === 'add') {
-            foreach ($allActions as $action) {
-                $form->get('form-actions')->remove($action);
-            }
-        } else {
-            foreach ($allActions as $action) {
-                // we check to see if they are set as the actions come from the backend and
-                // are not part of the posted data
-                if (!isset($formData['actions']) || !in_array($action, $formData['actions'])) {
+        if (!$this->getRequest()->isPost()) {
+            $allActions = ['grant', 'approve', 'generateDocument', 'cns', 'withdraw', 'refuse', 'reset'];
+            if ($this->params('action') === 'add') {
+                foreach ($allActions as $action) {
                     $form->get('form-actions')->remove($action);
+                }
+            } else {
+                foreach ($allActions as $action) {
+                    // we check to see if they are set as the actions come from the backend and
+                    // are not part of the posted data
+                    if (!isset($formData['actions']) || !in_array($action, $formData['actions'])) {
+                        $form->get('form-actions')->remove($action);
+                    }
                 }
             }
         }

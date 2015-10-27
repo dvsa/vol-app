@@ -75,6 +75,7 @@ class IrfoPsvAuth implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
+        $data['fields']['action'] = self::determineAction($data);
         return $data['fields'];
     }
 
@@ -89,5 +90,28 @@ class IrfoPsvAuth implements MapperInterface
     public static function mapFromErrors(FormInterface $form, array $errors)
     {
         return $errors;
+    }
+
+    public static function determineAction($data)
+    {
+        $allActions = ['grant', 'approve', 'generateDocument', 'cns', 'withdraw', 'refuse', 'reset'];
+        foreach ($allActions as $action) {
+            if (isset($data['form-actions'][$action]) && !is_null($data['form-actions'][$action])) {
+                return $action;
+            }
+        }
+
+        return null;
+    }
+
+    public static function determineUpdateDto($data)
+    {
+        $action = self::determineAction($data);
+        switch ($action) {
+            case "grant":
+                return \Dvsa\Olcs\Transfer\Command\Irfo\GrantIrfoPsvAuth;
+            default:
+                return \Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPsvAuth;
+        }
     }
 }
