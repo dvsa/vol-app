@@ -151,9 +151,6 @@ class LicenceController extends AbstractController implements LicenceControllerI
             return $this->redirect()->toRoute('licence', ['licence' => $licenceId]);
         }
 
-        $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage(
-            'Licence number was not found'
-        );
-        return $this->redirect()->toRoute('dashboard');
+        return $this->notFoundAction();
     }
 }
