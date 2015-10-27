@@ -135,10 +135,11 @@
         <dd><?php echo $licence . '/' . $application; ?></dd>
         <?php if ($paymentRef): ?>
             <dt><?php echo $this->translate('payment-reference-no.title'); ?></dt>
-            <dd><?php echo $paymentRef; ?></dd>
-            <a href="<?php echo $this->url('fees/receipt', ['action' => 'print', 'reference' => $paymentRef]);?>">
+            <dd><?php echo $paymentRef; ?>
+            <a target="_blank"
+               href="<?php echo $this->url('fees/receipt', ['action' => 'print', 'reference' => $paymentRef]);?>">
                 <?php echo $this->translate('pay-fees.success.print-receipt'); ?>
-            </a>
+            </a></dd>
         <?php endif; ?>
         <dt><?php echo $this->translate('submitted-date.title'); ?></dt>
         <dd><?php echo date('d F Y', strtotime($submittedDate)); ?></dd>

@@ -47,6 +47,8 @@ abstract class AbstractSummaryController extends AbstractController
         $response = $this->handleQuery($dto);
         $data = $response->getResult();
 
+        $reference = $this->params()->fromRoute('reference') ?
+            $this->params()->fromRoute('reference') : $data['reference'];
         return [
             'justPaid' => $justPaid,
             'lva' => $this->lva,
@@ -56,7 +58,7 @@ abstract class AbstractSummaryController extends AbstractController
             'status' => $data['status']['description'],
             'submittedDate' => $data['receivedDate'],
             'completionDate' => $data['targetCompletionDate'],
-            'paymentRef' => $this->params()->fromRoute('reference'),
+            'paymentRef' => $reference,
             'actions' => $data['actions'],
             'transportManagers' => $data['transportManagers'] ? $data['transportManagers'] : []
         ];
