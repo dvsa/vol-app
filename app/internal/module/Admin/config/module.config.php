@@ -57,7 +57,7 @@ return [
                             'route' => '/publication',
                             'defaults' => [
                                 'controller' => 'Admin\PublicationController',
-                                'action' => 'redirect',
+                                'action' => 'index',
                             ]
                         ],
                         'may_terminate' => true,
