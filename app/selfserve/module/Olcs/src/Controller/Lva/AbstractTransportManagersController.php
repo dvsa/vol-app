@@ -50,29 +50,17 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     ];
 
     /**
-     * Edit Form confirmation message action
+     * Revert to editing the form
      */
     public function editAction()
     {
-        // Get confirmation form
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $formHelper->createForm('GenericConfirmation');
-        $formHelper->setFormActionFromRequest($form, $this->getRequest());
-
-        if ($this->getRequest()->isPost()) {
-            $tmaId = (int) $this->params('child_id');
-            if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
-                return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
-            } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            }
+        // move status back to incomplete
+        $tmaId = (int) $this->params('child_id');
+        if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
+            return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
+        } else {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
-
-        return $this->render(
-            'transport-manager-application.edit-form',
-            $form,
-            ['sectionText' => 'transport-manager-application.edit-form.confirmation']
-        );
     }
 
     /**
@@ -81,149 +69,50 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     public function detailsAction()
     {
         $tmaId = (int) $this->params('child_id');
-
-        // Stop-gap until this feature is developed
-        if ($this->getRequest()->getQuery('register') == 'opsigned') {
-            $this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_OPERATOR_SIGNED);
-        }
-        // Stop-gap until this feature is developed
-        if ($this->getRequest()->getQuery('register') == 'tmsigned') {
-            $this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_TM_SIGNED);
-        }
-
         $tma = $this->getTmaDetails($tmaId);
         $user = $this->getCurrentUser();
-
-        $userIsThisTransportManager =
-            $tma['transportManager']['id'] == $user['transportManager']['id'];
+        $isUserTm = $tma['transportManager']['id'] == $user['transportManager']['id'];
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
 
-        $progress = null;
-        $showEditAction = false;
-        $showViewAction = false;
-        $showResendAction = false;
-
-        $viewActionUrl = $this->url()->fromRoute('transport_manager_review', ['id' => $tmaId]);
-        $editActionUrl = $this->url()->fromRoute(
-            "lva-{$this->lva}/transport_manager_details/action",
-            ['action' => 'edit'],
-            [],
-            true
-        );
-        $resendActionUrl = $this->url()->fromRoute(
-            "lva-{$this->lva}/transport_manager_details/action",
-            ['action' => 'resend'],
-            [],
-            true
-        );
-
         switch ($tma['tmApplicationStatus']['id']) {
             case TransportManagerApplicationEntityService::STATUS_POSTAL_APPLICATION:
-                // Show ref 1
-                $content = $translationHelper->translate('markup-tma-1');
-                break;
+                return $this->pagePostal($tma);
+                // no break
             case TransportManagerApplicationEntityService::STATUS_INCOMPLETE:
-                if ($userIsThisTransportManager) {
-                    // Show form currently on detailsAction
-                    return $this->details($tma);
-                }
-                $showResendAction = true;
-                // Show ref 3
-                $content = $translationHelper->translate('markup-tma-3');
-                break;
-            case TransportManagerApplicationEntityService::STATUS_AWAITING_SIGNATURE:
-                if ($userIsThisTransportManager) {
-                    // Show ref 4
-                    $content = $translationHelper->translateReplace('markup-tma-4', [$viewActionUrl, $editActionUrl]);
-                    $progress = 1;
-                    $showEditAction = true;
-                    $showViewAction = true;
+                $submitted = $this->getRequest()->getQuery('submitted') !== null;
+                if ($isUserTm) {
+                    if (!$submitted) {
+                        return $this->page1Point1($tma);
+                    } else {
+                        return $this->page1Point2($tma);
+                    }
                 } else {
-                    // Show ref 5
-                    $content = $translationHelper->translate('markup-tma-5');
-                    $progress = 1;
-                    $showViewAction = true;
-                    $showResendAction = true;
+                    return $this->page1Point3($tma);
                 }
-                break;
+                // no break
             case TransportManagerApplicationEntityService::STATUS_TM_SIGNED:
-                if ($userIsThisTransportManager) {
-                    // Show ref 6
-                    $content = $translationHelper->translateReplace('markup-tma-6', [$viewActionUrl]);
-                    $progress = 2;
-                    $showEditAction = true;
-                    $showViewAction = true;
+                if ($isUserTm) {
+                    return $this->page2Point1($tma);
                 } else {
-                    // Show ref 7
-                    $content = $translationHelper->translateReplace('markup-tma-7', [$viewActionUrl]);
-                    $progress = 2;
-                    $showViewAction = true;
-                    $showResendAction = true;
+                    return $this->page2Point2($tma);
                 }
-                break;
+                // no break
             case TransportManagerApplicationEntityService::STATUS_OPERATOR_SIGNED:
-                // show ref 8
-                $content = $translationHelper->translate('markup-tma-8');
-                $progress = 3;
-                $showViewAction = true;
-                break;
+                return $this->page3($tma, $isUserTm);
+                // no break
             case TransportManagerApplicationEntityService::STATUS_RECEIVED:
-                // show ref 9
-                $content = $translationHelper->translate('markup-tma-9');
-                $progress = 3;
-                $showViewAction = true;
-                break;
+                return $this->page4($tma, $isUserTm);
+                // no break
         }
-
-        $view = new \Zend\View\Model\ViewModel();
-        $view->setTemplate('pages/lva-tm-details-action');
-        if ($progress !== null) {
-            $view->setVariable('progress', $progress);
-        }
-        $view->setVariable('tmaStatus', $tma['tmApplicationStatus']);
-        $view->setVariable('content', $content);
-        $view->setVariable(
-            'actions',
-            ['view' => $showViewAction, 'edit' => $showEditAction, 'resend' => $showResendAction]
-        );
-        $view->setVariable('viewActionUrl', $viewActionUrl);
-        $view->setVariable('editActionUrl', $editActionUrl);
-        $view->setVariable('resendActionUrl', $resendActionUrl);
-        $view->setVariable('referenceNo', $tma['transportManager']['id']);
-        $view->setVariable('userIsThisTransportManager', $userIsThisTransportManager);
-        $view->setVariable(
-            'licenceApplicationNo',
-            $tma['application']['licence']['licNo'] .'/'. $tma['application']['id']
-        );
-        $view->setVariable(
-            'tmFullName',
-            $tma['transportManager']['homeCd']['person']['forename'].' '
-            .$tma['transportManager']['homeCd']['person']['familyName']
-        );
-
-        return $view;
     }
 
     /**
-     * Review Transport Manager Application page
+     * Details page, the big form for TM to input all details
      *
      * @return \Zend\View\Model\ViewModel
      */
-    public function reviewAction()
-    {
-        $view = new \Zend\View\Model\ViewModel();
-        $view->setTemplate('pages/placeholder');
-
-        return $view;
-    }
-
-    /**
-     * Details page
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function details($transportManagerApplicationData)
+    protected function page1Point1($transportManagerApplicationData)
     {
         $request = $this->getRequest();
 
@@ -313,6 +202,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     );
                 }
 
+                // save and return later
                 if (!$submit) {
                     $this->getServiceLocator()->get('Helper\FlashMessenger')
                         ->addSuccessMessage('lva-tm-details-save-success');
@@ -320,10 +210,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     return $this->redirectTmToHome();
                 }
 
-                $this->getServiceLocator()->get('Helper\FlashMessenger')
-                    ->addSuccessMessage('lva-tm-details-submit-success');
-
-                return $this->redirect()->refresh();
+                return $this->redirect()->toRoute(null, [], ['query' => ['submitted' => 1]], true);
             }
         }
 
@@ -1031,50 +918,339 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $response->isOk();
     }
 
-    public function resendAction()
+    /**
+     * TM form is complete, but not submitted yet
+     *
+     * @param array $tma
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    private function page1Point2(array $tma)
     {
-        if ($this->isButtonPressed('cancel')) {
-            return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
-        }
-        // Get confirmation form
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $formHelper->createForm('GenericConfirmation');
-        $form->get('form-actions')->get('submit')->setLabel('Send');
-        $formHelper->setFormActionFromRequest($form, $this->getRequest());
-
-        $tmaId = (int) $this->params('child_id');
-        $tma = $this->getTmaDetails($tmaId);
         if ($this->getRequest()->isPost()) {
-
             $response = $this->handleCommand(
-                Command\TransportManagerApplication\SendTmApplication::create(['id' => $tmaId])
+                Command\TransportManagerApplication\Submit::create(['id' => $tma['id']])
             );
 
+            $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
             if ($response->isOk()) {
-                $this->getServiceLocator()
-                    ->get('Helper\FlashMessenger')
-                    ->addSuccessMessage('transport-manager-application.resend-form.success');
+                $flashMessenger->addSuccessMessage('lva-tm-details-submit-success');
+                $this->redirect()->refresh();
+            } else {
+                $flashMessenger->addErrorMessage('unknown-error');
             }
-            if ($response->isServerError() || $response->isClientError()) {
-                $this->getServiceLocator()
-                    ->get('Helper\FlashMessenger')
-                    ->addErrorMessage('transport-manager-application.resend-form.error');
-            }
-
-            return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
         }
-        $tmName = $tma['transportManager']['homeCd']['person']['forename'] . ' ' .
-            $tma['transportManager']['homeCd']['person']['familyName'];
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        return $this->render(
-            'transport-manager-application.resend-form',
-            $form,
-            [
-                'sectionText' => $translationHelper->translateReplace(
-                    'transport-manager-application.resend-form.confirmation',
-                    [$tmName]
-                )
-            ]
+        $params = [
+            'content' => $translationHelper->translateReplace(
+                $this->isTmOperator($tma) ? 'markup-tma-b1-2' : 'markup-tma-a1-2',
+                [$this->getViewTmUrl()]
+            ),
+            'bottomContent' => sprintf(
+                '<p><a href="%s">%s</a></p>',
+                $this->url()->fromRoute(null, [], [], true),
+                $translationHelper->translate('TMA_CHANGE_DETAILS')
+            ),
+            'backLink' => null,
+        ];
+
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createForm('GenericConfirmation');
+        /* @var $form \Common\Form\Form */
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
+        $submitLabel = $this->isTmOperator($tma) ? 'submit' : 'submit-for-operator-approval';
+        $form->setSubmitLabel($submitLabel);
+        $form->removeCancel();
+
+        return $this->renderTmAction('transport-manager-application.review-and-submit', $form, $tma, $params);
+    }
+
+    /**
+     * Incomplete, resend email to TM
+     *
+     * @param array $tma
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    private function page1Point3(array $tma)
+    {
+        if ($this->getRequest()->isPost()) {
+            $this->resendTmEmail();
+        }
+
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $params = [
+            'content' => $translationHelper->translate('markup-tma-ab1-3'),
+            'bottomContent' => $translationHelper->translateReplace(
+                'TMA_RESEND_TM1',
+                $translationHelper->translate('TM1_FORM_LINK')
+            ),
+        ];
+
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createForm('TransportManagerApplicationResend');
+        /* @var $form \Common\Form\Form */
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
+        $form->get('emailAddress')->setValue($tma['transportManager']['homeCd']['emailAddress']);
+
+        return $this->renderTmAction('transport-manager-application.details-not-submitted', $form, $tma, $params);
+    }
+
+    /**
+     * TM signed, TM view
+     *
+     * @param array $tma
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    private function page2Point1(array $tma)
+    {
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $params = [
+            'content' => $translationHelper->translateReplace('markup-tma-a2-1', [$this->getEditTmUrl()]),
+            'backLink' => null,
+        ];
+
+        return $this->renderTmAction('transport-manager-application.awaiting-operator-approval', null, $tma, $params);
+    }
+
+    /**
+     * TM signed, Operator view
+     *
+     * @param array $tma
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    private function page2Point2(array $tma)
+    {
+        if ($this->getRequest()->isPost()) {
+            if ($this->getRequest()->getPost('emailAddress')) {
+                // resend form submitted
+                $this->resendTmEmail();
+            } else {
+                // approve Operator
+                $response = $this->handleCommand(
+                    Command\TransportManagerApplication\OperatorApprove::create(['id' => $tma['id']])
+                );
+
+                $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+                if ($response->isOk()) {
+                    $flashMessenger->addSuccessMessage('operator-approve-message');
+                    $this->redirect()->refresh();
+                } else {
+                    $flashMessenger->addErrorMessage('unknown-error');
+                }
+            }
+        }
+
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $params = [
+            'content' => $translationHelper->translateReplace(
+                'markup-tma-a2-2',
+                [$this->getViewTmUrl(), $this->url()->fromRoute(null, [], [], true)]
+            ),
+            'bottomContent' => $translationHelper->translate('TMA_WRONG_DETAILS'),
+            'backLink' => null,
+        ];
+
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createForm('GenericConfirmation');
+        /* @var $form \Common\Form\Form */
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
+        $form->setSubmitLabel('approve-details');
+        $form->removeCancel();
+
+        $resendForm = $formHelper->createForm('TransportManagerApplicationResend');
+        /* @var $form \Common\Form\Form */
+        $formHelper->setFormActionFromRequest($resendForm, $this->getRequest());
+        $resendForm->get('emailAddress')->setValue($tma['transportManager']['homeCd']['emailAddress']);
+
+        $params['resendForm'] = $resendForm;
+
+        return $this->renderTmAction('transport-manager-application.review-and-submit', $form, $tma, $params);
+    }
+
+    /**
+     * Operator signed
+     *
+     * @param array $tma
+     * @param bool $isUserTm
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    private function page3(array $tma, $isUserTm)
+    {
+        if ($this->isTmOperator($tma)) {
+            if ($isUserTm) {
+                $template = 'markup-tma-b3-1';
+            } else {
+                $template = 'markup-tma-b3-2';
+            }
+        } else {
+            if ($isUserTm) {
+                $template = 'markup-tma-a3-1';
+            } else {
+                $template = 'markup-tma-a3-2';
+            }
+        }
+
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $params['content'] = $translationHelper->translateReplace($template, [$this->getViewTmUrl()]);
+
+        return $this->renderTmAction('transport-manager-application.print-sign', null, $tma, $params);
+    }
+
+    /**
+     * Received
+     *
+     * @param array $tma
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    private function page4(array $tma)
+    {
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $params['content'] = $translationHelper->translateReplace('markup-tma-ab-4', [$this->getViewTmUrl()]);
+
+        return $this->renderTmAction('transport-manager-application.details-received', null, $tma, $params);
+    }
+
+    /**
+     * Postal application
+     *
+     * @param array $tma
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    private function pagePostal(array $tma)
+    {
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $params = [
+            'content' => $translationHelper->translateReplace('markup-tma-c-0', [$this->getViewTmUrl()]),
+            'backLink' => null,
+        ];
+
+        return $this->renderTmAction('transport-manager-application.print-sign', null, $tma, $params);
+    }
+
+    /**
+     * Render the Transport manager application process pages
+     *
+     * @param string $title
+     * @param \Common\Form\Form $form
+     * @param array $tma
+     * @param array $params
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    private function renderTmAction($title, $form, $tma, $params)
+    {
+        $defaultParams = [
+            'tmFullName' => trim(
+                $tma['transportManager']['homeCd']['person']['forename'].' '
+                .$tma['transportManager']['homeCd']['person']['familyName']
+            ),
+            'backLink' => $this->getBacklink(),
+            'backText' => $this->isTransportManagerRole() ? 'transport-manager-back-text-tm' :
+                'transport-manager-back-text-admin',
+        ];
+
+        $params = array_merge($defaultParams, $params);
+
+        $layout = $this->render($title, $form, $params);
+        /* @var $layout \Zend\View\Model\ViewModel */
+
+        $content = $layout->getChildrenByCaptureTo('content')[0];
+        $content->setTemplate('pages/lva-tm-details-action');
+
+        return $layout;
+    }
+
+    /**
+     * Get the URL to review wth TMA
+     *
+     * @param id $tmaId
+     *
+     * @return string
+     */
+    private function getViewTmUrl()
+    {
+        $tmaId = (int) $this->params('child_id');
+        return $this->url()->fromRoute('transport_manager_review', ['id' => $tmaId]);
+    }
+
+    /**
+     * Get the URL to edit the TMA
+     *
+     * @return string
+     */
+    private function getEditTmUrl()
+    {
+        return $this->url()->fromRoute(
+            "lva-{$this->lva}/transport_manager_details/action",
+            ['action' => 'edit'],
+            [],
+            true
         );
+    }
+
+    /**
+     * is the logged in user just TM, eg not an admin
+     *
+     * @return bool
+     */
+    private function isTransportManagerRole()
+    {
+        return ($this->isGranted(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD) &&
+            !$this->isGranted(UserEntityService::PERMISSION_SELFSERVE_LVA));
+    }
+
+    /**
+     * Is the TMA set as the operator/owner
+     *
+     * @param array $tma
+     *
+     * @return book
+     */
+    private function isTmOperator(array $tma)
+    {
+        return isset($tma['isOwner']) && $tma['isOwner'] == 'Y';
+    }
+
+    /**
+     * Get the URL/link to go back
+     *
+     * @return string
+     */
+    private function getBacklink()
+    {
+        if ($this->isTransportManagerRole()) {
+            return $this->url()->fromRoute('dashboard');
+        } else {
+            return $this->url()->fromRoute(
+                "lva-{$this->lva}/transport_managers",
+                ['application' => $this->getIdentifier()],
+                [],
+                false
+            );
+        }
+    }
+
+    /**
+     * Resend the TMA application email to the TM
+     */
+    private function resendTmEmail()
+    {
+        $tmaId = (int) $this->params('child_id');
+        $response = $this->handleCommand(
+            Command\TransportManagerApplication\SendTmApplication::create(['id' => $tmaId])
+        );
+
+        $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        if ($response->isOk()) {
+            $flashMessenger->addSuccessMessage('transport-manager-application.resend-form.success');
+        } else {
+            $flashMessenger->addErrorMessage('transport-manager-application.resend-form.error');
+        }
     }
 }
