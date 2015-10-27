@@ -946,9 +946,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 $this->isTmOperator($tma) ? 'markup-tma-b1-2' : 'markup-tma-a1-2',
                 [$this->getViewTmUrl()]
             ),
-            'bottomContent' => $translationHelper->translateReplace(
-                '<p><a href="%s">Change your details</a></p>',
-                [$this->url()->fromRoute(null, [], [], true)]
+            'bottomContent' => sprintf(
+                '<p><a href="%s">%s</a></p>',
+                $this->url()->fromRoute(null, [], [], true),
+                $translationHelper->translate('TMA_CHANGE_DETAILS')
             ),
             'backLink' => null,
         ];
