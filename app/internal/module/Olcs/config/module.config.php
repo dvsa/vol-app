@@ -545,7 +545,7 @@ return array(
             'people'      => \Common\Data\Object\Search\People::class,
             'user'        => \Common\Data\Object\Search\User::class,
             'publication' => \Common\Data\Object\Search\Publication::class,
-            'organisation'     => \Common\Data\Object\Search\Organisation::class,
+            'irfo'        => \Common\Data\Object\Search\IrfoOrganisation::class,
         ]
     ],
     'data_services' => [

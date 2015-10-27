@@ -887,6 +887,19 @@ $routes = [
         ]
     ],
     // These routes are for the licence page
+    'licence-no' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/licence-no/:licNo',
+            'constraints' => [
+                'licNo' => '[a-zA-Z0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'LicenceController',
+                'action' => 'licNo',
+            ]
+        ],
+    ],
     'licence' => [
         'type' => 'segment',
         'options' => [

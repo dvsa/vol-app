@@ -132,4 +132,28 @@ class LicenceController extends AbstractController implements LicenceControllerI
     {
         return $this->redirect()->toRoute('licence/details/overview', [], [], true);
     }
+
+    /**
+     * Redirect to licence overview page by a licNo
+     *
+     * @return \Zend\View\Helper\ViewModel
+     */
+    public function licNoAction()
+    {
+        $licNo = $this->params('licNo');
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Licence\LicenceByNumber::create(['licenceNumber' => $licNo])
+        );
+
+        if ($response->isOk()) {
+            $licenceId = (int) $response->getResult()['id'];
+
+            return $this->redirect()->toRoute('licence', ['licence' => $licenceId]);
+        }
+
+        $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage(
+            'Licence number was not found'
+        );
+        return $this->redirect()->toRoute('dashboard');
+    }
 }
