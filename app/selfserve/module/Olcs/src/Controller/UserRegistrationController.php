@@ -136,7 +136,7 @@ class UserRegistrationController extends AbstractController
             if (!empty($result['messages']['licenceNumber'])) {
                 $errors = $result['messages'];
             } else {
-                $this->getFlashMessenger()->addErrorMessage('unknown-error');
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }
         }
 
@@ -197,7 +197,7 @@ class UserRegistrationController extends AbstractController
         if (!empty($result['messages']['licenceNumber']) || !empty($result['messages']['loginId'])) {
             $errors = $result['messages'];
         } else {
-            $this->getFlashMessenger()->addErrorMessage('unknown-error');
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
         return $this->generateContentForUserRegistration($formData, $errors);
@@ -226,34 +226,6 @@ class UserRegistrationController extends AbstractController
         }
 
         return $output;
-    }
-
-    /**
-     * Gets a flash messenger object.
-     *
-     * @return \Common\Service\Helper\FlashMessengerHelperService
-     */
-    public function getFlashMessenger()
-    {
-        return $this->getServiceLocator()->get('Helper\FlashMessenger');
-    }
-
-    /**
-     * Returns a params object. Made literal here.
-     *
-     * @return \Zend\Mvc\Controller\Plugin\Params
-     */
-    protected function params()
-    {
-        return $this->getPluginManager()->get('params');
-    }
-
-    /**
-     * @return \Zend\Http\Request
-     */
-    public function getRequest()
-    {
-        return $this->getEvent()->getRequest();
     }
 
     /**

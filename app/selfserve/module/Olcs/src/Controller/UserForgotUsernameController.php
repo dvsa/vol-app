@@ -74,7 +74,7 @@ class UserForgotUsernameController extends AbstractController
 
             return $content;
         } else {
-            $this->getFlashMessenger()->addErrorMessage('unknown-error');
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
         return null;
@@ -94,34 +94,6 @@ class UserForgotUsernameController extends AbstractController
         $output['emailAddress'] = $data['fields']['emailAddress'];
 
         return $output;
-    }
-
-    /**
-     * Gets a flash messenger object.
-     *
-     * @return \Common\Service\Helper\FlashMessengerHelperService
-     */
-    public function getFlashMessenger()
-    {
-        return $this->getServiceLocator()->get('Helper\FlashMessenger');
-    }
-
-    /**
-     * Returns a params object. Made literal here.
-     *
-     * @return \Zend\Mvc\Controller\Plugin\Params
-     */
-    protected function params()
-    {
-        return $this->getPluginManager()->get('params');
-    }
-
-    /**
-     * @return \Zend\Http\Request
-     */
-    public function getRequest()
-    {
-        return $this->getEvent()->getRequest();
     }
 
     /**
