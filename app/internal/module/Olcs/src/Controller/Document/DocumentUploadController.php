@@ -78,7 +78,7 @@ class DocumentUploadController extends AbstractDocumentController
                 'category'      => $data['details']['category'],
                 'subCategory'   => $data['details']['documentSubCategory'],
                 'isExternal'    => false,
-                'isReadOnly'    => true
+                'isReadOnly'    => 'Y'
             ]
         );
 
@@ -140,15 +140,7 @@ class DocumentUploadController extends AbstractDocumentController
             }
         }
 
-        $formMessages = [
-            'details' => [
-                'file' => [
-                    'unknown_error'
-                ]
-            ]
-        ];
-
-        $form->setMessages($formMessages);
+        $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
 
         return $form;
     }
