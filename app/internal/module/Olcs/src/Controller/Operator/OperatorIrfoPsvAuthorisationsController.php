@@ -185,6 +185,28 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
 
                 $form->setData($formData);
             }
+        } elseif (!$form->isValid()) {
+
+            // We need to query the result again to determine the correct actions to remove
+            $paramProvider->setParams($this->plugin('params'));
+            $itemParams = $paramProvider->provideParameters();
+            $response = $this->handleQuery(ItemDto::create($itemParams));
+
+            if ($response->isNotFound()) {
+                return $this->notFoundAction();
+            }
+
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+
+            if ($response->isOk()) {
+                $result = $response->getResult();
+
+                $originalData = Mapper::mapFromResult($result);
+
+                $form = $this->setActionButtons($form, $originalData);
+            }
         }
 
         return $this->viewBuilder()->buildViewFromTemplate($this->editViewTemplate);
@@ -254,19 +276,17 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      */
     private function setActionButtons(ZendForm $form, $formData)
     {
-        if (!$this->getRequest()->isPost()) {
-            $allActions = ['grant', 'approve', 'generateDocument', 'cns', 'withdraw', 'refuse', 'reset'];
-            if ($this->params('action') === 'add') {
-                foreach ($allActions as $action) {
+        $allActions = ['grant', 'approve', 'generateDocument', 'cns', 'withdraw', 'refuse', 'reset'];
+        if ($this->params('action') === 'add') {
+            foreach ($allActions as $action) {
+                $form->get('form-actions')->remove($action);
+            }
+        } else {
+            foreach ($allActions as $action) {
+                // we check to see if they are set as the actions come from the backend and
+                // are not part of the posted data
+                if (!isset($formData['actions']) || !in_array($action, $formData['actions'])) {
                     $form->get('form-actions')->remove($action);
-                }
-            } else {
-                foreach ($allActions as $action) {
-                    // we check to see if they are set as the actions come from the backend and
-                    // are not part of the posted data
-                    if (!isset($formData['actions']) || !in_array($action, $formData['actions'])) {
-                        $form->get('form-actions')->remove($action);
-                    }
                 }
             }
         }

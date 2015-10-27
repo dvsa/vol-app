@@ -92,6 +92,12 @@ class IrfoPsvAuth implements MapperInterface
         return $errors;
     }
 
+    /**
+     * Determines the action being performed based on posted data
+     *
+     * @param $data
+     * @return null
+     */
     public static function determineAction($data)
     {
         $allActions = ['grant', 'approve', 'generateDocument', 'cns', 'withdraw', 'refuse', 'reset'];
@@ -104,6 +110,12 @@ class IrfoPsvAuth implements MapperInterface
         return null;
     }
 
+    /**
+     * Determines which DTO to use based on action button pressed
+     *
+     * @param $data
+     * @return mixed
+     */
     public static function determineUpdateDto($data)
     {
         $action = self::determineAction($data);
