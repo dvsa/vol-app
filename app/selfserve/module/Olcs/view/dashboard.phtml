@@ -1,5 +1,3 @@
-
-
 <div class="page-header">
   <div class="page-header__wrapper">
   <h3 class="page-header__subtitle"><?php echo $this->translate('dashboard.subtitle'); ?></h3>
@@ -7,32 +5,15 @@
   </div><!-- .page-header__wrapper -->
 </div><!-- .page-header-->
 
-
 <div class="dashboard two-thirds">
-  <?php echo $this->flashMessengerAll(); ?>
-
-  <?php
-
-  /* @var \Zend\View\Helper\Navigation\Menu $menu */
-  $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'dashboard-licences-applications'))->menu();
-
-  echo $menu->setMinDepth(0)->setMaxDepth(0)
-      ->setPartial('partials/dashboard-nav');
-  ?>
-
-  <?php /*echo $this->navigation('Olcs\Navigation\DashboardNavigation')
-              ->menu()
-              ->setPartial('partials/dashboard-nav');*/
-  ?>
-
-  <?php echo $licences; ?>
-  <div class="actions-container" style="margin-bottom: 3em;">
-    <a href="<?php echo $this->url('create_application'); ?>" class="action--primary">
-      <?php echo $this->translate('application.new.button'); ?>
-    </a>
-  </div>
-  <?php echo $variations; ?>
-  <?php echo $applications; ?>
+    <?php
+    echo $this->flashMessengerAll();
+    if ($total === 0) {
+        echo $this->partial('dashboard-empty');
+    } else {
+        echo $this->partial('dashboard-tables', compact('applications', 'licences', 'variations'));
+    }
+    ?>
 </div>
 
 <?php echo $this->partial('partials/dashboard-right-column'); ?>
