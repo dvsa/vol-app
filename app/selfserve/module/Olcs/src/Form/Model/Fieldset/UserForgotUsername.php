@@ -18,7 +18,7 @@ class UserForgotUsername
      * })
      * @Form\Attributes({"class":"medium"})
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":18}})
      */
     public $licenceNumber = null;
 
