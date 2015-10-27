@@ -35,7 +35,8 @@ class MyDetailsController extends AbstractController
                 );
 
                 if ($response->isOk()) {
-                    $this->getFlashMessenger()->addSuccessMessage('generic.updated.success');
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                        ->addSuccessMessage('generic.updated.success');
                     return $this->redirectToIndex();
                 } else {
                     $result = $response->getResult();
@@ -47,7 +48,7 @@ class MyDetailsController extends AbstractController
                             ]
                         );
                     } else {
-                        $this->getFlashMessenger()->addErrorMessage('unknown-error');
+                        $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
                     }
                 }
             }
@@ -58,7 +59,7 @@ class MyDetailsController extends AbstractController
                 $data = $this->formatLoadData($response->getResult());
                 $form->setData($data);
             } else {
-                $this->getFlashMessenger()->addErrorMessage('unknown-error');
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }
         }
 
@@ -107,34 +108,6 @@ class MyDetailsController extends AbstractController
         $output['contactDetails']['person']['forename']   = $data['main']['forename'];
 
         return $output;
-    }
-
-    /**
-     * Gets a flash messenger object.
-     *
-     * @return \Common\Service\Helper\FlashMessengerHelperService
-     */
-    public function getFlashMessenger()
-    {
-        return $this->getServiceLocator()->get('Helper\FlashMessenger');
-    }
-
-    /**
-     * Returns a params object. Made literal here.
-     *
-     * @return \Zend\Mvc\Controller\Plugin\Params
-     */
-    protected function params()
-    {
-        return $this->getPluginManager()->get('params');
-    }
-
-    /**
-     * @return \Zend\Http\Request
-     */
-    public function getRequest()
-    {
-        return $this->getEvent()->getRequest();
     }
 
     /**

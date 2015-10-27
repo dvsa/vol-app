@@ -17,14 +17,14 @@ class UserRegistrationController extends AbstractController
 {
     public function addAction()
     {
+        /** @var \Common\Form\Form $form */
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createFormWithRequest('UserRegistration', $this->getRequest());
+
         if ($this->getRequest()->isPost()) {
             if ($this->isButtonPressed('cancel')) {
                 return $this->redirectToHome();
             }
-
-            /** @var \Common\Form\Form $form */
-            $form = $this->getServiceLocator()->get('Helper\Form')
-                ->createFormWithRequest('UserRegistration', $this->getRequest());
 
             $form->setData($this->params()->fromPost());
 
@@ -33,7 +33,17 @@ class UserRegistrationController extends AbstractController
             }
         }
 
-        return $this->generateContentForUserRegistration();
+        // register page
+        $view = new ViewModel(
+            [
+                'form' => $form
+            ]
+        );
+        $view->setTemplate('olcs/user-registration/index');
+
+        $this->getServiceLocator()->get('Script')->loadFile('user-registration');
+
+        return $view;
     }
 
     private function generateContentForUserRegistration(array $formData = [], array $errors = [])
@@ -126,7 +136,7 @@ class UserRegistrationController extends AbstractController
             if (!empty($result['messages']['licenceNumber'])) {
                 $errors = $result['messages'];
             } else {
-                $this->getFlashMessenger()->addErrorMessage('unknown-error');
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }
         }
 
@@ -187,7 +197,7 @@ class UserRegistrationController extends AbstractController
         if (!empty($result['messages']['licenceNumber']) || !empty($result['messages']['loginId'])) {
             $errors = $result['messages'];
         } else {
-            $this->getFlashMessenger()->addErrorMessage('unknown-error');
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
         return $this->generateContentForUserRegistration($formData, $errors);
@@ -216,34 +226,6 @@ class UserRegistrationController extends AbstractController
         }
 
         return $output;
-    }
-
-    /**
-     * Gets a flash messenger object.
-     *
-     * @return \Common\Service\Helper\FlashMessengerHelperService
-     */
-    public function getFlashMessenger()
-    {
-        return $this->getServiceLocator()->get('Helper\FlashMessenger');
-    }
-
-    /**
-     * Returns a params object. Made literal here.
-     *
-     * @return \Zend\Mvc\Controller\Plugin\Params
-     */
-    protected function params()
-    {
-        return $this->getPluginManager()->get('params');
-    }
-
-    /**
-     * @return \Zend\Http\Request
-     */
-    public function getRequest()
-    {
-        return $this->getEvent()->getRequest();
     }
 
     /**

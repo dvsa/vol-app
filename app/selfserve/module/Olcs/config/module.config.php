@@ -3,6 +3,7 @@
 use Olcs\Controller\IndexController;
 use Olcs\Controller\Search\SearchController;
 use Olcs\Controller\MyDetailsController;
+use Olcs\Controller\UserForgotUsernameController;
 use Olcs\Controller\UserRegistrationController;
 
 use Olcs\Form\Element\SearchFilterFieldsetFactory;
@@ -305,6 +306,16 @@ $routes = array(
             'defaults' => array(
                 'controller' => UserRegistrationController::class,
                 'action' => 'add'
+            )
+        )
+    ),
+    'user-forgot-username' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/forgot-username',
+            'defaults' => array(
+                'controller' => UserForgotUsernameController::class,
+                'action' => 'index'
             )
         )
     ),
@@ -834,6 +845,7 @@ return array(
             'Correspondence' => 'Olcs\Controller\CorrespondenceController',
             'User' => 'Olcs\Controller\UserController',
             IndexController::class => IndexController::class,
+            UserForgotUsernameController::class => UserForgotUsernameController::class,
             UserRegistrationController::class => UserRegistrationController::class,
             MyDetailsController::class => MyDetailsController::class,
             SearchController::class => SearchController::class,
@@ -1046,6 +1058,7 @@ return array(
                 'search*' => ['*'],
                 'index' => ['*'],
                 'user-registration' => ['*'],
+                'user-forgot-username' => ['*'],
                 'cookies' => ['*'],
                 'not-found' => ['*'],
                 'server-error' => ['*'],
