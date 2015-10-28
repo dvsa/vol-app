@@ -118,7 +118,7 @@ class LvaOperatingCentre extends CommonOperatingCentre
         }
 
         if (isset($params['licence']['trafficArea']['isNi'])) {
-            return (bool)$params['trafficArea']['isNi'];
+            return (bool)$params['licence']['trafficArea']['isNi'];
         }
 
         return false;
