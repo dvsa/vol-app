@@ -17,6 +17,12 @@ class FeePayment
      */
     public $amount = null;
 
+
+    /**
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\FeeStoredCards")
+     */
+    public $storedCards = null;
+
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
