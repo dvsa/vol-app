@@ -16,7 +16,12 @@
         ?>
     </strong><br>
     <?php
-    echo $this->startDateTime->format('d/m/Y H:i');
+    if ($this->startDateTime instanceof \DateTime) {
+        echo $this->startDateTime->format('d/m/Y H:i');
+    } else {
+        echo $this->translate('Unknown');
+    }
+
     if (!empty($this->endDateTime)) {
         echo ' to '. $this->endDateTime->format('d/m/Y H:i');
     }
