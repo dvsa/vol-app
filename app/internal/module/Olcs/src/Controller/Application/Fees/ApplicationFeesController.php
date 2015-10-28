@@ -60,4 +60,19 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
             'status' => 'current',
         ];
     }
+
+    protected function getFeeTypeDtoData()
+    {
+        return ['application' => $this->params()->fromRoute('application')];
+    }
+
+    protected function getCreateFeeDtoData($formData)
+    {
+        return [
+            'user' => $this->getLoggedInUser(),
+            'invoicedDate' => $formData['fee-details']['createdDate'],
+            'feeType' => $formData['fee-details']['feeType'],
+            'application' => $this->params()->fromRoute('application'),
+        ];
+    }
 }

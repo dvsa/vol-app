@@ -23,17 +23,77 @@ class CreateFeeDetails
     public $version = null;
 
     /**
+     * @Form\Attributes({"id":"feeType"})
      * @Form\Options({
      *     "label": "fees.type",
      *     "short-label": "fees.type",
      *     "label_attributes": {"id": "label-type"},
-     *     "empty_option": "Please select",
-     *     "service_name":"Olcs\Service\Data\MiscellaneousFeeType"
+     *     "empty_option": "Please select"
      * })
-     * @Form\Type("DynamicSelect")
+     * @Form\Type("Select")
      * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      */
     public $feeType = null;
+
+    /**
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"irfoGvPermit","required":false})
+     * @Form\Options({
+     *     "label": "fees.irfoGvPermit",
+     *     "short-label": "fees.irfoGvPermit",
+     *     "label_attributes": {"id": "label-type"},
+     *     "empty_option": "Please select"
+     * })
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Type("Select")
+     * @Form\Validator({
+     *      "name": "ValidateIf",
+     *      "options": {
+     *          "context_field": "irfoPsvAuth",
+     *          "context_values": {""},
+     *          "context_truth": true,
+     *          "allow_empty" : false,
+     *          "validators": {
+     *              {
+     *                  "name": "Zend\Validator\NotEmpty",
+     *                  "options": {"messages": {"isEmpty": "internal.create-fee.irfo-required"}}
+     *              }
+     *          }
+     *      }
+     * })
+     */
+    public $irfoGvPermit = null;
+
+    /**
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"irfoPsvAuth","required":false})
+     * @Form\Options({
+     *     "label": "fees.irfoPsvAuth",
+     *     "short-label": "fees.irfoPsvAuth",
+     *     "label_attributes": {"id": "label-type"},
+     *     "empty_option": "Please select"
+     * })
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Type("Select")
+     * @Form\Validator({
+     *      "name": "ValidateIf",
+     *      "options": {
+     *          "context_field": "irfoGvPermit",
+     *          "context_values": {""},
+     *          "context_truth": true,
+     *          "allow_empty" : false,
+     *          "validators": {
+     *              {
+     *                  "name": "Zend\Validator\NotEmpty",
+     *                  "options": {"messages": {"isEmpty": "internal.create-fee.irfo-required"}}
+     *              }
+     *          }
+     *      }
+     * })
+     */
+    public $irfoPsvAuth = null;
 
     /**
      * Created date
@@ -44,7 +104,7 @@ class CreateFeeDetails
      *      "label_attributes": {"id": "label-createdDate"}
      * })
      * @Form\Required(true)
-     * @Form\Attributes({"required":false})
+     * @Form\Attributes({"required":false, "id":"createdDate"})
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
@@ -59,7 +119,7 @@ class CreateFeeDetails
      * })
      * @Form\Type("Text")
      * @Form\Required(true)
-     * @Form\Attributes({"required":false})
+     * @Form\Attributes({"required":false, "id":"amount"})
      * @Form\AllowEmpty(false)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Validator({"name": "Common\Form\Elements\Validators\Money"})

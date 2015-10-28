@@ -8,17 +8,20 @@
  */
 namespace Olcs\Controller\Traits;
 
-use Zend\View\Model\ViewModel;
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
-use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
-use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Dvsa\Olcs\Transfer\Command\Fee\ApproveWaive as ApproveWaiveCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\CreateFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RecommendWaive as RecommendWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
-use Dvsa\Olcs\Transfer\Command\Fee\CreateMiscellaneousFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
+use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
+use Dvsa\Olcs\Transfer\Query\Fee\FeeType as FeeTypeQry;
+use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList as FeeTypeListQry;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
+use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 
 /**
  * Fees action trait
@@ -75,12 +78,13 @@ trait FeesActionTrait
     public function addFeeAction()
     {
         $form = $this->getForm('create-fee');
+        $form = $this->alterCreateFeeForm($form);
 
         if ($this->getRequest()->isPost()) {
             if ($this->isButtonPressed('cancel')) {
                 return $this->redirectToList();
             }
-            $this->formPost($form, 'createFee');
+            $this->formPost($form, 'createFee', [$form]);
         }
 
         if ($this->getResponse()->getContent() !== '') {
@@ -93,11 +97,9 @@ trait FeesActionTrait
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
 
-        // currently only one route to create fees so we don't need to pass the
-        // title in to this method
-        $title = 'fees.create.title';
+        $this->loadScripts(['forms/create-fee']);
 
-        return $this->renderView($view, $title);
+        return $this->renderView($view, 'fees.create.title');
     }
 
     /**
@@ -490,15 +492,77 @@ trait FeesActionTrait
     }
 
     /**
+     * Alter create fee form
+     *
+     * @param \Zend\Form\Form $form
+     * @return \Zend\Form\Form
+     */
+    protected function alterCreateFeeForm($form)
+    {
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        // disable amount validation by default
+        $form->get('fee-details')->get('amount')->setAttribute('readonly', true);
+        $formHelper->disableEmptyValidationOnElement($form, 'fee-details->amount');
+
+        // remove IRFO fields by default
+        $formHelper->remove($form, 'fee-details->irfoGvPermit');
+        $formHelper->remove($form, 'fee-details->irfoPsvAuth');
+
+        // populate fee type select
+        $options = $this->fetchFeeTypeValueOptions();
+        $form->get('fee-details')->get('feeType')->setValueOptions($options);
+
+        return $form;
+    }
+
+    /**
+     * Get value options array for create fee type form
+     *
+     * @return array
+     */
+    protected function fetchFeeTypeValueOptions($effectiveDate = null)
+    {
+        $data = $this->fetchFeeTypeListData($effectiveDate);
+        if (isset($data['extra']['valueOptions']['feeType'])) {
+            return $data['extra']['valueOptions']['feeType'];
+        }
+
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    protected function fetchFeeTypeListData($effectiveDate = null)
+    {
+        $dtoData = $this->getFeeTypeDtoData();
+        if ($effectiveDate) {
+            $dtoData['effectiveDate'] = $effectiveDate;
+        }
+        $response = $this->handleQuery(FeeTypeListQry::create($dtoData));
+        if ($response->isOk()) {
+            return $response->getResult();
+        }
+    }
+
+    protected function getFeeTypeDtoData()
+    {
+        return [];
+    }
+
+    protected function getCreateFeeDtoData($formData)
+    {
+        return [];
+    }
+
+    /**
      * @param Table $table
      * @param array $results
      * @return Table
      */
     protected function alterFeeTable($table, $results)
     {
-        // remove the 'new' action by default
-        $table->removeAction('new');
-
         // disable 'pay' button if appropriate
         if ($results['extra']['allowFeePayments'] == false) {
             $table->disableAction('pay');
@@ -776,14 +840,9 @@ trait FeesActionTrait
      *
      * @param array $data
      */
-    protected function createFee($data)
+    protected function createFee($data, $form)
     {
-        $dtoData = [
-            'user' => $this->getLoggedInUser(),
-            'invoicedDate' => $data['fee-details']['createdDate'],
-            'feeType' => $data['fee-details']['feeType'],
-            'amount' => $data['fee-details']['amount'],
-        ];
+        $dtoData = $this->getCreateFeeDtoData($data);
 
         $dto = CreateFeeCmd::create($dtoData);
 
@@ -791,11 +850,14 @@ trait FeesActionTrait
 
         if ($response->isOk()) {
             $this->addSuccessMessage('fees.create.success');
+            $this->redirectToList();
         } else {
-            $this->addErrorMessage('fees.create.error');
+            $errors = $response->getResult();
+            \Olcs\Data\Mapper\CreateFee::mapFromErrors($form, $errors);
+            if (!empty($errors)) {
+                $this->addErrorMessage('fees.create.error');
+            }
         }
-
-        $this->redirectToList();
     }
 
     /**
@@ -852,5 +914,36 @@ trait FeesActionTrait
         // underpayment (different message for one or multiple fees)
         $suffix = $feeData['count'] > 1 ? 'multiple' : 'single';
         return 'internal.fee-payment.part-payment-' . $suffix;
+    }
+
+    public function feeTypeAction()
+    {
+        $id = $this->params('id');
+        $response = $this->handleQuery(FeeTypeQry::create(['id' => $id]));
+
+        $feeType = $response->getResult();
+
+        return new JsonModel(['value' => $feeType['displayValue']]);
+    }
+
+    public function feeTypeListAction()
+    {
+        $valueOptions = $this->fetchFeeTypeValueOptions($this->params('date'));
+
+        // map to format that the JS expects :-/
+        $feeTypes = array_map(
+            function ($id, $description) {
+                return array(
+                    'value' => $id,
+                    'label'  => $description,
+                );
+            },
+            array_keys($valueOptions),
+            $valueOptions
+        );
+
+        array_unshift($feeTypes, ["value" => "", "label" => ""]);
+
+        return new JsonModel($feeTypes);
     }
 }

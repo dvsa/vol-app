@@ -29,6 +29,22 @@ class PaymentProcessingFeesController extends AbstractActionController implement
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function alterCreateFeeForm($form)
+    {
+        $options = $this->fetchFeeTypeValueOptions();
+        $form->get('fee-details')->get('feeType')->setValueOptions($options);
+
+        // remove IRFO fields
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper->remove($form, 'fee-details->irfoGvPermit');
+        $formHelper->remove($form, 'fee-details->irfoPsvAuth');
+
+        return $form;
+    }
+
+    /**
      * Route (prefix) for fees action redirects
      * @see Olcs\Controller\Traits\FeesActionTrait
      * @return string
@@ -120,5 +136,20 @@ class PaymentProcessingFeesController extends AbstractActionController implement
             ['code' => '303'],
             true
         );
+    }
+
+    protected function getFeeTypeDtoData()
+    {
+        return ['isMiscellaneous' => 1];
+    }
+
+    protected function getCreateFeeDtoData($formData)
+    {
+        return [
+            'user' => $this->getLoggedInUser(),
+            'invoicedDate' => $formData['fee-details']['createdDate'],
+            'feeType' => $formData['fee-details']['feeType'],
+            'amount' => $formData['fee-details']['amount'],
+        ];
     }
 }
