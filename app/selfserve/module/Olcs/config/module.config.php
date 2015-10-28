@@ -980,6 +980,11 @@ return array(
             'lva-licence-operating_centres' => LvaFormService\OperatingCentres\LicenceOperatingCentres::class,
             'lva-variation-operating_centres' => LvaFormService\OperatingCentres\VariationOperatingCentres::class,
             'lva-application-operating_centres' => LvaFormService\OperatingCentres\ApplicationOperatingCentres::class,
+
+            'lva-application-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
+            'lva-licence-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
+            'lva-variation-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
+
             // Business Type
             'lva-application-business_type' => LvaFormService\BusinessType\ApplicationBusinessType::class,
             'lva-licence-business_type' => LvaFormService\BusinessType\LicenceBusinessType::class,
