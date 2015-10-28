@@ -60,7 +60,7 @@ class CaseDocsController extends CaseController implements LeftViewProvider
     {
         $case = $this->getCase();
 
-        $filters = ['case' => $case['id']];
+        $filters = [];
         switch ($case['caseType']['id']) {
             case 'case_t_tm':
                 $filters['transportManager'] = $case['transportManager']['id'];
