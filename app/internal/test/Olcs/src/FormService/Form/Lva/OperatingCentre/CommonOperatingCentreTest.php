@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Variation Operating Centre Test
+ * Common Operating Centre Test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
@@ -11,15 +11,15 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
-use Olcs\FormService\Form\Lva\OperatingCentre\VariationOperatingCentre;
+use Olcs\FormService\Form\Lva\OperatingCentre\CommonOperatingCentre;
 use Zend\Validator\Identical as ValidatorIdentical;
 
 /**
- * Variation Operating Centre Test
+ * Common Operating Centre Test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class VariationOperatingCentreTest extends MockeryTestCase
+class CommonOperatingCentreTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -29,7 +29,7 @@ class VariationOperatingCentreTest extends MockeryTestCase
     {
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
 
-        $this->sut = new VariationOperatingCentre();
+        $this->sut = new CommonOperatingCentre();
         $this->sut->setFormHelper($this->formHelper);
     }
 
@@ -65,7 +65,7 @@ class VariationOperatingCentreTest extends MockeryTestCase
                     )
                     ->getMock()
             )
-            ->once(3);
+            ->once();
 
         $params = [
             'isPsv' => false,

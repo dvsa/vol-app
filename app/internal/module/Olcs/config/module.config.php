@@ -650,9 +650,9 @@ return array(
             // Operating Centres
             'lva-application-operating_centres' => LvaFormService\OperatingCentres\ApplicationOperatingCentres::class,
             // Operating Centre
-            'lva-application-operating_centre' => LvaFormService\OperatingCentre\ApplicationOperatingCentre::class,
-            'lva-licence-operating_centre' => LvaFormService\OperatingCentre\LicenceOperatingCentre::class,
-            'lva-variation-operating_centre' => LvaFormService\OperatingCentre\VariationOperatingCentre::class,
+            'lva-application-operating_centre' => LvaFormService\OperatingCentre\CommonOperatingCentre::class,
+            'lva-licence-operating_centre' => LvaFormService\OperatingCentre\CommonOperatingCentre::class,
+            'lva-variation-operating_centre' => LvaFormService\OperatingCentre\CommonOperatingCentre::class,
             // Goods Vehicles
             'lva-licence-goods-vehicles' => LvaFormService\LicenceGoodsVehicles::class,
             'lva-application-goods-vehicles-add-vehicle' => LvaFormService\GoodsVehicles\AddVehicle::class,
