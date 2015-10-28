@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Common Operating Centre Test
+ * Lva Operating Centre Test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
@@ -11,15 +11,15 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Zend\Form\Fieldset;
 use Zend\Form\Form;
-use Olcs\FormService\Form\Lva\OperatingCentre\CommonOperatingCentre;
+use Olcs\FormService\Form\Lva\OperatingCentre\LvaOperatingCentre;
 use Zend\Validator\Identical as ValidatorIdentical;
 
 /**
- * Common Operating Centre Test
+ * Lva Operating Centre Test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CommonOperatingCentreTest extends MockeryTestCase
+class LvaOperatingCentreTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -29,7 +29,7 @@ class CommonOperatingCentreTest extends MockeryTestCase
     {
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
 
-        $this->sut = new CommonOperatingCentre();
+        $this->sut = new LvaOperatingCentre();
         $this->sut->setFormHelper($this->formHelper);
     }
 
