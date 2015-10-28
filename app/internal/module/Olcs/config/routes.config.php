@@ -809,7 +809,7 @@ $routes = [
                     'route' => '/delete/:doc',
                     'defaults' => [
                         'type' => 'case',
-                        'controller' => 'CaseController',
+                        'controller' => 'CaseDocsController',
                         'action' => 'delete-document'
                     ]
                 ],
@@ -832,10 +832,6 @@ $routes = [
                     'constraints' => [
                         'entityType' => '(statement|hearing|opposition|complaint)',
                         'entityId' => '[0-9]+'
-                    ],
-                    'defaults' => [
-                        'controller' => 'CaseController',
-                        'action' => 'documents'
                     ]
                 ],
                 'may_terminate' => true,
@@ -879,7 +875,7 @@ $routes = [
                             'route' => '/delete/:doc',
                             'defaults' => [
                                 'type' => 'case',
-                                'controller' => 'CaseController',
+                                'controller' => 'CaseDocsController',
                                 'action' => 'delete-document'
                             ]
                         ],
