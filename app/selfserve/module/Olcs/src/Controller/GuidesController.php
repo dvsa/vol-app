@@ -34,7 +34,7 @@ class GuidesController extends AbstractActionController
         }
 
         $view = new ViewModel(['guide' => $guide]);
-        $view->setTemplate('pages/guides');
+        $view->setTemplate('pages/guides/default');
 
         return $view;
     }
