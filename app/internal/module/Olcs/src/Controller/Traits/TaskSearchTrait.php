@@ -28,7 +28,7 @@ trait TaskSearchTrait
             'date'  => 'tdt_today',
             'status' => 'tst_open',
             'sort' => 'urgent,actionDate',
-            'order' => 'DESC,ASC',
+            'order' => 'DESC,DESC',
             'page' => 1,
             'limit' => 10
         ];
