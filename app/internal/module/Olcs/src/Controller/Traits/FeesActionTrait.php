@@ -454,6 +454,10 @@ trait FeesActionTrait
             $form->get('form-actions')->remove('reject');
         }
 
+        if ($fee['canRefund'] === false) {
+            $form->get('form-actions')->remove('refund');
+        }
+
         return $form;
     }
 

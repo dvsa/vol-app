@@ -14,7 +14,7 @@ class FeeActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary","id":"recommend"})
      * @Form\Options({
-     *     "label": "Recommend Waive",
+     *     "label": "Recommend waive",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },
@@ -27,7 +27,7 @@ class FeeActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary","id":"approve"})
      * @Form\Options({
-     *     "label": "Approve Waive",
+     *     "label": "Approve waive",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },
@@ -38,9 +38,9 @@ class FeeActions
     public $approve = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"reject"})
+     * @Form\Attributes({"type":"submit","class":"action--primary","id":"reject"})
      * @Form\Options({
-     *     "label": "Reject Waive",
+     *     "label": "Reject waive",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },
@@ -49,6 +49,19 @@ class FeeActions
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $reject = null;
+
+    /**
+     * @Form\Attributes({"type":"submit","class":"action--primary js-modal-ajax","id":"refund"})
+     * @Form\Options({
+     *     "label": "Refund fee",
+     *     "label_attributes": {
+     *         "class": "col-sm-2"
+     *     },
+     *     "column-size": "sm-10"
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
+     */
+    public $refund = null;
 
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary","id":"cancel"})
