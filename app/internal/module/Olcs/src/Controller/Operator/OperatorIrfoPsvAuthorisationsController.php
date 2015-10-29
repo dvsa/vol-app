@@ -5,6 +5,7 @@
  */
 namespace Olcs\Controller\Operator;
 
+use Common\Form\Elements\Types\Html;
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPsvAuth as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPsvAuth as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuth as ItemDto;
@@ -14,7 +15,11 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Data\Mapper\IrfoPsvAuth as Mapper;
 use Olcs\Form\Model\Form\IrfoPsvAuth as Form;
+use Zend\Form\Element\Hidden;
 use Zend\View\Model\ViewModel;
+use Common\RefData;
+use Zend\Form\Form as ZendForm;
+use Common\Form\Elements\InputFilters\ActionButton;
 
 /**
  * Operator Irfo Psv Authorisations Controller
@@ -104,5 +109,54 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     public function deleteAction()
     {
         return $this->notFoundAction();
+    }
+
+    /**
+     * Method to alter the form based on status
+     *
+     * @param $form
+     * @param $formData
+     * @return mixed
+     */
+    protected function alterFormForEdit($form, $formData)
+    {
+        // For now we dont want any action buttons appearing that do nothing. Hence next line is commented out.
+        $form = $this->setActionButtons($form, $formData);
+
+        return $form;
+    }
+
+    /**
+     * Method to alter the form based on status
+     *
+     * @param $form
+     * @param $formData
+     * @return mixed
+     */
+    protected function alterFormForAdd($form, $formData)
+    {
+        $form = $this->setActionButtons($form, $formData);
+
+        return $form;
+    }
+
+    /**
+     * Adds possible action buttons to the form
+     *
+     * @param ZendForm $form
+     * @param $formData
+     * @return ZendForm
+     */
+    private function setActionButtons(ZendForm $form, $formData)
+    {
+        $form->get('form-actions')->remove('grant');
+        $form->get('form-actions')->remove('approve');
+        $form->get('form-actions')->remove('generateDocument');
+        $form->get('form-actions')->remove('cns');
+        $form->get('form-actions')->remove('withdraw');
+        $form->get('form-actions')->remove('refuse');
+        $form->get('form-actions')->remove('reset');
+
+        return $form;
     }
 }

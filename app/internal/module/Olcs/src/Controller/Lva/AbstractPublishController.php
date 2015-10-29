@@ -11,22 +11,23 @@ abstract class AbstractPublishController extends \Common\Controller\Lva\Abstract
 {
     public function indexAction()
     {
-        if ($this->getRequest()->isPost()) {
-            $this->publishApplication($this->getIdentifier());
-            return $this->redirect()->toRouteAjax('lva-' . $this->lva, ['application' => $this->getIdentifier()]);
-        }
-
         $applicationPublish = $this->getApplicationPublish($this->getIdentifier());
+
         // if validation errors show cannot publish page
         if (!empty($applicationPublish['errors'])) {
             return $this->cannotPublish($applicationPublish['errors']);
         }
 
+        if ($this->getRequest()->isPost()) {
+            $this->publishApplication($this->getIdentifier());
+            return $this->redirect()->toRouteAjax('lva-' . $this->lva, ['application' => $this->getIdentifier()]);
+        }
+
         // if application has an existing publication then show republish page
         if ($applicationPublish['existingPublication']) {
-            return $this->republish();
+            return $this->republish($applicationPublish['hasActiveS4']);
         } else {
-            return $this->publish();
+            return $this->publish($applicationPublish['hasActiveS4']);
         }
     }
 
@@ -54,10 +55,12 @@ abstract class AbstractPublishController extends \Common\Controller\Lva\Abstract
      *
      * @return \Zend\View\Model\ViewModel
      */
-    protected function publish()
+    protected function publish($hasActiveS4)
     {
         $form = $this->getMessageForm();
-        $form->setMessage('Are you sure you wish to publish this application?');
+        $form->setMessage(
+            $hasActiveS4 ? 'application.publish-s4.confirm.message' : 'application.publish.confirm.message'
+        );
         $form->setOkButtonLabel('Publish');
 
         return $this->render(
@@ -71,10 +74,12 @@ abstract class AbstractPublishController extends \Common\Controller\Lva\Abstract
      *
      * @return \Zend\View\Model\ViewModel
      */
-    protected function republish()
+    protected function republish($hasActiveS4)
     {
         $form = $this->getMessageForm();
-        $form->setMessage('Are you sure you wish to republish this application?');
+        $form->setMessage(
+            $hasActiveS4 ? 'application.publish-s4.confirm.message' : 'application.republish.confirm.message'
+        );
         $form->setOkButtonLabel('Republish');
 
         return $this->render(

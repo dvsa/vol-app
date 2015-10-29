@@ -9,13 +9,15 @@ use Common\Controller\AbstractActionController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\FeesActionTrait;
 use Zend\View\Model\ViewModel;
+use Common\Controller\Traits\GenericReceipt;
 
 /**
  * Payment Processing Fees Controller
  */
 class PaymentProcessingFeesController extends AbstractActionController implements LeftViewProvider
 {
-    use FeesActionTrait;
+    use FeesActionTrait,
+        GenericReceipt;
 
     /**
      * @inheritdoc
@@ -24,6 +26,22 @@ class PaymentProcessingFeesController extends AbstractActionController implement
     {
         // no-op
         return $table;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function alterCreateFeeForm($form)
+    {
+        $options = $this->fetchFeeTypeValueOptions();
+        $form->get('fee-details')->get('feeType')->setValueOptions($options);
+
+        // remove IRFO fields
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper->remove($form, 'fee-details->irfoGvPermit');
+        $formHelper->remove($form, 'fee-details->irfoPsvAuth');
+
+        return $form;
     }
 
     /**
@@ -118,5 +136,20 @@ class PaymentProcessingFeesController extends AbstractActionController implement
             ['code' => '303'],
             true
         );
+    }
+
+    protected function getFeeTypeDtoData()
+    {
+        return ['isMiscellaneous' => 1];
+    }
+
+    protected function getCreateFeeDtoData($formData)
+    {
+        return [
+            'user' => $this->getLoggedInUser(),
+            'invoicedDate' => $formData['fee-details']['createdDate'],
+            'feeType' => $formData['fee-details']['feeType'],
+            'amount' => $formData['fee-details']['amount'],
+        ];
     }
 }

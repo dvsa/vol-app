@@ -1,12 +1,18 @@
-<h1><?php echo $this->translate('An error occurred') ?></h1>
-<h2><?php echo $this->message ?></h2>
+<?php
+echo $this->render(
+    'partials/page-header.phtml',
+    array(
+        'pageTitle' => 'Something&#39s gone wrong',
+        'pageSubTitle'=> $this->message
+    )
+);
+?>
 
+<div class="full-width">
 <?php if (isset($this->display_exceptions) && $this->display_exceptions): ?>
-
 <?php if(isset($this->exception) && $this->exception instanceof Exception): ?>
 <hr/>
 <h2><?php echo $this->translate('Additional information') ?>:</h2>
-<h3><?php echo get_class($this->exception); ?></h3>
 <dl>
     <dt><?php echo $this->translate('File') ?>:</dt>
     <dd>
@@ -66,3 +72,5 @@ Method: <?= isset($t['class']) ? $t['class'] . '::' : ''  ?><?= isset($t['functi
 <?php endif ?>
 
 <?php endif ?>
+
+</div><!-- end .full-width -->

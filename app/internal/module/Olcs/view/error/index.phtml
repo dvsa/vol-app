@@ -1,0 +1,21 @@
+<?php
+$this->placeholder('pageTitle')->set('500-title');
+?>
+<div class="two-thirds">
+    <div class="article">
+        <?php echo $this->translate('markup-500-text'); ?>
+        <hr>
+        <p><a href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('back-to-home'); ?></a></p>
+    </div>
+</div>
+<?php
+
+if (!isset($stopRedirect)) {
+    $this->inlineScript()->appendScript(
+        '
+        OLCS.ready(function() {
+            window.location.href = "' . $this->url('server-error') . '";
+        });
+        '
+    );
+}

@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Partners'
+        'title' => 'Partner organisations'
     ),
     'settings' => array(
         'crud' => array(

@@ -39,16 +39,21 @@ class LicenceStatusMarker extends AbstractMarker
             $startDateTime = new \DateTime($activeRule['startDate']);
             $endDateTime = (!empty($activeRule['endDate'])) ? new \DateTime($activeRule['endDate']) : null;
         } else {
+            $dateName = null;
             switch ($data['licence']['status']['id']) {
                 case RefData::LICENCE_STATUS_CURTAILED:
-                    $startDateTime = new \DateTime($data['licence']['curtailedDate']);
+                    $dateName = 'curtailedDate';
                     break;
                 case RefData::LICENCE_STATUS_REVOKED:
-                    $startDateTime = new \DateTime($data['licence']['revokedDate']);
+                    $dateName = 'revokedDate';
                     break;
                 case RefData::LICENCE_STATUS_SUSPENDED:
-                    $startDateTime = new \DateTime($data['licence']['suspendedDate']);
+                    $dateName = 'suspendedDate';
                     break;
+            }
+
+            if (isset($data['licence'][$dateName]) && !empty($data['licence'][$dateName])) {
+                $startDateTime = new \DateTime($data['licence'][$dateName]);
             }
         }
 

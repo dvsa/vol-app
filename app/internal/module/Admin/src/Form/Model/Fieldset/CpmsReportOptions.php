@@ -9,18 +9,12 @@ use Zend\Form\Annotation as Form;
  */
 class CpmsReportOptions
 {
-    // this is currently the only report available, as per OLCS-8021 A/C
-    const DAILY_BALANCE_REPORT_ID = 'ED7AAFBC';
-
     /**
      * @Form\Name("reportCode")
      * @Form\Type("Select")
      * @Form\Label("Report type")
      * @Form\Attributes({
      *      "id": "reportCode",
-     *      "options":{
-     *          Admin\Form\Model\Fieldset\CpmsReportOptions::DAILY_BALANCE_REPORT_ID:"Daily balance report"
-     *      }
      * })
      * @Form\Options({"label":"Report type"})
      */
@@ -54,6 +48,7 @@ class CpmsReportOptions
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      * @Form\Validator({
      *      "name": "DateCompare",
      *      "options": {

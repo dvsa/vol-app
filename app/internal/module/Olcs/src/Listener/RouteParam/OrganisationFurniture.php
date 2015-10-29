@@ -3,8 +3,11 @@
 namespace Olcs\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
+use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
+use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
+use Dvsa\Olcs\Transfer\Command\Audit\ReadOrganisation;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -21,11 +24,16 @@ use Zend\View\Model\ViewModel;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OrganisationFurniture implements ListenerAggregateInterface, FactoryInterface, QuerySenderAwareInterface
+class OrganisationFurniture implements
+    ListenerAggregateInterface,
+    FactoryInterface,
+    QuerySenderAwareInterface,
+    CommandSenderAwareInterface
 {
     use ListenerAggregateTrait,
         ViewHelperManagerAwareTrait,
-        QuerySenderAwareTrait;
+        QuerySenderAwareTrait,
+        CommandSenderAwareTrait;
 
     /**
      * Create service
@@ -36,6 +44,7 @@ class OrganisationFurniture implements ListenerAggregateInterface, FactoryInterf
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $this->setQuerySender($serviceLocator->get('QuerySender'));
+        $this->setCommandSender($serviceLocator->get('CommandSender'));
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
 
         return $this;
@@ -55,7 +64,11 @@ class OrganisationFurniture implements ListenerAggregateInterface, FactoryInterf
      */
     public function onOrganisation(RouteParam $e)
     {
-        $organisation = $this->getOrganisation($e->getValue());
+        $id = $e->getValue();
+
+        $this->getCommandSender()->send(ReadOrganisation::create(['id' => $id]));
+
+        $organisation = $this->getOrganisation($id);
         $placeholder = $this->getViewHelperManager()->get('placeholder');
 
         $placeholder->getContainer('horizontalNavigationId')->set('operator');

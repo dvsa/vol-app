@@ -42,17 +42,14 @@ class IrfoPsvAuth extends OrganisationBase
     public $validityPeriod = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"statusHtml", "required": false})
      * @Form\Options({
      *     "label": "Status",
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a status",
-     *     "category": "irfo_auth_status"
      * })
-     * @Form\Type("DynamicSelect")
+     * @Form\Type("Common\Form\Elements\Types\Html")
      */
-    public $status = null;
+    public $statusHtml;
 
     /**
      * @Form\Required(false)
@@ -77,7 +74,7 @@ class IrfoPsvAuth extends OrganisationBase
      * @Form\Required(false)
      * @Form\Attributes({"id":"createdOnHtml", "required": false})
      * @Form\Options({
-     *     "label": "Create date",
+     *     "label": "Created date",
      * })
      * @Form\Type("Common\Form\Elements\Types\Html")
      */
@@ -99,21 +96,21 @@ class IrfoPsvAuth extends OrganisationBase
     public $inForceDate;
 
     /**
-     * @Form\Attributes({"id":""})
-     * @Form\Required(false)
+     * @Form\Attributes({"id":"expiryDate"})
      * @Form\Options({
      *     "label": "Expiry date",
      *     "create_empty_option": true,
      *     "render_delimiters": false,
-     *     "max_year_delta": "+3",
+     *     "max_year_delta": "+2",
      *     "min_year_delta": "-40",
+     *     "hint": "The calculated expiry date is <span id=calculatedExpiryDateText>dd/mm/yyyy</span>",
      * })
      * @Form\Type("DateSelect")
-     * @Form\AllowEmpty(true)
      * @Form\Filter({"name": "DateSelectNullifier"})
+     *
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
-     *          "context_field": "inForceDate",
+     *          "context_field": "expiryDate",
      *          "context_values": {"--"},
      *          "context_truth": false,
      *          "allow_empty" : true,
@@ -124,15 +121,24 @@ class IrfoPsvAuth extends OrganisationBase
      *                  "options": {
      *                      "compare_to":"inForceDate",
      *                      "compare_to_label":"In force date",
-     *                      "operator": "gt",
+     *                      "operator": "gte",
      *                  }
      *              }
      *          }
      *      }
      * })
-     *
      */
     public $expiryDate;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"renewalDateHtml", "required": false})
+     * @Form\Options({
+     *     "label": "Renewal date",
+     * })
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $renewalDateHtml;
 
     /**
      * @Form\Attributes({"id":""})

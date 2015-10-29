@@ -284,4 +284,33 @@ class LicenceStatusMarkerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame('HTML1', $this->sut->render());
     }
+
+    public function testRenderWithMissingDate()
+    {
+        $data = [
+            'licence' => [
+                'status' => ['id' => 'lsts_revoked'],
+                'revokedDate' => null,
+                'licenceStatusRules' => []
+            ],
+        ];
+
+        $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);
+
+        $mockPartialHelper->shouldReceive('__invoke')
+            ->with(
+                'marker/licence-status',
+                [
+                    'startDateTime' => null,
+                    'endDateTime' => null,
+                    'status' => $data['licence']['status'],
+                ]
+            )
+            ->once()->andReturn('HTML1');
+
+        $this->sut->setData($data);
+        $this->sut->setPartialHelper($mockPartialHelper);
+
+        $this->assertSame('HTML1', $this->sut->render());
+    }
 }

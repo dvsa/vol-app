@@ -19,7 +19,7 @@ $feeActionRoute = [
     // child route config that is used in multiple places
     'type' => 'segment',
     'options' => [
-        'route' => '/:action/:fee',
+        'route' => '/:action[/:fee][/]',
         'constraints' => [
             'fee' => '([0-9]+,?)+',
         ],
@@ -39,6 +39,42 @@ $feeActionRoute = [
             ],
             'may_terminate' => true,
         ],
+    ],
+];
+$feeTypeAjaxRoute = [
+    // child route config that is used in multiple places
+    'type' => 'segment',
+    'options' => [
+        'route' => '/ajax',
+    ],
+    'may_terminate' => false,
+    'child_routes' => [
+        'single' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/fee-type/:id',
+                'constraints' => [
+                    'id' => '([0-9]+,?)+',
+                ],
+                'defaults' => [
+                    'action' => 'feeType',
+                ]
+            ],
+            'may_terminate' => true,
+        ],
+        'list' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => '/fee-type-list/:date',
+                // 'constraints' => [
+                //     'date' => '([0-9]{4}\-[0-9]{2}\-[0-9]{2})',
+                // ],
+                'defaults' => [
+                    'action' => 'feeTypeList',
+                ]
+            ],
+            'may_terminate' => true,
+        ]
     ],
 ];
 
@@ -631,6 +667,16 @@ $routes = [
             ]
         ]
     ],
+    'processing_read_history' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/processing/read-history[/]',
+            'defaults' => [
+                'controller' => 'CaseReadHistoryController',
+                'action' => 'index'
+            ]
+        ]
+    ],
     'case_processing_tasks' => [
         'type' => 'segment',
         'options' => [
@@ -763,7 +809,7 @@ $routes = [
                     'route' => '/delete/:doc',
                     'defaults' => [
                         'type' => 'case',
-                        'controller' => 'CaseController',
+                        'controller' => 'CaseDocsController',
                         'action' => 'delete-document'
                     ]
                 ],
@@ -786,10 +832,6 @@ $routes = [
                     'constraints' => [
                         'entityType' => '(statement|hearing|opposition|complaint)',
                         'entityId' => '[0-9]+'
-                    ],
-                    'defaults' => [
-                        'controller' => 'CaseController',
-                        'action' => 'documents'
                     ]
                 ],
                 'may_terminate' => true,
@@ -833,7 +875,7 @@ $routes = [
                             'route' => '/delete/:doc',
                             'defaults' => [
                                 'type' => 'case',
-                                'controller' => 'CaseController',
+                                'controller' => 'CaseDocsController',
                                 'action' => 'delete-document'
                             ]
                         ],
@@ -877,6 +919,19 @@ $routes = [
         ]
     ],
     // These routes are for the licence page
+    'licence-no' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/licence-no/:licNo',
+            'constraints' => [
+                'licNo' => '[a-zA-Z0-9]+'
+            ],
+            'defaults' => [
+                'controller' => 'LicenceController',
+                'action' => 'licNo',
+            ]
+        ],
+    ],
     'licence' => [
         'type' => 'segment',
         'options' => [
@@ -1054,7 +1109,7 @@ $routes = [
                                     'busRegId' => '[0-9]+',
                                 ],
                                 'controller' => 'BusRequestMapController',
-                                'action' => 'requestMap'
+                                'action' => 'add'
                             ]
                         ]
                     ],
@@ -1273,6 +1328,16 @@ $routes = [
                             ]
                         ],
                     ],
+                    'read-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/read-history[/]',
+                            'defaults' => [
+                                'controller' => 'BusRegReadHistoryController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                 ]
             ],
             'bus-fees' => [
@@ -1287,6 +1352,7 @@ $routes = [
                 'may_terminate' => true,
                 'child_routes' => [
                     'fee_action' => $feeActionRoute,
+                    'fee_type_ajax' => $feeTypeAjaxRoute,
                 ]
             ],
             'cases' => [
@@ -1450,6 +1516,16 @@ $routes = [
                             ]
                         ],
                     ],
+                    'read-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/read-history[/]',
+                            'defaults' => [
+                                'controller' => 'LicenceReadHistoryController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                 ]
             ],
             'fees' => [
@@ -1464,6 +1540,7 @@ $routes = [
                 'may_terminate' => true,
                 'child_routes' => [
                     'fee_action' => $feeActionRoute,
+                    'fee_type_ajax' => $feeTypeAjaxRoute,
                 ]
             ],
             'update-continuation' => [
@@ -1612,6 +1689,16 @@ $routes = [
                             ]
                         ],
                     ],
+                    'read-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/read-history[/]',
+                            'defaults' => [
+                                'controller' => 'OperatorReadHistoryController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                     'notes' => [
                         'type' => 'segment',
                         'may_terminate' => true,
@@ -1650,6 +1737,7 @@ $routes = [
                 'may_terminate' => true,
                 'child_routes' => [
                     'fee_action' => $feeActionRoute,
+                    'fee_type_ajax' => $feeTypeAjaxRoute,
                 ]
             ],
             'documents' => [
@@ -2010,6 +2098,16 @@ $routes = [
                             ]
                         ],
                         'may_terminate' => true,
+                    ],
+                    'read-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => '/read-history[/]',
+                            'defaults' => [
+                                'controller' => 'TransportManagerReadHistoryController',
+                                'action' => 'index',
+                            ]
+                        ],
                     ],
                 ],
             ],
@@ -2628,6 +2726,17 @@ $routes['lva-application']['child_routes'] = array_merge(
                         ]
                     ],
                 ],
+                'read-history' => [
+                    'type' => 'segment',
+                    'may_terminate' => true,
+                    'options' => [
+                        'route' => '/read-history[/]',
+                        'defaults' => [
+                            'controller' => 'ApplicationReadHistoryController',
+                            'action' => 'index'
+                        ]
+                    ],
+                ],
             ],
         ),
         'fees' => array(
@@ -2641,7 +2750,8 @@ $routes['lva-application']['child_routes'] = array_merge(
             ),
             'may_terminate' => true,
             'child_routes' => array(
-                'fee_action' => $feeActionRoute
+                'fee_action' => $feeActionRoute,
+                'fee_type_ajax' => $feeTypeAjaxRoute,
             )
         ),
         'interim' => array(

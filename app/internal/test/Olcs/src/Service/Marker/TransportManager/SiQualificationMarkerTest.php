@@ -27,7 +27,6 @@ class SiQualificationMarkerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
-
     public function testCanRenderWithGb()
     {
         $data = [
@@ -40,6 +39,20 @@ class SiQualificationMarkerTest extends \PHPUnit_Framework_TestCase
                         'hasValidSiGbQualification' => false,
                         'requireSiNiQualification' => false,
                         'hasValidSiNiQualification' => false,
+                    ]
+                ],
+            ],
+            'transportManagersFromLicence' => [
+                [
+                    'transportManager' => [
+                        'id' => 104,
+                        'homeCd' => ['person' => 'PERSON3'],
+                        'requireSiGbQualification' => true,
+                        'hasValidSiGbQualification' => false,
+                        'requireSiNiQualification' => false,
+                        'hasValidSiNiQualification' => false,
+                        'requireSiGbQualificationOnVariation' => true,
+                        'requireSiNiQualificationOnVariation' => false,
                     ]
                 ],
             ]
@@ -61,6 +74,20 @@ class SiQualificationMarkerTest extends \PHPUnit_Framework_TestCase
                         'hasValidSiGbQualification' => false,
                         'requireSiNiQualification' => true,
                         'hasValidSiNiQualification' => false,
+                    ]
+                ],
+            ],
+            'transportManagersFromLicence' => [
+                [
+                    'transportManager' => [
+                        'id' => 104,
+                        'homeCd' => ['person' => 'PERSON4'],
+                        'requireSiGbQualification' => false,
+                        'hasValidSiGbQualification' => false,
+                        'requireSiNiQualification' => false,
+                        'hasValidSiNiQualification' => false,
+                        'requireSiNiQualificationOnVariation' => true,
+                        'requireSiGbQualificationOnVariation' => false
                     ]
                 ],
             ]
@@ -120,7 +147,8 @@ class SiQualificationMarkerTest extends \PHPUnit_Framework_TestCase
                         'hasValidSiNiQualification' => false,
                     ]
                 ],
-            ]
+            ],
+            'page' => 'transportManager'
         ];
 
         $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);

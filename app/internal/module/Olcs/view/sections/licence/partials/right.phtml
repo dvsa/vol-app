@@ -1,5 +1,6 @@
 <?php
 $licence = $this->placeholder('licence')->getValue();
+$note = $this->placeholder('note')->getValue();
 ?>
 <div class="small-module">
     <h4 class="small-module__title">Operator details</h4>
@@ -35,7 +36,10 @@ if ($nav->getContainer()->hasPages(true)): ?>
     </div>
 <?php endif; ?>
 
-<div class="latest-note">
-    <p class="latest-note__details">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidid...</p>
-    <a class="latest-note__link">View all 13 notes</a>
-</div><!-- end .small-details -->
+<?php if ($note): ?>
+    <div class="latest-note">
+        <p class="latest-note__details"><?php echo substr($note, 0, 100); ?></p>
+        <a class="latest-note__link" href="<?php echo $this->url('licence/processing/notes', ['licence' => $licence['id']]); ?>">View all notes</a>
+    </div>
+<?php endif; ?>
+<!-- end .small-details -->

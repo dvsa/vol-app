@@ -138,11 +138,6 @@ return [
                     'route' => 'admin-dashboard/admin-user-management',
                     'pages' => [
                         [
-                            'id' => 'admin-dashboard/admin-user-management',
-                            'label' => 'Users',
-                            'route' => 'admin-dashboard/admin-user-management'
-                        ],
-                        [
                             'id' => 'admin-dashboard/admin-team-management',
                             'label' => 'Teams',
                             'route' => 'admin-dashboard/admin-team-management',
@@ -154,7 +149,7 @@ return [
                         ],
                         [
                             'id' => 'admin-dashboard/admin-partner-management',
-                            'label' => 'Partners',
+                            'label' => 'Partner organisations',
                             'route' => 'admin-dashboard/admin-partner-management',
                         ]
                     ]

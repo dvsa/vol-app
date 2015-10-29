@@ -30,18 +30,6 @@ class BatchController extends AbstractConsoleController
     }
 
     /**
-     * @return Zend\View\Model\ConsoleModel
-     */
-    public function inspectionRequestEmailAction()
-    {
-        /* @var $batchService \Cli\Service\Processing\BatchInspectionRequestEmailProcessingService */
-        $batchService = $this->getService('BatchInspectionRequestEmail');
-        $result = $batchService->process();
-
-        return $this->handleExitStatus($result);
-    }
-
-    /**
      * Wrapper function to get service and set the console adapter on it if
      * we're in verbose mode
      *

@@ -95,6 +95,7 @@ class ApplicationTest extends MockeryTestCase
             ],
             'licenceType' => ['id' => 'foo'],
             'existingPublication' => false,
+            'latestNote' => ['comment' => 'latest note']
         ];
 
         $quickViewActionsVisible = ($status !== ApplicationEntityService::APPLICATION_STATUS_VALID);
@@ -117,10 +118,12 @@ class ApplicationTest extends MockeryTestCase
         $this->setupMockApplication($applicationId, $application);
 
         $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
-        $mockContainer->shouldReceive('set')->with($application);
+        $mockContainer->shouldReceive('set')->with($application)->once();
+        $mockContainer->shouldReceive('set')->with('latest note')->once();
 
         $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
-        $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer);
+        $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer)->once();
+        $mockPlaceholder->shouldReceive('getContainer')->with('note')->andReturn($mockContainer)->once();
 
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
@@ -197,15 +200,18 @@ class ApplicationTest extends MockeryTestCase
             'canCreateCase' => false,
             'licenceType' => ['id' => 'xx'],
             'existingPublication' => true,
+            'latestNote' => ['comment' => 'latest note']
         ];
 
         $this->setupMockApplication(1066, $applicationData);
 
         $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
-        $mockContainer->shouldReceive('set')->with($applicationData);
+        $mockContainer->shouldReceive('set')->with($applicationData)->once();
+        $mockContainer->shouldReceive('set')->with('latest note')->once();
 
         $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
-        $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer);
+        $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer)->once();
+        $mockPlaceholder->shouldReceive('getContainer')->with('note')->andReturn($mockContainer)->once();
 
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
@@ -248,15 +254,18 @@ class ApplicationTest extends MockeryTestCase
             'canCreateCase' => false,
             'licenceType' => ['id' => 'xx'],
             'existingPublication' => false,
+            'latestNote' => ['comment' => 'latest note']
         ];
 
         $this->setupMockApplication(1066, $applicationData);
 
         $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
-        $mockContainer->shouldReceive('set')->with($applicationData);
+        $mockContainer->shouldReceive('set')->with($applicationData)->once();
+        $mockContainer->shouldReceive('set')->with('latest note')->once();
 
         $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
-        $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer);
+        $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer)->once();
+        $mockPlaceholder->shouldReceive('getContainer')->with('note')->andReturn($mockContainer)->once();
 
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
@@ -298,15 +307,18 @@ class ApplicationTest extends MockeryTestCase
             'canCreateCase' => false,
             'licenceType' => ['id' => 'xx'],
             'existingPublication' => false,
+            'latestNote' => ['comment' => 'latest note']
         ];
 
         $this->setupMockApplication(1066, $applicationData);
 
         $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
-        $mockContainer->shouldReceive('set')->with($applicationData);
+        $mockContainer->shouldReceive('set')->with($applicationData)->once();
+        $mockContainer->shouldReceive('set')->with('latest note')->once();
 
         $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
         $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer);
+        $mockPlaceholder->shouldReceive('getContainer')->with('note')->andReturn($mockContainer)->once();
 
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);

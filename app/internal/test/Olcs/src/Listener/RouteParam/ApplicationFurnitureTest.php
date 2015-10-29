@@ -9,7 +9,9 @@ namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
+use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
+use Dvsa\Olcs\Transfer\Command\Audit\ReadApplication;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
@@ -36,12 +38,14 @@ class ApplicationFurnitureTest extends TestCase
 
     protected $mockViewHelperManager;
     protected $mockQuerySender;
+    protected $mockCommandSender;
     protected $mockRouter;
 
     public function setUp()
     {
         $this->mockViewHelperManager = m::mock(HelperPluginManager::class);
         $this->mockQuerySender = m::mock(QuerySender::class);
+        $this->mockCommandSender = m::mock(CommandSender::class);
         $this->mockRouter = m::mock(RouteStackInterface::class);
 
         $this->sut = new ApplicationFurniture();
@@ -51,6 +55,7 @@ class ApplicationFurnitureTest extends TestCase
         $sl->shouldReceive('get')->with('ViewHelperManager')->andReturn($this->mockViewHelperManager);
         $sl->shouldReceive('get')->with('QuerySender')->andReturn($this->mockQuerySender);
         $sl->shouldReceive('get')->with('Router')->andReturn($this->mockRouter);
+        $sl->shouldReceive('get')->with('CommandSender')->andReturn($this->mockCommandSender);
 
         $this->sut->createService($sl);
     }
@@ -76,6 +81,8 @@ class ApplicationFurnitureTest extends TestCase
         $response = m::mock();
         $response->shouldReceive('isOk')->andReturn(false);
 
+        $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
+
         $this->mockQuerySender->shouldReceive('send')->once()
             ->with(m::type(ApplicationQry::class))
             ->andReturn($response);
@@ -87,6 +94,8 @@ class ApplicationFurnitureTest extends TestCase
     {
         $event = m::mock(RouteParam::class);
         $event->shouldReceive('getValue')->andReturn(111);
+
+        $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
 
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')
@@ -172,6 +181,8 @@ class ApplicationFurnitureTest extends TestCase
         $event = m::mock(RouteParam::class);
         $event->shouldReceive('getValue')->andReturn(111);
 
+        $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
+
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')
             ->with('pageTitle')
@@ -251,6 +262,8 @@ class ApplicationFurnitureTest extends TestCase
     {
         $event = m::mock(RouteParam::class);
         $event->shouldReceive('getValue')->andReturn(111);
+
+        $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
 
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')

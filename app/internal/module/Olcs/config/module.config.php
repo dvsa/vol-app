@@ -305,11 +305,18 @@ return array(
 
             // Event History Controllers
             'CaseHistoryController' => 'Olcs\Controller\Cases\Processing\HistoryController',
+            'CaseReadHistoryController' => 'Olcs\Controller\Cases\Processing\ReadHistoryController',
             'BusRegHistoryController' => 'Olcs\Controller\Bus\Processing\HistoryController',
+            'BusRegReadHistoryController' => 'Olcs\Controller\Bus\Processing\ReadHistoryController',
             'LicenceHistoryController' => 'Olcs\Controller\Licence\Processing\HistoryController',
+            'LicenceReadHistoryController' => 'Olcs\Controller\Licence\Processing\ReadHistoryController',
             'TransportManagerHistoryController' => 'Olcs\Controller\TransportManager\Processing\HistoryController',
+            'TransportManagerReadHistoryController'
+                => 'Olcs\Controller\TransportManager\Processing\ReadHistoryController',
             'ApplicationHistoryController' => 'Olcs\Controller\Application\Processing\HistoryController',
+            'ApplicationReadHistoryController' => 'Olcs\Controller\Application\Processing\ReadHistoryController',
             'OperatorHistoryController' => 'Olcs\Controller\Operator\HistoryController',
+            'OperatorReadHistoryController' => 'Olcs\Controller\Operator\Processing\ReadHistoryController',
             'ContinuationController' => 'Olcs\Controller\Licence\ContinuationController',
             Olcs\Controller\DisqualifyController::class => Olcs\Controller\DisqualifyController::class,
         ),
@@ -336,13 +343,14 @@ return array(
         'display_not_found_reason' => true,
         'display_exceptions' => true,
         'doctype' => 'HTML5',
-        'not_found_template' => 'pages/404',
-        'exception_template' => 'pages/500',
+        'not_found_template' => 'error/404',
+        'exception_template' => 'error/index',
         'template_map' => array(
             'layout/layout' => __DIR__ . '/../view/layout/base.phtml',
             'pages/lva-details' => __DIR__ . '/../view/sections/lva/lva-details.phtml',
-            'pages/404' => __DIR__ . '/../view/pages/404.phtml',
-            'pages/500' => __DIR__ . '/../view/pages/500.phtml'
+            'error/404' => __DIR__ . '/../view/error/404.phtml',
+            'error/403' => __DIR__ . '/../view/error/404.phtml',
+            'error/index' => __DIR__ . '/../view/error/index.phtml'
         ),
         'template_path_stack' => array(
             'olcs' => dirname(__DIR__) . '/view',
@@ -537,7 +545,7 @@ return array(
             'people'      => \Common\Data\Object\Search\People::class,
             'user'        => \Common\Data\Object\Search\User::class,
             'publication' => \Common\Data\Object\Search\Publication::class,
-            'organisation'     => \Common\Data\Object\Search\Organisation::class,
+            'irfo'        => \Common\Data\Object\Search\IrfoOrganisation::class,
         ]
     ],
     'data_services' => [
@@ -632,6 +640,8 @@ return array(
                 'inspection-request-email' => ['*'],
                 'process-inbox' => ['*'],
                 'enqueue-ch-compare' => ['*'],
+                'not-found' => ['*'],
+                'server-error' => ['*'],
                 // Global route rule needs to be last
                 '*' => ['internal-view'],
             ]
@@ -642,9 +652,9 @@ return array(
             // Operating Centres
             'lva-application-operating_centres' => LvaFormService\OperatingCentres\ApplicationOperatingCentres::class,
             // Operating Centre
-            'lva-application-operating_centre' => LvaFormService\OperatingCentre\ApplicationOperatingCentre::class,
-            'lva-licence-operating_centre' => LvaFormService\OperatingCentre\LicenceOperatingCentre::class,
-            'lva-variation-operating_centre' => LvaFormService\OperatingCentre\VariationOperatingCentre::class,
+            'lva-application-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
+            'lva-licence-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
+            'lva-variation-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
             // Goods Vehicles
             'lva-licence-goods-vehicles' => LvaFormService\LicenceGoodsVehicles::class,
             'lva-application-goods-vehicles-add-vehicle' => LvaFormService\GoodsVehicles\AddVehicle::class,
@@ -702,7 +712,6 @@ return array(
             'Lva\GracePeriod' => 'Olcs\BusinessService\Service\Lva\GracePeriod',
             'Lva\Schedule41' => 'Olcs\BusinessService\Service\Lva\Schedule41',
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
-            'InspectionRequestUpdate' => 'Olcs\BusinessService\Service\InspectionRequestUpdate',
             'Cases\Penalty\ErruAppliedPenaltyResponse'
                 => 'Olcs\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse',
         ]

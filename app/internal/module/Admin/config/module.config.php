@@ -57,7 +57,7 @@ return [
                             'route' => '/publication',
                             'defaults' => [
                                 'controller' => 'Admin\PublicationController',
-                                'action' => 'redirect',
+                                'action' => 'jump',
                             ]
                         ],
                         'may_terminate' => true,
@@ -367,7 +367,7 @@ return [
                             'misc-fees' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/misc-fees',
+                                    'route' => '/fees',
                                     'defaults' => [
                                         'controller' => 'Admin\PaymentProcessingFeesController',
                                         'action' => 'index'
@@ -400,6 +400,54 @@ return [
                                             ],
                                         ],
                                     ],
+                                    'print-receipt' => [
+                                        'type' => 'segment',
+                                        'options' => [
+                                            'route' => '/print-receipt/:reference',
+                                            'constraints' => [
+                                                'reference' => 'OLCS-[0-9A-F\-]+',
+                                            ],
+                                            'defaults' => [
+                                                'controller' => 'Admin\PaymentProcessingFeesController',
+                                                'action' => 'print',
+                                            ],
+                                        ],
+                                    ],
+                                    'fee_type_ajax' => [
+                                        'type' => 'segment',
+                                        'options' => [
+                                            'route' => '/ajax',
+                                        ],
+                                        'may_terminate' => false,
+                                        'child_routes' => [
+                                            'single' => [
+                                                'type' => 'segment',
+                                                'options' => [
+                                                    'route' => '/fee-type/:id',
+                                                    'constraints' => [
+                                                        'id' => '([0-9]+,?)+',
+                                                    ],
+                                                    'defaults' => [
+                                                        'action' => 'feeType',
+                                                    ]
+                                                ],
+                                                'may_terminate' => true,
+                                            ],
+                                            'list' => [
+                                                'type' => 'segment',
+                                                'options' => [
+                                                    'route' => '/fee-type-list/:date',
+                                                    // 'constraints' => [
+                                                    //     'date' => '([0-9]{4}\-[0-9]{2}\-[0-9]{2})',
+                                                    // ],
+                                                    'defaults' => [
+                                                        'action' => 'feeTypeList',
+                                                    ]
+                                                ],
+                                                'may_terminate' => true,
+                                            ]
+                                        ],
+                                    ]
                                 ],
                             ],
                         ],

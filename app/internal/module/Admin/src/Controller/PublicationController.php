@@ -30,6 +30,18 @@ class PublicationController extends AbstractInternalController implements LeftVi
         'publish' => ['requireRows' => true],
     ];
 
+    /**
+     * Specifically for navigation. For jumping us into the pending.
+     *
+     * @return \Zend\Http\Response
+     */
+    public function jumpAction()
+    {
+        return $this->redirect()->toRoute(
+            'admin-dashboard/admin-publication/pending', [], ['code' => 303]
+        );
+    }
+
     public function getLeftView()
     {
         $view = new ViewModel(

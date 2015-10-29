@@ -8,7 +8,9 @@
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
+use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
+use Dvsa\Olcs\Transfer\Command\Audit\ReadLicence;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\LicenceFurniture;
@@ -44,7 +46,7 @@ class LicenceFurnitureTest extends TestCase
         $this->sut->attach($mockEventManager);
     }
 
-    protected function onLicenceSetup($licenceId, $licenceData)
+    protected function onLicenceSetup($licenceData)
     {
         $mockQuerySender = m::mock(QuerySender::class);
         $this->sut->setQuerySender($mockQuerySender);
@@ -56,6 +58,10 @@ class LicenceFurnitureTest extends TestCase
 
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResult);
 
+        $mockCommandSender = m::mock(CommandSender::class);
+        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadLicence::class));
+        $this->sut->setCommandSender($mockCommandSender);
+
         if ($licenceData === false) {
             $mockResult->shouldReceive('isOk')->with()->once()->andReturn(false);
         } else {
@@ -66,7 +72,7 @@ class LicenceFurnitureTest extends TestCase
 
     public function testOnLicenceQueryError()
     {
-        $this->onLicenceSetup(32, false);
+        $this->onLicenceSetup(false);
         $event = new RouteParam();
         $event->setValue(32);
 
@@ -89,7 +95,7 @@ class LicenceFurnitureTest extends TestCase
             ]
         ];
 
-        $this->onLicenceSetup($licenceId, $licence);
+        $this->onLicenceSetup($licence);
 
         $mockPlaceholder = m::mock()
             ->shouldReceive('getContainer')->once()
@@ -146,10 +152,12 @@ class LicenceFurnitureTest extends TestCase
     {
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockQuerySender = m::mock(QuerySender::class);
+        $mockCommandSender = m::mock(CommandSender::class);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('QuerySender')->andReturn($mockQuerySender);
+        $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);
 
         $sut = new LicenceFurniture();
         $service = $sut->createService($mockSl);
@@ -157,5 +165,6 @@ class LicenceFurnitureTest extends TestCase
         $this->assertSame($sut, $service);
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
         $this->assertSame($mockQuerySender, $sut->getQuerySender());
+        $this->assertSame($mockCommandSender, $sut->getCommandSender());
     }
 }

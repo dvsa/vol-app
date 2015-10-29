@@ -26,7 +26,8 @@ class LicenceStatusDecisionCurtail
      *     "label": "licence-status.curtailment.from",
      *      "create_empty_option": true,
      *      "max_year_delta": "+10",
-     *      "min_year_delta": "-5"
+     *      "min_year_delta": "-5",
+     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label>Time</label>'HH:mm:ss'</div>'"
      * })
      * @Form\Attributes({"required":false})
      */
@@ -73,7 +74,8 @@ class LicenceStatusDecisionCurtail
      *     "label": "licence-status.curtailment.to",
      *      "create_empty_option": true,
      *      "max_year_delta": "+10",
-     *      "min_year_delta": "0"
+     *      "min_year_delta": "0",
+     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label>Time</label>'HH:mm:ss'</div>'"
      * })
      */
     public $curtailTo = null;

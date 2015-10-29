@@ -70,6 +70,11 @@ class IndexController extends AbstractController implements LeftViewProvider
             'entity' => 'SubCategoryDescription',
             'field' => 'subCategory',
             'title' => 'description'
+        ],
+        'fee-type' => [
+            'entity' => 'FeeType',
+            'field' => 'id',
+            'title' => 'id'
         ]
     ];
 
