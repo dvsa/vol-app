@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class SimpleSearch
 {
     /**
-     * @Form\Attributes({"class": "extra-long", "placeholder": "", "label":"some"})
+     * @Form\Attributes({"class": "long", "placeholder": "", "label":"some"})
      * @Form\Type("Text")
      * @Form\Validator({"name": "NotEmpty"})
      * @Form\Options({"label": "search.form.label", "hint": "search.form.hint"})
@@ -20,7 +20,7 @@ class SimpleSearch
     protected $search;
 
     /**
-     * @Form\Attributes({"class": "action--primary large", "value": "Submit"})
+     * @Form\Attributes({"class": "action--primary large", "value": "Search"})
      * @Form\Type("Submit")
      */
     protected $submit;

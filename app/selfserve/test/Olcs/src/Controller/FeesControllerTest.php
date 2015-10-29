@@ -208,6 +208,11 @@ class FeesControllerTest extends MockeryTestCase
                     'id' => 7,
                     'licNo' => 'LIC7',
                 ],
+                'feeType' => [
+                    'feeType' => [
+                        'id' => 'CONT'
+                    ]
+                ]
             ],
         ];
 
@@ -216,9 +221,9 @@ class FeesControllerTest extends MockeryTestCase
         $mockRequest = m::mock();
         $mockFormHelper = m::mock();
         $this->sm->setService('Helper\Form', $mockFormHelper);
-        $mockForm = m::mock();
+        $mockForm = m::mock(\Common\Form\Form::class);
         $mockFeesResponse = m::mock();
-
+        $mockStoredCardResponse = m::mock();
         // expectations ...
 
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
@@ -239,6 +244,14 @@ class FeesControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($mockForm);
 
+        $mockForm->shouldReceive('get->get->setValueOptions')->with(
+            [
+                0 =>'form.fee-stored-cards.option1',
+                'REF1' => 'VISA 4545********1234',
+                'REF2' => 'MC 4848********9876',
+            ]
+        )->once();
+
         $this->sut
             ->shouldReceive('handleQuery')
             ->with(m::type(OutstandingFeesQry::class))
@@ -249,6 +262,32 @@ class FeesControllerTest extends MockeryTestCase
             ->andReturn(true)
             ->shouldReceive('getResult')
             ->andReturn(['outstandingFees' => $outstandingFees]);
+
+        $this->sut
+            ->shouldReceive('handleQuery')
+            ->with(m::type(\Dvsa\Olcs\Transfer\Query\Cpms\StoredCardList::class))
+            ->andReturn($mockStoredCardResponse);
+
+        $mockStoredCardResponse
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')->with()->once()
+            ->andReturn(
+                ['results' =>
+                    [
+                        [
+                            'cardReference' => 'REF1',
+                            'cardScheme' => 'VISA',
+                            'maskedPan' => '4545********1234',
+                        ],
+                        [
+                            'cardReference' => 'REF2',
+                            'cardScheme' => 'MC',
+                            'maskedPan' => '4848********9876',
+                        ],
+                    ]
+                ]
+            );
 
         $view = $this->sut->payFeesAction();
 
@@ -276,6 +315,11 @@ class FeesControllerTest extends MockeryTestCase
                     'id' => 7,
                     'licNo' => 'LIC7',
                 ],
+                'feeType' => [
+                    'feeType' => [
+                        'id' => 'APP'
+                    ]
+                ]
             ],
             [
                 'id' => 88,
@@ -284,6 +328,11 @@ class FeesControllerTest extends MockeryTestCase
                     'id' => 8,
                     'licNo' => 'LIC8',
                 ],
+                'feeType' => [
+                    'feeType' => [
+                        'id' => 'APP'
+                    ]
+                ]
             ],
         ];
 
@@ -292,11 +341,12 @@ class FeesControllerTest extends MockeryTestCase
         $mockRequest = m::mock();
         $mockFormHelper = m::mock();
         $this->sm->setService('Helper\Form', $mockFormHelper);
-        $mockForm = m::mock();
+        $mockForm = m::mock(\Common\Form\Form::class);
         $mockTableService = m::mock();
         $this->sm->setService('Table', $mockTableService);
         $mockTable = m::mock();
         $mockFeesResponse = m::mock();
+        $mockStoredCardResponse = m::mock();
 
         // expectations ...
 
@@ -321,6 +371,8 @@ class FeesControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($mockForm);
 
+        $mockForm->shouldReceive('get->remove')->with('card')->once();
+
         $mockTableService
             ->shouldReceive('buildTable')
             ->with('pay-fees', $outstandingFees, [], false)
@@ -336,6 +388,15 @@ class FeesControllerTest extends MockeryTestCase
             ->andReturn(true)
             ->shouldReceive('getResult')
             ->andReturn(['outstandingFees' => $outstandingFees]);
+
+        $this->sut
+            ->shouldReceive('handleQuery')
+            ->with(m::type(\Dvsa\Olcs\Transfer\Query\Cpms\StoredCardList::class))
+            ->andReturn($mockStoredCardResponse);
+
+        $mockStoredCardResponse
+            ->shouldReceive('isOk')
+            ->andReturn(false);
 
         $view = $this->sut->payFeesAction();
 
@@ -446,13 +507,7 @@ class FeesControllerTest extends MockeryTestCase
             ->shouldReceive('isPost')
             ->andReturn(true)
             ->shouldReceive('getPost')
-            ->andReturn(
-                [
-                    'form-actions' => [
-                        'pay' => '',
-                    ]
-                ]
-            );
+            ->andReturn(['card' => 'XXX']);
 
         $this->sut->shouldReceive('getCurrentOrganisationId')
             ->with()
@@ -539,13 +594,7 @@ class FeesControllerTest extends MockeryTestCase
             ->shouldReceive('isPost')
             ->andReturn(true)
             ->shouldReceive('getPost')
-            ->andReturn(
-                [
-                    'form-actions' => [
-                        'pay' => '',
-                    ]
-                ]
-            );
+            ->andReturn(false);
 
         $this->sut->shouldReceive('getCurrentOrganisationId')
             ->with()
@@ -770,6 +819,11 @@ class FeesControllerTest extends MockeryTestCase
                     'name' => 'Big Trucks Ltd.',
                 ],
             ],
+            'feeType' => [
+                'feeType' => [
+                    'id' => 'CONT'
+                ]
+            ]
         ];
         $fee2 = [
             'id' => 88,
@@ -781,6 +835,11 @@ class FeesControllerTest extends MockeryTestCase
                     'name' => 'Big Trucks Ltd.',
                 ],
             ],
+            'feeType' => [
+                'feeType' => [
+                    'id' => 'CONT'
+                ]
+            ]
         ];
         $payment = [
             'id' => $paymentId,
@@ -880,6 +939,11 @@ class FeesControllerTest extends MockeryTestCase
                     'name' => 'Big Trucks Ltd.',
                 ],
             ],
+            'feeType' => [
+                'feeType' => [
+                    'id' => 'CONT'
+                ]
+            ]
         ];
         $fee2 = [
             'id' => 88,
@@ -891,6 +955,11 @@ class FeesControllerTest extends MockeryTestCase
                     'name' => 'Big Trucks Ltd.',
                 ],
             ],
+            'feeType' => [
+                'feeType' => [
+                    'id' => 'CONT'
+                ]
+            ]
         ];
         $payment = [
             'id' => $paymentId,
@@ -951,6 +1020,6 @@ class FeesControllerTest extends MockeryTestCase
         $this->assertEquals($fees, $view->getVariable('fees'));
         $this->assertEquals($payment, $view->getVariable('payment'));
 
-        $this->assertInstanceOf('\Olcs\View\Model\ReceiptViewModel', $view);
+        $this->assertInstanceOf('\Common\View\Model\ReceiptViewModel', $view);
     }
 }

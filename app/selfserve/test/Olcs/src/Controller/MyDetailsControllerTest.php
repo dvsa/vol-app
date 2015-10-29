@@ -174,6 +174,56 @@ class MyDetailsControllerTest extends TestCase
         $this->assertEquals('REDIRECT', $this->sut->editAction());
     }
 
+    public function testEditActionForPostWithError()
+    {
+        $postData = [
+            'main' => [
+                'id' => 3,
+                'version' => 1,
+                'loginId' => 'stevefox',
+                'emailAddress' => 'steve@example.com',
+                'emailConfirm' => 'steve@example.com',
+                'familyName' => 'Fox',
+                'forename' => 'Steve',
+            ]
+        ];
+
+        $mockRequest = m::mock();
+        $mockRequest->shouldReceive('isPost')->andReturn(true);
+        $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
+
+        $mockForm = m::mock('Common\Form\Form');
+        $mockForm->shouldReceive('setData')->once()->with($postData);
+        $mockForm->shouldReceive('isValid')->once()->andReturn(true);
+        $mockForm->shouldReceive('getData')->once()->andReturn($postData);
+        $mockForm->shouldReceive('setMessages')->once()->with(m::type('array'));
+
+        $mockFormHelper = m::mock();
+        $mockFormHelper
+            ->shouldReceive('createFormWithRequest')
+            ->with('MyDetails', $mockRequest)
+            ->once()
+            ->andReturn($mockForm);
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
+
+        $mockParams = m::mock();
+        $mockParams->shouldReceive('fromPost')->once()->andReturn($postData);
+        $this->sut->shouldReceive('params')->once()->andReturn($mockParams);
+
+        $response = m::mock('stdClass');
+        $response->shouldReceive('isOk')->andReturn(false);
+        $response->shouldReceive('getResult')->andReturn(
+            [
+                'messages' => ['loginId' => 'err']
+            ]
+        );
+        $this->sut->shouldReceive('handleCommand')->with(m::type(UpdateDto::class))->andReturn($response);
+
+        $this->sut->editAction();
+    }
+
     public function testEditActionForPostWithCancel()
     {
         $mockRequest = m::mock();

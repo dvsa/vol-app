@@ -10,13 +10,12 @@ namespace Olcs\Controller;
 use Common\Controller\Lva\AbstractController;
 use Common\RefData;
 use Zend\View\Model\ViewModel;
-use Olcs\View\Model\ReceiptViewModel;
 use Common\Exception\ResourceNotFoundException;
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentById;
-use Dvsa\Olcs\Transfer\Query\Transaction\TransactionByReference as PaymentByReference;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePayment;
+use Common\Controller\Traits\GenericReceipt;
 
 /**
  * Fees Controller
@@ -26,7 +25,8 @@ use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymen
 class FeesController extends AbstractController
 {
     use Lva\Traits\ExternalControllerTrait,
-        Lva\Traits\DashboardNavigationTrait;
+        Lva\Traits\DashboardNavigationTrait,
+        GenericReceipt;
 
     const PAYMENT_METHOD = RefData::FEE_PAYMENT_METHOD_CARD_ONLINE;
 
@@ -67,8 +67,13 @@ class FeesController extends AbstractController
             if ($this->isButtonPressed('cancel')) {
                 return $this->redirectToIndex();
             }
+            $storedCardReference = (is_array($this->getRequest()->getPost('storedCards')) &&
+                $this->getRequest()->getPost('storedCards')['card'] != '0') ?
+                $this->getRequest()->getPost('storedCards')['card'] :
+                false;
+
             $feeIds = explode(',', $this->params('fee'));
-            return $this->payOutstandingFees($feeIds);
+            return $this->payOutstandingFees($feeIds, $storedCardReference);
         }
 
         $fees = $this->getFeesFromParams();
@@ -78,18 +83,53 @@ class FeesController extends AbstractController
         }
 
         $form = $this->getForm();
+        $this->setupSelectStoredCards($form);
+
         if (count($fees) > 1) {
             $table = $this->getServiceLocator()->get('Table')
                 ->buildTable('pay-fees', $fees, [], false);
-            $view = new ViewModel(['table' => $table, 'form' => $form]);
+            $view = new ViewModel(
+                ['table' => $table, 'form' => $form, 'hasContinuation' => $this->hasContinuationFee($fees)]
+            );
             $view->setTemplate('pages/fees/pay-multi');
         } else {
             $fee = array_shift($fees);
-            $view = new ViewModel(['fee' => $fee, 'form' => $form]);
+            $view = new ViewModel(
+                [
+                    'fee' => $fee,
+                    'form' => $form,
+                    'hasContinuation' => $fee['feeType']['feeType']['id'] == RefData::FEE_TYPE_CONT
+                ]
+            );
             $view->setTemplate('pages/fees/pay-one');
         }
 
         return $view;
+    }
+
+    /**
+     * Setup the stored cards form element
+     *
+     * @param \Common\Form\Form $form
+     */
+    private function setupSelectStoredCards(\Common\Form\Form $form)
+    {
+        $options = [];
+        $response = $this->handleQuery(\Dvsa\Olcs\Transfer\Query\Cpms\StoredCardList::create([]));
+        if ($response->isOk()) {
+            foreach ($response->getResult()['results'] as $storedCard) {
+                $options[$storedCard['cardReference']] = $storedCard['cardScheme'] .' '. $storedCard['maskedPan'];
+            }
+        }
+
+        if (empty($options)) {
+            // if no stored cards then hide the select element
+            $form->get('storedCards')->remove('card');
+        } else {
+            asort($options);
+            array_unshift($options, 'form.fee-stored-cards.option1');
+            $form->get('storedCards')->get('card')->setValueOptions($options);
+        }
     }
 
     public function handleResultAction()
@@ -134,17 +174,6 @@ class FeesController extends AbstractController
 
         $view = new ViewModel($viewData);
         $view->setTemplate('pages/fees/payment-success');
-        return $view;
-    }
-
-    public function printAction()
-    {
-        $paymentRef = $this->params()->fromRoute('reference');
-
-        $viewData = $this->getReceiptData($paymentRef);
-
-        $view = new ReceiptViewModel($viewData);
-
         return $view;
     }
 
@@ -226,8 +255,9 @@ class FeesController extends AbstractController
      * Calls command to initiate payment and then redirects
      *
      * @param array $feeIds
+     * @param string|false $storedCardReference A refernce to the stored card to use
      */
-    protected function payOutstandingFees(array $feeIds)
+    protected function payOutstandingFees(array $feeIds, $storedCardReference = false)
     {
         $cpmsRedirectUrl = $this->getServiceLocator()->get('Helper\Url')
             ->fromRoute('fees/result', [], ['force_canonical' => true], true);
@@ -235,7 +265,7 @@ class FeesController extends AbstractController
         $paymentMethod = self::PAYMENT_METHOD;
         $organisationId = $this->getCurrentOrganisationId();
 
-        $dtoData = compact('cpmsRedirectUrl', 'feeIds', 'paymentMethod', 'organisationId');
+        $dtoData = compact('cpmsRedirectUrl', 'feeIds', 'paymentMethod', 'organisationId', 'storedCardReference');
         $dto = PayOutstandingFees::create($dtoData);
 
         /** @var \Common\Service\Cqrs\Response $response */
@@ -261,35 +291,5 @@ class FeesController extends AbstractController
         $view->setTemplate('cpms/payment');
 
         return $this->render($view);
-    }
-
-    protected function getReceiptData($paymentRef)
-    {
-        $query = PaymentByReference::create(['reference' => $paymentRef]);
-        $response = $this->handleQuery($query);
-        if ($response->isOk()) {
-            $payment = $response->getResult();
-            $fees = array_map(
-                function ($fp) {
-                    return $fp['fee'];
-                },
-                $payment['feeTransactions']
-            );
-        } else {
-            throw new ResourceNotFoundException('Payment not found');
-        }
-
-        $table = $this->getServiceLocator()->get('Table')
-            ->buildTable('pay-fees', $fees, [], false);
-
-        // override table title
-        $tableTitle = $this->getServiceLocator()->get('Helper\Translation')
-            ->translate('pay-fees.success.table.title');
-        $table->setVariable('title', $tableTitle);
-
-        // get operator name from the first fee
-        $operatorName = $fees[0]['licence']['organisation']['name'];
-
-        return compact('payment', 'fees', 'operatorName', 'table');
     }
 }

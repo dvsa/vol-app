@@ -5,5 +5,5 @@ return [
     'cqrs_client' => [
         'adapter' => \Zend\Http\Client\Adapter\Curl::class,
         'timeout' => 60,
-    ]
+    ],
 ];

@@ -64,6 +64,16 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
+        $mockForm = m::mock('Common\Form\Form');
+
+        $mockFormHelper = m::mock();
+        $mockFormHelper
+            ->shouldReceive('createFormWithRequest')
+            ->with('UserRegistration', $mockRequest)
+            ->once()
+            ->andReturn($mockForm);
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(true);
 
         $this->sut->shouldReceive('redirect->toRoute')
@@ -293,7 +303,7 @@ class UserRegistrationControllerTest extends TestCase
         $response = m::mock('stdClass');
         $response->shouldReceive('isOk')->andReturn(false);
         $response->shouldReceive('isNotFound')->andReturn(false);
-        $response->shouldReceive('getResult')->andReturn(['messages' => ['err']]);
+        $response->shouldReceive('getResult')->andReturn(['messages' => ['licenceNumber' => 'err']]);
         $this->sut->shouldReceive('handleQuery')->with(m::type(LicenceByNumberDto::class))->andReturn($response);
 
         $mockScript = m::mock();
@@ -397,7 +407,7 @@ class UserRegistrationControllerTest extends TestCase
 
         $response = m::mock('stdClass');
         $response->shouldReceive('isOk')->andReturn(false);
-        $response->shouldReceive('getResult')->andReturn(['messages' => ['err']]);
+        $response->shouldReceive('getResult')->andReturn(['messages' => ['loginId' => 'err']]);
         $this->sut->shouldReceive('handleCommand')->with(m::type(CreateDto::class))->andReturn($response);
 
         $mockScript = m::mock();

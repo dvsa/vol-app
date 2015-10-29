@@ -7,26 +7,33 @@ $results = $this->results;
     <div class="page-header">
         <div class="page-header__wrapper">
 
-            <h1><?php echo $this->getHelperPluginManager()
+            <h1>
+                <?php echo $this->getHelperPluginManager()
                     ->getServiceLocator()->get('Helper\Translation')
-                    ->translateReplace('search.result.title.' . $this->index, [$count]); ?></h1>
+                    ->translateReplace('search.result.title.' . $this->index, [$count]); ?>
+            </h1>
             <div class="page-header__text">
-                <p><?php echo $this->getHelperPluginManager()
-                    ->getServiceLocator()->get('Helper\Translation')
-                    ->translateReplace('search.result.subtitle.' . $this->index, [$count]); ?></p>
+                <p>
+                    <?php echo $this->getHelperPluginManager()
+                        ->getServiceLocator()->get('Helper\Translation')
+                        ->translateReplace('search.result.subtitle.' . $this->index, [$count]); ?>
+                </p>
             </div>
-            <ul class="page-header__actions">
 
-            </ul>
         </div><!-- .page-header__wrapper -->
     </div>
 
     <div class="three-eigths">
+
         <h3>Edit search</h3>
 
         <?php echo $this->form($this->placeholder('searchFilter')->getValue()) ?>
 
-    </div><!-- three-eights -->
+        <a href="<?php echo $this->url('search-jump-home'); ?>">
+            <?php echo $this->translate('search.form.restart'); ?>
+        </a>
+
+    </div><!-- .three-eights -->
 
     <div class="five-eigths">
 

@@ -3,6 +3,7 @@
 use Olcs\Controller\IndexController;
 use Olcs\Controller\Search\SearchController;
 use Olcs\Controller\MyDetailsController;
+use Olcs\Controller\UserForgotUsernameController;
 use Olcs\Controller\UserRegistrationController;
 
 use Olcs\Form\Element\SearchFilterFieldsetFactory;
@@ -59,6 +60,28 @@ $routes = array(
                 'controller' => IndexController::class,
                 'action' => 'index'
             )
+        )
+    ),
+    'guides' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/guides[/]'
+        ),
+        'may_terminate' => false,
+        'child_routes' => array(
+            'guide' => array(
+                'type' => 'segment',
+                'options' =>  array(
+                    'route' => ':guide[/]',
+                    'constraints' => [
+                        'guide' => '[a-zA-Z\-0-9]+'
+                    ],
+                    'defaults' => array(
+                        'controller' => \Olcs\Controller\GuidesController::class,
+                        'action' => 'index'
+                    )
+                ),
+            ),
         )
     ),
     'cookies' => array(
@@ -305,6 +328,16 @@ $routes = array(
             'defaults' => array(
                 'controller' => UserRegistrationController::class,
                 'action' => 'add'
+            )
+        )
+    ),
+    'user-forgot-username' => array(
+        'type' => 'segment',
+        'options' => array(
+            'route' => '/forgot-username',
+            'defaults' => array(
+                'controller' => UserForgotUsernameController::class,
+                'action' => 'index'
             )
         )
     ),
@@ -731,21 +764,21 @@ $searchNavigation = array(
         ),
         array(
             'id' => 'search-operator',
-            'label' => 'Vehicle Operator details',
+            'label' => 'Vehicle operators',
             'route' => 'search-operator',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         ),
         array(
             'id' => 'search-bus',
-            'label' => 'Bus services',
+            'label' => 'Bus registrations',
             'route' => 'search-bus',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         ),
         array(
             'id' => 'search-traffic-commissioner-publication',
-            'label' => 'Traffic Commissioner publications',
+            'label' => 'Publications',
             'route' => 'search-traffic-commissioner-publication',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
@@ -834,12 +867,14 @@ return array(
             'Correspondence' => 'Olcs\Controller\CorrespondenceController',
             'User' => 'Olcs\Controller\UserController',
             IndexController::class => IndexController::class,
+            UserForgotUsernameController::class => UserForgotUsernameController::class,
             UserRegistrationController::class => UserRegistrationController::class,
             MyDetailsController::class => MyDetailsController::class,
             SearchController::class => SearchController::class,
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             'Entity\View' => 'Olcs\Controller\Entity\ViewController',
             \Olcs\Controller\CookiesController::class => \Olcs\Controller\CookiesController::class,
+            \Olcs\Controller\GuidesController::class => \Olcs\Controller\GuidesController::class,
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -902,6 +937,11 @@ return array(
     'simple_date_format' => array(
         'default' => 'd-m-Y'
     ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'returnToAddress' => \Olcs\View\Helper\ReturnToAddress::class,
+        )
+    ),
     'view_manager' => array(
         'display_not_found_reason' => true,
         'display_exceptions' => true,
@@ -912,6 +952,7 @@ return array(
             'layout/layout' => __DIR__ . '/../view/layouts/base.phtml',
             'layout/ajax' => __DIR__ . '/../view/layouts/ajax.phtml',
             'error/404' => __DIR__ . '/../view/error/404.phtml',
+            'error/403' => __DIR__ . '/../view/error/404.phtml',
             'error/index' => __DIR__ . '/../view/error/index.phtml'
         ),
         'template_path_stack' => array(
@@ -968,6 +1009,11 @@ return array(
             'lva-licence-operating_centres' => LvaFormService\OperatingCentres\LicenceOperatingCentres::class,
             'lva-variation-operating_centres' => LvaFormService\OperatingCentres\VariationOperatingCentres::class,
             'lva-application-operating_centres' => LvaFormService\OperatingCentres\ApplicationOperatingCentres::class,
+
+            'lva-application-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
+            'lva-licence-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
+            'lva-variation-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
+
             // Business Type
             'lva-application-business_type' => LvaFormService\BusinessType\ApplicationBusinessType::class,
             'lva-licence-business_type' => LvaFormService\BusinessType\LicenceBusinessType::class,
@@ -1024,17 +1070,6 @@ return array(
                 // Manage Users Page
                 'manage-user' => ['can-manage-user-selfserve'],
 
-                // Search and who can access them
-                'search-operating-centre' => [
-                    'partner-user'
-                ],
-                'search-person' => [
-                    'partner-user'
-                ],
-                'search-vehicle-external' => [
-                    'partner-user'
-                ],
-
                 // Bus reg stuff and who can access
                 'ebsr' => ['selfserve-ebsr'],
                 'bus-registration' => [
@@ -1057,7 +1092,10 @@ return array(
                 'search*' => ['*'],
                 'index' => ['*'],
                 'user-registration' => ['*'],
+                'user-forgot-username' => ['*'],
                 'cookies' => ['*'],
+                'not-found' => ['*'],
+                'server-error' => ['*'],
                 '*' => ['selfserve-user'],
             ]
         ]

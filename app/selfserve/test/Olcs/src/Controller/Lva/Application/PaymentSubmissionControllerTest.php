@@ -74,6 +74,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
                 'chequeNo'        => null,
                 'chequeDate'      => null,
                 'poNo'            => null,
+                'storedCardReference' => null,
             ],
             [
                 'id' => [
@@ -148,6 +149,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
                 'chequeNo'        => null,
                 'chequeDate'      => null,
                 'poNo'            => null,
+                'storedCardReference' => null,
             ],
             [
                 'messages' => 'there was an error',
@@ -199,6 +201,7 @@ class PaymentSubmissionControllerTest extends AbstractLvaControllerTestCase
                 'chequeNo'        => null,
                 'chequeDate'      => null,
                 'poNo'            => null,
+                'storedCardReference' => null,
             ],
             [
                 'id' => [],
