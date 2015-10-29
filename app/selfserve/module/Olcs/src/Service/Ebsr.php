@@ -3,6 +3,7 @@
 namespace Olcs\Service;
 
 use Dvsa\Olcs\Transfer\Command\Document\Upload;
+use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\ProcessPacks;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\Service\Cqrs\Command\CommandSender;
@@ -96,13 +97,27 @@ class Ebsr implements FactoryInterface
         if (!count($packs)) {
             return ['errors' =>['No packs were found in your upload, please verify your file and try again']];
         }
-        try {
-            $packResults = $this->getDataService()->sendPackList($packs, $submissionType);
-        } catch (\RuntimeException $e) {
-            return ['errors' => [$e->getMessage()]];
+
+        $dtoData = [
+            'packs' => $packs,
+            'submissionType' => $submissionType
+        ];
+
+        $response = $this->getCommandSender()->send(ProcessPacks::create($dtoData));
+
+        if ($response->isOk()) {
+            $result = $response->getResult();
+
+            $packResults = [
+                'valid' => $result['id']['valid'],
+                'errors' => $result['id']['errors'],
+                'error_messages' => (array)$result['id']['error_messages']
+            ];
+
+            return $this->handleResult($packResults);
         }
 
-        return $this->handleResult($packResults);
+        return ['errors' => 'unknown error occurred'];
     }
 
     /**
@@ -140,7 +155,7 @@ class Ebsr implements FactoryInterface
             if ($validator->isValid()) {
 
                 $dtoData = [
-                    'content' => file_get_contents($ebsrPack),
+                    'content' => base64_encode(file_get_contents($ebsrPack)),
                     'category' => 3,
                     'subCategory' => 36,
                     'filename' => basename($ebsrPack),
@@ -168,7 +183,7 @@ class Ebsr implements FactoryInterface
     {
         $packs = $packResults['valid'] + $packResults['errors'];
 
-        $message = sprintf('%d %s successfully submitted for processing', $packs, ($packs > 1) ? ' packs' : ' pack');
+        $message = sprintf('%d %s submitted for processing', $packs, ($packs > 1) ? ' packs' : ' pack');
 
         $validMessage = sprintf(
             '<br />%d %s validated successfully',
@@ -187,8 +202,8 @@ class Ebsr implements FactoryInterface
                 $message . ($packResults['valid'] ? $validMessage : '') . ($packResults['errors'] ? $errorMessage : '')
         ];
 
-        foreach ($packResults['messages'] as $pack => $errors) {
-            $result['errors'][] = $this->filenameMap[$pack] . ': ' . implode(' ', $errors);
+        foreach ($packResults['error_messages'] as $message) {
+            $result['errors'][] = $message;
         }
 
         return $result;
