@@ -48,7 +48,7 @@ if ($transportManager) :
             <?php echo $transportManager['homeCd']['person']['forename']
                 . ' ' . $transportManager['homeCd']['person']['familyName']; ?></a></strong>
         </p>
-        <p><?php echo date('d/m/Y', strtotime($transportManager['homeCd']['person']['birthDate'])); ?></p>
+        <p><?php echo date(\DATE_FORMAT, strtotime($transportManager['homeCd']['person']['birthDate'])); ?></p>
 
     <?php endif; ?>
 

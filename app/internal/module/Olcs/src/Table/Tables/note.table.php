@@ -29,7 +29,7 @@ return array(
                 $url = $this->generateUrl($routeParams, null, true);
 
                 return '<a class="js-modal-ajax" href="' . $url . '">'
-                . (new \DateTime($data['createdOn']))->format('d/m/Y') . '</a>';
+                . (new \DateTime($data['createdOn']))->format(\DATE_FORMAT) . '</a>';
             },
             'sort' => 'createdOn'
         ),

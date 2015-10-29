@@ -7,9 +7,9 @@
     </strong>
     <br>
     <?php
-    echo $this->startDateTime->format('d/m/Y H:i');
+    echo $this->startDateTime->format(\DATETIME_FORMAT);
     if (!empty($this->endDateTime)) {
-        echo ' to '. $this->endDateTime->format('d/m/Y H:i');
+        echo ' to '. $this->endDateTime->format(\DATETIME_FORMAT);
     }
 
     $routes = [

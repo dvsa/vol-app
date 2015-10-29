@@ -44,7 +44,7 @@ class SlaDateTimeSelect extends ZendDateTimeSelect
                 throw new \LogicException('There was no target date found');
             }
 
-            $hint = 'Target date: ' . date('d/m/Y', strtotime($date));
+            $hint = 'Target date: ' . date(\DATE_FORMAT, strtotime($date));
 
         } catch (\LogicException $e) {
 
