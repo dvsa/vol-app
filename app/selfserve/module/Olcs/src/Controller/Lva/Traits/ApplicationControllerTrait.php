@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Traits;
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
 use Common\View\Model\Section;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
+use Olcs\Logging\Log\Logger;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Common\RefData;
@@ -51,10 +52,19 @@ trait ApplicationControllerTrait
         $response = $this->handleQuery($dto);
         $data = $response->getResult();
 
-        $doesBelong = $data['licence']['organisation']['id'] == $this->getCurrentOrganisationId();
+        $usersOrganisation = $this->getCurrentOrganisationId();
+        $doesBelong = $data['licence']['organisation']['id'] == $usersOrganisation;
 
         if (!$doesBelong) {
             $this->addErrorMessage('application-no-access');
+
+            $logData = [
+                'Users Organisation' => $usersOrganisation,
+                'Application Data' => $data,
+                'Response' => $response
+            ];
+
+            Logger::debug('**** REDIRECT TO DASHBOARD ****', ['data' => $logData]);
         }
 
         return $doesBelong;
