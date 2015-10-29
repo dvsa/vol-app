@@ -1,23 +1,22 @@
 <?php
 
 /**
- * Common Internal Operating Centres
+ * Lva Internal Operating Centres
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace Olcs\FormService\Form\Lva\OperatingCentre;
 
-use Common\FormService\Form\Lva\OperatingCentre\CommonOperatingCentre as ComOperatingCentre;
+use Common\FormService\Form\Lva\OperatingCentre\CommonOperatingCentre;
 use Zend\Form\Form;
-use Zend\Validator\ValidatorChain;
 use Zend\Validator\Identical as ValidatorIdentical;
 
 /**
- * Common Internal Operating Centres
+ * Lva Internal Operating Centres
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CommonOperatingCentre extends ComOperatingCentre
+class LvaOperatingCentre extends CommonOperatingCentre
 {
     public function alterForm(Form $form, array $params)
     {
