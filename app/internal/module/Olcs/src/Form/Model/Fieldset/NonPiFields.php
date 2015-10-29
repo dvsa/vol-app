@@ -44,7 +44,7 @@ class NonPiFields extends CaseBase
      *     "create_empty_option": true,
      *     "max_year": 2016,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '</div><div class=""field""><label for=hearingDate>Meeting time</label>'HH:mm:ss",
+     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""hearingDate"">Meeting time</label>'HH:mm:ss'</div>'",
      *     "category": "pi_hearing",
      *     "field": "hearingDate"
      * })
