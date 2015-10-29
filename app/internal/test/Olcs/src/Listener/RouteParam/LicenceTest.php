@@ -163,7 +163,6 @@ class LicenceTest extends TestCase
 
         // 'surrender' should be hidden for Goods vehicles
         $mockSidebar = m::mock();
-        $this->mockHideButton($mockSidebar, 'licence-decisions-surrender');
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
         $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
