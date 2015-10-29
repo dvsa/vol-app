@@ -247,8 +247,7 @@ trait FeesActionTrait
             return $this->getResponse();
         }
 
-        $feeTransactions = array_filter($fee['feeTransactions'], [$this, 'ftDisplayFilter']);
-        $table = $this->getTable('fee-transactions', $feeTransactions, []);
+        $table = $this->getTable('fee-transactions', $fee['displayTransactions'], []);
 
         $viewParams = [
             'form' => $form,

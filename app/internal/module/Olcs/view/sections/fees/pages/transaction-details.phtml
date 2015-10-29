@@ -15,7 +15,7 @@ echo $this->render(
                  [
                     'label' => 'Status:',
                     'noEscape' => true,
-                    'value' => \Common\Service\Table\Formatter\TransactionStatus::format(['transaction' => $transaction]),
+                    'value' => \Common\Service\Table\Formatter\TransactionStatus::format($transaction),
                     'class' => 'full-width',
                 ],
                 [
@@ -43,7 +43,6 @@ if ($table) {
 ?>
 <div class="actions-container">
     <button class="action--primary disabled" disabled="disabled">Reverse payment</button>
-    <button class="action--primary disabled" disabled="disabled">Refund payment</button>
     <?php if ($receiptLink): ?>
         <a href="<?php echo $receiptLink; ?>" class="action--primary" target="_blank">Generate receipt</a>
     <?php endif; ?>
