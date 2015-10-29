@@ -9,6 +9,7 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
+use Olcs\Logging\Log\Logger;
 use Zend\Form\Form;
 
 /**
@@ -46,10 +47,20 @@ trait LicenceControllerTrait
         $response = $this->handleQuery($dto);
         $data = $response->getResult();
 
-        $doesBelong = $data['organisation']['id'] == $this->getCurrentOrganisationId();
+        $usersOrganisation = $this->getCurrentOrganisationId();
+
+        $doesBelong = $data['organisation']['id'] == $usersOrganisation;
 
         if (!$doesBelong) {
             $this->addErrorMessage('licence-no-access');
+
+            $logData = [
+                'Users Organisation' => $usersOrganisation,
+                'Licence Data' => $data,
+                'Response' => $response
+            ];
+
+            Logger::debug('**** REDIRECT TO DASHBOARD ****', ['data' => $logData]);
         }
 
         return $doesBelong;
