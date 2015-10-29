@@ -57,7 +57,14 @@ class Module
         $cookieBannerListener = $sm->get('CookieBannerListener');
         $cookieBannerListener->attach($eventManager, 1);
 
-        define('DATETIME_FORMAT', 'd M Y H:i');
-        define('DATE_FORMAT', 'd M Y');
+        if (!defined('DATETIME_FORMAT')) {
+            define('DATETIME_FORMAT', 'd M Y H:i');
+        }
+        if (!defined('DATETIMESEC_FORMAT')) {
+            define('DATETIMESEC_FORMAT', 'd M Y H:i:s');
+        }
+        if (!defined('DATE_FORMAT')) {
+            define('DATE_FORMAT', 'd M Y');
+        }
     }
 }
