@@ -5,7 +5,6 @@ namespace Olcs\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
- * @codeCoverageIgnore No methods
  * @Form\Attributes({"class":"actions-container"})
  * @Form\Name("fee-actions")
  */
@@ -51,7 +50,7 @@ class FeeActions
     public $reject = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary js-modal-ajax","id":"refund"})
+     * @Form\Attributes({"type":"submit","class":"action--primary","id":"refund"})
      * @Form\Options({
      *     "label": "Refund fee",
      *     "label_attributes": {
