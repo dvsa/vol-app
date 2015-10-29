@@ -1,27 +1,7 @@
 <div class="printable">
     <div class="printable__address">
         <p><b><?php echo $this->translate('Return to'); ?>:</b></p>
-        <?php
-        if ($isNi) {
-            $addressParts = [
-                'Department of the Environment',
-                'The Central Licensing Office',
-                'PO Box 180',
-                'Leeds',
-                'LS9 1BU'
-            ];
-        } else {
-            $addressParts = [
-                'Office of the Traffic Commissioner',
-                'The Central Licensing Office',
-                'Hillcrest House',
-                '386 Harehills Lane',
-                'Leeds',
-                'LS9 6NF'
-            ];
-        }
-        ?>
-        <p><?php echo implode(',<br />', $addressParts); ?></p>
+        <p><?php echo $this->returnToAddress($isNi, ',<br />'); ?></p>
     </div>
     <div class="printable__meta">
         <dl>
@@ -49,7 +29,7 @@
 
     <p>
         <?php echo $this->translate('declaration-guidance'); ?><br />
-        <b><?php echo $this->translate('Return to'); ?>: </b><?php echo implode(', ', $addressParts); ?>
+        <b><?php echo $this->translate('Return to'); ?>: </b><?php echo $this->returnToAddress($isNi, ', '); ?>
     </p>
 
 </div>

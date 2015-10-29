@@ -62,6 +62,28 @@ $routes = array(
             )
         )
     ),
+    'guides' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/guides[/]'
+        ),
+        'may_terminate' => false,
+        'child_routes' => array(
+            'guide' => array(
+                'type' => 'segment',
+                'options' =>  array(
+                    'route' => ':guide[/]',
+                    'constraints' => [
+                        'guide' => '[a-zA-Z\-0-9]+'
+                    ],
+                    'defaults' => array(
+                        'controller' => \Olcs\Controller\GuidesController::class,
+                        'action' => 'index'
+                    )
+                ),
+            ),
+        )
+    ),
     'cookies' => array(
         'type' => 'segment',
         'options' =>  array(
@@ -852,6 +874,7 @@ return array(
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             'Entity\View' => 'Olcs\Controller\Entity\ViewController',
             \Olcs\Controller\CookiesController::class => \Olcs\Controller\CookiesController::class,
+            \Olcs\Controller\GuidesController::class => \Olcs\Controller\GuidesController::class,
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -913,6 +936,11 @@ return array(
     ),
     'simple_date_format' => array(
         'default' => 'd-m-Y'
+    ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'returnToAddress' => \Olcs\View\Helper\ReturnToAddress::class,
+        )
     ),
     'view_manager' => array(
         'display_not_found_reason' => true,
@@ -980,6 +1008,11 @@ return array(
             'lva-licence-operating_centres' => LvaFormService\OperatingCentres\LicenceOperatingCentres::class,
             'lva-variation-operating_centres' => LvaFormService\OperatingCentres\VariationOperatingCentres::class,
             'lva-application-operating_centres' => LvaFormService\OperatingCentres\ApplicationOperatingCentres::class,
+
+            'lva-application-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
+            'lva-licence-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
+            'lva-variation-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
+
             // Business Type
             'lva-application-business_type' => LvaFormService\BusinessType\ApplicationBusinessType::class,
             'lva-licence-business_type' => LvaFormService\BusinessType\LicenceBusinessType::class,
