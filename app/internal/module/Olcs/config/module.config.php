@@ -640,6 +640,8 @@ return array(
                 'inspection-request-email' => ['*'],
                 'process-inbox' => ['*'],
                 'enqueue-ch-compare' => ['*'],
+                'not-found' => ['*'],
+                'server-error' => ['*'],
                 // Global route rule needs to be last
                 '*' => ['internal-view'],
             ]
