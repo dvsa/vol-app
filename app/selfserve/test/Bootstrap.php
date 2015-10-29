@@ -56,6 +56,9 @@ class Bootstrap
         self::$di = $di;
 
         self::setupLogger();
+
+        define('DATETIME_FORMAT', 'd M Y H:i');
+        define('DATE_FORMAT', 'd M Y');
     }
 
     public static function setupLogger()
