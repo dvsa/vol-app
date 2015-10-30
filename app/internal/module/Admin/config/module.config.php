@@ -493,6 +493,7 @@ return [
             'Admin\CompaniesHouseAlertController' => 'Admin\Controller\CompaniesHouseAlertController',
             'Admin\FinancialStandingRateController' => 'Admin\Controller\FinancialStandingRateController',
             'Admin\CpmsReportController' => 'Admin\Controller\CpmsReportController',
+            'Admin\TeamsController' => \Admin\Controller\TeamController::class,
         ]
     ],
     'view_manager' => [

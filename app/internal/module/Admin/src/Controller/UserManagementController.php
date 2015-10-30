@@ -110,7 +110,7 @@ class UserManagementController extends AbstractInternalController implements Lef
 
     public function indexAction()
     {
-        return $this->redirect()->toRoute('search', ['index' => 'user'], ['code' => 303]);
+        return $this->redirect()->toRoute('admin-dashboard/admin-team-management', [], ['code' => 303]);
     }
 
     /**
