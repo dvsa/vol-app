@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Transactions',
+        'title' => 'Payments and adjustments',
         'empty_message' => 'There are no transactions',
     ),
     'settings' => array(
@@ -11,7 +11,7 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'Transaction No.',
+            'title' => 'No.',
             'name' => 'transactionId',
             'formatter' => 'TransactionNoAndStatus',
         ),

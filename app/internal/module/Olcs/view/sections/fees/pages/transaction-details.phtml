@@ -5,7 +5,7 @@ echo $this->render(
     [
         'multiItems' => [
             [
-                ['label' => 'Transaction No:', 'value' => $transaction['id'], 'class' => 'full-width'],
+                ['label' => 'No:', 'value' => $transaction['id'], 'class' => 'full-width'],
                 ['label' => 'Date:', 'date' => $transaction['completedDate'], 'class' => 'full-width'],
                 ['label' => 'Type:', 'value' => $transaction['type']['description'], 'class' => 'full-width'],
                 ['label' => 'Method:', 'value' => $transaction['paymentMethod']['description'], 'class' => 'full-width'],

@@ -339,15 +339,19 @@ trait FeesActionTrait
         $backLink = $this->getServiceLocator()->get('Helper\Url')
             ->fromRoute($this->getFeesRoute() . '/fee_action', ['action' => 'edit-fee'], [], true);
 
-        $receiptLink = ($transaction['type']['id'] == RefData::TRANSACTION_TYPE_PAYMENT) ?
-            $this->getServiceLocator()->get('Helper\Url')
+        if ($transaction['type']['id'] == RefData::TRANSACTION_TYPE_PAYMENT) {
+            $receiptLink = $this->getServiceLocator()->get('Helper\Url')
                 ->fromRoute(
                     $this->getFeesRoute() . '/print-receipt',
                     ['reference' => $transaction['reference']],
                     [],
                     true
-                ) :
-            '';
+                );
+            $title = 'internal.transaction-details.title-payment';
+        } else {
+            $receiptLink = '';
+            $title = 'internal.transaction-details.title-other';
+        }
 
         $viewParams = [
             'table' => $table,
@@ -356,7 +360,7 @@ trait FeesActionTrait
             'receiptLink' => $receiptLink
         ];
 
-        $this->placeholder()->setPlaceholder('contentTitle', 'internal.transaction-details.title');
+        $this->placeholder()->setPlaceholder('contentTitle', $title);
 
         $view = new ViewModel($viewParams);
         $view->setTemplate('sections/fees/pages/transaction-details');
@@ -474,6 +478,10 @@ trait FeesActionTrait
     {
         $status = $fee['feeStatus']['id'];
 
+        if ($fee['canRefund'] === false) {
+            $form->get('form-actions')->remove('refund');
+        }
+
         if ($status !== RefData::FEE_STATUS_OUTSTANDING) {
             $form->get('form-actions')->remove('approve');
             $form->get('form-actions')->remove('reject');
@@ -492,10 +500,6 @@ trait FeesActionTrait
         } else {
             $form->get('form-actions')->remove('approve');
             $form->get('form-actions')->remove('reject');
-        }
-
-        if ($fee['canRefund'] === false) {
-            $form->get('form-actions')->remove('refund');
         }
 
         return $form;
