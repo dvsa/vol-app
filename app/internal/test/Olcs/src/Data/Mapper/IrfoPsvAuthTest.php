@@ -27,7 +27,7 @@ class IrfoPsvAuthTest extends MockeryTestCase
         return [
             // add
             [
-                [],
+                ['actions' => []],
                 [
                     'fields' => [
                         'copiesIssued' => 0,
@@ -37,7 +37,9 @@ class IrfoPsvAuthTest extends MockeryTestCase
                         'copiesRequired' => 0,
                         'copiesRequiredTotal' => 0,
                         'copiesRequiredNonChargeable' => 0,
-                    ]
+                        'actions' => []
+                    ],
+                    'actions' => []
                 ]
             ],
             // edit
@@ -51,6 +53,7 @@ class IrfoPsvAuthTest extends MockeryTestCase
                     'copiesIssuedTotal' => 11,
                     'copiesRequired' => 3,
                     'copiesRequiredTotal' => 33,
+                    'actions' => ['grant']
                 ],
                 [
                     'fields' => [
@@ -66,7 +69,9 @@ class IrfoPsvAuthTest extends MockeryTestCase
                         'copiesRequired' => 3,
                         'copiesRequiredTotal' => 33,
                         'copiesRequiredNonChargeable' => 30,
+                        'actions' => ['grant']
                     ],
+                    'actions' => ['grant']
                 ]
             ]
         ];
@@ -75,7 +80,7 @@ class IrfoPsvAuthTest extends MockeryTestCase
     public function testMapFromForm()
     {
         $inData = ['fields' => ['field' => 'data']];
-        $expected = ['field' => 'data'];
+        $expected = ['field' => 'data', 'action' => ''];
 
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
