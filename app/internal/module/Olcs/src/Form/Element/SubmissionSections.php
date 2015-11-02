@@ -468,6 +468,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         return [
             'introduction',
             'case-summary',
+            'most-serious-infringement',
             'case-outline',
             'people',
             'outstanding-applications'

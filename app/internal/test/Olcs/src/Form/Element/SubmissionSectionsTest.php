@@ -87,6 +87,7 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
                 'introduction' => 'Case Introduction',
                 'people' => 'People',
                 'case-outline' => 'Cases',
+                'most-serious-infringement' => 'Most serious infringment',
                 'outstanding-applications' => 'Outstanding applications'
             ]
         );
