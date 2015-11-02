@@ -7,9 +7,10 @@
  */
 namespace Olcs\Controller\Licence\Fees;
 
+use Common\Controller\Traits\GenericReceipt;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Licence\LicenceController;
-use Olcs\Controller\Traits;
+use Olcs\Controller\Traits\FeesActionTrait;
 
 /**
  * Licence Fees Controller
@@ -18,7 +19,8 @@ use Olcs\Controller\Traits;
  */
 class LicenceFeesController extends LicenceController implements LeftViewProvider
 {
-    use Traits\FeesActionTrait;
+    use FeesActionTrait,
+        GenericReceipt;
 
     protected function renderLayout($view)
     {
