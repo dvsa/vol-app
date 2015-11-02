@@ -52,7 +52,13 @@ trait ExternalControllerTrait
     protected function getCurrentOrganisation()
     {
         $dto = MyAccount::create([]);
+
         $response = $this->handleQuery($dto);
+
+        if (!$response->isOk()) {
+            return null;
+        }
+
         $data = $response->getResult();
 
         return $data['organisationUsers'][0]['organisation'];
@@ -66,6 +72,7 @@ trait ExternalControllerTrait
     protected function getCurrentOrganisationId()
     {
         $organisation = $this->getCurrentOrganisation();
+
         return (isset($organisation['id'])) ? $organisation['id'] : null;
     }
 
