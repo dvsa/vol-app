@@ -79,7 +79,7 @@ class Offence extends Base
      *     "context_values": {"def_t_op", ""},
      *     "context_truth": false,
      *     "validators": {
- *              {"name": "\Common\Validator\Date"},
+     *          {"name": "\Common\Validator\Date"},
      *          {"name": "Date", "options":{"format":"Y-m-d"}},
      *          {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
      *     }}
