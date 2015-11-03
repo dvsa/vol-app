@@ -42,9 +42,9 @@ class TaskTest extends AbstractFormTest
         $dateHelper = $sm->get('Helper\Date');
 
         $todayStr     = $dateHelper->getDate('Y-m-d');
-        $today        = array_combine(['y', 'm', 'd'], explode('-', $todayStr));
+        $today        = array_combine(['Y', 'm', 'd'], explode('-', $todayStr));
         $yesterdayStr = $dateHelper->getDateObject('yesterday')->format('Y-m-d');
-        $yesterday    = array_combine(['y', 'm', 'd'], explode('-', $yesterdayStr));
+        $yesterday    = array_combine(['Y', 'm', 'd'], explode('-', $yesterdayStr));
 
         return [
             new F\Test(
@@ -84,7 +84,7 @@ class TaskTest extends AbstractFormTest
                     [
                         'day'   => $today['d'],
                         'month' => $today['m'],
-                        'year'  => $today['y'],
+                        'year'  => $today['Y'],
                     ]
                 ),
                 // probably shouldn't be allowed, but there's no validation set up
