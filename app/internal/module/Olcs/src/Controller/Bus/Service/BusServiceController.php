@@ -120,11 +120,12 @@ class BusServiceController extends AbstractInternalController implements BusRegC
             $form->remove('timetable');
         }
 
-        // If Scottish rules identified by busNoticePeriod = 1, remove radio and replace with hidden field
-        if ((int)$formData['fields']['busNoticePeriod'] !== 1) {
+        $isScottish = $formData['fields']['busNoticePeriod'] === RefData::BUSREG_NOTICE_PERIOD_SCOTLAND ? true : false;
+
+        // opNotifiedLaPte is only needed for scottish short notice registrations,
+        // the mapper will default this data to 'N' when it is posted to the backend
+        if (!($isScottish && $formData['fields']['isShortNotice'] === 'Y')) {
             $form->get('fields')->remove('opNotifiedLaPte');
-        } else {
-            $form->get('fields')->remove('opNotifiedLaPteHidden');
         }
 
         return $form;
