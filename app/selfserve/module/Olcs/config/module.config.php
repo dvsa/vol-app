@@ -1111,5 +1111,10 @@ return array(
             'Lva\VariationAddresses' => 'Olcs\BusinessService\Service\Lva\LicenceVariationAddresses',
             'Lva\AddressesChangeTask' => 'Olcs\BusinessService\Service\Lva\AddressesChangeTask',
         ]
+    ],
+    'date_settings' => [
+        'date_format' => 'd M Y',
+        'datetime_format' => 'd M Y H:i',
+        'datetimesec_format' => 'd M Y H:i:s'
     ]
 );
