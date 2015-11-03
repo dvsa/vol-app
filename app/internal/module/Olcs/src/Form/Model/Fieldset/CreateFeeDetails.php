@@ -23,6 +23,22 @@ class CreateFeeDetails
     public $version = null;
 
     /**
+     * Created date
+     *
+     * @Form\Options({
+     *      "short-label":"fees.created_date",
+     *      "label":"fees.created_date",
+     *      "label_attributes": {"id": "label-createdDate"}
+     * })
+     * @Form\Required(true)
+     * @Form\Attributes({"required":false, "id":"createdDate"})
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
+     */
+    public $createdDate = null;
+
+    /**
      * @Form\Attributes({"id":"feeType"})
      * @Form\Options({
      *     "label": "fees.type",
@@ -94,22 +110,6 @@ class CreateFeeDetails
      * })
      */
     public $irfoPsvAuth = null;
-
-    /**
-     * Created date
-     *
-     * @Form\Options({
-     *      "short-label":"fees.created_date",
-     *      "label":"fees.created_date",
-     *      "label_attributes": {"id": "label-createdDate"}
-     * })
-     * @Form\Required(true)
-     * @Form\Attributes({"required":false, "id":"createdDate"})
-     * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
-     */
-    public $createdDate = null;
 
     /**
      * @Form\Options({
