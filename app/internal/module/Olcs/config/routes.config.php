@@ -78,6 +78,19 @@ $feeTypeAjaxRoute = [
     ],
 ];
 
+$feePrintReceiptRoute = [
+    'type' => 'segment',
+    'options' => [
+        'route' => '/print-receipt/:reference',
+        'constraints' => [
+            'reference' => 'OLCS-[0-9A-F\-]+',
+        ],
+        'defaults' => [
+            'action' => 'print',
+        ],
+    ],
+];
+
 $routes = [
     'dashboard' => [
         'type' => 'Literal',
@@ -1353,6 +1366,7 @@ $routes = [
                 'child_routes' => [
                     'fee_action' => $feeActionRoute,
                     'fee_type_ajax' => $feeTypeAjaxRoute,
+                    'print-receipt' => $feePrintReceiptRoute,
                 ]
             ],
             'cases' => [
@@ -1541,6 +1555,7 @@ $routes = [
                 'child_routes' => [
                     'fee_action' => $feeActionRoute,
                     'fee_type_ajax' => $feeTypeAjaxRoute,
+                    'print-receipt' => $feePrintReceiptRoute,
                 ]
             ],
             'update-continuation' => [
@@ -1738,6 +1753,7 @@ $routes = [
                 'child_routes' => [
                     'fee_action' => $feeActionRoute,
                     'fee_type_ajax' => $feeTypeAjaxRoute,
+                    'print-receipt' => $feePrintReceiptRoute,
                 ]
             ],
             'documents' => [
@@ -2752,6 +2768,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'child_routes' => array(
                 'fee_action' => $feeActionRoute,
                 'fee_type_ajax' => $feeTypeAjaxRoute,
+                'print-receipt' => $feePrintReceiptRoute,
             )
         ),
         'interim' => array(

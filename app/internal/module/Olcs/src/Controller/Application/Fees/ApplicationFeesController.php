@@ -7,9 +7,10 @@
  */
 namespace Olcs\Controller\Application\Fees;
 
+use Common\Controller\Traits\GenericReceipt;
 use Olcs\Controller\Application\ApplicationController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Controller\Traits;
+use Olcs\Controller\Traits\FeesActionTrait;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -19,7 +20,8 @@ use Zend\View\Model\ViewModel;
  */
 class ApplicationFeesController extends ApplicationController implements LeftViewProvider
 {
-    use Traits\FeesActionTrait;
+    use FeesActionTrait,
+        GenericReceipt;
 
     protected function renderLayout($view)
     {
