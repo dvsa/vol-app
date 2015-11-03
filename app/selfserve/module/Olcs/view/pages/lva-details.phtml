@@ -51,7 +51,7 @@ if (isset($sectionText)) {
 
   <?php
 
-  $messages = $this->flashMessenger('prominent-error');
+  $messages = $this->flashMessengerAll('norender')->getMessagesFromNamespace('prominent-error');
 
   foreach ($messages as $message) {
       ?>
