@@ -9,10 +9,10 @@ echo $this->render(
                 ['label' => 'Date:', 'date' => $transaction['completedDate'], 'class' => 'full-width'],
                 ['label' => 'Type:', 'value' => $transaction['type']['description'], 'class' => 'full-width'],
                 ['label' => 'Method:', 'value' => $transaction['paymentMethod']['description'], 'class' => 'full-width'],
-                ['label' => 'Reference:', 'date' => $transaction['reference'], 'class' => 'full-width'],
+                ['label' => 'Reference:', 'value' => $transaction['reference'], 'class' => 'full-width'],
                 ['label' => 'Processed by:', 'value' => $transaction['processedByUser']['loginId'], 'class' => 'full-width'],
                 ['label' => 'Amount:', 'money' => $transaction['amount'], 'class' => 'full-width'],
-                 [
+                [
                     'label' => 'Status:',
                     'noEscape' => true,
                     'value' => \Common\Service\Table\Formatter\TransactionStatus::format($transaction),
