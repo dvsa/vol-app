@@ -56,7 +56,7 @@ return array(
         array(
             'title' => 'Date created',
             'formatter' => function ($row) {
-                return date('d/m/Y H:i:s', strtotime($row['createdOn']));
+                return date(\DATETIMESEC_FORMAT, strtotime($row['createdOn']));
             },
             'sort' => 'createdOn'
         ),

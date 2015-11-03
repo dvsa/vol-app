@@ -32,7 +32,7 @@ class User implements MapperInterface
 
             if (!empty($data['lockedDate'])) {
                 $formData['userLoginSecurity']['lockedDate'] = date(
-                    'd/m/Y H:i:s',
+                    \DATETIMESEC_FORMAT,
                     strtotime($data['lockedDate'])
                 );
             }

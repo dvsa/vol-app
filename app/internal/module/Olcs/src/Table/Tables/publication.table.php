@@ -61,7 +61,7 @@ return array(
             'title' => 'Publication date',
             'formatter' => function ($data) {
                 $date = new DateTime($data['publication']['pubDate']);
-                return $date->format('d/m/Y');
+                return $date->format(\DATE_FORMAT);
             }
         ),
         array(

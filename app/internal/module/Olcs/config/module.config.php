@@ -743,4 +743,9 @@ return array(
             Marker\SoleTraderDisqualificationMarker::class => Marker\SoleTraderDisqualificationMarker::class,
         ),
     ),
+    'date_settings' => array(
+        'date_format' => 'd/m/Y',
+        'datetime_format' => 'd/m/Y H:i',
+        'datetimesec_format' => 'd/m/Y H:i:s'
+    )
 );

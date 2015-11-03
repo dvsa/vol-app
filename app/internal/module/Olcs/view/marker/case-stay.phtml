@@ -20,6 +20,6 @@
     if (!($date instanceof \DateTime)) {
         $date = new \DateTime($this->stay['requestDate']);
     }
-    echo $date->format('d/m/Y');
+    echo $date->format(\DATE_FORMAT);
     ?>
 </p>
