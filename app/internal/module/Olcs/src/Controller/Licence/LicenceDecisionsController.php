@@ -59,26 +59,27 @@ class LicenceDecisionsController extends AbstractController
             return $this->redirectToDecision($decision, $licence);
         }
 
-        $messages = array();
-        foreach ($result['suitableForDecisions'] as $key => $value) {
-            if (!$value) {
-                continue;
-            }
+        if (isset($result['suitableForDecisions']) && is_array($result['suitableForDecisions'])) {
+            $messages = array();
+            foreach ($result['suitableForDecisions'] as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
 
-            switch ($key) {
-                case 'activeComLics':
-                    $messages[$key] = 'There are active, pending or suspended community licences';
-                    break;
-                case 'activeBusRoutes':
-                    $messages[$key] = 'There are active bus routes on this licence';
-                    break;
-                case 'activeVariations':
-                    $messages[$key] = 'There are applications still under consideration';
-                    break;
+                switch ($key) {
+                    case 'activeComLics':
+                        $messages[$key] = 'There are active, pending or suspended community licences';
+                        break;
+                    case 'activeBusRoutes':
+                        $messages[$key] = 'There are active bus routes on this licence';
+                        break;
+                    case 'activeVariations':
+                        $messages[$key] = 'There are applications still under consideration';
+                        break;
+                }
             }
+            $form->get('messages')->get('message')->setValue(implode('<br>', $messages));
         }
-
-        $form->get('messages')->get('message')->setValue(implode('<br>', $messages));
 
         $view = $this->getViewWithLicence(
             array(
