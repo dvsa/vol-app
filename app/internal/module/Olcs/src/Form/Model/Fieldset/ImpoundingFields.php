@@ -86,6 +86,7 @@ class ImpoundingFields
      *          "context_values": {"impt_hearing"},
      *          "allow_empty" : true,
      *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d H:i:s"}},
      *              {
      *                  "name": "DateCompare",

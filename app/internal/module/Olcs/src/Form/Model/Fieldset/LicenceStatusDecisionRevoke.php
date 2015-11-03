@@ -12,6 +12,7 @@ class LicenceStatusDecisionRevoke
     /**
      * @Form\Type("DateTimeSelect")
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({
      *     "name": "Date",
      *     "options": {

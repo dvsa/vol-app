@@ -59,6 +59,7 @@ class PublicInquiryHearingFields extends Base
      * })
      * @Form\Type("SlaDateTimeSelect")
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d H:i:s"}})
      */
     public $hearingDate;
@@ -179,6 +180,7 @@ class PublicInquiryHearingFields extends Base
      *          "context_values": {"Y"},
      *          "allow_empty": false,
      *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d H:i:s"}},
      *              {"name": "\Zend\Validator\NotEmpty"}
      *          }
