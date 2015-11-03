@@ -23,7 +23,8 @@ class PublicInquirySlaMain extends Base
      * @Form\Required(false)
      * @Form\Type("SlaDateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $callUpLetterDate = null;
@@ -39,7 +40,8 @@ class PublicInquirySlaMain extends Base
      * @Form\Required(false)
      * @Form\Type("SlaDateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $briefToTcDate = null;
@@ -79,6 +81,7 @@ class PublicInquirySlaMain extends Base
      *          "context_values": {"piwo_decision"},
      *          "allow_empty": true,
      *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
      *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
      *          }
@@ -108,6 +111,7 @@ class PublicInquirySlaMain extends Base
      *          "context_values": {"piwo_decision"},
      *          "allow_empty": true,
      *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
      *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
      *          }
@@ -137,6 +141,7 @@ class PublicInquirySlaMain extends Base
      *          "context_values": {"piwo_reason"},
      *          "allow_empty": true,
      *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
      *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
      *          }
@@ -166,6 +171,7 @@ class PublicInquirySlaMain extends Base
      *          "context_values": {"piwo_reason"},
      *          "allow_empty": true,
      *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
      *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
      *          }

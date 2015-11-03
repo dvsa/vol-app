@@ -23,6 +23,7 @@ class GracePeriodDetails
      *     "min_year_delta": "-5"
      * })
      * @Form\Type("DateSelect")
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({
      *     "name": "Date",
      *     "options": {
@@ -55,6 +56,7 @@ class GracePeriodDetails
      *          "context_truth": false,
      *          "allow_empty" : true,
      *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
      *              {
      *                  "name": "Date",
      *                  "options": {

@@ -19,7 +19,8 @@ class NonPiFields extends CaseBase
      *     "render_delimiters": false
      * })
      * @Form\Type("DateSelect")
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $agreedByTcDate;

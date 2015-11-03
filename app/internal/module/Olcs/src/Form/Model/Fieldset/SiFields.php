@@ -53,7 +53,8 @@ class SiFields extends CaseBase
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
     public $infringementDate = null;
 
@@ -66,7 +67,8 @@ class SiFields extends CaseBase
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
     public $checkDate = null;
 

@@ -19,7 +19,8 @@ class ProhibitionFields extends Base
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $prohibitionDate = null;
@@ -63,7 +64,8 @@ class ProhibitionFields extends Base
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $clearedDate = null;

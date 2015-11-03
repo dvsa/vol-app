@@ -121,6 +121,7 @@ class PublicInquiryHearingFields extends Base
      *          "allow_empty": false,
      *          "validators": {
      *              {"name":"Zend\Validator\NotEmpty"},
+     *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}}
      *          }
      *      }
