@@ -58,8 +58,9 @@ class BusRegisterService implements MapperInterface
             $commandData['routeDescription'] = $data['timetable']['routeDescription'];
         }
 
+        //opNotifiedLaPte only exists on the form when using scottish rules and the registration is short notice
         if (!isset($commandData['opNotifiedLaPte'])) {
-            $commandData['opNotifiedLaPte'] = $commandData['opNotifiedLaPteHidden'];
+            $commandData['opNotifiedLaPte'] = 'N';
         }
 
         return $commandData;
