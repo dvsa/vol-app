@@ -1444,7 +1444,7 @@ $routes = [
                             'route' => '/delete/:doc',
                             'defaults' => [
                                 'type' => 'licence',
-                                'controller' => 'LicenceController',
+                                'controller' => 'LicenceDocsController',
                                 'action' => 'delete-document'
                             ]
                         ],
