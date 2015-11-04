@@ -13,6 +13,7 @@ use Dvsa\Olcs\Transfer\Command\Fee\ApproveWaive as ApproveWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\CreateFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RecommendWaive as RecommendWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\RefundFee as RefundFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
 use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
@@ -229,6 +230,11 @@ trait FeesActionTrait
      */
     public function editFeeAction()
     {
+        if ($this->isButtonPressed('refund')) {
+            $route = $this->getFeesRoute() . '/fee_action';
+            return $this->redirect()->toRoute($route, ['action' => 'refund-fee'], [], true);
+        }
+
         $id = $this->params()->fromRoute('fee', null);
 
         $fee = $this->getFee($id);
@@ -241,8 +247,7 @@ trait FeesActionTrait
             return $this->getResponse();
         }
 
-        $feeTransactions = array_filter($fee['feeTransactions'], [$this, 'ftDisplayFilter']);
-        $table = $this->getTable('fee-transactions', $feeTransactions, []);
+        $table = $this->getTable('fee-transactions', $fee['displayTransactions'], []);
 
         $viewParams = [
             'form' => $form,
@@ -299,10 +304,12 @@ trait FeesActionTrait
     /**
      * Redirect back to fee details page
      */
-    protected function redirectToFeeDetails()
+    protected function redirectToFeeDetails($ajax = false)
     {
+        $method = $ajax ? 'toRouteAjax' : 'toRoute';
+
         $route = $this->getFeesRoute() . '/fee_action';
-        return $this->redirect()->toRoute($route, ['action' => 'edit-fee'], [], true);
+        return $this->redirect()->$method($route, ['action' => 'edit-fee'], [], true);
     }
 
     /**
@@ -332,15 +339,19 @@ trait FeesActionTrait
         $backLink = $this->getServiceLocator()->get('Helper\Url')
             ->fromRoute($this->getFeesRoute() . '/fee_action', ['action' => 'edit-fee'], [], true);
 
-        $receiptLink = ($transaction['type']['id'] == RefData::TRANSACTION_TYPE_PAYMENT) ?
-            $this->getServiceLocator()->get('Helper\Url')
+        if ($transaction['type']['id'] == RefData::TRANSACTION_TYPE_PAYMENT) {
+            $receiptLink = $this->getServiceLocator()->get('Helper\Url')
                 ->fromRoute(
                     $this->getFeesRoute() . '/print-receipt',
                     ['reference' => $transaction['reference']],
                     [],
                     true
-                ) :
-            '';
+                );
+            $title = 'internal.transaction-details.title-payment';
+        } else {
+            $receiptLink = '';
+            $title = 'internal.transaction-details.title-other';
+        }
 
         $viewParams = [
             'table' => $table,
@@ -349,7 +360,7 @@ trait FeesActionTrait
             'receiptLink' => $receiptLink
         ];
 
-        $this->placeholder()->setPlaceholder('contentTitle', 'internal.transaction-details.title');
+        $this->placeholder()->setPlaceholder('contentTitle', $title);
 
         $view = new ViewModel($viewParams);
         $view->setTemplate('sections/fees/pages/transaction-details');
@@ -423,6 +434,39 @@ trait FeesActionTrait
         return $this->renderView($view, $title);
     }
 
+    protected function refundFeeAction()
+    {
+        $feeId = $this->params('fee');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createFormWithRequest('GenericConfirmation', $this->getRequest());
+
+        if ($this->getRequest()->isPost()) {
+            if ($this->isButtonPressed('cancel')) {
+                return $this->redirectToFeeDetails();
+            }
+            $data = (array) $this->getRequest()->getPost();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $response = $this->handleCommand(
+                    RefundFeeCmd::create(['id' => $feeId])
+                );
+                if ($response->isOk()) {
+                    $this->addSuccessMessage('fees.refund.success');
+                } else {
+                    $this->addErrorMessage('unknown-error');
+                }
+                return $this->redirectToFeeDetails(true);
+            }
+        }
+
+        $form->get('messages')->get('message')->setValue('fees.refund.confirm');
+        $form->setSubmitLabel('Refund');
+        $view = new ViewModel(array('form' => $form));
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'fees.refund.title');
+    }
+
     /**
      * Alter fee form
      *
@@ -433,6 +477,10 @@ trait FeesActionTrait
     protected function alterFeeForm($form, $fee)
     {
         $status = $fee['feeStatus']['id'];
+
+        if ($fee['canRefund'] === false) {
+            $form->get('form-actions')->remove('refund');
+        }
 
         if ($status !== RefData::FEE_STATUS_OUTSTANDING) {
             $form->get('form-actions')->remove('approve');
