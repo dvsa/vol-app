@@ -109,26 +109,36 @@ class BusServiceController extends AbstractInternalController implements BusRegC
      */
     public function alterFormForEdit($form, $formData)
     {
-        if (!$formData['fields']['isLatestVariation'] ||
-            in_array(
-                $formData['fields']['status'], [RefData::BUSREG_STATUS_REGISTERED, RefData::BUSREG_STATUS_CANCELLED]
-            )) {
+        $busReg = $this->getBusReg();
+
+        if ($busReg['isReadOnly']) {
             $form->setOption('readonly', true);
         }
 
-        if ($formData['fields']['status'] == 'breg_s_cancelled') {
+        if ($busReg['status']['id'] == RefData::BUSREG_STATUS_CANCELLED) {
             $form->remove('timetable');
         }
 
-        $isScottish = $formData['fields']['busNoticePeriod'] === RefData::BUSREG_NOTICE_PERIOD_SCOTLAND ? true : false;
-
         // opNotifiedLaPte is only needed for scottish short notice registrations,
         // the mapper will default this data to 'N' when it is posted to the backend
-        if (!($isScottish && $formData['fields']['isShortNotice'] === 'Y')) {
+        if (!($busReg['isScottishRules'] && $busReg['isShortNotice'] === 'Y')) {
             $form->get('fields')->remove('opNotifiedLaPte');
         }
 
         return $form;
+    }
+
+    /**
+     * Gets a Bus Reg - we'll have this query cached, and if it previously failed we'll have returned a 404 already
+     *
+     * @return array|mixed
+     */
+    private function getBusReg()
+    {
+        $params = ['id' => $this->params()->fromRoute('busRegId')];
+        $response = $this->handleQuery(ItemDto::create($params));
+
+        return $response->getResult();
     }
 
     public function indexAction()

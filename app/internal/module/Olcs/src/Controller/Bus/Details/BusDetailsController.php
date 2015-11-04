@@ -7,7 +7,7 @@
  */
 namespace Olcs\Controller\Bus\Details;
 
-use Dvsa\Olcs\Transfer\Query\Bus\BusReg;
+use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use \Olcs\Data\Mapper\BusReg as BusRegMapper;
@@ -21,7 +21,6 @@ use Dvsa\Olcs\Transfer\Command\Bus\UpdateStops as UpdateStopCmd;
 use Olcs\Form\Model\Form\BusRegQuality as QualityForm;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateQualitySchemes as UpdateQualityCmd;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use Common\RefData;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -60,7 +59,7 @@ class BusDetailsController extends AbstractInternalController implements
 
     protected $inlineScripts = ['serviceAction' => ['bus-servicenumbers'], 'taAction' => ['forms/bus-details-ta']];
 
-    protected $itemDto = BusReg::class;
+    protected $itemDto = ItemDto::class;
     protected $itemParams = ['id' => 'busRegId'];
     protected $mapperClass = BusRegMapper::class;
     protected $section = 'details';
@@ -135,6 +134,19 @@ class BusDetailsController extends AbstractInternalController implements
     }
 
     /**
+     * Gets a Bus Reg - we'll have this query cached, and if it previously failed we'll have returned a 404 already
+     *
+     * @return array|mixed
+     */
+    private function getBusReg()
+    {
+        $params = ['id' => $this->params()->fromRoute('busRegId')];
+        $response = $this->handleQuery(ItemDto::create($params));
+
+        return $response->getResult();
+    }
+
+    /**
      * If not latest variation, or is EBSR, or status is 'registered' or 'cancelled', show read only form
      * @param \Common\Form\Form $form
      * @param array $formData
@@ -142,13 +154,9 @@ class BusDetailsController extends AbstractInternalController implements
      */
     protected function alterForm($form, $formData)
     {
-        if (
-            !$formData['fields']['isLatestVariation'] ||
-            $formData['fields']['isTxcApp'] === 'Y' ||
-            in_array(
-                $formData['fields']['status'], [RefData::BUSREG_STATUS_REGISTERED, RefData::BUSREG_STATUS_CANCELLED]
-            )
-        ) {
+        $busReg = $this->getBusReg();
+
+        if ($busReg['isReadOnly'] || $busReg['isFromEbsr']) {
             $form->setOption('readonly', true);
         }
 
