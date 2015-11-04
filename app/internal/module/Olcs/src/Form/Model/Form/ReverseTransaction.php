@@ -26,7 +26,7 @@ class ReverseTransaction
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\ReverseTransactionActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ReverseTransactionActions")
      */
     public $formActions = null;
 }
