@@ -20,7 +20,7 @@ class IrfoPsvAuth implements MapperInterface
     {
         $formData['fields'] = $data;
 
-        $formData['actions'] = $data['actions'];
+        $formData['isGrantable'] = $data['isGrantable'];
 
         foreach ($formData['fields'] as $key => $value) {
             if (isset($value['id'])) {
@@ -75,7 +75,6 @@ class IrfoPsvAuth implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
-        $data['fields']['action'] = self::determineAction($data);
         return $data['fields'];
     }
 

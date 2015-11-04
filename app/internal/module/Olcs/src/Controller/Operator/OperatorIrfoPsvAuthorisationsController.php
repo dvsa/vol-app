@@ -58,6 +58,8 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     protected $listDto = ListDto::class;
     protected $listVars = ['organisation'];
 
+    private $allActions = ['grant', 'approve', 'generateDocument', 'cns', 'withdraw', 'refuse', 'reset'];
+
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -104,9 +106,9 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         'status' => 'irfo_auth_s_pending',
     ];
 
-    private function determineResponse($commandData)
+    private function determineResponse($action, $commandData)
     {
-        switch ($commandData['action'])
+        switch ($action)
         {
             case 'grant':
                 return $this->handleCommand(GrantDto::create($commandData));
@@ -136,13 +138,11 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
             $form->setData($dataFromPost);
         }
 
-        $hasProcessed =
-            $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
-
-        if (!$hasProcessed && $this->persist && $request->isPost() && $form->isValid()) {
+        if ($this->persist && $request->isPost() && $form->isValid()) {
             $commandData = Mapper::mapFromForm($form->getData());
+            $action = Mapper::determineAction($form->getData());
 
-            $response = $this->determineResponse($commandData);
+            $response = $this->determineResponse($action, $commandData);
 
             if ($response->isServerError()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
@@ -150,7 +150,6 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
 
             if ($response->isClientError()) {
                 $flashErrors = Mapper::mapFromErrors($form, $response->getResult());
-
                 foreach ($flashErrors as $error) {
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
                 }
@@ -212,23 +211,6 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         return $this->viewBuilder()->buildViewFromTemplate($this->editViewTemplate);
     }
 
-    /**
-     * Determines the action DTO to use based on posted form data
-     *
-     * @param $data
-     * @return null
-     */
-    private function determineAction($postData)
-    {
-        $allActions = ['grant', 'approve', 'generateDocument', 'cns', 'withdraw', 'refuse', 'reset'];
-        foreach ($allActions as $action) {
-            if (isset($postData['form-actions'][$action]) && !is_null($postData['form-actions'][$action])) {
-                return $action;
-            }
-        }
-        return null;
-    }
-
     public function detailsAction()
     {
         return $this->notFoundAction();
@@ -262,7 +244,9 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      */
     protected function alterFormForAdd($form, $formData)
     {
-        $form = $this->setActionButtons($form, $formData);
+        foreach ($this->allActions as $action) {
+            $form->get('form-actions')->remove($action);
+        }
 
         return $form;
     }
@@ -276,19 +260,25 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      */
     private function setActionButtons(ZendForm $form, $formData)
     {
-        $allActions = ['grant', 'approve', 'generateDocument', 'cns', 'withdraw', 'refuse', 'reset'];
-        if ($this->params('action') === 'add') {
-            foreach ($allActions as $action) {
-                $form->get('form-actions')->remove($action);
+        if ($this->params('action') !== 'add') {
+            foreach ($this->allActions as $action) {
+                $form = $this->determineFormButton($form, $formData, $action);
             }
-        } else {
-            foreach ($allActions as $action) {
-                // we check to see if they are set as the actions come from the backend and
-                // are not part of the posted data
-                if (!isset($formData['actions']) || !in_array($action, $formData['actions'])) {
+        }
+
+        return $form;
+    }
+
+    private function determineFormButton($form, $formData, $action)
+    {
+        switch($action) {
+            case 'grant':
+                if (!isset($formData['isGrantable']) || $formData['isGrantable'] !== true) {
                     $form->get('form-actions')->remove($action);
                 }
-            }
+                break;
+            default:
+                $form->get('form-actions')->remove($action);
         }
 
         return $form;
