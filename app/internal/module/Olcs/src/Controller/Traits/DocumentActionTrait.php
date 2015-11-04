@@ -86,8 +86,8 @@ trait DocumentActionTrait
         $response = $this->confirm($translator->translate('internal.documents.delete.delete_message'));
 
         if ($response instanceof ViewModel) {
-            $response->setTerminal(true);
-            return $response;
+            $this->placeholder()->setPlaceholder('pageTitle', 'Delete document');
+            return $this->viewBuilder()->buildView($response);
         }
 
         $ids = explode(',', $id);
