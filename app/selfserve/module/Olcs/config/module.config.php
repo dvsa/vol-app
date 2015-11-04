@@ -87,10 +87,11 @@ $routes = array(
     'cookies' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/cookies[/]',
+            'route' => '/privacy-and-cookies[/]',
             'defaults' => array(
-                'controller' => \Olcs\Controller\CookiesController::class,
-                'action' => 'index'
+                'controller' => \Olcs\Controller\GuidesController::class,
+                'action' => 'index',
+                'guide' => 'privacy-and-cookies',
             )
         )
     ),
@@ -873,7 +874,6 @@ return array(
             SearchController::class => SearchController::class,
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             'Entity\View' => 'Olcs\Controller\Entity\ViewController',
-            \Olcs\Controller\CookiesController::class => \Olcs\Controller\CookiesController::class,
             \Olcs\Controller\GuidesController::class => \Olcs\Controller\GuidesController::class,
         )
     ),
