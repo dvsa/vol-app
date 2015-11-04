@@ -36,20 +36,13 @@ class BusRegShortNoticeTest extends MockeryTestCase
                 [
                     'result' => [
                         [
-                            'id' => 987,
-                            'busReg' => [
-                                'status' => ['id' => RefData::BUSREG_STATUS_NEW],
-                            ]
+                            'id' => 987
                         ]
                     ]
                 ],
                 [
                     'fields' => [
-                        'id' => 987,
-                        'busReg' => [
-                            'status' => ['id' => RefData::BUSREG_STATUS_NEW],
-                        ],
-                        'busRegStatus' => RefData::BUSREG_STATUS_NEW,
+                        'id' => 987
                     ],
                 ]
             ]
