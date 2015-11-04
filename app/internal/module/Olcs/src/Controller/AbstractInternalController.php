@@ -83,6 +83,7 @@ abstract class AbstractInternalController extends AbstractActionController
     protected $tableViewPlaceholderName = 'table';
     protected $tableViewTemplate = 'pages/table';
     protected $defaultTableSortField = 'id';
+    protected $defaultTableOrderField = 'DESC';
     protected $tableName = '';
     protected $listDto = '';
     protected $listVars = [];
@@ -255,7 +256,7 @@ abstract class AbstractInternalController extends AbstractActionController
 
         return $this->index(
             $this->listDto,
-            new GenericList($this->listVars, $this->defaultTableSortField),
+            new GenericList($this->listVars, $this->defaultTableSortField, $this->defaultTableOrderField),
             $this->tableViewPlaceholderName,
             $this->tableName,
             $this->tableViewTemplate,
