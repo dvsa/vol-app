@@ -42,7 +42,9 @@ if ($table) {
 }
 ?>
 <div class="actions-container">
-    <button class="action--primary disabled" disabled="disabled">Reverse payment</button>
+    <?php if ($reverseLink): ?>
+        <a href="<?php echo $reverseLink; ?>" class="action--primary js-modal-ajax" target="_blank">Reverse payment</a>
+    <?php endif; ?>
     <?php if ($receiptLink): ?>
         <a href="<?php echo $receiptLink; ?>" class="action--primary" target="_blank">Generate receipt</a>
     <?php endif; ?>

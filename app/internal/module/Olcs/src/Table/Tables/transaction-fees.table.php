@@ -4,18 +4,6 @@ return array(
     'variables' => array(
         'title' => 'Fees',
     ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'partRefund' => array(
-                    'class' => 'primary js-require--multiple',
-                    'value' => 'partRefund',
-                    'label' => 'Part refund',
-                    'requireRows' => true
-                ),
-            )
-        ),
-    ),
     'attributes' => array(
     ),
     'columns' => array(

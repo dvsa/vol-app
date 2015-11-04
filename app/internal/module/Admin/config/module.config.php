@@ -397,6 +397,18 @@ return [
                                                     ]
                                                 ],
                                                 'may_terminate' => true,
+                                                'child_routes' => [
+                                                    'reverse' => [
+                                                        'type' => 'segment',
+                                                        'options' => [
+                                                            'route' => '/reverse',
+                                                            'defaults' => [
+                                                                'action' => 'reverseTransaction',
+                                                            ]
+                                                        ],
+                                                        'may_terminate' => true,
+                                                    ],
+                                                ],
                                             ],
                                         ],
                                     ],
