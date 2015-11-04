@@ -22,12 +22,6 @@ class UserLoginSecurity
     public $loginId = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Reset password at next login"})
-     * @Form\Type("OlcsCheckbox")
-     */
-    public $mustResetPassword;
-
-    /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Disable account"})
      * @Form\Type("OlcsCheckbox")
      */
