@@ -47,7 +47,7 @@ return array(
                         $string = $data['ooo'] . $string;
                     } else {
                         $ooo = new DateTime($data['ooo']);
-                        $string = $ooo->format('d/m/Y') . $string;
+                        $string = $ooo->format(\DATE_FORMAT) . $string;
                     }
                 }
                 if (isset($data['oor'])) {
@@ -55,7 +55,7 @@ return array(
                         $string .= $data['oor'];
                     } else {
                         $oor = new DateTime($data['oor']);
-                        $string .= $oor->format('d/m/Y');
+                        $string .= $oor->format(\DATE_FORMAT);
                     }
                 }
                 return $string;

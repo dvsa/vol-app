@@ -5,14 +5,16 @@
  */
 namespace Olcs\Controller\Operator;
 
-use Olcs\Controller\Traits;
+use Common\Controller\Traits\GenericReceipt;
+use Olcs\Controller\Traits\FeesActionTrait;
 
 /**
  * Operator Fees Controller
  */
 class OperatorFeesController extends OperatorController
 {
-    use Traits\FeesActionTrait;
+    use FeesActionTrait,
+        GenericReceipt;
 
     /**
      * @var string

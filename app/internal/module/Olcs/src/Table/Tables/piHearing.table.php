@@ -39,7 +39,7 @@ return array(
         array(
             'title' => 'Date of PI',
             'formatter' => function ($data) {
-                $date = date('d/m/Y', strtotime($data['hearingDate']));
+                $date = date(\DATE_FORMAT, strtotime($data['hearingDate']));
                 if (!empty($data['pi']['closedDate'])) {
                     return $date;
                 } else {

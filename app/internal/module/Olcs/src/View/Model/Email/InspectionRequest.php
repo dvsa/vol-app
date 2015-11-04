@@ -77,13 +77,13 @@ class InspectionRequest extends ViewModel
         $workshop = array_shift($workshops);
 
         $requestDate = new \DateTime($inspectionRequest['requestDate']);
-        $requestDate = $requestDate->format('d/m/Y H:i:s');
+        $requestDate = $requestDate->format(\DATETIMESEC_FORMAT);
 
         $dueDate = new \DateTime($inspectionRequest['dueDate']);
-        $dueDate = $dueDate->format('d/m/Y H:i:s');
+        $dueDate = $dueDate->format(\DATETIMESEC_FORMAT);
 
         $expiryDate = new \DateTime($inspectionRequest['licence']['expiryDate']);
-        $expiryDate = $expiryDate->format('d/m/Y');
+        $expiryDate = $expiryDate->format(\DATE_FORMAT);
 
         $data = [
             'inspectionRequestId' => $inspectionRequest['id'],

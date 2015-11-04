@@ -7,8 +7,9 @@
  */
 namespace Olcs\Controller\Bus\Fees;
 
+use Common\Controller\Traits\GenericReceipt;
 use Olcs\Controller\Bus\BusController;
-use Olcs\Controller\Traits;
+use Olcs\Controller\Traits\FeesActionTrait;
 
 /**
  * Bus Fees Controller
@@ -17,7 +18,8 @@ use Olcs\Controller\Traits;
  */
 class BusFeesController extends BusController
 {
-    use Traits\FeesActionTrait;
+    use FeesActionTrait,
+        GenericReceipt;
 
     protected $section = 'fees';
     protected $subNavRoute = 'licence_bus_fees';
