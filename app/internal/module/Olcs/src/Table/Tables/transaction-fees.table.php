@@ -30,14 +30,12 @@ return array(
         array(
             'title' => 'Allocated',
             'name' => 'allocatedAmount',
-            'formatter' => 'FeeAmount',
+            'formatter' => 'TransactionFeeAllocatedAmount',
             'align' => 'right',
         ),
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}',
-            'type' => 'Checkbox',
-        )
+            'title' => 'Status',
+            'formatter' => 'TransactionFeeStatus',
+        ),
     ),
 );
