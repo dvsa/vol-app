@@ -12,26 +12,14 @@ class ReverseTransactionActions
 {
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
-     * @Form\Options({
-     *     "label": "Reverse",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
-     * })
+     * @Form\Options({"label": "Reverse"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $submit = null;
 
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
-     * @Form\Options({
-     *     "label": "Cancel",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
-     * })
+     * @Form\Options({"label": "Cancel"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $cancel = null;
