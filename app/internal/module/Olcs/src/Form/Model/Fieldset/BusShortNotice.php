@@ -385,20 +385,4 @@ class BusShortNotice extends Base
      * })
      */
     public $policeDetail;
-
-    /**
-     * @Form\Type("Hidden")
-     * @Form\Attributes({
-     *      "id":"fields[isLatestVariation]"
-     * })
-     */
-    public $isLatestVariation = null;
-
-    /**
-     * @Form\Type("Hidden")
-     * @Form\Attributes({
-     *      "id":"fields[busRegStatus]"
-     * })
-     */
-    public $busRegStatus = null;
 }

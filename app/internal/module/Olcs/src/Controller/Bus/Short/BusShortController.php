@@ -8,12 +8,12 @@
 namespace Olcs\Controller\Bus\Short;
 
 use Olcs\Controller\AbstractInternalController;
-use \Olcs\Data\Mapper\BusRegShortNotice as ShortNoticeMapper;
+use Olcs\Data\Mapper\BusRegShortNotice as ShortNoticeMapper;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Form\Model\Form\BusShortNotice as ShortNoticeForm;
 use Dvsa\Olcs\Transfer\Query\Bus\ShortNoticeByBusReg as ShortNoticeDto;
+use Dvsa\Olcs\Transfer\Query\Bus\BusReg as BusRegDto;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateShortNotice as UpdateShortNoticeCmd;
-use Common\RefData;
 
 /**
  * Bus Short Notice Controller
@@ -37,15 +37,25 @@ class BusShortController extends AbstractInternalController implements BusRegCon
      */
     protected function alterFormForEdit($form, $formData)
     {
-        if (!$formData['fields']['isLatestVariation'] ||
-            in_array(
-                $formData['fields']['busRegStatus'],
-                [RefData::BUSREG_STATUS_REGISTERED, RefData::BUSREG_STATUS_CANCELLED]
-            )
-        ) {
+        $busReg = $this->getBusReg();
+
+        if ($busReg['isReadOnly'] || $busReg['isFromEbsr']) {
             $form->setOption('readonly', true);
         }
 
         return $form;
+    }
+
+    /**
+     * Gets a Bus Reg - we'll have this query cached, and if it previously failed we'll have returned a 404 already
+     *
+     * @return array|mixed
+     */
+    private function getBusReg()
+    {
+        $params = ['id' => $this->params()->fromRoute('busRegId')];
+        $response = $this->handleQuery(BusRegDto::create($params));
+
+        return $response->getResult();
     }
 }
