@@ -301,5 +301,4 @@ class IrfoPsvAuth extends OrganisationBase
      * @Form\Type("Hidden")
      */
     public $isResetable = null;
-
 }
