@@ -21,7 +21,6 @@ use Zend\View\Model\ViewModel;
 use Common\RefData;
 use Zend\Form\Form as ZendForm;
 use Common\Form\Elements\InputFilters\ActionButton;
-use Olcs\Logging\Log\Logger;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
 /**
