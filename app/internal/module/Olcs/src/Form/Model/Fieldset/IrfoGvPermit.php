@@ -47,7 +47,8 @@ class IrfoGvPermit extends OrganisationBase
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
     public $inForceDate;
 
@@ -63,7 +64,6 @@ class IrfoGvPermit extends OrganisationBase
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     *
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "expiryDate",
@@ -71,6 +71,7 @@ class IrfoGvPermit extends OrganisationBase
      *          "context_truth": false,
      *          "allow_empty" : true,
      *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
      *              {
      *                  "name": "DateCompare",

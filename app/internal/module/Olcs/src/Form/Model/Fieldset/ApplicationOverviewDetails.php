@@ -37,6 +37,8 @@ class ApplicationOverviewDetails
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DateSelect")
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name": "Date", "options":{"format":"Y-m-d"}})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $receivedDate = null;
@@ -55,6 +57,8 @@ class ApplicationOverviewDetails
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DateSelect")
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name": "Date", "options":{"format":"Y-m-d"}})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $targetCompletionDate = null;

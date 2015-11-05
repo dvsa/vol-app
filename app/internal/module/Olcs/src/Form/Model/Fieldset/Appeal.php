@@ -19,6 +19,7 @@ class Appeal extends CaseBase
      * })
      * @Form\Type("DateSelect")
      * @Form\Required(false)
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
@@ -32,6 +33,7 @@ class Appeal extends CaseBase
      *     "render_delimiters": false
      * })
      * @Form\Type("DateSelect")
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
@@ -81,6 +83,7 @@ class Appeal extends CaseBase
      * })
      * @Form\Required(false)
      * @Form\Type("DateSelect")
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
@@ -95,6 +98,7 @@ class Appeal extends CaseBase
      * })
      * @Form\Required(false)
      * @Form\Type("DateSelect")
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
@@ -109,6 +113,7 @@ class Appeal extends CaseBase
      * })
      * @Form\Required(false)
      * @Form\Type("DateSelect")
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
@@ -123,6 +128,7 @@ class Appeal extends CaseBase
      * })
      * @Form\Required(false)
      * @Form\Type("DateSelect")
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
@@ -177,6 +183,7 @@ class Appeal extends CaseBase
      *          "context_field": "isWithdrawn",
      *          "context_values": {"Y"},
      *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
      *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
      *          }

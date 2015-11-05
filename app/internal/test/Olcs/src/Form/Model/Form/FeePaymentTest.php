@@ -38,19 +38,19 @@ class FeePaymentTest extends AbstractFormTest
         $todayArr = [
             'day' => $today->format('d'),
             'month' => $today->format('m'),
-            'year' => $today->format('y')
+            'year' => $today->format('Y')
         ];
         $yesterday = $dateHelper->getDateObject('yesterday');
         $yesterdayArr = [
             'day' => $yesterday->format('d'),
             'month' => $yesterday->format('m'),
-            'year' => $yesterday->format('y')
+            'year' => $yesterday->format('Y')
         ];
         $tomorrow = $dateHelper->getDateObject('tomorrow');
         $tomorrowArr = [
             'day' => $tomorrow->format('d'),
             'month' => $tomorrow->format('m'),
-            'year' => $tomorrow->format('y')
+            'year' => $tomorrow->format('Y')
         ];
 
         // cheque dates
@@ -58,7 +58,7 @@ class FeePaymentTest extends AbstractFormTest
         $invalidChequeArr = [
             'day' => $invalidChequeDate->format('d'),
             'month' => $invalidChequeDate->format('m'),
-            'year' => $invalidChequeDate->format('y')
+            'year' => $invalidChequeDate->format('Y')
         ];
 
         $cardContext = new F\Context(new F\Stack(['details', 'paymentType']), 'fpm_card_offline');

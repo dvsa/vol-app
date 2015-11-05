@@ -90,6 +90,7 @@ class FeePaymentDetails
      *          "allow_empty": false,
      *          "validators": {
      *              {"name": "NotEmpty"},
+     *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
      *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
      *          }
@@ -213,6 +214,7 @@ class FeePaymentDetails
      *          "allow_empty": false,
      *          "validators": {
      *              {"name": "NotEmpty"},
+     *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
      *              {"name": "\Common\Form\Elements\Validators\ChequeDate"},
      *              {

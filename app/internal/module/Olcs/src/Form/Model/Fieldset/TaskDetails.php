@@ -35,6 +35,9 @@ class TaskDetails
      *     "max_year_delta": "+10"
      * })
      * @Form\Type("DateSelect")
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $actionDate = null;
 

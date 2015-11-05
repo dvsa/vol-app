@@ -79,6 +79,7 @@ class Offence extends Base
      *     "context_values": {"def_t_op", ""},
      *     "context_truth": false,
      *     "validators": {
+     *          {"name": "\Common\Validator\Date"},
      *          {"name": "Date", "options":{"format":"Y-m-d"}},
      *          {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
      *     }}
@@ -132,7 +133,8 @@ class Offence extends Base
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      * @Form\Validator({
      *      "name": "DateCompare",
@@ -150,7 +152,8 @@ class Offence extends Base
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $convictionDate = null;
