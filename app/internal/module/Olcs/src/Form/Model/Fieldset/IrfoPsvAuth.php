@@ -268,7 +268,7 @@ class IrfoPsvAuth extends OrganisationBase
     public $copiesRequiredTotal = null;
 
     /**
-     * @Form\Type("Text")
+     * @Form\Type("Hidden")
      */
     public $isGrantable = null;
 
