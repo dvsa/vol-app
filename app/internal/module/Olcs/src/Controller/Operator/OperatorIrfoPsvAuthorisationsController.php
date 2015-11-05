@@ -106,116 +106,62 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         'status' => 'irfo_auth_s_pending',
     ];
 
-    private function determineResponse($action, $commandData)
+    /**
+     * Determines the command needed being performed based on posted data
+     *
+     * @param $data
+     * @return null
+     */
+    protected function determineCommand()
     {
-        switch ($action)
-        {
-            case 'grant':
-                return $this->handleCommand(GrantDto::create($commandData));
-            default:
-                return $this->handleCommand(UpdateDto::create($commandData));
+        foreach ($this->allActions as $action) {
+            if ($this->isButtonPressed($action)) {
+                switch ($action)
+                {
+                    case 'grant':
+                        return GrantDto::class;
+                    default:
+                        return UpdateDto::class;
+                }
+            }
         }
+
+        return null;
     }
 
+    /**
+     * Edit action - determines a varying command prior to execution of parent
+     * @return array|ViewModel
+     */
     public function editAction()
     {
-        $paramProvider = new GenericItem($this->itemParams);
-        $editViewTemplate = 'pages/crud-form';
-        $successMessage = 'Updated record';
-        $contentTitle = null;
+        $command = $this->determineCommand();
 
-        Logger::debug(__FILE__);
-        Logger::debug(__METHOD__);
-
-        $request = $this->getRequest();
-        $action = ucfirst($this->params()->fromRoute('action'));
-        $form = $this->getForm($this->formClass);
-        $this->placeholder()->setPlaceholder('form', $form);
-        $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
-
-        if ($request->isPost()) {
-            $dataFromPost = (array) $this->params()->fromPost();
-            $form->setData($dataFromPost);
-        }
-
-        if ($this->persist && $request->isPost() && $form->isValid()) {
-            $commandData = Mapper::mapFromForm($form->getData());
-            $action = Mapper::determineAction($form->getData());
-
-            $response = $this->determineResponse($action, $commandData);
-
-            if ($response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            }
-
-            if ($response->isClientError()) {
-                $flashErrors = Mapper::mapFromErrors($form, $response->getResult());
-                foreach ($flashErrors as $error) {
-                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
-                }
-            }
-
-            if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
-                return $this->redirectTo($response->getResult());
-            }
-
-        } elseif (!$request->isPost()) {
-            $paramProvider->setParams($this->plugin('params'));
-            $itemParams = $paramProvider->provideParameters();
-            $response = $this->handleQuery(ItemDto::create($itemParams));
-
-            if ($response->isNotFound()) {
-                return $this->notFoundAction();
-            }
-
-            if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            }
-
-            if ($response->isOk()) {
-                $result = $response->getResult();
-
-                $formData = Mapper::mapFromResult($result);
-
-                if (method_exists($this, 'alterFormFor' . $action)) {
-                    $form = $this->{'alterFormFor' . $action}($form, $formData);
-                }
-
-                $form->setData($formData);
-            }
-        } elseif (!$form->isValid()) {
-
-            // We need to query the result again to determine the correct actions to remove
-            $paramProvider->setParams($this->plugin('params'));
-            $itemParams = $paramProvider->provideParameters();
-            $response = $this->handleQuery(ItemDto::create($itemParams));
-
-            if ($response->isNotFound()) {
-                return $this->notFoundAction();
-            }
-
-            if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            }
-
-            if ($response->isOk()) {
-                $result = $response->getResult();
-
-                $originalData = Mapper::mapFromResult($result);
-
-                $form = $this->setActionButtons($form, $originalData);
-            }
-        }
-
-        return $this->viewBuilder()->buildViewFromTemplate($this->editViewTemplate);
+        return parent::edit(
+            $this->formClass,
+            $this->itemDto,
+            new GenericItem($this->itemParams),
+            $command,
+            $this->mapperClass,
+            $this->editViewTemplate,
+            $this->editSuccessMessage,
+            $this->editContentTitle
+        );
     }
 
+    /**
+     * Details action not used
+     * @return array
+     */
     public function detailsAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * Delete action not used
+     * @return array
+     */
     public function deleteAction()
     {
         return $this->notFoundAction();
@@ -269,11 +215,19 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         return $form;
     }
 
-    private function determineFormButton($form, $formData, $action)
+    /**
+     * Removes buttons if action cannot be performed on the entity
+     *
+     * @param ZendForm $form
+     * @param $formData
+     * @param $action
+     * @return ZendForm
+     */
+    private function determineFormButton(ZendForm $form, $formData, $action)
     {
         switch($action) {
             case 'grant':
-                if (!isset($formData['isGrantable']) || $formData['isGrantable'] !== true) {
+                if (!isset($formData['fields']['isGrantable']) || (bool) $formData['fields']['isGrantable'] !== true) {
                     $form->get('form-actions')->remove($action);
                 }
                 break;
