@@ -5,7 +5,6 @@
 
 namespace Admin\Controller;
 
-use Common\Service\Data\Search\Search;
 use Dvsa\Olcs\Transfer\Command\User\CreateUser as CreateDto;
 use Dvsa\Olcs\Transfer\Command\User\UpdateUser as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\User\DeleteUser as DeleteDto;
@@ -131,6 +130,23 @@ class UserManagementController extends AbstractInternalController implements Lef
             if ($post['userType']['userType'] === 'transport-manager') {
                 $form = $this->processApplicationTransportManagerLookup($form);
             }
+        }
+
+        return $form;
+    }
+
+    protected function alterFormForAdd($form, $data)
+    {
+        $form->get('userLoginSecurity')->remove('accountDisabled');
+        $form->get('userLoginSecurity')->remove('lockedDate');
+
+        return $form;
+    }
+
+    protected function alterFormForEdit($form, $data)
+    {
+        if (empty($data['userLoginSecurity']['lockedDate'])) {
+            $form->get('userLoginSecurity')->remove('lockedDate');
         }
 
         return $form;

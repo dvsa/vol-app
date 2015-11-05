@@ -87,7 +87,6 @@ class User implements MapperInterface
         $commandData['version'] = $data['version'];
 
         $commandData['loginId'] = $data['userLoginSecurity']['loginId'];
-        $commandData['mustResetPassword'] = $data['userLoginSecurity']['mustResetPassword'];
         $commandData['accountDisabled'] = $data['userLoginSecurity']['accountDisabled'];
 
         $commandData['userType'] = $data['userType']['userType'];
