@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Transactions',
+        'title' => 'Payments and adjustments',
         'empty_message' => 'There are no transactions',
     ),
     'settings' => array(
@@ -11,29 +11,26 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'Transaction No.',
-            'stack' => 'transaction->id',
+            'title' => 'No.',
+            'name' => 'transactionId',
             'formatter' => 'TransactionNoAndStatus',
         ),
         array(
             'title' => 'Type',
-            'stack' => 'transaction->type->description',
-            'formatter' => 'StackValue',
+            'name' => 'type',
         ),
         array(
             'title' => 'Date',
-            'stack' => 'transaction->completedDate',
-            'formatter' => 'FeeTransactionDate',
+            'name' => 'completedDate',
+            'formatter' => 'Date',
         ),
         array(
             'title' => 'Method',
-            'stack' => 'transaction->paymentMethod->description',
-            'formatter' => 'StackValue',
+            'name' => 'method',
         ),
         array(
             'title' => 'Processed by',
-            'stack' => 'transaction->processedByUser->loginId',
-            'formatter' => 'StackValue',
+            'name' => 'processedBy',
         ),
         array(
             'title' => 'Allocated',

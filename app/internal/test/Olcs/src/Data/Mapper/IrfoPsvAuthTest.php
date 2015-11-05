@@ -27,7 +27,7 @@ class IrfoPsvAuthTest extends MockeryTestCase
         return [
             // add
             [
-                [],
+                ['isGrantable' => false],
                 [
                     'fields' => [
                         'copiesIssued' => 0,
@@ -37,7 +37,9 @@ class IrfoPsvAuthTest extends MockeryTestCase
                         'copiesRequired' => 0,
                         'copiesRequiredTotal' => 0,
                         'copiesRequiredNonChargeable' => 0,
-                    ]
+                        'isGrantable' => false
+                    ],
+                    'isGrantable' => false
                 ]
             ],
             // edit
@@ -51,6 +53,7 @@ class IrfoPsvAuthTest extends MockeryTestCase
                     'copiesIssuedTotal' => 11,
                     'copiesRequired' => 3,
                     'copiesRequiredTotal' => 33,
+                    'isGrantable' => false
                 ],
                 [
                     'fields' => [
@@ -66,7 +69,9 @@ class IrfoPsvAuthTest extends MockeryTestCase
                         'copiesRequired' => 3,
                         'copiesRequiredTotal' => 33,
                         'copiesRequiredNonChargeable' => 30,
+                        'isGrantable' => false
                     ],
+                    'isGrantable' => false
                 ]
             ]
         ];

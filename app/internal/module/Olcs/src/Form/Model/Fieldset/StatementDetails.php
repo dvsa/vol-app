@@ -92,6 +92,20 @@ class StatementDetails extends CaseBase
     public $requestedDate = null;
 
     /**
+     * @Form\Attributes({"id":"issuedDate"})
+     * @Form\Options({
+     *     "label": "Issued date",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Type("DateSelect")
+     * @Form\Required(false)
+     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     */
+    public $issuedDate = null;
+
+    /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Request mode",

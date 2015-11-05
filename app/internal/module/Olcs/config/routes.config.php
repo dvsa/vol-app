@@ -38,6 +38,18 @@ $feeActionRoute = [
                 ]
             ],
             'may_terminate' => true,
+            'child_routes' => [
+                'reverse' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/reverse',
+                        'defaults' => [
+                            'action' => 'reverseTransaction',
+                        ]
+                    ],
+                    'may_terminate' => true,
+                ],
+            ],
         ],
     ],
 ];
@@ -75,6 +87,19 @@ $feeTypeAjaxRoute = [
             ],
             'may_terminate' => true,
         ]
+    ],
+];
+
+$feePrintReceiptRoute = [
+    'type' => 'segment',
+    'options' => [
+        'route' => '/print-receipt/:reference',
+        'constraints' => [
+            'reference' => 'OLCS-[0-9A-F\-]+',
+        ],
+        'defaults' => [
+            'action' => 'print',
+        ],
     ],
 ];
 
@@ -1353,6 +1378,7 @@ $routes = [
                 'child_routes' => [
                     'fee_action' => $feeActionRoute,
                     'fee_type_ajax' => $feeTypeAjaxRoute,
+                    'print-receipt' => $feePrintReceiptRoute,
                 ]
             ],
             'cases' => [
@@ -1430,7 +1456,7 @@ $routes = [
                             'route' => '/delete/:doc',
                             'defaults' => [
                                 'type' => 'licence',
-                                'controller' => 'LicenceController',
+                                'controller' => 'LicenceDocsController',
                                 'action' => 'delete-document'
                             ]
                         ],
@@ -1541,6 +1567,7 @@ $routes = [
                 'child_routes' => [
                     'fee_action' => $feeActionRoute,
                     'fee_type_ajax' => $feeTypeAjaxRoute,
+                    'print-receipt' => $feePrintReceiptRoute,
                 ]
             ],
             'update-continuation' => [
@@ -1657,7 +1684,7 @@ $routes = [
                         'options' => [
                             'route' => '/psv-authorisations[/:action][/:id]',
                             'constraints' => [
-                                'action' => '(add|edit)',
+                                'action' => '(add|edit|grant|reset|approve|withdraw|refuse)',
                                 'id' => '[0-9]+'
                             ],
                             'defaults' => [
@@ -1738,6 +1765,7 @@ $routes = [
                 'child_routes' => [
                     'fee_action' => $feeActionRoute,
                     'fee_type_ajax' => $feeTypeAjaxRoute,
+                    'print-receipt' => $feePrintReceiptRoute,
                 ]
             ],
             'documents' => [
@@ -2752,6 +2780,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'child_routes' => array(
                 'fee_action' => $feeActionRoute,
                 'fee_type_ajax' => $feeTypeAjaxRoute,
+                'print-receipt' => $feePrintReceiptRoute,
             )
         ),
         'interim' => array(

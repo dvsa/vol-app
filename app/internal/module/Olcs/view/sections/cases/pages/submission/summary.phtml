@@ -4,8 +4,8 @@ $operatorName = (isset($this->data['data']['overview']['organisationName']) ?
     ((isset($this->data['data']['overview']['isMlh']) && $this->data['data']['overview']['isMlh'] == 'Y') ?
     '(MLH)' : '');
 
-$isMlh = (isset($this->data['data']['overview']['isMlh']) ?
-    $this->data['data']['overview']['isMlh'] : 'N');
+$isMlh = (!empty($this->data['data']['overview']['isMlh']) ?
+    'Y' : 'N');
 
 $entity = (isset($this->data['data']['overview']['organisationType']) ?
     $this->data['data']['overview']['organisationType'] : '');
@@ -34,7 +34,7 @@ echo $this->render('partials/read-only/main',
         'multiItems' => [
             0 => [
                 ['label' => 'Operator name', 'value' => $operatorName],
-                ['label' => 'Is MLH?', 'value' => $isMlh],
+                ['label' => 'Is MLH?', 'value' => $isMlh, 'type' => 'yesno'],
                 ['label' => 'Entity', 'value' => $entity],
                 ['label' => 'ECMS', 'value' => $ecmsNo],
                 ['label' => 'Nature of business', 'value' =>

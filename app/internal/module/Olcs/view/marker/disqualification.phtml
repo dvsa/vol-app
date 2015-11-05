@@ -6,9 +6,9 @@
     </strong>
     <br>
     <?php
-    echo $this->startDateTime->format('d/m/Y');
+    echo $this->startDateTime->format(\DATE_FORMAT);
     if (!empty($this->endDateTime)) {
-        echo ' to '. $this->endDateTime->format('d/m/Y');
+        echo ' to '. $this->endDateTime->format(\DATE_FORMAT);
     }
     ?>
     <br>

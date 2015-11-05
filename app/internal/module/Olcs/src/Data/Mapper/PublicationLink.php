@@ -25,7 +25,7 @@ class PublicationLink implements MapperInterface
             'status' => $data['publication']['pubStatus']['description'],
             'section' => $data['publicationSection']['description'],
             'trafficArea' => $data['publication']['trafficArea']['name'],
-            'publicationDate' => date('d/m/Y', strtotime($data['publication']['pubDate']))
+            'publicationDate' => date(\DATE_FORMAT, strtotime($data['publication']['pubDate']))
         ];
 
         $textFields = [

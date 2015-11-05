@@ -397,6 +397,18 @@ return [
                                                     ]
                                                 ],
                                                 'may_terminate' => true,
+                                                'child_routes' => [
+                                                    'reverse' => [
+                                                        'type' => 'segment',
+                                                        'options' => [
+                                                            'route' => '/reverse',
+                                                            'defaults' => [
+                                                                'action' => 'reverseTransaction',
+                                                            ]
+                                                        ],
+                                                        'may_terminate' => true,
+                                                    ],
+                                                ],
                                             ],
                                         ],
                                     ],
@@ -493,6 +505,7 @@ return [
             'Admin\CompaniesHouseAlertController' => 'Admin\Controller\CompaniesHouseAlertController',
             'Admin\FinancialStandingRateController' => 'Admin\Controller\FinancialStandingRateController',
             'Admin\CpmsReportController' => 'Admin\Controller\CpmsReportController',
+            'Admin\TeamsController' => \Admin\Controller\TeamController::class,
         ]
     ],
     'view_manager' => [

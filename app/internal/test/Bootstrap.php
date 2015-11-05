@@ -40,6 +40,7 @@ class Bootstrap
         self::getRealServiceManager();
 
         self::setupLogger();
+
     }
 
     public static function setupLogger()

@@ -4,18 +4,6 @@ return array(
     'variables' => array(
         'title' => 'Fees',
     ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'partRefund' => array(
-                    'class' => 'primary js-require--multiple',
-                    'value' => 'partRefund',
-                    'label' => 'Part refund',
-                    'requireRows' => true
-                ),
-            )
-        ),
-    ),
     'attributes' => array(
     ),
     'columns' => array(
@@ -42,14 +30,12 @@ return array(
         array(
             'title' => 'Allocated',
             'name' => 'allocatedAmount',
-            'formatter' => 'FeeAmount',
+            'formatter' => 'TransactionFeeAllocatedAmount',
             'align' => 'right',
         ),
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}',
-            'type' => 'Checkbox',
-        )
+            'title' => 'Status',
+            'formatter' => 'TransactionFeeStatus',
+        ),
     ),
 );

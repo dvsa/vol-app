@@ -6,10 +6,10 @@
 namespace Admin\Controller;
 
 use Common\Controller\AbstractActionController;
+use Common\Controller\Traits\GenericReceipt;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\FeesActionTrait;
 use Zend\View\Model\ViewModel;
-use Common\Controller\Traits\GenericReceipt;
 
 /**
  * Payment Processing Fees Controller

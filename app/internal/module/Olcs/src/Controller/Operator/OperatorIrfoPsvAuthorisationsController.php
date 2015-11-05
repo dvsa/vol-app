@@ -8,6 +8,7 @@ namespace Olcs\Controller\Operator;
 use Common\Form\Elements\Types\Html;
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPsvAuth as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPsvAuth as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\GrantIrfoPsvAuth as GrantDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuth as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthList as ListDto;
 use Olcs\Controller\AbstractInternalController;
@@ -20,6 +21,7 @@ use Zend\View\Model\ViewModel;
 use Common\RefData;
 use Zend\Form\Form as ZendForm;
 use Common\Form\Elements\InputFilters\ActionButton;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
 /**
  * Operator Irfo Psv Authorisations Controller
@@ -54,6 +56,8 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     protected $tableName = 'operator.irfo.psv-authorisations';
     protected $listDto = ListDto::class;
     protected $listVars = ['organisation'];
+
+    private $allActions = ['grant', 'approve', 'generateDocument', 'cns', 'withdraw', 'refuse', 'reset'];
 
     public function getLeftView()
     {
@@ -101,11 +105,62 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         'status' => 'irfo_auth_s_pending',
     ];
 
+    /**
+     * Determines the command needed being performed based on posted data
+     *
+     * @param $data
+     * @return null
+     */
+    protected function determineCommand()
+    {
+        foreach ($this->allActions as $action) {
+            if ($this->isButtonPressed($action)) {
+                switch ($action)
+                {
+                    case 'grant':
+                        return GrantDto::class;
+                    default:
+                        return UpdateDto::class;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Edit action - determines a varying command prior to execution of parent
+     * @return array|ViewModel
+     */
+    public function editAction()
+    {
+        $command = $this->determineCommand();
+
+        return parent::edit(
+            $this->formClass,
+            $this->itemDto,
+            new GenericItem($this->itemParams),
+            $command,
+            $this->mapperClass,
+            $this->editViewTemplate,
+            $this->editSuccessMessage,
+            $this->editContentTitle
+        );
+    }
+
+    /**
+     * Details action not used
+     * @return array
+     */
     public function detailsAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * Delete action not used
+     * @return array
+     */
     public function deleteAction()
     {
         return $this->notFoundAction();
@@ -120,7 +175,6 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      */
     protected function alterFormForEdit($form, $formData)
     {
-        // For now we dont want any action buttons appearing that do nothing. Hence next line is commented out.
         $form = $this->setActionButtons($form, $formData);
 
         return $form;
@@ -135,13 +189,15 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      */
     protected function alterFormForAdd($form, $formData)
     {
-        $form = $this->setActionButtons($form, $formData);
+        foreach ($this->allActions as $action) {
+            $form->get('form-actions')->remove($action);
+        }
 
         return $form;
     }
 
     /**
-     * Adds possible action buttons to the form
+     * Removes action buttons not possible from the form on GET only
      *
      * @param ZendForm $form
      * @param $formData
@@ -149,13 +205,34 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      */
     private function setActionButtons(ZendForm $form, $formData)
     {
-        $form->get('form-actions')->remove('grant');
-        $form->get('form-actions')->remove('approve');
-        $form->get('form-actions')->remove('generateDocument');
-        $form->get('form-actions')->remove('cns');
-        $form->get('form-actions')->remove('withdraw');
-        $form->get('form-actions')->remove('refuse');
-        $form->get('form-actions')->remove('reset');
+        if ($this->params('action') !== 'add') {
+            foreach ($this->allActions as $action) {
+                $form = $this->determineFormButton($form, $formData, $action);
+            }
+        }
+
+        return $form;
+    }
+
+    /**
+     * Removes buttons if action cannot be performed on the entity
+     *
+     * @param ZendForm $form
+     * @param $formData
+     * @param $action
+     * @return ZendForm
+     */
+    private function determineFormButton(ZendForm $form, $formData, $action)
+    {
+        switch($action) {
+            case 'grant':
+                if (!isset($formData['fields']['isGrantable']) || (bool) $formData['fields']['isGrantable'] !== true) {
+                    $form->get('form-actions')->remove($action);
+                }
+                break;
+            default:
+                $form->get('form-actions')->remove($action);
+        }
 
         return $form;
     }

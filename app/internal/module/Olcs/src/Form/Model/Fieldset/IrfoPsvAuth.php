@@ -266,4 +266,39 @@ class IrfoPsvAuth extends OrganisationBase
      * @Form\Validator({"name":"Digits"})
      */
     public $copiesRequiredTotal = null;
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $isGrantable = null;
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $isApprovable = null;
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $isDocumentable = null;
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $isCnsable = null;
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $isWithdrawable = null;
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $isRefusable = null;
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $isResetable = null;
 }

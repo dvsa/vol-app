@@ -690,6 +690,7 @@ abstract class AbstractInternalController extends AbstractActionController
         }
 
         if ($response->isClientError()) {
+            // @todo $result is never defined???
             if ($displayApiErrors && isset($result['messages']) && !empty($result['messages'])) {
                 foreach ($result['messages'] as $message) {
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($message);
@@ -700,6 +701,7 @@ abstract class AbstractInternalController extends AbstractActionController
         }
 
         if ($response->isOk()) {
+            // @todo $result is never defined???
             if ($displayApiSuccess && isset($result['messages']) && !empty($result['messages'])) {
                 foreach ($result['messages'] as $message) {
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($message);
@@ -938,5 +940,23 @@ abstract class AbstractInternalController extends AbstractActionController
     protected function alterTable($table, $data)
     {
         return $table;
+    }
+
+    /**
+     * Check if a button was pressed. Part of original AbstractActionController
+     *
+     * @param string $button
+     * @param array $data
+     * @return bool
+     */
+    public function isButtonPressed($button, $data = null)
+    {
+        $request = $this->getRequest();
+
+        if (is_null($data)) {
+            $data = (array)$request->getPost();
+        }
+
+        return $request->isPost() && isset($data['form-actions'][$button]);
     }
 }

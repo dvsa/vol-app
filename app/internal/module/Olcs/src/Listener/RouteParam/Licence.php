@@ -355,12 +355,6 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             return false;
         }
 
-        // The 'surrender' button is only applicable for Goods licences
-        if ($licence['goodsOrPsv']['id'] != RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
-            $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
-            return false;
-        }
-
         // The 'surrender' button is hidden if there is a queued revocation,
         // curtailment or suspension
         if ($this->hasPendingStatusChange($licence)) {

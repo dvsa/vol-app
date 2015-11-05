@@ -16,7 +16,7 @@ if (isset($sectionText)) {
     ?><p><?php echo $this->translate($sectionText); ?></p><?php
 }
 
-$messages = $this->flashMessenger('prominent-error');
+$messages = $this->flashMessengerAll('norender')->getMessagesFromNamespace('prominent-error');
 
 foreach ($messages as $message) {
   ?>
