@@ -39,6 +39,8 @@ class SearchController extends AbstractController implements LeftViewProvider
          */
         $index = $sd['index'];
         unset($sd['index']);
+        // unset the page param, as when filtering or new search the pagination should be on page 1
+        unset($sd['page']);
 
         return $this->redirect()->toRoute(
             'search',
