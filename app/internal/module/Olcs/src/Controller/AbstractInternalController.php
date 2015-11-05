@@ -939,4 +939,22 @@ abstract class AbstractInternalController extends AbstractActionController
     {
         return $table;
     }
+
+    /**
+     * Check if a button was pressed. Part of original AbstractActionController
+     *
+     * @param string $button
+     * @param array $data
+     * @return bool
+     */
+    public function isButtonPressed($button, $data = null)
+    {
+        $request = $this->getRequest();
+
+        if (is_null($data)) {
+            $data = (array)$request->getPost();
+        }
+
+        return $request->isPost() && isset($data['form-actions'][$button]);
+    }
 }
