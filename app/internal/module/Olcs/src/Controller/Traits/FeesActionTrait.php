@@ -509,9 +509,11 @@ trait FeesActionTrait
             $data = (array) $this->getRequest()->getPost();
             $form->setData($data);
             if ($form->isValid()) {
-                $response = $this->handleCommand(
-                    ReverseTransactionCmd::create(['id' => $transactionId])
-                );
+                $dtoData = [
+                    'id' => $transactionId,
+                    'reason' => $form->getData()['details']['reason'],
+                ];
+                $response = $this->handleCommand(ReverseTransactionCmd::create($dtoData));
                 if ($response->isOk()) {
                     $this->addSuccessMessage('fees.reverse-transaction.success');
                 } else {
