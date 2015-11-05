@@ -37,38 +37,4 @@ class EbsrPack extends AbstractData
 
         return $this->getData('list');
     }
-
-    /**
-     * @param $packs
-     * @throws \RuntimeException
-     * @return array
-     */
-    public function sendPackList($packs, $submissionType)
-    {
-        $result = $this->getRestClient()->post(
-            'notify',
-            [
-                'organisationId' => 75,
-                'packs' => $packs,
-                'submissionType' => $submissionType
-            ]
-        );
-
-        if (!$result) {
-            throw new \RuntimeException('Failed to submit packs for processing, please try again');
-        }
-
-        $return = ['valid' => 0, 'errors' => 0, 'messages' => []];
-
-        foreach ($result as $pack => $errors) {
-            if (empty($errors)) {
-                $return['valid'] += 1;
-            } else {
-                $return['errors'] += 1;
-                $return['messages'][$pack] = $errors;
-            }
-        }
-
-        return $return;
-    }
 }

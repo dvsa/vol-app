@@ -63,6 +63,16 @@ if (!empty($this->registrationDetails['trafficAreas'])) {
         'value' => ''
     ];
 }
+if ($this->registrationDetails['receivedDate']) {
+    $receivedDate = (new \DateTime($this->registrationDetails['receivedDate']))->format(\DATE_FORMAT);
+} else {
+    $receivedDate = '';
+}
+if ($this->registrationDetails['effectiveDate']) {
+    $effectiveDate = (new \DateTime($this->registrationDetails['effectiveDate']))->format(\DATE_FORMAT);
+} else {
+    $effectiveDate = '';
+}
 echo $this->render('partials/read-only/main',
     [
         'multiItems' => [
@@ -85,8 +95,8 @@ echo $this->render('partials/read-only/main',
                 ['label' => 'Via', 'value' => $this->registrationDetails['via']]
             ],
             6 => [
-                ['label' => 'Date received', 'value' => $this->registrationDetails['receivedDate']],
-                ['label' => 'Effective date', 'value' => $this->registrationDetails['effectiveDate']],
+                ['label' => 'Date received', 'value' => $receivedDate],
+                ['label' => 'Effective date', 'value' => $effectiveDate],
                 ['label' => 'End date', 'value' => $this->registrationDetails['endDate']]
             ],
             7 => [

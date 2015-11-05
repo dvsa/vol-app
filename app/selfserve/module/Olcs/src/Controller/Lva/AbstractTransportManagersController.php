@@ -716,7 +716,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
 
         $formData['details']['name'] = $person['forename'] . ' ' . $person['familyName'];
-        $formData['details']['birthDate'] = date('d/m/Y', strtotime($person['birthDate']));
+        $formData['details']['birthDate'] = date(\DATE_FORMAT, strtotime($person['birthDate']));
 
         return $formData;
     }

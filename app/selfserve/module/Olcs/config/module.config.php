@@ -87,10 +87,11 @@ $routes = array(
     'cookies' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/cookies[/]',
+            'route' => '/privacy-and-cookies[/]',
             'defaults' => array(
-                'controller' => \Olcs\Controller\CookiesController::class,
-                'action' => 'index'
+                'controller' => \Olcs\Controller\GuidesController::class,
+                'action' => 'index',
+                'guide' => 'privacy-and-cookies',
             )
         )
     ),
@@ -873,7 +874,6 @@ return array(
             SearchController::class => SearchController::class,
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             'Entity\View' => 'Olcs\Controller\Entity\ViewController',
-            \Olcs\Controller\CookiesController::class => \Olcs\Controller\CookiesController::class,
             \Olcs\Controller\GuidesController::class => \Olcs\Controller\GuidesController::class,
         )
     ),
@@ -1111,5 +1111,10 @@ return array(
             'Lva\VariationAddresses' => 'Olcs\BusinessService\Service\Lva\LicenceVariationAddresses',
             'Lva\AddressesChangeTask' => 'Olcs\BusinessService\Service\Lva\AddressesChangeTask',
         ]
+    ],
+    'date_settings' => [
+        'date_format' => 'd M Y',
+        'datetime_format' => 'd M Y H:i',
+        'datetimesec_format' => 'd M Y H:i:s'
     ]
 );

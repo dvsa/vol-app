@@ -74,7 +74,7 @@ return array(
             'title' => 'Submitted',
             'formatter' => function ($row) {
                 // DateTime formatter require data set at root of array
-                return date('d/m/Y H:i', strtotime($row['busReg']['ebsrSubmissions'][0]['submittedDate']));
+                return date(\DATETIME_FORMAT, strtotime($row['busReg']['ebsrSubmissions'][0]['submittedDate']));
             }
         ),
         array(

@@ -56,6 +56,7 @@ class Bootstrap
         self::$di = $di;
 
         self::setupLogger();
+
     }
 
     public static function setupLogger()
