@@ -14,8 +14,6 @@ use Olcs\View\Helper\SubmissionSectionOverview;
  */
 class SubmissionSectionDetails extends AbstractHelper
 {
-    const DEFAULT_HELPER = 'submissionsectionoverview';
-
     /**
      * Type map to view helper
      *
@@ -56,6 +54,7 @@ class SubmissionSectionDetails extends AbstractHelper
         'te-reports'                        => 'SubmissionSectionOverview',
         'site-plans'                        => 'SubmissionSectionOverview',
         'planning-permission'               => 'SubmissionSectionOverview',
+        'applicants-responses'               => 'SubmissionSectionOverview',
         'applicants-comments'               => 'SubmissionSectionOverview',
         'visibility-access-egress-size'     => 'SubmissionSectionOverview',
         'compliance-complaints'             => 'SubmissionSectionTable',
@@ -74,6 +73,8 @@ class SubmissionSectionDetails extends AbstractHelper
         'tm-previous-history'               => 'SubmissionSectionMultipleTables',
 
     );
+
+    const DEFAULT_HELPER = 'submissionsectionoverview';
 
     /**
      * Default helper name

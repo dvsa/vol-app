@@ -348,6 +348,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'site-plans',
                     'planning-permission',
                     'applicants-comments',
+                    'applicants-responses',
                     'visibility-access-egress-size',
                     'environmental-complaints',
                     'objections',
@@ -438,6 +439,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'auth-requested-applied-for',
                     'site-plans',
                     'applicants-comments',
+                    'applicants-responses',
                     'environmental-complaints',
                     'waive-fee-late-fee'
                 ];

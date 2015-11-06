@@ -639,6 +639,13 @@ return [
             'allow_comments' => true,
             'allow_attachments' => true,
         ],
+        'applicants-responses'   => [
+            'subcategoryId' => 181,
+            'config' => [],
+            'section_type' => [],
+            'allow_comments' => true,
+            'allow_attachments' => true,
+        ],
         'visibility-access-egress-size'   => [
             'subcategoryId' => 151,
             'config' => [],
