@@ -8,7 +8,6 @@
 namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
-use Olcs\Data\Mapper\Traits as MapperTraits;
 use Zend\Form\FormInterface;
 
 /**
@@ -18,8 +17,6 @@ use Zend\Form\FormInterface;
  */
 class Team implements MapperInterface
 {
-    use MapperTraits\PhoneFieldsTrait;
-
     /**
      * Should map data from a result array into an array suitable for a form
      *
