@@ -91,14 +91,12 @@ class TransportManagerFurniture implements
             ->__invoke('transport-manager/details', ['transportManager' => $data['id']], [], true);
 
         $pageTitle = sprintf(
-            '<a href="%s">%s %s</a><span class="status %s">%s</span>',
+            '<a href="%s">%s %s</a>',
             $url,
             $data['homeCd']['person']['forename'],
-            $data['homeCd']['person']['familyName'],
-            $this->tmStatuses[$data['tmStatus']['id']],
-            $data['tmStatus']['description']
+            $data['homeCd']['person']['familyName']
         );
-
+        $this->getViewHelperManager()->get('placeholder')->getContainer('status')->set($this->getStatusArray($data));
         $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->set($pageTitle);
 
         $right = new ViewModel();
@@ -127,5 +125,21 @@ class TransportManagerFurniture implements
         }
 
         return $response->getResult();
+    }
+
+    /**
+     * Get status array.
+     *
+     * @param $data
+     *
+     * @return array
+     */
+    private function getStatusArray($data)
+    {
+        $status = [
+            'colour' => $this->tmStatuses[$data['tmStatus']['id']],
+            'value'  => $data['tmStatus']['description']
+        ];
+        return $status;
     }
 }

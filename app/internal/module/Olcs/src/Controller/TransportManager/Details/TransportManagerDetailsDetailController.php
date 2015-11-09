@@ -47,7 +47,7 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
     protected $itemParams = ['id' => 'transportManager'];
 
     protected $defaultData = [
-        'tmType'  => RefData::TRANSPORT_MANAGER_STATUS_CURRENT
+        'tmStatus'  => RefData::TRANSPORT_MANAGER_STATUS_CURRENT
     ];
 
     protected $redirectConfig = [
