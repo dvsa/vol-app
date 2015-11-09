@@ -101,7 +101,7 @@ class TransportManagerFurnitureTest extends TestCase
                 m::mock()
                 ->shouldReceive('set')
                 ->once()
-                ->with('<a href="url">Bob Smith</a>')
+                ->with('<a href="url">Bob Smith</a><span class="status green">Current</span>')
                 ->getMock()
             )
             ->shouldReceive('getContainer')
@@ -141,6 +141,10 @@ class TransportManagerFurnitureTest extends TestCase
                     'forename' => 'Bob',
                     'familyName' => 'Smith'
                 ]
+            ],
+            'tmStatus' => [
+                'id' => RefData::TRANSPORT_MANAGER_STATUS_CURRENT,
+                'description' => 'Current'
             ]
         ];
 

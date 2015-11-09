@@ -17,6 +17,7 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Zend\View\Model\ViewModel;
+use Common\RefData;
 
 /**
  * Transport Manager Furniture
@@ -33,6 +34,12 @@ class TransportManagerFurniture implements
         ViewHelperManagerAwareTrait,
         QuerySenderAwareTrait,
         CommandSenderAwareTrait;
+
+    protected $tmStatuses = [
+        RefData::TRANSPORT_MANAGER_STATUS_CURRENT => 'green',
+        RefData::TRANSPORT_MANAGER_STATUS_DISQUALIFIED => 'red',
+        RefData::TRANSPORT_MANAGER_STATUS_REMOVED => 'grey'
+    ];
 
     /**
      * Create service
@@ -84,10 +91,12 @@ class TransportManagerFurniture implements
             ->__invoke('transport-manager/details', ['transportManager' => $data['id']], [], true);
 
         $pageTitle = sprintf(
-            '<a href="%s">%s %s</a>',
+            '<a href="%s">%s %s</a><span class="status %s">%s</span>',
             $url,
             $data['homeCd']['person']['forename'],
-            $data['homeCd']['person']['familyName']
+            $data['homeCd']['person']['familyName'],
+            $this->tmStatuses[$data['tmStatus']['id']],
+            $data['tmStatus']['description']
         );
 
         $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->set($pageTitle);
