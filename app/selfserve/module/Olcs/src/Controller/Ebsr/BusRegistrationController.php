@@ -16,7 +16,6 @@ use Zend\View\Model\ViewModel;
  */
 class BusRegistrationController extends AbstractController
 {
-
     /**
      * Lists all EBSR's with filter search form
      *
@@ -189,7 +188,12 @@ class BusRegistrationController extends AbstractController
 
         $documents = [];
 
-        if ($this->isGranted('selfserve-ebsr-documents')) {
+        if ($this->isGranted('selfserve-ebsr-documents') &&
+            (
+                (!empty($results['pdfDocument'])) ||
+                (!empty($results['routeDocument'])) ||
+                (!empty($results['zipDocument']))
+            )) {
 
             $documents = [
                 $results['pdfDocument'],
