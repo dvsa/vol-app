@@ -6,11 +6,13 @@ class GenericList extends AbstractParameterProvider
 {
     private $paramNames;
     private $defaultSort;
+    private $defaultOrder;
 
-    public function __construct($paramNames, $defaultSort = 'id')
+    public function __construct($paramNames, $defaultSort = 'id', $defaultOrder = 'DESC')
     {
         $this->paramNames = (array) $paramNames;
         $this->defaultSort = $defaultSort;
+        $this->defaultOrder = $defaultOrder;
     }
 
     public function provideParameters()
@@ -18,7 +20,7 @@ class GenericList extends AbstractParameterProvider
         $params = [
             'page'    => $this->notEmptyOrDefault($this->params()->fromQuery('page'), 1),
             'sort'    => $this->notEmptyOrDefault($this->params()->fromQuery('sort'), $this->defaultSort),
-            'order'   => $this->notEmptyOrDefault($this->params()->fromQuery('order'), 'DESC'),
+            'order'   => $this->notEmptyOrDefault($this->params()->fromQuery('order'), $this->defaultOrder),
             'limit'   => $this->notEmptyOrDefault($this->params()->fromQuery('limit'), 10),
         ];
 
