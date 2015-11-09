@@ -70,6 +70,7 @@ class OverviewControllerTest extends MockeryTestCase
             'applicationCompletion' => $completion,
             'sections' => $sections,
             'outstandingFeeTotal' => '99.99',
+            'disableCardPayments' => false,
         ];
 
         $userData = [
@@ -127,7 +128,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, 'actionUrl', true, true, '99.99') // button visible and enabled
+                    ->with($mockForm, 'actionUrl', true, true, '99.99', false) // button visible and enabled
                 ->getMock()
         );
 
@@ -163,7 +164,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, 'actionUrl', false, true, '99.99')  // button not visible
+                    ->with($mockForm, 'actionUrl', false, true, '99.99', false)  // button not visible
                 ->getMock()
         );
 
@@ -218,7 +219,7 @@ class OverviewControllerTest extends MockeryTestCase
             m::mock()
                 ->shouldReceive('updatePaymentSubmissonForm')
                     ->once()
-                    ->with($mockForm, 'actionUrl', true, false, '99.99') // button visible but disabled
+                    ->with($mockForm, 'actionUrl', true, false, '99.99', false) // button visible but disabled
                 ->getMock()
         );
 
