@@ -35,22 +35,33 @@ class LvaOperatingCentre extends CommonOperatingCentre
 
         $this->setSendByPostContent($form, $isNi, $params);
 
-        $this->setAdPlacedLabels($form, $isNi);
+        $this->setAdPlacedLabels($form, $isNi, $params['isVariation']);
 
         parent::alterForm($form, $params);
     }
 
-    protected function setAdPlacedLabels(Form $form, $isNi)
+    protected function setAdPlacedLabels(Form $form, $isNi, $isVariation)
     {
         $adPlaced = $form->get('advertisements')->get('adPlaced');
+
+        $guideName = 'advertising-your-operating-centre';
+
+        if ($isNi) {
+            $guideName .= '-ni';
+        } else {
+            $guideName .= '-gb';
+        }
+
+        if ($isVariation) {
+            $guideName .= '-var';
+        } else {
+            $guideName .= '-new';
+        }
 
         $label = $this->getTranslator()->translateReplace(
             'markup-lva-oc-ad-placed-label-selfserve',
             [
-                $this->getUrl()->fromRoute(
-                    'guides/guide',
-                    ['guide' => 'advertising-your-operating-centre-' . ($isNi ? 'ni' : 'gb')]
-                )
+                $this->getUrl()->fromRoute('guides/guide', ['guide' => $guideName])
             ]
         );
 
@@ -68,11 +79,21 @@ class LvaOperatingCentre extends CommonOperatingCentre
     {
         $adSendByPost = $form->get('advertisements')->get('adSendByPost');
 
+        if (empty($params['licNo'])) {
+            $reference = '';
+        } else {
+            if (isset($params['applicationId'])) {
+                $reference = ': <b>' . $params['licNo'] . '/' . $params['applicationId'] . '</b>';
+            } else {
+                $reference = ': <b>' . $params['licNo'] . '</b>';
+            }
+        }
+
         $value = $this->getTranslator()->translateReplace(
             'markup-lva-oc-ad-send-by-post-text',
             [
                 ReturnToAddress::getAddress($isNi, '<br />'),
-                $params['licence']['licNo'] . '/' . $params['id']
+                $reference
             ]
         );
 

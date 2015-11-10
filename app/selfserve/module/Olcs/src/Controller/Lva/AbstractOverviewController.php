@@ -52,9 +52,10 @@ abstract class AbstractOverviewController extends AbstractController
             [$this->getIdentifierIndex() => $applicationId]
         );
         $feeAmount = $data['outstandingFeeTotal'];
+        $disableCardPayments = (bool) $data['disableCardPayments'];
 
         $this->getServiceLocator()->get('Helper\PaymentSubmissionForm')
-            ->updatePaymentSubmissonForm($form, $actionUrl, $visible, $enabled, $feeAmount);
+            ->updatePaymentSubmissonForm($form, $actionUrl, $visible, $enabled, $feeAmount, $disableCardPayments);
 
         return $this->getOverviewView($data, $sections, $form);
 

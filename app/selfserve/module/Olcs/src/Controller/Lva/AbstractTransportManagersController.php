@@ -707,9 +707,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                         ]
                     ]
                 ],
-                'declarations' => [
-                    'confirmation' => $data['declarationConfirmation']
-                ],
                 'homeAddress' => $contactDetails['address'],
                 'workAddress' => $data['transportManager']['workCd']['address']
             ];
@@ -750,18 +747,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $tmHelper->prepareOtherEmploymentTableTm($form->get('otherEmployment'), $tma['transportManager']);
 
         $formHelper->remove($form, 'responsibilities->tmApplicationStatus');
-
-        $form->get('declarations')->get('internal')->setValue(
-            'markup-tm-declaration-' . $niOrGb . '-internal'
-        );
-
-        $form->get('declarations')->get('external')->setValue(
-            'markup-tm-declaration-' . $niOrGb . '-external'
-        );
-
-        $form->get('declarations')->get('confirmation')->setLabel(
-            'markup-tm-declaration-' . $niOrGb . '-confirmation'
-        );
 
         return $form;
     }
