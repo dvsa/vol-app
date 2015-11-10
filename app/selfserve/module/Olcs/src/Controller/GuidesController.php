@@ -17,28 +17,34 @@ use Zend\View\Model\ViewModel;
  */
 class GuidesController extends AbstractActionController
 {
-    const GUIDE_ADV_OC_GB = 'advertising-your-operating-centre-gb';
-    const GUIDE_ADV_OC_NI = 'advertising-your-operating-centre-ni';
+    const GUIDE_OC_ADV_GB_NEW = 'advertising-your-operating-centre-gb-new';
+    const GUIDE_OC_ADV_GB_VAR = 'advertising-your-operating-centre-gb-var';
+    const GUIDE_OC_ADV_NI_NEW = 'advertising-your-operating-centre-ni-new';
+    const GUIDE_OC_ADV_NI_VAR = 'advertising-your-operating-centre-ni-var';
     const GUIDE_PRIVACY_AND_COOKIES = 'privacy-and-cookies';
     const GUIDE_TERMS_AND_CONDITIONS = 'terms-and-conditions';
 
-    protected $availableGuides = [
-        self::GUIDE_ADV_OC_GB,
-        self::GUIDE_ADV_OC_NI,
-        self::GUIDE_PRIVACY_AND_COOKIES,
-        self::GUIDE_TERMS_AND_CONDITIONS,
+    protected $guideMap = [
+        self::GUIDE_OC_ADV_GB_NEW => 'oc_advert',
+        self::GUIDE_OC_ADV_GB_VAR => 'oc_advert',
+        self::GUIDE_OC_ADV_NI_NEW => 'oc_advert',
+        self::GUIDE_OC_ADV_NI_VAR => 'oc_advert',
+        self::GUIDE_PRIVACY_AND_COOKIES => 'default',
+        self::GUIDE_TERMS_AND_CONDITIONS => 'default'
     ];
 
     public function indexAction()
     {
         $guide = $this->params('guide');
 
-        if (!in_array($guide, $this->availableGuides)) {
+        if (!isset($this->guideMap[$guide])) {
             return $this->notFoundAction();
         }
 
+        $partial = $this->guideMap[$guide];
+
         $view = new ViewModel(['guide' => $guide]);
-        $view->setTemplate('pages/guides/default');
+        $view->setTemplate('pages/guides/' . $partial);
 
         return $view;
     }
