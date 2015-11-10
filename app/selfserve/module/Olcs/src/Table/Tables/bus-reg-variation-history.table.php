@@ -5,14 +5,7 @@ return array(
     'variables' => array(
         'title' => 'Registration history'
     ),
-    'settings' => array(
-        'paginate' => array(
-            'limit' => array(
-                'default' => 10,
-                'options' => array(10, 25, 50)
-            )
-        )
-    ),
+    'settings' => array(),
     'columns' => array(
         array(
             'title' => 'Reg No.',

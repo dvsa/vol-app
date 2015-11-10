@@ -228,8 +228,6 @@ class BusRegistrationController extends AbstractController
         $query = BusRegVariationHistoryDto::create(
             [
                 'id' => $busRegId,
-                'page' => 1,
-                'limit' => 50,
                 'sort' => 'variationNo',
                 'order' => 'DESC'
             ]
@@ -248,7 +246,6 @@ class BusRegistrationController extends AbstractController
 
         if ($response->isOk()) {
             $result = $response->getResult();
-
             return $tableBuilder->buildTable(
                 'bus-reg-variation-history',
                 $result,
