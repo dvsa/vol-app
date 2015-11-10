@@ -59,7 +59,6 @@ class BusRegistrationController extends AbstractController
         if ($response->isOk()) {
             $result = $response->getResult();
 
-
             /** @var \Common\Service\Table\TableBuilder $tableBuilder */
             $tableBuilder = $this->getServiceLocator()->get('Table');
 
@@ -201,7 +200,7 @@ class BusRegistrationController extends AbstractController
                 $results['zipDocument'],
             ];
         }
-        
+
         // setup layout and view
         $content = $this->generateContent(
             'olcs/bus-registration/details',
