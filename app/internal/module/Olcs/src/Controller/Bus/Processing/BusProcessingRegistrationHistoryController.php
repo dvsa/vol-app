@@ -5,7 +5,7 @@
 namespace Olcs\Controller\Bus\Processing;
 
 use Dvsa\Olcs\Transfer\Query\Bus\BusReg;
-use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegRegistrationHistoryList;
+use Dvsa\Olcs\Transfer\Query\Bus\PaginatedRegistrationHistoryList as BusRegRegistrationHistoryList;
 use Dvsa\Olcs\Transfer\Command\Bus\DeleteBus;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
@@ -33,7 +33,7 @@ class BusProcessingRegistrationHistoryController extends AbstractInternalControl
      * Holds an array of variables for the
      * default index list page.
      */
-    protected $listVars = ['busReg' => 'busRegId', 'id' => 'busRegId'];
+    protected $listVars = ['id' => 'busRegId'];
     protected $itemParams = ['id' => 'busRegId'];
     protected $defaultTableSortField = 'variationNo';
     protected $tableName = 'Bus/registration-history';
