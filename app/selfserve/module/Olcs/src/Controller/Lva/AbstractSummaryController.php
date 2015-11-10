@@ -60,7 +60,8 @@ abstract class AbstractSummaryController extends AbstractController
             'completionDate' => $data['targetCompletionDate'],
             'paymentRef' => $reference,
             'actions' => $data['actions'],
-            'transportManagers' => $data['transportManagers'] ? $data['transportManagers'] : []
+            'transportManagers' => $data['transportManagers'] ? $data['transportManagers'] : [],
+            'outstandingFee' => $data['outstandingFee'],
         ];
     }
 }
