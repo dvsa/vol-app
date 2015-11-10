@@ -17,6 +17,7 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Zend\View\Model\ViewModel;
+use Common\RefData;
 
 /**
  * Transport Manager Furniture
@@ -33,6 +34,12 @@ class TransportManagerFurniture implements
         ViewHelperManagerAwareTrait,
         QuerySenderAwareTrait,
         CommandSenderAwareTrait;
+
+    protected $tmStatuses = [
+        RefData::TRANSPORT_MANAGER_STATUS_CURRENT => 'green',
+        RefData::TRANSPORT_MANAGER_STATUS_DISQUALIFIED => 'red',
+        RefData::TRANSPORT_MANAGER_STATUS_REMOVED => 'grey'
+    ];
 
     /**
      * Create service
@@ -89,7 +96,7 @@ class TransportManagerFurniture implements
             $data['homeCd']['person']['forename'],
             $data['homeCd']['person']['familyName']
         );
-
+        $this->getViewHelperManager()->get('placeholder')->getContainer('status')->set($this->getStatusArray($data));
         $this->getViewHelperManager()->get('placeholder')->getContainer('pageTitle')->set($pageTitle);
 
         $right = new ViewModel();
@@ -118,5 +125,21 @@ class TransportManagerFurniture implements
         }
 
         return $response->getResult();
+    }
+
+    /**
+     * Get status array.
+     *
+     * @param $data
+     *
+     * @return array
+     */
+    private function getStatusArray($data)
+    {
+        $status = [
+            'colour' => $this->tmStatuses[$data['tmStatus']['id']],
+            'value'  => $data['tmStatus']['description']
+        ];
+        return $status;
     }
 }
