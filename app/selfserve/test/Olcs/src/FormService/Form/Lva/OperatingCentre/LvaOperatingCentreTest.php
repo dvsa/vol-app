@@ -100,7 +100,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
                 'translated-markup-lva-oc-ad-send-by-post-text'
                 . '-Department of the Environment<br />The Central Licensing Office<br />PO Box 180'
                 . '<br />Leeds<br />LS9 1BU'
-                . '-AB12345/124'
+                . '-: <b>AB12345/111</b>'
             );
 
         $adPlaced = m::mock();
@@ -109,7 +109,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
             ->with(
                 'translated-markup-lva-oc-ad-placed-label-selfserve'
                 . '-guides/guide'
-                . '-advertising-your-operating-centre-ni'
+                . '-advertising-your-operating-centre-ni-new'
             );
 
         $adPlaced->shouldReceive('getValueOptions')->andReturn(['Y' => 'Yes', 'N' => 'No']);
@@ -169,7 +169,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
                 'translated-markup-lva-oc-ad-send-by-post-text'
                 . '-Office of the Traffic Commissioner<br />The Central Licensing Office<br />Hillcrest House'
                 . '<br />386 Harehills Lane<br />Leeds<br />LS9 6NF'
-                . '-AB12345/124'
+                . '-: <b>AB12345/111</b>'
             );
 
         $adPlaced = m::mock();
@@ -178,7 +178,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
             ->with(
                 'translated-markup-lva-oc-ad-placed-label-selfserve'
                 . '-guides/guide'
-                . '-advertising-your-operating-centre-gb'
+                . '-advertising-your-operating-centre-gb-new'
             );
 
         $adPlaced->shouldReceive('getValueOptions')->andReturn(['Y' => 'Yes', 'N' => 'No']);
@@ -212,9 +212,9 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'canUpdateAddress' => true,
                     'wouldIncreaseRequireAdditionalAdvertisement' => false,
                     'niFlag' => 'Y',
-                    'licence' => [
-                        'licNo' => 'AB12345'
-                    ]
+                    'licNo' => 'AB12345',
+                    'applicationId' => 111,
+                    'isVariation' => false
                 ]
             ],
             [
@@ -227,9 +227,9 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'trafficArea' => [
                         'isNi' => 1
                     ],
-                    'licence' => [
-                        'licNo' => 'AB12345'
-                    ]
+                    'licNo' => 'AB12345',
+                    'applicationId' => 111,
+                    'isVariation' => false
                 ]
             ],
             [
@@ -243,8 +243,10 @@ class LvaOperatingCentreTest extends MockeryTestCase
                         'trafficArea' => [
                             'isNi' => 1
                         ],
-                        'licNo' => 'AB12345'
-                    ]
+                    ],
+                    'licNo' => 'AB12345',
+                    'applicationId' => 111,
+                    'isVariation' => false
                 ]
             ]
         ];
@@ -261,9 +263,9 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'canUpdateAddress' => true,
                     'wouldIncreaseRequireAdditionalAdvertisement' => false,
                     'niFlag' => 'N',
-                    'licence' => [
-                        'licNo' => 'AB12345'
-                    ]
+                    'licNo' => 'AB12345',
+                    'applicationId' => 111,
+                    'isVariation' => false
                 ]
             ],
             [
@@ -276,9 +278,9 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'trafficArea' => [
                         'isNi' => 0
                     ],
-                    'licence' => [
-                        'licNo' => 'AB12345'
-                    ]
+                    'licNo' => 'AB12345',
+                    'applicationId' => 111,
+                    'isVariation' => false
                 ]
             ],
             [
@@ -291,9 +293,11 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'licence' => [
                         'trafficArea' => [
                             'isNi' => 0
-                        ],
-                        'licNo' => 'AB12345'
-                    ]
+                        ]
+                    ],
+                    'licNo' => 'AB12345',
+                    'applicationId' => 111,
+                    'isVariation' => false
                 ]
             ],
             [
@@ -303,9 +307,9 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'canAddAnother' => true,
                     'canUpdateAddress' => true,
                     'wouldIncreaseRequireAdditionalAdvertisement' => false,
-                    'licence' => [
-                        'licNo' => 'AB12345'
-                    ]
+                    'licNo' => 'AB12345',
+                    'applicationId' => 111,
+                    'isVariation' => false
                 ]
             ]
         ];
