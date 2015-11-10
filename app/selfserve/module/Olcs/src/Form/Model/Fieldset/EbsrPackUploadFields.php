@@ -13,11 +13,11 @@ class EbsrPackUploadFields
     /**
      * @Form\Name("submissionType")
      * @Form\Options({
-     *     "label": "Upload type",
+     *     "label": "What type of application are you making?",
      *     "help-block": "Please select an upload type",
      *     "value_options":{
-     *          "ebsrt_new":"New Application",
-     *          "ebsrt_refresh":"Data Refresh"
+     *          "ebsrt_new":"New application",
+     *          "ebsrt_refresh":"Data refresh"
      *      },
      *      "fieldset-attributes" : {
      *          "class":"checkbox"
