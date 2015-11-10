@@ -95,6 +95,17 @@ $routes = array(
             )
         )
     ),
+    'terms-and-conditions' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/terms-and-conditions[/]',
+            'defaults' => array(
+                'controller' => \Olcs\Controller\GuidesController::class,
+                'action' => 'index',
+                'guide' => 'terms-and-conditions',
+            )
+        )
+    ),
     'search' => array(
         'type' => 'segment',
         'options' =>  array(

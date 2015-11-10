@@ -20,11 +20,13 @@ class GuidesController extends AbstractActionController
     const GUIDE_ADV_OC_GB = 'advertising-your-operating-centre-gb';
     const GUIDE_ADV_OC_NI = 'advertising-your-operating-centre-ni';
     const GUIDE_PRIVACY_AND_COOKIES = 'privacy-and-cookies';
+    const GUIDE_TERMS_AND_CONDITIONS = 'terms-and-conditions';
 
     protected $availableGuides = [
         self::GUIDE_ADV_OC_GB,
         self::GUIDE_ADV_OC_NI,
         self::GUIDE_PRIVACY_AND_COOKIES,
+        self::GUIDE_TERMS_AND_CONDITIONS,
     ];
 
     public function indexAction()
