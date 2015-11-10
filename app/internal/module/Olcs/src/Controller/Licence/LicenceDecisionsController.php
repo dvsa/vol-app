@@ -362,6 +362,7 @@ class LicenceDecisionsController extends AbstractController
         $this->getServiceLocator()->get('Helper\Form')->setDefaultDate(
             $form->get('licence-decision')->get('surrenderDate')
         );
+        $form->get('form-actions')->get('confirm')->setLabel('licence-status.surrender.surrender-button');
 
         return $this->renderDecisionView($form, 'Surrender licence');
     }
@@ -403,6 +404,7 @@ class LicenceDecisionsController extends AbstractController
         $this->getServiceLocator()->get('Helper\Form')->setDefaultDate(
             $form->get('licence-decision')->get('terminateDate')
         );
+        $form->get('form-actions')->get('confirm')->setLabel('licence-status.terminate.terminate-button');
 
         return $this->renderDecisionView($form, 'Terminate licence');
     }
