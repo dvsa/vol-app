@@ -19,6 +19,7 @@ use Olcs\Form\Model\Form\TransportManager as TransportManagerForm;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Zend\View\Model\ViewModel;
+use Common\RefData;
 
 /**
  * Transport Manager Details Detail Controller
@@ -46,7 +47,7 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
     protected $itemParams = ['id' => 'transportManager'];
 
     protected $defaultData = [
-        'tmType'  => TransportManagerEntityService::TRANSPORT_MANAGER_STATUS_ACTIVE
+        'tmStatus'  => RefData::TRANSPORT_MANAGER_STATUS_CURRENT
     ];
 
     protected $redirectConfig = [

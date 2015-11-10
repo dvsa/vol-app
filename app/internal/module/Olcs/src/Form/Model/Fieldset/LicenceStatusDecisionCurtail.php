@@ -12,6 +12,7 @@ class LicenceStatusDecisionCurtail
     /**
      * @Form\Type("DateTimeSelect")
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({
      *     "name": "Date",
      *     "options": {
@@ -45,6 +46,7 @@ class LicenceStatusDecisionCurtail
      *          "context_truth": false,
      *          "allow_empty" : true,
      *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
      *              {
      *                  "name": "Date",
      *                  "options": {

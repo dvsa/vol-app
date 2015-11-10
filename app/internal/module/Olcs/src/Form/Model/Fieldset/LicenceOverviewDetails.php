@@ -23,6 +23,8 @@ class LicenceOverviewDetails
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
     public $continuationDate = null;
 
@@ -40,6 +42,8 @@ class LicenceOverviewDetails
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
     public $reviewDate = null;
 

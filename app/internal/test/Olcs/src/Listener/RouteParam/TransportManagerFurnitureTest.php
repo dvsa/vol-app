@@ -89,6 +89,10 @@ class TransportManagerFurnitureTest extends TestCase
 
     public function testOnTransportManagerFurniture()
     {
+        $statusArray = [
+            'colour' => 'green',
+            'value' => 'Current'
+        ];
         $event = m::mock(RouteParam::class);
         $event->shouldReceive('getValue')->andReturn(111);
 
@@ -121,6 +125,15 @@ class TransportManagerFurnitureTest extends TestCase
                     ->once()
                     ->with(m::type(ViewModel::class))
                     ->getMock()
+            )
+            ->shouldReceive('getContainer')
+            ->with('status')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->with($statusArray)
+                    ->once()
+                    ->getMock()
             );
 
         $this->mockViewHelperManager->shouldReceive('get')
@@ -141,6 +154,10 @@ class TransportManagerFurnitureTest extends TestCase
                     'forename' => 'Bob',
                     'familyName' => 'Smith'
                 ]
+            ],
+            'tmStatus' => [
+                'id' => RefData::TRANSPORT_MANAGER_STATUS_CURRENT,
+                'description' => 'Current'
             ]
         ];
 

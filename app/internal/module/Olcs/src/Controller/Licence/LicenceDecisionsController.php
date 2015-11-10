@@ -55,7 +55,8 @@ class LicenceDecisionsController extends AbstractController
         $result = $response->getResult();
 
         $pageTitle = ucfirst($decision) ." licence";
-        if ($this->getRequest()->isPost() || $result['suitableForDecisions'] === true) {
+        if (!isset($result['suitableForDecisions']) || $this->getRequest()->isPost() ||
+            $result['suitableForDecisions'] === true) {
             return $this->redirectToDecision($decision, $licence);
         }
 

@@ -20,7 +20,8 @@ class LicenceStatusDecisionTerminate
      *      "min_year_delta": "-5",
      * })
      * @Form\Validator({"name": "\Zend\Validator\NotEmpty"})
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name":"\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $terminateDate = null;
