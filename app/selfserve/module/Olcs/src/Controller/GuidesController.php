@@ -23,6 +23,7 @@ class GuidesController extends AbstractActionController
     const GUIDE_OC_ADV_NI_VAR = 'advertising-your-operating-centre-ni-var';
     const GUIDE_PRIVACY_AND_COOKIES = 'privacy-and-cookies';
     const GUIDE_TERMS_AND_CONDITIONS = 'terms-and-conditions';
+    const GUIDE_FINANCIAL_EVIDENCE = 'financial-evidence';
 
     protected $guideMap = [
         self::GUIDE_OC_ADV_GB_NEW => 'oc_advert',
@@ -30,7 +31,8 @@ class GuidesController extends AbstractActionController
         self::GUIDE_OC_ADV_NI_NEW => 'oc_advert',
         self::GUIDE_OC_ADV_NI_VAR => 'oc_advert',
         self::GUIDE_PRIVACY_AND_COOKIES => 'default',
-        self::GUIDE_TERMS_AND_CONDITIONS => 'default'
+        self::GUIDE_TERMS_AND_CONDITIONS => 'default',
+        self::GUIDE_FINANCIAL_EVIDENCE => 'default',
     ];
 
     public function indexAction()
