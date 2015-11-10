@@ -39,6 +39,8 @@ class BusRegistrationController extends AbstractController
         $params['ebsrSubmissionStatus'] = $this->params()->fromRoute('status');
         $params['sort'] = $this->params()->fromRoute('sort');
         $params['order'] = $this->params()->fromRoute('order');
+        $params['page'] = $this->params()->fromRoute('page');
+        $params['limit'] = $this->params()->fromRoute('limit');
 
         $query = ListDto::create($params);
 
