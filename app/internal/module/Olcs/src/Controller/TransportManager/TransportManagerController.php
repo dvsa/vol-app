@@ -320,4 +320,44 @@ class TransportManagerController extends AbstractController implements Transport
 
         return $this->renderView($view, 'transport-manager-remove');
     }
+
+    public function undoDisqualificationAction()
+    {
+        $request = $this->getRequest();
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createFormWithRequest('GenericConfirmation', $request);
+
+        $form->get('messages')
+            ->get('message')
+            ->setValue('transport-manager-undo-disqualification-are-you-sure');
+
+        $form->get('form-actions')
+            ->get('submit')
+            ->setLabel('transport-manager-confirmation-remove-disqualification');
+
+        if ($request->isPost()) {
+            $command = \Dvsa\Olcs\Transfer\Command\Tm\UndoDisqualification::create(
+                [
+                    'id' => $this->params()->fromRoute('transportManager'),
+                ]
+            );
+
+            $response = $this->handleCommand($command);
+            if ($response->isOk()) {
+                $this->flashMessenger()->addSuccessMessage('transport-manager-disqualification-removed');
+                return $this->redirectToRouteAjax(
+                    'transport-manager/details',
+                    [
+                        'transportManager' => $this->params()->fromRoute('transportManager')
+                    ]
+                );
+            }
+        }
+
+        $view = $this->getViewWithTm(['form' => $form]);
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'transport-manager-confirmation-remove-disqualification');
+    }
 }

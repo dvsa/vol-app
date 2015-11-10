@@ -470,6 +470,13 @@ return array(
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
+                        array(
+                            'id' => 'transport-manager-quick-actions-undo-disqualification',
+                            'label' => 'tm-quick-action-undo-disqualification',
+                            'route' => 'transport-manager/undo-disqualification',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
                     ),
                 ),
             ),
