@@ -9,4 +9,9 @@ return array(
     'form_row' => [
         'render_date_hint' => false
     ],
+    'soflomo_purifier' => [
+        'config' => [
+            'Cache.SerializerPath' => sys_get_temp_dir(),
+        ],
+    ],
 );
