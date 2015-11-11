@@ -16,8 +16,8 @@ class EbsrPackUploadFields
      *     "label": "ebsr-upload-type",
      *     "help-block": "ebsr-upload-type",
      *     "value_options":{
-     *          "ebsrt_new":"New application",
-     *          "ebsrt_refresh":"Data refresh"
+     *          "ebsrt_new":"ebsr-new",
+     *          "ebsrt_refresh":"ebsr-refresh"
      *      },
      *      "fieldset-attributes" : {
      *          "class":"checkbox"
