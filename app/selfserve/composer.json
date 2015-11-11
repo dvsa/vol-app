@@ -32,10 +32,6 @@
         {
             "type": "vcs",
             "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-testhelpers.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-devtools.git"
         }
     ],
     "require": {
@@ -56,13 +52,7 @@
         "phpunit/phpunit": "^4.0.0",
         "mockery/mockery": "~0.9.3",
         "mikey179/vfsstream": "^1.4.0",
-        "olcs/olcs-testhelpers": "dev-develop",
-        "olcs/olcs-devtools": "dev-master"
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "bash vendor/olcs/olcs-devtools/bin/post-install-cmd.sh"
-        ]
+        "olcs/olcs-testhelpers": "dev-develop"
     },
     "autoload": {
         "classmap": [
