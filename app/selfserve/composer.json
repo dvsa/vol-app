@@ -60,7 +60,7 @@
         "olcs/olcs-devtools": "dev-master"
     },
     "scripts": {
-        "post-install-cmd": [
+        "post-update-cmd": [
             "bash vendor/olcs/olcs-devtools/bin/post-install-cmd.sh"
         ]
     },
