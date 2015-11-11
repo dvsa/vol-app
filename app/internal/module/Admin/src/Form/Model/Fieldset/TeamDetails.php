@@ -43,7 +43,7 @@ class TeamDetails
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a traffic area",
      * })
-     *
+     * @Form\Required(false)
      * @Form\Type("DynamicSelect")
      */
     public $trafficArea = null;
