@@ -11,6 +11,7 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Olcs\Service\Nr\RestHelper as NrRestHelper;
+use Common\RefData;
 
 /**
  * Class Cases
@@ -151,6 +152,11 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         if (!is_null($data['removedDate'])) {
             $this->getSidebarNavigation()
                 ->findById('transport-manager-quick-actions-remove')
+                ->setVisible(false);
+        }
+        if ($data['tmStatus']['id'] !== RefData::TRANSPORT_MANAGER_STATUS_DISQUALIFIED) {
+            $this->getSidebarNavigation()
+                ->findById('transport-manager-quick-actions-undo-disqualification')
                 ->setVisible(false);
         }
 

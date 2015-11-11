@@ -13,6 +13,7 @@ use Zend\Navigation\Page\Mvc as PageMvc;
 use Zend\Http\Response;
 use Olcs\Listener\RouteParams;
 use Zend\Json\Json;
+use Common\RefData;
 
 /**
  * Class ActionTest
@@ -38,6 +39,7 @@ class TransportManagerTest extends MockeryTestCase
         $tm['homeCd']['person']['familyName'] = 'B';
         $tm['removedDate'] = 'notnull';
         $tm['hasBeenMerged'] = false;
+        $tm['tmStatus']['id'] = RefData::TRANSPORT_MANAGER_STATUS_CURRENT;
 
         $url = '#';
 
@@ -96,6 +98,14 @@ class TransportManagerTest extends MockeryTestCase
                     ->with(false)
                     ->getMock()
             );
+        $sidebarNav->shouldReceive('findById')
+            ->with('transport-manager-quick-actions-undo-disqualification')
+            ->andReturn(
+                m::mock(PageMvc::class)
+                    ->shouldReceive('setVisible')
+                    ->with(false)
+                    ->getMock()
+            );
 
         $this->setupGetTransportManager($sut, $tm);
 
@@ -131,6 +141,7 @@ class TransportManagerTest extends MockeryTestCase
         $tm['homeCd']['person']['familyName'] = 'B';
         $tm['removedDate'] = null;
         $tm['hasBeenMerged'] = false;
+        $tm['tmStatus']['id'] = RefData::TRANSPORT_MANAGER_STATUS_CURRENT;
 
         $url = '#';
         $pageTitle = '<a href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
@@ -179,6 +190,14 @@ class TransportManagerTest extends MockeryTestCase
                     ->with(false)
                     ->getMock()
             );
+        $sidebarNav->shouldReceive('findById')
+            ->with('transport-manager-quick-actions-undo-disqualification')
+            ->andReturn(
+                m::mock(PageMvc::class)
+                    ->shouldReceive('setVisible')
+                    ->with(false)
+                    ->getMock()
+            );
 
         $event = new RouteParam();
         $event->setValue($tmId);
@@ -199,6 +218,7 @@ class TransportManagerTest extends MockeryTestCase
         $tm['homeCd']['person']['familyName'] = 'B';
         $tm['removedDate'] = null;
         $tm['hasBeenMerged'] = true;
+        $tm['tmStatus']['id'] = RefData::TRANSPORT_MANAGER_STATUS_DISQUALIFIED;
 
         $url = '#';
         $pageTitle = '<a href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';

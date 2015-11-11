@@ -2261,6 +2261,16 @@ $routes = [
                     ],
                 ],
             ],
+            'undo-disqualification' => [
+                'type' => 'literal',
+                'options' => [
+                    'route' => '/undo-disqualification',
+                    'defaults' => [
+                        'controller' => 'TMController',
+                        'action' => 'undoDisqualification'
+                    ],
+                ],
+            ],
         ],
     ],
     'transport-manager-lookup' => [
