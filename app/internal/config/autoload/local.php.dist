@@ -53,7 +53,7 @@ return array(
     // Document service
     'document_share' => array(
         // File hyperlink to document
-        'uri_pattern' => 'file://fs01.olcs.mgt.mtpdvsa/OLCS/olcs/%s'
+        'uri_pattern' => 'file://///fs01.olcs.mgt.mtpdvsa/OLCS/olcs/%s'
     ),
 
     // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific*
