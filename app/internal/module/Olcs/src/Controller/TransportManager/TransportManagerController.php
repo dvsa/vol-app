@@ -353,6 +353,9 @@ class TransportManagerController extends AbstractController implements Transport
                     ]
                 );
             }
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
         }
 
         $view = $this->getViewWithTm(['form' => $form]);
