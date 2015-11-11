@@ -187,18 +187,17 @@ class BusRegistrationController extends AbstractController
 
         $documents = [];
 
-        if ($this->isGranted('selfserve-ebsr-documents') &&
-            (
-                (!empty($results['pdfDocument'])) ||
-                (!empty($results['routeDocument'])) ||
-                (!empty($results['zipDocument']))
-            )) {
-
-            $documents = [
-                $results['pdfDocument'],
-                $results['routeDocument'],
-                $results['zipDocument'],
-            ];
+        if ($this->isGranted('selfserve-ebsr-documents'))
+        {
+            if (!empty($results['pdfDocument'])) {
+                $documents[] = $results['pdfDocument'];
+            }
+            if (!empty($results['routeDocument'])) {
+                $documents[] = $results['routeDocument'];
+            }
+            if (!empty($results['zipDocument'])) {
+                $documents[] = $results['zipDocument'];
+            }
         }
 
         // setup layout and view
