@@ -1,61 +1,44 @@
 <?php
-
 /**
  * History Controller
  */
 namespace Olcs\Controller\Application\Processing;
 
-use Dvsa\Olcs\Transfer\Query\Audit\ReadApplication;
+use Dvsa\Olcs\Transfer\Query\Processing\History;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Common\Controller\Traits as CommonTraits;
+use Zend\Mvc\MvcEvent as MvcEvent;
 
 /**
  * History Controller
  */
-class HistoryController extends AbstractApplicationProcessingController
+class HistoryController extends AbstractInternalController implements ApplicationControllerInterface, LeftViewProvider
 {
     /**
-     * @var string
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
      */
-    protected $section = 'history';
+    protected $navigationId = 'application_processing_history';
 
-    public function indexAction()
+    /**
+     * Holds an array of variables for the
+     * default index list page.
+     */
+    protected $listVars = ['application'];
+    protected $defaultTableSortField = 'eventDatetime';
+    protected $tableName = 'event-history';
+    protected $listDto = History::class;
+
+    public function getLeftView()
     {
-        $view = $this->getViewWithApplication();
+        $view = new ViewModel();
+        $view->setTemplate('sections/processing/partials/left');
 
-        $params = [
-            'application' => $this->getQueryOrRouteParam('application'),
-            'page'    => $this->getQueryOrRouteParam('page', 1),
-            'sort'    => $this->getQueryOrRouteParam('sort', 'id'),
-            'order'   => $this->getQueryOrRouteParam('order', 'desc'),
-            'limit'   => $this->getQueryOrRouteParam('limit', 10),
-        ];
-
-        $params['query'] = $this->getRequest()->getQuery();
-
-        /**
-         * @todo need to migrate this
-         */
-        $bundle = [
-            'children' => [
-                'eventHistoryType' => [],
-                'user' => [
-                    'children' => [
-                        'contactDetails' => [
-                            'children' => [
-                                'person' => [],
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
-
-        $results = $this->makeRestCall('EventHistory', 'GET', $params, $bundle);
-
-        $view->table = $this->getTable('event-history', $results, $params);
-
-        $view->setTemplate('pages/table');
-
-        return $this->renderView($view);
+        return $view;
     }
 }
