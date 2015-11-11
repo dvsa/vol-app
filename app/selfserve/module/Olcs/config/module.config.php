@@ -1118,6 +1118,7 @@ return array(
                 'user-registration' => ['*'],
                 'user-forgot-username' => ['*'],
                 'cookies' => ['*'],
+                'terms-and-conditions' => ['*'],
                 'not-found' => ['*'],
                 'server-error' => ['*'],
                 '*' => ['selfserve-user'],
