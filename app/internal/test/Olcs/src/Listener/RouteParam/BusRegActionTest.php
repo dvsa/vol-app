@@ -65,7 +65,7 @@ class BusRegActionTest extends MockeryTestCase
             'isGrantable' => true,
             'isShortNotice' => 'Y',
             'shortNoticeRefused' => 'Y',
-            'isTxcApp' => 'Y',
+            'isFromEbsr' => true,
         ];
 
         $event = new RouteParam();
@@ -257,14 +257,14 @@ class BusRegActionTest extends MockeryTestCase
             // EBSR
             [
                 [
-                    'isTxcApp' => 'Y',
+                    'isFromEbsr' => true,
                 ],
                 true
             ],
             // non-EBSR
             [
                 [
-                    'isTxcApp' => 'N',
+                    'isFromEbsr' => false,
                 ],
                 false
             ],

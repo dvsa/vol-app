@@ -173,7 +173,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
 
     private function shouldShowRequestNewRouteMapButton($busReg)
     {
-        return (isset($busReg['isTxcApp']) && ($busReg['isTxcApp'] === 'Y'));
+        return $busReg['isFromEbsr'];
     }
 
     private function shouldShowRequestWithdrawnButton($busReg)

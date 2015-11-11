@@ -86,10 +86,6 @@ class BusRegisterServiceTest extends AbstractFormTest
                 new F\Value(F\Value::INVALID, null),
                 new F\Value(F\Value::INVALID, 'A'),
                 new F\Value(F\Value::INVALID, ['ABCDE'])
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'opNotifiedLaPteHidden']),
-                new F\Value(F\Value::VALID, 'N')
             )
         ];
     }

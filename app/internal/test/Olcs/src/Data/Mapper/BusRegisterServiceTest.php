@@ -92,7 +92,6 @@ class BusRegisterServiceTest extends MockeryTestCase
                     'fields' => [
                         'id' => 987,
                         'version' => 1,
-                        'opNotifiedLaPteHidden' => 'N'
                     ],
                     'timetable' => [
                         'timetableAcceptable' => 'Y',
@@ -112,7 +111,6 @@ class BusRegisterServiceTest extends MockeryTestCase
                     'routeDescription' => 'test 1',
                     'trcConditionChecked' => 'Y',
                     'trcNotes' => 'test 2',
-                    'opNotifiedLaPteHidden' => 'N',
                     'opNotifiedLaPte' => 'N',
                 ]
             ],

@@ -97,37 +97,4 @@ class BusRegisterService extends Base
      * })
      */
     public $variationReasonsHtml = null;
-
-    /**
-     * @Form\Type("Hidden")
-     * @Form\Attributes({
-     *      "id":"registerService[opNotifiedLaPte]",
-     *      "value":"N"
-     * })
-     */
-    public $opNotifiedLaPteHidden;
-
-    /**
-     * @Form\Type("Hidden")
-     * @Form\Attributes({
-     *      "id":"registerService[isLatestVariation]"
-     * })
-     */
-    public $isLatestVariation = null;
-
-    /**
-     * @Form\Type("Hidden")
-     * @Form\Attributes({
-     *      "id":"registerService[status]"
-     * })
-     */
-    public $status = null;
-
-    /**
-     * @Form\Type("Hidden")
-     * @Form\Attributes({
-     *      "id":"registerService[busNoticePeriod]"
-     * })
-     */
-    public $busNoticePeriod = null;
 }

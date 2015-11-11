@@ -8,6 +8,7 @@ namespace OlcsTest\Controller\Bus\Service;
 use Olcs\Controller\Bus\Service\BusServiceController as Sut;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
+use Common\RefData;
 
 /**
  * Bus Service Controller Test
@@ -99,26 +100,48 @@ class BusServiceControllerTest extends MockeryTestCase
     }
 
     /**
-    * @dataProvider alterFormForEditDataProvider
-    *
-    * @param $data
-    * @param $expected
-    */
+     * @dataProvider alterFormForEditDataProvider
+     *
+     * @param $data
+     * @param $readonly
+     * @param $timetableRemoved
+     * @param $opNotifiedLaPteRemoved
+     */
     public function testAlterFormForEdit(
         $data,
         $readonly,
         $timetableRemoved,
-        $opNotifiedLaPteRemoved,
-        $opNotifiedLaPteHiddenRemoved
+        $opNotifiedLaPteRemoved
     ) {
+        $this->sut = m::mock(Sut::class)
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
+        $response = m::mock();
+        $response->shouldReceive('getResult')
+            ->once()
+            ->andReturn($data);
+
+        $busRegId = 56;
+        $params = m::mock()
+            ->shouldReceive('fromRoute')->with('busRegId')->andReturn($busRegId)
+            ->getMock();
+
+        $this->sut
+            ->shouldReceive('handleQuery')
+            ->once()
+            ->andReturn($response);
+
+        $this->sut
+            ->shouldReceive('params')
+            ->once()
+            ->andReturn($params);
+
         $mockFieldset = m::mock('\Zend\Form\Element');
         $mockFieldset->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
         $mockFieldset->shouldReceive('remove')
             ->times($opNotifiedLaPteRemoved ? 1 : 0)
             ->with('opNotifiedLaPte');
-        $mockFieldset->shouldReceive('remove')
-            ->times($opNotifiedLaPteHiddenRemoved ? 1 : 0)
-            ->with('opNotifiedLaPteHidden');
 
         $mockForm = m::mock('\Zend\Form\Form');
         $mockForm->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
@@ -130,7 +153,7 @@ class BusServiceControllerTest extends MockeryTestCase
             ->times($timetableRemoved ? 1 : 0)
             ->with('timetable');
 
-        $result = $this->sut->alterFormForEdit($mockForm, $data);
+        $result = $this->sut->alterFormForEdit($mockForm, []);
 
         $this->assertSame($mockForm, $result);
     }
@@ -138,95 +161,69 @@ class BusServiceControllerTest extends MockeryTestCase
     public function alterFormForEditDataProvider()
     {
         return [
-            // latest variation - registered - Scottish
             [
                 [
-                    'fields' => [
-                        'isLatestVariation' => true,
-                        'status' => 'breg_s_registered',
-                        'busNoticePeriod' => 1,
+                    'isReadOnly' => true,
+                    'isScottishRules' => true,
+                    'isShortNotice' => 'Y',
+                    'status' => [
+                        'id' => RefData::BUSREG_STATUS_CANCELLED
                     ],
                 ],
                 // $readonly
                 true,
                 // $timetableRemoved
-                false,
-                // $opNotifiedLaPteRemoved
-                false,
-                // $opNotifiedLaPteHiddenRemoved
                 true,
+                // $opNotifiedLaPteRemoved
+                false
             ],
-            // latest variation - registered - Scottish - busNoticePeriod as string
             [
                 [
-                    'fields' => [
-                        'isLatestVariation' => true,
-                        'status' => 'breg_s_registered',
-                        'busNoticePeriod' => '1',
+                    'isReadOnly' => false,
+                    'isScottishRules' => false,
+                    'isShortNotice' => 'Y',
+                    'status' => [
+                        'id' => RefData::BUSREG_STATUS_REGISTERED
                     ],
                 ],
                 // $readonly
-                true,
+                false,
                 // $timetableRemoved
                 false,
                 // $opNotifiedLaPteRemoved
-                false,
-                // $opNotifiedLaPteHiddenRemoved
-                true,
+                true
             ],
-            // latest variation - registered - Other
             [
                 [
-                    'fields' => [
-                        'isLatestVariation' => true,
-                        'status' => 'breg_s_registered',
-                        'busNoticePeriod' => 2,
+                    'isReadOnly' => false,
+                    'isScottishRules' => true,
+                    'isShortNotice' => 'N',
+                    'status' => [
+                        'id' => RefData::BUSREG_STATUS_CANCELLATION
                     ],
                 ],
                 // $readonly
-                true,
+                false,
                 // $timetableRemoved
                 false,
                 // $opNotifiedLaPteRemoved
-                true,
-                // $opNotifiedLaPteHiddenRemoved
-                false,
+                true
             ],
-            // latest variation - cancelled - Other
             [
                 [
-                    'fields' => [
-                        'isLatestVariation' => true,
-                        'status' => 'breg_s_cancelled',
-                        'busNoticePeriod' => 2,
+                    'isReadOnly' => false,
+                    'isScottishRules' => false,
+                    'isShortNotice' => 'N',
+                    'status' => [
+                        'id' => RefData::BUSREG_STATUS_VARIATION
                     ],
                 ],
                 // $readonly
-                true,
-                // $timetableRemoved
-                true,
-                // $opNotifiedLaPteRemoved
-                true,
-                // $opNotifiedLaPteHiddenRemoved
                 false,
-            ],
-            // previous variation - registered - Other
-            [
-                [
-                    'fields' => [
-                        'isLatestVariation' => false,
-                        'status' => 'breg_s_registered',
-                        'busNoticePeriod' => 2,
-                    ],
-                ],
-                // $readonly
-                true,
                 // $timetableRemoved
                 false,
                 // $opNotifiedLaPteRemoved
-                true,
-                // $opNotifiedLaPteHiddenRemoved
-                false,
+                true
             ],
         ];
     }
