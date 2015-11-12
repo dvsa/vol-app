@@ -1059,7 +1059,12 @@ trait FeesActionTrait
 
         $feeType = $response->getResult();
 
-        return new JsonModel(['value' => $feeType['displayValue']]);
+        return new JsonModel(
+            [
+                'value' => $feeType['displayValue'],
+                'taxRate' => $feeType['vatRate']
+            ]
+        );
     }
 
     public function feeTypeListAction()

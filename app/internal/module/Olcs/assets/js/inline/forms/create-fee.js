@@ -20,12 +20,33 @@ OLCS.ready(function() {
     jsDate.change(); // trigger change event on hidden field for cascadeInput
   });
 
-  // populate Amount field when FeeType is selected
+  var showHideVatRate = function(rate) {
+    if (rate > 0) {
+      $("#vat-rate").val(rate+'%').parent().show();
+      $("#label-amount").text('Net amount');
+      $("#amount").focus();
+    } else {
+      $("#vat-rate").val('').parent().hide();
+      $("#label-amount").text('Amount');
+    }
+  }
+
+  // populate Amount and VAT rate fields when FeeType is selected
   OLCS.cascadeInput({
     source: form + " #feeType",
     dest: form + " #amount",
-    url: urlPrefix + "/fees/ajax/fee-type",
-    clearWhenEmpty: true
+    process: function(value, callback) {
+      if (value === "") {
+        return callback([{value: ""}]);
+      }
+      OLCS.ajax({
+        url: urlPrefix + "/fees/ajax/fee-type/" + value,
+        success: function(result) {
+          callback(result);
+          showHideVatRate(result.taxRate);
+        }
+      });
+    }
   });
 
   // refresh FeeType list with appropriate effectiveFrom date according to
@@ -37,4 +58,6 @@ OLCS.ready(function() {
     emptyLabel: 'Please select'
   });
 
+  // initially hide vat rate field
+  showHideVatRate(0);
 });
