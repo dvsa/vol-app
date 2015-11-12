@@ -16,7 +16,6 @@ use Zend\View\Model\ViewModel;
  */
 class BusRegistrationController extends AbstractController
 {
-
     /**
      * Lists all EBSR's with filter search form
      *
@@ -59,7 +58,6 @@ class BusRegistrationController extends AbstractController
         $busRegistrationTable = '';
         if ($response->isOk()) {
             $result = $response->getResult();
-
 
             /** @var \Common\Service\Table\TableBuilder $tableBuilder */
             $tableBuilder = $this->getServiceLocator()->get('Table');
@@ -190,14 +188,17 @@ class BusRegistrationController extends AbstractController
         $documents = [];
 
         if ($this->isGranted('selfserve-ebsr-documents')) {
-
-            $documents = [
-                $results['pdfDocument'],
-                $results['routeDocument'],
-                $results['zipDocument'],
-            ];
+            if (!empty($results['pdfDocument'])) {
+                $documents[] = $results['pdfDocument'];
+            }
+            if (!empty($results['routeDocument'])) {
+                $documents[] = $results['routeDocument'];
+            }
+            if (!empty($results['zipDocument'])) {
+                $documents[] = $results['zipDocument'];
+            }
         }
-        
+
         // setup layout and view
         $content = $this->generateContent(
             'olcs/bus-registration/details',
@@ -225,8 +226,6 @@ class BusRegistrationController extends AbstractController
         $query = BusRegVariationHistoryDto::create(
             [
                 'id' => $busRegId,
-                'page' => 1,
-                'limit' => 50,
                 'sort' => 'variationNo',
                 'order' => 'DESC'
             ]
@@ -245,7 +244,6 @@ class BusRegistrationController extends AbstractController
 
         if ($response->isOk()) {
             $result = $response->getResult();
-
             return $tableBuilder->buildTable(
                 'bus-reg-variation-history',
                 $result,
