@@ -119,9 +119,13 @@ class BusServiceController extends AbstractInternalController implements BusRegC
             $form->remove('timetable');
         }
 
-        // opNotifiedLaPte is only needed for scottish short notice registrations,
+        if ($busReg['isShortNotice'] === 'N') {
+            $form->get('fields')->remove('laShortNote');
+        }
+
+        // opNotifiedLaPte is only needed for scottish rules, if the field is null
         // the mapper will default this data to 'N' when it is posted to the backend
-        if (!($busReg['isScottishRules'] && $busReg['isShortNotice'] === 'Y')) {
+        if (!($busReg['isScottishRules'])) {
             $form->get('fields')->remove('opNotifiedLaPte');
         }
 

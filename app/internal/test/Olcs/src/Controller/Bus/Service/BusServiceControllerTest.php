@@ -111,7 +111,8 @@ class BusServiceControllerTest extends MockeryTestCase
         $data,
         $readonly,
         $timetableRemoved,
-        $opNotifiedLaPteRemoved
+        $opNotifiedLaPteRemoved,
+        $laShortNoteRemoved
     ) {
         $this->sut = m::mock(Sut::class)
             ->makePartial()
@@ -142,6 +143,9 @@ class BusServiceControllerTest extends MockeryTestCase
         $mockFieldset->shouldReceive('remove')
             ->times($opNotifiedLaPteRemoved ? 1 : 0)
             ->with('opNotifiedLaPte');
+        $mockFieldset->shouldReceive('remove')
+            ->times($laShortNoteRemoved ? 1 : 0)
+            ->with('laShortNote');
 
         $mockForm = m::mock('\Zend\Form\Form');
         $mockForm->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
@@ -175,6 +179,8 @@ class BusServiceControllerTest extends MockeryTestCase
                 // $timetableRemoved
                 true,
                 // $opNotifiedLaPteRemoved
+                false,
+                // $laShortNoteRemoved
                 false
             ],
             [
@@ -191,7 +197,9 @@ class BusServiceControllerTest extends MockeryTestCase
                 // $timetableRemoved
                 false,
                 // $opNotifiedLaPteRemoved
-                true
+                true,
+                // $laShortNoteRemoved
+                false
             ],
             [
                 [
@@ -207,6 +215,8 @@ class BusServiceControllerTest extends MockeryTestCase
                 // $timetableRemoved
                 false,
                 // $opNotifiedLaPteRemoved
+                false,
+                // $laShortNoteRemoved
                 true
             ],
             [
@@ -223,6 +233,8 @@ class BusServiceControllerTest extends MockeryTestCase
                 // $timetableRemoved
                 false,
                 // $opNotifiedLaPteRemoved
+                true,
+                // $laShortNoteRemoved
                 true
             ],
         ];
