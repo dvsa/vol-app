@@ -1,12 +1,13 @@
 <?php echo $this->doctype(); ?>
 <html lang="en-GB">
-  <head>
-    <meta charset="utf-8">
-    <?php echo $this->headTitle($this->translate('')); ?>
-    <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')->appendHttpEquiv('X-UA-Compatible', 'IE=edge'); ?>
-    <?php echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css'), ['media' => 'screen,print']); ?>
-    <?php echo $this->headScript(); ?>
-  </head>
+    
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle($this->translate('')); ?>
+        <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')->appendHttpEquiv('X-UA-Compatible', 'IE=edge'); ?>
+        <?php echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css'), ['media' => 'screen,print']); ?>
+        <?php echo $this->headScript(); ?>
+    </head>
 
   <body class="selfserve">
     <?php echo $this->version(); ?>
@@ -54,37 +55,46 @@
     ?>
 
     <div class="page-wrapper">
+        
+        <div class="user-header">
+            <p class="phase">
+                <span class="phase__tag">alpha</span>
+                <span class="phase__message">This is a new service – <a href="https://www.surveymonkey.com/s/T8NGJV8">help us improve it.</a></span>
+            </p>
+            <ul class="user-menu">
+                <li class="user-menu__item"><?php echo $this->currentUser()->getFullName() ?>, <b>Operator Licensing Ltd.</b></li>
+                <li class="user-menu__item"><a href="<?php echo $this->url('my-details');?>">My account</a></li>
+                <li class="user-menu__item"><a href="<?php echo $this->url('zfcuser/logout');?>">Sign out</a></li>
+            </ul>
+        </div><!-- user-header -->
 
-      <div class="user-header">
-        <p class="phase"><span class="phase__tag">alpha</span><span class="phase__message">This is a new service – <a href="https://www.surveymonkey.com/s/T8NGJV8">help us improve it.</a></span></p>
-        <ul class="user-menu">
-          <li class="user-menu__item"><?php echo $this->currentUser()->getFullName() ?>, <b>Operator Licensing Ltd.</b></li>
-          <li class="user-menu__item"><a href="<?php echo $this->url('my-details');?>">My account</a></li>
-          <li class="user-menu__item"><a href="<?php echo $this->url('zfcuser/logout');?>">Sign out</a></li>
-        </ul>
-      </div><!-- end .user-header -->
-
-      <div id="main" role="main">
-
-        <?php echo $this->content; ?>
-      </div><!-- end .main -->
-    </div><!-- end .page-wrapper-->
+        <div id="main" role="main">
+            <?php echo $this->content; ?>
+        </div><!-- main -->
+      
+    </div><!-- page-wrapper-->
 
     <div class="global-footer">
-      <div class="global-footer__wrapper">
-        <ul class="global-footer__links">
-          <li class="global-footer__link"><a href="<?php echo $this->url('terms-and-conditions');?>"><?php echo $this->translate('terms-and-conditions-title') ?></a></li>
-          <li class="global-footer__link"><a href="<?php echo $this->url('cookies');?>"><?php echo $this->translate('privacy-and-cookies-title') ?></a></li>
-          <li class="global-footer__link">
-              <?php echo $this->languageLink(); ?>
-          </li>
-          <li class="global-footer__link">Built by <a href="https://www.gov.uk/government/organisations/driver-and-vehicle-standards-agency">Driver and Vehicle Standards Agency</a></li>
-        </ul>
-        <div class="global-footer__copyright">
-          <a href="">&copy; Crown copyright</a>
+        <div class="global-footer__wrapper">
+            <ul class="global-footer__links">
+                <li class="global-footer__link">
+                    <a href="<?php echo $this->url('terms-and-conditions');?>"><?php echo $this->translate('terms-and-conditions-title') ?></a>
+                </li>
+                <li class="global-footer__link">
+                    <a href="<?php echo $this->url('cookies');?>"><?php echo $this->translate('privacy-and-cookies-title') ?></a>
+                </li>
+                <li class="global-footer__link">
+                    <?php echo $this->languageLink(); ?>
+                </li>
+                <li class="global-footer__link">
+                    Built by <a href="<?php echo $this->translate('DVSA-link'); ?>">Driver and Vehicle Standards Agency</a>
+                </li>
+            </ul>
+            <div class="global-footer__copyright">
+                <a href="<?php echo $this->translate('crown-copyright-link'); ?>" target="blank">&copy; Crown copyright</a>
+            </div>
         </div>
-        </div><!-- end global-wrapper -->
-    </div><!-- end global-footer -->
+    </div><!-- global-footer -->
 
 
     <?php echo $this->inlineScript()

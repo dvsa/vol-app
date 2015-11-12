@@ -82,19 +82,6 @@ $routes = array(
                     )
                 ),
             ),
-            'guide' => array(
-                'type' => 'segment',
-                'options' =>  array(
-                    'route' => ':guide[/]',
-                    'constraints' => [
-                        'guide' => '[a-zA-Z\-0-9]+'
-                    ],
-                    'defaults' => array(
-                        'controller' => \Olcs\Controller\GuidesController::class,
-                        'action' => 'index'
-                    )
-                ),
-            ),
         )
     ),
     'cookies' => array(
