@@ -503,28 +503,9 @@ trait FeesActionTrait
         $form = $formHelper->createFormWithRequest('ReverseTransaction', $this->getRequest());
 
         if ($this->getRequest()->isPost()) {
-            if ($this->isButtonPressed('cancel')) {
-                return $this->redirectToTransaction();
-            }
-            $data = (array) $this->getRequest()->getPost();
-            $form->setData($data);
-            if ($form->isValid()) {
-                $dtoData = [
-                    'id' => $transactionId,
-                    'reason' => $form->getData()['details']['reason'],
-                ];
-                $response = $this->handleCommand(ReverseTransactionCmd::create($dtoData));
-                if ($response->isOk()) {
-                    $this->addSuccessMessage('fees.reverse-transaction.success');
-                } else {
-                    $result = $response->getResult();
-                    if (isset($result['messages'])) {
-                        foreach ($result['messages'] as $error) {
-                            $this->addErrorMessage($error);
-                        }
-                    }
-                }
-                return $this->redirectToTransaction(true);
+            $redirect = $this->handleReverseTransactionPost($form, $transactionId);
+            if (!is_null($redirect)) {
+                return $redirect;
             }
         }
 
@@ -553,6 +534,33 @@ trait FeesActionTrait
         $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'fees.reverse-transaction.title');
+    }
+
+    private function handleReverseTransactionPost($form, $transactionId)
+    {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirectToTransaction();
+        }
+        $data = (array) $this->getRequest()->getPost();
+        $form->setData($data);
+        if ($form->isValid()) {
+            $dtoData = [
+                'id' => $transactionId,
+                'reason' => $form->getData()['details']['reason'],
+            ];
+            $response = $this->handleCommand(ReverseTransactionCmd::create($dtoData));
+            if ($response->isOk()) {
+                $this->addSuccessMessage('fees.reverse-transaction.success');
+            } else {
+                $result = $response->getResult();
+                if (isset($result['messages'])) {
+                    foreach ($result['messages'] as $error) {
+                        $this->addErrorMessage($error);
+                    }
+                }
+            }
+            return $this->redirectToTransaction(true);
+        }
     }
 
     /**
@@ -687,6 +695,9 @@ trait FeesActionTrait
         return [];
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function getCreateFeeDtoData($formData)
     {
         return [];
