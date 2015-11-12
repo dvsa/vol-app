@@ -26,41 +26,65 @@
     <?php endif; ?>
   </ul>
 </div>
-<div class="two-thirds border">
-  <?php echo $this->flashMessengerAll(); ?>
-  <ul class="overview-navigation">
-      <?php
-      foreach ($sections as $section) {
-          echo $this->render($section);
-      }
-      ?>
-  </ul>
-  <?php if (isset($submissionForm)): ?>
-    <?php echo $this->form($submissionForm); ?>
-  <?php endif ?>
-</div>
-<div class="one-third sidebar">
-  <dl class="meta">
-    <dt><?php echo $this->translate('status'); ?></dt>
-    <dd><?php echo $this->translate($status); ?></dd>
-    <?php if ($receivedDate): ?>
-        <dt><?php echo $this->translate('selfserve-dashboard-submission-date'); ?></dt>
-        <dd><?php echo strftime("%d %B %G",strtotime($receivedDate)); ?></dd>
-    <?php endif; ?>
-    <?php if ($completionDate): ?>
-        <dt><?php echo $this->translate('target-completion-date'); ?></dt>
-        <dd><?php echo strftime("%d %B %G",strtotime($completionDate)); ?></dd>
-    <?php endif; ?>
-  </dl>
 
-  <div class="links">
-    <h3>Applying for a new licence</h3>
-    <ul class="links-list">
-      <li class="links-list__item"><a href="">Complete your applications for a goods vehicle operator's licence</a></li>
-      <li class="links-list__item"><a href="">Advertise your application for a licence</a></li>
-      <li class="links-list__item"><a href="">Financial information</a></li>
-      <li class="links-list__item"><a href="">A guide to operator fees</a></li>
-      <li class="links-list__item"><a href="">How to draw up a maintenance contract</a></li>
+<div class="two-thirds border">
+    <?php echo $this->flashMessengerAll(); ?>
+    <ul class="overview-navigation">
+        <?php
+            foreach ($sections as $section) {
+                echo $this->render($section);
+            }
+        ?>
     </ul>
-  </div>
+    <?php if (isset($submissionForm)): ?>
+        <?php echo $this->form($submissionForm); ?>
+    <?php endif ?>
+</div>
+
+<div class="one-third sidebar">
+    
+    <dl class="meta">
+        <dt><?php echo $this->translate('status'); ?></dt>
+        <dd><?php echo $this->translate($status); ?></dd>
+        <?php if ($receivedDate): ?>
+            <dt><?php echo $this->translate('selfserve-dashboard-submission-date'); ?></dt>
+            <dd><?php echo strftime("%d %B %G",strtotime($receivedDate)); ?></dd>
+        <?php endif; ?>
+        <?php if ($completionDate): ?>
+            <dt><?php echo $this->translate('target-completion-date'); ?></dt>
+            <dd><?php echo strftime("%d %B %G",strtotime($completionDate)); ?></dd>
+        <?php endif; ?>
+    </dl>
+
+    <div class="links">
+        <h3>Applying for a variation</h3>
+        <ul class="links-list">
+            <li class="links-list__item">
+                <a href="<?php echo $this->translate('being-an-operator-link'); ?>" target="blank">
+                    <?php echo $this->translate('sidebar-variation-being-an-operator'); ?>
+                </a>
+            </li>
+            <li class="links-list__item">
+                <a href="<?php echo $this->translate('public-services-link'); ?>" target="blank">
+                    <?php echo $this->translate('sidebar-variation-public-service'); ?>
+                </a>
+            </li>
+            <li class="links-list__item">
+                <a href="<?php echo $this->url('guides/guide', ['guide' => 'advertising-your-operating-centre-gb']); ?>">
+                    <?php echo $this->translate('sidebar-variation-advertise'); ?>
+                </a>
+            </li>
+            <li class="links-list__item">
+                <a href="<?php echo $this->url('guides/guide', ['guide' => 'financial-evidence']); ?>">
+                    <?php echo $this->translate('sidebar-variation-financial-evidence'); ?>
+                </a>
+            </li>
+            <li class="links-list__item">
+                <a href="<?php echo $this->translate('vehicle-safety-link'); ?>" target="blank">
+                    <?php echo $this->translate('sidebar-variation-safety-and-maintenance'); ?>
+                </a>
+            </li>
+        </ul>
+    </div>
+  
 </div>
