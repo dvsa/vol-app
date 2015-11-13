@@ -20,7 +20,7 @@ class TransportManagerApplicationOrLicenceFull
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\SavePrintCancelFormActions")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\SaveButtons")
      * @Form\Attributes({"class":"actions-container"})
      */
     public $formActions = null;
