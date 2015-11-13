@@ -42,6 +42,11 @@ class BusProcessingRegistrationHistoryController extends AbstractInternalControl
     protected $deleteCommand = DeleteBus::class;
 
     /**
+     * Variables for controlling the delete action.
+     */
+    protected $deleteParams = ['id' => 'busRegId'];
+
+    /**
      * This config is overridden if when a bus reg is deleted there is a previous variation
      *
      * @var array
