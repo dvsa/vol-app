@@ -1,6 +1,6 @@
 <?php echo $this->doctype(); ?>
 <html lang="en-GB">
-    
+
     <head>
         <meta charset="utf-8">
         <?php echo $this->headTitle($this->translate('')); ?>
@@ -55,14 +55,13 @@
     ?>
 
     <div class="page-wrapper">
-        
         <div class="user-header">
             <p class="phase">
                 <span class="phase__tag">alpha</span>
                 <span class="phase__message">This is a new service – <a href="https://www.surveymonkey.com/s/T8NGJV8">help us improve it.</a></span>
             </p>
             <ul class="user-menu">
-                <li class="user-menu__item"><?php echo $this->currentUser()->getFullName() ?>, <b>Operator Licensing Ltd.</b></li>
+                <li class="user-menu__item"><?php echo $this->currentUser()->getFullName() ?>, <b><?php echo $this->currentUser()->getOrganisationName() ?></b></li>
                 <li class="user-menu__item"><a href="<?php echo $this->url('my-details');?>">My account</a></li>
                 <li class="user-menu__item"><a href="<?php echo $this->url('zfcuser/logout');?>">Sign out</a></li>
             </ul>
@@ -71,7 +70,7 @@
         <div id="main" role="main">
             <?php echo $this->content; ?>
         </div><!-- main -->
-      
+
     </div><!-- page-wrapper-->
 
     <div class="global-footer">
