@@ -112,6 +112,7 @@ class BusRegisterServiceTest extends MockeryTestCase
                     'trcConditionChecked' => 'Y',
                     'trcNotes' => 'test 2',
                     'opNotifiedLaPte' => 'N',
+                    'laShortNote' => 'N',
                 ]
             ],
         ];
