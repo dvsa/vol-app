@@ -5,7 +5,6 @@ namespace Olcs\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("bus-reg-filter-form")
  * @Form\Options({"label":"Filters"})
  * @Form\Attributes({"method":"post"})
