@@ -109,6 +109,11 @@ class SubmissionController extends AbstractInternalController implements CaseCon
     protected $deleteModalTitle = 'internal.delete-action-trait.title';
 
     /**
+     * Variables for controlling the delete action.
+     */
+    protected $deleteParams = ['id' => 'submission'];
+
+    /**
      * Any inline scripts needed in this section
      *
      * @var array
