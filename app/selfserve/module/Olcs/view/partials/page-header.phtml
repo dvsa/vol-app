@@ -1,8 +1,11 @@
 <div class="page-header">
     <?php
-    /** @var \Zend\View\Helper\Navigation\Menu $menu */
-    $menu = $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs');
-    echo $menu;
+    // We can explicitly opt out of breadcrumbs, but otherwise we show them
+    if (!isset($this->showNav) || $this->showNav !== false) {
+        /** @var \Zend\View\Helper\Navigation\Menu $menu */
+        $menu = $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs');
+        echo $menu;
+    }
     ?>
     <div class="page-header__wrapper">
 

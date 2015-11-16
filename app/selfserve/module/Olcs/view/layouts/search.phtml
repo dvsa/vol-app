@@ -5,7 +5,8 @@ echo $this->render(
         'pageTitle' => isset($this->pageTitle) ? $this->translate($this->pageTitle) : '',
         'pageSubTitle'=> isset($this->pageSubtitle) ? $this->translate($this->pageSubtitle) : '',
         'pageHeaderText'=> isset($this->pageHeaderText) ? $this->translate($this->pageHeaderText) : '',
-        'pageHeaderUrl'=> isset($this->pageHeaderUrl) ? $this->pageHeaderUrl : ''
+        'pageHeaderUrl'=> isset($this->pageHeaderUrl) ? $this->pageHeaderUrl : '',
+        'showNav' => isset($this->showNav) && $this->showNav === false ? false : true,
     )
 );
 ?>

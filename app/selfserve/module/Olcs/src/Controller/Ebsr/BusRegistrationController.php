@@ -91,7 +91,8 @@ class BusRegistrationController extends AbstractController
                         'action' => 'upload'
                     ],
                     'text' => 'register-cancel-update-service'
-                ]
+                ],
+                'showNav' => false
             ]
         );
 

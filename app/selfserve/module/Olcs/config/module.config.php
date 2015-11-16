@@ -768,8 +768,14 @@ $busRegNav = array(
         array(
             'id' => 'bus-registration-details',
             'label' => 'Details',
-            'route' => 'bus-registration',
+            'route' => 'bus-registration/details',
             'action' => 'details',
+            'use_route_match' => true
+        ),
+        array(
+            'id' => 'bus-registration-ebsr',
+            'label' => 'EBSR',
+            'route' => 'bus-registration/ebsr',
             'use_route_match' => true
         )
     )
