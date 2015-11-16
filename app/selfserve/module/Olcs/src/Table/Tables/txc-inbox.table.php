@@ -26,18 +26,16 @@ return array(
         array(
             'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
             'title' => 'Organisation',
-            'formatter' => function ($data) {
-                return isset($data['busReg']['licence']['organisation']['name']) ?
-                    $data['busReg']['licence']['organisation']['name'] : '';
-            },
+            'stack' => 'busReg->licence->organisation->name',
+            'formatter' => 'StackValue',
         ),
         array(
             'title' => 'Registration No.',
             'formatter' => function ($data) {
                 if (isset($data['busReg']['id'])) {
                     return '<a href="' . $this->generateUrl(
-                        array('action' => 'details', 'busRegId' => $data['busReg']['id']),
-                        'bus-registration',
+                        array('busRegId' => $data['busReg']['id']),
+                        'bus-registration/details',
                         false
                     ) . '">' . $data['busReg']['regNo'] . '</a>';
                 }
@@ -46,17 +44,11 @@ return array(
         ),
         array(
             'title' => 'Var No.',
-            'formatter' => function ($data) {
-                $string = '';
-                if (isset($data['variationNo'])) {
-                    $string = $data['variationNo'];
-                }
-                return $string;
-            }
+            'name' => 'variationNo'
         ),
         array(
             'title' => 'Service No.',
-            'formatter' => function ($data, $column, $sm) {
+            'formatter' => function ($data) {
                 $string = '';
 
                 if (isset($data['busReg']['serviceNo'])) {
@@ -79,18 +71,14 @@ return array(
         ),
         array(
             'title' => 'Registration type',
-            'name' => 'ebsrSubmissionType',
-            'formatter' => function ($row) {
-                return $row['busReg']['ebsrSubmissions'][0]['ebsrSubmissionType']['description'];
-            },
+            'stack' => 'busReg->ebsrSubmissions->0->ebsrSubmissionType->description',
+            'formatter' => 'StackValue',
             'sort' => 'ebsrSubmissionType'
         ),
         array(
             'title' => 'File status',
-            'name' => 'ebsrSubmissionStatus',
-            'formatter' => function ($row) {
-                return $row['busReg']['ebsrSubmissions'][0]['ebsrSubmissionStatus']['description'];
-            },
+            'stack' => 'busReg->ebsrSubmissions->0->ebsrSubmissionStatus->description',
+            'formatter' => 'StackValue',
             'sort' => 'ebsrSubmissionStatus'
         ),
         array(
