@@ -10,7 +10,6 @@ $readonly = $this->placeholder('readonly')->getValue();
 $freetext = '';
 
 $selectedIds = array_column($selectedSectionsArray, 'sectionId');
-
 foreach ($allSections as $sectionId => $sectionDescription) {
     if (array_key_exists($sectionId, $selectedSectionsArray))
     {

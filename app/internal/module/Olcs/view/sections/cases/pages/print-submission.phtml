@@ -1,0 +1,76 @@
+<?php
+$case = $this->placeholder('case')->getValue();
+$submission = $this->placeholder('submission')->getValue();
+$selectedSectionsArray = $this->placeholder('selectedSectionsArray')->getValue();
+$submissionConfig = $this->placeholder('submissionConfig')->getValue();
+
+$allSections = $this->placeholder('allSections')->getValue();
+$readonly = $this->placeholder('readonly')->getValue();
+
+$freetext = '';
+
+$selectedIds = array_column($selectedSectionsArray, 'sectionId');
+foreach ($allSections as $sectionId => $sectionDescription) {
+    if (array_key_exists($sectionId, $selectedSectionsArray))
+    {
+        $additionalConfig = isset($submissionConfig[$sectionId]['config']) ? $submissionConfig[$sectionId]['config']
+            : [];
+        $selectedSectionsArray[$sectionId]['config'] = $additionalConfig;
+
+        $freetext .= $this->submissionSectionDetails(
+            $sectionId,
+            $selectedSectionsArray[$sectionId],
+            $readonly,
+            $submission['version']
+        );
+        if (isset($submissionConfig[$sectionId]['allow_comments']) && $submissionConfig[$sectionId]['allow_comments']) {
+            $freetext .= $this->partial('sections/cases/pages/submission/comments',
+                [
+                    'sectionId' => $sectionId,
+                    'section' => $selectedSectionsArray[$sectionId],
+                    'caseId' => $case['id'],
+                    'submissionId' => $submission['id'],
+                    'readonly' => $readonly
+                ]
+            );
+        }
+    }
+}
+$actions = [];
+
+//last submission
+echo $this->render('partials/read-only/main',
+    [
+        'header' => $submission['submissionTypeTitle']['description'],
+        'actions' => $actions,
+        'freetext' => $freetext
+    ]
+);
+
+?>
+<?php if (count($submission['submissionActions']) > 0): ?>
+    <h3>Submission actions</h3>
+
+    <ul class="submission-actions" style="width: 100%">
+        <?php foreach ($submission['submissionActions'] as $sa): ?>
+            <li class="submission-item">
+
+                <h4><?php echo $sa['isDecision'] == 'Y' ? 'Decision reason' : 'Recommendation'; ?>:
+                    <?php
+                    echo implode(', ', array_column($sa['actionTypes'], 'description'));
+                    ?></h4>
+
+                <?php if (!$readonly): ?>
+                    <?php $route = 'submission_action_' . ($sa['isDecision'] == 'Y' ? 'decision' : 'recommendation'); ?>
+                    <a class="submission-item__edit" href="<?php echo $this->url($route, ['action' => 'edit', 'id' => $sa['id']], [], true); ?>">Edit</a>
+                <?php endif; ?>
+
+                <p><?php echo nl2br($sa['comment']); ?></p>
+                <p><strong>Legislation:</strong><br /><?php echo implode('<br />', array_map(function($item){return $item['sectionCode'] . ' - '. $item['description'];}, $sa['reasons'])); ?></p>
+                <p><b>Created:</b><br /><?php echo date('H:i d/m/Y', strtotime($sa['createdOn'])); ?></p>
+            </li><!-- submission-item -->
+        <?php endforeach; ?>
+    </ul>
+
+<?php endif; ?>
+

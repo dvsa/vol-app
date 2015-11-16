@@ -20,12 +20,15 @@ use Olcs\Form\Model\Form\Submission as SubmissionForm;
 use Olcs\Data\Mapper\Submission as SubmissionMapper;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Zend\Mvc\View\Http\ViewManager;
 use Zend\Stdlib\ArrayUtils;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Common\Controller\Traits\GenericUpload;
 use Dvsa\Olcs\Transfer\Command\Submission\CloseSubmission as CloseCmd;
 use Dvsa\Olcs\Transfer\Command\Submission\ReopenSubmission as ReopenCmd;
+use Zend\View\Model\ViewModel;
+use Zend\View\Renderer\PhpRenderer;
 
 /**
  * Cases Submission Controller
@@ -297,6 +300,36 @@ class SubmissionController extends AbstractInternalController implements CaseCon
      */
     public function detailsAction()
     {
+        $this->setupViewDetails(true);
+
+        return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
+    }
+
+    /**
+     * Details action - shows each section detail
+     *
+     * @return ViewModel
+     */
+    public function printAction()
+    {
+        $this->setupViewDetails(true);
+
+        $this->layout('layout/print-submission');
+
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/pages/print-submission');
+
+        return $view;
+
+    }
+
+    /**
+     * sets up the view details
+     *
+     * @return ViewModel
+     */
+    private function setupViewDetails($forceReadonly = false)
+    {
         $paramProvider = new GenericItem($this->itemParams);
 
         $paramProvider->setParams($this->plugin('params'));
@@ -342,13 +375,10 @@ class SubmissionController extends AbstractInternalController implements CaseCon
                 $this->placeholder()->setPlaceholder('allSections', $allSectionsRefData);
                 $this->placeholder()->setPlaceholder('submissionConfig', $submissionConfig['sections']);
                 $this->placeholder()->setPlaceholder('submission', $data);
-                $this->placeholder()->setPlaceholder('readonly', (bool) $data['isClosed']);
+                $this->placeholder()->setPlaceholder('readonly', (bool) ($forceReadonly || $data['isClosed']));
             }
         }
-
-        return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
     }
-
 
     /**
      * Updates a section table, to either refresh the data or delete rows
