@@ -30,6 +30,8 @@ class FeesController extends AbstractController
 
     const PAYMENT_METHOD = RefData::FEE_PAYMENT_METHOD_CARD_ONLINE;
 
+    private $disableCardPayments = false;
+
     /**
      * Fees index action
      */
@@ -46,6 +48,12 @@ class FeesController extends AbstractController
 
         $table = $this->getServiceLocator()->get('Table')
             ->buildTable('fees', $fees, [], false);
+
+        if ($this->getDisableCardPayments()) {
+            $table->removeAction('pay');
+            $table->removeColumn('checkbox');
+            $this->getServiceLocator()->get('Helper\Guidance')->append('selfserve-card-payments-disabled');
+        }
 
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('pages/fees/home');
@@ -181,6 +189,9 @@ class FeesController extends AbstractController
     {
         $query = OutstandingFees::create(['id' => $organisationId, 'hideExpired' => true]);
         $response = $this->handleQuery($query);
+
+        $this->disableCardPayments = $response->getResult()['disableCardPayments'];
+
         return $response->getResult();
     }
 
@@ -195,6 +206,17 @@ class FeesController extends AbstractController
         $data = $this->getOutstandingFeeDataForOrganisation($organisationId);
         return $data['correspondenceCount'];
     }
+
+    /**
+     * Are Card payments disabled
+     *
+     * @return bool
+     */
+    protected function getDisableCardPayments()
+    {
+        return $this->disableCardPayments;
+    }
+
 
     /**
      * Get fees by ID(s) from params, note these *must* be a subset of the

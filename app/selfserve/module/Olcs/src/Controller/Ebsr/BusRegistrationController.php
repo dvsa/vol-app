@@ -35,12 +35,13 @@ class BusRegistrationController extends AbstractController
         }
 
         $params = [];
-        $params['ebsrSubmissionType'] = $this->params()->fromRoute('subType');
-        $params['ebsrSubmissionStatus'] = $this->params()->fromRoute('status');
-        $params['sort'] = $this->params()->fromRoute('sort');
-        $params['order'] = $this->params()->fromRoute('order');
-        $params['page'] = $this->params()->fromRoute('page');
-        $params['limit'] = $this->params()->fromRoute('limit');
+        $params['ebsrSubmissionType'] = $this->params()->fromQuery('subType');
+        $params['ebsrSubmissionStatus'] = $this->params()->fromQuery('status');
+        $params['sort'] = $this->params()->fromQuery('sort', 'createdOn');
+        $params['order'] = $this->params()->fromQuery('order', 'DESC');
+        $params['page'] = $this->params()->fromQuery('page', 1);
+        $params['limit'] = $this->params()->fromQuery('limit', 25);
+        $params['query'] = $this->params()->fromQuery();
 
         $query = ListDto::create($params);
 
@@ -52,7 +53,7 @@ class BusRegistrationController extends AbstractController
         }
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
         }
 
         $busRegistrationTable = '';
@@ -85,12 +86,13 @@ class BusRegistrationController extends AbstractController
                 'pageHeaderText'=> 'bus-registrations-index-subtitle',
                 'searchForm' => $filterForm,
                 'pageHeaderUrl' => [
-                    'route' => 'ebsr',
+                    'route' => 'bus-registration/ebsr',
                     'params' => [
                         'action' => 'upload'
                     ],
                     'text' => 'register-cancel-update-service'
-                ]
+                ],
+                'showNav' => false
             ]
         );
 
@@ -133,8 +135,8 @@ class BusRegistrationController extends AbstractController
 
         if ($response->isOk()) {
 
-            $params['subType'] = $this->params()->fromRoute('subType');
-            $params['status'] = $this->params()->fromRoute('status');
+            $params['subType'] = $this->params()->fromQuery('subType');
+            $params['status'] = $this->params()->fromQuery('status');
 
             return $this->redirect()->toRoute(null, $params, [], false);
         }
@@ -147,15 +149,13 @@ class BusRegistrationController extends AbstractController
      */
     private function processSearch($data)
     {
-        $params = [];
-        if (!empty($data['fields']['subType'])) {
-            $params['subType'] = $data['fields']['subType'];
-        }
-        if (!empty($data['fields']['status'])) {
-            $params['status'] = $data['fields']['status'];
-        }
+        $params = $this->params()->fromQuery();
 
-        return $this->redirect()->toRoute(null, $params, [], false);
+        $params['subType'] = empty($data['fields']['subType']) ? null : $data['fields']['subType'];
+
+        $params['status'] = empty($data['fields']['status']) ? null : $data['fields']['status'];
+
+        return $this->redirect()->toRoute(null, [], ['query' => $params], true);
     }
 
     /**
@@ -296,8 +296,8 @@ class BusRegistrationController extends AbstractController
      */
     public function getFilterForm($params)
     {
-        $filterForm = $this->getServiceLocator()->get('Helper\Form')
-            ->createForm('BusRegFilterForm');
+        $filterForm = $this->getServiceLocator()->get('Helper\Form')->createForm('BusRegFilterForm');
+
         $filterForm->setData(
             [
                 'fields' => [

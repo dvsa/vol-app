@@ -137,6 +137,9 @@ class SearchController extends AbstractController
         $form->setAttribute('action', $searchPostUrl);
 
         $view->results = $this->getSearchService()->fetchResultsTable();
+        if ($view->results->getTotal() === 0) {
+            $view->noResultsMessage = 'search-no-results-'. $data['index'];
+        }
 
         $view->setTemplate('layouts/main-search-results.phtml');
 
