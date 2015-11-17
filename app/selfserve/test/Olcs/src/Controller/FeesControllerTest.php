@@ -104,6 +104,7 @@ class FeesControllerTest extends MockeryTestCase
                 [
                     'outstandingFees' => $fees,
                     'correspondenceCount' => 123,
+                    'disableCardPayments' => false,
                 ]
             );
 
@@ -130,6 +131,116 @@ class FeesControllerTest extends MockeryTestCase
             ->once()
             ->with('fees', $fees, [], false)
             ->andReturn($mockTable);
+
+        $mockScriptHelper
+            ->shouldReceive('loadFile')
+            ->once()
+            ->with('dashboard-fees');
+
+        $view = $this->sut->indexAction();
+
+        // assertions
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
+        $this->assertEquals('pages/fees/home', $view->getTemplate());
+    }
+
+    public function testIndexActionDisabledFees()
+    {
+        $fees = [
+            [
+                'id' => 1,
+                'description' => 'fee 1',
+                'licence' => [
+                    'id' => 7,
+                    'licNo' => 'LIC7',
+                ],
+            ],
+            [
+                'id' => 2,
+                'description' => 'fee 2',
+                'licence' => [
+                    'id' => 8,
+                    'licNo' => 'LIC8',
+                ],
+            ],
+            [
+                'id' => 3,
+                'description' => 'fee 3',
+                'licence' => [
+                    'id' => 9,
+                    'licNo' => 'LIC9',
+                ],
+            ],
+        ];
+
+        $organisationId = 99;
+
+        // mocks
+        $mockNavigation = m::mock();
+        $this->sm->setService('navigation', $mockNavigation);
+
+        $mockFeesResponse = m::mock();
+
+        $mockTableService = m::mock();
+        $this->sm->setService('Table', $mockTableService);
+
+        $mockTable = m::mock();
+
+        $mockScriptHelper = m::mock();
+        $this->sm->setService('Script', $mockScriptHelper);
+
+        $mockGuidanceHelper = m::mock();
+        $this->sm->setService('Helper\Guidance', $mockGuidanceHelper);
+
+        // expectations
+        $this->sut->shouldReceive('getCurrentOrganisationId')
+            ->with()
+            ->andReturn($organisationId);
+
+        $this->sut
+            ->shouldReceive('handleQuery')
+            ->with(m::type(OutstandingFeesQry::class))
+            ->andReturn($mockFeesResponse);
+
+        $mockFeesResponse
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn(
+                [
+                    'outstandingFees' => $fees,
+                    'correspondenceCount' => 123,
+                    'disableCardPayments' => true,
+                ]
+            );
+
+        $mockNavigation
+            ->shouldReceive('findOneById')
+            ->with('dashboard-fees')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->with('count', 3)
+                    ->getMock()
+            )
+            ->shouldReceive('findOneById')
+            ->with('dashboard-correspondence')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->with('count', 123)
+                    ->getMock()
+            );
+
+        $mockTableService
+            ->shouldReceive('buildTable')
+            ->once()
+            ->with('fees', $fees, [], false)
+            ->andReturn($mockTable);
+
+        $mockTable->shouldReceive('removeAction')->with('pay')->once();
+        $mockTable->shouldReceive('removeColumn')->with('checkbox')->once();
+        $mockGuidanceHelper->shouldReceive('append')->with('selfserve-card-payments-disabled')->once();
 
         $mockScriptHelper
             ->shouldReceive('loadFile')
@@ -261,7 +372,7 @@ class FeesControllerTest extends MockeryTestCase
             ->shouldReceive('isOk')
             ->andReturn(true)
             ->shouldReceive('getResult')
-            ->andReturn(['outstandingFees' => $outstandingFees]);
+            ->andReturn(['outstandingFees' => $outstandingFees, 'disableCardPayments' => false]);
 
         $this->sut
             ->shouldReceive('handleQuery')
@@ -387,7 +498,7 @@ class FeesControllerTest extends MockeryTestCase
             ->shouldReceive('isOk')
             ->andReturn(true)
             ->shouldReceive('getResult')
-            ->andReturn(['outstandingFees' => $outstandingFees]);
+            ->andReturn(['outstandingFees' => $outstandingFees, 'disableCardPayments' => false]);
 
         $this->sut
             ->shouldReceive('handleQuery')
@@ -477,7 +588,7 @@ class FeesControllerTest extends MockeryTestCase
             ->shouldReceive('isOk')
             ->andReturn(true)
             ->shouldReceive('getResult')
-            ->andReturn(['outstandingFees' => $outstandingFees]);
+            ->andReturn(['outstandingFees' => $outstandingFees, 'disableCardPayments' => false]);
 
         $this->sut->shouldReceive('params')->with('fee')->once()->andReturn('99');
 
