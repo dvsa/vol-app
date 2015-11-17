@@ -14,10 +14,8 @@ use Dvsa\Olcs\Transfer\Command\Submission\DeleteSubmission as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmission as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Submission\RefreshSubmissionSections as RefreshDto;
 use Dvsa\Olcs\Transfer\Command\Submission\FilterSubmissionSections as FilterDto;
-
 use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Submission\SubmissionList as ListDto;
-
 use Olcs\Form\Model\Form\Submission as SubmissionForm;
 use Olcs\Data\Mapper\Submission as SubmissionMapper;
 use Olcs\Controller\AbstractInternalController;
@@ -152,14 +150,14 @@ class SubmissionController extends AbstractInternalController implements CaseCon
 
     /** Close */
     protected $closeCommand = CloseCmd::class;
-    protected $closeParams = ['id' => 'submission'];
+    protected $closeParams = ['id' => 'submission', 'case'];
     protected $closeModalTitle = 'Close the submission';
     protected $closeConfirmMessage = 'Are you sure you want to close the submission?';
     protected $closeSuccessMessage = 'Submission closed';
 
     /** Reopen */
     protected $reopenCommand = ReopenCmd::class;
-    protected $reopenParams = ['id' => 'submission'];
+    protected $reopenParams = ['id' => 'submission', 'case'];
     protected $reopenModalTitle = 'Reopen the submission?';
     protected $reopenConfirmMessage = 'Are you sure you want to reopen the submission?';
     protected $reopenSuccessMessage = 'Submission reopened';
