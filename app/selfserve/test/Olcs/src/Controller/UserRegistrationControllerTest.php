@@ -36,7 +36,19 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(false);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
+        $termsAgreedElement = new \Zend\Form\Element;
+        $termsAgreedElement->setLabel('termsAgreedLabel');
+
         $mockForm = m::mock('Common\Form\Form');
+        $mockForm
+            ->shouldReceive('get')
+            ->with('fields')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('get')
+            ->with('termsAgreed')
+            ->once()
+            ->andReturn($termsAgreedElement);
 
         $mockFormHelper = m::mock();
         $mockFormHelper
@@ -45,6 +57,21 @@ class UserRegistrationControllerTest extends TestCase
             ->once()
             ->andReturn($mockForm);
         $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        $mockTranslation = m::mock();
+        $mockTranslation
+            ->shouldReceive('translateReplace')
+            ->with('termsAgreedLabel', ['URL'])
+            ->once();
+        $this->sm->setService('Helper\Translation', $mockTranslation);
+
+        $mockUrl = m::mock();
+        $mockUrl
+            ->shouldReceive('fromRoute')
+            ->with('terms-and-conditions')
+            ->once()
+            ->andReturn('URL');
+        $this->sm->setService('Helper\Url', $mockUrl);
 
         $mockScript = m::mock();
         $mockScript
@@ -152,10 +179,15 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
+        $termsAgreedElement = new \Zend\Form\Element;
+        $termsAgreedElement->setLabel('termsAgreedLabel');
+
         $mockForm = m::mock('Common\Form\Form');
         $mockForm->shouldReceive('setData')->twice()->with($postData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
+        $mockForm->shouldReceive('get')->once()->with('fields')->andReturnSelf();
+        $mockForm->shouldReceive('get')->once()->with('termsAgreed')->andReturn($termsAgreedElement);
 
         $mockFormHelper = m::mock();
         $mockFormHelper
@@ -183,6 +215,21 @@ class UserRegistrationControllerTest extends TestCase
             ->once()
             ->with('unknown-error');
         $this->sm->setService('Helper\FlashMessenger', $mockFlashMessengerHelper);
+
+        $mockTranslation = m::mock();
+        $mockTranslation
+            ->shouldReceive('translateReplace')
+            ->with('termsAgreedLabel', ['URL'])
+            ->once();
+        $this->sm->setService('Helper\Translation', $mockTranslation);
+
+        $mockUrl = m::mock();
+        $mockUrl
+            ->shouldReceive('fromRoute')
+            ->with('terms-and-conditions')
+            ->once()
+            ->andReturn('URL');
+        $this->sm->setService('Helper\Url', $mockUrl);
 
         $mockScript = m::mock();
         $mockScript
@@ -279,11 +326,16 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
+        $termsAgreedElement = new \Zend\Form\Element;
+        $termsAgreedElement->setLabel('termsAgreedLabel');
+
         $mockForm = m::mock('Common\Form\Form');
         $mockForm->shouldReceive('setData')->twice()->with($postData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
         $mockForm->shouldReceive('setMessages')->once()->with(m::type('array'));
+        $mockForm->shouldReceive('get')->once()->with('fields')->andReturnSelf();
+        $mockForm->shouldReceive('get')->once()->with('termsAgreed')->andReturn($termsAgreedElement);
 
         $mockFormHelper = m::mock();
         $mockFormHelper
@@ -305,6 +357,21 @@ class UserRegistrationControllerTest extends TestCase
         $response->shouldReceive('isNotFound')->andReturn(false);
         $response->shouldReceive('getResult')->andReturn(['messages' => ['licenceNumber' => 'err']]);
         $this->sut->shouldReceive('handleQuery')->with(m::type(LicenceByNumberDto::class))->andReturn($response);
+
+        $mockTranslation = m::mock();
+        $mockTranslation
+            ->shouldReceive('translateReplace')
+            ->with('termsAgreedLabel', ['URL'])
+            ->once();
+        $this->sm->setService('Helper\Translation', $mockTranslation);
+
+        $mockUrl = m::mock();
+        $mockUrl
+            ->shouldReceive('fromRoute')
+            ->with('terms-and-conditions')
+            ->once()
+            ->andReturn('URL');
+        $this->sm->setService('Helper\Url', $mockUrl);
 
         $mockScript = m::mock();
         $mockScript
@@ -384,11 +451,16 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
+        $termsAgreedElement = new \Zend\Form\Element;
+        $termsAgreedElement->setLabel('termsAgreedLabel');
+
         $mockForm = m::mock('Common\Form\Form');
         $mockForm->shouldReceive('setData')->twice()->with($postData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
         $mockForm->shouldReceive('setMessages')->once()->with(m::type('array'));
+        $mockForm->shouldReceive('get')->once()->with('fields')->andReturnSelf();
+        $mockForm->shouldReceive('get')->once()->with('termsAgreed')->andReturn($termsAgreedElement);
 
         $mockFormHelper = m::mock();
         $mockFormHelper
@@ -409,6 +481,21 @@ class UserRegistrationControllerTest extends TestCase
         $response->shouldReceive('isOk')->andReturn(false);
         $response->shouldReceive('getResult')->andReturn(['messages' => ['loginId' => 'err']]);
         $this->sut->shouldReceive('handleCommand')->with(m::type(CreateDto::class))->andReturn($response);
+
+        $mockTranslation = m::mock();
+        $mockTranslation
+            ->shouldReceive('translateReplace')
+            ->with('termsAgreedLabel', ['URL'])
+            ->once();
+        $this->sm->setService('Helper\Translation', $mockTranslation);
+
+        $mockUrl = m::mock();
+        $mockUrl
+            ->shouldReceive('fromRoute')
+            ->with('terms-and-conditions')
+            ->once()
+            ->andReturn('URL');
+        $this->sm->setService('Helper\Url', $mockUrl);
 
         $mockScript = m::mock();
         $mockScript
