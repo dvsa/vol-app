@@ -27,7 +27,7 @@ return array(
                 if (isset($data['busReg']['id'])) {
                     return '<a href="' . $this->generateUrl(
                         array('action' => 'details', 'busRegId' => $data['busReg']['id']),
-                        'bus-registration',
+                        'bus-registration/details',
                         false
                     ) . '">' . $data['busReg']['regNo'] . '</a>';
                 }

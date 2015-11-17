@@ -1098,9 +1098,8 @@ return array(
 
                 // Bus reg stuff and who can access
                 'ebsr' => ['selfserve-ebsr'],
-                'bus-registration' => [
-                    '*'
-                ],
+                'bus-registration/details' => ['*'],
+                'bus-registration' => ['selfserve-ebsr'],
                 'entity-view' => [
                     '*'
                 ],
