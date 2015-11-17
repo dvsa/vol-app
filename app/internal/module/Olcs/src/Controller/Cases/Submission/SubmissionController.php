@@ -26,6 +26,8 @@ use Zend\Stdlib\ArrayUtils;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Common\Controller\Traits\GenericUpload;
+use Dvsa\Olcs\Transfer\Command\Submission\CloseSubmission as CloseCmd;
+use Dvsa\Olcs\Transfer\Command\Submission\ReopenSubmission as ReopenCmd;
 
 /**
  * Cases Submission Controller
@@ -147,6 +149,20 @@ class SubmissionController extends AbstractInternalController implements CaseCon
             'reUseParams' => false
         ]
     ];
+
+    /** Close */
+    protected $closeCommand = CloseCmd::class;
+    protected $closeParams = ['id' => 'submission'];
+    protected $closeModalTitle = 'Close the submission';
+    protected $closeConfirmMessage = 'Are you sure you want to close the submission?';
+    protected $closeSuccessMessage = 'Submission closed';
+
+    /** Reopen */
+    protected $reopenCommand = ReopenCmd::class;
+    protected $reopenParams = ['id' => 'submission'];
+    protected $reopenModalTitle = 'Reopen the submission?';
+    protected $reopenConfirmMessage = 'Are you sure you want to reopen the submission?';
+    protected $reopenSuccessMessage = 'Submission reopened';
 
     /**
      * Stores the submission data
@@ -328,8 +344,8 @@ class SubmissionController extends AbstractInternalController implements CaseCon
                 $this->placeholder()->setPlaceholder('allSections', $allSectionsRefData);
                 $this->placeholder()->setPlaceholder('submissionConfig', $submissionConfig['sections']);
                 $this->placeholder()->setPlaceholder('submission', $data);
-                // to-do $view->setVariable('closeAction', $this->generateCloseActionButtonArray($submission['id']));
-                // to-do $view->setVariable('readonly', $submissionService->isClosed($submission['id']));
+                $this->placeholder()->setPlaceholder('closeAction', $this->generateCloseActionButtonArray($data));
+
                 $this->placeholder()->setPlaceholder('readonly', (bool) isset($data['closedDate']));
 
             }
@@ -648,5 +664,41 @@ class SubmissionController extends AbstractInternalController implements CaseCon
     public function getSubmissionData()
     {
         return $this->submissionData;
+    }
+
+
+    /**
+     * Returns the action array to generate the close/reopen button for a given entity
+     *
+     * @param integer $id|null
+     * @return array|null
+     */
+    private function generateCloseActionButtonArray($data = null)
+    {
+        if ($data['canReopen']) {
+            return $this->generateButton('reopen');
+        }
+        if ($data['canClose']) {
+            return $this->generateButton('close');
+        }
+        return null;
+    }
+
+    /**
+     * Generate the button array
+     * @param string $action
+     * @return array
+     */
+    public function generateButton($action)
+    {
+        $routeMatch = $this->getEvent()->getRouteMatch();
+        $routeParams = $routeMatch->getParams();
+        $routeParams['action'] = $action;
+
+        return [
+            'label' => ucfirst($action) . ' submission',
+            'route' => $routeMatch->getMatchedRouteName(),
+            'params' => $routeParams
+        ];
     }
 }
