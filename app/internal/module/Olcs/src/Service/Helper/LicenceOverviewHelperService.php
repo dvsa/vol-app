@@ -18,6 +18,8 @@ class LicenceOverviewHelperService extends AbstractHelperService
      *
      * @param array $licence licence data
      * @return array view data
+     *
+     * @SuppressWarnings("PMD.NPathComplexity")
      */
     public function getViewData($licence)
     {
@@ -30,7 +32,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
         $viewData = [
             'operatorName'              => $licence['organisation']['name'],
             'operatorId'                => $licence['organisation']['id'], // used for URL generation
-            'numberOfLicences'          => count($licence['organisation']['licences']),
+            'numberOfLicences'          => $licence['organisationLicenceCount'],
             'tradingName'               => $licence['tradingName'],
             'currentApplications'       => $this->getCurrentApplications($licence),
             'licenceNumber'             => $licence['licNo'],
