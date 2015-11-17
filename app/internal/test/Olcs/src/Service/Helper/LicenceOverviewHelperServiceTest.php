@@ -90,11 +90,6 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                         'allowEmail' => 'Y',
                         'id' => 72,
                         'name' => 'John Smith Haulage',
-                        'licences' => [
-                            ['id' => 210],
-                            ['id' => 208],
-                            ['id' => 203],
-                        ],
                         'leadTcArea' => ['id' => 'B'],
                         'organisationUsers' => [
                             ['isAdministrator' => 'Y']
@@ -129,7 +124,8 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'openCases' =>  [
                         ['id' => 2], ['id' => 3], ['id' => 4]
                     ],
-                    'busCount' => '4'
+                    'busCount' => '4',
+                    'organisationLicenceCount' => 3,
                 ],
                 // expected view data
                 [
@@ -189,11 +185,6 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                         'allowEmail' => 'N',
                         'id' => 72,
                         'name' => 'John Smith Coaches',
-                        'licences' => [
-                            ['id' => 210],
-                            ['id' => 208],
-                            ['id' => 203],
-                        ],
                         'leadTcArea' => ['id' => 'B'],
                         'organisationUsers' => [
                             ['isAdministrator' => 'N']
@@ -227,7 +218,8 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     ],
                     'complaintsCount' => 0,
                     'tradingName' => 'None',
-                    'busCount' => '4'
+                    'busCount' => '4',
+                    'organisationLicenceCount' => 3,
                 ],
                 // expectedViewData
                 [
@@ -282,9 +274,6 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                         'allowEmail' => 'Y',
                         'id' => 72,
                         'name' => 'John Smith Taxis',
-                        'licences' => [
-                            ['id' => 210],
-                        ],
                         'leadTcArea' => ['id' => 'B'],
                         'organisationUsers' => []
                     ],
@@ -302,7 +291,8 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     ],
                     'gracePeriods' => [],
                     'currentApplications' => [],
-                    'busCount' => '4'
+                    'busCount' => '4',
+                    'organisationLicenceCount' => 1,
                 ],
                 // expectedViewData
                 [
