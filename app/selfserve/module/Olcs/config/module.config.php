@@ -62,34 +62,12 @@ $routes = array(
             )
         )
     ),
-    'guides' => array(
-        'type' => 'segment',
-        'options' =>  array(
-            'route' => '/guides[/]'
-        ),
-        'may_terminate' => false,
-        'child_routes' => array(
-            'guide' => array(
-                'type' => 'segment',
-                'options' =>  array(
-                    'route' => ':guide[/]',
-                    'constraints' => [
-                        'guide' => '[a-zA-Z\-0-9]+'
-                    ],
-                    'defaults' => array(
-                        'controller' => \Olcs\Controller\GuidesController::class,
-                        'action' => 'index'
-                    )
-                ),
-            ),
-        )
-    ),
     'cookies' => array(
         'type' => 'segment',
         'options' =>  array(
             'route' => '/privacy-and-cookies[/]',
             'defaults' => array(
-                'controller' => \Olcs\Controller\GuidesController::class,
+                'controller' => \Common\Controller\GuidesController::class,
                 'action' => 'index',
                 'guide' => 'privacy-and-cookies',
             )
@@ -100,7 +78,7 @@ $routes = array(
         'options' =>  array(
             'route' => '/terms-and-conditions[/]',
             'defaults' => array(
-                'controller' => \Olcs\Controller\GuidesController::class,
+                'controller' => \Common\Controller\GuidesController::class,
                 'action' => 'index',
                 'guide' => 'terms-and-conditions',
             )
@@ -913,7 +891,6 @@ return array(
             SearchController::class => SearchController::class,
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             'Entity\View' => 'Olcs\Controller\Entity\ViewController',
-            \Olcs\Controller\GuidesController::class => \Olcs\Controller\GuidesController::class,
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
