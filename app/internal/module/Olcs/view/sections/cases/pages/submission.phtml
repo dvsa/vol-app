@@ -87,6 +87,26 @@ if (!$readonly) {
         )
     ]);
 }
+array_push($actions, [
+    'label' => 'Print submission',
+    'attributes' => ['target' => '_blank'],
+    'class' => 'action--secondary download',
+    'url' => $this->url(
+        'submission', [
+            'case' => $case['id'],
+            'action' => 'print',
+            'submission' => $submission['id']
+        ]
+    )
+]);
+
+echo $this->partial(
+    'sections/cases/pages/submission/submission-declaration',
+    [
+        'submission' => $submission,
+    ]
+);
+
 //last submission
 echo $this->render('partials/read-only/main',
     [

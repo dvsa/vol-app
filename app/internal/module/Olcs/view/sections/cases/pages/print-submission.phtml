@@ -38,6 +38,14 @@ foreach ($allSections as $sectionId => $sectionDescription) {
 }
 $actions = [];
 
+echo $this->partial(
+    'sections/cases/pages/submission/submission-declaration',
+    [
+        'submission' => $submission,
+        'header' => 'Submission exported: ' . date('H:i d/m/y')
+    ]
+);
+
 //last submission
 echo $this->render('partials/read-only/main',
     [
