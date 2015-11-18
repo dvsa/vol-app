@@ -342,7 +342,7 @@ class SubmissionController extends AbstractInternalController implements CaseCon
                 $this->placeholder()->setPlaceholder('allSections', $allSectionsRefData);
                 $this->placeholder()->setPlaceholder('submissionConfig', $submissionConfig['sections']);
                 $this->placeholder()->setPlaceholder('submission', $data);
-                $this->placeholder()->setPlaceholder('readonly', (bool) isset($data['closedDate']));
+                $this->placeholder()->setPlaceholder('readonly', (bool) isset($data['isClosed']));
             }
         }
 
