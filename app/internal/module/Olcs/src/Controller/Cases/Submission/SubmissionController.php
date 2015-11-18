@@ -314,13 +314,15 @@ class SubmissionController extends AbstractInternalController implements CaseCon
     {
         $this->setupViewDetails(true);
 
-        $this->layout('layout/print-submission');
-
         $view = new ViewModel();
         $view->setTemplate('sections/cases/pages/print-submission');
 
-        return $view;
+        $layout = new ViewModel();
+        $layout->setTemplate('layout/simple');
+        $layout->setTerminal(true);
+        $layout->addChild($view, 'content');
 
+        return $layout;
     }
 
     /**
