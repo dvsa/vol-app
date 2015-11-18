@@ -127,4 +127,16 @@ class CreateFeeDetails
      * @Form\Validator({"name": "Common\Form\Elements\Validators\Money"})
      */
     public $amount = null;
+
+    /**
+     * @Form\Options({
+     *      "short-label":"fees.vat_rate",
+     *      "label":"fees.vat_rate",
+     *      "label_attributes": {"id": "label-vat_rate"}
+     * })
+     * @Form\Type("Text")
+     * @Form\Required(false)
+     * @Form\Attributes({"disabled":"disabled", "id":"vat-rate"})
+     */
+    public $vatRate = null;
 }

@@ -63,6 +63,11 @@ class BusRegisterService implements MapperInterface
             $commandData['opNotifiedLaPte'] = 'N';
         }
 
+        //laShortNote only exists for short notice records
+        if (!isset($commandData['laShortNote'])) {
+            $commandData['laShortNote'] = 'N';
+        }
+
         return $commandData;
     }
 

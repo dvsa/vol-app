@@ -53,7 +53,7 @@ return array(
         array(
             'title' => 'Outstanding',
             'name' => 'outstanding',
-            'formatter' => 'FeeAmount',
+            'formatter' => 'Money',
         ),
         array(
             'title' => '',
