@@ -37,6 +37,12 @@ $results = $this->results;
 
     <div class="five-eigths">
 
-        <?php echo $results ?>
+        <?php
+        if ($this->noResultsMessage) {
+            echo $this->translate($noResultsMessage);
+        } else {
+            echo $results;
+        }
+        ?>
 
     </div><!-- .five-eights -->

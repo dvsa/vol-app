@@ -62,34 +62,12 @@ $routes = array(
             )
         )
     ),
-    'guides' => array(
-        'type' => 'segment',
-        'options' =>  array(
-            'route' => '/guides[/]'
-        ),
-        'may_terminate' => false,
-        'child_routes' => array(
-            'guide' => array(
-                'type' => 'segment',
-                'options' =>  array(
-                    'route' => ':guide[/]',
-                    'constraints' => [
-                        'guide' => '[a-zA-Z\-0-9]+'
-                    ],
-                    'defaults' => array(
-                        'controller' => \Olcs\Controller\GuidesController::class,
-                        'action' => 'index'
-                    )
-                ),
-            ),
-        )
-    ),
     'cookies' => array(
         'type' => 'segment',
         'options' =>  array(
             'route' => '/privacy-and-cookies[/]',
             'defaults' => array(
-                'controller' => \Olcs\Controller\GuidesController::class,
+                'controller' => \Common\Controller\GuidesController::class,
                 'action' => 'index',
                 'guide' => 'privacy-and-cookies',
             )
@@ -100,7 +78,7 @@ $routes = array(
         'options' =>  array(
             'route' => '/terms-and-conditions[/]',
             'defaults' => array(
-                'controller' => \Olcs\Controller\GuidesController::class,
+                'controller' => \Common\Controller\GuidesController::class,
                 'action' => 'index',
                 'guide' => 'terms-and-conditions',
             )
@@ -194,38 +172,44 @@ $routes = array(
             )
         )
     ),
-    'ebsr' => array(
-        'type' => 'segment',
-        'options' =>  array(
-            'route' => '/ebsr[/:action]',
-            'defaults' => array(
-                'controller' => 'Olcs\Ebsr\Uploads',
-                'action' => 'index'
-            )
-        )
-    ),
     'bus-registration' => array(
         'type' => 'segment',
         'options' =>  array(
             'route' =>
-                '/bus-registration/:action[/busreg/:busRegId][/sub-type/:subType][/status/:status][/page/:page]' .
-                '[/limit/:limit][/sort/:sort][/order/:order]',
+                '/bus-registration[/]',
             'defaults' => array(
                 'controller' => 'Olcs\Ebsr\BusRegistration',
                 'action' => 'index',
-                'page' => 1,
-                'limit' => 25,
-                'sort' => 'createdOn',
-                'order' => 'DESC'
+            )
+        ),
+        'may_terminate' => true,
+        'child_routes' => [
+            'details' => array(
+                'type' => 'segment',
+                'options' =>  array(
+                    'route' => 'details[/busreg/:busRegId][/]',
+                    'defaults' => array(
+                        'action' => 'details',
+                    ),
+                    'constraints' => [
+                        'busRegId' => '[0-9]+',
+                        'subType' => '[a-z_]+',
+                        'status' => '[a-z_]+',
+                        'page' => '[0-9]+',
+                    ]
+                )
             ),
-            'constraints' => [
-                'busRegId' => '[0-9]+',
-                'subType' => '[a-z_]+',
-                'status' => '[a-z_]+',
-                'page' => '[0-9]+',
-
-            ]
-        )
+            'ebsr' => array(
+                'type' => 'segment',
+                'options' =>  array(
+                    'route' => 'ebsr[/:action][/]',
+                    'defaults' => array(
+                        'controller' => 'Olcs\Ebsr\Uploads',
+                        'action' => 'index'
+                    )
+                )
+            ),
+        ]
     ),
     'dashboard' => array(
         'type' => 'segment',
@@ -753,6 +737,28 @@ $applicationNavigation = array(
     ),
 );
 
+$busRegNav = array(
+    'id' => 'bus-registration',
+    'label' => 'Bus registrations',
+    'route' => 'bus-registration',
+    'action' => 'index',
+    'pages' => array(
+        array(
+            'id' => 'bus-registration-details',
+            'label' => 'Details',
+            'route' => 'bus-registration/details',
+            'action' => 'details',
+            'use_route_match' => true
+        ),
+        array(
+            'id' => 'bus-registration-ebsr',
+            'label' => 'EBSR',
+            'route' => 'bus-registration/ebsr',
+            'use_route_match' => true
+        )
+    )
+);
+
 $searchNavigation = array(
     'id' => 'search',
     'label' => 'Search',
@@ -885,7 +891,6 @@ return array(
             SearchController::class => SearchController::class,
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             'Entity\View' => 'Olcs\Controller\Entity\ViewController',
-            \Olcs\Controller\GuidesController::class => \Olcs\Controller\GuidesController::class,
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -973,16 +978,26 @@ return array(
     ),
     'navigation' => array(
         'default' => array(
+            $applicationNavigation,
+            $searchNavigation,
+            $busRegNav,
             array(
                 'id' => 'home',
                 'label' => 'Home',
                 'route' => 'index',
                 'pages' => array(
-
-                    $applicationNavigation,
-
-                    $searchNavigation,
-
+                    array(
+                        'id' => 'selfserve-topnav-home',
+                        'label' => 'Home',
+                        'route' => 'index',
+                        'class' => 'proposition-nav__item',
+                    ),
+                    array(
+                        'id' => 'selfserve-topnav-search',
+                        'label' => 'Search',
+                        'route' => 'search-jump-home',
+                        'class' => 'proposition-nav__item',
+                    ),
                     array(
                         'id' => 'selfserve-topnav-bus-registration',
                         'label' => 'Bus registrations',
@@ -992,7 +1007,7 @@ return array(
                         'class' => 'proposition-nav__item',
                     ),
                     array(
-                        'id' => 'manage-users',
+                        'id' => 'selfserve-topnav-manage-users',
                         'label' => 'Manage Users',
                         'route' => 'manage-user',
                         'action' => 'index',
@@ -1083,9 +1098,8 @@ return array(
 
                 // Bus reg stuff and who can access
                 'ebsr' => ['selfserve-ebsr'],
-                'bus-registration' => [
-                    '*'
-                ],
+                'bus-registration/details' => ['*'],
+                'bus-registration' => ['selfserve-ebsr'],
                 'entity-view' => [
                     '*'
                 ],

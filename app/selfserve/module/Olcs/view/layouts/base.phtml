@@ -25,14 +25,18 @@
 
             <?php
 
-            /* @var \Zend\View\Helper\Navigation\Menu $menu */
-            $menuHelper = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'index'))->menu();
 
-            echo $menuHelper->setUlClass('proposition-nav')
-                ->setMinDepth(1)
-                ->setMaxDepth(1)
-                // This seems irrelevant, but it's very important as the partial is set elsewhere
-                ->setPartial('');
+            /* @var \Zend\View\Helper\Navigation\Menu $menu */
+            $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'home'))->menu();
+
+            $menu->setAddClassToListItem(true);
+
+            // This seems irrelevant, but it's very important as the partial is set elsewhere
+            $menu->setPartial(null);
+            $menu->setMaxDepth(0);
+            $menu->setMinDepth(0);
+
+            echo $menu->setUlClass('proposition-nav');
             ?>
         </div>
       </div><!-- end .global-header__wrapper -->

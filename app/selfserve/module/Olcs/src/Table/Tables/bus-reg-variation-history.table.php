@@ -13,7 +13,7 @@ return array(
                 if (isset($data['id'])) {
                     return '<a href="' . $this->generateUrl(
                         array('action' => 'details', 'busRegId' => $data['id']),
-                        'bus-registration',
+                        'bus-registration/details',
                         false
                     ) . '">' . $data['regNo'] . '</a>';
                 }

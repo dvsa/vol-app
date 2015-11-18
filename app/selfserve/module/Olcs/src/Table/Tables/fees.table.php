@@ -47,6 +47,7 @@ return array(
             'title' => '',
             'type' => 'Checkbox',
             'width' => 'checkbox',
+            'name' => 'checkbox',
         )
     ),
     'footer' => array(
