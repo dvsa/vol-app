@@ -150,14 +150,14 @@ class SubmissionController extends AbstractInternalController implements CaseCon
 
     /** Close */
     protected $closeCommand = CloseCmd::class;
-    protected $closeParams = ['id' => 'submission', 'case'];
+    protected $closeParams = ['id' => 'submission'];
     protected $closeModalTitle = 'Close the submission';
     protected $closeConfirmMessage = 'Are you sure you want to close the submission?';
     protected $closeSuccessMessage = 'Submission closed';
 
     /** Reopen */
     protected $reopenCommand = ReopenCmd::class;
-    protected $reopenParams = ['id' => 'submission', 'case'];
+    protected $reopenParams = ['id' => 'submission'];
     protected $reopenModalTitle = 'Reopen the submission?';
     protected $reopenConfirmMessage = 'Are you sure you want to reopen the submission?';
     protected $reopenSuccessMessage = 'Submission reopened';
