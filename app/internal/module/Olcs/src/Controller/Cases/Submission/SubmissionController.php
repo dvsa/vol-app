@@ -14,10 +14,8 @@ use Dvsa\Olcs\Transfer\Command\Submission\DeleteSubmission as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmission as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Submission\RefreshSubmissionSections as RefreshDto;
 use Dvsa\Olcs\Transfer\Command\Submission\FilterSubmissionSections as FilterDto;
-
 use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Submission\SubmissionList as ListDto;
-
 use Olcs\Form\Model\Form\Submission as SubmissionForm;
 use Olcs\Data\Mapper\Submission as SubmissionMapper;
 use Olcs\Controller\AbstractInternalController;
@@ -26,6 +24,8 @@ use Zend\Stdlib\ArrayUtils;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Common\Controller\Traits\GenericUpload;
+use Dvsa\Olcs\Transfer\Command\Submission\CloseSubmission as CloseCmd;
+use Dvsa\Olcs\Transfer\Command\Submission\ReopenSubmission as ReopenCmd;
 
 /**
  * Cases Submission Controller
@@ -109,6 +109,11 @@ class SubmissionController extends AbstractInternalController implements CaseCon
     protected $deleteModalTitle = 'internal.delete-action-trait.title';
 
     /**
+     * Variables for controlling the delete action.
+     */
+    protected $deleteParams = ['id' => 'submission'];
+
+    /**
      * Any inline scripts needed in this section
      *
      * @var array
@@ -142,6 +147,20 @@ class SubmissionController extends AbstractInternalController implements CaseCon
             'reUseParams' => false
         ]
     ];
+
+    /** Close */
+    protected $closeCommand = CloseCmd::class;
+    protected $closeParams = ['id' => 'submission'];
+    protected $closeModalTitle = 'Close the submission';
+    protected $closeConfirmMessage = 'Are you sure you want to close the submission?';
+    protected $closeSuccessMessage = 'Submission closed';
+
+    /** Reopen */
+    protected $reopenCommand = ReopenCmd::class;
+    protected $reopenParams = ['id' => 'submission'];
+    protected $reopenModalTitle = 'Reopen the submission?';
+    protected $reopenConfirmMessage = 'Are you sure you want to reopen the submission?';
+    protected $reopenSuccessMessage = 'Submission reopened';
 
     /**
      * Stores the submission data
@@ -323,10 +342,7 @@ class SubmissionController extends AbstractInternalController implements CaseCon
                 $this->placeholder()->setPlaceholder('allSections', $allSectionsRefData);
                 $this->placeholder()->setPlaceholder('submissionConfig', $submissionConfig['sections']);
                 $this->placeholder()->setPlaceholder('submission', $data);
-                // to-do $view->setVariable('closeAction', $this->generateCloseActionButtonArray($submission['id']));
-                // to-do $view->setVariable('readonly', $submissionService->isClosed($submission['id']));
-                $this->placeholder()->setPlaceholder('readonly', (bool) isset($data['closedDate']));
-
+                $this->placeholder()->setPlaceholder('readonly', (bool) $data['isClosed']);
             }
         }
 
