@@ -48,13 +48,23 @@ foreach ($allSections as $sectionId => $sectionDescription) {
     }
 }
 $actions = [];
-
-if (isset($closeAction) && is_array($closeAction)) {
+if ($submission['canClose']) {
+    $params = ['case' => $submission['case']['id'], 'submission' => $submission['id'], 'action' => 'close'];
     $closeActionUrl = [
-        'label' => $closeAction['label'],
+        'label' => 'Close submission',
         'url' => $this->url(
-                $closeAction['route'], $closeAction['params']
-            )
+            'submission', $params
+        )
+    ];
+    array_push($actions, $closeActionUrl);
+}
+if ($submission['canReopen']) {
+    $params = ['case' => $submission['case']['id'], 'submission' => $submission['id'], 'action' => 'reopen'];
+    $closeActionUrl = [
+        'label' => 'Reopen submission',
+        'url' => $this->url(
+            'submission', $params
+        )
     ];
     array_push($actions, $closeActionUrl);
 }
