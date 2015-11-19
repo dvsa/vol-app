@@ -8,6 +8,7 @@ namespace Olcs\Controller;
 use Common\Controller\Lva\AbstractController;
 use Dvsa\Olcs\Transfer\Command\User\RegisterUserSelfserve as RegisterDto;
 use Dvsa\Olcs\Transfer\Query\Licence\LicenceRegisteredAddress as LicenceByNumberDto;
+use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -36,7 +37,7 @@ class UserRegistrationController extends AbstractController
         // register page
         $view = new ViewModel(
             [
-                'form' => $form
+                'form' => $this->alterForm($form)
             ]
         );
         $view->setTemplate('olcs/user-registration/index');
@@ -44,6 +45,23 @@ class UserRegistrationController extends AbstractController
         $this->getServiceLocator()->get('Script')->loadFile('user-registration');
 
         return $view;
+    }
+
+    protected function alterForm(Form $form)
+    {
+        // inject link into terms agreed label
+        $termsAgreed = $form->get('fields')->get('termsAgreed');
+
+        $label = $this->getServiceLocator()->get('Helper\Translation')->translateReplace(
+            $termsAgreed->getLabel(),
+            [
+                $this->getServiceLocator()->get('Helper\Url')->fromRoute('terms-and-conditions')
+            ]
+        );
+
+        $termsAgreed->setLabel($label);
+
+        return $form;
     }
 
     private function generateContentForUserRegistration(array $formData = [], array $errors = [])
@@ -67,7 +85,7 @@ class UserRegistrationController extends AbstractController
         // register page
         $view = new ViewModel(
             [
-                'form' => $form
+                'form' => $this->alterForm($form)
             ]
         );
         $view->setTemplate('olcs/user-registration/index');
