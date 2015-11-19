@@ -91,7 +91,7 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
      * @param $formData
      * @return ZendForm
      */
-    public function alterFormForAdd(ZendForm $form, $formData)
+    protected function alterFormForAdd(ZendForm $form, $formData)
     {
         return $this->alterForm($form, $formData['id']);
     }
@@ -101,7 +101,7 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
      * @param $formData
      * @return ZendForm
      */
-    public function alterFormForEdit(ZendForm $form, $formData)
+    protected function alterFormForEdit(ZendForm $form, $formData)
     {
         return $this->alterForm($form, $formData['fields']['id']);
     }
