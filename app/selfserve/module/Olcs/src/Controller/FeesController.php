@@ -90,6 +90,7 @@ class FeesController extends AbstractController
             throw new ResourceNotFoundException('Fee not found');
         }
 
+        /* @var $form \Common\Form\Form */
         $form = $this->getForm();
         $this->setupSelectStoredCards($form);
 
@@ -110,6 +111,13 @@ class FeesController extends AbstractController
                 ]
             );
             $view->setTemplate('pages/fees/pay-one');
+        }
+
+        if ($this->getDisableCardPayments()) {
+            $form->get('form-actions')->remove('pay');
+            $form->get('form-actions')->get('cancel')->setLabel('back-to-fees');
+            $form->get('form-actions')->get('cancel')->setAttribute('class', 'action--tertiary large');
+            $this->getServiceLocator()->get('Helper\Guidance')->append('selfserve-card-payments-disabled');
         }
 
         return $view;
