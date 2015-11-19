@@ -176,6 +176,9 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         $form = $this->setReadonlyFields($form, $formData);
         $form = $this->setActionButtons($form, $formData);
 
+        // reset status html
+        $form->get('fields')->get('statusHtml')->setValue($formData['fields']['statusDescription']);
+
         return $form;
     }
 

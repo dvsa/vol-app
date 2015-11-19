@@ -31,6 +31,7 @@ class IrfoPsvAuth implements MapperInterface
         // Add status description as used for a label
         if (!empty($data['status']['description'])) {
             $formData['fields']['statusHtml'] = $data['status']['description'];
+            $formData['fields']['statusDescription'] = $data['status']['description'];
         }
 
         if (!empty($formData['fields']['createdOn'])) {
