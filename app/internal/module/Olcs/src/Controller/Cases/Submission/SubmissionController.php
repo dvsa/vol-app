@@ -300,7 +300,23 @@ class SubmissionController extends AbstractInternalController implements CaseCon
      */
     public function detailsAction()
     {
-        $this->setupViewDetails(true);
+        $paramProvider = new GenericItem($this->itemParams);
+
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
+
+        // if we have the section in the route, redirect using anchor (fragment).
+        // This action does not need the section and redirecting fulfills OLCS-8693
+        if (isset($params['section'])) {
+            return $this->redirect()->toRoute(
+                'submission',
+                ['section' => null],
+                ['code' => 303, 'fragment' => $params['section']],
+                true
+            );
+        }
+
+        $this->generateSubmissionView($params, false);
 
         return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
     }
@@ -312,7 +328,12 @@ class SubmissionController extends AbstractInternalController implements CaseCon
      */
     public function printAction()
     {
-        $this->setupViewDetails(true);
+        $paramProvider = new GenericItem($this->itemParams);
+
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
+
+        $this->generateSubmissionView($params, true);
 
         $view = new ViewModel();
         $view->setTemplate('sections/cases/pages/print-submission');
@@ -330,24 +351,8 @@ class SubmissionController extends AbstractInternalController implements CaseCon
      *
      * @return ViewModel
      */
-    private function setupViewDetails($forceReadonly = false)
+    private function generateSubmissionView($params, $printView = false)
     {
-        $paramProvider = new GenericItem($this->itemParams);
-
-        $paramProvider->setParams($this->plugin('params'));
-        $params = $paramProvider->provideParameters();
-
-        // if we have the section in the route, redirect using anchor (fragment).
-        // This action does not need the section and redirecting fulfills OLCS-8693
-        if (isset($params['section'])) {
-            return $this->redirect()->toRoute(
-                'submission',
-                ['section' => null],
-                ['code' => 303, 'fragment' => $params['section']],
-                true
-            );
-        }
-
         $query = ItemDto::create($params);
 
         $response = $this->handleQuery($query);
@@ -377,7 +382,7 @@ class SubmissionController extends AbstractInternalController implements CaseCon
                 $this->placeholder()->setPlaceholder('allSections', $allSectionsRefData);
                 $this->placeholder()->setPlaceholder('submissionConfig', $submissionConfig['sections']);
                 $this->placeholder()->setPlaceholder('submission', $data);
-                $this->placeholder()->setPlaceholder('readonly', (bool) ($forceReadonly || $data['isClosed']));
+                $this->placeholder()->setPlaceholder('readonly', (bool) ($printView || $data['isClosed']));
             }
         }
     }
@@ -531,6 +536,7 @@ class SubmissionController extends AbstractInternalController implements CaseCon
      */
     private function generateSectionForms($selectedSectionsArray)
     {
+
         $configService = $this->getServiceLocator()->get('config');
         $submissionConfig = $configService['submission_config'];
 
@@ -556,6 +562,7 @@ class SubmissionController extends AbstractInternalController implements CaseCon
                     );
 
                     $selectedSectionsArray[$sectionId]['attachmentsForm'] = $attachmentsForm;
+                    $selectedSectionsArray[$sectionId]['attachments'] = $this->loadFiles();
                 }
             }
         }
@@ -617,11 +624,17 @@ class SubmissionController extends AbstractInternalController implements CaseCon
      */
     public function loadFiles()
     {
+        $urlHelper = $this->getServiceLocator()->get('Helper\Url');
+
         $submission = $this->getSubmissionData();
         $sectionDocuments = [];
         foreach ($submission['documents'] as $document) {
             // ensure only the file only uploads to the section we are dealing with by checking subCategory
             if ($document['subCategory']['id'] == $this->sectionSubcategory) {
+                $document['url'] = $urlHelper->fromRoute(
+                    'getfile',
+                    array('identifier' => base64_encode($document['identifier']))
+                );
                 $sectionDocuments[] = $document;
             }
         }
