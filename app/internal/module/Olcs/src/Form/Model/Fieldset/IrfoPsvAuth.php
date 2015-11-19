@@ -52,6 +52,12 @@ class IrfoPsvAuth extends OrganisationBase
     public $statusHtml;
 
     /**
+     * @Form\Attributes({"id":"status"})
+     * @Form\Type("Hidden")
+     */
+    public $status = null;
+
+    /**
      * @Form\Required(false)
      * @Form\Attributes({"id":"", "required": false})
      * @Form\Options({
