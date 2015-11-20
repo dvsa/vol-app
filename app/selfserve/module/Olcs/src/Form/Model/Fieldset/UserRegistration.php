@@ -137,4 +137,16 @@ class UserRegistration
      * })
      */
     public $businessType = null;
+
+    /**
+     * @Form\Attributes({"id": "termsAgreed", "placeholder": "", "data-container-class": "confirm"})
+     * @Form\Options({
+     *     "label": "user-registration.field.termsAgreed.label",
+     *     "checked_value":"Y",
+     *     "unchecked_value":"N",
+     *     "must_be_value": "Y"
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
+     */
+    public $termsAgreed = null;
 }
