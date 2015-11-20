@@ -54,8 +54,7 @@ class OpposerContact
      * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\EmailAddress"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":60}})
+     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
      */
     public $emailAddress = null;
 }
