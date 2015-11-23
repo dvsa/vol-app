@@ -107,6 +107,7 @@ class StayController extends AbstractInternalController implements CaseControlle
      * Command is required, as are itemParams from above
      */
     protected $deleteCommand = DeleteDto::class;
+    protected $deleteParams = ['id' => 'stay'];
 
     protected $inlineScripts = array('forms/hearings-appeal');
 

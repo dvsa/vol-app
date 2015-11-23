@@ -101,6 +101,7 @@ class StatementController extends AbstractInternalController implements CaseCont
      * Command is required, as are itemParams from above
      */
     protected $deleteCommand = DeleteDto::class;
+    protected $deleteParams = ['id' => 'statement'];
     protected $deleteModalTitle = 'internal.delete-action-trait.title';
 
     /**
