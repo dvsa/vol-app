@@ -114,30 +114,6 @@ $routes = [
             ]
         ]
     ],
-    'operators' => [
-        'type' => 'Literal',
-        'options' => [
-            'route' => '/search2/operators',
-            'defaults' => [
-                'controller' => 'SearchController',
-                'action' => 'operator'
-            ]
-        ],
-        'may_terminate' => true,
-        'child_routes' => [
-            'operators-params' => [
-                'type' => 'wildcard',
-                'options' => [
-                    'key_value_delimiter' => '/',
-                    'param_delimiter' => '/',
-                    'defaults' => [
-                        'page' => 1,
-                        'limit' => 10
-                    ]
-                ]
-            ]
-        ]
-    ],
     'search' => [
         'type' => 'segment',
         'options' => [
