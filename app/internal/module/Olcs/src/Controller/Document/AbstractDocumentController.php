@@ -13,7 +13,6 @@ use Dvsa\Olcs\Transfer\Command\Document\DeleteDocument;
 use Dvsa\Olcs\Transfer\Query\Application\Application;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 use Dvsa\Olcs\Transfer\Query\Document\Letter;
-use Zend\View\Model\ViewModel;
 use Olcs\Controller\AbstractController;
 use Common\Category;
 
@@ -74,7 +73,8 @@ abstract class AbstractDocumentController extends AbstractController
      *
      * Note: busReg routing is set up completely differently to everything else :(
      *
-     * @param string $type
+     * @param string $type Type of document
+     *
      * @return string
      */
     public function getRouteParamKeyForType($type)
@@ -90,6 +90,11 @@ abstract class AbstractDocumentController extends AbstractController
         }
     }
 
+    /**
+     * Fetches document data by id (from route)
+     *
+     * @return array
+     */
     protected function fetchDocData()
     {
         $response = $this->handleQuery(Letter::create(['id' => $this->params('doc')]));
@@ -101,11 +106,28 @@ abstract class AbstractDocumentController extends AbstractController
         }
     }
 
+    /**
+     * Deletes a document by id
+     *
+     * @param int $id Document id
+     *
+     * @return \Common\Service\Cqrs\Response
+     */
     protected function removeDocument($id)
     {
         return $this->handleCommand(DeleteDocument::create(['id' => $id]));
     }
 
+    /**
+     * Redirects to the document route
+     *
+     * @param string $type        Type of document
+     * @param string $action      Action to redirect to
+     * @param array  $routeParams Route params
+     * @param bool   $ajax        Whether it's an ajax redirect
+     *
+     * @return \Zend\Http\Response
+     */
     protected function redirectToDocumentRoute($type, $action, $routeParams, $ajax = false)
     {
         $route = $this->documentRouteMap[$type];
@@ -125,6 +147,11 @@ abstract class AbstractDocumentController extends AbstractController
         return $this->redirect()->toRoute($route, $routeParams);
     }
 
+    /**
+     * Returns licence id linked to an application by id (from route)
+     *
+     * @return int
+     */
     protected function getLicenceIdForApplication()
     {
         $applicationId = $this->params()->fromRoute('application');
@@ -134,6 +161,13 @@ abstract class AbstractDocumentController extends AbstractController
         return $response->getResult()['licence']['id'];
     }
 
+    /**
+     * Returns category for a given type
+     *
+     * @param string $type Type of document
+     *
+     * @return int
+     */
     protected function getCategoryForType($type)
     {
         if ($type !== 'case') {
@@ -143,6 +177,11 @@ abstract class AbstractDocumentController extends AbstractController
         return $this->caseCategoryMap[$case['caseType']['id']];
     }
 
+    /**
+     * Returns case data by id (from route)
+     *
+     * @return array
+     */
     protected function getCase()
     {
         if ($this->caseData === null) {
