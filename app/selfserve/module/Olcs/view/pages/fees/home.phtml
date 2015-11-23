@@ -1,39 +1,44 @@
 <div class="page-header">
   <div class="page-header__wrapper">
-  <h3 class="page-header__subtitle"><?php echo $this->currentUser()->getOrganisationName() ?></h3>
-  <h1><?php echo $this->translate('dashboard.title'); ?></h1>
-  </div><!-- .page-header__wrapper -->
-</div><!-- .page-header-->
+    <h3 class="page-header__subtitle"><?php echo $this->currentUser()->getOrganisationName() ?></h3>
+    <h1><?php echo $this->translate('dashboard.title'); ?></h1>
+  </div>
+</div><!-- page-header-->
 
-<div class="dashboard two-thirds">
-  <?php echo $this->flashMessengerAll(); ?>
-
-  <?php
-
-  /* @var \Zend\View\Helper\Navigation\Menu $menu */
-  $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'dashboard-licences-applications'))->menu();
-
-  echo $menu->setMinDepth(0)->setMaxDepth(0)
-      ->setPartial('partials/dashboard-nav');
-  ?>
-
+<div class="row">
+    
+  <div class="dashboard two-thirds">
+    
+    <?php echo $this->flashMessengerAll(); ?>
+  
     <?php
-    $guidanceMessage = $this->placeholder('guidance');
-
-    if (!empty($guidanceMessage)) {
-        foreach ($guidanceMessage as $message):
-          ?>
-          <div class="guidance">
-              <p><?php echo $this->translate($message); ?></p>
-          </div>
-          <?php
-        endforeach;
-    }
+  
+      /* @var \Zend\View\Helper\Navigation\Menu $menu */
+      $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'dashboard-licences-applications'))->menu();
+    
+      echo $menu->setMinDepth(0)->setMaxDepth(0)
+          ->setPartial('partials/dashboard-nav');
+        
     ?>
+  
+    <?php
+      $guidanceMessage = $this->placeholder('guidance');
+      if (!empty($guidanceMessage)) {
+          foreach ($guidanceMessage as $message):
+    ?>
+      <div class="guidance">
+          <p><?php echo $this->translate($message); ?></p>
+      </div>
+    <?php
+      endforeach;
+    } ?>
+  
+    <?php if (isset($table)): ?>
+      <?php echo $table; ?>
+    <?php endif; ?>
+    
+  </div>
+  
+  <?php echo $this->partial('partials/dashboard-right-column'); ?>
 
-  <?php if (isset($table)): ?>
-    <?php echo $table; ?>
-  <?php endif; ?>
 </div>
-
-<?php echo $this->partial('partials/dashboard-right-column'); ?>

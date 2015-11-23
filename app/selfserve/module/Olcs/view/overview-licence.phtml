@@ -5,6 +5,7 @@
  * small templates so no biggie to have them separate for now
  */
 ?>
+
 <div class="page-header">
   <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
   <div class="page-header__wrapper">
@@ -12,7 +13,7 @@
         <?php echo $this->translate('licence.overview.licence-no'); ?> <?php echo $licenceId; ?>
     </h3>
     <h1><?php echo $this->translate('licence.overview.title'); ?></h1>
-  </div><!-- end .page-header__wrapper -->
+  </div>
   <ul class="page-header__actions">
     <?php if (isset($this->shouldShowCreateVariation) && $this->shouldShowCreateVariation): ?>
     <li>
@@ -22,24 +23,30 @@
     </li>
     <?php endif; ?>
   </ul>
-</div>
-<div class="two-thirds border">
-  <?php echo $this->flashMessengerAll(); ?>
-  <ul class="overview-navigation">
-      <?php
-      foreach ($sections as $section) {
-          echo $this->render($section);
-      }
-      ?>
-  </ul>
-</div>
-<div class="one-third sidebar">
-  <dl class="meta">
-    <dt><?php echo $this->translate('selfserve-dashboard-target-start-date'); ?></dt>
-    <dd><?php echo $startDate ? strftime("%d %B %G",strtotime($startDate)) : ''; ?></dd>
-    <dt><?php echo $this->translate('selfserve-dashboard-target-renewal-date'); ?></dt>
-    <dd><?php echo $renewalDate ? strftime("%d %B %G",strtotime($renewalDate)) : ''; ?></dd>
-    <dt><?php echo $this->translate('status'); ?></dt>
-    <dd><?php echo $this->translate($status); ?></dd>
-  </dl>
+</div><!-- page-header -->
+
+<div class="row">
+
+  <div class="two-thirds border">
+    <?php echo $this->flashMessengerAll(); ?>
+    <ul class="overview-navigation">
+        <?php
+        foreach ($sections as $section) {
+            echo $this->render($section);
+        }
+        ?>
+    </ul>
+  </div>
+  
+  <div class="one-third sidebar">
+    <dl class="meta">
+      <dt><?php echo $this->translate('selfserve-dashboard-target-start-date'); ?></dt>
+      <dd><?php echo $startDate ? strftime("%d %B %G",strtotime($startDate)) : ''; ?></dd>
+      <dt><?php echo $this->translate('selfserve-dashboard-target-renewal-date'); ?></dt>
+      <dd><?php echo $renewalDate ? strftime("%d %B %G",strtotime($renewalDate)) : ''; ?></dd>
+      <dt><?php echo $this->translate('status'); ?></dt>
+      <dd><?php echo $this->translate($status); ?></dd>
+    </dl>
+  </div>
+
 </div>

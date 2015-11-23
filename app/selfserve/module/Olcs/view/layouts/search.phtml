@@ -1,23 +1,27 @@
 <?php
-echo $this->render(
-    '/partials/page-header.phtml',
-    array(
-        'pageTitle' => isset($this->pageTitle) ? $this->translate($this->pageTitle) : '',
-        'pageSubTitle'=> isset($this->pageSubtitle) ? $this->translate($this->pageSubtitle) : '',
-        'pageHeaderText'=> isset($this->pageHeaderText) ? $this->translate($this->pageHeaderText) : '',
-        'pageHeaderUrl'=> isset($this->pageHeaderUrl) ? $this->pageHeaderUrl : '',
-        'showNav' => isset($this->showNav) && $this->showNav === false ? false : true,
-    )
-);
+    echo $this->render(
+        '/partials/page-header.phtml',
+        array(
+            'pageTitle' => isset($this->pageTitle) ? $this->translate($this->pageTitle) : '',
+            'pageSubTitle'=> isset($this->pageSubtitle) ? $this->translate($this->pageSubtitle) : '',
+            'pageHeaderText'=> isset($this->pageHeaderText) ? $this->translate($this->pageHeaderText) : '',
+            'pageHeaderUrl'=> isset($this->pageHeaderUrl) ? $this->pageHeaderUrl : '',
+            'showNav' => isset($this->showNav) && $this->showNav === false ? false : true,
+        )
+    );
 ?>
 
-<div class="three-eigths">
-    <?php
-    $this->searchForm->prepare();
-    echo $this->form()->render($this->searchForm);
-    ?>
-</div><!-- three-eights -->
+<div class="row">
+    
+    <div class="three-eigths">
+        <?php
+            $this->searchForm->prepare();
+            echo $this->form()->render($this->searchForm);
+        ?>
+    </div><!-- three-eights -->
+    
+    <div class="five-eigths">
+        <?php echo $this->content; ?>
+    </div><!-- five-eights -->
 
-<div class="five-eigths">
-    <?php echo $this->content; ?>
-</div><!-- .five-eights -->
+</div>
