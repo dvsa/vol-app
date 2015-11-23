@@ -1,23 +1,19 @@
-
-
 <div class="page-header">
   <div class="page-header__wrapper">
-  <h3 class="page-header__subtitle"><?php echo $this->currentUser()->getFullName() ?></h3>
-  <h1><?php echo $this->translate('dashboard.title'); ?></h1>
-  </div><!-- .page-header__wrapper -->
-</div><!-- .page-header-->
+    <h3 class="page-header__subtitle"><?php echo $this->currentUser()->getFullName() ?></h3>
+    <h1><?php echo $this->translate('dashboard.title'); ?></h1>
+  </div>
+</div><!-- page-header-->
 
+<div class="row">
+    
+  <div class="dashboard two-thirds">
+    <?php echo $this->flashMessengerAll(); ?>
+    <h3><?php echo $this->translate('Open applications'); ?></h3>
+    <?php echo $this->translate('markup-dashboard-tm-intro'); ?>
+    <?php echo $applicationsTable; ?>
+  </div>
 
-<div class="dashboard two-thirds">
-  <?php echo $this->flashMessengerAll(); ?>
+  <?php echo $this->partial('partials/dashboard-right-column'); ?>
 
-  <h3><?php echo $this->translate('Open applications'); ?></h3>
-  <?php echo $this->translate('markup-dashboard-tm-intro'); ?>
-
-  <?php echo $applicationsTable; ?>
 </div>
-
-
-
-
-<?php echo $this->partial('partials/dashboard-right-column'); ?>

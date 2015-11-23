@@ -1,13 +1,14 @@
-
-    <div class="page-header">
-        <div class="page-header__wrapper">
-            <h1><?php echo $this->translate('search.title.person'); ?></h1>
-            <div class="page-header__text"><p><?php echo $this->translate('search.subtitle.person'); ?></p></div>
-        </div><!-- .page-header__wrapper -->
-    </div><!-- .page-header -->
-    
-    <div class="two-thirds">
-        <?php echo $this->partial('search/form.phtml', ['form' => $this->searchForm]); ?>
+<div class="page-header">
+    <div class="page-header__wrapper">
+        <h1><?php echo $this->translate('search.title.person'); ?></h1>
+        <div class="page-header__text"><p><?php echo $this->translate('search.subtitle.person'); ?></p></div>
     </div>
+</div><!-- page-header -->
     
-</div><!-- .two-thirds -->
+<div class="row">
+  
+  <div class="two-thirds">
+      <?php echo $this->partial('search/form.phtml', ['form' => $this->searchForm]); ?>
+  </div>
+  
+</div>

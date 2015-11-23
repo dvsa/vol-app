@@ -1,19 +1,23 @@
 <div class="page-header">
   <div class="page-header__wrapper">
-  <h3 class="page-header__subtitle"><?php echo $this->currentUser()->getOrganisationName() ?></h3>
-  <h1><?php echo $this->translate('dashboard.title'); ?></h1>
-  </div><!-- .page-header__wrapper -->
-</div><!-- .page-header-->
+    <h3 class="page-header__subtitle"><?php echo $this->currentUser()->getOrganisationName() ?></h3>
+    <h1><?php echo $this->translate('dashboard.title'); ?></h1>
+  </div>
+</div><!-- page-header-->
 
-<div class="dashboard two-thirds">
+<div class="row">
+  
+  <div class="dashboard two-thirds">
     <?php
-    echo $this->flashMessengerAll();
-    if ($total === 0) {
-        echo $this->partial('dashboard-empty');
-    } else {
-        echo $this->partial('dashboard-tables', compact('applications', 'licences', 'variations'));
-    }
+      echo $this->flashMessengerAll();
+      if ($total === 0) {
+          echo $this->partial('dashboard-empty');
+      } else {
+          echo $this->partial('dashboard-tables', compact('applications', 'licences', 'variations'));
+      }
     ?>
-</div>
+  </div>
 
-<?php echo $this->partial('partials/dashboard-right-column'); ?>
+  <?php echo $this->partial('partials/dashboard-right-column'); ?>
+
+</div>

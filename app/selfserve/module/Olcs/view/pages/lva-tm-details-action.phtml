@@ -5,66 +5,71 @@
       <div class="page-header__wrapper">
         <h3 class="page-header__subtitle"><?php echo $this->tmFullName ?></h3>
         <h1><?php echo $this->translate($this->title); ?></h1>
-      </div><!-- .page-header__wrapper -->
-    </div><!-- .page-header-->
+      </div>
+    </div><!-- page-header-->
 
-    <div class="two-thirds article">
-        <?php
-
-        $guidanceMessage = $this->placeholder('guidance');
-
-        if (!empty($guidanceMessage)) {
-            foreach ($guidanceMessage as $message):
-            ?>
-            <div class="guidance">
-                <p><?php echo $this->translate($message); ?></p>
-            </div>
-            <?php
-            endforeach;
-        }
-
-        if (isset($sectionText)) {
-            ?><p><?php echo $this->translate($sectionText); ?></p><?php
-        }
-
-        echo $this->flashMessengerAll();
-        ?>
-
-        <?php echo $this->content ?>
-
-        <?php if (isset($form)): ?>
+    <div class="row">
+        
+      <div class="two-thirds article">
           <?php
-          $form->prepare();
-          echo $this->formErrors($form);
-          echo $this->form($form);
+  
+          $guidanceMessage = $this->placeholder('guidance');
+  
+          if (!empty($guidanceMessage)) {
+              foreach ($guidanceMessage as $message):
+              ?>
+              <div class="guidance">
+                  <p><?php echo $this->translate($message); ?></p>
+              </div>
+              <?php
+              endforeach;
+          }
+  
+          if (isset($sectionText)) {
+              ?><p><?php echo $this->translate($sectionText); ?></p><?php
+          }
+  
+          echo $this->flashMessengerAll();
           ?>
-        <?php endif; ?>
-
-        <?php if (isset($this->bottomContent)): ?>
-            <?php echo $this->bottomContent ?>
-        <?php endif; ?>
-
-        <?php if (isset($resendForm)): ?>
-            <details class="help">
-                <summary class="help__summary">Resend link to Transport Manager</summary>
-                <?php
-                $resendForm->prepare();
-                echo $this->formErrors($resendForm);
-                echo $this->form($resendForm);
-                ?>
-            </details>
-        <?php endif; ?>
-
-        <?php if (isset($this->backLink)): ?>
-        <p>
-            <a href="<?php echo $this->backLink ?>" class="action--tertiary list">
-                <?php echo $this->translate($this->backText); ?>
-            </a>
-        </p>
-        <?php endif; ?>
+  
+          <?php echo $this->content ?>
+  
+          <?php if (isset($form)): ?>
+            <?php
+            $form->prepare();
+            echo $this->formErrors($form);
+            echo $this->form($form);
+            ?>
+          <?php endif; ?>
+  
+          <?php if (isset($this->bottomContent)): ?>
+              <?php echo $this->bottomContent ?>
+          <?php endif; ?>
+  
+          <?php if (isset($resendForm)): ?>
+              <details class="help">
+                  <summary class="help__summary">Resend link to Transport Manager</summary>
+                  <?php
+                  $resendForm->prepare();
+                  echo $this->formErrors($resendForm);
+                  echo $this->form($resendForm);
+                  ?>
+              </details>
+          <?php endif; ?>
+  
+          <?php if (isset($this->backLink)): ?>
+          <p>
+              <a href="<?php echo $this->backLink ?>" class="action--tertiary list">
+                  <?php echo $this->translate($this->backText); ?>
+              </a>
+          </p>
+          <?php endif; ?>
+      </div>
+  
+      <div class="one-third sidebar">
+        <?php echo $this->translate('markup-support-contact-address'); ?>
+      </div>
+      
     </div>
-
-    <div class="one-third sidebar">
-      <?php echo $this->translate('markup-support-contact-address'); ?>
-    </div>
+    
 </div>
