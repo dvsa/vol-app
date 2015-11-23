@@ -106,6 +106,7 @@ class AppealController extends AbstractInternalController implements CaseControl
      * Command is required, as are itemParams from above
      */
     protected $deleteCommand = DeleteDto::class;
+    protected $deleteParams = ['id' => 'appeal'];
 
     protected $inlineScripts = array('forms/hearings-appeal');
 
