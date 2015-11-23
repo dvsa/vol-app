@@ -110,12 +110,12 @@ abstract class AbstractDocumentController extends AbstractController
     {
         $route = $this->documentRouteMap[$type];
 
-        if (!empty($routeParams['entityType']) && !empty($routeParams['entityId'])) {
-            // if both the entityType and the entityId has some values then use the entity routing
-            $route .= '/entity';
-        }
-
         if (!is_null($action)) {
+            if (!empty($routeParams['entityType']) && !empty($routeParams['entityId'])) {
+                // if both the entityType and the entityId has some values then use the entity routing
+                $route .= '/entity';
+            }
+
             $route .= '/' . $action;
         }
 
