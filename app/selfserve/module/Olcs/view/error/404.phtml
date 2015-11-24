@@ -1,26 +1,31 @@
 <div id="main" role="main">
-    <div class="page-header">
-        <div class="page-header__wrapper">
-            <h1><?php echo $this->translate('404-title') ?></h1>
-        </div><!-- .page-header__wrapper -->
-    </div><!-- .page-header-->
-
-    <div class="two-thirds">
-        <div class="article">
-            <?php echo $this->translate('markup-404-text'); ?>
-            <hr>
-            <p><a href="<?php echo $this->url('index'); ?>"><?php echo $this->translate('back-to-home'); ?></a></p>
-        </div>
+  
+  <div class="page-header">
+    <div class="page-header__wrapper">
+      <h1><?php echo $this->translate('404-title') ?></h1>
     </div>
+  </div><!-- page-header-->
+  
+  <div class="row">
+    <div class="two-thirds">
+      <div class="article">
+        <?php echo $this->translate('markup-404-text'); ?>
+        <hr>
+        <p><a href="<?php echo $this->url('index'); ?>"><?php echo $this->translate('back-to-home'); ?></a></p>
+      </div>
+    </div>
+  </div>
+    
 </div>
+
 <?php
 
-if (!isset($stopRedirect)) {
+  if (!isset($stopRedirect)) {
     $this->inlineScript()->appendScript(
-        '
-        OLCS.ready(function() {
-            window.location.href = "' . $this->url('not-found') . '";
-        });
-        '
+      '
+      OLCS.ready(function() {
+        window.location.href = "' . $this->url('not-found') . '";
+      });
+      '
     );
-}
+  }

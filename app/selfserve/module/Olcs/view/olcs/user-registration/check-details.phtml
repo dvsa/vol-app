@@ -1,26 +1,36 @@
 <div class="page-header">
   <div class="page-header__wrapper">
     <h1><?php echo $this->translate('user-registration.page.check-details.title'); ?></h1>
-  </div><!-- .page-header__wrapper -->
-</div><!-- .page-header -->
-<div class="two-thirds">
-  <div class="article">
-     <p><?php echo $this->translate('user-registration.page.check-details.text'); ?></p>
-     <p><b><?php echo $this->organisationName; ?><br />
-        <?php echo $this->address($this->address, null, '<br />'); ?></b></p>
   </div>
+</div><!-- page-header -->
+
+<div class="row">
+  
+  <div class="two-thirds">
+    
+    <div class="article">
+      <p><?php echo $this->translate('user-registration.page.check-details.text'); ?></p>
+      <p>
+        <b><?php echo $this->organisationName; ?><br /><?php echo $this->address($this->address, null, '<br />'); ?></b>
+      </p>
+    </div>
+    
     <?php echo $this->flashMessengerAll(); ?>
     <?php
         echo $this->formErrors($form);
         echo $this->form($form);
     ?>
-  <div>
-     <h3><?php echo $this->translate('user-registration.page.check-details.address-incorrect.header'); ?></h3>
-     <p><?php echo $this->translate('user-registration.page.check-details.address-incorrect.text'); ?></p>
-     <p><?php echo $this->translate('markup-support-helpline');?></p>
+  
+    <div>
+      <h3><?php echo $this->translate('user-registration.page.check-details.address-incorrect.header'); ?></h3>
+      <p><?php echo $this->translate('user-registration.page.check-details.address-incorrect.text'); ?></p>
+      <p><?php echo $this->translate('markup-support-helpline');?></p>
+    </div>
+  
+    <div class="actions-container">
+      <a href="<?php echo $this->url('index');?>"><?php echo $this->translate('back-to-home'); ?></a>
+    </div>
+    
   </div>
 
-  <div class="actions-container">
-    <a href="<?php echo $this->url('index');?>"><?php echo $this->translate('back-to-home'); ?></a>
-  </div>
 </div>
