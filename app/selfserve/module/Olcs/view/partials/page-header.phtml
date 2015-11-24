@@ -7,32 +7,34 @@
         echo $menu;
     }
     ?>
-    <div class="page-header__wrapper">
-
-        <?php if (isset($this->pageSubTitle)) : ?><h3 class="page-header__subtitle"><?php echo $this->pageSubTitle;
-            ?></h3><?php endif; ?>
-
-	    <h1><?php echo $this->pageTitle; ?></h1>
-
-        <div class="page-header__text">
-            <?php
-            if (isset($pageHeaderText)) {
-            ?>
-            <p><?php echo $this->pageHeaderText; ?></p>
-            <?php
-            }
-            ?>
-        </div>
-        <?php
-        if (isset($this->pageHeaderUrl)) {
-        ?>
-            <p><b><a href="<?php echo $this->url($this->pageHeaderUrl['route'], $this->pageHeaderUrl['params']);
-                    ?>"><?php echo $this->translate($this->pageHeaderUrl['text']); ?></a></b></p>
-        <?php
-        }
-        ?>
-        <ul class="page-header__actions">
-
-        </ul>
-    </div><!-- end .page-header__wrapper -->
+    <div class="row">
+      <div class="page-header__wrapper two-thirds">
+  
+          <?php if (isset($this->pageSubTitle)) : ?><h3 class="page-header__subtitle"><?php echo $this->pageSubTitle;
+              ?></h3><?php endif; ?>
+  
+        <h1><?php echo $this->pageTitle; ?></h1>
+  
+          <div class="page-header__text">
+              <?php
+              if (isset($pageHeaderText)) {
+              ?>
+              <p><?php echo $this->pageHeaderText; ?></p>
+              <?php
+              }
+              ?>
+          </div>
+          <?php
+          if (isset($this->pageHeaderUrl)) {
+          ?>
+              <p><b><a href="<?php echo $this->url($this->pageHeaderUrl['route'], $this->pageHeaderUrl['params']);
+                      ?>"><?php echo $this->translate($this->pageHeaderUrl['text']); ?></a></b></p>
+          <?php
+          }
+          ?>
+      </div><!-- end .page-header__wrapper -->
+      <ul class="page-header__actions one-third">
+  
+      </ul>
+    </div>
 </div><!-- end .page-header -->
