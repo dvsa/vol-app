@@ -10,7 +10,6 @@ namespace Olcs\Controller\Cases\Hearing;
 
 use Dvsa\Olcs\Transfer\Command\Cases\Hearing\CreateAppeal as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Hearing\UpdateAppeal as UpdateDto;
-use Dvsa\Olcs\Transfer\Command\Cases\Hearing\DeleteAppeal as DeleteDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\AppealByCase as AppealDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\StayList as StayDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\AppealList as ListDto;
@@ -90,12 +89,6 @@ class HearingAppealController extends AbstractInternalController implements Case
     protected $defaultData = [
         'case' => 'route'
     ];
-
-    /**
-     * Variables for controlling the delete action.
-     * Command is required, as are itemParams from above
-     */
-    protected $deleteCommand = DeleteDto::class;
 
     protected $redirectConfig = [
         'add' => [

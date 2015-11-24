@@ -10,7 +10,6 @@ namespace Olcs\Controller\Cases\Hearing;
 
 use Dvsa\Olcs\Transfer\Command\Cases\Hearing\CreateStay as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Hearing\UpdateStay as UpdateDto;
-use Dvsa\Olcs\Transfer\Command\Cases\Hearing\DeleteStay as DeleteDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\Stay as StayDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\StayList as ListDto;
 use Olcs\Controller\AbstractInternalController;
@@ -101,13 +100,6 @@ class StayController extends AbstractInternalController implements CaseControlle
         'case' => 'route',
         'stayType' => 'route',
     ];
-
-    /**
-     * Variables for controlling the delete action.
-     * Command is required, as are itemParams from above
-     */
-    protected $deleteCommand = DeleteDto::class;
-    protected $deleteParams = ['id' => 'stay'];
 
     protected $inlineScripts = array('forms/hearings-appeal');
 
