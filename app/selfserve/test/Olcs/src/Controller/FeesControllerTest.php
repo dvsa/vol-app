@@ -414,6 +414,109 @@ class FeesControllerTest extends MockeryTestCase
         $this->assertEquals('pages/fees/pay-one', $view->getTemplate());
     }
 
+    public function testPayFeesActionDisableOnlinePayments()
+    {
+        // data
+        $organisationId = 99;
+        $outstandingFees = [
+            [
+                'id' => 77,
+                'description' => 'fee 77',
+                'licence' => [
+                    'id' => 7,
+                    'licNo' => 'LIC7',
+                ],
+                'feeType' => [
+                    'feeType' => [
+                        'id' => 'CONT'
+                    ]
+                ]
+            ],
+        ];
+
+        // mocks ...
+
+        $mockRequest = m::mock();
+        $mockFormHelper = m::mock();
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $mockForm = m::mock(\Common\Form\Form::class);
+        $mockFeesResponse = m::mock();
+        $mockStoredCardResponse = m::mock();
+        $mockGuidanceHelper = m::mock();
+        $this->sm->setService('Helper\Guidance', $mockGuidanceHelper);
+        // expectations ...
+
+        $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
+
+        $mockRequest
+            ->shouldReceive('isPost')
+            ->andReturn(false);
+
+        $this->sut->shouldReceive('getCurrentOrganisationId')
+            ->with()
+            ->andReturn($organisationId);
+
+        $this->sut->shouldReceive('params')->with('fee')->once()->andReturn('77');
+
+        $mockFormHelper
+            ->shouldReceive('createForm')
+            ->with('FeePayment')
+            ->once()
+            ->andReturn($mockForm);
+
+        $mockFormActions = m::mock();
+        $mockFormActions->shouldReceive('remove')->with('pay')->once();
+        $mockFormActions->shouldReceive('get->setLabel')->with('back-to-fees')->once();
+        $mockFormActions->shouldReceive('get->setAttribute')->with('class', 'action--tertiary large')->once();
+        $mockForm->shouldReceive('get')->with('form-actions')->andReturn($mockFormActions);
+        $mockForm->shouldReceive('get')->with('storedCards')->andReturn(
+            m::mock()->shouldReceive('remove')->with('card')->once()->getMock()
+        );
+
+        $this->sut
+            ->shouldReceive('handleQuery')
+            ->with(m::type(OutstandingFeesQry::class))
+            ->andReturn($mockFeesResponse);
+
+        $mockFeesResponse
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn(
+                ['outstandingFees' => $outstandingFees,'disableCardPayments' => true]
+            );
+
+        $this->sut
+            ->shouldReceive('handleQuery')
+            ->with(m::type(\Dvsa\Olcs\Transfer\Query\Cpms\StoredCardList::class))
+            ->andReturn($mockStoredCardResponse);
+
+        $mockStoredCardResponse
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->shouldReceive('getResult')->with()->once()
+            ->andReturn(
+                ['results' =>
+                    []
+                ]
+            );
+
+        $mockGuidanceHelper->shouldReceive('append')->with('selfserve-card-payments-disabled')->once();
+
+        $view = $this->sut->payFeesAction();
+
+        // assertions...
+
+        $this->assertEquals($outstandingFees[0], $view->getVariable('fee'));
+
+        $this->assertSame(
+            $mockForm,
+            $view->getVariable('form')
+        );
+
+        $this->assertEquals('pages/fees/pay-one', $view->getTemplate());
+    }
+
     public function testPayFeesActionShowMultipleFees()
     {
         // data

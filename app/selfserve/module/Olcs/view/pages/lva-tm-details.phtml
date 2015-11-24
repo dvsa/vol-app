@@ -1,4 +1,5 @@
 <div class="js-body">
+  
     <?php $form->prepare(); ?>
     <?php echo $this->form()->openTag($form); ?>
 
@@ -27,36 +28,41 @@
             }
             ?>
         </ul>
-      </div><!-- .page-header__wrapper -->
-    </div><!-- .page-header-->
-
-    <div class="two-thirds border">
-    <?php
-
-    $guidanceMessage = $this->placeholder('guidance');
-
-    if (!empty($guidanceMessage)) {
-        foreach ($guidanceMessage as $message):
-        ?>
-        <div class="guidance">
-            <p><?php echo $this->translate($message); ?></p>
-        </div>
-        <?php
-        endforeach;
-    }
-
-    if (isset($sectionText)) {
-        ?><p><?php echo $this->translate($sectionText); ?></p><?php
-    }
-
-    echo $this->flashMessengerAll();
-
-    echo $this->formErrors($form);
-    echo $this->form()->render($form, false);
-    ?>
+      </div>
+    </div><!-- page-header-->
+    
+    <div class="row">
+  
+      <div class="two-thirds border">
+      <?php
+  
+      $guidanceMessage = $this->placeholder('guidance');
+  
+      if (!empty($guidanceMessage)) {
+          foreach ($guidanceMessage as $message):
+          ?>
+          <div class="guidance">
+              <p><?php echo $this->translate($message); ?></p>
+          </div>
+          <?php
+          endforeach;
+      }
+  
+      if (isset($sectionText)) {
+          ?><p><?php echo $this->translate($sectionText); ?></p><?php
+      }
+  
+      echo $this->flashMessengerAll();
+  
+      echo $this->formErrors($form);
+      echo $this->form()->render($form, false);
+      ?>
+      </div>
+      <div class="one-third sidebar">
+        <?php echo $this->translate('markup-support-contact-address'); ?>
+      </div>
+      <?php echo $this->form()->closeTag(); ?>
+      
     </div>
-    <div class="one-third sidebar">
-      <?php echo $this->translate('markup-support-contact-address'); ?>
-    </div>
-    <?php echo $this->form()->closeTag(); ?>
+    
 </div>

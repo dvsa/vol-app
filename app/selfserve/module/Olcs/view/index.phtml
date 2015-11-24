@@ -1,27 +1,27 @@
 <div class="page-header">
-    <div class="page-header__wrapper">
-        <h1><?php echo $this->translate('index.title'); ?></h1>
-    </div><!-- .page-header__wrapper -->
-</div><!-- .page-header-->
+  <div class="page-header__wrapper">
+    <h1><?php echo $this->translate('index.title'); ?></h1>
+  </div>
+</div><!-- page-header-->
 
-<div class="two-thirds">
+<div class="row">
+    
+  <div class="two-thirds">
+          
+    <p><?php echo $this->translate('search.what-are-you-looking-for'); ?></p>
+    
+    <?php
+  
+      /* @var \Zend\View\Helper\Navigation\Menu $menu */
+      $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'search'))->menu();
+  
+      echo $menu->setUlClass('search-navigation')
+          ->setMinDepth(0)
+          ->setMaxDepth(0)
+          ->setAddClassToListItem();
+        
+    ?>
+      
+  </div>
 
-    <div class="article">
-        
-        <p><?php echo $this->translate('search.what-are-you-looking-for'); ?></p>
-        
-        <?php
-    
-        /* @var \Zend\View\Helper\Navigation\Menu $menu */
-        $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'search'))->menu();
-    
-        echo $menu->setUlClass('search-navigation')
-            ->setMinDepth(0)
-            ->setMaxDepth(0)
-            ->setAddClassToListItem();
-            
-        ?>
-        
-    </div>
-    
 </div>

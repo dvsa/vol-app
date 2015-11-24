@@ -64,4 +64,10 @@ class UserRegistrationAddress
      * @Form\Type("Hidden")
      */
     public $businessType = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $termsAgreed = null;
 }
