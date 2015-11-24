@@ -11,28 +11,32 @@
   </div><!-- end .page-header__wrapper -->
 </div>
 
-<div class="three-quarters">
-
-  <?php echo $this->partial(
-    'partials/fees/payment-details',
-    compact('operatorName', 'fees', 'payment')
-  );?>
-
-  <hr>
-
-  <?php if (isset($table)): ?>
-    <?php echo $table; ?>
-  <?php endif; ?>
-
-  <hr>
-
-  <?php echo $this->translate('markup-pay-fees-success-notice'. ($hasContinuation ? '-continuation' : '')); ?>
-
-  <hr>
-
-  <div class="actions-container">
-    <a href="<?php echo $this->url('fees');?>" class="action--primary large"><?php echo $this->translate('pay-fees.back-to-home'); ?></a>
-    <a href="<?php echo $this->url('fees/receipt', ['action' => 'print'], [], true);?>" class="action--secondary large" target="_blank"><?php echo $this->translate('pay-fees.success.print-receipt'); ?></a>
+<div class="row">
+  
+  <div class="three-quarters">
+  
+    <?php echo $this->partial(
+      'partials/fees/payment-details',
+      compact('operatorName', 'fees', 'payment')
+    );?>
+  
+    <hr>
+  
+    <?php if (isset($table)): ?>
+      <?php echo $table; ?>
+    <?php endif; ?>
+  
+    <hr>
+  
+    <?php echo $this->translate('markup-pay-fees-success-notice'. ($hasContinuation ? '-continuation' : '')); ?>
+  
+    <hr>
+  
+    <div class="actions-container">
+      <a href="<?php echo $this->url('fees');?>" class="action--primary large"><?php echo $this->translate('pay-fees.back-to-home'); ?></a>
+      <a href="<?php echo $this->url('fees/receipt', ['action' => 'print'], [], true);?>" class="action--secondary large" target="_blank"><?php echo $this->translate('pay-fees.success.print-receipt'); ?></a>
+    </div>
+  
   </div>
 
 </div>
