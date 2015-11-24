@@ -5,23 +5,20 @@
 </div><!-- page-header-->
 
 <div class="row">
-    
+
   <div class="two-thirds">
-          
+
     <p><?php echo $this->translate('search.what-are-you-looking-for'); ?></p>
-    
+
     <?php
-  
       /* @var \Zend\View\Helper\Navigation\Menu $menu */
       $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'search'))->menu();
-  
+
       echo $menu->setUlClass('search-navigation')
           ->setMinDepth(0)
           ->setMaxDepth(0)
           ->setAddClassToListItem();
-        
     ?>
-      
   </div>
 
 </div>
