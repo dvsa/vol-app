@@ -5,7 +5,7 @@ namespace Olcs\Controller\Ebsr;
 use Common\Controller\AbstractActionController;
 use Common\Exception\ResourceNotFoundException;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList as ListDto;
-use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxByBusReg as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\BusRegWithTxcInbox as ItemDto;
 use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\UpdateTxcInbox as UpdateTxcInboxDto;
 use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegVariationHistoryDto;
 use Common\Controller\Lva\AbstractController;
@@ -168,7 +168,7 @@ class BusRegistrationController extends AbstractController
     {
         $id = $this->params()->fromRoute('busRegId');
 
-        $query = ItemDto::create(['busReg' => $id]);
+        $query = ItemDto::create(['id' => $id]);
 
         $response = $this->handleQuery($query);
 
@@ -184,18 +184,17 @@ class BusRegistrationController extends AbstractController
         if ($response->isOk()) {
             $results = $response->getResult();
         }
-
         $documents = [];
 
         if ($this->isGranted('selfserve-ebsr-documents')) {
-            if (!empty($results['pdfDocument'])) {
-                $documents[] = $results['pdfDocument'];
+            if (!empty($results['txcInboxs'][0]['pdfDocument'])) {
+                $documents[] = $results['txcInboxs'][0]['pdfDocument'];
             }
-            if (!empty($results['routeDocument'])) {
-                $documents[] = $results['routeDocument'];
+            if (!empty($results['txcInboxs'][0]['routeDocument'])) {
+                $documents[] = $results['txcInboxs'][0]['routeDocument'];
             }
-            if (!empty($results['zipDocument'])) {
-                $documents[] = $results['zipDocument'];
+            if (!empty($results['txcInboxs'][0]['zipDocument'])) {
+                $documents[] = $results['txcInboxs'][0]['zipDocument'];
             }
         }
 
@@ -203,9 +202,9 @@ class BusRegistrationController extends AbstractController
         $content = $this->generateContent(
             'olcs/bus-registration/details',
             [
-                'registrationDetails' => $results['busReg'],
+                'registrationDetails' => $results,
                 'documents' => $documents,
-                'variationHistoryTable' => $this->fetchVariationHistoryTable($results['busReg']['id'])
+                'variationHistoryTable' => $this->fetchVariationHistoryTable($results['id'])
             ]
         );
 
