@@ -11,7 +11,6 @@ namespace Olcs\Controller\Cases\Hearing;
 use Dvsa\Olcs\Transfer\Command\Cases\Hearing\CreateAppeal as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Hearing\UpdateAppeal as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\Appeal as AppealDto;
-use Dvsa\Olcs\Transfer\Query\Cases\Hearing\AppealList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -36,18 +35,6 @@ class AppealController extends AbstractInternalController implements CaseControl
 
     protected $routeIdentifier = 'appeal';
 
-    /*
-     * Variables for controlling table/list rendering
-     * tableName and listDto are required,
-     * listVars probably needs to be defined every time but will work without
-     */
-    protected $tableViewPlaceholderName = 'table';
-    protected $tableViewTemplate = 'pages/table-comments';
-    protected $defaultTableSortField = 'n/a';
-    protected $tableName = 'appeal';
-    protected $listDto = ListDto::class;
-    protected $listVars = ['case'];
-
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -56,12 +43,6 @@ class AppealController extends AbstractInternalController implements CaseControl
         return $view;
     }
 
-    /**
-     * Variables for controlling details view rendering
-     * details view and itemDto are required.
-     */
-    protected $detailsViewTemplate = 'sections/cases/pages/appeals-stays';
-    protected $detailsViewPlaceholderName = '  ';
     protected $itemDto = AppealDto::class;
     // 'id' => 'conviction', to => from
     protected $itemParams = [
@@ -108,6 +89,11 @@ class AppealController extends AbstractInternalController implements CaseControl
      * @var array
      */
     protected $redirectConfig = [
+        'index' => [
+            'action' => 'details',
+            'route' => 'case_hearing_appeal',
+            'reUseParams' => true,
+        ],
         'add' => [
             'action' => 'details',
             'route' => 'case_hearing_appeal',
@@ -119,4 +105,14 @@ class AppealController extends AbstractInternalController implements CaseControl
             'reUseParams' => true,
         ],
     ];
+
+    /**
+     * Ensure index action redirects to details action
+     *
+     * @return array|mixed|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
+    public function indexAction()
+    {
+        return $this->redirectTo([]);
+    }
 }

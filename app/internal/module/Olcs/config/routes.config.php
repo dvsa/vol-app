@@ -219,7 +219,8 @@ $routes = [
         'options' => [
             'route' => '/case/:case/hearing-appeal[/:action]',
             'constraints' => [
-                'case' => '[0-9]+'
+                'case' => '[0-9]+',
+                'action' => 'index',
             ],
             'defaults' => [
                 'controller' => HearingAppealController::class,
@@ -233,6 +234,7 @@ $routes = [
             'route' => '/case/:case/appeal[/:action][/:appeal]',
             'constraints' => [
                 'case' => '[0-9]+',
+                'action' => '(add|edit)',
                 'appeal' => '[0-9]+'
             ],
             'defaults' => [
@@ -247,6 +249,8 @@ $routes = [
             'route' => '/case/:case/stay[/:action][/:stayType][/:stay]',
             'constraints' => [
                 'case' => '[0-9]+',
+                'action' => '(add|edit)',
+                'stayType' => '(stay_t_tc|stay_t_ut)',
                 'stay' => '[0-9]+'
             ],
             'defaults' => [
