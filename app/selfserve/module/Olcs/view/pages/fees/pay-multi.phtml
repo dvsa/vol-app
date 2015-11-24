@@ -10,34 +10,39 @@
     <h1><?php echo $this->translate('pay-fees.title'); ?></h1>
   </div><!-- end .page-header__wrapper -->
 </div>
-<div class="three-quarters">
 
-    <?php
-    $guidanceMessage = $this->placeholder('guidance');
-    if (!empty($guidanceMessage)) {
-        foreach ($guidanceMessage as $message):
-            ?>
-            <div class="guidance">
-                <p><?php echo $this->translate($message); ?></p>
-            </div>
-            <?php
-        endforeach;
-    }
-    ?>
-
-    <!-- table -->
-  <?php if (isset($table)): ?>
-    <?php echo $table; ?>
-  <?php endif; ?>
-
-  <hr>
-
-  <?php echo $this->translate('markup-pay-fees-notice' . ($hasContinuation ? '-continuation' : '')); ?>
-
-  <hr>
-
-  <?php if (isset($form)): ?>
-    <?php echo $this->form($form); ?>
-  <?php endif ?>
+<div class="row">
+  
+  <div class="three-quarters">
+  
+      <?php
+      $guidanceMessage = $this->placeholder('guidance');
+      if (!empty($guidanceMessage)) {
+          foreach ($guidanceMessage as $message):
+              ?>
+              <div class="guidance">
+                  <p><?php echo $this->translate($message); ?></p>
+              </div>
+              <?php
+          endforeach;
+      }
+      ?>
+  
+      <!-- table -->
+    <?php if (isset($table)): ?>
+      <?php echo $table; ?>
+    <?php endif; ?>
+  
+    <hr>
+  
+    <?php echo $this->translate('markup-pay-fees-notice' . ($hasContinuation ? '-continuation' : '')); ?>
+  
+    <hr>
+  
+    <?php if (isset($form)): ?>
+      <?php echo $this->form($form); ?>
+    <?php endif ?>
+  
+  </div>
 
 </div>
