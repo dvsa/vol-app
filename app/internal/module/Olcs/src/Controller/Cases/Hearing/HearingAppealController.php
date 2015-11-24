@@ -8,17 +8,11 @@
  */
 namespace Olcs\Controller\Cases\Hearing;
 
-use Dvsa\Olcs\Transfer\Command\Cases\Hearing\CreateAppeal as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Cases\Hearing\UpdateAppeal as UpdateDto;
-use Dvsa\Olcs\Transfer\Command\Cases\Hearing\DeleteAppeal as DeleteDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\AppealByCase as AppealDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\StayList as StayDto;
-use Dvsa\Olcs\Transfer\Query\Cases\Hearing\AppealList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Form\Model\Form\Appeal as FormClass;
-use Olcs\Data\Mapper\GenericFields as Mapper;
 use Olcs\Logging\Log\Logger;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Zend\View\Model\ViewModel;
@@ -38,72 +32,16 @@ class HearingAppealController extends AbstractInternalController implements Case
      */
     protected $navigationId = 'case_hearings_appeals_stays';
 
-    /*
-     * Variables for controlling table/list rendering
-     * tableName and listDto are required,
-     * listVars probably needs to be defined every time but will work without
-     */
-    protected $tableViewPlaceholderName = 'table';
-    protected $tableViewTemplate = 'pages/table-comments';
-    protected $defaultTableSortField = 'n/a';
-    protected $tableName = 'appeal';
-    protected $listDto = ListDto::class;
-    protected $listVars = ['case'];
-
     /**
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
     protected $detailsViewTemplate = 'sections/cases/pages/appeals-stays';
     protected $detailsViewPlaceholderName = 'appeal';
-    protected $itemDto = AppealDto::class;
     // 'id' => 'conviction', to => from
     protected $itemParams = ['case'];
 
-    /**
-     * Variables for controlling edit view rendering
-     * all these variables are required
-     * itemDto (see above) is also required.
-     */
-    protected $formClass = FormClass::class;
-    protected $updateCommand = UpdateDto::class;
-    protected $mapperClass = Mapper::class;
-    protected $addContentTitle = 'Add appeal';
-    protected $editContentTitle = 'Edit appeal';
-
-    /**
-     * Variables for controlling edit view rendering
-     * all these variables are required
-     * itemDto (see above) is also required.
-     */
-    protected $createCommand = CreateDto::class;
-
-    /**
-     * Form data for the add form.
-     *
-     * Format is name => value
-     * name => "route" means get value from route,
-     * see conviction controller
-     *
-     * @var array
-     */
-    protected $defaultData = [
-        'case' => 'route'
-    ];
-
-    /**
-     * Variables for controlling the delete action.
-     * Command is required, as are itemParams from above
-     */
-    protected $deleteCommand = DeleteDto::class;
-
     protected $redirectConfig = [
-        'add' => [
-            'action' => 'details'
-        ],
-        'edit' => [
-            'action' => 'details'
-        ],
         'index' => [
             'action' => 'details'
         ]

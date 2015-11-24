@@ -360,16 +360,19 @@ trait FeesActionTrait
             true
         );
 
+        $receiptLink = '';
+
         if ($transaction['type']['id'] == RefData::TRANSACTION_TYPE_PAYMENT) {
-            $receiptLink = $urlHelper->fromRoute(
-                $this->getFeesRoute() . '/print-receipt',
-                ['reference' => $transaction['reference']],
-                [],
-                true
-            );
             $title = 'internal.transaction-details.title-payment';
+            if ($transaction['status']['id'] == RefData::TRANSACTION_STATUS_COMPLETE) {
+                $receiptLink = $urlHelper->fromRoute(
+                    $this->getFeesRoute() . '/print-receipt',
+                    ['reference' => $transaction['reference']],
+                    [],
+                    true
+                );
+            }
         } else {
-            $receiptLink = '';
             $title = 'internal.transaction-details.title-other';
         }
 

@@ -20,12 +20,15 @@ use Olcs\Form\Model\Form\Submission as SubmissionForm;
 use Olcs\Data\Mapper\Submission as SubmissionMapper;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Zend\Mvc\View\Http\ViewManager;
 use Zend\Stdlib\ArrayUtils;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Common\Controller\Traits\GenericUpload;
 use Dvsa\Olcs\Transfer\Command\Submission\CloseSubmission as CloseCmd;
 use Dvsa\Olcs\Transfer\Command\Submission\ReopenSubmission as ReopenCmd;
+use Zend\View\Model\ViewModel;
+use Zend\View\Renderer\PhpRenderer;
 
 /**
  * Cases Submission Controller
@@ -313,6 +316,43 @@ class SubmissionController extends AbstractInternalController implements CaseCon
             );
         }
 
+        $this->generateSubmissionView($params, false);
+
+        return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
+    }
+
+    /**
+     * Details action - shows each section detail
+     *
+     * @return ViewModel
+     */
+    public function printAction()
+    {
+        $paramProvider = new GenericItem($this->itemParams);
+
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
+
+        $this->generateSubmissionView($params, true);
+
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/pages/print-submission');
+
+        $layout = new ViewModel();
+        $layout->setTemplate('layout/simple');
+        $layout->setTerminal(true);
+        $layout->addChild($view, 'content');
+
+        return $layout;
+    }
+
+    /**
+     * sets up the view details
+     *
+     * @return ViewModel
+     */
+    private function generateSubmissionView($params, $printView = false)
+    {
         $query = ItemDto::create($params);
 
         $response = $this->handleQuery($query);
@@ -342,13 +382,10 @@ class SubmissionController extends AbstractInternalController implements CaseCon
                 $this->placeholder()->setPlaceholder('allSections', $allSectionsRefData);
                 $this->placeholder()->setPlaceholder('submissionConfig', $submissionConfig['sections']);
                 $this->placeholder()->setPlaceholder('submission', $data);
-                $this->placeholder()->setPlaceholder('readonly', (bool) $data['isClosed']);
+                $this->placeholder()->setPlaceholder('readonly', (bool) ($printView || $data['isClosed']));
             }
         }
-
-        return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
     }
-
 
     /**
      * Updates a section table, to either refresh the data or delete rows
@@ -499,6 +536,7 @@ class SubmissionController extends AbstractInternalController implements CaseCon
      */
     private function generateSectionForms($selectedSectionsArray)
     {
+
         $configService = $this->getServiceLocator()->get('config');
         $submissionConfig = $configService['submission_config'];
 
@@ -524,6 +562,7 @@ class SubmissionController extends AbstractInternalController implements CaseCon
                     );
 
                     $selectedSectionsArray[$sectionId]['attachmentsForm'] = $attachmentsForm;
+                    $selectedSectionsArray[$sectionId]['attachments'] = $this->loadFiles();
                 }
             }
         }
@@ -585,11 +624,17 @@ class SubmissionController extends AbstractInternalController implements CaseCon
      */
     public function loadFiles()
     {
+        $urlHelper = $this->getServiceLocator()->get('Helper\Url');
+
         $submission = $this->getSubmissionData();
         $sectionDocuments = [];
         foreach ($submission['documents'] as $document) {
             // ensure only the file only uploads to the section we are dealing with by checking subCategory
             if ($document['subCategory']['id'] == $this->sectionSubcategory) {
+                $document['url'] = $urlHelper->fromRoute(
+                    'getfile',
+                    array('identifier' => base64_encode($document['identifier']))
+                );
                 $sectionDocuments[] = $document;
             }
         }

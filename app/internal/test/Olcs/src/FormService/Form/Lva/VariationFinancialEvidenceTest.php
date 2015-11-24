@@ -1,22 +1,22 @@
 <?php
 
 /**
- * Financial Evidence Form Service Test
+ * Variation Financial Evidence Test
  *
- * @author Dan Eggleston <dan@stolenegg.com>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\FormService\Form\Lva\FinancialEvidence;
+use Olcs\FormService\Form\Lva\VariationFinancialEvidence;
 
 /**
- * Financial Evidence Form Service Test
+ * Variation Financial Evidence Test
  *
- * @author Dan Eggleston <dan@stolenegg.com>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
-class FinancialEvidenceTest extends MockeryTestCase
+class VariationFinancialEvidenceTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -29,7 +29,7 @@ class FinancialEvidenceTest extends MockeryTestCase
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
 
-        $this->sut = new FinancialEvidence();
+        $this->sut = new VariationFinancialEvidence();
         $this->sut->setFormHelper($this->formHelper);
         $this->sut->setFormServiceLocator($this->fsm);
     }
@@ -40,8 +40,11 @@ class FinancialEvidenceTest extends MockeryTestCase
         $mockForm = m::mock();
 
         $formActions = m::mock();
+        $formActions->shouldReceive('has')->with('saveAndContinue')->andReturn(true);
+        $formActions->shouldReceive('remove')->once()->with('saveAndContinue');
         $formActions->shouldReceive('get->setLabel')->once();
 
+        $mockForm->shouldReceive('has')->with('form-actions')->andReturn(true);
         $mockForm->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
         $this->formHelper->shouldReceive('createForm')

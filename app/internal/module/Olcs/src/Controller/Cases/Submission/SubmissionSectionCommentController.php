@@ -12,6 +12,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\SubmissionSectionComment as Mapper;
 use Olcs\Form\Model\Form\SubmissionSectionComment as Form;
+use \Zend\Form\Form as ZendForm;
 
 /**
  * Submission Section Comment Controller
@@ -84,4 +85,37 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
         'submission' => 'route',
         'submissionSection' => 'route',
     ];
+
+    /**
+     * @param ZendForm $form
+     * @param $formData
+     * @return ZendForm
+     */
+    protected function alterFormForAdd(ZendForm $form, $formData)
+    {
+        return $this->alterForm($form, $formData['id']);
+    }
+
+    /**
+     * @param ZendForm $form
+     * @param $formData
+     * @return ZendForm
+     */
+    protected function alterFormForEdit(ZendForm $form, $formData)
+    {
+        return $this->alterForm($form, $formData['fields']['id']);
+    }
+
+    /**
+     * Change the id of the text area to be unique (avoid DOM clashes with multiple TinyMCE instances
+     *
+     * @param ZendForm $form
+     * @param $id
+     * @return ZendForm
+     */
+    private function alterForm(ZendForm $form, $id)
+    {
+        $form->get('fields')->get('comment')->setAttribute('id', $id);
+        return $form;
+    }
 }

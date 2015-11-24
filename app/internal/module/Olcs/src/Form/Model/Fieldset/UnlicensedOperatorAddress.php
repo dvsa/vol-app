@@ -76,7 +76,8 @@ class UnlicensedOperatorAddress
      * @Form\Options({"label":"Postcode"})
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Dvsa\Olcs\Transfer\Filter\Postcode"})
+     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Postcode"});
      */
     public $postcode = null;
 }

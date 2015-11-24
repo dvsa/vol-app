@@ -119,13 +119,11 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
                 {
                     case 'grant':
                         return GrantDto::class;
-                    default:
-                        return UpdateDto::class;
                 }
             }
         }
 
-        return null;
+        return UpdateDto::class;
     }
 
     /**
@@ -175,7 +173,11 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      */
     protected function alterFormForEdit($form, $formData)
     {
+        $form = $this->setReadonlyFields($form, $formData);
         $form = $this->setActionButtons($form, $formData);
+
+        // reset status html
+        $form->get('fields')->get('statusHtml')->setValue($formData['fields']['statusDescription']);
 
         return $form;
     }
@@ -232,6 +234,49 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
                 break;
             default:
                 $form->get('form-actions')->remove($action);
+        }
+
+        return $form;
+    }
+
+    /**
+     * Depending on the status, we disable certain fields from editing, add a hidden field with the same value to
+     * ensure data is not lost during validation.
+     *
+     * @param ZendForm $form
+     * @param $formData
+     * @return ZendForm
+     */
+    private function setReadonlyFields(ZendForm $form, $formData)
+    {
+        $readonlyFields = [];
+
+        switch($formData['fields']['status']) {
+            case RefData::IRFO_PSV_AUTH_STATUS_PENDING:
+                $readonlyFields = ['irfoPsvAuthType', 'isFeeExemptApplication'];
+                break;
+            case RefData::IRFO_PSV_AUTH_STATUS_RENEW:
+                $readonlyFields = ['irfoPsvAuthType', 'validityPeriod'];
+                break;
+            case RefData::IRFO_PSV_AUTH_STATUS_GRANTED:
+            case RefData::IRFO_PSV_AUTH_STATUS_APPROVED:
+                $readonlyFields = ['irfoPsvAuthType', 'isFeeExemptApplication', 'isFeeExemptApplication',
+                    'isFeeExemptAnnual', 'exemptionDetails', 'copiesRequired'];
+                break;
+            default:
+                $form->setOption('readonly', true);
+        }
+
+        foreach ($readonlyFields as $readonlyField) {
+            // get the field, set hidden field with same value and disable
+            $field = $form->get('fields')->get($readonlyField);
+            $field->setValue($formData['fields'][$readonlyField]);
+
+            $hidden = new Hidden($field->getName());
+            $hidden->setValue($formData['fields'][$readonlyField]);
+
+            $form->get('fields')->get($readonlyField)->setAttribute('disabled', 'disabled');
+            $form->get('fields')->add($hidden);
         }
 
         return $form;

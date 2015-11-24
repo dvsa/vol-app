@@ -24,7 +24,7 @@ class SubmissionSectionComment extends Base
     public $submissionSection = null;
 
     /**
-     * @Form\Attributes({"id":"comment","class":"extra-long tinymce","name":"comment"})
+     * @Form\Attributes({"id":"","class":"extra-long tinymce","name":"comment"})
      * @Form\Options({
      *     "label": "",
      *     "label_attributes": {

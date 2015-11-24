@@ -114,30 +114,6 @@ $routes = [
             ]
         ]
     ],
-    'operators' => [
-        'type' => 'Literal',
-        'options' => [
-            'route' => '/search2/operators',
-            'defaults' => [
-                'controller' => 'SearchController',
-                'action' => 'operator'
-            ]
-        ],
-        'may_terminate' => true,
-        'child_routes' => [
-            'operators-params' => [
-                'type' => 'wildcard',
-                'options' => [
-                    'key_value_delimiter' => '/',
-                    'param_delimiter' => '/',
-                    'defaults' => [
-                        'page' => 1,
-                        'limit' => 10
-                    ]
-                ]
-            ]
-        ]
-    ],
     'search' => [
         'type' => 'segment',
         'options' => [
@@ -243,7 +219,8 @@ $routes = [
         'options' => [
             'route' => '/case/:case/hearing-appeal[/:action]',
             'constraints' => [
-                'case' => '[0-9]+'
+                'case' => '[0-9]+',
+                'action' => 'index',
             ],
             'defaults' => [
                 'controller' => HearingAppealController::class,
@@ -257,6 +234,7 @@ $routes = [
             'route' => '/case/:case/appeal[/:action][/:appeal]',
             'constraints' => [
                 'case' => '[0-9]+',
+                'action' => '(add|edit)',
                 'appeal' => '[0-9]+'
             ],
             'defaults' => [
@@ -271,6 +249,8 @@ $routes = [
             'route' => '/case/:case/stay[/:action][/:stayType][/:stay]',
             'constraints' => [
                 'case' => '[0-9]+',
+                'action' => '(add|edit)',
+                'stayType' => '(stay_t_tc|stay_t_ut)',
                 'stay' => '[0-9]+'
             ],
             'defaults' => [
@@ -546,7 +526,7 @@ $routes = [
             'constraints' => [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
-                'action' => '(index|add|edit|details|close|reopen|delete)'
+                'action' => '(index|add|edit|details|close|reopen|delete|print)'
             ],
             'defaults' => [
                 'controller' => 'CaseSubmissionController',

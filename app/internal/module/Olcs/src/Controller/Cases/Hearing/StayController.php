@@ -10,9 +10,7 @@ namespace Olcs\Controller\Cases\Hearing;
 
 use Dvsa\Olcs\Transfer\Command\Cases\Hearing\CreateStay as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Hearing\UpdateStay as UpdateDto;
-use Dvsa\Olcs\Transfer\Command\Cases\Hearing\DeleteStay as DeleteDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\Stay as StayDto;
-use Dvsa\Olcs\Transfer\Query\Cases\Hearing\StayList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -37,18 +35,6 @@ class StayController extends AbstractInternalController implements CaseControlle
 
     protected $routeIdentifier = 'stay';
 
-    /*
-     * Variables for controlling table/list rendering
-     * tableName and listDto are required,
-     * listVars probably needs to be defined every time but will work without
-     */
-    protected $tableViewPlaceholderName = 'table';
-    protected $tableViewTemplate = 'pages/table-comments';
-    protected $defaultTableSortField = 'n/a';
-    protected $tableName = 'stay';
-    protected $listDto = ListDto::class;
-    protected $listVars = ['case'];
-
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -61,8 +47,6 @@ class StayController extends AbstractInternalController implements CaseControlle
      * Variables for controlling details view rendering
      * details view and itemDto are required.
      */
-    protected $detailsViewTemplate = 'pages/case/appeals-stays';
-    protected $detailsViewPlaceholderName = '  ';
     protected $itemDto = StayDto::class;
     // 'id' => 'conviction', to => from
     protected $itemParams = [
@@ -102,12 +86,6 @@ class StayController extends AbstractInternalController implements CaseControlle
         'stayType' => 'route',
     ];
 
-    /**
-     * Variables for controlling the delete action.
-     * Command is required, as are itemParams from above
-     */
-    protected $deleteCommand = DeleteDto::class;
-
     protected $inlineScripts = array('forms/hearings-appeal');
 
     /**
@@ -116,6 +94,11 @@ class StayController extends AbstractInternalController implements CaseControlle
      * @var array
      */
     protected $redirectConfig = [
+        'index' => [
+            'action' => 'details',
+            'route' => 'case_hearing_appeal',
+            'reUseParams' => true,
+        ],
         'add' => [
             'action' => 'details',
             'route' => 'case_hearing_appeal',
@@ -127,4 +110,14 @@ class StayController extends AbstractInternalController implements CaseControlle
             'reUseParams' => true,
         ],
     ];
+
+    /**
+     * Ensure index action redirects to details action
+     *
+     * @return array|mixed|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
+    public function indexAction()
+    {
+        return $this->redirectTo([]);
+    }
 }

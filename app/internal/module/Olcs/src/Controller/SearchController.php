@@ -208,43 +208,6 @@ class SearchController extends AbstractController implements LeftViewProvider
     }
 
     /**
-     * Operator search results
-     *
-     * @return ViewModel
-     */
-    public function operatorAction()
-    {
-        $postData = (array)$this->getRequest()->getPost();
-        if (isset($postData['action']) && $postData['action'] == 'Create operator') {
-            return $this->redirectToRoute('create_operator');
-        }
-        if (isset($postData['action']) && $postData['action'] == 'Create transport manager') {
-            return $this->redirectToRoute('create_transport_manager');
-        }
-        $data = $this->params()->fromRoute();
-        $results = $this->makeRestCall('OperatorSearch', 'GET', $data);
-
-        $config = $this->getServiceLocator()->get('Config');
-        $static = $config['static-list-data'];
-
-        foreach ($results['Results'] as $key => $result) {
-
-            $orgType = $result['organisation_type'];
-
-            if (isset($static['business_types'][$orgType])) {
-                $results['Results'][$key]['organisation_type'] = $static['business_types'][$orgType];
-            }
-        }
-
-        $table = $this->getTable('operator', $results, $data);
-
-        $view = new ViewModel(['table' => $table]);
-        $view->setTemplate('pages/table');
-
-        return $this->renderView($view, 'Search results');
-    }
-
-    /**
      * Sets the navigation to that secified in the controller. Useful for when a controller is
      * 100% reresented by a single navigation object.
      *
