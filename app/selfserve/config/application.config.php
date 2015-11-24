@@ -9,6 +9,8 @@ $config = array(
         'Olcs\Logging',
         'Common',
         'Olcs',
+        'ZfcBase',
+        'ZfcUser',
         'ZfcRbac',
     ),
     'module_listener_options' => array(
