@@ -105,6 +105,12 @@ class SubmissionsFurniture implements
         return $response->getResult();
     }
 
+    /**
+     * Returns page title
+     *
+     * @param $case
+     * @return string
+     */
     private function getPageTitle($case)
     {
         $pageTitle = 'Case ' . $case['id'];
