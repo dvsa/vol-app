@@ -16,9 +16,9 @@ return [
                     'route' => 'admin-dashboard/admin-my-account/details'
                 ],
                 [
-                    'id' => 'zfcuser/logout',
+                    'id' => 'logout',
                     'label' => 'Sign out',
-                    'route' => 'zfcuser/logout'
+                    'route' => 'logout'
                 ]
             ]
         ]

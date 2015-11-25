@@ -406,7 +406,6 @@ return array(
         'aliases' => [
             'RouteParamsListener' => 'Olcs\Listener\RouteParams',
             'right-sidebar' => 'Olcs\Navigation\RightHandNavigation',
-            'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
             'HeaderSearchListener' => 'Olcs\Listener\HeaderSearch'
         ],
         'invokables' => [
@@ -625,8 +624,6 @@ return array(
     'zfc_rbac' => [
         'guards' => [
             'ZfcRbac\Guard\RoutePermissionsGuard' =>[
-                'zfcuser/login'    => ['*'],
-                'zfcuser/logout'    => ['*'],
                 'case_processing_notes' => ['internal-notes'],
                 '*case*' => ['internal-case'],
                 '*documents*' => ['internal-documents'],
