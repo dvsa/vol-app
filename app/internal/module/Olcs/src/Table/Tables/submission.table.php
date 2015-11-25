@@ -71,6 +71,11 @@ return array(
             'name' => 'recipientUser->contactDetails->person'
         ),
         array(
+            'title' => 'Date assigned',
+            'formatter' => 'DateTime',
+            'name' => 'assignedDate'
+        ),
+        array(
             'title' => 'Urgent',
             'formatter' => 'YesNo',
             'name' => 'urgent'
