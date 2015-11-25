@@ -256,11 +256,11 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
                 $readonlyFields = ['irfoPsvAuthType', 'isFeeExemptApplication'];
                 break;
             case RefData::IRFO_PSV_AUTH_STATUS_RENEW:
-                $readonlyFields = ['irfoPsvAuthType', 'validityPeriod'];
+                $readonlyFields = ['irfoPsvAuthType'];
                 break;
             case RefData::IRFO_PSV_AUTH_STATUS_GRANTED:
             case RefData::IRFO_PSV_AUTH_STATUS_APPROVED:
-                $readonlyFields = ['irfoPsvAuthType', 'isFeeExemptApplication', 'isFeeExemptApplication',
+                $readonlyFields = ['irfoPsvAuthType', 'validityPeriod', 'isFeeExemptApplication',
                     'isFeeExemptAnnual', 'exemptionDetails', 'copiesRequired'];
                 break;
             default:
