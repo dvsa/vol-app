@@ -79,7 +79,7 @@ trait FeesActionTrait
      */
     public function addFeeAction()
     {
-        $form = $this->getForm('create-fee');
+        $form = $this->getForm('CreateFee');
         $form = $this->alterCreateFeeForm($form);
 
         if ($this->getRequest()->isPost()) {
@@ -175,7 +175,7 @@ trait FeesActionTrait
      */
     protected function getFeeFilterForm($filters = [])
     {
-        $form = $this->getForm('fee-filter');
+        $form = $this->getForm('FeeFilter');
         $form->remove('csrf');
         $form->setData($filters);
 
@@ -240,7 +240,7 @@ trait FeesActionTrait
 
         $fee = $this->getFee($id);
 
-        $form = $this->alterFeeForm($this->getForm('fee'), $fee);
+        $form = $this->alterFeeForm($this->getForm('Fee'), $fee);
         $form = $this->setDataFeeForm($fee, $form);
         $this->processForm($form);
 

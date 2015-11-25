@@ -118,7 +118,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             return $this->redirectToIndex();
         }
 
-        $form = $this->getForm('transport-manager-application-small');
+        $form = $this->getForm('TransportManagerApplicationSmall');
 
         $view = $this->getViewWithTm(['form' => $form]);
         $view->setTemplate('pages/form');

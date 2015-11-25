@@ -166,7 +166,7 @@ class ReportController extends AbstractActionController implements LeftViewProvi
      */
     private function getCpidFilterForm($status)
     {
-        $cpidFilterForm = $this->getForm('cpid-filter');
+        $cpidFilterForm = $this->getForm('CpidFilter');
         $cpidFilterForm->remove('security');
         $cpidFilterForm->setData(['status' => $status]);
         $cpidFilterForm->get('status')->addValueOption([RefData::OPERATOR_CPID_ALL => 'All']);
