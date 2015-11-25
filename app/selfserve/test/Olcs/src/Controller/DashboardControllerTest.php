@@ -9,9 +9,7 @@ namespace OlcsTest\Controller;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Common\Service\Entity\UserEntityService;
-use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondences as CorrespondenceQry;
-use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees as OutstandingFeesQry;
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
 use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
 
@@ -60,10 +58,10 @@ class DashboardControllerTest extends MockeryTestCase
     public function testCorrectDashboardShown($permissionSelfserveLva, $permissionSelfserveTmDashboard, $standardView)
     {
         $this->sut->shouldReceive('isGranted')
-            ->with(UserEntityService::PERMISSION_SELFSERVE_LVA)
+            ->with(RefData::PERMISSION_SELFSERVE_LVA)
             ->andReturn($permissionSelfserveLva);
         $this->sut->shouldReceive('isGranted')
-            ->with(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD)
+            ->with(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD)
             ->andReturn($permissionSelfserveTmDashboard);
 
         if ($standardView) {
@@ -88,11 +86,11 @@ class DashboardControllerTest extends MockeryTestCase
         $this->sm->setService('navigation', $mockNavigation);
 
         $this->sut->shouldReceive('isGranted')
-            ->with(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD)
+            ->with(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD)
             ->once()
             ->andReturn(true);
         $this->sut->shouldReceive('isGranted')
-            ->with(UserEntityService::PERMISSION_SELFSERVE_LVA)
+            ->with(RefData::PERMISSION_SELFSERVE_LVA)
             ->once()
             ->andReturn(true);
         $this->sut->shouldReceive('getCurrentOrganisationId')
@@ -159,11 +157,11 @@ class DashboardControllerTest extends MockeryTestCase
         $this->sm->setService('DataMapper\DashboardTmApplications', $mockDataMapper);
 
         $this->sut->shouldReceive('isGranted')
-            ->with(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD)
+            ->with(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD)
             ->once()
             ->andReturn(true);
         $this->sut->shouldReceive('isGranted')
-            ->with(UserEntityService::PERMISSION_SELFSERVE_LVA)
+            ->with(RefData::PERMISSION_SELFSERVE_LVA)
             ->once()
             ->andReturn(false);
 

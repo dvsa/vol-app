@@ -9,9 +9,9 @@ namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractTmController;
 use Common\Controller\Traits\GenericUpload;
+use Common\RefData;
 use Common\Service\Entity\TransportManagerApplicationEntityService;
 use Common\Service\Entity\ApplicationEntityService;
-use Common\Service\Entity\UserEntityService;
 use Dvsa\Olcs\Transfer\Command;
 
 /**
@@ -854,8 +854,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     protected function redirectTmToHome()
     {
-        if ($this->isGranted(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD) &&
-            !$this->isGranted(UserEntityService::PERMISSION_SELFSERVE_LVA)) {
+        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD) &&
+            !$this->isGranted(RefData::PERMISSION_SELFSERVE_LVA)) {
             return $this->redirect()->toRoute('dashboard');
         } else {
             return $this->redirect()->toRoute(
@@ -1186,8 +1186,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     private function isTransportManagerRole()
     {
-        return ($this->isGranted(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD) &&
-            !$this->isGranted(UserEntityService::PERMISSION_SELFSERVE_LVA));
+        return ($this->isGranted(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD) &&
+            !$this->isGranted(RefData::PERMISSION_SELFSERVE_LVA));
     }
 
     /**

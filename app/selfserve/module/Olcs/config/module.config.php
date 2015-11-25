@@ -62,6 +62,16 @@ $routes = array(
             )
         )
     ),
+    'login' => array(
+        'type' => 'literal',
+        'options' =>  array(
+            'route' => '/login',
+            'defaults' => array(
+                'controller' => IndexController::class,
+                'action' => 'index'
+            )
+        )
+    ),
     'cookies' => array(
         'type' => 'segment',
         'options' =>  array(
@@ -87,11 +97,10 @@ $routes = array(
     'search' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/search/:index[/:action]',
+            'route' => '/search[/:index][/:action]',
             'defaults' => array(
                 'controller' => SearchController::class,
-                'action' => 'index',
-                'index' => 'operator'
+                'action' => 'index'
             )
         )
     ),
@@ -159,16 +168,6 @@ $routes = array(
                 'controller' => SearchController::class,
                 'action' => 'index',
                 'index' => 'vehicle-external'
-            )
-        )
-    ),
-    'search-jump-home' => array(
-        'type' => 'literal',
-        'options' =>  array(
-            'route' => '/search/jump',
-            'defaults' => array(
-                'controller' => SearchController::class,
-                'action' => 'jump',
             )
         )
     ),
@@ -762,7 +761,7 @@ $busRegNav = array(
 $searchNavigation = array(
     'id' => 'search',
     'label' => 'Search',
-    'route' => 'search-jump-home',
+    'route' => 'search',
     'class' => 'proposition-nav__item',
     'pages' => array(
         // --
@@ -900,9 +899,6 @@ return array(
         )
     ),
     'service_manager' => array(
-        'aliases' => [
-            'Zend\Authentication\AuthenticationService' => 'zfcuser_auth_service',
-        ],
         'invokables' => array(
             'ApplicationPeopleAdapter'
                 => 'Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter',
@@ -995,7 +991,7 @@ return array(
                     array(
                         'id' => 'selfserve-topnav-search',
                         'label' => 'Search',
-                        'route' => 'search-jump-home',
+                        'route' => 'search',
                         'class' => 'proposition-nav__item',
                     ),
                     array(
@@ -1112,8 +1108,6 @@ return array(
                 'lva-application/transport_manager_details*' => ['selfserve-tm'],
                 'lva-variation/transport_manager_details*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
-                'zfcuser/login' => ['*'],
-                'zfcuser/logout' => ['*'],
                 'search*' => ['*'],
                 'index' => ['*'],
                 'user-registration' => ['*'],
