@@ -62,12 +62,15 @@ class BusRegFurnitureTest extends MockeryTestCase
     public function testOnBusRegFurniture()
     {
         $id = 69;
+
+        $status = [
+            'id' => RefData::BUSREG_STATUS_REGISTERED,
+            'description' => 'description',
+        ];
+
         $busReg = [
             'id' => $id,
-            'status' => [
-                'id' => RefData::BUSREG_STATUS_REGISTERED,
-                'description' => 'description',
-            ],
+            'status' => $status,
             'regNo' => 'reg no',
             'routeNo' => 'route no',
             'variationNo' => 3,
@@ -94,6 +97,7 @@ class BusRegFurnitureTest extends MockeryTestCase
                 m::mock()
                 ->shouldReceive('set')
                 ->once()
+                ->with($status)
                 ->getMock()
             )
             ->shouldReceive('getContainer')
@@ -207,94 +211,5 @@ class BusRegFurnitureTest extends MockeryTestCase
         $this->sut->setCommandSender($mockCommandSender);
 
         $this->sut->onBusRegFurniture($event);
-    }
-
-    /**
-     * @dataProvider getStatusArrayProvider
-     */
-    public function testGetStatusArray($statusKey, $statusString, $expected)
-    {
-        $method = new \ReflectionMethod($this->sut, 'getStatusArray');
-        $method->setAccessible(true);
-
-        $this->assertEquals($expected, $method->invoke($this->sut, $statusKey, $statusString));
-    }
-
-    public function getStatusArrayProvider()
-    {
-        return [
-            [
-                RefData::BUSREG_STATUS_ADMIN,
-                'value',
-                [
-                    'colour' => 'grey',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_REGISTERED,
-                'value',
-                [
-                    'colour' => 'green',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_REFUSED,
-                'value',
-                [
-                    'colour' => 'grey',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_CANCELLATION,
-                'value',
-                [
-                    'colour' => 'orange',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_WITHDRAWN,
-                'value',
-                [
-                    'colour' => 'grey',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_VARIATION,
-                'value',
-                [
-                    'colour' => 'orange',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_CNS,
-                'value',
-                [
-                    'colour' => 'grey',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_CANCELLED,
-                'value',
-                [
-                    'colour' => 'grey',
-                    'value' => 'value',
-                ],
-            ],
-            [
-                RefData::BUSREG_STATUS_NEW,
-                'value',
-                [
-                    'colour' => 'orange',
-                    'value' => 'value',
-                ],
-            ],
-        ];
     }
 }

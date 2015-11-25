@@ -29,10 +29,7 @@
         <?php
     }
 
-    $status = $this->placeholder('status')->getValue();
-    if (!empty($status)) {
-        echo $this->licenceStatus($status);
-    }
+    echo $this->status($this->placeholder('status')->getValue());
     ?>
   </div><!-- end .page-header__wrapper-->
 </div><!-- end .page-header-->

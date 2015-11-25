@@ -97,6 +97,10 @@ class ApplicationFurnitureTest extends TestCase
 
         $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
 
+        $status = [
+            'id' => RefData::APPLICATION_STATUS_VALID
+        ];
+
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')
             ->with('pageTitle')
@@ -122,7 +126,7 @@ class ApplicationFurnitureTest extends TestCase
                 m::mock()
                     ->shouldReceive('set')
                     ->once()
-                    ->with(RefData::APPLICATION_STATUS_VALID)
+                    ->with($status)
                     ->getMock()
             )
             ->shouldReceive('getContainer')
@@ -153,9 +157,7 @@ class ApplicationFurnitureTest extends TestCase
 
         $data = [
             'id' => 111,
-            'status' => [
-                'id' => RefData::APPLICATION_STATUS_VALID
-            ],
+            'status' => $status,
             'licence' => [
                 'id' => 222,
                 'licNo' => 'AB123',
@@ -183,6 +185,10 @@ class ApplicationFurnitureTest extends TestCase
 
         $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
 
+        $status = [
+            'id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED
+        ];
+
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')
             ->with('pageTitle')
@@ -208,7 +214,7 @@ class ApplicationFurnitureTest extends TestCase
                 m::mock()
                     ->shouldReceive('set')
                     ->once()
-                    ->with(RefData::APPLICATION_STATUS_NOT_SUBMITTED)
+                    ->with($status)
                     ->getMock()
             )
             ->shouldReceive('getContainer')
@@ -235,9 +241,7 @@ class ApplicationFurnitureTest extends TestCase
 
         $data = [
             'id' => 111,
-            'status' => [
-                'id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED
-            ],
+            'status' => $status,
             'licence' => [
                 'id' => 222,
                 'licNo' => 'AB123',
@@ -265,6 +269,10 @@ class ApplicationFurnitureTest extends TestCase
 
         $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
 
+        $status = [
+            'id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED
+        ];
+
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')
             ->with('pageTitle')
@@ -290,7 +298,7 @@ class ApplicationFurnitureTest extends TestCase
                 m::mock()
                     ->shouldReceive('set')
                     ->once()
-                    ->with(RefData::APPLICATION_STATUS_NOT_SUBMITTED)
+                    ->with($status)
                     ->getMock()
             )
             ->shouldReceive('getContainer')
@@ -317,9 +325,7 @@ class ApplicationFurnitureTest extends TestCase
 
         $data = [
             'id' => 111,
-            'status' => [
-                'id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED
-            ],
+            'status' => $status,
             'licence' => [
                 'id' => 222,
                 'licNo' => null,
