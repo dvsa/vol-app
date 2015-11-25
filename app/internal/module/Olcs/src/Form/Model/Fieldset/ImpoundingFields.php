@@ -58,7 +58,7 @@ class ImpoundingFields
      * @Form\Attributes({"id":"impoundingLegislationTypes","placeholder":"","multiple":"multiple",
      *     "class":"chosen-select-large"})
      * @Form\Options({
-     *     "label": "Select legislation",
+     *     "label": "Grounds of application for return",
      *     "disable_inarray_validator": false,
      *     "help-block": "Use CTRL to select multiple",
      *     "service_name": "Olcs\Service\Data\ImpoundingLegislation",
