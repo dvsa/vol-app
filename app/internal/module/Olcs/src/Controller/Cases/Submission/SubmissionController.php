@@ -19,7 +19,7 @@ use Dvsa\Olcs\Transfer\Query\Submission\SubmissionList as ListDto;
 use Olcs\Form\Model\Form\Submission as SubmissionForm;
 use Olcs\Data\Mapper\Submission as SubmissionMapper;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\SubmissionControllerInterface;
 use Zend\Mvc\View\Http\ViewManager;
 use Zend\Stdlib\ArrayUtils;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
@@ -29,13 +29,14 @@ use Dvsa\Olcs\Transfer\Command\Submission\CloseSubmission as CloseCmd;
 use Dvsa\Olcs\Transfer\Command\Submission\ReopenSubmission as ReopenCmd;
 use Zend\View\Model\ViewModel;
 use Zend\View\Renderer\PhpRenderer;
+use Olcs\Controller\Interfaces\RightViewProvider;
 
 /**
  * Cases Submission Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class SubmissionController extends AbstractInternalController implements CaseControllerInterface
+class SubmissionController extends AbstractInternalController implements SubmissionControllerInterface
 {
     use GenericUpload;
 
