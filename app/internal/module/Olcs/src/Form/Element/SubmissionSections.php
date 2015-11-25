@@ -366,7 +366,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 ];
                 break;
             case 'submission_type_o_mlh_otc':
-            case 'submission_type_o_ni_tru':
                 $sections = [
                     'operating-centres',
                     'conditions-and-undertakings',
@@ -378,6 +377,21 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'continuous-effective-control',
                     'fitness-and-repute',
                     'local-licence-history',
+                    'linked-mlh-history',
+                    'maintenance-tachographs-hours',
+                    'financial-information'
+                ];
+                break;
+            case 'submission_type_o_ni_tru':
+                $sections = [
+                    'operating-centres',
+                    'conditions-and-undertakings',
+                    'linked-licences-app-numbers',
+                    'lead-tc-area',
+                    'auth-requested-applied-for',
+                    'transport-managers',
+                    'continuous-effective-control',
+                    'fitness-and-repute',
                     'linked-mlh-history',
                     'maintenance-tachographs-hours',
                     'financial-information'
@@ -406,16 +420,13 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 $sections = [
                     'operating-centres',
                     'conditions-and-undertakings',
-                    'intelligence-unit-check',
                     'linked-licences-app-numbers',
                     'current-submissions',
                     'transport-managers',
-                    'local-licence-history',
                     'maintenance-tachographs-hours',
                     'prohibition-history',
                     'conviction-fpn-offence-history',
-                    'annual-test-history',
-                    'penalties'
+                    'annual-test-history'
                 ];
                 break;
             case 'submission_type_o_tm':
@@ -455,7 +466,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
 
         return array_merge(
             $this->getMandatorySections(),
-            $this->getDefaultSections(),
+            $this->getDefaultSections($submissionType),
             $sections
         );
     }
@@ -479,17 +490,46 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     /**
      * Gets list of default sections that ALL submission types must have
      *
+     * @param $submissionType
      * @return array
      */
-    private function getDefaultSections()
+    private function getDefaultSections($submissionType)
     {
-        return [
-            'case-outline',
-            'people',
-            'previous-history',
-            'other-issues',
-            'annex'
-        ];
+        switch($submissionType) {
+            case 'submission_type_o_ni_tru':
+                return [
+                    'case-outline',
+                    'most-serious-infringement',
+                    'people',
+                    'previous-history',
+                ];
+            case 'submission_type_o_otc':
+                return [
+                    'case-outline',
+                    'most-serious-infringement',
+                    'people',
+                    'previous-history',
+                ];
+            case 'submission_type_o_bus_reg':
+            case 'submission_type_o_clo_fep':
+            case 'submission_type_o_clo_g':
+            case 'submission_type_o_clo_psv':
+            case 'submission_type_o_env':
+            case 'submission_type_o_tm':
+            case 'submission_type_o_schedule_41':
+            case 'submission_type_o_impounding':
+            case 'submission_type_o_mlh_clo':
+            case 'submission_type_o_mlh_otc':
+            case 'submission_type_o_irfo':
+            default:
+                return [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex'
+                ];
+        }
     }
 
     /**
