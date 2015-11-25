@@ -369,14 +369,12 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 $sections = [
                     'operating-centres',
                     'conditions-and-undertakings',
-                    'intelligence-unit-check',
                     'linked-licences-app-numbers',
                     'lead-tc-area',
                     'auth-requested-applied-for',
                     'transport-managers',
                     'continuous-effective-control',
                     'fitness-and-repute',
-                    'local-licence-history',
                     'linked-mlh-history',
                     'maintenance-tachographs-hours',
                     'financial-information'
@@ -504,6 +502,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'previous-history',
                 ];
             case 'submission_type_o_otc':
+            case 'submission_type_o_mlh_otc':
                 return [
                     'case-outline',
                     'most-serious-infringement',
@@ -519,7 +518,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             case 'submission_type_o_schedule_41':
             case 'submission_type_o_impounding':
             case 'submission_type_o_mlh_clo':
-            case 'submission_type_o_mlh_otc':
             case 'submission_type_o_irfo':
             default:
                 return [
