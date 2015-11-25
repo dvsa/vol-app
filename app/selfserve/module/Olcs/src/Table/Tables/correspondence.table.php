@@ -21,7 +21,7 @@ return array(
             'formatter' => 'AccessedCorrespondence'
         ),
         array(
-            'title' => 'Licence No.',
+            'title' => 'Licence number',
             'name' => 'licence',
             'formatter' => 'LicenceNumberLink'
         ),
