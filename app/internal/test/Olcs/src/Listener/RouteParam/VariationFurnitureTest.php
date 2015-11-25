@@ -88,6 +88,10 @@ class VariationFurnitureTest extends TestCase
         $event = m::mock(RouteParam::class);
         $event->shouldReceive('getValue')->andReturn(111);
 
+        $status = [
+            'id' => RefData::APPLICATION_STATUS_VALID
+        ];
+
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')
             ->with('pageTitle')
@@ -113,7 +117,7 @@ class VariationFurnitureTest extends TestCase
                 m::mock()
                     ->shouldReceive('set')
                     ->once()
-                    ->with(RefData::APPLICATION_STATUS_VALID)
+                    ->with($status)
                     ->getMock()
             )
             ->shouldReceive('getContainer')
@@ -144,9 +148,7 @@ class VariationFurnitureTest extends TestCase
 
         $data = [
             'id' => 111,
-            'status' => [
-                'id' => RefData::APPLICATION_STATUS_VALID
-            ],
+            'status' => $status,
             'licence' => [
                 'id' => 222,
                 'licNo' => 'AB123',

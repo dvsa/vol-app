@@ -101,7 +101,7 @@ class VariationFurniture implements ListenerAggregateInterface, FactoryInterface
         $licenceUrl = $this->getRouter()->assemble(['licence' => $data['licence']['id']], ['name' => 'lva-licence']);
         $placeholder->getContainer('pageTitle')->set(sprintf($html, $licenceUrl, $data['licence']['licNo'], $id));
         $placeholder->getContainer('pageSubtitle')->set($data['licence']['organisation']['name']);
-        $placeholder->getContainer('status')->set($data['status']['id']);
+        $placeholder->getContainer('status')->set($data['status']);
         $placeholder->getContainer('horizontalNavigationId')->set('application');
 
         $right = new ViewModel();
