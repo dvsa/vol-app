@@ -1004,7 +1004,7 @@ return array(
                     ),
                     array(
                         'id' => 'selfserve-topnav-manage-users',
-                        'label' => 'Manage Users',
+                        'label' => 'Manage users',
                         'route' => 'manage-user',
                         'action' => 'index',
                         'use_route_match' => true,
