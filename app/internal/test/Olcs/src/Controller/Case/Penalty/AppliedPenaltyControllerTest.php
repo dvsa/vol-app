@@ -66,7 +66,6 @@ class AppliedPenaltyControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDataForFormEdit()
     {
-        $this->markTestSkipped();
         $seriousInfringementId = 1;
         $id = 1;
         $action = 'edit';
@@ -120,7 +119,6 @@ class AppliedPenaltyControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDataForFormAdd()
     {
-        $this->markTestSkipped();
         $seriousInfringementId = 1;
         $id = 1;
         $case = 24;
