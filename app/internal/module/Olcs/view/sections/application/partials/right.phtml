@@ -10,7 +10,7 @@
             <?php echo $this->escapeHtml($licence['organisation']['name']); ?>
         </a><br />
         <?php echo $this->escapeHtml($licence['licNo']); ?>
-        <?php echo $this->licenceStatus($licence['status']['id']); ?>
+        <?php echo $this->status($licence['status']); ?>
     </p>
 </div>
 
