@@ -133,6 +133,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      */
     public function prepareElement(FormInterface $form)
     {
+        unset($form);
         $name = $this->getName();
 
         $this->getSubmissionType()->setName($name . '[submissionType]');
@@ -268,7 +269,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     }
 
     /**
-     * Returns the Preselected  section keys for a given submission type
+     * Returns the Preselected section keys for a given submission type
      *
      * @param string $submissionType
      * @return array
@@ -278,6 +279,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         switch($submissionType) {
             case 'submission_type_o_bus_reg':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'auth-requested-applied-for',
                     'transport-managers',
@@ -292,11 +298,21 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_clo_fep':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'waive-fee-late-fee'
                 ];
                 break;
             case 'submission_type_o_clo_g':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'intelligence-unit-check',
@@ -315,6 +331,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_clo_psv':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'intelligence-unit-check',
@@ -333,6 +354,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_env':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'intelligence-unit-check',
@@ -359,6 +385,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_irfo':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'transport-managers',
                     'fitness-and-repute',
@@ -366,18 +397,38 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 ];
                 break;
             case 'submission_type_o_mlh_otc':
-            case 'submission_type_o_ni_tru':
                 $sections = [
+                    'case-outline',
+                    'most-serious-infringement',
+                    'people',
+                    'previous-history',
                     'operating-centres',
                     'conditions-and-undertakings',
-                    'intelligence-unit-check',
                     'linked-licences-app-numbers',
                     'lead-tc-area',
                     'auth-requested-applied-for',
                     'transport-managers',
                     'continuous-effective-control',
                     'fitness-and-repute',
-                    'local-licence-history',
+                    'linked-mlh-history',
+                    'maintenance-tachographs-hours',
+                    'financial-information'
+                ];
+                break;
+            case 'submission_type_o_ni_tru':
+                $sections = [
+                    'case-outline',
+                    'most-serious-infringement',
+                    'people',
+                    'previous-history',
+                    'operating-centres',
+                    'conditions-and-undertakings',
+                    'linked-licences-app-numbers',
+                    'lead-tc-area',
+                    'auth-requested-applied-for',
+                    'transport-managers',
+                    'continuous-effective-control',
+                    'fitness-and-repute',
                     'linked-mlh-history',
                     'maintenance-tachographs-hours',
                     'financial-information'
@@ -385,6 +436,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_mlh_clo':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'intelligence-unit-check',
@@ -404,23 +460,29 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_otc':
                 $sections = [
+                    'case-outline',
+                    'most-serious-infringement',
+                    'people',
+                    'previous-history',
                     'operating-centres',
                     'conditions-and-undertakings',
-                    'intelligence-unit-check',
                     'linked-licences-app-numbers',
                     'current-submissions',
                     'transport-managers',
-                    'local-licence-history',
                     'maintenance-tachographs-hours',
                     'prohibition-history',
                     'conviction-fpn-offence-history',
-                    'annual-test-history',
-                    'penalties'
+                    'annual-test-history'
                 ];
                 break;
             case 'submission_type_o_tm':
                 $sections = array_merge(
                     [
+                        'case-outline',
+                        'people',
+                        'previous-history',
+                        'other-issues',
+                        'annex',
                         'intelligence-unit-check',
                         'transport-managers',
                         'continuous-effective-control',
@@ -432,6 +494,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_schedule_41':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'linked-licences-app-numbers',
@@ -446,6 +513,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_impounding':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'statements'
                 ];
                 break;
@@ -455,7 +527,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
 
         return array_merge(
             $this->getMandatorySections(),
-            $this->getDefaultSections(),
             $sections
         );
     }
@@ -473,22 +544,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             'case-outline',
             'people',
             'outstanding-applications'
-        ];
-    }
-
-    /**
-     * Gets list of default sections that ALL submission types must have
-     *
-     * @return array
-     */
-    private function getDefaultSections()
-    {
-        return [
-            'case-outline',
-            'people',
-            'previous-history',
-            'other-issues',
-            'annex'
         ];
     }
 

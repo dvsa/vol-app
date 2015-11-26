@@ -26,6 +26,7 @@ use Olcs\Listener\RouteParam\LicenceFurniture;
 use Olcs\Listener\RouteParam\OrganisationFurniture;
 use Olcs\Listener\RouteParam\BusRegFurniture;
 use Olcs\Listener\RouteParam\CasesFurniture;
+use Olcs\Listener\RouteParam\SubmissionsFurniture;
 use Olcs\Listener\RouteParam\TransportManagerFurniture;
 
 use Common\Data\Object\Search\Licence as LicenceSearch;
@@ -429,6 +430,7 @@ return array(
             VariationFurniture::class => VariationFurniture::class,
             BusRegFurniture::class => BusRegFurniture::class,
             CasesFurniture::class => CasesFurniture::class,
+            SubmissionsFurniture::class => SubmissionsFurniture::class,
             TransportManagerFurniture::class => TransportManagerFurniture::class,
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
             LicenceListener::class => LicenceListener::class,
@@ -476,6 +478,16 @@ return array(
     'route_param_listeners' => [
         'Olcs\Controller\Interfaces\CaseControllerInterface' => [
             CasesFurniture::class,
+            'Olcs\Listener\RouteParam\Cases',
+            LicenceListener::class,
+            'Olcs\Listener\RouteParam\CaseMarker',
+            ApplicationListener::class,
+            'Olcs\Listener\RouteParam\TransportManager',
+            'Olcs\Listener\RouteParam\Action',
+            'Olcs\Listener\HeaderSearch'
+        ],
+        'Olcs\Controller\Interfaces\SubmissionControllerInterface' => [
+            SubmissionsFurniture::class,
             'Olcs\Listener\RouteParam\Cases',
             LicenceListener::class,
             'Olcs\Listener\RouteParam\CaseMarker',
