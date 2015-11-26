@@ -30,7 +30,7 @@ class ContinuationController extends AbstractController
         $numNotCeasedDiscs = $data['numNotCeasedDiscs'];
 
         /* @var $form \Zend\Form\Form */
-        $form = $this->getForm('update-continuation');
+        $form = $this->getForm('UpdateContinuation');
         $this->alterForm($form, $continuationDetail, $hasOutstandingContinuationFee);
         $this->populateFormDefaultValues($form, $continuationDetail, $numNotCeasedDiscs);
 
