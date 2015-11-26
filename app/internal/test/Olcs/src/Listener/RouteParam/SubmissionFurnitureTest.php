@@ -21,9 +21,9 @@ use Zend\View\Model\ViewModel;
 /**
  * Submissions Furniture Test
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class SubmissionsFurnitureTest extends MockeryTestCase
+class SubmissionFurnitureTest extends MockeryTestCase
 {
     /**
      * @var SubmissionsFurniture
