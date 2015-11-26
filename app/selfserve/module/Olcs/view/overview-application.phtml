@@ -72,11 +72,36 @@
         <div class="links">
             <h3>Applying for a new licence</h3>
             <ul class="links-list">
-                <li class="links-list__item"><a href="">Complete your applications for a goods vehicle operator's licence</a></li>
-                <li class="links-list__item"><a href="">Advertise your application for a licence</a></li>
-                <li class="links-list__item"><a href="">Financial information</a></li>
-                <li class="links-list__item"><a href="">A guide to operator fees</a></li>
-                <li class="links-list__item"><a href="">How to draw up a maintenance contract</a></li>
+                <li class="links-list__item">
+                    <a href="<?php echo $this->translate('being-an-operator-link'); ?>" target="blank">
+                        <?php echo $this->translate('sidebar-variation-being-an-operator'); ?>
+                    </a>
+                </li>
+                <li class="links-list__item">
+                    <a href="<?php echo $this->translate('public-services-link'); ?>" target="blank">
+                        <?php echo $this->translate('sidebar-variation-public-service'); ?>
+                    </a>
+                </li>
+                <li class="links-list__item">
+                    <a href="<?php echo $this->url('guides/guide', ['guide' => 'advertising-your-operating-centre-gb-new']); ?>">
+                        <?php echo $this->translate('sidebar-variation-advertise-gb'); ?>
+                    </a>
+                </li>
+                <li class="links-list__item">
+                    <a href="<?php echo $this->url('guides/guide', ['guide' => 'advertising-your-operating-centre-ni-new']); ?>">
+                        <?php echo $this->translate('sidebar-variation-advertise-ni'); ?>
+                    </a>
+                </li>
+                <li class="links-list__item">
+                    <a href="<?php echo $this->url('guides/guide', ['guide' => 'financial-evidence']); ?>">
+                        <?php echo $this->translate('sidebar-variation-financial-evidence'); ?>
+                    </a>
+                </li>
+                <li class="links-list__item">
+                    <a href="<?php echo $this->translate('vehicle-safety-link'); ?>" target="blank">
+                        <?php echo $this->translate('sidebar-variation-safety-and-maintenance'); ?>
+                    </a>
+                </li>
             </ul>
         </div>
       
