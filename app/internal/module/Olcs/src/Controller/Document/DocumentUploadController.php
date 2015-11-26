@@ -44,7 +44,7 @@ class DocumentUploadController extends AbstractDocumentController
             ->get('Olcs\Service\Data\DocumentSubCategory')
             ->setCategory($category);
 
-        $form = $this->generateFormWithData('upload-document', 'processUpload', $data);
+        $form = $this->generateFormWithData('UploadDocument', 'processUpload', $data);
 
         $this->loadScripts(['upload-document']);
 
