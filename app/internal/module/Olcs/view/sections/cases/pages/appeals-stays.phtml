@@ -51,7 +51,11 @@ if (empty($appeal)){
                         $appeal['outcome']['description'] : '')],
                     ['label' => 'TM case Id', 'value' => isset($appeal['tmCaseId']) ? $appeal['tmCaseId'] : ''],
                     ['label' => 'Is withdrawn', 'value' => (empty($appeal['withdrawnDate']) ? 'N' : 'Y')],
-                    ['label' => 'Withdrawn date', 'date' => $appeal['withdrawnDate']]
+                    ['label' => 'Withdrawn date', 'date' => $appeal['withdrawnDate']],
+                    ['label' => 'DVSA notified?',
+                        'type' => 'yesno',
+                        'value' => (empty($appeal['dvsaNotified']) ? 'N' : 'Y')
+                    ]
                 ],
                 2 => [
                     ['label' => 'Comments', 'value' => $appeal['comment'], 'class' => 'full-width']
