@@ -30,6 +30,8 @@ class Stay implements MapperInterface
             $formData['fields']['isWithdrawn'] = 'Y';
         }
 
+        $formData['fields']['dvsaNotified'] = $data['dvsaNotified'] ? 'Y' : 'N';
+
         return $formData;
     }
 
