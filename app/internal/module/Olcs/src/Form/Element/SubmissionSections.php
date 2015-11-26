@@ -279,6 +279,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         switch($submissionType) {
             case 'submission_type_o_bus_reg':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'auth-requested-applied-for',
                     'transport-managers',
@@ -293,11 +298,21 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_clo_fep':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'waive-fee-late-fee'
                 ];
                 break;
             case 'submission_type_o_clo_g':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'intelligence-unit-check',
@@ -316,6 +331,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_clo_psv':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'intelligence-unit-check',
@@ -334,6 +354,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_env':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'intelligence-unit-check',
@@ -360,6 +385,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_irfo':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'transport-managers',
                     'fitness-and-repute',
@@ -368,6 +398,10 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_mlh_otc':
                 $sections = [
+                    'case-outline',
+                    'most-serious-infringement',
+                    'people',
+                    'previous-history',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'linked-licences-app-numbers',
@@ -383,6 +417,10 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_ni_tru':
                 $sections = [
+                    'case-outline',
+                    'most-serious-infringement',
+                    'people',
+                    'previous-history',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'linked-licences-app-numbers',
@@ -398,6 +436,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_mlh_clo':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'intelligence-unit-check',
@@ -417,6 +460,10 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_otc':
                 $sections = [
+                    'case-outline',
+                    'most-serious-infringement',
+                    'people',
+                    'previous-history',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'linked-licences-app-numbers',
@@ -431,6 +478,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             case 'submission_type_o_tm':
                 $sections = array_merge(
                     [
+                        'case-outline',
+                        'people',
+                        'previous-history',
+                        'other-issues',
+                        'annex',
                         'intelligence-unit-check',
                         'transport-managers',
                         'continuous-effective-control',
@@ -442,6 +494,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_schedule_41':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'linked-licences-app-numbers',
@@ -456,6 +513,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_impounding':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'statements'
                 ];
                 break;
@@ -465,7 +527,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
 
         return array_merge(
             $this->getMandatorySections(),
-            $this->getDefaultSections($submissionType),
             $sections
         );
     }
@@ -484,51 +545,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             'people',
             'outstanding-applications'
         ];
-    }
-
-    /**
-     * Gets list of default sections that ALL submission types must have
-     *
-     * @param $submissionType
-     * @return array
-     */
-    private function getDefaultSections($submissionType)
-    {
-        switch($submissionType) {
-            case 'submission_type_o_ni_tru':
-                return [
-                    'case-outline',
-                    'most-serious-infringement',
-                    'people',
-                    'previous-history',
-                ];
-            case 'submission_type_o_otc':
-            case 'submission_type_o_mlh_otc':
-                return [
-                    'case-outline',
-                    'most-serious-infringement',
-                    'people',
-                    'previous-history',
-                ];
-            case 'submission_type_o_bus_reg':
-            case 'submission_type_o_clo_fep':
-            case 'submission_type_o_clo_g':
-            case 'submission_type_o_clo_psv':
-            case 'submission_type_o_env':
-            case 'submission_type_o_tm':
-            case 'submission_type_o_schedule_41':
-            case 'submission_type_o_impounding':
-            case 'submission_type_o_mlh_clo':
-            case 'submission_type_o_irfo':
-            default:
-                return [
-                    'case-outline',
-                    'people',
-                    'previous-history',
-                    'other-issues',
-                    'annex'
-                ];
-        }
     }
 
     /**

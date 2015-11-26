@@ -59,10 +59,10 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests prepare submissionSections element for Non-TM
-     * @dataProvider getSubmissionSectionsProvider
      */
-    public function testPrepareElementNonTm($submissionType, $sections)
+    public function testPrepareElementNonTm()
     {
+
         $name = 'test';
 
         $sut = new SubmissionSections();
@@ -115,9 +115,8 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
 
     /**
      * Tests prepare submissionSections element for TM
-     * @dataProvider getSubmissionSectionsProvider
      */
-    public function testPrepareElementForTm($submissionType, $sections)
+    public function testPrepareElementForTm()
     {
         $name = 'test';
         $transportManagerId = 3;
