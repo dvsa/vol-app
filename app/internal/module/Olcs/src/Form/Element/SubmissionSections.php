@@ -133,6 +133,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      */
     public function prepareElement(FormInterface $form)
     {
+        unset($form);
         $name = $this->getName();
 
         $this->getSubmissionType()->setName($name . '[submissionType]');
@@ -268,7 +269,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     }
 
     /**
-     * Returns the Preselected  section keys for a given submission type
+     * Returns the Preselected section keys for a given submission type
      *
      * @param string $submissionType
      * @return array

@@ -37,6 +37,7 @@ class SubmissionFurnitureTest extends MockeryTestCase
 
     public function setupMockCase($id, $data)
     {
+        unset($id);
         $mockQuerySender  = m::mock(QuerySender::class);
 
         $mockResult = m::mock();
@@ -202,7 +203,7 @@ class SubmissionFurnitureTest extends MockeryTestCase
                     'closedDate' => null
                 ],
                 [
-                    'colour' => 'Orange',
+                    'colour' => 'orange',
                     'value' => 'Open',
                 ],
             ],
@@ -212,7 +213,7 @@ class SubmissionFurnitureTest extends MockeryTestCase
                     'closedDate' => '2015-01-02'
                 ],
                 [
-                    'colour' => 'Grey',
+                    'colour' => 'grey',
                     'value' => 'Closed',
                 ],
             ],

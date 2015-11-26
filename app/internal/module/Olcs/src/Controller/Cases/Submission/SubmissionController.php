@@ -543,7 +543,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
 
         if (is_array($selectedSectionsArray)) {
             foreach ($selectedSectionsArray as $sectionId => $sectionData) {
-
+                unset($sectionData);
                 $this->sectionId = $sectionId;
                 // if we allow attachments, then create the attachments form for this section
                 if (isset($submissionConfig['sections'][$sectionId]['allow_attachments']) &&

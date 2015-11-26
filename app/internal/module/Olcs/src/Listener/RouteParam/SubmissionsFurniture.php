@@ -162,7 +162,7 @@ class SubmissionsFurniture implements
     private function getStatusArray($case)
     {
         $status = [
-            'colour' => isset($case['closedDate']) ? 'Grey' : 'Orange',
+            'colour' => isset($case['closedDate']) ? 'grey' : 'orange',
             'value' => isset($case['closedDate']) ? 'Closed' : 'Open',
         ];
 

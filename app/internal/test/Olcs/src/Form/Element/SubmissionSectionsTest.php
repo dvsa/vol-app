@@ -64,7 +64,7 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
     public function testPrepareElementNonTm($submissionType, $sections)
     {
         $name = 'test';
-        $data = ['submissionType' => $submissionType, 'sections' => $sections];
+
         $sut = new SubmissionSections();
 
         $mockSelect = m::mock('Zend\Form\Element\Select');
@@ -113,7 +113,6 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
 
     }
 
-
     /**
      * Tests prepare submissionSections element for TM
      * @dataProvider getSubmissionSectionsProvider
@@ -122,7 +121,7 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
     {
         $name = 'test';
         $transportManagerId = 3;
-        $data = ['submissionType' => $submissionType, 'sections' => $sections];
+
         $sut = new SubmissionSections();
 
         $mockSelect = m::mock('Zend\Form\Element\Select');
@@ -270,6 +269,13 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 'submission_type_o_impounding',
+                'pressed',
+                array(
+                    'statements'
+                )
+            ),
+            array(
+                'submission_type_o_ni_tru',
                 'pressed',
                 array(
                     'statements'
