@@ -23,7 +23,7 @@ echo $this->render('partials/read-only/main',
             ['label' => 'Withdrawn date', 'date' => $withdrawnDate],
             ['label' => 'DVSA notified?',
                 'type' => 'yesno',
-                'value' => (empty($dvsaNotified) ? 'N' : 'Y')
+                'value' => $dvsaNotified
             ],
             ['label' => 'Notes', 'value' => $notes, 'class' => 'full-width']
         ]

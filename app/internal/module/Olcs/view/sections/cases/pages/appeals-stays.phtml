@@ -54,7 +54,7 @@ if (empty($appeal)){
                     ['label' => 'Withdrawn date', 'date' => $appeal['withdrawnDate']],
                     ['label' => 'DVSA notified?',
                         'type' => 'yesno',
-                        'value' => (empty($appeal['dvsaNotified']) ? 'N' : 'Y')
+                        'value' => $appeal['dvsaNotified']
                     ]
                 ],
                 2 => [
