@@ -424,14 +424,12 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'operating-centres',
                     'conditions-and-undertakings',
                     'linked-licences-app-numbers',
-                    'lead-tc-area',
-                    'auth-requested-applied-for',
+                    'current-submissions',
                     'transport-managers',
-                    'continuous-effective-control',
-                    'fitness-and-repute',
-                    'linked-mlh-history',
                     'maintenance-tachographs-hours',
-                    'financial-information'
+                    'prohibition-history',
+                    'conviction-fpn-offence-history',
+                    'annual-test-history'
                 ];
                 break;
             case 'submission_type_o_mlh_clo':
