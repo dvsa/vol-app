@@ -60,6 +60,7 @@ class Stay implements MapperInterface
      */
     public static function mapFromErrors(FormInterface $form, array $errors)
     {
+        unset($form);
         return $errors;
     }
 }
