@@ -33,7 +33,7 @@ class AppealTest extends MockeryTestCase
                     'someEntity' => [
                         'id' => 44
                     ],
-                    'dvsaNotified' => 1
+                    'dvsaNotified' => 'Y'
                 ],
                 [
                     'fields' => [
@@ -55,7 +55,7 @@ class AppealTest extends MockeryTestCase
                     'someEntity' => [
                         'id' => 44
                     ],
-                    'dvsaNotified' => 1
+                    'dvsaNotified' => 'Y'
                 ],
                 [
                     'fields' => [
@@ -76,11 +76,15 @@ class AppealTest extends MockeryTestCase
     {
         $inData = [
             'fields' => [
+                'withdrawnDate' => 'foo',
+                'isWithdrawn' => 'N',
                 'dvsaNotified' => 'Y',
             ],
         ];
         $expected = [
-            'dvsaNotified' => 'Y'
+            'dvsaNotified' => 'Y',
+            'isWithdrawn' => 'N',
+            'withdrawnDate' => null,
         ];
 
         $this->assertEquals($expected, Sut::mapFromForm($inData));

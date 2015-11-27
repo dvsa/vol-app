@@ -33,7 +33,7 @@ class StayTest extends MockeryTestCase
                     'someEntity' => [
                         'id' => 44
                     ],
-                    'dvsaNotified' => 1
+                    'dvsaNotified' => 'Y'
                 ],
                 [
                     'fields' => [
@@ -55,7 +55,7 @@ class StayTest extends MockeryTestCase
                     'someEntity' => [
                         'id' => 44
                     ],
-                    'dvsaNotified' => 1
+                    'dvsaNotified' => 'Y'
                 ],
                 [
                     'fields' => [
@@ -76,10 +76,14 @@ class StayTest extends MockeryTestCase
     {
         $inData = [
             'fields' => [
+                'withdrawnDate' => 'foo',
+                'isWithdrawn' => 'N',
                 'dvsaNotified' => 'Y',
             ],
         ];
         $expected = [
+            'isWithdrawn' => 'N',
+            'withdrawnDate' => null,
             'dvsaNotified' => 'Y'
         ];
 
