@@ -24,26 +24,24 @@ class TransportManagerApplicationTest extends MockeryTestCase
     public function testMapFromResult()
     {
         $data = [
-            'result' => [
-                'operatingCentres' => [
-                    ['id' => 1],
-                    ['id' => 2]
-                ],
-                'tmType' => ['id' => 3],
-                'tmApplicationStatus' => ['id' => 4],
-                'id' => 5,
-                'version' => 6,
-                'isOwner' => 1,
-                'hoursMon' => 1,
-                'hoursTue' => 2,
-                'hoursWed' => 3,
-                'hoursThu' => 4,
-                'hoursFri' => 5,
-                'hoursSat' => 6,
-                'hoursSun' => 7,
-                'additionalInformation' => 'ai',
-                'application' => 'app'
+            'operatingCentres' => [
+                ['id' => 1],
+                ['id' => 2]
             ],
+            'tmType' => ['id' => 3],
+            'tmApplicationStatus' => ['id' => 4],
+            'id' => 5,
+            'version' => 6,
+            'isOwner' => 1,
+            'hoursMon' => 1,
+            'hoursTue' => 2,
+            'hoursWed' => 3,
+            'hoursThu' => 4,
+            'hoursFri' => 5,
+            'hoursSat' => 6,
+            'hoursSun' => 7,
+            'additionalInformation' => 'ai',
+            'application' => 'app',
             'otherLicences' => 'ol'
         ];
         $expected = [
