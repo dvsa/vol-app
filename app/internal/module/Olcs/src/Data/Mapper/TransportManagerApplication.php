@@ -21,36 +21,33 @@ class TransportManagerApplication
 
     public static function mapFromResult(array $data)
     {
-        $details = [];
-        if (isset($data['result'])) {
-            $result = $data['result'];
-            $operatingCentres = [];
-            foreach ($result['operatingCentres'] as $oc) {
-                $operatingCentres[] = $oc['id'];
-            }
-            $details['operatingCentres'] = $operatingCentres;
-            if (isset($result['tmType']['id'])) {
-                $details['tmType'] = $result['tmType'];
-            }
-            if (isset($result['tmApplicationStatus']['id'])) {
-                $details['tmApplicationStatus'] = $result['tmApplicationStatus']['id'];
-            }
-            $details['id'] = $result['id'];
-            $details['version'] = $result['version'];
-            $details['isOwner'] = $result['isOwner'];
-            $details['hoursOfWeek']['hoursPerWeekContent']['hoursMon'] = $result['hoursMon'];
-            $details['hoursOfWeek']['hoursPerWeekContent']['hoursTue'] = $result['hoursTue'];
-            $details['hoursOfWeek']['hoursPerWeekContent']['hoursWed'] = $result['hoursWed'];
-            $details['hoursOfWeek']['hoursPerWeekContent']['hoursThu'] = $result['hoursThu'];
-            $details['hoursOfWeek']['hoursPerWeekContent']['hoursFri'] = $result['hoursFri'];
-            $details['hoursOfWeek']['hoursPerWeekContent']['hoursSat'] = $result['hoursSat'];
-            $details['hoursOfWeek']['hoursPerWeekContent']['hoursSun'] = $result['hoursSun'];
-            $details['additionalInformation'] = $result['additionalInformation'];
+        $operatingCentres = [];
+        foreach ($data['operatingCentres'] as $oc) {
+            $operatingCentres[] = $oc['id'];
         }
+        $details['operatingCentres'] = $operatingCentres;
+        if (isset($data['tmType']['id'])) {
+            $details['tmType'] = $data['tmType'];
+        }
+        if (isset($data['tmApplicationStatus']['id'])) {
+            $details['tmApplicationStatus'] = $data['tmApplicationStatus']['id'];
+        }
+        $details['id'] = $data['id'];
+        $details['version'] = $data['version'];
+        $details['isOwner'] = $data['isOwner'];
+        $details['hoursOfWeek']['hoursPerWeekContent']['hoursMon'] = $data['hoursMon'];
+        $details['hoursOfWeek']['hoursPerWeekContent']['hoursTue'] = $data['hoursTue'];
+        $details['hoursOfWeek']['hoursPerWeekContent']['hoursWed'] = $data['hoursWed'];
+        $details['hoursOfWeek']['hoursPerWeekContent']['hoursThu'] = $data['hoursThu'];
+        $details['hoursOfWeek']['hoursPerWeekContent']['hoursFri'] = $data['hoursFri'];
+        $details['hoursOfWeek']['hoursPerWeekContent']['hoursSat'] = $data['hoursSat'];
+        $details['hoursOfWeek']['hoursPerWeekContent']['hoursSun'] = $data['hoursSun'];
+        $details['additionalInformation'] = $data['additionalInformation'];
+
         return [
             'details' => $details,
             'otherLicences' => $data['otherLicences'],
-            'application' => $result['application']
+            'application' => $data['application']
         ];
     }
 
