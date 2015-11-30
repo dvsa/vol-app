@@ -13,7 +13,7 @@ return array(
             'formatter' => 'DashboardTmApplicationId'
         ),
         array(
-            'title' => 'Licence No.',
+            'title' => 'Licence number',
             'name' => 'licNo',
         ),
         array(

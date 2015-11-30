@@ -17,7 +17,7 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'Fee No.',
+            'title' => 'Fee number',
             'name' => 'id',
             'formatter' => 'FeeStatus',
         ),
@@ -27,7 +27,7 @@ return array(
             'formatter' => 'FeeUrl',
         ),
         array(
-            'title' => 'Licence No.',
+            'title' => 'Licence number',
             'formatter' => function ($row, $col, $sm) {
                 return $row['licence']['licNo'];
             },
