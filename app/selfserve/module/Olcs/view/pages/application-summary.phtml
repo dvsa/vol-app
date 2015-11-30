@@ -121,7 +121,7 @@
                                       <?php echo $tmName; ?>
                                       <?php echo $this->transportManagerApplicationStatus($tmStatus['id'], $tmStatus['description']); ?>
                                   </td>
-                                  <td><?php echo date(\DATE_FORMAT, strtotime($tmPerson['birthDate'])); ?></td>
+                                  <td><?php echo $this->date(strtotime($tmPerson['birthDate'])); ?></td>
                                   <td><a class="remove" href="<?php echo $tmLink; ?>"><?php echo $this->translate('View details'); ?></a></td>
                               </tr>
                               <?php
@@ -154,9 +154,9 @@
           </a></dd>
         <?php endif; ?>
         <dt><?php echo $this->translate('submitted-date.title'); ?></dt>
-        <dd><?php echo date(\DATE_FORMAT, strtotime($submittedDate)); ?></dd>
+        <dd><?php echo $this->date(strtotime($submittedDate)); ?></dd>
         <dt><?php echo $this->translate('completion-date.title'); ?></dt>
-        <dd><?php echo date(\DATE_FORMAT, strtotime($completionDate)); ?></dd>
+        <dd><?php echo $this->date(strtotime($completionDate)); ?></dd>
         <dt><?php echo $this->translate('status.title'); ?></dt>
         <dd><?php echo $this->translate($status); ?></dd>
       </dl>
