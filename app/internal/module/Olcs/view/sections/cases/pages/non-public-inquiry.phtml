@@ -20,7 +20,7 @@ if (count((array)$result) < 1) {
             ['label' => 'Type', 'value' => $data['hearingType']['description']],
             [
                 'label' => 'Meeting date & time',
-                'value' => !empty($data['hearingDate']) ? date('Y-m-d H:i', strtotime($data['hearingDate'])) : 'N/a'
+                'value' => $this->date(strtotime($data['hearingDate']), \DATETIME_FORMAT, 'N/a')
             ],
         ],
         [
@@ -30,7 +30,7 @@ if (count((array)$result) < 1) {
             ],
             [
                 'label' => 'TC/DTC/TR/DTR agreed date',
-                'value' => !empty($data['agreedByTcDate']) ? date('Y-m-d', strtotime($data['agreedByTcDate'])) : 'N/a'
+                'value' => $this->date(strtotime($data['agreedByTcDate']), \DATE_FORMAT, 'N/a')
             ]
         ],
         [
