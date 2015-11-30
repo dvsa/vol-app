@@ -38,6 +38,12 @@ class MyDetails extends Base
     public $officeAddress = null;
 
     /**
+     * @Form\Name("userSettings")
+     * @Form\ComposedObject("Admin\Form\Model\Fieldset\UserSettings")
+     */
+    public $userSettings = null;
+
+    /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
      * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
