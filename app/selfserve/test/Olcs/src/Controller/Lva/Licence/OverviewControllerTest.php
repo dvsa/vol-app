@@ -70,32 +70,4 @@ class OverviewControllerTest extends MockeryTestCase
         $view = $this->sut->indexAction();
         $this->assertInstanceOf(View::class, $view);
     }
-
-    /**
-     * @NOTE I don't think this is used anymore, I am going to comment it out for a little while and see if anything
-     * breaks
-     * @todo Remove this code if nothing has broken around creating variations
-    public function testCreateVariationAction()
-    {
-        $licenceId = 3;
-        $varId = 5;
-
-        $mockApplicationService = m::mock();
-        $this->sm->setService('Entity\Application', $mockApplicationService);
-
-        $this->sut->shouldReceive('params')
-            ->with('licence')
-            ->andReturn($licenceId);
-
-        $mockApplicationService->shouldReceive('createVariation')
-            ->with($licenceId)
-            ->andReturn($varId);
-
-        $this->sut->shouldReceive('redirect->toRouteAjax')
-            ->with('lva-variation', ['application' => $varId])
-            ->andReturn('RESPONSE');
-
-        $this->assertEquals('RESPONSE', $this->sut->createVariationAction());
-    }
-     */
 }
