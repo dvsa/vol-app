@@ -82,6 +82,7 @@ class MyDetailsController extends AbstractController
         $output['main']['id']            = $data['id'];
         $output['main']['version']       = $data['version'];
         $output['main']['loginId']       = $data['loginId'];
+        $output['main']['translateToWelsh'] = $data['translateToWelsh'];
         $output['main']['emailAddress']  = $data['contactDetails']['emailAddress'];
         $output['main']['emailConfirm']  = $data['contactDetails']['emailAddress'];
         $output['main']['familyName']    = $data['contactDetails']['person']['familyName'];
@@ -103,6 +104,7 @@ class MyDetailsController extends AbstractController
         $output['id'] = $data['main']['id'];
         $output['version'] = $data['main']['version'];
         $output['loginId'] = $data['main']['loginId'];
+        $output['translateToWelsh'] = $data['main']['translateToWelsh'];
         $output['contactDetails']['emailAddress'] = $data['main']['emailAddress'];
         $output['contactDetails']['person']['familyName'] = $data['main']['familyName'];
         $output['contactDetails']['person']['forename']   = $data['main']['forename'];

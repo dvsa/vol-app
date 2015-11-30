@@ -69,5 +69,11 @@ class UserRegistrationAddress
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */
+    public $translateToWelsh = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
     public $termsAgreed = null;
 }

@@ -122,7 +122,8 @@ class UserRegistrationControllerTest extends TestCase
                 'forename' => 'Steve',
                 'isLicenceHolder' => 'N',
                 'organisationName' => 'Org name',
-                'businessType' => 'type'
+                'businessType' => 'type',
+                'translateToWelsh' => 'Y',
             ]
         ];
 
@@ -171,7 +172,8 @@ class UserRegistrationControllerTest extends TestCase
                 'forename' => 'Steve',
                 'isLicenceHolder' => 'N',
                 'organisationName' => 'Org name',
-                'businessType' => 'type'
+                'businessType' => 'type',
+                'translateToWelsh' => 'Y',
             ]
         ];
 
@@ -253,7 +255,8 @@ class UserRegistrationControllerTest extends TestCase
                 'familyName' => 'Fox',
                 'forename' => 'Steve',
                 'isLicenceHolder' => 'Y',
-                'licenceNumber' => 'licNo'
+                'licenceNumber' => 'licNo',
+                'translateToWelsh' => 'Y',
             ]
         ];
 
@@ -318,7 +321,8 @@ class UserRegistrationControllerTest extends TestCase
                 'familyName' => 'Fox',
                 'forename' => 'Steve',
                 'isLicenceHolder' => 'Y',
-                'licenceNumber' => 'licNo'
+                'licenceNumber' => 'licNo',
+                'translateToWelsh' => 'Y',
             ]
         ];
 
@@ -395,7 +399,8 @@ class UserRegistrationControllerTest extends TestCase
                 'familyName' => 'Fox',
                 'forename' => 'Steve',
                 'isLicenceHolder' => 'Y',
-                'licenceNumber' => 'licNo'
+                'licenceNumber' => 'licNo',
+                'translateToWelsh' => 'Y',
             ]
         ];
 
@@ -443,7 +448,8 @@ class UserRegistrationControllerTest extends TestCase
                 'familyName' => 'Fox',
                 'forename' => 'Steve',
                 'isLicenceHolder' => 'Y',
-                'licenceNumber' => 'licNo'
+                'licenceNumber' => 'licNo',
+                'translateToWelsh' => 'Y',
             ]
         ];
 
