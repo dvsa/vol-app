@@ -146,7 +146,6 @@ class PaymentProcessingFeesController extends AbstractActionController implement
     protected function getCreateFeeDtoData($formData)
     {
         return [
-            'user' => $this->getLoggedInUser(),
             'invoicedDate' => $formData['fee-details']['createdDate'],
             'feeType' => $formData['fee-details']['feeType'],
             'amount' => $formData['fee-details']['amount'],
