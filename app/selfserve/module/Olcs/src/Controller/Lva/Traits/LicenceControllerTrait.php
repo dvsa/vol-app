@@ -33,40 +33,6 @@ trait LicenceControllerTrait
     }
 
     /**
-     * Check if the user has access to the licence
-     *
-     * @NOTE We might want to consider caching this information within the session, to save making this request on each
-     *  section
-     *
-     * @param int $licenceId
-     * @return boolean
-     */
-    protected function checkAccess($licenceId)
-    {
-        $dto = LicenceQry::create(['id' => $licenceId]);
-        $response = $this->handleQuery($dto);
-        $data = $response->getResult();
-
-        $usersOrganisation = $this->getCurrentOrganisationId();
-
-        $doesBelong = $data['organisation']['id'] == $usersOrganisation;
-
-        if (!$doesBelong) {
-            $this->addErrorMessage('licence-no-access');
-
-            $logData = [
-                'Users Organisation' => $usersOrganisation,
-                'Licence Data' => $data,
-                'Response' => $response
-            ];
-
-            Logger::debug('**** REDIRECT TO DASHBOARD ****', ['data' => $logData]);
-        }
-
-        return $doesBelong;
-    }
-
-    /**
      * Get licence id
      *
      * @return int

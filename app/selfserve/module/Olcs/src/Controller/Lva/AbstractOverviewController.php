@@ -30,10 +30,6 @@ abstract class AbstractOverviewController extends AbstractController
     {
         $applicationId = $this->getApplicationId();
 
-        if (!$this->checkAccess($applicationId)) {
-            return $this->redirect()->toRoute('dashboard');
-        }
-
         $data = $this->getOverviewData($applicationId);
         $data['idIndex'] = $this->getIdentifierIndex();
 
