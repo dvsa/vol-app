@@ -47,6 +47,7 @@ class MyDetailsControllerTest extends TestCase
                     'version' => 1,
                 ),
             ),
+            'translateToWelsh' => 'Y',
         );
         $formattedData = [
             'main' => [
@@ -57,6 +58,7 @@ class MyDetailsControllerTest extends TestCase
                 'emailConfirm' => 'steve@example.com',
                 'familyName' => 'Fox',
                 'forename' => 'Steve',
+                'translateToWelsh' => 'Y',
             ]
         ];
 
@@ -129,6 +131,7 @@ class MyDetailsControllerTest extends TestCase
                 'emailConfirm' => 'steve@example.com',
                 'familyName' => 'Fox',
                 'forename' => 'Steve',
+                'translateToWelsh' => 'Y',
             ]
         ];
 
@@ -185,6 +188,7 @@ class MyDetailsControllerTest extends TestCase
                 'emailConfirm' => 'steve@example.com',
                 'familyName' => 'Fox',
                 'forename' => 'Steve',
+                'translateToWelsh' => 'Y',
             ]
         ];
 

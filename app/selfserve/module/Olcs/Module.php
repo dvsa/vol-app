@@ -8,6 +8,7 @@
 
 namespace Olcs;
 
+use Dvsa\Olcs\Utils\Auth\AuthHelper;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
@@ -18,19 +19,40 @@ use Zend\Mvc\MvcEvent;
  */
 class Module
 {
-
+    /**
+     * Get the module config
+     *
+     * @return array
+     */
     public function getConfig()
     {
-        $config = array();
-        $configFiles = array(
-            include __DIR__ . '/config/module.config.php',
-        );
-        foreach ($configFiles as $file) {
-            $config = \Zend\Stdlib\ArrayUtils::merge($config, $file);
+        $config = include(__DIR__ . '/config/module.config.php');
+
+        if (AuthHelper::isOpenAm() === false) {
+            $config['service_manager']['aliases']['Zend\Authentication\AuthenticationService']
+                = 'zfcuser_auth_service';
+
+            $routeGuards = [
+                'zfcuser/login' => ['*'],
+                'login' => ['selfserve-user'],
+                'zfcuser/logout' => ['*'],
+                'logout' => ['*']
+            ];
+
+            $config['zfc_rbac']['guards']['ZfcRbac\Guard\RoutePermissionsGuard'] = array_merge(
+                $routeGuards,
+                $config['zfc_rbac']['guards']['ZfcRbac\Guard\RoutePermissionsGuard']
+            );
         }
+
         return $config;
     }
 
+    /**
+     * Get the autoloader config
+     *
+     * @return array
+     */
     public function getAutoloaderConfig()
     {
         return array(

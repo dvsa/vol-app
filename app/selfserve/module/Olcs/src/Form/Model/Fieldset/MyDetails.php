@@ -63,4 +63,15 @@ class MyDetails extends Base
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      */
     public $emailConfirm = null;
+
+    /**
+     * @Form\Attributes({"id":"translateToWelsh","placeholder":""})
+     * @Form\Options({
+     *     "label": "translate-to-welsh",
+     *     "checked_value":"Y",
+     *     "unchecked_value":"N"
+     * })
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $translateToWelsh = null;
 }

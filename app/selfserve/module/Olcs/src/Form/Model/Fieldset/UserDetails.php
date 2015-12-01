@@ -6,8 +6,8 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("UserDetails")
- * @Form\Attributes({"method":"post","label":"User Details"})
- * @Form\Options({"prefer_form_input_filter": true, "label": "User Details"})
+ * @Form\Attributes({"method":"post","label":"User details"})
+ * @Form\Options({"prefer_form_input_filter": true, "label": "User details"})
  */
 class UserDetails extends Base
 {
@@ -82,6 +82,17 @@ class UserDetails extends Base
      * @Form\Type("Radio")
      */
     public $permission;
+
+    /**
+     * @Form\Attributes({"id":"translateToWelsh","placeholder":""})
+     * @Form\Options({
+     *     "label": "translate-to-welsh",
+     *     "checked_value":"Y",
+     *     "unchecked_value":"N"
+     * })
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $translateToWelsh = null;
 
     /**
      * @Form\Attributes({"value":""})

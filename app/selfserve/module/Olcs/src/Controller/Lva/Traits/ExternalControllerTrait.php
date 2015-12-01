@@ -84,10 +84,6 @@ trait ExternalControllerTrait
      */
     protected function checkForRedirect($lvaId)
     {
-        if (!$this->checkAccess($lvaId)) {
-            return $this->redirect()->toRoute('dashboard');
-        }
-
         if ($this->lva === 'application' || $this->lva === 'variation') {
 
             $summaryRouteName = 'lva-' . $this->lva . '/summary';

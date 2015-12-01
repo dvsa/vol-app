@@ -37,39 +37,6 @@ trait ApplicationControllerTrait
         return $this->checkForRedirect($this->getApplicationId());
     }
 
-    /**
-     * Check if the user has access to the application
-     *
-     * @NOTE We might want to consider caching this information within the session, to save making this request on each
-     *  section
-     *
-     * @param int $applicationId
-     * @return boolean
-     */
-    protected function checkAccess($applicationId)
-    {
-        $dto = ApplicationQry::create(['id' => $applicationId]);
-        $response = $this->handleQuery($dto);
-        $data = $response->getResult();
-
-        $usersOrganisation = $this->getCurrentOrganisationId();
-        $doesBelong = $data['licence']['organisation']['id'] == $usersOrganisation;
-
-        if (!$doesBelong) {
-            $this->addErrorMessage('application-no-access');
-
-            $logData = [
-                'Users Organisation' => $usersOrganisation,
-                'Application Data' => $data,
-                'Response' => $response
-            ];
-
-            Logger::debug('**** REDIRECT TO DASHBOARD ****', ['data' => $logData]);
-        }
-
-        return $doesBelong;
-    }
-
     protected function checkAppStatus($applicationId)
     {
         // query is already cached

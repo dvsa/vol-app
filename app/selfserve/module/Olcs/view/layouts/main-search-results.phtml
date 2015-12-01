@@ -13,7 +13,7 @@ $results = $this->results;
                     ->getServiceLocator()->get('Helper\Translation')
                     ->translateReplace('search.result.title.' . $this->index, [$count]); ?>
             </h1>
-            
+
             <div class="page-header__text">
                 <p>
                     <?php echo $this->getHelperPluginManager()
@@ -24,23 +24,22 @@ $results = $this->results;
 
         </div>
     </div><!-- page-header -->
-    
+
     <div class="row">
-    
+
         <div class="one-quarter">
-    
+
             <h3>Edit search</h3>
-    
+
             <?php echo $this->form($this->placeholder('searchFilter')->getValue()) ?>
-    
-            <a href="<?php echo $this->url('search-jump-home'); ?>">
+            <a href="<?php echo $this->url('search'); ?>">
                 <?php echo $this->translate('search.form.restart'); ?>
             </a>
-    
+
         </div><!-- three-eights -->
-    
+
         <div class="three-quarters">
-    
+
             <?php
                 if ($this->noResultsMessage) {
                     echo $this->translate($noResultsMessage);
@@ -48,7 +47,6 @@ $results = $this->results;
                     echo $results;
                 }
             ?>
-    
+
         </div><!-- five-eights -->
-    
     </div><!-- row -->

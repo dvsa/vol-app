@@ -9,7 +9,7 @@ namespace Olcs\Controller;
 
 use Olcs\View\Model\Dashboard;
 use Common\Controller\Lva\AbstractController;
-use Common\Service\Entity\UserEntityService;
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
 
 /**
@@ -27,8 +27,8 @@ class DashboardController extends AbstractController
      */
     public function indexAction()
     {
-        if ($this->isGranted(UserEntityService::PERMISSION_SELFSERVE_TM_DASHBOARD) &&
-            !$this->isGranted(UserEntityService::PERMISSION_SELFSERVE_LVA)) {
+        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD) &&
+            !$this->isGranted(RefData::PERMISSION_SELFSERVE_LVA)) {
             $view = $this->transportManagerDashboardView();
         } else {
             $view = $this->standardDashboardView();
