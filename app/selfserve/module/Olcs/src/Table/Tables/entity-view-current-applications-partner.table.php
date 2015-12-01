@@ -34,12 +34,26 @@ return array(
         array(
             'title' => $translationPrefix . '.oooDate',
             'name' => 'oooDate',
-            'formatter' => 'Date'
+            'formatter' => function ($data, $column) {
+                if (is_string($data['oooDate'])) {
+                    return $data['oooDate'];
+                }
+                $column['formatter'] = 'Date';
+                $column['name'] = 'oooDate';
+                return $this->callFormatter($column, $data);
+            }
         ),
         array(
             'title' => $translationPrefix . '.oorDate',
             'name' => 'oorDate',
-            'formatter' => 'Date'
+            'formatter' => function ($data, $column) {
+                if (is_string($data['oorDate'])) {
+                    return $data['oorDate'];
+                }
+                $column['formatter'] = 'Date';
+                $column['name'] = 'oorDate';
+                return $this->callFormatter($column, $data);
+            }
         ),
         array(
             'title' => $translationPrefix . '.objectionRepresentationMade',
