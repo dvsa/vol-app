@@ -105,6 +105,7 @@ class UserControllerTest extends TestCase
                 ),
             ),
             'permission' => 'user',
+            'translateToWelsh' => 'Y',
         );
 
         $id = 3;
@@ -164,6 +165,7 @@ class UserControllerTest extends TestCase
                 'permission' => 'admin',
                 'id' => '3',
                 'version' => '1',
+                'translateToWelsh' => 'Y',
             ),
         );
 

@@ -84,6 +84,17 @@ class UserDetails extends Base
     public $permission;
 
     /**
+     * @Form\Attributes({"id":"translateToWelsh","placeholder":""})
+     * @Form\Options({
+     *     "label": "translate-to-welsh",
+     *     "checked_value":"Y",
+     *     "unchecked_value":"N"
+     * })
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $translateToWelsh = null;
+
+    /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */
