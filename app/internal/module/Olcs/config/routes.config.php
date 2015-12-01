@@ -145,7 +145,8 @@ $routes = [
         'type' => 'segment',
         'options' => [
             'route' =>
-            '/case/:action[/:case][/licence/:licence][/transportManager/:transportManager][/application/:application][/]',
+            '/case/:action[/:case][/licence/:licence][/transportManager/:transportManager]' .
+                '[/application/:application][/]',
             'constraints' => [
                 'case' => '|[0-9]+',
                 'action' => '(add|edit|details|redirect|delete|close|reopen)',
