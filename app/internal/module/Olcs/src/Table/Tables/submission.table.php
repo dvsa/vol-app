@@ -67,8 +67,16 @@ return array(
         ),
         array(
             'title' => 'Currently with',
-            'formatter' => 'Name',
-            'name' => 'recipientUser->contactDetails->person'
+            'formatter' => function ($data, $column) {
+                $column['formatter'] = 'Name';
+                if (!empty($data['recipientUser']['contactDetails']['person'])) {
+                    return $this->callFormatter($column, $data['recipientUser']['contactDetails']['person']);
+                }
+                if (!empty($data['createdBy']['contactDetails']['person'])) {
+                    return $this->callFormatter($column, $data['createdBy']['contactDetails']['person']);
+                }
+                return '';
+            }
         ),
         array(
             'title' => 'Date assigned',
