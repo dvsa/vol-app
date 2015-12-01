@@ -70,6 +70,8 @@ class User implements MapperInterface
             $formData['userContactDetails']['emailConfirm'] = $data['contactDetails']['emailAddress'];
 
             $formData['address'] = $data['contactDetails']['address'];
+
+            $formData['userSettings']['translateToWelsh'] = $data['translateToWelsh'];
         }
 
         return $formData;
@@ -115,6 +117,8 @@ class User implements MapperInterface
         $commandData['contactDetails']['emailAddress'] = $data['userContactDetails']['emailAddress'];
         $commandData['contactDetails']['phoneContacts'] = self::mapPhoneContactsFromForm($data['userContactDetails']);
         $commandData['contactDetails']['address'] = $data['address'];
+
+        $commandData['translateToWelsh'] = $data['userSettings']['translateToWelsh'];
 
         return $commandData;
     }
