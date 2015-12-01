@@ -19,9 +19,6 @@ class VariationApproveSchedule41
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"
-     *      },
-     *      "fieldset-attributes" : {
-     *          "class":"inline"
      *      }
      * })
      */
