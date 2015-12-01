@@ -33,7 +33,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'currentApplications'       => $licenceOverviewHelper->getCurrentApplications($licence),
             'applicationCreated'        => $application['createdOn'],
             'oppositionCount'           => $application['oppositionCount'],
-            'licenceStatus'             => $licence['status']['id'],
+            'licenceStatus'             => $licence['status'],
             'interimStatus'             => $this->getInterimStatus($application, $lva),
             'outstandingFees'           => $application['feeCount'],
             'licenceStartDate'          => $licence['inForceDate'],

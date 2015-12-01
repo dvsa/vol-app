@@ -13,6 +13,20 @@ class Appeal extends CaseBase
     /**
      * @Form\Attributes({"id":"dob"})
      * @Form\Options({
+     *     "label": "Date appeal received",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false,
+     * })
+     * @Form\Type("DateSelect")
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     */
+    public $appealDate = null;
+
+    /**
+     * @Form\Attributes({"id":"dob"})
+     * @Form\Options({
      *     "label": "Appeal deadline",
      *     "create_empty_option": true,
      *     "render_delimiters": false
@@ -26,20 +40,6 @@ class Appeal extends CaseBase
     public $deadlineDate = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
-     * @Form\Options({
-     *     "label": "Date of appeal",
-     *     "create_empty_option": true,
-     *     "render_delimiters": false
-     * })
-     * @Form\Type("DateSelect")
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     */
-    public $appealDate = null;
-
-    /**
      * @Form\Attributes({"class":"","id":""})
      * @Form\Options({"label":"Appeal number"})
      * @Form\Required(false)
@@ -49,6 +49,12 @@ class Appeal extends CaseBase
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":20}})
      */
     public $appealNo = null;
+
+    /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"DVSA notified?"})
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $dvsaNotified = null;
 
     /**
      * @Form\Options({

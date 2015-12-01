@@ -136,7 +136,7 @@ echo $this->render('partials/read-only/main',
 
         <p><?php echo nl2br($sa['comment']); ?></p>
         <p><strong>Legislation:</strong><br /><?php echo implode('<br />', array_map(function($item){return $item['sectionCode'] . ' - '. $item['description'];}, $sa['reasons'])); ?></p>
-        <p><b>Created:</b><br /><?php echo date('H:i d/m/Y', strtotime($sa['createdOn'])); ?></p>
+        <p><b>Created:</b><br /><?php echo $this->date(strtotime($sa['createdOn']), 'H:i d/m/Y'); ?></p>
     </li><!-- submission-item -->
   <?php endforeach; ?>
 </ul>

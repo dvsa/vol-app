@@ -97,6 +97,10 @@ class ApplicationFurnitureTest extends TestCase
 
         $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
 
+        $status = [
+            'id' => RefData::APPLICATION_STATUS_VALID
+        ];
+
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')
             ->with('pageTitle')
@@ -122,7 +126,7 @@ class ApplicationFurnitureTest extends TestCase
                 m::mock()
                     ->shouldReceive('set')
                     ->once()
-                    ->with(RefData::APPLICATION_STATUS_VALID)
+                    ->with($status)
                     ->getMock()
             )
             ->shouldReceive('getContainer')
@@ -153,16 +157,104 @@ class ApplicationFurnitureTest extends TestCase
 
         $data = [
             'id' => 111,
-            'status' => [
-                'id' => RefData::APPLICATION_STATUS_VALID
-            ],
+            'status' => $status,
             'licence' => [
                 'id' => 222,
                 'licNo' => 'AB123',
                 'organisation' => [
                     'name' => 'Foo ltd'
                 ],
-            ]
+            ],
+            'isVariation' => 0
+        ];
+
+        $response = m::mock();
+        $response->shouldReceive('isOk')->andReturn(true);
+        $response->shouldReceive('getResult')->andReturn($data);
+
+        $this->mockQuerySender->shouldReceive('send')->once()
+            ->with(m::type(ApplicationQry::class))
+            ->andReturn($response);
+
+        $this->sut->onApplicationFurniture($event);
+    }
+
+    public function testOnApplicationFurnitureIsVariationValid()
+    {
+        $event = m::mock(RouteParam::class);
+        $event->shouldReceive('getValue')->andReturn(111);
+
+        $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
+
+        $status = [
+            'id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED
+        ];
+
+        $mockPlaceholder = m::mock();
+        $mockPlaceholder->shouldReceive('getContainer')
+            ->with('pageTitle')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with('<a href="url">AB123</a> / 111')
+                    ->getMock()
+            )
+            ->shouldReceive('getContainer')
+            ->with('pageSubtitle')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with('Foo ltd')
+                    ->getMock()
+            )
+            ->shouldReceive('getContainer')
+            ->with('status')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with($status)
+                    ->getMock()
+            )
+            ->shouldReceive('getContainer')
+            ->with('horizontalNavigationId')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with('application')
+                    ->getMock()
+            )
+            ->shouldReceive('getContainer')
+            ->with('right')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with(m::type(ViewModel::class))
+                    ->getMock()
+            );
+
+        $this->mockViewHelperManager->shouldReceive('get')
+            ->with('placeholder')->andReturn($mockPlaceholder);
+
+        $this->mockRouter->shouldReceive('assemble')
+            ->with(['licence' => 222], ['name' => 'lva-licence'])
+            ->andReturn('url');
+
+        $data = [
+            'id' => 111,
+            'status' => $status,
+            'licence' => [
+                'id' => 222,
+                'licNo' => 'AB123',
+                'organisation' => [
+                    'name' => 'Foo ltd'
+                ],
+            ],
+            'isVariation' => 1
         ];
 
         $response = m::mock();
@@ -182,6 +274,10 @@ class ApplicationFurnitureTest extends TestCase
         $event->shouldReceive('getValue')->andReturn(111);
 
         $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
+
+        $status = [
+            'id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED
+        ];
 
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')
@@ -208,7 +304,7 @@ class ApplicationFurnitureTest extends TestCase
                 m::mock()
                     ->shouldReceive('set')
                     ->once()
-                    ->with(RefData::APPLICATION_STATUS_NOT_SUBMITTED)
+                    ->with($status)
                     ->getMock()
             )
             ->shouldReceive('getContainer')
@@ -235,16 +331,15 @@ class ApplicationFurnitureTest extends TestCase
 
         $data = [
             'id' => 111,
-            'status' => [
-                'id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED
-            ],
+            'status' => $status,
             'licence' => [
                 'id' => 222,
                 'licNo' => 'AB123',
                 'organisation' => [
                     'name' => 'Foo ltd'
                 ],
-            ]
+            ],
+            'isVariation' => 0
         ];
 
         $response = m::mock();
@@ -264,6 +359,10 @@ class ApplicationFurnitureTest extends TestCase
         $event->shouldReceive('getValue')->andReturn(111);
 
         $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
+
+        $status = [
+            'id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED
+        ];
 
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')
@@ -290,7 +389,7 @@ class ApplicationFurnitureTest extends TestCase
                 m::mock()
                     ->shouldReceive('set')
                     ->once()
-                    ->with(RefData::APPLICATION_STATUS_NOT_SUBMITTED)
+                    ->with($status)
                     ->getMock()
             )
             ->shouldReceive('getContainer')
@@ -317,16 +416,15 @@ class ApplicationFurnitureTest extends TestCase
 
         $data = [
             'id' => 111,
-            'status' => [
-                'id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED
-            ],
+            'status' => $status,
             'licence' => [
                 'id' => 222,
                 'licNo' => null,
                 'organisation' => [
                     'name' => 'Foo ltd'
                 ],
-            ]
+            ],
+            'isVariation' => 0
         ];
 
         $response = m::mock();

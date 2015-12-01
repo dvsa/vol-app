@@ -15,7 +15,6 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Common\RefData;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
 use Zend\View\Model\ViewModel;
@@ -81,12 +80,7 @@ class BusRegFurniture implements
         $busReg = $this->getBusReg($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
-        $placeholder->getContainer('status')->set(
-            $this->getStatusArray(
-                $busReg['status']['id'],
-                $busReg['status']['description']
-            )
-        );
+        $placeholder->getContainer('status')->set($busReg['status']);
         $placeholder->getContainer('pageTitle')->set($this->getPageTitle($busReg));
         $placeholder->getContainer('pageSubtitle')->set($this->getSubTitle($busReg));
         $placeholder->getContainer('horizontalNavigationId')->set('licence_bus');
@@ -127,35 +121,5 @@ class BusRegFurniture implements
     private function getSubTitle($busReg)
     {
         return $busReg['licence']['organisation']['name'] . ', Variation ' . $busReg['variationNo'];
-    }
-
-    /**
-     * Get status array.
-     *
-     * @param $statusKey
-     * @param $statusString
-     *
-     * @return array
-     */
-    private function getStatusArray($statusKey, $statusString)
-    {
-        $map = [
-            RefData::BUSREG_STATUS_ADMIN        => 'grey',
-            RefData::BUSREG_STATUS_REGISTERED   => 'green',
-            RefData::BUSREG_STATUS_REFUSED      => 'grey',
-            RefData::BUSREG_STATUS_CANCELLATION => 'orange',
-            RefData::BUSREG_STATUS_WITHDRAWN    => 'grey',
-            RefData::BUSREG_STATUS_VARIATION    => 'orange',
-            RefData::BUSREG_STATUS_CNS          => 'grey',
-            RefData::BUSREG_STATUS_CANCELLED    => 'grey',
-            RefData::BUSREG_STATUS_NEW          => 'orange'
-        ];
-
-        $status = [
-            'colour' => $map[$statusKey],
-            'value' => $statusString,
-        ];
-
-        return $status;
     }
 }

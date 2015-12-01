@@ -220,6 +220,11 @@ class TransportManagerController extends AbstractController implements Transport
     public function lookupAction()
     {
         $transportManagerId = (int) $this->params()->fromQuery('transportManager');
+        if (!$transportManagerId) {
+            $response = new \Zend\Http\Response();
+            $response->setStatusCode(422);
+            return $response;
+        }
         $view = new \Zend\View\Model\JsonModel();
 
         $tmData = $this->getTransportManager($transportManagerId);

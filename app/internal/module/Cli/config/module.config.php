@@ -48,17 +48,13 @@ return [
     'message_consumer_manager' => [
         'invokables' => [
             'que_typ_cont_checklist' => 'Cli\Service\Queue\Consumer\ContinuationChecklist',
-            'que_typ_ch_initial' => 'Cli\Service\Queue\Consumer\CompaniesHouse\InitialDataLoad',
             'que_typ_cont_check_rem_gen_let' =>
                 'Cli\Service\Queue\Consumer\ContinuationChecklistReminderGenerateLetter',
-            'que_typ_ch_compare' => 'Cli\Service\Queue\Consumer\CompaniesHouse\Compare',
         ]
     ],
     'business_service_manager' => [
         'invokables' => [
-            'Cli\ContinuationDetail' => 'Cli\BusinessService\Service\ContinuationDetail',
-            'Cli\CompaniesHouseLoad' => 'Cli\BusinessService\Service\CompaniesHouseLoad',
-            'Cli\CompaniesHouseCompare' => 'Cli\BusinessService\Service\CompaniesHouseCompare',
+            'Cli\ContinuationDetail' => 'Cli\BusinessService\Service\ContinuationDetail'
         ]
     ],
     'cache' => [
