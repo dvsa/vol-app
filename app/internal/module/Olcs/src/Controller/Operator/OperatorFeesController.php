@@ -110,7 +110,6 @@ class OperatorFeesController extends OperatorController
     protected function getCreateFeeDtoData($formData)
     {
         return [
-            'user' => $this->getLoggedInUser(),
             'invoicedDate' => $formData['fee-details']['createdDate'],
             'feeType' => $formData['fee-details']['feeType'],
             'irfoGvPermit' => $formData['fee-details']['irfoGvPermit'],

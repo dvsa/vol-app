@@ -75,6 +75,7 @@ class UserTest extends MockeryTestCase
                             ],
                         ],
                     ],
+                    'translateToWelsh' => 'Y',
                 ],
                 [
                     'id' => 987,
@@ -109,6 +110,9 @@ class UserTest extends MockeryTestCase
                         'version' => 1,
                         'addressLine1' => 'a1'
                     ],
+                    'userSettings' => [
+                        'translateToWelsh' => 'Y',
+                    ],
                 ]
             ],
             // edit - transport-manager
@@ -141,6 +145,7 @@ class UserTest extends MockeryTestCase
                             'addressLine1' => 'a1'
                         ],
                     ],
+                    'translateToWelsh' => 'N',
                 ],
                 [
                     'id' => 987,
@@ -167,6 +172,9 @@ class UserTest extends MockeryTestCase
                         'id' => 200,
                         'version' => 1,
                         'addressLine1' => 'a1'
+                    ],
+                    'userSettings' => [
+                        'translateToWelsh' => 'N',
                     ],
                 ]
             ],
@@ -200,6 +208,7 @@ class UserTest extends MockeryTestCase
                             'addressLine1' => 'a1'
                         ],
                     ],
+                    'translateToWelsh' => 'N',
                 ],
                 [
                     'id' => 987,
@@ -226,6 +235,9 @@ class UserTest extends MockeryTestCase
                         'id' => 200,
                         'version' => 1,
                         'addressLine1' => 'a1'
+                    ],
+                    'userSettings' => [
+                        'translateToWelsh' => 'N',
                     ],
                 ]
             ],
@@ -259,6 +271,7 @@ class UserTest extends MockeryTestCase
                             'addressLine1' => 'a1'
                         ],
                     ],
+                    'translateToWelsh' => 'N',
                 ],
                 [
                     'id' => 987,
@@ -285,6 +298,9 @@ class UserTest extends MockeryTestCase
                         'id' => 200,
                         'version' => 1,
                         'addressLine1' => 'a1'
+                    ],
+                    'userSettings' => [
+                        'translateToWelsh' => 'N',
                     ],
                 ]
             ],
@@ -337,6 +353,9 @@ class UserTest extends MockeryTestCase
                     'address' => [
                         'addressLine1' => 'a1'
                     ],
+                    'userSettings' => [
+                        'translateToWelsh' => 'Y',
+                    ],
                 ],
                 [
                     'id' => 987,
@@ -371,6 +390,7 @@ class UserTest extends MockeryTestCase
                             ],
                         ],
                     ],
+                    'translateToWelsh' => 'Y',
                 ],
             ],
             // edit - transport-manager
@@ -405,6 +425,9 @@ class UserTest extends MockeryTestCase
                     ],
                     'address' => [
                         'addressLine1' => 'a1'
+                    ],
+                    'userSettings' => [
+                        'translateToWelsh' => 'N',
                     ],
                 ],
                 [
@@ -441,6 +464,7 @@ class UserTest extends MockeryTestCase
                             ],
                         ],
                     ],
+                    'translateToWelsh' => 'N',
                 ],
             ],
             // edit - partner
@@ -474,6 +498,9 @@ class UserTest extends MockeryTestCase
                     ],
                     'address' => [
                         'addressLine1' => 'a1'
+                    ],
+                    'userSettings' => [
+                        'translateToWelsh' => 'N',
                     ],
                 ],
                 [
@@ -509,6 +536,7 @@ class UserTest extends MockeryTestCase
                             ],
                         ],
                     ],
+                    'translateToWelsh' => 'N',
                 ],
             ],
             // edit - local-authority
@@ -542,6 +570,9 @@ class UserTest extends MockeryTestCase
                     ],
                     'address' => [
                         'addressLine1' => 'a1'
+                    ],
+                    'userSettings' => [
+                        'translateToWelsh' => 'N',
                     ],
                 ],
                 [
@@ -577,6 +608,7 @@ class UserTest extends MockeryTestCase
                             ],
                         ],
                     ],
+                    'translateToWelsh' => 'N',
                 ],
             ],
             // edit - operator
@@ -610,6 +642,9 @@ class UserTest extends MockeryTestCase
                     ],
                     'address' => [
                         'addressLine1' => 'a1'
+                    ],
+                    'userSettings' => [
+                        'translateToWelsh' => 'N',
                     ],
                 ],
                 [
@@ -645,6 +680,7 @@ class UserTest extends MockeryTestCase
                             ],
                         ],
                     ],
+                    'translateToWelsh' => 'N',
                 ],
             ],
         ];

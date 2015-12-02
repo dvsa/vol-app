@@ -362,18 +362,24 @@ trait FeesActionTrait
 
         $receiptLink = '';
 
-        if ($transaction['type']['id'] == RefData::TRANSACTION_TYPE_PAYMENT) {
-            $title = 'internal.transaction-details.title-payment';
-            if ($transaction['status']['id'] == RefData::TRANSACTION_STATUS_COMPLETE) {
-                $receiptLink = $urlHelper->fromRoute(
-                    $this->getFeesRoute() . '/print-receipt',
-                    ['reference' => $transaction['reference']],
-                    [],
-                    true
-                );
-            }
-        } else {
-            $title = 'internal.transaction-details.title-other';
+        switch ($transaction['type']['id']) {
+            case RefData::TRANSACTION_TYPE_PAYMENT:
+                $title = 'internal.transaction-details.title-payment';
+                if ($transaction['status']['id'] == RefData::TRANSACTION_STATUS_COMPLETE) {
+                    $receiptLink = $urlHelper->fromRoute(
+                        $this->getFeesRoute() . '/print-receipt',
+                        ['reference' => $transaction['reference']],
+                        [],
+                        true
+                    );
+                }
+                break;
+            case RefData::TRANSACTION_TYPE_REVERSAL:
+                $title = 'internal.transaction-details.title-reversal';
+                break;
+            default:
+                $title = 'internal.transaction-details.title-other';
+                break;
         }
 
         if ($transaction['displayReversalOption']) {
@@ -532,7 +538,7 @@ trait FeesActionTrait
         $translator = $this->getServiceLocator()->get('Helper\Translation');
         $message = $translator->translateReplace(
             'fees.reverse-transaction.confirm',
-            [$transaction['paymentMethod']['id'] == RefData::FEE_PAYMENT_METHOD_CHEQUE ? 'cheque': 'card']
+            strtolower($transaction['paymentMethod']['description'])
         );
         $form->get('messages')->get('message')->setValue($message);
 

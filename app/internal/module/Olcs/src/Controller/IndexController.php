@@ -90,7 +90,16 @@ class IndexController extends AbstractController implements LeftViewProvider
 
         $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
 
-        $view = new ViewModel(['table' => $this->getTaskTable($filters, true)]);
+        // assignedToTeam or Category must be selected
+        if (empty($filters['assignedToTeam']) && empty($filters['category'])) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addWarningMessage(
+                'Please filter by either a team or a category.'
+            );
+            $view = new ViewModel();
+        } else {
+            $view = new ViewModel(['table' => $this->getTaskTable($filters, true)]);
+        }
+
         $view->setTemplate('pages/table');
 
         return $this->renderView($view, 'Home');

@@ -5,10 +5,10 @@ $result = $this->placeholder('details')->getValue();
 if (count((array)$result) < 1) {
     echo $this->render('partials/read-only/empty',
         [
-            'header' => 'Non-Public Inquiry',
-            'helpText' => 'There is currently no Non-Public Inquiry',
+            'header' => 'Non-public inquiry',
+            'helpText' => 'There is no non-nublic Inquiry',
             'url' => $this->url('case_non_pi', ['action' => 'add'], [], true),
-            'label' => 'Add Non-Public Inquiry',
+            'label' => 'Add non-public inquiry',
             'class' => 'action--primary left-aligned js-modal-ajax'
         ]
     );
@@ -20,7 +20,7 @@ if (count((array)$result) < 1) {
             ['label' => 'Type', 'value' => $data['hearingType']['description']],
             [
                 'label' => 'Meeting date & time',
-                'value' => !empty($data['hearingDate']) ? date('Y-m-d H:i', strtotime($data['hearingDate'])) : 'N/a'
+                'value' => $this->date(strtotime($data['hearingDate']), \DATETIME_FORMAT, 'N/a')
             ],
         ],
         [
@@ -30,7 +30,7 @@ if (count((array)$result) < 1) {
             ],
             [
                 'label' => 'TC/DTC/TR/DTR agreed date',
-                'value' => !empty($data['agreedByTcDate']) ? date('Y-m-d', strtotime($data['agreedByTcDate'])) : 'N/a'
+                'value' => $this->date(strtotime($data['agreedByTcDate']), \DATE_FORMAT, 'N/a')
             ]
         ],
         [

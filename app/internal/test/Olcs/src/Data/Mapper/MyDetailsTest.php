@@ -61,7 +61,8 @@ class MyDetailsTest extends MockeryTestCase
                             'version' => 1,
                             'forename' => 'forename'
                         ],
-                    ]
+                    ],
+                    'translateToWelsh' => 'Y',
                 ],
                 [
                     'id' => 987,
@@ -89,6 +90,9 @@ class MyDetailsTest extends MockeryTestCase
                         'id' => 400,
                         'version' => 1,
                         'forename' => 'forename'
+                    ],
+                    'userSettings' => [
+                        'translateToWelsh' => 'Y',
                     ],
                 ]
             ]
@@ -137,6 +141,9 @@ class MyDetailsTest extends MockeryTestCase
                         'version' => 1,
                         'forename' => 'forename'
                     ],
+                    'userSettings' => [
+                        'translateToWelsh' => 'N',
+                    ],
                 ],
                 [
                     'id' => 987,
@@ -169,7 +176,8 @@ class MyDetailsTest extends MockeryTestCase
                             'version' => 1,
                             'forename' => 'forename'
                         ],
-                    ]
+                    ],
+                    'translateToWelsh' => 'N',
                 ]
             ],
         ];

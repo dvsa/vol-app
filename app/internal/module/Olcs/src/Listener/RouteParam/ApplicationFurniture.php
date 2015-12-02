@@ -118,7 +118,7 @@ class ApplicationFurniture implements
             RefData::APPLICATION_STATUS_REFUSED
         ];
 
-        if (!in_array($data['status']['id'], $inactiveAppStatuses)) {
+        if (!in_array($data['status']['id'], $inactiveAppStatuses) || $data['isVariation']) {
             $licenceUrl = $this->getRouter()->assemble(
                 ['licence' => $data['licence']['id']],
                 ['name' => 'lva-licence']

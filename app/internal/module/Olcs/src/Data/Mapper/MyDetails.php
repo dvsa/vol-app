@@ -53,6 +53,10 @@ class MyDetails implements MapperInterface
             $formData['officeAddress'] = $data['contactDetails']['address'];
         }
 
+        if (!empty($data['translateToWelsh'])) {
+            $formData['userSettings']['translateToWelsh'] = $data['translateToWelsh'];
+        }
+
         return $formData;
     }
 
@@ -80,6 +84,8 @@ class MyDetails implements MapperInterface
             // set address data
             $commandData['contactDetails']['address'] = $data['officeAddress'];
         }
+
+        $commandData['translateToWelsh'] = $data['userSettings']['translateToWelsh'];
 
         return $commandData;
     }
