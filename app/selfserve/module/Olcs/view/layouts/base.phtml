@@ -7,6 +7,9 @@
         <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')->appendHttpEquiv('X-UA-Compatible', 'IE=edge'); ?>
         <?php echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css'), ['media' => 'screen,print']); ?>
         <?php echo $this->headScript(); ?>
+        <!--[if IE]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
     </head>
 
   <body class="selfserve">
@@ -119,11 +122,18 @@
     a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    <?php if ($this->currentUser()->isLoggedIn()):?>
-      ga('create', 'UA-56588861-1', 'auto', {'userId': <?php echo $this->currentUser()->getUniqueId()?>});
-    <?php else: ?>
-      ga('create', 'UA-56588861-1', 'auto');
-    <?php endif;?>
+    <?php
+
+    $userId = $this->currentUser()->getUniqueId();
+
+    if (!empty($userId)) {
+      echo sprintf('ga(\'create\', \'UA-56585177-1\', \'auto\', {\'userId\': \'%s\'});', $userId);
+    } else {
+      ?>
+      ga('create', 'UA-56585177-1', 'auto');
+      <?php
+    }
+    ?>
 
     ga('send', 'pageview');
 
