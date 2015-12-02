@@ -134,7 +134,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
     protected function alterFormBeforeValidation($form)
     {
-        $categories = $this->getListDataFromBackend('Category', ['isDocCategory' => true], 'description', 'id', false);
+        $categories = $this->getListDataCategoryDocs();
         $entityType = $this->getFromRoute('entityType');
 
         $categoryMapType = !empty($entityType) ? $this->getFromRoute('entityType') : $this->params('type');
@@ -144,7 +144,6 @@ class DocumentGenerationController extends AbstractDocumentController
         ];
 
         $data = [];
-        $filters = [];
         $docTemplates = ['' => self::EMPTY_LABEL];
 
         if ($this->getRequest()->isPost()) {
@@ -159,14 +158,13 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $details = isset($data['details']) ? $data['details'] : [];
 
-        $filters['category'] = $details['category'];
-        $filters['isDoc'] = true;
+        $category = (int) $details['category'];
 
-        $subCategories = $this->getListDataFromBackend('SubCategory', $filters, 'subCategoryName');
+        $subCategories = $this->getListDataSubCategoryDocs($category, self::EMPTY_LABEL);
 
         if (isset($details['documentSubCategory'])) {
-            $filters['subCategory'] = $details['documentSubCategory'];
-            $docTemplates = $this->getListDataFromBackend('DocTemplate', $filters);
+            $subCategoryId = (int) $details['documentSubCategory'];
+            $docTemplates = $this->getListDataDocTemplates(null, $subCategoryId);
         }
 
         $form->get('details')->get('category')->setValueOptions($categories);
@@ -224,18 +222,5 @@ class DocumentGenerationController extends AbstractDocumentController
 
             $fieldset->add($element);
         }
-    }
-
-    /**
-     * @NOTE Have not migrated the underlying functionality behind this trait method
-     */
-    protected function getListDataFromBackend(
-        $entity,
-        $filters = array(),
-        $titleField = 'description',
-        $keyField = 'id',
-        $showAll = self::EMPTY_LABEL
-    ) {
-        return parent::getListDataFromBackend($entity, $filters, $titleField, $keyField, $showAll);
     }
 }
