@@ -765,7 +765,7 @@ $routes = [
     'case_licence_docs_attachments' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/[:case]/documents[/]',
+            'route' => '/case[/:case]/documents[/]',
             'constraints' => [
                 'case' => '[0-9]+'
             ],
@@ -834,7 +834,7 @@ $routes = [
             'entity' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => ':entityType/:entityId/',
+                    'route' => ':entityType/:entityId[/]',
                     'constraints' => [
                         'entityType' => '(statement|hearing|opposition|complaint)',
                         'entityId' => '[0-9]+'
