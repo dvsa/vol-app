@@ -236,13 +236,12 @@ trait ListDataTrait
         $response = $this->handleQuery($dto);
         if (!$response->isOK()) {
             // something went wrong, assume its a temporary error, as these list lookups should never fail
-            d($response);
             return [];
         }
 
         $options = [];
         // Do we need to add a default first option
-        if ($firstOption !== false) {
+        if (is_string($options)) {
             $options[''] = $firstOption;
         }
 
