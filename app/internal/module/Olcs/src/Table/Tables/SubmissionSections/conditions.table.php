@@ -40,7 +40,7 @@ return array(
         ),
         array(
             'title' => 'Fulfilled',
-            'width' => 10%',
+            'width' => '10%',
             'formatter' => function ($data, $column) {
                 return $data['isFulfilled'] == 'Y' ? 'Yes' : 'No';
             },
