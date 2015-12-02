@@ -61,11 +61,7 @@ class SoleTraderDisqualificationMarkerTest extends \PHPUnit_Framework_TestCase
                 'type' => ['id' => 'org_t_st'],
                 'organisationPersons' => [
                     [
-                        'person' => [
-                            'contactDetails' => [
-                                ['foo']
-                            ]
-                        ]
+                        'person' => []
                     ]
                 ]
             ]
@@ -84,9 +80,7 @@ class SoleTraderDisqualificationMarkerTest extends \PHPUnit_Framework_TestCase
                 'organisationPersons' => [
                     [
                         'person' => [
-                            'contactDetails' => [
-                                ['disqualifications' => []]
-                            ]
+                            'disqualifications' => []
                         ]
                     ]
                 ]
@@ -106,9 +100,7 @@ class SoleTraderDisqualificationMarkerTest extends \PHPUnit_Framework_TestCase
                 'organisationPersons' => [
                     [
                         'person' => [
-                            'contactDetails' => [
-                                ['disqualifications' => ['foob']]
-                            ]
+                            'disqualifications' => ['foob']
                         ]
                     ]
                 ]
@@ -130,15 +122,11 @@ class SoleTraderDisqualificationMarkerTest extends \PHPUnit_Framework_TestCase
                     [
                         'person' => [
                             'id' => 64,
-                            'contactDetails' => [
+                            'disqualifications' => [
                                 [
-                                    'disqualifications' => [
-                                        [
-                                            'startDate' => '2013-02-12',
-                                            'endDate' => '2014-04-23',
-                                            'status' => 'Active',
-                                        ]
-                                    ]
+                                    'startDate' => '2013-02-12',
+                                    'endDate' => '2014-04-23',
+                                    'status' => 'Active',
                                 ]
                             ]
                         ]
@@ -177,15 +165,11 @@ class SoleTraderDisqualificationMarkerTest extends \PHPUnit_Framework_TestCase
                     [
                         'person' => [
                             'id' => 64,
-                            'contactDetails' => [
+                            'disqualifications' => [
                                 [
-                                    'disqualifications' => [
-                                        [
-                                            'startDate' => '2013-02-12',
-                                            'endDate' => '',
-                                            'status' => 'XXX',
-                                        ]
-                                    ]
+                                    'startDate' => '2013-02-12',
+                                    'endDate' => '',
+                                    'status' => 'XXX',
                                 ]
                             ]
                         ]
