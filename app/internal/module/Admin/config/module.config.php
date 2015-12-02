@@ -4,9 +4,9 @@ return [
     'router' => [
         'routes' => [
             'admin-dashboard' => [
-                'type' => 'Literal',
+                'type' => 'segment',
                 'options' => [
-                    'route' => '/admin',
+                    'route' => '/admin[/]',
                     'defaults' => [
                         'controller' => 'Admin\IndexController',
                         'action' => 'index',
@@ -15,9 +15,9 @@ return [
                 'may_terminate' => true,
                 'child_routes' => [
                     'admin-scanning' => [
-                        'type' => 'Literal',
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/scanning',
+                            'route' => 'scanning[/]',
                             'defaults' => [
                                 'controller' => 'Admin\ScanningController',
                                 'action' => 'index',
@@ -25,9 +25,9 @@ return [
                         ],
                     ],
                     'admin-printing' => [
-                        'type' => 'Literal',
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/printing',
+                            'route' => 'printing[/]',
                             'defaults' => [
                                 'controller' => 'Admin\PrintingController',
                                 'action' => 'index',
@@ -38,7 +38,7 @@ return [
                             'irfo-stock-control' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/irfo-stock-control[/:action][/:id]',
+                                    'route' => 'irfo-stock-control[/:action][/:id][/]',
                                     'constraints' => [
                                         'id' => '([0-9]+,?)+',
                                         'action' => '(index|add|in-stock|issued|void|returned)'
@@ -52,9 +52,9 @@ return [
                         ]
                     ],
                     'admin-publication' => [
-                        'type' => 'Literal',
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/publication',
+                            'route' => 'publication[/]',
                             'defaults' => [
                                 'controller' => 'Admin\PublicationController',
                                 'action' => 'jump',
@@ -65,7 +65,7 @@ return [
                             'pending' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/pending[/:action][/:id]',
+                                    'route' => 'pending[/:action][/:id][/]',
                                     'constraints' => [
                                         'publication' => '[0-9]+',
                                         'action' => '(index|generate|publish)'
@@ -79,7 +79,7 @@ return [
                             'recipient' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/recipient[/:action][/:id]',
+                                    'route' => 'recipient[/:action][/:id][/]',
                                     'constraints' => [
                                         'id' => '[0-9]+',
                                         'action' => '(index|add|edit|delete)'
@@ -93,9 +93,9 @@ return [
                         ]
                     ],
                     'admin-my-account' => [
-                        'type' => 'Literal',
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/my-account',
+                            'route' => 'my-account[/]',
                             'defaults' => [
                                 'controller' => 'Admin\MyDetailsController',
                                 'action' => 'index',
@@ -104,9 +104,9 @@ return [
                         'may_terminate' => true,
                         'child_routes' => [
                             'details' => [
-                                'type' => 'literal',
+                                'type' => 'segment',
                                 'options' => [
-                                    'route' => '/details',
+                                    'route' => 'details[/]',
                                     'defaults' => [
                                         'controller' => 'Admin\MyDetailsController',
                                         'action' => 'edit'
@@ -114,9 +114,9 @@ return [
                                 ]
                             ],
                             'change-password' => [
-                                'type' => 'literal',
+                                'type' => 'segment',
                                 'options' => [
-                                    'route' => '/password',
+                                    'route' => 'password[/]',
                                     'defaults' => [
                                         'controller' => 'Admin\MyDetailsController',
                                         'action' => 'password'
@@ -128,7 +128,7 @@ return [
                     'admin-continuation' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/continuation[/]',
+                            'route' => 'continuation[/]',
                             'defaults' => [
                                 'controller' => 'Admin\ContinuationController',
                                 'action' => 'index',
@@ -161,7 +161,7 @@ return [
                     'admin-report' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/report',
+                            'route' => 'report[/]',
                             'defaults' => [
                                 'controller' => 'Admin\ReportController',
                                 'action' => 'index',
@@ -172,7 +172,7 @@ return [
                             'ch-alerts' => [
                                 'type' => 'Segment',
                                 'options' => [
-                                    'route' => '/ch-alerts[/:action][/:id][/]',
+                                    'route' => 'ch-alerts[/:action][/:id][/]',
                                     'constraints' => [
                                         'id' => '[0-9\,]+'
                                     ],
@@ -185,7 +185,7 @@ return [
                             'cpms' => [
                                 'type' => 'Segment',
                                 'options' => [
-                                    'route' => '/cpms[/:action][/:id][/]',
+                                    'route' => 'cpms[/:action][/:id][/]',
                                     'constraints' => [
                                         'id' => '[0-9\,]+'
                                     ],
@@ -198,7 +198,7 @@ return [
                             'cpid-class' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/cpid-classification[/:status]',
+                                    'route' => 'cpid-classification[/:status][/]',
                                     'defaults' => [
                                         'controller' => 'Admin\ReportController',
                                         'action' => 'cpidClassification',
@@ -209,7 +209,7 @@ return [
                             'exported-reports' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/exported-reports',
+                                    'route' => 'exported-reports[/]',
                                     'defaults' => [
                                         'controller' => 'Admin\ReportController',
                                         'action' => 'exportedReports'
@@ -221,7 +221,7 @@ return [
                     'admin-user-management' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/user-management/users[/:action][/:user]',
+                            'route' => 'user-management/users[/:action][/:user][/]',
                             'constraints' => [
                                 'user' => '[0-9]+',
                                 'action' => '(index|add|edit|delete)'
@@ -235,7 +235,7 @@ return [
                     'admin-team-management' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/user-management/teams[/:action][/:team]',
+                            'route' => 'user-management/teams[/:action][/:team][/]',
                             'constraints' => [
                                 'user' => '[0-9]+',
                                 'action' => '(index|add|edit|delete)'
@@ -249,7 +249,7 @@ return [
                     'admin-printer-management' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/user-management/printers[/:action][/:printer]',
+                            'route' => 'user-management/printers[/:action][/:printer][/]',
                             'constraints' => [
                                 'user' => '[0-9]+',
                                 'action' => '(index|add|edit|delete)'
@@ -263,7 +263,7 @@ return [
                     'admin-partner-management' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/partner[/:action][/:id]',
+                            'route' => 'partner[/:action][/:id][/]',
                             'constraints' => [
                                 'id' => '[0-9]+',
                                 'action' => '(index|add|edit|delete)'
@@ -277,7 +277,7 @@ return [
                     'admin-financial-standing' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/financial-standing[/:action][/:id][/]',
+                            'route' => 'financial-standing[/:action][/:id][/]',
                             'constraints' => [
                                 'id' => '[0-9\,]+'
                             ],
@@ -288,9 +288,9 @@ return [
                         ],
                     ],
                     'admin-public-holiday' => [
-                        'type' => 'Literal',
+                        'type' => 'Segment',
                         'options' => [
-                            'route' => '/public-holiday',
+                            'route' => 'public-holiday[/]',
                             'defaults' => [
                                 'controller' => 'Admin\PublicHolidayController',
                                 'action' => 'index',
@@ -298,9 +298,9 @@ return [
                         ],
                     ],
                     'admin-system-message' => [
-                        'type' => 'Literal',
+                        'type' => 'Segment',
                         'options' => [
-                            'route' => '/system-message',
+                            'route' => 'system-message[/]',
                             'defaults' => [
                                 'controller' => 'Admin\SystemMessageController',
                                 'action' => 'index',
@@ -310,7 +310,7 @@ return [
                     'admin-disc-printing' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => '/disc-printing[/success[/:success]]',
+                            'route' => 'disc-printing[/success[/:success]][/]',
                             'defaults' => [
                                 'controller' => 'Admin\DiscPrintingController',
                                 'action' => 'index',
@@ -324,7 +324,7 @@ return [
                             'disc_prefixes' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/disc-prefixes-list',
+                                    'route' => 'disc-prefixes-list',
                                     'defaults' => [
                                         'controller' => 'Admin\DiscPrintingController',
                                         'action' => 'disc-prefixes-list'
@@ -334,7 +334,7 @@ return [
                             'disc_numbering' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/disc-numbering',
+                                    'route' => 'disc-numbering',
                                     'defaults' => [
                                         'controller' => 'Admin\DiscPrintingController',
                                         'action' => 'disc-numbering'
@@ -344,7 +344,7 @@ return [
                             'disc_printing' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/confirm-disc-printing',
+                                    'route' => 'confirm-disc-printing',
                                     'defaults' => [
                                         'controller' => 'Admin\DiscPrintingController',
                                         'action' => 'confirm-disc-printing'
@@ -354,9 +354,9 @@ return [
                         ]
                     ],
                     'admin-payment-processing' => [
-                        'type' => 'Literal',
+                        'type' => 'segment',
                         'options' => [
-                            'route' => '/payment-processing',
+                            'route' => 'payment-processing[/]',
                             'defaults' => [
                                 'controller' => 'Admin\PaymentProcessingFeesController',
                                 'action' => 'redirect',
@@ -367,7 +367,7 @@ return [
                             'misc-fees' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/fees',
+                                    'route' => 'fees[/]',
                                     'defaults' => [
                                         'controller' => 'Admin\PaymentProcessingFeesController',
                                         'action' => 'index'
@@ -378,7 +378,7 @@ return [
                                     'fee_action' => [
                                         'type' => 'segment',
                                         'options' => [
-                                            'route' => '/:action/[:fee]',
+                                            'route' => ':action[/:fee][/]',
                                             'constraints' => [
                                                 'fee' => '([0-9]+,?)+',
                                             ],
@@ -388,7 +388,7 @@ return [
                                             'transaction' => [
                                                 'type' => 'segment',
                                                 'options' => [
-                                                    'route' => '/transaction/:transaction',
+                                                    'route' => 'transaction/:transaction[/]',
                                                     'constraints' => [
                                                         'transaction' => '([0-9]+,?)+',
                                                     ],
@@ -401,7 +401,7 @@ return [
                                                     'reverse' => [
                                                         'type' => 'segment',
                                                         'options' => [
-                                                            'route' => '/reverse',
+                                                            'route' => 'reverse[/]',
                                                             'defaults' => [
                                                                 'action' => 'reverseTransaction',
                                                             ]
@@ -415,7 +415,7 @@ return [
                                     'print-receipt' => [
                                         'type' => 'segment',
                                         'options' => [
-                                            'route' => '/print-receipt/:reference',
+                                            'route' => 'print-receipt/:reference[/]',
                                             'constraints' => [
                                                 'reference' => 'OLCS-[0-9A-F\-]+',
                                             ],
@@ -428,14 +428,14 @@ return [
                                     'fee_type_ajax' => [
                                         'type' => 'segment',
                                         'options' => [
-                                            'route' => '/ajax',
+                                            'route' => 'ajax/',
                                         ],
                                         'may_terminate' => false,
                                         'child_routes' => [
                                             'single' => [
                                                 'type' => 'segment',
                                                 'options' => [
-                                                    'route' => '/fee-type/:id',
+                                                    'route' => 'fee-type/:id',
                                                     'constraints' => [
                                                         'id' => '([0-9]+,?)+',
                                                     ],
@@ -448,7 +448,7 @@ return [
                                             'list' => [
                                                 'type' => 'segment',
                                                 'options' => [
-                                                    'route' => '/fee-type-list/:date',
+                                                    'route' => 'fee-type-list/:date',
                                                     // 'constraints' => [
                                                     //     'date' => '([0-9]{4}\-[0-9]{2}\-[0-9]{2})',
                                                     // ],
