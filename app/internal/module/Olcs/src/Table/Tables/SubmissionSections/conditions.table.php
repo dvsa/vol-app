@@ -26,12 +26,12 @@ return array(
     'columns' => array(
         array(
             'title' => 'No.',
-            'width' => '10%',
+            'width' => '8%',
             'name' => 'id'
         ),
         array(
             'title' => 'Added via',
-            'width' => '10%',
+            'width' => '8%',
             'formatter' => function ($data, $column, $sl) {
                 $string = $sl->get('translator')->translate($data['addedVia']) . ' '
                     .$data['parentId'];
@@ -40,21 +40,21 @@ return array(
         ),
         array(
             'title' => 'Fulfilled',
-            'width' => '10%',
+            'width' => '8%',
             'formatter' => function ($data, $column) {
                 return $data['isFulfilled'] == 'Y' ? 'Yes' : 'No';
             },
         ),
         array(
             'title' => 'Status',
-            'width' => '10%',
+            'width' => '8%',
             'formatter' => function ($data, $column) {
                 return $data['isDraft'] == 'Y' ? 'Draft' : 'Approved';
             },
         ),
         array(
             'title' => 'Attached to',
-            'width' => '10%',
+            'width' => '8%',
             'formatter' => function ($data, $column, $sm) {
                 $attachedTo = $data['attachedTo'] == 'Operating Centre' ? 'OC' : $data['attachedTo'];
                 return $sm->get('translator')->translate($attachedTo);
@@ -62,13 +62,13 @@ return array(
         ),
         array(
             'title' => 'OC Address',
-            'width' => '25%',
-            'formatter' => 'Address',
+            'width' => '20%',
+            'formatter' => 'AddressLines',
             'name' => 'OcAddress'
         ),
         array(
             'title' => 'Notes',
-            'width' => '25%',
+            'width' => '40%',
             'name' => 'notes',
             'formatter' => 'Comment',
         ),
