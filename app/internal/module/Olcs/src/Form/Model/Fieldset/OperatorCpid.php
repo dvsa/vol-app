@@ -6,7 +6,6 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore No methods
- * @Form\Attributes({"class":"actions-container"})
  * @Form\Name("operator-cpid")
  */
 class OperatorCpid

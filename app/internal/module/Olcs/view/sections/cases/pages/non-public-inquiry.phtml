@@ -5,10 +5,10 @@ $result = $this->placeholder('details')->getValue();
 if (count((array)$result) < 1) {
     echo $this->render('partials/read-only/empty',
         [
-            'header' => 'Non-Public Inquiry',
-            'helpText' => 'There is currently no Non-Public Inquiry',
+            'header' => 'Non-public inquiry',
+            'helpText' => 'There is no non-nublic Inquiry',
             'url' => $this->url('case_non_pi', ['action' => 'add'], [], true),
-            'label' => 'Add Non-Public Inquiry',
+            'label' => 'Add non-public inquiry',
             'class' => 'action--primary left-aligned js-modal-ajax'
         ]
     );
