@@ -22,10 +22,10 @@ class SoleTraderDisqualificationMarker extends AbstractMarker
             return false;
         }
         $person = $data['organisation']['organisationPersons'][0]['person'];
-        if (!isset($person['contactDetails'][0]['disqualifications'])) {
+        if (!isset($person['disqualifications'])) {
             return false;
         }
-        if (count($person['contactDetails'][0]['disqualifications']) === 0) {
+        if (count($person['disqualifications']) === 0) {
             return false;
         }
 
@@ -39,7 +39,7 @@ class SoleTraderDisqualificationMarker extends AbstractMarker
         $person = $data['organisation']['organisationPersons'][0]['person'];
 
         // its only possible to have one disqualification record
-        $disqualification = $person['contactDetails'][0]['disqualifications'][0];
+        $disqualification = $person['disqualifications'][0];
 
         $startDateTime = new \DateTime($disqualification['startDate']);
         $endDateTime = ($disqualification['endDate']) ? new \DateTime($disqualification['endDate']) : null;

@@ -295,19 +295,14 @@ class DisqualifyControllerTest extends MockeryTestCase
         $person = [
             'forename' => 'Bob',
             'familyName' => 'Smith',
-            'contactDetails' => [
+            'disqualifications' => [
                 [
-                    'id' => 34,
-                    'disqualifications' => [
-                        [
-                            'isDisqualified' => 'X',
-                            'startDate' => '2015-08-12',
-                            'period' => 134,
-                            'notes' => 'NOTES',
-                            'id' => 234,
-                            'version' => 334,
-                        ]
-                    ]
+                    'isDisqualified' => 'X',
+                    'startDate' => '2015-08-12',
+                    'period' => 134,
+                    'notes' => 'NOTES',
+                    'id' => 234,
+                    'version' => 334,
                 ]
             ]
         ];
