@@ -47,6 +47,9 @@ $this->doctype();
         echo $this->headScript();
     }
     ?>
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
   <body class="internal">
     <?php echo $this->version(); ?>
@@ -125,13 +128,16 @@ if (!empty($right)): ?>
 
     <?php
 
-    if (isset($userId)) {
-      $gacode = "ga('create', 'UA-56585177-1', 'auto', {'userId': '%s'});";
-      echo sprintf($gacode, $userId);
+    $userId = $this->currentUser()->getUniqueId();
+
+    if (!empty($userId)) {
+      echo sprintf('ga(\'create\', \'UA-56585177-1\', \'auto\', {\'userId\': \'%s\'});', $userId);
     } else {
-      $gacode = "ga('create', 'UA-56585177-1', 'auto');";
-      echo sprintf($gacode);
-    }?>
+      ?>
+      ga('create', 'UA-56585177-1', 'auto');
+      <?php
+    }
+    ?>
 
     ga('send', 'pageview');
   </script>
