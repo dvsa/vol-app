@@ -8,7 +8,7 @@
 namespace Admin\Controller;
 
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
 use Zend\View\Model\ViewModel;
 
@@ -17,7 +17,7 @@ use Zend\View\Model\ViewModel;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-abstract class AbstractController extends AbstractActionController implements LeftViewProvider
+abstract class AbstractController extends ZendAbstractActionController implements LeftViewProvider
 {
     use GenericRenderView;
 

@@ -5,19 +5,25 @@
  */
 namespace Admin\Controller;
 
-use Common\Controller\AbstractActionController;
 use Common\Controller\Traits\GenericReceipt;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\FeesActionTrait;
 use Zend\View\Model\ViewModel;
+use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Common\Controller\Traits\GenericRenderView;
+use Common\Controller\Traits\GenericMethods;
+use Common\Util\FlashMessengerTrait;
 
 /**
  * Payment Processing Fees Controller
  */
-class PaymentProcessingFeesController extends AbstractActionController implements LeftViewProvider
+class PaymentProcessingFeesController extends ZendAbstractActionController implements LeftViewProvider
 {
     use FeesActionTrait,
-        GenericReceipt;
+        GenericReceipt,
+        GenericRenderView,
+        GenericMethods,
+        FlashMessengerTrait;
 
     /**
      * @inheritdoc
@@ -92,7 +98,7 @@ class PaymentProcessingFeesController extends AbstractActionController implement
      */
     protected function renderLayout($view, $pageTitle = null, $pageSubTitle = null)
     {
-        return parent::renderView($view, 'Payment processing', $pageSubTitle);
+        return $this->renderView($view, 'Payment processing', $pageSubTitle);
     }
 
     public function getLeftView()

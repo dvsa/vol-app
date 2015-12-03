@@ -5,15 +5,18 @@
  */
 namespace Admin\Controller;
 
-use Common\Controller\AbstractActionController;
+use Olcs\Controller\AbstractInternalController;
+use Common\Controller\Traits\GenericMethods;
 
 /**
  * Printing Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PrintingController extends AbstractActionController
+class PrintingController extends AbstractInternalController
 {
+    use GenericMethods;
+
     /**
      * Index action
      *

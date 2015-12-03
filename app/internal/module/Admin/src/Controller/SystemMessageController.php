@@ -5,7 +5,8 @@
 
 namespace Admin\Controller;
 
-use Common\Controller\AbstractActionController;
+use Common\Controller\Traits\GenericRenderView;
+use Olcs\Controller\AbstractInternalController;
 
 /**
  * System Message Controller
@@ -13,8 +14,10 @@ use Common\Controller\AbstractActionController;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 
-class SystemMessageController extends AbstractActionController
+class SystemMessageController extends AbstractInternalController
 {
+    use GenericRenderView;
+
     public function indexAction()
     {
         $view = $this->getView();
