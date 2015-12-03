@@ -18,6 +18,8 @@ class User implements MapperInterface
      * Should map data from a result array into an array suitable for a form
      *
      * @param array $data
+     *
+     * @return array
      */
     public static function mapFromResult(array $data)
     {
@@ -30,10 +32,10 @@ class User implements MapperInterface
             $formData['userLoginSecurity']['loginId'] = $data['loginId'];
             $formData['userLoginSecurity']['accountDisabled'] = $data['accountDisabled'];
 
-            if (!empty($data['lockedDate'])) {
-                $formData['userLoginSecurity']['lockedDate'] = date(
+            if (!empty($data['disabledDate'])) {
+                $formData['userLoginSecurity']['disabledDate'] = date(
                     \DATETIMESEC_FORMAT,
-                    strtotime($data['lockedDate'])
+                    strtotime($data['disabledDate'])
                 );
             }
 
