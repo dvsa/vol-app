@@ -57,7 +57,7 @@ $feeTypeAjaxRoute = [
     // child route config that is used in multiple places
     'type' => 'segment',
     'options' => [
-        'route' => 'ajax',
+        'route' => 'ajax/',
     ],
     'may_terminate' => false,
     'child_routes' => [
