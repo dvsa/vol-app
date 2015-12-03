@@ -2,6 +2,9 @@
     <div class="global-header__wrapper">
         <h2 class="global-header__title"><a href="/">OLCS</a></h2>
         <?php echo $this->partial('layout/partials/search'); ?>
-        <?php echo $this->partial('layout/partials/admin-menu'); ?>
+        <?php
+        $navigation = $this->navigation('navigation')->findOneBy('id', 'admin-dashboard');
+        echo $this->navigation('navigation')->menu($navigation)->setPartial('layout/partials/admin-menu');
+        ?>
     </div><!-- end global-header__wrapper -->
 </div><!-- end global-header -->
