@@ -50,7 +50,7 @@ return [
                 [
                     'id' => 'admin-dashboard/admin-financial-standing',
                     'label' => 'Financial standing rates',
-                    'route' => 'admin-dashboard/admin-financial-standing',
+                    'route' => 'admin-dashboard/admin-financial-standing'
                 ],
                 [
                     'label' => 'Disc Printing',

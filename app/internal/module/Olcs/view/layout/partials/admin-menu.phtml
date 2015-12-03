@@ -3,12 +3,13 @@
     $right = '';
     $toggle = 0;
     foreach ($this->container as $key => $page) :
-        $leftOrRight = ($toggle%2==0) ? 'left' : 'right';
-            $$leftOrRight .= '<li class="admin__item ' . ($page->isActive(true) ? 'current' : '') .'">';
-            $$leftOrRight .= $this->navigation()->menu()->htmlify($page);
-            $$leftOrRight .= '</li>';
-            $toggle++;
-
+        if ($page->isVisible(true) && $this->navigation()->accept($page, false)) {
+            $leftOrRight = ($toggle%2==0) ? 'left' : 'right';
+                $$leftOrRight .= '<li class="admin__item ' . ($page->isActive(true) ? 'current' : '') .'">';
+                $$leftOrRight .= $this->navigation()->menu()->htmlify($page);
+                $$leftOrRight .= '</li>';
+                $toggle++;
+        }
     endforeach;
 ?>
 
