@@ -54,12 +54,10 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                 ->andReturn('GRACE_PERIOD_URL')
                 ->shouldReceive('fromRoute')
                 ->with(
-                    'search',
-                    array(
-                        'index' => 'application',
-                        'action' => 'search',
-                    ),
-                    ['query' => ['search' => $licenceData['licNo']]]
+                    'operator/licences-applications',
+                    [
+                        'organisation' => 72
+                    ]
                 )
                 ->andReturn('APP_SEARCH_URL')
                 ->getMock()
