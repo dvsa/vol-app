@@ -763,7 +763,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         if ($this->commentBoxName) {
             $form = $this->generateForm(
-                'comment',
+                'Comment',
                 'processCommentForm'
             );
 
