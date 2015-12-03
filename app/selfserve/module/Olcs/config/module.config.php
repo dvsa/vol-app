@@ -1009,6 +1009,12 @@ return array(
                         'action' => 'index',
                         'use_route_match' => true,
                         'class' => 'proposition-nav__item',
+                    ),
+                    array(
+                        'id' => 'selfserve-topnav-my-details',
+                        'label' => 'My account',
+                        'route' => 'my-details',
+                        'class' => 'proposition-nav__item',
                     )
                 ),
             ),
