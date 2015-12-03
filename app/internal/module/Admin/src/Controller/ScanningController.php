@@ -8,14 +8,18 @@ namespace Admin\Controller;
 use Common\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Common\Service\Data\CategoryDataService;
+use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Common\Controller\Traits\GenericRenderView;
 
 /**
  * Scanning Controller
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class ScanningController extends AbstractActionController
+class ScanningController extends ZendAbstractActionController
 {
+    use GenericRenderView;
+
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
