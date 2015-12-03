@@ -241,7 +241,7 @@ trait ListDataTrait
 
         $options = [];
         // Do we need to add a default first option
-        if (is_string($options)) {
+        if (is_string($firstOption)) {
             $options[''] = $firstOption;
         }
 
