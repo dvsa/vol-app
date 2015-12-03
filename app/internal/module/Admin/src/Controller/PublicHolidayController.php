@@ -5,15 +5,18 @@
  */
 namespace Admin\Controller;
 
-use Common\Controller\AbstractActionController;
+use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Common\Controller\Traits\GenericRenderView;
 
 /**
  * Public Holiday Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PublicHolidayController extends AbstractActionController
+class PublicHolidayController extends ZendAbstractActionController
 {
+    use GenericRenderView;
+
     public function indexAction()
     {
         $view = $this->getView();

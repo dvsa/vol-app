@@ -5,15 +5,18 @@
  */
 namespace Admin\Controller;
 
-use Common\Controller\AbstractActionController;
+use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Common\Controller\Traits\GenericMethods;
 
 /**
  * Printing Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PrintingController extends AbstractActionController
+class PrintingController extends ZendAbstractActionController
 {
+    use GenericMethods;
+
     /**
      * Index action
      *
