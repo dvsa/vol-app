@@ -51,7 +51,7 @@ $this->doctype();
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
   </head>
-  <body class="internal">
+  <body class="internal" id="<?php echo $this->pageId(); ?>">
     <?php echo $this->version(); ?>
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
     <?php
