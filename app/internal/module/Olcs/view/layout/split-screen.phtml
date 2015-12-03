@@ -7,7 +7,7 @@
     <?php echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css')) ?>
     <?php echo $this->headScript(); ?>
   </head>
-  <body class="internal">
+  <body class="internal" id="<?php echo $this->pageId(); ?>">
       <div class="iframe-controls">
           <a href="#" class="iframe-controls--close">Close</a>
           <a href="#" class="iframe-controls--orientation">Switch orientation</a>
