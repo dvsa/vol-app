@@ -382,23 +382,13 @@ trait FeesActionTrait
                 break;
         }
 
-        if ($transaction['displayReversalOption']) {
-            $reverseLink = $urlHelper->fromRoute(
-                $this->getFeesRoute() . '/fee_action/transaction/reverse',
-                ['transaction' => $transaction['id']],
-                [],
-                true
-            );
-        } else {
-            $reverseLink = '';
-        }
-
         $viewParams = [
             'table' => $table,
             'transaction' => $transaction,
             'backLink' => $backLink,
             'receiptLink' => $receiptLink,
-            'reverseLink' => $reverseLink,
+            'reverseLink' => $this->getReverseLink($transaction),
+            'adjustLink' => $this->getAdjustLink($transaction),
         ];
 
         $this->placeholder()->setPlaceholder('contentTitle', $title);
@@ -411,6 +401,47 @@ trait FeesActionTrait
         $this->maybeClearLeft($layout);
 
         return $layout;
+    }
+
+    /**
+     * Determine reversal url from transaction data
+     *
+     * @param array $transaction
+     * @return  string
+     */
+    protected function getReverseLink(array $transaction)
+    {
+        if ($transaction['displayReversalOption']) {
+            return $this->getServiceLocator()->get('Helper\Url')->fromRoute(
+                $this->getFeesRoute() . '/fee_action/transaction/reverse',
+                ['transaction' => $transaction['id']],
+                [],
+                true
+            );
+        }
+
+        return '';
+    }
+
+    /**
+     * Determine adjustment url from transaction data
+     *
+     * @param array $transaction
+     * @return  string
+     * @todo
+     */
+    protected function getAdjustLink(array $transaction)
+    {
+        if ($transaction['displayAdjustmentOption']) {
+            return $this->getServiceLocator()->get('Helper\Url')->fromRoute(
+                $this->getFeesRoute() . '/fee_action/transaction/adjust',
+                ['transaction' => $transaction['id']],
+                [],
+                true
+            );
+        }
+
+        return '';
     }
 
     /**
@@ -563,6 +594,70 @@ trait FeesActionTrait
             $response = $this->handleCommand(ReverseTransactionCmd::create($dtoData));
             if ($response->isOk()) {
                 $this->addSuccessMessage('fees.reverse-transaction.success');
+            } else {
+                $result = $response->getResult();
+                if (isset($result['messages'])) {
+                    foreach ($result['messages'] as $error) {
+                        $this->addErrorMessage($error);
+                    }
+                }
+            }
+            return $this->redirectToTransaction(true);
+        }
+    }
+
+    public function adjustTransactionAction()
+    {
+        $transactionId = $this->params('transaction');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        // @todo
+        $form = $formHelper->createFormWithRequest('AdjustTransaction', $this->getRequest());
+
+        if ($this->getRequest()->isPost()) {
+            $redirect = $this->handleAdjustTransactionPost($form, $transactionId);
+            if (!is_null($redirect)) {
+                return $redirect;
+            }
+        }
+
+        $query = PaymentByIdQry::create(['id' => $transactionId]);
+        $response = $this->handleQuery($query);
+        if (!$response->isOk()) {
+            $this->addErrorMessage('unknown-error');
+            return $this->redirectToTransaction();
+        }
+
+        $transaction = $response->getResult();
+
+        if (!$transaction['canAdjust']) {
+            $this->addErrorMessage('fees.adjust-transaction.cannotAdjust');
+            return $this->redirectToTransaction(true);
+        }
+
+        $form->get('messages')->get('message')->setValue('fees.adjust-transaction.confirm');
+
+        $view = new ViewModel(array('form' => $form));
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'fees.adjust-transaction.title');
+    }
+
+    private function handleAdjustTransactionPost($form, $transactionId)
+    {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirectToTransaction();
+        }
+        $data = (array) $this->getRequest()->getPost();
+        $form->setData($data);
+        if ($form->isValid()) {
+            $dtoData = [
+                'id' => $transactionId,
+                'reason' => $form->getData()['details']['reason'],
+            ];
+            var_dump($dtoData); exit;
+            $response = $this->handleCommand(ReverseTransactionCmd::create($dtoData));
+            if ($response->isOk()) {
+                $this->addSuccessMessage('fees.adjust-transaction.success');
             } else {
                 $result = $response->getResult();
                 if (isset($result['messages'])) {
