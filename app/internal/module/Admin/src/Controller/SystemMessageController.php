@@ -5,8 +5,8 @@
 
 namespace Admin\Controller;
 
-use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
+use Olcs\Controller\AbstractInternalController;
 
 /**
  * System Message Controller
@@ -14,7 +14,7 @@ use Common\Controller\Traits\GenericRenderView;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 
-class SystemMessageController extends ZendAbstractActionController
+class SystemMessageController extends AbstractInternalController
 {
     use GenericRenderView;
 

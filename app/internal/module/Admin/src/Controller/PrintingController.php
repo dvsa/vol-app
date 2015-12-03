@@ -5,7 +5,7 @@
  */
 namespace Admin\Controller;
 
-use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Olcs\Controller\AbstractInternalController;
 use Common\Controller\Traits\GenericMethods;
 
 /**
@@ -13,7 +13,7 @@ use Common\Controller\Traits\GenericMethods;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PrintingController extends ZendAbstractActionController
+class PrintingController extends AbstractInternalController
 {
     use GenericMethods;
 

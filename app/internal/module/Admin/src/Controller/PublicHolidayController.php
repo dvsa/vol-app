@@ -5,7 +5,7 @@
  */
 namespace Admin\Controller;
 
-use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Olcs\Controller\AbstractInternalController;
 use Common\Controller\Traits\GenericRenderView;
 
 /**
@@ -13,7 +13,7 @@ use Common\Controller\Traits\GenericRenderView;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PublicHolidayController extends ZendAbstractActionController
+class PublicHolidayController extends AbstractInternalController
 {
     use GenericRenderView;
 
