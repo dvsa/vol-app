@@ -993,7 +993,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $params = [
             'content' => $translationHelper->translateReplace('markup-tma-a2-1', [$this->getEditTmUrl()]),
-            'backLink' => null,
         ];
 
         return $this->renderTmAction('transport-manager-application.awaiting-operator-approval', null, $tma, $params);
