@@ -6,9 +6,10 @@
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
-use Olcs\View\Model\Form;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as ItemDto;
 use Dvsa\Olcs\Transfer\Command\MyAccount\UpdateMyAccountSelfserve as UpdateDto;
+use Zend\View\Model\ViewModel;
+use Zend\Form\Form;
 
 /**
  * My Details Controller
@@ -63,10 +64,32 @@ class MyDetailsController extends AbstractController
             }
         }
 
-        $view = new Form();
-        $view->setForm($form);
+        $view = new ViewModel(
+            [
+                'form' => $this->alterForm($form),
+                'pageTitle' => 'my-account.page.title',
+                'showNav' => false
+            ]
+        );
+        $view->setTemplate('pages/my-account-page');
 
         return $view;
+    }
+
+
+    protected function alterForm(Form $form)
+    {
+        // inject link into change password label
+        $label = $this->getServiceLocator()->get('Helper\Translation')->translateReplace(
+            'my-account.field.change-password.label',
+            [
+                $this->getServiceLocator()->get('Helper\Url')->fromRoute('change-password')
+            ]
+        );
+
+        $form->get('securityFields')->get('changePasswordHtml')->setValue($label);
+
+        return $form;
     }
 
     /**
