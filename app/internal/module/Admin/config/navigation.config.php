@@ -10,6 +10,32 @@ return [
             'route' => 'admin-dashboard',
             'pages' => [
                 [
+                    'label' => 'Scanning',
+                    'route' => 'admin-dashboard/admin-scanning',
+                ],
+                [
+                    'id'    => 'admin-dashboard/admin-user-management',
+                    'label' => 'User management',
+                    'route' => 'admin-dashboard/admin-user-management',
+                    'pages' => [
+                        [
+                            'id' => 'admin-dashboard/admin-team-management',
+                            'label' => 'Teams',
+                            'route' => 'admin-dashboard/admin-team-management',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-printer-management',
+                            'label' => 'Printers',
+                            'route' => 'admin-dashboard/admin-printer-management',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-partner-management',
+                            'label' => 'Partner organisations',
+                            'route' => 'admin-dashboard/admin-partner-management',
+                        ]
+                    ]
+                ],
+                [
                     'id'    => 'admin-dashboard/admin-printing',
                     'label' => 'Printing',
                     'route' => 'admin-dashboard/admin-printing',
@@ -22,12 +48,17 @@ return [
                     ]
                 ],
                 [
+                    'id' => 'admin-dashboard/admin-financial-standing',
+                    'label' => 'Financial standing rates',
+                    'route' => 'admin-dashboard/admin-financial-standing'
+                ],
+                [
                     'label' => 'Disc Printing',
                     'route' => 'admin-dashboard/admin-disc-printing',
                 ],
                 [
-                    'label' => 'Scanning',
-                    'route' => 'admin-dashboard/admin-scanning',
+                    'label' => 'Public holidays',
+                    'route' => 'admin-dashboard/admin-public-holiday',
                 ],
                 [
                     'id'    => 'admin-dashboard/admin-publication',
@@ -47,21 +78,8 @@ return [
                     ]
                 ],
                 [
-                    'id'    => 'admin-dashboard/admin-my-account',
-                    'label' => 'My account',
-                    'route' => 'admin-dashboard/admin-my-account',
-                    'pages' => [
-                        [
-                            'id' => 'admin-dashboard/admin-my-account/details',
-                            'label' => 'Details',
-                            'route' => 'admin-dashboard/admin-my-account/details'
-                        ],
-                        [
-                            'id' => 'admin-dashboard/admin-my-account/change-password',
-                            'label' => 'Change password',
-                            'route' => 'admin-dashboard/admin-my-account/change-password',
-                        ],
-                    ]
+                    'label' => 'System messages',
+                    'route' => 'admin-dashboard/admin-system-message',
                 ],
                 [
                     'id' => 'admin-dashboard/continuations',
@@ -88,6 +106,7 @@ return [
                 // back to the generate page
                 [
                     'id' => 'admin-dashboard/continuations-details',
+                    'visible' => false,
                     'label' => 'admin-continuations-title',
                     'route' => 'admin-dashboard/admin-continuation',
                     'pages' => [
@@ -104,68 +123,6 @@ return [
                             'route' => 'admin-dashboard/admin-continuation/checklist-reminder',
                         ]
                     ]
-                ],
-                [
-                    'label' => 'Reports',
-                    'id' => 'admin-dashboard/admin-report',
-                    'route' => 'admin-dashboard/admin-report',
-                    'pages' => [
-                        [
-                            'id' => 'admin-dashboard/admin-report/ch-alerts',
-                            'label' => 'Companies House alerts',
-                            'route' => 'admin-dashboard/admin-report/ch-alerts'
-                        ],
-                        [
-                            'id' => 'admin-dashboard/admin-report/cpms',
-                            'label' => 'CPMS Financial report',
-                            'route' => 'admin-dashboard/admin-report/cpms'
-                        ],
-                        [
-                            'id' => 'admin-dashboard/admin-report/cpid-class',
-                            'label' => 'CPID classification',
-                            'route' => 'admin-dashboard/admin-report/cpid-class',
-                        ],
-                        [
-                            'id' => 'admin-dashboard/admin-report/exported-reports',
-                            'label' => 'Exported reports',
-                            'route' => 'admin-dashboard/admin-report/exported-reports',
-                        ],
-                    ],
-                ],
-                [
-                    'id'    => 'admin-dashboard/admin-user-management',
-                    'label' => 'User management',
-                    'route' => 'admin-dashboard/admin-user-management',
-                    'pages' => [
-                        [
-                            'id' => 'admin-dashboard/admin-team-management',
-                            'label' => 'Teams',
-                            'route' => 'admin-dashboard/admin-team-management',
-                        ],
-                        [
-                            'id' => 'admin-dashboard/admin-printer-management',
-                            'label' => 'Printers',
-                            'route' => 'admin-dashboard/admin-printer-management',
-                        ],
-                        [
-                            'id' => 'admin-dashboard/admin-partner-management',
-                            'label' => 'Partner organisations',
-                            'route' => 'admin-dashboard/admin-partner-management',
-                        ]
-                    ]
-                ],
-                [
-                    'id' => 'admin-dashboard/admin-financial-standing',
-                    'label' => 'Financial standing rates',
-                    'route' => 'admin-dashboard/admin-financial-standing',
-                ],
-                [
-                    'label' => 'Public holidays',
-                    'route' => 'admin-dashboard/admin-public-holiday',
-                ],
-                [
-                    'label' => 'System messages',
-                    'route' => 'admin-dashboard/admin-system-message',
                 ],
                 [
                     'id'    => 'admin-dashboard/admin-payment-processing',
@@ -194,6 +151,51 @@ return [
                         ],
                     ]
                 ],
+                [
+                    'id'    => 'admin-dashboard/admin-my-account',
+                    'visible' => false,
+                    'label' => 'My account',
+                    'route' => 'admin-dashboard/admin-my-account',
+                    'pages' => [
+                        [
+                            'id' => 'admin-dashboard/admin-my-account/details',
+                            'label' => 'Details',
+                            'route' => 'admin-dashboard/admin-my-account/details'
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-my-account/change-password',
+                            'label' => 'Change password',
+                            'route' => 'admin-dashboard/admin-my-account/change-password',
+                        ],
+                    ]
+                ],
+                [
+                    'label' => 'Reports',
+                    'id' => 'admin-dashboard/admin-report',
+                    'route' => 'admin-dashboard/admin-report',
+                    'pages' => [
+                        [
+                            'id' => 'admin-dashboard/admin-report/ch-alerts',
+                            'label' => 'Companies House alerts',
+                            'route' => 'admin-dashboard/admin-report/ch-alerts'
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-report/cpms',
+                            'label' => 'CPMS Financial report',
+                            'route' => 'admin-dashboard/admin-report/cpms'
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-report/cpid-class',
+                            'label' => 'CPID classification',
+                            'route' => 'admin-dashboard/admin-report/cpid-class',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-report/exported-reports',
+                            'label' => 'Exported reports',
+                            'route' => 'admin-dashboard/admin-report/exported-reports',
+                        ],
+                    ],
+                ]
             ]
         ]
     ]
