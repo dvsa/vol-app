@@ -17,6 +17,7 @@ use Dvsa\Olcs\Transfer\Command\Fee\RefundFee as RefundFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\ReverseTransaction as ReverseTransactionCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\AdjustTransaction as AdjustTransactionCmd;
 use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeType as FeeTypeQry;
@@ -636,6 +637,8 @@ trait FeesActionTrait
 
         $form->get('messages')->get('message')->setValue('fees.adjust-transaction.confirm');
 
+        $form->setData(\Olcs\Data\Mapper\AdjustTransaction::mapFromResult($transaction));
+
         $view = new ViewModel(array('form' => $form));
         $view->setTemplate('pages/form');
 
@@ -650,12 +653,8 @@ trait FeesActionTrait
         $data = (array) $this->getRequest()->getPost();
         $form->setData($data);
         if ($form->isValid()) {
-            $dtoData = [
-                'id' => $transactionId,
-                'reason' => $form->getData()['details']['reason'],
-            ];
-            var_dump($dtoData); exit;
-            $response = $this->handleCommand(ReverseTransactionCmd::create($dtoData));
+            $dtoData = \Olcs\Data\Mapper\AdjustTransaction::mapFromForm($form->getData());
+            $response = $this->handleCommand(AdjustTransactionCmd::create($dtoData));
             if ($response->isOk()) {
                 $this->addSuccessMessage('fees.adjust-transaction.success');
             } else {
