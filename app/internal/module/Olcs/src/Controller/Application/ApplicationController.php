@@ -17,6 +17,7 @@ use Dvsa\Olcs\Transfer\Query\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityQry;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
+use Common\Controller\Traits\CheckForCrudAction;
 
 /**
  * Application Controller
@@ -26,7 +27,8 @@ use Zend\View\Model\ViewModel;
 class ApplicationController extends AbstractController implements ApplicationControllerInterface
 {
     use Traits\LicenceControllerTrait,
-        Traits\ApplicationControllerTrait;
+        Traits\ApplicationControllerTrait,
+        CheckForCrudAction;
 
     /**
      * Placeholder stub
