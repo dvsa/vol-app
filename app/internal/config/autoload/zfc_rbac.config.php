@@ -32,7 +32,6 @@ return [
 
             // Admin Module Routes
             'admin-dashboard/admin-financial-standing*' => ['internal-admin'],
-            'admin-dashboard/admin-payment-processing*' => ['internal-admin'],
             'admin-dashboard/admin-system-message*' => ['internal-admin'],
             'admin-dashboard/admin-public-holiday*' => ['internal-admin'],
             'admin-dashboard/admin-team-management*' => ['internal-admin'],
