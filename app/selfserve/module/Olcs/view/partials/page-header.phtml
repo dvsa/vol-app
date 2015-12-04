@@ -25,7 +25,7 @@
               ?>
           </div>
           <?php
-          if (isset($this->pageHeaderUrl)) {
+          if (isset($this->pageHeaderUrl) && !empty($this->pageHeaderUrl)) {
           ?>
               <p><b><a href="<?php echo $this->url($this->pageHeaderUrl['route'], $this->pageHeaderUrl['params']);
                       ?>"><?php echo $this->translate($this->pageHeaderUrl['text']); ?></a></b></p>
