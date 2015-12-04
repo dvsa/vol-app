@@ -3,8 +3,10 @@
         <h2 class="global-header__title"><a href="/">OLCS</a></h2>
         <?php echo $this->partial('layout/partials/search'); ?>
         <?php
-        $navigation = $this->navigation('navigation')->findOneBy('id', 'admin-dashboard');
-        echo $this->navigation('navigation')->menu($navigation)->setPartial('layout/partials/admin-menu');
+        if ($this->isGranted('internal-case')) {
+            $navigation = $this->navigation('navigation')->findOneBy('id', 'admin-dashboard');
+            echo $this->navigation('navigation')->menu($navigation)->setPartial('layout/partials/admin-menu');
+        }
         ?>
     </div><!-- end global-header__wrapper -->
 </div><!-- end global-header -->
