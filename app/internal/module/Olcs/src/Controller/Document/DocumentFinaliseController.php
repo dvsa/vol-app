@@ -50,8 +50,7 @@ class DocumentFinaliseController extends AbstractDocumentController
             'template'    => $link
         ];
 
-        $this->setEnabledCsrf(false);
-        $form = $this->generateFormWithData('FinaliseDocument', 'processSaveLetter', $data);
+        $form = $this->generateFormWithData('FinaliseDocument', 'processSaveLetter', $data, false, false);
 
         if ($this->redirect !== null) {
             return $this->redirect;

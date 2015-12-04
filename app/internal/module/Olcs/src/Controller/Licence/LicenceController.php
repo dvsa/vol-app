@@ -14,6 +14,7 @@ use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Traits;
 use Olcs\Controller\Lva;
 use Zend\View\Model\ViewModel;
+use Common\Controller\Traits\CheckForCrudAction;
 
 /**
  * Licence Controller
@@ -23,7 +24,8 @@ use Zend\View\Model\ViewModel;
 class LicenceController extends AbstractController implements LicenceControllerInterface
 {
     use Lva\Traits\LicenceControllerTrait,
-        Traits\TaskSearchTrait;
+        Traits\TaskSearchTrait,
+        CheckForCrudAction;
 
     public function casesAction()
     {

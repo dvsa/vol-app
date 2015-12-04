@@ -10,6 +10,7 @@ namespace Olcs\Controller\Operator\Cases;
 use Dvsa\Olcs\Transfer\Query\Organisation\UnlicensedCases as OrganisationWithCases;
 use Olcs\Controller\Operator\OperatorController;
 use Zend\View\Model\ViewModel;
+use Common\Controller\Traits\CheckForCrudAction;
 
 /**
  * Unlicensed Cases Operator Controller
@@ -18,6 +19,8 @@ use Zend\View\Model\ViewModel;
  */
 class UnlicensedCasesOperatorController extends OperatorController
 {
+    use CheckForCrudAction;
+
     public function getLeftView()
     {
         return null;
