@@ -12,17 +12,18 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Fee\ApproveWaive as ApproveWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\CreateFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RecommendWaive as RecommendWaiveCmd;
-use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RefundFee as RefundFeeCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\AdjustTransaction as AdjustTransactionCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\ReverseTransaction as ReverseTransactionCmd;
-use Dvsa\Olcs\Transfer\Command\Transaction\AdjustTransaction as AdjustTransactionCmd;
 use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeType as FeeTypeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList as FeeTypeListQry;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
+use Olcs\Data\Mapper\AdjustTransaction as AdjustTransactionMapper;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
@@ -611,15 +612,8 @@ trait FeesActionTrait
     {
         $transactionId = $this->params('transaction');
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        // @todo
         $form = $formHelper->createFormWithRequest('AdjustTransaction', $this->getRequest());
-
-        if ($this->getRequest()->isPost()) {
-            $redirect = $this->handleAdjustTransactionPost($form, $transactionId);
-            if (!is_null($redirect)) {
-                return $redirect;
-            }
-        }
+        $form->get('messages')->get('message')->setValue('fees.adjust-transaction.confirm');
 
         $query = PaymentByIdQry::create(['id' => $transactionId]);
         $response = $this->handleQuery($query);
@@ -627,7 +621,6 @@ trait FeesActionTrait
             $this->addErrorMessage('unknown-error');
             return $this->redirectToTransaction();
         }
-
         $transaction = $response->getResult();
 
         if (!$transaction['canAdjust']) {
@@ -635,11 +628,17 @@ trait FeesActionTrait
             return $this->redirectToTransaction(true);
         }
 
-        $form->get('messages')->get('message')->setValue('fees.adjust-transaction.confirm');
-
-        if (!$this->getRequest()->isPost()) {
-            $form->setData(\Olcs\Data\Mapper\AdjustTransaction::mapFromResult($transaction));
+        if ($this->getRequest()->isPost()) {
+            $paymentMethod = $transaction['paymentMethod']['description'];
+            $redirect = $this->handleAdjustTransactionPost($form, $transaction);
+            if (!is_null($redirect)) {
+                return $redirect;
+            }
+        } else {
+            $form->setData(AdjustTransactionMapper::mapFromResult($transaction));
         }
+
+        $this->alterAdjustmentForm($form, $transaction);
 
         $view = new ViewModel(array('form' => $form));
         $view->setTemplate('pages/form');
@@ -647,28 +646,29 @@ trait FeesActionTrait
         return $this->renderView($view, 'fees.adjust-transaction.title');
     }
 
-    private function handleAdjustTransactionPost($form, $transactionId)
+    private function handleAdjustTransactionPost($form, $transaction)
     {
         if ($this->isButtonPressed('cancel')) {
             return $this->redirectToTransaction();
         }
         $data = (array) $this->getRequest()->getPost();
+
+        // re-add readonly value to form data
+        $data['details']['paymentMethod'] = $transaction['paymentMethod']['description'];
+
         $form->setData($data);
         if ($form->isValid()) {
-            $dtoData = \Olcs\Data\Mapper\AdjustTransaction::mapFromForm($form->getData());
+            $dtoData = AdjustTransactionMapper::mapFromForm($form->getData());
             $response = $this->handleCommand(AdjustTransactionCmd::create($dtoData));
-var_dump($response); exit;
             if ($response->isOk()) {
                 $this->addSuccessMessage('fees.adjust-transaction.success');
+                return $this->redirectToTransaction(true);
             } else {
-                $result = $response->getResult();
-                if (isset($result['messages'])) {
-                    foreach ($result['messages'] as $error) {
-                        $this->addErrorMessage($error);
-                    }
+                $flashErrors = AdjustTransactionMapper::mapFromErrors($form, $response->getResult());
+                foreach ($flashErrors as $error) {
+                    $this->addErrorMessage($error);
                 }
             }
-            return $this->redirectToTransaction(true);
         }
     }
 
@@ -765,6 +765,39 @@ var_dump($response); exit;
         // populate fee type select
         $options = $this->fetchFeeTypeValueOptions();
         $form->get('fee-details')->get('feeType')->setValueOptions($options);
+
+        return $form;
+    }
+
+    /**
+     * Alter adjustment form
+     *
+     * @param \Zend\Form\Form $form
+     * @param array $transaction
+     * @return \Zend\Form\Form
+     */
+    protected function alterAdjustmentForm($form, $transaction)
+    {
+        switch ($transaction['paymentMethod']['id']) {
+            case RefData::FEE_PAYMENT_METHOD_CASH :
+                $remove = ['chequeNo', 'chequeDate', 'poNo'];
+                break;
+            case RefData::FEE_PAYMENT_METHOD_CHEQUE :
+                $remove = ['poNo'];
+                break;
+            case RefData::FEE_PAYMENT_METHOD_POSTAL_ORDER :
+                $remove = ['chequeNo', 'chequeDate'];
+                break;
+            case RefData::FEE_PAYMENT_METHOD_CARD_ONLINE:
+            case RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE:
+            default:
+                $remove = ['received', 'payer', 'slipNo', 'chequeNo', 'chequeDate', 'poNo'];
+                break;
+        }
+
+        foreach ($remove as $field) {
+            $form->get('details')->remove($field);
+        }
 
         return $form;
     }

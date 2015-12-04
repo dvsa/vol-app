@@ -40,27 +40,7 @@ class AdjustTransactionDetails
      *      "label_attributes": {"id": "label-received"}
      * })
      * @Form\Type("Text")
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
-     *          "context_field": "paymentType",
-     *          "context_values": {"fpm_card_offline"},
-     *          "context_truth": false,
-     *          "allow_empty": false,
-     *          "validators": {
-     *              {
-     *                   "name": "Zend\Validator\GreaterThan",
-     *                   "options": {
-     *                        "min": 0,
-     *                        "messages": {
-     *                             "notGreaterThan": "The payment amount must be greater than %min%"
-     *                        }
-     *                   },
-     *                   "break_chain_on_failure": true
-     *              },
-     *              {"name": "\Common\Form\Elements\Validators\ReceivedAmount"}
-     *          }
-     *      }
-     * })
+     * @Form\Validator({"name": "Common\Form\Elements\Validators\Money"})
      */
     public $received = null;
 
