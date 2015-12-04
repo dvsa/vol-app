@@ -11,6 +11,7 @@
 return [
     'guards' => [
         'ZfcRbac\Guard\RoutePermissionsGuard' =>[
+
             // OLCS Module Routes
             'case_processing_notes' => ['internal-notes'],
             '*case*' => ['internal-case'],
@@ -44,8 +45,10 @@ return [
                 'internal-view'
             ],
 
-            // Other admin pages require mininmum case permission
-            'admin-dashboard*' => ['internal-case'],
+            // Other admin pages require mininmum internal-edit permission
+            'admin-dashboard*' => [
+                'internal-edit',
+            ],
 
             // Global route rule needs to be last
             '*' => ['internal-view'],
