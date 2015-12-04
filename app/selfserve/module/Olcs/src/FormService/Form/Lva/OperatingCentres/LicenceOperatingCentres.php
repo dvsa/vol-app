@@ -42,5 +42,8 @@ class LicenceOperatingCentres extends CommonLicenceOperatingCentres
                 );
             }
         }
+
+        $this->removeStandardFormActions($form);
+        $this->addBackToOverviewLink($form, 'licence');
     }
 }

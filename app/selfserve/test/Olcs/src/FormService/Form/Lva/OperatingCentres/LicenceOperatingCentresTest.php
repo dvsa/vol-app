@@ -123,6 +123,20 @@ class LicenceOperatingCentresTest extends MockeryTestCase
             ->with('dataTrafficArea')
             ->andReturn(true);
 
+        $formActions = m::mock();
+        $formActions->shouldReceive('has')->with('save')->andReturn(true);
+        $formActions->shouldReceive('remove')->once()->with('save');
+        $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
+        $formActions->shouldReceive('remove')->once()->with('cancel');
+        $formActions->shouldReceive('has')->with('saveAndContinue')->andReturn(true);
+        $formActions->shouldReceive('remove')->once()->with('saveAndContinue');
+
+        $formActions->shouldReceive('add')->once()
+            ->with(m::type(\Common\Form\Elements\InputFilters\Lva\BackToLicenceActionLink::class));
+
+        $this->form->shouldReceive('has')->with('form-actions')->andReturn(true);
+        $this->form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
+
         $this->form->shouldReceive('get')
             ->with('dataTrafficArea')
             ->andReturn(
