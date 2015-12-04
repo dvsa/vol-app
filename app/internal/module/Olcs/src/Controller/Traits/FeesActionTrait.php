@@ -637,7 +637,9 @@ trait FeesActionTrait
 
         $form->get('messages')->get('message')->setValue('fees.adjust-transaction.confirm');
 
-        $form->setData(\Olcs\Data\Mapper\AdjustTransaction::mapFromResult($transaction));
+        if (!$this->getRequest()->isPost()) {
+            $form->setData(\Olcs\Data\Mapper\AdjustTransaction::mapFromResult($transaction));
+        }
 
         $view = new ViewModel(array('form' => $form));
         $view->setTemplate('pages/form');
@@ -655,6 +657,7 @@ trait FeesActionTrait
         if ($form->isValid()) {
             $dtoData = \Olcs\Data\Mapper\AdjustTransaction::mapFromForm($form->getData());
             $response = $this->handleCommand(AdjustTransactionCmd::create($dtoData));
+var_dump($response); exit;
             if ($response->isOk()) {
                 $this->addSuccessMessage('fees.adjust-transaction.success');
             } else {

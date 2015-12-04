@@ -23,10 +23,15 @@ class AdjustTransactionDetails
     public $version = null;
 
     /**
+     * @Form\Type("Hidden")
+     */
+    public $paymentType = null;
+
+    /**
      * @Form\Options({"label": "fees.payment_method"})
      * @Form\Type("Common\Form\Elements\Types\Readonly")
      */
-    public $paymentType = null;
+    public $paymentMethod = null;
 
     /**
      * @Form\Options({
@@ -221,8 +226,16 @@ class AdjustTransactionDetails
 
     /**
      * @Form\Attributes({"class":"long","id":""})
-     * @Form\Options({"label":"Reason for the adjustment"})
+     * @Form\Options({
+     *     "label":"Reason for the adjustment",
+     *     "short-label":"Reason",
+     *     "label_attributes": {"id": "label-reason"}
+     * })
      * @Form\Type("\Common\Form\Elements\InputFilters\Textarea")
+     * @Form\Validator({
+     *     "name": "Zend\Validator\NotEmpty",
+     *     "options": {"messages": {"isEmpty": "You must enter a reason"}}
+     * })
      */
     public $reason = null;
 }

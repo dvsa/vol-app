@@ -19,7 +19,8 @@ class AdjustTransaction implements MapperInterface
     public static function mapFromResult(array $data)
     {
         $formData['details'] = [
-            'paymentType' => $data['paymentMethod']['description'],
+            'paymentType' => $data['paymentMethod']['id'],
+            'paymentMethod' => $data['paymentMethod']['description'],
             'received' => $data['amount'],
             'payer' => $data['payerName'],
             'slipNo' => $data['payingInSlipNumber'],
@@ -43,6 +44,7 @@ class AdjustTransaction implements MapperInterface
     {
         $details = $data['details'];
         unset($details['paymentType']); // we can never change this so remove it
+        unset($details['paymentMethod']);
         return $details;
     }
 
