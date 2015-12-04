@@ -13,7 +13,7 @@ return [
         'ZfcRbac\Guard\RoutePermissionsGuard' =>[
 
             // OLCS Module Routes
-            'case_processing_notes' => ['internal-notes'],
+            '*processing/notes*' => ['internal-notes'],
             '*case*' => ['internal-case'],
             '*documents*' => ['internal-documents'],
             '*docs*' => ['internal-documents'],
