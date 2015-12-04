@@ -32,12 +32,20 @@ return [
             // Admin Module Routes
             'admin-dashboard/admin-financial-standing*' => ['internal-admin'],
             'admin-dashboard/admin-payment-processing*' => ['internal-admin'],
-            'admin-dashboard/admin-system-message' => ['internal-admin'],
-            'admin-dashboard/admin-public-holiday' => ['internal-admin'],
-            'admin-dashboard/admin-team-management' => ['internal-admin'],
-            'admin-dashboard/admin-partner-management' => ['internal-admin'],
-            'admin-dashboard/admin-printer-management' => ['internal-admin'],
-            'admin-dashboard/admin-user-management' => ['internal-admin'],
+            'admin-dashboard/admin-system-message*' => ['internal-admin'],
+            'admin-dashboard/admin-public-holiday*' => ['internal-admin'],
+            'admin-dashboard/admin-team-management*' => ['internal-admin'],
+            'admin-dashboard/admin-partner-management*' => ['internal-admin'],
+            'admin-dashboard/admin-printer-management*' => ['internal-admin'],
+            'admin-dashboard/admin-user-management*' => ['internal-admin'],
+
+            // All Internal users can see my account, to change their details, password etc
+            'admin-dashboard/admin-my-account*' => [
+                'internal-view'
+            ],
+
+            // Other admin pages require mininmum case permission
+            'admin-dashboard*' => ['internal-case'],
 
             // Global route rule needs to be last
             '*' => ['internal-view'],
