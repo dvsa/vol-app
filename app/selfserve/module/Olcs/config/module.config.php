@@ -1099,9 +1099,15 @@ return array(
                 'manage-user' => ['can-manage-user-selfserve'],
 
                 // Bus reg stuff and who can access
-                'ebsr' => ['selfserve-ebsr'],
+                // upload page accessible by operators only
+                'bus-registration/ebsr' => ['selfserve-ebsr-upload'],
+
+                // bus reg list accessible by operators and LAs
+                'bus-registration' => ['selfserve-ebsr-list'],
+
+                // details page accessible by everyone inc anon. users
                 'bus-registration/details' => ['*'],
-                'bus-registration' => ['selfserve-ebsr'],
+
                 'entity-view' => [
                     '*'
                 ],
