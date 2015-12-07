@@ -68,5 +68,13 @@ return array(
             'error/403' => __DIR__ . '/../../module/Olcs/view/error/dev-403.phtml',
             'error/index' => __DIR__ . '/../../module/Olcs/view/error/dev-index.phtml'
         ),
-    )
+    ),
+
+    'openam' => [
+        'url' => 'http://olcs-internal.olcs.gov.uk/secure/',
+        'realm' => 'internal',
+        'cookie' => [
+            'domain' => '.olcs.gov.uk',
+        ]
+    ]
 );
