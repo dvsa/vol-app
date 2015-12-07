@@ -25,9 +25,9 @@ class PrintingController extends AbstractInternalController
     public function indexAction()
     {
         return $this->redirectToRoute(
-            'admin-dashboard/admin-printing/irfo-stock-control',
+            'admin-dashboard/admin-disc-printing',
             ['action'=>'index'],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
+            ['code' => '302'],
             true
         );
     }
