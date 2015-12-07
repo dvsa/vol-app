@@ -83,6 +83,9 @@ class PiController extends AbstractInternalController implements CaseControllerI
         'sla' => [
             'route' => 'case_pi',
             'action' => 'index'
+        ],
+        'details' => [
+            'action' => 'index'
         ]
     ];
 
@@ -92,6 +95,16 @@ class PiController extends AbstractInternalController implements CaseControllerI
         $view->setTemplate('sections/cases/partials/left');
 
         return $view;
+    }
+
+    /**
+     * Ensure index action redirects to details action
+     *
+     * @return array|mixed|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
+    public function detailsAction()
+    {
+        return $this->redirectTo([]);
     }
 
     /**

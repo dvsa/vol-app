@@ -425,7 +425,7 @@ $routes = [
             'route' => '/case/:case/pi[/:action][/]',
             'constraints' => [
                 'case' => '[0-9]+',
-                'action' => '(close|reopen|index)',
+                'action' => '(close|reopen|index|details)',
             ],
             'defaults' => [
                 'controller' => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
