@@ -27,7 +27,7 @@ class PrintingController extends AbstractInternalController
         return $this->redirectToRoute(
             'admin-dashboard/admin-disc-printing',
             ['action'=>'index'],
-            ['code' => '303'],
+            ['code' => '302'],
             true
         );
     }
