@@ -65,9 +65,6 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
         if ($this->getRequest()->isPost()) {
             // if this is post always take organisation type from parameters
             $form->setData($post);
-            if (!$this->getEnabledCsrf()) {
-                $this->getServiceLocator()->get('Helper\Form')->remove($form, 'csrf');
-            }
             if ($form->isValid()) {
 
                 $action = $operator ? 'edit' : 'add';

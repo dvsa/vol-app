@@ -5,6 +5,8 @@
  */
 namespace Olcs\Controller\Traits;
 
+use \Dvsa\Olcs\Transfer\Query\Operator\BusinessDetails as BusinessDetailsQry;
+
 /**
  * Operator Controller Trait
  */
@@ -37,12 +39,25 @@ trait OperatorControllerTrait
         return $view;
     }
 
-    /**
-     * @todo this needs migrating, should've been part of OLCS-9692?
-     */
     protected function getBusinessDetailsData($organisationId)
     {
-        return $this->getServiceLocator()->get('Entity\Organisation')->getBusinessDetailsData($organisationId);
+        $retv = [];
+        $queryToSend = $this->getServiceLocator()
+            ->get('TransferAnnotationBuilder')
+            ->createQuery(
+                BusinessDetailsQry::create(['id' => $organisationId])
+            );
+
+        $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            $retv = $response->getResult();
+        }
+        return $retv;
     }
 
     /**
