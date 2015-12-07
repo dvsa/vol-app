@@ -28,11 +28,6 @@ class AbstractSummaryControllerTest extends MockeryTestCase
             ->shouldAllowMockingProtectedMethods();
     }
 
-    protected function setupApplicationData($tma)
-    {
-    }
-
-
     public function testIndexAction()
     {
         $applicationData = [
@@ -83,9 +78,9 @@ class AbstractSummaryControllerTest extends MockeryTestCase
 
 
     /**
-     * @dataProvider dataProviderImportandText
+     * @dataProvider dataProviderImportantText
      */
-    public function testImportandText($isVariation, $goodsOrPsv, $licenceType, $expected)
+    public function testImportantText($isVariation, $goodsOrPsv, $licenceType, $expected)
     {
         $applicationData = [
             'id' => 712,
@@ -116,7 +111,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
         $this->assertSame('RENDERED', $this->sut->indexAction());
     }
 
-    public function dataProviderImportandText()
+    public function dataProviderImportantText()
     {
         return [
             // isVariation, goodsOrPsv, licence type, expected

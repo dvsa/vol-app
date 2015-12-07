@@ -67,7 +67,7 @@ abstract class AbstractSummaryController extends AbstractController
     }
 
     /**
-     * Get the important text translation ley for as application/variation
+     * Get the important text translation key for an application/variation
      *
      * @param array $applicationData Application data
      *
@@ -75,14 +75,14 @@ abstract class AbstractSummaryController extends AbstractController
      */
     protected function getImportantText($applicationData)
     {
-        $isVaration = $applicationData['isVariation'];
+        $isVariation = $applicationData['isVariation'];
         $licenceType = $applicationData['licenceType']['id'];
         $goodsOrPsv = $applicationData['goodsOrPsv']['id'];
 
         if ($goodsOrPsv === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
-            return $isVaration ? 'application-summary-important-goods-var' : 'application-summary-important-goods-app';
+            return $isVariation ? 'application-summary-important-goods-var' : 'application-summary-important-goods-app';
         } else {
-            if ($isVaration) {
+            if ($isVariation) {
                 return 'application-summary-important-psv-var';
             } else {
                 if ($licenceType === RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
