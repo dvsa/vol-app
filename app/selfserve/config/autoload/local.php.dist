@@ -64,4 +64,12 @@ return array(
             'error/index' => __DIR__ . '/../../module/Olcs/view/error/dev-index.phtml'
         ),
     ),
+
+    'openam' => [
+        'url' => 'http://olcs-selfserve.olcs.gov.uk/secure/',
+        'realm' => 'selfserve',
+        'cookie' => [
+            'domain' => '.olcs.gov.uk',
+        ]
+    ]
 );

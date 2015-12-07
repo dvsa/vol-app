@@ -26,6 +26,10 @@
             "type": "vcs"
         },
         {
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-auth.git",
+            "type": "vcs"
+        },
+        {
             "type": "vcs",
             "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-autoload.git"
         },
@@ -46,6 +50,7 @@
         "olcs/OlcsCommon": "dev-develop",
         "olcs/olcs-transfer": "dev-develop",
         "olcs/olcs-utils": "dev-develop",
+        "olcs/olcs-auth": "dev-develop",
         "olcs/olcs-logging": "dev-develop"
     },
     "require-dev": {
