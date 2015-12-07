@@ -8,7 +8,6 @@
 namespace Olcs\Controller\Operator;
 
 use Dvsa\Olcs\Transfer\Command\Application\CreateApplication;
-use Olcs\Controller\CrudAbstract;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
