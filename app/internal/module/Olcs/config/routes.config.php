@@ -1799,7 +1799,7 @@ $routes = [
                             'route' => 'delete/:doc[/]',
                             'defaults' => [
                                 'type' => 'irfoOrganisation',
-                                'controller' => 'OperatorController',
+                                'controller' => 'OperatorDocsController',
                                 'action' => 'delete-document'
                             ]
                         ],
