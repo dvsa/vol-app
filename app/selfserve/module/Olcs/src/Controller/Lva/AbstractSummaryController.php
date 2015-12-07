@@ -62,6 +62,35 @@ abstract class AbstractSummaryController extends AbstractController
             'actions' => $data['actions'],
             'transportManagers' => $data['transportManagers'] ? $data['transportManagers'] : [],
             'outstandingFee' => $data['outstandingFee'],
+            'importantText' => $this->getImportantText($data),
         ];
+    }
+
+    /**
+     * Get the important text translation ley for as application/variation
+     *
+     * @param array $applicationData Application data
+     *
+     * @return string translation key
+     */
+    protected function getImportantText($applicationData)
+    {
+        $isVaration = $applicationData['isVariation'];
+        $licenceType = $applicationData['licenceType']['id'];
+        $goodsOrPsv = $applicationData['goodsOrPsv']['id'];
+
+        if ($goodsOrPsv === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            return $isVaration ? 'application-summary-important-goods-var' : 'application-summary-important-goods-app';
+        } else {
+            if ($isVaration) {
+                return 'application-summary-important-psv-var';
+            } else {
+                if ($licenceType === RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+                    return 'application-summary-important-psv-app-sr';
+                } else {
+                    return 'application-summary-important-psv-app';
+                }
+            }
+        }
     }
 }
