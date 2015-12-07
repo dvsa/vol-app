@@ -398,7 +398,7 @@ trait FeesActionTrait
         $view = new ViewModel($viewParams);
         $view->setTemplate('sections/fees/pages/transaction-details');
 
-        $layout = $this->renderLayout($view, 'Transaction # ' . $transaction['id']);
+        $layout = $this->renderLayout($view, $title);
 
         $this->maybeClearLeft($layout);
 
