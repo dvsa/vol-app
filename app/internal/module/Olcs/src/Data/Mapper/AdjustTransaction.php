@@ -21,7 +21,7 @@ class AdjustTransaction implements MapperInterface
         $formData['details'] = [
             'paymentType' => $data['paymentMethod']['id'],
             'paymentMethod' => $data['paymentMethod']['description'],
-            'received' => $data['amount'],
+            'received' => $data['amountAfterAdjustment'],
             'payer' => $data['payerName'],
             'slipNo' => $data['payingInSlipNumber'],
             'chequeNo' => $data['chequePoNumber'],
