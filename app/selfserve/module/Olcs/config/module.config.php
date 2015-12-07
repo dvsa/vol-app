@@ -1024,6 +1024,18 @@ return array(
                     )
                 ),
             ),
+            array(
+                'id' => 'signin',
+                'label' => 'back-to-sign-in',
+                'route' => 'auth/login',
+                'pages' => array(
+                    array(
+                        'id' => 'forgot-password',
+                        'label' => 'auth.forgot-password.label',
+                        'route' => 'auth/forgot-password',
+                    )
+                )
+            )
         )
     ),
     'asset_path' => '//dev_dvsa-static.web01.olcs.mgt.mtpdvsa',
