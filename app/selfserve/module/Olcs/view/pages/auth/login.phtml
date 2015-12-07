@@ -9,11 +9,12 @@
             <p><?php echo sprintf($this->translate('signin-or-register-text'), $this->url('user-registration')); ?></p>
             <hr>
             <?php
-            if (isset($authenticationFailed) && $authenticationFailed) {
+            echo $this->flashMessengerAll();
+            if (isset($failed) && $failed) {
                 ?>
                 <div class="validation-summary">
                     <h3><?php echo $this->translate('auth.login.failed.title'); ?></h3>
-                    <p><?php echo $this->translate($authenticationFailureReason); ?></p>
+                    <p><?php echo $this->translate('auth.login.failed.reason.' . $failureReason); ?></p>
                 </div>
                 <?php
             }

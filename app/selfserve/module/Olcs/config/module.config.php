@@ -964,6 +964,7 @@ return array(
             'layout/layout' => __DIR__ . '/../view/layouts/base.phtml',
             'auth/layout' => __DIR__ . '/../view/layouts/base.phtml',
             'auth/login' => __DIR__ . '/../view/pages/auth/login.phtml',
+            'auth/expired-password' => __DIR__ . '/../view/pages/auth/expired-password.phtml',
             'layout/ajax' => __DIR__ . '/../view/layouts/ajax.phtml',
             'error/404' => __DIR__ . '/../view/error/404.phtml',
             'error/403' => __DIR__ . '/../view/error/404.phtml',
