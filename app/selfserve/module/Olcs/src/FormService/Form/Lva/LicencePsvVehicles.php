@@ -18,5 +18,6 @@ class LicencePsvVehicles extends PsvVehicles
     {
         parent::alterForm($form);
         $this->removeFormAction($form, 'saveAndContinue');
+        return $form;
     }
 }
