@@ -8,18 +8,18 @@
 namespace Olcs\Controller\Operator;
 
 use Dvsa\Olcs\Transfer\Command\Application\CreateApplication;
-use Olcs\Controller\CrudAbstract;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
+use Olcs\Controller\AbstractController;
 
 /**
  * Operator Controller
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OperatorController extends CrudAbstract implements OperatorControllerInterface, LeftViewProvider
+class OperatorController extends AbstractController implements OperatorControllerInterface, LeftViewProvider
 {
     use Traits\OperatorControllerTrait,
         Traits\ListDataTrait;

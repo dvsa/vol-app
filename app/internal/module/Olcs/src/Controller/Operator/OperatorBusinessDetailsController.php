@@ -125,9 +125,6 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         }
 
         if ($this->getRequest()->isPost() && $validateAndSave) {
-            if (!$this->getEnabledCsrf()) {
-                $this->getServiceLocator()->get('Helper\Form')->remove($form, 'csrf');
-            }
 
             $action = $operator ? 'edit' : 'add';
             $response = $this->saveForm($form, $action);

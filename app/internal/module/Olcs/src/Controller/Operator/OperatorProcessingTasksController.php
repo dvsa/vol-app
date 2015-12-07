@@ -58,14 +58,4 @@ class OperatorProcessingTasksController extends OperatorController
 
         return $this->renderView($view);
     }
-
-    /**
-     * Sets the table filters.
-     *
-     * @param mixed $filters
-     */
-    protected function setTableFilters($filters)
-    {
-        $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
-    }
 }
