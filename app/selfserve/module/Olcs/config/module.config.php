@@ -1055,7 +1055,7 @@ return array(
             'lva-application-goods-vehicles-filters' => LvaFormService\ApplicationGoodsVehiclesFilters::class,
             // External common goods vehicles vehicle form service
             'lva-application-goods-vehicles-add-vehicle' => LvaFormService\GoodsVehicles\AddVehicle::class,
-            'lva-licence-vehicles_psv' => LvaFormService\PsvVehicles::class,
+            'lva-licence-vehicles_psv' => LvaFormService\LicencePsvVehicles::class,
             'lva-variation-vehicles_psv' => LvaFormService\VariationPsvVehicles::class,
             'lva-licence-goods-vehicles' => LvaFormService\LicenceGoodsVehicles::class,
             'lva-variation-goods-vehicles' => LvaFormService\VariationGoodsVehicles::class,
