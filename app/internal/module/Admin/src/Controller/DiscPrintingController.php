@@ -20,13 +20,14 @@ use Admin\Data\Mapper\DiscPrinting as DiscPrintingMapper;
 use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
 use Common\Controller\Traits\GenericMethods;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
 /**
  * Disc Printing Controller
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class DiscPrintingController extends ZendAbstractActionController
+class DiscPrintingController extends ZendAbstractActionController implements LeftViewProvider
 {
     use GenericRenderView,
         GenericMethods;
@@ -362,5 +363,18 @@ class DiscPrintingController extends ZendAbstractActionController
         }
 
         return new JsonModel($retv);
+    }
+
+    public function getLeftView()
+    {
+        $view = new ViewModel(
+            [
+                'navigationId' => 'admin-dashboard/admin-printing',
+                'navigationTitle' => 'Printing'
+            ]
+        );
+        $view->setTemplate('admin/sections/admin/partials/generic-left');
+
+        return $view;
     }
 }

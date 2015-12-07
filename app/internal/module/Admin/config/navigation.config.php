@@ -41,6 +41,10 @@ return [
                     'route' => 'admin-dashboard/admin-printing',
                     'pages' => [
                         [
+                            'label' => 'Disc Printing',
+                            'route' => 'admin-dashboard/admin-disc-printing',
+                        ],
+                        [
                             'id' => 'admin-dashboard/admin-printing/irfo-stock-control',
                             'label' => 'IRFO stock control',
                             'route' => 'admin-dashboard/admin-printing/irfo-stock-control',
@@ -51,10 +55,6 @@ return [
                     'id' => 'admin-dashboard/admin-financial-standing',
                     'label' => 'Financial standing rates',
                     'route' => 'admin-dashboard/admin-financial-standing'
-                ],
-                [
-                    'label' => 'Disc Printing',
-                    'route' => 'admin-dashboard/admin-disc-printing',
                 ],
                 [
                     'label' => 'Public holidays',
