@@ -106,7 +106,6 @@ return [
                 // back to the generate page
                 [
                     'id' => 'admin-dashboard/continuations-details',
-                    'visible' => false,
                     'label' => 'admin-continuations-title',
                     'route' => 'admin-dashboard/admin-continuation',
                     'pages' => [
