@@ -94,6 +94,11 @@ class UserManagementController extends AbstractInternalController implements Lef
         ]
     ];
 
+    /**
+     * Defines left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -107,15 +112,22 @@ class UserManagementController extends AbstractInternalController implements Lef
         return $view;
     }
 
+    /**
+     * Index action
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
         return $this->redirect()->toRoute('admin-dashboard/admin-team-management', [], ['code' => 303]);
     }
 
     /**
-     * Gets a from from either a built or custom form config.
-     * @param type $type
-     * @return type
+     * Gets a form from either a built or custom form config.
+     *
+     * @param string $type
+     *
+     * @return \Zend\Form\Form
      */
     public function getForm($type)
     {
@@ -135,18 +147,34 @@ class UserManagementController extends AbstractInternalController implements Lef
         return $form;
     }
 
+    /**
+     * Alters the form for add
+     *
+     * @param \Zend\Form\Form $form The form to alter
+     * @param array $data Form data
+     *
+     * @return \Zend\Form\Form
+     */
     protected function alterFormForAdd($form, $data)
     {
         $form->get('userLoginSecurity')->remove('accountDisabled');
-        $form->get('userLoginSecurity')->remove('lockedDate');
+        $form->get('userLoginSecurity')->remove('disabledDate');
 
         return $form;
     }
 
+    /**
+     * Alters the form for edit
+     *
+     * @param \Zend\Form\Form $form The form to alter
+     * @param array $data Form data
+     *
+     * @return \Zend\Form\Form
+     */
     protected function alterFormForEdit($form, $data)
     {
-        if (empty($data['userLoginSecurity']['lockedDate'])) {
-            $form->get('userLoginSecurity')->remove('lockedDate');
+        if (empty($data['userLoginSecurity']['disabledDate'])) {
+            $form->get('userLoginSecurity')->remove('disabledDate');
         }
 
         return $form;
@@ -156,6 +184,7 @@ class UserManagementController extends AbstractInternalController implements Lef
      * Presentation logic to process an application look up
      *
      * @param $form
+     *
      * @return \Zend\Form\Form
      */
     protected function processApplicationTransportManagerLookup($form)
@@ -199,7 +228,9 @@ class UserManagementController extends AbstractInternalController implements Lef
 
     /**
      * Fetches a list of Transport Managers by application Id
+     *
      * @param integer $applicationId
+     *
      * @return array
      */
     protected function fetchTmListOptionsByApplicationId($applicationId)

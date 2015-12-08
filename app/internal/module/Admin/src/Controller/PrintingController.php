@@ -5,15 +5,18 @@
  */
 namespace Admin\Controller;
 
-use Common\Controller\AbstractActionController;
+use Olcs\Controller\AbstractInternalController;
+use Common\Controller\Traits\GenericMethods;
 
 /**
  * Printing Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PrintingController extends AbstractActionController
+class PrintingController extends AbstractInternalController
 {
+    use GenericMethods;
+
     /**
      * Index action
      *
@@ -22,9 +25,9 @@ class PrintingController extends AbstractActionController
     public function indexAction()
     {
         return $this->redirectToRoute(
-            'admin-dashboard/admin-printing/irfo-stock-control',
+            'admin-dashboard/admin-disc-printing',
             ['action'=>'index'],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
+            ['code' => '302'],
             true
         );
     }

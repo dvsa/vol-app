@@ -29,6 +29,7 @@ use Olcs\Data\Mapper\OtherLicence as OtherLicenceMapper;
 use Dvsa\Olcs\Transfer\Command\OtherLicence\CreateForTma as CreateForTmaDto;
 use Dvsa\Olcs\Transfer\Command\OtherLicence\CreateForTml as CreateForTmlDto;
 use Dvsa\Olcs\Transfer\Command\OtherLicence\UpdateForTma as UpdateForTmaDto;
+use Common\Controller\Traits\CheckForCrudAction;
 
 /**
  * Transport Manager Details Responsibility Controller
@@ -38,6 +39,10 @@ use Dvsa\Olcs\Transfer\Command\OtherLicence\UpdateForTma as UpdateForTmaDto;
 class TransportManagerDetailsResponsibilityController extends AbstractTransportManagerDetailsController implements
     LeftViewProvider
 {
+    use CheckForCrudAction {
+        CheckForCrudAction::getActionFromFullActionName as parentGetActionFromFullActionName;
+    }
+
     protected $responsibilities = null;
 
     protected $licenceId = null;
@@ -933,6 +938,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             return 'add';
         }
 
-        return parent::getActionFromFullActionName($action);
+        return $this->parentGetActionFromFullActionName($action);
     }
 }

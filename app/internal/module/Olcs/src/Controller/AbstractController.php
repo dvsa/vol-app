@@ -10,15 +10,21 @@ namespace Olcs\Controller;
 
 use Common\Controller\Traits as CommonTraits;
 use Olcs\Controller\Traits as OlcsTraits;
-use Common\Controller\AbstractActionController;
+use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Common\Controller\Traits\GenericRenderView;
+use Common\Controller\Traits\GenericMethods;
+use Common\Util\FlashMessengerTrait;
 
 /**
  * Abstract Controller
  */
-class AbstractController extends AbstractActionController
+class AbstractController extends ZendAbstractActionController
 {
     use CommonTraits\ViewHelperManagerAware,
-        OlcsTraits\ListDataTrait;
+        OlcsTraits\ListDataTrait,
+        GenericRenderView,
+        GenericMethods,
+        FlashMessengerTrait;
 
     /**
      * Gets a variable from the route

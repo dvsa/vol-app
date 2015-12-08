@@ -5,12 +5,25 @@ namespace Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
 
 /**
+ * @NOTE 3 December 2015 I don't think this trait is used anymore
+ *
  * Class DeleteActionTrait
  * @package Olcs\Controller
  */
 trait DeleteActionTrait
 {
     abstract protected function redirectToIndex();
+
+    /**
+     * Must be overridden to perform the delete
+     *
+     * @param int $id
+     *
+     * @return bool if delete was successful
+     */
+    protected function deleteItem($id)
+    {
+    }
 
     /**
      * Performs a delete action and redirects to the index
@@ -29,11 +42,14 @@ trait DeleteActionTrait
             return $this->renderView($response, $title);
         }
 
-        $this->makeRestCall($this->getDeleteServiceName(), 'DELETE', ['id' => $id]);
+        if ($this->deleteItem($id)) {
 
-        $this->addErrorMessage('Deleted successfully');
+            $this->addErrorMessage('Deleted successfully');
 
-        return $this->redirectToIndex();
+            return $this->redirectToIndex();
+        } else {
+            $this->addErrorMessage('Deleted failed');
+        }
     }
 
     /**

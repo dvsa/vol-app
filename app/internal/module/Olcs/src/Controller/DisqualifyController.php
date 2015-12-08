@@ -192,8 +192,8 @@ class DisqualifyController extends AbstractController
         }
 
         $person = $response->getResult();
-        $disqualification = isset($person['contactDetails'][0]['disqualifications'][0]) ?
-            $person['contactDetails'][0]['disqualifications'][0] : null;
+        $disqualification = isset($person['disqualifications'][0]) ?
+            $person['disqualifications'][0] : null;
 
         $data = [
             'name' => $person['forename'] .' '. $person['familyName'],

@@ -7,7 +7,6 @@
  */
 namespace Admin\Controller;
 
-use Common\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Common\Service\Entity\LicenceEntityService;
@@ -18,14 +17,21 @@ use Dvsa\Olcs\Transfer\Command\PsvDisc\ConfirmPrinting as ConfirmPrintingPsvDto;
 use Dvsa\Olcs\Transfer\Query\DiscSequence\DiscPrefixes as DiscPrefixesQry;
 use Dvsa\Olcs\Transfer\Query\DiscSequence\DiscsNumbering as DiscsNumberingQry;
 use Admin\Data\Mapper\DiscPrinting as DiscPrintingMapper;
+use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Common\Controller\Traits\GenericRenderView;
+use Common\Controller\Traits\GenericMethods;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
 /**
  * Disc Printing Controller
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class DiscPrintingController extends AbstractActionController
+class DiscPrintingController extends ZendAbstractActionController implements LeftViewProvider
 {
+    use GenericRenderView,
+        GenericMethods;
+
     /**
      * Discs on page
      */
@@ -357,5 +363,18 @@ class DiscPrintingController extends AbstractActionController
         }
 
         return new JsonModel($retv);
+    }
+
+    public function getLeftView()
+    {
+        $view = new ViewModel(
+            [
+                'navigationId' => 'admin-dashboard/admin-printing',
+                'navigationTitle' => 'Printing'
+            ]
+        );
+        $view->setTemplate('admin/sections/admin/partials/generic-left');
+
+        return $view;
     }
 }

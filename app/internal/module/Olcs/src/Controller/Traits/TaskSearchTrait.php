@@ -58,23 +58,16 @@ trait TaskSearchTrait
     {
         $form = $this->getForm('TasksHome');
 
-        // the filters generally double up perfectly as form
-        // and filter data, but team just needs a little bump...
-        if (isset($filters['assignedToTeam'])) {
-            $filters['team'] = $filters['assignedToTeam'];
-        }
-
-        // @see https://jira.i-env.net/browse/OLCS-6061. Don't worry, filters are ignored
-        // if the entity doesn't have the relevant field, so it's safe to cram this in here
-        $filters['isTask'] = true;
+        $team = (isset($filters['assignedToTeam'])) ? (int) $filters['assignedToTeam'] : null;
+        $category = (isset($filters['category'])) ? (int) $filters['category'] : null;
 
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
         $selects = [
-            'assignedToTeam' => $this->getListDataFromBackend('Team'),
-            'assignedToUser' => $this->getListDataFromBackend('User', $filters, 'loginId'),
-            'category' => $this->getListDataFromBackend('Category', [], 'description'),
-            'taskSubCategory' => $this->getListDataFromBackend('SubCategory', $filters, 'subCategoryName')
+            'assignedToTeam' => $this->getListDataTeam('All'),
+            'assignedToUser' => $this->getListDataUser($team, 'All'),
+            'category' => $this->getListDataCategoryTasks('All'),
+            'taskSubCategory' => $this->getListDataSubCategoryTask($category, 'All'),
         ];
 
         // bang the relevant data into the corresponding form inputs

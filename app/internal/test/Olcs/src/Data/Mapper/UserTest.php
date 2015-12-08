@@ -37,7 +37,7 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'loginId' => 'testuser',
                     'accountDisabled' => 'Y',
-                    'lockedDate' => '2015-06-07 17:11:12',
+                    'disabledDate' => '2015-06-07 17:11:12',
                     'userType' => 'internal',
                     'roles' => [
                         [
@@ -83,7 +83,7 @@ class UserTest extends MockeryTestCase
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
                         'accountDisabled' => 'Y',
-                        'lockedDate' => '07/06/2015 17:11:12',
+                        'disabledDate' => '07/06/2015 17:11:12',
                     ],
                     'userType' => [
                         'userType' => 'internal',

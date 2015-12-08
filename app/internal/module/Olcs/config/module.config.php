@@ -633,29 +633,6 @@ return array(
             'TmPreviousHistory' => 'Olcs\Filter\SubmissionSection\TmPreviousHistory',
         ]
     ],
-    'zfc_rbac' => [
-        'guards' => [
-            'ZfcRbac\Guard\RoutePermissionsGuard' =>[
-                'case_processing_notes' => ['internal-notes'],
-                '*case*' => ['internal-case'],
-                '*documents*' => ['internal-documents'],
-                '*docs*' => ['internal-documents'],
-                'fetch_tmp_document' => ['internal-documents'],
-                'note' => ['internal-notes'],
-                // cli module route
-                'batch-licence-status' => ['*'],
-                'batch-cns' => ['*'],
-                'process-queue' => ['*'],
-                'inspection-request-email' => ['*'],
-                'process-inbox' => ['*'],
-                'enqueue-ch-compare' => ['*'],
-                'not-found' => ['*'],
-                'server-error' => ['*'],
-                // Global route rule needs to be last
-                '*' => ['internal-view'],
-            ]
-        ]
-    ],
     'form_service_manager' => [
         'invokables' => [
             // Operating Centres

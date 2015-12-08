@@ -29,55 +29,6 @@ class IndexController extends AbstractController implements LeftViewProvider
 {
     use TaskSearchTrait;
 
-    const MAX_LIMIT = 100;
-
-    protected $entityListMap = [
-        'users' => [
-            'entity' => 'User',
-            'field' => 'team',
-            'title' => 'loginId'
-        ],
-        'task-sub-categories' => [
-            'entity' => 'SubCategory',
-            'field' => 'category',
-            'title' => 'subCategoryName',
-            'search' => [
-                'isTask' => true
-            ]
-        ],
-        'document-sub-categories' => [
-            'entity' => 'SubCategory',
-            'field' => 'category',
-            'title' => 'subCategoryName',
-            'search' => [
-                'isDoc' => true
-            ]
-        ],
-        'scanning-sub-categories' => [
-            'entity' => 'SubCategory',
-            'field' => 'category',
-            'title' => 'subCategoryName',
-            'search' => [
-                'isScan' => true
-            ]
-        ],
-        'document-templates' => [
-            'entity' => 'DocTemplate',
-            'field' => 'subCategory',
-            'title' => 'description'
-        ],
-        'sub-category-descriptions' => [
-            'entity' => 'SubCategoryDescription',
-            'field' => 'subCategory',
-            'title' => 'description'
-        ],
-        'fee-type' => [
-            'entity' => 'FeeType',
-            'field' => 'id',
-            'title' => 'id'
-        ]
-    ];
-
     public function indexAction()
     {
         $redirect = $this->processTasksActions();
@@ -127,28 +78,33 @@ class IndexController extends AbstractController implements LeftViewProvider
         $key = $this->params('type');
         $value = $this->params('value');
 
-        if (!isset($this->entityListMap[$key])) {
-            // handle separately?
-            throw new \Exception('Invalid entity filter key: ' . $key);
+        switch ($key) {
+            case 'users':
+                $results = $this->getListDataUser($value, 'All');
+                break;
+            case 'task-sub-categories':
+                $results = $this->getListDataSubCategoryTask($value, 'All');
+                break;
+            case 'document-sub-categories':
+                $results = $this->getListDataSubCategoryDocs($value, 'All');
+                break;
+            case 'scanning-sub-categories':
+                $results = $this->getListDataSubCategoryTask($value, 'All');
+                break;
+            case 'document-templates':
+                $results = $this->getListDataDocTemplates(null, $value, 'All');
+                break;
+            case 'sub-category-descriptions':
+                $results = $this->getListDataSubCategoryDescription($value);
+                break;
+            default:
+                throw new \Exception('Invalid entity filter key: ' . $key);
         }
-
-        $lookup = $this->entityListMap[$key];
-
-        // e.g. array("category_id" => 12)
-        $search = [$lookup['field'] => $value];
-
-        if (isset($lookup['search'])) {
-            $search = array_merge($search, $lookup['search']);
-        }
-
-        $titleKey = isset($lookup['title']) ? $lookup['title'] : 'name';
-
-        $results = $this->getListDataFromBackend($lookup['entity'], $search, $titleKey);
-        $viewResults = [];
 
         // iterate over the list data and just convert it to a more
         // JS friendly format (key/val assoc isn't quite such a neat
         // fit for frontend)
+        $viewResults = [];
         foreach ($results as $id => $result) {
             $viewResults[] = [
                 'value' => $id,

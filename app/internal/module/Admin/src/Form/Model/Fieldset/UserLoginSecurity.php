@@ -30,8 +30,8 @@ class UserLoginSecurity
     /**
      * @Form\Options({"label":"Account disabled"})
      * @Form\Required(false)
-     * @Form\Attributes({"id":"lockedDate", "required": false})
+     * @Form\Attributes({"id":"disabledDate", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")
      */
-    public $lockedDate = null;
+    public $disabledDate = null;
 }

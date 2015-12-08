@@ -6,7 +6,7 @@
 namespace Admin\Controller;
 
 use Common\Category;
-use Common\Controller\AbstractActionController;
+use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Organisation\CpidOrganisationExport;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
@@ -14,6 +14,9 @@ use Dvsa\Olcs\Transfer\Query\Organisation\CpidOrganisation;
 use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
+use Common\Controller\Traits\GenericMethods;
+use Common\Controller\Traits\GenericRenderView;
+use Common\Controller\Traits\ViewHelperManagerAware;
 
 /**
  * Report Controller
@@ -21,8 +24,12 @@ use Zend\View\Model\ViewModel;
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 
-class ReportController extends AbstractActionController implements LeftViewProvider
+class ReportController extends ZendAbstractActionController implements LeftViewProvider
 {
+    use GenericMethods,
+        GenericRenderView,
+        ViewHelperManagerAware;
+
     /**
      * @inheritdoc
      */
@@ -31,7 +38,7 @@ class ReportController extends AbstractActionController implements LeftViewProvi
         $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')
             ->set($view->getVariable('filterForm'));
 
-        return parent::renderView($view, $pageTitle, $pageSubTitle);
+        return $this->renderView($view, $pageTitle, $pageSubTitle);
     }
 
     public function getLeftView()

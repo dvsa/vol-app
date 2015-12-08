@@ -79,11 +79,9 @@ class LicenceOverviewHelperService extends AbstractHelperService
         }
 
         $urlHelper = $this->getServiceLocator()->get('Helper\Url');
-
         $url = $urlHelper->fromRoute(
-            'search',
-            ['index' => 'application', 'action' => 'search'],
-            ['query' => ['search' => $licence['licNo']]]
+            'operator/licences-applications',
+            ['organisation' => (int) $licence['organisation']['id']]
         );
 
         return sprintf('%s (<a href="%s">view</a>)', $count, $url);

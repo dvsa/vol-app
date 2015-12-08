@@ -89,7 +89,7 @@ class EnvironmentalComplaintFormTest extends AbstractFormTest
             new F\Test(
                 new F\Stack(['address', 'postcode']),
                 new F\Value(F\Value::VALID, 'AB1 2CD'),
-                new F\Value(F\Value::INVALID, null)
+                new F\Value(F\Value::VALID, null)
             ),
             new F\Test(
                 new F\Stack(['fields', 'description']),

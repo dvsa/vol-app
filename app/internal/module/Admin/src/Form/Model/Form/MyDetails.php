@@ -9,7 +9,7 @@ use Olcs\Form\Model\Fieldset\Base;
  * @Form\Name("admin-my-details")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label": "My details"})
+ * @Form\Options({"prefer_form_input_filter": true, "label": "My details", "bypass_auth":true})
  */
 class MyDetails extends Base
 {
