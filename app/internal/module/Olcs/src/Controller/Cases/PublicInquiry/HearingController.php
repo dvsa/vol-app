@@ -241,12 +241,18 @@ class HearingController extends AbstractInternalController implements CaseContro
             $form->get('fields')->remove('definition');
             $form->setOption('readonly', true);
         } else {
-            // set the label to republish if *any* publication has NOT been printed
-            if (!empty($data['pi']['publicationLinks'])) {
-                foreach ($data['pi']['publicationLinks'] as $pl) {
-                    if (isset($pl['publication']) && $pl['publication']['pubStatus']['id'] != 'pub_s_printed') {
-                        $form->get('form-actions')->get('publish')->setLabel('Republish');
-                        break;
+            if ($data['isCancelled'] === 'Y' || $data['isAdjourned'] === 'Y') {
+                // if cancelled or adjourned remove the publish button (OLCS-11222)
+                $form->get('form-actions')->remove('publish');
+            } else {
+
+                // set the label to republish if *any* publication has NOT been printed
+                if (!empty($data['pi']['publicationLinks'])) {
+                    foreach ($data['pi']['publicationLinks'] as $pl) {
+                        if (isset($pl['publication']) && $pl['publication']['pubStatus']['id'] != 'pub_s_printed') {
+                            $form->get('form-actions')->get('publish')->setLabel('Republish');
+                            break;
+                        }
                     }
                 }
             }
