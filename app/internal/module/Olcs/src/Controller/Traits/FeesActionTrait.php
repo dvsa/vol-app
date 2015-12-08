@@ -661,6 +661,7 @@ trait FeesActionTrait
             $dtoData = AdjustTransactionMapper::mapFromForm($form->getData());
             $response = $this->handleCommand(AdjustTransactionCmd::create($dtoData));
             if ($response->isOk()) {
+                // @todo redirect to *new* adjustment transaction, not the current one
                 $this->addSuccessMessage('fees.adjust-transaction.success');
                 return $this->redirectToTransaction(true);
             } else {
