@@ -64,7 +64,7 @@
       
       <div id="main" role="main">
         
-        <?php if (isset($right)): ?><div class="four-fifths--left"><?php endif; ?>
+        <?php if (isset($right)): ?><div class="table-col"><?php endif; ?>
 
           <?php
             if (!empty($horizontalNavigationId)) {
@@ -80,11 +80,11 @@
               
             <?php if (isset($this->left)): ?>
             
-              <div class="one-fifth--left">
+              <div class="sidebar--left">
                 <?php echo $this->left; ?>
               </div>
             
-              <div class="three-fifths">
+              <div class="table-col">
                 
                 <?php endif; if (!empty($contentTitle)): ?>
                   <div class="content__header js-title">
@@ -103,9 +103,9 @@
           
           </div><!-- content -->
         
-        <?php if (isset($right)): ?></div><!-- .four-fifths--left --><?php endif; if (!empty($right)): ?>
+        <?php if (isset($right)): ?></div><!-- .table-col --><?php endif; if (!empty($right)): ?>
           
-        <div class="one-fifth--right">
+        <div class="sidebar--right">
           <?php echo $this->render($right); ?>
         </div>
         
