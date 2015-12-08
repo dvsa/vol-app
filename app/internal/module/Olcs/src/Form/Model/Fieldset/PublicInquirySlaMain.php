@@ -179,4 +179,20 @@ class PublicInquirySlaMain extends Base
      * })
      */
     public $writtenReasonLetterDate = null;
+
+    /**
+     * @Form\Options({
+     *     "label": "Written decision letter sent",
+     *     "create_empty_option": true,
+     *     "render_delimiters": "d m y",
+     *     "category": "pi",
+     *     "field": "writtenDecisionLetterSent"
+     * })
+     * @Form\Required(false)
+     * @Form\Type("SlaDateSelect")
+     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
+     */
+    public $writtenDecisionLetterSent = null;
 }
