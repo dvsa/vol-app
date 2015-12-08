@@ -23,12 +23,10 @@ class ImpoundingLegislation extends RefData implements ListDataInterface
     {
         $context = empty($context)? $this->getLicenceContext() : $context;
 
-        $context['bundle'] = json_encode([]);
-        $context['limit'] = 1000;
-        $context['order'] = 'sectionCode';
-
         //decide which ref data category we need
-        if ($context['goodsOrPsv'] == 'lcat_psv') {
+        if (empty($context)) {
+            $data = $this->fetchListData('impound_legislation_goods_gb');
+        } elseif ($context['goodsOrPsv'] == 'lcat_psv') {
             $data = $this->fetchListData('impound_legislation_psv_gb');
         } elseif ($context['isNi'] == 'Y') {
             $data = $this->fetchListData('impound_legislation_goods_ni');
