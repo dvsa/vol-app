@@ -63,9 +63,9 @@ $routes = array(
         )
     ),
     'login' => array(
-        'type' => 'literal',
+        'type' => 'segment',
         'options' =>  array(
-            'route' => '/login',
+            'route' => '/login[/]',
             'defaults' => array(
                 'controller' => IndexController::class,
                 'action' => 'index'
@@ -97,7 +97,7 @@ $routes = array(
     'search' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/search[/:index][/:action]',
+            'route' => '/search[/:index][/:action][/]',
             'defaults' => array(
                 'controller' => SearchController::class,
                 'action' => 'index'
@@ -108,7 +108,7 @@ $routes = array(
     'search-operating-centre' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/search/operating-centre[/:action]',
+            'route' => '/search/operating-centre[/:action][/]',
             'defaults' => array(
                 'controller' => SearchController::class,
                 'action' => 'index',
@@ -119,7 +119,7 @@ $routes = array(
     'search-person' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/search/person[/:action]',
+            'route' => '/search/person[/:action][/]',
             'defaults' => array(
                 'controller' => SearchController::class,
                 'action' => 'index',
@@ -130,7 +130,7 @@ $routes = array(
     'search-operator' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/search/operator[/:action]',
+            'route' => '/search/operator[/:action][/]',
             'defaults' => array(
                 'controller' => SearchController::class,
                 'action' => 'index',
@@ -141,7 +141,7 @@ $routes = array(
     'search-bus' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/search/bus[/:action]',
+            'route' => '/search/bus[/:action][/]',
             'defaults' => array(
                 'controller' => SearchController::class,
                 'action' => 'index',
@@ -152,7 +152,7 @@ $routes = array(
     'search-traffic-commissioner-publication' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/search/traffic-commissioner-publication[/:action]',
+            'route' => '/search/traffic-commissioner-publication[/:action][/]',
             'defaults' => array(
                 'controller' => SearchController::class,
                 'action' => 'index',
@@ -163,7 +163,7 @@ $routes = array(
     'search-vehicle-external' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/search/vehicle-external[/:action]',
+            'route' => '/search/vehicle-external[/:action][/]',
             'defaults' => array(
                 'controller' => SearchController::class,
                 'action' => 'index',
@@ -257,7 +257,7 @@ $routes = array(
             'receipt' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => 'receipt/:reference[/:action]',
+                    'route' => 'receipt/:reference[/:action][/]',
                     'constraints' => array(
                         'reference' => 'OLCS-[0-9A-F\-]+',
                     ),
@@ -283,7 +283,7 @@ $routes = array(
             'access' => array(
                 'type' => 'segment',
                 'options' => array(
-                    'route' => 'access/:correspondenceId',
+                    'route' => 'access/:correspondenceId[/]',
                     'defaults' => array(
                         'controller' => 'Correspondence',
                         'action' => 'accessCorrespondence'
@@ -319,7 +319,7 @@ $routes = array(
     'user-registration' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/register',
+            'route' => '/register[/]',
             'defaults' => array(
                 'controller' => UserRegistrationController::class,
                 'action' => 'add'
@@ -329,7 +329,7 @@ $routes = array(
     'user-forgot-username' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/forgot-username',
+            'route' => '/forgot-username[/]',
             'defaults' => array(
                 'controller' => UserForgotUsernameController::class,
                 'action' => 'index'
@@ -339,7 +339,7 @@ $routes = array(
     'manage-user' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/manage-user[/:action][/:id]',
+            'route' => '/manage-user[/:action][/:id][/]',
             'constraints' => array(
                 'action' => '(index|add|edit|delete)',
                 'id' => '[0-9]+',
@@ -353,7 +353,7 @@ $routes = array(
     'my-details' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/my-details',
+            'route' => '/my-details[/]',
             'defaults' => array(
                 'controller' => MyDetailsController::class,
                 'action' => 'edit'
@@ -363,7 +363,7 @@ $routes = array(
     'entity-view' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/view-details/:entity[/:entityId]',
+            'route' => '/view-details/:entity[/:entityId][/]',
             'constraints' => array(
                 'entity' => '(licence)',
                 'entityId' => '[0-9]+',
@@ -1009,6 +1009,12 @@ return array(
                         'action' => 'index',
                         'use_route_match' => true,
                         'class' => 'proposition-nav__item',
+                    ),
+                    array(
+                        'id' => 'selfserve-topnav-my-details',
+                        'label' => 'My account',
+                        'route' => 'my-details',
+                        'class' => 'proposition-nav__item',
                     )
                 ),
             ),
@@ -1049,7 +1055,7 @@ return array(
             'lva-application-goods-vehicles-filters' => LvaFormService\ApplicationGoodsVehiclesFilters::class,
             // External common goods vehicles vehicle form service
             'lva-application-goods-vehicles-add-vehicle' => LvaFormService\GoodsVehicles\AddVehicle::class,
-            'lva-licence-vehicles_psv' => LvaFormService\PsvVehicles::class,
+            'lva-licence-vehicles_psv' => LvaFormService\LicencePsvVehicles::class,
             'lva-variation-vehicles_psv' => LvaFormService\VariationPsvVehicles::class,
             'lva-licence-goods-vehicles' => LvaFormService\LicenceGoodsVehicles::class,
             'lva-variation-goods-vehicles' => LvaFormService\VariationGoodsVehicles::class,
@@ -1093,9 +1099,15 @@ return array(
                 'manage-user' => ['can-manage-user-selfserve'],
 
                 // Bus reg stuff and who can access
-                'ebsr' => ['selfserve-ebsr'],
+                // upload page accessible by operators only
+                'bus-registration/ebsr' => ['selfserve-ebsr-upload'],
+
+                // bus reg list accessible by operators and LAs
+                'bus-registration' => ['selfserve-ebsr-list'],
+
+                // details page accessible by everyone inc anon. users
                 'bus-registration/details' => ['*'],
-                'bus-registration' => ['selfserve-ebsr'],
+
                 'entity-view' => [
                     '*'
                 ],

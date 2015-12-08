@@ -79,19 +79,26 @@ class BusRegistrationController extends AbstractController
 
         $filterForm = $this->getFilterForm($params);
 
+        $pageHeaderText = '';
+        $pageHeaderUrl = '';
+        if ($this->isGranted('selfserve-ebsr-upload')) {
+            $pageHeaderText = 'bus-registrations-index-subtitle';
+            $pageHeaderUrl = [
+                'route' => 'bus-registration/ebsr',
+                'params' => [
+                    'action' => 'upload'
+                ],
+                'text' => 'register-cancel-update-service'
+            ];
+        }
+
         // setup layout and view
         $layout = $this->generateLayout(
             [
                 'pageTitle' => 'bus-registrations-index-title',
-                'pageHeaderText'=> 'bus-registrations-index-subtitle',
+                'pageHeaderText'=> $pageHeaderText,
                 'searchForm' => $filterForm,
-                'pageHeaderUrl' => [
-                    'route' => 'bus-registration/ebsr',
-                    'params' => [
-                        'action' => 'upload'
-                    ],
-                    'text' => 'register-cancel-update-service'
-                ],
+                'pageHeaderUrl' => $pageHeaderUrl,
                 'showNav' => false
             ]
         );

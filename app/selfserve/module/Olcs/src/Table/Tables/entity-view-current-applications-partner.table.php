@@ -33,13 +33,11 @@ return array(
         ),
         array(
             'title' => $translationPrefix . '.oooDate',
-            'name' => 'oooDate',
-            'formatter' => 'Date'
+            'name' => 'oooDate'
         ),
         array(
             'title' => $translationPrefix . '.oorDate',
-            'name' => 'oorDate',
-            'formatter' => 'Date'
+            'name' => 'oorDate'
         ),
         array(
             'title' => $translationPrefix . '.objectionRepresentationMade',

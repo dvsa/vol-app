@@ -42,7 +42,7 @@ $businessType = isset($this->result['organisation']['type']['id']) ?
     $this->result['organisation']['type']['description'] : '';
 
 $licenceType = isset($this->result['licenceType']['description']) ? $this->result['licenceType']['description'] : '';
-$licenceReviewDate = isset($this->result['reviewDate']) ? $this->result['reviewDate'] : '';
+$licenceReviewDate = isset($this->result['reviewDate']) ? $this->date(strtotime($this->result['reviewDate'])) : '';
 
 $totalVehicleAuthority = isset($this->result['totalAuthVehicles']) ? $this->result['totalAuthVehicles'] : '0';
 $vehiclesInPossession = isset($this->result['totalVehiclesInPossession']) ?
@@ -64,9 +64,9 @@ $leadTrafficCommissioner = isset($this->result['organisation']['leadTcArea']['co
 
 $trafficArea = isset($this->result['trafficArea']['description']) ? $this->result['trafficArea']['description'] : '';
 
-$licenceStartDate = isset($this->result['inForceDate']) ? $this->result['inForceDate'] : '';
+$licenceStartDate = isset($this->result['inForceDate']) ? $this->date(strtotime($this->result['inForceDate'])) : '';
 $licenceStatus = isset($this->result['status']['description']) ? $this->result['status']['description'] : '';
-$continuationDate = isset($this->result['expiryDate']) ? $this->result['expiryDate'] : '';
+$continuationDate = isset($this->result['expiryDate']) ? $this->date(strtotime($this->result['expiryDate'])) : '';
 $trafficArea = isset($this->result['trafficArea']['name']) ? $this->result['trafficArea']['name'] : '';
 
 echo $this->render('partials/read-only/main',
