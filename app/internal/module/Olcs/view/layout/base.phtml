@@ -73,8 +73,9 @@ if (!empty($horizontalNavigationId)) {
 }
 ?>
           <div class="content">
-<?php if (isset($this->left)): ?>
-            <div class="one-fifth--left">
+              
+            <?php if (isset($this->left)): ?>
+                <div class="one-fifth--left">
               <?php echo $this->left; ?>
             </div><!-- End: one-fifth--left -->
             <div class="three-fifths">
