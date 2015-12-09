@@ -17,7 +17,13 @@ echo $this->render(
   <div class="three-quarters">
   
   <?php
-  
+  $serviceNos = $this->registrationDetails['serviceNo'];
+  if (!empty($this->registrationDetails['otherServices'])) {
+      for($i = 0; $i<count($this->registrationDetails['otherServices']);$i++) {
+            $serviceNos .= ', ' . $this->registrationDetails['otherServices'][$i]['serviceNo'];
+      }
+  }
+
   $busServiceTypes = [];
   $localAuthoritiesList = [];
   $trafficAreasList = [];
@@ -88,7 +94,7 @@ echo $this->render(
                   ['label' => 'Status', 'value' => $this->registrationDetails['status']['description']]
               ],
               3 => [
-                  ['label' => 'Service No.()', 'value' => $this->registrationDetails['serviceNo']]
+                  ['label' => 'Service No.', 'value' => $serviceNos]
               ],
               4 => $busServiceTypes,
               5 => [
