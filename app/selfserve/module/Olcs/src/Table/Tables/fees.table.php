@@ -19,7 +19,6 @@ return array(
         array(
             'title' => 'Fee number',
             'name' => 'id',
-            'formatter' => 'FeeStatus',
         ),
         array(
             'title' => 'Description',
