@@ -22,9 +22,7 @@ $(function() {
   var niFlagText = niFlag.filter(':checked').parent().text();
   var operatorTypeText = operatorType.filter(':checked').parent().text();
   var licenceTypeText = licenceType.filter(':checked').parent().text();
-  var confirmDiscPrintingUrl = '/admin/disc-printing/confirm-disc-printing';
-  var discPrintingUrl = '/admin/disc-printing';
- 
+
   // two variations for the message
   var discsVoided;
   if (endNumberIncreased.val() === endNumber.val()) {
@@ -90,7 +88,7 @@ $(function() {
           $('#popupMessage').prepend('<div class="notice--warning" id="confirmDiscWarning"><p>Error proccessing discs numbering</p></div>');
       } else {
         OLCS.modal.hide();
-        window.location.href = discPrintingUrl + '/success/' + isSuccessfull;
+        window.location.href = discPrintingUrl + 'success/' + isSuccessfull;
       }
     });
     return false;  

@@ -308,50 +308,14 @@ return [
                         ],
                     ],
                     'admin-disc-printing' => [
-                        'type' => 'segment',
+                        'type' => 'Segment',
                         'options' => [
-                            'route' => 'disc-printing[/success[/:success]][/]',
+                            'route' => 'disc-printing[/success[/:success]][/:action][/]',
                             'defaults' => [
                                 'controller' => 'Admin\DiscPrintingController',
                                 'action' => 'index',
-                            ],
-                            'constraints' => [
-                                'licence' => '[a-z]+'
-                            ],
+                            ]
                         ],
-                        'may_terminate' => true,
-                        'child_routes' => [
-                            'disc_prefixes' => [
-                                'type' => 'segment',
-                                'options' => [
-                                    'route' => 'disc-prefixes-list',
-                                    'defaults' => [
-                                        'controller' => 'Admin\DiscPrintingController',
-                                        'action' => 'disc-prefixes-list'
-                                    ]
-                                ]
-                            ],
-                            'disc_numbering' => [
-                                'type' => 'segment',
-                                'options' => [
-                                    'route' => 'disc-numbering',
-                                    'defaults' => [
-                                        'controller' => 'Admin\DiscPrintingController',
-                                        'action' => 'disc-numbering'
-                                    ]
-                                ]
-                            ],
-                            'disc_printing' => [
-                                'type' => 'segment',
-                                'options' => [
-                                    'route' => 'confirm-disc-printing',
-                                    'defaults' => [
-                                        'controller' => 'Admin\DiscPrintingController',
-                                        'action' => 'confirm-disc-printing'
-                                    ]
-                                ]
-                            ],
-                        ]
                     ],
                     'admin-payment-processing' => [
                         'type' => 'segment',
