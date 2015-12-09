@@ -2,7 +2,6 @@
 
 namespace Olcs\Controller\Ebsr;
 
-use Common\Controller\AbstractActionController;
 use Common\Exception\ResourceNotFoundException;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList as ListDto;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\BusRegWithTxcInbox as ItemDto;
