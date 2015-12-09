@@ -81,7 +81,7 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
         }
         $view = new ViewModel($params);
         $this->loadScripts($inlineScripts);
-        $view->setTemplate('pages/form');
+        $view->setTemplate('pages/disc-printing/disc-printing-form');
 
         return $this->renderView($view, 'admin_disc-printing.pageHeader');
     }

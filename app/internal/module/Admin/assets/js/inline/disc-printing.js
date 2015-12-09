@@ -31,9 +31,6 @@ OLCS.ready(function() {
   var endNumberIncreased = F("discs-numbering", "endNumberIncreased");
   var totalPages         = F("discs-numbering", "totalPages");
 
-  var discPrefixesUrl  = "/admin/disc-printing/disc-prefixes-list";
-  var discNumberingUrl = "/admin/disc-printing/disc-numbering";
-
   // get list of prefixes for selected operator location, operator type and licence type
   $(licenceType).on("change", function() {
 
