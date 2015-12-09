@@ -40,23 +40,12 @@ return array(
         array(
             'title' => 'OOO/OOR',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
                 $string = ' - ';
                 if (isset($data['ooo'])) {
-                    if ($data['ooo'] == 'Unknown') {
-                        $string = $data['ooo'] . $string;
-                    } else {
-                        $ooo = new DateTime($data['ooo']);
-                        $string = $ooo->format(\DATE_FORMAT) . $string;
-                    }
+                    $string = $data['ooo'] . $string;
                 }
                 if (isset($data['oor'])) {
-                    if ($data['oor'] == 'Unknown') {
-                        $string .= $data['oor'];
-                    } else {
-                        $oor = new DateTime($data['oor']);
-                        $string .= $oor->format(\DATE_FORMAT);
-                    }
+                    $string .= $data['oor'];
                 }
                 return $string;
             }
