@@ -7,8 +7,6 @@
  */
 namespace Olcs\Controller\Cases\Penalty;
 
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
@@ -18,11 +16,14 @@ use Zend\View\Model\ViewModel;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PenaltyController extends \Common\Controller\AbstractActionController implements
+class PenaltyController extends \Zend\Mvc\Controller\AbstractActionController implements
     CaseControllerInterface,
     LeftViewProvider
 {
-    use \Common\Controller\Traits\GenericMethods;
+    use \Common\Controller\Traits\GenericMethods,
+        \Common\Controller\Traits\ViewHelperManagerAware,
+        \Common\Controller\Traits\GenericRenderView,
+        \Common\Util\FlashMessengerTrait;
 
     public function getLeftView()
     {
@@ -57,9 +58,9 @@ class PenaltyController extends \Common\Controller\AbstractActionController impl
         );
 
         if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Response sent successfully');
+            $this->addSuccessMessage('Response sent successfully');
         } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnknownError();
+            $this->addErrorMessage('unknown-error');
         }
 
         return $this->redirectToIndex();
