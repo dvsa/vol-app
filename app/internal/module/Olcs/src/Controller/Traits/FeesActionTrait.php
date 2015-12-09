@@ -194,8 +194,8 @@ trait FeesActionTrait
             $this->getFeesTableParams(),
             [
                 'page'    => $this->params()->fromQuery('page', 1),
-                'sort'    => $this->params()->fromQuery('sort', 'id'),
-                'order'   => $this->params()->fromQuery('order', 'ASC'),
+                'sort'    => $this->params()->fromQuery('sort', 'invoicedDate'),
+                'order'   => $this->params()->fromQuery('order', 'DESC'),
                 'limit'   => $this->params()->fromQuery('limit', 10)
             ]
         );
