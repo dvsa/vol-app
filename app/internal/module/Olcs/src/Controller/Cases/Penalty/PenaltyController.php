@@ -5,10 +5,8 @@
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-
 namespace Olcs\Controller\Cases\Penalty;
 
-// Olcs
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
@@ -20,64 +18,11 @@ use Zend\View\Model\ViewModel;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PenaltyController extends OlcsController\CrudAbstract implements CaseControllerInterface, LeftViewProvider
+class PenaltyController extends \Common\Controller\AbstractActionController implements
+    CaseControllerInterface,
+    LeftViewProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier
-     *
-     *
-     * @var string
-     */
-    protected $identifier = 'case';
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'case';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = '';
-
-    /**
-     * Name of comment box field.
-     *
-     * @var string
-     */
-    protected $commentBoxName = 'penaltiesNote';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'SeriousInfringement';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'ErruPenalty';
-
-    /**
-     * Holds the navigation ID,
-     * required when an entire controller is
-     * represented by a single navigation id.
-     */
-    protected $navigationId = 'case_details_penalties';
-
-    /**
-     * @var array
-     */
-    protected $inlineScripts = ['table-actions'];
+    use \Common\Controller\Traits\GenericMethods;
 
     public function getLeftView()
     {
@@ -148,8 +93,6 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
 
         $view = $this->getView([]);
 
-        $this->buildCommentsBoxIntoView();
-
         if (isset($data['results'][0])) {
             $this->getViewHelperManager()->get('placeholder')->getContainer('penalties')->set($data['results'][0]);
             $this->getErruTable('erru-imposed', 'imposedErrus', $data);
@@ -157,6 +100,7 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
             $this->getErruTable('erru-applied', 'appliedPenalties', $data);
         }
 
+        $this->addCommentForm($data['results'][0]['case']);
         $view->setTemplate('sections/cases/pages/penalties');
 
         return $this->renderView($view);
@@ -207,5 +151,43 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
         }
 
         return $response->getResult();
+    }
+
+    /**
+     * Add the comment form
+     *
+     * @param array $case Case data
+     */
+    private function addCommentForm(array $case)
+    {
+        $form = $this->generateForm(\Olcs\Form\Model\Form\Comment::class, 'updateComment');
+        if (false === $this->getRequest()->isPost()) {
+            $data['fields']['id'] = $case['id'];
+            $data['fields']['version'] = $case['version'];
+            $data['fields']['comment'] = $case['penaltiesNote'];
+            $form->setData($data);
+        }
+
+        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
+    }
+
+    /**
+     * Update the comment from the form
+     *
+     * @param array $formData
+     */
+    private function updateComment(array $formData)
+    {
+        $params = [
+            'id' => $formData['fields']['id'],
+            'version' => $formData['fields']['version'],
+            'penaltiesNote' => $formData['fields']['comment'],
+        ];
+        $response = $this->handleCommand(\Dvsa\Olcs\Transfer\Command\Cases\UpdatePenaltiesNote::create($params));
+        if ($response->isOk()) {
+            $this->addSuccessMessage('comment-updated');
+        } else {
+            $this->addErrorMessage('unknown-error');
+        }
     }
 }
