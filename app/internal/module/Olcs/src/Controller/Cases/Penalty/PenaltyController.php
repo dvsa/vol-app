@@ -5,12 +5,8 @@
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-
 namespace Olcs\Controller\Cases\Penalty;
 
-// Olcs
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
@@ -20,95 +16,14 @@ use Zend\View\Model\ViewModel;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PenaltyController extends OlcsController\CrudAbstract implements CaseControllerInterface, LeftViewProvider
+class PenaltyController extends \Zend\Mvc\Controller\AbstractActionController implements
+    CaseControllerInterface,
+    LeftViewProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier
-     *
-     *
-     * @var string
-     */
-    protected $identifier = 'case';
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'case';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = '';
-
-    /**
-     * Name of comment box field.
-     *
-     * @var string
-     */
-    protected $commentBoxName = 'penaltiesNote';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'SeriousInfringement';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'erru-penalty';
-
-    /**
-     * Holds the navigation ID,
-     * required when an entire controller is
-     * represented by a single navigation id.
-     */
-    protected $navigationId = 'case_details_penalties';
-
-    /**
-     * @var array
-     */
-    protected $inlineScripts = ['table-actions'];
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-    */
-    protected $dataBundle = array(
-        'children' => array(
-            'siCategory' => array(),
-            'siCategoryType' => array(),
-            'appliedPenalties' => array(
-                'children' => array(
-                    'siPenaltyType' => array(),
-                    'seriousInfringement' => array()
-                )
-            ),
-            'imposedErrus' => array(
-                'children' => array(
-                    'siPenaltyImposedType' => array(),
-                    'executed' => []
-                )
-            ),
-            'requestedErrus' => array(
-                'children' => array(
-                    'siPenaltyRequestedType' => array()
-                )
-            ),
-            'case' => array(),
-            'memberStateCode' => array()
-        )
-    );
+    use \Common\Controller\Traits\GenericMethods,
+        \Common\Controller\Traits\ViewHelperManagerAware,
+        \Common\Controller\Traits\GenericRenderView,
+        \Common\Util\FlashMessengerTrait;
 
     public function getLeftView()
     {
@@ -125,7 +40,7 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
     {
         return $this->redirectToRouteAjax(
             null,
-            ['action'=>'index', $this->getIdentifierName() => $this->params()->fromRoute($this->getIdentifierName())],
+            ['action'=>'index', 'case' => $this->params()->fromRoute('case')],
             ['code' => '303'], // Why? No cache is set with a 303 :)
             true
         );
@@ -133,26 +48,19 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
 
     /**
      * Sends the response back to Erru
-     *
-     * @return \Zend\Http\Response
      */
     public function sendAction()
     {
-        $caseId = $this->params()->fromRoute('case');
-
-        $response = $this->getServiceLocator()->get('BusinessServiceManager')
-            ->get('Cases\Penalty\ErruAppliedPenaltyResponse')
-            ->process(
-                [
-                    'caseId' => $caseId,
-                    'user' => $this->getLoggedInUser()
-                ]
-            );
+        $response = $this->handleCommand(
+            \Dvsa\Olcs\Transfer\Command\Cases\Si\SendResponse::create(
+                ['case' => $this->params()->fromRoute('case')]
+            )
+        );
 
         if ($response->isOk()) {
-            $this->addSuccessMessage($response->getMessage());
+            $this->addSuccessMessage('Response sent successfully');
         } else {
-            $this->addErrorMessage($response->getMessage());
+            $this->addErrorMessage('unknown-error');
         }
 
         return $this->redirectToIndex();
@@ -165,8 +73,7 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
      */
     public function indexAction()
     {
-        //using loadListData so can use the case id in parameters, but we'll only ever have one result
-        $data = $this->loadListData(['case' => $this->params()->fromRoute('case')]);
+        $data = $this->getPenaltyData();
 
         //if a table crud button has been clicked then
         //we need to intercept the post and redirect to AppliedPenaltyController
@@ -177,7 +84,7 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
                 'case_penalty_edit',
                 [
                     'action' => $postedVars['action'],
-                    'seriousInfringement' => $data['Results'][0]['id'],
+                    'seriousInfringement' => $data['results'][0]['id'],
                     'id' => isset($postedVars['id']) ? $postedVars['id'] : null
                 ],
                 ['code' => '303'], // Why? No cache is set with a 303 :)
@@ -187,15 +94,14 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
 
         $view = $this->getView([]);
 
-        $this->buildCommentsBoxIntoView();
-
-        if (isset($data['Results'][0])) {
-            $this->getViewHelperManager()->get('placeholder')->getContainer('penalties')->set($data['Results'][0]);
-            $this->getErruTable('erru-imposed', 'imposedErrus');
-            $this->getErruTable('erru-requested', 'requestedErrus');
-            $this->getErruTable('erru-applied', 'appliedPenalties');
+        if (isset($data['results'][0])) {
+            $this->getViewHelperManager()->get('placeholder')->getContainer('penalties')->set($data['results'][0]);
+            $this->getErruTable('erru-imposed', 'imposedErrus', $data);
+            $this->getErruTable('erru-requested', 'requestedErrus', $data);
+            $this->getErruTable('erru-applied', 'appliedPenalties', $data);
         }
 
+        $this->addCommentForm($data['results'][0]['case']);
         $view->setTemplate('sections/cases/pages/penalties');
 
         return $this->renderView($view);
@@ -206,16 +112,14 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
      *
      * @param string $tableName
      * @param string $dataKey
+     * @param array  $data      Penalty data
      */
-    private function getErruTable($tableName, $dataKey)
+    private function getErruTable($tableName, $dataKey, $data)
     {
-        //cached list data
-        $listData = $this->getListData();
-
-        if (isset($listData['Results'][0][$dataKey]) && !empty($listData['Results'][0][$dataKey])) {
+        if (isset($data['results'][0][$dataKey]) && !empty($data['results'][0][$dataKey])) {
             $tableData = [
-                'Count' => count($listData['Results'][0][$dataKey]),
-                'Results' => $listData['Results'][0][$dataKey]
+                'Count' => count($data['results'][0][$dataKey]),
+                'Results' => $data['results'][0][$dataKey]
             ];
         } else {
             $tableData = [
@@ -227,5 +131,64 @@ class PenaltyController extends OlcsController\CrudAbstract implements CaseContr
         $this->getViewHelperManager()->get('placeholder')->getContainer($tableName)->set(
             $this->getTable($tableName, $tableData, [])
         );
+    }
+
+    /**
+     * Get Penalty data for the case
+     *
+     * @return array
+     */
+    private function getPenaltyData()
+    {
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Cases\Si\GetList::create(
+                ['case' => $this->params()->fromRoute('case')]
+            )
+        );
+
+        if (!$response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            return [];
+        }
+
+        return $response->getResult();
+    }
+
+    /**
+     * Add the comment form
+     *
+     * @param array $case Case data
+     */
+    private function addCommentForm(array $case)
+    {
+        $form = $this->generateForm(\Olcs\Form\Model\Form\Comment::class, 'updateComment');
+        if (false === $this->getRequest()->isPost()) {
+            $data['fields']['id'] = $case['id'];
+            $data['fields']['version'] = $case['version'];
+            $data['fields']['comment'] = $case['penaltiesNote'];
+            $form->setData($data);
+        }
+
+        $this->getViewHelperManager()->get('placeholder')->getContainer('form')->set($form);
+    }
+
+    /**
+     * Update the comment from the form
+     *
+     * @param array $formData
+     */
+    private function updateComment(array $formData)
+    {
+        $params = [
+            'id' => $formData['fields']['id'],
+            'version' => $formData['fields']['version'],
+            'penaltiesNote' => $formData['fields']['comment'],
+        ];
+        $response = $this->handleCommand(\Dvsa\Olcs\Transfer\Command\Cases\UpdatePenaltiesNote::create($params));
+        if ($response->isOk()) {
+            $this->addSuccessMessage('comment-updated');
+        } else {
+            $this->addErrorMessage('unknown-error');
+        }
     }
 }

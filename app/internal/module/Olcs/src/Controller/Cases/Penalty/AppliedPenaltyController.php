@@ -26,7 +26,7 @@ class AppliedPenaltyController extends OlcsController\CrudAbstract implements Ca
      *
      * @var string
      */
-    protected $formName = 'erru-penalty';
+    protected $formName = 'ErruPenalty';
 
     /**
      * Holds the service name
