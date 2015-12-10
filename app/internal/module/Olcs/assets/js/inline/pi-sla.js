@@ -15,8 +15,8 @@ $(function() {
         "date:tcWrittenReasonDate": hasValue("reason"),
         "date:writtenReasonLetterDate": hasValue("reason"),
         "date:tcWrittenDecisionDate": hasValue("decision"),
-        "date:writtenDecisionLetterSentDate": hasValue("decision"),
-        "date:decisionLetterSentDate": hasValue("none")
+        "date:writtenDecisionLetterDate": hasValue("decision"),
+        "date:decisionLetterSentDate": hasValue("verbal")
 
       }
     }

@@ -186,7 +186,7 @@ class PublicInquirySlaMain extends Base
      *     "create_empty_option": true,
      *     "render_delimiters": "d m y",
      *     "category": "pi",
-     *     "field": "writtenDecisionLetterSent"
+     *     "field": "writtenDecisionLetterDate"
      * })
      * @Form\Required(false)
      * @Form\Type("SlaDateSelect")
@@ -194,5 +194,5 @@ class PublicInquirySlaMain extends Base
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
-    public $writtenDecisionLetterSent = null;
+    public $writtenDecisionLetterDate = null;
 }
