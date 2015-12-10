@@ -62,16 +62,6 @@ $routes = array(
             )
         )
     ),
-    'login' => array(
-        'type' => 'segment',
-        'options' =>  array(
-            'route' => '/login[/]',
-            'defaults' => array(
-                'controller' => IndexController::class,
-                'action' => 'index'
-            )
-        )
-    ),
     'cookies' => array(
         'type' => 'segment',
         'options' =>  array(
