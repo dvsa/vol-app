@@ -72,7 +72,7 @@
                     <li class="user-menu__item"><?php echo $this->currentUser()->getFullName() ?>, <b><?php echo $this->currentUser()->getOrganisationName() ?></b></li>
                     <li class="user-menu__item"><a href="<?php echo $this->url('auth/logout');?>">Sign out</a></li>
                 <?php else: ?>
-                    <li class="user-menu__item"><a href="<?php echo $this->url('login');?>">Sign in</a></li>
+                    <li class="user-menu__item"><a href="<?php echo $this->url('auth/login');?>">Sign in</a></li>
                 <?php endif;?>
             </ul>
         </div><!-- user-header -->
