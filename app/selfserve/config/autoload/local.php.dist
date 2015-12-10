@@ -1,7 +1,5 @@
 <?php
 
-use Dvsa\Olcs\Utils\Auth\AuthHelper;
-
 return array(
     // Debugging, display environment and version on interface
 //    'version' => [
@@ -17,7 +15,7 @@ return array(
                     'backend' => [
                         'options' => [
                             // Backend service URI *Environment specific*
-                            'route' => AuthHelper::getBackendUri()
+                            'route' => 'olcs-backend.olcs.gov.uk',
                         ]
                     ]
                 ]
@@ -37,7 +35,7 @@ return array(
                 ]
             ],
             'backend' => [
-                'url' => 'http://' . AuthHelper::getBackendUri() . '/',
+                'url' => 'http://olcs-backend.olcs.gov.uk/',
                 'options' => [
                     'adapter' => \Zend\Http\Client\Adapter\Curl::class,
                     'timeout' => 60,
