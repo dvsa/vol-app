@@ -321,12 +321,17 @@ trait FeesActionTrait
     /**
      * Redirect back to transaction details page
      */
-    protected function redirectToTransaction($ajax = false)
+    protected function redirectToTransaction($ajax = false, $transactionId = null)
     {
         $method = $ajax ? 'toRouteAjax' : 'toRoute';
-
         $route = $this->getFeesRoute() . '/fee_action/transaction';
-        return $this->redirect()->$method($route, ['action' => 'edit-fee'], [], true);
+        $params = ['action' => 'edit-fee'];
+
+        if ($transactionId) {
+            $params['transaction'] = $transactionId;
+        }
+
+        return $this->redirect()->$method($route, $params, [], true);
     }
 
     /**
@@ -661,9 +666,10 @@ trait FeesActionTrait
             $dtoData = AdjustTransactionMapper::mapFromForm($form->getData());
             $response = $this->handleCommand(AdjustTransactionCmd::create($dtoData));
             if ($response->isOk()) {
-                // @todo redirect to *new* adjustment transaction, not the current one
+                // redirect to *new* adjustment transaction, not the current one
                 $this->addSuccessMessage('fees.adjust-transaction.success');
-                return $this->redirectToTransaction(true);
+                $newId = $response->getResult()['id']['transaction'];
+                return $this->redirectToTransaction(true, $newId);
             } else {
                 $flashErrors = AdjustTransactionMapper::mapFromErrors($form, $response->getResult());
                 foreach ($flashErrors as $error) {
