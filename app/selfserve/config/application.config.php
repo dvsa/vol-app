@@ -10,7 +10,6 @@ $config = array(
         'Olcs\Logging',
         'Common',
         'Olcs',
-        'ZfcBase',
         'ZfcRbac',
     ),
     'module_listener_options' => array(
