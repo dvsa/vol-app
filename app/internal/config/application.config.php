@@ -5,7 +5,6 @@ $config = array(
         'Dvsa\Olcs\Auth',
         'Dvsa\Olcs\Utils',
         'Dvsa\Olcs\Transfer',
-        'ZfcBase',
         'ZfcRbac',
         'Olcs\Logging',
         'Dvsa\Olcs\Transfer',
