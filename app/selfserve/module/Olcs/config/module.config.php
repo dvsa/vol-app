@@ -962,6 +962,12 @@ return array(
         'exception_template' => 'error/index',
         'template_map' => array(
             'layout/layout' => __DIR__ . '/../view/layouts/base.phtml',
+            'auth/layout' => __DIR__ . '/../view/layouts/base.phtml',
+            'auth/login' => __DIR__ . '/../view/pages/auth/login.phtml',
+            'auth/expired-password' => __DIR__ . '/../view/pages/auth/expired-password.phtml',
+            'auth/forgot-password' => __DIR__ . '/../view/pages/auth/forgot-password.phtml',
+            'auth/confirm-forgot-password' => __DIR__ . '/../view/pages/auth/confirm-forgot-password.phtml',
+            'auth/reset-password' => __DIR__ . '/../view/pages/auth/reset-password.phtml',
             'layout/ajax' => __DIR__ . '/../view/layouts/ajax.phtml',
             'error/404' => __DIR__ . '/../view/error/404.phtml',
             'error/403' => __DIR__ . '/../view/error/404.phtml',
@@ -1018,6 +1024,18 @@ return array(
                     )
                 ),
             ),
+            array(
+                'id' => 'signin',
+                'label' => 'back-to-sign-in',
+                'route' => 'auth/login',
+                'pages' => array(
+                    array(
+                        'id' => 'forgot-password',
+                        'label' => 'auth.forgot-password.label',
+                        'route' => 'auth/forgot-password',
+                    )
+                )
+            )
         )
     ),
     'asset_path' => '//dev_dvsa-static.web01.olcs.mgt.mtpdvsa',
@@ -1091,7 +1109,6 @@ return array(
     'zfc_rbac' => [
         'guards' => [
             'ZfcRbac\Guard\RoutePermissionsGuard' => [
-
                 // Dashboard Page
                 'dashboard' => ['selfserve-nav-dashboard'],
 

@@ -2,6 +2,7 @@
 
 $config = array(
     'modules' => array(
+        'Dvsa\Olcs\Auth',
         'Dvsa\Olcs\Utils',
         'Dvsa\Olcs\Transfer',
         'DoctrineModule',
@@ -10,7 +11,6 @@ $config = array(
         'Common',
         'Olcs',
         'ZfcBase',
-        'ZfcUser',
         'ZfcRbac',
     ),
     'module_listener_options' => array(

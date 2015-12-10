@@ -70,7 +70,7 @@
             <ul class="user-menu">
                 <?php if($this->currentUser()->isLoggedIn()):?>
                     <li class="user-menu__item"><?php echo $this->currentUser()->getFullName() ?>, <b><?php echo $this->currentUser()->getOrganisationName() ?></b></li>
-                    <li class="user-menu__item"><a href="<?php echo $this->url('logout');?>">Sign out</a></li>
+                    <li class="user-menu__item"><a href="<?php echo $this->url('auth/logout');?>">Sign out</a></li>
                 <?php else: ?>
                     <li class="user-menu__item"><a href="<?php echo $this->url('login');?>">Sign in</a></li>
                 <?php endif;?>
