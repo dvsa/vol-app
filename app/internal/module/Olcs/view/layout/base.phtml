@@ -1,5 +1,5 @@
-<?php {
-  
+<?php
+{
     $title = null;
     if (isset($this->pageTitle)) {
         $title = $this->pageTitle;
@@ -31,40 +31,29 @@
     if (!isset($horizontalNavigationContainer)) {
         $horizontalNavigationContainer = $this->getPlaceholder('horizontalNavigationContainer')->asObject();
     }
-    
-} $this->doctype(); ?>
+
+}
+$this->doctype(); ?>
 
 <html lang="en">
-  
   <head>
     <meta charset="utf-8">
-    <?php {
-        echo $this->headTitle(strip_tags($title));
-        echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')->appendHttpEquiv('X-UA-Compatible', 'IE=edge');
-        /* echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico')); */
-        echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css'));
-        echo $this->headScript();
-    } ?>
-    <!--[if IE]>
-      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+      <?php echo $this->partial('partials/head', ['title' => $title]); ?>
   </head>
-  
   <body class="internal" id="<?php echo $this->pageId(); ?>">
-  
     <?php echo $this->version(); ?>
-    
+
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
-    
+
     <?php
       echo $this->partial('layout/partials/global-header');
       echo $this->partial('layout/partials/header', ['title' => $title, 'subTitle' => $subTitle]); 
     ?>
-    
+
     <div class="page-wrapper">
-      
+
       <div id="main" role="main">
-        
+
         <?php if (isset($right)): ?><div class="table-col"><?php endif; ?>
 
           <?php
@@ -76,77 +65,46 @@
                 echo $this->navigation($horizontalNavigationContainer)->menu()->setPartial('partials/horizontal-navigation');
             }
           ?>
-        
+
           <div class="content">
-              
+
             <?php if (isset($this->left)): ?>
-            
+
               <div class="sidebar--left">
                 <?php echo $this->left; ?>
               </div>
-            
+
               <div class="table-col">
-                
+
                 <?php endif; if (!empty($contentTitle)): ?>
                   <div class="content__header js-title">
                     <h3><?php echo $this->translate($contentTitle); ?></h3>
                   </div>
                 <?php endif; ?>
-              
+
                 <div class="js-body">
                   <?php
                     echo $this->flashMessengerAll();
                     echo $this->content;
                   ?>
                 </div>
-                
+
             <?php if (isset($this->left)): ?></div><?php endif; ?>
-          
+
           </div><!-- content -->
-        
+
         <?php if (isset($right)): ?></div><!-- .table-col --><?php endif; if (!empty($right)): ?>
-          
+
         <div class="sidebar--right">
           <?php echo $this->render($right); ?>
         </div>
-        
+
         <?php endif; ?>
-        
+
       </div><!-- #main -->
-    
+
     </div><!-- .page-wrapper-->
-
-    <!-- Start: Global and Inline Script -->
-    <?php echo $this->inlineScript()->prependFile($this->assetPath('js/' . $this->applicationName() . '.js')); ?>
-    <!-- End: Global and Inline Script -->
-  
-    <script>
-      OLCS.ready(function() {
-        OLCS.eventEmitter.emit("render");
-      });
-    </script>
-
-    <script>
-      
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];
-        a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  
-      <?php
-        $userId = $this->currentUser()->getUniqueId();
-        if (!empty($userId)) {
-          echo sprintf('ga(\'create\', \'UA-56585177-1\', \'auto\', {\'userId\': \'%s\'});', $userId);
-        } else {
-      ?>
-        ga('create', 'UA-56585177-1', 'auto');
-      <?php } ?>
-  
-      ga('send', 'pageview');
-      
-    </script>
-    
+  <?php echo $this->partial('partials/body-end'); ?>
   </body>
-  
+
 </html>
