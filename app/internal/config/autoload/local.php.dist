@@ -1,7 +1,5 @@
 <?php
 
-use Dvsa\Olcs\Utils\Auth\AuthHelper;
-
 return array(
     // Debugging, display environment and version on interface
 //    'version' => [
@@ -17,7 +15,7 @@ return array(
                     'backend' => [
                         'options' => [
                             // Backend service URI *Environment specific*
-                            'route' => AuthHelper::getBackendUri()
+                            'route' => 'olcs-backend.olcs.gov.uk',
                         ]
                     ]
                 ]
@@ -36,7 +34,7 @@ return array(
                 ]
             ],
             'backend' => [
-                'url' => 'http://' . AuthHelper::getBackendUri() . '/',
+                'url' => 'http://olcs-backend.olcs.gov.uk/',
                 'options' => [
                     'adapter' => \Zend\Http\Client\Adapter\Curl::class,
                     'timeout' => 60,
@@ -68,5 +66,13 @@ return array(
             'error/403' => __DIR__ . '/../../module/Olcs/view/error/dev-403.phtml',
             'error/index' => __DIR__ . '/../../module/Olcs/view/error/dev-index.phtml'
         ),
-    )
+    ),
+
+    'openam' => [
+        'url' => 'http://olcs-internal.olcs.gov.uk/secure/',
+        'realm' => 'internal',
+        'cookie' => [
+            'domain' => '.olcs.gov.uk',
+        ]
+    ]
 );
