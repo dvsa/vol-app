@@ -2,13 +2,20 @@
 
 namespace Olcs\Controller\Ebsr;
 
-use Common\Controller\AbstractActionController;
+use Common\Controller\Traits\GenericMethods;
+use Common\Controller\Traits\GenericRenderView;
+use Common\Util\FlashMessengerTrait;
+use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
 
 /**
  * Class UploadsController
  */
-class UploadsController extends AbstractActionController
+class UploadsController extends ZendAbstractActionController
 {
+    use GenericMethods,
+        GenericRenderView,
+        FlashMessengerTrait;
+
     /**
      * @return \Zend\View\Model\ViewModel
      */
@@ -33,11 +40,11 @@ class UploadsController extends AbstractActionController
      */
     public function uploadAction()
     {
-        $this->fieldValues = $this->params()->fromFiles();
+        $fieldValues = $this->params()->fromFiles();
         $postFields = $this->params()->fromPost('fields');
-        $this->fieldValues['fields']['submissionType'] = $postFields['submissionType'];
+        $fieldValues['fields']['submissionType'] = $postFields['submissionType'];
 
-        $form = $this->generateFormWithData('EbsrPackUpload', 'processSave');
+        $form = $this->generateFormWithData('EbsrPackUpload', 'processSave', null, false, true, $fieldValues);
 
         return $this->getView(['form' => $form]);
     }

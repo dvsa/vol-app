@@ -90,8 +90,7 @@ class NewTmUserDetails
      * @Form\Type("Text")
      * @Form\Required(false)
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\EmailAddress"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":60}})
+     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
      * @Form\Validator({"name":"Common\Form\Elements\Validators\EmailConfirm","options":{"token":"emailConfirm"}})
      */
     public $emailAddress = null;

@@ -3,7 +3,9 @@
 hadCommonSymlink=false
 hadTransferSymlink=false
 hadUtilsSymlink=false
+hadAuthSymlink=false
 
+# Common
 if [ -L "vendor/olcs/OlcsCommon" ]
 then
     echo "Removing symlink"
@@ -11,6 +13,8 @@ then
     rm vendor/olcs/OlcsCommon
 fi
 
+
+# Transfer
 if [ -L "vendor/olcs/olcs-transfer" ]
 then
     echo "Removing symlink"
@@ -18,12 +22,28 @@ then
     rm vendor/olcs/olcs-transfer
 fi
 
+
+# Utils
 if [ -L "vendor/olcs/olcs-utils" ]
 then
     echo "Removing symlink"
     hadUtilsSymlink=true
     rm vendor/olcs/olcs-utils
 fi
+
+
+# Auth
+if [ -L "vendor/olcs/olcs-auth" ]
+then
+    echo "Removing symlink"
+    hadUtilsSymlink=true
+    rm vendor/olcs/olcs-auth
+fi
+
+
+
+
+
 
 if [ -f composer.phar ] ;
 then
@@ -59,5 +79,15 @@ then
         echo "Recreating symlink"
         rm -rf vendor/olcs/olcs-utils
         (cd vendor/olcs && ln -s ../../../olcs-utils/ olcs-utils)
+    fi
+fi
+
+if [ "$hadAuthSymlink" = true ] || [ "$1" = "--force" ];
+then
+    if [ -d "vendor/olcs/olcs-auth" ] ;
+    then
+        echo "Recreating symlink"
+        rm -rf vendor/olcs/olcs-auth
+        (cd vendor/olcs && ln -s ../../../olcs-auth/ olcs-auth)
     fi
 fi
