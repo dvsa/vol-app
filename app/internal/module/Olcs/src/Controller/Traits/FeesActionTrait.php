@@ -435,7 +435,6 @@ trait FeesActionTrait
      *
      * @param array $transaction
      * @return  string
-     * @todo
      */
     protected function getAdjustLink(array $transaction)
     {
@@ -634,7 +633,6 @@ trait FeesActionTrait
         }
 
         if ($this->getRequest()->isPost()) {
-            $paymentMethod = $transaction['paymentMethod']['description'];
             $redirect = $this->handleAdjustTransactionPost($form, $transaction);
             if (!is_null($redirect)) {
                 return $redirect;
@@ -786,13 +784,13 @@ trait FeesActionTrait
     protected function alterAdjustmentForm($form, $transaction)
     {
         switch ($transaction['paymentMethod']['id']) {
-            case RefData::FEE_PAYMENT_METHOD_CASH :
+            case RefData::FEE_PAYMENT_METHOD_CASH:
                 $remove = ['chequeNo', 'chequeDate', 'poNo'];
                 break;
-            case RefData::FEE_PAYMENT_METHOD_CHEQUE :
+            case RefData::FEE_PAYMENT_METHOD_CHEQUE:
                 $remove = ['poNo'];
                 break;
-            case RefData::FEE_PAYMENT_METHOD_POSTAL_ORDER :
+            case RefData::FEE_PAYMENT_METHOD_POSTAL_ORDER:
                 $remove = ['chequeNo', 'chequeDate'];
                 break;
             case RefData::FEE_PAYMENT_METHOD_CARD_ONLINE:
