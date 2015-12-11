@@ -72,7 +72,7 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
         $mockLicenceService = $this->getMock('\Common\Service\Data\Licence', ['fetchLicenceData', 'getId']);
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
-            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => null, 'trafficArea' => ['id' => 'B']]);
+            ->willReturn(['id' => 7,'niFlag'=> true, 'goodsOrPsv' => null, 'trafficArea' => ['id' => 'B']]);
         $mockLicenceService->expects($this->once())
             ->method('getId')
             ->willReturn(987);
@@ -80,7 +80,7 @@ class PublicInquiryReasonTest extends \PHPUnit_Framework_TestCase
         $mockApplicationService = $this->getMock('\Common\Service\Data\Application', ['fetchApplicationData', 'setId']);
         $mockApplicationService->expects($this->once())
             ->method('fetchApplicationData')
-            ->willReturn(['goodsOrPsv' => ['id'=>'lcat_gv']]);
+            ->willReturn(['goodsOrPsv' => ['id'=>'lcat_gv'], 'niFlag' => 'Y']);
         $mockApplicationService->expects($this->once())
             ->method('setId')
             ->with($this->equalTo(321));

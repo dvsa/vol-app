@@ -18,7 +18,7 @@ return [
                 [
                     'id' => 'logout',
                     'label' => 'Sign out',
-                    'route' => 'logout'
+                    'route' => 'auth/logout'
                 ]
             ]
         ]

@@ -32,31 +32,33 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
         $context = empty($context) ?
             $this->getLicenceContext() : array_merge($context, $this->getLicenceContext());
 
-        if (empty($context['goodsOrPsv'])) {
-            if (empty($this->getApplicationService()->getId())) {
-                // find an application linked to the licence
-                $licenceId = $this->getLicenceService()->getId();
+        $licenceId = $this->getLicenceService()->getId();
 
-                $applicationsForLicence = $this->getServiceLocator()
-                    ->get('Entity\Application')
-                    ->getApplicationsForLicence($licenceId);
+        if ($licenceId !== null) {
+            if (empty($context['goodsOrPsv'])) {
+                if (empty($this->getApplicationService()->getId())) {
+                    // find an application linked to the licence
+                    $applicationsForLicence = $this->getServiceLocator()
+                        ->get('Entity\Application')
+                        ->getApplicationsForLicence($licenceId);
 
-                if (!empty($applicationsForLicence['Results'])) {
-                    $app = array_pop($applicationsForLicence['Results']);
-                    $this->getApplicationService()->setId($app['id']);
+                    if (!empty($applicationsForLicence['Results'])) {
+                        $app = array_pop($applicationsForLicence['Results']);
+                        $this->getApplicationService()->setId($app['id']);
+
+                        $appContext = $this->getApplicationContext();
+
+                        // use application's goodsOrPsv instead
+                        $context['goodsOrPsv'] = $appContext['goodsOrPsv'];
+                        $context['isNi'] = $appContext['isNi'] === 'Y';
+                    }
                 }
+            } else {
+                // @NOTE: we need booleans to filter properly...
+                $context['isNi'] = $context['isNi'] === 'Y';
             }
-
-            // use application's goodsOrPsv instead
-            $context['goodsOrPsv'] = $this->getApplicationContext()['goodsOrPsv'];
         }
 
-        if (!isset($context['goodsOrPsv'])) {
-            $context['goodsOrPsv'] = 'NULL';
-        }
-
-        // @NOTE: we need booleans to filter properly...
-        $context['isNi'] = $context['isNi'] === 'Y';
         $context['bundle'] = json_encode([]);
         $context['limit'] = 1000;
 

@@ -348,6 +348,7 @@ return array(
         'exception_template' => 'error/index',
         'template_map' => array(
             'layout/layout' => __DIR__ . '/../view/layout/base.phtml',
+            'auth/layout' => __DIR__ . '/../view/layout/signin.phtml',
             'pages/lva-details' => __DIR__ . '/../view/sections/lva/lva-details.phtml',
             'error/404' => __DIR__ . '/../view/error/404.phtml',
             'error/403' => __DIR__ . '/../view/error/404.phtml',

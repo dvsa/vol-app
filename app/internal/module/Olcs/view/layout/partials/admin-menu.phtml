@@ -1,7 +1,14 @@
 <?php
+
     $left = '';
     $right = '';
     $toggle = 0;
+
+    // Remove duplicate continuations page in Navigation. Used to correctly display continuation filters and
+    // 'Generate continuations' back link which would otherwise be an inactive link.
+    $continuationsPage = $this->container->findOneById('admin-dashboard/continuations-details');
+    $this->container->removePage($continuationsPage);
+
     foreach ($this->container as $key => $page) :
         if ($page->isVisible(true) && $this->navigation()->accept($page, false)) {
             $leftOrRight = ($toggle%2==0) ? 'left' : 'right';

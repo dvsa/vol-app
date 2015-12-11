@@ -11,6 +11,30 @@ use Mockery as m;
  */
 class ImpoundingLegislationTest extends \PHPUnit_Framework_TestCase
 {
+
+    /**
+     * Tests fetchListOptions when no licence is present
+     */
+    public function testFetchListOptionsNoLicence()
+    {
+        $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
+        $mockLicenceService->expects($this->once())
+            ->method('fetchLicenceData')
+            ->willReturn([]);
+
+        $sut = new ImpoundingLegislation();
+        $sut->setLicenceService($mockLicenceService);
+
+        $mockRestClient = m::mock('Common\Util\RestClient');
+        $mockRestClient->shouldReceive('get')
+            ->once()
+            ->with('category/impound_legislation_goods_gb')
+            ->andReturn($this->getSingleSource());
+        $sut->setRestClient($mockRestClient);
+
+        $this->assertEquals($this->getSingleExpected(), $sut->fetchListOptions([]));
+    }
+
     /**
      * @dataProvider provideFetchListOptions
      *
@@ -23,7 +47,14 @@ class ImpoundingLegislationTest extends \PHPUnit_Framework_TestCase
         $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
-            ->willReturn(['niFlag'=> $niFlag, 'goodsOrPsv' => ['id'=> $goodsOrPsv], 'trafficArea' => ['id'=> 'B']]);
+            ->willReturn(
+                [
+                    'id' => 7,
+                    'niFlag'=> $niFlag,
+                    'goodsOrPsv' => ['id'=> $goodsOrPsv],
+                    'trafficArea' => ['id'=> 'B']
+                ]
+            );
 
         $sut = new ImpoundingLegislation();
         $sut->setLicenceService($mockLicenceService);
@@ -45,7 +76,14 @@ class ImpoundingLegislationTest extends \PHPUnit_Framework_TestCase
         $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
-            ->willReturn(['niFlag'=> 'Y', 'goodsOrPsv' => ['id'=> 'lcat_gv'], 'trafficArea' => ['id'=> 'B']]);
+            ->willReturn(
+                [
+                    'id' => 7,
+                    'niFlag'=> 'Y',
+                    'goodsOrPsv' => ['id'=> 'lcat_gv'],
+                    'trafficArea' => ['id'=> 'B']
+                ]
+            );
 
         $sut = new ImpoundingLegislation();
         $sut->setLicenceService($mockLicenceService);

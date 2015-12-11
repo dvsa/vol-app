@@ -196,17 +196,10 @@ $nav = array(
                 array(
                     'id' => 'case_hearings_appeals',
                     'label' => 'Hearings & appeals',
-                    'route' => 'case_hearing_appeal',
-                    'action' => 'index',
+                    'route' => 'case_pi',
+                    'action' => 'details',
                     'use_route_match' => true,
                     'pages' => array(
-                        array(
-                            'id' => 'case_hearings_appeals_stays',
-                            'label' => 'Appeal and stays',
-                            'route' => 'case_hearing_appeal',
-                            'action' => 'details',
-                            'use_route_match' => true,
-                        ),
                         array(
                             'id' => 'case_hearings_appeals_public_inquiry',
                             'label' => 'Public Inquiry',
@@ -227,6 +220,13 @@ $nav = array(
                                     'action' => 'edit'
                                 ),
                             ),
+                        ),
+                        array(
+                            'id' => 'case_hearings_appeals_stays',
+                            'label' => 'Appeal and stays',
+                            'route' => 'case_hearing_appeal',
+                            'action' => 'details',
+                            'use_route_match' => true,
                         ),
                         array(
                             'id' => 'case_hearings_appeals_non_public_inquiry',

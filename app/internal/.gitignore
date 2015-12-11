@@ -16,3 +16,4 @@ config/autoload/local.php
 public/static
 *.sw?
 node_modules
+/.vscode
