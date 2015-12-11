@@ -16,13 +16,13 @@ return array(
             'formatter' => 'TransactionNoAndStatus',
         ),
         array(
-            'title' => 'Type',
-            'name' => 'type',
-        ),
-        array(
             'title' => 'Date',
             'name' => 'completedDate',
             'formatter' => 'Date',
+        ),
+        array(
+            'title' => 'Type',
+            'name' => 'type',
         ),
         array(
             'title' => 'Method',
