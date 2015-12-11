@@ -12,8 +12,9 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Fee\ApproveWaive as ApproveWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\CreateFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RecommendWaive as RecommendWaiveCmd;
-use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RefundFee as RefundFeeCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\AdjustTransaction as AdjustTransactionCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\ReverseTransaction as ReverseTransactionCmd;
@@ -22,6 +23,7 @@ use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeType as FeeTypeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList as FeeTypeListQry;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
+use Olcs\Data\Mapper\AdjustTransaction as AdjustTransactionMapper;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
@@ -319,12 +321,17 @@ trait FeesActionTrait
     /**
      * Redirect back to transaction details page
      */
-    protected function redirectToTransaction($ajax = false)
+    protected function redirectToTransaction($ajax = false, $transactionId = null)
     {
         $method = $ajax ? 'toRouteAjax' : 'toRoute';
-
         $route = $this->getFeesRoute() . '/fee_action/transaction';
-        return $this->redirect()->$method($route, ['action' => 'edit-fee'], [], true);
+        $params = ['action' => 'edit-fee'];
+
+        if ($transactionId) {
+            $params['transaction'] = $transactionId;
+        }
+
+        return $this->redirect()->$method($route, $params, [], true);
     }
 
     /**
@@ -382,23 +389,13 @@ trait FeesActionTrait
                 break;
         }
 
-        if ($transaction['displayReversalOption']) {
-            $reverseLink = $urlHelper->fromRoute(
-                $this->getFeesRoute() . '/fee_action/transaction/reverse',
-                ['transaction' => $transaction['id']],
-                [],
-                true
-            );
-        } else {
-            $reverseLink = '';
-        }
-
         $viewParams = [
             'table' => $table,
             'transaction' => $transaction,
             'backLink' => $backLink,
             'receiptLink' => $receiptLink,
-            'reverseLink' => $reverseLink,
+            'reverseLink' => $this->getReverseLink($transaction),
+            'adjustLink' => $this->getAdjustLink($transaction),
         ];
 
         $this->placeholder()->setPlaceholder('contentTitle', $title);
@@ -406,11 +403,51 @@ trait FeesActionTrait
         $view = new ViewModel($viewParams);
         $view->setTemplate('sections/fees/pages/transaction-details');
 
-        $layout = $this->renderLayout($view, 'Transaction # ' . $transaction['id']);
+        $layout = $this->renderLayout($view, $title);
 
         $this->maybeClearLeft($layout);
 
         return $layout;
+    }
+
+    /**
+     * Determine reversal url from transaction data
+     *
+     * @param array $transaction
+     * @return  string
+     */
+    protected function getReverseLink(array $transaction)
+    {
+        if ($transaction['displayReversalOption']) {
+            return $this->getServiceLocator()->get('Helper\Url')->fromRoute(
+                $this->getFeesRoute() . '/fee_action/transaction/reverse',
+                ['transaction' => $transaction['id']],
+                [],
+                true
+            );
+        }
+
+        return '';
+    }
+
+    /**
+     * Determine adjustment url from transaction data
+     *
+     * @param array $transaction
+     * @return  string
+     */
+    protected function getAdjustLink(array $transaction)
+    {
+        if ($transaction['displayAdjustmentOption']) {
+            return $this->getServiceLocator()->get('Helper\Url')->fromRoute(
+                $this->getFeesRoute() . '/fee_action/transaction/adjust',
+                ['transaction' => $transaction['id']],
+                [],
+                true
+            );
+        }
+
+        return '';
     }
 
     /**
@@ -575,6 +612,71 @@ trait FeesActionTrait
         }
     }
 
+    public function adjustTransactionAction()
+    {
+        $transactionId = $this->params('transaction');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createFormWithRequest('AdjustTransaction', $this->getRequest());
+        $form->get('messages')->get('message')->setValue('fees.adjust-transaction.confirm');
+
+        $query = PaymentByIdQry::create(['id' => $transactionId]);
+        $response = $this->handleQuery($query);
+        if (!$response->isOk()) {
+            $this->addErrorMessage('unknown-error');
+            return $this->redirectToTransaction();
+        }
+        $transaction = $response->getResult();
+
+        if (!$transaction['canAdjust']) {
+            $this->addErrorMessage('fees.adjust-transaction.cannotAdjust');
+            return $this->redirectToTransaction(true);
+        }
+
+        if ($this->getRequest()->isPost()) {
+            $redirect = $this->handleAdjustTransactionPost($form, $transaction);
+            if (!is_null($redirect)) {
+                return $redirect;
+            }
+        } else {
+            $form->setData(AdjustTransactionMapper::mapFromResult($transaction));
+        }
+
+        $this->alterAdjustmentForm($form, $transaction);
+
+        $view = new ViewModel(array('form' => $form));
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'fees.adjust-transaction.title');
+    }
+
+    private function handleAdjustTransactionPost($form, $transaction)
+    {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirectToTransaction();
+        }
+        $data = (array) $this->getRequest()->getPost();
+
+        // re-add readonly value to form data
+        $data['details']['paymentMethod'] = $transaction['paymentMethod']['description'];
+
+        $form->setData($data);
+        if ($form->isValid()) {
+            $dtoData = AdjustTransactionMapper::mapFromForm($form->getData());
+            $response = $this->handleCommand(AdjustTransactionCmd::create($dtoData));
+            if ($response->isOk()) {
+                // redirect to *new* adjustment transaction, not the current one
+                $this->addSuccessMessage('fees.adjust-transaction.success');
+                $newId = $response->getResult()['id']['transaction'];
+                return $this->redirectToTransaction(true, $newId);
+            } else {
+                $flashErrors = AdjustTransactionMapper::mapFromErrors($form, $response->getResult());
+                foreach ($flashErrors as $error) {
+                    $this->addErrorMessage($error);
+                }
+            }
+        }
+    }
+
     /**
      * Alter fee form
      *
@@ -668,6 +770,39 @@ trait FeesActionTrait
         // populate fee type select
         $options = $this->fetchFeeTypeValueOptions();
         $form->get('fee-details')->get('feeType')->setValueOptions($options);
+
+        return $form;
+    }
+
+    /**
+     * Alter adjustment form
+     *
+     * @param \Zend\Form\Form $form
+     * @param array $transaction
+     * @return \Zend\Form\Form
+     */
+    protected function alterAdjustmentForm($form, $transaction)
+    {
+        switch ($transaction['paymentMethod']['id']) {
+            case RefData::FEE_PAYMENT_METHOD_CASH:
+                $remove = ['chequeNo', 'chequeDate', 'poNo'];
+                break;
+            case RefData::FEE_PAYMENT_METHOD_CHEQUE:
+                $remove = ['poNo'];
+                break;
+            case RefData::FEE_PAYMENT_METHOD_POSTAL_ORDER:
+                $remove = ['chequeNo', 'chequeDate'];
+                break;
+            case RefData::FEE_PAYMENT_METHOD_CARD_ONLINE:
+            case RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE:
+            default:
+                $remove = ['received', 'payer', 'slipNo', 'chequeNo', 'chequeDate', 'poNo'];
+                break;
+        }
+
+        foreach ($remove as $field) {
+            $form->get('details')->remove($field);
+        }
 
         return $form;
     }

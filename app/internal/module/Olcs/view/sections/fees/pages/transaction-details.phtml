@@ -9,9 +9,18 @@ echo $this->render(
                 ['label' => 'Date:', 'date' => $transaction['completedDate'], 'class' => 'full-width'],
                 ['label' => 'Type:', 'value' => $transaction['type']['description'], 'class' => 'full-width'],
                 ['label' => 'Method:', 'value' => $transaction['paymentMethod']['description'], 'class' => 'full-width'],
+                ['label' => 'Amount:', 'class' => 'full-width', 'value' => $transaction['displayAmount']],
+                [
+                    // @todo don't show for refunds
+                    'label' => 'Previous payment:',
+                    'class' => 'full-width',
+                    'url' => "../".$transaction['previousTransactionId'],
+                    'value' => $transaction['previousTransactionId'],
+                    'hideIfEmpty' => true,
+                ],
                 ['label' => 'Reference:', 'value' => $transaction['reference'], 'class' => 'full-width'],
                 ['label' => 'Processed by:', 'value' => $transaction['processedByUser']['loginId'], 'class' => 'full-width'],
-                ['label' => 'Amount:', 'money' => $transaction['amount'], 'class' => 'full-width'],
+
                 [
                     'label' => 'Status:',
                     'noEscape' => true,
@@ -26,6 +35,9 @@ echo $this->render(
                     'hideIfEmpty' => true,
                     'class' => 'full-width',
                 ],
+
+                // @todo add cheque data, paying in slip no, cheque no, PO no
+
                 [
                     'label' => 'Comment:',
                     'value' => $transaction['comment'],
@@ -42,6 +54,9 @@ if ($table) {
 }
 ?>
 <div class="actions-container">
+    <?php if ($adjustLink): ?>
+        <a href="<?php echo $adjustLink; ?>" class="action--primary js-modal-ajax" target="_blank">Adjust payment</a>
+    <?php endif; ?>
     <?php if ($reverseLink): ?>
         <a href="<?php echo $reverseLink; ?>" class="action--primary js-modal-ajax" target="_blank">Reverse payment</a>
     <?php endif; ?>

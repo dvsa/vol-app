@@ -33,7 +33,7 @@ return array(
             'name' => 'processedBy',
         ),
         array(
-            'title' => 'Allocated',
+            'title' => 'Allocation',
             'name' => 'amount',
             'formatter' => 'TransactionAmount',
             'align' => 'right',
