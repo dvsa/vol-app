@@ -146,7 +146,7 @@ class PaymentProcessingFeesController extends ZendAbstractActionController imple
 
     protected function getFeeTypeDtoData()
     {
-        return ['isMiscellaneous' => 1];
+        return ['isMiscellaneous' => 'Y'];
     }
 
     protected function getCreateFeeDtoData($formData)
