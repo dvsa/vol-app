@@ -122,4 +122,5 @@ class ProhibitionController extends AbstractInternalController implements CaseCo
     protected $commentItemParams = ['id' => 'case', 'case' => 'case'];
     protected $commentUpdateCommand = CommentUpdateDto::class;
     protected $commentMapperClass = CommentMapper::class;
+    protected $commentTitle = 'Prohibitions';
 }
