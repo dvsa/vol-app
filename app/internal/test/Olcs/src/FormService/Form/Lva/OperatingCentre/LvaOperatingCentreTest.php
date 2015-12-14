@@ -35,7 +35,25 @@ class LvaOperatingCentreTest extends MockeryTestCase
 
     public function testAlterForm()
     {
-        $form = m::mock(Form::class);
+        $form = m::mock(Form::class)
+            ->shouldReceive('get')
+            ->with('address')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('postcode')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setOption')
+                            ->with('shouldEscapeMessages', false)
+                            ->once()
+                            ->getMock()
+                    )
+                    ->once()
+                    ->getMock()
+            )
+            ->once()
+            ->getMock();
 
         $this->formHelper
             ->shouldReceive('removeValidator')
