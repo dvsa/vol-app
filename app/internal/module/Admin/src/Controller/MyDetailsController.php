@@ -54,7 +54,7 @@ class MyDetailsController extends AbstractInternalController implements LeftView
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
 
-    protected $editContentTitle = 'My details';
+    protected $editContentTitle = 'My account';
 
     public function indexAction()
     {
