@@ -68,7 +68,25 @@ class LvaOperatingCentreTest extends MockeryTestCase
      */
     public function testAlterFormNi($params)
     {
-        $form = m::mock(Form::class);
+        $form = m::mock(Form::class)
+            ->shouldReceive('get')
+            ->with('address')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('postcode')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setOption')
+                            ->with('shouldEscapeMessages', false)
+                            ->once()
+                            ->getMock()
+                    )
+                    ->once()
+                    ->getMock()
+            )
+            ->once()
+            ->getMock();
 
         $form->shouldReceive('getInputFilter')
             ->andReturn(
@@ -137,7 +155,25 @@ class LvaOperatingCentreTest extends MockeryTestCase
      */
     public function testAlterFormGb($params)
     {
-        $form = m::mock(Form::class);
+        $form = m::mock(Form::class)
+            ->shouldReceive('get')
+            ->with('address')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('postcode')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setOption')
+                            ->with('shouldEscapeMessages', false)
+                            ->once()
+                            ->getMock()
+                    )
+                    ->once()
+                    ->getMock()
+            )
+            ->once()
+            ->getMock();
 
         $form->shouldReceive('getInputFilter')
             ->andReturn(
