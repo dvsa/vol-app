@@ -9,6 +9,7 @@ use Common\Form\Elements\Types\Html;
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPsvAuth as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPsvAuth as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\GrantIrfoPsvAuth as GrantDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\RefuseIrfoPsvAuth as RefusetDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuth as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthList as ListDto;
 use Olcs\Controller\AbstractInternalController;
@@ -119,6 +120,8 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
                 {
                     case 'grant':
                         return GrantDto::class;
+                    case 'refuse':
+                        return RefusetDto::class;
                 }
             }
         }
@@ -229,6 +232,11 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         switch($action) {
             case 'grant':
                 if (!isset($formData['fields']['isGrantable']) || (bool) $formData['fields']['isGrantable'] !== true) {
+                    $form->get('form-actions')->remove($action);
+                }
+                break;
+            case 'refuse':
+                if (!isset($formData['fields']['isRefusable']) || (bool) $formData['fields']['isRefusable'] !== true) {
                     $form->get('form-actions')->remove($action);
                 }
                 break;
