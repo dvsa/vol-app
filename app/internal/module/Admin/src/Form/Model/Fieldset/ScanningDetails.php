@@ -15,7 +15,7 @@ class ScanningDetails
      *     "label": "scanning.data.category",
      *     "service_name": "Olcs\Service\Data\Category",
      *     "context": {
-     *       "isScanCategory": true
+     *       "isScanCategory": "Y"
      *     }
      * })
      * @Form\Type("DynamicSelect")

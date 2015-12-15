@@ -12,6 +12,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class SubCategoryDescriptionTest extends MockeryTestCase
 {
+    public function setUp()
+    {
+        $this->markTestSkipped();
+    }
+
     public function testFetchListData()
     {
         $results = [

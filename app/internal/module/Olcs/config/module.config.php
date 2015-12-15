@@ -413,6 +413,7 @@ return array(
         'invokables' => [
             'ApplicationUtility' => 'Olcs\Service\Utility\ApplicationUtility',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
+            'Olcs\Service\Data\SubCategory' => 'Olcs\Service\Data\SubCategory',
         ],
         'factories' => array(
             \Olcs\Service\Marker\MarkerService::class => \Olcs\Service\Marker\MarkerService::class,
@@ -448,7 +449,6 @@ return array(
             'Olcs\Service\Data\Fee' => 'Olcs\Service\Data\Fee',
             'Olcs\Service\Data\Cases' => 'Olcs\Service\Data\Cases',
             'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
-            'Olcs\Service\Data\TaskSubCategory' => 'Olcs\Service\Data\TaskSubCategory',
             'Olcs\Service\Data\OperatingCentresForInspectionRequest'
                 => 'Olcs\Service\Data\OperatingCentresForInspectionRequest',
             'Olcs\Service\Data\IrfoGvPermitType' => 'Olcs\Service\Data\IrfoGvPermitType',
