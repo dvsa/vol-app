@@ -113,16 +113,6 @@ return [
                                     ]
                                 ]
                             ],
-                            'change-password' => [
-                                'type' => 'segment',
-                                'options' => [
-                                    'route' => 'password[/]',
-                                    'defaults' => [
-                                        'controller' => 'Admin\MyDetailsController',
-                                        'action' => 'password'
-                                    ]
-                                ]
-                            ]
                         ]
                     ],
                     'admin-continuation' => [
@@ -507,4 +497,5 @@ return [
     ),
     //-------- End navigation -----------------
     'local_scripts_path' => [__DIR__ . '/../assets/js/inline/'],
+    'my_account_route' => 'admin-dashboard/admin-my-account',
 ];
