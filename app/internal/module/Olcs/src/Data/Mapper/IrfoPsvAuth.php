@@ -20,16 +20,6 @@ class IrfoPsvAuth implements MapperInterface
     {
         $formData['fields'] = $data;
 
-        if (!empty($data['isGrantable'])) {
-            $formData['isGrantable'] = $data['isGrantable'];
-        }
-        if (!empty($data['isRefusable'])) {
-            $formData['isRefusable'] = $data['isRefusable'];
-        }
-        if (!empty($data['isWithdrawable'])) {
-            $formData['isWithdrawable'] = $data['isWithdrawable'];
-        }
-
         foreach ($formData['fields'] as $key => $value) {
             if (isset($value['id'])) {
                 $formData['fields'][$key] = $value['id'];
