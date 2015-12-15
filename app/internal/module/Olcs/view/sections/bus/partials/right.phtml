@@ -1,6 +1,6 @@
 <?php $busReg = $this->placeholder('busReg')->getValue(); ?>
 <div class="small-module">
-    <h4 class="small-module__title">Operator details</h4>
+    <h4 class="title">Operator details</h4>
     <p class="small-module__details">
         <a href="<?php echo $this->url('operator', ['organisation' => $busReg['licence']['organisation']['id']], [], true);?>">
             <?php echo $this->escapeHtml($busReg['licence']['organisation']['name']); ?>
@@ -9,7 +9,7 @@
 </div>
 
 <div class="small-module">
-    <h4 class="small-module__title">Licence details</h4>
+    <h4 class="title">Licence details</h4>
     <p class="small-module__details">
         <a href="<?php echo $this->url('lva-licence', ['licence' => $busReg['licence']['id']], [], false); ?>"><?php echo $this->escapeHtml($busReg['licence']['licNo']); ?></a><br>
         <?php echo $this->translate($busReg['licence']['licenceType']['id']); ?><br/>
