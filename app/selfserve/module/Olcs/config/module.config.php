@@ -340,10 +340,10 @@ $routes = array(
             )
         )
     ),
-    'my-details' => array(
+    'my-account' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/my-details[/]',
+            'route' => '/my-account[/]',
             'defaults' => array(
                 'controller' => MyDetailsController::class,
                 'action' => 'edit'
@@ -803,7 +803,7 @@ $searchNavigation = array(
 $myAccountNav = array(
     'id' => 'my-account',
     'label' => 'My account',
-    'route' => 'my-details',
+    'route' => 'my-account',
     'action' => 'edit',
     'pages' => array(
         array(
@@ -1025,9 +1025,9 @@ return array(
                         'class' => 'proposition-nav__item',
                     ),
                     array(
-                        'id' => 'selfserve-topnav-my-details',
+                        'id' => 'selfserve-topnav-my-account',
                         'label' => 'My account',
-                        'route' => 'my-details',
+                        'route' => 'my-account',
                         'class' => 'proposition-nav__item',
                     )
                 ),
@@ -1174,5 +1174,5 @@ return array(
         'datetime_format' => 'd M Y H:i',
         'datetimesec_format' => 'd M Y H:i:s'
     ],
-    'my_account_route' => 'my-details',
+    'my_account_route' => 'my-account',
 );

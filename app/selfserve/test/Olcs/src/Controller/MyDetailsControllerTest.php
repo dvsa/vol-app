@@ -214,7 +214,7 @@ class MyDetailsControllerTest extends TestCase
         $this->sm->setService('Helper\FlashMessenger', $mockFlashMessengerHelper);
 
         $this->sut->shouldReceive('redirect->toRoute')
-            ->with('my-details', ['action' => 'edit'], array(), false)
+            ->with('my-account', ['action' => 'edit'], array(), false)
             ->once()
             ->andReturn('REDIRECT');
 
@@ -315,7 +315,7 @@ class MyDetailsControllerTest extends TestCase
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(true);
 
         $this->sut->shouldReceive('redirect->toRoute')
-            ->with('my-details', ['action' => 'edit'], array(), false)
+            ->with('my-account', ['action' => 'edit'], array(), false)
             ->once()
             ->andReturn('REDIRECT');
 

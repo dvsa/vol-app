@@ -140,6 +140,6 @@ class MyDetailsController extends AbstractController
      */
     private function redirectToIndex()
     {
-        return $this->redirect()->toRoute('my-details', ['action' => 'edit'], array(), false);
+        return $this->redirect()->toRoute('my-account', ['action' => 'edit'], array(), false);
     }
 }
