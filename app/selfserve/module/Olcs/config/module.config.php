@@ -969,7 +969,6 @@ return array(
         'template_map' => array(
             'layout/layout' => __DIR__ . '/../view/layouts/base.phtml',
             'auth/layout' => __DIR__ . '/../view/layouts/base.phtml',
-            'auth/layout-change-password' => __DIR__ . '/../view/layouts/base.phtml',
             'auth/login' => __DIR__ . '/../view/pages/auth/login.phtml',
             'auth/change-password' => __DIR__ . '/../view/pages/auth/change-password.phtml',
             'auth/expired-password' => __DIR__ . '/../view/pages/auth/expired-password.phtml',
