@@ -473,9 +473,6 @@ return [
         ]
     ],
     'view_manager' => [
-        'template_map' => array(
-            'auth/layout-change-password' => __DIR__ . '/../../Olcs/view/layout/base.phtml',
-        ),
         'template_path_stack' => [
             'admin/view' => dirname(__DIR__) . '/view',
         ]
