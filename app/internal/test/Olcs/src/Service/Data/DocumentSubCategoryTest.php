@@ -18,9 +18,6 @@ use Dvsa\Olcs\Transfer\Query\SubCategory\GetList as Qry;
  */
 class DocumentSubCategoryTest extends AbstractDataServiceTestCase
 {
-    /**
-     * @group test123
-     */
     public function testFetchListData()
     {
         $results = ['results' => 'results'];
