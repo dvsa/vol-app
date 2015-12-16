@@ -10,7 +10,7 @@ use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
-use Olcs\Service\Nr\RestHelper as NrRestHelper;
+use Dvsa\Olcs\Transfer\Query\Nr\ReputeUrl as ReputeUrlQry;
 use Common\RefData;
 
 /**
@@ -31,11 +31,6 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
      * @var \Common\Service\Cqrs\Query\QueryService
      */
     protected $queryService;
-
-    /**
-     * @var \Olcs\Service\Nr\RestHelper
-     */
-    protected $nrService;
 
     /**
      * @var \Zend\Navigation\Navigation
@@ -85,22 +80,6 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @return \Olcs\Service\Nr\RestHelper
-     */
-    public function getNrService()
-    {
-        return $this->nrService;
-    }
-
-    /**
-     * @param mixed $nrService
-     */
-    public function setNrService($nrService)
-    {
-        $this->nrService = $nrService;
-    }
-
-    /**
      * Attach one or more listeners
      *
      * Implementers may add an optional $priority argument; the EventManager
@@ -138,9 +117,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
                  ->setVisible(true);
         }
 
-        /* @to-do temporarily removed this until it can be enabled properly on dev */
-        //$reputeUrl = $this->getNrService()->fetchTmReputeUrl($id);
-        $reputeUrl = null;
+        $reputeUrl = $this->getReputeUrl($id);
 
         if ($reputeUrl !== null) {
             $this->getSidebarNavigation()
@@ -196,7 +173,6 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         $this->setQueryService($serviceLocator->get('QueryService'));
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setSidebarNavigation($serviceLocator->get('right-sidebar'));
-        $this->setNrService($serviceLocator->get(NrRestHelper::class));
 
         return $this;
     }
@@ -222,5 +198,28 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         }
 
         return $response->getResult();
+    }
+
+    /**
+     * Get the TM repute url
+     *
+     * @param int $id Transport Manager ID
+     *
+     * @return array
+     * @throws \RuntimeException
+     */
+    private function getReputeUrl($id)
+    {
+        $query = $this->getAnnotationBuilder()->createQuery(ReputeUrlQry::create(['id' => $id]));
+
+        $response = $this->getQueryService()->send($query);
+
+        //sometimes there will genuinely be no repute url,
+        //in these cases $response->isOk() will still return true
+        if (!$response->isOk()) {
+            throw new \RuntimeException("Error cannot get repute url");
+        }
+
+        return $response->getResult()['reputeUrl'];
     }
 }
