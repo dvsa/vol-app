@@ -22,7 +22,7 @@ if (!isset($navigation)) {
 if ($navigation):
 
     ?>
-    <h4><?php echo $this->translate($navigation->getLabel()); ?></h4>
+    <h4 class="title"><?php echo $this->translate($navigation->getLabel()); ?></h4>
     <?php
     echo $this->navigation($navigation)
         ->menu()->setPartial('partials/vertical-navigation');
