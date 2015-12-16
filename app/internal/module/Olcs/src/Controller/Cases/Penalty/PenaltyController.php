@@ -99,9 +99,10 @@ class PenaltyController extends \Zend\Mvc\Controller\AbstractActionController im
             $this->getErruTable('erru-imposed', 'imposedErrus', $data);
             $this->getErruTable('erru-requested', 'requestedErrus', $data);
             $this->getErruTable('erru-applied', 'appliedPenalties', $data);
+
+            $this->addCommentForm($data['results'][0]['case']);
         }
 
-        $this->addCommentForm($data['results'][0]['case']);
         $view->setTemplate('sections/cases/pages/penalties');
 
         return $this->renderView($view);
