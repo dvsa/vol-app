@@ -26,13 +26,13 @@ echo $this->render(
                     'hideIfEmpty' => true,
                 ],
                 [
-                    'label' => 'Slip No:',
+                    'label' => 'Paying in slip number:',
                     'value' => $transaction['payingInSlipNumber'],
                     'class' => 'full-width',
                     'hideIfEmpty' => true,
                 ],
                 [
-                    'label' => 'Cheque/PO Number No:',
+                    'label' => 'Cheque/PO number:',
                     'value' => $transaction['chequePoNumber'],
                     'class' => 'full-width',
                     'hideIfEmpty' => true,
@@ -51,7 +51,7 @@ echo $this->render(
                     'hideIfEmpty' => true,
                 ],
                 [
-                    'label' => 'Recommend by:',
+                    'label' => 'Recommended by:',
                     'value' => isset($transaction['waiveRecommenderUser']['loginId'])
                         ? $transaction['waiveRecommenderUser']['loginId']
                         : '',
