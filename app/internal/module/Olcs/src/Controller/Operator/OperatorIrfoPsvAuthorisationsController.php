@@ -11,6 +11,7 @@ use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPsvAuth as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\GrantIrfoPsvAuth as GrantDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\RefuseIrfoPsvAuth as RefusetDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\WithdrawIrfoPsvAuth as WithdrawtDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\ResetIrfoPsvAuth as ResetDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuth as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthList as ListDto;
 use Olcs\Controller\AbstractInternalController;
@@ -125,6 +126,8 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
                         return RefusetDto::class;
                     case 'withdraw':
                         return WithdrawtDto::class;
+                    case 'reset':
+                        return ResetDto::class;
                 }
             }
         }
@@ -245,6 +248,12 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
                 break;
             case 'withdraw':
                 if (!isset($formData['fields']['isWithdrawable']) || (bool) $formData['fields']['isWithdrawable'] !==
+                    true) {
+                    $form->get('form-actions')->remove($action);
+                }
+                break;
+            case 'reset':
+                if (!isset($formData['fields']['isResetable']) || (bool) $formData['fields']['isResetable'] !==
                     true) {
                     $form->get('form-actions')->remove($action);
                 }
