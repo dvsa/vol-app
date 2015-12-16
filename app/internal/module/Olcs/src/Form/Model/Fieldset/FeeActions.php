@@ -10,6 +10,14 @@ use Zend\Form\Annotation as Form;
  */
 class FeeActions
 {
+
+    /**
+     * @Form\Attributes({"type":"submit","class":"action--primary","id":"pay"})
+     * @Form\Options({"label": "Pay"})
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
+     */
+    public $pay = null;
+
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary","id":"recommend"})
      * @Form\Options({"label": "Recommend waive"})

@@ -10,6 +10,11 @@ use Zend\Form\Annotation as Form;
 class FeePaymentDetails
 {
     /**
+     * @Form\Type("Hidden")
+     */
+    public $backToFee = null;
+
+    /**
      * @Form\Type("Common\Form\Elements\Types\Html")
      * @Form\Options({
      *     "label": "fees.max_amount",

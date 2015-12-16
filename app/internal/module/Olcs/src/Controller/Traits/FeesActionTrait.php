@@ -459,6 +459,7 @@ trait FeesActionTrait
         $feeData = $this->getFees(['ids' => $feeIds]);
         $fees = $feeData['results'];
         $title = 'Pay fee' . (count($fees) !== 1 ? 's' : '');
+        $backToFee = !empty($this->params()->fromQuery('backToFee'));
 
         foreach ($fees as $fee) {
             // bail early if any of the fees prove to be the wrong status
@@ -469,7 +470,7 @@ trait FeesActionTrait
         }
 
         $form = $this->getForm('FeePayment');
-        $form = $this->alterPaymentForm($form, $feeData);
+        $form = $this->alterPaymentForm($form, $feeData, $backToFee);
 
         $this->loadScripts(['forms/fee-payment']);
 
@@ -693,6 +694,7 @@ trait FeesActionTrait
         }
 
         if ($status !== RefData::FEE_STATUS_OUTSTANDING) {
+            $form->get('form-actions')->remove('pay');
             $form->get('form-actions')->remove('approve');
             $form->get('form-actions')->remove('reject');
             $form->get('form-actions')->remove('recommend');
@@ -720,9 +722,11 @@ trait FeesActionTrait
      *
      * @param \Zend\Form\Form $form
      * @param array $feeData from FeeList query
+     * @param boolean $backToFee whether to populate 'backToFee' field which
+     * controls the final redirect
      * @return \Zend\Form\Form
      */
-    protected function alterPaymentForm($form, $feeData)
+    protected function alterPaymentForm($form, $feeData, $backToFee = false)
     {
         $minAmount = $feeData['extra']['minPayment'];
         $maxAmount = $feeData['extra']['totalOutstanding'];
@@ -745,6 +749,12 @@ trait FeesActionTrait
         $form->get('details')
             ->get('minAmountForValidator')
             ->setValue($minAmount);
+
+        if ($backToFee) {
+            // note we don't actually use the query string id here, it's safer
+            // to treat it as a boolean flag and use the id from the data
+            $form->get('details')->get('backToFee')->setValue($feeData['results'][0]['id']);
+        }
 
         return $form;
     }
@@ -873,7 +883,9 @@ trait FeesActionTrait
      */
     protected function processForm($form)
     {
-        if ($this->isButtonPressed('recommend')) {
+        if ($this->isButtonPressed('pay')) {
+            $this->redirectToPay();
+        } elseif ($this->isButtonPressed('recommend')) {
             $this->formPost($form, 'recommendWaive');
         } elseif ($this->isButtonPressed('reject')) {
             $this->validateForm = false;
@@ -989,6 +1001,18 @@ trait FeesActionTrait
     }
 
     /**
+     * Redirect to 'pay fee' page
+     */
+    protected function redirectToPay()
+    {
+        $feeId = $this->params()->fromRoute('fee', null);
+        $route = $this->getFeesRoute() . '/fee_action';
+        $params = ['fee' => $feeId, 'action' => 'pay-fees'];
+        $options = ['query' => ['backToFee' => $feeId]];
+        return $this->redirect()->toRoute($route, $params, $options, true);
+    }
+
+    /**
      * Kick off the CPMS payment process for a given amount
      * relating to a given array of fees
      *
@@ -1081,6 +1105,10 @@ trait FeesActionTrait
             $this->addSuccessMessage('The payment was made successfully');
         } else {
             $this->addErrorMessage('The fee(s) have NOT been paid. Please try again');
+        }
+
+        if (isset($details['backToFee']) && !empty($details['backToFee'])) {
+            return $this->redirectToFeeDetails(true);
         }
 
         return $this->redirectToList();
