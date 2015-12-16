@@ -503,7 +503,7 @@ trait FeesActionTrait
                     }
                 }
 
-                return $this->initiatePaymentRequest($feeIds, $form->getData()['details']);
+                return $this->initiatePaymentRequest($feeIds, $form->getData()['details'], $backToFee);
             }
         }
 
@@ -1018,8 +1018,9 @@ trait FeesActionTrait
      *
      * @param array  $feeIds
      * @param array  $details
+     * @param boolean $backToFee
      */
-    private function initiatePaymentRequest($feeIds, $details)
+    private function initiatePaymentRequest($feeIds, $details, $backToFee)
     {
         $paymentMethod = $details['paymentType'];
 
@@ -1028,8 +1029,13 @@ trait FeesActionTrait
 
                 $cpmsRedirectUrl = $this->url()->fromRoute(
                     $this->getFeesRoute() . '/fee_action',
-                    ['action' => 'payment-result'],
-                    ['force_canonical' => true],
+                    [
+                        'action' => 'payment-result',
+                    ],
+                    [
+                        'force_canonical' => true,
+                        'query' => ['backToFee' => (int) $backToFee],
+                    ],
                     true
                 );
 
@@ -1152,6 +1158,10 @@ trait FeesActionTrait
             default:
                 $this->addErrorMessage('An unexpected error occured');
                 break;
+        }
+
+        if (isset($queryStringData['backToFee']) && !empty($queryStringData['backToFee'])) {
+            return $this->redirectToFeeDetails();
         }
 
         return $this->redirectToList();
