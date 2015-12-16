@@ -1,60 +1,77 @@
 <?php
 
+/**
+ * SubCategoryDescription Data Service Test
+ *
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ */
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\SubCategoryDescription;
 use Mockery as m;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Dvsa\Olcs\Transfer\Query\SubCategoryDescription\GetList as Qry;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 
 /**
- * Class SubCategoryDescriptionTest
- * @package OlcsTest\Service\Data
+ * SubCategoryDescription Data Service Test
+ *
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class SubCategoryDescriptionTest extends MockeryTestCase
+class SubCategoryDescriptionTest extends AbstractDataServiceTestCase
 {
-    public function setUp()
-    {
-        $this->markTestSkipped();
-    }
-
     public function testFetchListData()
     {
-        $results = [
-            'Results' => [
-                ['result1'],
-                ['result2']
-            ]
-        ];
+        $results = ['results' => 'results'];
+        $subCategory = 'subCat';
+        $dto = Qry::create([]);
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturnUsing(
+                function ($dto) use ($subCategory) {
+                    $this->assertEquals($subCategory, $dto->getSubCategory());
+                    return 'query';
+                }
+            )
+            ->once()
+            ->getMock();
 
-        $mockRestClient = m::mock('\Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('', m::type('array'))->andReturn($results);
+        $mockResponse = m::mock()
+            ->shouldReceive('isServerError')
+            ->andReturn(false)
+            ->once()
+            ->shouldReceive('isClientError')
+            ->andReturn(false)
+            ->once()
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->once()
+            ->shouldReceive('getResult')
+            ->andReturn($results)
+            ->twice()
+            ->getMock();
+
         $sut = new SubCategoryDescription();
-        $sut->setRestClient($mockRestClient);
+        $sut->setSubCategory($subCategory);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
 
-        $this->assertEquals($results['Results'], $sut->fetchListData([]));
-        $sut->fetchListData([]);
+        $this->assertEquals($results['results'], $sut->fetchListData([]));
     }
 
-    public function testFetchListDataWithCategory()
+    public function testFetchListDataWithException()
     {
-        $results = [
-            'Results' => [
-                ['result1'],
-                ['result2']
-            ]
-        ];
+        $this->setExpectedException(UnexpectedResponseException::class);
+        $subCategory = 'subCategory';
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
 
-        $mockRestClient = m::mock('\Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')
+        $mockResponse = m::mock()
+            ->shouldReceive('isServerError')
+            ->andReturn(true)
             ->once()
-            ->with('', ['subCategory' => 'testing'])
-            ->andReturn($results);
-
+            ->getMock();
         $sut = new SubCategoryDescription();
-        $sut->setRestClient($mockRestClient);
-        $sut->setSubCategory('testing');
+        $sut->setSubCategory($subCategory);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, []);
 
-        $this->assertEquals($results['Results'], $sut->fetchListData([]));
         $sut->fetchListData([]);
     }
 

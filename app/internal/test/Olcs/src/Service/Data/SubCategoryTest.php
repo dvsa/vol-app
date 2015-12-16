@@ -1,60 +1,85 @@
 <?php
 
+/**
+ * SubCategory Data Service Test
+ *
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ */
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\SubCategory;
 use Mockery as m;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Dvsa\Olcs\Transfer\Query\SubCategory\GetList as Qry;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 
 /**
- * Class DocumentSubCategoryTest
- * @package OlcsTest\Service\Data
+ * SubCategory Data Service Test
+ *
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class SubCategoryTest extends MockeryTestCase
+class SubCategoryTest extends AbstractDataServiceTestCase
 {
-    public function setUp()
-    {
-        $this->markTestSkipped();
-    }
-
     public function testFetchListData()
     {
-        $results = [
-            'Results' => [
-                ['result1'],
-                ['result2']
-            ]
+        $results = ['results' => 'results'];
+        $params = [
+            'sort' => 'subCategoryName',
+            'order' => 'ASC',
+            'isScanCategory' => 'Y',
+            'category' => 'cat'
         ];
+        $dto = Qry::create($params);
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturnUsing(
+                function ($dto) use ($params) {
+                    $this->assertEquals($params['sort'], $dto->getSort());
+                    $this->assertEquals($params['order'], $dto->getOrder());
+                    $this->assertEquals($params['isScanCategory'], $dto->getIsScanCategory());
+                    $this->assertEquals($params['category'], $dto->getCategory());
+                    return 'query';
+                }
+            )
+            ->once()
+            ->getMock();
 
-        $mockRestClient = m::mock('\Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('', m::type('array'))->andReturn($results);
+        $mockResponse = m::mock()
+            ->shouldReceive('isServerError')
+            ->andReturn(false)
+            ->once()
+            ->shouldReceive('isClientError')
+            ->andReturn(false)
+            ->once()
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->once()
+            ->shouldReceive('getResult')
+            ->andReturn($results)
+            ->twice()
+            ->getMock();
+
         $sut = new SubCategory();
-        $sut->setRestClient($mockRestClient);
+        $sut->setIsScanCategory('Y');
+        $sut->setCategory('cat');
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
 
-        $this->assertEquals($results['Results'], $sut->fetchListData([]));
-        $sut->fetchListData([]);
+        $this->assertEquals($results['results'], $sut->fetchListData([]));
     }
 
-    public function testFetchListDataWithCategory()
+    public function testFetchListDataWithException()
     {
-        $results = [
-            'Results' => [
-                ['result1'],
-                ['result2']
-            ]
-        ];
+        $this->setExpectedException(UnexpectedResponseException::class);
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
 
-        $mockRestClient = m::mock('\Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')
+        $mockResponse = m::mock()
+            ->shouldReceive('isServerError')
+            ->andReturn(true)
             ->once()
-            ->with('', ['category' => 'testing', 'sort' => 'subCategoryName', 'limit' => 'all'])
-            ->andReturn($results);
-
+            ->getMock();
         $sut = new SubCategory();
-        $sut->setRestClient($mockRestClient);
-        $sut->setCategory('testing');
+        $sut->setIsScanCategory('Y');
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, []);
 
-        $this->assertEquals($results['Results'], $sut->fetchListData([]));
         $sut->fetchListData([]);
     }
 

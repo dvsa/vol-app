@@ -38,6 +38,7 @@ class Category extends AbstractDataService implements ListDataInterface
                 $params['isScanCategory'] = $isScanCategory;
             }
             $dtoData = GetList::create($params);
+
             $response = $this->handleQuery($dtoData);
             if ($response->isServerError() || $response->isClientError() || !$response->isOk()) {
                 throw new UnexpectedResponseException('unknown-error');
