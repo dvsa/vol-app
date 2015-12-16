@@ -274,7 +274,7 @@ trait FeesActionTrait
         $view = new ViewModel($viewParams);
         $view->setTemplate('sections/fees/pages/fee-details');
 
-        $layout = $this->renderLayout($view, 'No # ' . $fee['id']);
+        $layout = $this->renderLayout($view, 'internal.fee-details.title');
 
         $this->maybeClearLeft($layout);
 
