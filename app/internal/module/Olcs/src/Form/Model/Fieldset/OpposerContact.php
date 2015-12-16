@@ -11,7 +11,7 @@ class OpposerContact
 {
     /**
      * @Form\AllowEmpty(true)
-     * @Form\Required(true)
+     * @Form\Required(false)
      * @Form\Attributes({"id":"phone","placeholder":"","class":"medium", "required":false})
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({"label":"Phone"})
@@ -47,11 +47,10 @@ class OpposerContact
 
     /**
      * @Form\AllowEmpty(true)
-     * @Form\Required(true)
+     * @Form\Required(false)
      * @Form\Attributes({"id":"email","placeholder":"","class":"medium", "required":false})
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({"label":"Email"})
-     * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
