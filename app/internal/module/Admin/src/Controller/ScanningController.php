@@ -37,10 +37,14 @@ class ScanningController extends ZendAbstractActionController
         $subCategory = $data['details']['subCategory'];
 
         $this->getDataService('SubCategory')
-            ->setCategory($category);
+            ->setCategory($category)
+            ->setIsScanCategory('Y');
 
         $this->getDataService('SubCategoryDescription')
             ->setSubCategory($subCategory);
+
+        $this->getDataService('Category')
+            ->setIsScanCategory('Y');
 
         $form = $this->createFormWithData($data);
 

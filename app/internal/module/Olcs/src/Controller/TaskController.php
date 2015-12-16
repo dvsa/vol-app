@@ -185,10 +185,9 @@ class TaskController extends AbstractController
     {
         $data = $this->mapDefaultData();
 
-        // @todo Update this code once we have a migrated solution for list data
         // Set up the data services so that dynamic selects populate correctly if we already have data
         if (isset($data['category'])) {
-            $this->getServiceLocator()->get('Olcs\Service\Data\TaskSubCategory')->setCategory($data['category']);
+            $this->getServiceLocator()->get('Olcs\Service\Data\SubCategory')->setCategory($data['category']);
         }
         if (isset($data['assignedToTeam'])) {
             $this->getServiceLocator()->get('Olcs\Service\Data\User')->setTeam($data['assignedToTeam']);
