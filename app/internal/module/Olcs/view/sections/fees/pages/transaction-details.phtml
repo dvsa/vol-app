@@ -5,7 +5,7 @@ echo $this->render(
     [
         'multiItems' => [
             [
-                ['label' => 'No:', 'value' => $transaction['id'], 'class' => 'full-width'],
+                ['label' => 'Id:', 'value' => $transaction['id'], 'class' => 'full-width'],
                 ['label' => 'Date:', 'date' => $transaction['completedDate'], 'class' => 'full-width'],
                 ['label' => 'Type:', 'value' => $transaction['type']['description'], 'class' => 'full-width'],
                 ['label' => 'Method:', 'value' => $transaction['paymentMethod']['description'], 'class' => 'full-width'],
@@ -19,13 +19,36 @@ echo $this->render(
                     'hideIfEmpty' => true,
                 ],
                 ['label' => 'Reference:', 'value' => $transaction['reference'], 'class' => 'full-width'],
-                ['label' => 'Processed by:', 'value' => $transaction['processedByUser']['loginId'], 'class' => 'full-width'],
-
                 [
-                    'label' => 'Status:',
-                    'noEscape' => true,
-                    'value' => \Common\Service\Table\Formatter\TransactionStatus::format($transaction),
+                    'label' => 'Payer name:',
+                    'value' => $transaction['payerName'],
                     'class' => 'full-width',
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Paying in slip number:',
+                    'value' => $transaction['payingInSlipNumber'],
+                    'class' => 'full-width',
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Cheque/PO number:',
+                    'value' => $transaction['chequePoNumber'],
+                    'class' => 'full-width',
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Cheque date:',
+                    'date' => $transaction['chequePoDate'],
+                    'dateFormat' => 'Y-m-d',
+                    'class' => 'full-width',
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Recommendation date:',
+                    'date' => $transaction['waiveRecommendationDate'],
+                    'class' => 'full-width',
+                    'hideIfEmpty' => true,
                 ],
                 [
                     'label' => 'Recommended by:',
@@ -35,13 +58,17 @@ echo $this->render(
                     'hideIfEmpty' => true,
                     'class' => 'full-width',
                 ],
-
-                // @todo add cheque data, paying in slip no, cheque no, PO no
-
+                ['label' => 'Processed by:', 'value' => $transaction['processedByUser']['loginId'], 'class' => 'full-width'],
                 [
                     'label' => 'Comment:',
                     'value' => $transaction['comment'],
                     'hideIfEmpty' => true,
+                    'class' => 'full-width',
+                ],
+                [
+                    'label' => 'Status:',
+                    'noEscape' => true,
+                    'value' => \Common\Service\Table\Formatter\TransactionStatus::format($transaction),
                     'class' => 'full-width',
                 ],
             ],
