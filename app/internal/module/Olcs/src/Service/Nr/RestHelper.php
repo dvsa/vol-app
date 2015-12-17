@@ -54,27 +54,6 @@ class RestHelper implements FactoryInterface
     }
 
     /**
-     * Sends tmId to the Nr endpoint, if it meets validation then a url will be returned
-     *
-     * @param $tmId
-     * @return \Zend\Http\Response
-     */
-    public function fetchTmReputeUrl($tmId)
-    {
-        $restClient = $this->getRestClient();
-        $restClient->getUri()->setPath('/repute/url/' . $tmId);
-        $response = $restClient->send();
-
-        $repute = Json::decode($response->getContent(), Json::TYPE_ARRAY);
-
-        if (isset($repute['Response']['Data']['url'])) {
-            return $repute['Response']['Data']['url'];
-        }
-
-        return null;
-    }
-
-    /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator

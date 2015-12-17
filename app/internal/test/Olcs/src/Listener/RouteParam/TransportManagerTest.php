@@ -11,7 +11,8 @@ use Zend\Navigation\Navigation;
 use Zend\Navigation\Page\Uri as PageUri;
 use Zend\Navigation\Page\Mvc as PageMvc;
 use Zend\Http\Response;
-use Olcs\Listener\RouteParams;
+use Dvsa\Olcs\Transfer\Query\Tm\TransportManager as TmQry;
+use Dvsa\Olcs\Transfer\Query\Nr\ReputeUrl as ReputeQry;
 use Zend\Json\Json;
 use Common\RefData;
 
@@ -107,7 +108,7 @@ class TransportManagerTest extends MockeryTestCase
                     ->getMock()
             );
 
-        $this->setupGetTransportManager($sut, $tm);
+        $this->setupGetTransportManager($sut, $tm, $reputeUrl);
 
         $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
         $mockContainer->shouldReceive('prepend')->with($pageTitle);
@@ -123,7 +124,6 @@ class TransportManagerTest extends MockeryTestCase
         $mockViewHelperManager->shouldReceive('get')->with('url')->andReturn($mockUrl);
 
         $sut->setViewHelperManager($mockViewHelperManager);
-        $sut->setNrService($mockNr);
         $sut->setSidebarNavigation($sidebarNav);
         $sut->onTransportManager($event);
     }
@@ -274,24 +274,36 @@ class TransportManagerTest extends MockeryTestCase
         $sut->onTransportManager($event);
     }
 
-    private function setupGetTransportManager(SystemUnderTest $sut, array $tmData = [])
+    private function setupGetTransportManager(SystemUnderTest $sut, array $tmData = [], $reputeUrl = null)
     {
         $mockAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
-        $mockResponse = m::mock();
+        $mockTmResponse = m::mock();
+        $mockNrResponse = m::mock();
 
-        $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
+        $mockAnnotationBuilder->shouldReceive('createQuery')->with(m::type(TmQry::class))->once()->andReturnUsing(
             function ($dto) {
-                $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\Tm\TransportManager::class, $dto);
+                $this->assertInstanceOf(TmQry::class, $dto);
                 $this->assertSame(1, $dto->getId());
-                return 'QUERY';
+                return 'TM QUERY';
             }
         );
 
-        $mockQueryService->shouldReceive('send')->with('QUERY')->once()->andReturn($mockResponse);
+        $mockAnnotationBuilder->shouldReceive('createQuery')->with(m::type(ReputeQry::class))->once()->andReturnUsing(
+            function ($dto) {
+                $this->assertInstanceOf(ReputeQry::class, $dto);
+                $this->assertSame(1, $dto->getId());
+                return 'NR QUERY';
+            }
+        );
 
-        $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
-        $mockResponse->shouldReceive('getResult')->with()->once()->andReturn($tmData);
+        $mockQueryService->shouldReceive('send')->with('TM QUERY')->once()->andReturn($mockTmResponse);
+        $mockQueryService->shouldReceive('send')->with('NR QUERY')->once()->andReturn($mockNrResponse);
+
+        $mockTmResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
+        $mockTmResponse->shouldReceive('getResult')->with()->once()->andReturn($tmData);
+        $mockNrResponse->shouldReceive('isOk')->once()->andReturn(true);
+        $mockNrResponse->shouldReceive('getResult')->once()->andReturn(['reputeUrl' => $reputeUrl]);
 
         $sut->setAnnotationBuilder($mockAnnotationBuilder);
         $sut->setQueryService($mockQueryService);
@@ -315,14 +327,13 @@ class TransportManagerTest extends MockeryTestCase
     {
         $mockAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
-        $mockNr = m::mock(NrRestHelper::class);
+
         $sidebarNav = m::mock(Navigation::class);
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($sidebarNav);
-        $mockSl->shouldReceive('get')->with(NrRestHelper::class)->andReturn($mockNr);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockAnnotationBuilder);
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
 
@@ -331,7 +342,6 @@ class TransportManagerTest extends MockeryTestCase
 
         $this->assertSame($sut, $service);
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
-        $this->assertSame($mockNr, $sut->getNrService());
         $this->assertSame($sidebarNav, $sut->getSidebarNavigation());
         $this->assertSame($mockAnnotationBuilder, $sut->getAnnotationBuilder());
         $this->assertSame($mockQueryService, $sut->getQueryService());
