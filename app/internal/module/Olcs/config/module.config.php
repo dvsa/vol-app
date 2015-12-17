@@ -414,6 +414,8 @@ return array(
             'ApplicationUtility' => 'Olcs\Service\Utility\ApplicationUtility',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
             'Olcs\Service\Data\SubCategory' => 'Olcs\Service\Data\SubCategory',
+            'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
+            'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
         ],
         'factories' => array(
             \Olcs\Service\Marker\MarkerService::class => \Olcs\Service\Marker\MarkerService::class,
@@ -440,9 +442,7 @@ return array(
             'Olcs\Listener\RouteParam\Organisation' => 'Olcs\Listener\RouteParam\Organisation',
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
-            'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
             'Olcs\Service\Data\Team' => 'Olcs\Service\Data\Team',
-            'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
             'Olcs\Service\Data\SiPenaltyType' => 'Olcs\Service\Data\SiPenaltyType',
             'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
             'Olcs\Service\Data\SubmissionSectionComment' => 'Olcs\Service\Data\SubmissionSectionComment',

@@ -1,31 +1,24 @@
 <?php
 
 /**
- * User data service test
+ * PresidingTc data service test
  *
- * @author someone <someone@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace OlcsTest\Service\Data;
 
-use Olcs\Service\Data\User;
+use Olcs\Service\Data\PresidingTc;
 use Mockery as m;
-use Dvsa\Olcs\Transfer\Query\User\UserList as Qry;
+use Dvsa\Olcs\Transfer\Query\Cases\PresidingTc\GetList as Qry;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 
 /**
- * User data service test
+ * PresidingTc data service test
  *
- * @author someone <someone@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class UserTest extends AbstractDataServiceTestCase
+class PresidingTcTest extends AbstractDataServiceTestCase
 {
-    private $users = [
-        ['id' => 1, 'loginId' => 'Logged in user'],
-        ['id' => 5, 'loginId' => 'Mr E'],
-    ];
-
     /**
      * Test fetchUserListData
      */
@@ -33,17 +26,15 @@ class UserTest extends AbstractDataServiceTestCase
     {
         $results = ['results' => 'results'];
         $params = [
-            'sort' => 'loginId',
+            'sort' => 'name',
             'order' => 'ASC'
         ];
-        $team = 99;
         $dto = Qry::create($params);
         $mockTransferAnnotationBuilder = m::mock()
             ->shouldReceive('createQuery')->once()->andReturnUsing(
-                function ($dto) use ($params, $team) {
+                function ($dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
-                    $this->assertEquals($team, $dto->getTeam());
                     return 'query';
                 }
             )
@@ -59,8 +50,7 @@ class UserTest extends AbstractDataServiceTestCase
             ->twice()
             ->getMock();
 
-        $sut = new User();
-        $sut->setTeam($team);
+        $sut = new PresidingTc();
         $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
 
         $this->assertEquals($results['results'], $sut->fetchUserListData([]));
@@ -80,31 +70,9 @@ class UserTest extends AbstractDataServiceTestCase
             ->andReturn(false)
             ->once()
             ->getMock();
-        $sut = new User();
+        $sut = new PresidingTc();
         $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, []);
 
         $sut->fetchUserListData([]);
-    }
-
-    /**
-     * Test fetchListOptions
-     */
-    public function testFetchListOptions()
-    {
-        $sut = new User();
-        $sut->setData('userlist', $this->users);
-
-        $this->assertEquals([1 => 'Logged in user', 5 => 'Mr E'], $sut->fetchListOptions([]));
-    }
-
-    /**
-     * Test fetchListOptionsEmpty
-     */
-    public function testFetchListOptionsEmpty()
-    {
-        $sut = new User();
-        $sut->setData('userlist', false);
-
-        $this->assertEquals([], $sut->fetchListOptions([]));
     }
 }
