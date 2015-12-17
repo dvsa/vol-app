@@ -58,7 +58,7 @@ class SubCategoryDescription extends AbstractDataService implements ListDataInte
         if (is_null($this->getData($key))) {
             $dtoData = GetList::create($params);
             $response = $this->handleQuery($dtoData);
-            if ($response->isServerError() || $response->isClientError() || !$response->isOk()) {
+            if (!$response->isOk()) {
                 throw new UnexpectedResponseException('unknown-error');
             }
 

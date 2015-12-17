@@ -40,7 +40,7 @@ class Category extends AbstractDataService implements ListDataInterface
             $dtoData = GetList::create($params);
 
             $response = $this->handleQuery($dtoData);
-            if ($response->isServerError() || $response->isClientError() || !$response->isOk()) {
+            if (!$response->isOk()) {
                 throw new UnexpectedResponseException('unknown-error');
             }
             $this->setData('categories', false);

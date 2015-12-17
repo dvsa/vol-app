@@ -12,6 +12,7 @@ use Olcs\Service\Data\User;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\User\UserList as Qry;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * User data service test
