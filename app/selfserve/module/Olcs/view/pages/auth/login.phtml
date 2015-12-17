@@ -30,6 +30,7 @@
                 <fieldset>
                     <?php echo $this->formRow($form->get('username')); ?>
                     <?php echo $this->formRow($form->get('password')); ?>
+                    <p><?php echo sprintf($this->translate('auth.login.termsAgreed'), $this->url('terms-and-conditions')); ?></p>
                     <div class="actions-container">
                         <?php echo $this->formElement($form->get('submit')); ?>
                         <a href="<?php echo $this->url('user-forgot-username'); ?>" class="action--tertiary list">

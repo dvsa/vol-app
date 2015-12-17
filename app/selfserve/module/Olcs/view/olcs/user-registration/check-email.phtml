@@ -25,7 +25,7 @@
             ->translateReplace(
                 'user-registration.page.check-email.content',
                 [
-                    $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Url')->fromRoute('login')
+                    $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Url')->fromRoute('auth/login')
                 ]
             ); ?>
       </p>

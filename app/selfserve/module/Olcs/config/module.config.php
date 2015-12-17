@@ -340,10 +340,10 @@ $routes = array(
             )
         )
     ),
-    'my-details' => array(
+    'my-account' => array(
         'type' => 'segment',
         'options' => array(
-            'route' => '/my-details[/]',
+            'route' => '/my-account[/]',
             'defaults' => array(
                 'controller' => MyDetailsController::class,
                 'action' => 'edit'
@@ -800,6 +800,22 @@ $searchNavigation = array(
     )
 );
 
+$myAccountNav = array(
+    'id' => 'my-account',
+    'label' => 'My account',
+    'route' => 'my-account',
+    'action' => 'edit',
+    'pages' => array(
+        array(
+            'id' => 'change-password',
+            'label' => 'Change password',
+            'route' => 'change-password',
+            'action' => 'index',
+            'use_route_match' => true,
+        ),
+    )
+);
+
 return array(
     'router' => array(
         'routes' => array_merge($routes, $configRoutes),
@@ -954,6 +970,7 @@ return array(
             'layout/layout' => __DIR__ . '/../view/layouts/base.phtml',
             'auth/layout' => __DIR__ . '/../view/layouts/base.phtml',
             'auth/login' => __DIR__ . '/../view/pages/auth/login.phtml',
+            'auth/change-password' => __DIR__ . '/../view/pages/auth/change-password.phtml',
             'auth/expired-password' => __DIR__ . '/../view/pages/auth/expired-password.phtml',
             'auth/forgot-password' => __DIR__ . '/../view/pages/auth/forgot-password.phtml',
             'auth/confirm-forgot-password' => __DIR__ . '/../view/pages/auth/confirm-forgot-password.phtml',
@@ -973,6 +990,7 @@ return array(
             $applicationNavigation,
             $searchNavigation,
             $busRegNav,
+            $myAccountNav,
             array(
                 'id' => 'home',
                 'label' => 'Home',
@@ -1007,9 +1025,9 @@ return array(
                         'class' => 'proposition-nav__item',
                     ),
                     array(
-                        'id' => 'selfserve-topnav-my-details',
+                        'id' => 'selfserve-topnav-my-account',
                         'label' => 'My account',
-                        'route' => 'my-details',
+                        'route' => 'my-account',
                         'class' => 'proposition-nav__item',
                     )
                 ),
@@ -1155,5 +1173,6 @@ return array(
         'date_format' => 'd M Y',
         'datetime_format' => 'd M Y H:i',
         'datetimesec_format' => 'd M Y H:i:s'
-    ]
+    ],
+    'my_account_route' => 'my-account',
 );
