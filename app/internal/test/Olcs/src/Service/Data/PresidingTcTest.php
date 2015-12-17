@@ -1,31 +1,33 @@
 <?php
 
 /**
- * Category Data Service Test
+ * PresidingTc data service test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace OlcsTest\Service\Data;
 
-use Olcs\Service\Data\Category;
+use Olcs\Service\Data\PresidingTc;
 use Mockery as m;
-use Dvsa\Olcs\Transfer\Query\Category\GetList as Qry;
+use Dvsa\Olcs\Transfer\Query\Cases\PresidingTc\GetList as Qry;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 
 /**
- * Category Data Service Test
+ * PresidingTc data service test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CategoryTest extends AbstractDataServiceTestCase
+class PresidingTcTest extends AbstractDataServiceTestCase
 {
-    public function testFetchListData()
+    /**
+     * Test fetchUserListData
+     */
+    public function testFetchUserListData()
     {
         $results = ['results' => 'results'];
         $params = [
-            'sort' => 'description',
-            'order' => 'ASC',
-            'isScanCategory' => 'Y'
+            'sort' => 'name',
+            'order' => 'ASC'
         ];
         $dto = Qry::create($params);
         $mockTransferAnnotationBuilder = m::mock()
@@ -33,7 +35,6 @@ class CategoryTest extends AbstractDataServiceTestCase
                 function ($dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
-                    $this->assertEquals($params['isScanCategory'], $dto->getIsScanCategory());
                     return 'query';
                 }
             )
@@ -41,12 +42,6 @@ class CategoryTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $mockResponse = m::mock()
-            ->shouldReceive('isServerError')
-            ->andReturn(false)
-            ->once()
-            ->shouldReceive('isClientError')
-            ->andReturn(false)
-            ->once()
             ->shouldReceive('isOk')
             ->andReturn(true)
             ->once()
@@ -55,13 +50,15 @@ class CategoryTest extends AbstractDataServiceTestCase
             ->twice()
             ->getMock();
 
-        $sut = new Category();
-        $sut->setIsScanCategory('Y');
+        $sut = new PresidingTc();
         $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
 
-        $this->assertEquals($results['results'], $sut->fetchListData([]));
+        $this->assertEquals($results['results'], $sut->fetchUserListData([]));
     }
 
+    /**
+     * Test fetchUserListData with exception
+     */
     public function testFetchListDataWithException()
     {
         $this->setExpectedException(UnexpectedResponseException::class);
@@ -69,32 +66,13 @@ class CategoryTest extends AbstractDataServiceTestCase
             ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
 
         $mockResponse = m::mock()
-            ->shouldReceive('isServerError')
-            ->andReturn(true)
+            ->shouldReceive('isOk')
+            ->andReturn(false)
             ->once()
             ->getMock();
-        $sut = new Category();
-        $sut->setIsScanCategory('Y');
+        $sut = new PresidingTc();
         $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, []);
 
-        $sut->fetchListData([]);
-    }
-
-    public function testGetIdFromHandle()
-    {
-        $sut = new Category();
-        $sut->setData('categories', [['handle' => 'test', 'id' => 4]]);
-
-        $this->assertEquals(4, $sut->getIdFromHandle('test'));
-        $this->assertNull($sut->getIdFromHandle('non-existant'));
-    }
-
-    public function testGetDescriptionFromId()
-    {
-        $sut = new Category();
-        $sut->setData('categories', [['description' => 'test', 'id' => 4]]);
-
-        $this->assertEquals('test', $sut->getDescriptionFromId(4));
-        $this->assertNull($sut->getDescriptionFromId(123));
+        $sut->fetchUserListData([]);
     }
 }

@@ -12,8 +12,9 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Fee\ApproveWaive as ApproveWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\CreateFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RecommendWaive as RecommendWaiveCmd;
-use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RefundFee as RefundFeeCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\AdjustTransaction as AdjustTransactionCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\ReverseTransaction as ReverseTransactionCmd;
@@ -22,6 +23,7 @@ use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeType as FeeTypeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList as FeeTypeListQry;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
+use Olcs\Data\Mapper\AdjustTransaction as AdjustTransactionMapper;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
@@ -272,7 +274,7 @@ trait FeesActionTrait
         $view = new ViewModel($viewParams);
         $view->setTemplate('sections/fees/pages/fee-details');
 
-        $layout = $this->renderLayout($view, 'No # ' . $fee['id']);
+        $layout = $this->renderLayout($view, 'internal.fee-details.title');
 
         $this->maybeClearLeft($layout);
 
@@ -319,12 +321,17 @@ trait FeesActionTrait
     /**
      * Redirect back to transaction details page
      */
-    protected function redirectToTransaction($ajax = false)
+    protected function redirectToTransaction($ajax = false, $transactionId = null)
     {
         $method = $ajax ? 'toRouteAjax' : 'toRoute';
-
         $route = $this->getFeesRoute() . '/fee_action/transaction';
-        return $this->redirect()->$method($route, ['action' => 'edit-fee'], [], true);
+        $params = ['action' => 'edit-fee'];
+
+        if ($transactionId) {
+            $params['transaction'] = $transactionId;
+        }
+
+        return $this->redirect()->$method($route, $params, [], true);
     }
 
     /**
@@ -382,23 +389,13 @@ trait FeesActionTrait
                 break;
         }
 
-        if ($transaction['displayReversalOption']) {
-            $reverseLink = $urlHelper->fromRoute(
-                $this->getFeesRoute() . '/fee_action/transaction/reverse',
-                ['transaction' => $transaction['id']],
-                [],
-                true
-            );
-        } else {
-            $reverseLink = '';
-        }
-
         $viewParams = [
             'table' => $table,
             'transaction' => $transaction,
             'backLink' => $backLink,
             'receiptLink' => $receiptLink,
-            'reverseLink' => $reverseLink,
+            'reverseLink' => $this->getReverseLink($transaction),
+            'adjustLink' => $this->getAdjustLink($transaction),
         ];
 
         $this->placeholder()->setPlaceholder('contentTitle', $title);
@@ -406,11 +403,51 @@ trait FeesActionTrait
         $view = new ViewModel($viewParams);
         $view->setTemplate('sections/fees/pages/transaction-details');
 
-        $layout = $this->renderLayout($view, 'Transaction # ' . $transaction['id']);
+        $layout = $this->renderLayout($view, $title);
 
         $this->maybeClearLeft($layout);
 
         return $layout;
+    }
+
+    /**
+     * Determine reversal url from transaction data
+     *
+     * @param array $transaction
+     * @return  string
+     */
+    protected function getReverseLink(array $transaction)
+    {
+        if ($transaction['displayReversalOption']) {
+            return $this->getServiceLocator()->get('Helper\Url')->fromRoute(
+                $this->getFeesRoute() . '/fee_action/transaction/reverse',
+                ['transaction' => $transaction['id']],
+                [],
+                true
+            );
+        }
+
+        return '';
+    }
+
+    /**
+     * Determine adjustment url from transaction data
+     *
+     * @param array $transaction
+     * @return  string
+     */
+    protected function getAdjustLink(array $transaction)
+    {
+        if ($transaction['displayAdjustmentOption']) {
+            return $this->getServiceLocator()->get('Helper\Url')->fromRoute(
+                $this->getFeesRoute() . '/fee_action/transaction/adjust',
+                ['transaction' => $transaction['id']],
+                [],
+                true
+            );
+        }
+
+        return '';
     }
 
     /**
@@ -422,6 +459,7 @@ trait FeesActionTrait
         $feeData = $this->getFees(['ids' => $feeIds]);
         $fees = $feeData['results'];
         $title = 'Pay fee' . (count($fees) !== 1 ? 's' : '');
+        $backToFee = !empty($this->params()->fromQuery('backToFee'));
 
         foreach ($fees as $fee) {
             // bail early if any of the fees prove to be the wrong status
@@ -432,7 +470,7 @@ trait FeesActionTrait
         }
 
         $form = $this->getForm('FeePayment');
-        $form = $this->alterPaymentForm($form, $feeData);
+        $form = $this->alterPaymentForm($form, $feeData, $backToFee);
 
         $this->loadScripts(['forms/fee-payment']);
 
@@ -465,7 +503,7 @@ trait FeesActionTrait
                     }
                 }
 
-                return $this->initiatePaymentRequest($feeIds, $form->getData()['details']);
+                return $this->initiatePaymentRequest($feeIds, $form->getData()['details'], $backToFee);
             }
         }
 
@@ -575,6 +613,71 @@ trait FeesActionTrait
         }
     }
 
+    public function adjustTransactionAction()
+    {
+        $transactionId = $this->params('transaction');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createFormWithRequest('AdjustTransaction', $this->getRequest());
+        $form->get('messages')->get('message')->setValue('fees.adjust-transaction.confirm');
+
+        $query = PaymentByIdQry::create(['id' => $transactionId]);
+        $response = $this->handleQuery($query);
+        if (!$response->isOk()) {
+            $this->addErrorMessage('unknown-error');
+            return $this->redirectToTransaction();
+        }
+        $transaction = $response->getResult();
+
+        if (!$transaction['canAdjust']) {
+            $this->addErrorMessage('fees.adjust-transaction.cannotAdjust');
+            return $this->redirectToTransaction(true);
+        }
+
+        if ($this->getRequest()->isPost()) {
+            $redirect = $this->handleAdjustTransactionPost($form, $transaction);
+            if (!is_null($redirect)) {
+                return $redirect;
+            }
+        } else {
+            $form->setData(AdjustTransactionMapper::mapFromResult($transaction));
+        }
+
+        $this->alterAdjustmentForm($form, $transaction);
+
+        $view = new ViewModel(array('form' => $form));
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'fees.adjust-transaction.title');
+    }
+
+    private function handleAdjustTransactionPost($form, $transaction)
+    {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirectToTransaction();
+        }
+        $data = (array) $this->getRequest()->getPost();
+
+        // re-add readonly value to form data
+        $data['details']['paymentMethod'] = $transaction['paymentMethod']['description'];
+
+        $form->setData($data);
+        if ($form->isValid()) {
+            $dtoData = AdjustTransactionMapper::mapFromForm($form->getData());
+            $response = $this->handleCommand(AdjustTransactionCmd::create($dtoData));
+            if ($response->isOk()) {
+                // redirect to *new* adjustment transaction, not the current one
+                $this->addSuccessMessage('fees.adjust-transaction.success');
+                $newId = $response->getResult()['id']['transaction'];
+                return $this->redirectToTransaction(true, $newId);
+            } else {
+                $flashErrors = AdjustTransactionMapper::mapFromErrors($form, $response->getResult());
+                foreach ($flashErrors as $error) {
+                    $this->addErrorMessage($error);
+                }
+            }
+        }
+    }
+
     /**
      * Alter fee form
      *
@@ -591,6 +694,7 @@ trait FeesActionTrait
         }
 
         if ($status !== RefData::FEE_STATUS_OUTSTANDING) {
+            $form->get('form-actions')->remove('pay');
             $form->get('form-actions')->remove('approve');
             $form->get('form-actions')->remove('reject');
             $form->get('form-actions')->remove('recommend');
@@ -618,9 +722,11 @@ trait FeesActionTrait
      *
      * @param \Zend\Form\Form $form
      * @param array $feeData from FeeList query
+     * @param boolean $backToFee whether to populate 'backToFee' field which
+     * controls the final redirect
      * @return \Zend\Form\Form
      */
-    protected function alterPaymentForm($form, $feeData)
+    protected function alterPaymentForm($form, $feeData, $backToFee = false)
     {
         $minAmount = $feeData['extra']['minPayment'];
         $maxAmount = $feeData['extra']['totalOutstanding'];
@@ -643,6 +749,12 @@ trait FeesActionTrait
         $form->get('details')
             ->get('minAmountForValidator')
             ->setValue($minAmount);
+
+        if ($backToFee) {
+            // note we don't actually use the query string id here, it's safer
+            // to treat it as a boolean flag and use the id from the data
+            $form->get('details')->get('backToFee')->setValue($feeData['results'][0]['id']);
+        }
 
         return $form;
     }
@@ -668,6 +780,39 @@ trait FeesActionTrait
         // populate fee type select
         $options = $this->fetchFeeTypeValueOptions();
         $form->get('fee-details')->get('feeType')->setValueOptions($options);
+
+        return $form;
+    }
+
+    /**
+     * Alter adjustment form
+     *
+     * @param \Zend\Form\Form $form
+     * @param array $transaction
+     * @return \Zend\Form\Form
+     */
+    protected function alterAdjustmentForm($form, $transaction)
+    {
+        switch ($transaction['paymentMethod']['id']) {
+            case RefData::FEE_PAYMENT_METHOD_CASH:
+                $remove = ['chequeNo', 'chequeDate', 'poNo'];
+                break;
+            case RefData::FEE_PAYMENT_METHOD_CHEQUE:
+                $remove = ['poNo'];
+                break;
+            case RefData::FEE_PAYMENT_METHOD_POSTAL_ORDER:
+                $remove = ['chequeNo', 'chequeDate'];
+                break;
+            case RefData::FEE_PAYMENT_METHOD_CARD_ONLINE:
+            case RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE:
+            default:
+                $remove = ['received', 'payer', 'slipNo', 'chequeNo', 'chequeDate', 'poNo'];
+                break;
+        }
+
+        foreach ($remove as $field) {
+            $form->get('details')->remove($field);
+        }
 
         return $form;
     }
@@ -738,7 +883,9 @@ trait FeesActionTrait
      */
     protected function processForm($form)
     {
-        if ($this->isButtonPressed('recommend')) {
+        if ($this->isButtonPressed('pay')) {
+            $this->redirectToPay();
+        } elseif ($this->isButtonPressed('recommend')) {
             $this->formPost($form, 'recommendWaive');
         } elseif ($this->isButtonPressed('reject')) {
             $this->validateForm = false;
@@ -854,13 +1001,26 @@ trait FeesActionTrait
     }
 
     /**
+     * Redirect to 'pay fee' page
+     */
+    protected function redirectToPay()
+    {
+        $feeId = $this->params()->fromRoute('fee', null);
+        $route = $this->getFeesRoute() . '/fee_action';
+        $params = ['fee' => $feeId, 'action' => 'pay-fees'];
+        $options = ['query' => ['backToFee' => $feeId]];
+        return $this->redirect()->toRoute($route, $params, $options, true);
+    }
+
+    /**
      * Kick off the CPMS payment process for a given amount
      * relating to a given array of fees
      *
      * @param array  $feeIds
      * @param array  $details
+     * @param boolean $backToFee
      */
-    private function initiatePaymentRequest($feeIds, $details)
+    private function initiatePaymentRequest($feeIds, $details, $backToFee)
     {
         $paymentMethod = $details['paymentType'];
 
@@ -869,8 +1029,13 @@ trait FeesActionTrait
 
                 $cpmsRedirectUrl = $this->url()->fromRoute(
                     $this->getFeesRoute() . '/fee_action',
-                    ['action' => 'payment-result'],
-                    ['force_canonical' => true],
+                    [
+                        'action' => 'payment-result',
+                    ],
+                    [
+                        'force_canonical' => true,
+                        'query' => ['backToFee' => (int) $backToFee],
+                    ],
                     true
                 );
 
@@ -948,6 +1113,10 @@ trait FeesActionTrait
             $this->addErrorMessage('The fee(s) have NOT been paid. Please try again');
         }
 
+        if (isset($details['backToFee']) && !empty($details['backToFee'])) {
+            return $this->redirectToFeeDetails(true);
+        }
+
         return $this->redirectToList();
     }
 
@@ -989,6 +1158,10 @@ trait FeesActionTrait
             default:
                 $this->addErrorMessage('An unexpected error occured');
                 break;
+        }
+
+        if (isset($queryStringData['backToFee']) && !empty($queryStringData['backToFee'])) {
+            return $this->redirectToFeeDetails();
         }
 
         return $this->redirectToList();

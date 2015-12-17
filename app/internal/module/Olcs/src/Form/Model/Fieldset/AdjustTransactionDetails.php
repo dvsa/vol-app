@@ -5,42 +5,33 @@ namespace Olcs\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
- * Fee Payment Details fieldset
+ * @Form\Attributes({"class":""})
+ * @Form\Name("details")
  */
-class FeePaymentDetails
+class AdjustTransactionDetails
 {
     /**
+     * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */
-    public $backToFee = null;
+    public $id = null;
 
     /**
-     * @Form\Type("Common\Form\Elements\Types\Html")
-     * @Form\Options({
-     *     "label": "fees.max_amount",
-     * })
-     */
-    public $maxAmount = null;
-
-    /**
+     * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      */
-    public $minAmountForValidator = null;
+    public $version = null;
 
     /**
      * @Form\Type("Hidden")
-     */
-    public $maxAmountForValidator = null;
-
-    /**
-     * @Form\Options({
-     *     "label": "fees.payment_method",
-     *     "service_name":"Olcs\Service\Data\PaymentType"
-     * })
-     * @Form\Type("DynamicSelect")
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      */
     public $paymentType = null;
+
+    /**
+     * @Form\Options({"label": "fees.payment_method"})
+     * @Form\Type("Common\Form\Elements\Types\Readonly")
+     */
+    public $paymentMethod = null;
 
     /**
      * @Form\Options({
@@ -49,60 +40,9 @@ class FeePaymentDetails
      *      "label_attributes": {"id": "label-received"}
      * })
      * @Form\Type("Text")
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
-     *          "context_field": "paymentType",
-     *          "context_values": {"fpm_card_offline"},
-     *          "context_truth": false,
-     *          "allow_empty": false,
-     *          "validators": {
-     *              {
-     *                   "name": "Zend\Validator\GreaterThan",
-     *                   "options": {
-     *                        "min": 0,
-     *                        "messages": {
-     *                             "notGreaterThan": "The payment amount must be greater than %min%"
-     *                        }
-     *                   },
-     *                   "break_chain_on_failure": true
-     *              },
-     *              {"name": "\Common\Form\Elements\Validators\ReceivedAmount"}
-     *          }
-     *      }
-     * })
+     * @Form\Validator({"name": "Common\Form\Elements\Validators\Money"})
      */
     public $received = null;
-
-    /**
-     * Receipt date, required for non-card payments
-     *
-     * @Form\Options({
-     *      "short-label":"fees.receipt_date",
-     *      "label":"fees.receipt_date",
-     *      "label_attributes": {"id": "label-receiptDate"}
-     * })
-     * @Form\Required(true)
-     * @Form\Attributes({"required":false})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
-     *          "context_field": "paymentType",
-     *          "context_values": {"fpm_card_offline"},
-     *          "context_truth": false,
-     *          "allow_empty": false,
-     *          "validators": {
-     *              {"name": "NotEmpty"},
-     *              {"name": "\Common\Validator\Date"},
-     *              {"name": "Date", "options": {"format": "Y-m-d"}},
-     *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
-     *          }
-     *      }
-     * })
-     */
-    public $receiptDate = null;
 
     /**
      * Payer name, required for non-card payments
@@ -263,4 +203,19 @@ class FeePaymentDetails
      * })
      */
     public $poNo = null;
+
+    /**
+     * @Form\Attributes({"class":"long","id":""})
+     * @Form\Options({
+     *     "label":"Reason for the adjustment",
+     *     "short-label":"Reason",
+     *     "label_attributes": {"id": "label-reason"}
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\Textarea")
+     * @Form\Validator({
+     *     "name": "Zend\Validator\NotEmpty",
+     *     "options": {"messages": {"isEmpty": "You must enter a reason"}}
+     * })
+     */
+    public $reason = null;
 }

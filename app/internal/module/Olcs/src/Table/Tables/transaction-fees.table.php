@@ -28,7 +28,7 @@ return array(
             'align' => 'right',
         ),
         array(
-            'title' => 'Allocated',
+            'title' => 'Allocation',
             'name' => 'allocatedAmount',
             'formatter' => 'TransactionFeeAllocatedAmount',
             'align' => 'right',

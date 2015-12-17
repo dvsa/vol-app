@@ -56,7 +56,7 @@ class TaskDetails
      * @Form\Options({
      *     "label": "tasks.data.category",
      *     "service_name": "Olcs\Service\Data\Category",
-     *     "context": {"isTaskCategory": true },
+     *     "context": {"isTaskCategory": "Y" },
      *     "empty_option": "Please Select"
      * })
      * @Form\Type("DynamicSelect")
@@ -67,7 +67,8 @@ class TaskDetails
      * @Form\Attributes({"id":"subCategory","placeholder":""})
      * @Form\Options({
      *     "label": "tasks.data.sub_category",
-     *     "service_name": "Olcs\Service\Data\TaskSubCategory",
+     *     "service_name": "Olcs\Service\Data\SubCategory",
+     *     "context": {"isTaskCategory": "Y" },
      *     "empty_option": "Please Select"
      * })
      * @Form\Type("DynamicSelect")

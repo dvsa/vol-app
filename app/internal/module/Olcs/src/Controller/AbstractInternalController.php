@@ -231,6 +231,12 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     protected $commentMapperClass;
 
+    /**
+     * @var string
+     *
+     * On pages with a comment form, we need to override the title returned from editAction
+     */
+    protected $commentTitle;
 
     /**
      * Caches the list data result
@@ -248,6 +254,8 @@ abstract class AbstractInternalController extends AbstractActionController
                 $this->commentUpdateCommand,
                 $this->commentMapperClass
             );
+
+            $this->placeholder()->setPlaceholder('contentTitle', $this->commentTitle);
 
             if ($commentBox instanceof HttpResponse) {
                 return $commentBox;

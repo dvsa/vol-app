@@ -52,19 +52,19 @@ $this->doctype(); ?>
 
     <div class="page-wrapper">
 
+      <?php
+        if (!empty($horizontalNavigationId)) {
+            echo $this->navigation('navigation')
+                ->menu($this->navigation()->findOneBy('id', $horizontalNavigationId))
+                ->setPartial('partials/horizontal-navigation');
+        } elseif(!empty($horizontalNavigationContainer)) {
+            echo $this->navigation($horizontalNavigationContainer)->menu()->setPartial('partials/horizontal-navigation');
+        }
+      ?>
+
       <div id="main" role="main">
 
         <?php if (isset($right)): ?><div class="table-col"><?php endif; ?>
-
-          <?php
-            if (!empty($horizontalNavigationId)) {
-                echo $this->navigation('navigation')
-                    ->menu($this->navigation()->findOneBy('id', $horizontalNavigationId))
-                    ->setPartial('partials/horizontal-navigation');
-            } elseif(!empty($horizontalNavigationContainer)) {
-                echo $this->navigation($horizontalNavigationContainer)->menu()->setPartial('partials/horizontal-navigation');
-            }
-          ?>
 
           <div class="content">
 
@@ -78,7 +78,7 @@ $this->doctype(); ?>
 
                 <?php endif; if (!empty($contentTitle)): ?>
                   <div class="content__header js-title">
-                    <h3><?php echo $this->translate($contentTitle); ?></h3>
+                    <h3 class="title"><?php echo $this->translate($contentTitle); ?></h3>
                   </div>
                 <?php endif; ?>
 

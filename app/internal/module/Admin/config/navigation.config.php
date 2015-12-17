@@ -152,7 +152,6 @@ return [
                 ],
                 [
                     'id'    => 'admin-dashboard/admin-my-account',
-                    'visible' => false,
                     'label' => 'My account',
                     'route' => 'admin-dashboard/admin-my-account',
                     'pages' => [
@@ -164,7 +163,8 @@ return [
                         [
                             'id' => 'admin-dashboard/admin-my-account/change-password',
                             'label' => 'Change password',
-                            'route' => 'admin-dashboard/admin-my-account/change-password',
+                            'route' => 'change-password',
+                            'class' => 'js-modal-ajax',
                         ],
                     ]
                 ],

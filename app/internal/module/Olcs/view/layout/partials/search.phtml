@@ -6,10 +6,10 @@
             if (!empty($searchForm)):
                 ?>
                 <form action="<?php echo $this->url('search')?>" method="POST">
-                    <?php echo $this->formInput($searchForm->get('search')); ?>
                     <div class="search__select">
                         <?php echo $this->formSelect($searchForm->get('index')); ?>
-                    </div><!-- .search__select -->
+                    </div>
+                    <?php echo $this->formInput($searchForm->get('search')); ?>
                     <?php echo $this->formSubmit($searchForm->get('submit')); ?>
                 </form>
             <?php

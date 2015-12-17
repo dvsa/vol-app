@@ -23,9 +23,9 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
     use FeesActionTrait,
         GenericReceipt;
 
-    protected function renderLayout($view)
+    protected function renderLayout($view, $pageTitle = null)
     {
-        return $this->render($view);
+        return $this->render($view, $pageTitle);
     }
 
     /**

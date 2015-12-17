@@ -3,26 +3,28 @@
 namespace Olcs\Service\Data;
 
 use Common\Service\Data\ListDataInterface;
-use Common\Service\Data\AbstractData;
+use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataTrait;
+use Dvsa\Olcs\Transfer\Query\SubCategory\GetList;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 
 /**
  * Class SubCategory
  * @package Olcs\Service\Data
  */
-class SubCategory extends AbstractData implements ListDataInterface
+class SubCategory extends AbstractDataService implements ListDataInterface
 {
     use ListDataTrait;
 
     /**
      * @var string
      */
-    protected $serviceName = 'SubCategory';
+    protected $category;
 
-    /**
+    /*
      * @var string
      */
-    protected $category;
+    protected $isScanCategory = null;
 
     /**
      * @param string $category
@@ -51,7 +53,12 @@ class SubCategory extends AbstractData implements ListDataInterface
     public function fetchListData($params)
     {
         $params['sort'] = 'subCategoryName';
-        $params['limit'] = 'all';
+        $params['order'] = 'ASC';
+
+        $isScanCategory = $this->getIsScanCategory();
+        if ($isScanCategory) {
+            $params['isScanCategory'] = $isScanCategory;
+        }
 
         $category = $this->getCategory();
         $key = 'all';
@@ -61,10 +68,16 @@ class SubCategory extends AbstractData implements ListDataInterface
         }
 
         if (is_null($this->getData($key))) {
-            $data = $this->getRestClient()->get('', $params);
+
+            $dtoData = GetList::create($params);
+            $response = $this->handleQuery($dtoData);
+            if ($response->isServerError() || $response->isClientError() || !$response->isOk()) {
+                throw new UnexpectedResponseException('unknown-error');
+            }
+
             $this->setData($key, false);
-            if (isset($data['Results'])) {
-                $this->setData($key, $data['Results']);
+            if (isset($response->getResult()['results'])) {
+                $this->setData($key, $response->getResult()['results']);
             }
         }
 
@@ -96,5 +109,27 @@ class SubCategory extends AbstractData implements ListDataInterface
     public function getDescriptionFromId($id)
     {
         return $this->getPropertyFromKey('id', 'subCategoryName', $id);
+    }
+
+    /**
+     * Get isScanCategory
+     *
+     * @return string
+     */
+    public function getIsScanCategory()
+    {
+        return $this->isScanCategory;
+    }
+
+    /**
+     * Set isScanCategory
+     *
+     * @param string
+     * @return \Olcs\Service\Data\SubCategory
+     */
+    public function setIsScanCategory($isScanCategory)
+    {
+        $this->isScanCategory = $isScanCategory;
+        return $this;
     }
 }

@@ -1,77 +1,94 @@
 <?php
 
+/**
+ * User data service test
+ *
+ * @author someone <someone@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ */
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\User;
+use Mockery as m;
+use Dvsa\Olcs\Transfer\Query\User\UserList as Qry;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 
 /**
- * Class UserTest
- * @package OlcsTest\Service\Data
+ * User data service test
+ *
+ * @author someone <someone@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class UserTest extends \PHPUnit_Framework_TestCase
+class UserTest extends AbstractDataServiceTestCase
 {
     private $users = [
         ['id' => 1, 'loginId' => 'Logged in user'],
         ['id' => 5, 'loginId' => 'Mr E'],
     ];
 
-    public function testUserData()
+    /**
+     * Test fetchUserListData
+     */
+    public function testFetchUserListData()
     {
-        $users = ['Results' =>
-            $this->users
+        $results = ['results' => 'results'];
+        $params = [
+            'sort' => 'loginId',
+            'order' => 'ASC'
         ];
+        $team = 99;
+        $dto = Qry::create($params);
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturnUsing(
+                function ($dto) use ($params, $team) {
+                    $this->assertEquals($params['sort'], $dto->getSort());
+                    $this->assertEquals($params['order'], $dto->getOrder());
+                    $this->assertEquals($team, $dto->getTeam());
+                    return 'query';
+                }
+            )
+            ->once()
+            ->getMock();
 
-        $mockRestClient = $this->getMock('\Common\Util\RestClient', [], [], '', false);
-        $mockRestClient->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo(''), $this->isType('array'))
-            ->willReturn($users);
+        $mockResponse = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->once()
+            ->shouldReceive('getResult')
+            ->andReturn($results)
+            ->twice()
+            ->getMock();
 
         $sut = new User();
-        $sut->setRestClient($mockRestClient);
+        $sut->setTeam($team);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
 
-        $this->assertEquals($this->users, $sut->fetchUserListData([]));
-        //test data is cached
-        $this->assertEquals($this->users, $sut->fetchUserListData([]));
+        $this->assertEquals($results['results'], $sut->fetchUserListData([]));
     }
 
-    public function testUserDataForTeam()
+    /**
+     * Test fetchUserListData with exception
+     */
+    public function testFetchListDataWithException()
     {
-        $users = ['Results' =>
-            $this->users
-        ];
+        $this->setExpectedException(UnexpectedResponseException::class);
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
 
-        $mockRestClient = $this->getMock('\Common\Util\RestClient', [], [], '', false);
-        $mockRestClient->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo(''), ['bundle'=>json_encode([]), 'team'=>99])
-            ->willReturn($users);
-
+        $mockResponse = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(false)
+            ->once()
+            ->getMock();
         $sut = new User();
-        $sut->setTeam(99);
-        $sut->setRestClient($mockRestClient);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, []);
 
-        $this->assertEquals($this->users, $sut->fetchUserListData([]));
+        $sut->fetchUserListData([]);
     }
 
-    public function testFetchUserDataFailure()
-    {
-        $users = [];
-
-        $mockRestClient = $this->getMock('\Common\Util\RestClient', [], [], '', false);
-        $mockRestClient->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo(''), $this->isType('array'))
-            ->willReturn($users);
-
-        $sut = new User();
-        $sut->setRestClient($mockRestClient);
-
-        $this->assertEquals(false, $sut->fetchUserListData([]));
-        //test failure isn't retried
-        $this->assertEquals(false, $sut->fetchUserListData([]));
-    }
-
+    /**
+     * Test fetchListOptions
+     */
     public function testFetchListOptions()
     {
         $sut = new User();
@@ -80,17 +97,14 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals([1 => 'Logged in user', 5 => 'Mr E'], $sut->fetchListOptions([]));
     }
 
+    /**
+     * Test fetchListOptionsEmpty
+     */
     public function testFetchListOptionsEmpty()
     {
         $sut = new User();
         $sut->setData('userlist', false);
 
         $this->assertEquals([], $sut->fetchListOptions([]));
-    }
-
-    public function testGetBundle()
-    {
-        $sut = new User();
-        $this->assertInternalType('array', $sut->getBundle());
     }
 }

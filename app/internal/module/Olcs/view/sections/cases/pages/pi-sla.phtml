@@ -18,14 +18,15 @@ $items = [
     ['label' => 'Target date', 'date' => $pi['briefToTcDateTarget'], 'dateFormat' => $dateFormat],
 ];
 
+$items[] = [
+    'label' => 'Written outcome',
+    'value' => isset($pi['writtenOutcome']['description']) ? $pi['writtenOutcome']['description'] : '',
+    'class' => 'full-width'
+];
+
 if (isset($pi['writtenOutcome']['id'])) {
     switch ($pi['writtenOutcome']['id']) {
         case 'piwo_reason':
-            $items[] = [
-                'label' => 'Written outcome',
-                'value' => $pi['writtenOutcome']['description'],
-                'class' => 'full-width'
-            ];
             $items[] = [
                 'label' => 'Date TC\'s written reason',
                 'date' => $pi['tcWrittenReasonDate'],
@@ -57,20 +58,6 @@ if (isset($pi['writtenOutcome']['id'])) {
             break;
         case 'piwo_decision':
             $items[] = [
-                'label' => 'Written decision letter sent',
-                'date' => $pi['decisionLetterSentDate'],
-                'dateFormat' => $dateFormat,
-                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                    $pi['decisionLetterSentDate'],
-                    $pi['decisionLetterSentDateTarget']
-                )
-            ];
-            $items[] = [
-                'label' => 'Target date',
-                'date' => $pi['decisionLetterSentDateTarget'],
-                'dateFormat' => $dateFormat
-            ];
-            $items[] = [
                 'label' => 'Date TC\'s written decision',
                 'date' => $pi['tcWrittenDecisionDate'],
                 'dateFormat' => $dateFormat,
@@ -84,13 +71,22 @@ if (isset($pi['writtenOutcome']['id'])) {
                 'date' => $pi['tcWrittenDecisionDateTarget'],
                 'dateFormat' => $dateFormat
             ];
-            break;
-        case 'piwo_none':
             $items[] = [
-                'label' => 'Written outcome',
-                'value' => 'Verbal decision only',
-                'class' => 'full-width'
+                'label' => 'Written decision letter sent',
+                'date' => $pi['writtenDecisionLetterDate'],
+                'dateFormat' => $dateFormat,
+                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
+                    $pi['decisionLetterSentDate'],
+                    $pi['decisionLetterSentDateTarget']
+                )
             ];
+            $items[] = [
+                'label' => 'Target date',
+                'date' => $pi['decisionLetterSentDateTarget'],
+                'dateFormat' => $dateFormat
+            ];
+            break;
+        case 'piwo_verbal':
             $items[] = [
                 'label' => 'Decision letter sent',
                 'date' => $pi['decisionLetterSentDate'],
@@ -106,20 +102,7 @@ if (isset($pi['writtenOutcome']['id'])) {
                 'dateFormat' => $dateFormat
             ];
             break;
-        default:
-            $items[] = [
-                'label' => 'Written outcome',
-                'value' => isset($pi['writtenOutcome']['description']) ? $pi['writtenOutcome']['description'] : '',
-                'class' => 'full-width'
-            ];
-            break;
     }
-} else {
-    $items[] = [
-        'label' => 'Written outcome',
-        'value' => '',
-        'class' => 'full-width'
-    ];
 }
 
 $actions = [];

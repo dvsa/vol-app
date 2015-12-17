@@ -49,6 +49,16 @@ $feeActionRoute = [
                     ],
                     'may_terminate' => true,
                 ],
+                'adjust' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => 'adjust[/]',
+                        'defaults' => [
+                            'action' => 'adjustTransaction',
+                        ]
+                    ],
+                    'may_terminate' => true,
+                ],
             ],
         ],
     ],
@@ -1665,7 +1675,7 @@ $routes = [
                         'options' => [
                             'route' => 'psv-authorisations[/:action][/:id][/]',
                             'constraints' => [
-                                'action' => '(add|edit|grant|reset|approve|withdraw|refuse)',
+                                'action' => '(add|edit|reset)',
                                 'id' => '[0-9]+'
                             ],
                             'defaults' => [

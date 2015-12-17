@@ -16,7 +16,7 @@ class DocumentSubCategory extends SubCategory
      */
     public function fetchListData($params)
     {
-        $params['isDoc'] = true;
+        $params['isDocCategory'] = 'Y';
         return parent::fetchListData($params);
     }
 }

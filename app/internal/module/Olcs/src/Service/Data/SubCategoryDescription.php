@@ -3,21 +3,18 @@
 namespace Olcs\Service\Data;
 
 use Common\Service\Data\ListDataInterface;
-use Common\Service\Data\AbstractData;
+use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataTrait;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Dvsa\Olcs\Transfer\Query\SubCategoryDescription\GetList;
 
 /**
  * Class SubCategoryDescription
  * @package Olcs\Service\Data
  */
-class SubCategoryDescription extends AbstractData implements ListDataInterface
+class SubCategoryDescription extends AbstractDataService implements ListDataInterface
 {
     use ListDataTrait;
-
-    /**
-     * @var string
-     */
-    protected $serviceName = 'SubCategoryDescription';
 
     /**
      * @var string
@@ -59,10 +56,15 @@ class SubCategoryDescription extends AbstractData implements ListDataInterface
         }
 
         if (is_null($this->getData($key))) {
-            $data = $this->getRestClient()->get('', $params);
+            $dtoData = GetList::create($params);
+            $response = $this->handleQuery($dtoData);
+            if ($response->isServerError() || $response->isClientError() || !$response->isOk()) {
+                throw new UnexpectedResponseException('unknown-error');
+            }
+
             $this->setData($key, false);
-            if (isset($data['Results'])) {
-                $this->setData($key, $data['Results']);
+            if (isset($response->getResult()['results'])) {
+                $this->setData($key, $response->getResult()['results']);
             }
         }
 
