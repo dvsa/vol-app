@@ -103,19 +103,6 @@ class IrfoPsvAuthFormActions
     public $refuse = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"reset"})
-     * @Form\Options({
-     *     "label": "Reset",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
-     * })
-     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
-     */
-    public $reset = null;
-
-    /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
      * @Form\Options({
      *     "label": "Cancel",
