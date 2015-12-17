@@ -6,6 +6,6 @@ $currentSectionParent = $currentSection->getParent();
 $case = $this->placeholder('case')->getValue();
 
 ?>
-<h4><?php echo $this->translate($currentSection->getParent()->getLabel()); ?></h4>
+<h4 class="title"><?php echo $this->translate($currentSection->getParent()->getLabel()); ?></h4>
 <?php
 echo $this->navigation($currentSectionParent)->menu()->setPartial('partials/vertical-navigation');
