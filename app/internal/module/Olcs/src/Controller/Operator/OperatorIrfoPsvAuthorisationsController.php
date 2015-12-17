@@ -27,7 +27,6 @@ use Common\Form\Elements\InputFilters\ActionButton;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 
-
 /**
  * Operator Irfo Psv Authorisations Controller
  */
