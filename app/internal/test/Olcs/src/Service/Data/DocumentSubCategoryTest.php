@@ -10,6 +10,7 @@ namespace OlcsTest\Service\Data;
 use Olcs\Service\Data\DocumentSubCategory;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\SubCategory\GetList as Qry;
+use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * SubCategory Data Service Test
@@ -41,12 +42,6 @@ class DocumentSubCategoryTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $mockResponse = m::mock()
-            ->shouldReceive('isServerError')
-            ->andReturn(false)
-            ->once()
-            ->shouldReceive('isClientError')
-            ->andReturn(false)
-            ->once()
             ->shouldReceive('isOk')
             ->andReturn(true)
             ->once()

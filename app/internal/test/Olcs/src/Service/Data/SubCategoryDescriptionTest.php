@@ -11,6 +11,7 @@ use Olcs\Service\Data\SubCategoryDescription;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\SubCategoryDescription\GetList as Qry;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * SubCategoryDescription Data Service Test
@@ -35,12 +36,6 @@ class SubCategoryDescriptionTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $mockResponse = m::mock()
-            ->shouldReceive('isServerError')
-            ->andReturn(false)
-            ->once()
-            ->shouldReceive('isClientError')
-            ->andReturn(false)
-            ->once()
             ->shouldReceive('isOk')
             ->andReturn(true)
             ->once()
@@ -64,8 +59,8 @@ class SubCategoryDescriptionTest extends AbstractDataServiceTestCase
             ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
 
         $mockResponse = m::mock()
-            ->shouldReceive('isServerError')
-            ->andReturn(true)
+            ->shouldReceive('isOk')
+            ->andReturn(false)
             ->once()
             ->getMock();
         $sut = new SubCategoryDescription();
