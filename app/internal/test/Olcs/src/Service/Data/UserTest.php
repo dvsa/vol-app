@@ -51,12 +51,6 @@ class UserTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $mockResponse = m::mock()
-            ->shouldReceive('isServerError')
-            ->andReturn(false)
-            ->once()
-            ->shouldReceive('isClientError')
-            ->andReturn(false)
-            ->once()
             ->shouldReceive('isOk')
             ->andReturn(true)
             ->once()
@@ -82,8 +76,8 @@ class UserTest extends AbstractDataServiceTestCase
             ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
 
         $mockResponse = m::mock()
-            ->shouldReceive('isServerError')
-            ->andReturn(true)
+            ->shouldReceive('isOk')
+            ->andReturn(false)
             ->once()
             ->getMock();
         $sut = new User();

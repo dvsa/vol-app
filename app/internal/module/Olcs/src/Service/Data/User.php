@@ -91,7 +91,7 @@ class User extends AbstractDataService implements ListDataInterface
 
             $dtoData = UserList::create($params);
             $response = $this->handleQuery($dtoData);
-            if ($response->isServerError() || $response->isClientError() || !$response->isOk()) {
+            if (!$response->isOk()) {
                 throw new UnexpectedResponseException('unknown-error');
             }
             $this->setData('userlist', false);
