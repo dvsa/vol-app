@@ -127,10 +127,10 @@
     $userId = $this->currentUser()->getUniqueId();
 
     if (!empty($userId)) {
-      echo sprintf('ga(\'create\', \'UA-56585177-1\', \'auto\', {\'userId\': \'%s\'});', $userId);
+      echo sprintf('ga(\'create\', \'UA-56588861-1\', \'auto\', {\'userId\': \'%s\'});', $userId);
     } else {
       ?>
-      ga('create', 'UA-56585177-1', 'auto');
+      ga('create', 'UA-56588861-1', 'auto');
       <?php
     }
     ?>
