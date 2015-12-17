@@ -25,6 +25,8 @@ use Common\RefData;
 use Zend\Form\Form as ZendForm;
 use Common\Form\Elements\InputFilters\ActionButton;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
+
 
 /**
  * Operator Irfo Psv Authorisations Controller
@@ -61,6 +63,10 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     protected $listVars = ['organisation'];
 
     private $allActions = ['grant', 'approve', 'generateDocument', 'cns', 'withdraw', 'refuse', 'reset'];
+
+    protected $crudConfig = [
+        'reset' => ['requireRows' => true]
+    ];
 
     public function getLeftView()
     {
@@ -126,8 +132,6 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
                         return RefusetDto::class;
                     case 'withdraw':
                         return WithdrawtDto::class;
-                    case 'reset':
-                        return ResetDto::class;
                 }
             }
         }
@@ -152,6 +156,17 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
             $this->editViewTemplate,
             $this->editSuccessMessage,
             $this->editContentTitle
+        );
+    }
+
+    public function resetAction()
+    {
+        return $this->confirmCommand(
+            new ConfirmItem($this->itemParams, false),
+            ResetDto::class,
+            'Reset',
+            'Are you sure you want to reset the selected record(s)',
+            'Record reset'
         );
     }
 
@@ -248,12 +263,6 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
                 break;
             case 'withdraw':
                 if (!isset($formData['fields']['isWithdrawable']) || (bool) $formData['fields']['isWithdrawable'] !==
-                    true) {
-                    $form->get('form-actions')->remove($action);
-                }
-                break;
-            case 'reset':
-                if (!isset($formData['fields']['isResetable']) || (bool) $formData['fields']['isResetable'] !==
                     true) {
                     $form->get('form-actions')->remove($action);
                 }
