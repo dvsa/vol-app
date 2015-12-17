@@ -1675,7 +1675,7 @@ $routes = [
                         'options' => [
                             'route' => 'psv-authorisations[/:action][/:id][/]',
                             'constraints' => [
-                                'action' => '(add|edit|grant|reset|approve|withdraw|refuse)',
+                                'action' => '(add|edit|reset)',
                                 'id' => '[0-9]+'
                             ],
                             'defaults' => [
