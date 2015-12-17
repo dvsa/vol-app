@@ -9,6 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("fee-filter")
  * @Form\Attributes({"method":"get", "class":"form__filter filters"})
  * @Form\Type("Common\Form\Form")
+ * @Form\Options({"prefer_form_input_filter": true, "bypass_auth": true})
  */
 class FeeFilter
 {
