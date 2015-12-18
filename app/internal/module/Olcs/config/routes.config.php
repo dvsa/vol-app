@@ -370,20 +370,6 @@ $routes = [
             ]
         ],
     ],
-    'case_penalty_edit' => [
-        'type' => 'segment',
-        'options' => [
-            'route' => '/case/:case/penalty/:seriousInfringement/:action[/:id][/]',
-            'constraints' => [
-                'case' => '[0-9]+',
-                'seriousInfringement' => '[0-9]+',
-                'id' => '[0-9]+',
-            ],
-            'defaults' => [
-                'controller' => 'CaseAppliedPenaltyController'
-            ]
-        ],
-    ],
     'case_complaint' => [
         'type' => 'segment',
         'options' => [
