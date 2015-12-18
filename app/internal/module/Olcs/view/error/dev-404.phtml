@@ -3,7 +3,9 @@
 
 <?php if (isset($this->reason) && $this->reason): ?>
 
-  <?php $reasonMessage= ''; switch ($this->reason) {
+  <?php 
+  $reasonMessage= ''; 
+  switch ($this->reason) {
     case 'error-controller-cannot-dispatch':
         $reasonMessage = $this->translate('The requested controller was unable to dispatch the request.');
         break;
