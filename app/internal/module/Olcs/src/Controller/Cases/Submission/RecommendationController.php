@@ -12,6 +12,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\SubmissionAction as Mapper;
 use Olcs\Form\Model\Form\SubmissionRecommendation as Form;
+use \Zend\Form\Form as ZendForm;
 
 /**
  * Submission Recommendation Controller
@@ -100,5 +101,38 @@ class RecommendationController extends AbstractInternalController implements Cas
     public function deleteAction()
     {
         return $this->notFoundAction();
+    }
+
+    /**
+     * @param ZendForm $form
+     * @param $formData
+     * @return ZendForm
+     */
+    protected function alterFormForAdd(ZendForm $form, $formData)
+    {
+        return $this->alterForm($form, $formData['id']);
+    }
+
+    /**
+     * @param ZendForm $form
+     * @param $formData
+     * @return ZendForm
+     */
+    protected function alterFormForEdit(ZendForm $form, $formData)
+    {
+        return $this->alterForm($form, $formData['fields']['id']);
+    }
+
+    /**
+     * Change the id of the text area to be unique (avoid DOM clashes with multiple TinyMCE instances
+     *
+     * @param ZendForm $form
+     * @param $id
+     * @return ZendForm
+     */
+    private function alterForm(ZendForm $form, $id)
+    {
+        $form->get('fields')->get('comment')->setAttribute('id', $id . time());
+        return $form;
     }
 }

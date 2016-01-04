@@ -38,7 +38,7 @@ class SubmissionDecision extends Base
     public $reasons = null;
 
     /**
-     * @Form\Attributes({"id":"comment","class":"extra-long","name":"comment"})
+     * @Form\Attributes({"id":"","class":"extra-long tinymce","name":"comment"})
      * @Form\Options({
      *     "label": "Decision reason",
      *     "label_attributes": {
@@ -48,7 +48,8 @@ class SubmissionDecision extends Base
      * })
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":10000}})
+     * @Form\Filter({"name":"htmlpurifier"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5}})
      */
     public $comment = null;
 
