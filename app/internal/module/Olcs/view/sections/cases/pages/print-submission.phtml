@@ -77,7 +77,9 @@ echo $this->render('partials/read-only/main',
 
                 <?php if (!$readonly): ?>
                     <?php $route = 'submission_action_' . ($sa['isDecision'] == 'Y' ? 'decision' : 'recommendation'); ?>
-                    <a class="submission-item__edit" href="<?php echo $this->url($route, ['action' => 'edit', 'id' => $sa['id']], [], true); ?>">Edit</a>
+                    <a class="submission-item__edit js-modal-ajax" href="<?php echo $this->url($route, ['action' =>
+                        'edit', 'id'
+                    => $sa['id']], [], true); ?>">Edit</a>
                 <?php endif; ?>
 
                 <p><?php echo nl2br($sa['comment']); ?></p>
