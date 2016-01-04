@@ -1,13 +1,22 @@
 <?php
 $this->placeholder('pageTitle')->set('404-title');
 ?>
-<div class="two-thirds">
-    <div class="article">
-        <?php echo $this->translate('markup-404-text'); ?>
-        <hr>
-        <p><a href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('back-to-home'); ?></a></p>
-    </div>
+
+<div class="article">
+  
+  <p><?php echo $this->translate('404-lede'); ?></p>
+  
+  <p><?php echo $this->translate('404-report-broken-link'); ?></a>
+  
+  <ul class="list--bullet">
+    <li><?php echo $this->translate('404-report-include-1'); ?></li>
+    <li><?php echo $this->translate('404-report-include-2'); ?></li>
+  </ul>
+  
+  <p><a href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('back-to-home'); ?></a></p>
+
 </div>
+
 <?php
 
 if (!isset($stopRedirect)) {
