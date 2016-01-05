@@ -18,6 +18,14 @@ use Dvsa\Olcs\Transfer\Query\Cases\Cases as CommentItemDto;
 use Dvsa\Olcs\Transfer\Command\Cases\UpdatePenaltiesNote as CommentUpdateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\SendResponse as SendResponseCmd;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Olcs\Data\Mapper\GenericFields;
+use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Si\Applied\Penalty as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Si\GetList as ListDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Update as UpdateDto;
+use Olcs\Form\Model\Form\ErruPenalty;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Case Penalty Controller
@@ -26,12 +34,44 @@ use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
  */
 class PenaltyController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
+    /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
+     */
+    protected $navigationId = 'case_details_penalties';
+
     protected $commentFormClass = CommentForm::class;
     protected $commentItemDto = CommentItemDto::class;
     protected $commentItemParams = ['id' => 'case', 'case' => 'case'];
     protected $commentUpdateCommand = CommentUpdateDto::class;
     protected $commentMapperClass = CommentMapper::class;
     protected $commentTitle = 'Erru Penalties';
+
+    protected $createCommand = CreateDto::class;
+    protected $updateCommand = UpdateDto::class;
+
+    protected $deleteCommand = DeleteDto::class;
+    protected $deleteParams = ['id'];
+    protected $deleteModalTitle = 'Delete Applied Penalty';
+
+    protected $formClass = ErruPenalty::class;
+    protected $mapperClass = GenericFields::class;
+    protected $itemDto = ItemDto::class;
+
+    protected $defaultData = [
+        'case' => AddFormDefaultData::FROM_ROUTE,
+        'id' => AddFormDefaultData::FROM_ROUTE
+    ];
+
+    /**
+     * Any inline scripts needed in this section
+     *
+     * @var array
+     */
+    protected $inlineScripts = array(
+        'indexAction' => ['table-actions']
+    );
 
     public function getLeftView()
     {
@@ -104,7 +144,7 @@ class PenaltyController extends AbstractInternalController implements CaseContro
     private function getPenaltyData()
     {
         $response = $this->handleQuery(
-            \Dvsa\Olcs\Transfer\Query\Cases\Si\GetList::create(
+            ListDto::create(
                 ['case' => $this->params()->fromRoute('case')]
             )
         );
