@@ -69,7 +69,7 @@ return array(
     ),
 
     'openam' => [
-        'url' => 'http://olcs-internal.olcs.gov.uk/secure/',
+        'url' => 'http://olcs-auth.olcs.gov.uk:8081/secure/',
         'realm' => 'internal',
         'cookie' => [
             'domain' => '.olcs.gov.uk',
