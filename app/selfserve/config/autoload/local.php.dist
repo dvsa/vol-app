@@ -64,7 +64,7 @@ return array(
     ),
 
     'openam' => [
-        'url' => 'http://olcs-selfserve.olcs.gov.uk/secure/',
+        'url' => 'http://olcs-auth.olcs.gov.uk:8081/secure/',
         'realm' => 'selfserve',
         'cookie' => [
             'domain' => '.olcs.gov.uk',
