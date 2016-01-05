@@ -14,13 +14,6 @@ use Zend\Form\Annotation as Form;
 class ErruPenalty
 {
     /**
-     * @Form\Name("base")
-     * @Form\Attributes({"class":"base"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CaseBase")
-     */
-    public $caseBase = null;
-
-    /**
      * @Form\Name("fields")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ErruPenalty")
      */
