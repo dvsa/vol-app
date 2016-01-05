@@ -11,6 +11,7 @@ use Olcs\Service\Data\PresidingTc;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Cases\PresidingTc\GetList as Qry;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * PresidingTc data service test

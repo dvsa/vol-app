@@ -11,6 +11,7 @@ use Olcs\Service\Data\Category;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Category\GetList as Qry;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * Category Data Service Test
@@ -41,12 +42,6 @@ class CategoryTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $mockResponse = m::mock()
-            ->shouldReceive('isServerError')
-            ->andReturn(false)
-            ->once()
-            ->shouldReceive('isClientError')
-            ->andReturn(false)
-            ->once()
             ->shouldReceive('isOk')
             ->andReturn(true)
             ->once()
@@ -69,8 +64,8 @@ class CategoryTest extends AbstractDataServiceTestCase
             ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
 
         $mockResponse = m::mock()
-            ->shouldReceive('isServerError')
-            ->andReturn(true)
+            ->shouldReceive('isOk')
+            ->andReturn(false)
             ->once()
             ->getMock();
         $sut = new Category();
