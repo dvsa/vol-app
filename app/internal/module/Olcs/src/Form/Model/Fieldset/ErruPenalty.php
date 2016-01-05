@@ -75,10 +75,4 @@ class ErruPenalty
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":500}})
      */
     public $reasonNotImposed;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $seriousInfringement;
 }
