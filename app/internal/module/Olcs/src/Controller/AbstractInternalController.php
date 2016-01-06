@@ -244,18 +244,31 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     protected $listData;
 
+    /**
+     * Gets a comment box
+     *
+     * @return array|ViewModel
+     */
+    public function getCommentBox()
+    {
+        $commentBox = $this->edit(
+            $this->commentFormClass,
+            $this->commentItemDto,
+            new GenericItem($this->commentItemParams),
+            $this->commentUpdateCommand,
+            $this->commentMapperClass
+        );
+
+        //must be set after edit has been run and not before
+        $this->placeholder()->setPlaceholder('contentTitle', $this->commentTitle);
+
+        return $commentBox;
+    }
+
     public function indexAction()
     {
         if (!empty($this->commentItemDto)) {
-            $commentBox = $this->edit(
-                $this->commentFormClass,
-                $this->commentItemDto,
-                new GenericItem($this->commentItemParams),
-                $this->commentUpdateCommand,
-                $this->commentMapperClass
-            );
-
-            $this->placeholder()->setPlaceholder('contentTitle', $this->commentTitle);
+            $commentBox = $this->getCommentBox();
 
             if ($commentBox instanceof HttpResponse) {
                 return $commentBox;

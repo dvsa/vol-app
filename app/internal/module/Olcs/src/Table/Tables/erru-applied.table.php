@@ -25,10 +25,9 @@ return array(
                 return '<a href="' . $this->generateUrl(
                     array(
                         'action' => 'edit',
-                        'seriousInfringement' => $data['seriousInfringement']['id'],
                         'id' => $data['id']
                     ),
-                    'case_penalty_edit',
+                    'case_penalty',
                     true
                 ) . '" class="js-modal-ajax">' . $data['id'] . '</a>';
             },

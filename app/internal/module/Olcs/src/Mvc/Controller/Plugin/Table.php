@@ -33,6 +33,16 @@ class Table extends AbstractPlugin
     }
 
     /**
+     * gives us a new table builder, necessary if we've more than one table on a page
+     */
+    public function setTableBuilder(TableBuilder $tableBuilder)
+    {
+        $this->tableBuilder = $tableBuilder;
+
+        return $this;
+    }
+
+    /**
      * @param $tableName
      * @param $data
      * @param $params
