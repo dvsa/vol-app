@@ -14,7 +14,6 @@ class ImpoundingLegislationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests fetchListOptions when no licence is present
-     * @group test123
      */
     public function testFetchListOptionsNoLicence()
     {
