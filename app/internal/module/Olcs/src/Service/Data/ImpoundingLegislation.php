@@ -3,16 +3,23 @@
 namespace Olcs\Service\Data;
 
 use Common\Service\Data\ListDataInterface;
-use Common\Service\Data\RefData;
+use Common\Service\Data\AbstractData;
 use Common\Service\Data\LicenceServiceTrait;
+use Dvsa\Olcs\Transfer\Query\RefData\RefDataList;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Common\Service\Data\ListDataTrait;
 
 /**
  * Class ImpoundingLegislation
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ImpoundingLegislation extends RefData implements ListDataInterface
+class ImpoundingLegislation extends AbstractData implements ListDataInterface, ServiceLocatorAwareInterface
 {
-    use LicenceServiceTrait;
+    use LicenceServiceTrait,
+        ServiceLocatorAwareTrait,
+        ListDataTrait;
 
     /**
     * @param mixed $context
@@ -47,13 +54,36 @@ class ImpoundingLegislation extends RefData implements ListDataInterface
      * @param $category
      * @return array
      */
-    public function fetchListData($category = null)
+    public function fetchListData($category)
     {
         if (is_null($this->getData($category))) {
-            $data = $this->getRestClient()->get(sprintf('category/%s', $category));
-            $this->setData($category, $data);
+
+            $languagePreferenceService = $this->getServiceLocator()->get('LanguagePreference');
+            $params = [
+                'refDataCategory' => $category,
+                'language' => $languagePreferenceService->getPreference()
+            ];
+            $dtoData = RefDataList::create($params);
+
+            $response = $this->handleQuery($dtoData);
+            if (!$response->isOk()) {
+                throw new UnexpectedResponseException('unknown-error');
+            }
+            $this->setData($category, false);
+            if (isset($response->getResult()['results'])) {
+                $this->setData($category, $response->getResult()['results']);
+            }
         }
 
         return $this->getData($category);
+    }
+
+    protected function handleQuery($dtoData)
+    {
+        $annotationBuilder = $this->getServiceLocator()->get('TransferAnnotationBuilder');
+        $queryService = $this->getServiceLocator()->get('QueryService');
+
+        $query = $annotationBuilder->createQuery($dtoData);
+        return $queryService->send($query);
     }
 }
