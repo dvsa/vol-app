@@ -15,6 +15,7 @@ use Dvsa\Olcs\Transfer\Query\Cases\Pi\HearingList as PiHearingListDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Pi as PiDto;
 use Olcs\Mvc\Controller\ParameterProvider\PreviousPiHearingData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
+use Zend\Form\Form as ZendForm;
 
 /**
  * Class HearingController
@@ -72,8 +73,6 @@ class HearingController extends AbstractInternalController implements CaseContro
     public function indexAction()
     {
         $pi = $this->getPi();
-        $slaData = ['agreedDate' => $pi['agreedDate']];
-        $this->getServiceLocator()->get('Common\Service\Data\Sla')->setContext('pi_hearing', $slaData);
 
         if ($pi['isClosed']) {
             $this->tableName = 'piHearingReadOnly';
@@ -88,9 +87,7 @@ class HearingController extends AbstractInternalController implements CaseContro
             $this->filterForm
         );
     }
-
-
-
+    
     /**
      * Adds a Pi Hearing, redirects to the Pi index page with a message if the Pi is closed
      *
@@ -102,11 +99,9 @@ class HearingController extends AbstractInternalController implements CaseContro
 
         if ($pi['isClosed']) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage(self::MSG_CLOSED_PI);
+
             return $this->redirectTo([]);
         }
-
-        $slaData = ['agreedDate' => $pi['agreedDate']];
-        $this->getServiceLocator()->get('Common\Service\Data\Sla')->setContext('pi_hearing', $slaData);
 
         return $this->add(
             $this->formClass,
@@ -120,20 +115,6 @@ class HearingController extends AbstractInternalController implements CaseContro
     }
 
     /**
-     * Edits a Pi Hearing. No check for whether Pi is closed - if it's closed then read only version is shown
-     *
-     * @return array|ViewModel
-     */
-    public function editAction()
-    {
-        $data = $this->getHearing();
-        $data['agreedDate'] = $data['pi']['agreedDate']; //used by sla
-        $this->getServiceLocator()->get('Common\Service\Data\Sla')->setContext('pi_hearing', $data);
-
-        return parent::editAction();
-    }
-
-    /**
      * Link to generate a hearing letter, redirects to the Pi index page with a message if the Pi is closed
      *
      * @return \Zend\Http\Response
@@ -144,6 +125,7 @@ class HearingController extends AbstractInternalController implements CaseContro
 
         if ($pi['isClosed']) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage(self::MSG_CLOSED_PI);
+
             return $this->redirectTo([]);
         }
 
@@ -215,6 +197,9 @@ class HearingController extends AbstractInternalController implements CaseContro
             $form->get('fields')->remove('trafficAreas');
         }
 
+        // set SLAs
+        $form = $this->setSlaTargetHint($form, $data);
+
         return $form;
     }
 
@@ -264,6 +249,44 @@ class HearingController extends AbstractInternalController implements CaseContro
             }
         }
 
+        // set SLAs
+        $form = $this->setSlaTargetHint($form, $data);
+
+        return $form;
+    }
+
+    /**
+     * Sets the SLA target date as a hint on the form elements
+     *
+     * @param ZendForm $form
+     * @param $data
+     * @return ZendForm
+     */
+    private function setSlaTargetHint(ZendForm $form, $data)
+    {
+        $date = $data['hearingDateTarget'];
+        if (empty($date)) {
+            $hint = 'There was no target date found';
+        } else {
+            $hint = 'Target date: ' . date('d/m/Y', strtotime($date));
+        }
+
+        $element = $form->get('fields')->get('hearingDate');
+        $pattern = $element->getOption('pattern');
+
+        if (!empty($pattern)) {
+            if (strstr($pattern, '{{SLA_HINT}}')) {
+                $pattern = str_replace('{{SLA_HINT}}', '<p class="hint">' . $hint . '</p>', $pattern);
+
+                $element->setOption('pattern', $pattern);
+            } elseif (strstr($pattern, '</div>')) {
+                $pattern = str_replace('</div>', '<p class="hint">' . $hint . '</p></div>', $pattern);
+
+                $element->setOption('pattern', $pattern);
+            }
+        } else {
+            $this->setOption('hint', $hint);
+        }
         return $form;
     }
 }
