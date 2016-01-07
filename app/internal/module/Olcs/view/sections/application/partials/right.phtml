@@ -51,7 +51,7 @@ if ($nav->getContainer()->hasPages(true)): ?>
 
 <?php if ($note): ?>
     <div class="latest-note">
-        <p class="latest-note__details"><?php echo substr($note, 0, 100); ?></p>
+        <div class="latest-note__details"><?php echo substr($note, 0, 100); ?></div>
         <a
             class="latest-note__link"
             href="<?php echo $this->url('lva-application/processing/notes', ['application' => $application['id']]); ?>"
