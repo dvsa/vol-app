@@ -19,7 +19,7 @@
   ?>
   </h4>
   <?php if ($enabled) : ?>
-    <?php if (isset($status)): ?>
+    <?php if (isset($status) && $status !== ''): ?>
       <span class="status <?php echo $statusColour; ?>"><?php echo $this->translate($status); ?></span>
     <?php endif; ?>
     <p><?php echo $this->translate($link); ?></p>
