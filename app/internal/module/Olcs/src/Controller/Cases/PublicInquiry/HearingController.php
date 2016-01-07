@@ -87,7 +87,7 @@ class HearingController extends AbstractInternalController implements CaseContro
             $this->filterForm
         );
     }
-    
+
     /**
      * Adds a Pi Hearing, redirects to the Pi index page with a message if the Pi is closed
      *
