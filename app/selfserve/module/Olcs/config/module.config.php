@@ -999,7 +999,7 @@ return array(
                     array(
                         'id' => 'selfserve-topnav-home',
                         'label' => 'Home',
-                        'route' => 'index',
+                        'route' => 'dashboard',
                         'class' => 'proposition-nav__item',
                     ),
                     array(
