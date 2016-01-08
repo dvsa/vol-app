@@ -3,7 +3,7 @@
 echo $this->render(
     '/partials/page-header.phtml',
     array(
-        'pageTitle' => $this->translate('Bus registration details'),
+        'pageTitle' => $this->translate($this->registrationDetails['licence']['organisation']['name']),
         'pageSubTitle'=>
             '<a href="' . $this->url('entity-view', ['entity' => 'licence', 'entityId' =>
                 $this->registrationDetails['licence']['id']]). '">' .
@@ -12,10 +12,12 @@ echo $this->render(
 );
 ?>
 
-<div class="row">
-  
-  <div class="three-quarters">
-  
+<div class="full-width">
+    <div class="read-only__header">
+  <h4 id="bus-registration-details" class="read-only__title"><?php echo $this->translate('Bus registration details');
+      ?></h4>
+    </div>
+
   <?php
   $serviceNos = $this->registrationDetails['serviceNo'];
   if (!empty($this->registrationDetails['otherServices'])) {
