@@ -41,6 +41,7 @@ class TmResponsibilities
      *     }
      * })
      * @Form\Type("DynamicRadio")
+     * @Form\Required(false)
      * @Form\Validator({
      *      "name":"Zend\Validator\NotEmpty"
      * })

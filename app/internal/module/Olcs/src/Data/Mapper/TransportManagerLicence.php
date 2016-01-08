@@ -19,31 +19,35 @@ class TransportManagerLicence
         return isset($data['results']) ? $data['results'] : [];
     }
 
-    public static function mapFromResult(array $data)
+    public static function mapFromResult(array $data = [])
     {
+        if (!count($data)) {
+            return [];
+        }
         $details = [];
-        if (isset($data['result'])) {
-            $result = $data['result'];
-            $operatingCentres = [];
+
+        $result = $data;
+        $operatingCentres = [];
+        if (isset($result['operatingCentres'])) {
             foreach ($result['operatingCentres'] as $oc) {
                 $operatingCentres[] = $oc['id'];
             }
-            $details['operatingCentres'] = $operatingCentres;
-            if (isset($result['tmType']['id'])) {
-                $details['tmType'] = $result['tmType'];
-            }
-            $details['id'] = $result['id'];
-            $details['version'] = $result['version'];
-            $details['isOwner'] = $result['isOwner'];
-            $details['hoursOfWeek']['hoursPerWeekContent']['hoursMon'] = $result['hoursMon'];
-            $details['hoursOfWeek']['hoursPerWeekContent']['hoursTue'] = $result['hoursTue'];
-            $details['hoursOfWeek']['hoursPerWeekContent']['hoursWed'] = $result['hoursWed'];
-            $details['hoursOfWeek']['hoursPerWeekContent']['hoursThu'] = $result['hoursThu'];
-            $details['hoursOfWeek']['hoursPerWeekContent']['hoursFri'] = $result['hoursFri'];
-            $details['hoursOfWeek']['hoursPerWeekContent']['hoursSat'] = $result['hoursSat'];
-            $details['hoursOfWeek']['hoursPerWeekContent']['hoursSun'] = $result['hoursSun'];
-            $details['additionalInformation'] = $result['additionalInformation'];
         }
+        $details['operatingCentres'] = $operatingCentres;
+        if (isset($result['tmType']['id'])) {
+            $details['tmType'] = $result['tmType'];
+        }
+        $details['id'] = $result['id'];
+        $details['version'] = $result['version'];
+        $details['isOwner'] = $result['isOwner'];
+        $details['hoursOfWeek']['hoursPerWeekContent']['hoursMon'] = $result['hoursMon'];
+        $details['hoursOfWeek']['hoursPerWeekContent']['hoursTue'] = $result['hoursTue'];
+        $details['hoursOfWeek']['hoursPerWeekContent']['hoursWed'] = $result['hoursWed'];
+        $details['hoursOfWeek']['hoursPerWeekContent']['hoursThu'] = $result['hoursThu'];
+        $details['hoursOfWeek']['hoursPerWeekContent']['hoursFri'] = $result['hoursFri'];
+        $details['hoursOfWeek']['hoursPerWeekContent']['hoursSat'] = $result['hoursSat'];
+        $details['hoursOfWeek']['hoursPerWeekContent']['hoursSun'] = $result['hoursSun'];
+        $details['additionalInformation'] = $result['additionalInformation'];
 
         return [
             'details' => $details,

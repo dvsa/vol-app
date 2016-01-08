@@ -22,25 +22,23 @@ class TransportManagerLicenceTest extends MockeryTestCase
     public function testMapFromResult()
     {
         $data = [
-            'result' => [
-                'operatingCentres' => [
-                    ['id' => 1],
-                    ['id' => 2]
-                ],
-                'tmType' => ['id' => 3],
-                'id' => 5,
-                'version' => 6,
-                'isOwner' => 1,
-                'hoursMon' => 1,
-                'hoursTue' => 2,
-                'hoursWed' => 3,
-                'hoursThu' => 4,
-                'hoursFri' => 5,
-                'hoursSat' => 6,
-                'hoursSun' => 7,
-                'additionalInformation' => 'ai',
-                'licence' => 'lic'
+            'operatingCentres' => [
+                ['id' => 1],
+                ['id' => 2]
             ],
+            'tmType' => ['id' => 3],
+            'id' => 5,
+            'version' => 6,
+            'isOwner' => 1,
+            'hoursMon' => 1,
+            'hoursTue' => 2,
+            'hoursWed' => 3,
+            'hoursThu' => 4,
+            'hoursFri' => 5,
+            'hoursSat' => 6,
+            'hoursSun' => 7,
+            'additionalInformation' => 'ai',
+            'licence' => 'lic',
             'otherLicences' => 'ol'
         ];
         $expected = [
@@ -67,6 +65,11 @@ class TransportManagerLicenceTest extends MockeryTestCase
             'licence' => 'lic'
         ];
         $this->assertEquals($expected, Sut::mapFromResult($data));
+    }
+
+    public function testMapFromEmptyResult()
+    {
+        $this->assertEquals([], Sut::mapFromResult([]));
     }
 
     public function testMapFromFrom()

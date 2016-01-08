@@ -28,7 +28,7 @@ class TransportManager
 
     /**
      * @Form\Name("work-address")
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\Address")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\AddressOptional")
      * @Form\Options({"label":"transport-manager-details-work-address"})
      */
     public $workAddress = null;
