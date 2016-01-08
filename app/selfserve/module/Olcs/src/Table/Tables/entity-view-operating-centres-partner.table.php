@@ -7,7 +7,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'entity-view-label-operating-centre',
-
+            'addressFields' => 'FULL',
             'formatter' => 'Address',
             'name' => 'operatingCentre->address'
         ),

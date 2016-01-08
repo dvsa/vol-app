@@ -8,6 +8,7 @@ return array(
         array(
             'title' => 'entity-view-label-operating-centre',
             'formatter' => 'Address',
+            'addressFields' => 'FULL',
             'name' => 'operatingCentre->address'
         ),
         array(
