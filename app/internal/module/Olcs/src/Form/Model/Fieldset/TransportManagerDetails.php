@@ -31,11 +31,13 @@ class TransportManagerDetails
     public $transportManagerId = null;
 
     /**
+     * @Form\Required(false)
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "empty_option": "Please Select",
      *     "label": "transport-manager-details-title",
      *     "category":"person_title",
+     *     "disable_inarray_validator": true,
      * })
      * @Form\Type("DynamicSelect")
      */
