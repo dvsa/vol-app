@@ -4,34 +4,30 @@ namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\ImpoundingLegislation;
 use Mockery as m;
+use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * Class ImpoundingLegislationTest
+ *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ImpoundingLegislationTest extends \PHPUnit_Framework_TestCase
+class ImpoundingLegislationTest extends AbstractDataServiceTestCase
 {
-
     /**
      * Tests fetchListOptions when no licence is present
      */
     public function testFetchListOptionsNoLicence()
     {
-        $this->markTestSkipped();
-        $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
-        $mockLicenceService->expects($this->once())
-            ->method('fetchLicenceData')
-            ->willReturn([]);
+        $mockLicenceService = m::mock('\Common\Service\Data\Licence');
+        $mockLicenceService->shouldReceive('fetchLicenceData')
+            ->andReturn([])
+            ->once()
+            ->getMock();
 
         $sut = new ImpoundingLegislation();
         $sut->setLicenceService($mockLicenceService);
-
-        $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')
-            ->once()
-            ->with('category/impound_legislation_goods_gb')
-            ->andReturn($this->getSingleSource());
-        $sut->setRestClient($mockRestClient);
+        $sut->setData('impound_legislation_goods_gb', $this->getSingleSource());
 
         $this->assertEquals($this->getSingleExpected(), $sut->fetchListOptions([]));
     }
@@ -45,27 +41,22 @@ class ImpoundingLegislationTest extends \PHPUnit_Framework_TestCase
      */
     public function testFetchListOptions($niFlag, $goodsOrPsv, $expectedList)
     {
-        $this->markTestSkipped();
-        $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
-        $mockLicenceService->expects($this->once())
-            ->method('fetchLicenceData')
-            ->willReturn(
+        $mockLicenceService = m::mock('\Common\Service\Data\Licence');
+        $mockLicenceService->shouldReceive('fetchLicenceData')
+            ->andReturn(
                 [
                     'id' => 7,
                     'niFlag'=> $niFlag,
                     'goodsOrPsv' => ['id'=> $goodsOrPsv],
                     'trafficArea' => ['id'=> 'B']
                 ]
-            );
+            )
+            ->once()
+            ->getMock();
 
         $sut = new ImpoundingLegislation();
         $sut->setLicenceService($mockLicenceService);
-
-        $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with(
-            'category/' . $expectedList
-        )->andReturn($this->getSingleSource());
-        $sut->setRestClient($mockRestClient);
+        $sut->setData($expectedList, $this->getSingleSource());
 
         $this->assertEquals($this->getSingleExpected(), $sut->fetchListOptions([]));
     }
@@ -75,25 +66,22 @@ class ImpoundingLegislationTest extends \PHPUnit_Framework_TestCase
      */
     public function testFetchListOptionsNoData()
     {
-        $this->markTestSkipped();
-        $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
-        $mockLicenceService->expects($this->once())
-            ->method('fetchLicenceData')
-            ->willReturn(
+        $mockLicenceService = m::mock('\Common\Service\Data\Licence');
+        $mockLicenceService->shouldReceive('fetchLicenceData')
+            ->andReturn(
                 [
                     'id' => 7,
                     'niFlag'=> 'Y',
                     'goodsOrPsv' => ['id'=> 'lcat_gv'],
                     'trafficArea' => ['id'=> 'B']
                 ]
-            );
+            )
+            ->once()
+            ->getMock();
 
         $sut = new ImpoundingLegislation();
         $sut->setLicenceService($mockLicenceService);
-
-        $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('category/impound_legislation_goods_ni')->andReturn('');
-        $sut->setRestClient($mockRestClient);
+        $sut->setData('impound_legislation_goods_ni', '');
 
         $this->assertEquals([], $sut->fetchListOptions([]));
     }
