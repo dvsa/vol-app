@@ -14,6 +14,11 @@ echo $this->render(
 </div><!-- .one-quarter -->
  */ ?>
 
-<div class="full-width">
+<div id="top" class="full-width">
     <?php echo $this->content; ?>
+    <div class="actions-container">
+        <a href="#top"><?php echo $this->translate('search-result-nav-back-to-top');?></a>
+        <a href="<?php echo $this->url('search'); ?>"><?php echo $this->translate
+        ('search-result-nav-back-to-operator-search');?></a>
+    </div>
 </div><!-- .three-quarters -->
