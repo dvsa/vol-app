@@ -7,6 +7,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'search-result-label-operating-centre',
+            'addressFields' => 'FULL',
             'formatter' => 'Address',
             'name' => 'operatingCentre->address'
         ),

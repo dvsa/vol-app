@@ -8,6 +8,7 @@ return array(
         array(
             'title' => 'search-result-label-operating-centre',
             'formatter' => 'Address',
+            'addressFields' => 'FULL',
             'name' => 'operatingCentre->address'
         ),
         array(
