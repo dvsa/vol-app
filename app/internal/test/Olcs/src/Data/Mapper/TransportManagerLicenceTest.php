@@ -67,6 +67,11 @@ class TransportManagerLicenceTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 
+    public function testMapFromEmptyResult()
+    {
+        $this->assertEquals([], Sut::mapFromResult([]));
+    }
+
     public function testMapFromFrom()
     {
         $data = [

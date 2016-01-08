@@ -19,14 +19,19 @@ class TransportManagerLicence
         return isset($data['results']) ? $data['results'] : [];
     }
 
-    public static function mapFromResult(array $data)
+    public static function mapFromResult(array $data = [])
     {
+        if (!count($data)) {
+            return [];
+        }
         $details = [];
 
         $result = $data;
         $operatingCentres = [];
-        foreach ($result['operatingCentres'] as $oc) {
-            $operatingCentres[] = $oc['id'];
+        if (isset($result['operatingCentres'])) {
+            foreach ($result['operatingCentres'] as $oc) {
+                $operatingCentres[] = $oc['id'];
+            }
         }
         $details['operatingCentres'] = $operatingCentres;
         if (isset($result['tmType']['id'])) {
