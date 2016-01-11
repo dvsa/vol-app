@@ -41,6 +41,8 @@ class Application implements ListenerAggregateInterface, FactoryInterface
 
     protected $queryService;
 
+    protected $applicationService;
+
     public function getMarkerService()
     {
         return $this->markerService;
@@ -108,6 +110,24 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
+     * @param \Common\Service\Data\Application $applicationService
+     * @return $this
+     */
+    public function setApplicationService($applicationService)
+    {
+        $this->applicationService = $applicationService;
+        return $this;
+    }
+
+    /**
+     * @return \Common\Service\Data\Application
+     */
+    public function getApplicationService()
+    {
+        return $this->applicationService;
+    }
+
+    /**
      * Attach one or more listeners
      *
      * Implementers may add an optional $priority argument; the EventManager
@@ -134,6 +154,8 @@ class Application implements ListenerAggregateInterface, FactoryInterface
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('application')->set($application);
+
+        $this->getApplicationService()->setId($id); //set default application id for use in forms
 
         $this->getViewHelperManager()->get('placeholder')
             ->getContainer('note')
@@ -215,6 +237,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         $this->setNavigationService($serviceLocator->get('Navigation'));
         $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
         $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
+        $this->setApplicationService($serviceLocator->get(\Common\Service\Data\Application::class));
 
         return $this;
     }

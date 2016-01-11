@@ -46,6 +46,9 @@ class ApplicationTest extends MockeryTestCase
         $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
         $mockMarkerService->shouldReceive('addData')->with('organisation', $applicationData['licence']['organisation']);
 
+        $mockApplicationService = m::mock()->shouldReceive('setId')->with($id)->getMock();
+        $this->sut->setApplicationService($mockApplicationService);
+
         $this->sut->setAnnotationBuilder($mockAnnotationBuilder);
         $this->sut->setQueryService($mockQueryService);
         $this->sut->setMarkerService($mockMarkerService);
@@ -373,6 +376,7 @@ class ApplicationTest extends MockeryTestCase
         $mockTransferAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
         $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
+        $mockApplicationService = m::mock();
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
@@ -381,6 +385,7 @@ class ApplicationTest extends MockeryTestCase
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockTransferAnnotationBuilder);
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
         $mockSl->shouldReceive('get')->with(\Olcs\Service\Marker\MarkerService::class)->andReturn($mockMarkerService);
+        $mockSl->shouldReceive('get')->with('Common\Service\Data\Application')->andReturn($mockApplicationService);
 
         $sut = new Application();
         $service = $sut->createService($mockSl);
