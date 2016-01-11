@@ -6,8 +6,11 @@ $results = $this->results;
 ?>
 
     <div class="page-header">
-        <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
-
+        <ol class="breadcrumbs">
+            <li class="breadcrumbs__item">
+                <a href="<?php echo $this->url('search');?>"><?php echo $this->translate('search.form.back'); ?></a>
+            </li>
+        </ol>
         <div class="page-header__wrapper">
 
             <h1>
@@ -34,9 +37,6 @@ $results = $this->results;
             <h3>Edit search</h3>
 
             <?php echo $this->form($this->placeholder('searchFilter')->getValue()) ?>
-            <a href="<?php echo $this->url('search'); ?>">
-                <?php echo $this->translate('search.form.restart'); ?>
-            </a>
 
         </div><!-- three-eights -->
 
