@@ -112,10 +112,12 @@ class ViewController extends AbstractController
             array_merge(
                 [
                     'result' => $result,
-                    'soleTraderOrRegisteredCompany' => [
+                    'soleTraderOrRegisteredCompanyType' => [
                         RefData::ORG_TYPE_REGISTERED_COMPANY,
                         RefData::ORG_TYPE_SOLE_TRADER,
-                    ]
+                    ],
+                    'registeredCompanyType' => RefData::ORG_TYPE_REGISTERED_COMPANY,
+                    'partnershipType' => RefData::ORG_TYPE_PARTNERSHIP,
                 ],
                 $this->generateTables($result)
             )

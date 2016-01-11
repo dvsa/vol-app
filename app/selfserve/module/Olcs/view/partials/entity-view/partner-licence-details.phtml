@@ -18,7 +18,7 @@ if (!empty($this->result['organisation']['tradingNames'])) {
 }
 $items[] = $tradingNamesList;
 
-if (!in_array($this->result['organisation']['type']['id'], $this->soleTraderOrRegisteredCompany)) {
+if (!in_array($this->result['organisation']['type']['id'], $this->soleTraderOrRegisteredCompanyType)) {
     if (!empty($this->result['partners'])) {
         for ($i = 0; $i < count($this->result['partners']); $i++) {
             $label = ($i == 0) ? 'search-result-label-partners' : '';

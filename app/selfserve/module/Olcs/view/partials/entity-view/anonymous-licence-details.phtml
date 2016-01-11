@@ -16,7 +16,7 @@ if (!empty($this->result['organisation']['tradingNames'])) {
 }
 $items[] = $tradingNamesList;
 
-if (!in_array($this->result['organisation']['type']['id'], $this->soleTraderOrRegisteredCompany)) {
+if ($this->result['organisation']['type']['id'] === $this->partnershipType) {
     if (!empty($this->result['partners'])) {
         for ($i = 0; $i < count($this->result['partners']); $i++) {
             $label = ($i == 0) ? 'search-result-label-partners' : '';
@@ -36,24 +36,25 @@ if (!in_array($this->result['organisation']['type']['id'], $this->soleTraderOrRe
     $items[] = $partnersList;
 }
 
-
-if (!empty($this->result['directors'])) {
-    for($i = 0; $i<count($this->result['directors']);$i++) {
-        $label = ($i == 0) ? 'search-result-label-directors' : '';
+if ($this->result['organisation']['type']['id'] === $this->registeredCompanyType) {
+    if (!empty($this->result['directors'])) {
+        for ($i = 0; $i < count($this->result['directors']); $i++) {
+            $label = ($i == 0) ? 'search-result-label-directors' : '';
+            $directorsList[] = [
+                'label' => $label,
+                'value' =>
+                    $this->result['directors'][$i]['person']['forename'] . ' ' .
+                    $this->result['directors'][$i]['person']['familyName']
+            ];
+        }
+    } else {
         $directorsList[] = [
-            'label' => $label,
-            'value' =>
-                $this->result['directors'][$i]['person']['forename'] . ' ' .
-                $this->result['directors'][$i]['person']['familyName']
+            'label' => 'search-result-label-directors',
+            'value' => ''
         ];
     }
-} else {
-    $directorsList[] = [
-        'label' => 'search-result-label-directors',
-        'value' => ''
-    ];
+    $items[] = $directorsList;
 }
-$items[] = $directorsList;
 
 $businessType = isset($this->result['organisation']['type']['id']) ?
     $this->result['organisation']['type']['description'] : '';
