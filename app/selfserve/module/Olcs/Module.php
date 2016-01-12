@@ -62,11 +62,13 @@ class Module
         $cookieBannerListener = $sm->get('CookieBannerListener');
         $cookieBannerListener->attach($eventManager, 1);
 
-        $this->initSession(array(
-            'remember_me_seconds' => 180,
-            'use_cookies' => true,
-            'cookie_httponly' => true,
-        ));
+        $this->initSession(
+            [
+                'remember_me_seconds' => 180,
+                'use_cookies' => true,
+                'cookie_httponly' => true
+            ]
+        );
     }
 
     public function initSession($config)
