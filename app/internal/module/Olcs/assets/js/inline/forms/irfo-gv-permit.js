@@ -5,9 +5,9 @@ $(function() {
 
   function addToInForceDate(noOfMonths) {
     // add noOfMonths to the in force date
-    var inForceDateDay = parseInt($('select[name="fields\\[inForceDate\\]\\[day\\]"]').val());
-    var inForceDateMonth = parseInt($('select[name="fields\\[inForceDate\\]\\[month\\]"]').val());
-    var inForceDateYear = parseInt($('select[name="fields\\[inForceDate\\]\\[year\\]"]').val());
+    var inForceDateDay = parseInt($('[name="fields\\[inForceDate\\]\\[day\\]"]').val());
+    var inForceDateMonth = parseInt($('[name="fields\\[inForceDate\\]\\[month\\]"]').val());
+    var inForceDateYear = parseInt($('[name="fields\\[inForceDate\\]\\[year\\]"]').val());
 
     if (!isNaN(inForceDateDay) && !isNaN(inForceDateMonth) && !isNaN(inForceDateYear)) {
       var date = new Date(inForceDateYear, inForceDateMonth-1, inForceDateDay);
@@ -78,7 +78,7 @@ $(function() {
   // watch all relevant form fields
   OLCS.formHelper('fields', 'irfoGvPermitType').on('change', calculateExpiryDate);
   OLCS.formHelper('fields', 'yearRequired').on('change', calculateExpiryDate);
-  $('select[name="fields\\[inForceDate\\]\\[day\\]"]').on('change', calculateExpiryDate);
-  $('select[name="fields\\[inForceDate\\]\\[month\\]"]').on('change', calculateExpiryDate);
-  $('select[name="fields\\[inForceDate\\]\\[year\\]"]').on('change', calculateExpiryDate);
+  $('[name="fields\\[inForceDate\\]\\[day\\]"]').on('change', calculateExpiryDate);
+  $('[name="fields\\[inForceDate\\]\\[month\\]"]').on('change', calculateExpiryDate);
+  $('[name="fields\\[inForceDate\\]\\[year\\]"]').on('change', calculateExpiryDate);
 });

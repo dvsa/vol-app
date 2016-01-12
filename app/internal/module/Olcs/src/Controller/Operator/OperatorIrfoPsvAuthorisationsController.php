@@ -46,8 +46,16 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      */
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
-        'addAction' => ['forms/irfo-psv-auth-numbers', 'forms/irfo-psv-auth-copies'],
-        'editAction' => ['forms/irfo-psv-auth-numbers', 'forms/irfo-psv-auth-copies'],
+        'addAction' => [
+            'forms/irfo-psv-auth-numbers',
+            'forms/irfo-psv-auth-copies',
+            'forms/irfo-psv-auth-expiry-date'
+        ],
+        'editAction' => [
+            'forms/irfo-psv-auth-numbers',
+            'forms/irfo-psv-auth-copies',
+            'forms/irfo-psv-auth-expiry-date'
+        ],
     ];
 
     /*
