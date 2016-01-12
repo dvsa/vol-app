@@ -15,6 +15,7 @@ use Olcs\Form\Model\Form\SearchFilter as SearchFilterForm;
 
 use Olcs\Form\Element\SearchFilterFieldset;
 use Olcs\Form\Element\SearchDateRangeFieldset;
+use Zend\Session\Container;
 
 /**
  * Search Controller
@@ -109,12 +110,28 @@ class SearchController extends AbstractController
         $incomingParameters['search'] = $search;
         $incomingParameters['text']['search'] = $search;
 
+        $this->storeSearchUrl($routeParams, $queryParams);
+
         /**
          * Now remove all the data we don't want in the query string.
          */
         $incomingParameters = array_diff_key($incomingParameters, array_flip($remove));
 
         return $incomingParameters;
+    }
+
+    /**
+     * Store search params in the session to generate 'Back to search results' links
+     * Taken from route params and query params stored in the session
+     *
+     * @param array $params
+     */
+    private function storeSearchUrl($routeParams, $queryParams)
+    {
+        $sessionSearch = new Container('searchQuery');
+
+        $sessionSearch->routeParams = $routeParams;
+        $sessionSearch->queryParams = $queryParams;
     }
 
     public function searchAction()

@@ -10,6 +10,7 @@ use Common\Controller\Lva\AbstractController;
 use Common\Service\Entity\UserEntityService;
 use Dvsa\Olcs\Transfer\Query\Search\Licence as SearchLicence;
 use Common\RefData;
+use Zend\Session\Container;
 
 /**
  * Entity View Controller
@@ -93,7 +94,8 @@ class ViewController extends AbstractController
             [
                 'pageTitle' => $title,
                 'pageSubtitle' => $subtitle,
-                'userType' => $this->getUserType()
+                'userType' => $this->getUserType(),
+                'searchResultsLink' => $this->generateSearchResultsLink()
             ]
         );
         $layout->setTemplate('layouts/entity-view');
@@ -117,7 +119,7 @@ class ViewController extends AbstractController
                         RefData::ORG_TYPE_SOLE_TRADER,
                     ],
                     'registeredCompanyType' => RefData::ORG_TYPE_REGISTERED_COMPANY,
-                    'partnershipType' => RefData::ORG_TYPE_PARTNERSHIP,
+                    'partnershipType' => RefData::ORG_TYPE_PARTNERSHIP
                 ],
                 $this->generateTables($result)
             )
@@ -126,6 +128,31 @@ class ViewController extends AbstractController
 
         $content->setTemplate($template);
         return $content;
+    }
+
+    /**
+     * Generates the url as a Query string to go back to
+     *
+     * @return string
+     */
+    private function generateSearchResultsLink()
+    {
+        $searchQueryParams = new Container('searchQuery');
+
+        if (empty($searchQueryParams->routeParams) || empty($searchQueryParams->queryParams)) {
+            // return default search link
+            return $this->url()->fromRoute(
+                'search'
+            );
+        }
+
+        return $this->url()->fromRoute(
+            'search',
+            $searchQueryParams->routeParams,
+            [
+                'query' => $searchQueryParams->queryParams
+            ]
+        );
     }
 
     /**

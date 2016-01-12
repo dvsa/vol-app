@@ -10,6 +10,9 @@ namespace Olcs;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Zend\Session\Config\SessionConfig;
+use Zend\Session\Container;
+use Zend\Session\SessionManager;
 
 /**
  * Module.php
@@ -58,5 +61,27 @@ class Module
 
         $cookieBannerListener = $sm->get('CookieBannerListener');
         $cookieBannerListener->attach($eventManager, 1);
+
+        $this->initSession(
+            [
+                'remember_me_seconds' => 86400,
+                'use_cookies' => true,
+                'cookie_httponly' => true
+            ]
+        );
+    }
+
+    /**
+     * Set up and configure Session Manager
+     * 
+     * @param $config
+     */
+    public function initSession($config)
+    {
+        $sessionConfig = new SessionConfig();
+        $sessionConfig->setOptions($config);
+        $sessionManager = new SessionManager($sessionConfig);
+        $sessionManager->start();
+        Container::setDefaultManager($sessionManager);
     }
 }
