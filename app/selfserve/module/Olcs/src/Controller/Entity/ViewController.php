@@ -119,8 +119,12 @@ class ViewController extends AbstractController
                         RefData::ORG_TYPE_SOLE_TRADER,
                     ],
                     'registeredCompanyType' => RefData::ORG_TYPE_REGISTERED_COMPANY,
-                    'partnershipType' => RefData::ORG_TYPE_PARTNERSHIP
-                ],
+                    'partnershipCompanyType' => RefData::ORG_TYPE_PARTNERSHIP,
+                    'otherCompanyType' => RefData::ORG_TYPE_OTHER,
+                    'llpCompanyType' => RefData::ORG_TYPE_LLP,
+                    'irfoCompanyType' => RefData::ORG_TYPE_IRFO,
+                    'soleTraderCompanyType' => RefData::ORG_TYPE_SOLE_TRADER
+                 ],
                 $this->generateTables($result)
             )
         );

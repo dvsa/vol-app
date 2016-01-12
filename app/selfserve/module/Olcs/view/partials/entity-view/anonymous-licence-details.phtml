@@ -1,5 +1,6 @@
 <?php
 $items = [];
+
 if (!empty($this->result['organisation']['tradingNames'])) {
     for($i = 0; $i<count($this->result['organisation']['tradingNames']);$i++) {
         $label = ($i == 0) ? 'search-result-label-trading-names' : '';
@@ -16,45 +17,21 @@ if (!empty($this->result['organisation']['tradingNames'])) {
 }
 $items[] = $tradingNamesList;
 
-if ($this->result['organisation']['type']['id'] === $this->partnershipType) {
-    if (!empty($this->result['partners'])) {
-        for ($i = 0; $i < count($this->result['partners']); $i++) {
-            $label = ($i == 0) ? 'search-result-label-partners' : '';
-            $partnersList[] = [
-                'label' => $label,
-                'value' =>
-                    $this->result['partners'][$i]['person']['forename'] . ' ' .
-                    $this->result['partners'][$i]['person']['familyName']
-            ];
-        }
-    } else {
-        $partnersList[] = [
-            'label' => 'search-result-label-partners',
-            'value' => ''
-        ];
-    }
-    $items[] = $partnersList;
+switch($this->result['organisation']['type']['id']) {
+    case $this->registeredCompanyType:
+        $items[] = $this->generatePeopleList($this->result['people'], 'search-result-label-directors');
+        break;
+    case $this->partnershipCompanyType:
+        $items[] = $this->generatePeopleList($this->result['people'], 'search-result-label-partners');
+        break;
+    case $this->otherCompanyType:
+        $items[] = $this->generatePeopleList($this->result['people'], 'search-result-label-responsible-people');
+        break;
+    default:
+        $items[] = $this->generatePeopleList($this->result['people'], 'search-result-label-people');
+        break;
 }
 
-if ($this->result['organisation']['type']['id'] === $this->registeredCompanyType) {
-    if (!empty($this->result['directors'])) {
-        for ($i = 0; $i < count($this->result['directors']); $i++) {
-            $label = ($i == 0) ? 'search-result-label-directors' : '';
-            $directorsList[] = [
-                'label' => $label,
-                'value' =>
-                    $this->result['directors'][$i]['person']['forename'] . ' ' .
-                    $this->result['directors'][$i]['person']['familyName']
-            ];
-        }
-    } else {
-        $directorsList[] = [
-            'label' => 'search-result-label-directors',
-            'value' => ''
-        ];
-    }
-    $items[] = $directorsList;
-}
 
 $businessType = isset($this->result['organisation']['type']['id']) ?
     $this->result['organisation']['type']['description'] : '';
