@@ -64,13 +64,18 @@ class Module
 
         $this->initSession(
             [
-                'remember_me_seconds' => 180,
+                'remember_me_seconds' => 86400,
                 'use_cookies' => true,
                 'cookie_httponly' => true
             ]
         );
     }
 
+    /**
+     * Set up and configure Session Manager
+     * 
+     * @param $config
+     */
     public function initSession($config)
     {
         $sessionConfig = new SessionConfig();

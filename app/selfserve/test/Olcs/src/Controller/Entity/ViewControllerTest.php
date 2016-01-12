@@ -71,6 +71,9 @@ class ViewControllerTest extends MockeryTestCase
         $mockParams->shouldReceive('fromRoute')->with('entity')->andReturn($entity);
         $mockParams->shouldReceive('fromRoute')->with('entityId')->andReturn($entityId);
 
+        $urlPlugin = $mockPluginManager->get('url', '');
+        $urlPlugin->shouldReceive('fromRoute')->andReturn('foo');
+
         $mockTable = m::mock('Common\Service\Table\TableBuilder');
         $mockTable->shouldReceive('buildTable')
             ->with('entity-view-related-operator-licences', $mockResult['otherLicences'])
@@ -158,6 +161,9 @@ class ViewControllerTest extends MockeryTestCase
         $mockParams = $mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('entity')->andReturn($entity);
         $mockParams->shouldReceive('fromRoute')->with('entityId')->andReturn($entityId);
+
+        $urlPlugin = $mockPluginManager->get('url', '');
+        $urlPlugin->shouldReceive('fromRoute')->andReturn('foo');
 
         $mockTable = m::mock('Common\Service\Table\TableBuilder');
         $mockTable->shouldReceive('buildTable')
