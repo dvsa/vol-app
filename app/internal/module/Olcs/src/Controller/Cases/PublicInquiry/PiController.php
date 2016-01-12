@@ -67,6 +67,9 @@ class PiController extends AbstractInternalController implements CaseControllerI
     protected $mapperClass = PiMapper::class;
     protected $inlineScripts = ['decisionAction' => ['shared/definition'], 'slaAction' => ['pi-sla']];
 
+    protected $slaFields = ['callUpLetterDate', 'briefToTcDate', 'tcWrittenDecisionDate' ,'decisionLetterSentDate',
+        'tcWrittenReasonDate', 'writtenReasonLetterDate', 'writtenDecisionLetterDate'];
+
     protected $redirectConfig = [
         'decision' => [
             'route' => 'case_pi',
@@ -205,9 +208,6 @@ class PiController extends AbstractInternalController implements CaseControllerI
      */
     public function slaAction()
     {
-        $pi = $this->getPi();
-        $this->getServiceLocator()->get(SlaService::class)->setContext('pi', $pi);
-
         return $this->edit(
             $this->slaForm,
             $this->itemDto,
@@ -218,6 +218,50 @@ class PiController extends AbstractInternalController implements CaseControllerI
             'Updated record',
             'Service level agreement'
         );
+    }
+
+    /**
+     * Alter form for edit set SLAs
+     *
+     * @param \Common\Controller\Form $form
+     * @return \Common\Controller\Form
+     */
+    public function alterFormForSla($form)
+    {
+        $data = $this->getPi();
+
+        // set SLAs
+        $fields = $form->get('fields');
+        foreach ($fields as $element) {
+            if (in_array($element->getName(), $this->slaFields)) {
+                $form = $this->setSlaTargetHint($form, $element, $data);
+            }
+        }
+
+        return $form;
+    }
+
+    /**
+     * Sets the target date hint on an element from data provided by the query handler
+     *
+     * @param $form
+     * @param $element
+     * @param $data
+     * @return mixed
+     */
+    private function setSlaTargetHint($form, $element, $data)
+    {
+        $elementName = $element->getName();
+
+        $date = $data[$elementName . 'Target'];
+        if (empty($date)) {
+            $hint = 'There was no target date found';
+        } else {
+            $hint = 'Target date: ' . date('d/m/Y', strtotime($date));
+        }
+
+        $element->setOption('hint', $hint);
+        return $form;
     }
 
     /**

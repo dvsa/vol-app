@@ -14,7 +14,6 @@ class PaymentTypeTest extends MockeryTestCase
 {
     public function testFetchListData()
     {
-        $this->markTestSkipped();
         $data = [
             [
                 'id' => 'fpm_cash',
@@ -27,15 +26,8 @@ class PaymentTypeTest extends MockeryTestCase
                 'description' => 'Will Be Overridden'
             ]
         ];
-
-        $mockRestClient = m::mock('\Common\Util\RestClient')
-            ->shouldReceive('get')
-            ->with('/category/fee_pay_method')
-            ->andReturn($data)
-            ->getMock();
-
         $sut = new PaymentType();
-        $sut->setRestClient($mockRestClient);
+        $sut->setData('fee_pay_method', $data);
 
         $result = [
             [

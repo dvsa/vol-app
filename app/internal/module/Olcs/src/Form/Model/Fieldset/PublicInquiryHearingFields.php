@@ -57,7 +57,7 @@ class PublicInquiryHearingFields extends Base
      *     "category": "pi_hearing",
      *     "field": "hearingDate"
      * })
-     * @Form\Type("SlaDateTimeSelect")
+     * @Form\Type("DateTimeSelect")
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d H:i:s"}})
