@@ -139,14 +139,14 @@ $routes = array(
             )
         )
     ),
-    'search-traffic-commissioner-publication' => array(
+    'search-find-a-publication' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/search/traffic-commissioner-publication[/:action][/]',
+            'route' => '/search/find-a-publication[/:action][/]',
             'defaults' => array(
                 'controller' => SearchController::class,
                 'action' => 'index',
-                'index' => 'traffic-commissioner-publication'
+                'index' => 'find-a-publication'
             )
         )
     ),
@@ -784,9 +784,9 @@ $searchNavigation = array(
             'class' => 'search-navigation__item',
         ),
         array(
-            'id' => 'search-traffic-commissioner-publication',
+            'id' => 'search-find-a-publication',
             'label' => 'Publications',
-            'route' => 'search-traffic-commissioner-publication',
+            'route' => 'search-find-a-publication',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         ),
