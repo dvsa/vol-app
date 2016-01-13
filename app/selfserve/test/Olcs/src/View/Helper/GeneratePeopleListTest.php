@@ -19,6 +19,26 @@ use Olcs\View\Helper\GeneratePeopleList;
 class GeneratePeopleListTest extends MockeryTestCase
 {
     /**
+     * Test render no persons
+     */
+    public function testInvokeEmpty()
+    {
+        $sut = new GeneratePeopleList();
+
+        $response = $sut($this->getTestPeopleArray(0), 'single');
+
+        $this->assertEquals(
+            [
+                [
+                    'label' => 'single',
+                    'value' => ''
+                ]
+            ],
+            $response
+        );
+    }
+
+    /**
      * Test render single person
      */
     public function testInvokeSingle()
@@ -56,6 +76,26 @@ class GeneratePeopleListTest extends MockeryTestCase
                 [
                     'label' => '',
                     'value' => 'John1 Smith1'
+                ]
+            ],
+            $response
+        );
+    }
+
+    /**
+     * Test render no persons
+     */
+    public function testRenderEmpty()
+    {
+        $sut = new GeneratePeopleList();
+
+        $response = $sut->render($this->getTestPeopleArray(0), 'single');
+
+        $this->assertEquals(
+            [
+                [
+                    'label' => 'single',
+                    'value' => ''
                 ]
             ],
             $response
@@ -115,7 +155,7 @@ class GeneratePeopleListTest extends MockeryTestCase
     private function getTestPeopleArray($count)
     {
         $testData = [];
-        for($i=0; $i<$count; $i++) {
+        for ($i=0; $i<$count; $i++) {
             $testData[$i] = [
                 'person' => [
                     'forename' => 'John' . $i,
