@@ -1,7 +1,14 @@
 $(function() {
   'use strict';
 
+  var id = OLCS.formHelper('fields', 'id').val();
   var calculatedExpiryDateText = $('#calculatedExpiryDateText');
+
+  function isRenewal() {
+    var status = OLCS.formHelper('fields', 'status').val();
+
+    return (status === 'irfo_auth_s_renew');
+  }
 
   function addYearsToFieldValue(fieldName, noOfYears) {
     // add noOfYears to a value of the fieldName
@@ -24,10 +31,9 @@ $(function() {
     var calculated;
 
     // get current values
-    var status = OLCS.formHelper('fields', 'status').val();
     var validityPeriod = parseInt(OLCS.formHelper('fields', 'validityPeriod').val());
 
-    if (status === 'irfo_auth_s_renew') {
+    if (isRenewal()) {
       // renewal
       calculated = addYearsToFieldValue('expiryDate', validityPeriod);
     } else {
@@ -37,12 +43,17 @@ $(function() {
     calculatedExpiryDateText.html(calculated || 'unknown');
   }
 
-  // calculate on init
-  calculateExpiryDate();
+  if (!id || isRenewal()) {
+    // calculate on init
+    calculateExpiryDate();
 
-  // watch all relevant form fields
-  OLCS.formHelper('fields', 'validityPeriod').on('change', calculateExpiryDate);
-  $('[name="fields\\[inForceDate\\]\\[day\\]"]').on('change', calculateExpiryDate);
-  $('[name="fields\\[inForceDate\\]\\[month\\]"]').on('change', calculateExpiryDate);
-  $('[name="fields\\[inForceDate\\]\\[year\\]"]').on('change', calculateExpiryDate);
+    // watch all relevant form fields
+    OLCS.formHelper('fields', 'validityPeriod').on('change', calculateExpiryDate);
+    $('[name="fields\\[inForceDate\\]\\[day\\]"]').on('change', calculateExpiryDate);
+    $('[name="fields\\[inForceDate\\]\\[month\\]"]').on('change', calculateExpiryDate);
+    $('[name="fields\\[inForceDate\\]\\[year\\]"]').on('change', calculateExpiryDate);
+  } else {
+    // hide the hint
+    calculatedExpiryDateText.parent().hide();
+  }
 });
