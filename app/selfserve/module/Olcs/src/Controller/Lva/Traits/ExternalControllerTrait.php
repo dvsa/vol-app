@@ -7,9 +7,11 @@
  */
 namespace Olcs\Controller\Lva\Traits;
 
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Common\View\Model\Section;
+use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as UserQry;
 
 /**
  * Abstract External Controller
@@ -33,7 +35,10 @@ trait ExternalControllerTrait
      */
     protected function getCurrentUser()
     {
-        return $this->getServiceLocator()->get('Entity\User')->getCurrentUser();
+        // get user data from Controller Plugin
+        $userData = $this->currentUser()->getUserData();
+
+        return $userData;
     }
 
     /**
@@ -46,8 +51,17 @@ trait ExternalControllerTrait
      */
     protected function getCurrentOrganisation()
     {
-        $user = $this->getCurrentUser();
-        return $this->getServiceLocator()->get('Entity\Organisation')->getForUser($user['id']);
+        $dto = MyAccount::create([]);
+
+        $response = $this->handleQuery($dto);
+
+        if (!$response->isOk()) {
+            return null;
+        }
+
+        $data = $response->getResult();
+
+        return $data['organisationUsers'][0]['organisation'];
     }
 
     /**
@@ -58,21 +72,33 @@ trait ExternalControllerTrait
     protected function getCurrentOrganisationId()
     {
         $organisation = $this->getCurrentOrganisation();
+
         return (isset($organisation['id'])) ? $organisation['id'] : null;
     }
 
     /**
      * Check for redirect
      *
-     * @todo now this is a trait, we can't call parent due to sonar
-     *
      * @param int $lvaId
      * @return null|\Zend\Http\Response
      */
     protected function checkForRedirect($lvaId)
     {
-        if (!$this->checkAccess($lvaId)) {
-            return $this->redirect()->toRoute('dashboard');
+        if ($this->lva === 'application' || $this->lva === 'variation') {
+
+            $summaryRouteName = 'lva-' . $this->lva . '/summary';
+            $submissionRouteName = 'lva-' . $this->lva . '/submission-summary';
+            $allowedRoutes = [
+                $summaryRouteName,
+                $submissionRouteName,
+                'lva-' . $this->lva . '/transport_manager_details',
+                'lva-' . $this->lva . '/withdraw'
+            ];
+            $matchedRouteName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
+
+            if (!in_array($matchedRouteName, $allowedRoutes) && !$this->checkAppStatus($lvaId)) {
+                $this->redirect()->toRoute($submissionRouteName, ['application' => $lvaId]);
+            }
         }
 
         return parent::checkForRedirect($lvaId);
@@ -83,9 +109,10 @@ trait ExternalControllerTrait
      *
      * @param string $titleSuffix
      * @param \Zend\Form\Form $form
+     * @param array $variables
      * @return \Common\View\Model\Section
      */
-    protected function render($titleSuffix, Form $form = null)
+    protected function render($titleSuffix, Form $form = null, $variables = array())
     {
         $this->attachCurrentMessages();
 
@@ -93,6 +120,23 @@ trait ExternalControllerTrait
             return $titleSuffix;
         }
 
-        return new Section(array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form));
+        $params = array_merge(
+            array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form),
+            $variables
+        );
+
+        return $this->renderView(new Section($params));
+    }
+
+    protected function renderView($section)
+    {
+        $template = $this->getRequest()->isXmlHttpRequest() ? 'ajax' : 'layout';
+
+        $base = new ViewModel();
+        $base->setTemplate('layout/' . $template)
+            ->setTerminal(true)
+            ->addChild($section, 'content');
+
+        return $base;
     }
 }

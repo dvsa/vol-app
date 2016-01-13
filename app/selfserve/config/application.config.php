@@ -1,12 +1,16 @@
 <?php
 
-return array(
+$config = array(
     'modules' => array(
-        'Olcs\Logging',
-        'Common',
+        'Dvsa\Olcs\Auth',
+        'Dvsa\Olcs\Utils',
+        'Dvsa\Olcs\Transfer',
         'DoctrineModule',
         'DoctrineORMModule',
-        'Olcs'
+        'Olcs\Logging',
+        'Common',
+        'Olcs',
+        'ZfcRbac',
     ),
     'module_listener_options' => array(
         'module_paths' => array(
@@ -19,3 +23,9 @@ return array(
         )
     )
 );
+
+if (file_exists(__DIR__ . '/../vendor/zendframework/zend-developer-tools/Module.php')) {
+    array_unshift($config['modules'], 'ZendDeveloperTools');
+}
+
+return $config;

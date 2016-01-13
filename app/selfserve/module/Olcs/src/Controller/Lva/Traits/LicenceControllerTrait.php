@@ -8,6 +8,8 @@
  */
 namespace Olcs\Controller\Lva\Traits;
 
+use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
+use Olcs\Logging\Log\Logger;
 use Zend\Form\Form;
 
 /**
@@ -31,47 +33,14 @@ trait LicenceControllerTrait
     }
 
     /**
-     * Check if the user has access to the licence
-     *
-     * @NOTE We might want to consider caching this information within the session, to save making this request on each
-     *  section
-     *
-     * @param int $licenceId
-     * @return boolean
-     */
-    protected function checkAccess($licenceId)
-    {
-        $organisation = $this->getCurrentOrganisation();
-
-        $doesBelong = $this->getServiceLocator()->get('Entity\Licence')
-            ->doesBelongToOrganisation($licenceId, $organisation['id']);
-
-        if ($doesBelong) {
-            return true;
-        }
-
-        $this->addErrorMessage('licence-no-access');
-        return false;
-    }
-
-    /**
      * Get licence id
      *
      * @return int
+     * @inheritdoc
      */
     protected function getLicenceId($lva = null)
     {
         return $this->getIdentifier();
-    }
-
-    /**
-     * Get type of licence data
-     *
-     * @return array
-     */
-    protected function getTypeOfLicenceData()
-    {
-        return $this->getServiceLocator()->get('Entity\Licence')->getTypeOfLicenceData($this->getLicenceId());
     }
 
     /**
@@ -89,6 +58,6 @@ trait LicenceControllerTrait
 
     protected function alterFormForLva(Form $form)
     {
-        $form->get('form-actions')->remove('saveAndContinue');
+        return $this->getServiceLocator()->get('LicenceLvaAdapter')->alterForm($form);
     }
 }

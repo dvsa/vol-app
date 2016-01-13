@@ -16,10 +16,13 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class PeopleController extends Lva\AbstractPeopleController
 {
-    use ApplicationControllerTrait;
+    use ApplicationControllerTrait {
+        ApplicationControllerTrait::postSave as commonPostSave;
+    }
 
     protected $lva = 'application';
     protected $location = 'external';

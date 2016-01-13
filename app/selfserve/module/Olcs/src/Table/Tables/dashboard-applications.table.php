@@ -11,12 +11,8 @@ return array(
     'columns' => array(
         array(
             'title' => $translationPrefix . '-appId',
-            'formatter' => function ($row) {
-                return '<b><a href="' . $this->url->fromRoute(
-                    'lva-application',
-                    array('application' => $row['id'])
-                ) . '">'.$row['id'].'</a></b>';
-            }
+            'lva' => 'application',
+            'formatter' => 'DashboardApplicationLink'
         ),
         array(
             'title' => $translationPrefix . '-licNo',
@@ -24,7 +20,7 @@ return array(
                 if (!empty($row['licNo'])) {
                     return $row['licNo'];
                 }
-                return $sm->get('translator')->translate('Not yet allocated');
+                return $sm->get('translator')->translate('dashboard-lic-no-not-allocated');
             }
         ),
         array(

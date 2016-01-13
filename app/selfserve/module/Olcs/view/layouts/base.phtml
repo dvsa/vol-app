@@ -1,58 +1,143 @@
 <?php echo $this->doctype(); ?>
 <html lang="en-GB">
-  <head>
-    <meta charset="utf-8">
-    <?php echo $this->headTitle($this->translate('')); ?>
-    <?php echo $this->headMeta() ->appendName('viewport', 'width=device-width, initial-scale=1.0') ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')?>
-    <?php /* echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico')); */
-        echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css')) ?>
-    <?php echo $this->headScript(); ?>
-  </head>
 
-  <body class="selfserve">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle($this->translate('')); ?>
+        <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')->appendHttpEquiv('X-UA-Compatible', 'IE=edge'); ?>
+        <?php echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css'), ['media' => 'screen,print']); ?>
+        <?php echo $this->headScript(); ?>
+        <!--[if IE]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+    </head>
+
+  <body class="selfserve" id="<?php echo $this->pageId(); ?>">
+    <?php echo $this->version(); ?>
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
     <div role="banner" class="global-header">
       <div class="global-header__wrapper">
-        <a href="/dashboard" title="Go to dashboard" class="global-header__logo">
+        <a href="/" title="Go to dashboard" class="global-header__logo">
           <img src="<?php echo $this->assetPath('/images/gov.uk_logotype_crown.png') ?>" alt="GOV.UK logo">GOV.UK
         </a>
-        <h2 class="global-header__title">Operator Licensing</h2>
+
+        <div class="proposition">
+          <h2 class="proposition__title">Vehicle Operator Licensing</h2>
+          <a class="proposition__toggle" href="#">Menu</a>
+
+            <?php
+
+
+            /* @var \Zend\View\Helper\Navigation\Menu $menu */
+            $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'home'))->menu();
+
+            $menu->setAddClassToListItem(true);
+
+            // This seems irrelevant, but it's very important as the partial is set elsewhere
+            $menu->setPartial(null);
+            $menu->setMaxDepth(0);
+            $menu->setMinDepth(0);
+
+            echo $menu->setUlClass('proposition-nav');
+            ?>
+        </div>
       </div><!-- end .global-header__wrapper -->
     </div><!-- end .global-header -->
 
+    <?php
+
+    $showCookieBanner = $this->getPlaceholder('showCookieBanner')->asBool();
+    if ($showCookieBanner === true) {
+        ?>
+        <div class="cookie-banner">
+            <div class="cookie-banner__wrapper">
+                <p><?php echo $this->translate('cookie-banner'); ?> <a
+                        href="<?php echo $this->url('cookies'); ?>"><?php echo $this->translate('Find out more'); ?></a>
+                </p>
+            </div>
+        </div>
+        <?php
+    }
+    ?>
+
     <div class="page-wrapper">
+        <div class="user-header">
+            <p class="phase">
+                <span class="phase__tag">alpha</span>
+                <span class="phase__message">This is a new service – <a href="https://www.surveymonkey.com/s/T8NGJV8">help us improve it.</a></span>
+                <span class="phase__message"><strong>Data up to date as of 16 Dec 2015</strong></span>
+            </p>
+            <ul class="user-menu">
+                <?php if($this->currentUser()->isLoggedIn()):?>
+                    <li class="user-menu__item"><?php echo $this->currentUser()->getFullName() ?>, <b><?php echo $this->currentUser()->getOrganisationName() ?></b></li>
+                    <li class="user-menu__item"><a href="<?php echo $this->url('auth/logout');?>">Sign out</a></li>
+                <?php else: ?>
+                    <li class="user-menu__item"><a href="<?php echo $this->url('auth/login');?>">Sign in</a></li>
+                <?php endif;?>
+            </ul>
+        </div><!-- user-header -->
 
-      <div class="user-header">
-        <p class="phase"><span class="phase__tag">alpha <?php echo $this->version(); ?></span><span class="phase__message">This is a prototype – your <a href="">feedback</a> will help us improve it.</span></p>
-        <ul class="user-menu">
-          <li class="user-menu__item">Sam Quayle:</li>
-          <li class="user-menu__item"><a href="/dashboard">Dashboard</a></li>
-          <li class="user-menu__item"><a href="">Sign out</a></li>
-        </ul>
-      </div><!-- end .user-header -->
+        <div id="main" role="main">
+            <?php echo $this->content; ?>
+        </div><!-- main -->
 
-      <div id="main" role="main">
-
-        <?php echo $this->content; ?>
-      </div><!-- end .main -->
-    </div><!-- end .page-wrapper-->
+    </div><!-- page-wrapper-->
 
     <div class="global-footer">
-      <div class="global-footer__wrapper">
-        <ul class="global-footer__links">
-          <li class="global-footer__link"><a href="">Helpdesk</a></li>
-          <li class="global-footer__link"><a href="">Privacy &amp; cookies</a></li>
-          <li class="global-footer__link">Built by <a href="https://www.gov.uk/government/organisations/driver-and-vehicle-standards-agency">Driver &amp; Vehicle Standards Agency</a></li>
-        </ul>
-        <div class="global-footer__copyright">
-          <a href="">&copy; Crown copyright</a>
+        <div class="global-footer__wrapper">
+            <ul class="global-footer__links">
+                <li class="global-footer__link">
+                    <a href="<?php echo $this->url('terms-and-conditions');?>"><?php echo $this->translate('terms-and-conditions-title') ?></a>
+                </li>
+                <li class="global-footer__link">
+                    <a href="<?php echo $this->url('cookies');?>"><?php echo $this->translate('privacy-and-cookies-title') ?></a>
+                </li>
+                <li class="global-footer__link">
+                    <?php echo $this->languageLink(); ?>
+                </li>
+                <li class="global-footer__link">
+                    Built by <a href="<?php echo $this->translate('DVSA-link'); ?>">Driver and Vehicle Standards Agency</a>
+                </li>
+            </ul>
+            <div class="global-footer__copyright">
+                <a href="<?php echo $this->translate('crown-copyright-link'); ?>" target="blank">&copy; Crown copyright</a>
+            </div>
         </div>
-        </div><!-- end global-wrapper -->
-    </div><!-- end global-footer -->
+    </div><!-- global-footer -->
 
 
     <?php echo $this->inlineScript()
         ->prependFile($this->assetPath('js/' . $this->applicationName() . '.js')) ?>
+
+    <script>
+      OLCS.ready(function() {
+        OLCS.eventEmitter.emit("render");
+      });
+    </script>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];
+    a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    <?php
+
+    $userId = $this->currentUser()->getUniqueId();
+
+    if (!empty($userId)) {
+      echo sprintf('ga(\'create\', \'UA-56588861-1\', \'auto\', {\'userId\': \'%s\'});', $userId);
+    } else {
+      ?>
+      ga('create', 'UA-56588861-1', 'auto');
+      <?php
+    }
+    ?>
+
+    ga('send', 'pageview');
+
+    </script>
+
   </body>
 </html>

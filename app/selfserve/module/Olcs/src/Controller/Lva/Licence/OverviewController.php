@@ -8,9 +8,11 @@
  */
 namespace Olcs\Controller\Lva\Licence;
 
-use Olcs\View\Model\Licence\LicenceOverview;
-use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Common\Controller\Lva\AbstractController;
+use Common\RefData;
+use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
+use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use Olcs\View\Model\Licence\LicenceOverview;
 
 /**
  * Licence Overview Controller
@@ -30,9 +32,37 @@ class OverviewController extends AbstractController
      */
     public function indexAction()
     {
-        $data = $this->getServiceLocator()->get('Entity\Licence')->getOverview($this->getLicenceId());
+        $data = $this->getOverviewData($this->getLicenceId());
         $data['idIndex'] = $this->getIdentifierIndex();
+        $sections = array_keys($data['sections']);
 
-        return new LicenceOverview($data, $this->getAccessibleSections());
+        $variables = ['shouldShowCreateVariation' => true];
+
+        if ($data['licenceType']['id'] === RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+            $variables['shouldShowCreateVariation'] = false;
+        }
+
+        return new LicenceOverview($data, $sections, $variables);
+    }
+
+    /**
+     * @NOTE I don't think this is used anymore, I am going to comment it out for a little while and see if anything
+     * breaks
+     * @todo Remove this code if nothing has broken around creating variations
+    public function createVariationAction()
+    {
+        $varId = $this->getServiceLocator()->get('Entity\Application')
+            ->createVariation($this->getIdentifier());
+
+        return $this->redirect()->toRouteAjax('lva-variation', ['application' => $varId]);
+    }
+     */
+
+    protected function getOverviewData($licenceId)
+    {
+        $dto = LicenceQry::create(['id' => $licenceId]);
+        $response = $this->handleQuery($dto);
+
+        return $response->getResult();
     }
 }

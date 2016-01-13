@@ -7,45 +7,99 @@
 ?>
 
 <div class="page-header">
-  <div class="page-header__wrapper">
-    <h3 class="page-header__subtitle">
-        <?php echo $this->translate('application.overview.application-no'); ?> <?php echo $applicationId; ?>
-    </h3>
-    <h1><?php echo $this->translate('application.overview.title'); ?></h1>
-  </div><!-- end .page-header__wrapper -->
-  <ul class="page-header__actions">
-    <li><a href="" class="page-header__action"><?php echo $this->translate('application.print'); ?></a></li>
-    <li><a href="" class="page-header__action"><?php echo $this->translate('application.cancel'); ?></a></li>
-  </ul>
-</div>
-<div class="two-thirds">
-    <?php echo $this->flashMessengerAll(); ?>
-  <ul class="overview-navigation">
-      <?php
-      foreach ($sections as $section) {
-          echo $this->render($section);
-      }
-      ?>
-  </ul>
-</div>
-<div class="one-third sidebar">
-  <dl class="meta">
-    <dt><?php echo $this->translate('created'); ?></dt>
-    <dd><?php echo $createdOn; ?></dd>
-    <dt><?php echo $this->translate('progress'); ?></dt>
-    <dd><?php echo sprintf($this->translate('application.progress'), 'X', 'Y'); ?></dd>
-    <dt><?php echo $this->translate('status'); ?></dt>
-    <dd><?php echo $this->translate($status); ?></dd>
-  </dl>
-
-  <div class="links">
-    <h3>Applying for a new licence</h3>
-    <ul class="links-list">
-      <li class="links-list__item"><a href="">Complete your applications for a goods vehicle operator's licence</a></li>
-      <li class="links-list__item"><a href="">Advertise your application for a licence</a></li>
-      <li class="links-list__item"><a href="">Financial information</a></li>
-      <li class="links-list__item"><a href="">A guide to operator fees</a></li>
-      <li class="links-list__item"><a href="">How to draw up a maintenance contract</a></li>
+  <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
+  <div class="row">
+    <div class="page-header__wrapper two-thirds">
+      <h3 class="page-header__subtitle">
+          <?php echo $this->translate('application.overview.application-no'); ?> <?php echo $applicationId; ?>
+      </h3>
+      <h1><?php echo $this->translate('application.overview.title'); ?></h1>
+    </div><!-- end .page-header__wrapper -->
+    <ul class="page-header__actions one-third">
+      <?php if ($canCancel): ?>
+        <li>
+          <a
+            href="<?php echo $this->url('lva-variation/cancel', [], [], true); ?>"
+            class="page-header__action js-modal-ajax">
+            <?php echo $this->translate('application.cancel'); ?>
+          </a>
+        </li>
+      <?php endif; ?>
     </ul>
   </div>
+</div>
+
+<div class="row">
+    
+  <div class="two-thirds border">
+      <?php echo $this->flashMessengerAll(); ?>
+      <ul class="overview-navigation">
+          <?php
+              foreach ($sections as $section) {
+                  echo $this->render($section);
+              }
+          ?>
+      </ul>
+      <?php if (isset($submissionForm)): ?>
+          <?php echo $this->form($submissionForm); ?>
+      <?php endif ?>
+  </div>
+  
+  <div class="one-third">
+    
+      <div class="sidebar">
+      
+        <dl class="meta">
+            <dt><?php echo $this->translate('status'); ?></dt>
+            <dd><?php echo $this->translate($status); ?></dd>
+            <?php if ($receivedDate): ?>
+                <dt><?php echo $this->translate('selfserve-dashboard-submission-date'); ?></dt>
+                <dd><?php echo strftime("%d %B %G",strtotime($receivedDate)); ?></dd>
+            <?php endif; ?>
+            <?php if ($completionDate): ?>
+                <dt><?php echo $this->translate('target-completion-date'); ?></dt>
+                <dd><?php echo strftime("%d %B %G",strtotime($completionDate)); ?></dd>
+            <?php endif; ?>
+        </dl>
+    
+        <div class="links">
+            <h3>Applying for a variation</h3>
+            <ul class="links-list">
+                <li class="links-list__item">
+                    <a href="<?php echo $this->translate('being-an-operator-link'); ?>" target="_blank">
+                        <?php echo $this->translate('sidebar-variation-being-an-operator'); ?>
+                    </a>
+                </li>
+                <li class="links-list__item">
+                    <a href="<?php echo $this->translate('public-services-link'); ?>" target="_blank">
+                        <?php echo $this->translate('sidebar-variation-public-service'); ?>
+                    </a>
+                </li>
+                <li class="links-list__item">
+                    <a href="<?php echo $this->url('guides/guide', ['guide' => 'advertising-your-operating-centre-gb-var']); ?>">
+                        <?php echo $this->translate('sidebar-variation-advertise-gb'); ?>
+                    </a>
+                </li>
+                <li class="links-list__item">
+                    <a href="<?php echo $this->url('guides/guide', ['guide' => 'advertising-your-operating-centre-ni-var']); ?>">
+                        <?php echo $this->translate('sidebar-variation-advertise-ni'); ?>
+                    </a>
+                </li>
+                <li class="links-list__item">
+                    <a href="<?php echo $this->url('guides/guide', ['guide' => 'financial-evidence']); ?>">
+                        <?php echo $this->translate('sidebar-variation-financial-evidence'); ?>
+                    </a>
+                </li>
+                <li class="links-list__item">
+                    <a href="<?php echo $this->translate('vehicle-safety-link'); ?>" target="_blank">
+                        <?php echo $this->translate('sidebar-variation-safety-and-maintenance'); ?>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+      </div>
+    
+  </div>
+
 </div>

@@ -2,24 +2,32 @@
 
 namespace Olcs\Controller\Ebsr;
 
-use Common\Controller\AbstractActionController;
+use Common\Controller\Traits\GenericMethods;
+use Common\Controller\Traits\GenericRenderView;
+use Common\Util\FlashMessengerTrait;
+use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
 
 /**
  * Class UploadsController
  */
-class UploadsController extends AbstractActionController
+class UploadsController extends ZendAbstractActionController
 {
+    use GenericMethods,
+        GenericRenderView,
+        FlashMessengerTrait;
 
+    /**
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
-
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
         $tableBuilder = $this->getServiceLocator()->get('Table');
         $dataService = $this->getEbsrDataService();
 
         $table = $tableBuilder->buildTable(
             'ebsr-packs',
-            $dataService->fetchPackList(),
+            $dataService->fetchList(),
             ['url' => $this->plugin('url')],
             false
         );
@@ -27,47 +35,39 @@ class UploadsController extends AbstractActionController
         return $this->getView(['table' => $table]);
     }
 
+    /**
+     * @return \Zend\View\Model\ViewModel
+     */
     public function uploadAction()
     {
-        $this->fieldValues = $this->params()->fromFiles();
-        $form = $this->generateFormWithData('EbsrPackUpload', 'processSave');
+        $fieldValues = $this->params()->fromFiles();
+        $postFields = $this->params()->fromPost('fields');
+        $fieldValues['fields']['submissionType'] = $postFields['submissionType'];
+
+        $form = $this->generateFormWithData('EbsrPackUpload', 'processSave', null, false, true, $fieldValues);
 
         return $this->getView(['form' => $form]);
     }
 
-    public function processSave($data)
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function processSave($data, $form = null, $additionalParams = null)
     {
-        $dataService = $this->getEbsrDataService();
-        $result = $dataService->processPackUpload($data);
+        $dataService = $this->getEbsrService();
 
-        if (is_array($result)) {
-            $packs = $result['valid'] + $result['errors'];
+        $result = $dataService->processPackUpload($data, $data['fields']['submissionType']);
 
-            $message = sprintf('%d %s successfully submitted for processing', $packs, ($packs > 1)? ' packs': ' pack');
-
-            $validMessage = sprintf(
-                '<br />%d %s validated successfully',
-                $result['valid'],
-                ($result['valid'] > 1)? 'packs' : 'pack'
-            );
-
-            $errorMessage = sprintf(
-                '<br />%d %s contained errors',
-                $result['errors'],
-                ($result['errors'] > 1)? ' packs': ' pack'
-            );
-
-            $this->addSuccessMessage(
-                $message .
-                ($result['valid'] ? $validMessage : '') .
-                ($result['errors'] ? $errorMessage : '')
-            );
-
-            foreach ($result['messages'] as $pack => $errors) {
-                $this->addErrorMessage($pack . ': ' . implode(' ', $errors));
+        if (isset($result['success'])) {
+            $this->addSuccessMessage($result['success']);
+        }
+        if (isset($result['errors'])) {
+            $messages['fields']['file'] = [];
+            foreach ((array) $result['errors'] as $message) {
+                array_push($messages['fields']['file'], $message);
             }
-        } else {
-            $this->addErrorMessage($result);
+            $form->setMessages($messages);
         }
     }
 
@@ -78,6 +78,16 @@ class UploadsController extends AbstractActionController
     {
         /** @var \Olcs\Service\Data\EbsrPack $dataService */
         $dataService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\EbsrPack');
+        return $dataService;
+    }
+
+    /**
+     * @return \Olcs\Service\Ebsr
+     */
+    public function getEbsrService()
+    {
+        /** @var \Olcs\Service\Ebsr $dataService */
+        $dataService = $this->getServiceLocator()->get('Olcs\Service\Ebsr');
         return $dataService;
     }
 }

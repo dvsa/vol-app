@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Variation;
 
+use Common\Controller\Lva\Variation\AbstractTypeOfLicenceController;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 
@@ -15,7 +16,7 @@ use Olcs\Controller\Lva\Traits\VariationControllerTrait;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
+class TypeOfLicenceController extends AbstractTypeOfLicenceController
 {
     use VariationControllerTrait;
 

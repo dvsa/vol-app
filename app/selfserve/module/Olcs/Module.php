@@ -8,9 +8,11 @@
 
 namespace Olcs;
 
-use Zend\Session\SessionManager;
-use Zend\Session\Container;
 use Zend\Mvc\ModuleRouteListener;
+use Zend\Mvc\MvcEvent;
+use Zend\Session\Config\SessionConfig;
+use Zend\Session\Container;
+use Zend\Session\SessionManager;
 
 /**
  * Module.php
@@ -19,19 +21,21 @@ use Zend\Mvc\ModuleRouteListener;
  */
 class Module
 {
-
+    /**
+     * Get the module config
+     *
+     * @return array
+     */
     public function getConfig()
     {
-        $config = array();
-        $configFiles = array(
-            include __DIR__ . '/config/module.config.php',
-        );
-        foreach ($configFiles as $file) {
-            $config = \Zend\Stdlib\ArrayUtils::merge($config, $file);
-        }
-        return $config;
+        return include(__DIR__ . '/config/module.config.php');
     }
 
+    /**
+     * Get the autoloader config
+     *
+     * @return array
+     */
     public function getAutoloaderConfig()
     {
         return array(
@@ -43,74 +47,41 @@ class Module
         );
     }
 
-    public function onBootstrap($e)
+    /**
+     * @param MvcEvent $e
+     */
+    public function onBootstrap(MvcEvent $e)
     {
-        $eventManager = $e->getApplication()->getEventManager();
+        $application = $e->getApplication();
+        $sm = $application->getServiceManager();
+
+        $eventManager = $application->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
-    }
 
-    public function bootstrapSession($e)
-    {
-        $session = $e->getApplication()
-            ->getServiceManager()
-            ->get('Zend\Session\SessionManager');
-        $session->start();
+        $cookieBannerListener = $sm->get('CookieBannerListener');
+        $cookieBannerListener->attach($eventManager, 1);
 
-        $container = new Container('initialized');
-        if (!isset($container->init)) {
-            $session->regenerateId(true);
-            $container->init = 1;
-        }
-    }
-
-    public function getServiceConfig()
-    {
-        return array(
-            'factories' => array(
-                'Zend\Session\SessionManager' => function ($sm) {
-                    $config = $sm->get('config');
-                    if (isset($config['session'])) {
-                        $session = $config['session'];
-
-                        $sessionConfig = null;
-                        if (isset($session['config'])) {
-                            $class = isset($session['config']['class'])
-                                ? $session['config']['class']
-                                : 'Zend\Session\Config\SessionConfig';
-                            $options = isset($session['config']['options']) ? $session['config']['options'] : array();
-                            $sessionConfig = new $class();
-                            $sessionConfig->setOptions($options);
-                        }
-
-                        $sessionStorage = null;
-                        if (isset($session['storage'])) {
-                            $class = $session['storage'];
-                            $sessionStorage = new $class();
-                        }
-
-                        $sessionSaveHandler = null;
-                        if (isset($session['save_handler'])) {
-                            // class should be fetched from service manager since it will require constructor arguments
-                            $sessionSaveHandler = $sm->get($session['save_handler']);
-                        }
-
-                        $sessionManager = new SessionManager($sessionConfig, $sessionStorage, $sessionSaveHandler);
-
-                        if (isset($session['validator'])) {
-                            $chain = $sessionManager->getValidatorChain();
-                            foreach ($session['validator'] as $validator) {
-                                $validator = new $validator();
-                                $chain->attach('session.validate', array($validator, 'isValid'));
-                            }
-                        }
-                    } else {
-                        $sessionManager = new SessionManager();
-                    }
-                    Container::setDefaultManager($sessionManager);
-                    return $sessionManager;
-                }
-            )
+        $this->initSession(
+            [
+                'remember_me_seconds' => 86400,
+                'use_cookies' => true,
+                'cookie_httponly' => true
+            ]
         );
+    }
+
+    /**
+     * Set up and configure Session Manager
+     * 
+     * @param $config
+     */
+    public function initSession($config)
+    {
+        $sessionConfig = new SessionConfig();
+        $sessionConfig->setOptions($config);
+        $sessionManager = new SessionManager($sessionConfig);
+        $sessionManager->start();
+        Container::setDefaultManager($sessionManager);
     }
 }

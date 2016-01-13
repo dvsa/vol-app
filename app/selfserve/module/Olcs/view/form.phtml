@@ -1,0 +1,9 @@
+<div class="row">
+  <div class="dashboard two-thirds js-body">
+      <?php echo $this->flashMessengerAll(); ?>
+      <?php
+          echo $this->formErrors($form);
+          echo $this->form($form);
+      ?>
+  </div>
+</div>

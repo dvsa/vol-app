@@ -27,9 +27,11 @@ abstract class LvaOverview extends AbstractViewModel
         $sectionModel = __NAMESPACE__ . '\\' . $this->sectionModel;
         $overviewSections = [];
 
+        $i = 1;
         foreach ($sections as $key => $section) {
 
             if (is_array($section)) {
+                $data['sectionNumber'] = $i++;
                 $overviewSections[] = new $sectionModel($key, $data, $section);
             } else {
                 $overviewSections[] = new $sectionModel($section, $data);

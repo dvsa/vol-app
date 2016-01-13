@@ -1,0 +1,21 @@
+<?php
+
+use Common\RefData;
+
+$items = [];
+$additional = [];
+$faxCount = 0;
+$phoneCount = 0;
+
+$address = isset($this->result['correspondenceAddress']['address']) ?
+    $this->address($this->result['correspondenceAddress']['address']) : '';
+
+$items[] = [0 => ['label' => 'search-result-label-address', 'value' => $address]];
+
+echo $this->render('partials/read-only/main',
+    [
+        'multiItems' =>
+            $items
+
+    ]
+);

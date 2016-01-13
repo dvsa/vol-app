@@ -8,7 +8,7 @@
  */
 namespace Olcs\Controller\Lva\Variation;
 
-use Common\Controller\Lva;
+use Olcs\Controller\Lva\AbstractTransportManagersController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 
 /**
@@ -17,7 +17,7 @@ use Olcs\Controller\Lva\Traits\VariationControllerTrait;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TransportManagersController extends Lva\AbstractTransportManagersController
+class TransportManagersController extends AbstractTransportManagersController
 {
     use VariationControllerTrait;
 

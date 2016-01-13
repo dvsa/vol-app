@@ -9,7 +9,7 @@ nbproject
 composer.lock
 vendor/
 test/coverage-report
-config/autoload/local.php
+config/autoload/*.php
 .sublime-project
 .sass-cache/
 public/static

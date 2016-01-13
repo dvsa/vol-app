@@ -8,7 +8,7 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
-use Common\Controller\Lva;
+use Olcs\Controller\Lva\AbstractTransportManagersController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
 /**
@@ -17,7 +17,7 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TransportManagersController extends Lva\AbstractTransportManagersController
+class TransportManagersController extends AbstractTransportManagersController
 {
     use ApplicationControllerTrait;
 

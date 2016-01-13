@@ -1,19 +1,73 @@
 <?php
 
 return array(
+    // Debugging, display environment and version on interface
+//    'version' => [
+//        'environment' => 'Local Dev',
+//        'release' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : '')
+//    ],
+
+    // New Backend service
+    'api_router' => [
+        'routes' => [
+            'api' => [
+                'child_routes' => [
+                    'backend' => [
+                        'options' => [
+                            // Backend service URI *Environment specific*
+                            'route' => 'olcs-backend.olcs.gov.uk',
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ],
+
+    // Service addresses
+
     'service_api_mapping' => array(
         'endpoints' => array(
-            'payments' => 'http://olcspayment.dev/api/',
-            'backend' => 'http://olcs-backend',
-            'postcode' => 'http://sc-address.scdv-ap01.sc.npm/'
+            'payments' => [
+                'url' => 'http://olcspayment.dev/api/',
+                'options' => [
+                    'adapter' => \Zend\Http\Client\Adapter\Curl::class,
+                    'timeout' => 60,
+                ]
+            ],
+            'backend' => [
+                'url' => 'http://olcs-backend.olcs.gov.uk/',
+                'options' => [
+                    'adapter' => \Zend\Http\Client\Adapter\Curl::class,
+                    'timeout' => 60,
+                ]
+            ],
+            'postcode' => [
+                'url' => 'http://postcode.cit.olcs.mgt.mtpdvsa/',
+                'options' => [
+                    'adapter' => \Zend\Http\Client\Adapter\Curl::class,
+                    'timeout' => 60,
+                ]
+            ]
+        )
+    ),
+
+    // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific*
+    'asset_path' => 'https://demo-olcs-static.i-env.net',
+
+    'view_manager' => array(
+        'template_map' => array(
+            // Dev versions of 404 and error
+            'error/404' => __DIR__ . '/../../module/Olcs/view/error/dev-404.phtml',
+            'error/403' => __DIR__ . '/../../module/Olcs/view/error/dev-403.phtml',
+            'error/index' => __DIR__ . '/../../module/Olcs/view/error/dev-index.phtml'
         ),
     ),
-    'jackrabbit' => array(
-        'http' => array(),
-        'client' => array(
-            'baseuri' => 'http://scdv-ap05.sc.npm:8080/hcs',
-            'uuid' => 'uD12345',
-            'workspace' => 'olcs'
-        )
-    )
+
+    'openam' => [
+        'url' => 'http://olcs-auth.olcs.gov.uk:8081/secure/',
+        'realm' => 'selfserve',
+        'cookie' => [
+            'domain' => '.olcs.gov.uk',
+        ]
+    ]
 );

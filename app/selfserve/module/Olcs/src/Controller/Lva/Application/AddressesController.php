@@ -11,6 +11,8 @@ namespace Olcs\Controller\Lva\Application;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
+use Zend\Form\Form;
+
 /**
  * External Application Addresses Controller
  *
@@ -23,4 +25,9 @@ class AddressesController extends Lva\AbstractAddressesController
 
     protected $lva = 'application';
     protected $location = 'external';
+
+    protected function alterFormForLva(Form $form)
+    {
+        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'consultant');
+    }
 }

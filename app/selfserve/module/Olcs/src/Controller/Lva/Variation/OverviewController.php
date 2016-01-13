@@ -7,36 +7,68 @@
  */
 namespace Olcs\Controller\Lva\Variation;
 
-use Common\Controller\Lva\AbstractController;
+use Olcs\Controller\Lva\AbstractOverviewController;
 use Olcs\View\Model\Variation\VariationOverview;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
+use Common\RefData;
 
 /**
  * Variation Overview Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OverviewController extends AbstractController
+class OverviewController extends AbstractOverviewController
 {
     use VariationControllerTrait;
 
     protected $lva = 'variation';
     protected $location = 'external';
 
-    /**
-     * Variation overview
-     */
-    public function indexAction()
+    protected function getOverviewView($data, $sections, $form)
     {
-        $applicationId = $this->getApplicationId();
+        return new VariationOverview($data, $sections, $form);
+    }
 
-        if (!$this->checkAccess($applicationId)) {
-            return $this->redirect()->toRoute('dashboard');
+    protected function isReadyToSubmit($sections)
+    {
+        $updated = 0;
+        foreach ($sections as $section) {
+            if ($section['status'] == RefData::VARIATION_STATUS_REQUIRES_ATTENTION) {
+                return false;
+            }
+            if ($section['status'] == RefData::VARIATION_STATUS_UPDATED) {
+                $updated++;
+            }
         }
+        return ($updated > 0);
+    }
 
-        $data = $this->getServiceLocator()->get('Entity\Application')->getOverview($applicationId);
-        $data['idIndex'] = $this->getIdentifierIndex();
+    /**
+     * @return array
+     *
+     * e.g. [ 'section_name' => ['status' => 2] ]
+     */
+    protected function getSections($data)
+    {
+        $completions = $data['variationCompletion'];
 
-        return new VariationOverview($data, $this->getAccessibleSections());
+        $accessible = array_keys($data['sections']);
+
+        // @todo there must be an easier way to do this, but it's late on a friday and my brain hurts
+        $accessible = array_flip($accessible);
+        $sections = array_intersect_key(
+            array_merge(
+                $accessible,
+                $completions
+            ),
+            $accessible
+        );
+
+        return array_map(
+            function ($value) {
+                return ['status' => $value];
+            },
+            $sections
+        );
     }
 }

@@ -8,6 +8,12 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
+use Common\View\Model\Section;
+use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
+use Olcs\Logging\Log\Logger;
+use Zend\Form\Form;
+use Zend\View\Model\ViewModel;
+use Common\RefData;
 
 /**
  * EXTERNAL Abstract Application Controller
@@ -24,47 +30,115 @@ trait ApplicationControllerTrait
      */
     protected function preDispatch()
     {
-        $applicationId = $this->getApplicationId();
-
-        if (!$this->isApplicationNew($applicationId)) {
+        if ($this->isApplicationVariation()) {
             return $this->notFoundAction();
         }
 
-        return $this->checkForRedirect($applicationId);
+        return $this->checkForRedirect($this->getApplicationId());
+    }
+
+    protected function checkAppStatus($applicationId)
+    {
+        // query is already cached
+        $dto = ApplicationQry::create(['id' => $applicationId]);
+        $response = $this->handleQuery($dto);
+        $data = $response->getResult();
+        return ($data['status']['id'] === RefData::APPLICATION_STATUS_NOT_SUBMITTED);
     }
 
     /**
-     * Check if the user has access to the application
+     * Render the section
      *
-     * @NOTE We might want to consider caching this information within the session, to save making this request on each
-     *  section
-     *
-     * @param int $applicationId
-     * @return boolean
+     * @param string $titleSuffix
+     * @param \Zend\Form\Form $form
+     * @param array $variables
+     * @return \Common\View\Model\Section
      */
-    protected function checkAccess($applicationId)
+    protected function render($titleSuffix, Form $form = null, $variables = array())
     {
-        $organisationId = $this->getCurrentOrganisationId();
+        $this->attachCurrentMessages();
 
-        $doesBelong = $this->getServiceLocator()->get('Entity\Application')
-            ->doesBelongToOrganisation($applicationId, $organisationId);
-
-        if (!$doesBelong) {
-            $this->addErrorMessage('application-no-access');
+        if ($titleSuffix instanceof ViewModel) {
+            return $titleSuffix;
         }
 
-        return $doesBelong;
+        $sectionName = $titleSuffix;
+        // overrides for any instance where the section name differs from the view template name
+        $sectionOverrides = [
+            'person' => 'people'
+        ];
+        if (array_key_exists($titleSuffix, $sectionOverrides)) {
+            $sectionName = $sectionOverrides[$titleSuffix];
+        }
+
+        $progress = $this->getSectionStepProgress($sectionName);
+
+        $params = array_merge(
+            array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form),
+            $progress,
+            $variables
+        );
+
+        $section = new Section($params);
+
+        $template = $this->getRequest()->isXmlHttpRequest() ? 'ajax' : 'layout';
+
+        $base = new ViewModel();
+        $base->setTemplate('layout/' . $template)
+            ->setTerminal(true)
+            ->addChild($section, 'content');
+
+        return $base;
     }
 
     /**
-     * Get type of licence data
-     *
+     * @param string $currentSection
      * @return array
      */
-    protected function getTypeOfLicenceData()
+    protected function getSectionStepProgress($currentSection)
     {
-        $licenceId = $this->getLicenceId($this->getApplicationId());
+        $applicationId = $this->getApplicationId();
 
-        return $this->getServiceLocator()->get('Entity\Licence')->getTypeOfLicenceData($licenceId);
+        $dto = ApplicationQry::create(['id' => $applicationId]);
+        $response = $this->handleQuery($dto);
+        $data = $response->getResult();
+
+        // Don't show steps on variations
+        if ($data['isVariation'] == true) {
+            return [];
+        }
+
+        $sectionStatus = $this->setEnabledAndCompleteFlagOnSections(
+            $data['sections'],
+            $data['applicationCompletion']
+        );
+
+        $sections = array_keys($sectionStatus);
+
+        $index = array_search($currentSection, $sections);
+
+        if ($index === false) {
+            return [];
+        }
+
+        // we can pass this array straight to the view
+        return ['stepX' => $index+1, 'stepY' => count($sections)];
+    }
+
+    protected function postSave($section)
+    {
+        $applicationId = $this->getApplicationId();
+
+        if ($section !== 'undertakings') {
+            $this->resetUndertakings($applicationId);
+        }
+
+        $this->updateCompletionStatuses($applicationId, $section);
+    }
+
+    protected function resetUndertakings($applicationId)
+    {
+        $this->getServiceLocator()->get('Entity\Application')
+            ->forceUpdate($applicationId, ['declarationConfirmation' => 'N']);
     }
 }

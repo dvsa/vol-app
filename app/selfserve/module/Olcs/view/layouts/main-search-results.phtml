@@ -1,0 +1,54 @@
+<?php
+
+$count = $this->results->getTotal();
+$results = $this->results;
+
+?>
+
+    <div class="page-header">
+        <ol class="breadcrumbs">
+            <li class="breadcrumbs__item">
+                <a href="<?php echo $this->url('search');?>"><?php echo $this->translate('search.form.back'); ?></a>
+            </li>
+        </ol>
+        <div class="page-header__wrapper">
+
+            <h1>
+                <?php echo $this->getHelperPluginManager()
+                    ->getServiceLocator()->get('Helper\Translation')
+                    ->translateReplace('search.result.title.' . $this->index, [$count]); ?>
+            </h1>
+
+            <div class="page-header__text">
+                <p>
+                    <?php echo $this->getHelperPluginManager()
+                        ->getServiceLocator()->get('Helper\Translation')
+                        ->translateReplace('search.result.subtitle.' . $this->index, [$count]); ?>
+                </p>
+            </div>
+
+        </div>
+    </div><!-- page-header -->
+
+    <div class="row">
+
+        <div class="one-quarter">
+
+            <h3>Edit search</h3>
+
+            <?php echo $this->form($this->placeholder('searchFilter')->getValue()) ?>
+
+        </div><!-- three-eights -->
+
+        <div class="three-quarters">
+
+            <?php
+                if ($this->noResultsMessage) {
+                    echo $this->translate($noResultsMessage);
+                } else {
+                    echo $results;
+                }
+            ?>
+
+        </div><!-- five-eights -->
+    </div><!-- row -->
