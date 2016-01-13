@@ -14,6 +14,7 @@ use Olcs\Form\Element\SearchDateRangeFieldset;
 use Common\Data\Object\Search\LicenceSelfserve as LicenceSelfserve;
 use Common\Data\Object\Search\OperatingCentreSelfserve as OperatingCentreSearchIndex;
 use Common\Data\Object\Search\PeopleSelfserve as PeopleSelfserveSearchIndex;
+use Common\Data\Object\Search\PublicationSelfserve as PublicationSelfserveSearchIndex;
 
 use Olcs\FormService\Form\Lva as LvaFormService;
 
@@ -139,14 +140,14 @@ $routes = array(
             )
         )
     ),
-    'search-find-a-publication' => array(
+    'search-publication' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/search/find-a-publication[/:action][/]',
+            'route' => '/search/publication[/:action][/]',
             'defaults' => array(
                 'controller' => SearchController::class,
                 'action' => 'index',
-                'index' => 'find-a-publication'
+                'index' => 'publication'
             )
         )
     ),
@@ -784,9 +785,9 @@ $searchNavigation = array(
             'class' => 'search-navigation__item',
         ),
         array(
-            'id' => 'search-find-a-publication',
+            'id' => 'search-publication',
             'label' => 'Publications',
-            'route' => 'search-find-a-publication',
+            'route' => 'search-publication',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         ),
@@ -936,7 +937,7 @@ return array(
             'bus'         => \Common\Data\Object\Search\BusRegSelfServe::class,
             'person'      => PeopleSelfserveSearchIndex::class,
             'operating-centre' => OperatingCentreSearchIndex::class,
-            'traffic-commissioner-publication' => \Common\Data\Object\Search\TrafficCommissionerPublications::class,
+            'publication' => PublicationSelfserveSearchIndex::class,
         ]
     ],
     'form_elements' => [
