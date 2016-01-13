@@ -87,7 +87,7 @@ $nav = $this->navigation('right-sidebar')
 ?>
 <?php if (count($nav->getContainer()) > 0): ?>
 <div class="record-actions">
-    <h5>Quick actions</h5>
+    <h4 class="title">Quick actions</h4>
     <?php echo $nav; ?>
 </div>
 <?php endif; ?>
@@ -106,12 +106,12 @@ $nav = $this->navigation('right-sidebar')
 ?>
 <?php if (count($nav->getContainer()) > 0): ?>
     <div class="record-actions">
-        <h5>Decisions</h5>
+        <h4 class="title">Decisions</h4>
         <?php echo $nav; ?>
     </div>
 <?php endif; ?>
 
 <div class="latest-note">
-<p class="latest-note__details">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidid...</p>
-<a class="latest-note__link">View all 13 notes</a>
-</div><!-- end .small-details -->
+  <div class="latest-note__details">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidid...</div>
+  <a class="latest-note__link">View all 13 notes</a>
+</div>

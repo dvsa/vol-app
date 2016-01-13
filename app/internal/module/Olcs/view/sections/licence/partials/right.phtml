@@ -20,7 +20,7 @@ $nav = $this->navigation('right-sidebar')
 
 if ($nav->getContainer()->hasPages(true)): ?>
     <div class="record-actions">
-        <h5>Quick actions</h5>
+        <h4 class="title">Quick actions</h4>
         <?php echo $nav; ?>
     </div>
 <?php endif;
@@ -31,14 +31,14 @@ $nav = $this->navigation('right-sidebar')
 
 if ($nav->getContainer()->hasPages(true)): ?>
     <div class="record-actions">
-        <h5>Decisions</h5>
+        <h4 class="title">Decisions</h4>
         <?php echo $nav; ?>
     </div>
 <?php endif; ?>
 
 <?php if ($note): ?>
     <div class="latest-note">
-        <p class="latest-note__details"><?php echo substr($note, 0, 100); ?></p>
+        <div class="latest-note__details"><?php echo substr($note, 0, 100); ?></div>
         <a class="latest-note__link" href="<?php echo $this->url('licence/processing/notes', ['licence' => $licence['id']]); ?>">View all notes</a>
     </div>
 <?php endif; ?>
