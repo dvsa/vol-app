@@ -7,7 +7,9 @@
  */
 namespace Olcs\Controller\Bus\Fees;
 
+use Common\Controller\Traits\GenericReceipt;
 use Olcs\Controller\Bus\BusController;
+use Olcs\Controller\Traits\FeesActionTrait;
 
 /**
  * Bus Fees Controller
@@ -16,19 +18,74 @@ use Olcs\Controller\Bus\BusController;
  */
 class BusFeesController extends BusController
 {
+    use FeesActionTrait,
+        GenericReceipt;
+
     protected $section = 'fees';
     protected $subNavRoute = 'licence_bus_fees';
 
     /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
+     * Route (prefix) for fees action redirects
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return string
      */
-    public function indexAction()
+    protected function getFeesRoute()
     {
-        $view = $this->getViewWithBusReg();
+        return 'licence/bus-fees';
+    }
 
-        $view->setTemplate('licence/bus/index');
+    /**
+     * The fees route redirect params
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return array
+     */
+    protected function getFeesRouteParams()
+    {
+        return [
+            'licence' => $this->getFromRoute('licence'),
+            'busRegId' => $this->getFromRoute('busRegId'),
+        ];
+    }
+
+    /**
+     * The controller specific fees table params
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return array
+     */
+    protected function getFeesTableParams()
+    {
+        return [
+            'licence' => $this->getFromRoute('licence'),
+            'busReg' => $this->getFromRoute('busRegId'),
+            'status' => 'current',
+        ];
+    }
+
+    protected function renderLayout($view)
+    {
         return $this->renderView($view);
+    }
+
+    public function redirectToIndex()
+    {
+        return $this->redirectToList();
+    }
+
+    protected function getFeeTypeDtoData()
+    {
+        return [
+            'busReg' => $this->getFromRoute('busRegId'),
+            'licence' => $this->params()->fromRoute('licence')
+        ];
+    }
+
+    protected function getCreateFeeDtoData($formData)
+    {
+        return [
+            'invoicedDate' => $formData['fee-details']['createdDate'],
+            'feeType' => $formData['fee-details']['feeType'],
+            'licence' => $this->params()->fromRoute('licence'),
+            'busReg' => $this->params()->fromRoute('busRegId'),
+        ];
     }
 }

@@ -2,10 +2,12 @@
 
 return array(
     'variables' => array(
+        'id' => 'conviction-fpn-offence-history',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'conviction-fpn-offence-history']
         ],
+        'title' => 'Conviction / FPN / Offence history'
     ),
     'settings' => array(
         'crud' => array(
@@ -43,7 +45,7 @@ return array(
         array(
             'title' => 'Name / defendant type',
             'formatter' => function ($data, $column, $sm) {
-                    return $data['name'] . '<br />' . $data['defendantType']['description'];
+                return $data['name'] . '<br />' . $data['defendantType'];
             },
             'name' => 'name'
         ),
@@ -72,9 +74,11 @@ return array(
             'name' => 'isDealtWith'
         ),
         array(
+            'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}'
+            'format' => '{{[elements/checkbox]}}',
+            'hideWhenDisabled' => true
         ),
     )
 );

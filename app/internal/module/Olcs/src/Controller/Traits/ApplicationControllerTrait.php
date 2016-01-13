@@ -7,11 +7,9 @@
  */
 namespace Olcs\Controller\Traits;
 
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
-use Common\Service\Entity\ApplicationEntityService;
 use Common\Service\Entity\LicenceEntityService;
-use Olcs\View\Model\Application\Layout;
-use Olcs\View\Model\Application\ApplicationLayout;
 
 /**
  * Application Controller Trait
@@ -20,67 +18,39 @@ use Olcs\View\Model\Application\ApplicationLayout;
  */
 trait ApplicationControllerTrait
 {
-    protected function render($view)
+    protected function render($view, $title = null, array $variables = [])
     {
-        $applicationLayout = new ApplicationLayout();
-
-        $applicationLayout->addChild($this->getQuickActions(), 'actions');
-        $applicationLayout->addChild($view, 'content');
-
-        $params = $this->getHeaderParams();
-
-        return new Layout($applicationLayout, $params);
-    }
-
-    /**
-     * Quick action view model
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function getQuickActions()
-    {
-        $status = $this->getServiceLocator()->get('Entity\Application')->getStatus($this->params('application'));
-        $showGrantButton = $this->shouldShowGrantButton($status);
-
-        if ($showGrantButton) {
-            $showUndoGrantButton = false;
-        } else {
-            $showUndoGrantButton = $this->shouldShowUndoGrantButton($status);
+        if ($title === null) {
+            $title = $view->getVariable('title');
         }
 
-        $viewModel = new ViewModel(
-            array(
-                'showGrant' => $showGrantButton,
-                'showUndoGrant' => $showUndoGrantButton
-            )
-        );
-        $viewModel->setTemplate('application/quick-actions');
-
-        return $viewModel;
-    }
-
-    protected function shouldShowGrantButton($status)
-    {
-        return ($status === ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION);
-    }
-
-    protected function shouldShowUndoGrantButton($status)
-    {
-        $applicationId = $this->params('application');
-
-        $applicationType = $this->getServiceLocator()->get('Entity\Application')->getApplicationType($applicationId);
-
-        if ($applicationType === ApplicationEntityService::APPLICATION_TYPE_NEW
-            && $status === ApplicationEntityService::APPLICATION_STATUS_GRANTED
-        ) {
-            $applicationService = $this->getServiceLocator()->get('Entity\Application');
-
-            $category = $applicationService->getCategory($applicationId);
-
-            return ($category === LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE);
+        if (empty($variables)) {
+            $variables = $view->getVariables();
         }
 
-        return false;
+        return $this->renderPage($view, $title, $variables);
+    }
+
+    protected function renderPage($content, $title, array $variables = [])
+    {
+        $this->placeholder()->setPlaceholder('contentTitle', $title);
+
+        $layout = $this->viewBuilder()->buildView($content);
+
+        if (!($this instanceof LeftViewProvider)) {
+            $left = $this->getLeft($variables);
+
+            if ($left) {
+                $layout->setLeft($left);
+            }
+        }
+
+        return $layout;
+    }
+
+    protected function getLeft(array $variables = [])
+    {
+        return null;
     }
 
     /**
@@ -96,8 +66,45 @@ trait ApplicationControllerTrait
             'applicationId' => $data['id'],
             'licNo' => $data['licence']['licNo'],
             'licenceId' => $data['licence']['id'],
-            'companyName' => $data['licence']['organisation']['name'],
-            'status' => $data['status']['id']
+            'companyName' => $data['licence']['organisation']['name']
         );
+    }
+
+    /**
+     * Gets the application by ID.
+     *
+     * @param integer $id
+     * @return array
+     */
+    protected function getApplication($id = null)
+    {
+        if (is_null($id)) {
+            $id = $this->params('application');
+        }
+
+        return $this->getServiceLocator()->get('Entity\Application')
+            ->getDataForProcessing($id);
+    }
+
+    /**
+     * Get view with application
+     *
+     * @param array $variables
+     * @return \Zend\View\Model\ViewModel
+     */
+    protected function getViewWithApplication($variables = array())
+    {
+        $application = $this->getApplication();
+
+        if ($application['licence']['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
+        }
+
+        $variables = array_merge(
+            $variables,
+            $this->getHeaderParams()
+        );
+
+        return $this->getView($variables);
     }
 }

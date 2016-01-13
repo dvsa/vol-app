@@ -1,0 +1,14 @@
+<?php
+
+if ($this->sectionId !== 'introduction') {
+    $case = $this->placeholder('case')->getValue();
+
+    //last submission
+    echo $this->render(
+        'partials/read-only/main',
+        [
+            'id' => $this->data['submissionSection'],
+            'header' => (isset($this->data['description']) ? $this->data['description'] : ''),
+        ]
+    );
+}

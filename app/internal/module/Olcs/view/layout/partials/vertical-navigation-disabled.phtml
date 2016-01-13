@@ -1,7 +1,0 @@
-    <ul class="vertical-navigation" role="menu">
-        <?php foreach ($this->container as $key => $page) : ?>
-            <li class="vertical-navigation__item <?php echo $page->isActive(true) ? 'current' : ''; ?>">
-                <span><?php echo $this->translate($page->getLabel()) . PHP_EOL; ?></span>
-            </li>
-        <?php endforeach; ?>
-    </ul><!-- end .progress -->

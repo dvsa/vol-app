@@ -1,0 +1,8 @@
+<h4 class="title"><?php echo $this->translate('internal-licence-processing'); ?></h4>
+<?php
+$activePage = $this->navigation('navigation')->findOneByActive(true);
+if (!$activePage) {
+    throw new \RuntimeException('Cannot find active page to be able to display left menu');
+}
+
+echo $this->navigation($activePage->getParent())->menu()->setPartial('partials/vertical-navigation');

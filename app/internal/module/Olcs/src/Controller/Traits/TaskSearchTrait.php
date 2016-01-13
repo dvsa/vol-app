@@ -2,51 +2,42 @@
 
 namespace Olcs\Controller\Traits;
 
+use Dvsa\Olcs\Transfer\Query\Task\TaskList;
+use Dvsa\Olcs\Transfer\Query\Task\TaskDetails;
+
 /**
- * Class TaskSearchTrait
- * @package Olcs\Controller
+ * Task Search Trait
+ *
+ * @NOTE Migrated
  */
 trait TaskSearchTrait
 {
-
     /**
-     * Inspect the request to see if we have any filters set, and
-     * if necessary, filter them down to a valid subset
+     * Inspect the request to see if we have any filters set, and if necessary, filter them down to a valid subset
      *
+     * @param array $extra
      * @return array
      */
-    protected function mapTaskFilters($extra = array())
+    protected function mapTaskFilters(array $extra = [])
     {
-        $defaults = array(
-            'assignedToUser' => $this->getLoggedInUser(),
-            'assignedToTeam' => 2,  // we've no stub for this, but it matches the logged in user's team
-            'date'           => 'tdt_today',
-            'status'         => 'tst_open',
-            'sort'           => 'actionDate',
-            'order'          => 'ASC',
-            'page'           => 1,
-            'limit'          => 10
-        );
+        $user = $this->currentUser()->getUserData();
+
+        $defaults = [
+            'assignedToUser' => $user['id'],
+            'assignedToTeam' => $user['team']['id'],
+            'date'  => 'tdt_today',
+            'status' => 'tst_open',
+            'sort' => 'urgent,actionDate',
+            'order' => 'DESC,DESC',
+            'page' => 1,
+            'limit' => 10
+        ];
 
         $filters = array_merge(
             $defaults,
             $extra,
             $this->getRequest()->getQuery()->toArray()
         );
-
-        // form => backend mappings
-
-        // we need an if / else if here because there is a third input
-        // state, "all", which shouldn't apply either filter
-        if ($filters['status'] === 'tst_closed') {
-            $filters['isClosed'] = true;
-        } elseif ($filters['status'] === 'tst_open') {
-            $filters['isClosed'] = false;
-        }
-
-        if (isset($filters['date']) && $filters['date'] === 'tdt_today') {
-            $filters['actionDate'] = '<= ' . date('Y-m-d');
-        }
 
         // nuke any empty values too
         return array_filter(
@@ -57,32 +48,33 @@ trait TaskSearchTrait
         );
     }
 
-    protected function getTaskForm($filters = array())
+    /**
+     * Get task form
+     *
+     * @param array $filters
+     * @return mixed
+     */
+    protected function getTaskForm(array $filters = [])
     {
-        $form = $this->getForm('tasks-home');
+        $form = $this->getForm('TasksHome');
 
-        // the filters generally double up perfectly as form
-        // and filter data, but team just needs a little bump...
-        if (isset($filters['assignedToTeam'])) {
-            $filters['team'] = $filters['assignedToTeam'];
-        }
+        $team = (isset($filters['assignedToTeam'])) ? (int) $filters['assignedToTeam'] : null;
+        $category = (isset($filters['category'])) ? (int) $filters['category'] : null;
 
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
-        $selects = array(
-            'assignedToTeam' => $this->getListData('Team'),
-            'assignedToUser' => $this->getListData('User', $filters),
-            'category' => $this->getListData('Category', [], 'description'),
-            'taskSubCategory' => $this->getListData('TaskSubCategory', $filters)
-        );
+        $selects = [
+            'assignedToTeam' => $this->getListDataTeam('All'),
+            'assignedToUser' => $this->getListDataUser($team, 'All'),
+            'category' => $this->getListDataCategoryTasks('All'),
+            'taskSubCategory' => $this->getListDataSubCategoryTask($category, 'All'),
+        ];
 
         // bang the relevant data into the corresponding form inputs
         foreach ($selects as $name => $options) {
-            $form->get($name)
-                ->setValueOptions($options);
+            $form->get($name)->setValueOptions($options);
         }
 
-        // setting $this->enableCsrf = false won't sort this; we never POST
         $form->remove('csrf');
 
         $form->setData($filters);
@@ -90,58 +82,36 @@ trait TaskSearchTrait
         return $form;
     }
 
-    protected function getTaskTable($filters = array(), $render = true, $noCreate = false)
+    protected function getTaskTable($filters = [], $noCreate = false)
     {
-        $tasks = $this->makeRestCall(
-            'TaskSearchView',
-            'GET',
-            $filters
-        );
+        $response = $this->handleQuery(TaskList::create($filters));
+        $tasks = $response->getResult();
 
-        $table = $this->getTable(
-            'tasks',
-            $tasks,
-            array_merge(
-                $filters,
-                array('query' => $this->getRequest()->getQuery())
-            )
-        );
+        $options = array_merge($filters, ['query' => $this->getRequest()->getQuery()]);
+        $tableName = 'tasks' . ($noCreate ? '-no-create' : '');
 
-        if ($noCreate) {
-            $settings = $table->getSettings();
-            if (isset($settings['crud']['actions']['create task'])) {
-                unset($settings['crud']['actions']['create task']);
-                if (isset($settings['crud']['actions']['edit']) && is_array($settings['crud']['actions']['edit'])) {
-                    $settings['crud']['actions']['edit']['class'] = 'primary';
-                }
-                $table->setSettings($settings);
-            }
-        }
-
-        if ($render) {
-            return $table->render();
-        }
-        return $table;
+        return $this->getTable($tableName, $tasks, $options);
     }
 
     /**
      * Hold processing of task actions
      *
      * @param string $type
-     * @return bool|redirect
+     * @return bool|\Zend\Http\Response
      */
     protected function processTasksActions($type = '')
     {
-        $action = strtolower($this->params()->fromPost('action'));
-        if ($action === 're-assign task') {
-            $action = 'reassign';
-        } elseif ($action === 'create task') {
-            $action = 'add';
-        } elseif ($action === 'close task') {
-            $action = 'close';
-        }
-
         if ($this->getRequest()->isPost()) {
+
+            $action = strtolower($this->params()->fromPost('action'));
+            if ($action === 're-assign task') {
+                $action = 'reassign';
+            } elseif ($action === 'create task') {
+                $action = 'add';
+            } elseif ($action === 'close task') {
+                $action = 'close';
+            }
+
             if ($action !== 'add') {
                 $id = $this->params()->fromPost('id');
 
@@ -160,10 +130,40 @@ trait TaskSearchTrait
             }
 
             switch ($type) {
+                case 'organisation':
+                    $params = [
+                        'type' => 'organisation',
+                        'typeId' => $this->params('organisation'),
+                    ];
+                    break;
                 case 'licence':
                     $params = [
                         'type' => 'licence',
-                        'typeId' => $this->getFromRoute('licence'),
+                        'typeId' => $this->params('licence'),
+                    ];
+                    break;
+                case 'application':
+                    $params = [
+                        'type' => 'application',
+                        'typeId' => $this->params('application'),
+                    ];
+                    break;
+                case 'transportManager':
+                    $params = [
+                        'type' => 'tm',
+                        'typeId' => $this->params('transportManager'),
+                    ];
+                    break;
+                case 'busReg':
+                    $params = [
+                        'type' => 'busreg',
+                        'typeId' => $this->params('busRegId'),
+                    ];
+                    break;
+                case 'case':
+                    $params = [
+                        'type' => 'case',
+                        'typeId' => $this->params('case'),
                     ];
                     break;
                 default:
@@ -176,11 +176,7 @@ trait TaskSearchTrait
                 $params['task'] = $id;
             }
 
-            return $this->redirect()->toRoute(
-                'task_action',
-                $params
-            );
-
+            return $this->redirect()->toRoute('task_action', $params);
         }
 
         return false;
@@ -194,15 +190,12 @@ trait TaskSearchTrait
      */
     protected function getTaskDetails($id = null)
     {
-        $taskDetails = array();
-        if ($id) {
-            $taskDetails = $this->makeRestCall(
-                'TaskSearchView',
-                'GET',
-                array('id' => $id),
-                array('properties' => array('linkType', 'linkId', 'linkDisplay'))
-            );
+        if (!$id) {
+            $id = $this->params('task');
         }
-        return $taskDetails;
+
+        $response = $this->handleQuery(TaskDetails::create(['id' => $id]));
+
+        return $response->getResult();
     }
 }

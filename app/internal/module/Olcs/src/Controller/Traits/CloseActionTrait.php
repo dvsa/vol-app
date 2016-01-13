@@ -1,4 +1,5 @@
 <?php
+
 namespace Olcs\Controller\Traits;
 
 use Common\Service\Data\CloseableInterface;
@@ -90,6 +91,7 @@ trait CloseActionTrait
     public function generateCloseActionButtonArray($id = null)
     {
         $id = empty($id) ? $this->getIdToClose($id) : $id;
+
         $dataService = $this->getDataService();
 
         if ($dataService instanceof CloseableInterface) {
@@ -97,6 +99,7 @@ trait CloseActionTrait
                 return $this->generateButton('reopen');
             }
             if ($dataService->canClose($id)) {
+
                 return $this->generateButton('close');
             }
         }

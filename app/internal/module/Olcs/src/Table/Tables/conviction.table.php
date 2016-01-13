@@ -2,16 +2,16 @@
 
 return array(
     'variables' => array(
-        'title' => 'Convictions list'
+        'title' => 'Convictions'
     ),
     'settings' => array(
         'crud' => array(
             'formName' => 'conviction',
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
                 /* 'dealt' => array('class' => 'secondary', 'requireRows' => true, 'label' => 'Mark as Dealt With'), */
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         ),
         'paginate' => array(
@@ -35,13 +35,13 @@ return array(
             'formatter' => function ($data, $column) {
 
                 $url = $this->generateUrl(['action' => 'edit', 'conviction' => $data['id']], 'conviction', true);
-
+                $class = 'js-modal-ajax';
                 if ($data['convictionDate'] == null) {
-                    return '<a href="' . $url . '">N/A</a>';
+                    return '<a href="' . $url . '" class="' . $class . '">N/A</a>';
                 }
 
                 $column['formatter'] = 'Date';
-                return '<a href="' . $url . '">' . $this->callFormatter($column, $data) . '</a>';
+                return '<a href="' . $url . '" class="' . $class . '">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'convictionDate'
         ),
@@ -69,14 +69,13 @@ return array(
             'formatter' => function ($row) {
 
                 if (count($row['convictionCategory']) && $row['convictionCategory']['id'] != 168) {
-                        $row['categoryText'] = $row['convictionCategory']['description'];
+                    $row['categoryText'] = $row['convictionCategory']['description'];
                 }
 
                 $categoryText = $row['categoryText'];
 
-
                 $append = strlen($categoryText) > 30 ? '...' : '';
-                return substr($categoryText, 0, 30) . $append;
+                return nl2br(substr($categoryText, 0, 30)) . $append;
             }
         ),
         array(

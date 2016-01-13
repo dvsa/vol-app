@@ -8,8 +8,8 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
+                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         )
     ),
@@ -25,12 +25,11 @@ return array(
                 return '<a href="' . $this->generateUrl(
                     array(
                         'action' => 'edit',
-                        'seriousInfringement' => $data['seriousInfringement']['id'],
                         'id' => $data['id']
                     ),
-                    'case_penalty_edit',
+                    'case_penalty',
                     true
-                ) . '">' . $data['id'] . '</a>';
+                ) . '" class="js-modal-ajax">' . $data['id'] . '</a>';
             },
         ),
         array(

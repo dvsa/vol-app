@@ -2,15 +2,15 @@
 
 return array(
     'variables' => array(
-        'title' => 'Submission list'
+        'title' => 'Submissions'
     ),
     'settings' => array(
         'crud' => array(
             'formName' => 'submission',
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
+                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         ),
         'paginate' => array(
@@ -27,10 +27,10 @@ return array(
         array(
             'title' => '',
             'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
+            'formatter' => 'HideIfClosedRadio'
         ),
         array(
-            'title' => 'Submission #',
+            'title' => 'Submission No.',
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
                     array('submission' => $row['id'], 'action' => 'details'),
@@ -49,27 +49,43 @@ return array(
         ),
         array(
             'title' => 'Sub status',
-            'name' => 'status'
+            'formatter' => function ($row) {
+                return !empty($row['closedDate']) ? 'Closed' : 'Open';
+            },
         ),
         array(
             'title' => 'Date created',
             'formatter' => function ($row) {
-                return date('d/m/Y H:i:s', strtotime($row['createdOn']));
+                return date(\DATETIMESEC_FORMAT, strtotime($row['createdOn']));
             },
             'sort' => 'createdOn'
         ),
         array(
             'title' => 'Date closed',
-            'formatter' => function ($row) {
-                return $row['closedDate'] != '' ? date('d/m/Y', strtotime($row['closedDate'])) : '-';
-            }
+            'formatter' => 'Date',
+            'name' => 'closedDate'
         ),
         array(
             'title' => 'Currently with',
-            'name' => 'currentlyWith'
+            'formatter' => function ($data, $column) {
+                $column['formatter'] = 'Name';
+                if (!empty($data['recipientUser']['contactDetails']['person'])) {
+                    return $this->callFormatter($column, $data['recipientUser']['contactDetails']['person']);
+                }
+                if (!empty($data['createdBy']['contactDetails']['person'])) {
+                    return $this->callFormatter($column, $data['createdBy']['contactDetails']['person']);
+                }
+                return '';
+            }
+        ),
+        array(
+            'title' => 'Date assigned',
+            'formatter' => 'DateTime',
+            'name' => 'assignedDate'
         ),
         array(
             'title' => 'Urgent',
+            'formatter' => 'YesNo',
             'name' => 'urgent'
         )
     )

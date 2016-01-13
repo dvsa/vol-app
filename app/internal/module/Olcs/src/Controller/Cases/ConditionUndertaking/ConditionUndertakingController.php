@@ -1,354 +1,228 @@
 <?php
 
 /**
- * CaseConditionUndertaking Controller
+ * Case ConditionUndertaking Controller
  *
- * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-
 namespace Olcs\Controller\Cases\ConditionUndertaking;
 
-// Olcs
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
-
-use Olcs\Controller\Traits\DeleteActionTrait;
+use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\ConditionUndertaking\Get as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Cases\ConditionUndertaking\ConditionUndertakingList as ListDto;
+use Dvsa\Olcs\Transfer\Query\Cases\CasesWithLicence as CasesWithLicenceDto;
+use Common\RefData;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Common\Exception\DataServiceException;
 use Zend\View\Model\ViewModel;
-use Common\Service\Table\Formatter\Address;
 
 /**
- * ConditionUndertaking Controller
+ * Case ConditionUndertaking Controller
  *
- * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @to-do We need to extract the logic from the various LVA adapters and replicate it in a new way. This is to
+ * alter the form and generate the value options for the attachedTo field which has 2 group options:
+ *
+ * Licence
+ *     OB12345
+ * OCs
+ *     <oc address>
+ *     <oc address>
+ *
+ * UPDATE: LVA adapters have been removed and hence this form is broken. I *think* the attachedTo field on the form
+ * used to call an LVA service to generate the drop down. That service needs to call
+ * backend/licence/operatingcentre/<licence_id> to get a list of oc's against the licence and return the group options
+ * (see Mat Evans for more info)
+ *
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class ConditionUndertakingController extends OlcsController\CrudAbstract
+class ConditionUndertakingController extends AbstractInternalController implements
+    CaseControllerInterface,
+    LeftViewProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'id';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'condition';
-
-    /**
-     * Name of comment box field.
-     *
-     * @var string
-     */
-    protected $commentBoxName = null;
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'ConditionUndertakingForm';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case';
-
-    /**
-     * For most case crud controllers, we use the case/inner-layout
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'case/inner-layout';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'ConditionUndertaking';
 
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_details_conditions_undertakings';
 
-    /**
-     * Holds an array of variables for the
-     * default index list page.
+    protected $routeIdentifier = 'id';
+
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $listVars = [
-        'case',
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'id';
+    protected $tableName = 'condition';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['case'];
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
+
+        return $view;
+    }
+
+    /**
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $detailsViewTemplate = null;
+    protected $detailsViewPlaceholderName = null;
+    protected $itemDto = ItemDto::class;
+
+    protected $itemParams = ['case', 'id'];
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = 'ConditionUndertaking';
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = \Olcs\Data\Mapper\ConditionUndertaking::class;
+    protected $addContentTitle = 'Add condition or undertaking';
+    protected $editContentTitle = 'Edit condition or undertaking';
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'case' => 'route'
     ];
 
     /**
-     * Data map
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
+     */
+    protected $deleteCommand = DeleteDto::class;
+    protected $deleteModalTitle = 'internal.delete-action-trait.title';
+
+    /**
+     * Any inline scripts needed in this section
      *
      * @var array
-    */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-                'base',
-            )
-        )
+     */
+    protected $inlineScripts = array(
+        'indexAction' => ['table-actions']
     );
 
     /**
-     * Holds the isAction
+     * Alter Form for add
      *
-     * @var boolean
+     * @param \Common\Controller\Form $form
+     * @param array $initialData
+     * @return \Common\Controller\Form
      */
-    protected $isAction = false;
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-    */
-    protected $dataBundle = array(
-        'properties' => 'ALL',
-        'children' => array(
-            'case' => array(
-                'properties' => array('id')
-            ),
-            'prohibitionType' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-            'attachedTo' => array(
-                'properties' => array('id', 'description')
-            ),
-            'conditionType' => array(
-                'properties' => array('id', 'description')
-            ),
-            'operatingCentre' => array(
-                'properties' => array('id'),
-                'children' => array(
-                    'address' => array(
-                        'properties' => array(
-
-                            'addressLine1',
-                            'addressLine2',
-                            'addressLine3',
-                            'addressLine4',
-                            'town',
-                            'postcode'
-                        ),
-                        'children' => array(
-                            'countryCode' => array(
-                                'properties' => array(
-                                'id'
-                            )
-                        )
-                        )
-                    )
-                )
-            ),
-            'addedVia' => array(
-                'properties' => array('id', 'description')
-            ),
-        )
-    );
-
-    const CONDITION_TYPE_CONDITION = 'cdt_con';
-    const CONDITION_TYPE_UNDERTAKING = 'cdt_und';
-
-    const ATTACHED_TO_LICENCE = 'cat_lic';
-    const ATTACHED_TO_OPERATING_CENTRE = 'cat_oc';
-
-    /**
-     * Added extra method called after setting form data
-     *
-     * @param Form $form
-     * @return Form
-     */
-    public function alterFormBeforeValidation($form)
+    public function alterFormForAdd($form, $initialData)
     {
-        return $this->configureFormForConditionType($form, $this->getCase()['licence']['id']);
+        return $this->alterFormForCase($form, $initialData);
     }
 
     /**
-     * Method to extract all Operating Centre Addresses for a given licence
-     * and reformat into array suitable for select options
+     * Alter Form for edit
      *
-     * @param integer $licenceId
-     * @return array address_id => [address details]
+     * @param \Common\Controller\Form $form
+     * @param array $initialData
+     * @return \Common\Controller\Form
      */
-    public function getOcAddressByLicence($licenceId)
+    public function alterFormForEdit($form, $initialData)
     {
-        $result = $this->makeRestCall(
-            'OperatingCentre',
-            'GET',
-            array('licence' => $licenceId),
-            $this->getOcAddressBundle()
+        return $this->alterFormForCase($form, $initialData);
+    }
+
+    /**
+     * Alter Form based on Case details
+     *
+     * @param \Common\Controller\Form $form
+     * @param array $initialData
+     * @return \Common\Controller\Form
+     */
+    private function alterFormForCase($form, $initialData)
+    {
+        $caseData = $this->getCaseData();
+
+        $form->get('fields')->get('attachedTo')->setValueOptions(
+            [
+                'licence' => [
+                    'label' => 'Licence',
+                    'options' => [
+                        RefData::ATTACHED_TO_LICENCE => 'Licence (' . $caseData['licence']['licNo'] . ')'
+                   ]
+                ],
+                'OC' => [
+                    'label' => 'OC Address',
+                    'options' => $this->getOperatingCentreListOptions($caseData)
+                ]
+            ]
         );
-
-        if ($result['Count']) {
-            foreach ($result['Results'] as $oc) {
-                $operatingCentreAddresses[$oc['id']] = Address::format($oc['address']);
-            }
-        }
-        // set up the group options required by Zend
-        $options = array(
-            'Licence' => array(
-                'label' => 'Licence',
-                'options' => array(
-                    self::ATTACHED_TO_LICENCE => 'Licence ' . $licenceId
-                ),
-            ),
-            'OC' => array(
-                'label' => 'OC Address',
-                'options' => $operatingCentreAddresses
-            )
-        );
-
-        return $options;
-    }
-
-    /**
-     * Method to return the bundle required for getting all operating centre
-     * addresses for a given licence
-     *
-     * @return array
-     */
-    public function getOcAddressBundle()
-    {
-        return array(
-            'properties' => array(
-                'id',
-                'address'
-            ),
-            'children' => array(
-                'address' => array(
-                    'properties' => array(
-                        'id',
-                        'addressLine1',
-                        'addressLine2',
-                        'addressLine3',
-                        'addressLine4',
-                        'town',
-                        'postcode'
-                    ),
-                    'children' => array(
-                        'countryCode' => array(
-                            'properties' => array(
-                                'id'
-                            )
-                        )
-                    )
-                )
-            )
-        );
-    }
-
-    /**
-     * Map the data on load
-     *
-     * @param array $data
-     * @return array
-     */
-    public function processLoad($data)
-    {
-        $data = parent::processLoad($data);
-
-        $data = $this->determineFormAttachedTo($data);
-
-        return $data;
-    }
-
-    /**
-     * Complete section and save
-     *
-     * @param array $data
-     * @return array
-     */
-    public function processSave($data)
-    {
-        $data = $this->determineSavingAttachedTo($data);
-
-        return parent::processSave($data);
-    }
-
-    /**
-     * The attachedTo dropdown has values of either 'licence' or an OC id
-     * However what is stored is either 'OC' or 'Licence' so this method
-     * sets the value to the OC id in preparation for generating the edit form
-     *
-     * @param array $data
-     * @return array
-     */
-    public function determineFormAttachedTo($data)
-    {
-        // for form
-        if (isset($data['fields']['attachedTo']) && $data['fields']['attachedTo'] != self::ATTACHED_TO_LICENCE) {
-            $data['fields']['attachedTo'] =
-                isset($data['fields']['operatingCentre']) ? $data['fields']['operatingCentre'] : '';
-        }
-
-        $data['fields']['licence'] = $this->getCase()['licence']['id'];
-
-        return $data;
-    }
-
-    /**
-     * The attachedTo dropdown has values of either 'licence' or an OC id
-     * However what is stored is either 'OC' or 'Licence' so this method
-     * sets the value from OC id to the value 'OC' or 'Licence'
-     * in preparation for saving the data
-     *
-     * @param array $data
-     * @return array
-     */
-    private function determineSavingAttachedTo($data)
-    {
-        if (strtolower($data['fields']['attachedTo']) !== self::ATTACHED_TO_LICENCE) {
-            $data['fields']['operatingCentre'] = $data['fields']['attachedTo'];
-            $data['fields']['attachedTo'] = self::ATTACHED_TO_OPERATING_CENTRE;
-        } else {
-            $data['fields']['operatingCentre'] = null;
-            $data['fields']['attachedTo'] = self::ATTACHED_TO_LICENCE;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Sets the notes field label accoring to the type of condition.
-     * i.e. Undertaking or Condition
-     * Also extracts the Operating Centre addresses for the licence and sets
-     * up the group options for the attachedTo drop down
-     *
-     * @param \Zend\Form\Form $form
-     * @param integer $licenceId
-     * @param string $type
-     * @return \Zend\Form\Form $form
-     */
-    public function configureFormForConditionType($form, $licenceId)
-    {
-        $ocAddressList = $this->getOcAddressByLicence($licenceId);
-
-        // set form dependent aspects
-        $form->setLabel($form->getLabel() . ' Conditions / Undertakings');
-
-        $form->get('fields')
-            ->get('attachedTo')
-            ->setValueOptions($ocAddressList);
 
         return $form;
+    }
 
+    /**
+     * Returns the case data with attached licence, OC and address info
+     * @return mixed
+     * @throws DataServiceException
+     */
+    private function getCaseData()
+    {
+        // get the case
+        $params = ['id' => (int) $this->params()->fromRoute('case')];
+        $query = CasesWithLicenceDto::create($params);
+
+        $response = $this->handleQuery($query);
+
+        if ($response->isOk()) {
+            $caseData = $response->getResult();
+        } else {
+            throw new DataServiceException('Unable to load case data');
+        }
+
+        return $caseData;
+    }
+
+    /**
+     * Extracts the addresses for each operating centre and formats them using the address view helper (not ideal)
+     *
+     * @param $caseData
+     * @return array
+     */
+    private function getOperatingCentreListOptions($caseData)
+    {
+        $optionList = [];
+        if (isset($caseData['licence']['operatingCentres'])) {
+            $viewHelperManager = $this->getServiceLocator()->get('ViewHelperManager');
+            $addressViewHelper = $viewHelperManager->get('Address');
+            foreach ($caseData['licence']['operatingCentres'] as $operatingCentreDetails) {
+                $optionList[$operatingCentreDetails['operatingCentre']['id']] =
+                    $addressViewHelper($operatingCentreDetails['operatingCentre']['address']);
+            }
+        }
+
+        return $optionList;
     }
 }

@@ -1,43 +1,24 @@
-OLCS.ready(function() {
-  var isReason = function (value) {
-    return value == 'piwo_reason';
-  };
+$(function() {
+  "use strict";
 
-  var isDecision = function (value) {
-    return value == 'piwo_decision';
-  };
+  function hasValue(value) {
+    return function() {
+      return OLCS.formHelper("fields", "writtenOutcome").val() === "piwo_" + value;
+    };
+  }
 
-  var isNeither = function (value) {
-    return value == 'piwo_none';
-  };
+  OLCS.cascadeForm({
+    form: "[method=post]",
+    rulesets: {
+      "fields": {
+        "*": true,
+        "date:tcWrittenReasonDate": hasValue("reason"),
+        "date:writtenReasonLetterDate": hasValue("reason"),
+        "date:tcWrittenDecisionDate": hasValue("decision"),
+        "date:writtenDecisionLetterDate": hasValue("decision"),
+        "date:decisionLetterSentDate": hasValue("verbal")
 
-  OLCS.showHideInput({
-    'source': 'select[name="fields[writtenOutcome]"]',
-    'dest': 'label[for="fields[tcWrittenReasonDate]"]',
-    'predicate': isReason
-  });
-
-  OLCS.showHideInput({
-    'source': 'select[name="fields[writtenOutcome]"]',
-    'dest': 'label[for="fields[writtenReasonLetterDate]"]',
-    'predicate': isReason
-  });
-
-  OLCS.showHideInput({
-    'source': 'select[name="fields[writtenOutcome]"]',
-    'dest': 'label[for="fields[tcWrittenDecisionDate]"]',
-    'predicate': isDecision
-  });
-
-  OLCS.showHideInput({
-    'source': 'select[name="fields[writtenOutcome]"]',
-    'dest': 'label[for="fields[decisionLetterSentDate]"]',
-    'predicate': isDecision
-  });
-
-  OLCS.showHideInput({
-    'source': 'select[name="fields[writtenOutcome]"]',
-    'dest': 'label[for="fields[decSentAfterWrittenDecDate]"]',
-    'predicate': isNeither
+      }
+    }
   });
 });

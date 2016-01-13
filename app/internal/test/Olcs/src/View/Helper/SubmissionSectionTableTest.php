@@ -17,8 +17,9 @@ class SubmissionSectionTableTest extends \PHPUnit_Framework_TestCase
      * @dataProvider provideInvoke
      * @param $input
      * @param $expected
+     * @param $disabled
      */
-    public function testInvoke($input, $expected)
+    public function testInvoke($input, $expected, $disabled)
     {
         $sut = new SubmissionSectionTable();
 
@@ -35,13 +36,20 @@ class SubmissionSectionTableTest extends \PHPUnit_Framework_TestCase
         $mockTableBuilder = m::mock('\Common\Service\Table\TableFactory');
         $mockTableBuilder->shouldReceive('buildTable')
             ->withAnyArgs()
+            ->andReturnSelf();
+        $mockTableBuilder->shouldReceive('setDisabled')
+            ->times($disabled ? 1 : 0)
+            ->with(true);
+        $mockTableBuilder->shouldReceive('render')
+            ->withAnyArgs()
             ->andReturn('<table></table>');
 
         $sut->setTableBuilder($mockTableBuilder);
 
         $result = $sut(
             $input['submissionSection'],
-            $input['data']
+            $input['data'],
+            $disabled
         );
 
         $this->assertEquals(
@@ -76,10 +84,10 @@ class SubmissionSectionTableTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                ['submissionSection' => 'introduction', 'data' => ['data' => []]], null
+                ['submissionSection' => 'introduction', 'data' => ['data' => []]], '<table></table>', true
             ],
             [
-                ['submissionSection' => '', 'data' => ['data' => []]], ''
+                ['submissionSection' => '', 'data' => ['data' => []]], '', false
             ],
         ];
     }

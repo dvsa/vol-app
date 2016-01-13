@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("bus-reg-quality-fields")
  */
-class BusRegQuality extends Base
+class BusRegQuality extends BusRegDetails
 {
     /**
      * @Form\Type("Radio")
@@ -80,7 +80,7 @@ class BusRegQuality extends Base
     /**
      * @Form\Type("Radio")
      * @Form\Options({
-     *      "label": "Operate on part of a Quality Partnership Scheme current or future",
+     *      "label": "Operate on part of a Quality Contract Scheme current or future",
      *      "value_options":{
      *          "N":"No",
      *          "Y":"Yes"

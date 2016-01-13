@@ -2,15 +2,18 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\ListDataInterface;
-use Common\Service\Data\RefData;
 use Common\Service\Data\LicenceServiceTrait;
+use Dvsa\Olcs\Transfer\Query\RefData\RefDataList;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Zend\ServiceManager\FactoryInterface;
+use Common\Service\Data\RefData;
 
 /**
  * Class ImpoundingLegislation
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ImpoundingLegislation extends RefData implements ListDataInterface
+class ImpoundingLegislation extends RefData implements FactoryInterface
 {
     use LicenceServiceTrait;
 
@@ -22,12 +25,11 @@ class ImpoundingLegislation extends RefData implements ListDataInterface
     public function fetchListOptions($context, $useGroups = false)
     {
         $context = empty($context)? $this->getLicenceContext() : $context;
-        $context['bundle'] = json_encode(['properties' => 'ALL']);
-        $context['limit'] = 1000;
-        $context['order'] = 'sectionCode';
 
         //decide which ref data category we need
-        if ($context['goodsOrPsv'] == 'lcat_psv') {
+        if (empty($context)) {
+            $data = $this->fetchListData('impound_legislation_goods_gb');
+        } elseif ($context['goodsOrPsv'] == 'lcat_psv') {
             $data = $this->fetchListData('impound_legislation_psv_gb');
         } elseif ($context['isNi'] == 'Y') {
             $data = $this->fetchListData('impound_legislation_goods_ni');
@@ -40,21 +42,5 @@ class ImpoundingLegislation extends RefData implements ListDataInterface
         }
 
         return $this->formatData($data);
-    }
-
-    /**
-     * Ensures only a single call is made to the backend for each dataset
-     *
-     * @param $category
-     * @return array
-     */
-    public function fetchListData($category = null)
-    {
-        if (is_null($this->getData($category))) {
-            $data = $this->getRestClient()->get(sprintf('/%s', $category));
-            $this->setData($category, $data);
-        }
-
-        return $this->getData($category);
     }
 }

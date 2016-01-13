@@ -8,8 +8,8 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
+                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         ),
         'paginate' => array(
@@ -60,7 +60,7 @@ return array(
             }
         ),
         array(
-            'title' => 'Imposed At',
+            'title' => 'Imposed at',
             'format' => '{{imposedAt}}'
         ),
         array(

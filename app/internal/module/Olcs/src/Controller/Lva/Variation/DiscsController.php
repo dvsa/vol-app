@@ -9,13 +9,14 @@ namespace Olcs\Controller\Lva\Variation;
 
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
+use Olcs\Controller\Interfaces\VariationControllerInterface;
 
 /**
  * Internal Variation Discs Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DiscsController extends Lva\AbstractDiscsController
+class DiscsController extends Lva\AbstractDiscsController implements VariationControllerInterface
 {
     use VariationControllerTrait;
 

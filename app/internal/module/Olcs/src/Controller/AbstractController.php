@@ -8,46 +8,23 @@
 
 namespace Olcs\Controller;
 
-use Common\Controller\Traits;
-use Common\Controller\AbstractActionController;
-use Zend\Session\Container;
+use Common\Controller\Traits as CommonTraits;
+use Olcs\Controller\Traits as OlcsTraits;
+use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Common\Controller\Traits\GenericRenderView;
+use Common\Controller\Traits\GenericMethods;
+use Common\Util\FlashMessengerTrait;
 
 /**
  * Abstract Controller
  */
-class AbstractController extends AbstractActionController
+class AbstractController extends ZendAbstractActionController
 {
-    use Traits\ViewHelperManagerAware;
-
-    const MAX_LIST_DATA_LIMIT = 100;
-
-    private $searchForm;
-
-    /**
-     * Retrieve some data from the backend and convert it for use in
-     * a select. Optionally provide some search data to filter the
-     * returned data too.
-     */
-    protected function getListData($entity, $data = array(), $titleKey = 'name', $primaryKey = 'id', $showAll = 'All')
-    {
-        $data['limit'] = self::MAX_LIST_DATA_LIMIT;
-        $data['sort'] = $titleKey;  // AC says always sort alphabetically
-        $response = $this->makeRestCall($entity, 'GET', $data);
-
-        if ($showAll !== false) {
-            $final = array('' => $showAll);
-        } else {
-            $final = array();
-        }
-
-        foreach ($response['Results'] as $result) {
-            $key = $result[$primaryKey];
-            $value = $result[$titleKey];
-
-            $final[$key] = $value;
-        }
-        return $final;
-    }
+    use CommonTraits\ViewHelperManagerAware,
+        OlcsTraits\ListDataTrait,
+        GenericRenderView,
+        GenericMethods,
+        FlashMessengerTrait;
 
     /**
      * Gets a variable from the route
@@ -74,6 +51,26 @@ class AbstractController extends AbstractActionController
     }
 
     /**
+     * Proxies to the get query or get param.
+     *
+     * @param mixed $name
+     * @param mixed $default
+     * @return mixed
+     */
+    public function getQueryOrRouteParam($name, $default = null)
+    {
+        if ($queryValue = $this->params()->fromQuery($name, $default)) {
+            return $queryValue;
+        }
+
+        if ($queryValue = $this->params()->fromRoute($name, $default)) {
+            return $queryValue;
+        }
+
+        return $default;
+    }
+
+    /**
      * Sets the table filters.
      *
      * @param mixed $filters
@@ -81,35 +78,5 @@ class AbstractController extends AbstractActionController
     public function setTableFilters($filters)
     {
         $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
-    }
-
-    public function setSearchForm($form)
-    {
-        $this->searchForm = $form;
-        return $this;
-    }
-
-    /**
-     * Gets the search form for the header, it is cached on the object so that the search query is maintained
-     */
-    public function getSearchForm()
-    {
-        if ($this->searchForm === null) {
-            $this->searchForm = $this->getFormClass('HeaderSearch');
-
-            $container = new Container('search');
-            $this->searchForm->bind($container);
-        }
-
-        return $this->searchForm;
-    }
-
-    protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
-    {
-        $view = parent::renderView($view, $pageTitle, $pageSubTitle);
-
-        $view->setVariable('searchForm', $this->getSearchForm());
-
-        return $view;
     }
 }

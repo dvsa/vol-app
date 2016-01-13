@@ -13,7 +13,8 @@ return array(
         ),
         'crud' => array(
             'actions' => array(
-                'createOperator' => array('class' => 'primary', 'value' => 'Create operator')
+                'createOperator' => array('class' => 'primary', 'value' => 'Create operator'),
+                'createTransportManager' => array('class' => 'secondary', 'value' => 'Create transport manager')
             )
         ),
     ),

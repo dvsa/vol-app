@@ -7,88 +7,55 @@
  */
 namespace Olcs\Controller\Bus\Short;
 
-use Olcs\Controller\Bus\BusController;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Data\Mapper\BusRegShortNotice as ShortNoticeMapper;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\Form\Model\Form\BusShortNotice as ShortNoticeForm;
+use Dvsa\Olcs\Transfer\Query\Bus\ShortNoticeByBusReg as ShortNoticeDto;
+use Dvsa\Olcs\Transfer\Query\Bus\BusReg as BusRegDto;
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateShortNotice as UpdateShortNoticeCmd;
 
 /**
  * Bus Short Notice Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusShortController extends BusController
+class BusShortController extends AbstractInternalController implements BusRegControllerInterface
 {
-    protected $layoutFile = 'licence/bus/layout-wide';
-    protected $section = 'short';
-    protected $subNavRoute = 'licence_bus_short';
-
-    /* properties required by CrudAbstract */
-    protected $formName = 'bus-short-notice';
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'busRegId';
+    protected $navigationId = 'licence_bus_short';
+    protected $itemDto = ShortNoticeDto::class;
+    protected $itemParams = ['id' => 'busRegId'];
+    protected $formClass = ShortNoticeForm::class;
+    protected $updateCommand = UpdateShortNoticeCmd::class;
+    protected $mapperClass = ShortNoticeMapper::class;
+    protected $editContentTitle = 'Bus Short Notice';
 
     /**
-     * Identifier key
-     *
-     * @var string
+     * @param \Common\Form\Form $form
+     * @param array $formData
+     * @return \Common\Form\Form
      */
-    protected $identifierKey = 'busReg';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'BusShortNotice';
-
-    /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-                'base'
-            )
-        )
-    );
-
-    /**
-     * Load data for the form
-     *
-     * This method should be overridden
-     *
-     * @param int $id
-     * @return array
-     */
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'properties' => 'ALL'
-    );
-
-    public function processLoad($data)
+    protected function alterFormForEdit($form, $formData)
     {
-        $data = (isset($data['Results'][0]) ? $data['Results'][0] : []);
-        return parent::processLoad($data);
+        $busReg = $this->getBusReg();
+
+        if ($busReg['isReadOnly'] || $busReg['isFromEbsr']) {
+            $form->setOption('readonly', true);
+        }
+
+        return $form;
     }
 
-    public function redirectToIndex()
+    /**
+     * Gets a Bus Reg - we'll have this query cached, and if it previously failed we'll have returned a 404 already
+     *
+     * @return array|mixed
+     */
+    private function getBusReg()
     {
-        return $this->redirectToRoute(
-            null,
-            ['action'=>'edit'],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
+        $params = ['id' => $this->params()->fromRoute('busRegId')];
+        $response = $this->handleQuery(BusRegDto::create($params));
+
+        return $response->getResult();
     }
 }

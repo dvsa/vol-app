@@ -3,116 +3,117 @@
 /**
  * Case Complaint Controller
  *
- * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-
 namespace Olcs\Controller\Cases\Complaint;
 
-// Olcs
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
-
+use Dvsa\Olcs\Transfer\Command\Complaint\CreateComplaint as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Complaint\UpdateComplaint as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Complaint\DeleteComplaint as DeleteDto;
+use Dvsa\Olcs\Transfer\Query\Complaint\Complaint as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Complaint\ComplaintList as ListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Data\Mapper\Complaint as Mapper;
+use Olcs\Form\Model\Form\Complaint as Form;
 use Zend\View\Model\ViewModel;
 
 /**
  * Case Complaint Controller
  *
- * @author S Lizzio <shaun.lizzio@valtech.co.uk>
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class ComplaintController extends OlcsController\CrudAbstract
+class ComplaintController extends AbstractInternalController implements
+    CaseControllerInterface,
+    LeftViewProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'complaint';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'complaint';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'complaint';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case';
-
-    /**
-     * For most case crud controllers, we use the case/inner-layout
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'case/inner-layout';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'Complaint';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_details_complaints';
 
-    /**
-     * Holds an array of variables for the
-     * default index list page.
+    protected $routeIdentifier = 'complaint';
+
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $listVars = [
-        'case',
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'id';
+    protected $tableName = 'complaint';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['case'];
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
+
+        return $view;
+    }
+
+    /**
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'complaint', to => from
+    protected $itemParams = ['id' => 'complaint'];
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add complaint';
+    protected $editContentTitle = 'Edit complaint';
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'case' => 'route'
     ];
 
     /**
-     * Data map
-     *
-     * @var array
-    */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-            )
-        )
-    );
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
+     */
+    protected $deleteCommand = DeleteDto::class;
+    protected $deleteModalTitle = 'internal.delete-action-trait.title';
+    /**
+     * Variables for controlling the delete action.
+     * Format is: required => supplied
+     */
+    protected $deleteParams = ['id' => 'complaint'];
 
     /**
-     * Holds the isAction
-     *
-     * @var boolean
-    */
-    protected $isAction = false;
-
-    /**
-     * Holds the Data Bundle
+     * Any inline scripts needed in this section
      *
      * @var array
      */
-    protected $dataBundle = array(
-        'properties' => 'ALL',
-        'children' => array(
-            'case' => [],
-            'complaintType' => [],
-            'status' => [],
-        )
+    protected $inlineScripts = array(
+        'indexAction' => ['table-actions']
     );
 }

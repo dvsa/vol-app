@@ -24,7 +24,8 @@ class HeaderSearch
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Options({
-     *      "service_name": "Olcs\Service\Data\Search\Search"
+     *      "service_name": "Common\Service\Data\Search\SearchType",
+     *      "context": "internal-search"
      * })
      */
     protected $index;

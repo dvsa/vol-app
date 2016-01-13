@@ -7,8 +7,6 @@
  */
 namespace Olcs\Controller\Traits;
 
-use Zend\Mvc\MvcEvent;
-
 /**
  * HearingAppeal Controller Trait
  *
@@ -24,18 +22,8 @@ trait HearingAppealControllerTrait
      */
     protected $appealDataBundle = array(
         'children' => array(
-            'reason' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-            'outcome' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            )
+            'reason' => array(),
+            'outcome' => array()
         )
     );
 
@@ -46,23 +34,9 @@ trait HearingAppealControllerTrait
      */
     protected $stayRecordBundle = array(
         'children' => array(
-            'stayType' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-            'outcome' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            )
+            'stayType' => array(),
+            'outcome' => array(),
+            'case' => array()
         )
     );
 

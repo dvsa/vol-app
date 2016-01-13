@@ -5,81 +5,35 @@
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-
 namespace Olcs\Controller\Cases\Penalty;
 
-// Olcs
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Zend\View\Model\ViewModel;
+use Common\Service\Table\TableBuilder;
+use Olcs\Form\Model\Form\Comment as CommentForm;
+use Olcs\Data\Mapper\PenaltyCommentBox as CommentMapper;
+use Dvsa\Olcs\Transfer\Query\Cases\Cases as CommentItemDto;
+use Dvsa\Olcs\Transfer\Command\Cases\UpdatePenaltiesNote as CommentUpdateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Si\SendResponse as SendResponseCmd;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Olcs\Data\Mapper\GenericFields;
+use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Si\Applied\Penalty as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Si\GetList as ListDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Update as UpdateDto;
+use Olcs\Form\Model\Form\ErruPenalty;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Case Penalty Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PenaltyController extends OlcsController\CrudAbstract
+class PenaltyController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier
-     *
-     *
-     * @var string
-     */
-    protected $identifier = 'case';
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'case';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = '';
-
-    /**
-     * Name of comment box field.
-     *
-     * @var string
-     */
-    protected $commentBoxName = 'penaltiesNote';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case';
-
-    /**
-     * For most case crud controllers, we use the case/inner-layout
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'case/inner-layout';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'SeriousInfringement';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'erru-penalty';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -87,92 +41,52 @@ class PenaltyController extends OlcsController\CrudAbstract
      */
     protected $navigationId = 'case_details_penalties';
 
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-    */
-    protected $dataBundle = array(
-        'children' => array(
-            'siCategory' => array(
-                'properties' => array(
-                    'description'
-                )
-            ),
-            'siCategoryType' => array(
-                'properties' => array(
-                    'description'
-                )
-            ),
-            'appliedPenalties' => array(
-                'properties' => 'ALL',
-                'children' => array(
-                    'siPenaltyType' => array(
-                        'properties' => array(
-                            'id',
-                            'description'
-                        )
-                    ),
-                    'seriousInfringement' => array(
-                        'properties' => array(
-                            'id'
-                        )
-                    )
-                )
-            ),
-            'imposedErrus' => array(
-                'properties' => array(
-                    'finalDecisionDate',
-                    'startDate',
-                    'endDate',
-                    'executed'
-                ),
-                'children' => array(
-                    'siPenaltyImposedType' => array(
-                        'properties' => array(
-                            'id',
-                            'description'
-                        )
-                    )
-                )
-            ),
-            'requestedErrus' => array(
-                'properties' => 'ALL',
-                'children' => array(
-                    'siPenaltyRequestedType' => array(
-                        'properties' => array(
-                            'id',
-                            'description'
-                        )
-                    )
-                )
-            ),
-            'case' => array(
-                'properties' => array(
-                    'erruOriginatingAuthority',
-                    'erruTransportUndertakingName',
-                    'erruVrm'
-                )
-            ),
-            'memberStateCode' => array(
-                'properties' => array(
-                    'countryDesc'
-                )
-            )
-        )
-    );
+    protected $commentFormClass = CommentForm::class;
+    protected $commentItemDto = CommentItemDto::class;
+    protected $commentItemParams = ['id' => 'case', 'case' => 'case'];
+    protected $commentUpdateCommand = CommentUpdateDto::class;
+    protected $commentMapperClass = CommentMapper::class;
+    protected $commentTitle = 'Erru Penalties';
+
+    protected $createCommand = CreateDto::class;
+    protected $updateCommand = UpdateDto::class;
+
+    protected $deleteCommand = DeleteDto::class;
+    protected $deleteParams = ['id'];
+    protected $deleteModalTitle = 'Delete Applied Penalty';
+
+    protected $formClass = ErruPenalty::class;
+    protected $mapperClass = GenericFields::class;
+    protected $itemDto = ItemDto::class;
+
+    protected $defaultData = [
+        'case' => AddFormDefaultData::FROM_ROUTE,
+        'id' => AddFormDefaultData::FROM_ROUTE
+    ];
 
     /**
-     * Simple redirect to index.
+     * Any inline scripts needed in this section
+     *
+     * @var array
      */
-    public function redirectToIndex()
+    protected $inlineScripts = array(
+        'indexAction' => ['table-actions']
+    );
+
+    public function getLeftView()
     {
-        return $this->redirectToRoute(
-            null,
-            ['action'=>'index', $this->getIdentifierName() => $this->params()->fromRoute($this->getIdentifierName())],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
+
+        return $view;
+    }
+
+    /**
+     * Sends the response back to Erru
+     */
+    public function sendAction()
+    {
+        return $this->processCommand(new GenericItem(['case' => 'case']), SendResponseCmd::class);
     }
 
     /**
@@ -182,57 +96,32 @@ class PenaltyController extends OlcsController\CrudAbstract
      */
     public function indexAction()
     {
-        //using loadListData so can use the case id in parameters, but we'll only ever have one result
-        $data = $this->loadListData(['case' => $this->params()->fromRoute('case')]);
+        $data = $this->getPenaltyData();
 
-        //if a table crud button has been clicked then
-        //we need to intercept the post and redirect to AppliedPenaltyController
-        $postedVars = $this->params()->fromPost();
-
-        if (isset($postedVars['action'])) {
-            return $this->redirectToRoute(
-                'case_penalty_edit',
-                [
-                    'action' => $postedVars['action'],
-                    'seriousInfringement' => $data['Results'][0]['id'],
-                    'id' => isset($postedVars['id']) ? $postedVars['id'] : null
-                ],
-                ['code' => '303'], // Why? No cache is set with a 303 :)
-                true
-            );
+        if (isset($data['results'][0])) {
+            $this->placeholder()->setPlaceholder('penalties', $data['results'][0]);
+            $this->getErruTable('erru-imposed', 'imposedErrus', $data);
+            $this->getErruTable('erru-requested', 'requestedErrus', $data);
+            $this->getErruTable('erru-applied', 'appliedPenalties', $data);
+            $this->getCommentBox();
         }
 
-        $view = $this->getView([]);
-
-        $this->buildCommentsBoxIntoView();
-
-        if (isset($data['Results'][0])) {
-            $this->getViewHelperManager()->get('placeholder')->getContainer('penalties')->set($data['Results'][0]);
-            $this->getErruTable('erru-imposed', 'imposedErrus');
-            $this->getErruTable('erru-requested', 'requestedErrus');
-            $this->getErruTable('erru-applied', 'appliedPenalties');
-        }
-
-        $view->setTemplate('case/page/penalties');
-
-        return $this->renderView($view);
+        return $this->viewBuilder()->buildViewFromTemplate('sections/cases/pages/penalties');
     }
 
     /**
-     * There is more than one table on the page so we can't use crud abstract
+     * There is more than one table on the page so we can't use the usual method in abstractInternalController
      *
      * @param string $tableName
      * @param string $dataKey
+     * @param array  $data      Penalty data
      */
-    private function getErruTable($tableName, $dataKey)
+    private function getErruTable($tableName, $dataKey, $data)
     {
-        //cached list data
-        $listData = $this->getListData();
-
-        if (isset($listData['Results'][0][$dataKey]) && !empty($listData['Results'][0][$dataKey])) {
+        if (isset($data['results'][0][$dataKey]) && !empty($data['results'][0][$dataKey])) {
             $tableData = [
-                'Count' => count($listData['Results'][0][$dataKey]),
-                'Results' => $listData['Results'][0][$dataKey]
+                'Count' => count($data['results'][0][$dataKey]),
+                'Results' => $data['results'][0][$dataKey]
             ];
         } else {
             $tableData = [
@@ -241,8 +130,30 @@ class PenaltyController extends OlcsController\CrudAbstract
             ];
         }
 
-        $this->getViewHelperManager()->get('placeholder')->getContainer($tableName)->set(
-            $this->getTable($tableName, $tableData, [])
+        //multiple tables on a page, so we need to give our plugin a new table builder each time
+        $tableBuilder = new TableBuilder($this->getServiceLocator());
+        $this->table()->setTableBuilder($tableBuilder);
+        $this->placeholder()->setPlaceholder($tableName, $this->table()->buildTable($tableName, $tableData, []));
+    }
+
+    /**
+     * Get Penalty data for the case
+     *
+     * @return array
+     */
+    private function getPenaltyData()
+    {
+        $response = $this->handleQuery(
+            ListDto::create(
+                ['case' => $this->params()->fromRoute('case')]
+            )
         );
+
+        if (!$response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            return [];
+        }
+
+        return $response->getResult();
     }
 }

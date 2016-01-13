@@ -1,0 +1,23 @@
+<?php $this->doctype(); ?>
+<html lang="en">
+  <head>
+    <?php echo $this->partial('partials/head', ['title' => $title]); ?>
+  </head>
+  <body class="internal sign-in" id="<?php echo $this->pageId(); ?>">
+    <?php echo $this->version(); ?>
+    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+
+    <div role="banner" class="global-header">
+      <div class="global-header__wrapper">
+          <h2 class="global-header__title">OLCS</h2>
+      </div><!-- global-header__wrapper -->
+    </div>
+    <div class="page-wrapper">
+      <div id="main" role="main">
+        <?php echo $this->content; ?>
+      </div><!-- End: main -->
+    </div><!-- .page-wrapper-->
+
+  <?php echo $this->partial('partials/body-end'); ?>
+  </body>
+</html>

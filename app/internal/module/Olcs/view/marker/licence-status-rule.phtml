@@ -1,0 +1,25 @@
+<p class="notice--danger">
+    <strong>
+        <?php
+        echo $this->translate('Licence due to be ');
+        echo $this->translate(lcfirst($this->status['description']));
+        ?>
+    </strong>
+    <br>
+    <?php
+    echo $this->startDateTime->format(\DATETIME_FORMAT);
+    if (!empty($this->endDateTime)) {
+        echo ' to '. $this->endDateTime->format(\DATETIME_FORMAT);
+    }
+
+    $routes = [
+        \Common\RefData::LICENCE_STATUS_CURTAILED => 'curtail-licence',
+        \Common\RefData::LICENCE_STATUS_REVOKED => 'revoke-licence',
+        \Common\RefData::LICENCE_STATUS_SUSPENDED => 'suspend-licence'
+    ];
+    $route = 'licence/' . $routes[$this->status['id']];
+    ?>
+    <a href="<?php echo $this->url($route, ['licence' => $this->licenceId, 'status' => $this->ruleId]) ?>" class="js-modal-ajax">
+        <?php echo $this->translate('Update details') ?>
+    </a>
+</p>

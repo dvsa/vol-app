@@ -15,7 +15,7 @@ use Common\Service\Table\TableFactory;
 class SubmissionSectionTable extends AbstractHelper
 {
 
-    const DEFAULT_VIEW = '/case/submission/section/table';
+    const DEFAULT_VIEW = 'sections/cases/pages/submission/table';
 
     private $tableBuilder;
 
@@ -38,38 +38,52 @@ class SubmissionSectionTable extends AbstractHelper
     /**
      * Renders the data for a SubmissionSection details
      *
-     * @param  String $submissionSection
+     * @param String $submissionSection
      * @param Array $data
+     * @param bool $readonly
      * @return string
      */
-    public function __invoke($submissionSection = '', $data = array())
+    public function __invoke($submissionSection = '', $data = array(), $readonly = false, $submissionVersion = null)
     {
-
         if (empty($submissionSection)) {
             return '';
         }
 
-        return $this->render($submissionSection, $data);
+        return $this->render($submissionSection, $data, $readonly, $submissionVersion);
     }
 
-    public function render($submissionSection, $data)
+    /**
+     * Renders the data for a SubmissionSection details
+     *
+     * @param String $submissionSection
+     * @param Array $data
+     * @param bool $readonly
+     * @param int $submissionVersion
+     *
+     * @return string
+     */
+    public function render($submissionSection, $data, $readonly, $submissionVersion = null)
     {
-        $params = [];
-
-        $viewTemplate = isset($this->viewMap[$submissionSection]) ?
-            $this->viewMap[$submissionSection] : self::DEFAULT_VIEW;
+        $params = ['submissionVersion' => $submissionVersion];
 
         $tableConfig = isset($this->tableMap[$submissionSection]) ?
             $this->tableMap[$submissionSection] : 'SubmissionSections/' . $submissionSection;
+        $tableData = isset($data['data']['tables'][$submissionSection]) ?
+            $data['data']['tables'][$submissionSection] : [];
 
-        $data['table'] = $this->getTableBuilder()->buildTable(
+        $tableBuilder = $this->getTableBuilder()->buildTable(
             $tableConfig,
-            ['Results' => $data['data']],
+            ['Results' => $tableData],
             $params,
             false
         );
-        $data['sectionId'] = $submissionSection;
-        return $this->getView()->render($viewTemplate, ['data' => $data]);
+
+        if ($readonly) {
+            // disable for readonly
+            $tableBuilder->setDisabled(true);
+        }
+
+        return $tableBuilder->render();
     }
 
     public function setTableBuilder(TableFactory $tableBuilder)

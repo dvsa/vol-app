@@ -1,4 +1,6 @@
 OLCS.ready(function() {
+  "use strict";
+
   var selector = "#submission";
 
   $(selector).find("button:first").hide();
@@ -13,9 +15,9 @@ OLCS.ready(function() {
       "<input type=hidden class=form__action name='fields[submissionSections][submissionTypeSubmit]' value='' />"
     );
 
-    OLCS.formAjax({
+    OLCS.submitForm({
       form: $(selector),
-      success: OLCS.responseFilter(selector, selector),
+      success: OLCS.filterResponse(selector, selector),
       complete: function() {
         $(selector).find("button:first").hide();
         $(".form__action").remove();

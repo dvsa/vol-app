@@ -27,13 +27,11 @@ trait InternalControllerTrait
     /**
      * Get the current organisation id
      *
-     * @todo This method needs implementing properly once we know the users journey to get here
-     *
      * @return int
      */
     protected function getCurrentOrganisationId()
     {
-        return 1;
+        return $this->getLvaEntityService()->getOrganisation($this->getIdentifier())['id'];
     }
 
     /**

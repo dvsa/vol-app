@@ -2,27 +2,26 @@
 
 namespace Olcs\Controller\Traits;
 
+use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
+
 /**
- * Class DocumentSearchTrait
- * @package Olcs\Controller
+ * Document Search Trait
  */
 trait DocumentSearchTrait
 {
-
     /**
-     * Inspect the request to see if we have any filters set, and
-     * if necessary, filter them down to a valid subset
+     * Inspect the request to see if we have any filters set, and if necessary, filter them down to a valid subset
      *
      * @return array
      */
-    protected function mapDocumentFilters($extra = array())
+    protected function mapDocumentFilters($extra = [])
     {
-        $defaults = array(
-            'sort'   => 'issuedDate',
-            'order'  => 'DESC',
-            'page'   => 1,
-            'limit'  => 10
-        );
+        $defaults = [
+            'sort' => 'issuedDate',
+            'order' => 'DESC',
+            'page' => 1,
+            'limit' => 10
+        ];
 
         $filters = array_merge(
             $defaults,
@@ -30,13 +29,13 @@ trait DocumentSearchTrait
             $this->getRequest()->getQuery()->toArray()
         );
 
-        if ( isset($filters['isDigital']) ) {
-            if ($filters['isDigital'] === 'digital') {
-                $filters['isDigital'] = true;
-            } elseif ($filters['isDigital'] === 'nondigital') {
-                $filters['isDigital'] = false;
+        if (isset($filters['isExternal'])) {
+            if ($filters['isExternal'] === 'external') {
+                $filters['isExternal'] = 'Y';
+            } elseif ($filters['isExternal'] === 'internal') {
+                $filters['isExternal'] = 'N';
             } else {
-                unset($filters['isDigital']);
+                unset($filters['isExternal']);
             }
         }
 
@@ -49,26 +48,22 @@ trait DocumentSearchTrait
         );
     }
 
-    protected function getDocumentForm($filters = array())
+    protected function getDocumentForm($filters = [])
     {
-        $form = $this->getForm('documents-home');
+        $form = $this->getForm('DocumentsHome');
+
+        $category = (isset($filters['category'])) ? (int) $filters['category'] : null;
 
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
-        $selects = array(
-            'category' => $this->getListData('Category', [], 'description'),
-            'documentSubCategory' => $this->getListData('DocumentSubCategory', $filters, 'description'),
-            'fileExtension' => $this->getListData(
-                'RefData',
-                ['refDataCategoryId' => 'document_type'],
-                'description', 'id'
-            )
-        );
+        $selects = [
+            'category' => $this->getListDataCategoryDocs('All'),
+            'documentSubCategory' => $this->getListDataSubCategoryDocs($category, 'All')
+        ];
 
         // insert relevant data into the corresponding form inputs
         foreach ($selects as $name => $options) {
-            $form->get($name)
-                ->setValueOptions($options);
+            $form->get($name)->setValueOptions($options);
         }
 
         // setting $this->enableCsrf = false won't sort this; we never POST
@@ -79,28 +74,20 @@ trait DocumentSearchTrait
         return $form;
     }
 
-    protected function getDocumentsTable($filters = array(), $render = true)
+    protected function getDocumentsTable($filters = [])
     {
-        $documents = $this->makeRestCall(
-            'DocumentSearchView',
-            'GET',
-            $filters
-        );
+        $response = $this->handleQuery(DocumentList::create($filters));
 
-        $filters = array_merge(
-            $filters,
-            array('query' => $this->getRequest()->getQuery())
-        );
-
-        $table = $this->getTable(
-            'documents',
-            $documents,
-            $filters
-        );
-
-        if ($render) {
-            return $table->render();
+        if (!$response->isOk()) {
+            throw new \Exception('Error retrieving document list');
         }
+
+        $documents = $response->getResult();
+
+        $filters['query'] = $this->getRequest()->getQuery();
+
+        $table = $this->getTable('documents', $documents, $filters);
+
         return $table;
     }
 }

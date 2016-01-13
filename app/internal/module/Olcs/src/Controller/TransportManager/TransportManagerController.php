@@ -8,18 +8,20 @@
 namespace Olcs\Controller\TransportManager;
 
 use Olcs\Controller\AbstractController;
+use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 
 /**
  * Transport Manager Controller
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TransportManagerController extends AbstractController
+class TransportManagerController extends AbstractController implements TransportManagerControllerInterface
 {
     /**
-     * @var string
+     * Memoize TM details to prevent multiple backend calls with same id
+     * @var array
      */
-    protected $pageLayout = 'transport-manager';
+    protected $tmDetailsCache = [];
 
     /**
      * Redirect to the first menu section
@@ -29,7 +31,7 @@ class TransportManagerController extends AbstractController
      */
     public function indexJumpAction()
     {
-        return $this->redirect()->toRoute('transport-manager/details/details', [], [], true);
+        return $this->redirect()->toRoute('transport-manager/details', [], [], true);
     }
 
     /**
@@ -40,28 +42,330 @@ class TransportManagerController extends AbstractController
      */
     public function indexProcessingJumpAction()
     {
-        return $this->redirect()->toRoute('transport-manager/processing/notes', [], [], true);
+        return $this->redirect()->toRoute(
+            'transport-manager/processing/notes',
+            ['action' => null, 'id' => null, 'transportManager' => $this->params()->fromRoute('transportManager')],
+            ['code' => '303'],
+            false
+        );
     }
 
     /**
      * Get view with TM
+     *
+     * @todo this can probably be removed now
      *
      * @param array $variables
      * @return \Zend\View\Model\ViewModel
      */
     protected function getViewWithTm($variables = [])
     {
-        // implement later
-        $transportManager = null;
+        return $this->getView($variables);
+    }
 
-        $variables['transportManager'] = $transportManager;
-        $variables['section'] = $this->section;
+    public function getTmDetails($tmId, $bypassCache = false)
+    {
+        if ($bypassCache || !isset($this->tmDetailsCache[$tmId])) {
+             $this->tmDetailsCache[$tmId] = $this->getServiceLocator()
+                ->get('Entity\TransportManager')
+                ->getTmDetails($tmId);
+        }
+        return $this->tmDetailsCache[$tmId];
+    }
 
-        $view = $this->getView($variables);
+    /**
+     * Merge a transport manager
+     */
+    public function mergeAction()
+    {
+        $transportManagerId = (int) $this->params()->fromRoute('transportManager');
 
-        // implement later
-        $this->pageTitle = 'Dave Watson';
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = (array)$request->getPost();
+        } else {
+            $tmData = $this->getTransportManager($transportManagerId);
+            if (!$tmData) {
+                return $this->notFoundAction();
+            }
+            $data['fromTmName'] = $tmData['id'] .' '.
+                $tmData['homeCd']['person']['forename'] .' '.
+                $tmData['homeCd']['person']['familyName'];
+            if (isset($tmData['users'][0])) {
+                $data['fromTmName'] .= ' (associated user: '. $tmData['users'][0]['loginId'] .')';
+            }
+        }
 
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        /* @var $form \Common\Form\Form */
+        $form = $formHelper->createForm('TransportManagerMerge');
+        $form->setData($data);
+        $formHelper->setFormActionFromRequest($form, $request);
+        $form->get('toTmId')->setAttribute('data-lookup-url', $this->url()->fromRoute('transport-manager-lookup'));
+
+        if ($request->isPost() && $form->isValid()) {
+            $toTmId = (int) $form->getData()['toTmId'];
+            /* @var $response \Common\Service\Cqrs\Response */
+            $response = $this->handleCommand(
+                \Dvsa\Olcs\Transfer\Command\Tm\Merge::create(
+                    ['id' => $transportManagerId, 'recipientTransportManager' => $toTmId]
+                )
+            );
+
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('form.tm-merge.success');
+
+                return $this->redirect()->toRouteAjax('transport-manager', ['transportManager' => $transportManagerId]);
+            } elseif ($response->isNotFound()) {
+                $formMessages['toTmId'][] = 'form.tm-merge.to-tm-id.validation.not-found';
+                $form->setMessages($formMessages);
+            } else {
+                if (isset($response->getResult()['messages'])) {
+                    foreach (array_keys($response->getResult()['messages']) as $key) {
+                        $formMessages['toTmId'][] = 'form.tm-merge.to-tm-id.validation.'. $key;
+                    }
+                    $form->setMessages($formMessages);
+                } else {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                        ->addErrorMessage('unknown-error');
+                }
+            }
+        }
+
+        $this->getServiceLocator()->get('Script')->loadFile('tm-merge');
+
+        $view = new \Zend\View\Model\ViewModel(['form' => $form]);
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'Merge transport manager');
+    }
+
+    /**
+     * Unmerge a transport manager
+     */
+    public function unmergeAction()
+    {
+        $transportManagerId = (int) $this->params()->fromRoute('transportManager');
+        $tmData = $this->getTransportManager($transportManagerId);
+        if (!$tmData) {
+            return $this->notFoundAction();
+        }
+
+        $request = $this->getRequest();
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        /* @var $form \Common\Form\Form */
+        $form = $formHelper->createForm('GenericConfirmation');
+        $message = $this->getServiceLocator()->get('Helper\Translation')->translateReplace(
+            'form.tm-unmerge.message',
+            [
+                $transportManagerId,
+                $tmData['homeCd']['person']['forename'] .' '. $tmData['homeCd']['person']['familyName'],
+                $tmData['mergeToTransportManager']['id'],
+                $tmData['mergeToTransportManager']['homeCd']['person']['forename'] .' '.
+                    $tmData['mergeToTransportManager']['homeCd']['person']['familyName'],
+            ]
+        );
+        $form->get('messages')->get('message')->setValue($message);
+        $form->get('form-actions')->get('submit')->setLabel('form.tm-unmerge.confirm.action');
+        $formHelper->setFormActionFromRequest($form, $request);
+
+        if ($request->isPost()) {
+            $response = $this->handleCommand(
+                \Dvsa\Olcs\Transfer\Command\Tm\Unmerge::create(['id' => $transportManagerId])
+            );
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('form.tm-unmerge.success');
+
+                return $this->redirect()->toRouteAjax('transport-manager', ['transportManager' => $transportManagerId]);
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+        }
+
+        $view = new \Zend\View\Model\ViewModel(['form' => $form]);
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'Unmerge transport manager');
+    }
+
+    /**
+     * Get TransportManager data
+     *
+     * @param int $id TransportManager ID
+     *
+     * @return array
+     * @throws \RuntimeException
+     */
+    protected function getTransportManager($id)
+    {
+        /* @var $response \Common\Service\Cqrs\Response */
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Tm\TransportManager::create(['id' => $id])
+        );
+        if ($response->isNotFound()) {
+            return null;
+        }
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Error getting TransportManager');
+        }
+
+        return $response->getResult();
+    }
+
+    /**
+     * Ajax lookup of transport manager name
+     *
+     * @return \Zend\View\Model\JsonModel
+     */
+    public function lookupAction()
+    {
+        $transportManagerId = (int) $this->params()->fromQuery('transportManager');
+        if (!$transportManagerId) {
+            $response = new \Zend\Http\Response();
+            $response->setStatusCode(422);
+            return $response;
+        }
+        $view = new \Zend\View\Model\JsonModel();
+
+        $tmData = $this->getTransportManager($transportManagerId);
+        if (!$tmData) {
+            return $this->notFoundAction();
+        }
+        $name = $tmData['homeCd']['person']['forename'] .' '. $tmData['homeCd']['person']['familyName'];
+        if (isset($tmData['users'][0])) {
+            $name .= ' (associated user: '. $tmData['users'][0]['loginId'] .')';
+        }
+        $view->setVariables(
+            [
+                'id' => $tmData['id'],
+                'name' => $name,
+            ]
+        );
         return $view;
+    }
+
+    public function canRemoveAction()
+    {
+        $query = \Dvsa\Olcs\Transfer\Query\Tm\TransportManager   ::create(
+            [
+                'id' => $this->params()->fromRoute('transportManager')
+            ]
+        );
+
+        $response = $this->handleQuery($query);
+
+        $messages = [];
+        if ($response->getResult()['isDetached'] === false) {
+            $messages[] = 'transport-manager-remove-not-detached-error';
+        }
+        if (is_array($response->getResult()['hasUsers'])) {
+            $suffix = implode(', ', $response->getResult()['hasUsers']);
+            $messages[] = 'transport-manager-remove-has-users-error' . $suffix;
+        }
+
+        if (count($messages) <= 0) {
+            return $this->redirectToRoute(
+                'transport-manager/remove',
+                [
+                    'transportManager' => $this->params()->fromRoute('transportManager')
+                ]
+            );
+        }
+
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createFormWithRequest(
+                'LicenceStatusDecisionMessages',
+                $this->getRequest()
+            );
+
+        $form->get('messages')->get('message')->setValue(implode('<br />', $messages));
+        $form->get('form-actions')->remove('continue');
+
+        $view = $this->getViewWithTm(['form' => $form]);
+
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'transport-manager-remove');
+    }
+
+    public function removeAction()
+    {
+        $request = $this->getRequest();
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createFormWithRequest('GenericConfirmation', $request);
+
+        $form->get('messages')
+            ->get('message')
+            ->setValue('transport-manager-remove-are-you-sure');
+
+        if ($request->isPost()) {
+            $command = \Dvsa\Olcs\Transfer\Command\Tm\Remove::create(
+                [
+                    'id' => $this->params()->fromRoute('transportManager'),
+                    'removedDate' => new \DateTime()
+                ]
+            );
+
+            $response = $this->handleCommand($command);
+            if ($response->isOk()) {
+                $this->flashMessenger()->addSuccessMessage('transport-manager-removed');
+                return $this->redirectToRouteAjax(
+                    'transport-manager/details',
+                    [
+                        'transportManager' => $this->params()->fromRoute('transportManager')
+                    ]
+                );
+            }
+        }
+
+        $view = $this->getViewWithTm(['form' => $form]);
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'transport-manager-remove');
+    }
+
+    public function undoDisqualificationAction()
+    {
+        $request = $this->getRequest();
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createFormWithRequest('GenericConfirmation', $request);
+
+        $form->get('messages')
+            ->get('message')
+            ->setValue('transport-manager-undo-disqualification-are-you-sure');
+
+        $form->get('form-actions')
+            ->get('submit')
+            ->setLabel('transport-manager-confirmation-remove-disqualification');
+
+        if ($request->isPost()) {
+            $command = \Dvsa\Olcs\Transfer\Command\Tm\UndoDisqualification::create(
+                [
+                    'id' => $this->params()->fromRoute('transportManager'),
+                ]
+            );
+
+            $response = $this->handleCommand($command);
+            if ($response->isOk()) {
+                $this->flashMessenger()->addSuccessMessage('transport-manager-disqualification-removed');
+                return $this->redirectToRouteAjax(
+                    'transport-manager/details',
+                    [
+                        'transportManager' => $this->params()->fromRoute('transportManager')
+                    ]
+                );
+            }
+            if ($response->isClientError() || $response->isServerError()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            }
+        }
+
+        $view = $this->getViewWithTm(['form' => $form]);
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'transport-manager-confirmation-remove-disqualification');
     }
 }

@@ -1,6 +1,16 @@
-OLCS.ready(function() {
+$(function() {
+  "use strict";
 
-  var otherVenue = "other";
+  function publish() {
+    var isAdjourned = OLCS.formHelper("fields", "isAdjourned").filter(":checked").val();
+    var isCancelled = OLCS.formHelper("fields", "isCancelled").filter(":checked").val();
+    return !(isAdjourned === "Y" && isCancelled === "Y");
+  }
+
+  function piVenueOther() {
+    var value = OLCS.formHelper("fields", "piVenue").val();
+    return (value === "other");
+  }
 
   function checked(selector) {
     return function() {
@@ -16,13 +26,15 @@ OLCS.ready(function() {
     rulesets: {
       "fields": {
         "*": true,
-        "piVenueOther": function() {
-          return OLCS.formHelper("fields", "piVenue").val() === otherVenue;
-        },
+        "piVenueOther": piVenueOther,
         "date:cancelledDate": checked("isCancelled"),
         "cancelledReason": checked("isCancelled"),
         "date:adjournedDate": checked("isAdjourned"),
         "adjournedReason": checked("isAdjourned")
+      },
+      "form-actions": {
+        "*": true,
+        "#form-actions\\[publish\\]": publish
       }
     }
   });

@@ -3,67 +3,28 @@
 /**
  * Case Impounding Controller
  *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
 namespace Olcs\Controller\Cases\Impounding;
 
-// Olcs
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Dvsa\Olcs\Transfer\Command\Cases\Impounding\CreateImpounding as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Impounding\DeleteImpounding as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Impounding\UpdateImpounding as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Impounding\Impounding as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Impounding\ImpoundingList as ListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Form\Model\Form\Impounding;
+use Zend\View\Model\ViewModel;
 
 /**
  * Case Impounding Controller
  *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class ImpoundingController extends OlcsController\CrudAbstract
+class ImpoundingController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'impounding';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'impounding';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'impounding';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case';
-
-    /**
-     * For most case crud controllers, we use the case/inner-layout
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'case/inner-layout';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'Impounding';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -71,96 +32,84 @@ class ImpoundingController extends OlcsController\CrudAbstract
      */
     protected $navigationId = 'case_details_impounding';
 
-    /**
-     * Holds an array of variables for the
-     * default index list page.
+    protected $routeIdentifier = 'impounding';
+
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
      */
-    protected $listVars = [
-        'case',
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'id';
+    protected $tableName = 'impounding';
+    protected $listDto = ListDto::class;
+    protected $listVars = ['case'];
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
+
+        return $view;
+    }
+
+    /**
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'impounding', to => from
+    protected $itemParams = ['case', 'id' => 'impounding'];
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Impounding::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = \Olcs\Data\Mapper\Impounding::class;
+    protected $addContentTitle = 'Add impounding';
+    protected $editContentTitle = 'Edit impounding';
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'case' => 'route'
     ];
 
     /**
-     * Data map
-     *
-     * @var array
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
      */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-                'base',
-            )
-        )
-    );
-
-    /**
-     * Holds the isAction
-     *
-     * @var boolean
-     */
-    protected $isAction = false;
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'children' => array(
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            ),
-            'presidingTc' => array(
-                'properties' => array(
-                    'id',
-                    'name'
-                )
-            ),
-            'outcome' => array(
-                'properties' => array(
-                    'id',
-                    'name'
-                )
-            ),
-            'impoundingType' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-            'piVenue' => array(
-                'properties' => array(
-                    'id',
-                    'name'
-                )
-            ),
-            'impoundingLegislationTypes' => array(
-                'properties' => 'ALL'
-            ),
-        )
-    );
+    protected $deleteCommand = DeleteDto::class;
+    protected $deleteParams = ['id' => 'impounding'];
+    protected $deleteModalTitle = 'Delete Impounding';
 
     /**
      * Any inline scripts needed in this section
      *
      * @var array
      */
-    protected $inlineScripts = array('forms/impounding');
-
-    /**
-    * Overrides the parent, needed to make absolutely sure we can't have data in both venue fields :)
-    *
-    * @param array $data
-    * @return \Zend\Http\Response
-    */
-    public function processSave($data)
-    {
-        if ($data['fields']['piVenue'] != 'other') {
-            $data['fields']['piVenueOther'] = null;
-        }
-
-        return parent::processSave($data);
-    }
+    protected $inlineScripts = array(
+        'addAction' => ['forms/impounding'],
+        'editAction' => ['forms/impounding'],
+        'deleteAction' => ['forms/impounding'],
+        'indexAction' => ['table-actions']
+    );
 }

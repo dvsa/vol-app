@@ -1,97 +1,104 @@
 <?php
 
 /**
- * Bus Short Notice Controller Test
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * Bus Short Controller Test
  */
 namespace OlcsTest\Controller\Bus\Short;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Olcs\Controller\Bus\Short\BusShortController as Sut;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery as m;
 
 /**
- * Bus Short Notice Controller Test
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * Bus Short Controller Test
  */
-class BusShortControllerTest extends AbstractHttpControllerTestCase
+class BusShortControllerTest extends MockeryTestCase
 {
+    protected $sut;
+
     public function setUp()
     {
-        $this->setApplicationConfig(
-            include __DIR__.'/../../../../../../config/application.config.php'
-        );
-
-        $this->controller = $this->getMock(
-            '\Olcs\Controller\Bus\Short\BusShortController',
-            array(
-                'getDataBundle',
-                'getQueryOrRouteParam',
-                'redirectToRoute'
-            )
-        );
-
-        parent::setUp();
+        $this->sut = new Sut;
     }
 
     /**
-     * Tests process load for an existing record.
+     * @dataProvider alterFormForEditDataProvider
+     *
+     * @param $data
+     * @param $readonly
      */
-    public function testProcessLoadWithId()
-    {
-        $bundle = array(
-            'properties' => 'ALL'
-        );
+    public function testAlterFormForEdit(
+        $data,
+        $readonly
+    ) {
+        $this->sut = m::mock(Sut::class)
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
 
-        $data = array(
-            'Results' => array(
-                0 => array(
-                    'id' => 1
-                )
-            )
-        );
+        $response = m::mock();
+        $response->shouldReceive('getResult')
+            ->once()
+            ->andReturn($data);
 
-        $result = array(
-            'id' => '1'
-        );
+        $busRegId = 56;
+        $params = m::mock()
+            ->shouldReceive('fromRoute')->with('busRegId')->andReturn($busRegId)
+            ->getMock();
 
-        $result['fields'] = $result;
-        $result['base'] = $result;
+        $this->sut
+            ->shouldReceive('handleQuery')
+            ->once()
+            ->andReturn($response);
 
-        $this->controller->expects($this->once())->method('getDataBundle')
-            ->will($this->returnValue($bundle));
+        $this->sut
+            ->shouldReceive('params')
+            ->once()
+            ->andReturn($params);
 
-        $this->assertEquals($result, $this->controller->processLoad($data));
+        $mockForm = m::mock('\Zend\Form\Form');
+        $mockForm->shouldReceive('setOption')
+            ->times($readonly ? 1 : 0)
+            ->with('readonly', true);
+
+        $result = $this->sut->alterFormForEdit($mockForm, []);
+
+        $this->assertSame($mockForm, $result);
     }
 
     /**
-     * Tests the process load function where no Id is found.
+     * @return array
      */
-    public function testProcessLoadWithoutId()
+    public function alterFormForEditDataProvider()
     {
-        $data = array();
-
-        $result = array('case' => null);
-        $result['fields']['case'] = null;
-        $result['base']['case'] = null;
-
-        $this->controller->expects($this->once())->method('getQueryOrRouteParam')
-            ->with('case')->will($this->returnValue(null));
-
-        $this->assertEquals($result, $this->controller->processLoad($data));
-    }
-
-    public function testRedirectToIndex()
-    {
-        $this->controller->expects($this->once())
-            ->method('redirectToRoute')
-            ->with(
-                $this->equalTo(null),
-                $this->equalTo(['action'=>'edit']),
-                $this->equalTo(['code' => '303']),
-                $this->equalTo(true)
-            );
-
-        $this->controller->redirectToIndex();
+        return [
+            [
+                [
+                    'isReadOnly' => true,
+                    'isFromEbsr' => true,
+                ],
+                true,
+            ],
+            [
+                [
+                    'isReadOnly' => true,
+                    'isFromEbsr' => false,
+                ],
+                true,
+            ],
+            [
+                [
+                    'isReadOnly' => false,
+                    'isFromEbsr' => true,
+                ],
+                true,
+            ],
+            [
+                [
+                    'isReadOnly' => false,
+                    'isFromEbsr' => false,
+                ],
+                false,
+            ],
+        ];
     }
 }

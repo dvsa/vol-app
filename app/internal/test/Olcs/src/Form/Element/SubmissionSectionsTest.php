@@ -30,9 +30,13 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider getSubmissionSectionsProvider
      */
-    public function testSetValue($submissionType, $sections)
+    public function testSetValue($submissionType, $submissionTypeSubmit, $sections)
     {
-        $data = ['submissionType' => $submissionType, 'sections' => $sections];
+        $data = [
+            'submissionType' => $submissionType,
+            'submissionTypeSubmit' => $submissionTypeSubmit,
+            'sections' => $sections
+        ];
         $sut = new SubmissionSections();
 
         $mockSelect = m::mock('Zend\Form\Element\Select');
@@ -40,7 +44,10 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
         $sut->setSubmissionType($mockSelect);
 
         $mockMultiCheckbox = m::mock('Zend\Form\Element\MultiCheckbox');
-        $mockMultiCheckbox->shouldReceive('setValue')->with($data['sections']);
+        $mockMultiCheckbox->shouldReceive('setValue')->with(m::type('array'));
+        $mockMultiCheckbox->shouldReceive('getValueOptions')->andReturn(['operating-centres' => 'Operating centres']);
+        $mockMultiCheckbox->shouldReceive('setValueOptions');
+
         $sut->setSections($mockMultiCheckbox);
 
         $sut->setValue($data);
@@ -51,18 +58,25 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider getSubmissionSectionsProvider
+     * Tests prepare submissionSections element for Non-TM
      */
-    public function testPrepareElement($submissionType, $sections)
+    public function testPrepareElementNonTm()
     {
+
         $name = 'test';
-        $data = ['submissionType' => $submissionType, 'sections' => $sections];
+
         $sut = new SubmissionSections();
 
         $mockSelect = m::mock('Zend\Form\Element\Select');
         $mockSelect->shouldReceive('setName')->with($name . '[submissionType]');
 
         $sut->setSubmissionType($mockSelect);
+
+        $mockTm = m::mock('Zend\Form\Element\Hidden');
+        $mockTm->shouldReceive('setName')->with($name . '[transportManager]');
+        $mockTm->shouldReceive('getValue')->andReturnNull();
+
+        $sut->setTransportManager($mockTm);
 
         $mockMultiCheckbox = m::mock('Zend\Form\Element\MultiCheckbox');
         $mockMultiCheckbox->shouldReceive(
@@ -71,8 +85,10 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
             [
                 'case-summary' => 'Case Summary',
                 'introduction' => 'Case Introduction',
-                'persons' => 'Persons',
-                'case-outline' => 'Cases'
+                'people' => 'People',
+                'case-outline' => 'Cases',
+                'most-serious-infringement' => 'Most serious infringment',
+                'outstanding-applications' => 'Outstanding applications'
             ]
         );
         $mockMultiCheckbox->shouldReceive('setValueOptions');
@@ -88,7 +104,62 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
 
         $sut->setName($name);
 
-        $mockForm = m::mock('Zend\Form\Form');
+        $mockForm = new \Zend\Form\Form();
+
+        $sut->prepareElement($mockForm);
+
+        $this->assertNotEmpty($sut->getSections());
+        $this->assertNotEmpty($sut->getSubmissionType());
+
+    }
+
+    /**
+     * Tests prepare submissionSections element for TM
+     */
+    public function testPrepareElementForTm()
+    {
+        $name = 'test';
+        $transportManagerId = 3;
+
+        $sut = new SubmissionSections();
+
+        $mockSelect = m::mock('Zend\Form\Element\Select');
+        $mockSelect->shouldReceive('setName')->with($name . '[submissionType]');
+
+        $sut->setSubmissionType($mockSelect);
+
+        $mockTm = m::mock('Zend\Form\Element\Hidden');
+        $mockTm->shouldReceive('setName')->with($name . '[transportManager]');
+        $mockTm->shouldReceive('getValue')->andReturn($transportManagerId);
+
+        $sut->setTransportManager($mockTm);
+
+        $mockMultiCheckbox = m::mock('Zend\Form\Element\MultiCheckbox');
+        $mockMultiCheckbox->shouldReceive(
+            'getValueOptions'
+        )->andReturn(
+            [
+                'case-summary' => 'Case Summary',
+                'introduction' => 'Case Introduction',
+                'people' => 'People',
+                'case-outline' => 'Cases',
+                'outstanding-applications' => 'Outstanding applications'
+            ]
+        );
+        $mockMultiCheckbox->shouldReceive('setValueOptions');
+        $mockMultiCheckbox->shouldReceive('setOptions')->with(['label_position'=>'append']);
+        $mockMultiCheckbox->shouldReceive('setName')->with($name . '[sections]');
+
+        $sut->setSections($mockMultiCheckbox);
+
+        $mockSubmitButton = m::mock('Zend\Form\Element\Button');
+        $mockSubmitButton->shouldReceive('setName')->with($name . '[submissionTypeSubmit]');
+
+        $sut->setSubmissionTypeSubmit($mockSubmitButton);
+
+        $sut->setName($name);
+
+        $mockForm = new \Zend\Form\Form();
 
         $sut->prepareElement($mockForm);
 
@@ -102,6 +173,7 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 'sub_type1',
+                null,
                 array(
                     'section 1',
                     'section 2'
@@ -109,7 +181,111 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 'sub_type2',
+                null,
                 array()
+            ),
+            array(
+                'submission_type_o_tm',
+                null,
+                null
+            ),
+            array(
+                'submission_type_o_bus_reg',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_clo_fep',
+                'pressed',
+                array(
+                    'waive-fee-late-fee'
+                )
+            ),
+            array(
+                'submission_type_o_clo_g',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_clo_psv',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_env',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_irfo',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_mlh_clo',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_mlh_otc',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_otc',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_tm',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_schedule_41',
+                'pressed',
+                array(
+                    'operating-centres'
+                )
+            ),
+            array(
+                'submission_type_o_impounding',
+                'pressed',
+                array(
+                    'statements'
+                )
+            ),
+            array(
+                'submission_type_o_ni_tru',
+                'pressed',
+                array(
+                    'statements'
+                )
+            ),
+            array(
+                'UNKNOWN_submission_type',
+                'pressed',
+                array(
+                    'statements'
+                )
             )
         );
     }

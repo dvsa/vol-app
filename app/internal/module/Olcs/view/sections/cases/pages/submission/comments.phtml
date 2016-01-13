@@ -1,0 +1,39 @@
+<div class="read-only">
+
+<?php
+if (empty($this->section['comments'])) {
+    if (!$readonly):
+?>
+    <a class="action--secondary js-modal-ajax" href="<?php echo $this->url(
+        'submission_section_comment', [
+            'case' => $this->caseId,
+            'submission' => $this->submissionId,
+            'submissionSection' => $this->sectionId,
+            'action' => 'add'
+        ]
+    );?>"><?php echo $this->translate('Add comments');?></a>
+    <?php endif; ?>
+
+<?php
+} else {
+    foreach ($this->section['comments'] as $comment) {
+?>
+        <div class="comment">
+            <?php if (!$readonly): ?>
+            <a class="comment__edit js-modal-ajax" href="<?php echo $this->url(
+                'submission_section_comment', [
+                    'case' => $this->caseId,
+                    'submission' => $this->submissionId,
+                    'submissionSection' => $this->sectionId,
+                    'id' => $this->section['comments'][0]['id'],
+                    'action' => 'edit'
+                ]
+            );?>" ><?php echo $this->translate('Edit');?></a>
+            <?php endif; ?>
+            <p><?php echo nl2br($comment['comment']);?></p>
+        </div><!-- .comment -->
+<?php
+    }
+}
+?>
+</div>

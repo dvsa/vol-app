@@ -8,8 +8,9 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore No methods
  * @Form\Name("fee")
  * @Form\Attributes({"method":"post"})
+ * @Form\Attributes({"method":"post", "class": "js-form-ajax-submit"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
+ * @Form\Options({"prefer_form_input_filter": true, "action_lcfirst": true})
  */
 class Fee
 {

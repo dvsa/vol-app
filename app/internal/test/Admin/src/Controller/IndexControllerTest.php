@@ -1,49 +1,78 @@
 <?php
 
 /**
- * Test IndexController
+ * Index Controller Test
  *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
-
 namespace AdminTest\Controller;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Admin\Controller\IndexController;
+use OlcsTest\Bootstrap;
 
 /**
- * Test IndexController
+ * Index Controller Test
  *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
-class IndexControllerTest extends AbstractHttpControllerTestCase
+class IndexControllerTest extends MockeryTestCase
 {
+    /**
+     * @var Admin\Controller\IndexController
+     */
+    protected $sut;
+
     public function setUp()
     {
-        $this->controller = $this->getMock(
-            '\Admin\Controller\IndexController',
-            [
-                'getView'
-            ]
-        );
-
-        $this->view = $this->getMock(
-            'Zend\View\Model\ViewModel',
-            [
-                'setTemplate'
-            ]
-        );
+        $this->markTestSkipped();
+        $this->sut = new IndexController();
+        $this->sm = Bootstrap::getServiceManager();
+        $this->sut->setServiceLocator($this->sm);
     }
 
     public function testIndexAction()
     {
-        $this->controller->expects($this->once())
-            ->method('getView')
-            ->will($this->returnValue($this->view));
+        // Mocks
+        $mockVhm = m::mock();
+        $this->sm->setService('viewHelperManager', $mockVhm);
 
-        $this->view->expects($this->once())
-            ->method('setTemplate')
-            ->with('home');
+        // Expectations
+        $mockVhm->shouldReceive('get')
+            ->with('placeholder')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getContainer')
+                ->once()
+                ->with('navigationId')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with('admin-dashboard')
+                    ->getMock()
+                )
+                ->getMock()
+            );
 
-        $this->assertSame($this->view, $this->controller->indexAction());
+        // Assertions
+        $response = $this->sut->indexAction();
+
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $response);
+        $this->assertEquals('Admin', $response->getVariable('pageTitle'));
+        $this->assertEquals('layout/base', $response->getTemplate());
+
+        $header = $response->getChildrenByCaptureTo('header');
+        $content = $response->getChildrenByCaptureTo('content');
+
+        $this->assertCount(1, $header);
+        $this->assertCount(2, $content);
+
+        $this->assertEquals('partials/header', $header[0]->getTemplate());
+        $this->assertEquals('placeholder', $content[0]->getTemplate());
+        $this->assertEquals('layout/admin-layout', $content[1]->getTemplate());
+
+        $this->assertSame($content[0], $content[1]->getChildren()[0]);
     }
 }

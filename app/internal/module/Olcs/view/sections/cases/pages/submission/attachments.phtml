@@ -1,0 +1,11 @@
+<?php
+foreach ($this->attachments as $attachment) {
+    ?>
+    <div>
+        <p><?php echo $attachment['description']; ?></p>
+
+        <p><img src="<?php echo $attachment['url']; ?>" alt="<?php echo $attachment['description']; ?>"/></p>
+    </div>
+    <?php
+}
+?>

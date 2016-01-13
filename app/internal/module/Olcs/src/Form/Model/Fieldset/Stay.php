@@ -25,27 +25,53 @@ class Stay extends CaseBase
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
     public $requestDate = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"decisionDate","class":"extra-long"})
      * @Form\Options({
      *     "label": "Date of decision",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Required(false)
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
-     * @Form\Validator({
-     *      "name": "\Common\Validator\DateCompare",
-     *      "options": {"compare_to": "requestDate", "operator":"gte", "compare_to_label": "Date of request"}
+     * @Form\AllowEmpty(true)
+     *
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "requestDate",
+     *          "context_values": {"--"},
+     *          "context_truth": false,
+     *          "allow_empty" : true,
+     *          "validators": {
+     *              {"name": "Date", "options": {"format": "Y-m-d"}},
+     *              {
+     *                  "name": "DateCompare",
+     *                  "options": {
+     *                      "compare_to":"requestDate",
+     *                      "compare_to_label":"Date of request",
+     *                      "operator": "gte",
+     *                  }
+     *              }
+     *          }
+     *      }
      * })
+     *
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $decisionDate = null;
+
+    /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"DVSA notified?"})
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $dvsaNotified = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
@@ -79,8 +105,8 @@ class Stay extends CaseBase
     public $notes = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Is withdrawn?"})
-     * @Form\Type("checkbox")
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled / Withdrawn?"})
+     * @Form\Type("OlcsCheckbox")
      */
     public $isWithdrawn = null;
 
@@ -101,6 +127,7 @@ class Stay extends CaseBase
      *          "context_field": "isWithdrawn",
      *          "context_values": {"Y"},
      *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
      *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
      *          }

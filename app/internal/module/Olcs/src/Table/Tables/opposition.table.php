@@ -2,14 +2,20 @@
 
 return array(
     'variables' => array(
-        'title' => 'List of oppositions'
+        'title' => 'Oppositions'
     ),
     'settings' => array(
         'crud' => array(
+            'formName' => 'opposition',
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
+                'generate' => array(
+                    'requireRows' => true,
+                    'class' => 'secondary js-require--one',
+                    'label' => 'Generate Letter'
+                ),
+                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         ),
         'paginate' => array(
@@ -34,22 +40,21 @@ return array(
                     array('action' => 'edit', 'opposition' => $data['id']),
                     'case_opposition',
                     true
-                ) . '">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'sort' => 'raisedDate',
         ),
         array(
             'title' => 'Opposition type',
-            'formatter' => function ($data, $column) {
-                return $data['oppositionType']['description'];
-            },
+            'formatter' => 'RefData',
+            'name' => 'oppositionType'
         ),
 
         array(
             'title' => 'Name',
             'formatter' => function ($data, $column) {
-                $person = $data['opposer']['contactDetails']['person'];
-                return $person['forename'] . ' ' . $person['familyName'];
+                return $data['opposer']['contactDetails']['person']['forename'] . ' ' .
+                $data['opposer']['contactDetails']['person']['familyName'];
             }
         ),
         array(
@@ -57,7 +62,7 @@ return array(
             'formatter' => function ($data, $column) {
                 $grounds = [];
                 foreach ($data['grounds'] as $ground) {
-                    $grounds[] = $ground['grounds']['description'];
+                    $grounds[] = $ground['description'];
                 }
 
                 return implode(', ', $grounds);
@@ -78,6 +83,7 @@ return array(
         array(
             'title' => 'Valid',
             'name' => 'isValid',
+            'formatter' => 'RefData',
             'sort' => 'isValid'
         ),
         array(
@@ -91,7 +97,7 @@ return array(
             'sort' => 'isInTime'
         ),
         array(
-            'title' => 'Public inquiry',
+            'title' => 'Public Inquiry',
             'name' => 'isPublicInquiry',
             'sort' => 'isPublicInquiry'
         ),

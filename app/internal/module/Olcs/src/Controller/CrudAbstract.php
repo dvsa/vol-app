@@ -33,13 +33,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         'dataMap',
         'dataBundle',
         'service',
-        'pageLayout',
         'listVars'
     ];
-
-    protected $pageLayout = null;
-
-    protected $pageLayoutInner = null;
 
     protected $detailsView = null;
 
@@ -108,6 +103,16 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
     protected $entityDisplayName = null;
 
+    protected $isSaved = false;
+
+    /**
+     * @var bool
+     */
+    private $redirectToIndex = false;
+
+    protected $addContentTitle;
+    protected $editContentTitle;
+
     /**
      * Get Entity name
      * @return string
@@ -119,7 +124,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
     /**
      * Set entityName
-     * @param string $entityName
+     * @param string $entityDisplayName
      * @return $this
      */
     public function setEntityDisplayName($entityDisplayName)
@@ -144,6 +149,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
     /**
      * @param null $dataServiceName
+     *
+     * @return $this
      */
     public function setDataServiceName($dataServiceName)
     {
@@ -188,42 +195,6 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             return $this->getIdentifierName();
         }
         return $this->placeholderName;
-    }
-
-    /**
-     * @param string $pageLayout
-     * @return $this
-     */
-    public function setPageLayout($pageLayout)
-    {
-        $this->pageLayout = $pageLayout;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPageLayout()
-    {
-        return $this->pageLayout;
-    }
-
-    /**
-     * @param string $pageLayoutInner
-     * @return $this
-     */
-    public function setPageLayoutInner($pageLayoutInner)
-    {
-        $this->pageLayoutInner = $pageLayoutInner;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPageLayoutInner()
-    {
-        return $this->pageLayoutInner;
     }
 
     /**
@@ -307,6 +278,40 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     }
 
     /**
+     * Stores whether a record has been saved
+     *
+     * @return bool
+     */
+    public function getIsSaved()
+    {
+        return $this->isSaved;
+    }
+
+    /**
+     * Sets the isSaved variable
+     *
+     * @param string $isSaved
+     * @return $this
+     */
+    public function setIsSaved($isSaved)
+    {
+        $this->isSaved = $isSaved;
+        return $this;
+    }
+
+    /**
+     * Sets the form name used by the class
+     *
+     * @param $formName
+     * @return $this
+     */
+    public function setFormName($formName)
+    {
+        $this->formName = $formName;
+        return $this;
+    }
+
+    /**
      * @codeCoverageIgnore this is part of the event system.
      */
     protected function attachDefaultListeners()
@@ -353,7 +358,11 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->buildCommentsBoxIntoView();
 
-        $view->setTemplate('crud/index');
+        if ($this->redirectToIndex) {
+            return $this->redirectToIndex();
+        }
+
+        $view->setTemplate('pages/table-comments');
 
         return $this->renderView($view);
     }
@@ -425,6 +434,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             $params[$listVars[$i]] = $this->getQueryOrRouteParam($listVars[$i], null);
         }
 
+        $params['query'] = $this->getRequest()->getQuery();
+
         return $params;
     }
 
@@ -447,6 +458,11 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
         $view = $this->getView([]);
 
         $result = $this->loadCurrent();
+
+        if (isset($result['id']) &&
+            in_array('Olcs\Controller\Traits\CloseActionTrait', class_uses($this))) {
+            $view->setVariable('closeAction', $this->generateCloseActionButtonArray($result['id']));
+        }
 
         $this->getViewHelperManager()
              ->get('placeholder')
@@ -482,6 +498,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     public function addAction()
     {
+        if ($this->addContentTitle !== null) {
+            $this->placeholder()->setPlaceholder('contentTitle', $this->addContentTitle);
+        }
         return $this->saveThis();
     }
 
@@ -492,6 +511,9 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     public function editAction()
     {
+        if ($this->editContentTitle !== null) {
+            $this->placeholder()->setPlaceholder('contentTitle', $this->editContentTitle);
+        }
         return $this->saveThis();
     }
 
@@ -516,11 +538,15 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         $form = $this->generateFormWithData($this->getFormName(), $this->getFormCallback(), $this->getDataForForm());
 
+        if ($this->getIsSaved()) {
+            return $this->getResponse();
+        }
+
         $view = $this->getView();
 
         $this->setPlaceholder('form', $form);
 
-        $view->setTemplate('crud/form');
+        $view->setTemplate('pages/crud-form');
 
         return $this->renderView($view);
     }
@@ -537,6 +563,8 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->addSuccessMessage('Saved successfully');
 
+        $this->setIsSaved(true);
+
         if (func_num_args() > 1 && func_get_arg(1) === false /* redirect = false */) {
             return $result;
         }
@@ -549,7 +577,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     public function redirectToIndex()
     {
-        return $this->redirectToRoute(
+        return $this->redirectToRouteAjax(
             null,
             ['action'=>'index', $this->getIdentifierName() => null],
             ['code' => '303'], // Why? No cache is set with a 303 :)
@@ -611,22 +639,11 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      */
     protected function renderView($view, $pageTitle = null, $pageSubTitle = null)
     {
-        $pageLayoutInner = $this->getPageLayoutInner();
-
-        if (!is_null($pageLayoutInner)) {
-
-            // This is a zend\view\variables object - cast it to an array.
-            $layout = $this->getView((array)$view->getVariables());
-
-            $layout->setTemplate($pageLayoutInner);
-
-            $this->maybeAddScripts($layout);
-
-            $layout->addChild($view, 'content');
-
-            return parent::renderView($layout, $pageTitle, $pageSubTitle);
+        if (property_exists($this, 'navigationId')) {
+            $this->setPlaceholder('navigationId', $this->navigationId);
         }
 
+        $this->maybeAddScripts($view);
         return parent::renderView($view, $pageTitle, $pageSubTitle);
     }
 
@@ -667,6 +684,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      * @param string $param
      * @param mixed $default
      * @return type
+     * @deprecated
      */
     public function fromRoute($param, $default = null)
     {
@@ -679,6 +697,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
      * @param string $param
      * @param mixed $default
      * @return type
+     * @deprecated
      */
     public function fromPost($param, $default = null)
     {
@@ -697,7 +716,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         foreach ($array as $key => $value) {
             if (in_array($key, $ids)) {
-                if (array_key_exists('id', $value)) {
+                if (is_array($value) && array_key_exists('id', $value)) {
                     $array[$key] = $value['id'];
                 }
             }
@@ -726,9 +745,11 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             $data['base'] = $data;
         } else {
             $caseId = $this->getQueryOrRouteParam('case');
-            $data['case'] = $caseId;
-            $data['fields']['case'] = $caseId;
-            $data['base']['case'] = $caseId;
+            if (!empty($caseId)) {
+                $data['case'] = $caseId;
+                $data['fields']['case'] = $caseId;
+                $data['base']['case'] = $caseId;
+            }
         }
 
         return $data;
@@ -742,7 +763,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
     {
         if ($this->commentBoxName) {
             $form = $this->generateForm(
-                'comment',
+                'Comment',
                 'processCommentForm'
             );
 
@@ -750,7 +771,11 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
             $data = [];
             $data['fields']['id'] = $case['id'];
             $data['fields']['version'] = $case['version'];
-            $data['fields']['comment'] = $case[$this->commentBoxName];
+
+            if (false === $this->getRequest()->isPost()) {
+
+                $data['fields']['comment'] = $case[$this->commentBoxName];
+            }
 
             $form->setData($data);
 
@@ -788,7 +813,7 @@ abstract class CrudAbstract extends CommonController\AbstractSectionController i
 
         $this->addSuccessMessage('Comments updated successfully');
 
-        $this->redirectToIndex();
+        $this->redirectToIndex = true;
     }
 
     /**

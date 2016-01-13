@@ -2,14 +2,15 @@
 
 return array(
     'variables' => array(
-        'title' => 'Notes'
+        'title' => 'Notes',
+        'titleSingular' => 'Note',
     ),
     'settings' => array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--multiple'),
+                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--multiple')
             )
         ),
         'paginate' => array(
@@ -17,61 +18,69 @@ return array(
                 'default' => 10,
                 'options' => array(10, 25, 50, 100)
             )
-        )
+        ),
+        'useQuery' => true
     ),
     'columns' => array(
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
-        ),
-        array(
             'title' => 'Created',
             'formatter' => function ($data) {
-                $routeParams = array('action' => 'edit', 'id' => $data['id']);
+                $routeParams = ['action' => 'edit', 'id' => $data['id']];
+                $url = $this->generateUrl($routeParams, null, true);
 
-                switch ($data['noteType']['id']) {
-                    case 'licence/bus-processing':
-                        $routeParams['busRegId'] = $data['busReg']['id'];
-                        break;
-                    case 'case_processing_notes':
-                        $routeParams['case'] = $data['case']['id'];
-                        break;
-                    case 'licence/processing':
-                        $routeParams['licence'] = $data['licence']['id'];
-                        break;
-                }
-
-                return '<a href="' . $this->generateUrl(
-                    $routeParams,
-                    $data['routePrefix'] . '/modify-note',
-                    true
-                ) . '">' . (new \DateTime($data['createdOn']))->format('d/m/Y') . '</a>';
+                return '<a class="js-modal-ajax" href="' . $url . '">'
+                . (new \DateTime($data['createdOn']))->format(\DATE_FORMAT) . '</a>';
             },
             'sort' => 'createdOn'
         ),
         array(
             'title' => 'Author',
-            'formatter' => function ($data) {
-                return $data['createdBy']['name'];
+            'formatter' => function ($data, $column) {
+
+                $column['formatter'] = 'Name';
+
+                return $this->callFormatter($column, $data['createdBy']['contactDetails']['person']);
             }
         ),
         array(
             'title' => 'Note',
+            'formatter' => 'Comment',
             'name' => 'comment',
             'sort' => 'comment'
         ),
         array(
-            'title' => 'Note Type',
+            'title' => 'Note type',
             'formatter' => function ($data) {
-                return $data['noteType']['description'];
-            },
-            'sort' => 'noteType'
+
+                /**
+                 * @see https://jira.i-env.net/browse/OLCS-10256
+                 */
+
+                switch ($data['noteType']['id']) {
+
+                    case 'note_t_lic':
+                    case 'note_t_tm':
+                    case 'note_t_org':
+                        return $data['noteType']['description'];
+
+                    case 'note_t_app':
+                        return $data['noteType']['description'] . ' ' . $data['application']['id'];
+                    case 'note_t_case':
+                        return $data['noteType']['description'] . ' ' . $data['case']['id'];
+                }
+
+                return 'BR ' . $data['busReg']['regNo'];
+            }
         ),
         array(
             'title' => 'Priority',
             'name' => 'priority',
             'sort' => 'priority'
-        )
+        ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
+        ),
     )
 );

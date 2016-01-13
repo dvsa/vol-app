@@ -6,10 +6,12 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Public inquiry Agreed and Legislation")
+ * @Form\Name("Traffic Commissioner agreement and legislation")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label": "Public Inquiry Agreed and Legislation"})
+ * @Form\Options({
+ *     "prefer_form_input_filter": true
+ * })
  */
 class PublicInquiryAgreedAndLegislation
 {
@@ -23,7 +25,7 @@ class PublicInquiryAgreedAndLegislation
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
 }

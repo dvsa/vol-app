@@ -8,8 +8,8 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
+                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         ),
         'paginate' => array(
@@ -29,15 +29,20 @@ return array(
             'title' => 'Defect type',
             'formatter' => function ($data, $column) {
                 return '<a href="' . $this->generateUrl(
-                    array('action' => 'edit', 'prohibition' => $data['prohibition']['id'], 'id' => $data['id']),
+                    array(
+                        'action' => 'edit',
+                        'prohibition' => $data['prohibition']['id'],
+                        'id' => $data['id']
+                    ),
                     'case_prohibition_defect',
                     true
-                ) . '">' . $data['defectType'] . '</a>';
+                ) . '" class="js-modal-ajax">' . $data['defectType'] . '</a>';
             }
         ),
         array(
             'title' => 'Notes',
-            'format' => '{{notes}}'
+            'formatter' => 'Comment',
+            'name' => 'notes',
         )
     )
 );

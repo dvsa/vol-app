@@ -2,7 +2,8 @@
 
 return array(
     'variables' => array(
-        'title' => 'Fees'
+        'title' => 'Fees',
+        'titleSingular' => 'Fee'
     ),
     'settings' => array(
         'paginate' => array(
@@ -14,7 +15,8 @@ return array(
         'crud' => array(
             'formName' => 'fees',
             'actions' => array(
-                'pay' => array('class' => 'primary', 'value' => 'Pay', 'requireRows' => true)
+                'new' => array('class' => 'secondary', 'value' => 'New', 'requireRows' => false),
+                'pay' => array('class' => 'primary js-require--multiple', 'value' => 'Pay', 'requireRows' => true),
             )
         ),
     ),
@@ -22,75 +24,15 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}'
-        ),
-        array(
-            'title' => 'No',
+            'title' => 'Fee No.',
             'sort' => 'id',
             'name' => 'id',
-            'formatter' => function ($row, $column, $serviceLocator) {
-
-                $url = '';
-
-                $statusClass = 'green';
-                switch ($row['feeStatus']['id']) {
-                    case 'lfs_ot':
-                        $statusClass = 'red';
-                        break;
-                    case 'lfs_pd':
-                        $statusClass = 'green';
-                        break;
-                    case 'lfs_wr':
-                        $statusClass = 'orange';
-                        break;
-                    case 'lfs_w':
-                        $statusClass = 'green';
-                        break;
-                    case 'lfs_cn':
-                        $statusClass = 'grey';
-                        break;
-                    default:
-                        $statusClass = '';
-                        break;
-                }
-                return $row['id'] . ' <span class="status ' .
-                        $statusClass . '">' . $row['feeStatus']['description'] . '</span>';
-            },
+            'formatter' => 'FeeNoAndStatus',
         ),
         array(
             'title' => 'Description',
-            'formatter' => function ($row, $column, $serviceLocator) {
-                $router = $serviceLocator->get('router');
-                $request = $serviceLocator->get('request');
-                $routeMatch = $router->match($request);
-                switch ($routeMatch->getMatchedRouteName()) {
-                    case 'licence/fees':
-                        $url = $this->generateUrl(
-                            array('fee' => $row['id'], 'action' => 'edit-fee', 'controller' => 'LicenceController'),
-                            'licence/fees/fee_action'
-                        );
-                        break;
-                    case 'lva-application/fees':
-                    default:
-                        $url = $this->generateUrl(
-                            array('fee' => $row['id'], 'action' => 'edit-fee', 'controller' => 'ApplicationController'),
-                            'lva-application/fees/fee_action'
-                        );
-                }
-                return '<a href="'
-                    . $url
-                    . '" class=js-modal-ajax>'
-                    . $row['description']
-                    . '</a>';
-            },
+            'formatter' => 'FeeUrl',
             'sort' => 'description',
-        ),
-        array(
-            'title' => 'Amount',
-            'name' => 'amount',
-            'sort' => 'amount'
         ),
         array(
             'title' => 'Created',
@@ -99,15 +41,25 @@ return array(
             'sort' => 'invoicedDate'
         ),
         array(
-            'title' => 'Receipt No',
+            'title' => 'Latest payment ref.',
             'name' => 'receiptNo',
-            'sort' => 'receiptNo'
         ),
         array(
-            'title' => 'Received',
-            'name' => 'receivedDate',
-            'formatter' => 'Date',
-            'sort' => 'receivedDate'
+            'title' => 'Fee amount',
+            'name' => 'amount',
+            'sort' => 'amount',
+            'formatter' => 'FeeAmount',
+        ),
+        array(
+            'title' => 'Outstanding',
+            'name' => 'outstanding',
+            'formatter' => 'Money',
+        ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/checkbox]}}',
+            'type' => 'Checkbox',
         ),
     )
 );

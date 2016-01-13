@@ -39,14 +39,12 @@ class OperatorDetails
     public $name = null;
 
     /**
-     * @Form\Attributes({"data-placeholder":"Please select a nature of business"})
+     * @Form\Attributes({"class":"extra-long"})
      * @Form\Options({
-     *     "label": "internal-operator-profile-nature-of-business",
-     *     "category": "SIC_CODE",
-     *     "chosen-size": "medium",
+     *     "label": "Nature of Business",
+     *     "help-block": "Please select a nature of business"
      * })
      * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
-     * @Form\Type("DynamicMultiSelect")
      */
     public $natureOfBusiness = null;
 
@@ -54,25 +52,31 @@ class OperatorDetails
      * @Form\Type("Common\Form\Elements\Types\Html")
      * @Form\Attributes({
      *      "value":
-     *      "Please enter your business type. You can find a list of business types at Companies House 
-     *      <a href=""http://www.companieshouse.gov.uk/infoAndGuide/faq/sicCode.shtml"" target=""_blank"">here</a>"})
+     *      "Please enter your business type. You can find a list of business types at Companies House
+     *      <a href=""https://www.gov.uk/government/publications/standard-industrial-classification-of-economic-activities-sic"" target=""_blank"">here</a>"})
      */
     public $information = null;
 
     /**
-     * @Form\Attributes({"chosen-size":"long","id":""})
-     * @Form\Options({"label":"'internal-operator-profile-first-name'"})
+     * @Form\Attributes({"class":"long","id":""})
+     * @Form\Options({"label":"internal-operator-profile-first-name"})
      * @Form\Type("Text")
      */
     public $firstName = null;
 
     /**
      * @Form\Attributes({"class":"long","id":""})
-     * @Form\Options({"label":"'internal-operator-profile-first-name'"})
+     * @Form\Options({"label":"internal-operator-profile-last-name"})
      * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      * @Form\Type("Text")
      */
     public $lastName = null;
+
+    /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Is IRFO"})
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $isIrfo;
 
     /**
      * @Form\Type("Hidden")

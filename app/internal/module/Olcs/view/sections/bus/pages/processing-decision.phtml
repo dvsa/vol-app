@@ -1,0 +1,91 @@
+<?php
+$header = $this->navigation('navigation')->findOneBy('active', 1)->getLabel();
+
+$busReg = $this->placeholder('details')->getValue();
+
+if (!empty($busReg['decision'])) {
+    echo $this->render('partials/read-only/main',
+        [
+            'header' => $header,
+            'multiItems' => [
+                [
+                    ['label' => 'Decision', 'value' => $busReg['decision']['decision'], 'class' => 'full-width']
+                ],
+                [
+                    ['label' => 'Reason', 'value' => $busReg['decision']['reason'], 'class' => 'full-width']
+                ],
+            ]
+        ]
+    );
+} else {
+    if ($busReg['status']['id'] == 'breg_s_registered') {
+        echo $this->render('partials/read-only/empty',
+            [
+                'header' => $header,
+                'helpText' => 'This bus registration is of status <strong>Registered</strong>',
+                'multiUrl' => [
+                    [
+                        'url' => $this->url(null, ['action' => 'cancel'], [], true),
+                        'label' => 'Admin cancel',
+                        'class' => 'action--secondary js-modal-ajax'
+                    ]
+                ]
+            ]
+        );
+    } elseif (in_array($busReg['status']['id'], ['breg_s_new', 'breg_s_var', 'breg_s_cancellation'])) {
+
+        $multiUrl = [
+            [
+                'url' => $this->url(null, ['action' => 'withdraw'], [], true),
+                'label' => 'Withdraw',
+                'class' => 'action--secondary js-modal-ajax'
+            ],
+            [
+                'url' => $this->url(null, ['action' => 'refuse'], [], true),
+                'label' => 'Refuse',
+                'class' => 'action--secondary js-modal-ajax'
+            ],
+        ];
+
+        //only show button if record passes grantable validation
+        if (isset($busReg['isGrantable']) && $busReg['isGrantable'] === true) {
+            array_unshift(
+                $multiUrl,
+                [
+                    'url' => $this->url(null, ['action' => 'grant'], [], true),
+                    'label' => 'Grant',
+                    'class' => 'action--primary' . ($busReg['status']['id'] == 'breg_s_var' ? ' js-modal-ajax' : '')
+                ]
+            );
+        }
+
+        //Refuse by short notice
+        if ($busReg['shortNoticeRefused'] == 'N' && $busReg['isShortNotice'] == 'Y') {
+            $multiUrl[] = [
+                'url' => $this->url(null, ['action' => 'refuse-by-short-notice'], [], true),
+                'label' => 'Refuse by SN',
+                'class' => 'action--secondary js-modal-ajax'
+            ];
+        }
+
+        echo $this->render('partials/read-only/empty',
+            [
+                'header' => $header,
+                'helpText' => 'There are no decisions for this bus registration',
+                'multiUrl' => $multiUrl
+            ]
+        );
+    }
+
+    //if record is short notice refused
+    if ($busReg['shortNoticeRefused'] == 'Y') {
+        echo $this->render('partials/read-only/main',
+            [
+                'header' => 'Short notice refused',
+                'items' => [
+                    ['label' => 'Reason', 'value' => $busReg['reasonSnRefused'], 'class' => 'full-width']
+                ]
+            ]
+        );
+    }
+}

@@ -1,20 +1,50 @@
 <?php
 
+/**
+ * User data service
+ *
+ * @author someone <someone@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ */
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\AbstractData;
+use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
+use Dvsa\Olcs\Transfer\Query\User\UserList;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 
 /**
- * Could be moved to common?
+ * User data service
  *
- * Class Licence
- * @package Olcs\Service
+ * @author someone <someone@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class User extends AbstractData implements ListDataInterface
+class User extends AbstractDataService implements ListDataInterface
 {
-    protected $id;
-    protected $serviceName = 'User';
+    protected $titleKey = 'loginId';
+
+    /**
+     * @var int
+     */
+    protected $team = null;
+
+    /**
+     * @param string $team
+     * @return $this
+     */
+    public function setTeam($team)
+    {
+        $this->team = $team;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTeam()
+    {
+        return $this->team;
+    }
 
     /**
      * Fetch back a set of options for a drop down list, context passed is parameters which may need to be passed to the
@@ -36,33 +66,40 @@ class User extends AbstractData implements ListDataInterface
         }
 
         foreach ($data as $datum) {
-            $ret[$datum['id']] = $datum['name'];
+            $ret[$datum['id']] = $datum[$this->titleKey];
         }
 
         return $ret;
     }
 
-
-    public function fetchUserListData($bundle = null)
+    /**
+     * Fetch user list data
+     *
+     * @return array
+     */
+    public function fetchUserListData()
     {
         if (is_null($this->getData('userlist'))) {
-            $bundle = is_null($bundle) ? $this->getBundle() : $bundle;
-            $data =  $this->getRestClient()->get('', ['bundle' => json_encode($bundle)]);
+            $params = [
+                'sort' => 'loginId',
+                'order' => 'ASC'
+            ];
+            $team   = $this->getTeam();
+            if (!empty($team)) {
+                $params['team'] = $team;
+            }
+
+            $dtoData = UserList::create($params);
+            $response = $this->handleQuery($dtoData);
+            if (!$response->isOk()) {
+                throw new UnexpectedResponseException('unknown-error');
+            }
             $this->setData('userlist', false);
-            if (isset($data['Results'])) {
-                $this->setData('userlist', $data['Results']);
+            if (isset($response->getResult()['results'])) {
+                $this->setData('userlist', $response->getResult()['results']);
             }
         }
 
         return $this->getData('userlist');
-    }
-
-    public function getBundle()
-    {
-        $bundle = array(
-            'properties' => 'ALL',
-        );
-
-        return $bundle;
     }
 }

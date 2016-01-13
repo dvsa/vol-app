@@ -7,50 +7,35 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
-use Zend\Form\Form;
-use Common\Controller\Lva;
-use Common\View\Model\Section;
-use Olcs\View\Model\Application\Layout;
-use Olcs\View\Model\Application\CreateApplicationLayout;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Common\Controller\Lva\Application\AbstractTypeOfLicenceController;
 
 /**
  * Internal Type Of Licence Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TypeOfLicenceController extends Lva\AbstractTypeOfLicenceController
+class TypeOfLicenceController extends AbstractTypeOfLicenceController implements ApplicationControllerInterface
 {
-    use ApplicationControllerTrait,
-        Lva\Traits\ApplicationTypeOfLicenceTrait;
+    use ApplicationControllerTrait {
+        ApplicationControllerTrait::getSectionsForView as genericGetSectionsForView;
+    }
 
     protected $location = 'internal';
     protected $lva = 'application';
 
-    /**
-     * Render the section
-     *
-     * @param string $titleSuffix
-     * @param \Zend\Form\Form $form
-     * @return \Common\View\Model\Section
-     */
-    protected function renderCreateApplication($titleSuffix, Form $form = null)
+    protected function getSectionsForView()
     {
-        $content = new Section(array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form));
+        $data = $this->getServiceLocator()->get('Entity\Application')
+            ->getTypeOfLicenceData($this->getApplicationId());
 
-        $applicationLayout = new CreateApplicationLayout();
+        $sections = $this->genericGetSectionsForView();
 
-        $applicationLayout->addChild($this->getQuickActions(), 'actions');
-        $applicationLayout->addChild($content, 'content');
+        if (empty($data['licenceType']) || empty($data['goodsOrPsv']) || empty($data['niFlag'])) {
+            $sections['overview']['enabled'] = false;
+        }
 
-        $params = array(
-            'applicationId' => '',
-            'licNo' => '',
-            'licenceId' => '',
-            'companyName' => '',
-            'status' => ''
-        );
-
-        return new Layout($applicationLayout, $params);
+        return $sections;
     }
 }

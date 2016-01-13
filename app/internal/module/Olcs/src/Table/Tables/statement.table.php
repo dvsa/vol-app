@@ -8,8 +8,9 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'edit' => array('class' => 'secondary js-require--multiple', 'requireRows' => true),
+                'generate' => array('requireRows' => true, 'class' => 'secondary js-require--multiple', 'label' => 'Generate Letter'),
+                'delete' => array('class' => 'secondary js-require--multiple', 'requireRows' => true)
             )
         )
     ),
@@ -27,13 +28,16 @@ return array(
                     array('action' => 'edit', 'statement' => $data['id']),
                     'case_statement',
                     true
-                ) . '">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'requestedDate'
         ),
         array(
             'title' => 'Requested by',
-            'format' => '{{requestorsForename}} {{requestorsFamilyName}}'
+            'formatter' => function ($data, $column, $sm) {
+                return $data['requestorsContactDetails']['person']['forename'] . ' ' .
+                    $data['requestorsContactDetails']['person']['familyName'];
+            }
         ),
         array(
             'title' => 'Statement type',

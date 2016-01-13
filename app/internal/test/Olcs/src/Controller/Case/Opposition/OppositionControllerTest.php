@@ -8,87 +8,130 @@
 
 namespace OlcsTest\Controller;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\TestHelpers\ControllerPluginManagerHelper;
+use Olcs\TestHelpers\ControllerRouteMatchHelper;
 
 /**
  * Opposition Test Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class OppositionControllerTest extends AbstractHttpControllerTestCase
+class OppositionControllerTest extends MockeryTestCase
 {
-    protected $testClass = 'Olcs\Controller\Cases\Opposition\OppositionController';
+    /**
+     * @var ControllerPluginManagerHelper
+     */
+    protected $pluginManagerHelper;
 
-    public function indexActionDataProvider()
+    public function setUp()
     {
-        return [
-            ['2014-04-01T09:43:21+0100', '2014-04-01', '2014-04-22T00:00:00+0100'], //dates are fine
-            ['2014-04-02T09:43:21+0100', '2014-04-01', null], //received is before the ad placed date
-            ['2014-04-02T09:43:21+0100', null, null] //we don't have an ad placed date
+        $this->sut = new \Olcs\Controller\Cases\Opposition\OppositionController();
+        $this->pluginManagerHelper = new ControllerPluginManagerHelper();
+        $this->routeMatchHelper = new ControllerRouteMatchHelper();
+        parent::setUp();
+    }
+
+    public function testAlterForm()
+    {
+        $data = [
+            'licence' => [
+                'goodsOrPsv' => [
+                    'id' => 'lcat_psv'
+                ]
+            ],
+            'oooDate' => '2015-02-01',
+            'oorDate' => '2015-02-01'
         ];
+
+        $sut = m::mock('Olcs\Controller\Cases\Opposition\OppositionController')
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
+        $sut->shouldReceive('getCaseWithOppositionDates')->andReturn($data);
+
+        $form = new \Zend\Form\Form();
+
+        $fieldset = new \Zend\Form\Fieldset('fields');
+
+        $appOcList = new \Zend\Form\Element\Select('applicationOperatingCentres');
+        $fieldset->add($appOcList);
+
+        $licOcList = new \Zend\Form\Element\Select('licenceOperatingCentres');
+        $fieldset->add($licOcList);
+
+        $oppositonType = new \Zend\Form\Element\Select('oppositionType');
+        $oppositonType->setValueOptions(
+            [
+                'otf_eob' => 'Environmental objection',
+                'otf_rep' => 'Representation',
+                'otf_obj' => 'Objection'
+            ]
+        );
+        $fieldset->add($oppositonType);
+
+        $outOfRepresentationDate = new \Common\Form\Elements\Types\Html('outOfRepresentationDate');
+        $fieldset->add($outOfRepresentationDate);
+
+        $outOfObjectionDate = new \Common\Form\Elements\Types\Html('outOfObjectionDate');
+        $fieldset->add($outOfObjectionDate);
+
+        $form->add($fieldset);
+        $alteredForm = $sut->alterFormForEdit($form, []);
+
+        $newOptions = $alteredForm->get('fields')
+            ->get('oppositionType')
+            ->getValueOptions();
+
+        $this->assertNotContains('otf_eob', array_keys($newOptions));
+        $this->assertNotContains('otf_rep', array_keys($newOptions));
+
+        $oorDateObj = new \DateTime($data['oorDate']);
+        $this->assertStringMatchesFormat(
+            'Out of representation ' . $oorDateObj->format('d/m/Y'),
+            $outOfRepresentationDate->getLabel()
+        );
+
+        $oooDateObj = new \DateTime($data['oooDate']);
+        $this->assertStringMatchesFormat(
+            'Out of objection ' . $oooDateObj->format('d/m/Y'),
+            $outOfObjectionDate->getLabel()
+        );
     }
 
     /**
-     * @dataProvider indexActionDataProvider
+     * Tests the generate action
      *
-     * @param $receivedDate
-     * @param $adPlacedDate
-     * @param $oorDate
      */
-    public function testIndexAction($receivedDate, $adPlacedDate, $oorDate)
+    public function testGenerateAction()
     {
-        $id = 1;
+        $caseId = 12;
+        $oppositionId = 123;
 
-        $listData = [
-            'Results' => [
-                0 => [
-                    'application' => [
-                        'receivedDate' => $receivedDate,
-                        'operatingCentres' => [
-                            0 => [
-                                'adPlacedDate' => $adPlacedDate
-                            ]
-                        ]
-                    ]
-                ]
+        $mockPluginManager = $this->pluginManagerHelper->getMockPluginManager(
+            [
+                'params' => 'Params',
+                'redirect' => 'Redirect'
             ]
-        ];
-
-        $expectedViewVars = [
-            'oooDate' => null,
-            'oorDate' => $oorDate
-        ];
-
-        $sut = $this->getMock(
-            'Olcs\Controller\Cases\Opposition\OppositionController',
-            ['getView', 'getIdentifierName', 'checkForCrudAction', 'buildTableIntoView', 'renderView']
         );
+        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams->shouldReceive('fromRoute')->with('opposition')->andReturn($oppositionId);
+        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
 
-        $sut->setListData($listData);
+        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect->shouldReceive('toRoute')->once()->with(
+            'case_licence_docs_attachments/entity/generate',
+            [
+                'case' => $caseId,
+                'entityType' => 'opposition',
+                'entityId' => $oppositionId
+            ]
+        )->andReturn('redirectResponse');
 
-        $view = $this->getMock('\Zend\View\View', ['setTemplate', 'setVariables']);
-        $view->expects($this->once())
-            ->method('setTemplate')
-            ->with('case/page/opposition')
-            ->will($this->returnSelf());
+        $mockPluginManager->shouldReceive('get')->with('redirect')->andReturn($mockRedirect);
+        $this->sut->setPluginManager($mockPluginManager);
 
-        $view->expects($this->once())
-            ->method('setVariables')
-            ->with($expectedViewVars)
-            ->will($this->returnSelf());
-
-        $sut->expects($this->once())->method('getView')
-            ->will($this->returnValue($view));
-        $sut->expects($this->once())->method('getIdentifierName')
-            ->will($this->returnValue($id));
-        $sut->expects($this->once())->method('checkForCrudAction')
-            ->with(null, [], $id)->will($this->returnValue(null));
-        $sut->expects($this->once())->method('buildTableIntoView');
-
-        $sut->expects($this->once())->method('renderView')
-            ->with($view)->will($this->returnValue($view));
-
-        $this->assertSame($view, $sut->indexAction());
+        $this->assertEquals('redirectResponse', $this->sut->generateAction());
     }
 }

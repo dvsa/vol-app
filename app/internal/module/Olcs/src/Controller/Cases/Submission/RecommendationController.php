@@ -1,166 +1,138 @@
 <?php
 
 /**
- * Case Submission  Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
+ * Submission Recommendation Controller
  */
 namespace Olcs\Controller\Cases\Submission;
 
-//use Olcs\Controller\Traits\DeleteActionTrait;
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionAction as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmissionAction as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Submission\SubmissionAction as ItemDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Data\Mapper\SubmissionAction as Mapper;
+use Olcs\Form\Model\Form\SubmissionRecommendation as Form;
+use \Zend\Form\Form as ZendForm;
 
 /**
- * Case Submission Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
+ * Submission Recommendation Controller
  */
-class RecommendationController extends OlcsController\CrudAbstract
+class RecommendationController extends AbstractInternalController implements CaseControllerInterface
 {
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'id';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'recommendation';
-
-    /**
-     * Name of comment box field.
-     *
-     * @var string
-     */
-    protected $commentBoxName = '';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'submission-recommendation';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case';
-
-    protected $pageLayoutInner = null;
-
-    protected $defaultTableSortField = '';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'SubmissionAction';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_submissions';
 
     /**
-     * Holds an array of variables for the default
-     * index list page.
+     * @var array
      */
-    protected $listVars = [
-        'submission',
+    protected $inlineScripts = [
+        'addAction' => ['forms/submission-recommendation-decision'],
+        'editAction' => ['forms/submission-recommendation-decision'],
     ];
 
     /**
-     * Data map
-     *
-     * @var array
-    */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields'
-            )
-        )
-    );
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-    */
-    protected $dataBundle = array(
-        'properties' => 'ALL',
-        'children' => array(
-            'submission' => array(
-                'properties' => 'ALL',
-            ),
-            'submissionActionStatus' => array(
-                'properties' => 'ALL',
-            ),
-            'recipientUser' => array(
-                'properties' => 'ALL',
-            ),
-            'senderUser' => array(
-                'properties' => 'ALL',
-            ),
-            'reasons' => array(
-                'properties' => 'ALL',
-            )
-        )
-    );
-
-    /**
      * @var array
      */
-    protected $inlineScripts = ['submission-rec-dec'];
+    protected $redirectConfig = [
+        'add' => [
+            'route' => 'submission',
+            'action' => 'details',
+            'reUseParams' => true,
+        ],
+        'edit' => [
+            'route' => 'submission',
+            'action' => 'details',
+            'reUseParams' => true,
+        ]
+    ];
 
     /**
-     * Simple redirect to index.
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    public function redirectToIndex()
+    protected $itemDto = ItemDto::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add submission recommendation';
+    protected $editContentTitle = 'Edit submission recommendation';
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'submission' => 'route',
+        'isDecision' => 'N',
+    ];
+
+    public function indexAction()
     {
-        $submission = $this->params()->fromRoute('submission');
+        return $this->notFoundAction();
+    }
 
-        return $this->redirectToRoute(
-            'submission',
-            ['action'=>'details', 'submission' => $submission],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
-            true
-        );
+    public function detailsAction()
+    {
+        return $this->notFoundAction();
+    }
+
+    public function deleteAction()
+    {
+        return $this->notFoundAction();
     }
 
     /**
-     * @codeCoverageIgnore
+     * @param ZendForm $form
+     * @param $formData
+     * @return ZendForm
      */
-    public function parentProcessLoad($data)
+    protected function alterFormForAdd(ZendForm $form, $formData)
     {
-        return parent::processLoad($data);
+        return $this->alterForm($form, $formData['id']);
     }
 
-    public function processLoad($data)
+    /**
+     * @param ZendForm $form
+     * @param $formData
+     * @return ZendForm
+     */
+    protected function alterFormForEdit(ZendForm $form, $formData)
     {
-        $data = $this->parentProcessLoad($data);
+        return $this->alterForm($form, $formData['fields']['id']);
+    }
 
-        if (!isset($data['fields']['submission'])) {
-            $data['fields']['submission'] = $this->params()->fromRoute('submission');
-        }
-
-        if (!isset($data['fields']['senderUser'])) {
-            $data['fields']['senderUser'] = $this->getLoggedInUser();
-        }
-
-        return $data;
+    /**
+     * Change the id of the text area to be unique (avoid DOM clashes with multiple TinyMCE instances
+     *
+     * @param ZendForm $form
+     * @param $id
+     * @return ZendForm
+     */
+    private function alterForm(ZendForm $form, $id)
+    {
+        $form->get('fields')->get('comment')->setAttribute('id', $id . time());
+        return $form;
     }
 }

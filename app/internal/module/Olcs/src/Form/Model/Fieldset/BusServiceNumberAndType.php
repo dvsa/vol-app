@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("bus-service-number-and-type")
  */
-class BusServiceNumberAndType extends Base
+class BusServiceNumberAndType extends BusRegDetails
 {
     /**
      * @Form\Attributes({"class":"","id":"serviceNo"})
@@ -19,6 +19,15 @@ class BusServiceNumberAndType extends Base
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":70}})
      */
     public $serviceNo = null;
+
+    /**
+     * @Form\ComposedObject({
+     *      "target_object":"Olcs\Form\Model\Fieldset\BusReg\OtherServices",
+     *      "is_collection":true,
+     *      "options":{"count":1, "label":"Other Service numbers"}
+     * })
+     */
+    public $otherServices = null;
 
     /**
      * @Form\Attributes({"class":"","id":"startPoint"})
@@ -85,6 +94,7 @@ class BusServiceNumberAndType extends Base
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name":"Common\Form\Elements\Validators\DateNotInFuture"})
      */
@@ -99,8 +109,9 @@ class BusServiceNumberAndType extends Base
      * })
      * @Form\Required(false)
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $effectiveDate = null;
 
@@ -113,14 +124,14 @@ class BusServiceNumberAndType extends Base
      * })
      * @Form\Required(false)
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $endDate = null;
 
     /**
      * @Form\Attributes({"id":"busNoticePeriod","placeholder":"","class":"medium"})
-     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Rules",
      *     "service_name": "Olcs\Service\Data\BusNoticePeriod",

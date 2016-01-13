@@ -70,6 +70,7 @@ class SubmissionSectionDetailsTest extends \PHPUnit_Framework_TestCase
             [['submissionSection' => false, 'data' => []], ''],
             [['submissionSection' => 'rubbish', 'data' => []], ''],
             [['submissionSection' => 'introduction', 'data' => []], ''],
+            [['submissionSection' => 'penalties', 'data' => []], ''],
 
         ];
     }

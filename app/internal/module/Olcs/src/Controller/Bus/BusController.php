@@ -9,31 +9,33 @@ namespace Olcs\Controller\Bus;
 
 use Olcs\Controller as OlcsController;
 use Olcs\Controller\Traits as ControllerTraits;
-use Common\Controller\Traits;
+use Common\Controller\Traits as CommonTraits;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Zend\View\Model\ViewModel;
 
 /**
  * Bus Controller
  *
+ * @NOTE Made this abstract as it is never used as a concrete
+ *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusController extends OlcsController\CrudAbstract
+abstract class BusController extends OlcsController\CrudAbstract implements BusRegControllerInterface, LeftViewProvider
 {
     use ControllerTraits\BusControllerTrait;
-    use Traits\ViewHelperManagerAware;
+    use CommonTraits\ViewHelperManagerAware;
+
+    use CommonTraits\GenericRenderView {
+        CommonTraits\GenericRenderView::renderView as parentRenderView;
+    }
 
     /* bus controller properties */
-    protected $layoutFile = 'licence/bus/layout';
     protected $subNavRoute;
     protected $section;
     protected $item;
 
     /* properties required by CrudAbstract */
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'none';
 
     /**
      * Identifier name from route
@@ -48,14 +50,6 @@ class BusController extends OlcsController\CrudAbstract
      * @var string
      */
     protected $formName = 'none';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'bus';
 
     /**
      * Holds the service name
@@ -82,15 +76,12 @@ class BusController extends OlcsController\CrudAbstract
         '',
     );
 
-    /**
-     * Index action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function indexAction()
+    public function getLeftView()
     {
-        //for now we're defaulting to the details page
-        return $this->redirectToRoute('licence/bus-details', [], [], true);
+        $view = new ViewModel();
+        $view->setTemplate('sections/processing/partials/left');
+
+        return $view;
     }
 
     /**
@@ -103,20 +94,9 @@ class BusController extends OlcsController\CrudAbstract
      */
     public function renderView($view, $pageTitle = null, $pageSubTitle = null)
     {
-        $this->pageLayout = 'bus';
+        $this->maybeAddScripts($view);
 
-        $variables = array(
-            'navigation' => $this->getSubNavigation(),
-            'section' => $this->getSection(),
-            'item' => $this->getItem()
-        );
-
-        $layout = $this->getViewWithBusReg(array_merge($variables, (array)$view->getVariables()));
-        $layout->setTemplate($this->getLayoutFile());
-
-        $layout->addChild($view, 'content');
-
-        return parent::renderView($layout, $pageTitle, $pageSubTitle);
+        return $this->parentRenderView($view, $pageTitle, $pageSubTitle);
     }
 
     /**
@@ -127,5 +107,47 @@ class BusController extends OlcsController\CrudAbstract
     public function setTableFilters($filters)
     {
         $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
+    }
+
+    /**
+     * Load an array of script files which will be rendered inline inside a view
+     *
+     * @param array $scripts
+     * @return array
+     */
+    protected function loadScripts($scripts)
+    {
+        return $this->getServiceLocator()->get('Script')->loadFiles($scripts);
+    }
+
+    /**
+     * Optionally add scripts to view, if there are any
+     *
+     * @param ViewModel $view
+     */
+    protected function maybeAddScripts($view)
+    {
+        $scripts = $this->getInlineScripts();
+
+        if (empty($scripts)) {
+            return;
+        }
+
+        // this process defers to a service which takes care of checking
+        // whether the script(s) exist
+        $this->loadScripts($scripts);
+    }
+
+    protected function normaliseFormName($name, $ucFirst = false)
+    {
+        $name = str_replace([' ', '_'], '-', $name);
+
+        $name = $this->getServiceLocator()->get('Helper\String')->dashToCamel($name);
+
+        if (!$ucFirst) {
+            return lcfirst($name);
+        }
+
+        return $name;
     }
 }

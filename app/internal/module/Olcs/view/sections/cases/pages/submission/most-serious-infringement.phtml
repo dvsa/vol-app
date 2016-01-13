@@ -1,0 +1,31 @@
+<?php
+echo $this->render('partials/read-only/main',
+    [
+        'id' => $this->data['submissionSection'],
+        'header' => 'Most serious infringement',
+        'multiItems' => [
+            0 => [
+                ['label' => 'Infringement ID', 'value' => $this->data['data']['overview']['id']],
+                ['label' => 'Notification number', 'value' => $this->data['data']['overview']['notificationNumber']],
+            ],
+            1 => [
+                ['label' => 'Date of infringement', 'dateFormat' => 'Y-m-d', 'date' =>
+                $this->data['data']['overview']['infringementDate']],
+                ['label' => 'Date of check', 'dateFormat' => 'Y-m-d', 'date' => $this->data['data']['overview']['checkDate']],
+                ['label' => 'Category', 'value' => $this->data['data']['overview']['siCategory']],
+                [
+                    'label' => 'Type',
+                    'value' => $this->data['data']['overview']['siCategoryType'],
+                    'class' => 'full-width'
+                ]
+            ],
+            2 => [
+                [
+                    'label' => 'Member state',
+                    'value' => $this->data['data']['overview']['isMemberState'],
+                    'class' => 'full-width'
+                ]
+            ]
+        ]
+    ]
+);

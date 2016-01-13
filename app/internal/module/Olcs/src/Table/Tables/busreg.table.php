@@ -8,8 +8,7 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         ),
         'paginate' => array(
@@ -21,54 +20,30 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
-        ),
-        array(
-            'title' => 'Reg No',
+            'title' => 'Reg No.',
             'formatter' => function ($data) {
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'index', 'busRegId' => $data['id']),
-                    'licence/bus-details',
+                    'licence/bus-details/service',
                     true
                 ) . '">' . $data['regNo'] . '</a>';
             },
             'sort' => 'regNo'
         ),
         array(
-            'title' => 'Var No',
-            'name' => 'routeSeq',
-            'sort' => 'routeSeq'
+            'title' => 'Var No.',
+            'name' => 'variationNo',
+            'sort' => 'variationNo'
         ),
         array(
-            'title' => 'Service No',
-            'formatter' => function ($data) {
-                $serviceNo = $data['serviceNo'];
-                $otherService = [];
-
-                foreach ($data['otherServices'] as $service) {
-                    $otherService[] = $service['serviceNo'];
-                }
-
-                $otherServiceStr = implode(', ', $otherService);
-
-                if ($serviceNo && $otherServiceStr) {
-                    return $serviceNo . ' AND (' . $otherServiceStr . ')';
-                } elseif ($serviceNo) {
-                    return $serviceNo;
-                } elseif ($otherServiceStr) {
-                    return $otherServiceStr;
-                }
-
-                return '';
-            },
+            'title' => 'Service No.',
+            'name' => 'serviceNo',
             'sort' => 'serviceNo'
         ),
         array(
-            'title' => 'Date 1st Registered / Date Cancelled',
-            'formatter' => function () {
-                return 'TBC / TBC';
+            'title' => '1st registered / cancelled',
+            'formatter' => function ($data) {
+                return date(\DATE_FORMAT, strtotime($data['date1stReg']));
             },
         ),
         array(
@@ -80,6 +55,15 @@ return array(
             'title' => 'Finishing point',
             'name' => 'finishPoint',
             'sort' => 'finishPoint'
+        ),
+        array(
+            'title' => 'Status',
+            'name' => 'busRegStatusDesc'
+        ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
         )
     )
 );

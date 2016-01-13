@@ -7,9 +7,9 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("tasks-home")
- * @Form\Attributes({"method":"get"})
+ * @Form\Attributes({"method":"get", "class": "filters form__filter"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true})
+ * @Form\Options({"prefer_form_input_filter": true, "bypass_auth": true})
  */
 class TasksHome
 {
@@ -70,7 +70,7 @@ class TasksHome
      * @Form\Options({
      *     "label": "tasks.data.date",
      *     "disable_inarray_validator": false,
-     *     "category": "task-date-types"
+     *     "category": "task_date_types"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -81,7 +81,7 @@ class TasksHome
      * @Form\Options({
      *     "label": "tasks.data.status",
      *     "disable_inarray_validator": false,
-     *     "category": "task-status-types"
+     *     "category": "task_status_types"
      * })
      * @Form\Type("DynamicSelect")
      */

@@ -1,56 +1,69 @@
 <?php
 
 /**
- * IndexController
+ * Index Controller
  *
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace Olcs\Controller;
 
-use Olcs\Controller\AbstractController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 use Olcs\Controller\Traits\TaskSearchTrait;
 
 /**
- * IndexController
+ * Index Controller
+ *
+ * @NOTE Migrated (Not converted to a "new" internal controller)
  *
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
-class IndexController extends AbstractController
+class IndexController extends AbstractController implements LeftViewProvider
 {
     use TaskSearchTrait;
-
-    const MAX_LIMIT = 100;
-
-    protected $pageTitle = 'Home';
-    protected $pageSubTitle = 'Subtitle';
 
     public function indexAction()
     {
         $redirect = $this->processTasksActions();
+
         if ($redirect) {
             return $redirect;
         }
 
         $filters = $this->mapTaskFilters();
 
-        $this->loadScripts(['tasks', 'table-actions']);
+        $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
 
-        $view = new ViewModel(
-            array(
-                'table' => $this->getTaskTable($filters, true, true),
-                'form'  => $this->getTaskForm($filters),
-            )
-        );
-        $view->setTemplate('index/home');
-        $view->setTerminal($this->getRequest()->isXmlHttpRequest());
+        // assignedToTeam or Category must be selected
+        if (empty($filters['assignedToTeam']) && empty($filters['category'])) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addWarningMessage(
+                'Please filter by either a team or a category.'
+            );
+            $view = new ViewModel();
+        } else {
+            $view = new ViewModel(['table' => $this->getTaskTable($filters, true)]);
+        }
 
-        return $this->renderView($view);
+        $view->setTemplate('pages/table');
+
+        return $this->renderView($view, 'Home');
+    }
+
+    public function getLeftView()
+    {
+        $filters = $this->mapTaskFilters();
+
+        $left = new ViewModel(['form' => $this->getTaskForm($filters)]);
+        $left->setTemplate('sections/home/partials/left');
+
+        return $left;
     }
 
     /**
@@ -58,58 +71,45 @@ class IndexController extends AbstractController
      * The consumer doesn't control what the entities and keys are; they
      * simply provide a key and a value which we look up in a map
      *
-     * @return JSON
+     * @return JsonModel
      */
     public function entityListAction()
     {
-        $key = $this->params()->fromRoute('type');
-        $value = $this->params()->fromRoute('value');
-        $map = array(
-            'users' => array(
-                'entity' => 'User',
-                'field' => 'team'
-            ),
-            'task-sub-categories' => array(
-                'entity' => 'TaskSubCategory',
-                'field' => 'category'
-            ),
-            'document-sub-categories' => array(
-                'entity' => 'DocumentSubCategory',
-                'field' => 'category',
-                'title' => 'description'
-            ),
-            'document-templates' => array(
-                'entity' => 'DocTemplate',
-                'field' => 'documentSubCategory',
-                'title' => 'description'
-            )
-        );
+        $key = $this->params('type');
+        $value = $this->params('value');
 
-        if (!isset($map[$key])) {
-            // handle separately?
-            throw new \Exception("Invalid entity filter key: " . $key);
+        switch ($key) {
+            case 'users':
+                $results = $this->getListDataUser($value, 'All');
+                break;
+            case 'task-sub-categories':
+                $results = $this->getListDataSubCategoryTask($value, 'All');
+                break;
+            case 'document-sub-categories':
+                $results = $this->getListDataSubCategoryDocs($value, 'All');
+                break;
+            case 'scanning-sub-categories':
+                $results = $this->getListDataSubCategoryTask($value, 'All');
+                break;
+            case 'document-templates':
+                $results = $this->getListDataDocTemplates(null, $value, 'All');
+                break;
+            case 'sub-category-descriptions':
+                $results = $this->getListDataSubCategoryDescription($value);
+                break;
+            default:
+                throw new \Exception('Invalid entity filter key: ' . $key);
         }
-
-        $lookup = $map[$key];
-
-        // e.g. array("category_id" => 12)
-        $search = array(
-            $lookup['field'] => $value
-        );
-
-        $titleKey = isset($lookup['title']) ? $lookup['title'] : 'name';
-
-        $results = $this->getListData($lookup['entity'], $search, $titleKey);
-        $viewResults = array();
 
         // iterate over the list data and just convert it to a more
         // JS friendly format (key/val assoc isn't quite such a neat
         // fit for frontend)
+        $viewResults = [];
         foreach ($results as $id => $result) {
-            $viewResults[] = array(
+            $viewResults[] = [
                 'value' => $id,
                 'label' => $result
-            );
+            ];
         }
 
         return new JsonModel($viewResults);
