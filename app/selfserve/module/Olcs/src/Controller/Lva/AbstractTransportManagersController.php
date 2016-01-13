@@ -178,7 +178,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                             'hoursSat' => (float) $hoursOfWeek['hoursPerWeekContent']['hoursSat'],
                             'hoursSun' => (float) $hoursOfWeek['hoursPerWeekContent']['hoursSun'],
                             'additionalInfo' => $data['responsibilities']['additionalInformation'],
-                            'submit' => ($submit) ? 'Y' : 'N'
+                            'submit' => ($submit) ? 'Y' : 'N',
+                            'dob' => $data['details']['birthDate']
                         ]
                     )
                 );
@@ -710,10 +711,17 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 'homeAddress' => $contactDetails['address'],
                 'workAddress' => $data['transportManager']['workCd']['address']
             ];
+            if (!empty($person['birthDate'])) {
+                $birthDate = new \DateTime($person['birthDate']);
+                $formData['details']['birthDate'] = [
+                    'day' => $birthDate->format('d'),
+                    'month' => $birthDate->format('m'),
+                    'year' => $birthDate->format('Y'),
+                ];
+            }
         }
 
         $formData['details']['name'] = $person['forename'] . ' ' . $person['familyName'];
-        $formData['details']['birthDate'] = date(\DATE_FORMAT, strtotime($person['birthDate']));
 
         return $formData;
     }
