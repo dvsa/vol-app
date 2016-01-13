@@ -11,10 +11,6 @@ use Olcs\Form\Element\SearchFilterFieldset;
 use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
 use Olcs\Form\Element\SearchDateRangeFieldset;
 
-use Common\Data\Object\Search\LicenceSelfserve as LicenceSelfserve;
-use Common\Data\Object\Search\OperatingCentreSelfserve as OperatingCentreSearchIndex;
-use Common\Data\Object\Search\PeopleSelfserve as PeopleSelfserveSearchIndex;
-
 use Olcs\FormService\Form\Lva as LvaFormService;
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
@@ -139,14 +135,14 @@ $routes = array(
             )
         )
     ),
-    'search-traffic-commissioner-publication' => array(
+    'search-publication' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/search/traffic-commissioner-publication[/:action][/]',
+            'route' => '/search/publication[/:action][/]',
             'defaults' => array(
                 'controller' => SearchController::class,
                 'action' => 'index',
-                'index' => 'traffic-commissioner-publication'
+                'index' => 'publication'
             )
         )
     ),
@@ -784,9 +780,9 @@ $searchNavigation = array(
             'class' => 'search-navigation__item',
         ),
         array(
-            'id' => 'search-traffic-commissioner-publication',
+            'id' => 'search-publication',
             'label' => 'Publications',
-            'route' => 'search-traffic-commissioner-publication',
+            'route' => 'search-publication',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         ),
@@ -930,13 +926,13 @@ return array(
     ),
     'search' => [
         'invokables' => [
-            'operator'    => LicenceSelfserve::class, // Selfserve licence search
-            'vehicle'     => \Common\Data\Object\Search\Vehicle::class,
-            'vehicle-external' => \Common\Data\Object\Search\VehicleSelfServe::class,
-            'bus'         => \Common\Data\Object\Search\BusRegSelfServe::class,
-            'person'      => PeopleSelfserveSearchIndex::class,
-            'operating-centre' => OperatingCentreSearchIndex::class,
-            'traffic-commissioner-publication' => \Common\Data\Object\Search\TrafficCommissionerPublications::class,
+            'operator'          => Common\Data\Object\Search\LicenceSelfserve::class, // Selfserve licence search
+            'vehicle'           => Common\Data\Object\Search\Vehicle::class,
+            'vehicle-external'  => Common\Data\Object\Search\VehicleSelfserve::class,
+            'bus'               => Common\Data\Object\Search\BusRegSelfserve::class,
+            'person'            => Common\Data\Object\Search\PeopleSelfserve::class,
+            'operating-centre'  => Common\Data\Object\Search\OperatingCentreSelfserve::class,
+            'publication'       => Common\Data\Object\Search\PublicationSelfserve::class,
         ]
     ],
     'form_elements' => [
