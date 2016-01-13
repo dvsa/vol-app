@@ -11,11 +11,6 @@ use Olcs\Form\Element\SearchFilterFieldset;
 use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
 use Olcs\Form\Element\SearchDateRangeFieldset;
 
-use Common\Data\Object\Search\LicenceSelfserve as LicenceSelfserve;
-use Common\Data\Object\Search\OperatingCentreSelfserve as OperatingCentreSearchIndex;
-use Common\Data\Object\Search\PeopleSelfserve as PeopleSelfserveSearchIndex;
-use Common\Data\Object\Search\PublicationSelfserve as PublicationSelfserveSearchIndex;
-
 use Olcs\FormService\Form\Lva as LvaFormService;
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
@@ -931,13 +926,13 @@ return array(
     ),
     'search' => [
         'invokables' => [
-            'operator'    => LicenceSelfserve::class, // Selfserve licence search
-            'vehicle'     => \Common\Data\Object\Search\Vehicle::class,
-            'vehicle-external' => \Common\Data\Object\Search\VehicleSelfServe::class,
-            'bus'         => \Common\Data\Object\Search\BusRegSelfServe::class,
-            'person'      => PeopleSelfserveSearchIndex::class,
-            'operating-centre' => OperatingCentreSearchIndex::class,
-            'publication' => PublicationSelfserveSearchIndex::class,
+            'operator'          => Common\Data\Object\Search\LicenceSelfserve::class, // Selfserve licence search
+            'vehicle'           => Common\Data\Object\Search\Vehicle::class,
+            'vehicle-external'  => Common\Data\Object\Search\VehicleSelfserve::class,
+            'bus'               => Common\Data\Object\Search\BusRegSelfserve::class,
+            'person'            => Common\Data\Object\Search\PeopleSelfserve::class,
+            'operating-centre'  => Common\Data\Object\Search\OperatingCentreSelfserve::class,
+            'publication'       => Common\Data\Object\Search\PublicationSelfserve::class,
         ]
     ],
     'form_elements' => [
