@@ -46,7 +46,7 @@
             ]
         ];
 
-        if ($data['erruResponseSent'] == 'N' && !empty($data['appliedPenalties'])) {
+        if ($data['case']['canSendErruResponse']) {
             $infringement['actions'] = [
                 0 => [
                     'url' => $this->url(null, ['action' => 'send'], [], true),
