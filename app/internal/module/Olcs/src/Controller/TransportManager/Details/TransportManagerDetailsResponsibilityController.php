@@ -133,8 +133,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
         }
+        $this->placeholder()->setPlaceholder('contentTitle', 'Add application');
 
-        return $this->renderView($view, 'Add application');
+        return $this->renderView($view);
     }
 
     /**
@@ -283,8 +284,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         );
         $view->setTemplate('sections/transport-manager/pages/tm-responsibility-edit');
         $this->loadScripts(['forms/crud-table-handler']);
+        $this->placeholder()->setPlaceholder('contentTitle', $title);
 
-        return $this->renderView($view, $title);
+        return $this->renderView($view);
     }
 
     /**
