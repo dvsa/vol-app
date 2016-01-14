@@ -214,6 +214,8 @@ trait ListDataTrait
         ];
         if ((int) $teamId !== 0) {
             $params['team'] = $teamId;
+        } else {
+            $params['isInternal'] = true;
         }
 
         $dto = \Dvsa\Olcs\Transfer\Query\User\UserList::create($params);
