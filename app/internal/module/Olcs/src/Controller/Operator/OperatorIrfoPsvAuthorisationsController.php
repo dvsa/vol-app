@@ -5,12 +5,12 @@
  */
 namespace Olcs\Controller\Operator;
 
-use Common\Form\Elements\Types\Html;
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPsvAuth as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPsvAuth as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\GrantIrfoPsvAuth as GrantDto;
-use Dvsa\Olcs\Transfer\Command\Irfo\RefuseIrfoPsvAuth as RefusetDto;
-use Dvsa\Olcs\Transfer\Command\Irfo\WithdrawIrfoPsvAuth as WithdrawtDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\RefuseIrfoPsvAuth as RefuseDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\WithdrawIrfoPsvAuth as WithdrawDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\CnsIrfoPsvAuth as CnsDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\ResetIrfoPsvAuth as ResetDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuth as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthList as ListDto;
@@ -23,7 +23,6 @@ use Zend\Form\Element\Hidden;
 use Zend\View\Model\ViewModel;
 use Common\RefData;
 use Zend\Form\Form as ZendForm;
-use Common\Form\Elements\InputFilters\ActionButton;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 
@@ -136,9 +135,11 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
                     case 'grant':
                         return GrantDto::class;
                     case 'refuse':
-                        return RefusetDto::class;
+                        return RefuseDto::class;
                     case 'withdraw':
-                        return WithdrawtDto::class;
+                        return WithdrawDto::class;
+                    case 'cns':
+                        return CnsDto::class;
                 }
             }
         }
@@ -271,6 +272,11 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
             case 'withdraw':
                 if (!isset($formData['fields']['isWithdrawable']) || (bool) $formData['fields']['isWithdrawable'] !==
                     true) {
+                    $form->get('form-actions')->remove($action);
+                }
+                break;
+            case 'cns':
+                if (!isset($formData['fields']['isCnsable']) || (bool) $formData['fields']['isCnsable'] !== true) {
                     $form->get('form-actions')->remove($action);
                 }
                 break;
