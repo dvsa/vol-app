@@ -70,10 +70,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         $tmaId = (int) $this->params('child_id');
         $tma = $this->getTmaDetails($tmaId);
-        $user = $this->getCurrentUser();
-        $isUserTm = $tma['transportManager']['id'] == $user['transportManager']['id'];
-
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $isUserTm = $tma['isTmLoggedInUser'];
 
         switch ($tma['tmApplicationStatus']['id']) {
             case TransportManagerApplicationEntityService::STATUS_POSTAL_APPLICATION:
