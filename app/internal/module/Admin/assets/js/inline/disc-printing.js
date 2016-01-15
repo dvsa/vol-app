@@ -126,8 +126,10 @@ OLCS.ready(function() {
       $(startNumber).unwrap();
     }
 
+    F("form-actions", "print").attr('disabled', 'disabled');
     $.post(discNumberingUrl, data, function(result) {
 
+      F("form-actions", "print").removeAttr('disabled');
       if (result.error) {
         $(startNumber).wrap("<div class='validation-wrapper'></div>");
         $("<ul><li>" + result.error + "</li></ul>").insertBefore(startNumber);
