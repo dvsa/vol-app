@@ -30,7 +30,7 @@ class OperatorDetails
     public $companyNumber = null;
 
     /**
-     * @Form\Attributes({"class":"long","id":""})
+     * @Form\Attributes({"class":"extra-long","id":""})
      * @Form\Options({"label":"internal-operator-profile-name"})
      * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      * @Form\Name("name")
