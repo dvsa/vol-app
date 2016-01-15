@@ -2,16 +2,16 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\AbstractData;
 use Common\Service\Data\ListDataInterface;
+use Common\Service\Data\AbstractDataService;
+use Dvsa\Olcs\Transfer\Query\Irfo\IrfoCountryList;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 
 /**
  * Class IrfoCountry
  */
-class IrfoCountry extends AbstractData implements ListDataInterface
+class IrfoCountry extends AbstractDataService implements ListDataInterface
 {
-    protected $serviceName = 'IrfoCountry';
-
     /**
      * Format data
      *
@@ -48,19 +48,21 @@ class IrfoCountry extends AbstractData implements ListDataInterface
     /**
      * Ensures only a single call is made to the backend for each dataset
      *
-     * @internal param $category
      * @return array
      */
     public function fetchListData()
     {
         if (is_null($this->getData('IrfoCountry'))) {
+            $dtoData = IrfoCountryList::create([]);
 
-            $data = $this->getRestClient()->get('', ['limit' => 1000]);
+            $response = $this->handleQuery($dtoData);
 
+            if (!$response->isOk()) {
+                throw new UnexpectedResponseException('unknown-error');
+            }
             $this->setData('IrfoCountry', false);
-
-            if (isset($data['Results'])) {
-                $this->setData('IrfoCountry', $data['Results']);
+            if (isset($response->getResult()['results'])) {
+                $this->setData('IrfoCountry', $response->getResult()['results']);
             }
         }
 
