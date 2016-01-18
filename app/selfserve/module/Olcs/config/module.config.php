@@ -1135,8 +1135,6 @@ return array(
                 ],
 
                 // Selfserve search
-                'search-operating-centre' => ['selfserve-search-operating-centre'],
-                'search-person' => ['selfserve-search-person'],
                 'search-vehicle-external' => ['selfserve-search-vehicle-external'],
 
                 'lva-application/transport_manager_details*' => ['selfserve-tm'],
