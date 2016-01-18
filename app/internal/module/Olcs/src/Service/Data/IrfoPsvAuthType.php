@@ -2,16 +2,17 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\AbstractData;
 use Common\Service\Data\ListDataInterface;
+use Common\Service\Data\AbstractDataService;
+use Common\Service\Data\ListDataTrait;
+use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthTypeList;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 
 /**
  * Class IrfoPsvAuthType
  */
-class IrfoPsvAuthType extends AbstractData implements ListDataInterface
+class IrfoPsvAuthType extends AbstractDataService implements ListDataInterface
 {
-    protected $serviceName = 'IrfoPsvAuthType';
-
     /**
      * Format data!
      *
@@ -48,22 +49,25 @@ class IrfoPsvAuthType extends AbstractData implements ListDataInterface
     /**
      * Ensures only a single call is made to the backend for each dataset
      *
-     * @internal param $category
      * @return array
      */
     public function fetchListData()
     {
         if (is_null($this->getData('IrfoPsvAuthType'))) {
 
-            $data = $this->getRestClient()->get('', ['limit' => 1000]);
+            $dtoData = IrfoPsvAuthTypeList::create([]);
+            $response = $this->handleQuery($dtoData);
+            if (!$response->isOk()) {
+                throw new UnexpectedResponseException('unknown-error');
+            }
 
             $this->setData('IrfoPsvAuthType', false);
-
-            if (isset($data['Results'])) {
-                $this->setData('IrfoPsvAuthType', $data['Results']);
+            if (isset($response->getResult()['results'])) {
+                $this->setData('IrfoPsvAuthType', $response->getResult()['results']);
             }
         }
 
         return $this->getData('IrfoPsvAuthType');
+
     }
 }
