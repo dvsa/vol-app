@@ -84,13 +84,23 @@ class SearchController extends AbstractController implements LeftViewProvider
 
         $this->loadScripts(['table-actions']);
 
-        $elasticSearch->getFiltersForm();
+        $form = $elasticSearch->getFiltersForm();
         $elasticSearch->processSearchData();
 
         $view = new ViewModel();
+        $view->setTemplate('sections/search/pages/results');
 
-        $elasticSearch->configureNavigation();
-        $view = $elasticSearch->generateResults($view);
+        // make all elements not required
+        foreach ($form->getInputFilter()->get('filter')->getInputs() as $input) {
+            /* @var $input \Zend\InputFilter\Input */
+            $input->setRequired(false);
+        }
+
+        // if valid then generate results
+        if ($form->isValid()) {
+            $elasticSearch->configureNavigation();
+            $view = $elasticSearch->generateResults($view);
+        }
 
         return $this->renderView($view, 'Search results');
     }
