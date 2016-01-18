@@ -2,16 +2,16 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\AbstractData;
+use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
+use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermitTypeList;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 
 /**
- * Class BusServiceType
+ * Class IrfoGvPermitType
  */
-class IrfoGvPermitType extends AbstractData implements ListDataInterface
+class IrfoGvPermitType extends AbstractDataService implements ListDataInterface
 {
-    protected $serviceName = 'IrfoGvPermitType';
-
     /**
      * Format data!
      *
@@ -48,22 +48,22 @@ class IrfoGvPermitType extends AbstractData implements ListDataInterface
     /**
      * Ensures only a single call is made to the backend for each dataset
      *
-     * @internal param $category
      * @return array
      */
     public function fetchListData()
     {
         if (is_null($this->getData('IrfoGvPermitType'))) {
 
-            $data = $this->getRestClient()->get('', ['limit' => 1000]);
-
+            $dtoData = IrfoGvPermitTypeList::create([]);
+            $response = $this->handleQuery($dtoData);
+            if (!$response->isOk()) {
+                throw new UnexpectedResponseException('unknown-error');
+            }
             $this->setData('IrfoGvPermitType', false);
-
-            if (isset($data['Results'])) {
-                $this->setData('IrfoGvPermitType', $data['Results']);
+            if (isset($response->getResult()['results'])) {
+                $this->setData('IrfoGvPermitType', $response->getResult()['results']);
             }
         }
-
         return $this->getData('IrfoGvPermitType');
     }
 }
