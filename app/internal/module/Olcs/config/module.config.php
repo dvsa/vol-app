@@ -279,6 +279,8 @@ return array(
             'OperatorFeesController'
                 => 'Olcs\Controller\Operator\OperatorFeesController',
             'TMController' => TransportManagerController::class,
+            'HistoricTmController'
+                => Olcs\Controller\TransportManager\HistoricTm\HistoricTmController::class,
             'TMDetailsDetailController' => TransportManagerDetailsDetailController::class,
             'TMDetailsCompetenceController'
                 => 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsCompetenceController',
