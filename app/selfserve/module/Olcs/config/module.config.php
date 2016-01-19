@@ -1113,6 +1113,9 @@ return array(
         ],
     ],
     'zfc_rbac' => [
+        'assertion_map' => [
+            'selfserve-ebsr-list' => \Olcs\Assertion\Ebsr\EbsrList::class,
+        ],
         'guards' => [
             'ZfcRbac\Guard\RoutePermissionsGuard' => [
                 // Dashboard Page
