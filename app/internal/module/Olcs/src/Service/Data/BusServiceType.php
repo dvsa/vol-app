@@ -2,17 +2,18 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\AbstractData;
 use Common\Service\Data\ListDataInterface;
+use Common\Service\Data\AbstractDataService;
+use Common\Service\Data\ListDataTrait;
+use Dvsa\Olcs\Transfer\Query\Bus\BusServiceTypeList;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 
 /**
  * Class BusServiceType
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusServiceType extends AbstractData implements ListDataInterface
+class BusServiceType extends AbstractDataService implements ListDataInterface
 {
-    protected $serviceName = 'BusServiceType';
-
     /**
      * Format data!
      *
@@ -49,19 +50,21 @@ class BusServiceType extends AbstractData implements ListDataInterface
     /**
      * Ensures only a single call is made to the backend for each dataset
      *
-     * @internal param $category
      * @return array
      */
     public function fetchListData()
     {
         if (is_null($this->getData('BusServiceType'))) {
 
-            $data = $this->getRestClient()->get('', ['limit' => 1000]);
+            $dtoData = BusServiceTypeList::create([]);
+            $response = $this->handleQuery($dtoData);
+            if (!$response->isOk()) {
+                throw new UnexpectedResponseException('unknown-error');
+            }
 
             $this->setData('BusServiceType', false);
-
-            if (isset($data['Results'])) {
-                $this->setData('BusServiceType', $data['Results']);
+            if (isset($response->getResult()['results'])) {
+                $this->setData('BusServiceType', $response->getResult()['results']);
             }
         }
 
