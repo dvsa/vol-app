@@ -1,10 +1,9 @@
-<div class="read-only">
 
 <?php
 if (empty($this->section['comments'])) {
     if (!$readonly):
 ?>
-    <a class="action--secondary js-modal-ajax" href="<?php echo $this->url(
+    <a class="action--secondary js-modal-ajax comment-button" href="<?php echo $this->url(
         'submission_section_comment', [
             'case' => $this->caseId,
             'submission' => $this->submissionId,
@@ -36,4 +35,4 @@ if (empty($this->section['comments'])) {
     }
 }
 ?>
-</div>
+

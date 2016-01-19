@@ -23,24 +23,25 @@ foreach ($allSections as $sectionId => $sectionDescription) {
             $readonly,
             $submission['version']
         );
+        // if (isset($submissionConfig[$sectionId]['allow_attachments']) &&
+        //     $submissionConfig[$sectionId]['allow_attachments'] && !$readonly) {
+
+        //     $freetext .= $this->partial(
+        //         'pages/form',
+        //         ['form' => $selectedSectionsArray[$sectionId]['attachmentsForm']]
+        //     );
+        // }
         if (isset($submissionConfig[$sectionId]['allow_comments']) && $submissionConfig[$sectionId]['allow_comments']) {
-            $freetext .= $this->partial('sections/cases/pages/submission/comments',
+            $freetext .= $this->partial('sections/cases/pages/submission/attach-comment',
                 [
+                    'submissionConfig' => $submissionConfig,
+                    'form' => $selectedSectionsArray[$sectionId]['attachmentsForm'],
                     'sectionId' => $sectionId,
                     'section' => $selectedSectionsArray[$sectionId],
                     'caseId' => $case['id'],
                     'submissionId' => $submission['id'],
                     'readonly' => $readonly
                 ]
-            );
-        }
-
-        if (isset($submissionConfig[$sectionId]['allow_attachments']) &&
-            $submissionConfig[$sectionId]['allow_attachments'] && !$readonly) {
-
-            $freetext .= $this->partial(
-                'pages/form',
-                ['form' => $selectedSectionsArray[$sectionId]['attachmentsForm']]
             );
         }
     }
@@ -87,10 +88,12 @@ if (!$readonly) {
         )
     ]);
 }
+
+
 array_push($actions, [
     'label' => 'Print submission',
     'attributes' => ['target' => '_blank'],
-    'class' => 'action--secondary download',
+    'class' => 'action--secondary',
     'url' => $this->url(
         'submission', [
             'case' => $case['id'],
@@ -100,6 +103,14 @@ array_push($actions, [
     )
 ]);
 
+//last submission
+echo $this->render('partials/read-only/header',
+    [
+        'header' => $submission['submissionTypeTitle']['description'],
+        'actions' => $actions
+    ]
+);
+
 echo $this->partial(
     'sections/cases/pages/submission/submission-declaration',
     [
@@ -107,16 +118,12 @@ echo $this->partial(
     ]
 );
 
-//last submission
-echo $this->render('partials/read-only/main',
-    [
-        'header' => $submission['submissionTypeTitle']['description'],
-        'actions' => $actions,
-        'freetext' => $freetext
-    ]
-);
 
 ?>
+
+<?php echo $freetext; ?>
+
+
 <?php if (count($submission['submissionActions']) > 0): ?>
 <h4 class="title">Submission actions</h4>
 

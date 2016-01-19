@@ -5,9 +5,7 @@ if ($submission['isNi']) {
 } else {
     $freeText = 'This is an OFFICIAL document and is not for disclosure to any third parties without the ' .
         'specific consent of the Traffic Commissioner.';
-}
-echo $this->render('partials/read-only/main',
-    [
-        'header' => $freeText
-    ]
-);
+} ?>
+<p><?php echo $freeText; ?></p>
+<hr />
+
