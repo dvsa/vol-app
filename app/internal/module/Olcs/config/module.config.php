@@ -417,6 +417,7 @@ return array(
             'Olcs\Service\Data\IrfoCountry' => 'Olcs\Service\Data\IrfoCountry',
             'Olcs\Service\Data\IrfoGvPermitType' => 'Olcs\Service\Data\IrfoGvPermitType',
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
+            'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
         ],
         'factories' => array(
             \Olcs\Service\Marker\MarkerService::class => \Olcs\Service\Marker\MarkerService::class,
@@ -441,7 +442,6 @@ return array(
             LicenceListener::class => LicenceListener::class,
             'Olcs\Listener\RouteParam\CaseMarker' => 'Olcs\Listener\RouteParam\CaseMarker',
             'Olcs\Listener\RouteParam\Organisation' => 'Olcs\Listener\RouteParam\Organisation',
-            'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
             'Olcs\Service\Data\Team' => 'Olcs\Service\Data\Team',
             'Olcs\Service\Data\SiPenaltyType' => 'Olcs\Service\Data\SiPenaltyType',
             'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
