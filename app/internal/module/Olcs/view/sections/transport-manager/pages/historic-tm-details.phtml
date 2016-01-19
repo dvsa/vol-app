@@ -1,17 +1,3 @@
 <?php
 
-$items = [
-['label' => 'Operator name', 'value' => $operatorName],
-['label' => 'Licence No.', 'value' => $licNo]
-];
 
-if (isset($applicationId)) {
-$items[] = ['label' => 'Application ID', 'value' => $applicationId];
-}
-
-echo $this->render(
-'partials/read-only/main',
-[
-'items' => $items
-]
-);
