@@ -1,0 +1,19 @@
+<?php
+
+/* @var \Zend\View\Helper\Navigation\Menu $menu */
+$menu = $this->navigation($this->navigation('navigation')->getContainer()
+    ->findBy('id', 'dashboard-licences-applications'))->menu();
+
+echo $menu->setMinDepth(0)->setMaxDepth(0)
+    ->setPartial('partials/dashboard-nav');
+
+echo $licences;
+?>
+    <div class="actions-container" style="margin-bottom: 3em;">
+        <a href="<?php echo $this->url('create_application'); ?>" class="action--primary">
+            <?php echo $this->translate('application.new.button'); ?>
+        </a>
+    </div>
+<?php
+echo $variations;
+echo $applications;

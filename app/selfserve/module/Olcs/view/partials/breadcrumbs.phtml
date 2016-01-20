@@ -1,0 +1,7 @@
+<ol class="breadcrumbs">
+    <?php foreach ($this->pages as $key => $page): ?>
+        <?php if ($key < count($this->pages) - 1): ?>
+            <li class="breadcrumbs__item"><a href="<?php echo $page->getHref(); ?>"><?php echo $this->translate($page->getLabel()); ?></a></li>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</ol>

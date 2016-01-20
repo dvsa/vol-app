@@ -1,0 +1,76 @@
+{
+    "name": "olcs/olcs-selfserve",
+    "description": "OLCS Self Service Web Site",
+    "repositories": [
+        {
+            "packagist": false
+        },
+        {
+            "url": "http://satis.inf.mgt.mtpdvsa",
+            "type": "composer"
+        },
+        {
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-logging.git",
+            "type": "vcs"
+        },
+        {
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git",
+            "type": "vcs"
+        },
+        {
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-transfer.git",
+            "type": "vcs"
+        },
+        {
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-utils.git",
+            "type": "vcs"
+        },
+        {
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-auth.git",
+            "type": "vcs"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-autoload.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-testhelpers.git"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "zendframework/zendframework": "~2.3.5",
+        "doctrine/doctrine-orm-module": "~0.9.0",
+        "doctrine/annotations": "^1.2.3",
+        "symfony/Filesystem": "~2.6.0",
+        "zf-commons/zfc-rbac": "~2.4.0",
+        "olcs/autoload": "dev-develop",
+        "olcs/OlcsCommon": "dev-develop",
+        "olcs/olcs-transfer": "dev-develop",
+        "olcs/olcs-utils": "dev-develop",
+        "olcs/olcs-auth": "dev-develop",
+        "olcs/olcs-logging": "dev-develop"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.0.0",
+        "mockery/mockery": "~0.9.3",
+        "mikey179/vfsstream": "^1.4.0",
+        "olcs/olcs-testhelpers": "dev-develop"
+    },
+    "autoload": {
+        "classmap": [
+            "module/Olcs/src",
+            "vendor/olcs/OlcsCommon/Common/src/Common"
+        ],
+        "psr-4": {
+            "Common\\": "vendor/olcs/OlcsCommon/Common/src/Common"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "github-oauth": {
+            "github.com": "9d28c36d14775b5d8c4a5ffeee6172eecbd8c9f4"
+        }
+    }
+}

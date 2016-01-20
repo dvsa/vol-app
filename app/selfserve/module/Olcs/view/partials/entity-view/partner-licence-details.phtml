@@ -1,0 +1,120 @@
+<?php
+
+$items = [];
+if (!empty($this->result['tradingNames'])) {
+    for($i = 0; $i<count($this->result['tradingNames']);$i++) {
+        $label = ($i == 0) ? 'search-result-label-trading-names' : '';
+        $tradingNamesList[] = [
+            'label' => $label,
+            'value' => $this->result['tradingNames'][$i]
+        ];
+    }
+} else {
+    $tradingNamesList[] = [
+        'label' => 'search-result-label-trading-names',
+        'value' => ''
+    ];
+}
+$items[] = $tradingNamesList;
+
+if (!in_array($this->result['organisation']['type']['id'], $this->soleTraderOrRegisteredCompanyType)) {
+    if (!empty($this->result['partners'])) {
+        for ($i = 0; $i < count($this->result['partners']); $i++) {
+            $label = ($i == 0) ? 'search-result-label-partners' : '';
+            $partnersList[] = [
+                'label' => $label,
+                'value' =>
+                    $this->result['partners'][$i]['person']['forename'] . ' ' .
+                    $this->result['partners'][$i]['person']['familyName']
+            ];
+        }
+    } else {
+        $partnersList[] = [
+            'label' => 'search-result-label-partners',
+            'value' => ''
+        ];
+    }
+    $items[] = $partnersList;
+}
+
+$businessType = isset($this->result['organisation']['type']['id']) ?
+    $this->result['organisation']['type']['description'] : '';
+
+$licenceType = isset($this->result['licenceType']['description']) ? $this->result['licenceType']['description'] : '';
+$licenceReviewDate = isset($this->result['reviewDate']) ? $this->date(strtotime($this->result['reviewDate'])) : '';
+
+$totalVehicleAuthority = isset($this->result['totalAuthVehicles']) ? $this->result['totalAuthVehicles'] : '0';
+$vehiclesInPossession = isset($this->result['totalVehiclesInPossession']) ?
+    $this->result['totalVehiclesInPossession'] : '0';
+$totalTrailerAuthority = isset($this->result['totalAuthTrailers']) ? $this->result['totalAuthTrailers'] : '0';
+$trailersInPossession = isset($this->result['trailersInPossession']) ? $this->result['trailersInPossession'] : '0';
+
+$totalPiRecords = isset($this->result['totalPiRecords']) ? $this->result['totalPiRecords'] : '0';
+$isDisqualified = isset($this->result['disqualificationStatus']) ? $this->result['disqualificationStatus'] : '';
+
+$activeCommunityLicences = isset($this->result['activeCommunityLicences']) ?
+    $this->result['activeCommunityLicences'] : '';
+
+$multipleLicenceHolder = isset($this->result['otherLicences']) && count($this->result['otherLicences']) > 0 ?
+    'Y' : 'N';
+
+$leadTrafficCommissioner = isset($this->result['organisation']['leadTcArea']['contactDetails']['person']) ?
+    $this->personName($this->result['organisation']['leadTcArea']['contactDetails']['person']) : '';
+
+$trafficArea = isset($this->result['trafficArea']['description']) ? $this->result['trafficArea']['description'] : '';
+
+$licenceStartDate = isset($this->result['inForceDate']) ? $this->date(strtotime($this->result['inForceDate'])) : '';
+$licenceStatus = isset($this->result['status']['description']) ? $this->result['status']['description'] : '';
+$continuationDate = isset($this->result['expiryDate']) ? $this->date(strtotime($this->result['expiryDate'])) : '';
+$trafficArea = isset($this->result['trafficArea']['name']) ? $this->result['trafficArea']['name'] : '';
+
+echo $this->render('partials/read-only/main',
+    [
+        'multiItems' =>
+            array_merge(
+                [
+                    0 => [
+                        ['label' => 'search-result-label-business-type', 'value' => $businessType],
+                    ]
+                ],
+                $items,
+                [
+                    4 => [
+                        ['label' => 'search-result-label-licence-start-date', 'value' => $licenceStartDate],
+                        ['label' => 'search-result-label-licence-review-date', 'value' => $licenceReviewDate],
+                        ['label' => 'search-result-label-licence-type', 'value' => $licenceType],
+                        ['label' => 'search-result-label-licence-status', 'value' => $licenceStatus],
+                        [
+                            'label' => 'search-result-label-continuation-date',
+                            'dateFormat' => 'Y-m-d',
+                            'date' => $continuationDate
+                        ]
+                    ],
+                    5 => [
+                        ['label' => 'search-result-label-vauth', 'value' => $totalVehicleAuthority],
+                        ['label' => 'search-result-label-vip', 'value' => $vehiclesInPossession],
+                        ['label' => 'search-result-label-tauth', 'value' => $totalTrailerAuthority],
+                        ['label' => 'search-result-label-tip', 'value' => $trailersInPossession],
+                    ],
+                    6 => [
+                        ['label' => 'search-result-label-existing-pi', 'value' => $totalPiRecords],
+                        ['label' => 'search-result-label-operator-disqualified', 'value' =>
+                            $isDisqualified],
+                        [
+                            'label' => 'search-result-label-total-community-licences',
+                            'value' => $activeCommunityLicences
+                        ],
+                        [
+                            'label' => 'search-result-label-multiple-licence-holder',
+                            'type' => 'yesno',
+                            'value' => $multipleLicenceHolder
+                        ],
+                    ],
+                    7 => [
+                        ['label' => 'search-result-label-lead-tc', 'value' => $leadTrafficCommissioner],
+                        ['label' => 'search-result-label-traffic-area', 'value' => $trafficArea],
+                    ]
+                ]
+            )
+    ]
+);

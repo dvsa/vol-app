@@ -1,0 +1,35 @@
+<?php echo $this->doctype(); ?>
+<?php
+/**
+ * Simplified layout; will probably be used for print pages but not always
+ * exclusively. Removes standard headers & footers
+ */
+?>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle($this->translate('')); ?>
+
+        <?php echo $this->headMeta() ->appendName('viewport', 'width=device-width, initial-scale=1.0') ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')?>
+        <?php echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css'), ['media' => 'screen,print']) ?>
+        <?php echo $this->headScript(); ?>
+
+    </head>
+
+    <body class="<?php echo $this->applicationName(); ?>" id="<?php echo $this->pageId(); ?>">
+
+	<div class="page-wrapper">
+        <div id="main" role="main">
+            <?php
+            echo $this->content;
+
+            if (isset($this->children)) {
+                foreach ($this->children as $child) {
+                    echo $this->$child;
+                }
+            }
+            ?>
+        </div>
+    </div><!-- .page-wrapper-->
+    </body>
+</html>
