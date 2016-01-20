@@ -1,0 +1,11 @@
+<?php
+if ($submission['isNi']) {
+    $freeText = 'This is an OFFICIAL document and is not for disclosure to any third parties without the ' .
+        'specific consent of the Department.';
+} else {
+    $freeText = 'This is an OFFICIAL document and is not for disclosure to any third parties without the ' .
+        'specific consent of the Traffic Commissioner.';
+} ?>
+<p><?php echo $freeText; ?></p>
+<hr />
+

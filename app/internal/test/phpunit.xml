@@ -2,24 +2,20 @@
 
 <phpunit bootstrap="Bootstrap.php" colors="true">
     <testsuites>
-        <testsuite name="FE Application">
+        <testsuite name="OLCS Internal Application">
             <directory>./</directory>
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist>
-            <directory suffix=".php">../module</directory>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../module/Olcs/src</directory>
+            <directory suffix=".php">../module/Cli/src</directory>
+            <directory suffix=".php">../module/Admin/src</directory>
             <exclude>
-                <file>../module/AlphaGov/Module.php</file>
-                <file>../module/Common/Module.php</file>
-                <file>../module/Olcs/Module.php</file>
-                <directory>../module/*/config</directory>
+                <directory>../module/Olcs/src/Form/Forms</directory>
+                <directory>../module/Olcs/src/Table/</directory>
+                <directory>../module/Admin/src/Table/</directory>
             </exclude>
         </whitelist>
     </filter>
-    <logging>
-        <log type="coverage-html" target="./coverage-report" charset="UTF-8"
-             yui="true" highlight="true" lowUpperBound="50"
-             highLowerBound="80"/>
-    </logging>
 </phpunit>

@@ -1,0 +1,48 @@
+<?php
+
+namespace Olcs\Form\Model\Fieldset;
+
+use Zend\Form\Annotation as Form;
+
+/**
+ * @Form\Name("details")
+ * @Form\Options({"label":"documents.details"})
+ */
+class Details
+{
+    /**
+     * @Form\Attributes({"id":"category","placeholder":""})
+     * @Form\Options({
+     *     "label": "documents.data.category",
+     *     "service_name": "Olcs\Service\Data\Category",
+     *     "context": {"isDocCategory": "Y" }
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $category = null;
+
+    /**
+     * @Form\Attributes({"id":"documentSubCategory","placeholder":""})
+     * @Form\Options({
+     *     "label": "documents.data.sub_category",
+     *     "service_name": "Olcs\Service\Data\DocumentSubCategory",
+     *     "empty_option": "Please Select"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $documentSubCategory = null;
+
+    /**
+     * @Form\Attributes({"class":"long","id":""})
+     * @Form\Options({"label":"documents.data.description"})
+     * @Form\Required(false)
+     * @Form\Type("Text")
+     */
+    public $description = null;
+
+    /**
+     * @Form\Options({"label":"documents.data.file"})
+     * @Form\Type("\Zend\Form\Element\File")
+     */
+    public $file = null;
+}

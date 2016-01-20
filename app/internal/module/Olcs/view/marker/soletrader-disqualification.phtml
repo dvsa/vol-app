@@ -1,0 +1,18 @@
+<p class="notice--<?php echo $this->active ? 'danger' : 'warning' ?>">
+    <strong>
+        <?php
+        echo $this->translate('Sole trader disqualified')
+        ?>
+    </strong>
+    <br>
+    <?php
+    echo $this->startDateTime->format(\DATE_FORMAT);
+    if (!empty($this->endDateTime)) {
+        echo ' to '. $this->endDateTime->format(\DATE_FORMAT);
+    }
+    ?>
+    <br>
+    <a href="<?php echo $this->url('operator/disqualify_person', ['person' => (int) $this->personId, 'organisation' => (int) $this->organisationId]) ?>" class="js-modal-ajax">
+        <?php echo $this->translate('Edit disqualification') ?>
+    </a>
+</p>

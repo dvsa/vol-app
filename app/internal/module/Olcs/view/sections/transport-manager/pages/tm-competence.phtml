@@ -1,0 +1,9 @@
+<?php
+
+$form = $this->placeholder('form')->getValue();
+$table = $this->placeholder('table')->getValue();
+
+echo $table;
+if (isset($form)) {
+    echo $this->form($form);
+}

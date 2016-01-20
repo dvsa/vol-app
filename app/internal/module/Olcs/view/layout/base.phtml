@@ -1,0 +1,110 @@
+<?php
+{
+    $title = null;
+    if (isset($this->pageTitle)) {
+        $title = $this->pageTitle;
+    } else {
+        $title = $this->getPlaceholder('pageTitle')->asString();
+    }
+
+    $subTitle = null;
+    if (isset($pageSubTitle)) {
+        $subTitle = $pageSubTitle;
+    } else {
+        $subTitle = $this->getPlaceholder('pageSubtitle')->asString();
+    }
+
+    if (!isset($contentTitle)) {
+        $contentTitle = $this->getPlaceholder('contentTitle')->asString();
+    }
+
+    // We may have right content in a placeholder
+    if (!isset($right)) {
+        $right = $this->getPlaceholder('right')->asView();
+    }
+
+    // We may have nav id in a placeholder
+    if (!isset($horizontalNavigationId)) {
+        $horizontalNavigationId = $this->getPlaceholder('horizontalNavigationId')->asString();
+    }
+
+    if (!isset($horizontalNavigationContainer)) {
+        $horizontalNavigationContainer = $this->getPlaceholder('horizontalNavigationContainer')->asObject();
+    }
+
+}
+$this->doctype(); ?>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <?php echo $this->partial('partials/head', ['title' => $title]); ?>
+  </head>
+  <body class="internal" id="<?php echo $this->pageId(); ?>">
+    <?php echo $this->version(); ?>
+
+    <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+
+    <?php
+      echo $this->partial('layout/partials/global-header');
+      echo $this->partial('layout/partials/header', ['title' => $title, 'subTitle' => $subTitle]); 
+    ?>
+
+    <div class="page-wrapper">
+
+      <?php
+        if (!empty($horizontalNavigationId)) {
+            echo $this->navigation('navigation')
+                ->menu($this->navigation()->findOneBy('id', $horizontalNavigationId))
+                ->setPartial('partials/horizontal-navigation');
+        } elseif(!empty($horizontalNavigationContainer)) {
+            echo $this->navigation($horizontalNavigationContainer)->menu()->setPartial('partials/horizontal-navigation');
+        }
+      ?>
+
+      <div id="main" role="main">
+
+        <?php if (isset($right)): ?><div class="table-col"><?php endif; ?>
+
+          <div class="content">
+
+            <?php if (isset($this->left)): ?>
+
+              <div class="sidebar--left">
+                <?php echo $this->left; ?>
+              </div>
+
+              <div class="table-col">
+
+                <?php endif; if (!empty($contentTitle)): ?>
+                  <div class="content__header js-title">
+                    <h4 class="title"><?php echo $this->translate($contentTitle); ?></h4>
+                  </div>
+                <?php endif; ?>
+
+                <div class="js-body">
+                  <?php
+                    echo $this->flashMessengerAll();
+                    echo $this->content;
+                  ?>
+                </div>
+
+            <?php if (isset($this->left)): ?></div><?php endif; ?>
+
+          </div><!-- content -->
+
+        <?php if (isset($right)): ?></div><!-- .table-col --><?php endif; if (!empty($right)): ?>
+
+        <div class="sidebar--right">
+          <?php echo $this->render($right); ?>
+        </div>
+
+        <?php endif; ?>
+
+      </div><!-- #main -->
+
+    </div><!-- .page-wrapper-->
+  <?php echo $this->partial('partials/body-end'); ?>
+  </body>
+
+</html>

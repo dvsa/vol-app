@@ -1,45 +1,78 @@
 {
-    "name": "OLCS Self Serve",
-    "description": "OLCS Self Service Web Site",
+    "name": "olcs/olcs-internal",
+    "description": "OLCS Internal Web Site",
     "repositories": [
         {
-        "type": "package",
-        "package": {
-            "name": "olcs/olcs-entities",
-            "version": "0.1.4",
-            "source": {
-                "url": "gitolite@git.clb.npm:olcs-entities.git",
-                "type": "git",
-                "reference": "origin/master"
-                }
-            }
+            "packagist": false
         },
         {
-        "type": "package",
-        "package": {
-            "name": "olcs/OlcsCommon",
-            "version": "0.1.0",
-            "source": {
-                "url": "gitolite@git.clb.npm:olcs-common.git",
-                "type": "git",
-                "reference": "origin/develop"
-                }
-            }
+            "url": "http://satis.inf.mgt.mtpdvsa",
+            "type": "composer"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git"
+        },
+        {
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-transfer.git",
+            "type": "vcs"
+        },
+        {
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-utils.git",
+            "type": "vcs"
+        },
+        {
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-auth.git",
+            "type": "vcs"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-testhelpers.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-logging.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-autoload.git"
         }
     ],
     "require": {
         "php": ">=5.4",
-        "phpunit/phpunit": "4.0.*",
-        "zendframework/zendframework": "2.2.*",
-        "doctrine/doctrine-orm-module": "0.*",
-        "olcs/olcs-entities": "0.1.*",
-        "olcs/OlcsCommon": "0.1.*"
+        "zendframework/zendframework": "~2.3.5",
+        "doctrine/doctrine-orm-module": "~0.9.0",
+        "doctrine/annotations": "^1.2.3",
+        "symfony/Filesystem": "~2.6.0",
+        "zf-commons/zfc-rbac": "~2.4.0",
+        "olcs/autoload": "dev-develop",
+        "olcs/OlcsCommon": "dev-develop",
+        "olcs/olcs-transfer": "dev-develop",
+        "olcs/olcs-utils": "dev-develop",
+        "olcs/olcs-auth": "dev-develop",
+        "olcs/olcs-logging": "dev-develop",
+        "zendframework/zend-developer-tools": "dev-master",
+        "soflomo/purifier": "~0.1.0"
     },
-    "autoload" : {
+    "require-dev": {
+        "phpunit/phpunit": "^4.0.0",
+        "mockery/mockery": "~0.9.3",
+        "olcs/olcs-testhelpers": "dev-develop"
+    },
+    "autoload": {
+        "classmap": [
+            "module/Admin/src",
+            "module/Olcs/src",
+            "vendor/olcs/OlcsCommon/Common/src/Common"
+        ],
         "psr-4": {
-            "OlcsEntities\\": "vendor/olcs/olcs-entities/OlcsEntities/src/OlcsEntities",
-            "Common\\": "vendor/olcs/OlcsCommon/Common/src"
+            "Common\\": "vendor/olcs/OlcsCommon/Common/src/Common"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "github-oauth": {
+            "github.com": "9d28c36d14775b5d8c4a5ffeee6172eecbd8c9f4"
         }
     }
 }
-

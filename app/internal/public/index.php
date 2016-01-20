@@ -1,8 +1,10 @@
 <?php
 
-error_reporting(E_ALL);
+error_reporting(-1);
 ini_set("display_errors", 1);
-    
+ini_set('intl.default_locale', 'en_GB');
+date_default_timezone_set('Europe/London');
+
 /**
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.
@@ -17,5 +19,8 @@ if (php_sapi_name() === 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['RE
 // Setup autoloading
 require 'init_autoloader.php';
 
+// load dependent on where application is running from
+$applicationConfig = (PHP_SAPI === 'cli') ? 'application.cli.config.php' : 'application.config.php';
+
 // Run the application!
-Zend\Mvc\Application::init(require 'config/application.config.php')->run();
+Zend\Mvc\Application::init(require 'config/'. $applicationConfig)->run();

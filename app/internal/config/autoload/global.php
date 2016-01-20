@@ -1,21 +1,18 @@
 <?php
-return array(
-    'service_api_mapping' => array(
-        array(
-            'endpoint' => 'http://olcspayment.dev/api/',
-            'apis' => array(
-                'Vosa\Payment\Token' => 'token',
-                'Vosa\Payment\Db' => 'paymentdb',
-                'Vosa\Payment\Card' => 'cardpayment',
-            ),
-        ),
-        array(
-            'endpoint' => 'http://olcs-backend/',
-            'apis' => array(
-                'User' => 'user',
-                'Person' => 'person',
-            )
-        )
-    )
-);
 
+return array(
+    'application-name' => 'internal',
+    'cqrs_client' => [
+        'adapter' => \Zend\Http\Client\Adapter\Curl::class,
+        'timeout' => 60,
+    ],
+    'form_row' => [
+        'render_date_hint' => false
+    ],
+    'soflomo_purifier' => [
+        'config' => [
+            'Cache.SerializerPath' => sys_get_temp_dir(),
+        ],
+    ],
+    'zfc_rbac' => require('zfc_rbac.config.php')
+);

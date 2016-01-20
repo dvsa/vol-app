@@ -1,0 +1,68 @@
+<?php
+
+namespace OlcsTest\Service\Marker;
+
+use Mockery as m;
+
+/**
+ * BusRefEbsrMarkerTest
+ *
+ * @author Mat Evans <mat.evans@valtech.co.uk>
+ */
+class BusRefEbsrMarkerTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     *
+     * @var \Olcs\Service\Marker\BusRegEbsrMarker
+     */
+    protected $sut;
+
+    public function setUp()
+    {
+        $this->sut = new \Olcs\Service\Marker\BusRegEbsrMarker();
+    }
+
+    public function testCanRenderWithNoData()
+    {
+        $this->assertFalse($this->sut->canRender());
+    }
+
+    public function testCanRenderN()
+    {
+        $data = [
+            'busReg' => ['isTxcApp' => 'N']
+        ];
+
+        $this->sut->setData($data);
+
+        $this->assertFalse($this->sut->canRender());
+    }
+
+    public function testCanRenderY()
+    {
+        $data = [
+            'busReg' => ['isTxcApp' => 'Y']
+        ];
+
+        $this->sut->setData($data);
+
+        $this->assertTrue($this->sut->canRender());
+    }
+
+    public function testRender()
+    {
+        $data = [
+            'busReg' => ['isTxcApp' => 'Y']
+        ];
+
+        $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);
+
+        $mockPartialHelper->shouldReceive('__invoke')
+            ->with('marker/busreg-ebsr', ['busReg' => $data['busReg']])->once()->andReturn('HTML1');
+
+        $this->sut->setData($data);
+        $this->sut->setPartialHelper($mockPartialHelper);
+
+        $this->assertSame('HTML1', $this->sut->render());
+    }
+}

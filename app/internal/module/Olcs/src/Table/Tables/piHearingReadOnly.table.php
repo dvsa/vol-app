@@ -1,0 +1,45 @@
+<?php
+
+return array(
+    'variables' => array(
+        'title' => 'Hearings',
+    ),
+    'settings' => array(
+        'paginate' => array(
+            'limit' => array(
+                'default' => 10,
+                'options' => array(10, 25, 50)
+            )
+        )
+    ),
+    'attributes' => array(
+    ),
+    'columns' => array(
+        array(
+            'title' => 'Date of PI',
+            'formatter' => function ($data) {
+                $date = date(\DATE_FORMAT, strtotime($data['hearingDate']));
+                $url = $this->generateUrl(
+                    ['action' => 'edit', 'id' => $data['id'], 'pi' => $data['pi']['id']],
+                    'case_pi_hearing', true
+                );
+                return '<a href="' . $url . '" class="js-modal-ajax">' . $date . '</a>';
+            },
+            'name' => 'id'
+        ),
+        array(
+            'title' => 'Venue',
+            'formatter' => function ($data) {
+                return (isset($data['piVenue']['name']) ? $data['piVenue']['name'] : $data['piVenueOther']);
+            }
+        ),
+        array(
+            'title' => 'Adjourned',
+            'name' => 'isAdjourned'
+        ),
+        array(
+            'title' => 'Cancelled',
+            'name' => 'isCancelled'
+        ),
+    )
+);

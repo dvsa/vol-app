@@ -1,0 +1,10 @@
+<p class="notice--warning">
+    <strong>
+        <?php
+        echo $this->translate('Submitted by EBSR');
+        if ($this->busReg['ebsrRefresh'] == 'Y') {
+            echo ' '. $this->translate('data refresh');
+        }
+        ?>
+    </strong>
+</p>

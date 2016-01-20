@@ -1,0 +1,67 @@
+<?php
+$result = $this->placeholder('details')->getValue();
+
+//no decision so display buttons
+if (count((array)$result) < 1) {
+    echo $this->render('partials/read-only/empty',
+        [
+            'header' => 'Non-public inquiry',
+            'helpText' => 'There is no non-nublic Inquiry',
+            'url' => $this->url('case_non_pi', ['action' => 'add'], [], true),
+            'label' => 'Add non-public inquiry',
+            'class' => 'action--primary left-aligned js-modal-ajax'
+        ]
+    );
+} else { //there is a decision
+    $data = $result;
+
+    $items = [
+        [
+            ['label' => 'Type', 'value' => $data['hearingType']['description']],
+            [
+                'label' => 'Meeting date & time',
+                'value' => $this->date(strtotime($data['hearingDate']), \DATETIME_FORMAT, 'N/a')
+            ],
+        ],
+        [
+            [
+                'label' => 'Presiding TC/DTC/TR/DTR',
+                'value' => isset($data['presidingStaffName']) ? $data['presidingStaffName'] : 'N/a'
+            ],
+            [
+                'label' => 'TC/DTC/TR/DTR agreed date',
+                'value' => $this->date(strtotime($data['agreedByTcDate']), \DATE_FORMAT, 'N/a')
+            ]
+        ],
+        [
+            [
+                'label' => 'Meeting venue',
+                'value' => !empty($data['venue']) ? $data['venue']['name'] : $data['venueOther'],
+            ],
+            [
+                'label' => 'Number of witnesses',
+                'value' => !empty($data['witnessCount']) ? $data['witnessCount'] : 'None'
+            ],
+        ],
+        [
+            [
+                'label' => 'Outcome',
+                'value' => !empty($data['outcome']) ? $data['outcome']['description'] : 'N/a',
+            ]
+        ]
+    ];
+
+    echo $this->render('partials/read-only/main',
+        [
+            'header' => 'Non-Public Inquiry',
+            'actions' => [
+                [
+                    'label' => 'Edit',
+                    'url' => $this->url('case_non_pi', ['action' => 'edit','id' => $data['id']], [], true),
+                    'class' => 'action--primary right-aligned js-modal-ajax'
+                ]
+            ],
+            'multiItems' => $items
+        ]
+    );
+}

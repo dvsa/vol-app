@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * Bus Fees Controller
+ *
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ */
+namespace Olcs\Controller\Bus\Fees;
+
+use Common\Controller\Traits\GenericReceipt;
+use Olcs\Controller\Bus\BusController;
+use Olcs\Controller\Traits\FeesActionTrait;
+
+/**
+ * Bus Fees Controller
+ *
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ */
+class BusFeesController extends BusController
+{
+    use FeesActionTrait,
+        GenericReceipt;
+
+    protected $section = 'fees';
+    protected $subNavRoute = 'licence_bus_fees';
+
+    /**
+     * Route (prefix) for fees action redirects
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return string
+     */
+    protected function getFeesRoute()
+    {
+        return 'licence/bus-fees';
+    }
+
+    /**
+     * The fees route redirect params
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return array
+     */
+    protected function getFeesRouteParams()
+    {
+        return [
+            'licence' => $this->getFromRoute('licence'),
+            'busRegId' => $this->getFromRoute('busRegId'),
+        ];
+    }
+
+    /**
+     * The controller specific fees table params
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return array
+     */
+    protected function getFeesTableParams()
+    {
+        return [
+            'licence' => $this->getFromRoute('licence'),
+            'busReg' => $this->getFromRoute('busRegId'),
+            'status' => 'current',
+        ];
+    }
+
+    protected function renderLayout($view)
+    {
+        return $this->renderView($view);
+    }
+
+    public function redirectToIndex()
+    {
+        return $this->redirectToList();
+    }
+
+    protected function getFeeTypeDtoData()
+    {
+        return [
+            'busReg' => $this->getFromRoute('busRegId'),
+            'licence' => $this->params()->fromRoute('licence')
+        ];
+    }
+
+    protected function getCreateFeeDtoData($formData)
+    {
+        return [
+            'invoicedDate' => $formData['fee-details']['createdDate'],
+            'feeType' => $formData['fee-details']['feeType'],
+            'licence' => $this->params()->fromRoute('licence'),
+            'busReg' => $this->params()->fromRoute('busRegId'),
+        ];
+    }
+}

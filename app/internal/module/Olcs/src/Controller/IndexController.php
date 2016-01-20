@@ -1,402 +1,117 @@
 <?php
 
 /**
- * @package    olcs
- * @subpackage
- * @author     Mike Cooper
+ * Index Controller
+ *
+ * @author Mike Cooper <michael.cooper@valtech.co.uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
  */
-
 namespace Olcs\Controller;
 
-use Common\Controller\AbstractActionController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
-use Common\Exception\ResourceNotFoundException;
-use Common\Exception\BadRequestException;
-use OlcsEntities\Entity\User;
-use Common\Exception\ResourceConflictException;
+use Zend\View\Model\JsonModel;
+use Olcs\Controller\Traits\TaskSearchTrait;
 
-class IndexController extends AbstractActionController
+/**
+ * Index Controller
+ *
+ * @NOTE Migrated (Not converted to a "new" internal controller)
+ *
+ * @author Mike Cooper <michael.cooper@valtech.co.uk>
+ * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Rob Caiger <rob@clocal.co.uk>
+ */
+class IndexController extends AbstractController implements LeftViewProvider
 {
-
-    public function notFoundAction()
-    {
-        $routeMatch = $this->getEvent()->getRouteMatch();
-        $method = $routeMatch->getParam('action');
-
-        $view = new ViewModel(['method' => $method]);
-        $view->setTemplate('index/' . $method . '.phtml');
-        return $view;
-    }
-
-    // public function homeAction()
-    // {
-    //     $view = new ViewModel(['response' => 'Home page']);
-    //     $view->setTemplate('index');
-    //     return $view;
-    // }
-
-    public function formTestAction()
-    {
-        $form = new \Zend\Form\Form('testFormName');
-
-        $form->add([
-            'type' => 'Text',
-            'name' => 'name',
-            'options' => [
-                'label' => 'Name',
-                'help-block' => 'Text Field Help Text',
-            ],
-            'inputErrorClass' => 'error',
-            'attributes' => [
-                'id' => 'name',
-                'placeholder' => 'Text Field Placeholder',
-                'class' => 'long'
-            ],
-            'filters' => [
-                ['name' => 'Zend\Filter\StringTrim'],
-                ['name' => 'Zend\Filter\StringToLower'],
-            ],
-            'validators' => [
-                new \Zend\Validator\StringLength(['min' => 10, 'max' => 100]),
-
-            ]
-        ]);
-
-        // $form->add([
-        //     'type' => 'DateSelect',
-        //     'name' => 'dob',
-        //     'options' => [
-        //         'label' => 'Date of Birth',
-        //         'label_attributes' => ['class' => ''],
-        //         'column-size' => 'sm-6',
-        //         'create_empty_option' => true,
-        //         'render_delimiters' => false,
-        //         'help-block' => 'Your date of birth',
-        //     ],
-        //     'attributes' => [
-        //         'id' => 'dob',
-        //     ]
-        // ]);
-
-        $form->add([
-            'type' => '\Zend\Form\Element\Select',
-            'name' => 'standardSelect',
-            'options' => [
-                'label' => 'Standard Select',
-                'label_attributes' => ['class' => ''],
-                'value_options' => [
-                    '1' => 'Option 1',
-                    '2' => 'Option 2',
-                    '3' => 'Option 3',
-                    '4' => 'Option 4',
-                ],
-                'empty_option' => 'Please Select',
-                'disable_inarray_validator' => false,
-                'help-block' => 'Standard Select Help Text',
-            ],
-            'attributes' => [
-                'id' => 'standardSelect',
-                'placeholder' => 'Standard Select Placeholder',
-            ]
-        ]);
-
-        $form->add([
-            'type' => '\Zend\Form\Element\MultiCheckbox',
-            'name' => 'multiCheckbox',
-            'options' => [
-                'label' => 'Multi Checkbox',
-                'label_attributes' => ['class' => ''],
-                'value_options' => [
-                    '1' => 'MultiCheckbox Option 1',
-                    '2' => 'MultiCheckbox Option 2',
-                    '3' => 'MultiCheckbox Option 3',
-                    '4' => 'MultiCheckbox Option 4',
-                ],
-                'empty_option' => 'Please Select',
-                'disable_inarray_validator' => false,
-                'help-block' => 'Multi Checkbox Help Text',
-            ],
-            'attributes' => [
-                'id' => 'multiCheckbox',
-                'placeholder' => 'Multi Checkbox Placeholder',
-            ]
-        ]);
-
-        $form->add([
-            'type' => '\Zend\Form\Element\Radio',
-            'name' => 'radioGender',
-            'options' => [
-                'label' => 'Radio Gender',
-                'label_attributes' => ['class' => ''],
-                'value_options' => [
-                    '1' => 'Radio Gender Option 1',
-                    '2' => 'Radio Gender Option 2',
-                    '3' => 'Radio Gender Option 3',
-                    '4' => 'Radio Gender Option 4',
-                ],
-                'empty_option' => 'Please Select',
-                'disable_inarray_validator' => false,
-                'help-block' => 'Radio Gender Help Text',
-            ],
-            'attributes' => [
-                'id' => 'radioGender',
-                'placeholder' => 'Radio Gender Placeholder',
-            ]
-        ]);
-
-        $form->add([
-            'type' => '\Zend\Form\Element\Textarea',
-            'name' => 'freeText',
-            'options' => [
-                'label' => 'Free Text',
-                'label_attributes' => ['class' => ''],
-                'column-size' => 'sm-6',
-                'help-block' => 'You can type anything in this box.',
-            ],
-            'attributes' => [
-                'id' => 'freeText',
-                'class' => 'extra-long'
-            ],
-            'filters' => [
-                ['name' => 'Zend\Filter\StringTrim'],
-                ['name' => 'Zend\Filter\StringToLower'],
-            ],
-            'validators' => [
-                new \Zend\Validator\StringLength(['min' => 10, 'max' => 100]),
-
-            ]
-        ]);
-
-        $form->add([
-            'type' => 'Zend\Form\Element\Csrf',
-            'name' => 'olcs_csrf'
-        ]);
-
-        $form->add([
-            'type' => '\Zend\Form\Element\Button',
-            'name' => 'submit',
-            'options' => [
-                'label' => 'Submit',
-                'label_attributes' => ['class' => ''],
-            ],
-            'attributes' => [
-                'type' => 'submit',
-                'class' => 'button--primary'
-            ]
-        ]);
-
-        if ($this->getRequest()->isPost()) {
-
-            $data = $this->getRequest()->getPost();
-
-            $form->setData($data);
-
-            if ($form->isValid()) {
-                //echo 'Valid';
-            }
-        }
-
-        $view = new ViewModel(['form'=>$form]);
-        $view->setTemplate('index/form-test.phtml');
-        return $view;
-    }
+    use TaskSearchTrait;
 
     public function indexAction()
     {
-        $id = $this->getEvent()->getRouteMatch()->getParam('id');
-        $this->log('MWC - index '.date('d-m-Y'));
+        $redirect = $this->processTasksActions();
 
-        $response = $this->getUserById($id);
-
-        $view = new ViewModel(['response' => $response]);
-        $view->setTemplate('index');
-        return $view;
-    }
-
-    private function getUserById($id)
-    {
-        try {
-
-            $response = $this->makeRestCall('User', 'GET', array('id' => $id));
-
-        } catch (ResourceNotFoundException $ex) {
-
-            // @todo: Handle 404 not found exception
-            die('404 not found');
-
-        } catch (\Exception $ex) {
-
-            // @todo Handle unexpected exception
-            die('Unknown problem: ' . $ex->getMessage());
+        if ($redirect) {
+            return $redirect;
         }
 
-        return $response;
-    }
+        $filters = $this->mapTaskFilters();
 
-    public function searchAction()
-    {
-        $username = $this->getEvent()->getRouteMatch()->getParam('username');
-        $this->log('MWC - index '.date('d-m-Y'));
+        $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
 
-        try {
-
-            $response = $this->makeRestCall('User', 'GET', array('username' => '%' . $username . '%'));
-
-        } catch (ResourceNotFoundException $ex) {
-
-            // @todo: Handle 404 not found exception
-            die('404 not found');
-
-        } catch (\Exception $ex) {
-
-            // @todo Handle unexpected exception
-            die('Unknown problem: ' . $ex->getMessage());
+        // assignedToTeam or Category must be selected
+        if (empty($filters['assignedToTeam']) && empty($filters['category'])) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addWarningMessage(
+                'Please filter by either a team or a category.'
+            );
+            $view = new ViewModel();
+        } else {
+            $view = new ViewModel(['table' => $this->getTaskTable($filters, true)]);
         }
 
-        $view = new ViewModel(['response' => $response]);
-        $view->setTemplate('index');
-        return $view;
+        $view->setTemplate('pages/table');
+
+        return $this->renderView($view, 'Home');
     }
 
-    public function createAction()
+    public function getLeftView()
     {
-        $this->log('MWC - index '.date('d-m-Y'));
+        $filters = $this->mapTaskFilters();
 
-        $entity = new User();
+        $left = new ViewModel(['form' => $this->getTaskForm($filters)]);
+        $left->setTemplate('sections/home/partials/left');
 
-        $entity->setUsername('Bobby123');
-        $entity->setPassword('password');
+        return $left;
+    }
 
-        try {
+    /**
+     * Retrieve a list of entities, filtered by a certain key.
+     * The consumer doesn't control what the entities and keys are; they
+     * simply provide a key and a value which we look up in a map
+     *
+     * @return JsonModel
+     */
+    public function entityListAction()
+    {
+        $key = $this->params('type');
+        $value = $this->params('value');
 
-            $response = $this->makeRestCall('User', 'POST', $entity);
-
-        } catch (BadRequestException $ex) {
-
-            // @todo Handle 400 Bad request
-            // This most likely means there is something wrong with the entity
-            die('Bad request: ' . $ex->getMessage());
-
-        } catch (\Exception $ex) {
-
-            // @todo Handle unexpected exception
-            die('Unknown problem: ' . $ex->getMessage());
+        switch ($key) {
+            case 'users':
+                $results = $this->getListDataUser($value, 'All');
+                break;
+            case 'task-sub-categories':
+                $results = $this->getListDataSubCategoryTask($value, 'All');
+                break;
+            case 'document-sub-categories':
+                $results = $this->getListDataSubCategoryDocs($value, 'All');
+                break;
+            case 'scanning-sub-categories':
+                $results = $this->getListDataSubCategoryTask($value, 'All');
+                break;
+            case 'document-templates':
+                $results = $this->getListDataDocTemplates(null, $value, 'All');
+                break;
+            case 'sub-category-descriptions':
+                $results = $this->getListDataSubCategoryDescription($value);
+                break;
+            default:
+                throw new \Exception('Invalid entity filter key: ' . $key);
         }
 
-        $view = new ViewModel(['response' => $response]);
-        $view->setTemplate('index');
-        return $view;
-    }
-
-    public function updateAction()
-    {
-        $this->log('MWC - index '.date('d-m-Y'));
-
-        $id = $this->getEvent()->getRouteMatch()->getParam('id');
-
-        // Ensure when updating you have a version number
-        $entity = array(
-            'username' => 'Updated Username',
-            'version' => 2
-        );
-
-        try {
-
-            $response = $this->makeRestCall('User', 'PUT', array('id' => $id, 'details' => $entity));
-
-        } catch (BadRequestException $ex) {
-
-            // @todo Handle 400 Bad request
-            // This most likely means there is something wrong with the entity
-            die('Bad request: ' . $ex->getMessage());
-
-        } catch (ResourceNotFoundException $ex) {
-
-            // @todo: Handle 404 not found exception
-            die('404 not found');
-
-        } catch (ResourceConflictException $ex) {
-
-            // @todo: Handle 409 resource conflict
-            die('409 resource conflict (Optimistic Locking)');
-
-        } catch (\Exception $ex) {
-
-            // @todo Handle unexpected exception
-            die('Unknown problem: ' . $ex->getMessage());
+        // iterate over the list data and just convert it to a more
+        // JS friendly format (key/val assoc isn't quite such a neat
+        // fit for frontend)
+        $viewResults = [];
+        foreach ($results as $id => $result) {
+            $viewResults[] = [
+                'value' => $id,
+                'label' => $result
+            ];
         }
 
-        $view = new ViewModel(['response' => $response]);
-        $view->setTemplate('index');
-        return $view;
+        return new JsonModel($viewResults);
     }
-
-    public function patchAction()
-    {
-        $this->log('MWC - index '.date('d-m-Y'));
-
-        $id = $this->getEvent()->getRouteMatch()->getParam('id');
-
-        // Ensure when updating you have a version number
-        $entity = array(
-            'username' => 'Updated Username',
-            'version' => 4
-        );
-
-        try {
-
-            $response = $this->makeRestCall('User', 'PATCH', array('id' => $id, 'details' => $entity));
-
-        } catch (BadRequestException $ex) {
-
-            // @todo Handle 400 Bad request
-            // This most likely means there is something wrong with the entity
-            die('Bad request: ' . $ex->getMessage());
-
-        } catch (ResourceNotFoundException $ex) {
-
-            // @todo: Handle 404 not found exception
-            die('404 not found');
-
-        } catch (ResourceConflictException $ex) {
-
-            // @todo: Handle 409 resource conflict
-            die('409 resource conflict (Optimistic Locking)');
-
-        } catch (\Exception $ex) {
-
-            // @todo Handle unexpected exception
-            die('Unknown problem: ' . $ex->getMessage());
-        }
-
-        $view = new ViewModel(['response' => $response]);
-        $view->setTemplate('index');
-        return $view;
-    }
-
-    public function deleteAction()
-    {
-        $id = $this->getEvent()->getRouteMatch()->getParam('id');
-        $this->log('MWC - index '.date('d-m-Y'));
-
-        try {
-
-            $response = $this->makeRestCall('User', 'DELETE', array('id' => $id));
-
-        } catch (ResourceNotFoundException $ex) {
-
-            // @todo: Handle 404 not found exception
-            die('404 not found');
-
-        } catch (\Exception $ex) {
-
-            // @todo Handle unexpected exception
-            die('Unknown problem: ' . $ex->getMessage());
-        }
-
-        $view = new ViewModel(['response' => $response]);
-        $view->setTemplate('index');
-        return $view;
-    }
-    
 }

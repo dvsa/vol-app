@@ -1,0 +1,54 @@
+<?php
+
+$case = $this->placeholder('case')->getValue();
+
+$categories = isset($case['categorys']) && is_array($case['categorys']) ?
+    implode(', ', array_map(function($item){return $item['description'];}, $case['categorys'])) :
+    'None selected';
+$outcomes = isset($case['outcomes']) && is_array($case['outcomes']) ?
+    implode(', ', array_map(function($item){return $item['description'];}, $case['outcomes'])) :
+    'None selected';
+
+$actions = [];
+
+if (!$case['isClosed']) {
+    $editAction = [
+        'label' => 'Edit',
+        'url' => $this->url(null, ['action' => 'edit'], [], true),
+        'class' => 'js-modal-ajax action--secondary'
+    ];
+    $actions[] = $editAction;
+}
+
+if ($case['canReopen']) {
+    $reopenAction = [
+        'label' => 'Reopen',
+        'url' => $this->url(null, ['action' => 'reopen'], [], true),
+        'class' => 'js-modal-ajax action--secondary'
+    ];
+    $actions[] = $reopenAction;
+} else if ($case['canClose']) {
+    $closeAction = [
+        'label' => 'Close',
+        'url' => $this->url(null, ['action' => 'close'], [], true),
+        'class' => 'js-modal-ajax action--secondary'
+    ];
+    $actions[] = $closeAction;
+}
+
+//case overview
+echo $this->render('partials/read-only/main',
+    [
+        'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
+        'actions' => $actions,
+        'items' => [
+            ['label' => 'Case type', 'value' => $case['caseType']['description']],
+            ['label' => 'Open date', 'date' => $case['openDate']],
+            ['label' => 'ECMS', 'value' => $case['ecmsNo']],
+            ['label' => 'Closed date', 'date' => $case['closedDate']],
+            ['label' => 'Description', 'value' => $case['description'], 'class' => 'full-width'],
+            ['label' => 'Categories', 'value' => $categories, 'class' => 'full-width'],
+            ['label' => 'Outcomes', 'value' => $outcomes, 'class' => 'full-width']
+        ]
+    ]
+);

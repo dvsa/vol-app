@@ -1,0 +1,10 @@
+<?php
+$case = $this->placeholder('case')->getValue();
+
+echo $this->render('partials/read-only/main',
+    [
+        'id' => $this->data['submissionSection'],
+        'header' => (isset($this->data['description']) ? $this->data['description'] : ''),
+        'freetext' => (isset($this->data['data']['outline']) ? $this->data['data']['outline'] : '')
+    ]
+);
