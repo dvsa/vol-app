@@ -24,15 +24,9 @@ return array(
     ],
 
     // Service addresses
-    'service_api_mapping' => array(
-        'endpoints' => array(
-            'payments' => [
-                'url' => 'http://olcspayment.dev/api/',
-                'options' => [
-                    'adapter' => \Zend\Http\Client\Adapter\Curl::class,
-                    'timeout' => 60,
-                ]
-            ],
+    'service_api_mapping' => [
+        'endpoints' => [
+            // Backend service URI *Environment specific*
             'backend' => [
                 'url' => 'http://olcs-backend.olcs.gov.uk/',
                 'options' => [
@@ -40,24 +34,33 @@ return array(
                     'timeout' => 60,
                 ]
             ],
+            // Postcode/Address service URI *Environment specific*
             'postcode' => [
                 'url' => 'http://postcode.cit.olcs.mgt.mtpdvsa/',
                 'options' => [
                     'adapter' => \Zend\Http\Client\Adapter\Curl::class,
                     'timeout' => 60,
                 ]
-            ]
-        )
-    ),
+            ],
+        ]
+    ],
 
     // Document service
-    'document_share' => array(
+    'document_share' => [
         // File hyperlink to document
         'uri_pattern' => 'file://///fs01.olcs.mgt.mtpdvsa/OLCS/olcs/%s'
-    ),
+    ],
 
     // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific*
     'asset_path' => 'https://demo-olcs-static.i-env.net',
+
+    'openam' => [
+        'url' => 'http://olcs-auth.olcs.gov.uk:8081/secure/',
+        'realm' => 'internal',
+        'cookie' => [
+            'domain' => '.olcs.gov.uk',
+        ]
+    ],
 
     'view_manager' => array(
         'template_map' => array(
@@ -67,12 +70,4 @@ return array(
             'error/index' => __DIR__ . '/../../module/Olcs/view/error/dev-index.phtml'
         ),
     ),
-
-    'openam' => [
-        'url' => 'http://olcs-auth.olcs.gov.uk:8081/secure/',
-        'realm' => 'internal',
-        'cookie' => [
-            'domain' => '.olcs.gov.uk',
-        ]
-    ]
 );
