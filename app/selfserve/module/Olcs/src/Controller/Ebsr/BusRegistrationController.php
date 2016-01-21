@@ -9,6 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\UpdateTxcInbox as UpdateTxcInboxDto;
 use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegVariationHistoryDto;
 use Common\Controller\Lva\AbstractController;
 use Zend\View\Model\ViewModel;
+use Common\Rbac\User;
 
 /**
  * Class BusRegistrationController
@@ -115,7 +116,7 @@ class BusRegistrationController extends AbstractController
 
         $userData = $this->currentUser()->getUserData();
 
-        if (!empty($userData['localAuthorityId'])) {
+        if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
             $tableName = 'txc-inbox';
         } else {
             $tableName = 'ebsr-submissions';
