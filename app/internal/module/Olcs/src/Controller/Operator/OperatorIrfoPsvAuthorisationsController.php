@@ -8,6 +8,7 @@ namespace Olcs\Controller\Operator;
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPsvAuth as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPsvAuth as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\GrantIrfoPsvAuth as GrantDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\ApproveIrfoPsvAuth as ApproveDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\RefuseIrfoPsvAuth as RefuseDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\WithdrawIrfoPsvAuth as WithdrawDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\CnsIrfoPsvAuth as CnsDto;
@@ -134,6 +135,8 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
                 {
                     case 'grant':
                         return GrantDto::class;
+                    case 'approve':
+                        return ApproveDto::class;
                     case 'refuse':
                         return RefuseDto::class;
                     case 'withdraw':
@@ -261,6 +264,13 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         switch($action) {
             case 'grant':
                 if (!isset($formData['fields']['isGrantable']) || (bool) $formData['fields']['isGrantable'] !== true) {
+                    $form->get('form-actions')->remove($action);
+                }
+                break;
+            case 'approve':
+                if (!isset($formData['fields']['isApprovable'])
+                    || ((bool) $formData['fields']['isApprovable'] !== true)
+                ) {
                     $form->get('form-actions')->remove($action);
                 }
                 break;
