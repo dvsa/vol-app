@@ -2249,10 +2249,10 @@ $routes = [
      'historic-tm' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/historic-tm/:transportManager[/]',
+            'route' => '/historic-tm/:historicId[/]',
             'constraints' => [
                 'action' => 'details',
-                'transportManager' => '|[0-9]+',
+                'historicId' => '|[0-9]+',
             ],
             'defaults' => [
                 'controller' => 'HistoricTmController',

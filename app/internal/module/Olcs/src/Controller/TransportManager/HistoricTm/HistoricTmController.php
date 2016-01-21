@@ -18,6 +18,7 @@ use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Zend\View\Model\ViewModel;
 use Common\RefData;
+use Olcs\Logging\Log\Logger;
 
 /**
  * Historic Tm Details Controller
@@ -31,7 +32,7 @@ class HistoricTmController extends AbstractInternalController
     /* for view */
     protected $detailsViewTemplate = 'sections/transport-manager/pages/historic-tm-details';
     protected $itemDto = HistoricTmQry::class;
-    protected $itemParams = ['id' => 'transportManager'];
+    protected $itemParams = ['historicId'];
     protected $detailsViewPlaceholderName = 'details';
     protected $detailsContentTitle = 'Historic Transport Manager Details';
 
@@ -45,4 +46,56 @@ class HistoricTmController extends AbstractInternalController
             ]
         ]
     ];
+
+    public function detailsAction()
+    {
+        $itemDto = $this->itemDto;
+        $paramProvider = new GenericItem($this->itemParams);
+
+        Logger::debug(__FILE__);
+        Logger::debug(__METHOD__);
+
+        $this->placeholder()->setPlaceholder('contentTitle', $this->detailsContentTitle);
+
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
+
+        $query = $itemDto::create($params);
+
+        $response = $this->handleQuery($query);
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            $data = $response->getResult();
+
+            if (isset($data)) {
+                $this->placeholder()->setPlaceholder($this->detailsViewPlaceholderName, $data);
+                $this->placeholder()->setPlaceholder(
+                    'applicationsTable',
+                    $this->table()->buildTable(
+                        'historic-tm-applications',
+                        $data['applicationData'],
+                        []
+                    )->render()
+                );
+                $this->placeholder()->setPlaceholder(
+                    'licencesTable',
+                    $this->table()->buildTable(
+                        'historic-tm-licences',
+                        $data['licenceData'],
+                        []
+                    )->render()
+                );
+            }
+        }
+
+        return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
+    }
 }
