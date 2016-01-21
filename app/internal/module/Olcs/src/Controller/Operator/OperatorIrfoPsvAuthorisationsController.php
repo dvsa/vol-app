@@ -261,37 +261,19 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      */
     private function determineFormButton(ZendForm $form, $formData, $action)
     {
-        switch($action) {
-            case 'grant':
-                if (!isset($formData['fields']['isGrantable']) || (bool) $formData['fields']['isGrantable'] !== true) {
-                    $form->get('form-actions')->remove($action);
-                }
-                break;
-            case 'approve':
-                if (!isset($formData['fields']['isApprovable'])
-                    || ((bool) $formData['fields']['isApprovable'] !== true)
-                ) {
-                    $form->get('form-actions')->remove($action);
-                }
-                break;
-            case 'refuse':
-                if (!isset($formData['fields']['isRefusable']) || (bool) $formData['fields']['isRefusable'] !== true) {
-                    $form->get('form-actions')->remove($action);
-                }
-                break;
-            case 'withdraw':
-                if (!isset($formData['fields']['isWithdrawable']) || (bool) $formData['fields']['isWithdrawable'] !==
-                    true) {
-                    $form->get('form-actions')->remove($action);
-                }
-                break;
-            case 'cns':
-                if (!isset($formData['fields']['isCnsable']) || (bool) $formData['fields']['isCnsable'] !== true) {
-                    $form->get('form-actions')->remove($action);
-                }
-                break;
-            default:
-                $form->get('form-actions')->remove($action);
+        $actionToFlag = [
+            'grant' => 'isGrantable',
+            'approve' => 'isApprovable',
+            'refuse' => 'isRefusable',
+            'withdraw' => 'isWithdrawable',
+            'cns' => 'isCnsable',
+        ];
+
+        if (empty($actionToFlag[$action])
+            || empty($formData['fields'][$actionToFlag[$action]])
+            || ((bool) $formData['fields'][$actionToFlag[$action]] !== true)
+        ) {
+            $form->get('form-actions')->remove($action);
         }
 
         return $form;
