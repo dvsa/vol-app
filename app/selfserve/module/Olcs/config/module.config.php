@@ -751,20 +751,7 @@ $searchNavigation = array(
     'class' => 'proposition-nav__item',
     'pages' => array(
         // --
-        array(
-            'id' => 'search-operating-centre',
-            'label' => 'Find Operating centre',
-            'route' => 'search-operating-centre',
-            'use_route_match' => true,
-            'class' => 'search-navigation__item',
-        ),
-        array(
-            'id' => 'search-person',
-            'label' => 'Find people',
-            'route' => 'search-person',
-            'use_route_match' => true,
-            'class' => 'search-navigation__item',
-        ),
+
         array(
             'id' => 'search-operator',
             'label' => 'Vehicle operators',
@@ -790,6 +777,20 @@ $searchNavigation = array(
             'id' => 'search-vehicle-external',
             'label' => 'Vehicles',
             'route' => 'search-vehicle-external',
+            'use_route_match' => true,
+            'class' => 'search-navigation__item',
+        ),
+        array(
+            'id' => 'search-operating-centre',
+            'label' => 'Operating centres',
+            'route' => 'search-operating-centre',
+            'use_route_match' => true,
+            'class' => 'search-navigation__item',
+        ),
+        array(
+            'id' => 'search-person',
+            'label' => 'People',
+            'route' => 'search-person',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         )

@@ -9,6 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\UpdateTxcInbox as UpdateTxcInboxDto;
 use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegVariationHistoryDto;
 use Common\Controller\Lva\AbstractController;
 use Zend\View\Model\ViewModel;
+use Common\Rbac\User;
 
 /**
  * Class BusRegistrationController
@@ -59,21 +60,7 @@ class BusRegistrationController extends AbstractController
         if ($response->isOk()) {
             $result = $response->getResult();
 
-            /** @var \Common\Service\Table\TableBuilder $tableBuilder */
-            $tableBuilder = $this->getServiceLocator()->get('Table');
-
-            $busRegistrationTable = $tableBuilder->buildTable(
-                'txc-inbox',
-                ['Results' => $result['results'], 'Count' => $result['count']],
-                $params,
-                false
-            );
-
-            // set disabled so non-LA's dont get a pointless 'mark as read' button
-            $userData = $this->currentUser()->getUserData();
-            if (empty($userData['localAuthorityId'])) {
-                $busRegistrationTable->setDisabled(true);
-            }
+            $busRegistrationTable = $this->generateTable($result, $params);
         }
 
         $filterForm = $this->getFilterForm($params);
@@ -114,6 +101,36 @@ class BusRegistrationController extends AbstractController
         return $layout;
     }
 
+    /**
+     * Generates one of two tables depending on user logged in.
+     * LAs get the txc-inbox table to match the results returned. Operators get the ebsr-submissions table.
+     *
+     * @param $result
+     * @param $params
+     * @return string
+     */
+    private function generateTable($result, $params)
+    {
+        /** @var \Common\Service\Table\TableBuilder $tableBuilder */
+        $tableBuilder = $this->getServiceLocator()->get('Table');
+
+        $userData = $this->currentUser()->getUserData();
+
+        if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
+            $tableName = 'txc-inbox';
+        } else {
+            $tableName = 'ebsr-submissions';
+        }
+
+        $busRegistrationTable = $tableBuilder->buildTable(
+            $tableName,
+            ['Results' => $result['results'], 'Count' => $result['count']],
+            $params,
+            false
+        );
+
+        return $busRegistrationTable;
+    }
     /**
      * Process those marked in table as read
      *
