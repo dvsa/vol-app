@@ -2252,7 +2252,7 @@ $routes = [
             'route' => '/historic-tm/:historicId[/]',
             'constraints' => [
                 'action' => 'details',
-                'historicId' => '|[0-9]+',
+                'historicId' => '[0-9]+',
             ],
             'defaults' => [
                 'controller' => 'HistoricTmController',

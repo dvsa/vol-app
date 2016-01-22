@@ -24,7 +24,7 @@ return array(
             'name' => 'dateRemoved'
         ),
         array(
-            'title' => 'Seen Qual?',
+            'title' => 'Seen qualification?',
             'formatter' => 'YesNo',
             'name' => 'seenQualification'
         ),

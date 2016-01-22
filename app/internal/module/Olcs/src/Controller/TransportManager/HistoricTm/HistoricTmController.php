@@ -52,9 +52,6 @@ class HistoricTmController extends AbstractInternalController
         $itemDto = $this->itemDto;
         $paramProvider = new GenericItem($this->itemParams);
 
-        Logger::debug(__FILE__);
-        Logger::debug(__METHOD__);
-
         $this->placeholder()->setPlaceholder('contentTitle', $this->detailsContentTitle);
 
         $paramProvider->setParams($this->plugin('params'));
