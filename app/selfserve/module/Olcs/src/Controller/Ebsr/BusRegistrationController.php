@@ -3,7 +3,8 @@
 namespace Olcs\Controller\Ebsr;
 
 use Common\Exception\ResourceNotFoundException;
-use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList as ListDto;
+use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\EbsrSubmissionList;
+use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\BusRegWithTxcInbox as ItemDto;
 use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\UpdateTxcInbox as UpdateTxcInboxDto;
 use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegVariationHistoryDto;
@@ -37,13 +38,20 @@ class BusRegistrationController extends AbstractController
         $params = [];
         $params['ebsrSubmissionType'] = $this->params()->fromQuery('subType');
         $params['ebsrSubmissionStatus'] = $this->params()->fromQuery('status');
-        $params['sort'] = $this->params()->fromQuery('sort', 'createdOn');
+        $params['sort'] = $this->params()->fromQuery('sort', 'submittedDate');
         $params['order'] = $this->params()->fromQuery('order', 'DESC');
         $params['page'] = $this->params()->fromQuery('page', 1);
         $params['limit'] = $this->params()->fromQuery('limit', 25);
         $params['query'] = $this->params()->fromQuery();
 
-        $query = ListDto::create($params);
+        $userData = $this->currentUser()->getUserData();
+        $query = EbsrSubmissionList::create($params);
+
+        if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
+            $params['sort'] = $this->params()->fromQuery('sort', 'createdOn');
+
+            $query = TxcInboxList::create($params);
+        }
 
         $response = $this->handleQuery($query);
 
