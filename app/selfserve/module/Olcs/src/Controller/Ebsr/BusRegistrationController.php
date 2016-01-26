@@ -35,22 +35,25 @@ class BusRegistrationController extends AbstractController
             return $this->processSearch($postData);
         }
 
-        $params = [];
-        $params['ebsrSubmissionType'] = $this->params()->fromQuery('subType');
-        $params['ebsrSubmissionStatus'] = $this->params()->fromQuery('status');
-        $params['sort'] = $this->params()->fromQuery('sort', 'submittedDate');
-        $params['order'] = $this->params()->fromQuery('order', 'DESC');
-        $params['page'] = $this->params()->fromQuery('page', 1);
-        $params['limit'] = $this->params()->fromQuery('limit', 25);
-        $params['query'] = $this->params()->fromQuery();
-
         $userData = $this->currentUser()->getUserData();
-        $query = EbsrSubmissionList::create($params);
+
+        $params = [
+            'subType' => $this->params()->fromQuery('subType'),
+            'status'  => $this->params()->fromQuery('status'),
+            'page'    => $this->getPluginManager()->get('params')->fromQuery('page', 1),
+            'sort'    => $this->getPluginManager()->get('params')->fromQuery('sort', 'submittedDate'),
+            'order'   => $this->getPluginManager()->get('params')->fromQuery('order', 'DESC'),
+            'limit'   => $this->getPluginManager()->get('params')->fromQuery('limit', 2),
+        ];
+
+        // set query params for pagination
+        $params['query'] = $params;
 
         if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
             $params['sort'] = $this->params()->fromQuery('sort', 'createdOn');
-
             $query = TxcInboxList::create($params);
+        } else {
+            $query = EbsrSubmissionList::create($params);
         }
 
         $response = $this->handleQuery($query);
@@ -67,7 +70,6 @@ class BusRegistrationController extends AbstractController
         $busRegistrationTable = '';
         if ($response->isOk()) {
             $result = $response->getResult();
-
             $busRegistrationTable = $this->generateTable($result, $params);
         }
 
@@ -331,8 +333,8 @@ class BusRegistrationController extends AbstractController
         $filterForm->setData(
             [
                 'fields' => [
-                    'subType' => $params['ebsrSubmissionType'],
-                    'status' => $params['ebsrSubmissionStatus']
+                    'subType' => $params['subType'],
+                    'status' => $params['status']
                 ]
             ]
         );
