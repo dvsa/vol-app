@@ -32,6 +32,7 @@ class BusRegistrationController extends AbstractController
             if (isset($postData['action']) && isset($postData['table']) && $postData['table'] == 'txc-inbox') {
                 return $this->processMarkAsRead($postData);
             }
+
             return $this->processSearch($postData);
         }
 
@@ -41,20 +42,20 @@ class BusRegistrationController extends AbstractController
             'subType' => $this->params()->fromQuery('subType'),
             'status'  => $this->params()->fromQuery('status'),
             'page'    => $this->getPluginManager()->get('params')->fromQuery('page', 1),
-            'sort'    => $this->getPluginManager()->get('params')->fromQuery('sort', 'submittedDate'),
             'order'   => $this->getPluginManager()->get('params')->fromQuery('order', 'DESC'),
             'limit'   => $this->getPluginManager()->get('params')->fromQuery('limit', 2),
         ];
-
-        // set query params for pagination
-        $params['query'] = $params;
 
         if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
             $params['sort'] = $this->params()->fromQuery('sort', 'createdOn');
             $query = TxcInboxList::create($params);
         } else {
+            $params['sort'] = $this->params()->fromQuery('sort', 'submittedDate');
             $query = EbsrSubmissionList::create($params);
         }
+
+        // set query params for pagination
+        $params['query'] = $params;
 
         $response = $this->handleQuery($query);
 
@@ -185,8 +186,10 @@ class BusRegistrationController extends AbstractController
         $params = $this->params()->fromQuery();
 
         $params['subType'] = empty($data['fields']['subType']) ? null : $data['fields']['subType'];
-
         $params['status'] = empty($data['fields']['status']) ? null : $data['fields']['status'];
+
+        // initialise search results to page 1
+        $params['page'] = 1;
 
         return $this->redirect()->toRoute(null, [], ['query' => $params], true);
     }
