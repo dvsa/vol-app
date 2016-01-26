@@ -39,11 +39,11 @@ class BusRegistrationController extends AbstractController
         $userData = $this->currentUser()->getUserData();
 
         $params = [
-            'subType' => $this->params()->fromQuery('subType'),
-            'status'  => $this->params()->fromQuery('status'),
-            'page'    => $this->getPluginManager()->get('params')->fromQuery('page', 1),
-            'order'   => $this->getPluginManager()->get('params')->fromQuery('order', 'DESC'),
-            'limit'   => $this->getPluginManager()->get('params')->fromQuery('limit', 2),
+            'subType'   => $this->params()->fromQuery('subType'),
+            'status'    => $this->params()->fromQuery('status'),
+            'page'      => $this->getPluginManager()->get('params')->fromQuery('page', 1),
+            'order'     => $this->getPluginManager()->get('params')->fromQuery('order', 'DESC'),
+            'limit'     => $this->getPluginManager()->get('params')->fromQuery('limit', 25),
         ];
 
         if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
@@ -93,7 +93,7 @@ class BusRegistrationController extends AbstractController
         $layout = $this->generateLayout(
             [
                 'pageTitle' => 'bus-registrations-index-title',
-                'pageHeaderText'=> $pageHeaderText,
+                'pageHeaderText' => $pageHeaderText,
                 'searchForm' => $filterForm,
                 'pageHeaderUrl' => $pageHeaderUrl,
                 'showNav' => false
@@ -111,7 +111,7 @@ class BusRegistrationController extends AbstractController
 
         return $layout;
     }
-
+    
     /**
      * Generates one of two tables depending on user logged in.
      * LAs get the txc-inbox table to match the results returned. Operators get the ebsr-submissions table.
