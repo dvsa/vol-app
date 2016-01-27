@@ -72,14 +72,12 @@ return array(
         array(
             'title' => 'Registration type',
             'stack' => 'busReg->ebsrSubmissions->0->ebsrSubmissionType->description',
-            'formatter' => 'StackValue',
-            'sort' => 'ebsrSubmissionType'
+            'formatter' => 'StackValue'
         ),
         array(
             'title' => 'File status',
             'stack' => 'busReg->ebsrSubmissions->0->ebsrSubmissionStatus->description',
-            'formatter' => 'StackValue',
-            'sort' => 'ebsrSubmissionStatus'
+            'formatter' => 'StackValue'
         ),
         array(
             'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
