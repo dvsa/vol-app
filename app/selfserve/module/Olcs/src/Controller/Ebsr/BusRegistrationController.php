@@ -41,9 +41,9 @@ class BusRegistrationController extends AbstractController
         $params = [
             'subType'   => $this->params()->fromQuery('subType'),
             'status'    => $this->params()->fromQuery('status'),
-            'page'      => $this->getPluginManager()->get('params')->fromQuery('page', 1),
-            'order'     => $this->getPluginManager()->get('params')->fromQuery('order', 'DESC'),
-            'limit'     => $this->getPluginManager()->get('params')->fromQuery('limit', 25),
+            'page'      => $this->params()->fromQuery('page', 1),
+            'order'     => $this->params()->fromQuery('order', 'DESC'),
+            'limit'     => $this->params()->fromQuery('limit', 25),
         ];
 
         if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
