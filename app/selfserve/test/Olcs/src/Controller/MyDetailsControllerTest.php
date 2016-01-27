@@ -103,6 +103,13 @@ class MyDetailsControllerTest extends TestCase
             ->andReturn('URL');
         $this->sm->setService('Helper\Url', $mockUrl);
 
+        $mockScript = m::mock();
+        $mockScript
+            ->shouldReceive('loadFile')
+            ->with('my-account')
+            ->once();
+        $this->sm->setService('Script', $mockScript);
+
         $view = $this->sut->editAction();
 
         $this->assertInstanceOf('Common\Form\Form', $view->getVariable('form'));
@@ -157,6 +164,13 @@ class MyDetailsControllerTest extends TestCase
             ->once()
             ->andReturn('URL');
         $this->sm->setService('Helper\Url', $mockUrl);
+
+        $mockScript = m::mock();
+        $mockScript
+            ->shouldReceive('loadFile')
+            ->with('my-account')
+            ->once();
+        $this->sm->setService('Script', $mockScript);
 
         $view = $this->sut->editAction();
 
@@ -288,6 +302,13 @@ class MyDetailsControllerTest extends TestCase
             ->once()
             ->andReturn('URL');
         $this->sm->setService('Helper\Url', $mockUrl);
+
+        $mockScript = m::mock();
+        $mockScript
+            ->shouldReceive('loadFile')
+            ->with('my-account')
+            ->once();
+        $this->sm->setService('Script', $mockScript);
 
         $view = $this->sut->editAction();
 
