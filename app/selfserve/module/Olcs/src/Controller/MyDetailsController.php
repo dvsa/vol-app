@@ -73,6 +73,8 @@ class MyDetailsController extends AbstractController
         );
         $view->setTemplate('pages/my-account-page');
 
+        $this->getServiceLocator()->get('Script')->loadFile('my-account');
+
         return $view;
     }
 
