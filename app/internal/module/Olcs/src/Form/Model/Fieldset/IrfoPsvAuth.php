@@ -145,16 +145,6 @@ class IrfoPsvAuth extends OrganisationBase
     public $expiryDate;
 
     /**
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"renewalDateHtml", "required": false})
-     * @Form\Options({
-     *     "label": "Renewal date",
-     * })
-     * @Form\Type("Common\Form\Elements\Types\Html")
-     */
-    public $renewalDateHtml;
-
-    /**
      * @Form\Attributes({"id":""})
      * @Form\Required(false)
      * @Form\Options({

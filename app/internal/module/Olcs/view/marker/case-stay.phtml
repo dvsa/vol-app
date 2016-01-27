@@ -15,11 +15,15 @@
     </strong>
     <br>
     <?php
-    echo ($this->stay['stayType']['id'] == 'stay_t_ut') ?  ' UT ' : ' TC/TR ';
     $date = $this->stay['requestDate'];
-    if (!($date instanceof \DateTime)) {
-        $date = new \DateTime($this->stay['requestDate']);
+    if (empty($date)) {
+        echo $this->translate('no-date-set');
+    } else {
+        echo ($this->stay['stayType']['id'] == 'stay_t_ut') ?  ' UT ' : ' TC/TR ';
+        if (!($date instanceof \DateTime)) {
+            $date = new \DateTime($this->stay['requestDate']);
+        }
+        echo $date->format(\DATE_FORMAT);
     }
-    echo $date->format(\DATE_FORMAT);
     ?>
 </p>

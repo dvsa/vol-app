@@ -464,7 +464,12 @@ trait FeesActionTrait
         foreach ($fees as $fee) {
             // bail early if any of the fees prove to be the wrong status
             if ($fee['feeStatus']['id'] !== RefData::FEE_STATUS_OUTSTANDING) {
-                $this->addErrorMessage('You can only pay outstanding fees');
+                $this->addErrorMessage('fee.not-outstanding.error');
+                return $this->redirectToList();
+            }
+
+            if ($fee['ruleDateBeforeInvoice']) {
+                $this->addErrorMessage('fee.rule-before-invoiced-date.error');
                 return $this->redirectToList();
             }
         }
