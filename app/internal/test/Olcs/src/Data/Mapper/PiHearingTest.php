@@ -148,6 +148,24 @@ class PiHearingTest extends MockeryTestCase
                         'witnesses' => $witnesses
                     ]
                 ]
+            ],
+            [
+                [
+                    'piVenue' => 1,
+                    'piVenueOther' => $piVenueOther,
+                    'otherField' => [
+                        'id' => $otherFieldId
+                    ],
+                    'witnesses' => null
+                ],
+                [
+                    'fields' => [
+                        'piVenue' => 'other',
+                        'piVenueOther' => $piVenueOther,
+                        'otherField' => $otherFieldId,
+                        'witnesses' => 0
+                    ]
+                ]
             ]
         ];
     }
