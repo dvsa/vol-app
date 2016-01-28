@@ -72,16 +72,14 @@ return array(
             'name' => 'ebsrSubmissionType',
             'formatter' => function ($row) {
                 return $row['busReg']['ebsrSubmissions'][0]['ebsrSubmissionType']['description'];
-            },
-            'sort' => 'ebsrSubmissionType'
+            }
         ),
         array(
             'title' => 'File status',
             'name' => 'ebsrSubmissionStatus',
             'formatter' => function ($row) {
                 return $row['busReg']['ebsrSubmissions'][0]['ebsrSubmissionStatus']['description'];
-            },
-            'sort' => 'ebsrSubmissionStatus'
+            }
         ),
         array(
             'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],

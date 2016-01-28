@@ -3,7 +3,8 @@
 namespace Olcs\Controller\Ebsr;
 
 use Common\Exception\ResourceNotFoundException;
-use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList as ListDto;
+use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\EbsrSubmissionList;
+use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\BusRegWithTxcInbox as ItemDto;
 use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\UpdateTxcInbox as UpdateTxcInboxDto;
 use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegVariationHistoryDto;
@@ -31,19 +32,30 @@ class BusRegistrationController extends AbstractController
             if (isset($postData['action']) && isset($postData['table']) && $postData['table'] == 'txc-inbox') {
                 return $this->processMarkAsRead($postData);
             }
+
             return $this->processSearch($postData);
         }
 
-        $params = [];
-        $params['ebsrSubmissionType'] = $this->params()->fromQuery('subType');
-        $params['ebsrSubmissionStatus'] = $this->params()->fromQuery('status');
-        $params['sort'] = $this->params()->fromQuery('sort', 'createdOn');
-        $params['order'] = $this->params()->fromQuery('order', 'DESC');
-        $params['page'] = $this->params()->fromQuery('page', 1);
-        $params['limit'] = $this->params()->fromQuery('limit', 25);
-        $params['query'] = $this->params()->fromQuery();
+        $userData = $this->currentUser()->getUserData();
 
-        $query = ListDto::create($params);
+        $params = [
+            'subType'   => $this->params()->fromQuery('subType'),
+            'status'    => $this->params()->fromQuery('status'),
+            'page'      => $this->params()->fromQuery('page', 1),
+            'order'     => $this->params()->fromQuery('order', 'DESC'),
+            'limit'     => $this->params()->fromQuery('limit', 25),
+        ];
+
+        if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
+            $params['sort'] = $this->params()->fromQuery('sort', 'createdOn');
+            $query = TxcInboxList::create($params);
+        } else {
+            $params['sort'] = $this->params()->fromQuery('sort', 'submittedDate');
+            $query = EbsrSubmissionList::create($params);
+        }
+
+        // set query params for pagination
+        $params['query'] = $params;
 
         $response = $this->handleQuery($query);
 
@@ -59,7 +71,6 @@ class BusRegistrationController extends AbstractController
         $busRegistrationTable = '';
         if ($response->isOk()) {
             $result = $response->getResult();
-
             $busRegistrationTable = $this->generateTable($result, $params);
         }
 
@@ -82,7 +93,7 @@ class BusRegistrationController extends AbstractController
         $layout = $this->generateLayout(
             [
                 'pageTitle' => 'bus-registrations-index-title',
-                'pageHeaderText'=> $pageHeaderText,
+                'pageHeaderText' => $pageHeaderText,
                 'searchForm' => $filterForm,
                 'pageHeaderUrl' => $pageHeaderUrl,
                 'showNav' => false
@@ -100,7 +111,7 @@ class BusRegistrationController extends AbstractController
 
         return $layout;
     }
-
+    
     /**
      * Generates one of two tables depending on user logged in.
      * LAs get the txc-inbox table to match the results returned. Operators get the ebsr-submissions table.
@@ -175,8 +186,10 @@ class BusRegistrationController extends AbstractController
         $params = $this->params()->fromQuery();
 
         $params['subType'] = empty($data['fields']['subType']) ? null : $data['fields']['subType'];
-
         $params['status'] = empty($data['fields']['status']) ? null : $data['fields']['status'];
+
+        // initialise search results to page 1
+        $params['page'] = 1;
 
         return $this->redirect()->toRoute(null, [], ['query' => $params], true);
     }
@@ -323,8 +336,8 @@ class BusRegistrationController extends AbstractController
         $filterForm->setData(
             [
                 'fields' => [
-                    'subType' => $params['ebsrSubmissionType'],
-                    'status' => $params['ebsrSubmissionStatus']
+                    'subType' => $params['subType'],
+                    'status' => $params['status']
                 ]
             ]
         );
