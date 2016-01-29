@@ -812,6 +812,20 @@ $routes = [
                     ]
                 ],
             ],
+            'sla-target' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'sla-target/:doc[/]',
+                    'constraints' => [
+                        'doc' => '[0-9]+',
+                        'action' => '(add|edit)'
+                    ],
+                    'defaults' => [
+                        'controller' => 'SlaTargetController',
+                        'action' => 'add'
+                    ]
+                ],
+            ],
             'entity' => [
                 'type' => 'segment',
                 'options' => [

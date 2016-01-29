@@ -49,6 +49,11 @@ return array(
             'sort' => 'issuedDate',
         ),
         array(
+            'title' => 'SLA target date',
+            'name' => 'slaTargetDate',
+            'formatter' => 'SlaTargetDate'
+        ),
+        array(
             'width' => 'checkbox',
             'type' => 'Checkbox',
             'data-attributes' => array(
