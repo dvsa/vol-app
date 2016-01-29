@@ -7,6 +7,8 @@
  */
 namespace Olcs\Controller\Traits;
 
+use Dvsa\Olcs\Transfer\Query\Bus\BusReg as BusRegDto;
+
 /**
  * Bus Controller Trait
  *
@@ -15,25 +17,52 @@ namespace Olcs\Controller\Traits;
 trait BusControllerTrait
 {
     /**
-     * Get view with licence
+     * bus reg new / variation and cancellation statuses
      *
-     * @param array $variables
-     * @return \Zend\View\Model\ViewModel
+     * @var array
      */
-    public function getViewWithBusReg($variables = array())
+    protected $newVariationCancellationStatuses = [
+        'breg_s_new',
+        'breg_s_var',
+        'breg_s_cancellation'
+    ];
+
+    /**
+     * bus reg rejected statuses
+     *
+     * @var array
+     */
+    protected $rejectedStatuses = [
+        'breg_s_admin',
+        'breg_s_refused',
+        'breg_s_cancelled',
+        'breg_s_withdrawn'
+    ];
+
+    /**
+     * Memoize Bus Reg details to prevent multiple backend calls with same id
+     * @var array
+     */
+    protected $busRegDetailsCache = [];
+
+    /**
+     * returns array of new / variation / cancellation statuses
+     *
+     * @return array
+     */
+    public function getNewVariationCancellationStatuses()
     {
-        $busReg = $this->getBusReg();
+        return $this->newVariationCancellationStatuses;
+    }
 
-        $variables['busReg'] = $busReg;
-
-        $view = $this->getView($variables);
-
-        $this->pageTitle = $busReg['regNo'];
-        $this->pageSubTitle = $busReg['licence']['organisation']['name'] . ', Variation ' .
-            $busReg['routeSeq']
-            . ', ' . $busReg['status']['description'];
-
-        return $view;
+    /**
+     * returns array of rejected statuses
+     *
+     * @return array
+     */
+    public function getRejectedStatuses()
+    {
+        return $this->rejectedStatuses;
     }
 
     /**
@@ -45,24 +74,31 @@ trait BusControllerTrait
     public function getBusReg($id = null)
     {
         if (is_null($id)) {
-            $id = $this->getFromRoute('busRegId');
+            $id = $this->params()->fromRoute('busRegId');
         }
 
-        $bundle = [
-            'children' => [
-                'licence' => [
-                    'properties' => 'ALL',
-                    'children' => [
-                        'organisation'
-                    ]
-                ],
-                'status' => [
-                    'properties' => 'ALL'
-                ]
-            ]
-        ];
+        if (isset($busRegDetailsCache[$id])) {
+            return $busRegDetailsCache[$id];
+        }
 
-        return $this->makeRestCall('BusReg', 'GET', array('id' => $id, 'bundle' => json_encode($bundle)));
+        $dto = new BusRegDto();
+        $dto->exchangeArray(['id' => $id]);
+        $response = $this->handleQuery($dto);
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            //this probably should end up on a different page...
+        }
+
+        if ($response->isOk()) {
+            $result = $response->getResult();
+            $busRegDetailsCache[$result['id']] = $result;
+            return $result;
+        }
     }
 
     /**
@@ -71,13 +107,18 @@ trait BusControllerTrait
      */
     public function isFromEbsr($id = null)
     {
-        if (is_null($id)) {
-            $id = $this->getFromRoute('busRegId');
-        }
+        $busReg = $this->getBusReg($id);
+        return (isset($busReg['isTxcApp']) && $busReg['isTxcApp'] == 'Y');
+    }
 
-        $ebsr = $this->makeRestCall('EbsrSubmission', 'GET', array('busReg' => $id));
-
-        return (bool)$ebsr['Count'];
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function isLatestVariation($id = null)
+    {
+        $busReg = $this->getBusReg($id);
+        return $busReg['isLatestVariation'];
     }
 
     /**
@@ -128,15 +169,5 @@ trait BusControllerTrait
     public function getItem()
     {
         return $this->item;
-    }
-
-    /**
-     * Returns the layout file
-     *
-     * @return string
-     */
-    public function getLayoutFile()
-    {
-        return $this->layoutFile;
     }
 }

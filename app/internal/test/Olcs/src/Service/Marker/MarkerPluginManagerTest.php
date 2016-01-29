@@ -2,24 +2,63 @@
 
 namespace OlcsTest\Service\Marker;
 
-use Olcs\Service\Marker\MarkerPluginManager;
+use Mockery as m;
 
 /**
- * Class MarkerPluginManagerTest
- * @package OlcsTest\Service\Data
+ * MarkerPluginManagerTest
+ *
+ * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class MarkerPluginManagerTest extends \PHPUnit_Framework_TestCase
+class MarkerPluginManagerTest extends m\Adapter\Phpunit\MockeryTestCase
 {
+    /**
+     * @var \Olcs\Service\Marker\MarkerPluginManager
+     */
     protected $sut;
 
     public function setUp()
     {
-        $this->sut = new MarkerPluginManager();
+        $this->sut = new \Olcs\Service\Marker\MarkerPluginManager();
+        parent::setUp();
     }
 
-    public function testValidatePlugin()
+    public function testConstructor()
     {
-        $plugin = new \StdClass();
-        $this->assertTrue($this->sut->validatePlugin($plugin));
+        $mockConfig = m::mock(\Zend\ServiceManager\ConfigInterface::class);
+
+        $mockConfig->shouldReceive('configureServiceManager')->twice();
+
+        $sut = new \Olcs\Service\Marker\MarkerPluginManager($mockConfig);
+
+        $this->assertInstanceOf(\Olcs\Service\Marker\MarkerPluginManager::class, $sut);
+    }
+
+    public function testValidatePluginTrue()
+    {
+        $mockPlugin = m::mock(\Olcs\Service\Marker\MarkerInterface::class);
+
+        $this->assertTrue($this->sut->validatePlugin($mockPlugin));
+    }
+
+    public function testValidatePluginFalse()
+    {
+        $mockPlugin = m::mock();
+
+        $this->setExpectedException(\RuntimeException::class, 'Must implement MarkerInterface');
+
+        $this->sut->validatePlugin($mockPlugin);
+    }
+
+    public function testInjectPartialHelper()
+    {
+        $mockSl = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $mockService = m::mock();
+
+        $this->sut->setServiceLocator($mockSl);
+
+        $mockSl->shouldReceive('get->get')->once()->andReturn('PARTIAL');
+        $mockService->shouldReceive('setPartialHelper')->with('PARTIAL')->once();
+
+        $this->sut->injectPartialHelper($mockService, $this->sut);
     }
 }

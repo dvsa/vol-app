@@ -1,0 +1,130 @@
+<?php
+$dateFormat = 'Y-m-d';
+
+$items = [
+    [
+        'label' => 'Date call up letter issued',
+        'date' => $pi['callUpLetterDate'],
+        'dateFormat' => $dateFormat,
+        'suffix' => $this->slaIndicator()->hasTargetBeenMet($pi['callUpLetterDate'], $pi['callUpLetterDateTarget'])
+    ],
+    ['label' => 'Target date', 'date' => $pi['callUpLetterDateTarget'], 'dateFormat' => $dateFormat],
+    [
+        'label' => 'Date brief to TC',
+        'date' => $pi['briefToTcDate'],
+        'dateFormat' => $dateFormat,
+        'suffix' => $this->slaIndicator()->hasTargetBeenMet($pi['briefToTcDate'], $pi['briefToTcDateTarget'])
+    ],
+    ['label' => 'Target date', 'date' => $pi['briefToTcDateTarget'], 'dateFormat' => $dateFormat],
+];
+
+$items[] = [
+    'label' => 'Written outcome',
+    'value' => isset($pi['writtenOutcome']['description']) ? $pi['writtenOutcome']['description'] : '',
+    'class' => 'full-width'
+];
+
+if (isset($pi['writtenOutcome']['id'])) {
+    switch ($pi['writtenOutcome']['id']) {
+        case 'piwo_reason':
+            $items[] = [
+                'label' => 'Date TC\'s written reason',
+                'date' => $pi['tcWrittenReasonDate'],
+                'dateFormat' => $dateFormat,
+                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
+                    $pi['tcWrittenReasonDate'],
+                    $pi['tcWrittenReasonDateTarget']
+                )
+            ];
+            $items[] = [
+                'label' => 'Target date',
+                'date' => $pi['tcWrittenReasonDateTarget'],
+                'dateFormat' => $dateFormat
+            ];
+            $items[] = [
+                'label' => 'Written reason letter sent',
+                'date' => $pi['writtenReasonLetterDate'],
+                'dateFormat' => $dateFormat,
+                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
+                    $pi['writtenReasonLetterDate'],
+                    $pi['writtenReasonLetterDateTarget']
+                )
+            ];
+            $items[] = [
+                'label' => 'Target date',
+                'date' => $pi['writtenReasonLetterDateTarget'],
+                'dateFormat' => $dateFormat
+            ];
+            break;
+        case 'piwo_decision':
+            $items[] = [
+                'label' => 'Date TC\'s written decision',
+                'date' => $pi['tcWrittenDecisionDate'],
+                'dateFormat' => $dateFormat,
+                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
+                    $pi['tcWrittenDecisionDate'],
+                    $pi['tcWrittenDecisionDateTarget']
+                )
+            ];
+            $items[] = [
+                'label' => 'Target date',
+                'date' => $pi['tcWrittenDecisionDateTarget'],
+                'dateFormat' => $dateFormat
+            ];
+            $items[] = [
+                'label' => 'Written decision letter sent',
+                'date' => $pi['writtenDecisionLetterDate'],
+                'dateFormat' => $dateFormat,
+                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
+                    $pi['decisionLetterSentDate'],
+                    $pi['decisionLetterSentDateTarget']
+                )
+            ];
+            $items[] = [
+                'label' => 'Target date',
+                'date' => $pi['decisionLetterSentDateTarget'],
+                'dateFormat' => $dateFormat
+            ];
+            break;
+        case 'piwo_verbal':
+            $items[] = [
+                'label' => 'Decision letter sent',
+                'date' => $pi['decisionLetterSentDate'],
+                'dateFormat' => $dateFormat,
+                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
+                    $pi['decisionLetterSentDate'],
+                    $pi['decisionLetterSentDateTarget']
+                )
+            ];
+            $items[] = [
+                'label' => 'Target date',
+                'date' => $pi['decisionLetterSentDateTarget'],
+                'dateFormat' => $dateFormat
+            ];
+            break;
+    }
+}
+
+$actions = [];
+if (!$readonly) {
+    $actions = [
+        [
+            'label' => 'Edit',
+            'url' => $this->url(
+                'case_pi_sla',
+                ['action' => 'edit'],
+                [],
+                true
+            ),
+            'class' => 'action--secondary js-modal-ajax'
+        ],
+    ];
+}
+
+echo $this->render('partials/read-only/main',
+    [
+        'header' => 'Service level agreement',
+        'actions' => $actions,
+        'items' => $items
+    ]
+);

@@ -6,9 +6,9 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("Cases")
- * @Form\Attributes({"method":"post","label":"Case"})
+ * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true,"label": "Case"})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class Cases
 {
@@ -22,7 +22,7 @@ class Cases
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
 }

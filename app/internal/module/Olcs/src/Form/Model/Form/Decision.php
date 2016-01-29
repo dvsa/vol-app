@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("decision")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Decision"})
+ * @Form\Options({"prefer_form_input_filter": true, "label":"Decision", "action_lcfirst": true})
  */
 class Decision
 {
@@ -47,7 +47,7 @@ class Decision
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
 }

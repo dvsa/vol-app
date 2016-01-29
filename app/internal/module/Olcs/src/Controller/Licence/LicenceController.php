@@ -7,213 +7,152 @@
  */
 namespace Olcs\Controller\Licence;
 
+use Common\RefData;
+use Dvsa\Olcs\Transfer\Query\Cases\ByLicence as CasesByLicenceQry;
 use Olcs\Controller\AbstractController;
+use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Traits;
 use Olcs\Controller\Lva;
+use Zend\View\Model\ViewModel;
+use Common\Controller\Traits\CheckForCrudAction;
 
 /**
  * Licence Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class LicenceController extends AbstractController
+class LicenceController extends AbstractController implements LicenceControllerInterface
 {
     use Lva\Traits\LicenceControllerTrait,
         Traits\TaskSearchTrait,
-        Traits\DocumentSearchTrait,
-        Traits\FeesActionTrait;
-
-    /**
-     * Shows fees table
-     */
-    public function feesAction()
-    {
-        $this->loadScripts(['forms/filter', 'table-actions']);
-
-        $licenceId = $this->params()->fromRoute('licence');
-        $this->pageLayout = 'licence';
-
-        $status = $this->params()->fromQuery('status');
-        $filters = [
-            'status' => $status
-        ];
-
-        $table = $this->getFeesTable($licenceId, $status);
-
-        $view = $this->getViewWithLicence(['table' => $table, 'form'  => $this->getFeeFilterForm($filters)]);
-        $view->setTemplate('licence/fees/layout');
-
-        return $this->renderView($view);
-    }
-
-    public function detailsAction()
-    {
-        $view = $this->getViewWithLicence();
-        $view->setTemplate('licence/index');
-
-        return $this->renderView($view);
-    }
+        CheckForCrudAction;
 
     public function casesAction()
     {
-
         $this->checkForCrudAction('case', [], 'case');
         $view = $this->getViewWithLicence();
-        $this->pageLayout = 'licence';
 
         $params = [
-            'licence' => $this->params()->fromRoute('licence'),
-            'page'    => $this->params()->fromRoute('page', 1),
-            'sort'    => $this->params()->fromRoute('sort', 'id'),
-            'order'   => $this->params()->fromRoute('order', 'desc'),
-            'limit'   => $this->params()->fromRoute('limit', 10),
+            'licence' => $this->getQueryOrRouteParam('licence'),
+            'page'    => $this->getQueryOrRouteParam('page', 1),
+            'sort'    => $this->getQueryOrRouteParam('sort', 'createdOn, id'),
+            'order'   => $this->getQueryOrRouteParam('order', 'DESC'),
+            'limit'   => $this->getQueryOrRouteParam('limit', 10),
         ];
 
-        $bundle = array(
-            'children' => array(
-                'caseType' => array(
-                    'properties' => 'ALL'
-                )
-            )
-        );
+        $params['query'] = $this->getRequest()->getQuery()->toArray();
 
-        $results = $this->makeRestCall('Cases', 'GET', $params, $bundle);
+        $response = $this->handleQuery(CasesByLicenceQry::create($params));
+        $results = $response->getResult();
 
-        $view->{'table'} = $this->getTable('case', $results, $params);
-
-        $view->setTemplate('licence/cases');
-
-        return $this->renderView($view);
-    }
-
-    public function oppositionAction()
-    {
-        $view = $this->getViewWithLicence();
-        $this->pageLayout = 'licence';
-        $view->setTemplate('licence/opposition');
-
-        return $this->renderView($view);
-    }
-
-    public function documentsAction()
-    {
-        if ($this->getRequest()->isPost()) {
-            $action = strtolower($this->params()->fromPost('action'));
-
-            if ($action === 'new letter') {
-                $action = 'generate';
-            }
-
-            $params = [
-                'licence' => $this->getFromRoute('licence')
-            ];
-
+        // If this is an 'unlicensed' licence, redirect to the Unlicensed
+        // Operator version of the page
+        if ($results['extra']['licence']['status']['id'] === RefData::LICENCE_STATUS_UNLICENSED) {
             return $this->redirect()->toRoute(
-                'licence/documents/'.$action,
-                $params
+                'operator-unlicensed/cases',
+                ['organisation' => $results['extra']['organisation']['id']]
             );
         }
 
-        $this->pageLayout = 'licence';
+        $view->table = $this->getTable('cases', $results, $params);
 
-        $filters = $this->mapDocumentFilters(
-            array('licenceId' => $this->getFromRoute('licence'))
-        );
+        $view->setTemplate('pages/table');
 
-        $view = $this->getViewWithLicence(
-            array(
-                'table' => $this->getDocumentsTable($filters),
-                'form'  => $this->getDocumentForm($filters)
-            )
-        );
-
-        $this->loadScripts(['documents', 'table-actions']);
-
-        $view->setTemplate('licence/docs-attachments');
-        $view->setTerminal(
-            $this->getRequest()->isXmlHttpRequest()
-        );
-
-        return $this->renderView($view);
-    }
-
-    public function busAction()
-    {
-        $this->pageLayout = 'licence';
-
-        $searchData = array(
-            'licence' => $this->getFromRoute('licence'),
-            'page' => 1,
-            'sort' => 'regNo',
-            'order' => 'DESC',
-            'limit' => 10
-        );
-
-        $filters = array_merge(
-            $searchData,
-            $this->getRequest()->getQuery()->toArray()
-        );
-
-        // if status is set to all
-        if (isset($filters['status']) && !$filters['status']) {
-            unset($filters['status']);
-        }
-
-        $bundle = [
-            'children' => [
-                'otherServices' => [
-                    'properties' => [
-                        'serviceNo'
-                    ]
-                ]
-            ]
-        ];
-
-        $resultData = $this->makeRestCall('BusReg', 'GET', $filters, $bundle);
-
-        $table = $this->getTable(
-            'busreg',
-            $resultData,
-            array_merge(
-                $filters,
-                array('query' => $this->getRequest()->getQuery())
-            ),
-            true
-        );
-
-        $form = $this->getForm('bus-reg-list');
-        $form->remove('csrf'); //we never post
-        $form->setData($filters);
-
-        $this->setTableFilters($form);
-
-        $this->loadScripts(['forms/filter']);
-
-        $view = $this->getViewWithLicence(
-            array(
-                'table' => $table
-            )
-        );
-
-        $view->setTemplate('licence/bus-registration');
-
-        $view->setTerminal(
-            $this->getRequest()->isXmlHttpRequest()
-        );
+        $this->loadScripts(['table-actions']);
 
         return $this->renderView($view);
     }
 
     /**
-     * This method is to assist the heirachical nature of zend
+     * Opposition page
+     */
+    public function oppositionAction()
+    {
+        $licenceId = (int) $this->params()->fromRoute('licence', null);
+
+        $responseOppositions = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Opposition\OppositionList::create(
+                [
+                    'licence' => $licenceId,
+                    'sort' => 'raisedDate',
+                    'order' => 'ASC',
+                    'page' => 1,
+                    'limit' => 1000,
+                ]
+            )
+        );
+        if (!$responseOppositions->isOk()) {
+            throw new \RuntimeException('Cannot get Opposition list');
+        }
+        $oppositionResults = $responseOppositions->getResult()['results'];
+
+        /* @var $oppositionHelperService \Common\Service\Helper\OppositionHelperService */
+        $oppositionHelperService = $this->getServiceLocator()->get('Helper\Opposition');
+        $oppositions = $oppositionHelperService->sortOpenClosed($oppositionResults);
+
+        $responseComplaints = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\EnvironmentalComplaint\EnvironmentalComplaintList::create(
+                [
+                    'licence' => $licenceId,
+                    'sort' => 'complaintDate',
+                    'order' => 'ASC',
+                    'page' => 1,
+                    'limit' => 1000,
+                ]
+            )
+        );
+        if (!$responseComplaints->isOk()) {
+            throw new \RuntimeException('Cannot get Complaints list');
+        }
+        $casesResults = $responseComplaints->getResult()['results'];
+
+        /* @var $complaintsHelperService \Common\Service\Helper\ComplaintsHelperService */
+        $complaintsHelperService = $this->getServiceLocator()->get('Helper\Complaints');
+        $complaints = $complaintsHelperService->sortCasesOpenClosed($casesResults);
+
+        $view = new ViewModel(
+            [
+                'tables' => [
+                    $this->getTable('opposition-readonly', $oppositions),
+                    $this->getTable('environmental-complaints-readonly', $complaints)
+                ]
+            ]
+        );
+        $view->setTemplate('pages/multi-tables');
+
+        return $this->renderView($view);
+    }
+
+    /**
+     * This method is to assist the hierarchical nature of zend
      * navigation when parent pages need to also be siblings
      * from a breadcrumb and navigation point of view.
      *
-     * @codeCoverageIgnore
      * @return \Zend\Http\Response
      */
     public function indexJumpAction()
     {
         return $this->redirect()->toRoute('licence/details/overview', [], [], true);
+    }
+
+    /**
+     * Redirect to licence overview page by a licNo
+     *
+     * @return \Zend\View\Helper\ViewModel
+     */
+    public function licNoAction()
+    {
+        $licNo = $this->params('licNo');
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Licence\LicenceByNumber::create(['licenceNumber' => $licNo])
+        );
+
+        if ($response->isOk()) {
+            $licenceId = (int) $response->getResult()['id'];
+
+            return $this->redirect()->toRoute('licence', ['licence' => $licenceId]);
+        }
+
+        return $this->notFoundAction();
     }
 }

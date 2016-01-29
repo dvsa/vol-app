@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
@@ -15,7 +16,8 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class FinancialHistoryController extends Lva\AbstractFinancialHistoryController
+class FinancialHistoryController extends Lva\AbstractFinancialHistoryController implements
+    ApplicationControllerInterface
 {
     use ApplicationControllerTrait;
 

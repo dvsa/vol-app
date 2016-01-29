@@ -2,15 +2,15 @@
 
 return array(
     'variables' => array(
-        'title' => 'Conditions and undertakings'
+        'title' => 'Conditions & Undertakings'
     ),
     'settings' => array(
         'crud' => array(
             'formName' => 'conditions',
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
+                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         )
     ),
@@ -23,14 +23,11 @@ return array(
         array(
             'title' => 'No.',
             'formatter' => function ($data, $column) {
-                /* if (!empty($data['operatingCentre'])) {
-                    die('<pre>' . print_r($data, 1));
-                } */
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'edit', 'id' => $data['id']),
                     'case_conditions_undertakings',
                     true
-                ) . '">' . $data['id'] . '</a>';
+                ) . '" class="js-modal-ajax">' . $data['id'] . '</a>';
             },
             'name' => 'id'
         ),
@@ -65,13 +62,7 @@ return array(
             },
         ),
         array(
-            'title' => 'S4',
-            'formatter' => function ($data, $column) {
-                return 'ToDo';
-            }
-        ),
-        array(
-            'title' => 'OC Address',
+            'title' => 'OC address',
             'width' => '300px',
             'formatter' => function ($data, $column, $sm) {
 

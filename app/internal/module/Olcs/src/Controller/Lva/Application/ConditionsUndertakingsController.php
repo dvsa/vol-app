@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Application;
 
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
@@ -15,10 +16,21 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertakingsController
+class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertakingsController implements
+    ApplicationControllerInterface
 {
     use ApplicationControllerTrait;
 
     protected $lva = 'application';
     protected $location = 'internal';
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return array
+     */
+    protected function getRenderVariables()
+    {
+        return array('title' => null);
+    }
 }

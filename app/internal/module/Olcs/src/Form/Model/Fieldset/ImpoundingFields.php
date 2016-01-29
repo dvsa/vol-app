@@ -32,6 +32,7 @@ class ImpoundingFields
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
@@ -44,22 +45,12 @@ class ImpoundingFields
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },
-     *     "column-size": "sm-5",
-     *     "help-block": "Between 2 and 7 characters."
+     *     "column-size": "sm-5"
      * })
      * 
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Filter({"name":"Zend\Filter\StringToUpper"})
-     * @Form\Filter({
-     *     "name": "Zend\Filter\PregReplace",
-     *     "options": {
-     *         "pattern": "/\ /",
-     *         "replacement": ""
-     *     }
-     * })
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":7}})
-     * @Form\Validator({"name":"Zend\I18n\Validator\Alnum"})
+     * @Form\Filter({"name":"Common\Filter\Vrm"})
+     * @Form\Validator({"name":"Common\Form\Elements\Validators\Vrm"})
      */
     public $vrm = null;
 
@@ -67,7 +58,7 @@ class ImpoundingFields
      * @Form\Attributes({"id":"impoundingLegislationTypes","placeholder":"","multiple":"multiple",
      *     "class":"chosen-select-large"})
      * @Form\Options({
-     *     "label": "Select legislation",
+     *     "label": "Grounds of application for return",
      *     "disable_inarray_validator": false,
      *     "help-block": "Use CTRL to select multiple",
      *     "service_name": "Olcs\Service\Data\ImpoundingLegislation",
@@ -83,7 +74,7 @@ class ImpoundingFields
      *     "label": "Hearing date",
      *     "create_empty_option": true,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '</div><div class=""field""><label for=hearingDate>Hearing time</label>'HH:mm:ss"
+     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=hearingDate>Hearing time</label>'HH:mm:ss'</div>'"
      * })
      * @Form\Required(false)
      * @Form\Type("DateTimeSelect")
@@ -95,6 +86,7 @@ class ImpoundingFields
      *          "context_values": {"impt_hearing"},
      *          "allow_empty" : true,
      *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d H:i:s"}},
      *              {
      *                  "name": "DateCompare",
@@ -185,6 +177,7 @@ class ImpoundingFields
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */

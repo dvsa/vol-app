@@ -1,51 +1,59 @@
 <?php
 
+/**
+ * SubCategory Data Service Test
+ *
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ */
 namespace OlcsTest\Service\Data;
 
-use PHPUnit_Framework_TestCase as TestCase;
 use Olcs\Service\Data\DocumentSubCategory;
 use Mockery as m;
+use Dvsa\Olcs\Transfer\Query\SubCategory\GetList as Qry;
+use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
- * Class DocumentSubCategoryTest
- * @package OlcsTest\Service\Data
+ * SubCategory Data Service Test
+ *
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class DocumentSubCategoryTest extends TestCase
+class DocumentSubCategoryTest extends AbstractDataServiceTestCase
 {
     public function testFetchListData()
     {
-        $results = [
-            'Results' => [
-                ['result1'],
-                ['result2']
-            ]
+        $results = ['results' => 'results'];
+        $params = [
+            'sort' => 'subCategoryName',
+            'order' => 'ASC',
+            'isDocCategory' => 'Y',
+            'category' => 'cat'
         ];
+        $dto = Qry::create($params);
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturnUsing(
+                function ($dto) use ($params) {
+                    $this->assertEquals($params['sort'], $dto->getSort());
+                    $this->assertEquals($params['order'], $dto->getOrder());
+                    $this->assertEquals($params['category'], $dto->getCategory());
+                    return 'query';
+                }
+            )
+            ->once()
+            ->getMock();
 
-        $mockRestClient = m::mock('\Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('', m::type('array'))->andReturn($results);
+        $mockResponse = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->once()
+            ->shouldReceive('getResult')
+            ->andReturn($results)
+            ->twice()
+            ->getMock();
+
         $sut = new DocumentSubCategory();
-        $sut->setRestClient($mockRestClient);
+        $sut->setCategory('cat');
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
 
-        $this->assertEquals($results['Results'], $sut->fetchListData([]));
-        $sut->fetchListData([]);
-    }
-
-    public function testFetchListDataWithCategory()
-    {
-        $results = [
-            'Results' => [
-                ['result1'],
-                ['result2']
-            ]
-        ];
-
-        $mockRestClient = m::mock('\Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('', ['category' => 'testing'])->andReturn($results);
-        $sut = new DocumentSubCategory();
-        $sut->setRestClient($mockRestClient);
-        $sut->setCategory('testing');
-
-        $this->assertEquals($results['Results'], $sut->fetchListData([]));
-        $sut->fetchListData([]);
+        $this->assertEquals($results['results'], $sut->fetchListData([]));
     }
 }

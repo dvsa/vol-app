@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("fields")
  */
-class ProhibitionFields
+class ProhibitionFields extends Base
 {
     /**
      * @Form\Attributes({"id":"prohibitionDate"})
@@ -19,7 +19,8 @@ class ProhibitionFields
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $prohibitionDate = null;
@@ -29,23 +30,14 @@ class ProhibitionFields
      * @Form\Options({"label":"Vehicle registration mark"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Filter({"name":"Zend\Filter\StringToUpper"})
-     * @Form\Filter({
-     *     "name": "Zend\Filter\PregReplace",
-     *     "options": {
-     *         "pattern": "/\ /",
-     *         "replacement": ""
-     *     }
-     * })
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":7}})
-     * @Form\Validator({"name":"Zend\I18n\Validator\Alnum"})
+     * @Form\Filter({"name":"Common\Filter\Vrm"})
+     * @Form\Validator({"name":"Common\Form\Elements\Validators\Vrm"})
      */
     public $vrm = null;
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Trailer"})
-     * @Form\Type("checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $isTrailer = null;
 
@@ -72,13 +64,14 @@ class ProhibitionFields
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $clearedDate = null;
 
     /**
-     * @Form\Attributes({"class":"","id":""})
+     * @Form\Attributes({"class":"medium","id":""})
      * @Form\Options({"label":"Location prohibition issued"})
      * @Form\Required(false)
      * @Form\Type("Text")

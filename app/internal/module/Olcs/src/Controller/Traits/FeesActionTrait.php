@@ -4,12 +4,28 @@
  * Fees action trait
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace Olcs\Controller\Traits;
 
+use Common\RefData;
+use Dvsa\Olcs\Transfer\Command\Fee\ApproveWaive as ApproveWaiveCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\CreateFee as CreateFeeCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\RecommendWaive as RecommendWaiveCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\RefundFee as RefundFeeCmd;
+use Dvsa\Olcs\Transfer\Command\Fee\RejectWaive as RejectWaiveCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\AdjustTransaction as AdjustTransactionCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\ReverseTransaction as ReverseTransactionCmd;
+use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQry;
+use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
+use Dvsa\Olcs\Transfer\Query\Fee\FeeType as FeeTypeQry;
+use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList as FeeTypeListQry;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
+use Olcs\Data\Mapper\AdjustTransaction as AdjustTransactionMapper;
+use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
-use Zend\Json\Json;
-use Common\Service\Listener\FeeListenerService;
 
 /**
  * Fees action trait
@@ -19,14 +35,149 @@ use Common\Service\Listener\FeeListenerService;
 trait FeesActionTrait
 {
     /**
+     * Must be declared by implementing classes in an attempt to
+     * try and sanitise template nuances between apps & licences
+     */
+    abstract protected function renderLayout($view);
+
+    /**
+     * Defines the controller specific fees route
+     */
+    protected abstract function getFeesRoute();
+
+    /**
+     * Defines the controller specific fees route params
+     */
+    protected abstract function getFeesRouteParams();
+
+    /**
+     * Defines the controller specific fees table params
+     */
+    protected abstract function getFeesTableParams();
+
+    /**
+     * Shows fees table
+     */
+    public function feesAction()
+    {
+        $response = $this->checkActionRedirect();
+        if ($response) {
+            return $response;
+        }
+
+        return $this->commonFeesAction();
+    }
+
+    /**
+     * Pay Fees Action
+     */
+    public function payFeesAction()
+    {
+        return $this->commonPayFeesAction();
+    }
+
+    /**
+     * Pay Fees Action
+     */
+    public function addFeeAction()
+    {
+        $form = $this->getForm('CreateFee');
+        $form = $this->alterCreateFeeForm($form);
+
+        if ($this->getRequest()->isPost()) {
+            if ($this->isButtonPressed('cancel')) {
+                return $this->redirectToList();
+            }
+            $this->formPost($form, 'createFee', [$form]);
+        }
+
+        if ($this->getResponse()->getContent() !== '') {
+            return $this->getResponse();
+        }
+
+        $this->getServiceLocator()->get('Helper\Form')
+            ->setDefaultDate($form->get('fee-details')->get('createdDate'));
+
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('pages/form');
+
+        $this->loadScripts(['forms/create-fee']);
+
+        return $this->renderView($view, 'fees.create.title');
+    }
+
+    /**
+     * Common logic when rendering the list of fees
+     */
+    private function commonFeesAction()
+    {
+        $this->loadScripts(['forms/filter', 'table-actions']);
+
+        $status = $this->params()->fromQuery('status');
+        $table = $this->getFeesTable($status);
+
+        $view = new ViewModel(['table' => $table]);
+        $view->setTemplate('pages/table');
+        return $this->renderLayout($view);
+    }
+
+    public function getLeftView()
+    {
+        $status = $this->params()->fromQuery('status');
+        $filters = [
+            'status' => $status
+        ];
+
+        $view = new ViewModel(['filterForm' => $this->getFeeFilterForm($filters)]);
+        $view->setTemplate('sections/fees/partials/left');
+
+        return $view;
+    }
+
+    protected function checkActionRedirect()
+    {
+        if ($this->getRequest()->isPost()) {
+
+            $data = (array)$this->getRequest()->getPost();
+
+            $action = isset($data['action']) ? strtolower($data['action']) : '';
+            switch ($action) {
+                case 'new':
+                    $params = [
+                        'action' => 'add-fee',
+                    ];
+                    break;
+                case 'pay':
+                default:
+                    if (!isset($data['id']) || empty($data['id'])) {
+                        $this->addErrorMessage('fees.pay.error.please-select');
+                        return $this->redirectToList();
+                    }
+                    $params = [
+                        'action' => 'pay-fees',
+                        'fee' => implode(',', $data['id']),
+                    ];
+                    break;
+            }
+
+            return $this->redirect()->toRoute(
+                $this->getFeesRoute() . '/fee_action',
+                $params,
+                null,
+                true
+            );
+        }
+    }
+
+    /**
      * Get fee filter form
      *
      * @param array $filters
-     * @return Zend\Form\Form
+     * @return \Zend\Form\Form
      */
     protected function getFeeFilterForm($filters = [])
     {
-        $form = $this->getForm('fee-filter');
+        $form = $this->getForm('FeeFilter');
         $form->remove('csrf');
         $form->setData($filters);
 
@@ -36,41 +187,45 @@ trait FeesActionTrait
     /**
      * Get fees table
      *
-     * @param string $licenceId
      * @param string $status
-     * @return Common\Service\Table\TableBuilder;
+     * @return \Common\Service\Table\TableBuilder;
      */
-    protected function getFeesTable($licenceId, $status)
+    protected function getFeesTable($status)
     {
-        switch ($status) {
-            case 'historical':
-                $feeStatus = 'IN ["lfs_pd","lfs_w","lfs_cn"]';
-                break;
-            case 'all':
-                $feeStatus = "";
-                break;
-            case 'current':
-            default:
-                $feeStatus = 'IN ["lfs_ot","lfs_wr"]';
-        }
-        $params = [
-            'licence' => $licenceId,
-            'page'    => $this->params()->fromQuery('page', 1),
-            'sort'    => $this->params()->fromQuery('sort', 'receivedDate'),
-            'order'   => $this->params()->fromQuery('order', 'DESC'),
-            'limit'   => $this->params()->fromQuery('limit', 10)
-        ];
-        if ($feeStatus) {
-            $params['feeStatus'] = $feeStatus;
+        $params = array_merge(
+            $this->getFeesTableParams(),
+            [
+                'page'    => $this->params()->fromQuery('page', 1),
+                'sort'    => $this->params()->fromQuery('sort', 'invoicedDate'),
+                'order'   => $this->params()->fromQuery('order', 'DESC'),
+                'limit'   => $this->params()->fromQuery('limit', 10)
+            ]
+        );
+
+        if ($status) {
+            $params['status'] = $status;
         }
 
-        $feesService = $this->getServiceLocator()->get('Olcs\Service\Data\Fee');
-        $results = $feesService->getFees($params, null);
+        $results = $this->getFees($params);
 
         $tableParams = array_merge($params, ['query' => $this->getRequest()->getQuery()]);
         $table = $this->getTable('fees', $results, $tableParams);
 
-        return $table;
+        return $this->alterFeeTable($table, $results);
+    }
+
+    protected function getFees($params)
+    {
+        $query = FeeListQry::create($params);
+        $response = $this->handleQuery($query);
+        return $response->getResult();
+    }
+
+    protected function getFee($id)
+    {
+        $query = FeeQry::create(['id' => $id]);
+        $response = $this->handleQuery($query);
+        return $response->getResult();
     }
 
     /**
@@ -78,77 +233,664 @@ trait FeesActionTrait
      */
     public function editFeeAction()
     {
-        $id = $this->params()->fromRoute('fee', null);
-        $feesService = $this->getServiceLocator()->get('Olcs\Service\Data\Fee');
-        $fee = $feesService->getFee($id);
-        $form = $this->alterFeeForm($this->getForm('fee'), $fee['feeStatus']['id']);
-        $form = $this->setDataFeeForm($fee, $form);
+        if ($this->isButtonPressed('refund')) {
+            $route = $this->getFeesRoute() . '/fee_action';
+            return $this->redirect()->toRoute($route, ['action' => 'refund-fee'], [], true);
+        }
 
+        $id = $this->params()->fromRoute('fee', null);
+
+        $fee = $this->getFee($id);
+
+        $form = $this->alterFeeForm($this->getForm('Fee'), $fee);
+        $form = $this->setDataFeeForm($fee, $form);
         $this->processForm($form);
-        if ($this->getResponse()->getContent() !== "") {
+
+        if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
         }
 
+        $table = $this->getTable('fee-transactions', $fee['displayTransactions'], []);
+
         $viewParams = [
             'form' => $form,
+            'table' => $table,
             'invoiceNo' => $fee['id'],
             'description' => $fee['description'],
             'amount' => $fee['amount'],
+            'netAmount' => $fee['netAmount'],
+            'vatAmount' => $fee['vatAmount'],
+            'vatInfo' => $fee['vatInfo'],
             'created' => $fee['invoicedDate'],
+            'outstanding' => $fee['outstanding'],
             'status' => isset($fee['feeStatus']['description']) ? $fee['feeStatus']['description'] : '',
-            'receiptNo' => $fee['receiptNo'],
-            'receivedAmount' => $fee['receivedAmount'],
-            'receivedDate' => $fee['receivedDate'],
-            'paymentMethod' => isset($fee['paymentMethod']['description']) ? : '',
-            'processedBy' => isset($fee['lastModifiedBy']['name']) ? $fee['lastModifiedBy']['name'] : ''
+            'fee' => $fee
         ];
-        $view = new ViewModel($viewParams);
-        $view->setTemplate('licence/fees/edit-fee');
 
-        return $this->renderView($view, 'No # ' . $fee['id']);
+        $this->placeholder()->setPlaceholder('contentTitle', 'internal.fee-details.title');
+
+        $this->loadScripts(['forms/fee-details']);
+
+        $view = new ViewModel($viewParams);
+        $view->setTemplate('sections/fees/pages/fee-details');
+
+        $layout = $this->renderLayout($view, 'internal.fee-details.title');
+
+        $this->maybeClearLeft($layout);
+
+        return $layout;
+    }
+
+    /**
+     * Alter which feeTransactions are displayed in the table,
+     * called as array_filter callback
+     *
+     * @param array $feeTransaction
+     * @return boolean
+     */
+    public function ftDisplayFilter($feeTransaction)
+    {
+        // OLCS-10687 exclude outstanding waive transactions
+        if (
+            $feeTransaction['transaction']['status']['id'] === RefData::TRANSACTION_STATUS_OUTSTANDING
+            &&
+            $feeTransaction['transaction']['type']['id'] === RefData::TRANSACTION_TYPE_WAIVE
+        ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function maybeClearLeft($layout)
+    {
+        $layout->clearLeft();
+    }
+
+    /**
+     * Redirect back to fee details page
+     */
+    protected function redirectToFeeDetails($ajax = false)
+    {
+        $method = $ajax ? 'toRouteAjax' : 'toRoute';
+
+        $route = $this->getFeesRoute() . '/fee_action';
+        return $this->redirect()->$method($route, ['action' => 'edit-fee'], [], true);
+    }
+
+    /**
+     * Redirect back to transaction details page
+     */
+    protected function redirectToTransaction($ajax = false, $transactionId = null)
+    {
+        $method = $ajax ? 'toRouteAjax' : 'toRoute';
+        $route = $this->getFeesRoute() . '/fee_action/transaction';
+        $params = ['action' => 'edit-fee'];
+
+        if ($transactionId) {
+            $params['transaction'] = $transactionId;
+        }
+
+        return $this->redirect()->$method($route, $params, [], true);
+    }
+
+    /**
+     * Display transaction info
+     */
+    public function transactionAction()
+    {
+        $id = $this->params()->fromRoute('transaction', null);
+
+        $query = PaymentByIdQry::create(['id' => $id]);
+        $response = $this->handleQuery($query);
+
+        if (!$response->isOk()) {
+            if ($response->isNotFound()) {
+                return $this->notFoundAction();
+            }
+            $this->addErrorMessage('unknown-error');
+            return $this->redirectToFeeDetails();
+        }
+
+        $transaction = $response->getResult();
+
+        $fees = $transaction['fees'];
+
+        $table = $this->getTable('transaction-fees', $fees);
+
+        $urlHelper = $this->getServiceLocator()->get('Helper\Url');
+
+        $backLink = $urlHelper->fromRoute(
+            $this->getFeesRoute() . '/fee_action',
+            ['action' => 'edit-fee'],
+            [],
+            true
+        );
+
+        $receiptLink = '';
+
+        switch ($transaction['type']['id']) {
+            case RefData::TRANSACTION_TYPE_PAYMENT:
+                $title = 'internal.transaction-details.title-payment';
+                if ($transaction['status']['id'] == RefData::TRANSACTION_STATUS_COMPLETE) {
+                    $receiptLink = $urlHelper->fromRoute(
+                        $this->getFeesRoute() . '/print-receipt',
+                        ['reference' => $transaction['reference']],
+                        [],
+                        true
+                    );
+                }
+                break;
+            case RefData::TRANSACTION_TYPE_REVERSAL:
+                $title = 'internal.transaction-details.title-reversal';
+                break;
+            default:
+                $title = 'internal.transaction-details.title-other';
+                break;
+        }
+
+        $viewParams = [
+            'table' => $table,
+            'transaction' => $transaction,
+            'backLink' => $backLink,
+            'receiptLink' => $receiptLink,
+            'reverseLink' => $this->getReverseLink($transaction),
+            'adjustLink' => $this->getAdjustLink($transaction),
+        ];
+
+        $this->placeholder()->setPlaceholder('contentTitle', $title);
+
+        $view = new ViewModel($viewParams);
+        $view->setTemplate('sections/fees/pages/transaction-details');
+
+        $layout = $this->renderLayout($view, $title);
+
+        $this->maybeClearLeft($layout);
+
+        return $layout;
+    }
+
+    /**
+     * Determine reversal url from transaction data
+     *
+     * @param array $transaction
+     * @return  string
+     */
+    protected function getReverseLink(array $transaction)
+    {
+        if ($transaction['displayReversalOption']) {
+            return $this->getServiceLocator()->get('Helper\Url')->fromRoute(
+                $this->getFeesRoute() . '/fee_action/transaction/reverse',
+                ['transaction' => $transaction['id']],
+                [],
+                true
+            );
+        }
+
+        return '';
+    }
+
+    /**
+     * Determine adjustment url from transaction data
+     *
+     * @param array $transaction
+     * @return  string
+     */
+    protected function getAdjustLink(array $transaction)
+    {
+        if ($transaction['displayAdjustmentOption']) {
+            return $this->getServiceLocator()->get('Helper\Url')->fromRoute(
+                $this->getFeesRoute() . '/fee_action/transaction/adjust',
+                ['transaction' => $transaction['id']],
+                [],
+                true
+            );
+        }
+
+        return '';
+    }
+
+    /**
+     * Common logic when handling payFeesAction
+     */
+    protected function commonPayFeesAction()
+    {
+        $feeIds = explode(',', $this->params('fee'));
+        $feeData = $this->getFees(['ids' => $feeIds]);
+        $fees = $feeData['results'];
+        $title = 'Pay fee' . (count($fees) !== 1 ? 's' : '');
+        $backToFee = !empty($this->params()->fromQuery('backToFee'));
+
+        foreach ($fees as $fee) {
+            // bail early if any of the fees prove to be the wrong status
+            if ($fee['feeStatus']['id'] !== RefData::FEE_STATUS_OUTSTANDING) {
+                $this->addErrorMessage('fee.not-outstanding.error');
+                return $this->redirectToList();
+            }
+
+            if ($fee['ruleDateBeforeInvoice']) {
+                $this->addErrorMessage('fee.rule-before-invoiced-date.error');
+                return $this->redirectToList();
+            }
+        }
+
+        $form = $this->getForm('FeePayment');
+        $form = $this->alterPaymentForm($form, $feeData, $backToFee);
+
+        $this->loadScripts(['forms/fee-payment']);
+
+        if ($this->getRequest()->isPost()) {
+
+            $data = (array)$this->getRequest()->getPost();
+
+            // check if we need to recover serialized data from confirm step
+            if ($this->isButtonPressed('confirm') && isset($data['custom'])) {
+                $data = unserialize($data['custom']);
+            }
+
+            if ($this->isCardPayment($data)) {
+                // remove field and validator if this is a card payment
+                $this->getServiceLocator()
+                    ->get('Helper\Form')
+                    ->remove($form, 'details->received');
+            }
+
+            $form->setData($data);
+
+            if ($form->isValid()) {
+
+                if ($this->shouldConfirmPayment($feeData, $data)) {
+                    $confirmMessage = $this->getConfirmPaymentMessage($feeData, $data);
+                    $confirm = $this->confirm($confirmMessage, false, serialize($data));
+
+                    if ($confirm instanceof ViewModel) {
+                        return $this->renderView($confirm);
+                    }
+                }
+
+                return $this->initiatePaymentRequest($feeIds, $form->getData()['details'], $backToFee);
+            }
+        }
+
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, $title);
+    }
+
+    public function refundFeeAction()
+    {
+        $feeId = $this->params('fee');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createFormWithRequest('GenericConfirmation', $this->getRequest());
+
+        if ($this->getRequest()->isPost()) {
+            if ($this->isButtonPressed('cancel')) {
+                return $this->redirectToFeeDetails();
+            }
+            $data = (array) $this->getRequest()->getPost();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $response = $this->handleCommand(
+                    RefundFeeCmd::create(['id' => $feeId])
+                );
+                if ($response->isOk()) {
+                    $this->addSuccessMessage('fees.refund.success');
+                } else {
+                    $this->addErrorMessage('unknown-error');
+                }
+                return $this->redirectToFeeDetails(true);
+            }
+        }
+
+        $form->get('messages')->get('message')->setValue('fees.refund.confirm');
+        $form->setSubmitLabel('Refund');
+        $view = new ViewModel(array('form' => $form));
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'fees.refund.title');
+    }
+
+    public function reverseTransactionAction()
+    {
+        $transactionId = $this->params('transaction');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createFormWithRequest('ReverseTransaction', $this->getRequest());
+
+        if ($this->getRequest()->isPost()) {
+            $redirect = $this->handleReverseTransactionPost($form, $transactionId);
+            if (!is_null($redirect)) {
+                return $redirect;
+            }
+        }
+
+        $query = PaymentByIdQry::create(['id' => $transactionId]);
+        $response = $this->handleQuery($query);
+        if (!$response->isOk()) {
+            $this->addErrorMessage('unknown-error');
+            return $this->redirectToTransaction();
+        }
+
+        $transaction = $response->getResult();
+
+        if (!$transaction['canReverse']) {
+            $this->addErrorMessage('fees.reverse-transaction.cannotReverse');
+            return $this->redirectToTransaction(true);
+        }
+
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        $message = $translator->translateReplace(
+            'fees.reverse-transaction.confirm',
+            strtolower($transaction['paymentMethod']['description'])
+        );
+        $form->get('messages')->get('message')->setValue($message);
+
+        $view = new ViewModel(array('form' => $form));
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'fees.reverse-transaction.title');
+    }
+
+    private function handleReverseTransactionPost($form, $transactionId)
+    {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirectToTransaction();
+        }
+        $data = (array) $this->getRequest()->getPost();
+        $form->setData($data);
+        if ($form->isValid()) {
+            $dtoData = [
+                'id' => $transactionId,
+                'reason' => $form->getData()['details']['reason'],
+            ];
+            $response = $this->handleCommand(ReverseTransactionCmd::create($dtoData));
+            if ($response->isOk()) {
+                $this->addSuccessMessage('fees.reverse-transaction.success');
+            } else {
+                $result = $response->getResult();
+                if (isset($result['messages'])) {
+                    foreach ($result['messages'] as $error) {
+                        $this->addErrorMessage($error);
+                    }
+                }
+            }
+            return $this->redirectToTransaction(true);
+        }
+    }
+
+    public function adjustTransactionAction()
+    {
+        $transactionId = $this->params('transaction');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createFormWithRequest('AdjustTransaction', $this->getRequest());
+        $form->get('messages')->get('message')->setValue('fees.adjust-transaction.confirm');
+
+        $query = PaymentByIdQry::create(['id' => $transactionId]);
+        $response = $this->handleQuery($query);
+        if (!$response->isOk()) {
+            $this->addErrorMessage('unknown-error');
+            return $this->redirectToTransaction();
+        }
+        $transaction = $response->getResult();
+
+        if (!$transaction['canAdjust']) {
+            $this->addErrorMessage('fees.adjust-transaction.cannotAdjust');
+            return $this->redirectToTransaction(true);
+        }
+
+        if ($this->getRequest()->isPost()) {
+            $redirect = $this->handleAdjustTransactionPost($form, $transaction);
+            if (!is_null($redirect)) {
+                return $redirect;
+            }
+        } else {
+            $form->setData(AdjustTransactionMapper::mapFromResult($transaction));
+        }
+
+        $this->alterAdjustmentForm($form, $transaction);
+
+        $view = new ViewModel(array('form' => $form));
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'fees.adjust-transaction.title');
+    }
+
+    private function handleAdjustTransactionPost($form, $transaction)
+    {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirectToTransaction();
+        }
+        $data = (array) $this->getRequest()->getPost();
+
+        // re-add readonly value to form data
+        $data['details']['paymentMethod'] = $transaction['paymentMethod']['description'];
+
+        $form->setData($data);
+        if ($form->isValid()) {
+            $dtoData = AdjustTransactionMapper::mapFromForm($form->getData());
+            $response = $this->handleCommand(AdjustTransactionCmd::create($dtoData));
+            if ($response->isOk()) {
+                // redirect to *new* adjustment transaction, not the current one
+                $this->addSuccessMessage('fees.adjust-transaction.success');
+                $newId = $response->getResult()['id']['transaction'];
+                return $this->redirectToTransaction(true, $newId);
+            } else {
+                $flashErrors = AdjustTransactionMapper::mapFromErrors($form, $response->getResult());
+                foreach ($flashErrors as $error) {
+                    $this->addErrorMessage($error);
+                }
+            }
+        }
     }
 
     /**
      * Alter fee form
      *
-     * @param Zend\Form\Form $form
-     * @return Zend\Form\Form
+     * @param \Zend\Form\Form $form
+     * @param array $fee
+     * @return \Zend\Form\Form
      */
-    protected function alterFeeForm($form, $status)
+    protected function alterFeeForm($form, $fee)
     {
-        switch ($status) {
-            case 'lfs_ot':
-                // outstanding
-                $form->get('form-actions')->remove('approve');
-                $form->get('form-actions')->remove('reject');
-                break;
-            case 'lfs_wr':
-                // waive recommended
-                $form->get('form-actions')->remove('recommend');
-                break;
-            case 'lfs_w':
-                // waived
-                $form->remove('form-actions');
-                $form->get('fee-details')->get('waiveReason')->setAttribute('disabled', 'disabled');
-                break;
-            case 'lfs_pd':
-                // payed
-            case 'lfs_cn':
-                // cancelled
-                $form = null;
-                break;
+        $status = $fee['feeStatus']['id'];
+
+        if ($fee['canRefund'] === false) {
+            $form->get('form-actions')->remove('refund');
         }
+
+        if ($status !== RefData::FEE_STATUS_OUTSTANDING) {
+            $form->get('form-actions')->remove('pay');
+            $form->get('form-actions')->remove('approve');
+            $form->get('form-actions')->remove('reject');
+            $form->get('form-actions')->remove('recommend');
+            // don't remove whole fieldset as we need to keep 'back' button
+
+            $form->get('fee-details')->remove('waiveRemainder'); // checkbox
+            $form->get('fee-details')->remove('waiveReason'); // textbox
+
+            return $form;
+        }
+
+        if ($fee['hasOutstandingWaiveTransaction']) {
+            $form->get('fee-details')->remove('waiveRemainder');
+            $form->get('form-actions')->remove('recommend');
+        } else {
+            $form->get('form-actions')->remove('approve');
+            $form->get('form-actions')->remove('reject');
+        }
+
         return $form;
     }
 
     /**
+     * Alter fee payment form
+     *
+     * @param \Zend\Form\Form $form
+     * @param array $feeData from FeeList query
+     * @param boolean $backToFee whether to populate 'backToFee' field which
+     * controls the final redirect
+     * @return \Zend\Form\Form
+     */
+    protected function alterPaymentForm($form, $feeData, $backToFee = false)
+    {
+        $minAmount = $feeData['extra']['minPayment'];
+        $maxAmount = $feeData['extra']['totalOutstanding'];
+
+        // default the receipt date to 'today'
+        $today = $this->getServiceLocator()->get('Helper\Date')->getDateObject();
+        $form->get('details')
+            ->get('receiptDate')
+            ->setValue($today);
+
+        // add the fee amount and validator to the form
+        $form->get('details')
+            ->get('maxAmount')
+            ->setValue('£' . number_format($maxAmount, 2));
+
+        // conditional validation needs numeric values to compare
+        $form->get('details')
+            ->get('maxAmountForValidator')
+            ->setValue($maxAmount);
+        $form->get('details')
+            ->get('minAmountForValidator')
+            ->setValue($minAmount);
+
+        if ($backToFee) {
+            // note we don't actually use the query string id here, it's safer
+            // to treat it as a boolean flag and use the id from the data
+            $form->get('details')->get('backToFee')->setValue($feeData['results'][0]['id']);
+        }
+
+        return $form;
+    }
+
+    /**
+     * Alter create fee form
+     *
+     * @param \Zend\Form\Form $form
+     * @return \Zend\Form\Form
+     */
+    protected function alterCreateFeeForm($form)
+    {
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        // disable amount validation by default
+        $form->get('fee-details')->get('amount')->setAttribute('readonly', true);
+        $formHelper->disableEmptyValidationOnElement($form, 'fee-details->amount');
+
+        // remove IRFO fields by default
+        $formHelper->remove($form, 'fee-details->irfoGvPermit');
+        $formHelper->remove($form, 'fee-details->irfoPsvAuth');
+
+        // populate fee type select
+        $options = $this->fetchFeeTypeValueOptions();
+        $form->get('fee-details')->get('feeType')->setValueOptions($options);
+
+        return $form;
+    }
+
+    /**
+     * Alter adjustment form
+     *
+     * @param \Zend\Form\Form $form
+     * @param array $transaction
+     * @return \Zend\Form\Form
+     */
+    protected function alterAdjustmentForm($form, $transaction)
+    {
+        switch ($transaction['paymentMethod']['id']) {
+            case RefData::FEE_PAYMENT_METHOD_CASH:
+                $remove = ['chequeNo', 'chequeDate', 'poNo'];
+                break;
+            case RefData::FEE_PAYMENT_METHOD_CHEQUE:
+                $remove = ['poNo'];
+                break;
+            case RefData::FEE_PAYMENT_METHOD_POSTAL_ORDER:
+                $remove = ['chequeNo', 'chequeDate'];
+                break;
+            case RefData::FEE_PAYMENT_METHOD_CARD_ONLINE:
+            case RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE:
+            default:
+                $remove = ['received', 'payer', 'slipNo', 'chequeNo', 'chequeDate', 'poNo'];
+                break;
+        }
+
+        foreach ($remove as $field) {
+            $form->get('details')->remove($field);
+        }
+
+        return $form;
+    }
+
+    /**
+     * Get value options array for create fee type form
+     *
+     * @return array
+     */
+    protected function fetchFeeTypeValueOptions($effectiveDate = null)
+    {
+        $data = $this->fetchFeeTypeListData($effectiveDate);
+        if (isset($data['extra']['valueOptions']['feeType'])) {
+            return $data['extra']['valueOptions']['feeType'];
+        }
+
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    protected function fetchFeeTypeListData($effectiveDate = null)
+    {
+        $dtoData = $this->getFeeTypeDtoData();
+        if ($effectiveDate) {
+            $dtoData['effectiveDate'] = $effectiveDate;
+        }
+        $response = $this->handleQuery(FeeTypeListQry::create($dtoData));
+        if ($response->isOk()) {
+            return $response->getResult();
+        }
+    }
+
+    protected function getFeeTypeDtoData()
+    {
+        return [];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getCreateFeeDtoData($formData)
+    {
+        return [];
+    }
+
+    /**
+     * @param Table $table
+     * @param array $results
+     * @return Table
+     */
+    protected function alterFeeTable($table, $results)
+    {
+        // disable 'pay' button if appropriate
+        if ($results['extra']['allowFeePayments'] == false) {
+            $table->disableAction('pay');
+        }
+
+        return $table;
+    }
+
+
+    /**
      * Process form
      *
-     * @param Zend\Form\Form $form
+     * @param \Zend\Form\Form $form
      */
     protected function processForm($form)
     {
-        if ($this->isButtonPressed('recommend')) {
+        if ($this->isButtonPressed('pay')) {
+            $this->redirectToPay();
+        } elseif ($this->isButtonPressed('recommend')) {
             $this->formPost($form, 'recommendWaive');
         } elseif ($this->isButtonPressed('reject')) {
             $this->validateForm = false;
@@ -167,14 +909,15 @@ trait FeesActionTrait
      */
     protected function recommendWaive($data)
     {
-        $params = [
-            'id' => $data['fee-details']['id'],
-            'version' => $data['fee-details']['version'],
-            'waiveReason' => $data['fee-details']['waiveReason'],
-            // changing fee status to waive recommended
-            'feeStatus' => 'lfs_wr'
-        ];
-        $this->updateFeeAndRedirectToList($params);
+        $dto = RecommendWaiveCmd::create(
+            [
+                'id' => $data['fee-details']['id'],
+                'version' => $data['fee-details']['version'],
+                'waiveReason' => $data['fee-details']['waiveReason'],
+            ]
+        );
+
+        $this->updateFeeAndRedirectToList($dto, 'Waive recommended');
     }
 
     /**
@@ -184,14 +927,14 @@ trait FeesActionTrait
      */
     protected function rejectWaive($data)
     {
-        $params = [
-            'id' => $data['fee-details']['id'],
-            'version' => $data['fee-details']['version'],
-            // changing fee status back to outstanding
-            'feeStatus' => 'lfs_ot',
-        ];
-        $message = 'The fee waive recommendation has been rejected';
-        $this->updateFeeAndRedirectToList($params, $message);
+        $dto = RejectWaiveCmd::create(
+            [
+                'id' => $data['fee-details']['id'],
+                'version' => $data['fee-details']['version'],
+            ]
+        );
+
+        return $this->updateFeeAndRedirectToList($dto, 'Waive rejected');
     }
 
     /**
@@ -201,38 +944,35 @@ trait FeesActionTrait
      */
     protected function approveWaive($data)
     {
-        $params = [
-            'id' => $data['fee-details']['id'],
-            'version' => $data['fee-details']['version'],
-            'waiveReason' => $data['fee-details']['waiveReason'],
-            // changing fee status to waived
-            'feeStatus' => 'lfs_w'
-        ];
-
-        $this->getServiceLocator()->get('Entity\Fee')->save($params);
-        $this->getServiceLocator()->get('Helper\FlashMessenger')
-            ->addSuccessMessage('The selected fee has been waived');
-
-        $this->getServiceLocator()->get('Listener\Fee')->trigger(
-            $data['fee-details']['id'],
-            FeeListenerService::EVENT_WAIVE
+        $dto = ApproveWaiveCmd::create(
+            [
+                'id' => $data['fee-details']['id'],
+                'version' => $data['fee-details']['version'],
+                'waiveReason' => $data['fee-details']['waiveReason'],
+            ]
         );
 
-        $this->redirectToList();
+        return $this->updateFeeAndRedirectToList($dto, 'Waive approved');
     }
 
     /**
      * Update fee and redirect to list
      *
-     * @param array $data
+     * @param CommandInterface $command
      * @param string $message
      */
-    protected function updateFeeAndRedirectToList($data, $message = '')
+    protected function updateFeeAndRedirectToList($command, $message = '')
     {
-        $this->getServiceLocator()->get('Entity\Fee')->save($data);
-        if ($message) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($message);
+        $response = $this->handleCommand($command);
+
+        if ($response->isOk() && $message) {
+            $this->addSuccessMessage($message);
         }
+
+        if (!$response->isOk()) {
+            $this->addErrorMessage('unknown-error');
+        }
+
         $this->redirectToList();
     }
 
@@ -240,42 +980,312 @@ trait FeesActionTrait
      * Set data
      *
      * @param array $fee
-     * @param Zend\Form\Form $form
-     * @return Zend\Form\Form
+     * @param \Zend\Form\Form $form
+     * @return \Zend\Form\Form
      */
     protected function setDataFeeForm($fee, $form)
     {
         if ($form) {
             $form->get('fee-details')->get('id')->setValue($fee['id']);
             $form->get('fee-details')->get('version')->setValue($fee['version']);
-            $form->get('fee-details')->get('waiveReason')->setValue($fee['waiveReason']);
+            if (isset($fee['waiveReason'])) {
+                $form->get('fee-details')->get('waiveReason')->setValue($fee['waiveReason']);
+            }
         }
         return $form;
     }
 
     /**
-     * Redirect back to list of tasks
-     *
-     * @return redirect
+     * Redirect back to list of fees
      */
     protected function redirectToList()
     {
-        $licenceId = $this->getFromRoute('licence');
-        if ($licenceId) {
-            $route = 'licence/fees';
-            $params = ['licence' => $licenceId];
-        } else {
-            $applicationId = $this->getFromRoute('application');
-            $route = 'lva-application/fees';
-            $params = ['application' => $applicationId];
+        $route = $this->getFeesRoute();
+        $params = $this->getFeesRouteParams();
+        return $this->redirect()->toRouteAjax($route, $params);
+    }
+
+    /**
+     * Redirect to 'pay fee' page
+     */
+    protected function redirectToPay()
+    {
+        $feeId = $this->params()->fromRoute('fee', null);
+        $route = $this->getFeesRoute() . '/fee_action';
+        $params = ['fee' => $feeId, 'action' => 'pay-fees'];
+        $options = ['query' => ['backToFee' => $feeId]];
+        return $this->redirect()->toRoute($route, $params, $options, true);
+    }
+
+    /**
+     * Kick off the CPMS payment process for a given amount
+     * relating to a given array of fees
+     *
+     * @param array  $feeIds
+     * @param array  $details
+     * @param boolean $backToFee
+     */
+    private function initiatePaymentRequest($feeIds, $details, $backToFee)
+    {
+        $paymentMethod = $details['paymentType'];
+
+        switch ($paymentMethod) {
+            case RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE:
+
+                $cpmsRedirectUrl = $this->url()->fromRoute(
+                    $this->getFeesRoute() . '/fee_action',
+                    [
+                        'action' => 'payment-result',
+                    ],
+                    [
+                        'force_canonical' => true,
+                        'query' => ['backToFee' => (int) $backToFee],
+                    ],
+                    true
+                );
+
+                $dtoData = compact('cpmsRedirectUrl', 'feeIds', 'paymentMethod');
+                $dto = PayOutstandingFeesCmd::create($dtoData);
+                $response = $this->handleCommand($dto);
+
+                if (!$response->isOk()) {
+                    $this->addErrorMessage('unknown-error');
+                    return $this->redirectToList();
+                }
+
+                // Look up the new payment in order to get the redirect data
+                $transactionId = $response->getResult()['id']['transaction'];
+                $response = $this->handleQuery(PaymentByIdQry::create(['id' => $transactionId]));
+                $transaction = $response->getResult();
+                $view = new ViewModel(
+                    [
+                        'gateway' => $transaction['gatewayUrl'],
+                        'data' => [
+                            'receipt_reference' => $transaction['reference']
+                        ]
+                    ]
+                );
+                // render the gateway redirect and return early
+                $view->setTemplate('cpms/payment');
+                return $this->renderView($view);
+
+            case RefData::FEE_PAYMENT_METHOD_CASH:
+                $dtoData = [
+                    'feeIds' => $feeIds,
+                    'paymentMethod' => $paymentMethod,
+                    'received' => $details['received'],
+                    'receiptDate' => $details['receiptDate'],
+                    'payer' => $details['payer'],
+                    'slipNo' => $details['slipNo'],
+                ];
+                break;
+
+            case RefData::FEE_PAYMENT_METHOD_CHEQUE:
+                $dtoData = [
+                    'feeIds' => $feeIds,
+                    'paymentMethod' => $paymentMethod,
+                    'received' => $details['received'],
+                    'receiptDate' => $details['receiptDate'],
+                    'payer' => $details['payer'],
+                    'slipNo' => $details['slipNo'],
+                    'chequeNo' => $details['chequeNo'],
+                    'chequeDate' => $details['chequeDate'],
+                ];
+                break;
+
+            case RefData::FEE_PAYMENT_METHOD_POSTAL_ORDER:
+                $dtoData = [
+                    'feeIds' => $feeIds,
+                    'paymentMethod' => $paymentMethod,
+                    'received' => $details['received'],
+                    'receiptDate' => $details['receiptDate'],
+                    'payer' => $details['payer'],
+                    'slipNo' => $details['slipNo'],
+                    'poNo' => $details['poNo'],
+                ];
+                break;
+
+            default:
+                throw new \UnexpectedValueException("Payment type '$paymentMethod' is not valid");
         }
 
-        if ($this->getRequest()->isXmlHttpRequest()) {
-            $data = ['status' => 302, 'location' => $this->url()->fromRoute($route, $params)];
-            $this->getResponse()->getHeaders()->addHeaders(['Content-Type' => 'application/json']);
-            $this->getResponse()->setContent(Json::encode($data));
-            return;
+        $dto = PayOutstandingFeesCmd::create($dtoData);
+        $response = $this->handleCommand($dto);
+
+        if ($response->isOk()) {
+            $this->addSuccessMessage('The payment was made successfully');
+        } else {
+            $this->addErrorMessage('The fee(s) have NOT been paid. Please try again');
         }
-        $this->redirect()->toRoute($route, $params);
+
+        if (isset($details['backToFee']) && !empty($details['backToFee'])) {
+            return $this->redirectToFeeDetails(true);
+        }
+
+        return $this->redirectToList();
+    }
+
+    /**
+     * Handle response from third-party payment gateway
+     */
+    public function paymentResultAction()
+    {
+        $queryStringData = (array)$this->getRequest()->getQuery();
+
+        $dtoData = [
+            'reference' => $queryStringData['receipt_reference'],
+            'cpmsData' => $queryStringData,
+            'paymentMethod' => RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE,
+        ];
+
+        $response = $this->handleCommand(CompletePaymentCmd::create($dtoData));
+
+        if (!$response->isOk()) {
+            $this->addErrorMessage('The fee payment failed');
+            return $this->redirectToList();
+        }
+
+        // check payment status and redirect accordingly
+        $transactionId = $response->getResult()['id']['transaction'];
+        $response = $this->handleQuery(PaymentByIdQry::create(['id' => $transactionId]));
+        $transaction = $response->getResult();
+
+        switch ($transaction['status']['id']) {
+            case RefData::TRANSACTION_STATUS_COMPLETE:
+                $this->addSuccessMessage('The fee(s) have been paid successfully');
+                break;
+            case RefData::TRANSACTION_STATUS_CANCELLED:
+                $this->addWarningMessage('The fee payment was cancelled');
+                break;
+            case RefData::TRANSACTION_STATUS_FAILED:
+                $this->addErrorMessage('The fee payment failed');
+                break;
+            default:
+                $this->addErrorMessage('An unexpected error occured');
+                break;
+        }
+
+        if (isset($queryStringData['backToFee']) && !empty($queryStringData['backToFee'])) {
+            return $this->redirectToFeeDetails();
+        }
+
+        return $this->redirectToList();
+    }
+
+    /**
+     * Create fee
+     *
+     * @param array $data
+     */
+    protected function createFee($data, $form)
+    {
+        $dtoData = $this->getCreateFeeDtoData($data);
+
+        $dto = CreateFeeCmd::create($dtoData);
+
+        $response = $this->handleCommand($dto);
+
+        if ($response->isOk()) {
+            $this->addSuccessMessage('fees.create.success');
+            $this->redirectToList();
+        } else {
+            $errors = $response->getResult();
+            \Olcs\Data\Mapper\CreateFee::mapFromErrors($form, $errors);
+            if (!empty($errors)) {
+                $this->addErrorMessage('fees.create.error');
+            }
+        }
+    }
+
+    /**
+     * Determine if we're making a card payment
+     *
+     * @param array $data payment data
+     * @return boolean
+     */
+    public function isCardPayment($data)
+    {
+        return (
+            isset($data['details']['paymentType'])
+            && $data['details']['paymentType'] == RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE
+        );
+    }
+
+    /**
+     * @param array $feeData from FeeList query
+     * @param array $postData
+     * @return boolean
+     */
+    protected function shouldConfirmPayment(array $feeData, array $postData)
+    {
+        if ($this->isCardPayment($postData)) {
+            return false;
+        }
+
+        // force the amounts to be in the same format, we can't compare floats for equality
+        $received = number_format((float)$postData['details']['received'], 2);
+        $total = number_format((float)$feeData['extra']['totalOutstanding'], 2);
+        return ($received !== $total);
+    }
+
+    /**
+     * @param array $feeData from FeeList query response
+     * @param array $postData
+     * @return string message (translation key)
+     */
+    protected function getConfirmPaymentMessage(array $feeData, $postData)
+    {
+        $received = $postData['details']['received'];
+        $total = $feeData['extra']['totalOutstanding'];
+
+        if ($received > $total) {
+            // overpayment
+            if ($received > ($total * 2)) {
+                // A slightly altered warning message is displayed if the payment amount
+                // is more than double the amount outstanding in order to avoid mis-keying:
+                return 'internal.fee-payment.over-payment-double';
+            }
+            return 'internal.fee-payment.over-payment-standard';
+        }
+
+        // underpayment (different message for one or multiple fees)
+        $suffix = $feeData['count'] > 1 ? 'multiple' : 'single';
+        return 'internal.fee-payment.part-payment-' . $suffix;
+    }
+
+    public function feeTypeAction()
+    {
+        $id = $this->params('id');
+        $response = $this->handleQuery(FeeTypeQry::create(['id' => $id]));
+
+        $feeType = $response->getResult();
+
+        return new JsonModel(
+            [
+                'value' => $feeType['displayValue'],
+                'taxRate' => $feeType['vatRate']
+            ]
+        );
+    }
+
+    public function feeTypeListAction()
+    {
+        $valueOptions = $this->fetchFeeTypeValueOptions($this->params('date'));
+
+        // map to format that the JS expects :-/
+        $feeTypes = array_map(
+            function ($id, $description) {
+                return array(
+                    'value' => $id,
+                    'label'  => $description,
+                );
+            },
+            array_keys($valueOptions),
+            $valueOptions
+        );
+
+        array_unshift($feeTypes, ["value" => "", "label" => ""]);
+
+        return new JsonModel($feeTypes);
     }
 }

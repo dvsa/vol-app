@@ -2,17 +2,17 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\AbstractData;
+use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
+use Dvsa\Olcs\Transfer\Query\Bus\BusNoticePeriodList;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 
 /**
  * Class BusNoticePeriod
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusNoticePeriod extends AbstractData implements ListDataInterface
+class BusNoticePeriod extends AbstractDataService implements ListDataInterface
 {
-    protected $serviceName = 'BusNoticePeriod';
-
     /**
      * Format data!
      *
@@ -49,22 +49,22 @@ class BusNoticePeriod extends AbstractData implements ListDataInterface
     /**
      * Ensures only a single call is made to the backend for each dataset
      *
-     * @internal param $category
      * @return array
      */
     public function fetchListData()
     {
         if (is_null($this->getData('BusNoticePeriod'))) {
 
-            $data = $this->getRestClient()->get('', ['limit' => 1000]);
-
+            $dtoData = BusNoticePeriodList::create([]);
+            $response = $this->handleQuery($dtoData);
+            if (!$response->isOk()) {
+                throw new UnexpectedResponseException('unknown-error');
+            }
             $this->setData('BusNoticePeriod', false);
-
-            if (isset($data['Results'])) {
-                $this->setData('BusNoticePeriod', $data['Results']);
+            if (isset($response->getResult()['results'])) {
+                $this->setData('BusNoticePeriod', $response->getResult()['results']);
             }
         }
-
         return $this->getData('BusNoticePeriod');
     }
 }

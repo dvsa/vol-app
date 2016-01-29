@@ -8,8 +8,8 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                'delete' => array('class' => 'secondary', 'requireRows' => true)
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
+                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         ),
         'paginate' => array(
@@ -33,7 +33,7 @@ return array(
                     array('action' => 'edit', 'impounding' => $data['id']),
                     'case_details_impounding',
                     true
-                ) . '">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'applicationReceiptDate'
         ),

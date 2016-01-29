@@ -20,7 +20,15 @@ class SubmissionSectionsFactory implements FactoryInterface
         /** @var \Zend\Form\FormElementManager $formElementManager */
         $serviceLocator = $formElementManager->getServiceLocator();
 
-        $service = new SubmissionSections();
+        $element = new SubmissionSections();
+
+        // set up TM ID to trigger additional TM sections when generating element
+        $case = $this->getCase($serviceLocator);
+        $transportManagerElement = $formElementManager->get('Hidden');
+        if ($case->isTm()) {
+            $transportManagerElement->setValue($case['transportManager']['id']);
+        }
+        $element->setTransportManager($transportManagerElement);
 
         /** @var \Common\Form\Element\DynamicSelect $submissionType */
         $submissionType = $formElementManager->get('DynamicSelect');
@@ -32,7 +40,7 @@ class SubmissionSectionsFactory implements FactoryInterface
             'help-block' => 'Please select a submission type'
         ];
         $submissionType->setOptions($options);
-        $service->setSubmissionType($submissionType);
+        $element->setSubmissionType($submissionType);
 
         /** @var \Common\Form\Element\Button $submissionTypeSubmit */
         $submissionTypeSubmit = $formElementManager->get('Submit');
@@ -43,7 +51,7 @@ class SubmissionSectionsFactory implements FactoryInterface
         ];
         $submissionTypeSubmit->setOptions($options);
 
-        $service->setSubmissionTypeSubmit($submissionTypeSubmit);
+        $element->setSubmissionTypeSubmit($submissionTypeSubmit);
 
         /** @var \Common\Form\Element\SubmissionSections $submissionSections */
         $sections = $formElementManager->get('DynamicMultiCheckbox');
@@ -55,9 +63,25 @@ class SubmissionSectionsFactory implements FactoryInterface
         ];
 
         $sections->setOptions($sectionOptions);
+        $element->setSections($sections);
 
-        $service->setSections($sections);
+        return $element;
+    }
 
-        return $service;
+    /**
+     * Method to extract the case in order to get the transport manager and set it's id value as hidden field
+     *
+     * @param $serviceLocator
+     * @return array $case
+     */
+    private function getCase($serviceLocator)
+    {
+        $cpm = $serviceLocator->get('ControllerPluginManager');
+        $params = $cpm->get('params');
+        $caseId = $params->fromRoute('case');
+        $caseService = $serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
+        $case = $caseService->fetchCaseData($caseId);
+
+        return $case;
     }
 }

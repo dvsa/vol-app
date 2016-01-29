@@ -22,7 +22,7 @@ class RecommendMain
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $submissionActionStatus = null;
+    public $actionTypes = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":"","multiple":"multiple"})
@@ -60,7 +60,7 @@ class RecommendMain
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Urgent"})
-     * @Form\Type("checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $urgent = null;
 }

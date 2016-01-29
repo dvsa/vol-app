@@ -6,17 +6,18 @@
 namespace Olcs\Controller\Licence\Processing;
 
 use Zend\View\Model\ViewModel;
-use \Olcs\Controller\Traits\TaskSearchTrait;
 
 /**
  * Licence Processing Tasks Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 class LicenceProcessingTasksController extends AbstractLicenceProcessingController
 {
-    use TaskSearchTrait;
-
+    /**
+     * @var string
+     */
     protected $section = 'tasks';
 
     public function indexAction()
@@ -27,35 +28,26 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
         }
 
         $filters = $this->mapTaskFilters(
-            array(
-                'linkId' => $this->getFromRoute('licence'),
-                'linkType' => 'Licence',
+            [
+                'licence' => $this->getFromRoute('licence'),
                 'assignedToTeam' => '',
                 'assignedToUser' => ''
-            )
+            ]
         );
 
-        $table = $this->getTaskTable($filters, false);
+        $table = $this->getTaskTable($filters);
 
-        // the table's nearly all good except we don't want
-        // a couple of columns
+        // the table's nearly all good except we don't want a couple of columns
         $table->removeColumn('name');
         $table->removeColumn('link');
 
         $this->setTableFilters($this->getTaskForm($filters));
 
-        $this->loadScripts(['tasks', 'table-actions']);
+        $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
 
-        $view = new ViewModel(
-            array(
-                'table' => $table->render()
-            )
-        );
+        $view = new ViewModel(['table' => $table]);
 
-        $view->setTemplate('licence/processing/layout');
-        $view->setTerminal(
-            $this->getRequest()->isXmlHttpRequest()
-        );
+        $view->setTemplate('pages/table');
 
         return $this->renderView($view);
     }

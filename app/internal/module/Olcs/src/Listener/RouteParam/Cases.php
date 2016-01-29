@@ -4,14 +4,14 @@ namespace Olcs\Listener\RouteParam;
 
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
+use \Dvsa\Olcs\Transfer\Query\Cases\Cases as ItemDto;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Helper\Navigation\PluginManager as ViewHelperManager;
-use Common\Service\Data\Licence as LicenceService;
-use Olcs\Service\Data\Cases as CaseService;
+use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
+use Common\Exception\ResourceNotFoundException;
 
 /**
  * Class Cases
@@ -20,70 +20,93 @@ use Olcs\Service\Data\Cases as CaseService;
 class Cases implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
+    use ViewHelperManagerAwareTrait;
 
     /**
-     * @var ViewHelperManager
+     * @var \Zend\Navigation\Navigation
      */
-    protected $viewHelperManager;
+    protected $navigationService;
 
     /**
-     * @var LicenceService
+     * @var \Zend\Navigation\Navigation
      */
-    protected $licenceService;
+    protected $sidebarNavigationService;
+
+    protected $annotationBuilder;
+
+    protected $queryService;
+
+    public function getAnnotationBuilder()
+    {
+        return $this->annotationBuilder;
+    }
+
+    public function getQueryService()
+    {
+        return $this->queryService;
+    }
+
+    public function setAnnotationBuilder($annotationBuilder)
+    {
+        $this->annotationBuilder = $annotationBuilder;
+    }
+
+    public function setQueryService($queryService)
+    {
+        $this->queryService = $queryService;
+    }
 
     /**
-     * @var CaseService
+     * @return \Zend\Navigation\Navigation
      */
-    protected $caseService;
+    public function getNavigationService()
+    {
+        return $this->navigationService;
+    }
 
     /**
-     * @param \Zend\View\Helper\Navigation\PluginManager $viewHelperManager
+     * @param \Zend\Navigation\Navigation $navigationService
      * @return $this
      */
-    public function setViewHelperManager($viewHelperManager)
+    public function setNavigationService($navigationService)
     {
-        $this->viewHelperManager = $viewHelperManager;
+        $this->navigationService = $navigationService;
         return $this;
     }
 
     /**
-     * @return \Zend\View\Helper\Navigation\PluginManager
+     * @return \Zend\Navigation\Navigation
      */
-    public function getViewHelperManager()
+    public function getSidebarNavigationService()
     {
-        return $this->viewHelperManager;
+        return $this->sidebarNavigationService;
     }
 
     /**
-     * @param \Olcs\Service\Data\Cases $caseService
+     * @param \Zend\Navigation\Navigation $sidebarNavigationService
+     * @return $this
      */
-    public function setCaseService($caseService)
+    public function setSidebarNavigationService($sidebarNavigationService)
     {
-        $this->caseService = $caseService;
+        $this->sidebarNavigationService = $sidebarNavigationService;
+        return $this;
     }
 
     /**
-     * @return \Olcs\Service\Data\Cases
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
      */
-    public function getCaseService()
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this->caseService;
-    }
+        $this->setAnnotationBuilder($serviceLocator->get('TransferAnnotationBuilder'));
+        $this->setQueryService($serviceLocator->get('QueryService'));
+        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
+        $this->setNavigationService($serviceLocator->get('Navigation'));
+        $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
 
-    /**
-     * @param \Common\Service\Data\Licence $licenceService
-     */
-    public function setLicenceService($licenceService)
-    {
-        $this->licenceService = $licenceService;
-    }
-
-    /**
-     * @return \Common\Service\Data\Licence
-     */
-    public function getLicenceService()
-    {
-        return $this->licenceService;
+        return $this;
     }
 
     /**
@@ -106,39 +129,66 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
      */
     public function onCase(RouteParam $e)
     {
-        $context = $e->getContext();
-        $case = $this->getCaseService()->fetchCaseData($e->getValue());
-
-        $this->getViewHelperManager()->get('headTitle')->prepend('Case ' . $case['id']);
+        $case = $this->getCase($e->getValue());
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
-        $placeholder->getContainer('pageTitle')->append('Case ' . $case['id']);
-        $placeholder->getContainer('pageSubtitle')->append('Case subtitle');
-
         $placeholder->getContainer('case')->set($case);
 
-        // if we already have licence data, no sense in getting it again.
         if (isset($case['licence']['id'])) {
-            $this->getLicenceService()->setData($case['licence']['id'], $case['licence']);
+            // Trigger the licence now - it won't trigger twice.
+            $e->getTarget()->trigger('licence', $case['licence']['id']);
+        }
 
-            if (!isset($context['licence'])) {
-                $e->getTarget()->trigger('licence', $case['licence']['id']);
+        if (isset($case['application']['id'])) {
+            // Trigger the application now - it won't trigger twice.
+            $e->getTarget()->trigger('application', $case['application']['id']);
+        }
+
+        if (isset($case['transportManager']['id'])) {
+            // If we have a transportManager, get it here.
+            $this->getNavigationService()->findOneById('case_opposition')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_details_legacy_offence')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_details_annual_test_history')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_details_prohibitions')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_details_statements')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_details_conditions_undertakings')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_details_impounding')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_processing_in_office_revocation')->setVisible(false);
+
+            // Trigger the transportManager now - it won't trigger twice.
+            $e->getTarget()->trigger('transportManager', $case['transportManager']['id']);
+
+            if (!empty($case['tmDecisions'])) {
+                $sidebarNav = $this->getSidebarNavigationService();
+                $sidebarNav->findOneById('case-decisions-transport-manager-repute-not-lost')->setVisible(false);
+                $sidebarNav->findOneById('case-decisions-transport-manager-declare-unfit')->setVisible(false);
+                $sidebarNav->findOneById('case-decisions-transport-manager-no-further-action')->setVisible(false);
             }
+        } else {
+            $this->getNavigationService()->findOneById('case_details_serious_infringement')->setVisible(false);
+            $this->getNavigationService()->findOneById('case_processing_decisions')->setVisible(false);
         }
     }
 
     /**
-     * Create service
+     * Get the Case data
      *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
+     * @param id $id
+     * @return array
+     * @throws ResourceNotFoundException
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    private function getCase($id)
     {
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setCaseService($serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\Cases'));
-        $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
+        $query = $this->getAnnotationBuilder()->createQuery(
+            ItemDto::create(['id' => $id])
+        );
 
-        return $this;
+        $response = $this->getQueryService()->send($query);
+
+        if (!$response->isOk()) {
+            throw new ResourceNotFoundException("Case id [$id] not found");
+        }
+
+        return $response->getResult();
     }
 }

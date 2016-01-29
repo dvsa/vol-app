@@ -2,15 +2,16 @@
 
 return array(
     'variables' => array(
-        'title' => 'Tasks'
+        'title' => 'Tasks',
+        'titleSingular' => 'Task',
     ),
     'settings' => array(
         'crud' => array(
             'actions' => array(
                 'create task' => array('class' => 'primary'),
-                'edit' => array('requireRows' => true),
-                're-assign task' => array('requireRows' => true),
-                'close task' => array('requireRows' => true)
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
+                're-assign task' => array('requireRows' => true, 'class' => 'secondary js-require--multiple'),
+                'close task' => array('requireRows' => true, 'class' => 'secondary js-require--multiple')
             )
         ),
         'paginate' => array(
@@ -40,34 +41,7 @@ return array(
         ),
         array(
             'title' => 'Description',
-            'formatter' => function ($row, $column, $serviceLocator) {
-                $router = $serviceLocator->get('router');
-                $request = $serviceLocator->get('request');
-                $routeMatch = $router->match($request);
-                switch ($routeMatch->getMatchedRouteName()) {
-                    case 'licence/processing/tasks':
-                        $url = $this->generateUrl(
-                            array(
-                                'task' => $row['id'],
-                                'action' => 'edit',
-                                'type' => 'licence',
-                                'typeId' => $row['linkId']
-                            ),
-                            'task_action'
-                        );
-                        break;
-                    default:
-                        $url = $this->generateUrl(
-                            array('task' => $row['id'], 'action' => 'edit'),
-                            'task_action'
-                        );
-                }
-                return '<a href="'
-                    . $url
-                    . '" class=js-modal-ajax>'
-                    . $row['description']
-                    . '</a>';
-            },
+            'formatter' => 'TaskDescription',
             'sort' => 'description',
         ),
         array(
@@ -78,13 +52,8 @@ return array(
         ),
         array(
             'title' => 'Owner',
-            'formatter' => function ($row) {
-                if (empty($row['ownerName'])) {
-                    return 'Unassigned';
-                }
-                return $row['ownerName'];
-            },
-            'sort' => 'ownerName',
+            'formatter' => 'TaskOwner',
+            'sort' => 'teamName,ownerName',
         ),
         array(
             'title' => 'Name',
@@ -94,7 +63,7 @@ return array(
         array(
             'title' => '',
             'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}'
+            'formatter' => 'TaskCheckbox',
         )
     )
 );

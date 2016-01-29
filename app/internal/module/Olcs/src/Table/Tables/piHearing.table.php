@@ -2,20 +2,23 @@
 
 return array(
     'variables' => array(
-        'action_route' => [
-            'route' => 'case_pi',
-            'params' => ['action' => 'details'],
-            'title' => 'Hearings',
-        ],
+        'title' => 'Hearings',
     ),
     'settings' => array(
         'crud' => array(
-            'formName' => 'PublicInquiryHearing',
             'actions' => array(
-                'addHearing' => array('class' => 'primary', 'value' => 'add', 'label' => 'Add'),
-                'editHearing' => array('requireRows' => true, 'value' => 'edit', 'label' => 'Edit')
+                'addHearing' => array('class' => 'primary', 'label' => 'Add'),
+                'editHearing' => array(
+                    'class' => 'secondary js-require--one',
+                    'requireRows' => true,
+                    'label' => 'Edit'
+                ),
+                'generate' => array(
+                    'requireRows' => true,
+                    'class' => 'secondary js-require--multiple',
+                    'label' => 'Generate Letter'
+                ),
             ),
-            'action_field_name' => 'formAction'
         ),
         'paginate' => array(
             'limit' => array(
@@ -30,17 +33,22 @@ return array(
         array(
             'title' => '&nbsp;',
             'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
+            'format' => '{{[elements/radio]}}',
+            'hideWhenDisabled' => true
         ),
         array(
             'title' => 'Date of PI',
-            'formatter' => function ($data, $column) {
-                $url = $this->generateUrl(
-                    ['action' => 'edit', 'id' => $data['id'], 'pi' => $data['pi']['id']],
-                    'case_pi_hearing', true
-                );
-                $column['formatter'] = 'Date';
-                return '<a href="' . $url . '">' . date('d/m/Y', strtotime($data['hearingDate'])) . '</a>';
+            'formatter' => function ($data) {
+                $date = date(\DATE_FORMAT, strtotime($data['hearingDate']));
+                if (!empty($data['pi']['closedDate'])) {
+                    return $date;
+                } else {
+                    $url = $this->generateUrl(
+                        ['action' => 'edit', 'id' => $data['id'], 'pi' => $data['pi']['id']],
+                        'case_pi_hearing', true
+                    );
+                    return '<a href="' . $url . '" class="js-modal-ajax">' . $date . '</a>';
+                }
             },
             'name' => 'id'
         ),

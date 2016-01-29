@@ -1,95 +1,24 @@
 <?php
 
 /**
- * Cases SubmissionSectionComment Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
+ * SubmissionSectionComment Controller
  */
 namespace Olcs\Controller\Cases\Submission;
 
-use Olcs\Controller as OlcsController;
-use Zend\View\Model\ViewModel;
-use Olcs\Controller\Cases\AbstractController as AbstractCasesController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionSectionComment as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmissionSectionComment as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Submission\SubmissionSectionComment as ItemDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Data\Mapper\SubmissionSectionComment as Mapper;
+use Olcs\Form\Model\Form\SubmissionSectionComment as Form;
+use \Zend\Form\Form as ZendForm;
 
 /**
- * Cases SubmissionSectionComment Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
+ * Submission Section Comment Controller
  */
-class SubmissionSectionCommentController extends OlcsController\CrudAbstract
+class SubmissionSectionCommentController extends AbstractInternalController implements CaseControllerInterface
 {
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'id';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'submissionSectionComment';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'SubmissionSectionComment';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case';
-
-    protected $detailsView = 'case/submission/details';
-
-    protected $pageLayoutInner = null;
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'SubmissionSectionComment';
-
-    /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields'
-            )
-        )
-    );
-
-    protected $action = false;
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'properties' => 'ALL',
-        'children' => array(
-            'submission' => array(
-                'properties' => 'ALL'
-            )
-        )
-    );
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -98,96 +27,95 @@ class SubmissionSectionCommentController extends OlcsController\CrudAbstract
     protected $navigationId = 'case_submissions';
 
     /**
-     * Map the data on load
-     *
-     * @param array $data
-     * @return array
+     * @var array
      */
-    public function processLoad($data)
-    {
-        $data = $this->callParentProcessLoad($data);
-        $data['fields']['submission'] = $this->params()->fromRoute('submission');
-        $data['fields']['submissionSection'] = $this->params()->fromRoute('submissionSection');
+    protected $redirectConfig = [
+        'add' => [
+            'route' => 'submission',
+            'action' => 'details',
+            'reUseParams' => true,
+            'resultIdMap' => [
+                'section' => 'submissionSection'
+            ]
+        ],
+        'edit' => [
+            'route' => 'submission',
+            'action' => 'details',
+            'reUseParams' => true,
+            'resultIdMap' => [
+                'section' => 'submissionSection'
+            ]
+        ]
+    ];
 
-        return $data;
+    /**
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
+     */
+    protected $itemDto = ItemDto::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = Form::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add comment';
+    protected $editContentTitle = 'Edit comment';
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'submission' => 'route',
+        'submissionSection' => 'route',
+    ];
+
+    /**
+     * @param ZendForm $form
+     * @param $formData
+     * @return ZendForm
+     */
+    protected function alterFormForAdd(ZendForm $form, $formData)
+    {
+        return $this->alterForm($form, $formData['id']);
     }
 
     /**
-     * @codeCoverageIgnore Calls parent method
-     * Call parent process load and return result. Public method to allow unit testing
-     *
-     * @param array $data
-     * @return array
+     * @param ZendForm $form
+     * @param $formData
+     * @return ZendForm
      */
-    public function callParentProcessLoad($data)
+    protected function alterFormForEdit(ZendForm $form, $formData)
     {
-        return parent::processLoad($data);
+        return $this->alterForm($form, $formData['fields']['id']);
     }
 
     /**
-     * Ensure index action redirects to details action
+     * Change the id of the text area to be unique (avoid DOM clashes with multiple TinyMCE instances
      *
-     * @return array|mixed|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @param ZendForm $form
+     * @param $id
+     * @return ZendForm
      */
-    public function indexAction()
+    private function alterForm(ZendForm $form, $id)
     {
-        return $this->redirectToIndex();
-    }
-
-    /**
-     * Override to redirect to details page
-     *
-     * @return mixed|\Zend\Http\Response
-     */
-    public function redirectToIndex()
-    {
-        $submissionId = $this->params()->fromRoute('submission');
-        return $this->redirectToRoute('submission', ['id' => $submissionId, 'action' => 'details'], [], true);
-    }
-
-    /**
-     * Alters form to set the form label to match the section being edited
-     *
-     * @param \Common\Controller\Form $form
-     * @return \Common\Controller\Form
-     */
-    public function alterForm($form)
-    {
-        $sectionId = $this->params()->fromRoute('submissionSection');
-
-        $refDataService = $this->getServiceLocator()->get('Common\Service\Data\RefData');
-
-        $submissionSectionRefData = $refDataService->fetchListOptions('submission_section');
-
-        $formLabel = $submissionSectionRefData[$sectionId];
-
-        $form->setOptions(['label' => $formLabel, 'alter_label' => false]);
+        $form->get('fields')->get('comment')->setAttribute('id', $id);
         return $form;
-    }
-
-    /**
-     * @codeCoverageIgnore Calls parent method
-     * Call parent process save and return result. Public method to allow unit testing
-     *
-     * @param array $data
-     * @return array
-     */
-    public function callParentProcessSave($data)
-    {
-        // pass false to prevent default redirect back to index action
-        // and return result of the save
-        return parent::processSave($data, false);
-    }
-
-    /**
-     * @codeCoverageIgnore Calls parent method
-     * Call parent process load and return result. Public method to allow unit testing
-     *
-     * @param array $data
-     * @return array
-     */
-    public function callParentSave($data, $service = null)
-    {
-        return parent::save($data, $service);
     }
 }

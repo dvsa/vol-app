@@ -7,25 +7,25 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("SubmissionRecommendation-fields")
- * @Form\Attributes({"class":"actions-container"})
  */
 class SubmissionRecommendation extends Base
 {
     /**
-     * @Form\Attributes({"id":"","placeholder":"", "class":"js-sub_st_rec", "multiple":false})
+     * @Form\Attributes({"id":"","placeholder":"", "class":"chosen-select-medium js-sub_st_rec", "multiple":true})
      * @Form\Options({
      *     "label": "Recommendation type",
-     *     "category": "sub_st_rec",
-     *     "empty_option": "Please Select",
+     *     "service_name": "Olcs\Service\Data\SubmissionActionTypes",
      *     "disable_inarray_validator": false,
+     *     "use_groups":true
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $submissionActionStatus = null;
+    public $actionTypes = null;
 
     /**
+     * @Form\Required(true)
      * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium js-sub-legislation",
-     * "multiple" : true})
+     * "multiple" : true, "required":false})
      * @Form\Options({
      *     "label": "Legislation",
      *     "service_name": "Olcs\Service\Data\SubmissionLegislation",
@@ -33,48 +33,26 @@ class SubmissionRecommendation extends Base
      *     "help-block": "Please select a category",
      *     "use_groups":true
      * })
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DynamicSelect")
+     * @Form\Validator({"name": "ValidateIfMultiple",
+     *      "options":{
+     *          "context_field": "actionTypes",
+     *          "context_values": {"sub_st_rec_pi", "sub_st_rec_ptr"},
+     *          "allow_empty": false,
+     *          "validators": {
+     *              {"name": "\Zend\Validator\NotEmpty"}
+     *          }
+     *      }
+     * })
      */
     public $reasons = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Attributes({"id":"","class":"extra-long tinymce","name":"comment"})
      * @Form\Options({
-     *     "label": "Send to",
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "service_name": "Olcs\Service\Data\User"
-     * })
-     * @Form\Type("DynamicSelect")
-     */
-    public $recipientUser = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $senderUser = null;
-
-    /**
-     * @Form\Type("Radio")
-     * @Form\Options({
-     *      "label": "Urgent?",
-     *      "value_options":{
-     *          "N":"No",
-     *          "Y":"Yes"
-     *      },
-     *      "fieldset-attributes" : {
-     *          "class":"inline"
-     *      }
-     * })
-     * @Form\Attributes({"value": "N"})
-     */
-    public $urgent;
-
-    /**
-     * @Form\Attributes({"id":"comment","class":"extra-long","name":"comment"})
-     * @Form\Options({
-     *     "label": "Reason",
+     *     "label": "Recommendation reason",
      *     "label_attributes": {
      *         "class": ""
      *     },
@@ -82,7 +60,8 @@ class SubmissionRecommendation extends Base
      * })
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":10000}})
+     * @Form\Filter({"name":"htmlpurifier"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5}})
      */
     public $comment = null;
 

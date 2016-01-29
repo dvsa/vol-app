@@ -7,49 +7,28 @@
  */
 namespace Olcs\Controller\Application;
 
+use Dvsa\Olcs\Transfer\Command\Application\UndoGrant;
+use Dvsa\Olcs\Transfer\Query\Application\Application;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\CreateChangeOfEntity as CreateChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\DeleteChangeOfEntity as DeleteChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\UpdateChangeOfEntity as UpdateChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Query\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityQry;
 use Olcs\Controller\AbstractController;
-use Zend\View\Model\ViewModel;
 use Olcs\Controller\Traits;
-use Common\Service\Entity\ApplicationEntityService;
-use Common\Service\Entity\LicenceEntityService;
-use Common\Service\Data\FeeTypeDataService;
-use Common\Service\Entity\FeeEntityService;
-use Common\Service\Data\CategoryDataService;
+use Zend\View\Model\ViewModel;
+use Common\Controller\Traits\CheckForCrudAction;
 
 /**
  * Application Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationController extends AbstractController
+class ApplicationController extends AbstractController implements ApplicationControllerInterface
 {
     use Traits\LicenceControllerTrait,
-        Traits\FeesActionTrait,
-        Traits\ApplicationControllerTrait;
-
-    /**
-     * Shows fees table
-     */
-    public function feesAction()
-    {
-        $this->loadScripts(['forms/filter', 'table-actions']);
-
-        $applicationId = $this->params()->fromRoute('application');
-        $licenceId = $this->getServiceLocator()->get('Entity\Application')
-            ->getLicenceIdForApplication($applicationId);
-
-        $status = $this->params()->fromQuery('status');
-        $filters = [
-            'status' => $status
-        ];
-
-        $table = $this->getFeesTable($licenceId, $status);
-
-        $view = new ViewModel(['table' => $table, 'form'  => $this->getFeeFilterForm($filters)]);
-        $view->setTemplate('licence/fees/layout');
-
-        return $this->render($view);
-    }
+        Traits\ApplicationControllerTrait,
+        CheckForCrudAction;
 
     /**
      * Placeholder stub
@@ -58,79 +37,111 @@ class ApplicationController extends AbstractController
      */
     public function caseAction()
     {
-        $view = new ViewModel();
-        $view->setTemplate('application/index');
+        $this->checkForCrudAction('case', [], 'case');
 
-        return $this->render($view);
-    }
+        $applicationId = $this->params()->fromRoute('application', null);
 
-    /**
-     * Placeholder stub
-     *
-     * @return ViewModel
-     */
-    public function environmentalAction()
-    {
-        $view = new ViewModel();
-        $view->setTemplate('application/index');
+        $canHaveCases = $this->getServiceLocator()
+            ->get('DataServiceManager')
+            ->get('Common\Service\Data\Application')->canHaveCases($applicationId);
 
-        return $this->render($view);
-    }
+        if (!$canHaveCases) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addErrorMessage('The application has no cases');
 
-    /**
-     * Placeholder stub
-     *
-     * @return ViewModel
-     */
-    public function documentAction()
-    {
-        $view = new ViewModel();
-        $view->setTemplate('application/index');
-
-        return $this->render($view);
-    }
-
-    /**
-     * Placeholder stub
-     *
-     * @return ViewModel
-     */
-    public function processingAction()
-    {
-        $view = new ViewModel();
-        $view->setTemplate('application/index');
-
-        return $this->render($view);
-    }
-
-    public function grantAction()
-    {
-        $request = $this->getRequest();
-        $id = $this->params('application');
-
-        if ($request->isPost()) {
-
-            if (!$this->isButtonPressed('cancel')) {
-
-                $licenceId = $this->getServiceLocator()->get('Entity\Application')->getLicenceIdForApplication($id);
-                $this->grantApplication($id);
-                $this->grantLicence($licenceId);
-                $taskId = $this->createGrantTask($id, $licenceId);
-                $this->createGrantFee($id, $licenceId, $taskId);
-
-                $this->getServiceLocator()->get('Helper\FlashMessenger')
-                    ->addSuccessMessage('The application was granted successfully');
-            }
-
-            return $this->redirect()->toRoute('lva-application', array('application' => $id));
+            return $this->redirect()->toRouteAjax('lva-application', array('application' => $applicationId));
         }
 
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm('GenericConfirmation');
+        $params = [
+            'application' => $applicationId,
+            'page'    => $this->params()->fromRoute('page', 1),
+            'sort'    => $this->params()->fromRoute('sort', 'id'),
+            'order'   => $this->params()->fromRoute('order', 'desc'),
+            'limit'   => $this->params()->fromRoute('limit', 10),
+        ];
 
-        $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('application/grant');
+        $params = array_merge(
+            $params,
+            $this->getRequest()->getQuery()->toArray(),
+            array('query' => $this->getRequest()->getQuery())
+        );
+
+        $results = $this->getServiceLocator()
+            ->get('DataServiceManager')
+            ->get('Olcs\Service\Data\Cases')->fetchList($params);
+
+        $view = new ViewModel(['table' => $this->getTable('cases', $results, $params)]);
+        $view->setTemplate('pages/table');
+
+        $this->loadScripts(['table-actions']);
 
         return $this->render($view);
+    }
+
+    public function setRequest(\Zend\Http\Request $request)
+    {
+        $this->request = $request;
+        return $this;
+    }
+
+    /**
+     * Opposition page
+     */
+    public function oppositionAction()
+    {
+        $applicationId = (int) $this->params()->fromRoute('application', null);
+
+        $responseOppositions = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Opposition\OppositionList::create(
+                [
+                    'application' => $applicationId,
+                    'sort' => 'raisedDate',
+                    'order' => 'ASC',
+                    'page' => 1,
+                    'limit' => 1000,
+                ]
+            )
+        );
+        if (!$responseOppositions->isOk()) {
+            throw new \RuntimeException('Cannot get Opposition list');
+        }
+        $oppositionResults = $responseOppositions->getResult()['results'];
+
+        /* @var $oppositionHelperService \Common\Service\Helper\OppositionHelperService */
+        $oppositionHelperService = $this->getServiceLocator()->get('Helper\Opposition');
+        $oppositions = $oppositionHelperService->sortOpenClosed($oppositionResults);
+
+        $responseComplaints = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\EnvironmentalComplaint\EnvironmentalComplaintList::create(
+                [
+                    'application' => $applicationId,
+                    'sort' => 'complaintDate',
+                    'order' => 'ASC',
+                    'page' => 1,
+                    'limit' => 1000,
+                ]
+            )
+        );
+        if (!$responseComplaints->isOk()) {
+            throw new \RuntimeException('Cannot get Complaints list');
+        }
+        $casesResults = $responseComplaints->getResult()['results'];
+
+        /* @var $complaintsHelperService \Common\Service\Helper\ComplaintsHelperService */
+        $complaintsHelperService = $this->getServiceLocator()->get('Helper\Complaints');
+        $complaints = $complaintsHelperService->sortCasesOpenClosed($casesResults);
+
+        $view = new ViewModel(
+            [
+                'tables' => [
+                    $this->getTable('opposition-readonly', $oppositions),
+                    $this->getTable('environmental-complaints-readonly', $complaints)
+                ]
+            ]
+        );
+        $view->setTemplate('pages/multi-tables');
+
+        return $this->renderView($view);
     }
 
     public function undoGrantAction()
@@ -142,150 +153,127 @@ class ApplicationController extends AbstractController
 
             if (!$this->isButtonPressed('cancel')) {
 
-                $licenceId = $this->getServiceLocator()->get('Entity\Application')->getLicenceIdForApplication($id);
-                $this->undoGrantApplication($id);
-                $this->undoGrantLicence($licenceId);
-                $this->cancelFees($licenceId);
-                $this->closeGrantTask($id, $licenceId);
+                $response = $this->handleCommand(UndoGrant::create(['id' => $id]));
 
-                $this->getServiceLocator()->get('Helper\FlashMessenger')
-                    ->addSuccessMessage('The application grant has been undone successfully');
+                if ($response->isOk()) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                        ->addSuccessMessage('The application grant has been undone successfully');
+                } else {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                        ->addErrorMessage('unknown-error');
+                }
             }
 
-            return $this->redirect()->toRoute('lva-application', array('application' => $id));
+            return $this->redirect()->toRouteAjax('lva-application', array('application' => $id));
         }
 
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm('GenericConfirmation');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
+
+        $form->get('messages')->get('message')->setValue('confirm-undo-grant-application');
 
         $view = new ViewModel(array('form' => $form));
-        $view->setTemplate('application/undo-grant');
+        $view->setTemplate('pages/form');
 
-        return $this->render($view);
+        return $this->renderView($view, 'Undo grant application');
     }
 
-    protected function cancelFees($licenceId)
+    protected function getLicenceIdForApplication($applicationId = null)
     {
-        $this->getServiceLocator()->get('Entity\Fee')->cancelForLicence($licenceId);
-    }
+        if (is_null($applicationId)) {
+            $applicationId = $this->params()->fromRoute('application');
+        }
 
-    protected function undoGrantApplication($id)
-    {
-        $applicationData = array(
-            'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-            'grantedDate' => null
-        );
+        $response = $this->handleQuery(Application::create(['id' => $applicationId]));
+        $result = $response->getResult();
 
-        $this->getServiceLocator()->get('Entity\Application')->forceUpdate($id, $applicationData);
-    }
-
-    protected function undoGrantLicence($id)
-    {
-        $licenceData = array(
-            'status' => LicenceEntityService::LICENCE_STATUS_UNDER_CONSIDERATION,
-            'grantedDate' => null
-        );
-
-        $this->getServiceLocator()->get('Entity\Licence')->forceUpdate($id, $licenceData);
-    }
-
-    protected function grantApplication($id)
-    {
-        $grantedDate = $this->getServiceLocator()->get('Helper\Date')->getDate();
-
-        $applicationData = array(
-            'status' => ApplicationEntityService::APPLICATION_STATUS_GRANTED,
-            'grantedDate' => $grantedDate
-        );
-
-        $this->getServiceLocator()->get('Entity\Application')->forceUpdate($id, $applicationData);
-    }
-
-    protected function grantLicence($id)
-    {
-        $grantedDate = $this->getServiceLocator()->get('Helper\Date')->getDate();
-
-        $licenceData = array(
-            'status' => LicenceEntityService::LICENCE_STATUS_GRANTED,
-            'grantedDate' => $grantedDate
-        );
-
-        $this->getServiceLocator()->get('Entity\Licence')->forceUpdate($id, $licenceData);
-    }
-
-    protected function closeGrantTask($id, $licenceId)
-    {
-        $this->getServiceLocator()->get('Entity\Task')->closeByQuery(
-            array(
-                'category' => CategoryDataService::CATEGORY_APPLICATION,
-                'taskSubCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_GRANT_FEE_DUE,
-                'licence' => $licenceId,
-                'application' => $id
-            )
-        );
-    }
-
-    protected function createGrantTask($id, $licenceId)
-    {
-        $user = $this->getServiceLocator()->get('Entity\User')->getCurrentUser();
-        $date = $this->getServiceLocator()->get('Helper\Date')->getDate();
-
-        $data = array(
-            'category' => CategoryDataService::CATEGORY_APPLICATION,
-            'taskSubCategory' => CategoryDataService::TASK_SUB_CATEGORY_APPLICATION_GRANT_FEE_DUE,
-            'description' => 'Grant fee due',
-            'actionDate' => $date,
-            'assignedToUser' => $user['id'],
-            'assignedToTeam' => $user['team']['id'],
-            'isClosed' => 'N',
-            'urgent' => 'N',
-            'application' => $id,
-            'licence' => $licenceId,
-        );
-
-        $saved = $this->getServiceLocator()->get('Entity\Task')->save($data);
-
-        return $saved['id'];
-    }
-
-    protected function createGrantFee($applicationId, $licenceId, $taskId)
-    {
-        $feeType = $this->getFeeTypeForLicence($applicationId, $licenceId);
-        $date = $this->getServiceLocator()->get('Helper\Date')->getDate();
-
-        $feeData = array(
-            'amount' => (float)($feeType['fixedValue'] === '0.00' ? $feeType['fiveYearValue'] : $feeType['fixedValue']),
-            'application' => $applicationId,
-            'licence' => $licenceId,
-            'invoicedDate' => $date,
-            'feeType' => $feeType['id'],
-            'description' => $feeType['description'] . ' for application ' . $applicationId,
-            'feeStatus' => FeeEntityService::STATUS_OUTSTANDING,
-            'task' => $taskId
-        );
-
-        $this->getServiceLocator()->get('Entity\Fee')->save($feeData);
+        return $result['licence']['id'];
     }
 
     /**
-     * Get the latest fee type for a licence
+     * Action to handle an application change of entity request.
      *
-     * @todo Maybe move this so it can be re-used
-     *
-     * @param int $licenceId
-     * @return int
+     * @return string|\Zend\Http\Response|ViewModel
      */
-    protected function getFeeTypeForLicence($applicationId, $licenceId)
+    public function changeOfEntityAction()
     {
-        $data = $this->getServiceLocator()->get('Entity\Licence')->getTypeOfLicenceData($licenceId);
+        $request = $this->getRequest();
+        $applicationId = $this->params()->fromRoute('application', null);
+        $changeOfEntity = $this->params()->fromRoute('changeId', null);
 
-        $date = $this->getServiceLocator()->get('Entity\Application')->getApplicationDate($applicationId);
+        if ($this->isButtonPressed('remove')) {
+            $dto = DeleteChangeOfEntityCmd::create(['id' => $changeOfEntity]);
+            $response = $this->handleCommand($dto);
+            if ($response->isOk()) {
+                $this->flashMessenger()->addSuccessMessage('application.change-of-entity.delete.success');
+            }
+            return $this->redirectToRouteAjax(
+                'lva-application/overview',
+                array(
+                    'application' => $applicationId
+                )
+            );
+        }
 
-        return $this->getServiceLocator()->get('Data\FeeType')->getLatest(
-            FeeTypeDataService::FEE_TYPE_GRANT,
-            $data['goodsOrPsv'],
-            $data['licenceType'],
-            $date,
-            ($data['niFlag'] === 'Y')
-        );
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createFormWithRequest('ApplicationChangeOfEntity', $request);
+
+        if (!is_null($changeOfEntity)) {
+            $dto = ChangeOfEntityQry::create(['id' => $changeOfEntity]);
+            $response = $this->handleQuery($dto);
+            $changeOfEntityData = $response->getResult();
+            $form->setData(
+                array(
+                    'change-details' => $changeOfEntityData
+                )
+            );
+        } else {
+            $form->get('form-actions')->remove('remove');
+        }
+
+        if ($request->isPost()) {
+            $form->setData((array)$request->getPost());
+
+            if ($form->isValid()) {
+
+                $details = $form->getData()['change-details'];
+                if ($changeOfEntity) {
+                    $dto = UpdateChangeOfEntityCmd::create(
+                        [
+                            'id' => $changeOfEntity,
+                            'oldOrganisationName' => $details['oldOrganisationName'],
+                            'oldLicenceNo' => $details['oldLicenceNo'],
+                        ]
+                    );
+                } else {
+                    $dto = CreateChangeOfEntityCmd::create(
+                        [
+                            'applicationId' => $applicationId,
+                            'oldOrganisationName' => $details['oldOrganisationName'],
+                            'oldLicenceNo' => $details['oldLicenceNo'],
+                        ]
+                    );
+                }
+
+                $response = $this->handleCommand($dto);
+
+                if ($response->isOk()) {
+                    $this->flashMessenger()->addSuccessMessage('application.change-of-entity.create.success');
+                }
+
+                return $this->redirectToRouteAjax(
+                    'lva-application/overview',
+                    array(
+                        'application' => $applicationId
+                    )
+                );
+            }
+        }
+
+        $view = new ViewModel(array('form' => $form));
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'Change Entity');
     }
 }

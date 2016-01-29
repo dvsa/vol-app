@@ -1,0 +1,32 @@
+<?php
+$action = $this->placeholder('action')->getValue();
+
+$form = $this->placeholder('form')->getValue();
+
+$contentTitle = $this->getPlaceholder('contentTitle')->asString();
+
+/**
+ * @todo this really needs sorting, but for backwards compatibility I have left this in
+ */
+if (count($form) > 0) {
+    if (empty($contentTitle) && $form->getOption('label') !== null) {
+
+        if ($form->getOption('override_form_label')) {
+            $contentTitle = $this->translate($form->getOption('label'));
+        } else {
+            $contentTitle = is_string($action) ? ucfirst($action) . ' ' : '';
+            if ($form->getOption('action_lcfirst') === true) {
+                $contentTitle .= lcfirst($this->translate($form->getOption('label')));
+            } else {
+                $contentTitle .= $this->translate($form->getOption('label'));
+            }
+        }
+
+        if (isset($contentTitle)) {
+            $this->placeholder('contentTitle')->set(trim($contentTitle));
+        }
+    }
+
+    echo $this->formErrors($form);
+    echo $this->form($form);
+}

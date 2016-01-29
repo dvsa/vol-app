@@ -1,10 +1,12 @@
 <?php
 return array(
     'variables' => array(
+        'id' => 'oppositions',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'oppositions']
         ],
+        'title' => 'Oppositions'
     ),
     'settings' => array(
         'crud' => array(
@@ -72,9 +74,11 @@ return array(
             'name' => 'isWithdrawn'
         ),
         array(
+            'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}'
+            'format' => '{{[elements/checkbox]}}',
+            'hideWhenDisabled' => true
         ),
     )
 );

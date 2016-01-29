@@ -26,7 +26,7 @@ class Cases extends Base
      * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium", "multiple": "true"})
      * @Form\Options({
      *     "label": "Case category",
-     *     "disable_inarray_validator": false,
+     *     "disable_inarray_validator": true,
      *     "help-block": "Please select a case category",
      *     "category": "case_category",
      *     "use_groups": true
@@ -62,8 +62,15 @@ class Cases extends Base
     public $ecmsNo = null;
 
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"","placeholder":"", "class":"chosen-select-medium","multiple":"multiple"})
+     * @Form\Options({
+     *     "label": "Outcome",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select a case type",
+     *     "category": "case_outcome"
+     * })
+     * @Form\Type("DynamicSelect")
      */
-    public $licence = null;
+    public $outcomes = null;
 }

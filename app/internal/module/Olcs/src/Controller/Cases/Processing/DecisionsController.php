@@ -2,107 +2,113 @@
 
 /**
  * Processing Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
 namespace Olcs\Controller\Cases\Processing;
 
-// Olcs
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Dvsa\Olcs\Transfer\Query\Cases\Cases as CasesItemDto;
+use Dvsa\Olcs\Transfer\Query\TmCaseDecision\GetByCase as ItemDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Common\Exception\ResourceNotFoundException;
+use Zend\View\Model\ViewModel;
 
 /**
  * Case Decisions Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class DecisionsController extends OlcsController\CrudAbstract
+class DecisionsController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'decision';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'decision';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case';
-
-    /**
-     * For most case crud controllers, we use the case/inner-layout
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'case/inner-layout';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'decision';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_processing_decisions';
 
-    /**
-     * Holds an array of variables for the
-     * default index list page.
-     */
-    protected $listVars = [
-        'case',
-    ];
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
+
+        return $view;
+    }
 
     /**
-     * Data map
-     *
-     * @var array
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'fields',
-                'base',
-            )
-        )
-    );
+    protected $detailsViewTemplate = 'sections/cases/pages/tm-decision';
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'conviction', to => from
+    protected $itemParams = ['case'];
+
+    public function indexAction()
+    {
+        $case = $this->getCase($this->params()->fromRoute('case'));
+
+        if (!empty($case['transportManager']['id'])) {
+            // is TM
+            return $this->redirectToDetails();
+        }
+
+        return $this->redirect()->toRouteAjax(
+            'processing_in_office_revocation',
+            ['action' => 'index'],
+            ['code' => '303'],
+            true
+        );
+    }
+
+    public function addAction()
+    {
+        return $this->redirectToDetails();
+    }
+
+    public function editAction()
+    {
+        return $this->redirectToDetails();
+    }
+
+    public function deleteAction()
+    {
+        return $this->redirectToDetails();
+    }
+
+    public function redirectToDetails()
+    {
+        return $this->redirect()->toRouteAjax(
+            'processing_decisions',
+            ['action' => 'details'],
+            ['code' => '303'],
+            true
+        );
+    }
 
     /**
-     * Holds the isAction
-     *
-     * @var boolean
+     * Not found is a valid response for this particular controller
      */
-    protected $isAction = false;
+    public function notFoundAction()
+    {
+        return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
+    }
 
     /**
-     * Holds the Data Bundle
+     * Get the Case data
      *
-     * @var array
+     * @param id $id
+     * @return array
+     * @throws ResourceNotFoundException
      */
-    protected $dataBundle = array(
-        'children' => array(
-            'case' => array(
-                'properties' => 'ALL'
-            )
-        )
-    );
+    private function getCase($id)
+    {
+        $response = $this->handleQuery(
+            CasesItemDto::create(['id' => $id])
+        );
+
+        if (!$response->isOk()) {
+            throw new ResourceNotFoundException("Case id [$id] not found");
+        }
+
+        return $response->getResult();
+    }
 }

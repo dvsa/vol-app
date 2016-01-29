@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("erru_penalty_fields")
  */
-class ErruPenalty
+class ErruPenalty extends CaseBase
 {
     /**
      * @Form\Options({
@@ -31,6 +31,7 @@ class ErruPenalty
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      */
     public $startDate;
@@ -45,6 +46,7 @@ class ErruPenalty
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      */
     public $endDate;
@@ -73,10 +75,4 @@ class ErruPenalty
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":500}})
      */
     public $reasonNotImposed;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $seriousInfringement;
 }

@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("statement")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Statement"})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class Statement
 {
@@ -30,7 +30,7 @@ class Statement
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
 }

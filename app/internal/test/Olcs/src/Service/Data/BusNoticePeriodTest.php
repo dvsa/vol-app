@@ -4,19 +4,15 @@ namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\BusNoticePeriod;
 use Mockery as m;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * Class BusNoticePeriod Test
  * @package CommonTest\Service
  */
-class BusNoticePeriodTest extends \PHPUnit_Framework_TestCase
+class BusNoticePeriodTest extends AbstractDataServiceTestCase
 {
-    public function testGetServiceName()
-    {
-        $sut = new BusNoticePeriod();
-        $this->assertEquals('BusNoticePeriod', $sut->getServiceName());
-    }
-
     public function testFormatData()
     {
         $source = $this->getSingleSource();
@@ -48,30 +44,48 @@ class BusNoticePeriodTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideFetchListData
-     * @param $data
-     * @param $expected
-     */
-    public function testFetchListData($data, $expected)
+    public function testFetchListData()
     {
-        $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('', ['limit' => 1000])->andReturn($data);
+        $results = ['results' => 'results'];
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturn('query')
+            ->once()
+            ->getMock();
+
+        $mockResponse = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->once()
+            ->shouldReceive('getResult')
+            ->andReturn($results)
+            ->twice()
+            ->getMock();
 
         $sut = new BusNoticePeriod();
-        $sut->setRestClient($mockRestClient);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
-        $this->assertEquals($expected, $sut->fetchListData());
-        $sut->fetchListData(); //ensure data is cached
+        $this->assertEquals($results['results'], $sut->fetchListData());
+        $this->assertEquals($results['results'], $sut->fetchListData()); //ensure data is cached
     }
 
-    public function provideFetchListData()
+    /**
+     * Test fetchListData with exception
+     */
+    public function testFetchListDataWithException()
     {
-        return [
-            [false, false],
-            [['Results' => $this->getSingleSource()], $this->getSingleSource()],
-            [['some' => 'data'],  false]
-        ];
+        $this->setExpectedException(UnexpectedResponseException::class);
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+
+        $mockResponse = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(false)
+            ->once()
+            ->getMock();
+        $sut = new BusNoticePeriod();
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+
+        $sut->fetchListData([]);
     }
 
     /**

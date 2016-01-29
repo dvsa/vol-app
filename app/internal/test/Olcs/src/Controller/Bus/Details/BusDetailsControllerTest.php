@@ -2,155 +2,151 @@
 
 /**
  * Bus Details Controller Test
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 namespace OlcsTest\Controller\Bus\Details;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Olcs\Controller\Bus\Details\BusDetailsController as Sut;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery as m;
 
 /**
  * Bus Details Controller Test
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusDetailsControllerTest extends AbstractHttpControllerTestCase
+class BusDetailsControllerTest extends MockeryTestCase
 {
+    protected $sut;
+
     public function setUp()
     {
-        $this->setApplicationConfig(
-            include __DIR__.'/../../../../../../config/application.config.php'
-        );
-
-        $this->controller = $this->getMock(
-            '\Olcs\Controller\Bus\Details\BusDetailsController',
-            array(
-                'getViewWithBusReg',
-                'renderView',
-                'redirectToRoute',
-                'isFromEbsr'
-            )
-        );
-
-        $this->form = $this->getMock(
-            '\Zend\Form\Form',
-            array(
-                'remove',
-                'get'
-            )
-        );
-
-        $this->view = $this->getMock(
-            '\Zend\View\Model\ViewModel',
-            array(
-                'setTemplate'
-            )
-        );
-
-        parent::setUp();
+        $this->sut = new Sut;
     }
 
     /**
-     * Tests alter form before validation function
-     * when record is not from Ebsr
+     * @dataProvider alterFormProvider
+     *
+     * @param array $data
+     * @param bool $readonly
      */
-    public function testAlterFormBeforeValidationNotEbsr()
+    public function testAlterFormForService($data, $readonly)
     {
-        $form = $this->form;
+        $mockForm = $this->getAlterFormAssertions($data, $readonly);
+        $result = $this->sut->alterFormForService($mockForm, []);
 
-        $this->controller->expects($this->once())
-            ->method('isFromEbsr')
-            ->will($this->returnValue(false));
-
-        $form->expects($this->never())
-            ->method('get');
-
-        $form->expects($this->never())
-            ->method('remove');
-
-        $this->controller->alterFormBeforeValidation($form);
+        $this->assertSame($mockForm, $result);
     }
 
     /**
-     * Tests alter form before validation function
-     * when record has come from Ebsr
+     * @dataProvider alterFormProvider
+     *
+     * @param array $data
+     * @param bool $readonly
      */
-    public function testAlterFormBeforeValidationWhenFromEbsr()
+    public function testAlterFormForTa($data, $readonly)
     {
-        $form = $this->form;
+        $mockForm = $this->getAlterFormAssertions($data, $readonly);
+        $result = $this->sut->alterFormForTa($mockForm, []);
 
-        $this->controller->disableFormFields = array(
-            'fieldName'
-        );
-
-        $fields = $this->getMock(
-            '\Zend\Form\Fieldset',
-            array(
-                'get'
-            )
-        );
-
-        $attributeMock = $this->getMock(
-            '\Zend\Form\Element',
-            array(
-                'setAttribute'
-            )
-        );
-
-        $attributeMock->expects($this->any())
-            ->method('setAttribute')
-            ->with(
-                $this->equalTo('disabled'),
-                $this->equalTo('disabled')
-            );
-
-        $fields->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue($attributeMock));
-
-        $this->controller->expects($this->once())
-            ->method('isFromEbsr')
-            ->will($this->returnValue(true));
-
-        $form->expects($this->once())
-            ->method('get')
-            ->with('fields')
-            ->will($this->returnValue($fields));
-
-        $form->expects($this->once())
-            ->method('remove');
-
-        $this->controller->alterFormBeforeValidation($form);
+        $this->assertSame($mockForm, $result);
     }
 
     /**
-     * Unit test for index action
+     * @dataProvider alterFormProvider
+     *
+     * @param array $data
+     * @param bool $readonly
      */
-    public function testIndexAction()
+    public function testAlterFormForStop($data, $readonly)
     {
-        $this->controller->expects($this->once())
-            ->method('redirectToRoute')
-            ->with(
-                $this->equalTo('licence/bus-details/service'),
-                $this->equalTo(['action'=>'edit']),
-                $this->equalTo(['code' => '303']),
-                $this->equalTo(true)
-            );
+        $mockForm = $this->getAlterFormAssertions($data, $readonly);
+        $result = $this->sut->alterFormForStop($mockForm, []);
 
-        $this->controller->indexAction();
+        $this->assertSame($mockForm, $result);
     }
 
-    public function testRedirectToIndex()
+    /**
+     * @dataProvider alterFormProvider
+     *
+     * @param array $data
+     * @param bool $readonly
+     */
+    public function testAlterFormForQuality($data, $readonly)
     {
-        $this->controller->expects($this->once())
-            ->method('redirectToRoute')
-            ->with(
-                $this->equalTo(null),
-                $this->equalTo(['action'=>'edit']),
-                $this->equalTo(['code' => '303']),
-                $this->equalTo(true)
-            );
+        $mockForm = $this->getAlterFormAssertions($data, $readonly);
+        $result = $this->sut->alterFormForQuality($mockForm, []);
 
-        $this->controller->redirectToIndex();
+        $this->assertSame($mockForm, $result);
+    }
+
+    /**
+     * @param array $data
+     * @param bool $readonly
+     * @return m\MockInterface
+     */
+    public function getAlterFormAssertions($data, $readonly)
+    {
+        $this->sut = m::mock(Sut::class)
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+
+        $response = m::mock();
+        $response->shouldReceive('getResult')
+            ->once()
+            ->andReturn($data);
+
+        $busRegId = 56;
+        $params = m::mock()
+            ->shouldReceive('fromRoute')->with('busRegId')->andReturn($busRegId)
+            ->getMock();
+
+        $this->sut
+            ->shouldReceive('handleQuery')
+            ->once()
+            ->andReturn($response);
+
+        $this->sut
+            ->shouldReceive('params')
+            ->once()
+            ->andReturn($params);
+
+        $mockForm = m::mock('\Zend\Form\Form');
+        $mockForm->shouldReceive('setOption')
+            ->times($readonly ? 1 : 0)
+            ->with('readonly', true);
+
+        return $mockForm;
+    }
+
+    public function alterFormProvider()
+    {
+        return [
+            [
+                [
+                    'isReadOnly' => true,
+                    'isFromEbsr' => true,
+                ],
+                true,
+            ],
+            [
+                [
+                    'isReadOnly' => true,
+                    'isFromEbsr' => false,
+                ],
+                true,
+            ],
+            [
+                [
+                    'isReadOnly' => false,
+                    'isFromEbsr' => true,
+                ],
+                true,
+            ],
+            [
+                [
+                    'isReadOnly' => false,
+                    'isFromEbsr' => false,
+                ],
+                false,
+            ],
+        ];
     }
 }

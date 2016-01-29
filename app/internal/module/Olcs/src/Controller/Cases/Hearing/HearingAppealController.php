@@ -1,158 +1,59 @@
 <?php
 
 /**
- * Case Hearing Controller
+ * Hearing & Appeal Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 namespace Olcs\Controller\Cases\Hearing;
 
-// Olcs
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Dvsa\Olcs\Transfer\Query\Cases\Hearing\AppealByCase as AppealDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Hearing\StayList as StayDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Logging\Log\Logger;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Zend\View\Model\ViewModel;
 
 /**
- * Case Hearing Controller
+ * Hearing Appeal Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class HearingAppealController extends OlcsController\CrudAbstract
+class HearingAppealController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
-    use ControllerTraits\CaseControllerTrait;
-    use ControllerTraits\HearingAppealControllerTrait;
-
-    /**
-     * Identifier name
-     *
-     * @var string
-     */
-    protected $identifierName = 'appeal';
-
-    /**
-     * Table name string
-     *
-     * @var string
-     */
-    protected $tableName = 'appeal';
-
-    /**
-     * Holds the form name
-     *
-     * @var string
-     */
-    protected $formName = 'appeal';
-
-    /**
-     * The current page's extra layout, over and above the
-     * standard base template, a sibling of the base though.
-     *
-     * @var string
-     */
-    protected $pageLayout = 'case';
-
-    /**
-     * For most case crud controllers, we use the case/inner-layout
-     * layout file. Except submissions.
-     *
-     * @var string
-     */
-    protected $pageLayoutInner = 'case/inner-layout';
-
-    /**
-     * Holds the service name
-     *
-     * @var string
-     */
-    protected $service = 'Appeal';
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
-     * represneted by a single navigation id.
+     * represented by a single navigation id.
      */
     protected $navigationId = 'case_hearings_appeals_stays';
 
     /**
-     * Holds an array of variables for the
-     * default index list page.
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    protected $listVars = [
-        'case',
+    protected $detailsViewTemplate = 'sections/cases/pages/appeals-stays';
+    protected $detailsViewPlaceholderName = 'appeal';
+    // 'id' => 'conviction', to => from
+    protected $itemParams = ['case'];
+
+    protected $redirectConfig = [
+        'index' => [
+            'action' => 'details'
+        ]
     ];
 
-    /**
-     * Data map
-     *
-     * @var array
-     */
-    protected $dataMap = array(
-        'main' => array(
-            'mapFrom' => array(
-                'details',
-                'fields',
-                'base',
-            )
-        )
-    );
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
 
-    /**
-     * Holds the isAction
-     *
-     * @var boolean
-     */
-    protected $isAction = false;
-
-    /**
-     * Holds the Data Bundle
-     *
-     * @var array
-     */
-    protected $dataBundle = array(
-        'children' => array(
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            ),
-            'appeal' => array(
-                'properties' => 'ALL'
-            )
-        )
-    );
-
-    /**
-     * Holds the Stay Data Bundle
-     *
-     * @var array
-     */
-    protected $stayDataBundle = array(
-        'children' => array(
-            'stayType' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-            'outcome' => array(
-                'properties' => array(
-                    'id',
-                    'description'
-                )
-            ),
-            'case' => array(
-                'properties' => array(
-                    'id'
-                )
-            )
-        )
-    );
-
-    /**
-     * Holds the details view
-     *
-     * @return array|\Zend\Http\Response|\Zend\View\Model\ViewModel
-     */
-    protected $detailsView = '/case/hearing-appeal/details';
+        return $view;
+    }
 
     /**
      * Ensure index action redirects to details action
@@ -161,41 +62,51 @@ class HearingAppealController extends OlcsController\CrudAbstract
      */
     public function indexAction()
     {
-        return $this->redirectToIndex();
+        return $this->redirectTo([]);
     }
 
-    /**
-     * Override to redirect to details page
-     *
-     * @return mixed|\Zend\Http\Response
-     */
-    public function redirectToIndex()
-    {
-        return $this->redirectToRoute(null, ['action' => 'details'], [], true);
-    }
-
-    /**
-     * Details action. Shows appeals and stays (if appeal exists)
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
     public function detailsAction()
     {
-        $caseId = $this->getCase()['id'];
-        $appeal = $this->getAppealData($caseId);
-        $stayRecords = $this->getStayData($caseId);
+        Logger::debug(__FILE__);
+        Logger::debug(__METHOD__);
 
-        $view = $this->getView([]);
+        $this->placeholder()->setPlaceholder('case', $this->params()->fromRoute('case'));
 
-        $this->getViewHelperManager()
-            ->get('placeholder')
-            ->getContainer($this->getIdentifierName())
-            ->set($appeal);
+        $paramProvider = new GenericItem($this->itemParams);
+        $paramProvider->setParams($this->plugin('params'));
 
-        $view->setTemplate($this->detailsView);
-        $view->setVariable('case', $this->getCase());
-        $view->setVariable('stayRecords', $stayRecords);
+        $params = $paramProvider->provideParameters();
+        $appealDto = AppealDto::class;
+        $appealQuery = $appealDto::create($params);
 
-        return $this->renderView($view);
+        $appeal = $this->handleQuery($appealQuery);
+        if ($appeal->isNotFound()) {
+            $this->placeholder()->setPlaceholder('no-appeal', true);
+            return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
+        }
+
+        $this->placeholder()->setPlaceholder('appeal', $appeal->getResult());
+
+        $stayDto = StayDto::class;
+        $params = array_merge($params, ['page' => 1, 'limit' => 20, 'sort' => 'id', 'order' => 'DESC']);
+        $stayQuery = $stayDto::create($params);
+        $stay = $this->handleQuery($stayQuery);
+        if ($stay->isNotFound()) {
+            $this->placeholder()->setPlaceholder('no-stay', true);
+            return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
+        }
+
+        $multipleStays = $stay->getResult();
+
+        $stayRecords = [];
+        if (isset($multipleStays['results'])) {
+            foreach ($multipleStays['results'] as $stay) {
+                $stayRecords[$stay['stayType']['id']] = $stay;
+            }
+        }
+
+        $this->placeholder()->setPlaceholder('stays', $stayRecords);
+
+        return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
     }
 }

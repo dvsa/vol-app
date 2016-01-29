@@ -4,33 +4,26 @@
  * Application Overview Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
 namespace Olcs\Controller\Lva\Application;
 
-use Zend\View\Model\ViewModel;
 use Common\Controller\Lva\AbstractController;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Olcs\Controller\Lva\Traits\ApplicationOverviewTrait;
 
 /**
  * Application Overview Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Dan Eggleston <dan@stolenegg.com>
  */
-class OverviewController extends AbstractController
+class OverviewController extends AbstractController implements ApplicationControllerInterface
 {
-    use ApplicationControllerTrait;
+    use ApplicationControllerTrait,
+        ApplicationOverviewTrait;
 
     protected $lva = 'application';
     protected $location = 'internal';
-
-    /**
-     * Application overview
-     */
-    public function indexAction()
-    {
-        $content = new ViewModel();
-        $content->setTemplate('application/overview');
-
-        return $this->render($content);
-    }
 }

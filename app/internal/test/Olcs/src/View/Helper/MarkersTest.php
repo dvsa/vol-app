@@ -5,12 +5,13 @@ namespace OlcsTest\View\Helper;
 use Olcs\View\Helper\Markers;
 use Zend\View\Model\ViewModel;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * Class MarkersTest
  * @package OlcsTest\View\Helper
  */
-class MarkersTest extends \PHPUnit_Framework_TestCase
+class MarkersTest extends MockeryTestCase
 {
     /**
      * @dataProvider provideInvoke

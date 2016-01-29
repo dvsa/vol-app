@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("offence")
  * @Form\Options({"label":"Offence details:","class":"extra-long"})
  */
-class Offence extends CaseBase
+class Offence extends Base
 {
     /**
      * @Form\Attributes({"id":"defendantType","placeholder":""})
@@ -79,6 +79,7 @@ class Offence extends CaseBase
      *     "context_values": {"def_t_op", ""},
      *     "context_truth": false,
      *     "validators": {
+     *          {"name": "\Common\Validator\Date"},
      *          {"name": "Date", "options":{"format":"Y-m-d"}},
      *          {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
      *     }}
@@ -132,7 +133,8 @@ class Offence extends CaseBase
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      * @Form\Validator({
      *      "name": "DateCompare",
@@ -150,7 +152,8 @@ class Offence extends CaseBase
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $convictionDate = null;
@@ -247,7 +250,7 @@ class Offence extends CaseBase
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Dealt with"})
-     * @Form\Type("checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $isDealtWith = null;
 }

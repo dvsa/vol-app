@@ -2,11 +2,7 @@
 
 namespace Olcs\View\Helper;
 
-use Zend\I18n\Translator\TranslatorInterface as Translator;
-use Zend\I18n\Translator\TranslatorAwareInterface;
 use Zend\View\Helper\AbstractHelper;
-use Zend\Form\Exception;
-use Common\Service\Table\TableFactory;
 
 /**
  * View helper to render the submission section
@@ -14,16 +10,19 @@ use Common\Service\Table\TableFactory;
  */
 class SubmissionSectionMultipleTables extends AbstractHelper
 {
-
-    private $tableBuilder;
-
+    const DEFAULT_VIEW = 'sections/cases/pages/submission/table';
 
     /**
-     * Table config map
+     * View map
      *
      * @var array
      */
-    protected $tableMap = array();
+    protected $viewMap = array();
+
+    /**
+     * @var \Zend\I18n\Translator\Translator
+     */
+    protected $translator;
 
     /**
      * Renders the data for a SubmissionSection details $data expected consists of multidimentional array:
@@ -33,32 +32,78 @@ class SubmissionSectionMultipleTables extends AbstractHelper
      * ...
      * ]
      *
-     * @param  String $submissionSection
+     * @param String $submissionSection
      * @param Array $data
+     * @param bool $readonly
      * @return string
      */
-    public function __invoke($submissionSection = '', $data = array())
+    public function __invoke($submissionSection = '', $data = array(), $readonly = false, $submissionVersion = null)
     {
-
         if (empty($submissionSection)) {
             return '';
         }
 
-        return $this->render($submissionSection, $data);
+        return $this->render($submissionSection, $data, $readonly, $submissionVersion);
     }
 
-    public function render($submissionSection, $data)
+    /**
+     * Renders the data for a SubmissionSection details
+     *
+     * @param String $submissionSection
+     * @param Array $data
+     * @param bool $readonly
+     *
+     * @return string
+     */
+    public function render($submissionSection, $data, $readonly, $submissionVersion = null)
     {
         $html = '';
+
+        $viewTemplate = isset($this->viewMap[$submissionSection]) ?
+            $this->viewMap[$submissionSection] : self::DEFAULT_VIEW;
+
         $tableViewHelper = $this->getView()->plugin('SubmissionSectionTable');
 
-        foreach ($data['data'] as $subSection => $tableData) {
+        $tables = isset($data['data']['tables']) ?
+            $data['data']['tables'] : [];
+        foreach ($tables as $subSection => $tableData) {
             $html .= $tableViewHelper(
                 $subSection,
-                ['description' => $subSection, 'data' => $tableData]
+                [
+                    'description' => $this->getTranslator()->translate($data['sectionId'] . '-' . $subSection),
+                    'data' => $data['data']
+                ],
+                $readonly,
+                $submissionVersion
             );
         }
 
-        return $html;
+        $data['tables'] = $html;
+
+        // config set to remove the section header if an overview already has it
+        if (isset($data['config']['show_multiple_tables_section_header']) &&
+            $data['config']['show_multiple_tables_section_header'] == false
+        ) {
+            return $html;
+        }
+
+        return $this->getView()->render($viewTemplate, ['data' => $data]);
+
+    }
+
+    /**
+     * @param \Zend\I18n\Translator\Translator $translator
+     */
+    public function setTranslator($translator)
+    {
+        $this->translator = $translator;
+    }
+
+    /**
+     * @return \Zend\I18n\Translator\Translator
+     */
+    public function getTranslator()
+    {
+        return $this->translator;
     }
 }

@@ -7,6 +7,7 @@ nbproject
 .project
 .settings
 composer.lock
+composer.phar
 vendor/
 test/coverage-report
 config/autoload/local.php
@@ -15,3 +16,4 @@ config/autoload/local.php
 public/static
 *.sw?
 node_modules
+/.vscode

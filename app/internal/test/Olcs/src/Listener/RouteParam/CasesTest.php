@@ -1,157 +1,200 @@
 <?php
 
-
 namespace OlcsTest\Listener\RouteParam;
 
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
-use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Listener\RouteParam\Cases;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
 /**
  * Class CasesTest
  * @package OlcsTest\Listener\RouteParam
  */
-class CasesTest extends TestCase
+class CasesTest extends MockeryTestCase
 {
+    public function setUp()
+    {
+        $this->sut = new Cases();
+
+        parent::setUp();
+    }
+
+    public function setupMockCase($id, $data)
+    {
+        $mockAnnotationBuilder = m::mock();
+        $mockQueryService  = m::mock();
+
+        $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
+            function ($dto) use ($id) {
+                $this->assertSame($id, $dto->getId());
+                return 'QUERY';
+            }
+        );
+
+        $mockResult = m::mock();
+        $mockResult->shouldReceive('isOk')->with()->once()->andReturn(true);
+        $mockResult->shouldReceive('getResult')->with()->once()->andReturn($data);
+
+        $mockQueryService->shouldReceive('send')->with('QUERY')->once()->andReturn($mockResult);
+
+        $this->sut->setAnnotationBuilder($mockAnnotationBuilder);
+        $this->sut->setQueryService($mockQueryService);
+    }
+
     public function testAttach()
     {
-        $sut = new Cases();
-
         $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
         $mockEventManager->shouldReceive('attach')->once()
-            ->with(RouteParams::EVENT_PARAM . 'case', [$sut, 'onCase'], 1);
+            ->with(RouteParams::EVENT_PARAM . 'case', [$this->sut, 'onCase'], 1);
 
-        $sut->attach($mockEventManager);
+        $this->sut->attach($mockEventManager);
     }
 
     public function testOnCase()
     {
-        $caseId = 1;
-        $case = ['id' => $caseId];
-
-        $event = new RouteParam();
-        $event->setValue($caseId);
-
-        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
-        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($case);
-
-        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
-        $mockContainer->shouldReceive('prepend')->with('Case ' . $caseId);
-        $mockContainer->shouldReceive('append')->with('Case ' . $caseId);
-        $mockContainer->shouldReceive('append')->with('Case subtitle');
-        $mockContainer->shouldReceive('set')->with($case);
-
-        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
-        $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
-        $mockPlaceholder->shouldReceive('getContainer')->with('pageSubtitle')->andReturn($mockContainer);
-        $mockPlaceholder->shouldReceive('getContainer')->with('case')->andReturn($mockContainer);
-
-        $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
-        $mockViewHelperManager->shouldReceive('get')->with('headTitle')->andReturn($mockContainer);
-
-        $sut = new Cases();
-        $sut->setCaseService($mockCaseService);
-        $sut->setViewHelperManager($mockViewHelperManager);
-        $sut->onCase($event);
-    }
-
-    public function testOnCaseTriggersLicence()
-    {
-        $caseId = 1;
+        $id = 69;
         $case = [
-            'id' => $caseId,
-            'licence' => ['id' => 4]
+            'id' => $id,
+            'application' => [
+                'id' => 100,
+            ],
+            'licence' => [
+                'id' => 101,
+            ],
+            'transportManager' => [
+                'id' => 102,
+            ],
+            'tmDecisions' => [
+                ['id' => 200]
+            ]
         ];
 
-        $mockTarget = m::mock('Olcs\Listener\RouteParams');
-        $mockTarget->shouldReceive('trigger')->with('licence', 4);
-
         $event = new RouteParam();
-        $event->setValue($caseId);
-        $event->setTarget($mockTarget);
+        $event->setValue($id);
+        $event->setTarget(
+            m::mock()
+            ->shouldReceive('trigger')->once()->with('application', 100)
+            ->shouldReceive('trigger')->once()->with('licence', 101)
+            ->shouldReceive('trigger')->once()->with('transportManager', 102)
+            ->getMock()
+        );
 
-        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
-        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($case);
+        $this->setupMockCase($id, $case);
 
-        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
-        $mockContainer->shouldIgnoreMissing();
+        $mockPlaceholder = m::mock()
+            ->shouldReceive('getContainer')->once()->with('case')->andReturn(
+                m::mock()->shouldReceive('set')->once()->with($case)->getMock()
+            )
+            ->getMock();
 
-        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
-        $mockPlaceholder->shouldReceive('getContainer')->withAnyArgs()->andReturn($mockContainer);
+        $mockViewHelperManager = m::mock('\Zend\View\HelperPluginManager')
+            ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
+            ->getMock();
 
-        $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
-        $mockViewHelperManager->shouldReceive('get')->with('headTitle')->andReturn($mockContainer);
+        $this->sut->setViewHelperManager($mockViewHelperManager);
 
-        $mockLicenceService = m::mock('Common\Service\Data\Licence');
-        $mockLicenceService->shouldReceive('setData')->with(4, ['id' => 4]);
+        $mockNavigation = m::mock()
+            ->shouldReceive('findOneById')->once()->with('case_opposition')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )
+            ->shouldReceive('findOneById')->once()->with('case_details_legacy_offence')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )
+            ->shouldReceive('findOneById')->once()->with('case_details_annual_test_history')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )
+            ->shouldReceive('findOneById')->once()->with('case_details_prohibitions')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )
+            ->shouldReceive('findOneById')->once()->with('case_details_statements')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )
+            ->shouldReceive('findOneById')->once()->with('case_details_conditions_undertakings')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )
+            ->shouldReceive('findOneById')->once()->with('case_details_impounding')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )
+            ->shouldReceive('findOneById')->once()->with('case_processing_in_office_revocation')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )
+            ->getMock();
 
-        $sut = new Cases();
-        $sut->setCaseService($mockCaseService);
-        $sut->setViewHelperManager($mockViewHelperManager);
-        $sut->setLicenceService($mockLicenceService);
-        $sut->onCase($event);
-    }
+        $this->sut->setNavigationService($mockNavigation);
 
-    public function testOnCaseSetsDataButDoesNotTriggerLicence()
-    {
-        $caseId = 1;
-        $case = [
-            'id' => $caseId,
-            'licence' => ['id' => 4]
-        ];
+        $mockSidebar = m::mock()
+            ->shouldReceive('findOneById')->once()->with('case-decisions-transport-manager-repute-not-lost')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )
+            ->shouldReceive('findOneById')->once()->with('case-decisions-transport-manager-declare-unfit')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )
+            ->shouldReceive('findOneById')->once()->with('case-decisions-transport-manager-no-further-action')
+            ->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )
+            ->getMock();
 
-        $mockTarget = m::mock('Olcs\Listener\RouteParams');
+        $this->sut->setSidebarNavigationService($mockSidebar);
 
-        $event = new RouteParam();
-        $event->setValue($caseId);
-        $event->setTarget($mockTarget);
-        $event->setContext(['licence' => 7]);
-
-        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
-        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)->andReturn($case);
-
-        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
-        $mockContainer->shouldIgnoreMissing();
-
-        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
-        $mockPlaceholder->shouldReceive('getContainer')->withAnyArgs()->andReturn($mockContainer);
-
-        $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
-        $mockViewHelperManager->shouldReceive('get')->with('headTitle')->andReturn($mockContainer);
-
-        $mockLicenceService = m::mock('Common\Service\Data\Licence');
-        $mockLicenceService->shouldReceive('setData')->with(4, ['id' => 4]);
-
-        $sut = new Cases();
-        $sut->setCaseService($mockCaseService);
-        $sut->setViewHelperManager($mockViewHelperManager);
-        $sut->setLicenceService($mockLicenceService);
-        $sut->onCase($event);
+        $this->sut->onCase($event);
     }
 
     public function testCreateService()
     {
-        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
-        $mockLicenceService = m::mock('Common\Service\Data\Licence');
-        $mockViewHelperManager = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockNavigation = m::mock();
+        $mockSidebar = m::mock();
+        $mockTransferAnnotationBuilder = m::mock();
+        $mockQueryService = m::mock();
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
-        $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')->with('Olcs\Service\Data\Cases')->andReturn($mockCaseService);
-        $mockSl->shouldReceive('get')->with('Common\Service\Data\Licence')->andReturn($mockLicenceService);
+        $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mockNavigation);
+        $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($mockSidebar);
+        $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockTransferAnnotationBuilder);
+        $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
 
-        $sut = new Cases();
-        $service = $sut->createService($mockSl);
+        $service = $this->sut->createService($mockSl);
 
-        $this->assertSame($sut, $service);
-        $this->assertSame($mockCaseService, $sut->getCaseService());
-        $this->assertSame($mockLicenceService, $sut->getLicenceService());
-        $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
+        $this->assertSame($this->sut, $service);
+        $this->assertSame($mockViewHelperManager, $this->sut->getViewHelperManager());
+        $this->assertSame($mockTransferAnnotationBuilder, $this->sut->getAnnotationBuilder());
+        $this->assertSame($mockQueryService, $this->sut->getQueryService());
+        $this->assertSame($mockNavigation, $this->sut->getNavigationService());
+        $this->assertSame($mockSidebar, $this->sut->getSidebarNavigationService());
+    }
+
+    /**
+     * @expectedException \Common\Exception\ResourceNotFoundException
+     */
+    public function testOnCaseNotFound()
+    {
+        $id = 69;
+
+        $event = new RouteParam();
+        $event->setValue($id);
+
+        $mockAnnotationBuilder = m::mock();
+        $mockQueryService  = m::mock();
+
+        $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
+            function ($dto) use ($id) {
+                $this->assertSame($id, $dto->getId());
+                return 'QUERY';
+            }
+        );
+
+        $mockResult = m::mock();
+        $mockResult->shouldReceive('isOk')->with()->once()->andReturn(false);
+
+        $mockQueryService->shouldReceive('send')->with('QUERY')->once()->andReturn($mockResult);
+
+        $this->sut->setAnnotationBuilder($mockAnnotationBuilder);
+        $this->sut->setQueryService($mockQueryService);
+
+        $this->sut->onCase($event);
     }
 }

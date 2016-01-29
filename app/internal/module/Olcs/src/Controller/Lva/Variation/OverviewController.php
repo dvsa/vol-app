@@ -1,37 +1,27 @@
 <?php
 
 /**
- * Application Overview Controller
+ * Variation Overview Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 namespace Olcs\Controller\Lva\Variation;
 
-use Zend\View\Model\ViewModel;
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
+use Olcs\Controller\Lva\Traits\ApplicationOverviewTrait;
+use Olcs\Controller\Interfaces\VariationControllerInterface;
 
 /**
  * Application Overview Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OverviewController extends AbstractController
+class OverviewController extends AbstractController implements VariationControllerInterface
 {
-    use VariationControllerTrait;
+    use VariationControllerTrait,
+        ApplicationOverviewTrait;
 
     protected $lva = 'variation';
     protected $location = 'internal';
-
-    /**
-     * Application overview
-     */
-    public function indexAction()
-    {
-        // @NOTE until we know more about the variation section, this will use the application views
-        $content = new ViewModel();
-        $content->setTemplate('application/overview');
-
-        return $this->render($content);
-    }
 }

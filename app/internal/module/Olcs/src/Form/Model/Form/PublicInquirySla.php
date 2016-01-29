@@ -6,10 +6,10 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Public inquiry SLA")
+ * @Form\Name("Service level agreement")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"prefer_form_input_filter": true, "label":"Public Inquiry SLA"})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class PublicInquirySla
 {
@@ -23,7 +23,7 @@ class PublicInquirySla
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\CancelFormActions")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
 }

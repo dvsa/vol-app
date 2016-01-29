@@ -1,12 +1,19 @@
-
-	<h4>Content</h4>
-	<ol class="vertical-navigation" role="navigation">
-	<?php
-	//$verticalNavigationItems = array('Postal address', 'Personal information', 'About you');
-	foreach($this->navItems as $item) { ?>
-		<li class="vertical-navigation__item">
-			<a href="#<?php echo strtolower(str_replace(' ', '-', $item)); ?>"><?php echo $item; ?></a>
-		</li>
-	<?php } ?>
-	</ol><!-- end .vertical-navigation -->
-
+<ul class="vertical-navigation" role="menu">
+    <?php foreach ($this->container as $key => $page) : ?>
+        <?php if($page->isVisible(true)): ?>
+            <li class="vertical-navigation__item <?php echo $page->isActive(true) ? 'current' : ''; ?>">
+                <?php if (!$page->isActive(true)) : ?>
+                    <?php echo $this->navigation()->menu()->htmlify($page); ?>
+                <?php else: ?>
+                    <span><?php echo $this->translate($page->getLabel()); ?></span>
+                    <?php
+                    $tableFilters = $this->placeholder('tableFilters')->getValue();
+                    if($tableFilters instanceof \Zend\Form\Form) {
+                      echo $this->form($tableFilters);
+                    }
+                    ?>
+                <?php endif; ?>
+            </li>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</ul><!-- .vertical-navigation -->

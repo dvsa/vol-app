@@ -43,7 +43,6 @@ class PublicInquiryHearingFields extends Base
      *          }
      *      }
      * })
-
      */
     public $piVenueOther;
 
@@ -54,12 +53,13 @@ class PublicInquiryHearingFields extends Base
      *     "create_empty_option": true,
      *     "max_year": 2016,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '</div><div class=""field""><label for=hearingDate>Time of PI</label>'HH:mm:ss",
+     *     "pattern": "d MMMM y '{{SLA_HINT}}</fieldset><fieldset><div class=""field""><label for=""hearingDate"">Time of PI</label>'HH:mm:ss'</div>'",
      *     "category": "pi_hearing",
      *     "field": "hearingDate"
      * })
-     * @Form\Type("SlaDateTimeSelect")
+     * @Form\Type("DateTimeSelect")
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d H:i:s"}})
      */
     public $hearingDate;
@@ -91,17 +91,16 @@ class PublicInquiryHearingFields extends Base
     public $presidedByRole;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"small"})
-     * @Form\Options({"label": "Witnesses"})
+     * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
+     * @Form\Options({"label": "Number of witnesses"})
      * @Form\Type("Text")
-     * @Form\Required(false)
      * @Form\Validator({"name":"Digits"})
      */
     public $witnesses;
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled / Withdrawn"})
-     * @Form\Type("checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $isCancelled;
 
@@ -120,7 +119,10 @@ class PublicInquiryHearingFields extends Base
      *      "options":{
      *          "context_field": "isCancelled",
      *          "context_values": {"Y"},
+     *          "allow_empty": false,
      *          "validators": {
+     *              {"name":"Zend\Validator\NotEmpty"},
+     *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}}
      *          }
      *      }
@@ -152,27 +154,35 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Adjourned"})
-     * @Form\Type("checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $isAdjourned;
 
     /**
      * @Form\Required(true)
-     * @Form\Attributes({"id":"adjournedDate", "required": false})
+     * @Form\Attributes({"id":"adjournedDate"})
      * @Form\Options({
      *     "label": "Adjourned date",
      *     "create_empty_option": true,
+     *     "max_year": 2016,
+     *     "render_delimiters": true,
+     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""adjournedDate"">Adjourned time</label>'HH:mm:ss'</div>'",
+     *     "category": "pi_hearing",
+     *     "field": "adjournedDate"
      * })
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Type("DateTimeSelect")
+     * @Form\Filter({"name": "DateTimeSelectNullifier"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isAdjourned",
      *          "context_values": {"Y"},
+     *          "allow_empty": false,
      *          "validators": {
-     *              {"name": "Date", "options": {"format": "Y-m-d"}}
+     *              {"name": "\Common\Validator\Date"},
+     *              {"name": "Date", "options": {"format": "Y-m-d H:i:s"}},
+     *              {"name": "\Zend\Validator\NotEmpty"}
      *          }
      *      }
      * })
@@ -203,14 +213,14 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Required(false)
-     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-large  js-definition-source",
-     * "multiple":true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-large js-definition-source"})
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
      *     "service_name": "\Olcs\Service\Data\PublicInquiryDefinition",
-     *     "use_groups": true
+     *     "use_groups": true,
+     *     "empty_option": "Add definition option"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -225,6 +235,52 @@ class PublicInquiryHearingFields extends Base
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5, "max":4000}})
      */
     public $details = null;
+
+    /**
+     * @Form\Type("Select")
+     * @Form\Options({
+     *      "label": "Publication type",
+     *      "value_options":{
+     *          "All":"All",
+     *          "A&D":"A&D",
+     *          "N&P":"N&P"
+     *      }
+     * })
+     * @Form\Attributes({
+     *      "id":"pubType",
+     *      "value":"All"
+     * })
+     */
+    public $pubType;
+
+    /**
+     * @Form\Type("Select")
+     * @Form\Attributes({
+     *      "id":"trafficAreas",
+     *      "placeholder":"",
+     *      "multiple":"multiple",
+     *      "value":"all"
+     * })
+     * @Form\Options({
+     *      "label": "Traffic areas",
+     *      "value_options":{
+     *          "all":"All traffic areas",
+     *          "B":"North East of England",
+     *          "C":"North West of England",
+     *          "D":"West Midlands",
+     *          "F":"East of England",
+     *          "G":"Wales",
+     *          "H":"West of England",
+     *          "K":"London and the South East of England",
+     *          "M":"Scotland",
+     *          "N":"Northern Ireland"
+     *      }
+     * })
+     * @Form\Attributes({
+     *      "id":"trafficAreas"
+     * })
+     */
+    public $trafficAreas;
 
     /**
      * @Form\Attributes({"value":""})

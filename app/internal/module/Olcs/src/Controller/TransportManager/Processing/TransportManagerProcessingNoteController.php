@@ -1,35 +1,120 @@
 <?php
-
 /**
- * Transport Manager Processing Note Controller
- * 
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * Note Controller
  */
 namespace Olcs\Controller\TransportManager\Processing;
 
-use Olcs\Controller\TransportManager\Processing\AbstractTransportManagerProcessingController;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
+use Olcs\Form\Model\Form\Note as AddForm;
+use Olcs\Form\Model\Form\NoteEdit as EditForm;
+use Olcs\Form\Model\Form\NoteFilter as FilterForm;
+use Olcs\Data\Mapper\GenericFields as Mapper;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Zend\View\Model\ViewModel;
 
 /**
- * Transport Manager Processing Note Controller
- * 
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * Note Controller
  */
-class TransportManagerProcessingNoteController extends AbstractTransportManagerProcessingController
+class TransportManagerProcessingNoteController extends AbstractInternalController implements
+    TransportManagerControllerInterface,
+    LeftViewProvider
 {
     /**
-     * @var string
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
      */
-    protected $section = 'processing-notes';
+    protected $navigationId = 'transport_manager_processing_notes';
+
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
+     */
+    protected $tableViewPlaceholderName = 'table';
+    protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'priority';
+    protected $tableName = 'note';
+    protected $listDto = ListDto::class;
+    protected $listVars = [
+        'transportManager' => 'transportManager'
+    ];
+    protected $filterForm = FilterForm::class;
+
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/transport-manager/partials/processing-left');
+
+        return $view;
+    }
 
     /**
-     * Placeholder stub
-     *
-     * @return ViewModel
+     * Variables for controlling details view rendering
+     * details view and itemDto are required.
      */
-    public function indexAction()
-    {
-        $view = $this->getViewWithTm();
-        $view->setTemplate('transport-manager/index');
-        return $this->renderView($view);
-    }
+    protected $itemDto = ItemDto::class;
+    // 'id' => 'conviction', to => from
+    protected $itemParams = [
+        'transportManager' => 'transportManager',
+        'id'
+    ];
+
+    /**
+     * Form class for add form. If this has a value, then this will be used, otherwise $formClass will be used.
+     */
+    protected $addFormClass = AddForm::class;
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $formClass = EditForm::class;
+    protected $updateCommand = UpdateDto::class;
+    protected $mapperClass = Mapper::class;
+    protected $addContentTitle = 'Add note';
+    protected $editContentTitle = 'Edit note';
+
+    /**
+     * Variables for controlling edit view rendering
+     * all these variables are required
+     * itemDto (see above) is also required.
+     */
+    protected $createCommand = CreateDto::class;
+
+    /**
+     * Form data for the add form.
+     *
+     * Format is name => value
+     * name => "route" means get value from route,
+     * see conviction controller
+     *
+     * @var array
+     */
+    protected $defaultData = [
+        'transportManager' => AddFormDefaultData::FROM_ROUTE,
+        'noteType' => 'note_t_tm',
+        'id' => -1,
+        'version' => -1
+    ];
+
+    protected $routeIdentifier = 'id';
+
+    /**
+     * Variables for controlling the delete action.
+     * Command is required, as are itemParams from above
+     */
+    protected $deleteCommand = DeleteDto::class;
+
+    protected $inlineScripts = [
+        'indexAction' => ['forms/filter', 'table-actions']
+    ];
 }

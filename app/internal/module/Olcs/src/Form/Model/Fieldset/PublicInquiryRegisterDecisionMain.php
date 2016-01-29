@@ -128,27 +128,26 @@ class PublicInquiryRegisterDecisionMain
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Licence revoked at PI"})
-     * @Form\Type("checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $licenceRevokedAtPi = null;
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Licence suspended at PI"})
-     * @Form\Type("checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $licenceSuspendedAtPi = null;
 
     /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Licence curtailed at PI"})
-     * @Form\Type("checkbox")
+     * @Form\Type("OlcsCheckbox")
      */
     public $licenceCurtailedAtPi = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
-     * @Form\Options({"label": "Witnesses"})
+     * @Form\Options({"label": "Number of witnesses"})
      * @Form\Type("Text")
-     * @Form\Required(false)
      * @Form\Validator({"name":"Digits"})
      */
     public $witnesses = null;
@@ -163,7 +162,8 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $decisionDate = null;
@@ -178,20 +178,21 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $notificationDate = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-large js-definition-source",
-     *     "multiple":true})
+     * @Form\Attributes({"id":"","placeholder":"","class":"js-definition-source chosen-select-large"})
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
      *     "service_name": "\Olcs\Service\Data\PublicInquiryDefinition",
-     *     "use_groups": true
+     *     "use_groups": true,
+     *     "empty_option": "Add definition option"
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(false)
@@ -199,7 +200,7 @@ class PublicInquiryRegisterDecisionMain
     public $definition = null;
 
     /**
-     * @Form\Attributes({"id":"","class":"extra-long    js-definition-target"})
+     * @Form\Attributes({"id":"","class":"extra-long js-definition-target"})
      * @Form\Options({
      *     "label": "Details to be published",
      *     "label_attributes": {

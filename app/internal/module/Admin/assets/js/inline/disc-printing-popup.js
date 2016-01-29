@@ -1,3 +1,9 @@
+/**
+ * @todo Not sure why this section has been done differently. This JS file is essentially constructing a view which is
+ * the controllers job. Think this may be due to the fact that the previous page POSTs back to the controller and a
+ * modal is optionally shown. This should be handled in the same way as type-of-licence i.e. we submit the previous form
+ * using js which means we can catch the response and display in a modal.
+ */
 $(function() {
 
   "use strict";
@@ -16,9 +22,7 @@ $(function() {
   var niFlagText = niFlag.filter(':checked').parent().text();
   var operatorTypeText = operatorType.filter(':checked').parent().text();
   var licenceTypeText = licenceType.filter(':checked').parent().text();
-  var confirmDiscPrintingUrl = '/admin/disc-printing/confirm-disc-printing';
-  var discPrintingUrl = '/admin/disc-printing';
- 
+
   // two variations for the message
   var discsVoided;
   if (endNumberIncreased.val() === endNumber.val()) {
@@ -28,18 +32,33 @@ $(function() {
   }
   
   // custom confirmation modal window, we need separate component for this, ideally
-  var message = [
-    '<div id="popupMessage">',
-      '<p>Printing submitted for location "' + niFlagText + '", operator type "' + operatorTypeText,
-      '", licence type "' + licenceTypeText + '".</p>',
-      '<p>The print run was between ' + startNumber.val() + ' and ' + endNumber.val() + discsVoided,
-      '<p>Did the discs print successfully?</p>',
-      '<div class="action-container">',
-        '<a href id="discPrintingOk" class="action--primary large popupButtons">Yes</a>',
-        '<a href id="discPrintingFailed" class="action--secondary large popupButtons">No</a>',
-      '</div>',  
-    '</div>'
-  ].join('\n');
+  if (niFlag.filter(':checked').val() === 'Y') {
+    var message = [
+      '<div id="popupMessage">',
+        '<p>Printing submitted for location "' + niFlagText + '", ',
+        'licence type "' + licenceTypeText + '".</p>',
+        '<p>The print run was between ' + startNumber.val() + ' and ' + endNumber.val() + discsVoided,
+        '<p>Did the discs print successfully?</p>',
+        '<div class="action-container">',
+          '<a href id="discPrintingOk" class="action--primary large popupButtons">Yes</a>',
+          '<a href id="discPrintingFailed" class="action--secondary large popupButtons">No</a>',
+        '</div>',  
+      '</div>'
+    ].join('\n');
+  } else {
+    var message = [
+      '<div id="popupMessage">',
+        '<p>Printing submitted for location "' + niFlagText + '", operator type "' + operatorTypeText,
+        '", licence type "' + licenceTypeText + '".</p>',
+        '<p>The print run was between ' + startNumber.val() + ' and ' + endNumber.val() + discsVoided,
+        '<p>Did the discs print successfully?</p>',
+        '<div class="action-container">',
+          '<a href id="discPrintingOk" class="action--primary large popupButtons">Yes</a>',
+          '<a href id="discPrintingFailed" class="action--secondary large popupButtons">No</a>',
+        '</div>',  
+      '</div>'
+    ].join('\n');
+  }
   
   OLCS.modal.show(message,'Discs printing');
   
@@ -69,7 +88,7 @@ $(function() {
           $('#popupMessage').prepend('<div class="notice--warning" id="confirmDiscWarning"><p>Error proccessing discs numbering</p></div>');
       } else {
         OLCS.modal.hide();
-        window.location.href = discPrintingUrl + '/success/' + isSuccessfull;
+        window.location.href = discPrintingUrl + 'success/' + isSuccessfull;
       }
     });
     return false;  

@@ -1,0 +1,87 @@
+<?php
+echo $this->render('partials/read-only/main',
+    [
+        'multiItems' =>  [
+            0 => [
+                [
+                    'label' => 'Operator name',
+                    'url' => $this->url('operator', ['organisation' => $operatorId]),
+                    'value' => $operatorName,
+                ],
+                ['label' => 'Trading name', 'value' => $tradingName],
+                ['label' => 'Previous operator name', 'value' => $previousOperatorName, 'hideIfEmpty' => true],
+                ['label' => 'Previous licence No.', 'value' => $previousLicenceNumber, 'hideIfEmpty' => true],
+                ['label' => 'No of licences ', 'numeric' => $numberOfLicences],
+                ['label' => 'Current applications ', 'numeric' => $currentApplications],
+            ],
+            1 => [
+                ['label' => 'Application created', 'date' => $applicationCreated],
+                ['label' => 'Out of opposition', 'date' => $outOfOpposition, 'dateFormat' => 'Y-m-d'],
+                ['label' => 'No. of oppositions', 'numeric' => $oppositionCount],
+                ['label' => 'Out of representation', 'date' =>  $outOfRepresentation, 'dateFormat' => 'Y-m-d'],
+                ['label' => 'Change of entity', 'value' => $changeOfEntity, 'noEscape' => true, 'hideIfEmpty' => true],
+                ['label' => 'Interim status', 'value' => $interimStatus, 'noEscape' => true, 'hideIfEmpty' => true],
+            ],
+            2 => [
+                ['label' => 'Licence status', 'value' => $this->status($licenceStatus), 'noEscape' => true],
+                ['label' => 'Outstanding fees', 'numeric' => $outstandingFees],
+                [
+                    'label' => 'Licence Start Date',
+                    'date' => $licenceStartDate,
+                    'dateFormat' => 'Y-m-d',
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Continuation date',
+                    'date' => $continuationDate,
+                    'dateFormat' => 'Y-m-d',
+                    'hideIfEmpty' => true,
+                ],
+                ['label' => 'Grace Period', 'value' => $licenceGracePeriods, 'noEscape' => true],
+            ],
+            3 => [
+                [
+                    'label' => 'No of Vehicles',
+                    'value' => $numberOfVehicles,
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Total Vehicle Authorisation',
+                    'value' => $totalVehicleAuthorisation,
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'No of Operating Centres',
+                    'value' => $numberOfOperatingCentres,
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'Total Trailer Authorisation',
+                    'value' => $totalTrailerAuthorisation,
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'No of Issued Discs',
+                    'numeric' => $numberOfIssuedDiscs,
+                    'hideIfEmpty' => true,
+                ],
+                [
+                    'label' => 'No of Community Lics',
+                    'numeric' => $numberOfCommunityLicences,
+                    'hideIfEmpty' => true,
+                ],
+            ],
+            4 => [
+                ['label' => 'Open cases', 'value' => $openCases],  // not numeric, may be suffixed with ' (PI)'
+                ['label' => 'Current Review Complaints', 'numeric' => $currentReviewComplaints],
+                ['label' => 'Receives Mail Electronically', 'value' => $receivesMailElectronically],
+                ['label' => 'Registered for self service', 'value' => $registeredForSelfService],
+            ],
+        ],
+    ]
+);
+if (isset($form)) {
+    $form->prepare();
+    echo $this->formErrors($form);
+    echo $this->form($form);
+}

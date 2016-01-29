@@ -8,6 +8,7 @@
 namespace AdminTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 use OlcsTest\Bootstrap;
 
@@ -16,7 +17,7 @@ use OlcsTest\Bootstrap;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-abstract class AbstractAdminControllerTest extends AbstractHttpControllerTestCase
+abstract class AbstractAdminControllerTest extends MockeryTestCase
 {
     protected $mockMethods = [];
 
@@ -32,9 +33,13 @@ abstract class AbstractAdminControllerTest extends AbstractHttpControllerTestCas
         $methods = array_merge($this->mockMethods, ['getView', 'getRequest']);
         $this->controller = $this->getMock($this->controllerName, $methods);
 
-        $this->serviceManager = Bootstrap::getServiceManager();
+        $this->serviceManager = $this->getServiceManager();
         $this->serviceManager->setAllowOverride(true);
         $this->controller->setServiceLocator($this->serviceManager);
+    }
 
+    protected function getServiceManager()
+    {
+        return Bootstrap::getServiceManager();
     }
 }

@@ -9,8 +9,10 @@
  */
 namespace Olcs\Controller\Document;
 
+use Dvsa\Olcs\Transfer\Command\Document\CreateDocument;
+use Dvsa\Olcs\Transfer\Command\Document\Upload;
+use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
-use Common\Service\File\Exception as FileException;
 
 /**
  * Document Generation Controller
@@ -21,102 +23,125 @@ use Common\Service\File\Exception as FileException;
  */
 class DocumentUploadController extends AbstractDocumentController
 {
-    /**
-     * how to map route param types to category names
-     */
-    private $categoryMap = [
-        'licence' => 1
-    ];
-
     public function uploadAction()
     {
-        $category = $this->categoryMap[$this->params()->fromRoute('type')];
-        $this->getServiceLocator()
-             ->get('DataServiceManager')
-             ->get('Olcs\Service\Data\DocumentSubCategory')
-             ->setCategory($category);
+        if ($this->getRequest()->isPost()) {
+            $data = (array)$this->getRequest()->getPost();
+            $category = $data['details']['category'];
+        } else {
+            $type = $this->params()->fromRoute('type');
+            $category = $this->getCategoryForType($type);
+            $data = [
+                'details' => [
+                    'category' => $category
+                ]
+            ];
+        }
 
-        $defaults = ['details' => ['category' => $category]];
-        $form = $this->generateFormWithData('upload-document', 'processUpload', $defaults);
+        // @todo data services for list data are changing as part of another story
+        $this->getServiceLocator()
+            ->get('DataServiceManager')
+            ->get('Olcs\Service\Data\DocumentSubCategory')
+            ->setCategory($category);
+
+        $form = $this->generateFormWithData('UploadDocument', 'processUpload', $data);
 
         $this->loadScripts(['upload-document']);
 
         $view = new ViewModel(['form' => $form]);
 
-        $view->setTemplate('form-simple');
-        return $this->renderView($view, 'Upload Document');
+        $view->setTemplate('pages/form');
+        return $this->renderView($view, 'Upload document');
     }
 
-    public function processUpload($data)
+    public function processUpload($data, Form $form)
     {
         $routeParams = $this->params()->fromRoute();
         $type = $routeParams['type'];
 
         $files = $this->getRequest()->getFiles()->toArray();
-        $files=$files['details'];
+        $files = $files['details'];
 
         if (!isset($files['file']) || $files['file']['error'] !== UPLOAD_ERR_OK) {
             // @TODO this needs to be handled better; by the time we get here we
             // should *know* that our files are valid
             $this->addErrorMessage('Sorry; there was a problem uploading the file. Please try again.');
-            return $this->redirect()->toRoute(
-                $type . '/documents/upload',
-                $routeParams
-            );
-        }
-        $uploader = $this->getUploader();
-        $uploader->setFile($files['file']);
-
-        try {
-            $file = $uploader->upload();
-        } catch (FileException $ex) {
-            $this->addErrorMessage('The document store is unavailable. Please try again later');
-            return $this->redirect()->toRoute(
-                $type . '/documents/upload',
-                $routeParams
-            );
+            return $this->redirectToDocumentRoute($type, 'upload', $routeParams);
         }
 
-        // we don't know what params are needed to satisfy this type's
-        // finalise route; so to be safe we supply them all
-        $routeParams = array_merge(
-            $routeParams,
+        $data = array_merge(
+            $data,
             [
-                'tmpId' => $file->getIdentifier()
+                'filename'      => $files['file']['name'],
+                'content'       => base64_encode(file_get_contents($files['file']['tmp_name'])),
+                'description'   => $data['details']['description'],
+                'category'      => $data['details']['category'],
+                'subCategory'   => $data['details']['documentSubCategory'],
+                'isExternal'    => false,
+                'isReadOnly'    => 'Y'
             ]
         );
 
-        // AC specifies this timestamp format...
-        $fileName = date('YmdHi')
-            . '_' . $this->formatFilename($files['file']['name'])
-            . '.' . $file->getExtension();
-        $data = [
-            'identifier'          => $file->getIdentifier(),
-            'description'         => $data['details']['description'],
-            'filename'            => $fileName,
-            'fileExtension'       => 'doc_' . $file->getExtension(),
-            'category'            => $data['details']['category'],
-            'documentSubCategory' => $data['details']['documentSubCategory'],
-            'isDigital'           => true,
-            'isReadOnly'          => true,
-            'issuedDate'          => date('Y-m-d H:i:s'),
-            'size'                => $file->getSize()
-        ];
+        $key = $this->getRouteParamKeyForType($type);
+        $data[$type] = $routeParams[$key];
 
-        $data[$type] = $routeParams[$type];
+        // we need to link certain documents to multiple IDs
+        switch ($type) {
+            case 'application':
+                $data['licence'] = $this->getLicenceIdForApplication();
+                break;
 
-        $this->makeRestCall(
-            'Document',
-            'POST',
-            $data
-        );
+            case 'case':
+                $data = array_merge(
+                    $data,
+                    $this->getCaseData()
+                );
+                break;
 
-        $this->removeTmpData();
+            case 'busReg':
+                $data['licence'] = $routeParams['licence'];
+                break;
 
-        return $this->redirect()->toRoute(
-            $type . '/documents',
-            $routeParams
-        );
+            default:
+                break;
+        }
 
+        $response = $this->handleCommand(Upload::create($data));
+
+        if ($response->isOk()) {
+            $identifier = $response->getResult()['id']['identifier'];
+
+            $routeParams = array_merge(
+                $routeParams,
+                [
+                    'doc' => $identifier
+                ]
+            );
+
+            return $this->redirectToDocumentRoute($type, null, $routeParams);
+        }
+
+        if ($response->isClientError()) {
+            $messages = $response->getResult()['messages'];
+
+            if (isset($messages['ERR_MIME'])) {
+
+                $formMessages = [
+                    'details' => [
+                        'file' => [
+                            'ERR_MIME'
+                        ]
+                    ]
+                ];
+
+                $form->setMessages($formMessages);
+
+                return $form;
+            }
+        }
+
+        $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
+
+        return $form;
     }
 }

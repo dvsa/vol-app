@@ -45,6 +45,29 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     protected $submissionTypeSubmit;
 
     /**
+     * Hidden form element that contains transportManager Id
+     *
+     * @var \Zend\Form\Element\Text
+     */
+    protected $transportManager;
+
+    /**
+     * @param \Olcs\Form\Element\Hidden $transportManager
+     */
+    public function setTransportManager($transportManager)
+    {
+        $this->transportManager = $transportManager;
+    }
+
+    /**
+     * @return \Olcs\Form\Element\Hidden
+     */
+    public function getTransportManager()
+    {
+        return $this->transportManager;
+    }
+
+    /**
      * Set submission type
      * @param \Common\Form\Elements\Custom\Select $submissionType
      *
@@ -110,6 +133,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      */
     public function prepareElement(FormInterface $form)
     {
+        unset($form);
         $name = $this->getName();
 
         $this->getSubmissionType()->setName($name . '[submissionType]');
@@ -117,14 +141,45 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         $sections = $this->getSections()->getValueOptions();
         $m_sections = $this->getMandatorySections();
 
-        foreach ($m_sections as $m_key) {
-            $sections[$m_key] = ['label' => $sections[$m_key], 'selected' => 'selected', 'disabled' => true];
+        $tm = $this->getTransportManager()->getValue();
+        if (empty($tm)) {
+            $sections = $this->removeTmSections($sections);
+            foreach ($m_sections as $m_key) {
+                $sections[$m_key] = ['label' => $sections[$m_key], 'selected' => 'selected', 'disabled' => true];
+            }
+        } else {
+            // disable all but TM options
+            $tmSections = $this->getAllTmSections();
+            foreach ($sections as $key => $label) {
+                if (!in_array($key, $tmSections)) {
+                    unset($sections[$key]);
+                } elseif (in_array($key, $m_sections)) {
+                    $sections[$key] = ['label' => $label, 'selected' => 'selected', 'disabled' => true];
+                }
+            }
         }
+
         $this->getSections()->setValueOptions($sections);
         $this->getSections()->setOptions(['label_position'=>'append']);
 
         $this->getSections()->setName($name . '[sections]');
         $this->getSubmissionTypeSubmit()->setName($name . '[submissionTypeSubmit]');
+        $this->getTransportManager()->setName($name . '[transportManager]');
+    }
+
+    /**
+     * Removes TM sections from section list array
+     *
+     * @param $sections
+     * @return mixed
+     */
+    private function removeTmSections($sections)
+    {
+        $tmSections = $this->getTmOnlySections();
+        foreach ($tmSections as $tmSection) {
+            unset($sections[$tmSection]);
+        }
+        return $sections;
     }
 
     /**
@@ -135,7 +190,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      */
     public function setValue($value)
     {
-
         $this->getSubmissionType()->setValue($value['submissionType']);
         $sections = [];
 
@@ -215,7 +269,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     }
 
     /**
-     * Returns the Preselected  section keys for a given submission type
+     * Returns the Preselected section keys for a given submission type
      *
      * @param string $submissionType
      * @return array
@@ -225,6 +279,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
         switch($submissionType) {
             case 'submission_type_o_bus_reg':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'auth-requested-applied-for',
                     'transport-managers',
@@ -239,11 +298,21 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_clo_fep':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'waive-fee-late-fee'
                 ];
                 break;
             case 'submission_type_o_clo_g':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'intelligence-unit-check',
@@ -262,6 +331,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_clo_psv':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'intelligence-unit-check',
@@ -280,6 +354,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_env':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'intelligence-unit-check',
@@ -295,6 +374,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'site-plans',
                     'planning-permission',
                     'applicants-comments',
+                    'applicants-responses',
                     'visibility-access-egress-size',
                     'environmental-complaints',
                     'objections',
@@ -305,14 +385,60 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_irfo':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'transport-managers',
                     'fitness-and-repute',
                     'maintenance-tachographs-hours'
                 ];
                 break;
-            case 'submission_type_o_mlh':
+            case 'submission_type_o_mlh_otc':
                 $sections = [
+                    'case-outline',
+                    'most-serious-infringement',
+                    'people',
+                    'previous-history',
+                    'operating-centres',
+                    'conditions-and-undertakings',
+                    'linked-licences-app-numbers',
+                    'lead-tc-area',
+                    'auth-requested-applied-for',
+                    'transport-managers',
+                    'continuous-effective-control',
+                    'fitness-and-repute',
+                    'linked-mlh-history',
+                    'maintenance-tachographs-hours',
+                    'financial-information'
+                ];
+                break;
+            case 'submission_type_o_ni_tru':
+                $sections = [
+                    'case-outline',
+                    'most-serious-infringement',
+                    'people',
+                    'previous-history',
+                    'operating-centres',
+                    'conditions-and-undertakings',
+                    'linked-licences-app-numbers',
+                    'current-submissions',
+                    'transport-managers',
+                    'maintenance-tachographs-hours',
+                    'prohibition-history',
+                    'conviction-fpn-offence-history',
+                    'annual-test-history'
+                ];
+                break;
+            case 'submission_type_o_mlh_clo':
+                $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'intelligence-unit-check',
@@ -332,35 +458,45 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_otc':
                 $sections = [
+                    'case-outline',
+                    'most-serious-infringement',
+                    'people',
+                    'previous-history',
                     'operating-centres',
                     'conditions-and-undertakings',
-                    'intelligence-unit-check',
                     'linked-licences-app-numbers',
-                    'lead-tc-area',
                     'current-submissions',
                     'transport-managers',
-                    'fitness-and-repute',
-                    'local-licence-history',
                     'maintenance-tachographs-hours',
                     'prohibition-history',
                     'conviction-fpn-offence-history',
-                    'annual-test-history',
-                    'penalties',
-                    'compliance-complaints',
-                    'financial-information'
+                    'annual-test-history'
                 ];
                 break;
             case 'submission_type_o_tm':
-                $sections = [
-                    'intelligence-unit-check',
-                    'transport-managers',
-                    'continuous-effective-control',
-                    'fitness-and-repute',
-                    'oppositions'
-                ];
+                $sections = array_merge(
+                    [
+                        'case-outline',
+                        'people',
+                        'previous-history',
+                        'other-issues',
+                        'annex',
+                        'intelligence-unit-check',
+                        'transport-managers',
+                        'continuous-effective-control',
+                        'fitness-and-repute',
+                        'oppositions'
+                    ],
+                    $this->getTmOnlySections()
+                );
                 break;
             case 'submission_type_o_schedule_41':
                 $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
                     'operating-centres',
                     'conditions-and-undertakings',
                     'linked-licences-app-numbers',
@@ -368,22 +504,34 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'auth-requested-applied-for',
                     'site-plans',
                     'applicants-comments',
+                    'applicants-responses',
                     'environmental-complaints',
                     'waive-fee-late-fee'
                 ];
                 break;
-            case 'submission_type_impounding':
+            case 'submission_type_o_impounding':
+                $sections = [
+                    'case-outline',
+                    'people',
+                    'previous-history',
+                    'other-issues',
+                    'annex',
+                    'statements'
+                ];
+                break;
             default:
                 $sections = [];
         }
 
-        return array_merge($this->getMandatorySections(), $this->getDefaultSections(), $sections);
+        return array_merge(
+            $this->getMandatorySections(),
+            $sections
+        );
     }
 
     /**
      * Returns the mandatory section keys for a given submission type
      *
-     * @param string $submissionType
      * @return array
      */
     private function getMandatorySections()
@@ -392,24 +540,49 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
             'introduction',
             'case-summary',
             'case-outline',
-            'persons',
+            'people',
+            'outstanding-applications'
         ];
     }
 
     /**
-     * Gets list of default sections that ALL submission types must have
+     * Gets list of Transport Manager specific sections.
      *
+     * @note These may be removed by the controller/JS if the case type is NOT TM
      * @return array
      */
-    private function getDefaultSections()
+    public function getTmOnlySections()
     {
         return [
-            'case-outline',
-            'most-serious-infringement',
-            'persons',
-            'previous-history',
-            'other-issues',
-            'annex'
+            'tm-details',
+            'tm-qualifications',
+            'tm-responsibilities',
+            'tm-other-employment',
+            'tm-previous-history'
         ];
+    }
+
+    /**
+     * Gets list of All Transport Manager sections.
+     *
+     * @note These may be removed by the controller/JS if the case type is NOT TM
+     * @return array
+     */
+    public function getAllTmSections()
+    {
+        return array_merge(
+            [
+                'introduction',
+                'case-outline',
+                'most-serious-infringement',
+                'intelligence-unit-check',
+                'current-submissions',
+                'continuous-effective-control',
+                'fitness-and-repute',
+                'other-issues',
+                'annex'
+            ],
+            $this->getTmOnlySections()
+        );
     }
 }
