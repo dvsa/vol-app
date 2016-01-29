@@ -19,6 +19,9 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = Addresses::class;
 
+    /**
+     * @group test123
+     */
     public function testGetForm()
     {
         // Mocks
@@ -72,6 +75,11 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
             )
             ->twice()
             ->getMock();
+
+        $this->formHelper
+            ->shouldReceive('remove')
+            ->with($mockForm, 'contact->phone-validator')
+            ->once();
 
         $form = $this->sut->getForm('ltyp_sn');
 
