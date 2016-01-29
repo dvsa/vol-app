@@ -19,9 +19,6 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = Addresses::class;
 
-    /**
-     * @group test123
-     */
     public function testGetForm()
     {
         // Mocks
