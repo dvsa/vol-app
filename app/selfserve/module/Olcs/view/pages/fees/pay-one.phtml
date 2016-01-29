@@ -1,0 +1,81 @@
+<div class="page-header">
+
+  <ol class="breadcrumbs">
+    <li class="breadcrumbs__item">
+      <a href="<?php echo $this->url('fees');?>"><?php echo $this->translate('pay-fees.back-to-home'); ?></a>
+    </li>
+  </ol>
+
+  <div class="page-header__wrapper">
+    <h3 class="page-header__subtitle">
+      <?php echo $this->translate('licence'); ?> <?php echo $fee['licence']['licNo']; ?>
+    </h3>
+    <h1><?php echo $fee['description']; ?></h1>
+  </div><!-- end .page-header__wrapper -->
+</div>
+
+<div class="row">
+
+  <div class="three-quarters">
+  
+      <?php
+      $guidanceMessage = $this->placeholder('guidance');
+      if (!empty($guidanceMessage)) {
+          foreach ($guidanceMessage as $message):
+              ?>
+              <div class="guidance">
+                  <p><?php echo $this->translate($message); ?></p>
+              </div>
+              <?php
+          endforeach;
+      }
+      ?>
+  
+    <?php echo $this->render(
+      'partials/read-only/main',
+      [
+          'multiItems' => [
+              [
+                  [
+                      'label' => 'pay-fees.fee-no',
+                      'value' => $fee['id'],
+                  ],
+                  [
+                      'label' => 'pay-fees.description',
+                      'value' => $fee['description'],
+                  ],
+                  [
+                      'label' => 'pay-fees.lic-no',
+                      'value' => $fee['licence']['licNo'],
+                  ],
+                  [
+                      'label' => 'pay-fees.created',
+                      'date' => $fee['invoicedDate'],
+                  ],
+                  [
+                      'label' => 'pay-fees.amount',
+                      'value' => '£'.number_format($fee['amount'],2),
+                  ],
+                  [
+                      'label' => 'pay-fees.outstanding',
+                      'value' => '£'.number_format($fee['outstanding'],2),
+                  ],
+              ],
+            ],
+        ]
+      );
+    ?>
+  
+    <hr>
+  
+    <?php echo $this->translate('markup-pay-fees-notice' . ($hasContinuation ? '-continuation' : '')); ?>
+  
+    <hr>
+  
+    <?php if (isset($form)): ?>
+      <?php echo $this->form($form); ?>
+    <?php endif ?>
+  
+  </div>
+
+</div>

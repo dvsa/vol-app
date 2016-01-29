@@ -1,0 +1,73 @@
+<?php
+
+use Common\RefData;
+
+$items = [];
+$additional = [];
+$faxCount = 0;
+$phoneCount = 0;
+
+$address = isset($this->result['licenceContactDetails']['address']) ?
+    $this->address($this->result['licenceContactDetails']['address']) : '';
+
+$items[] = [0 => ['label' => 'search-result-label-address', 'value' => $address]];
+
+$phoneContacts = $this->result['licenceContactDetails']['phoneContacts'];
+if (!empty($phoneContacts)) {
+    for($i = 0; $i<count($phoneContacts);$i++) {
+        if ($phoneContacts[$i]['phoneContactType']['id'] === RefData::TYPE_FAX) {
+            $faxLabel = ($faxCount == 0) ? 'search-result-label-fax-numbers' : '';
+            $faxList[] = [
+                'label' => $faxLabel,
+                'value' => $phoneContacts[$i]['phoneNumber']
+            ];
+            $faxCount++;
+        } else {
+            $phoneLabel = ($phoneCount == 0) ? 'search-result-label-phone-numbers' : '';
+            $phoneList[] = [
+                'label' => $phoneLabel,
+                'value' => $phoneContacts[$i]['phoneNumber']
+            ];
+            $phoneCount++;
+        }
+    }
+} else {
+    $phoneList[] = [
+        'label' => 'search-result-label-phone-numbers',
+        'value' => ''
+    ];
+    $faxList[] = [
+        'label' => 'search-result-label-fax-numbers',
+        'value' => ''
+    ];
+}
+
+if (empty($phoneList)) {
+    $phoneList[] = [
+        'label' => 'search-result-label-phone-numbers',
+        'value' => ''
+    ];
+}
+if (empty($faxList)) {
+    $faxList[] = [
+        'label' => 'search-result-label-fax-numbers',
+        'value' => ''
+    ];
+}
+
+$items[] = $phoneList;
+$items[] = $faxList;
+$items[] = [
+    0 => [
+        'label' => 'search-result-label-email',
+        'value' => $this->result['licenceContactDetails']['emailAddress']
+    ]
+];
+
+echo $this->render('partials/read-only/main',
+    [
+        'multiItems' =>
+            $items
+
+    ]
+);

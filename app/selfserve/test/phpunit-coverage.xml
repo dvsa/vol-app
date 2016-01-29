@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="Bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="OLCS Selfserve Application">
+            <directory>./</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../module/Olcs/src</directory>
+            <exclude>
+                <directory>../module/Olcs/src/Table/</directory>
+                <directory>../module/Olcs/src/Form/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="coverage-html" target="./coverage-report" charset="UTF-8"
+             yui="true" highlight="true" lowUpperBound="50"
+             highLowerBound="80"/>
+    </logging>
+</phpunit>

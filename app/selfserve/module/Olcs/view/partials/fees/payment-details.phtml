@@ -1,0 +1,26 @@
+<?php echo $this->render(
+    'partials/read-only/main',
+    [
+        'header' => 'pay-fees.success.header',
+        'multiItems' => [
+            [
+                [
+                    'label' => 'pay-fees.success.operator-name',
+                    'value' => $operatorName,
+                ],
+                [
+                    'label' => 'pay-fees.success.payment-reference',
+                    'value' => $payment['id'],
+                ],
+                [
+                    'label' => 'pay-fees.success.received',
+                    'date' => $payment['completedDate'],
+                ],
+                [
+                    'label' => 'pay-fees.success.amount',
+                    'date' => $payment['amount'],
+                ],
+            ],
+          ],
+      ]
+);?>

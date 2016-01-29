@@ -1,0 +1,67 @@
+<div class="read-only">
+    <div class="read-only__header">
+        <h4 id="licence-details" class="read-only__title">
+            <?php echo $this->translate(
+                    'search-result-section-header-licence-details'
+                ) . ' (' . $this->escapeHtml($this->result['licNo']) . ')';
+            ?></h4>
+    </div><!-- read-only__header -->
+    <?php
+        echo $this->partial('partials/entity-view/anonymous-licence-details');
+    ?>
+</div>
+
+<div class="read-only">
+    <div class="read-only__header">
+        <h4 id="contact-details" class="read-only__title"><?php echo $this->translate
+            ('search-result-section-header-contact-details');?></h4>
+    </div><!-- read-only__header -->
+    <?php
+        echo $this->partial('partials/entity-view/anonymous-contact-details');
+    ?>
+</div>
+
+<div class="read-only">
+    <div class="read-only__header">
+        <h4 id="operating-centres" class="read-only__title"><?php echo $this->translate
+            ('search-result-section-header-operating-centres'); ?></h4>
+    </div>
+    <!-- read-only__header -->
+    <?php
+    echo $operatingCentresTable;
+    ?>
+</div>
+
+<?php
+if (!empty($transportManagerTable)) {
+    ?>
+    <div class="read-only">
+        <div class="read-only__header">
+            <h4 id="transport-managers" class="read-only__title"><?php echo $this->translate
+                ('search-result-section-header-transport-managers'); ?></h4>
+        </div>
+        <!-- read-only__header -->
+        <?php
+        echo $transportManagerTable;
+        ?>
+    </div>
+    <?php
+}
+?>
+
+<?php
+if (!empty($relatedOperatorLicencesTable)) {
+    ?>
+    <div class="read-only">
+        <div class="read-only__header">
+            <h4 id="related-operator-licences" class="read-only__title"><?php echo $this->translate
+                ('search-result-section-header-related-operator-licences'); ?></h4>
+        </div>
+        <!-- read-only__header -->
+        <?php
+        echo $relatedOperatorLicencesTable;
+        ?>
+    </div>
+    <?php
+}
+?>

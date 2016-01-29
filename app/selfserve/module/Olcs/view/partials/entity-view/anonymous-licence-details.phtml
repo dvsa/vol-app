@@ -1,0 +1,69 @@
+<?php
+$items = [];
+
+if (!empty($this->result['tradingNames'])) {
+    for($i = 0; $i<count($this->result['tradingNames']);$i++) {
+        $label = ($i == 0) ? 'search-result-label-trading-names' : '';
+        $tradingNamesList[] = [
+            'label' => $label,
+            'value' => $this->result['tradingNames'][$i]
+        ];
+    }
+} else {
+    $tradingNamesList[] = [
+        'label' => 'search-result-label-trading-names',
+        'value' => ''
+    ];
+}
+$items[] = $tradingNamesList;
+
+switch($this->result['organisation']['type']['id']) {
+    case $this->registeredCompanyType:
+        $items[] = $this->generatePeopleList($this->result['people'], 'search-result-label-directors');
+        break;
+    case $this->partnershipCompanyType:
+        $items[] = $this->generatePeopleList($this->result['people'], 'search-result-label-partners');
+        break;
+    case $this->otherCompanyType:
+        $items[] = $this->generatePeopleList($this->result['people'], 'search-result-label-responsible-people');
+        break;
+    default:
+        $items[] = $this->generatePeopleList($this->result['people'], 'search-result-label-people');
+        break;
+}
+
+
+$businessType = isset($this->result['organisation']['type']['id']) ?
+    $this->result['organisation']['type']['description'] : '';
+$licenceType = isset($this->result['licenceType']['description']) ? $this->result['licenceType']['description'] : '';
+$licenceStatus = isset($this->result['status']['description']) ? $this->result['status']['description'] : '';
+$continuationDate = isset($this->result['expiryDate']) ? $this->result['expiryDate'] : '';
+$trafficArea = isset($this->result['trafficArea']['name']) ? $this->result['trafficArea']['name'] : '';
+
+echo $this->render('partials/read-only/main',
+    [
+        'multiItems' =>
+            array_merge(
+                [
+                    0 => [
+                        ['label' => 'search-result-label-business-type', 'value' => $businessType],
+                    ]
+                ],
+                $items,
+                [
+                    3 => [
+                        ['label' => 'search-result-label-licence-type', 'value' => $licenceType],
+                        ['label' => 'search-result-label-licence-status', 'value' => $licenceStatus],
+                        [
+                            'label' => 'search-result-label-continuation-date',
+                            'dateFormat' => 'Y-m-d',
+                            'date' => $continuationDate
+                        ]
+                    ],
+                    4 => [
+                        ['label' => 'search-result-label-traffic-area', 'value' => $trafficArea],
+                    ]
+                ]
+            )
+    ]
+);

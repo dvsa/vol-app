@@ -1,21 +1,12 @@
 <?php
-return array(
-    'service_api_mapping' => array(
-        array(
-            'endpoint' => 'http://olcspayment.dev/api/',
-            'apis' => array(
-                'Vosa\Payment\Token' => 'token',
-                'Vosa\Payment\Db' => 'paymentdb',
-                'Vosa\Payment\Card' => 'cardpayment',
-            ),
-        ),
-        array(
-            'endpoint' => 'http://olcs-backend/',
-            'apis' => array(
-                'User' => 'user',
-                'Person' => 'person',
-            )
-        )
-    )
-);
 
+return [
+    'application-name' => 'selfserve',
+    'cqrs_client' => [
+        'adapter' => \Zend\Http\Client\Adapter\Curl::class,
+        'timeout' => 60,
+    ],
+    'form_row' => [
+        'render_date_hint' => true
+    ],
+];
