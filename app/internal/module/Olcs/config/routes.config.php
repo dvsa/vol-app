@@ -812,20 +812,6 @@ $routes = [
                     ]
                 ],
             ],
-            'sla-target' => [
-                'type' => 'segment',
-                'options' => [
-                    'route' => 'sla-target/:doc[/]',
-                    'constraints' => [
-                        'doc' => '[0-9]+',
-                        'action' => '(add|edit)'
-                    ],
-                    'defaults' => [
-                        'controller' => 'SlaTargetController',
-                        'action' => 'add'
-                    ]
-                ],
-            ],
             'entity' => [
                 'type' => 'segment',
                 'options' => [
@@ -2295,7 +2281,21 @@ $routes = [
                 'action' => 'index'
             ]
         ]
-    ]
+    ],
+    'sla-target' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/sla-target/:action/:entityType/:entityId[/:slaId]',
+            'constraints' => [
+                'entityId' => '[0-9]+',
+                'entityType' => '(document)',
+                'action' => '(add|edit)'
+            ],
+            'defaults' => [
+                'controller' => 'SlaTargetDateController'
+            ]
+        ],
+    ],
 ];
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
