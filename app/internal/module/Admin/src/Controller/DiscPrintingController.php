@@ -21,6 +21,7 @@ use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionControlle
 use Common\Controller\Traits\GenericRenderView;
 use Common\Controller\Traits\GenericMethods;
 use Olcs\Controller\Interfaces\LeftViewProvider;
+use Common\Util\FlashMessengerTrait;
 
 /**
  * Disc Printing Controller
@@ -30,7 +31,8 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 class DiscPrintingController extends ZendAbstractActionController implements LeftViewProvider
 {
     use GenericRenderView,
-        GenericMethods;
+        GenericMethods,
+        FlashMessengerTrait;
 
     /**
      * Discs on page
