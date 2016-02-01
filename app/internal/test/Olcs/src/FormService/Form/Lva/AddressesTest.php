@@ -73,6 +73,11 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
             ->twice()
             ->getMock();
 
+        $this->formHelper
+            ->shouldReceive('remove')
+            ->with($mockForm, 'contact->phone-validator')
+            ->once();
+
         $form = $this->sut->getForm('ltyp_sn');
 
         $this->assertSame($mockForm, $form);
