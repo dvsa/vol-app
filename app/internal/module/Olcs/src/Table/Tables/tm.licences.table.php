@@ -28,8 +28,8 @@ return array(
                 $routeParams = ['id' => $row['id'], 'action' => 'edit-tm-licence'];
                 $url = $this->generateUrl($routeParams);
                 return '<a href="' . $url . '">' .
-                ($row['tmType']['description'] ? $row['tmType']['description'] : 'Not set') .
-                '</a>';
+                ((isset($row['tmType']['description']) && $row['tmType']['description']) ?
+                    $row['tmType']['description'] : 'Not set') . '</a>';
             },
         ),
         array(
