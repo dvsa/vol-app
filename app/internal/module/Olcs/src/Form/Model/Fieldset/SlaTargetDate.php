@@ -10,6 +10,15 @@ use Zend\Form\Annotation as Form;
  */
 class SlaTargetDate extends Base
 {
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"entityTypeHtml", "required": false})
+     * @Form\Options({
+     *     "label": "Entity type:",
+     * })
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $entityTypeHtml;
 
     /**
      * @Form\Options({

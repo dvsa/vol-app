@@ -9,6 +9,7 @@ namespace Olcs\Controller\Sla;
 
 use Dvsa\Olcs\Transfer\Command\Sla\CreateSlaTargetDate as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Sla\UpdateSlaTargetDate as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Sla\SlaTargetDate as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Data\Mapper\SlaTargetDate as Mapper;
 use Olcs\Form\Model\Form\SlaTargetDate as Form;
@@ -36,7 +37,7 @@ class SlaTargetDateController extends AbstractInternalController
      */
     protected $itemDto = ItemDto::class;
     // 'id' => 'complaint', to => from
-    protected $itemParams = ['id' => 'SlaId'];
+    protected $itemParams = ['entityId', 'entityType'];
 
     /**
      * Variables for controlling edit view rendering
@@ -46,8 +47,8 @@ class SlaTargetDateController extends AbstractInternalController
     protected $formClass = Form::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
-    protected $addContentTitle = 'Add Sla Date';
-    protected $editContentTitle = 'Edit SlaDate';
+    protected $addContentTitle = 'Add Sla Target Date';
+    protected $editContentTitle = 'Edit Sla Target Date';
 
     /**
      * Variables for controlling edit view rendering
@@ -91,4 +92,36 @@ class SlaTargetDateController extends AbstractInternalController
     protected $inlineScripts = array(
         'indexAction' => ['table-actions']
     );
+
+    /**
+     * Method to alter the form to indicate the type and ID of the entity for which the SLA Date is to be applied
+     *
+     * @param $form
+     * @param $formData
+     * @return mixed
+     */
+    protected function alterFormForEdit($form, $formData)
+    {
+        $form->get('fields')
+            ->get('entityTypeHtml')
+            ->setValue(ucfirst($formData['entityType']) . ' ' . $formData['entityId']);
+
+        return $form;
+    }
+
+    /**
+     * Method to alter the form based on status
+     *
+     * @param $form
+     * @param $formData
+     * @return mixed
+     */
+    protected function alterFormForAdd($form, $formData)
+    {
+        $form->get('fields')
+            ->get('entityTypeHtml')
+            ->setValue(ucfirst($formData['fields']['entityType']) . ' ' . $formData['fields']['entityId']);
+
+        return $form;
+    }
 }
