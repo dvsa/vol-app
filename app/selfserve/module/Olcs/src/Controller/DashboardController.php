@@ -88,7 +88,15 @@ class DashboardController extends AbstractController
         $userId = $this->currentUser()->getUserData()['id'];
 
         $response = $this->handleQuery(
-            \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(['user' => $userId])
+            \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(
+                [
+                    'user' => $userId,
+                    'appStatuses' => [
+                        RefData::APPLICATION_STATUS_UNDER_CONSIDERATION,
+                        RefData::APPLICATION_STATUS_NOT_SUBMITTED
+                    ]
+                ]
+            )
         );
         $results = $response->getResult()['results'];
 
