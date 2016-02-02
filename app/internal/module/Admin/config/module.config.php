@@ -239,13 +239,13 @@ return [
                     'admin-printer-management' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => 'user-management/printers[/:action][/:printer][/]',
+                            'route' => 'printing/printers[/:action][/:printer][/]',
                             'constraints' => [
                                 'user' => '[0-9]+',
                                 'action' => '(index|add|edit|delete)'
                             ],
                             'defaults' => [
-                                'controller' => 'Admin\PrintersController',
+                                'controller' => 'Admin\PrintingController',
                                 'action' => 'index'
                             ]
                         ]
