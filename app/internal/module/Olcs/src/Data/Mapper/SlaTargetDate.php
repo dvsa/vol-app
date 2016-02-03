@@ -43,6 +43,7 @@ class SlaTargetDate implements MapperInterface
     public static function mapFromForm(array $data)
     {
         unset($data['fields']['entityTypeHtml']);
+
         return $data['fields'];
     }
 

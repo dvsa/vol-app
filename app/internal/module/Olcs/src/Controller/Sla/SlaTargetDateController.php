@@ -93,6 +93,17 @@ class SlaTargetDateController extends AbstractInternalController
         'indexAction' => ['table-actions']
     );
 
+    protected $redirectConfig = [
+        'add' => [
+            'route' => 'case_licence_docs_attachments',
+            'action' => 'documents'
+        ],
+        'edit' => [
+            'route' => 'case_licence_docs_attachments',
+            'action' => 'documents'
+        ]
+    ];
+
     /**
      * Method to alter the form to indicate the type and ID of the entity for which the SLA Date is to be applied
      *
