@@ -121,7 +121,10 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $mockMarkerService->shouldReceive('addData')
             ->with('transportManager', array('result'=>'TM', 'results'=>'TM'))->once();
 
-        $this->mockQuery(['user' => null, 'application' => null, 'transportManager' => 12], 'TMAs');
+        $this->mockQuery(
+            ['user' => null, 'application' => null, 'transportManager' => 12, 'appStatuses' => null],
+            'TMAs'
+        );
         $mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
 
         $this->mockQuery(['licence' => null, 'transportManager' => 12], 'TMLs');
@@ -200,7 +203,10 @@ class TransportManagerMarkerTest extends MockeryTestCase
 
         $this->sut->setApplicationService($mockApplicationService);
 
-        $this->mockQuery(['user' => null, 'application' => 534, 'transportManager' => null], 'TMAs');
+        $this->mockQuery(
+            ['user' => null, 'application' => 534, 'transportManager' => null, 'appStatuses' => null],
+            'TMAs'
+        );
         $mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
         $mockMarkerService->shouldReceive('addData')->with('page', 'transportManagerApplication')->once();
 
@@ -240,7 +246,10 @@ class TransportManagerMarkerTest extends MockeryTestCase
 
         $this->sut->setApplicationService($mockApplicationService);
 
-        $this->mockQuery(['user' => null, 'application' => 534, 'transportManager' => null], 'TMAs');
+        $this->mockQuery(
+            ['user' => null, 'application' => 534, 'transportManager' => null, 'appStatuses' => null],
+            'TMAs'
+        );
         $mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
 
         $this->mockQuery(['variation' => 534], 'TMAs1');
@@ -262,7 +271,10 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
         $this->sut->setMarkerService($mockMarkerService);
 
-        $this->mockQuery(['user' => null, 'application' => 534, 'transportManager' => null], false);
+        $this->mockQuery(
+            ['user' => null, 'application' => 534, 'transportManager' => null, 'appStatuses' => null],
+            false
+        );
 
         $event = new RouteParam();
         $event->setValue(534);
@@ -300,7 +312,10 @@ class TransportManagerMarkerTest extends MockeryTestCase
 
         $this->sut->setApplicationService($mockApplicationService);
 
-        $this->mockQuery(['user' => null, 'application' => 534, 'transportManager' => null], 'TMAs');
+        $this->mockQuery(
+            ['user' => null, 'application' => 534, 'transportManager' => null, 'appStatuses' => null],
+            'TMAs'
+        );
         $mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
 
         $this->mockQuery(['variation' => 534], false);
