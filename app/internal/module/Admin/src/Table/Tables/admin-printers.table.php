@@ -27,8 +27,8 @@ return array(
             'name' => 'printerName',
             'sort' => 'printerName',
             'formatter' => function ($row) {
-                $routeParams = ['team' => $row['id'], 'action' => 'edit'];
-                $route = 'admin-dashboard/admin-printer-management';
+                $routeParams = ['printer' => $row['id'], 'action' => 'edit'];
+                $route = 'admin-dashboard/admin-printing/admin-printer-management';
                 $url = $this->generateUrl($routeParams, $route);
                 return '<a href="'. $url . '" class="js-modal-ajax">' . $row['printerName'] .'</a>';
             },

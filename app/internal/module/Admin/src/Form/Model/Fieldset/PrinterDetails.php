@@ -29,6 +29,7 @@ class PrinterDetails
      * @Form\Attributes({"placeholder":"","class":"medium"})
      * @Form\Options({"label":"Tray"})
      * @Form\Type("Text")
+     * @Form\Required(false)
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":45}})
      */
@@ -38,6 +39,7 @@ class PrinterDetails
      * @Form\Attributes({"placeholder":"","class":"medium"})
      * @Form\Options({"label":"Description"})
      * @Form\Type("Text")
+     * @Form\Required(false)
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
      */

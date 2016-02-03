@@ -18,6 +18,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\Printer as PrinterMapper;
 use Admin\Form\Model\Form\Printer as PrinterForm;
 use Zend\View\Model\ViewModel;
+use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 
 /**
  * Printing Controller
@@ -45,7 +46,7 @@ class PrintingController extends AbstractInternalController implements LeftViewP
 
     // add/edit
     protected $itemDto = ItemDto::class;
-    protected $itemParams = ['id' => 'team'];
+    protected $itemParams = ['id' => 'printer'];
     protected $formClass = PrinterForm::class;
     protected $addFormClass = PrinterForm::class;
     protected $mapperClass = PrinterMapper::class;
@@ -98,5 +99,59 @@ class PrintingController extends AbstractInternalController implements LeftViewP
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         $formHelper->remove($form, 'form-actions->addAnother');
         return $form;
+    }
+
+    /**
+     * Specifically for navigation.
+     *
+     * @return \Zend\Http\Response
+     */
+    public function jumpAction()
+    {
+        return $this->redirect()->toRoute(
+            'admin-dashboard/admin-printing/admin-printer-management', [], ['code' => 303]
+        );
+    }
+
+    public function deleteAction()
+    {
+        // validate if we can remove the team
+        $deleteCommand = $this->deleteCommand;
+        $params = $this->prepareParams(['validate' => true]);
+        $response = $this->handleCommand($deleteCommand::create($params));
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+        $result = $response->getResult();
+        // can't remove the printer - display error messages
+        if (isset($result['messages']) && $response->isClientError()) {
+            $message = implode('<br />', $result['messages']);
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($message);
+        } elseif ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        // it's possible to remove the printer, now need to confirm it
+        if ($response->isOk()) {
+            return $this->confirmCommand(
+                new ConfirmItem($this->deleteParams, $this->hasMultiDelete),
+                $this->deleteCommand,
+                $this->deleteModalTitle,
+                $this->deleteConfirmMessage,
+                $this->deleteSuccessMessage
+            );
+        }
+        return $this->redirectTo($response->getResult());
+    }
+
+    protected function prepareParams($defaultParams = [])
+    {
+        $paramProvider = new ConfirmItem($this->deleteParams, $this->hasMultiDelete);
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
+        if (isset($defaultParams['validate'])) {
+            $params['validate'] = $defaultParams['validate'];
+        }
+        return $params;
     }
 }

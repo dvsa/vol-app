@@ -38,7 +38,7 @@ return [
                         [
                             'id' => 'admin-dashboard/admin-printing/admin-printer-management',
                             'label' => 'Printers',
-                            'route' => 'admin-dashboard/admin-printer-management',
+                            'route' => 'admin-dashboard/admin-printing/admin-printer-management',
                         ],
                         [
                             'label' => 'Disc Printing',
