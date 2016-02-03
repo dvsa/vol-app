@@ -67,6 +67,22 @@ class SlaTargetDate extends Base
     public $targetDate = null;
 
     /**
+     * @Form\Type("Radio")
+     * @Form\Options({
+     *      "label": "Under delegation?",
+     *      "value_options":{
+     *          "N":"No",
+     *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
+     *      }
+     * })
+     * @Form\Attributes({"value": "N"})
+     */
+    public $underDelegation;
+
+    /**
      * @Form\Attributes({"class":"extra-long","id":""})
      * @Form\Options({"label":"Notes"})
      * @Form\Required(false)
