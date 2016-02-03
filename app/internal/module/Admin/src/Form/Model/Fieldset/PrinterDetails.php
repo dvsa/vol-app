@@ -44,5 +44,4 @@ class PrinterDetails
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
      */
     public $description = null;
-
 }

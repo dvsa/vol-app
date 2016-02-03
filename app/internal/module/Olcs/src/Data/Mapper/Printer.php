@@ -59,7 +59,7 @@ class Printer implements MapperInterface
             unset($errors['messages']['printerName']);
         }
         if (isset($errors['messages']['printerTray'])) {
-            $messages['printe-details']['printerTray'] = $errors['messages']['printerTray'];
+            $messages['printer-details']['printerTray'] = $errors['messages']['printerTray'];
             unset($errors['messages']['printerTray']);
         }
         if (isset($errors['messages']['description'])) {
