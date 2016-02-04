@@ -320,7 +320,7 @@ return array(
             'OperatorReadHistoryController' => 'Olcs\Controller\Operator\Processing\ReadHistoryController',
             'ContinuationController' => 'Olcs\Controller\Licence\ContinuationController',
             Olcs\Controller\DisqualifyController::class => Olcs\Controller\DisqualifyController::class,
-            'SlaTargetDateController' => 'Olcs\Controller\Sla\SlaTargetDateController'
+            'DocumentSlaTargetDateController' => 'Olcs\Controller\Sla\DocumentSlaTargetDateController'
         ),
     ),
     'controller_plugins' => array(

@@ -16,11 +16,11 @@ use Olcs\Form\Model\Form\SlaTargetDate as Form;
 use Zend\View\Model\ViewModel;
 
 /**
- * SLA Date Controller
+ * Abstract SLA Date Controller
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class SlaTargetDateController extends AbstractInternalController
+abstract class AbstractSlaTargetDateController extends AbstractInternalController
 {
     /**
      * Holds the navigation ID,
@@ -93,17 +93,6 @@ class SlaTargetDateController extends AbstractInternalController
         'indexAction' => ['table-actions']
     );
 
-    protected $redirectConfig = [
-        'add' => [
-            'route' => 'case_licence_docs_attachments',
-            'action' => 'documents'
-        ],
-        'edit' => [
-            'route' => 'case_licence_docs_attachments',
-            'action' => 'documents'
-        ]
-    ];
-
     /**
      * Method to alter the form to indicate the type and ID of the entity for which the SLA Date is to be applied
      *
@@ -111,13 +100,9 @@ class SlaTargetDateController extends AbstractInternalController
      * @param $formData
      * @return mixed
      */
-    protected function alterFormForEdit($form, $formData)
+    protected function alterFormForEditSla($form, $formData)
     {
-        $form->get('fields')
-            ->get('entityTypeHtml')
-            ->setValue(ucfirst($formData['entityType']) . ' ' . $formData['entityId']);
-
-        return $form;
+        return $this->setEntityTypeHtml($form, $formData);
     }
 
     /**
@@ -127,12 +112,39 @@ class SlaTargetDateController extends AbstractInternalController
      * @param $formData
      * @return mixed
      */
-    protected function alterFormForAdd($form, $formData)
+    protected function alterFormForAddSla($form, $formData)
+    {
+        return $this->setEntityTypeHtml($form, $formData);
+    }
+
+    /**
+     * Sets the entity type and ID Html
+     *
+     * @param $form
+     * @param $formData
+     * @return mixed
+     */
+    private function setEntityTypeHtml($form, $formData)
     {
         $form->get('fields')
             ->get('entityTypeHtml')
             ->setValue(ucfirst($formData['fields']['entityType']) . ' ' . $formData['fields']['entityId']);
 
         return $form;
+    }
+
+    protected function getEntityType()
+    {
+        return $this->entityType;
+    }
+
+    public function addSlaAction()
+    {
+        return parent::addAction();
+    }
+
+    public function editSlaAction()
+    {
+        return parent::editAction();
     }
 }

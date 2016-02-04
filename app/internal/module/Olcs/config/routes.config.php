@@ -757,6 +757,36 @@ $routes = [
         ],
         'may_terminate' => true,
         'child_routes' => [
+            'add-sla' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'add-sla/:entityType/:entityId',
+                    'constraints' => [
+                        'entityId' => '[0-9]+',
+                        'entityType' => '(document)',
+                    ],
+                    'defaults' => [
+                        'type' => 'case',
+                        'controller' => 'DocumentSlaTargetDateController',
+                        'action' => 'addSla'
+                    ]
+                ],
+            ],
+            'edit-sla' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'edit-sla/:entityType/:entityId',
+                    'constraints' => [
+                        'entityId' => '[0-9]+',
+                        'entityType' => '(document)',
+                    ],
+                    'defaults' => [
+                        'type' => 'case',
+                        'controller' => 'DocumentSlaTargetDateController',
+                        'action' => 'editSla'
+                    ]
+                ],
+            ],
             'generate' => [
                 'type' => 'segment',
                 'options' => [
@@ -2281,21 +2311,7 @@ $routes = [
                 'action' => 'index'
             ]
         ]
-    ],
-    'sla-target' => [
-        'type' => 'segment',
-        'options' => [
-            'route' => '/sla-target/:action/:entityType/:entityId[/:slaId]',
-            'constraints' => [
-                'entityId' => '[0-9]+',
-                'entityType' => '(document)',
-                'action' => '(add|edit)'
-            ],
-            'defaults' => [
-                'controller' => 'SlaTargetDateController'
-            ]
-        ],
-    ],
+    ]
 ];
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
