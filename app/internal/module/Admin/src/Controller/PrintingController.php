@@ -88,12 +88,6 @@ class PrintingController extends AbstractInternalController implements LeftViewP
         return $view;
     }
 
-    protected function setNavigationId($id)
-    {
-        $this->getServiceLocator()->get('viewHelperManager')->get('placeholder')
-            ->getContainer('navigationId')->set($id);
-    }
-
     protected function alterFormForEdit($form)
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
