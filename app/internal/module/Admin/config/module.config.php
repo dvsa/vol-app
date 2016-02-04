@@ -30,7 +30,7 @@ return [
                             'route' => 'printing[/]',
                             'defaults' => [
                                 'controller' => 'Admin\PrintingController',
-                                'action' => 'index',
+                                'action' => 'jump',
                             ]
                         ],
                         'may_terminate' => true,
@@ -48,7 +48,21 @@ return [
                                         'action' => 'index'
                                     ]
                                 ]
-                            ]
+                            ],
+                            'admin-printer-management' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'printers[/:action][/:printer][/]',
+                                    'constraints' => [
+                                        'user' => '[0-9]+',
+                                        'action' => '(index|add|edit|delete)'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => 'Admin\PrintingController',
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ],
                         ]
                     ],
                     'admin-publication' => [
@@ -232,20 +246,6 @@ return [
                             ],
                             'defaults' => [
                                 'controller' => 'Admin\TeamsController',
-                                'action' => 'index'
-                            ]
-                        ]
-                    ],
-                    'admin-printer-management' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => 'user-management/printers[/:action][/:printer][/]',
-                            'constraints' => [
-                                'user' => '[0-9]+',
-                                'action' => '(index|add|edit|delete)'
-                            ],
-                            'defaults' => [
-                                'controller' => 'Admin\PrintersController',
                                 'action' => 'index'
                             ]
                         ]

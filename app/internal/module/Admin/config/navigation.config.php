@@ -24,11 +24,6 @@ return [
                             'route' => 'admin-dashboard/admin-team-management',
                         ],
                         [
-                            'id' => 'admin-dashboard/admin-printer-management',
-                            'label' => 'Printers',
-                            'route' => 'admin-dashboard/admin-printer-management',
-                        ],
-                        [
                             'id' => 'admin-dashboard/admin-partner-management',
                             'label' => 'Partner organisations',
                             'route' => 'admin-dashboard/admin-partner-management',
@@ -40,6 +35,11 @@ return [
                     'label' => 'Printing',
                     'route' => 'admin-dashboard/admin-printing',
                     'pages' => [
+                        [
+                            'id' => 'admin-dashboard/admin-printing/admin-printer-management',
+                            'label' => 'Printers',
+                            'route' => 'admin-dashboard/admin-printing/admin-printer-management',
+                        ],
                         [
                             'label' => 'Disc Printing',
                             'route' => 'admin-dashboard/admin-disc-printing',
