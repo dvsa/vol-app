@@ -21,6 +21,16 @@ class SlaTargetDate extends Base
     public $entityTypeHtml;
 
     /**
+     * @Form\Type("Hidden")
+     */
+    public $entityId = null;
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $entityType = null;
+
+    /**
      * @Form\Options({
      *     "label": "Agreed date",
      *     "create_empty_option": false,

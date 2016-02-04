@@ -27,8 +27,8 @@ class SlaTargetDate implements MapperInterface
         }
 
         if (isset($data['document'])) {
-            $formData['entityId'] = $data['document']['id'];
-            $formData['entityType'] = 'document';
+            $formData['fields']['entityType'] = 'document';
+            $formData['fields']['entityId'] = $data['document']['id'];
         }
 
         return $formData;
