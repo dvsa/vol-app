@@ -768,7 +768,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git",
-                "reference": "b78fe96bb379fc9747dd626d6485ba6941665577"
+                "reference": "6c4310b0e726ec3ac8c4779558cb1ac465c3d4fa"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -799,7 +799,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2016-01-27 17:19:27"
+            "time": "2016-02-03 16:46:47"
         },
         {
             "name": "olcs/autoload",
@@ -822,7 +822,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-auth.git",
-                "reference": "3d55179b922b5491a6f654f477e4a6bf25fdeb0c"
+                "reference": "78b533dcab6608366142c074cd481289e298a7f2"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -841,7 +841,7 @@
                 }
             },
             "description": "OLCS Authentication",
-            "time": "2016-01-11 16:04:54"
+            "time": "2016-02-04 09:49:41"
         },
         {
             "name": "olcs/olcs-logging",
@@ -882,7 +882,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-transfer.git",
-                "reference": "381b64cc3dd48fbbffe51b143f0fd5456e1804bf"
+                "reference": "b73603bb815d64eae5bd43a76a95fa17947b610b"
             },
             "require": {
                 "php": ">=5.4",
@@ -900,7 +900,7 @@
                 }
             },
             "description": "OLCS Transfer",
-            "time": "2016-01-27 12:41:05"
+            "time": "2016-02-04 11:39:27"
         },
         {
             "name": "olcs/olcs-utils",
@@ -1958,17 +1958,17 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.21",
+            "version": "4.8.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "ea76b17bced0500a28098626b84eda12dbcf119c"
+                "reference": "dfb11aa5236376b4fc63853cf746af39fe780e72"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-phpunit-ea76b17bced0500a28098626b84eda12dbcf119c-zip-19ad2f.tar",
-                "reference": "ea76b17bced0500a28098626b84eda12dbcf119c",
-                "shasum": "f0fd27b2aba1d049ed0e2425807bce6196efeab4"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-phpunit-dfb11aa5236376b4fc63853cf746af39fe780e72-zip-ae430b.tar",
+                "reference": "dfb11aa5236376b4fc63853cf746af39fe780e72",
+                "shasum": "2520a887427e6d6e1ddd30b4ddf753b2249f518e"
             },
             "require": {
                 "ext-dom": "*",
@@ -2026,7 +2026,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-12-12 07:45:58"
+            "time": "2016-02-02 09:01:21"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
