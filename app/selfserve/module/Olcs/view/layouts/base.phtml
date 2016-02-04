@@ -16,7 +16,7 @@
     <?php echo $this->version(); ?>
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
-    <div role="banner" class="global-header">
+    <header role="banner" class="global-header">
       <div class="global-header__wrapper">
         <a href="/" title="Go to dashboard" class="global-header__logo">
           <img src="<?php echo $this->assetPath('/images/bitmap/gov.uk_logotype_crown.png') ?>" alt="GOV.UK logo">GOV.UK
@@ -42,8 +42,8 @@
             echo $menu->setUlClass('proposition-nav');
             ?>
         </div>
-      </div><!-- end .global-header__wrapper -->
-    </div><!-- end .global-header -->
+      </div>
+    </header><!-- .global-header -->
 
     <?php
 
