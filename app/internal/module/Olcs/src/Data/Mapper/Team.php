@@ -27,6 +27,16 @@ class Team implements MapperInterface
         $formData = [
             'team-details' => $data
         ];
+        if (count($data['teamPrinters'])) {
+            $defaultPrinter = null;
+            foreach ($data['teamPrinters'] as $tp) {
+                if (isset($tp['printer']) && !$tp['user'] && !$tp['subCategory']) {
+                    $defaultPrinter = $tp['printer'];
+                    break;
+                }
+            }
+            $formData['team-details']['defaultPrinter'] = $defaultPrinter;
+        }
 
         return $formData;
     }

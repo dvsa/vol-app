@@ -36,13 +36,6 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
      */
     protected $navigationId = 'admin-dashboard/admin-team-management';
 
-    /**
-     * @var array
-     */
-    protected $inlineScripts = [
-        'indexAction' => ['table-actions'],
-    ];
-
     // list
     protected $tableName = 'admin-teams';
     protected $defaultTableSortField = 'name';
