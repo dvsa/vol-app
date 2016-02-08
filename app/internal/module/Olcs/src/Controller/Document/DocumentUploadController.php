@@ -9,6 +9,7 @@
  */
 namespace Olcs\Controller\Document;
 
+use Common\Util\FileContent;
 use Dvsa\Olcs\Transfer\Command\Document\CreateDocument;
 use Dvsa\Olcs\Transfer\Command\Document\Upload;
 use Zend\Form\Form;
@@ -73,7 +74,7 @@ class DocumentUploadController extends AbstractDocumentController
             $data,
             [
                 'filename'      => $files['file']['name'],
-                'content'       => base64_encode(file_get_contents($files['file']['tmp_name'])),
+                'content'       => new FileContent($files['file']['tmp_name']),
                 'description'   => $data['details']['description'],
                 'category'      => $data['details']['category'],
                 'subCategory'   => $data['details']['documentSubCategory'],
