@@ -23,6 +23,17 @@ class CaseDocsController extends CaseController implements LeftViewProvider
         ControllerTraits\DocumentSearchTrait;
 
     /**
+     * Table to use
+     *
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return string
+     */
+    protected function getDocumentTableName()
+    {
+        return 'documents-with-sla';
+    }
+
+    /**
      * Route (prefix) for document action redirects
      * @see Olcs\Controller\Traits\DocumentActionTrait
      * @return string
