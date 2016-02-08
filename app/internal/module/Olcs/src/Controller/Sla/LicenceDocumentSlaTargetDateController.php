@@ -11,21 +11,21 @@ use Olcs\Controller\Sla\AbstractSlaTargetDateController;
 use Zend\View\Model\ViewModel;
 
 /**
- * Abstract SLA Date Controller
+ * Abstract SLA Date Controller - Licence documents
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class DocumentSlaTargetDateController extends AbstractSlaTargetDateController
+class LicenceDocumentSlaTargetDateController extends AbstractSlaTargetDateController
 {
     protected $entityType = 'document';
 
     protected $redirectConfig = [
         'addsla' => [
-            'route' => 'case_licence_docs_attachments',
+            'route' => 'licence/documents',
             'action' => 'documents'
         ],
         'editsla' => [
-            'route' => 'case_licence_docs_attachments',
+            'route' => 'licence/documents',
             'action' => 'documents'
         ]
     ];
