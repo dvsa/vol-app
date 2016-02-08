@@ -7,9 +7,9 @@
  */
 namespace Olcs\Controller\Sla;
 
-use Dvsa\Olcs\Transfer\Command\Sla\CreateSlaTargetDate as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Sla\UpdateSlaTargetDate as UpdateDto;
-use Dvsa\Olcs\Transfer\Query\Sla\SlaTargetDate as ItemDto;
+use Dvsa\Olcs\Transfer\Command\System\CreateSlaTargetDate as CreateDto;
+use Dvsa\Olcs\Transfer\Command\System\UpdateSlaTargetDate as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\System\SlaTargetDate as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Data\Mapper\SlaTargetDate as Mapper;
 use Olcs\Form\Model\Form\SlaTargetDate as Form;
