@@ -766,8 +766,7 @@ $routes = [
                         'entityType' => '(document)',
                     ],
                     'defaults' => [
-                        'type' => 'case',
-                        'controller' => 'DocumentSlaTargetDateController',
+                        'controller' => 'CaseDocumentSlaTargetDateController',
                         'action' => 'addSla'
                     ]
                 ],
@@ -782,7 +781,7 @@ $routes = [
                     ],
                     'defaults' => [
                         'type' => 'case',
-                        'controller' => 'DocumentSlaTargetDateController',
+                        'controller' => 'CaseDocumentSlaTargetDateController',
                         'action' => 'editSla'
                     ]
                 ],
@@ -1409,6 +1408,35 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'add-sla' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'add-sla/:entityType/:entityId',
+                            'constraints' => [
+                                'entityId' => '[0-9]+',
+                                'entityType' => '(document)',
+                            ],
+                            'defaults' => [
+                                'controller' => 'LicenceDocumentSlaTargetDateController',
+                                'action' => 'addSla'
+                            ]
+                        ],
+                    ],
+                    'edit-sla' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'edit-sla/:entityType/:entityId',
+                            'constraints' => [
+                                'entityId' => '[0-9]+',
+                                'entityType' => '(document)',
+                            ],
+                            'defaults' => [
+                                'type' => 'case',
+                                'controller' => 'LicenceDocumentSlaTargetDateController',
+                                'action' => 'editSla'
+                            ]
+                        ],
+                    ],
                     'generate' => [
                         'type' => 'segment',
                         'options' => [
