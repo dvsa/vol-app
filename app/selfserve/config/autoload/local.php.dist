@@ -64,4 +64,27 @@ return [
             'error/index' => __DIR__ . '/../../module/Olcs/view/error/dev-index.phtml'
         ],
     ],
+    /**
+     * Configure the location of the application log
+     */
+    'log' => [
+        'Logger' => [
+            'writers' => [
+                'full' => [
+                    'options' => [
+                        'stream' => '/var/tmp/selfserve.log'
+                    ],
+                ]
+            ]
+        ],
+        'ExceptionLogger' => [
+            'writers' => [
+                'full' => [
+                    'options' => [
+                        'stream' => '/var/tmp/selfserve.log'
+                    ],
+                ]
+            ]
+        ]
+    ]
 ];
