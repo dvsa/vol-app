@@ -40,7 +40,6 @@ class SlaTargetDate extends Base
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $agreedDate = null;
 
@@ -57,6 +56,25 @@ class SlaTargetDate extends Base
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "agreedDate",
+     *          "context_values": {"--"},
+     *          "context_truth": false,
+     *          "allow_empty" : true,
+     *          "validators": {
+     *              {"name": "Date", "options": {"format": "Y-m-d"}},
+     *              {
+     *                  "name": "DateCompare",
+     *                  "options": {
+     *                      "compare_to":"agreedDate",
+     *                      "compare_to_label":"Agreed date",
+     *                      "operator": "gte",
+     *                  }
+     *              }
+     *          }
+     *      }
+     * })
      */
     public $sentDate = null;
 
@@ -72,7 +90,27 @@ class SlaTargetDate extends Base
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\Date "})
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "agreedDate",
+     *          "context_values": {"--"},
+     *          "context_truth": false,
+     *          "allow_empty" : true,
+     *          "validators": {
+     *              {"name": "Date", "options": {"format": "Y-m-d"}},
+     *              {
+     *                  "name": "DateCompareWithInterval",
+     *                  "options": {
+     *                      "compare_to":"agreedDate",
+     *                      "compare_to_label":"Agreed date",
+     *                      "interval_label":"5 working days",
+     *                      "date_interval":"P5D",
+     *                      "operator": "gt",
+     *                  }
+     *              }
+     *          }
+     *      }
+     * })
      */
     public $targetDate = null;
 
