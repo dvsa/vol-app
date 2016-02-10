@@ -410,7 +410,8 @@ return array(
         'aliases' => [
             'RouteParamsListener' => 'Olcs\Listener\RouteParams',
             'right-sidebar' => 'Olcs\Navigation\RightHandNavigation',
-            'HeaderSearchListener' => 'Olcs\Listener\HeaderSearch'
+            'HeaderSearchListener' => 'Olcs\Listener\HeaderSearch',
+            'NysiisService' => 'Olcs\Service\Data\Nysiis'
         ],
         'invokables' => [
             'ApplicationUtility' => 'Olcs\Service\Utility\ApplicationUtility',
@@ -461,7 +462,8 @@ return array(
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
             'Olcs\Service\Nr\RestHelper' => 'Olcs\Service\Nr\RestHelper',
-            'Olcs\Service\Data\SubmissionActionTypes' => 'Olcs\Service\Data\SubmissionActionTypes'
+            'Olcs\Service\Data\SubmissionActionTypes' => 'Olcs\Service\Data\SubmissionActionTypes',
+            'Olcs\Service\Data\Nysiis' => 'Olcs\Service\Data\NysiisFactory',
         )
     ),
     'form_elements' => [
@@ -474,6 +476,7 @@ return array(
             'Olcs\Form\Element\SearchDateRangeFieldset' => 'Olcs\Form\Element\SearchDateRangeFieldsetFactory'
         ],
         'aliases' => [
+
             'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect',
             'SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelect',
             'SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldset',

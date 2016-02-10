@@ -9,6 +9,7 @@ namespace Olcs\Controller\TransportManager;
 
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
+use Zend\Soap\Client as ZendSoapClient;
 
 /**
  * Transport Manager Controller
@@ -404,6 +405,10 @@ class TransportManagerController extends AbstractController implements Transport
 
     private function getNysiisData($tmData)
     {
+        echo phpinfo();exit;
+        $nysiisService = $this->getServiceLocator()->get('NysiisService');
+
+        exit;
         return [
             'nysiisForename' => $tmData['homeCd']['person']['forename'],
             'nysiisFamilyname' => $tmData['homeCd']['person']['familyName']
