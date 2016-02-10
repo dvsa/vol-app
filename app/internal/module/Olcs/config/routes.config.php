@@ -2293,6 +2293,16 @@ $routes = [
                     ],
                 ],
             ],
+            'nysiis-lookup' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'nysiis-lookup[/]',
+                    'defaults' => [
+                        'controller' => 'TMController',
+                        'action' => 'nysiisLookup'
+                    ],
+                ],
+            ],
         ],
     ],
     'transport-manager-lookup' => [

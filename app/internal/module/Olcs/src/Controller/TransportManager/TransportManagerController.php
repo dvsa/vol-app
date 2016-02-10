@@ -368,4 +368,45 @@ class TransportManagerController extends AbstractController implements Transport
 
         return $this->renderView($view, 'transport-manager-confirmation-remove-disqualification');
     }
+
+    /**
+     * Lookup the NYSIIS name for a transport manager
+     */
+    public function nysiisLookupAction()
+    {
+        $transportManagerId = (int) $this->params()->fromRoute('transportManager');
+        $tmData = $this->getTransportManager($transportManagerId);
+        if (!$tmData) {
+            return $this->notFoundAction();
+        }
+
+        $response = $this->handleCommand(
+            \Dvsa\Olcs\Transfer\Command\Tm\NysiisUpdate::create(
+                array_merge(
+                [
+                    'id' => $transportManagerId,
+                    'version' => $tmData['version']
+                ],
+                $this->getNysiisData($tmData)
+                )
+            )
+        );
+
+        if ($response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addSuccessMessage('form.tm-nysiis-update.success');
+            return $this->redirect()->toRouteAjax('transport-manager', ['transportManager' => $transportManagerId]);
+        } else {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+        return $this->redirect()->toRouteAjax('transport-manager', ['transportManager' => $transportManagerId]);
+    }
+
+    private function getNysiisData($tmData)
+    {
+        return [
+            'nysiisForename' => $tmData['homeCd']['person']['forename'],
+            'nysiisFamilyname' => $tmData['homeCd']['person']['familyName']
+        ];
+    }
 }

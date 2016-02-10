@@ -477,6 +477,13 @@ return array(
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
+                        array(
+                            'id' => 'transport-manager-quick-actions-nysiis-lookup',
+                            'label' => 'tm-quick-action-nysiis-lookup',
+                            'route' => 'transport-manager/nysiis-lookup',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
                     ),
                 ),
             ),
