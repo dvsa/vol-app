@@ -65,8 +65,6 @@ class PublicationController extends AbstractInternalController implements LeftVi
         return $this->processCommand(
             new GenericItem(['id' => 'id']),
             GenerateCmd::class,
-            false,
-            true,
             'Publication was generated, a new publication was also created'
         );
     }
