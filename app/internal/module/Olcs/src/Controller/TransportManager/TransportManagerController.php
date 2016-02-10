@@ -206,6 +206,7 @@ class TransportManagerController extends AbstractController implements Transport
         if ($response->isNotFound()) {
             return null;
         }
+
         if (!$response->isOk()) {
             throw new \RuntimeException('Error getting TransportManager');
         }
@@ -405,10 +406,8 @@ class TransportManagerController extends AbstractController implements Transport
 
     private function getNysiisData($tmData)
     {
-        echo phpinfo();exit;
         $nysiisService = $this->getServiceLocator()->get('NysiisService');
 
-        exit;
         return [
             'nysiisForename' => $tmData['homeCd']['person']['forename'],
             'nysiisFamilyname' => $tmData['homeCd']['person']['familyName']

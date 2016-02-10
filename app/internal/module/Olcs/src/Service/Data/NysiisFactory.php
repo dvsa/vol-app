@@ -25,8 +25,6 @@ class NysiisFactory implements FactoryInterface
 
         $wsdl = file_get_contents($config['nysiis']['wsdl']['uri']);
 
-        $soapClient = false;
-
         try {
             $soapClient = new SoapClient(
                 $wsdl,
