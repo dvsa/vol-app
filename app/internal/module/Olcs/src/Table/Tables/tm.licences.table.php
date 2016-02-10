@@ -22,12 +22,14 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'Manager Type',
+            'title' => 'Manager type',
             'name' => 'tmType',
             'formatter' => function ($row) {
                 $routeParams = ['id' => $row['id'], 'action' => 'edit-tm-licence'];
                 $url = $this->generateUrl($routeParams);
-                return '<a href="' . $url . '">' . $row['tmType']['description'] . '</a>';
+                return '<a href="' . $url . '">' .
+                ((isset($row['tmType']['description']) && $row['tmType']['description']) ?
+                    $row['tmType']['description'] : 'Not set') . '</a>';
             },
         ),
         array(

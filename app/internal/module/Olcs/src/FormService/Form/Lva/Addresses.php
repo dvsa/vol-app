@@ -23,6 +23,7 @@ class Addresses extends CommonAddresses
         $form->get('form-actions')->get('save')->setLabel('internal.save.button');
         $form->getInputFilter()->get('contact')->get('email')->setRequired(false);
         $form->getInputFilter()->get('contact')->get('email')->setAllowEmpty(true);
+        $this->getFormHelper()->remove($form, 'contact->phone-validator');
 
         return $form;
     }
