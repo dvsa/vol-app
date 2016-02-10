@@ -746,7 +746,7 @@ $busRegNav = array(
 
 $searchNavigation = array(
     'id' => 'search',
-    'label' => 'Search',
+    'label' => 'search',
     'route' => 'search',
     'class' => 'proposition-nav__item',
     'pages' => array(
@@ -1002,7 +1002,7 @@ return array(
                     ),
                     array(
                         'id' => 'selfserve-topnav-search',
-                        'label' => 'Search',
+                        'label' => 'search',
                         'route' => 'search',
                         'class' => 'proposition-nav__item',
                     ),
