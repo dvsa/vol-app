@@ -8,7 +8,7 @@ use Common\Form\Model\Form\Traits\VersionTrait;
 
 /**
  * @codeCoverageIgnore No methods
- * @Form\Attributes({"class":""})
+ * @Form\Attributes({"class":"table__form"})
  * @Form\Name("team-details")
  */
 class TeamDetails
@@ -60,4 +60,10 @@ class TeamDetails
      * @Form\Type("DynamicSelect")
      */
     public $defaultPrinter = null;
+
+    /**
+     * @Form\Name("printerExceptions")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\Table")
+     */
+    public $printerExceptions = null;
 }

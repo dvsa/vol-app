@@ -27,7 +27,7 @@ class Team implements MapperInterface
         $formData = [
             'team-details' => $data
         ];
-        if (count($data['teamPrinters'])) {
+        if (is_array($data['teamPrinters']) && count($data['teamPrinters'])) {
             $defaultPrinter = null;
             foreach ($data['teamPrinters'] as $tp) {
                 if (isset($tp['printer']) && !$tp['user'] && !$tp['subCategory']) {

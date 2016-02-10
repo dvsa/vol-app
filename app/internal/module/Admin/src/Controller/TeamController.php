@@ -13,12 +13,22 @@ use Dvsa\Olcs\Transfer\Command\Team\UpdateTeam as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Team\DeleteTeam as DeleteDto;
 use Dvsa\Olcs\Transfer\Query\Team\Team as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Team\TeamList as ListDto;
+use Dvsa\Olcs\Transfer\Query\TeamPrinter\TeamPrinterExceptionsList as TeamPrinterExceptionsListDto;
+use Dvsa\Olcs\Transfer\Query\TeamPrinter\TeamPrinter as TeamPrinterItemDto;
+use Dvsa\Olcs\Transfer\Command\TeamPrinter\CreateTeamPrinter as CreateTeamPrinterDto;
+use Dvsa\Olcs\Transfer\Command\TeamPrinter\UpdateTeamPrinter as UpdateTeamPrinterDto;
+use Dvsa\Olcs\Transfer\Command\TeamPrinter\DeleteTeamPrinter as DeleteTeamPrinterDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\Team as TeamMapper;
 use Admin\Form\Model\Form\Team as TeamForm;
+use Admin\Form\Model\Form\PrinterException as PrinterExceptionForm;
+use Olcs\Data\Mapper\PrinterException as PrinterExceptionMapper;
 use Zend\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Common\Category;
 
 /**
  * Team management controller
@@ -41,6 +51,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     protected $defaultTableSortField = 'name';
     protected $defaultTableOrderField = 'ASC';
     protected $listDto = ListDto::class;
+    protected $tableViewTemplate = 'pages/table';
 
     // add/edit
     protected $itemDto = ItemDto::class;
@@ -62,6 +73,39 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
 
     protected $addContentTitle = 'Add team';
     protected $editContentTitle = 'Edit team';
+
+    protected $inlineScripts = [
+        'editAction' => ['table-actions'],
+        'addRuleAction' => ['forms/printer-exception'],
+        'editRuleAction' => ['forms/printer-exception']
+    ];
+
+    protected $redirectConfig = [
+        'addrule' => [
+            'action' => 'edit',
+            'routeMap' => [
+                'team' => 'team'
+            ]
+        ],
+        'editrule' => [
+            'action' => 'edit',
+            'routeMap' => [
+                'team' => 'team'
+            ],
+            'reUseParams' => false
+        ],
+        'deleterule' => [
+            'action' => 'edit',
+            'routeMap' => [
+                'team' => 'team'
+            ],
+            'reUseParams' => false
+        ],
+        'edit' => [
+            'action' => 'index',
+            'reUseParams' => false
+        ]
+    ];
 
     public function getLeftView()
     {
@@ -190,5 +234,204 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         unset($valueOptions[$this->params()->fromRoute('team')]);
         $form->get('team-remove-details')->get('newTeam')->setValueOptions($valueOptions);
         return $form;
+    }
+
+    /**
+     * Alter form for add action - remove the printers exceptions table
+     *
+     * @param Form $form
+     * @param array $formData
+     * @return Form
+     */
+    protected function alterFormForAdd($form)
+    {
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper->remove($form, 'team-details->printerExceptions');
+        return $form;
+    }
+
+    /**
+     * Alter form for editRule action, set default values for listboxes
+     *
+     * @param Form $form
+     * @param array $formData
+     * @return Form
+     */
+    protected function alterFormForEditRule($form, $formData)
+    {
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper->remove($form, 'form-actions->addAnother');
+
+        $defaultCategory = isset($formData['team-printer']['categoryTeam']) ?
+            $formData['team-printer']['categoryTeam'] : Category::CATEGORY_APPLICATION;
+        $this->getServiceLocator()->get('Olcs\Service\Data\DocumentSubCategory')
+            ->setCategory($defaultCategory);
+
+        $defaultTeam = isset($formData['exception-details']['team']) ?
+            $formData['exception-details']['team'] : $this->params()->fromRoute('team', null);
+        $this->getServiceLocator()->get('Olcs\Service\Data\UserWithName')
+            ->setTeam($defaultTeam);
+
+        return $form;
+    }
+
+    /**
+     * Alter form for addRule action, set default values for listboxes
+     *
+     * @param Form $form
+     * @param array $formData
+     * @return Form
+     */
+    protected function alterFormForAddRule($form, $formData)
+    {
+        $this->getServiceLocator()->get('Olcs\Service\Data\DocumentSubCategory')
+            ->setCategory(Category::CATEGORY_APPLICATION);
+
+        $defaultTeam = isset($formData['exception-details']['team']) ?
+            $formData['exception-details']['team'] : $this->params()->fromRoute('team', null);
+        $this->getServiceLocator()->get('Olcs\Service\Data\UserWithName')
+            ->setTeam($defaultTeam);
+
+        return $form;
+    }
+
+    /**
+     * Overwrite getForm method to inject the table
+     *
+     * @param $name
+     * @return mixed
+     */
+    public function getForm($name)
+    {
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        $form = $formHelper->createForm($name);
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
+        if ($name === 'Admin\Form\Model\Form\Team') {
+            $formHelper->populateFormTable(
+                $form->get('team-details')->get('printerExceptions'), $this->getExceptionsTable()
+            );
+        } elseif ($name === 'Admin\Form\Model\Form\PrinterException') {
+            $teamId = $this->params()->fromRoute('team');
+            $this->getServiceLocator()->get('Olcs\Service\Data\UserWithName')->setTeam($teamId);
+        }
+
+        return $form;
+    }
+
+    /**
+     * Get printer exceptions table
+     */
+    protected function getExceptionsTable()
+    {
+        return $this->getServiceLocator()->get('Table')
+            ->prepareTable('admin-printers-exceptions', $this->getTableData());
+    }
+
+    /**
+     * Get table data
+     *
+     * @return array
+     */
+    protected function getTableData()
+    {
+        if (empty($this->params()->fromRoute('team'))) {
+            return [];
+        }
+        $query = TeamPrinterExceptionsListDto::class;
+        $data = [
+            'team' => $this->params()->fromRoute('team'),
+        ];
+
+        $response = $this->handleQuery($query::create($data));
+
+        if ($response->isServerError() || $response->isClientError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            return $response->getResult();
+        }
+
+        return [];
+    }
+
+    /**
+     * Edit action
+     */
+    public function editAction()
+    {
+        $query = $this->params()->fromQuery();
+        $tableAction = null;
+        if (isset($query['table']['action'])) {
+            $tableAction = $query['table']['action'];
+            $params = [
+                'action' => $tableAction,
+                'rule' => $query['id']
+            ];
+            if (isset($query['team-details']['id'])) {
+                $params['team'] = $query['team-details']['id'];
+            }
+        }
+        if (!$tableAction) {
+            return $this->edit(
+                $this->formClass,
+                $this->itemDto,
+                new GenericItem($this->itemParams),
+                $this->updateCommand,
+                $this->mapperClass,
+                $this->editViewTemplate,
+                $this->editSuccessMessage,
+                $this->editContentTitle
+            );
+        }
+        $this->redirect()->toRoute(null, $params, ['code' => 303], true);
+    }
+
+    /**
+     * Add rule action
+     */
+    public function addRuleAction()
+    {
+        return $this->add(
+            PrinterExceptionForm::class,
+            new AddFormDefaultData(['team' => 'route']),
+            CreateTeamPrinterDto::class,
+            PrinterExceptionMapper::class,
+            $this->editViewTemplate,
+            'Printer exception added',
+            'Add printer exception'
+        );
+    }
+
+    /**
+     * Edit rule action
+     */
+    public function editRuleAction()
+    {
+        return $this->edit(
+            PrinterExceptionForm::class,
+            TeamPrinterItemDto::class,
+            new GenericItem(['id' => 'rule']),
+            UpdateTeamPrinterDto::class,
+            PrinterExceptionMapper::class,
+            $this->editViewTemplate,
+            'Printer exception updated',
+            'Edit printer exception'
+        );
+    }
+
+    /**
+     * Delete rule action
+     */
+    public function deleteRuleAction()
+    {
+        return $this->confirmCommand(
+            new ConfirmItem(['id' => 'rule']),
+            DeleteTeamPrinterDto::class,
+            'Delete printer exception',
+            'Are you sure you want to remove this printer exception?',
+            'Printer exceptions removed'
+        );
     }
 }

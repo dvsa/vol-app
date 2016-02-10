@@ -239,15 +239,15 @@ return [
                     'admin-team-management' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => 'user-management/teams[/:action][/:team][/]',
+                            'route' => 'user-management/teams[/:action][/:team][/rule/:rule][/]',
                             'constraints' => [
-                                'user' => '[0-9]+',
-                                'action' => '(index|add|edit|delete)'
+                                'team' => '[0-9]+',
+                                'rule' => '[0-9]+',
                             ],
                             'defaults' => [
                                 'controller' => 'Admin\TeamsController',
                                 'action' => 'index'
-                            ]
+                            ],
                         ]
                     ],
                     'admin-partner-management' => [

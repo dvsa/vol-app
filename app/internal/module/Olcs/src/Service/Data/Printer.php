@@ -31,7 +31,8 @@ class Printer extends AbstractDataService implements ListDataInterface
 
         foreach ($data as $datum) {
             $optionData[$datum['id']] = $datum['printerName'] . ' - ' .
-                (isset($datum['printerTray']) ? $datum['printerTray'] : 'Default tray');
+                (isset($datum['printerTray']) && !empty($datum['printerTray']) ?
+                    $datum['printerTray'] : 'Default tray');
         }
 
         return $optionData;
