@@ -11,7 +11,7 @@ use Zend\Form\Annotation as Form;
 class FeePaymentActions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large"})
+     * @Form\Attributes({"type":"submit","class":"action--primary action--external large"})
      * @Form\Options({"label": "pay-now"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
