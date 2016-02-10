@@ -2,6 +2,7 @@
 
 namespace Olcs\Service;
 
+use Common\Util\FileContent;
 use Dvsa\Olcs\Transfer\Command\Document\Upload;
 use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\ProcessPacks;
 use Zend\ServiceManager\FactoryInterface;
@@ -155,7 +156,7 @@ class Ebsr implements FactoryInterface
             if ($validator->isValid()) {
 
                 $dtoData = [
-                    'content' => base64_encode(file_get_contents($ebsrPack)),
+                    'content' => new FileContent($ebsrPack),
                     'category' => 3,
                     'subCategory' => 36,
                     'filename' => basename($ebsrPack),
