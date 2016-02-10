@@ -93,46 +93,6 @@ abstract class AbstractSlaTargetDateController extends AbstractInternalControlle
         'indexAction' => ['table-actions']
     );
 
-    /**
-     * Method to alter the form to indicate the type and ID of the entity for which the SLA Date is to be applied
-     *
-     * @param $form
-     * @param $formData
-     * @return mixed
-     */
-    protected function alterFormForEditSla($form, $formData)
-    {
-        return $this->setEntityTypeHtml($form, $formData);
-    }
-
-    /**
-     * Method to alter the form based on status
-     *
-     * @param $form
-     * @param $formData
-     * @return mixed
-     */
-    protected function alterFormForAddSla($form, $formData)
-    {
-        return $this->setEntityTypeHtml($form, $formData);
-    }
-
-    /**
-     * Sets the entity type and ID Html
-     *
-     * @param $form
-     * @param $formData
-     * @return mixed
-     */
-    private function setEntityTypeHtml($form, $formData)
-    {
-        $form->get('fields')
-            ->get('entityTypeHtml')
-            ->setValue(ucfirst($formData['fields']['entityType']) . ' ' . $formData['fields']['entityId']);
-
-        return $form;
-    }
-
     protected function getEntityType()
     {
         return $this->entityType;

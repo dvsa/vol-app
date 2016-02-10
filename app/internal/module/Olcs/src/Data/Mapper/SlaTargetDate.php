@@ -31,6 +31,9 @@ class SlaTargetDate implements MapperInterface
             $formData['fields']['entityId'] = $data['document']['id'];
         }
 
+        $formData['fields']['entityTypeHtml'] = ucfirst($formData['fields']['entityType']) . ' '
+            . $formData['fields']['entityId'];
+
         return $formData;
     }
 
