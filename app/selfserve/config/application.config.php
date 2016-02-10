@@ -5,8 +5,8 @@ $config = array(
         'Dvsa\Olcs\Auth',
         'Dvsa\Olcs\Utils',
         'Dvsa\Olcs\Transfer',
+        // Required for annotation parsing
         'DoctrineModule',
-        'DoctrineORMModule',
         'Olcs\Logging',
         'Common',
         'Olcs',

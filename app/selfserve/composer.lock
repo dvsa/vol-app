@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ab16e1c74d7d0d26b794cefb7e3aa3d7",
-    "content-hash": "0fe2228074904ec69780f9f7c1a2fa3e",
+    "hash": "c1a6d782fe175c2166bbdd4254937108",
+    "content-hash": "db8b12cf54dc014203162ff93303a5a3",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -768,7 +768,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git",
-                "reference": "6c4310b0e726ec3ac8c4779558cb1ac465c3d4fa"
+                "reference": "bc522191bffc8771b0c8f6d8f4deeb98fd6a8dc7"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -799,7 +799,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2016-02-03 16:46:47"
+            "time": "2016-02-10 13:47:49"
         },
         {
             "name": "olcs/autoload",
@@ -822,7 +822,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-auth.git",
-                "reference": "78b533dcab6608366142c074cd481289e298a7f2"
+                "reference": "9c2e2285af23ffeece648cfd40534ae2f9d83ba3"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -841,7 +841,7 @@
                 }
             },
             "description": "OLCS Authentication",
-            "time": "2016-02-04 09:49:41"
+            "time": "2016-02-08 12:28:05"
         },
         {
             "name": "olcs/olcs-logging",
@@ -882,7 +882,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-transfer.git",
-                "reference": "b73603bb815d64eae5bd43a76a95fa17947b610b"
+                "reference": "67bbc0e4101743f201f6acafbdbc68e0cc7a7bb2"
             },
             "require": {
                 "php": ">=5.4",
@@ -900,7 +900,7 @@
                 }
             },
             "description": "OLCS Transfer",
-            "time": "2016-02-04 11:39:27"
+            "time": "2016-02-10 11:42:33"
         },
         {
             "name": "olcs/olcs-utils",
@@ -968,26 +968,26 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.2",
+            "version": "v3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "d0239fb42f98dd02e7d342f793c5d2cdee0c478d"
+                "reference": "5a02eaadaa285e2bb727eb6bbdfb8201fcd971b0"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-console-d0239fb42f98dd02e7d342f793c5d2cdee0c478d-zip-9c2e3b.tar",
-                "reference": "d0239fb42f98dd02e7d342f793c5d2cdee0c478d",
-                "shasum": "bc6ebfe2bbd17c5c61dca9d94799260769d60601"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-console-5a02eaadaa285e2bb727eb6bbdfb8201fcd971b0-zip-bc4a29.tar",
+                "reference": "5a02eaadaa285e2bb727eb6bbdfb8201fcd971b0",
+                "shasum": "b0945fba616f8849be725eeed75ec3754a6c938d"
             },
             "require": {
-                "php": ">=5.3.9",
+                "php": ">=5.5.9",
                 "symfony/polyfill-mbstring": "~1.0"
             },
             "require-dev": {
                 "psr/log": "~1.0",
-                "symfony/event-dispatcher": "~2.1|~3.0.0",
-                "symfony/process": "~2.1|~3.0.0"
+                "symfony/event-dispatcher": "~2.8|~3.0",
+                "symfony/process": "~2.8|~3.0"
             },
             "suggest": {
                 "psr/log": "For using the console logger",
@@ -997,7 +997,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.8-dev"
+                    "dev-master": "3.0-dev"
                 }
             },
             "autoload": {
@@ -1024,7 +1024,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-01-14 08:33:16"
+            "time": "2016-02-02 13:44:19"
         },
         {
             "name": "symfony/filesystem",
@@ -1255,24 +1255,24 @@
         },
         {
             "name": "zendframework/zendxml",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/ZendXml.git",
-                "reference": "54edb3875aba5b45f02824f65f311c9fb2743a38"
+                "reference": "7b64507bc35d841c9c5802d67f6f87ef8e1a58c9"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/zendframework-zendxml-54edb3875aba5b45f02824f65f311c9fb2743a38-zip-773cca.tar",
-                "reference": "54edb3875aba5b45f02824f65f311c9fb2743a38",
-                "shasum": "74b0a31513b88e443c3c293ccc507d528e0d8468"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/zendframework-zendxml-7b64507bc35d841c9c5802d67f6f87ef8e1a58c9-zip-41dd75.tar",
+                "reference": "7b64507bc35d841c9c5802d67f6f87ef8e1a58c9",
+                "shasum": "4322193a5444778adace7621836a98ff2dea1976"
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": "^5.3.3 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~3.7",
-                "squizlabs/php_codesniffer": "~1.5"
+                "phpunit/phpunit": "^3.7 || ^4.0",
+                "squizlabs/php_codesniffer": "^1.5"
             },
             "type": "library",
             "extra": {
@@ -1296,7 +1296,7 @@
                 "xml",
                 "zf2"
             ],
-            "time": "2015-08-03 14:50:10"
+            "time": "2016-02-04 21:02:08"
         },
         {
             "name": "zf-commons/zfc-rbac",
@@ -2457,25 +2457,25 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.2",
+            "version": "v3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "34c8a4b51e751e7ea869b8262f883d008a2b81b8"
+                "reference": "3cf0709d7fe936e97bee9e954382e449003f1d9a"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-yaml-34c8a4b51e751e7ea869b8262f883d008a2b81b8-zip-5042ac.tar",
-                "reference": "34c8a4b51e751e7ea869b8262f883d008a2b81b8",
-                "shasum": "a91f626d02bd15a870140a8e30cfedac0e6052ee"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-yaml-3cf0709d7fe936e97bee9e954382e449003f1d9a-zip-d20ba7.tar",
+                "reference": "3cf0709d7fe936e97bee9e954382e449003f1d9a",
+                "shasum": "c8bf60a365b55a4cfe253372f3e8edfc6cae3650"
             },
             "require": {
-                "php": ">=5.3.9"
+                "php": ">=5.5.9"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.8-dev"
+                    "dev-master": "3.0-dev"
                 }
             },
             "autoload": {
@@ -2502,7 +2502,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-01-13 10:28:07"
+            "time": "2016-02-02 13:44:19"
         }
     ],
     "aliases": [],
