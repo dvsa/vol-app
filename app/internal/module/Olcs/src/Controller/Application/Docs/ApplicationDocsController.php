@@ -23,6 +23,17 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
         Traits\DocumentActionTrait;
 
     /**
+     * Table to use
+     *
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return string
+     */
+    protected function getDocumentTableName()
+    {
+        return 'documents';
+    }
+
+    /**
      * Route (prefix) for document action redirects
      * @see Olcs\Controller\Traits\DocumentActionTrait
      * @return string
