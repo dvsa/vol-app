@@ -240,6 +240,7 @@ return [
                         'type' => 'Segment',
                         'options' => [
                             'route' => 'user-management/teams[/:action][/:team][/rule/:rule][/]',
+                            'action' => '(index|add|edit|delete|addRule|editRule|deleteRule)',
                             'constraints' => [
                                 'team' => '[0-9]+',
                                 'rule' => '[0-9]+',
