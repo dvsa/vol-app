@@ -398,7 +398,8 @@ trait FeesActionTrait
             'backLink' => $backLink,
             'receiptLink' => $receiptLink,
             'reverseLink' => $this->getReverseLink($transaction),
-            'adjustLink' => $this->getAdjustLink($transaction),
+            // OLCS-11825 removal of adjust payment button
+            //'adjustLink' => $this->getAdjustLink($transaction),
         ];
 
         $this->placeholder()->setPlaceholder('contentTitle', $title);
@@ -441,6 +442,7 @@ trait FeesActionTrait
      */
     protected function getAdjustLink(array $transaction)
     {
+        /* OLCS-11825
         if ($transaction['displayAdjustmentOption']) {
             return $this->getServiceLocator()->get('Helper\Url')->fromRoute(
                 $this->getFeesRoute() . '/fee_action/transaction/adjust',
@@ -451,6 +453,7 @@ trait FeesActionTrait
         }
 
         return '';
+        */
     }
 
     /**
