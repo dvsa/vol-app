@@ -70,8 +70,9 @@ class Printer extends AbstractDataService implements ListDataInterface
                 throw new UnexpectedResponseException('unknown-error');
             }
             $this->setData('Printer', false);
-            if (isset($response->getResult()['results'])) {
-                $this->setData('Printer', $response->getResult()['results']);
+            $result = $response->getResult();
+            if (isset($result['results'])) {
+                $this->setData('Printer', $result['results']);
             }
         }
 

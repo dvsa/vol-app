@@ -35,7 +35,7 @@ class PrinterTest extends AbstractDataServiceTestCase
             ->once()
             ->shouldReceive('getResult')
             ->andReturn($results)
-            ->twice()
+            ->once()
             ->getMock();
 
         $sut = new Printer();

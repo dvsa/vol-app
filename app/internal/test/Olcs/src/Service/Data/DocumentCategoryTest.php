@@ -46,7 +46,7 @@ class DocumentCategoryTest extends AbstractDataServiceTestCase
             ->once()
             ->shouldReceive('getResult')
             ->andReturn($results)
-            ->twice()
+            ->once()
             ->getMock();
 
         $sut = new DocumentCategory();
