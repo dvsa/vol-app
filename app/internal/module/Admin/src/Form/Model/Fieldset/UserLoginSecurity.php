@@ -22,6 +22,12 @@ class UserLoginSecurity
     public $loginId = null;
 
     /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Reset password / Unlock account"})
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $resetPassword = null;
+
+    /**
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Disable account"})
      * @Form\Type("OlcsCheckbox")
      */
