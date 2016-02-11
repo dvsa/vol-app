@@ -13,8 +13,8 @@ $config = array(
         'Soflomo\Purifier',
         'Olcs',
         'Admin',
-        'DoctrineModule',
-        'DoctrineORMModule'
+        // Required for annotation parsing
+        'DoctrineModule'
     ),
     // These are various options for the listeners attached to the ModuleManager
     'module_listener_options' => array(
