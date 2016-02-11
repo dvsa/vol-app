@@ -248,7 +248,7 @@ class TransportManagerController extends AbstractController implements Transport
 
     public function canRemoveAction()
     {
-        $query = \Dvsa\Olcs\Transfer\Query\Tm\TransportManager   ::create(
+        $query = \Dvsa\Olcs\Transfer\Query\Tm\TransportManager::create(
             [
                 'id' => $this->params()->fromRoute('transportManager')
             ]
@@ -408,9 +408,13 @@ class TransportManagerController extends AbstractController implements Transport
     {
         $nysiisService = $this->getServiceLocator()->get('NysiisService');
 
-        return [
+        $params = [
             'nysiisForename' => $tmData['homeCd']['person']['forename'],
             'nysiisFamilyname' => $tmData['homeCd']['person']['familyName']
         ];
+
+        $nysiisData = $nysiisService->getNysiisSearchKeys($params);
+
+        return $nysiisData;
     }
 }

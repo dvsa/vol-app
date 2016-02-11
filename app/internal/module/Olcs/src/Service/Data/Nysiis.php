@@ -20,7 +20,7 @@ class Nysiis
     private $soapClient;
 
     /**
-     * Nysiis constructor.
+     * Nysiis constructor. Initiates a SOAP client and configuration
      *
      * @param $soapClient
      * @param $config
@@ -29,5 +29,19 @@ class Nysiis
     {
         $this->soapClient = $soapClient;
         $this->nysiisConfig = $config;
+    }
+
+    /**
+     * Make SOAP request to NYSIIS to extract the firstName and familyName.
+     * @to-do When WSDL/SOAP server known, do the connection proper.
+     * For now just return the params
+     *
+     * @param $params
+     * @return mixed
+     */
+    public function getNysiisSearchKeys($params) {
+
+        return $params;
+        //$result = $this->soapClient->GetNYSIISSearchKeys($params['nysiisForename'], $params['nysiisFamilyname']);
     }
 }

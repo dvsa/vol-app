@@ -148,6 +148,19 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
                 ->setValue($data['transport-manager-details']['id']);
         }
 
+        // if nysiis details are known, set the hint text
+        if (isset($data['transport-manager-details']['nysiisForename'])) {
+            $form->get('transport-manager-details')
+                ->get('firstName')
+                ->setOption('hint', 'NYSIIS first name: ' . $data['transport-manager-details']['nysiisForename']);
+        }
+
+        if (isset($data['transport-manager-details']['nysiisFamilyName'])) {
+            $form->get('transport-manager-details')
+                ->get('lastName')
+                ->setOption('hint', 'NYSIIS Family name: ' . $data['transport-manager-details']['nysiisFamilyName']);
+        }
+
         return $form;
     }
 }
