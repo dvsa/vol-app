@@ -329,6 +329,7 @@ class UserTest extends MockeryTestCase
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
                         'accountDisabled' => 'Y',
+                        'resetPassword' => 'Y',
                     ],
                     'userType' => [
                         'userType' => 'internal',
@@ -362,6 +363,7 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'loginId' => 'testuser',
                     'accountDisabled' => 'Y',
+                    'resetPassword' => 'Y',
                     'userType' => 'internal',
                     'roles' => ['role'],
                     'team' => 3,
@@ -401,6 +403,7 @@ class UserTest extends MockeryTestCase
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
                         'accountDisabled' => 'Y',
+                        'resetPassword' => 'N',
                     ],
                     'userType' => [
                         'userType' => 'transport-manager',
@@ -435,6 +438,7 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'loginId' => 'testuser',
                     'accountDisabled' => 'Y',
+                    'resetPassword' => 'N',
                     'userType' => 'transport-manager',
                     'roles' => ['role'],
                     'application' => 97,
@@ -475,6 +479,7 @@ class UserTest extends MockeryTestCase
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
                         'accountDisabled' => 'Y',
+                        'resetPassword' => 'N',
                     ],
                     'userType' => [
                         'userType' => 'partner',
@@ -508,6 +513,7 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'loginId' => 'testuser',
                     'accountDisabled' => 'Y',
+                    'resetPassword' => 'N',
                     'userType' => 'partner',
                     'roles' => ['role'],
                     'partnerContactDetails' => 3,
@@ -547,6 +553,7 @@ class UserTest extends MockeryTestCase
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
                         'accountDisabled' => 'Y',
+                        'resetPassword' => 'N',
                     ],
                     'userType' => [
                         'userType' => 'local-authority',
@@ -580,6 +587,7 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'loginId' => 'testuser',
                     'accountDisabled' => 'Y',
+                    'resetPassword' => 'N',
                     'userType' => 'local-authority',
                     'roles' => ['role'],
                     'localAuthority' => 3,
@@ -619,6 +627,7 @@ class UserTest extends MockeryTestCase
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
                         'accountDisabled' => 'Y',
+                        'resetPassword' => 'N',
                     ],
                     'userType' => [
                         'userType' => 'operator',
@@ -652,6 +661,7 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'loginId' => 'testuser',
                     'accountDisabled' => 'Y',
+                    'resetPassword' => 'N',
                     'userType' => 'operator',
                     'roles' => ['role'],
                     'licenceNumber' => 'licNo',
