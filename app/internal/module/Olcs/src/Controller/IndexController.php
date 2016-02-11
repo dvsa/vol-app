@@ -92,7 +92,7 @@ class IndexController extends AbstractController implements LeftViewProvider
                 $results = $this->getListDataSubCategoryDocs($value, false);
                 break;
             case 'scanning-sub-categories':
-                $results = $this->getListDataSubCategoryTask($value, 'All');
+                $results = $this->getListDataSubCategoryScan($value, 'All');
                 break;
             case 'document-templates':
                 $results = $this->getListDataDocTemplates(null, $value, 'All');
