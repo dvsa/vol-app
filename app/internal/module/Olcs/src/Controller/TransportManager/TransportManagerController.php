@@ -385,11 +385,11 @@ class TransportManagerController extends AbstractController implements Transport
         $response = $this->handleCommand(
             \Dvsa\Olcs\Transfer\Command\Tm\NysiisUpdate::create(
                 array_merge(
-                [
-                    'id' => $transportManagerId,
-                    'version' => $tmData['version']
-                ],
-                $this->getNysiisData($tmData)
+                    [
+                        'id' => $transportManagerId,
+                        'version' => $tmData['version']
+                    ],
+                    $this->getNysiisData($tmData)
                 )
             )
         );

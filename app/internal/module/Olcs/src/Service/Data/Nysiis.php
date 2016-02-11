@@ -39,8 +39,8 @@ class Nysiis
      * @param $params
      * @return mixed
      */
-    public function getNysiisSearchKeys($params) {
-
+    public function getNysiisSearchKeys($params)
+    {
         return $params;
         //$result = $this->soapClient->GetNYSIISSearchKeys($params['nysiisForename'], $params['nysiisFamilyname']);
     }
