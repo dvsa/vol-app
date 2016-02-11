@@ -372,7 +372,10 @@ trait FeesActionTrait
         switch ($transaction['type']['id']) {
             case RefData::TRANSACTION_TYPE_PAYMENT:
                 $title = 'internal.transaction-details.title-payment';
-                if ($transaction['status']['id'] == RefData::TRANSACTION_STATUS_COMPLETE) {
+                if (
+                    $transaction['status']['id'] == RefData::TRANSACTION_STATUS_COMPLETE
+                    && !empty($transaction['reference'])
+                ) {
                     $receiptLink = $urlHelper->fromRoute(
                         $this->getFeesRoute() . '/print-receipt',
                         ['reference' => $transaction['reference']],
