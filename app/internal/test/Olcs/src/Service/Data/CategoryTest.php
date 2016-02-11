@@ -47,7 +47,7 @@ class CategoryTest extends AbstractDataServiceTestCase
             ->once()
             ->shouldReceive('getResult')
             ->andReturn($results)
-            ->twice()
+            ->once()
             ->getMock();
 
         $sut = new Category();

@@ -21,8 +21,39 @@ class TeamTest extends MockeryTestCase
 {
     public function testMapFromResult()
     {
-        $data = ['foo' => 'bar'];
-        $expected = ['team-details' => ['foo' => 'bar']];
+        $data = [
+            'foo' => 'bar',
+            'teamPrinters' => [
+                [
+                    'printer' => 'not defult',
+                    'user' => 'baz',
+                    'subCategory' => null
+                ],
+                [
+                    'printer' => 'cake',
+                    'user' => null,
+                    'subCategory' => null
+                ]
+            ]
+        ];
+        $expected = [
+            'team-details' => [
+                'foo' => 'bar',
+                'defaultPrinter' => 'cake',
+                'teamPrinters' => [
+                    [
+                        'printer' => 'not defult',
+                        'user' => 'baz',
+                        'subCategory' => null
+                    ],
+                    [
+                        'printer' => 'cake',
+                        'user' => null,
+                        'subCategory' => null
+                    ]
+                ]
+            ]
+        ];
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 

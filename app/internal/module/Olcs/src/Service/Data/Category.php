@@ -44,8 +44,9 @@ class Category extends AbstractDataService implements ListDataInterface
                 throw new UnexpectedResponseException('unknown-error');
             }
             $this->setData('categories', false);
-            if (isset($response->getResult()['results'])) {
-                $this->setData('categories', $response->getResult()['results']);
+            $result = $response->getResult();
+            if (isset($result['results'])) {
+                $this->setData('categories', $result['results']);
             }
         }
         return $this->getData('categories');

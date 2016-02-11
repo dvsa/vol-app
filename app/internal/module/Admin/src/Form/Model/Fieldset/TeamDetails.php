@@ -8,7 +8,7 @@ use Common\Form\Model\Form\Traits\VersionTrait;
 
 /**
  * @codeCoverageIgnore No methods
- * @Form\Attributes({"class":""})
+ * @Form\Attributes({"class":"table__form"})
  * @Form\Name("team-details")
  */
 class TeamDetails
@@ -47,4 +47,23 @@ class TeamDetails
      * @Form\Type("DynamicSelect")
      */
     public $trafficArea = null;
+
+    /**
+     * @Form\Attributes({"id":"team","placeholder":"","class":"medium"})
+     * @Form\Options({
+     *     "label": "Default printer",
+     *     "service_name": "Olcs\Service\Data\Printer",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select a default printer",
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $defaultPrinter = null;
+
+    /**
+     * @Form\Name("printerExceptions")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\Table")
+     */
+    public $printerExceptions = null;
 }
