@@ -148,19 +148,30 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
                 ->setValue($data['transport-manager-details']['id']);
         }
 
-        // if nysiis details are known, set the hint text
-        if (isset($data['transport-manager-details']['nysiisForename'])) {
-            $form->get('transport-manager-details')
-                ->get('firstName')
-                ->setOption('hint', 'NYSIIS first name: ' . $data['transport-manager-details']['nysiisForename']);
-        }
+        $nysiisData = $this->getNysiisData($data['transport-manager-details']);
 
-        if (isset($data['transport-manager-details']['nysiisFamilyName'])) {
-            $form->get('transport-manager-details')
-                ->get('lastName')
-                ->setOption('hint', 'NYSIIS Family name: ' . $data['transport-manager-details']['nysiisFamilyName']);
-        }
+        $form->get('transport-manager-details')
+            ->get('nysiisForename')
+            ->setValue($nysiisData['nysiisForename']);
+
+        $form->get('transport-manager-details')
+            ->get('nysiisFamilyname')
+            ->setValue($nysiisData['nysiisFamilyname']);
 
         return $form;
+    }
+
+    private function getNysiisData($tmData)
+    {
+        $nysiisService = $this->getServiceLocator()->get('NysiisService');
+
+        $params = [
+            'nysiisForename' => $tmData['firstName'],
+            'nysiisFamilyname' => $tmData['lastName']
+        ];
+
+        $nysiisData = $nysiisService->getNysiisSearchKeys($params);
+
+        return $nysiisData;
     }
 }
