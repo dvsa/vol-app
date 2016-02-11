@@ -70,22 +70,8 @@ class PrinterExceptionTest extends MockeryTestCase
                 ],
                 [
                     'exception-details' => [
-                        'id' => null,
-                        'version' => null,
-                        'teamOrUser' => 'team',
                         'team' => 1
                     ],
-                    'team-printer' => [
-                        'printer' => null,
-                        'subCategoryTeam' => null,
-                        'categoryTeam' => null
-                    ],
-                    'user-printer' => [
-                        'user' => null,
-                        'printer' => null,
-                        'subCategoryUser' => null,
-                        'categoryUser' => null
-                    ]
                 ]
             ]
         ];

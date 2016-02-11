@@ -24,28 +24,33 @@ class PrinterException implements MapperInterface
      */
     public static function mapFromResult(array $data)
     {
-        $formData = [
-            'exception-details' => [
-                'id' => isset($data['id']) ? $data['id'] : null,
-                'version' => isset($data['version']) ? $data['version'] : null,
-                'teamOrUser' => isset($data['user']['id']) ? 'user' : 'team',
-                'team' => isset($data['team']['id']) ? $data['team']['id'] :
-                    (isset($data['team']) ? $data['team'] : null)
-            ],
-            'team-printer' => [
-                'printer' => isset($data['printer']['id']) ? $data['printer']['id'] : null,
-                'subCategoryTeam' => isset($data['subCategory']['id']) ? $data['subCategory']['id'] : null,
-                'categoryTeam' => isset($data['subCategory']['category']['id']) ?
-                    $data['subCategory']['category']['id'] : null
-            ],
-            'user-printer' => [
-                'printer' => isset($data['printer']['id']) ? $data['printer']['id'] : null,
-                'subCategoryUser' => isset($data['subCategory']['id']) ? $data['subCategory']['id'] : null,
-                'categoryUser' => isset($data['subCategory']['category']['id']) ?
-                    $data['subCategory']['category']['id'] : null,
-                'user' => isset($data['user']['id']) ? $data['user']['id'] : null
-            ],
-        ];
+        $formData = [];
+
+        if (isset($data['id'])) {
+            $formData = [
+                'exception-details' => [
+                    'id' => $data['id'],
+                    'version' => $data['version'],
+                    'teamOrUser' => isset($data['user']['id']) ? 'user' : 'team',
+                    'team' => isset($data['team']['id']) ? $data['team']['id'] :
+                        (isset($data['team']) ? $data['team'] : null)
+                ],
+                'team-printer' => [
+                    'printer' => $data['printer']['id'],
+                    'subCategoryTeam' => $data['subCategory']['id'],
+                    'categoryTeam' => $data['subCategory']['category']['id']
+                ],
+                'user-printer' => [
+                    'printer' => $data['printer']['id'],
+                    'subCategoryUser' => $data['subCategory']['id'],
+                    'categoryUser' => $data['subCategory']['category']['id'],
+                    'user' => isset($data['user']['id']) ? $data['user']['id'] : null
+                ],
+            ];
+        }
+        if (isset($data['team']) && !is_array($data['team'])) {
+            $formData['exception-details']['team'] = $data['team'];
+        }
 
         return $formData;
     }
@@ -70,11 +75,9 @@ class PrinterException implements MapperInterface
                 'printer' => $data['team-printer']['printer']
             ];
         }
-        if (isset($data['exception-details']['version'])) {
-            $commandData['version'] = $data['exception-details']['version'];
-        }
         if (isset($data['exception-details']['id'])) {
             $commandData['id'] = $data['exception-details']['id'];
+            $commandData['version'] = $data['exception-details']['version'];
         }
         if (isset($data['exception-details']['team'])) {
             $commandData['team'] = $data['exception-details']['team'];
