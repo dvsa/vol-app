@@ -9,7 +9,6 @@ namespace Olcs\Controller\TransportManager;
 
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
-use Zend\Soap\Client as ZendSoapClient;
 
 /**
  * Transport Manager Controller
