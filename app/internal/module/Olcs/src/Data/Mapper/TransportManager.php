@@ -169,8 +169,8 @@ class TransportManager
             $tmDetails['nysiisForename'] = $data['nysiisForename'];
         }
 
-        if (isset($data['nysiisFamilyName'])) {
-            $tmDetails['nysiisFamilyName'] = $data['nysiisFamilyName'];
+        if (isset($data['nysiisFamilyname'])) {
+            $tmDetails['nysiisFamilyname'] = $data['nysiisFamilyname'];
         }
 
         return [

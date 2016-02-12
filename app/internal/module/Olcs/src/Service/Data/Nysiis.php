@@ -44,4 +44,20 @@ class Nysiis
         return $params;
         //$result = $this->soapClient->GetNYSIISSearchKeys($params['nysiisForename'], $params['nysiisFamilyname']);
     }
+
+    /**
+     * @return array
+     */
+    public function getNysiisConfig()
+    {
+        return $this->nysiisConfig;
+    }
+
+    /**
+     * @return \Zend\Soap\Client
+     */
+    public function getSoapClient()
+    {
+        return $this->soapClient;
+    }
 }

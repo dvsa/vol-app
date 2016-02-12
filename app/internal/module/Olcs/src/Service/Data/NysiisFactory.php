@@ -23,9 +23,11 @@ class NysiisFactory implements FactoryInterface
     {
         $config = $serviceLocator->get('Config');
 
-        $wsdl = file_get_contents($config['nysiis']['wsdl']['uri']);
+        $soapClient = false;
 
         try {
+            $wsdl = file_get_contents($config['nysiis']['wsdl']['uri']);
+
             $soapClient = new SoapClient(
                 $wsdl,
                 $config['nysiis']['wsdl']['soap']['options']
