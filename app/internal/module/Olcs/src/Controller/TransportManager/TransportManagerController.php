@@ -205,6 +205,7 @@ class TransportManagerController extends AbstractController implements Transport
         if ($response->isNotFound()) {
             return null;
         }
+
         if (!$response->isOk()) {
             throw new \RuntimeException('Error getting TransportManager');
         }
@@ -246,7 +247,7 @@ class TransportManagerController extends AbstractController implements Transport
 
     public function canRemoveAction()
     {
-        $query = \Dvsa\Olcs\Transfer\Query\Tm\TransportManager   ::create(
+        $query = \Dvsa\Olcs\Transfer\Query\Tm\TransportManager::create(
             [
                 'id' => $this->params()->fromRoute('transportManager')
             ]
