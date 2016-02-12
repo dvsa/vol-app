@@ -23,9 +23,10 @@
         <a href="/" title="Go to dashboard" class="global-header__logo">
           <img src="<?php echo $this->assetPath('/images/bitmap/gov.uk_logotype_crown.png') ?>" alt="GOV.UK logo">GOV.UK
         </a>
-
-        <nav class="proposition" role="navigation">
-          <h2 class="proposition__title">Vehicle Operator Licensing</h2>
+        
+        <div class="proposition" role="navigation">
+          <h2 class="proposition__title"><?php echo $this->translate('header-vehicle-operator-licensing'); ?></h2>
+          
           <a class="proposition__toggle" href="#">Menu</a>
 
             <?php
@@ -65,17 +66,21 @@
 
     <div class="page-wrapper">
         <div class="user-header">
-            <p class="phase">
-                <span class="phase__tag">alpha</span>
-                <span class="phase__message">This is a new service – <a href="https://www.surveymonkey.com/s/T8NGJV8">help us improve it.</a></span>
-                <span class="phase__message"><strong>Data up to date as of 16 <abbr title="December" aria-label="December">Dec</abbr> 2015</strong></span>
-            </p>
+            <?php echo $this->translate('markup-alpha-banner'); ?>
             <ul class="user-menu">
                 <?php if($this->currentUser()->isLoggedIn()):?>
                     <li class="user-menu__item"><?php echo $this->currentUser()->getFullName() ?>, <b><?php echo $this->currentUser()->getOrganisationName() ?></b></li>
-                    <li class="user-menu__item"><a href="<?php echo $this->url('auth/logout');?>">Sign out</a></li>
+                    <li class="user-menu__item">
+                        <a href="<?php echo $this->url('auth/logout');?>">
+                            <?php echo $this->translate('Sign out'); ?>
+                        </a>
+                    </li>
                 <?php else: ?>
-                    <li class="user-menu__item"><a href="<?php echo $this->url('auth/login');?>">Sign in</a></li>
+                    <li class="user-menu__item">
+                        <a href="<?php echo $this->url('auth/login');?>">
+                            <?php echo $this->translate('Sign in'); ?>
+                        </a>
+                    </li>
                 <?php endif;?>
             </ul>
         </div><!-- user-header -->
@@ -99,11 +104,11 @@
                     <?php echo $this->languageLink(); ?>
                 </li>
                 <li class="global-footer__link">
-                    Built by <a href="<?php echo $this->translate('DVSA-link'); ?>">Driver and Vehicle Standards Agency</a>
+                    <?php echo $this->translate('built-by'); ?> <a href="<?php echo $this->translate('DVSA-link'); ?>">Driver and Vehicle Standards Agency</a>
                 </li>
             </ul>
             <div class="global-footer__copyright">
-                <a href="<?php echo $this->translate('crown-copyright-link'); ?>" target="blank">&copy; Crown copyright</a>
+                <a href="<?php echo $this->translate('crown-copyright-link'); ?>" target="blank">&copy; <?php echo $this->translate('crown-copyright'); ?></a>
             </div>
         </div>
     </footer><!-- global-footer -->
