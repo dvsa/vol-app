@@ -5,7 +5,6 @@
         "This file is @generated automatically"
     ],
     "hash": "c1a6d782fe175c2166bbdd4254937108",
-    "content-hash": "db8b12cf54dc014203162ff93303a5a3",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -641,10 +640,10 @@
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-lexer-83893c552fd2045dd78aef794c31e694c37c0b8c-zip-53c158.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "shasum": "bdcbb326ce6b293b13f28ff23f543b0f833c2021"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
@@ -768,7 +767,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git",
-                "reference": "bc522191bffc8771b0c8f6d8f4deeb98fd6a8dc7"
+                "reference": "2e8b62588706af6f1006939a7944cc6807e70446"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -799,7 +798,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2016-02-10 13:47:49"
+            "time": "2016-02-11 12:49:57"
         },
         {
             "name": "olcs/autoload",
@@ -822,7 +821,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-auth.git",
-                "reference": "9c2e2285af23ffeece648cfd40534ae2f9d83ba3"
+                "reference": "4765966980061ff80107d01749eb686c3b2107b4"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -841,7 +840,7 @@
                 }
             },
             "description": "OLCS Authentication",
-            "time": "2016-02-08 12:28:05"
+            "time": "2016-02-11 14:21:59"
         },
         {
             "name": "olcs/olcs-logging",
@@ -882,7 +881,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-transfer.git",
-                "reference": "67bbc0e4101743f201f6acafbdbc68e0cc7a7bb2"
+                "reference": "c196cc8f628738f86640990bd1f8d0d519089a8f"
             },
             "require": {
                 "php": ">=5.4",
@@ -900,7 +899,7 @@
                 }
             },
             "description": "OLCS Transfer",
-            "time": "2016-02-10 11:42:33"
+            "time": "2016-02-12 10:13:11"
         },
         {
             "name": "olcs/olcs-utils",
@@ -937,10 +936,10 @@
                 "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/psr-log-fe0936ee26643249e916849d48e3a51d5f5e278b-zip-e71523.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
                 "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
-                "shasum": "d733a3385c0cfd1e4f29c1bfec38e525e972dc71"
+                "shasum": ""
             },
             "type": "library",
             "autoload": {
@@ -1307,10 +1306,10 @@
                 "reference": "42f466656ad9730025a6bbbfd4144ac2f3abb64c"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/zf-commons-zfc-rbac-42f466656ad9730025a6bbbfd4144ac2f3abb64c-zip-fcc7d7.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/ZF-Commons/zfc-rbac/zipball/42f466656ad9730025a6bbbfd4144ac2f3abb64c",
                 "reference": "42f466656ad9730025a6bbbfd4144ac2f3abb64c",
-                "shasum": "97ae06af6f9ad961e06c93ee1fd3995c689eab2b"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.4",
@@ -1383,10 +1382,10 @@
                 "reference": "493711bfc2a637fd7c6f23b71b7b55a621c35d9d"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/zfr-rbac-493711bfc2a637fd7c6f23b71b7b55a621c35d9d-zip-85e76c.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/zf-fr/rbac/zipball/493711bfc2a637fd7c6f23b71b7b55a621c35d9d",
                 "reference": "493711bfc2a637fd7c6f23b71b7b55a621c35d9d",
-                "shasum": "d01c15fbf0047c3157b4152949dcd7ad900e5cdd"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.4"
@@ -1616,10 +1615,10 @@
                 "reference": "d68dbdc53dc358a816f00b300704702b2eaff7b8"
             },
             "dist": {
-                "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpdocumentor-reflection-docblock-d68dbdc53dc358a816f00b300704702b2eaff7b8-zip-b8dbaa.tar",
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/d68dbdc53dc358a816f00b300704702b2eaff7b8",
                 "reference": "d68dbdc53dc358a816f00b300704702b2eaff7b8",
-                "shasum": "4928718c210ef1ddcbdd63d4cd09e4124c34b095"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
@@ -1958,17 +1957,17 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.22",
+            "version": "4.8.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "dfb11aa5236376b4fc63853cf746af39fe780e72"
+                "reference": "6e351261f9cd33daf205a131a1ba61c6d33bd483"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-phpunit-dfb11aa5236376b4fc63853cf746af39fe780e72-zip-ae430b.tar",
-                "reference": "dfb11aa5236376b4fc63853cf746af39fe780e72",
-                "shasum": "2520a887427e6d6e1ddd30b4ddf753b2249f518e"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-phpunit-6e351261f9cd33daf205a131a1ba61c6d33bd483-zip-7f34aa.tar",
+                "reference": "6e351261f9cd33daf205a131a1ba61c6d33bd483",
+                "shasum": "30f4615787d5ca1cd7a6746f35c54b7a107a7e73"
             },
             "require": {
                 "ext-dom": "*",
@@ -2026,7 +2025,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-02-02 09:01:21"
+            "time": "2016-02-11 14:56:33"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
