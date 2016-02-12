@@ -10,6 +10,7 @@ namespace Dvsa\OlcsTest\Api\Service;
 use Olcs\Service\Data\NysiisFactory;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
+use Zend\Soap\Client as ZendSoapClient;
 
 /**
  * NysiisFactory Test
@@ -25,7 +26,7 @@ class NysiisFactoryTest extends MockeryTestCase
         parent::setUp();
     }
 
-    private function createService()
+    public function testCreateServiceExceptionLogged()
     {
         $config = [
             'nysiis' => [
@@ -39,12 +40,38 @@ class NysiisFactoryTest extends MockeryTestCase
             ->andReturn($config);
 
         $sut = new NysiisFactory();
-        return $sut->createService($this->sm);
+
+        $service = $sut->createService($this->sm);
+
+        $this->assertFalse($service->getSoapClient());
+        $this->assertEquals($config, $service->getNysiisConfig());
     }
 
-    public function testCreateService()
+    /**
+     *
+     */
+    public function testCreateServiceValidWsdl()
     {
-        $this->createService();
-    }
+        $config = [
+            'nysiis' => [
+                'wsdl' => [
+                    'uri' => __DIR__ . '/../../../../../module/Olcs/config/nysiis/nysiis.svc.wsdl',
+                    'soap' => [
+                        'options' => []
+                    ]
+                ]
+            ]
+        ];
 
+        $this->sm->shouldReceive('get')
+            ->with('Config')
+            ->andReturn($config);
+
+        $sut = new NysiisFactory();
+
+        $service = $sut->createService($this->sm);
+
+        $this->assertinstanceOf(ZendSoapClient::class, $service->getSoapClient());
+        $this->assertEquals($config, $service->getNysiisConfig());
+    }
 }

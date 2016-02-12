@@ -26,12 +26,17 @@ class NysiisFactory implements FactoryInterface
         $soapClient = false;
 
         try {
-            $wsdl = file_get_contents($config['nysiis']['wsdl']['uri']);
+            if (file_exists($config['nysiis']['wsdl']['uri'])) {
+                $wsdl = file_get_contents($config['nysiis']['wsdl']['uri']);
 
-            $soapClient = new SoapClient(
-                $wsdl,
-                $config['nysiis']['wsdl']['soap']['options']
-            );
+                $soapClient = new SoapClient(
+                    $wsdl,
+                    $config['nysiis']['wsdl']['soap']['options']
+                );
+            } else {
+                throw new \Exception('WSDL file not found');
+            }
+
         } catch (\Exception $e) {
             Logger::debug(__FILE__ . 'Unable to create soap client: ' . $e->getMessage());
         }
