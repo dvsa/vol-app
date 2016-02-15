@@ -10,7 +10,7 @@
       
     <div class="page-header__wrapper two-thirds">
   
-      <?php if (isset($this->pageSubTitle)) : ?>
+      <?php if (isset($this->pageSubTitle) && $this->pageSubTitle != '') : ?>
         <h3 class="page-header__subtitle">
           <?php echo $this->pageSubTitle; ?>
         </h3>
