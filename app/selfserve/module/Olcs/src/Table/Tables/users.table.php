@@ -50,7 +50,7 @@ return array(
             }
         ],
         [
-            'title' => '',
+            'title' => 'Remove',
             'type' => 'Action',
             'action' => 'delete',
             'class' => 'remove',
