@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ab16e1c74d7d0d26b794cefb7e3aa3d7",
-    "content-hash": "0fe2228074904ec69780f9f7c1a2fa3e",
+    "hash": "c1a6d782fe175c2166bbdd4254937108",
+    "content-hash": "db8b12cf54dc014203162ff93303a5a3",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -768,7 +768,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git",
-                "reference": "6c4310b0e726ec3ac8c4779558cb1ac465c3d4fa"
+                "reference": "77ce7a2318071c364257fe0afb8bbb69cde38ed1"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -799,7 +799,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2016-02-03 16:46:47"
+            "time": "2016-02-12 11:01:08"
         },
         {
             "name": "olcs/autoload",
@@ -822,7 +822,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-auth.git",
-                "reference": "78b533dcab6608366142c074cd481289e298a7f2"
+                "reference": "4765966980061ff80107d01749eb686c3b2107b4"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -841,7 +841,7 @@
                 }
             },
             "description": "OLCS Authentication",
-            "time": "2016-02-04 09:49:41"
+            "time": "2016-02-11 14:21:59"
         },
         {
             "name": "olcs/olcs-logging",
@@ -882,7 +882,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-transfer.git",
-                "reference": "b73603bb815d64eae5bd43a76a95fa17947b610b"
+                "reference": "c196cc8f628738f86640990bd1f8d0d519089a8f"
             },
             "require": {
                 "php": ">=5.4",
@@ -900,7 +900,7 @@
                 }
             },
             "description": "OLCS Transfer",
-            "time": "2016-02-04 11:39:27"
+            "time": "2016-02-12 10:13:11"
         },
         {
             "name": "olcs/olcs-utils",
@@ -1255,24 +1255,24 @@
         },
         {
             "name": "zendframework/zendxml",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/ZendXml.git",
-                "reference": "54edb3875aba5b45f02824f65f311c9fb2743a38"
+                "reference": "7b64507bc35d841c9c5802d67f6f87ef8e1a58c9"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/zendframework-zendxml-54edb3875aba5b45f02824f65f311c9fb2743a38-zip-773cca.tar",
-                "reference": "54edb3875aba5b45f02824f65f311c9fb2743a38",
-                "shasum": "74b0a31513b88e443c3c293ccc507d528e0d8468"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/zendframework-zendxml-7b64507bc35d841c9c5802d67f6f87ef8e1a58c9-zip-41dd75.tar",
+                "reference": "7b64507bc35d841c9c5802d67f6f87ef8e1a58c9",
+                "shasum": "4322193a5444778adace7621836a98ff2dea1976"
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": "^5.3.3 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~3.7",
-                "squizlabs/php_codesniffer": "~1.5"
+                "phpunit/phpunit": "^3.7 || ^4.0",
+                "squizlabs/php_codesniffer": "^1.5"
             },
             "type": "library",
             "extra": {
@@ -1296,7 +1296,7 @@
                 "xml",
                 "zf2"
             ],
-            "time": "2015-08-03 14:50:10"
+            "time": "2016-02-04 21:02:08"
         },
         {
             "name": "zf-commons/zfc-rbac",
@@ -1958,17 +1958,17 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.22",
+            "version": "4.8.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "dfb11aa5236376b4fc63853cf746af39fe780e72"
+                "reference": "6e351261f9cd33daf205a131a1ba61c6d33bd483"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-phpunit-dfb11aa5236376b4fc63853cf746af39fe780e72-zip-ae430b.tar",
-                "reference": "dfb11aa5236376b4fc63853cf746af39fe780e72",
-                "shasum": "2520a887427e6d6e1ddd30b4ddf753b2249f518e"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-phpunit-6e351261f9cd33daf205a131a1ba61c6d33bd483-zip-7f34aa.tar",
+                "reference": "6e351261f9cd33daf205a131a1ba61c6d33bd483",
+                "shasum": "30f4615787d5ca1cd7a6746f35c54b7a107a7e73"
             },
             "require": {
                 "ext-dom": "*",
@@ -2026,7 +2026,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-02-02 09:01:21"
+            "time": "2016-02-11 14:56:33"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
