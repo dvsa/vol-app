@@ -14,7 +14,7 @@ class SlaTargetDate extends Base
      * @Form\Required(false)
      * @Form\Attributes({"id":"entityTypeHtml", "required": false})
      * @Form\Options({
-     *     "label": "Entity type:",
+     *     "label": "Document:",
      * })
      * @Form\Type("Common\Form\Elements\Types\Html")
      */
