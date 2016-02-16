@@ -24,6 +24,17 @@ class TransportManagerDocumentController extends TransportManagerController impl
         Traits\ListDataTrait;
 
     /**
+     * Table to use
+     *
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return string
+     */
+    protected function getDocumentTableName()
+    {
+        return 'documents';
+    }
+
+    /**
      * @var string
      */
     protected $section = 'documents';

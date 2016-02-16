@@ -320,6 +320,8 @@ return array(
             'OperatorReadHistoryController' => 'Olcs\Controller\Operator\Processing\ReadHistoryController',
             'ContinuationController' => 'Olcs\Controller\Licence\ContinuationController',
             Olcs\Controller\DisqualifyController::class => Olcs\Controller\DisqualifyController::class,
+            'CaseDocumentSlaTargetDateController' => 'Olcs\Controller\Sla\CaseDocumentSlaTargetDateController',
+            'LicenceDocumentSlaTargetDateController' => 'Olcs\Controller\Sla\LicenceDocumentSlaTargetDateController'
         ),
     ),
     'controller_plugins' => array(
@@ -414,7 +416,10 @@ return array(
             'ApplicationUtility' => 'Olcs\Service\Utility\ApplicationUtility',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
             'Olcs\Service\Data\SubCategory' => 'Olcs\Service\Data\SubCategory',
+            'Olcs\Service\Data\DocumentSubCategory' => 'Olcs\Service\Data\DocumentSubCategory',
+            'Olcs\Service\Data\DocumentCategory' => 'Olcs\Service\Data\DocumentCategory',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
+            'Olcs\Service\Data\UserWithName' => 'Olcs\Service\Data\UserWithName',
             'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
             'Olcs\Service\Data\IrfoCountry' => 'Olcs\Service\Data\IrfoCountry',
             'Olcs\Service\Data\IrfoGvPermitType' => 'Olcs\Service\Data\IrfoGvPermitType',

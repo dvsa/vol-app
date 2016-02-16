@@ -9,6 +9,8 @@ use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
  */
 trait DocumentSearchTrait
 {
+    protected abstract function getDocumentTableName();
+
     /**
      * Inspect the request to see if we have any filters set, and if necessary, filter them down to a valid subset
      *
@@ -86,7 +88,7 @@ trait DocumentSearchTrait
 
         $filters['query'] = $this->getRequest()->getQuery();
 
-        $table = $this->getTable('documents', $documents, $filters);
+        $table = $this->getTable($this->getDocumentTableName(), $documents, $filters);
 
         return $table;
     }

@@ -81,9 +81,13 @@ if ($table) {
 }
 ?>
 <div class="actions-container">
-    <?php if ($adjustLink): ?>
+    <?php
+    /* OLCS-11825
+    if ($adjustLink): ?>
         <a href="<?php echo $adjustLink; ?>" class="action--primary js-modal-ajax" target="_blank">Adjust payment</a>
-    <?php endif; ?>
+    <?php endif;
+    */
+    ?>
     <?php if ($reverseLink): ?>
         <a href="<?php echo $reverseLink; ?>" class="action--primary js-modal-ajax" target="_blank">Reverse payment</a>
     <?php endif; ?>

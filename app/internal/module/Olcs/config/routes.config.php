@@ -49,6 +49,7 @@ $feeActionRoute = [
                     ],
                     'may_terminate' => true,
                 ],
+                /* OLCS-11825
                 'adjust' => [
                     'type' => 'segment',
                     'options' => [
@@ -59,6 +60,7 @@ $feeActionRoute = [
                     ],
                     'may_terminate' => true,
                 ],
+                */
             ],
         ],
     ],
@@ -757,6 +759,35 @@ $routes = [
         ],
         'may_terminate' => true,
         'child_routes' => [
+            'add-sla' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'add-sla/:entityType/:entityId',
+                    'constraints' => [
+                        'entityId' => '[0-9]+',
+                        'entityType' => '(document)',
+                    ],
+                    'defaults' => [
+                        'controller' => 'CaseDocumentSlaTargetDateController',
+                        'action' => 'addSla'
+                    ]
+                ],
+            ],
+            'edit-sla' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'edit-sla/:entityType/:entityId',
+                    'constraints' => [
+                        'entityId' => '[0-9]+',
+                        'entityType' => '(document)',
+                    ],
+                    'defaults' => [
+                        'type' => 'case',
+                        'controller' => 'CaseDocumentSlaTargetDateController',
+                        'action' => 'editSla'
+                    ]
+                ],
+            ],
             'generate' => [
                 'type' => 'segment',
                 'options' => [
@@ -1379,6 +1410,35 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'add-sla' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'add-sla/:entityType/:entityId',
+                            'constraints' => [
+                                'entityId' => '[0-9]+',
+                                'entityType' => '(document)',
+                            ],
+                            'defaults' => [
+                                'controller' => 'LicenceDocumentSlaTargetDateController',
+                                'action' => 'addSla'
+                            ]
+                        ],
+                    ],
+                    'edit-sla' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'edit-sla/:entityType/:entityId',
+                            'constraints' => [
+                                'entityId' => '[0-9]+',
+                                'entityType' => '(document)',
+                            ],
+                            'defaults' => [
+                                'type' => 'case',
+                                'controller' => 'LicenceDocumentSlaTargetDateController',
+                                'action' => 'editSla'
+                            ]
+                        ],
+                    ],
                     'generate' => [
                         'type' => 'segment',
                         'options' => [
