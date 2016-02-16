@@ -180,9 +180,10 @@ class CaseAppealMarkerTest extends \PHPUnit_Framework_TestCase
                     ]
                 ],
                 [ // open case
+                    'closedDate' => null,
                     'appeal' => [
                         'appealDate' => '2015-08-17',
-                        'decisionDate' => ''
+                        'decisionDate' => '',
                     ]
                 ]
             ]
