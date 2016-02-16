@@ -149,6 +149,29 @@ class CaseAppealMarkerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->sut->canRender());
     }
 
+    public function testCanRenderWithCaseClosed()
+    {
+        $data = [
+            'cases' => [
+                [
+                    'appeal' => null,
+                    'closedDate' => '2015-05-05'
+                ],
+                [
+                    'closedDate' => '2015-05-05',
+                    'appeal' => [
+                        'appealDate' => '2015-08-17',
+                        'decisionDate' => ''
+                    ]
+                ]
+            ]
+        ];
+
+        $this->sut->setData($data);
+
+        $this->assertFalse($this->sut->canRender());
+    }
+
     public function testRender()
     {
         $data = [
