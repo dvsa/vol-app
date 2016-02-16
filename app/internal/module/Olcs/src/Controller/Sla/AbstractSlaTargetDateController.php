@@ -9,6 +9,7 @@ namespace Olcs\Controller\Sla;
 
 use Dvsa\Olcs\Transfer\Command\System\CreateSlaTargetDate as CreateDto;
 use Dvsa\Olcs\Transfer\Command\System\UpdateSlaTargetDate as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Document\Document;
 use Dvsa\Olcs\Transfer\Query\System\SlaTargetDate as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Data\Mapper\SlaTargetDate as Mapper;
@@ -68,8 +69,7 @@ abstract class AbstractSlaTargetDateController extends AbstractInternalControlle
      */
     protected $defaultData = [
         'entityType' => 'route',
-        'entityId' => 'route',
-        'entityDescription' => 'route'
+        'entityId' => 'route'
     ];
 
     /**
@@ -107,5 +107,53 @@ abstract class AbstractSlaTargetDateController extends AbstractInternalControlle
     public function editSlaAction()
     {
         return parent::editAction();
+    }
+
+    /**
+     * Alter Form to add the entity description to the form.
+     *
+     * @param \Common\Controller\Form $form
+     * @param array $initialData
+     * @return \Common\Controller\Form
+     */
+    public function alterFormForAddSla($form, $initialData)
+    {
+        $entity = $this->loadEntity($initialData['fields']['entityId']);
+
+        $form->get('fields')
+            ->get('entityTypeHtml')
+            ->setValue($entity['description']);
+
+        return $form;
+    }
+
+    /**
+     * Load the entity and return
+     *
+     * @param $id
+     * @return array|mixed
+     */
+    private function loadEntity($id)
+    {
+        $documentDto = Document::class;
+        $query = $documentDto::create(['id' => $id]);
+
+        $response = $this->handleQuery($query);
+
+        if ($response->isNotFound()) {
+            return $this->notFoundAction();
+        }
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            $data = $response->getResult();
+
+            if (isset($data)) {
+                return $data;
+            }
+        }
     }
 }

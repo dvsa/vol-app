@@ -30,9 +30,6 @@ class SlaTargetDate implements MapperInterface
             $formData['fields']['entityType'] = 'document';
             $formData['fields']['entityId'] = $data['document']['id'];
             $formData['fields']['entityTypeHtml'] = $data['document']['description'];
-        } else {
-            // get description from uri (add action)
-            $formData['fields']['entityTypeHtml'] = base64_decode($data['entityDescription']);
         }
 
         return $formData;
