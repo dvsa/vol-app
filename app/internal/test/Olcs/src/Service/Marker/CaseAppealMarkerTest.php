@@ -154,10 +154,6 @@ class CaseAppealMarkerTest extends \PHPUnit_Framework_TestCase
         $data = [
             'cases' => [
                 [
-                    'appeal' => null,
-                    'closedDate' => '2015-05-05'
-                ],
-                [
                     'closedDate' => '2015-05-05',
                     'appeal' => [
                         'appealDate' => '2015-08-17',
@@ -170,6 +166,31 @@ class CaseAppealMarkerTest extends \PHPUnit_Framework_TestCase
         $this->sut->setData($data);
 
         $this->assertFalse($this->sut->canRender());
+    }
+
+    public function testCanRenderWithCaseNotClosed()
+    {
+        $data = [
+            'cases' => [
+                [ // closed case
+                    'closedDate' => '2015-05-05',
+                    'appeal' => [
+                        'appealDate' => '2015-08-17',
+                        'decisionDate' => ''
+                    ]
+                ],
+                [ // open case
+                    'appeal' => [
+                        'appealDate' => '2015-08-17',
+                        'decisionDate' => ''
+                    ]
+                ]
+            ]
+        ];
+
+        $this->sut->setData($data);
+
+        $this->assertTrue($this->sut->canRender());
     }
 
     public function testRender()
