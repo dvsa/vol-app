@@ -37,7 +37,7 @@ abstract class AbstractSlaTargetDateController extends AbstractInternalControlle
      */
     protected $itemDto = ItemDto::class;
     // 'id' => 'complaint', to => from
-    protected $itemParams = ['entityId', 'entityType'];
+    protected $itemParams = ['entityId', 'entityType', 'entityDescription'];
 
     /**
      * Variables for controlling edit view rendering
@@ -68,7 +68,8 @@ abstract class AbstractSlaTargetDateController extends AbstractInternalControlle
      */
     protected $defaultData = [
         'entityType' => 'route',
-        'entityId' => 'route'
+        'entityId' => 'route',
+        'entityDescription' => 'route'
     ];
 
     /**
