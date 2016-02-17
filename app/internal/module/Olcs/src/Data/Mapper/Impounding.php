@@ -65,6 +65,11 @@ class Impounding implements MapperInterface
 
         $data = $data['fields'];
 
+        // add the publish flag
+        $data['publish'] =
+            (isset($data['form-actions']['publish']) && $data['form-actions']['publish'] !== null) ?
+            'Y' : 'N';
+
         return $data;
     }
 
