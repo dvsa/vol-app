@@ -23,6 +23,7 @@ class OperatorBusinessDetails implements MapperInterface
             'version' => $data['version'],
             'name' => $data['name'],
             'isIrfo' => $data['isIrfo'],
+            'allowEmail' => $data['allowEmail'],
             'companyNumber' => [
                 'company_number' => $data['companyOrLlpNo']
             ]
@@ -83,7 +84,9 @@ class OperatorBusinessDetails implements MapperInterface
             'address' => isset($data['registeredAddress']) ?
                 $data['registeredAddress'] : null,
             'isIrfo' => isset($data['operator-details']['isIrfo']) ?
-                $data['operator-details']['isIrfo'] : null
+                $data['operator-details']['isIrfo'] : null,
+            'allowEmail' => isset($data['operator-details']['allowEmail']) ?
+                $data['operator-details']['allowEmail'] : null
         ];
 
         return $mapped;

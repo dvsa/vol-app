@@ -39,7 +39,7 @@ class CaseAppealMarker extends AbstractMarker
     {
         $casesWithAppeals = [];
         foreach ($data['cases'] as $case) {
-            if (empty($case['appeal'])) {
+            if (empty($case['appeal']) || !empty($case['closedDate'])) {
                 continue;
             }
 

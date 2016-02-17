@@ -167,6 +167,11 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         $data[$type] = $routeParams[$this->getRouteParamKeyForType($type)];
 
+        // if both the entityType and the entityId has some values then add it into $data
+        if (!empty($routeParams['entityType']) && !empty($routeParams['entityId'])) {
+            $data[$routeParams['entityType']] = $routeParams['entityId'];
+        }
+
         // Update Document Record
         $dto = UpdateDocumentLinks::create($data);
         $response = $this->handleCommand($dto);

@@ -476,7 +476,7 @@ return array(
                             'route' => 'transport-manager/undo-disqualification',
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
-                        ),
+                        )
                     ),
                 ),
             ),

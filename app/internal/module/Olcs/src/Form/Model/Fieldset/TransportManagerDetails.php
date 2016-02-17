@@ -148,4 +148,16 @@ class TransportManagerDetails
      * @Form\Type("Hidden")
      */
     public $status = null;
+
+    /**
+     * @Form\Type("Hidden")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     */
+    public $nysiisForename = null;
+
+    /**
+     * @Form\Type("Hidden")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     */
+    public $nysiisFamilyname = null;
 }
