@@ -10,7 +10,10 @@
     $userId = $this->currentUser()->getUniqueId();
 
     if (!empty($userId)) {
-      echo sprintf('ga(\'create\', \'UA-56585177-1\', \'auto\', {\'userId\': \'%s\'});', $userId);
+    ?>
+      ga('create', 'UA-56585177-1', 'auto', {'userId': '<?php echo $userId; ?>'});
+      ga('set', 'dimension1', '<?php echo $userId; ?>');
+      <?php
     } else {
       ?>
     ga('create', 'UA-56585177-1', 'auto');
