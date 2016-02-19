@@ -33,10 +33,18 @@
                     <p><?php echo sprintf($this->translate('auth.login.termsAgreed'), $this->url('terms-and-conditions')); ?></p>
                     <div class="actions-container">
                         <?php echo $this->formElement($form->get('submit')); ?>
-                        <a href="<?php echo $this->url('user-forgot-username'); ?>" class="action--tertiary list">
+                        <a 
+                          href="<?php echo $this->url('user-forgot-username'); ?>" 
+                          class="action--tertiary list" 
+                          aria-label="<?php echo $this->translate('auth.forgot-username.label.audio'); ?>"
+                        >
                             <?php echo $this->translate('auth.forgot-username.label'); ?>
                         </a>
-                        <a href="<?php echo $this->url('auth/forgot-password'); ?>" class="action--tertiary list">
+                        <a 
+                          href="<?php echo $this->url('auth/forgot-password'); ?>" 
+                          class="action--tertiary list"
+                          aria-label="<?php echo $this->translate('auth.forgot-password.label.audio'); ?>"
+                        >
                             <?php echo $this->translate('auth.forgot-password.label'); ?>
                         </a>
                     </div>
