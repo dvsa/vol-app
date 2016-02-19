@@ -18,11 +18,11 @@ class PreviousPiHearingDataTest extends TestCase
     /**
      * @dataProvider provideParametersProvider
      *
-     * @param $piVenueOther
-     * @param $piVenue
-     * @param $outputPiVenue
+     * @param $venueOther
+     * @param $venue
+     * @param $outputVenue
      */
-    public function testProvideParameters($piVenueOther, $piVenue, $outputPiVenue)
+    public function testProvideParameters($venueOther, $venue, $outputVenue)
     {
         $piId = 44;
         $presidingTc = 22;
@@ -37,10 +37,10 @@ class PreviousPiHearingDataTest extends TestCase
 
                 ],
                 1 => [
-                    'piVenue' => [
-                        'id' => $piVenue,
+                    'venue' => [
+                        'id' => $venue,
                     ],
-                    'piVenueOther' => $piVenueOther,
+                    'venueOther' => $venueOther,
                     'presidingTc' => [
                         'id' => $presidingTc
                     ],
@@ -55,8 +55,8 @@ class PreviousPiHearingDataTest extends TestCase
 
         $expected = [
             'pi' => $piId,
-            'piVenue' => $outputPiVenue,
-            'piVenueOther' => $piVenueOther,
+            'venue' => $outputVenue,
+            'venueOther' => $venueOther,
             'presidingTc' => $presidingTc,
             'presidedByRole' => $presidedByRole,
             'witnesses' => $witnesses,

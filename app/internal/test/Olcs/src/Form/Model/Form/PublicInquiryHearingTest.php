@@ -18,7 +18,7 @@ class PublicInquiryHearingTest extends AbstractFormTest
     {
         return [
             [
-                ['fields', 'piVenue'],
+                ['fields', 'venue'],
                 ['1' => 'Venue 1', 'other' => 'Other']
             ],
             [
@@ -36,20 +36,20 @@ class PublicInquiryHearingTest extends AbstractFormTest
     {
         return [
             new F\Test(
-                new F\Stack(['fields', 'piVenue']),
+                new F\Stack(['fields', 'venue']),
                 new F\Value(F\Value::VALID, 1),
                 new F\Value(F\Value::VALID, 'other'),
                 new F\Value(F\Value::INVALID, null)
             ),
             new F\Test(
-                new F\Stack(['fields', 'piVenueOther']),
-                new F\Value(F\Value::VALID, '', new F\Context(new F\Stack(['fields', 'piVenue']), 1)),
-                new F\Value(F\Value::VALID, 'abcdefgh', new F\Context(new F\Stack(['fields', 'piVenue']), 'other')),
-                new F\Value(F\Value::INVALID, '', new F\Context(new F\Stack(['fields', 'piVenue']), 'other')),
+                new F\Stack(['fields', 'venueOther']),
+                new F\Value(F\Value::VALID, '', new F\Context(new F\Stack(['fields', 'venue']), 1)),
+                new F\Value(F\Value::VALID, 'abcdefgh', new F\Context(new F\Stack(['fields', 'venue']), 'other')),
+                new F\Value(F\Value::INVALID, '', new F\Context(new F\Stack(['fields', 'venue']), 'other')),
                 new F\Value(
                     F\Value::INVALID,
                     str_pad('', 256, '+'),
-                    new F\Context(new F\Stack(['fields', 'piVenue']), 'other')
+                    new F\Context(new F\Stack(['fields', 'venue']), 'other')
                 )
             ),
             new F\Test(

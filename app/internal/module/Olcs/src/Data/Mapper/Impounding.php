@@ -35,8 +35,8 @@ class Impounding implements MapperInterface
             }
         }
 
-        if (isset($data['fields']['piVenueOther']) && $data['fields']['piVenueOther'] != '') {
-            $data['fields']['piVenue'] = 'other';
+        if (!empty($formData['fields']['venueOther'])) {
+            $formData['fields']['venue'] = 'other';
         }
 
         return $formData;
@@ -50,8 +50,8 @@ class Impounding implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
-        if ($data['fields']['piVenue'] != 'other') {
-            $data['fields']['piVenueOther'] = null;
+        if ($data['fields']['venue'] != 'other') {
+            $data['fields']['venueOther'] = null;
         }
 
         // must have a case

@@ -30,7 +30,7 @@ return array(
         array(
             'title' => 'Venue',
             'formatter' => function ($data) {
-                return (isset($data['piVenue']['name']) ? $data['piVenue']['name'] : $data['piVenueOther']);
+                return (isset($data['venue']['name']) ? $data['venue']['name'] : $data['venueOther']);
             }
         ),
         array(

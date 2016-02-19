@@ -29,16 +29,16 @@ class ImpoundingTest extends MockeryTestCase
             [
                 [
                     'case' => 24,
-                    'piVenue' => 'something',
-                    'piVenueOther' => null,
+                    'venue' => 'something',
+                    'venueOther' => null,
                     'legislationTypes' => ['id' => 7]
                 ],
                 [
                     'fields' => [
                         'case' => 24,
-                        'piVenue' => 'something',
+                        'venue' => 'something',
                         'legislationTypes' => 7,
-                        'piVenueOther' => null
+                        'venueOther' => null
                     ],
                     'base' => [
                         'case' => 24
@@ -51,8 +51,8 @@ class ImpoundingTest extends MockeryTestCase
                     'id' => 99,
                     'version' => 3,
                     'case' => 24,
-                    'piVenue' => 'somethingelse',
-                    'piVenueOther' => null,
+                    'venue' => null,
+                    'venueOther' => 'somethingelse',
                     'legislationTypes' => ['id' => 7]
                 ],
                 [
@@ -60,8 +60,8 @@ class ImpoundingTest extends MockeryTestCase
                         'id' => 99,
                         'version' => 3,
                         'case' => 24,
-                        'piVenue' => 'somethingelse',
-                        'piVenueOther' => null,
+                        'venue' => 'other',
+                        'venueOther' => 'somethingelse',
                         'legislationTypes' => 7
                     ],
                     'base' => [
@@ -78,7 +78,7 @@ class ImpoundingTest extends MockeryTestCase
     {
         $inData = [
             'fields' => [
-                'piVenue' => 'something',
+                'venue' => 'something',
                 'legislationTypes' => 7
             ],
             'base' => [
@@ -89,8 +89,8 @@ class ImpoundingTest extends MockeryTestCase
         ];
         $expected = [
             'case' => 24,
-            'piVenue' => 'something',
-            'piVenueOther' => null,
+            'venue' => 'something',
+            'venueOther' => null,
             'legislationTypes' => 7,
             'case' => 24,
             'id' => 99,
