@@ -11,10 +11,10 @@ use Zend\Form\Annotation as Form;
 class PublicInquiryHearingFields extends Base
 {
     /**
-     * @Form\Attributes({"id":"piVenue","placeholder":"","class":"medium"})
+     * @Form\Attributes({"id":"venue","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Venue",
-     *     "service_name": "Common\Service\Data\PiVenue",
+     *     "service_name": "Common\Service\Data\Venue",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
@@ -23,18 +23,18 @@ class PublicInquiryHearingFields extends Base
      *
      * @Form\Type("DynamicSelect")
      */
-    public $piVenue;
+    public $venue;
 
     /**
      * @Form\Required(true)
-     * @Form\Attributes({"class":"medium","id":"piVenueOther", "required":false})
+     * @Form\Attributes({"class":"medium","id":"venueOther", "required":false})
      * @Form\Options({"label":"Other venue"})
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Text")
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
-     *          "context_field": "piVenue",
+     *          "context_field": "venue",
      *          "context_values": {"other"},
      *          "allow_empty": false,
      *          "validators": {
@@ -44,7 +44,7 @@ class PublicInquiryHearingFields extends Base
      *      }
      * })
      */
-    public $piVenueOther;
+    public $venueOther;
 
     /**
      * @Form\Attributes({"id":"hearingDate"})

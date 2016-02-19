@@ -29,7 +29,7 @@ class PiHearingTest extends MockeryTestCase
      */
     public function mapFromFormDataProvider()
     {
-        $piVenueOther = 'pi venue other';
+        $venueOther = 'pi venue other';
         $adjournedReason = 'cancelled reason';
         $adjournedDate = '2015-12-25';
         $cancelledReason = 'cancelled reason';
@@ -40,8 +40,8 @@ class PiHearingTest extends MockeryTestCase
             [
                 [
                     'fields' => [
-                        'piVenue' => 'other',
-                        'piVenueOther' => $piVenueOther,
+                        'venue' => 'other',
+                        'venueOther' => $venueOther,
                         'isCancelled' => 'Y',
                         'cancelledReason' => $cancelledReason,
                         'cancelledDate' => $cancelledDate,
@@ -55,8 +55,8 @@ class PiHearingTest extends MockeryTestCase
                     ]
                 ],
                 [
-                    'piVenue' => null,
-                    'piVenueOther' => $piVenueOther,
+                    'venue' => null,
+                    'venueOther' => $venueOther,
                     'isCancelled' => 'Y',
                     'cancelledReason' => $cancelledReason,
                     'cancelledDate' => $cancelledDate,
@@ -71,8 +71,8 @@ class PiHearingTest extends MockeryTestCase
             [
                 [
                     'fields' => [
-                        'piVenue' => 1,
-                        'piVenueOther' => $piVenueOther,
+                        'venue' => 1,
+                        'venueOther' => $venueOther,
                         'isCancelled' => 'N',
                         'cancelledReason' => $cancelledReason,
                         'cancelledDate' => $cancelledDate,
@@ -83,8 +83,8 @@ class PiHearingTest extends MockeryTestCase
                     ],
                 ],
                 [
-                    'piVenue' => 1,
-                    'piVenueOther' => null,
+                    'venue' => 1,
+                    'venueOther' => null,
                     'isCancelled' => 'N',
                     'cancelledReason' => null,
                     'cancelledDate' => null,
@@ -118,7 +118,7 @@ class PiHearingTest extends MockeryTestCase
      */
     public function mapFromResultDataProvider()
     {
-        $piVenueOther = 'pi venue other';
+        $venueOther = 'pi venue other';
         $otherFieldId = 99;
         $witnesses = 88;
 
@@ -133,8 +133,8 @@ class PiHearingTest extends MockeryTestCase
             ],
             [
                 [
-                    'piVenue' => 1,
-                    'piVenueOther' => $piVenueOther,
+                    'venue' => 1,
+                    'venueOther' => $venueOther,
                     'otherField' => [
                         'id' => $otherFieldId
                     ],
@@ -142,8 +142,8 @@ class PiHearingTest extends MockeryTestCase
                 ],
                 [
                     'fields' => [
-                        'piVenue' => 'other',
-                        'piVenueOther' => $piVenueOther,
+                        'venue' => 'other',
+                        'venueOther' => $venueOther,
                         'otherField' => $otherFieldId,
                         'witnesses' => $witnesses
                     ]
@@ -151,8 +151,8 @@ class PiHearingTest extends MockeryTestCase
             ],
             [
                 [
-                    'piVenue' => 1,
-                    'piVenueOther' => $piVenueOther,
+                    'venue' => 1,
+                    'venueOther' => $venueOther,
                     'otherField' => [
                         'id' => $otherFieldId
                     ],
@@ -160,8 +160,8 @@ class PiHearingTest extends MockeryTestCase
                 ],
                 [
                     'fields' => [
-                        'piVenue' => 'other',
-                        'piVenueOther' => $piVenueOther,
+                        'venue' => 'other',
+                        'venueOther' => $venueOther,
                         'otherField' => $otherFieldId,
                         'witnesses' => 0
                     ]

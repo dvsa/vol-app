@@ -14,9 +14,9 @@ $(function() {
       "fields": {
         "*": true,
         "label:hearingDate": showHearing,
-        "piVenue": showHearing,
-        "piVenueOther": function() {
-          return showHearing() && OLCS.formHelper("fields", "piVenue").val() === otherVenue;
+        "venue": showHearing,
+        "venueOther": function() {
+          return showHearing() && OLCS.formHelper("fields", "venue").val() === otherVenue;
         }
       }
     }

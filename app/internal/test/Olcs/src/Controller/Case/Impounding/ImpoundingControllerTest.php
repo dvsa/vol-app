@@ -27,15 +27,15 @@ class ImpoundingControllerTest extends AbstractHttpControllerTestCase
         );
         $inData = [
             'fields' => [
-                'piVenue' => 1,
-                'piVenueOther' => 'this data will be made null'
+                'venue' => 1,
+                'venueOther' => 'this data will be made null'
             ]
         ];
 
         $outData = [
             'fields' => [
-                'piVenue' => 1,
-                'piVenueOther' => null
+                'venue' => 1,
+                'venueOther' => null
             ]
         ];
 

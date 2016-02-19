@@ -104,10 +104,10 @@ class ImpoundingFields
     public $hearingDate = null;
 
     /**
-     * @Form\Attributes({"id":"piVenue","placeholder":"","class":"medium", "required":false})
+     * @Form\Attributes({"id":"venue","placeholder":"","class":"medium", "required":false})
      * @Form\Options({
      *     "label": "Hearing location",
-     *     "service_name": "Common\Service\Data\PiVenue",
+     *     "service_name": "Common\Service\Data\Venue",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
@@ -117,11 +117,11 @@ class ImpoundingFields
      * @Form\AllowEmpty(true)
      * @Form\Type("DynamicSelect")
      */
-    public $piVenue = null;
+    public $venue = null;
 
     /**
      * @Form\Required(false)
-     * @Form\Attributes({"class":"medium","id":"piVenueOther", "required":false})
+     * @Form\Attributes({"class":"medium","id":"venueOther", "required":false})
      * @Form\Options({"label":"Other hearing location"})
      * @Form\AllowEmpty(true)
      * @Form\Type("Text")
@@ -137,7 +137,7 @@ class ImpoundingFields
      *      }
      * })
      */
-    public $piVenueOther = null;
+    public $venueOther = null;
 
     /**
      * @Form\Attributes({"id":"presidingTc","placeholder":"","class":"medium"})
