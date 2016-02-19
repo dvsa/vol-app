@@ -35,8 +35,8 @@ class Impounding implements MapperInterface
             }
         }
 
-        if (isset($data['fields']['venueOther']) && $data['fields']['venueOther'] != '') {
-            $data['fields']['venue'] = 'other';
+        if (!empty($formData['fields']['venueOther'])) {
+            $formData['fields']['venue'] = 'other';
         }
 
         return $formData;

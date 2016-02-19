@@ -51,8 +51,8 @@ class ImpoundingTest extends MockeryTestCase
                     'id' => 99,
                     'version' => 3,
                     'case' => 24,
-                    'venue' => 'somethingelse',
-                    'venueOther' => null,
+                    'venue' => null,
+                    'venueOther' => 'somethingelse',
                     'legislationTypes' => ['id' => 7]
                 ],
                 [
@@ -60,8 +60,8 @@ class ImpoundingTest extends MockeryTestCase
                         'id' => 99,
                         'version' => 3,
                         'case' => 24,
-                        'venue' => 'somethingelse',
-                        'venueOther' => null,
+                        'venue' => 'other',
+                        'venueOther' => 'somethingelse',
                         'legislationTypes' => 7
                     ],
                     'base' => [
