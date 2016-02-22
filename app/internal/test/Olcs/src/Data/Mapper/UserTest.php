@@ -130,7 +130,13 @@ class UserTest extends MockeryTestCase
                         ]
                     ],
                     'transportManager' => [
-                        'id' => 3
+                        'id' => 3,
+                        'homeCd' => [
+                            'person' => [
+                                'forename' => 'test',
+                                'familyName' => 'me'
+                            ]
+                        ]
                     ],
                     'contactDetails' => [
                         'person' => [
@@ -157,7 +163,8 @@ class UserTest extends MockeryTestCase
                     'userType' => [
                         'userType' => 'transport-manager',
                         'role' => 'role',
-                        'transportManager' => 3,
+                        'currentTransportManager' => 3,
+                        'currentTransportManagerName' => 'test me',
                     ],
                     'userPersonal' => [
                         'forename' => 'fn1',
