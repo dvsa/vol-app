@@ -67,6 +67,14 @@ class ProhibitionFields extends Base
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
+     * @Form\Validator({
+     *     "name": "DateCompare",
+     *     "options": {
+     *         "compare_to":"prohibitionDate",
+     *         "compare_to_label":"Prohibition date",
+     *         "operator": "gte",
+     *     }
+     * })
      */
     public $clearedDate = null;
 
