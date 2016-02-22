@@ -53,6 +53,28 @@ class UserType
     public $team = null;
 
     /**
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"currentTransportManagerHtml", "required": false, "data-container-class":"tm-current"})
+     * @Form\Options({
+     *     "label": "Current Transport Manager"
+     * })
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $currentTransportManagerHtml = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $currentTransportManager = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $currentTransportManagerName = null;
+
+    /**
      * @Form\Options({"label":"Application"})
      * @Form\Required(false)
      * @Form\Attributes({"id":"applicationTransportManagers"})
@@ -78,8 +100,19 @@ class UserType
      *          "context_values": {"transport-manager"},
      *          "allow_empty": false,
      *          "validators": {
-     *              {"name": "\Zend\Validator\NotEmpty"},
+     *              {
+     *                  "name": "ValidateIf",
+     *                  "options": {
+     *                      "context_field": "currentTransportManager",
+     *                      "context_values": {""},
+     *                      "allow_empty": false,
+     *                      "validators": {
+     *                          {"name": "\Zend\Validator\NotEmpty"},
+     *                      }
+     *                  }
+     *              }
      *          }
+
      *      }
      * })
      */

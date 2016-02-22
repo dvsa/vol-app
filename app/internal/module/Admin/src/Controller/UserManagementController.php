@@ -157,6 +157,7 @@ class UserManagementController extends AbstractInternalController implements Lef
      */
     protected function alterFormForAdd($form, $data)
     {
+        $form->get('userType')->remove('currentTransportManagerHtml');
         $form->get('userLoginSecurity')->remove('accountDisabled');
         $form->get('userLoginSecurity')->remove('disabledDate');
         $form->get('userLoginSecurity')->remove('resetPassword');
@@ -176,6 +177,22 @@ class UserManagementController extends AbstractInternalController implements Lef
     {
         if (empty($data['userLoginSecurity']['disabledDate'])) {
             $form->get('userLoginSecurity')->remove('disabledDate');
+        }
+
+        if (!empty($data['userType']['currentTransportManager'])
+            && !empty($data['userType']['currentTransportManagerName'])
+        ) {
+            $value = sprintf(
+                '<a href="%s">%s</a>',
+                $this->getServiceLocator()->get('Helper\Url')->fromRoute(
+                    'transport-manager',
+                    ['transportManager' => $data['userType']['currentTransportManager']]
+                ),
+                $data['userType']['currentTransportManagerName']
+            );
+            $form->get('userType')->get('currentTransportManagerHtml')->setValue($value);
+        } else {
+            $form->get('userType')->remove('currentTransportManagerHtml');
         }
 
         return $form;

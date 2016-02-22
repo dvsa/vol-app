@@ -50,7 +50,13 @@ class User implements MapperInterface
                     $formData['userType']['team'] = $data['team']['id'];
                     break;
                 case 'transport-manager':
-                    $formData['userType']['transportManager'] = $data['transportManager']['id'];
+                    $formData['userType']['currentTransportManager'] = $data['transportManager']['id'];
+
+                    if (!empty($data['transportManager']['homeCd']['person']['familyName'])) {
+                        $formData['userType']['currentTransportManagerName']
+                            = $data['transportManager']['homeCd']['person']['forename']
+                                .' '.$data['transportManager']['homeCd']['person']['familyName'];
+                    }
                     break;
                 case 'partner':
                     $formData['userType']['partnerContactDetails'] = $data['partnerContactDetails']['id'];
