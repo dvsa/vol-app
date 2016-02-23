@@ -848,7 +848,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-auth.git",
-                "reference": "4765966980061ff80107d01749eb686c3b2107b4"
+                "reference": "b23554fdda030dc3206f0b2b88841206afb225a3"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -867,7 +867,7 @@
                 }
             },
             "description": "OLCS Authentication",
-            "time": "2016-02-11 14:21:59"
+            "time": "2016-02-23 12:35:15"
         },
         {
             "name": "olcs/olcs-logging",
