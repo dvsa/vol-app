@@ -130,21 +130,20 @@
     a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    <?php
-
-    $userId = $this->currentUser()->getUniqueId();
-
-    if (!empty($userId)) {
-      echo sprintf('ga(\'create\', \'UA-56588861-1\', \'auto\', {\'userId\': \'%s\'});', $userId);
-    } else {
-      ?>
-      ga('create', 'UA-56588861-1', 'auto');
-      <?php
-    }
+<?php
+$userId = $this->currentUser()->getUniqueId();
+if (!empty($userId)) {
     ?>
-
-    ga('send', 'pageview');
-
+    ga('create', 'UA-56588861-1', 'auto', {'userId': '<?php echo $userId; ?>'});
+    ga('set', 'dimension1', '<?php echo $userId; ?>');
+    <?php
+} else {
+    ?>
+    ga('create', 'UA-56588861-1', 'auto');
+    <?php
+    }
+?>
+ga('send', 'pageview');
     </script>
 
   </body>
