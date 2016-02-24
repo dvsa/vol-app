@@ -200,9 +200,9 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                         ['id' => 2],
                     ],
                     'openCases' => [
-                        ['id' => 2, 'publicInquirys' => []],
-                        ['id' => 3, 'publicInquirys' => []],
-                        ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
+                        ['id' => 2, 'publicInquiry' => []],
+                        ['id' => 3, 'publicInquiry' => []],
+                        ['id' => 4, 'publicInquiry' => ['id' => 99]],
                     ],
                     'gracePeriods' => [
                         [
@@ -283,9 +283,9 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'tradingName' => 'JSH R Us',
                     'complaintsCount' => 0,
                     'openCases' =>[
-                        ['id' => 2, 'publicInquirys' => []],
-                        ['id' => 3, 'publicInquirys' => []],
-                        ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
+                        ['id' => 2, 'publicInquiry' => null],
+                        ['id' => 3, 'publicInquiry' => null],
+                        ['id' => 4, 'publicInquiry' => ['id' => 99]],
                     ],
                     'gracePeriods' => [],
                     'currentApplications' => [],
