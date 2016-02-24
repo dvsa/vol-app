@@ -17,6 +17,8 @@ use Zend\Mvc\Controller\AbstractActionController;
  */
 class ApplicationControllerTraitStub extends AbstractActionController
 {
+    protected $lva = 'application';
+
     use ApplicationControllerTrait;
 
     public function callRender($title, $form = null, $variables = array())

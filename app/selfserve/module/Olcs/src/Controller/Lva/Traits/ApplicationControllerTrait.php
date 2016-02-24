@@ -39,10 +39,7 @@ trait ApplicationControllerTrait
 
     protected function checkAppStatus($applicationId)
     {
-        // query is already cached
-        $dto = ApplicationQry::create(['id' => $applicationId]);
-        $response = $this->handleQuery($dto);
-        $data = $response->getResult();
+        $data = $this->getApplicationData($applicationId);
         return ($data['status']['id'] === RefData::APPLICATION_STATUS_NOT_SUBMITTED);
     }
 
@@ -72,12 +69,15 @@ trait ApplicationControllerTrait
         }
 
         $progress = $this->getSectionStepProgress($sectionName);
+        $data = $this->getApplicationData($this->getApplicationId());
 
         $params = array_merge(
             [
                 'title' => 'lva.section.title.' . $titleSuffix,
                 'form' => $form,
-                'reference' => $this->getApplicationId() . '/' . $this->getLicenceId()
+                'reference' => $this->getApplicationId() . '/' . $this->getLicenceId(),
+                'status' => $data['status']['id'],
+                'lva' => $this->lva
             ],
             $progress,
             $variables
@@ -101,11 +101,7 @@ trait ApplicationControllerTrait
      */
     protected function getSectionStepProgress($currentSection)
     {
-        $applicationId = $this->getApplicationId();
-
-        $dto = ApplicationQry::create(['id' => $applicationId]);
-        $response = $this->handleQuery($dto);
-        $data = $response->getResult();
+        $data = $this->getApplicationData($this->getApplicationId());
 
         // Don't show steps on variations
         if ($data['isVariation'] == true) {

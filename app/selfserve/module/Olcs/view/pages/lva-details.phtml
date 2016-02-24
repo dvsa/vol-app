@@ -1,6 +1,12 @@
 <?php
-  $progressTranslated = sprintf($this->translate('application.progress'), $stepX, $stepY);
+  if ($lva === 'application') {
+    $progressTranslated = sprintf($this->translate('application.progress'), $stepX, $stepY);
+  } elseif ($lva === 'licence') {
+    $startDateFormatted =  $startDate ? strftime("%d %B %G",strtotime($startDate)) : '';
+    $renewalDateFormatted =  $renewalDate ? strftime("%d %B %G",strtotime($renewalDate)) : '';
+  }
   $statusTranslated = $this->translate($status);
+  $translator = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');
 ?>
 <div class="page-header">
   <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
@@ -27,6 +33,21 @@
   <div class="one-quarter">
     <h3>Filter by:</h3>
     <?php echo $this->form($filterForm); ?>
+    <?php
+    if ($lva === 'application') {
+      echo $translator->translateReplace(
+          'markup-application-right-column', [$reference, $progressTranslated, $statusTranslated]
+      );
+    } elseif ($lva === 'variation') {
+      echo $translator->translateReplace(
+          'markup-variation-right-column', [$reference, $statusTranslated]
+      );
+    } else {
+      echo $translator->translateReplace(
+          'markup-licence-right-column', [$licNo, $statusTranslated, $renewalDateFormatted, $startDateFormatted]
+      );
+    }
+    ?>
     <?php echo $this->translate('markup-support-contact-address');?>
   </div>
 
@@ -93,10 +114,23 @@
 
   <?php if (!isset($filterForm)): ?>
     <div class="one-third">
-      <?php echo $this->getHelperPluginManager()
-          ->getServiceLocator()->get('Helper\Translation')
-          ->translateReplace('markup-application-right-column', [$reference, $progressTranslated, $statusTranslated]);
+      <div class="sidebar">
+      <?php
+          if ($lva === 'application') {
+            echo $translator->translateReplace(
+                    'markup-application-right-column', [$reference, $progressTranslated, $statusTranslated]
+                );
+          } elseif ($lva === 'variation') {
+            echo $translator->translateReplace(
+                    'markup-variation-right-column', [$reference, $statusTranslated]
+                );
+          } else {
+            echo $translator->translateReplace(
+                  'markup-licence-right-column', [$licNo, $statusTranslated, $renewalDateFormatted, $startDateFormatted]
+              );
+          }
       ?>
+      </div>
       <?php echo $this->translate('markup-support-contact-address');?>
     </div>
   <?php endif; ?>
