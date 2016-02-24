@@ -95,6 +95,7 @@ class ImpoundingTest extends MockeryTestCase
             'case' => 24,
             'id' => 99,
             'version' => 3,
+            'publish' => 'N',
         ];
 
         $this->assertEquals($expected, Sut::mapFromForm($inData));
