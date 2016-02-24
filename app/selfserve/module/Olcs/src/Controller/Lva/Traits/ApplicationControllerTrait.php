@@ -74,7 +74,11 @@ trait ApplicationControllerTrait
         $progress = $this->getSectionStepProgress($sectionName);
 
         $params = array_merge(
-            array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form),
+            [
+                'title' => 'lva.section.title.' . $titleSuffix,
+                'form' => $form,
+                'reference' => $this->getApplicationId() . '/' . $this->getLicenceId()
+            ],
             $progress,
             $variables
         );
@@ -140,5 +144,13 @@ trait ApplicationControllerTrait
     {
         $this->getServiceLocator()->get('Entity\Application')
             ->forceUpdate($applicationId, ['declarationConfirmation' => 'N']);
+    }
+
+    protected function getApplicationData($applicationId)
+    {
+        // query is already cached
+        $dto = ApplicationQry::create(['id' => $applicationId]);
+        $response = $this->handleQuery($dto);
+        return $response->getResult();
     }
 }

@@ -1,3 +1,7 @@
+<?php
+  $progressTranslated = sprintf($this->translate('application.progress'), $stepX, $stepY);
+  $statusTranslated = $this->translate($status);
+?>
 <div class="page-header">
   <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
   <div class="page-header__wrapper">
@@ -89,6 +93,10 @@
 
   <?php if (!isset($filterForm)): ?>
     <div class="one-third">
+      <?php echo $this->getHelperPluginManager()
+          ->getServiceLocator()->get('Helper\Translation')
+          ->translateReplace('markup-application-right-column', [$reference, $progressTranslated, $statusTranslated]);
+      ?>
       <?php echo $this->translate('markup-support-contact-address');?>
     </div>
   <?php endif; ?>
