@@ -32,7 +32,7 @@ class SlaTargetDate extends Base
 
     /**
      * @Form\Options({
-     *     "label": "Agreed date",
+     *     "label": "Received/Agreed date",
      *     "create_empty_option": false,
      *     "render_delimiters": "d m y"
      * })
