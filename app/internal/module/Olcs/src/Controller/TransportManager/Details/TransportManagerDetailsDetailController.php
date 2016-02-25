@@ -148,15 +148,20 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
                 ->setValue($data['transport-manager-details']['id']);
         }
 
-        $nysiisData = $this->getNysiisData($data['transport-manager-details']);
+        // If no Transport Manager details then don't attempt to lookup Nysiis name
+        if (!empty($data['transport-manager-details'])) {
 
-        $form->get('transport-manager-details')
-            ->get('nysiisForename')
-            ->setValue($nysiisData['nysiisForename']);
+            // @todo check the response from the service that the array indexes exist
+            $nysiisData = $this->getNysiisData($data['transport-manager-details']);
 
-        $form->get('transport-manager-details')
-            ->get('nysiisFamilyname')
-            ->setValue($nysiisData['nysiisFamilyname']);
+            $form->get('transport-manager-details')
+                ->get('nysiisForename')
+                ->setValue($nysiisData['nysiisForename']);
+
+            $form->get('transport-manager-details')
+                ->get('nysiisFamilyname')
+                ->setValue($nysiisData['nysiisFamilyname']);
+        }
 
         return $form;
     }
