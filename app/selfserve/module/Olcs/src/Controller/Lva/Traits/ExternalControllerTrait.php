@@ -12,6 +12,7 @@ use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Common\View\Model\Section;
 use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as UserQry;
+use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
 
 /**
  * Abstract External Controller
@@ -124,6 +125,17 @@ trait ExternalControllerTrait
             array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form),
             $variables
         );
+        if ($this->lva === 'licence') {
+            // query is already cached
+            $dto = LicenceQry::create(['id' => $this->getLicenceId()]);
+            $response = $this->handleQuery($dto);
+            $data = $response->getResult();
+            $params['startDate'] = $data['inForceDate'];
+            $params['renewalDate'] = $data['expiryDate'];
+            $params['status'] = $data['status']['id'];
+            $params['licNo'] = $data['licNo'];
+            $params['lva'] = 'licence';
+        }
 
         return $this->renderView(new Section($params));
     }
