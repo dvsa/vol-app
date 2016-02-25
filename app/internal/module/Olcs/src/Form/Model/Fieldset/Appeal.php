@@ -111,6 +111,36 @@ class Appeal extends CaseBase
     public $decisionDate = null;
 
     /**
+     * @Form\Attributes({"id":"papersDueTcDate"})
+     * @Form\Options({
+     *     "label": "Papers due with TC/DTC",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Required(false)
+     * @Form\Type("DateSelect")
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     */
+    public $papersDueTcDate = null;
+
+    /**
+     * @Form\Attributes({"id":"papersSentTcDate"})
+     * @Form\Options({
+     *     "label": "Papers sent to TC/DTC",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Required(false)
+     * @Form\Type("DateSelect")
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     */
+    public $papersSentTcDate = null;
+
+    /**
      * @Form\Attributes({"id":"dob"})
      * @Form\Options({
      *     "label": "Papers due at tribunal",
@@ -128,7 +158,7 @@ class Appeal extends CaseBase
     /**
      * @Form\Attributes({"id":"dob"})
      * @Form\Options({
-     *     "label": "Papers sent date",
+     *     "label": "Papers sent to tribunal",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
