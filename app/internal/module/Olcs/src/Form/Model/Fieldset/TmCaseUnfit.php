@@ -128,7 +128,6 @@ class TmCaseUnfit extends CaseBase
      * @Form\Attributes({"id":"unfitnessReasons","class":"chosen-select-medium","multiple":"multiple"})
      * @Form\Options({
      *     "label": "Reason for unfitness",
-     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a reason for unfitness",
      *     "category": "tm_unfit_reason"
@@ -142,7 +141,6 @@ class TmCaseUnfit extends CaseBase
      * @Form\Attributes({"id":"rehabMeasures","class":"chosen-select-medium","multiple":"multiple"})
      * @Form\Options({
      *     "label": "Rehabilitation measure",
-     *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a rehabilitation measure",
      *     "category": "tm_case_rehab"

@@ -491,7 +491,7 @@ trait FeesActionTrait
 
             // check if we need to recover serialized data from confirm step
             if ($this->isButtonPressed('confirm') && isset($data['custom'])) {
-                $data = unserialize($data['custom']);
+                $data = json_decode($data['custom'], true);
             }
 
             if ($this->isCardPayment($data)) {
@@ -507,7 +507,7 @@ trait FeesActionTrait
 
                 if ($this->shouldConfirmPayment($feeData, $data)) {
                     $confirmMessage = $this->getConfirmPaymentMessage($feeData, $data);
-                    $confirm = $this->confirm($confirmMessage, false, serialize($data));
+                    $confirm = $this->confirm($confirmMessage, false, json_encode($data));
 
                     if ($confirm instanceof ViewModel) {
                         return $this->renderView($confirm);
