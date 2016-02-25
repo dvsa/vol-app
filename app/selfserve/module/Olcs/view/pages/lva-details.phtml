@@ -124,7 +124,7 @@
             echo $translator->translateReplace(
                     'markup-variation-right-column', [$reference, $statusTranslated]
                 );
-          } else {
+          } elseif ($lva === 'licence') {
             echo $translator->translateReplace(
                   'markup-licence-right-column', [$licNo, $statusTranslated, $renewalDateFormatted, $startDateFormatted]
               );
