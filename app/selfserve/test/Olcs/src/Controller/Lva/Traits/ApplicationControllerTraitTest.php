@@ -114,7 +114,20 @@ class ApplicationControllerTraitTest extends MockeryTestCase
 
         $this->sut->shouldReceive('getSectionStepProgress')
             ->with('my-page')
-            ->andReturn(['stepX' => 2, 'stepY' => 12]);
+            ->andReturn(['stepX' => 2, 'stepY' => 12])
+            ->shouldReceive('getApplicationData')
+            ->andReturn(
+                [
+                    'status' => ['id' => 'apsts_not_submitted']
+                ]
+            )
+            ->once()
+            ->shouldReceive('getApplicationId')
+            ->andReturn(1)
+            ->twice()
+            ->shouldReceive('getLicenceId')
+            ->andReturn(2)
+            ->once();
 
         $view = $this->sut->callRender('my-page');
 
@@ -131,6 +144,9 @@ class ApplicationControllerTraitTest extends MockeryTestCase
                 'form' => null,
                 'stepX' => 2,
                 'stepY' => 12,
+                'status' => 'apsts_not_submitted',
+                'lva' => 'application',
+                'reference' => '1/2'
             ],
             (array)$children[0]->getVariables()
         );
@@ -149,7 +165,20 @@ class ApplicationControllerTraitTest extends MockeryTestCase
 
         $this->sut->shouldReceive('getSectionStepProgress')
             ->with('people')
-            ->andReturn(['stepX' => 2, 'stepY' => 12]);
+            ->andReturn(['stepX' => 2, 'stepY' => 12])
+            ->shouldReceive('getApplicationData')
+            ->andReturn(
+                [
+                    'status' => ['id' => 'apsts_not_submitted']
+                ]
+            )
+            ->once()
+            ->shouldReceive('getApplicationId')
+            ->andReturn(1)
+            ->twice()
+            ->shouldReceive('getLicenceId')
+            ->andReturn(2)
+            ->once();
 
         $view = $this->sut->callRender('person');
 
@@ -161,6 +190,9 @@ class ApplicationControllerTraitTest extends MockeryTestCase
                 'form'  => null,
                 'stepX' => 2,
                 'stepY' => 12,
+                'status' => 'apsts_not_submitted',
+                'lva' => 'application',
+                'reference' => '1/2'
             ],
             (array)$children[0]->getVariables()
         );

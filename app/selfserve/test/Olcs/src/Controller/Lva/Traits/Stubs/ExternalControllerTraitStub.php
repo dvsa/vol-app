@@ -17,6 +17,8 @@ use Zend\Mvc\Controller\AbstractActionController;
  */
 class ExternalControllerTraitStub extends AbstractActionController
 {
+    protected $lva = 'licence';
+
     use ExternalControllerTrait;
 
     public function callRender($title, $form = null, $variables = array())
