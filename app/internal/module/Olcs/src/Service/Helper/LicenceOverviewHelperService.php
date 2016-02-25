@@ -124,7 +124,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
         $openCases = (string) count($cases);
 
         foreach ($cases as $c) {
-            if (!empty($c['publicInquirys'])) {
+            if (!empty($c['publicInquiry'])) {
                 $openCases .= ' (PI)';
                 break;
             }
