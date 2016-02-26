@@ -541,7 +541,7 @@ $routes = [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
                 'section' => '[a-z\-]+',
-                'action' => '(assign|attach)'
+                'action' => '(assign|attach|information-complete)'
             ],
             'defaults' => [
                 'controller' => 'CaseProcessSubmissionController',
