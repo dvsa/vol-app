@@ -33,6 +33,11 @@ class ProcessSubmissionController extends AbstractInternalController implements 
             'route' => 'submission',
             'action' => 'details',
             'reUseParams' => true,
+        ],
+        'information-complete' => [
+            'route' => 'submission',
+            'action' => 'details',
+            'reUseParams' => true,
         ]
     ];
 
