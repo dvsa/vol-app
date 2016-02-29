@@ -96,9 +96,9 @@
                       <table>
                           <thead>
                               <tr>
-                                  <th>Name</th>
-                                  <th>DOB</th>
-                                  <th></th>
+                                  <th><?php echo $this->translate('name'); ?></th>
+                                  <th><?php echo $this->translate('dob'); ?></th>
+                                  <th><?php echo $this->translate('actions'); ?></th>
                               </tr>
                           </thead>
                           <tbody>
@@ -141,7 +141,7 @@
   </div>
 
   <div class="one-third">
-    <div class="sidebar">
+    <aside class="sidebar" role="complementary">
       <dl class="meta">
         <dt><?php echo $this->translate('application-reference-no.title'); ?></dt>
         <dd><?php echo $licence . '/' . $application; ?></dd>
@@ -160,7 +160,7 @@
         <dt><?php echo $this->translate('status.title'); ?></dt>
         <dd><?php echo $this->translate($status); ?></dd>
       </dl>
-    </div>
+    </aside>
   </div>
 
 </div>

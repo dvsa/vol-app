@@ -1,40 +1,44 @@
 <div class="page-header">
-    <?php
-    // We can explicitly opt out of breadcrumbs, but otherwise we show them
-    if (!isset($this->showNav) || $this->showNav !== false) {
-        /** @var \Zend\View\Helper\Navigation\Menu $menu */
-        $menu = $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs');
-        echo $menu;
-    }
-    ?>
-    <div class="row">
-      <div class="page-header__wrapper two-thirds">
   
-          <?php if (isset($this->pageSubTitle)) : ?><h3 class="page-header__subtitle"><?php echo $this->pageSubTitle;
-              ?></h3><?php endif; ?>
+  <?php if (!isset($this->showNav) || $this->showNav !== false) {
+    /** @var \Zend\View\Helper\Navigation\Menu $menu */
+    $menu = $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs');
+    echo $menu;
+  } ?>
   
-        <h1><?php echo $this->pageTitle; ?></h1>
+  <div class="row">
+      
+    <div class="page-header__wrapper two-thirds">
   
-          <div class="page-header__text">
-              <?php
-              if (isset($this->pageHeaderText)) {
-              ?>
-              <p><?php echo $this->pageHeaderText; ?></p>
-              <?php
-              }
-              ?>
-          </div>
-          <?php
-          if (isset($this->pageHeaderUrl) && !empty($this->pageHeaderUrl)) {
-          ?>
-              <p><b><a href="<?php echo $this->url($this->pageHeaderUrl['route'], $this->pageHeaderUrl['params']);
-                      ?>"><?php echo $this->translate($this->pageHeaderUrl['text']); ?></a></b></p>
-          <?php
-          }
-          ?>
-      </div><!-- end .page-header__wrapper -->
-      <ul class="page-header__actions one-third">
+      <?php if (isset($this->pageSubTitle) && $this->pageSubTitle != '') : ?>
+        <h3 class="page-header__subtitle">
+          <?php echo $this->pageSubTitle; ?>
+        </h3>
+      <?php endif; ?>
   
-      </ul>
+      <h1><?php echo $this->pageTitle; ?></h1>
+  
+      <?php if (isset($this->pageHeaderText) && $this->pageHeaderText != '') { ?>
+        <div class="page-header__text">
+            <p><?php echo $this->pageHeaderText; ?></p>
+        </div>
+      <?php } ?>
+          
+      <?php if (isset($this->pageHeaderUrl) && !empty($this->pageHeaderUrl)) { ?>
+        <p>
+          <b>
+            <a href="<?php echo $this->url($this->pageHeaderUrl['route'], $this->pageHeaderUrl['params']);?>">
+              <?php echo $this->translate($this->pageHeaderUrl['text']); ?>
+            </a>
+          </b>
+        </p>
+      <?php } ?>
+          
     </div>
-</div><!-- end .page-header -->
+    
+    <ul class="page-header__actions one-third">
+    </ul>
+      
+  </div>
+    
+</div><!-- .page-header -->

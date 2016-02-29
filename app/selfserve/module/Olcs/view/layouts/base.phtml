@@ -8,26 +8,29 @@
         <?php echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css'), ['media' => 'screen,print']); ?>
         <?php echo $this->headScript(); ?>
         <!--[if IE]>
-        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+          <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
     </head>
 
   <body class="selfserve" id="<?php echo $this->pageId(); ?>">
     <?php echo $this->version(); ?>
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+    
+    <a class="visually-hidden" id="skipToContent" href="#main"><?php echo $this->translate('skip-content'); ?></a>
 
-    <div role="banner" class="global-header">
+    <header role="banner" class="global-header">
       <div class="global-header__wrapper">
         <a href="/" title="Go to dashboard" class="global-header__logo">
-          <img src="<?php echo $this->assetPath('/images/gov.uk_logotype_crown.png') ?>" alt="GOV.UK logo">GOV.UK
+          <img aria-label="GOV-dot-U.K logo" src="<?php echo $this->assetPath('/images/gov.uk_logotype_crown.png') ?>" alt="GOV.UK logo">
+          <span aria-hidden="true">GOV.UK</span>
         </a>
-
-        <div class="proposition">
+        
+        <div class="proposition" role="navigation">
           <h2 class="proposition__title"><?php echo $this->translate('header-vehicle-operator-licensing'); ?></h2>
+          
           <a class="proposition__toggle" href="#">Menu</a>
 
             <?php
-
 
             /* @var \Zend\View\Helper\Navigation\Menu $menu */
             $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'home'))->menu();
@@ -41,9 +44,10 @@
 
             echo $menu->setUlClass('proposition-nav');
             ?>
-        </div>
-      </div><!-- end .global-header__wrapper -->
-    </div><!-- end .global-header -->
+            
+        </nav>
+      </div>
+    </header><!-- .global-header -->
 
     <?php
 
@@ -82,13 +86,13 @@
             </ul>
         </div><!-- user-header -->
 
-        <div id="main" role="main">
+        <main id="main" role="main">
             <?php echo $this->content; ?>
-        </div><!-- main -->
+        </main><!-- main -->
 
     </div><!-- page-wrapper-->
 
-    <div class="global-footer">
+    <footer class="global-footer" role="contentinfo">
         <div class="global-footer__wrapper">
             <ul class="global-footer__links">
                 <li class="global-footer__link">
@@ -108,7 +112,7 @@
                 <a href="<?php echo $this->translate('crown-copyright-link'); ?>" target="blank">&copy; <?php echo $this->translate('crown-copyright'); ?></a>
             </div>
         </div>
-    </div><!-- global-footer -->
+    </footer><!-- global-footer -->
 
 
     <?php echo $this->inlineScript()

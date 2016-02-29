@@ -30,8 +30,8 @@
 
   <?php if (isset($filterForm)): ?>
 
-  <div class="one-quarter">
-    <h3>Filter by:</h3>
+  <div class="one-quarter sidebar--plain">
+    <h4>Filter by:</h4>
     <?php echo $this->form($filterForm); ?>
     <?php
     if ($lva === 'application') {
@@ -114,15 +114,19 @@
 
   <?php if (!isset($filterForm)): ?>
     <div class="one-third">
-      <div class="sidebar">
-      <?php
-          if ($lva === 'application') {
-            echo $translator->translateReplace(
-                    'markup-application-right-column', [$reference, $progressTranslated, $statusTranslated]
-                );
-          } elseif ($lva === 'variation') {
-            echo $translator->translateReplace(
-                    'markup-variation-right-column', [$reference, $statusTranslated]
+      <aside class="sidebar" role="complementary">
+        <?php
+            if ($lva === 'application') {
+              echo $translator->translateReplace(
+                      'markup-application-right-column', [$reference, $progressTranslated, $statusTranslated]
+                  );
+            } elseif ($lva === 'variation') {
+              echo $translator->translateReplace(
+                      'markup-variation-right-column', [$reference, $statusTranslated]
+                  );
+            } else {
+              echo $translator->translateReplace(
+                    'markup-licence-right-column', [$licNo, $statusTranslated, $renewalDateFormatted, $startDateFormatted]
                 );
           } elseif ($lva === 'licence') {
             echo $translator->translateReplace(
@@ -130,7 +134,7 @@
               );
           }
       ?>
-      </div>
+      </aside>
       <?php echo $this->translate('markup-support-contact-address');?>
     </div>
   <?php endif; ?>

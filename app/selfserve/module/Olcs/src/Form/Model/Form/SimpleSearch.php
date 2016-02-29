@@ -6,7 +6,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("simple-search")
- * @Form\Attributes({"method":"post", "action":""})
+ * @Form\Attributes({"method":"post", "action":"", "role":"search"})
  * @Form\Hydrator("Zend\Stdlib\Hydrator\ArraySerializable")
  */
 class SimpleSearch
