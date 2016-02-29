@@ -128,10 +128,14 @@
               echo $translator->translateReplace(
                     'markup-licence-right-column', [$licNo, $statusTranslated, $renewalDateFormatted, $startDateFormatted]
                 );
-            }
-        ?>
-        <?php echo $this->translate('markup-support-contact-address');?>
+          } elseif ($lva === 'licence') {
+            echo $translator->translateReplace(
+                  'markup-licence-right-column', [$licNo, $statusTranslated, $renewalDateFormatted, $startDateFormatted]
+              );
+          }
+      ?>
       </aside>
+      <?php echo $this->translate('markup-support-contact-address');?>
     </div>
   <?php endif; ?>
   
