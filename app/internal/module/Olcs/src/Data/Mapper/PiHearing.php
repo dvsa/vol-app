@@ -29,7 +29,9 @@ class PiHearing implements MapperInterface
             $formData['fields']['venue'] = 'other';
         }
 
-        if ($formData['fields']['isFullDay'] !== 'N' && $formData['fields']['isFullDay'] !== 'Y') {
+        if (!isset($formData['fields']['isFullDay']) ||
+            ($formData['fields']['isFullDay'] !== 'N' && $formData['fields']['isFullDay'] !== 'Y')
+        ) {
             $formData['fields']['isFullDay'] = 'not-set';
         }
 
