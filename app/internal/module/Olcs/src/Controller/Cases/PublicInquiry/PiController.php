@@ -18,7 +18,6 @@ use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateDecision as UpdateDecisionCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateSla as UpdateSlaCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\Close as CloseCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\Reopen as ReopenCmd;
-use Common\Service\Data\Sla as SlaService;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Zend\View\Model\ViewModel;
 
@@ -251,13 +250,10 @@ class PiController extends AbstractInternalController implements CaseControllerI
      */
     private function setSlaTargetHint($form, $element, $data)
     {
-        $elementName = $element->getName();
-
-        $date = $data[$elementName . 'Target'];
-        if (empty($date)) {
+        if (empty($data[$element->getName() . 'Target'])) {
             $hint = 'There was no target date found';
         } else {
-            $hint = 'Target date: ' . date('d/m/Y', strtotime($date));
+            $hint = 'Target date: ' . date('d/m/Y', strtotime($data[$element->getName() . 'Target']));
         }
 
         $element->setOption('hint', $hint);
