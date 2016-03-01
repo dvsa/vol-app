@@ -47,7 +47,27 @@ class ExternalControllerTraitTest extends MockeryTestCase
                 ->shouldReceive('isXmlHttpRequest')
                 ->andReturn(false)
                 ->getMock()
-            );
+            )
+            ->shouldReceive('handleQuery')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('getResult')
+                ->andReturn(
+                    [
+                        'inForceDate' => '01/01/2015',
+                        'expiryDate' => '01/01/2016',
+                        'status' => ['id' => 'lsts_valid'],
+                        'licNo' => 'OB1'
+                    ]
+                )
+                ->once()
+                ->getMock()
+            )
+            ->once()
+            ->shouldReceive('getLicenceId')
+            ->andReturn(1)
+            ->once()
+            ->getMock();
 
         $view = $this->sut->callRender('my-page');
 
@@ -61,7 +81,12 @@ class ExternalControllerTraitTest extends MockeryTestCase
         $this->assertEquals(
             [
                 'title' => 'lva.section.title.my-page',
-                'form' => null
+                'form' => null,
+                'startDate' => '01/01/2015',
+                'renewalDate' => '01/01/2016',
+                'status' => 'lsts_valid',
+                'licNo' => 'OB1',
+                'lva' => 'licence'
             ],
             (array)$children[0]->getVariables()
         );
@@ -76,7 +101,27 @@ class ExternalControllerTraitTest extends MockeryTestCase
                 ->shouldReceive('isXmlHttpRequest')
                 ->andReturn(true)
                 ->getMock()
-            );
+            )
+            ->shouldReceive('handleQuery')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('getResult')
+                    ->andReturn(
+                        [
+                            'inForceDate' => '01/01/2015',
+                            'expiryDate' => '01/01/2016',
+                            'status' => ['id' => 'lsts_valid'],
+                            'licNo' => 'OB1'
+                        ]
+                    )
+                    ->once()
+                    ->getMock()
+            )
+            ->once()
+            ->shouldReceive('getLicenceId')
+            ->andReturn(1)
+            ->once()
+            ->getMock();
 
         $view = $this->sut->callRender('my-page');
 

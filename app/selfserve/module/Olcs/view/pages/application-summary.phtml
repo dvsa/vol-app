@@ -48,7 +48,7 @@
               <?php endif; ?>
           </div>
           <?php endif; ?>
-          <?php if (empty($actions)): ?>
+          <?php if (empty($actions) || $hideContent): ?>
               <h2><?php echo $this->translate('What happens next?'); ?></h2>
               <p><?php echo $this->translate('application-summary-complete-what-next-text'); ?></p>
           <?php else: ?>
@@ -57,7 +57,7 @@
       </div>
       <div class="article">
 
-          <?php if (array_key_exists('PRINT_SIGN_RETURN', $actions)): ?>
+          <?php if (array_key_exists('PRINT_SIGN_RETURN', $actions) && !$hideContent): ?>
               <div class="incomplete-section">
                   <h3><?php echo $this->translate('print-sign-return-declaration-form'); ?></h3>
                   <p><?php echo $this->translate('print-sign-return-declaration-form-text'); ?></p>
@@ -70,7 +70,7 @@
               </div>
           <?php endif; ?>
 
-          <?php if (array_key_exists('SUPPLY_SUPPORTING_EVIDENCE', $actions)): ?>
+          <?php if (array_key_exists('SUPPLY_SUPPORTING_EVIDENCE', $actions) && !$hideContent): ?>
               <div class="incomplete-section">
                   <h3><?php echo $this->translate('supply-supporting-evidence'); ?></h3>
                   <p><?php echo $this->translate('supply-supporting-evidence-text-1'); ?></p>
@@ -89,16 +89,16 @@
               </div>
           <?php endif; ?>
 
-          <?php if (array_key_exists('APPROVE_TM', $actions)): ?>
+          <?php if (array_key_exists('APPROVE_TM', $actions) && !$hideContent): ?>
               <div class="incomplete-section">
                   <h3><?php echo $this->translate('approve-tm.title'); ?></h3>
                   <div class="table__wrapper">
                       <table>
                           <thead>
                               <tr>
-                                  <th>Name</th>
-                                  <th>DOB</th>
-                                  <th></th>
+                                  <th><?php echo $this->translate('name'); ?></th>
+                                  <th><?php echo $this->translate('dob'); ?></th>
+                                  <th><?php echo $this->translate('actions'); ?></th>
                               </tr>
                           </thead>
                           <tbody>
@@ -141,7 +141,7 @@
   </div>
 
   <div class="one-third">
-    <div class="sidebar">
+    <aside class="sidebar" role="complementary">
       <dl class="meta">
         <dt><?php echo $this->translate('application-reference-no.title'); ?></dt>
         <dd><?php echo $licence . '/' . $application; ?></dd>
@@ -160,7 +160,7 @@
         <dt><?php echo $this->translate('status.title'); ?></dt>
         <dd><?php echo $this->translate($status); ?></dd>
       </dl>
-    </div>
+    </aside>
   </div>
 
 </div>

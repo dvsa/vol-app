@@ -15,6 +15,9 @@ class UserForgotUsername
      * @Form\Type("Text")
      * @Form\Options({
      *     "label": "user-forgot-username.field.licenceNumber.label",
+     *     "label_attributes": {
+     *         "aria-label": "Enter your licence number"
+     *     }
      * })
      * @Form\Attributes({"class":"medium"})
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
@@ -25,7 +28,10 @@ class UserForgotUsername
     /**
      * @Form\Type("Text")
      * @Form\Options({
-     *     "label":"user-forgot-username.field.emailAddress.label"
+     *     "label":"user-forgot-username.field.emailAddress.label",
+     *     "label_attributes": {
+     *         "aria-label": "Enter your email address"
+     *     }
      * })
      * @Form\Attributes({"class":"medium"})
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
