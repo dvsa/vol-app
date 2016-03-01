@@ -72,8 +72,7 @@ return array(
                 $hearingLength = 'Not known';
                 if ($data['isFullDay'] == 'Y') {
                     $hearingLength = 'Full day';
-                }
-                if ($data['isFullDay'] == 'N') {
+                } elseif ($data['isFullDay'] == 'N') {
                     $hearingLength = 'Half day';
                 }
                 return $hearingLength;
