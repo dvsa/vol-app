@@ -65,19 +65,6 @@ class PublicInquiryHearingFields extends Base
     public $hearingDate;
 
     /**
-     * @Form\Attributes({"id":"presidingTc","placeholder":"","class":"medium"})
-     * @Form\Options({
-     *     "label": "Presiding TC/DTC/TR/DTR",
-     *     "service_name": "Olcs\Service\Data\PresidingTc",
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
-     * })
-     * @Form\Type("DynamicSelect")
-     */
-    public $presidingTc;
-
-    /**
      * @Form\Type("Radio")
      * @Form\Options({
      *      "label": "Hearing length",
@@ -93,6 +80,19 @@ class PublicInquiryHearingFields extends Base
      * @Form\Attributes({"value": "not-set"})
      */
     public $isFullDay;
+    
+    /**
+     * @Form\Attributes({"id":"presidingTc","placeholder":"","class":"medium"})
+     * @Form\Options({
+     *     "label": "Presiding TC/DTC/TR/DTR",
+     *     "service_name": "Olcs\Service\Data\PresidingTc",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please select a category",
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $presidingTc;
 
     /**
      * @Form\Attributes({"id":"presidedByRole","placeholder":"","class":"medium"})
