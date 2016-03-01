@@ -78,6 +78,23 @@ class PublicInquiryHearingFields extends Base
     public $presidingTc;
 
     /**
+     * @Form\Type("Radio")
+     * @Form\Options({
+     *      "label": "Hearing length",
+     *      "value_options":{
+     *          "not-set":"Not set",
+     *          "N":"Half day",
+     *          "Y":"Full day"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
+     *      }
+     * })
+     * @Form\Attributes({"value": "not-set"})
+     */
+    public $isFullDay;
+
+    /**
      * @Form\Attributes({"id":"presidedByRole","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Presiding TC/DTC/TR/DTR Role",

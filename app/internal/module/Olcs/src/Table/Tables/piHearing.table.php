@@ -66,5 +66,17 @@ return array(
             'title' => 'Cancelled',
             'name' => 'isCancelled'
         ),
+        array(
+            'title' => 'Hearing length',
+            'formatter' => function ($data) {
+                $hearingLength = 'Not known';
+                if ($data['isFullDay'] == 'Y') {
+                    $hearingLength = 'Full day';
+                } elseif ($data['isFullDay'] == 'N') {
+                    $hearingLength = 'Half day';
+                }
+                return $hearingLength;
+            }
+        ),
     )
 );
