@@ -11,8 +11,6 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
-                'edit' => array('class' => 'secondary js-require--one', 'requireRows' => true),
-                'delete' => array('class' => 'secondary js-require--multiple', 'requireRows' => true),
             )
         )
     ),
@@ -53,9 +51,8 @@ return array(
             },
         ),
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}'
+            'type' => 'ActionLinks',
+            'deleteInputName' => 'action[delete][%d]'
         ),
     )
 );
