@@ -39,6 +39,7 @@ class User implements MapperInterface
                 );
             }
 
+            $formData['userType']['id'] = $data['id'];
             $formData['userType']['userType'] = $data['userType'];
 
             // get the first role from the list (it should be only one)
@@ -97,8 +98,14 @@ class User implements MapperInterface
         $commandData['version'] = $data['version'];
 
         $commandData['loginId'] = $data['userLoginSecurity']['loginId'];
-        $commandData['accountDisabled'] = $data['userLoginSecurity']['accountDisabled'];
-        $commandData['resetPassword'] = $data['userLoginSecurity']['resetPassword'];
+
+        if (!empty($data['userLoginSecurity']['accountDisabled'])) {
+            $commandData['accountDisabled'] = $data['userLoginSecurity']['accountDisabled'];
+        }
+
+        if (!empty($data['userLoginSecurity']['resetPassword'])) {
+            $commandData['resetPassword'] = $data['userLoginSecurity']['resetPassword'];
+        }
 
         $commandData['userType'] = $data['userType']['userType'];
         $commandData['roles'] = [$data['userType']['role']];
