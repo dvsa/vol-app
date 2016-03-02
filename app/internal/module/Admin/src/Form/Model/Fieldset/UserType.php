@@ -172,6 +172,12 @@ class UserType
     public $partnerContactDetails = null;
 
     /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $id = null;
+
+    /**
      * @Form\Required(true)
      * @Form\Attributes({"class":"medium","id":"licenceNumber","required":false})
      * @Form\Options({"label":"Licence number"})
@@ -181,10 +187,20 @@ class UserType
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "userType",
-     *          "context_values": {"self-service"},
+     *          "context_values": {"operator"},
      *          "allow_empty": false,
      *          "validators": {
-     *              {"name": "\Zend\Validator\NotEmpty"},
+     *              {
+     *                  "name": "ValidateIf",
+     *                  "options": {
+     *                      "context_field": "id",
+     *                      "context_values": {""},
+     *                      "allow_empty": false,
+     *                      "validators": {
+     *                          {"name": "\Zend\Validator\NotEmpty"},
+     *                      }
+     *                  }
+     *              }
      *          }
      *      }
      * })

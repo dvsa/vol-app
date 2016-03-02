@@ -48,7 +48,8 @@ class PiHearingTest extends MockeryTestCase
                         'isAdjourned' => 'Y',
                         'adjournedReason' => $adjournedReason,
                         'adjournedDate' => $adjournedDate,
-                        'details' => $details
+                        'details' => $details,
+                        'isFullDay' => 'not-set',
                     ],
                     'form-actions' => [
                         'publish' => true
@@ -65,7 +66,8 @@ class PiHearingTest extends MockeryTestCase
                     'adjournedDate' => $adjournedDate,
                     'details' => $details,
                     'publish' => 'Y',
-                    'text2' => $details
+                    'text2' => $details,
+                    'isFullDay' => 'not-set',
                 ]
             ],
             [
@@ -79,7 +81,8 @@ class PiHearingTest extends MockeryTestCase
                         'isAdjourned' => 'N',
                         'adjournedReason' => $adjournedReason,
                         'adjournedDate' => $adjournedDate,
-                        'details' => $details
+                        'details' => $details,
+                        'isFullDay' => 'Y',
                     ],
                 ],
                 [
@@ -92,7 +95,8 @@ class PiHearingTest extends MockeryTestCase
                     'adjournedReason' => null,
                     'adjournedDate' => null,
                     'details' => $details,
-                    'publish' => 'N'
+                    'publish' => 'N',
+                    'isFullDay' => 'Y',
                 ]
             ]
         ];
@@ -127,7 +131,8 @@ class PiHearingTest extends MockeryTestCase
                 [],
                 [
                     'fields' => [
-                        'witnesses' => 0
+                        'witnesses' => 0,
+                        'isFullDay' => 'not-set',
                     ]
                 ]
             ],
@@ -138,14 +143,16 @@ class PiHearingTest extends MockeryTestCase
                     'otherField' => [
                         'id' => $otherFieldId
                     ],
-                    'witnesses' => $witnesses
+                    'witnesses' => $witnesses,
+                    'isFullDay' => 'Y',
                 ],
                 [
                     'fields' => [
                         'venue' => 'other',
                         'venueOther' => $venueOther,
                         'otherField' => $otherFieldId,
-                        'witnesses' => $witnesses
+                        'witnesses' => $witnesses,
+                        'isFullDay' => 'Y',
                     ]
                 ]
             ],
@@ -156,14 +163,16 @@ class PiHearingTest extends MockeryTestCase
                     'otherField' => [
                         'id' => $otherFieldId
                     ],
-                    'witnesses' => null
+                    'witnesses' => null,
+                    'isFullDay' => 'N',
                 ],
                 [
                     'fields' => [
                         'venue' => 'other',
                         'venueOther' => $venueOther,
                         'otherField' => $otherFieldId,
-                        'witnesses' => 0
+                        'witnesses' => 0,
+                        'isFullDay' => 'N',
                     ]
                 ]
             ]

@@ -145,6 +145,29 @@ class PublicInquiryRegisterDecisionMain
     public $licenceCurtailedAtPi = null;
 
     /**
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"TM called with operator?"})
+     * @Form\Type("OlcsCheckbox")
+     */
+    public $tmCalledWithOperator;
+
+    /**
+     * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-large",  "multiple" : true,
+     *     "required": false})
+     * @Form\AllowEmpty(true)
+     * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Required(false)
+     * @Form\Options({
+     *     "label":"TM decision",
+     *     "disable_inarray_validator": false,
+     *     "help-block": "Please choose the appropriate decisions",
+     *     "category":"pi_tm_decision"
+     * })
+     *
+     * @Form\Type("DynamicSelect")
+     */
+    public $tmDecisions = null;
+
+    /**
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
      * @Form\Options({"label": "Number of witnesses"})
      * @Form\Type("Text")
