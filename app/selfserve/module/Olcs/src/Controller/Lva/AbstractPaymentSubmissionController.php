@@ -188,12 +188,21 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             throw new BadRequestException('Invalid payment submission request');
         }
 
+        $fees = $this->getOutstandingFeeDataForApplication($applicationId);
+        if (empty($fees) || $this->disableCardPayments) {
+            $postData = (array) $this->getRequest()->getPost();
+            return $this->submitApplication($applicationId, $postData['version']);
+        }
+
         if (is_array($this->getRequest()->getPost('storedCards'))) {
-            // 2nd POST, redirect to payment page
-            $storedCardReference = (is_array($this->getRequest()->getPost('storedCards')) &&
-                $this->getRequest()->getPost('storedCards')['card'] != '0') ?
-                $this->getRequest()->getPost('storedCards')['card'] :
-                false;
+            /*
+             * If storedCards POST param exists that mean we are on 2nd step
+             * so we need to redirect to the index action which do all
+             * the logic for the payment and app/var submission
+             */
+            $storedCardReference =
+                ($this->getRequest()->getPost('storedCards')['card'] !== '0') ?
+                $this->getRequest()->getPost('storedCards')['card'] : false;
 
             $params = [
                 'action' => 'index',
@@ -209,11 +218,18 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         $form = $this->getServiceLocator()->get('Helper\Form')->createForm('FeePayment');
         $this->setupSelectStoredCards($form);
 
-        $fees = $this->getOutstandingFeeDataForApplication($applicationId);
-        if (empty($fees) || $this->disableCardPayments) {
-            $postData = (array) $this->getRequest()->getPost();
-            return $this->submitApplication($applicationId, $postData['version']);
-        }
+        return $this->getStoredCardsView($fees, $form);
+    }
+
+    /**
+     * Get stored cards view
+     *
+     * @param array $fees
+     * @param \Common\Form\Form $form
+     * @return View
+     */
+    protected function getStoredCardsView($fees, $form)
+    {
         if (count($fees) > 1) {
             $table = $this->getServiceLocator()->get('Table')
                 ->buildTable('pay-fees', $fees, [], false);
@@ -226,7 +242,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             );
             $view->setTemplate('pages/fees/pay-multi');
         } else {
-            $fee = array_shift($fees);
+            $fee = $fees[0];
             $view = new ViewModel(
                 [
                     'fee' => $fee,
@@ -236,7 +252,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             );
             $view->setTemplate('pages/fees/pay-one');
         }
-
         return $view;
     }
 
