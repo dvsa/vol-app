@@ -118,16 +118,13 @@ class ApplicationControllerTraitTest extends MockeryTestCase
             ->shouldReceive('getApplicationData')
             ->andReturn(
                 [
-                    'status' => ['id' => 'apsts_not_submitted']
+                    'status' => ['id' => 'apsts_not_submitted'], 'licence' => ['licNo' => 'OB1']
                 ]
             )
             ->once()
             ->shouldReceive('getApplicationId')
             ->andReturn(1)
-            ->twice()
-            ->shouldReceive('getLicenceId')
-            ->andReturn(2)
-            ->once();
+            ->twice();
 
         $view = $this->sut->callRender('my-page');
 
@@ -146,7 +143,7 @@ class ApplicationControllerTraitTest extends MockeryTestCase
                 'stepY' => 12,
                 'status' => 'apsts_not_submitted',
                 'lva' => 'application',
-                'reference' => '1/2'
+                'reference' => 'OB1/1'
             ],
             (array)$children[0]->getVariables()
         );
@@ -169,16 +166,13 @@ class ApplicationControllerTraitTest extends MockeryTestCase
             ->shouldReceive('getApplicationData')
             ->andReturn(
                 [
-                    'status' => ['id' => 'apsts_not_submitted']
+                    'status' => ['id' => 'apsts_not_submitted'], 'licence' => ['licNo' => 'OB1']
                 ]
             )
             ->once()
             ->shouldReceive('getApplicationId')
             ->andReturn(1)
-            ->twice()
-            ->shouldReceive('getLicenceId')
-            ->andReturn(2)
-            ->once();
+            ->twice();
 
         $view = $this->sut->callRender('person');
 
@@ -192,7 +186,7 @@ class ApplicationControllerTraitTest extends MockeryTestCase
                 'stepY' => 12,
                 'status' => 'apsts_not_submitted',
                 'lva' => 'application',
-                'reference' => '1/2'
+                'reference' => 'OB1/1'
             ],
             (array)$children[0]->getVariables()
         );
