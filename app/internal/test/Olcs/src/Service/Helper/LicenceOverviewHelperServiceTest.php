@@ -39,7 +39,6 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
      * @param array $cases
      * @param array $applications organisation applications
      * @param array $expectedViewData
-     * @group test123
      */
     public function testGetViewData($licenceData, $expectedViewData)
     {
