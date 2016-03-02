@@ -86,6 +86,7 @@ class UserTest extends MockeryTestCase
                         'disabledDate' => '07/06/2015 17:11:12',
                     ],
                     'userType' => [
+                        'id' => 987,
                         'userType' => 'internal',
                         'role' => 'role',
                         'team' => 3,
@@ -161,6 +162,7 @@ class UserTest extends MockeryTestCase
                         'accountDisabled' => 'Y',
                     ],
                     'userType' => [
+                        'id' => 987,
                         'userType' => 'transport-manager',
                         'role' => 'role',
                         'currentTransportManager' => 3,
@@ -225,6 +227,7 @@ class UserTest extends MockeryTestCase
                         'accountDisabled' => 'Y',
                     ],
                     'userType' => [
+                        'id' => 987,
                         'userType' => 'partner',
                         'role' => 'role',
                         'partnerContactDetails' => 3,
@@ -288,6 +291,7 @@ class UserTest extends MockeryTestCase
                         'accountDisabled' => 'Y',
                     ],
                     'userType' => [
+                        'id' => 987,
                         'userType' => 'local-authority',
                         'role' => 'role',
                         'localAuthority' => 3,
