@@ -93,13 +93,6 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                             ['isAdministrator' => 'Y']
                         ]
                     ],
-                    'licenceVehicles' => [
-                        ['id' => 1],
-                        ['id' => 2],
-                        ['id' => 3],
-                        ['id' => 4],
-                        ['id' => 5],
-                    ],
                     'operatingCentres' => [
                         ['id' => 1],
                         ['id' => 2],
@@ -124,6 +117,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     ],
                     'busCount' => '4',
                     'organisationLicenceCount' => 3,
+                    'numberOfVehicles' => 5
                 ],
                 // expected view data
                 [
@@ -188,13 +182,6 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                             ['isAdministrator' => 'N']
                         ]
                     ],
-                    'licenceVehicles' => [
-                        ['id' => 1],
-                        ['id' => 2],
-                        ['id' => 3],
-                        ['id' => 4],
-                        ['id' => 5],
-                    ],
                     'operatingCentres' => [
                         ['id' => 1],
                         ['id' => 2],
@@ -218,6 +205,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'tradingName' => 'None',
                     'busCount' => '4',
                     'organisationLicenceCount' => 3,
+                    'numberOfVehicles' => 5
                 ],
                 // expectedViewData
                 [
@@ -275,10 +263,6 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                         'leadTcArea' => ['id' => 'B'],
                         'organisationUsers' => []
                     ],
-                    'licenceVehicles' => [
-                        ['id' => 1],
-                        ['id' => 2],
-                    ],
                     'operatingCentres' => [],
                     'tradingName' => 'JSH R Us',
                     'complaintsCount' => 0,
@@ -291,6 +275,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'currentApplications' => [],
                     'busCount' => '4',
                     'organisationLicenceCount' => 1,
+                    'numberOfVehicles' => 2
                 ],
                 // expectedViewData
                 [

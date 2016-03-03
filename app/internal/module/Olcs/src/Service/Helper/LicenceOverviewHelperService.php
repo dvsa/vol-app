@@ -41,7 +41,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
             'licenceStatus'             => $licence['status'],
             'licenceGracePeriods'       => $this->getLicenceGracePeriods($licence),
             'surrenderedDate'           => $this->getSurrenderedDate($licence),
-            'numberOfVehicles'          => $isSpecialRestricted ? null : count($licence['licenceVehicles']),
+            'numberOfVehicles'          => $isSpecialRestricted ? null : $licence['numberOfVehicles'],
             'totalVehicleAuthorisation' => $isSpecialRestricted ? null : $licence['totAuthVehicles'],
             'numberOfOperatingCentres'  => $isSpecialRestricted ? null : count($licence['operatingCentres']),
             'totalTrailerAuthorisation' => $isPsv ? null : $licence['totAuthTrailers'],
