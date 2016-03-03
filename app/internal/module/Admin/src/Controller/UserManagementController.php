@@ -161,6 +161,7 @@ class UserManagementController extends AbstractInternalController implements Lef
         $form->get('userLoginSecurity')->remove('accountDisabled');
         $form->get('userLoginSecurity')->remove('disabledDate');
         $form->get('userLoginSecurity')->remove('resetPassword');
+        $form->get('userLoginSecurity')->remove('createdOn');
 
         return $form;
     }
