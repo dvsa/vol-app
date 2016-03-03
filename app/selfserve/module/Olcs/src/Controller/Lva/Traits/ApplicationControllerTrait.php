@@ -75,7 +75,7 @@ trait ApplicationControllerTrait
             [
                 'title' => 'lva.section.title.' . $titleSuffix,
                 'form' => $form,
-                'reference' => $this->getApplicationId() . '/' . $this->getLicenceId(),
+                'reference' => $data['licence']['licNo']  . '/' . $this->getApplicationId(),
                 'status' => $data['status']['id'],
                 'lva' => $this->lva
             ],
