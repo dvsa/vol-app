@@ -9,16 +9,6 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add-other-licence-licences' => array('label' => 'Add', 'class' => 'primary'),
-                'edit-other-licence-licences' => array(
-                    'label' => 'Edit',
-                    'class' => 'secondary js-require--one',
-                    'requireRows' => true
-                ),
-                'delete-other-licence-licences' => array(
-                    'label' => 'Remove',
-                    'class' => 'secondary js-require--multiple',
-                    'requireRows' => true
-                )
             ),
         ),
     ),
@@ -47,9 +37,8 @@ return array(
             'name' => 'hoursPerWeek',
         ),
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}'
+            'type' => 'ActionLinks',
+            'deleteInputName' => 'table[action][delete-other-licence-licences][%d]'
         ),
     )
 );
