@@ -36,6 +36,7 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
+                    'createdOn' => '2012-06-01 17:11:12',
                     'accountDisabled' => 'Y',
                     'disabledDate' => '2015-06-07 17:11:12',
                     'userType' => 'internal',
@@ -82,6 +83,7 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
+                        'createdOn' => '01/06/2012 17:11:12',
                         'accountDisabled' => 'Y',
                         'disabledDate' => '07/06/2015 17:11:12',
                     ],
@@ -122,6 +124,7 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
+                    'createdOn' => '2012-06-01 17:11:12',
                     'accountDisabled' => 'Y',
                     'userType' => 'transport-manager',
                     'roles' => [
@@ -158,6 +161,7 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'userLoginSecurity' => [
+                        'createdOn' => '01/06/2012 17:11:12',
                         'loginId' => 'testuser',
                         'accountDisabled' => 'Y',
                     ],
@@ -193,6 +197,7 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
+                    'createdOn' => '2012-06-01 17:11:12',
                     'accountDisabled' => 'Y',
                     'userType' => 'partner',
                     'roles' => [
@@ -224,6 +229,7 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
+                        'createdOn' => '01/06/2012 17:11:12',
                         'accountDisabled' => 'Y',
                     ],
                     'userType' => [
@@ -257,6 +263,7 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
+                    'createdOn' => '2012-06-01 17:11:12',
                     'accountDisabled' => 'Y',
                     'userType' => 'local-authority',
                     'roles' => [
@@ -288,6 +295,7 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
+                        'createdOn' => '01/06/2012 17:11:12',
                         'accountDisabled' => 'Y',
                     ],
                     'userType' => [

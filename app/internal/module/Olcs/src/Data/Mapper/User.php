@@ -39,6 +39,13 @@ class User implements MapperInterface
                 );
             }
 
+            if (!empty($data['createdOn'])) {
+                $formData['userLoginSecurity']['createdOn'] = date(
+                    \DATETIMESEC_FORMAT,
+                    strtotime($data['createdOn'])
+                );
+            }
+
             $formData['userType']['id'] = $data['id'];
             $formData['userType']['userType'] = $data['userType'];
 
