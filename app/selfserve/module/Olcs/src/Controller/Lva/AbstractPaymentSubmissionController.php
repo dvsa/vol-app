@@ -177,7 +177,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     /**
      * Display stored cards form
      */
-    public function storedCardsAction()
+    public function payAndSubmitAction()
     {
         if (!$this->getRequest()->isPost()) {
             return $this->redirectToOverview();
@@ -194,9 +194,10 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             return $this->submitApplication($applicationId, $postData['version']);
         }
 
-        if (is_array($this->getRequest()->getPost('storedCards'))) {
+        $post = (array) $this->getRequest()->getPost();
+        if (isset($post['form-actions']['pay'])) {
             /*
-             * If storedCards POST param exists that mean we are on 2nd step
+             * If pay POST param exists that mean we are on 2nd step
              * so we need to redirect to the index action which do all
              * the logic for the payment and app/var submission
              */
@@ -237,7 +238,8 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
                 [
                     'table' => $table,
                     'form' => $form,
-                    'hasContinuation' => $this->hasContinuationFee($fees)
+                    'hasContinuation' => $this->hasContinuationFee($fees),
+                    'type' => 'submit'
                 ]
             );
             $view->setTemplate('pages/fees/pay-multi');
@@ -247,7 +249,8 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
                 [
                     'fee' => $fee,
                     'form' => $form,
-                    'hasContinuation' => $fee['feeType']['feeType']['id'] == RefData::FEE_TYPE_CONT
+                    'hasContinuation' => $fee['feeType']['feeType']['id'] == RefData::FEE_TYPE_CONT,
+                    'type' => 'submit'
                 ]
             );
             $view->setTemplate('pages/fees/pay-one');
@@ -269,7 +272,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             throw new ResourceNotFoundException('Error getting outstaning fees');
         }
         $result = $response->getResult();
-        $this->disableCardPayments = $result['disableCardsPayment'];
+        $this->disableCardPayments = $result['disableCardPayments'];
         return $result['outstandingFees'];
     }
 }

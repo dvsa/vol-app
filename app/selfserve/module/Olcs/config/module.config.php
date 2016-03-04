@@ -385,13 +385,13 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
-        'stored-cards' => array(
+        'pay-and-submit' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'stored-cards[/]',
+                'route' => 'pay-and-submit[/]',
                 'defaults' => array(
                     'controller' => 'LvaApplication/PaymentSubmission',
-                    'action' => 'storedCards'
+                    'action' => 'payAndSubmit'
                 ),
             )
         ),
@@ -501,13 +501,13 @@ $configRoutes['lva-variation']['child_routes'] = array_merge(
                 )
             )
         ),
-        'stored-cards' => array(
+        'pay-and-submit' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'stored-cards[/]',
+                'route' => 'pay-and-submit[/]',
                 'defaults' => array(
                     'controller' => 'LvaVariation/PaymentSubmission',
-                    'action' => 'storedCards'
+                    'action' => 'payAndSubmit'
                 ),
             )
         ),

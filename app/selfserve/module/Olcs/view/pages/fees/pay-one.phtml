@@ -2,8 +2,15 @@
 
   <ol class="breadcrumbs">
     <li class="breadcrumbs__item">
-      <a href="<?php echo $this->url('fees');?>"><?php echo $this->translate('pay-fees.back-to-home'); ?></a>
+      <a href="<?php echo $this->url('fees');?>"><?php echo $this->translate('dashboard.link'); ?></a>
     </li>
+    <?php if ($type === 'submit'): ?>
+      <li class="breadcrumbs__item">
+        <a href="<?php echo $this->url('lva-application', [], [], true);?>">
+          <?php echo $this->translate('application.overview.title'); ?>
+        </a>
+      </li>
+    <?php endif; ?>
   </ol>
 
   <div class="page-header__wrapper">
