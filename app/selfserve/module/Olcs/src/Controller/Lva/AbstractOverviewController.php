@@ -44,7 +44,7 @@ abstract class AbstractOverviewController extends AbstractController
         $enabled = $this->isReadyToSubmit($sections);
         $visible = ($data['status']['id'] == RefData::APPLICATION_STATUS_NOT_SUBMITTED);
         $actionUrl = $this->url()->fromRoute(
-            'lva-'.$this->lva.'/stored-cards',
+            'lva-'.$this->lva.'/pay-and-submit',
             [$this->getIdentifierIndex() => $applicationId]
         );
         $feeAmount = $data['outstandingFeeTotal'];

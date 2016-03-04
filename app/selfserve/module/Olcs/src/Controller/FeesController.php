@@ -99,7 +99,12 @@ class FeesController extends AbstractController
             $table = $this->getServiceLocator()->get('Table')
                 ->buildTable('pay-fees', $fees, [], false);
             $view = new ViewModel(
-                ['table' => $table, 'form' => $form, 'hasContinuation' => $this->hasContinuationFee($fees)]
+                [
+                    'table' => $table,
+                    'form' => $form,
+                    'hasContinuation' => $this->hasContinuationFee($fees),
+                    'type' => 'fees'
+                ]
             );
             $view->setTemplate('pages/fees/pay-multi');
         } else {
@@ -108,7 +113,8 @@ class FeesController extends AbstractController
                 [
                     'fee' => $fee,
                     'form' => $form,
-                    'hasContinuation' => $fee['feeType']['feeType']['id'] == RefData::FEE_TYPE_CONT
+                    'hasContinuation' => $fee['feeType']['feeType']['id'] == RefData::FEE_TYPE_CONT,
+                    'type' => 'fees'
                 ]
             );
             $view->setTemplate('pages/fees/pay-one');
