@@ -97,6 +97,12 @@
 
       <?php echo $this->flashMessengerAll(); ?>
 
+      <?php if (isset($searchForm)) : ?>
+          <?php $searchForm->prepare(); ?>
+          <?php echo $this->formErrors($searchForm); ?>
+          <?php echo $this->form($searchForm); ?>
+      <?php endif; ?>
+
       <?php if (isset($table)): ?>
         <?php echo $table; ?>
       <?php endif; ?>
