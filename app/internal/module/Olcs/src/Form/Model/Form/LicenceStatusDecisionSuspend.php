@@ -25,6 +25,12 @@ class LicenceStatusDecisionSuspend
     public $suspend = null;
 
     /**
+     * @Form\Name("licence-decision-reasons")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionReasons")
+     */
+    public $reasons = null;
+
+    /**
      * @Form\Name("form-actions")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionFormActions")
      */
