@@ -124,6 +124,26 @@ return [
                     ]
                 ],
                 [
+                    'id' => 'admin-dashboard/continuations-irfo',
+                    'label' => 'admin-continuations-title',
+                    'route' => 'admin-dashboard/admin-continuation',
+                    'pages' => [
+                        [
+                            'label' => 'admin-generate-continuations-title',
+                            'route' => 'admin-dashboard/admin-continuation',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-continuation/irfo-psv-auth',
+                            'label' => 'admin-generate-continuation-details-title',
+                            'route' => 'admin-dashboard/admin-continuation/irfo-psv-auth',
+                        ],
+                        [
+                            'label' => 'admin-continuations-checklist-reminders-title',
+                            'route' => 'admin-dashboard/admin-continuation/checklist-reminder',
+                        ]
+                    ]
+                ],
+                [
                     'id'    => 'admin-dashboard/admin-payment-processing',
                     'label' => 'Payment processing',
                     'route' => 'admin-dashboard/admin-payment-processing',
