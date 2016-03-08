@@ -66,21 +66,7 @@ return array(
         ),
         array(
             'title' => 'Description',
-            'formatter' => function ($row) {
-                /*
-                    conv_c_cat_1144 is ref data id for a 'User defined' category.
-                    However all new convictions with User defined descriptions have no category.
-                    Hence the logic below.
-                */
-                if (count($row['convictionCategory']) && $row['convictionCategory']['id'] != 'conv_c_cat_1144') {
-                    $row['categoryText'] = $row['convictionCategory']['description'];
-                }
-
-                $categoryText = $row['categoryText'];
-
-                $append = strlen($categoryText) > 30 ? '...' : '';
-                return nl2br(substr($categoryText, 0, 30)) . $append;
-            }
+            'formatter' => 'ConvictionDescription',
         ),
         array(
             'title' => 'Court/FPN',
