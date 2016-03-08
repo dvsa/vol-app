@@ -67,8 +67,12 @@ return array(
         array(
             'title' => 'Description',
             'formatter' => function ($row) {
-
-                if (count($row['convictionCategory']) && $row['convictionCategory']['id'] != 168) {
+                /*
+                    conv_c_cat_1144 is ref data id for a 'User defined' category.
+                    However all new convictions with User defined descriptions have no category.
+                    Hence the logic below.
+                */
+                if (count($row['convictionCategory']) && $row['convictionCategory']['id'] != 'conv_c_cat_1144') {
                     $row['categoryText'] = $row['convictionCategory']['description'];
                 }
 
