@@ -93,21 +93,24 @@
             <?php
         }
 
+        echo $this->flashMessengerAll();
+
+        if (isset($searchForm)) {
+            $searchForm->prepare();
+            echo $this->formErrors($searchForm);
+            echo $this->form($searchForm);
+        }
+
+        if (isset($table)) {
+          echo $table;
+        }
+
+        if (isset($form)) {
+          $form->prepare();
+          echo $this->formErrors($form);
+          echo $this->form($form);
+        }
       ?>
-
-      <?php echo $this->flashMessengerAll(); ?>
-
-      <?php if (isset($table)): ?>
-        <?php echo $table; ?>
-      <?php endif; ?>
-
-      <?php if (isset($form)): ?>
-        <?php
-        $form->prepare();
-        echo $this->formErrors($form);
-        echo $this->form($form);
-        ?>
-      <?php endif; ?>
 
       </div> <!-- /js-body -->
     </div>
