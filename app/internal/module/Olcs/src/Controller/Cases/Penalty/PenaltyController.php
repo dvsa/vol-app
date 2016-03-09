@@ -17,11 +17,11 @@ use Olcs\Data\Mapper\PenaltyCommentBox as CommentMapper;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases as CommentItemDto;
 use Dvsa\Olcs\Transfer\Command\Cases\UpdatePenaltiesNote as CommentUpdateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\SendResponse as SendResponseCmd;
-use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Data\Mapper\GenericFields;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Si\Applied\Penalty as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Si\GetList as ListDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Si\Si as SingleSiDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Update as UpdateDto;
 use Olcs\Form\Model\Form\ErruPenalty;
@@ -46,14 +46,14 @@ class PenaltyController extends AbstractInternalController implements CaseContro
     protected $commentItemParams = ['id' => 'case', 'case' => 'case'];
     protected $commentUpdateCommand = CommentUpdateDto::class;
     protected $commentMapperClass = CommentMapper::class;
-    protected $commentTitle = 'Erru Penalties';
+    protected $commentTitle = 'Erru penalties';
 
-    protected $createCommand = CreateDto::class;
-    protected $updateCommand = UpdateDto::class;
+    protected $createCommand = CreateDto::class; //add action creates applied penalties
+    protected $updateCommand = UpdateDto::class; //edit action updates applied penalties
 
-    protected $deleteCommand = DeleteDto::class;
+    protected $deleteCommand = DeleteDto::class; //delete action deletes applied penalties
     protected $deleteParams = ['id'];
-    protected $deleteModalTitle = 'Delete Applied Penalty';
+    protected $deleteModalTitle = 'Delete applied penalty';
 
     protected $formClass = ErruPenalty::class;
     protected $mapperClass = GenericFields::class;
@@ -61,6 +61,7 @@ class PenaltyController extends AbstractInternalController implements CaseContro
 
     protected $defaultData = [
         'case' => AddFormDefaultData::FROM_ROUTE,
+        'si' => AddFormDefaultData::FROM_ROUTE,
         'id' => AddFormDefaultData::FROM_ROUTE
     ];
 
@@ -73,20 +74,15 @@ class PenaltyController extends AbstractInternalController implements CaseContro
         'indexAction' => ['table-actions']
     );
 
+    /**
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
         $view->setTemplate('sections/cases/partials/left');
 
         return $view;
-    }
-
-    /**
-     * Sends the response back to Erru
-     */
-    public function sendAction()
-    {
-        return $this->processCommand(new GenericItem(['case' => 'case']), SendResponseCmd::class);
     }
 
     /**
@@ -98,13 +94,11 @@ class PenaltyController extends AbstractInternalController implements CaseContro
     {
         $data = $this->getPenaltyData();
 
-        if (isset($data['results'][0])) {
-            $this->placeholder()->setPlaceholder('penalties', $data['results'][0]);
-            $this->getErruTable('erru-imposed', 'imposedErrus', $data);
-            $this->getErruTable('erru-requested', 'requestedErrus', $data);
-            $this->getErruTable('erru-applied', 'appliedPenalties', $data);
-            $this->getCommentBox();
-        }
+        $this->placeholder()->setPlaceholder('penalties', $data);
+        $this->getErruTable('erru-imposed', 'imposedErrus', $data);
+        $this->getErruTable('erru-requested', 'requestedErrus', $data);
+        $this->getErruTable('erru-applied', 'appliedPenalties', $data);
+        $this->getCommentBox();
 
         return $this->viewBuilder()->buildViewFromTemplate('sections/cases/pages/penalties');
     }
@@ -118,10 +112,10 @@ class PenaltyController extends AbstractInternalController implements CaseContro
      */
     private function getErruTable($tableName, $dataKey, $data)
     {
-        if (isset($data['results'][0][$dataKey]) && !empty($data['results'][0][$dataKey])) {
+        if (isset($data[$dataKey]) && !empty($data[$dataKey])) {
             $tableData = [
-                'Count' => count($data['results'][0][$dataKey]),
-                'Results' => $data['results'][0][$dataKey]
+                'Count' => count($data[$dataKey]),
+                'Results' => $data[$dataKey]
             ];
         } else {
             $tableData = [
@@ -144,9 +138,7 @@ class PenaltyController extends AbstractInternalController implements CaseContro
     private function getPenaltyData()
     {
         $response = $this->handleQuery(
-            ListDto::create(
-                ['case' => $this->params()->fromRoute('case')]
-            )
+            SingleSiDto::create(['id' => $this->params()->fromRoute('si')])
         );
 
         if (!$response->isOk()) {

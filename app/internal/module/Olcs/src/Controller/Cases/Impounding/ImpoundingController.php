@@ -17,6 +17,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\Impounding;
 use Zend\View\Model\ViewModel;
+use Common\RefData as RefData;
 
 /**
  * Case Impounding Controller
@@ -112,4 +113,31 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
         'deleteAction' => ['forms/impounding'],
         'indexAction' => ['table-actions']
     );
+
+    /**
+     * Alter form for TM cases, set pubType and trafficAreas to be visible for publishing
+     *
+     * @param \Common\Controller\Form $form
+     * @param $initialData
+     * @return \Common\Controller\Form
+     */
+    public function alterFormForEdit($form, $initialData)
+    {
+        // remove publish button if impounding type is NOT 'hearing'
+        if ($initialData['fields']['impoundingType'] !== RefData::IMPOUNDING_TYPE_HEARING) {
+            $form->get('form-actions')->remove('publish');
+        } else {
+            // set the label to republish if *any* publication has NOT been printed
+            if (!empty($initialData['impounding']['publicationLinks'])) {
+                foreach ($data['impounding']['publicationLinks'] as $pl) {
+                    if (isset($pl['publication']) && $pl['publication']['pubStatus']['id'] !== 'pub_s_printed') {
+                        $form->get('form-actions')->get('publish')->setLabel('Republish');
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $form;
+    }
 }

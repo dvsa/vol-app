@@ -346,16 +346,32 @@ $routes = [
     'case_penalty' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/penalty[/:action][/:id][/]',
+            'route' => '/case/:case/penalty[/:action][/]',
             'constraints' => [
                 'case' => '[0-9]+',
+                'action' => '(index|send)'
+            ],
+            'defaults' => [
+                'controller' => 'CaseSiController',
+                'action' => 'index'
+            ]
+        ]
+    ],
+    'case_penalty_applied' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/penalty/si[/:si][/:action][/:id][/]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'si' => '[0-9]+',
                 'id' => '[0-9]+',
+                'action' => '(index|add|edit)'
             ],
             'defaults' => [
                 'controller' => 'CasePenaltyController',
                 'action' => 'index'
             ]
-        ],
+        ]
     ],
     'case_complaint' => [
         'type' => 'segment',
@@ -541,7 +557,7 @@ $routes = [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
                 'section' => '[a-z\-]+',
-                'action' => '(assign|attach)'
+                'action' => '(assign|attach|information-complete)'
             ],
             'defaults' => [
                 'controller' => 'CaseProcessSubmissionController',

@@ -25,9 +25,10 @@ return array(
                 return '<a href="' . $this->generateUrl(
                     array(
                         'action' => 'edit',
-                        'id' => $data['id']
+                        'id' => $data['id'],
+                        'si' => $data['seriousInfringement']['id']
                     ),
-                    'case_penalty',
+                    'case_penalty_applied',
                     true
                 ) . '" class="js-modal-ajax">' . $data['id'] . '</a>';
             },
@@ -56,9 +57,8 @@ return array(
         ),
         array(
             'title' => 'Imposed',
-            'formatter' => function ($data) {
-                return $data['imposed'] == 'Y' ? 'Yes' : 'No';
-            },
+            'formatter' => 'YesNo',
+            'name' => 'imposed'
         )
     )
 );

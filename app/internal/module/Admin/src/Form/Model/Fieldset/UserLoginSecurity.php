@@ -22,8 +22,28 @@ class UserLoginSecurity
     public $loginId = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Reset password / Unlock account"})
-     * @Form\Type("OlcsCheckbox")
+     * @Form\Options({"label":"Created on"})
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"createdOn", "required": false})
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $createdOn = null;
+
+    /**
+     * @Form\Type("Radio")
+     * @Form\Options({
+     *      "label": "Reset password / Unlock account",
+     *      "value_options":{
+     *          "":"N/A",
+     *          "post":"By post",
+     *          "email":"By email"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
+     *      }
+     * })
+     * @Form\Attributes({"value": ""})
+     * @Form\Required(false)
      */
     public $resetPassword = null;
 

@@ -109,6 +109,31 @@ $nav = array(
                             'route' => 'case_penalty',
                             'action' => 'index',
                             'use_route_match' => true,
+                            'pages' => array(
+                                array(
+                                    'id' => 'case_penalty_applied',
+                                    'label' => 'Serious infringement',
+                                    'route' => 'case_penalty_applied',
+                                    'action' => 'index',
+                                    'use_route_match' => true,
+                                    'pages' => array(
+                                        array(
+                                            'id' => 'case_penalty_applied_add',
+                                            'label' => 'Add Penalty',
+                                            'route' => 'case_penalty_applied',
+                                            'action' => 'add',
+                                            'use_route_match' => true,
+                                        ),
+                                        array(
+                                            'id' => 'case_penalty_applied_edit',
+                                            'label' => 'Edit Penalty',
+                                            'route' => 'case_penalty_applied',
+                                            'action' => 'edit',
+                                            'use_route_match' => true,
+                                        ),
+                                    )
+                                )
+                            )
                         ),
                         array(
                             'id' => 'case_details_prohibitions',

@@ -4,12 +4,14 @@
  */
 namespace Olcs\Controller\Cases\Submission;
 
-use Dvsa\Olcs\Transfer\Command\Submission\AssignSubmission as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Submission\AssignSubmission as AssignUpdateDto;
+use Dvsa\Olcs\Transfer\Command\Submission\InformationCompleteSubmission as InformationCompleteDto;
 use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\Submission as Mapper;
-use Olcs\Form\Model\Form\SubmissionSendTo as Form;
+use Olcs\Form\Model\Form\SubmissionSendTo as SendToForm;
+use Olcs\Form\Model\Form\SubmissionInformationComplete as CompleteForm;
 
 /**
  * Process Submission Controller
@@ -31,6 +33,11 @@ class ProcessSubmissionController extends AbstractInternalController implements 
             'route' => 'submission',
             'action' => 'details',
             'reUseParams' => true,
+        ],
+        'information-complete' => [
+            'route' => 'submission',
+            'action' => 'details',
+            'reUseParams' => true,
         ]
     ];
 
@@ -48,12 +55,34 @@ class ProcessSubmissionController extends AbstractInternalController implements 
      * itemDto (see above) is also required.
      */
     protected $formClass = Form::class;
-    protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
-    protected $editContentTitle = 'Assign submission';
 
+    /**
+     * Generate form action to update submission, setting assigned_date, sender/recipient_user_ids
+     *
+     * @return array|\Zend\View\Model\ViewModel
+     */
     public function assignAction()
     {
+        $this->formClass = SendToForm::class;
+        $this->updateCommand = AssignUpdateDto::class;
+        $this->editContentTitle = 'Assign submission';
+
+        return $this->editAction();
+    }
+
+    /**
+     * Generate form action to update submission, setting information_complete_date
+     *
+     * @return array|\Zend\View\Model\ViewModel
+     */
+    public function informationCompleteAction()
+    {
+        $this->formClass = CompleteForm::class;
+
+        $this->updateCommand = InformationCompleteDto::class;
+        $this->editContentTitle = 'Set info complete';
+
         return $this->editAction();
     }
 }

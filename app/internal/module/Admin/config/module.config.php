@@ -160,6 +160,20 @@ return [
                                     ],
                                 ],
                             ],
+                            'irfo-psv-auth' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'irfo-psv-auth/:year/:month[/]',
+                                    'constraints' => [
+                                        'year' => '([0-9]{4})',
+                                        'month' => '([0-9]{1,2})',
+                                    ],
+                                    'defaults' => [
+                                        'controller' => 'Admin\IrfoPsvAuthContinuationController',
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
                         ]
                     ],
                     'admin-report' => [
@@ -453,6 +467,7 @@ return [
             'Admin\IndexController' => 'Admin\Controller\IndexController',
             'Admin\PrintingController' => 'Admin\Controller\PrintingController',
             'Admin\IrfoStockControlController' => 'Admin\Controller\IrfoStockControlController',
+            'Admin\IrfoPsvAuthContinuationController' => 'Admin\Controller\IrfoPsvAuthContinuationController',
             'Admin\ScanningController' => 'Admin\Controller\ScanningController',
             'Admin\PublicationController' => 'Admin\Controller\PublicationController',
             'Admin\RecipientController' => 'Admin\Controller\RecipientController',

@@ -23,13 +23,13 @@ class PreviousPiHearingData extends AbstractParameterProvider
             $lastHearing = end($this->pi['piHearings']);
 
             //if the venue other field is filled in, override venue id
-            if ($lastHearing['piVenueOther'] != '') {
-                $lastHearing['piVenue']['id'] = 'other';
+            if ($lastHearing['venueOther'] != '') {
+                $lastHearing['venue']['id'] = 'other';
             }
 
             $populateFields = [
-                'piVenue' => $lastHearing['piVenue']['id'],
-                'piVenueOther' => $lastHearing['piVenueOther'],
+                'venue' => $lastHearing['venue']['id'],
+                'venueOther' => $lastHearing['venueOther'],
                 'presidingTc' => $lastHearing['presidingTc']['id'],
                 'presidedByRole' => $lastHearing['presidedByRole']['id'],
                 'witnesses' => $lastHearing['witnesses'],

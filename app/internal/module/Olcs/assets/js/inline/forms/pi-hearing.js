@@ -7,8 +7,8 @@ $(function() {
     return !(isAdjourned === "Y" && isCancelled === "Y");
   }
 
-  function piVenueOther() {
-    var value = OLCS.formHelper("fields", "piVenue").val();
+  function venueOther() {
+    var value = OLCS.formHelper("fields", "venue").val();
     return (value === "other");
   }
 
@@ -26,7 +26,7 @@ $(function() {
     rulesets: {
       "fields": {
         "*": true,
-        "piVenueOther": piVenueOther,
+        "venueOther": venueOther,
         "date:cancelledDate": checked("isCancelled"),
         "cancelledReason": checked("isCancelled"),
         "date:adjournedDate": checked("isAdjourned"),

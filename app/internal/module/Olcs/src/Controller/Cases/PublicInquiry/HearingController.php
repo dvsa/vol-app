@@ -214,11 +214,11 @@ class HearingController extends AbstractInternalController implements CaseContro
         $data = $this->getHearing();
 
         if ($data['pi']['isClosed']) {
-            if (isset($data['piVenue']['id'])) {
-                $form->get('fields')->remove('piVenueOther');
+            if (isset($data['venue']['id'])) {
+                $form->get('fields')->remove('venueOther');
             } else {
-                $form->get('fields')->remove('piVenue');
-                $form->get('fields')->get('piVenueOther')->setLabel('Venue');
+                $form->get('fields')->remove('venue');
+                $form->get('fields')->get('venueOther')->setLabel('Venue');
             }
 
             $form->get('fields')->remove('pubType');

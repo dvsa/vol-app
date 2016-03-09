@@ -23,7 +23,6 @@ class ContinuationController extends AbstractController
 {
     use CrudActionTrait;
 
-    // @note temporary, remove after irfo functionality developed
     const CONTINUATION_TYPE_IRFO = 'irfo';
 
     protected $defaultFilters = [
@@ -54,12 +53,18 @@ class ContinuationController extends AbstractController
         if ($request->isPost() && $form->isValid()) {
             $data = $form->getData();
 
-            // AC Says to redirect to placeholder page until irfo is developed
-            if ($data['details']['type'] === self::CONTINUATION_TYPE_IRFO) {
-                return $this->redirect()->toRoute(null, ['action' => 'irfo']);
-            }
-
             list($year, $month) = explode('-', $data['details']['date']);
+
+            if ($data['details']['type'] === self::CONTINUATION_TYPE_IRFO) {
+                // redirect to irfo psv auth continuation page
+                return $this->redirect()->toRoute(
+                    'admin-dashboard/admin-continuation/irfo-psv-auth',
+                    [
+                        'month' => (int)$month,
+                        'year' => (int)$year,
+                    ]
+                );
+            }
 
             $criteria = [
                 'month' => (int)$month,
@@ -145,14 +150,6 @@ class ContinuationController extends AbstractController
         $view->setTemplate('pages/table');
 
         return $this->renderView($view, 'admin-generate-continuation-details-title', $title);
-    }
-
-    public function irfoAction()
-    {
-        $view = new ViewModel();
-        $view->setTemplate('placeholder');
-        $this->setNavigationId('admin-dashboard/continuations');
-        return $this->renderView($view, 'IRFO Continuations');
     }
 
     public function generateAction()

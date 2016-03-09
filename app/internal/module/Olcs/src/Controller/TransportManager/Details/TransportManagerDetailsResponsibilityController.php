@@ -510,8 +510,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     {
         if ($this->responsibilities === null) {
             $query = [
-                'licenceStatuses' => 'lsts_valid,lsts_suspended,lsts_curtailed',
-                'applicationStatuses' => 'apsts_consideration,apsts_not_submitted,apsts_granted',
                 'transportManager' => $this->params('transportManager')
             ];
             $queryToSend = $this->getServiceLocator()

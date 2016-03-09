@@ -29,7 +29,7 @@ class PiHearingTest extends MockeryTestCase
      */
     public function mapFromFormDataProvider()
     {
-        $piVenueOther = 'pi venue other';
+        $venueOther = 'pi venue other';
         $adjournedReason = 'cancelled reason';
         $adjournedDate = '2015-12-25';
         $cancelledReason = 'cancelled reason';
@@ -40,23 +40,24 @@ class PiHearingTest extends MockeryTestCase
             [
                 [
                     'fields' => [
-                        'piVenue' => 'other',
-                        'piVenueOther' => $piVenueOther,
+                        'venue' => 'other',
+                        'venueOther' => $venueOther,
                         'isCancelled' => 'Y',
                         'cancelledReason' => $cancelledReason,
                         'cancelledDate' => $cancelledDate,
                         'isAdjourned' => 'Y',
                         'adjournedReason' => $adjournedReason,
                         'adjournedDate' => $adjournedDate,
-                        'details' => $details
+                        'details' => $details,
+                        'isFullDay' => 'not-set',
                     ],
                     'form-actions' => [
                         'publish' => true
                     ]
                 ],
                 [
-                    'piVenue' => null,
-                    'piVenueOther' => $piVenueOther,
+                    'venue' => null,
+                    'venueOther' => $venueOther,
                     'isCancelled' => 'Y',
                     'cancelledReason' => $cancelledReason,
                     'cancelledDate' => $cancelledDate,
@@ -65,26 +66,28 @@ class PiHearingTest extends MockeryTestCase
                     'adjournedDate' => $adjournedDate,
                     'details' => $details,
                     'publish' => 'Y',
-                    'text2' => $details
+                    'text2' => $details,
+                    'isFullDay' => 'not-set',
                 ]
             ],
             [
                 [
                     'fields' => [
-                        'piVenue' => 1,
-                        'piVenueOther' => $piVenueOther,
+                        'venue' => 1,
+                        'venueOther' => $venueOther,
                         'isCancelled' => 'N',
                         'cancelledReason' => $cancelledReason,
                         'cancelledDate' => $cancelledDate,
                         'isAdjourned' => 'N',
                         'adjournedReason' => $adjournedReason,
                         'adjournedDate' => $adjournedDate,
-                        'details' => $details
+                        'details' => $details,
+                        'isFullDay' => 'Y',
                     ],
                 ],
                 [
-                    'piVenue' => 1,
-                    'piVenueOther' => null,
+                    'venue' => 1,
+                    'venueOther' => null,
                     'isCancelled' => 'N',
                     'cancelledReason' => null,
                     'cancelledDate' => null,
@@ -92,7 +95,8 @@ class PiHearingTest extends MockeryTestCase
                     'adjournedReason' => null,
                     'adjournedDate' => null,
                     'details' => $details,
-                    'publish' => 'N'
+                    'publish' => 'N',
+                    'isFullDay' => 'Y',
                 ]
             ]
         ];
@@ -118,7 +122,7 @@ class PiHearingTest extends MockeryTestCase
      */
     public function mapFromResultDataProvider()
     {
-        $piVenueOther = 'pi venue other';
+        $venueOther = 'pi venue other';
         $otherFieldId = 99;
         $witnesses = 88;
 
@@ -127,43 +131,48 @@ class PiHearingTest extends MockeryTestCase
                 [],
                 [
                     'fields' => [
-                        'witnesses' => 0
+                        'witnesses' => 0,
+                        'isFullDay' => 'not-set',
                     ]
                 ]
             ],
             [
                 [
-                    'piVenue' => 1,
-                    'piVenueOther' => $piVenueOther,
+                    'venue' => 1,
+                    'venueOther' => $venueOther,
                     'otherField' => [
                         'id' => $otherFieldId
                     ],
-                    'witnesses' => $witnesses
+                    'witnesses' => $witnesses,
+                    'isFullDay' => 'Y',
                 ],
                 [
                     'fields' => [
-                        'piVenue' => 'other',
-                        'piVenueOther' => $piVenueOther,
+                        'venue' => 'other',
+                        'venueOther' => $venueOther,
                         'otherField' => $otherFieldId,
-                        'witnesses' => $witnesses
+                        'witnesses' => $witnesses,
+                        'isFullDay' => 'Y',
                     ]
                 ]
             ],
             [
                 [
-                    'piVenue' => 1,
-                    'piVenueOther' => $piVenueOther,
+                    'venue' => 1,
+                    'venueOther' => $venueOther,
                     'otherField' => [
                         'id' => $otherFieldId
                     ],
-                    'witnesses' => null
+                    'witnesses' => null,
+                    'isFullDay' => 'N',
                 ],
                 [
                     'fields' => [
-                        'piVenue' => 'other',
-                        'piVenueOther' => $piVenueOther,
+                        'venue' => 'other',
+                        'venueOther' => $venueOther,
                         'otherField' => $otherFieldId,
-                        'witnesses' => 0
+                        'witnesses' => 0,
+                        'isFullDay' => 'N',
                     ]
                 ]
             ]
