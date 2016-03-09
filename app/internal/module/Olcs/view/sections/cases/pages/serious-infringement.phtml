@@ -1,0 +1,30 @@
+<?php
+
+$case = $this->placeholder('case')->getValue();
+
+if (!$case['isErru']) {
+    echo' This case is not Erru';
+} else{
+    $header = ['header' => 'Msi response'];
+
+    if ($case['canSendMsiResponse']) {
+        $header['actions'] = [
+            0 => [
+                'url' => $this->url(null, ['action' => 'send'], [], true),
+                'label' => 'Send response',
+                'class' => 'action--primary js-modal-ajax'
+            ]
+        ];
+    } elseif ($case['erruRequest']['responseSent'] == 'Y') {
+        $erruResponseSent = new \DateTime($case['erruRequest']['responseTime']);
+        $header['header'] .= ' sent ' . $erruResponseSent->format('jS F Y');
+    } else {
+        $header['header'] .= ' can\'t be sent until all serious infringements have a response';
+    }
+
+    echo $this->render('pages/table');
+    echo $this->render('partials/read-only/main', $header);
+
+    echo $this->render('pages/comments');
+}
+
