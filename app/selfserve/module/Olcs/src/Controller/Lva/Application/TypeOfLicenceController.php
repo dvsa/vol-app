@@ -39,6 +39,8 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
             [
                 'title' => 'lva.section.title.' . $titleSuffix, 'form' => $form,
                 'stepX' => '1',
+                // don't display any additional information like progress, app number, etc on create app page
+                'lva' => ''
             ]
         );
     }

@@ -13,14 +13,17 @@ return array(
             'title' => 'application_operating-centres_authorisation.table.address',
             'name' => 'operatingCentre->address',
             'formatter' => 'Address',
+            'sort' => 'adr'
         ),
         array(
             'title' => 'application_operating-centres_authorisation.table.vehicles',
-            'name' => 'noOfVehiclesRequired'
+            'name' => 'noOfVehiclesRequired',
+            'sort' => 'noOfVehiclesRequired'
         ),
         array(
             'title' => 'application_operating-centres_authorisation.table.trailers',
-            'name' => 'noOfTrailersRequired'
+            'name' => 'noOfTrailersRequired',
+            'sort' => 'noOfTrailersRequired'
         )
     ),
     'footer' => array(

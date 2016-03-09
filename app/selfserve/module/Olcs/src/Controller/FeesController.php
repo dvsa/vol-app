@@ -26,6 +26,7 @@ class FeesController extends AbstractController
 {
     use Lva\Traits\ExternalControllerTrait,
         Lva\Traits\DashboardNavigationTrait,
+        Lva\Traits\StoredCardsTrait,
         GenericReceipt;
 
     const PAYMENT_METHOD = RefData::FEE_PAYMENT_METHOD_CARD_ONLINE;
@@ -98,7 +99,12 @@ class FeesController extends AbstractController
             $table = $this->getServiceLocator()->get('Table')
                 ->buildTable('pay-fees', $fees, [], false);
             $view = new ViewModel(
-                ['table' => $table, 'form' => $form, 'hasContinuation' => $this->hasContinuationFee($fees)]
+                [
+                    'table' => $table,
+                    'form' => $form,
+                    'hasContinuation' => $this->hasContinuationFee($fees),
+                    'type' => 'fees'
+                ]
             );
             $view->setTemplate('pages/fees/pay-multi');
         } else {
@@ -107,7 +113,8 @@ class FeesController extends AbstractController
                 [
                     'fee' => $fee,
                     'form' => $form,
-                    'hasContinuation' => $fee['feeType']['feeType']['id'] == RefData::FEE_TYPE_CONT
+                    'hasContinuation' => $fee['feeType']['feeType']['id'] == RefData::FEE_TYPE_CONT,
+                    'type' => 'fees'
                 ]
             );
             $view->setTemplate('pages/fees/pay-one');
@@ -121,31 +128,6 @@ class FeesController extends AbstractController
         }
 
         return $view;
-    }
-
-    /**
-     * Setup the stored cards form element
-     *
-     * @param \Common\Form\Form $form
-     */
-    private function setupSelectStoredCards(\Common\Form\Form $form)
-    {
-        $options = [];
-        $response = $this->handleQuery(\Dvsa\Olcs\Transfer\Query\Cpms\StoredCardList::create([]));
-        if ($response->isOk()) {
-            foreach ($response->getResult()['results'] as $storedCard) {
-                $options[$storedCard['cardReference']] = $storedCard['cardScheme'] .' '. $storedCard['maskedPan'];
-            }
-        }
-
-        if (empty($options)) {
-            // if no stored cards then hide the select element
-            $form->get('storedCards')->remove('card');
-        } else {
-            asort($options);
-            array_unshift($options, 'form.fee-stored-cards.option1');
-            $form->get('storedCards')->get('card')->setValueOptions($options);
-        }
     }
 
     public function handleResultAction()

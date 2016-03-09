@@ -385,14 +385,27 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'pay-and-submit' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'pay-and-submit[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/PaymentSubmission',
+                    'action' => 'payAndSubmit'
+                ),
+            )
+        ),
         'payment' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'payment[/]',
+                'route' => 'payment[/stored-card-reference/:storedCardReference][/]',
                 'defaults' => array(
                     'controller' => 'LvaApplication/PaymentSubmission',
                     'action' => 'index'
-                )
+                ),
+                'constraints' => array(
+                    'storedCardReference' => 'OLCS-[0-9A-F\-]+',
+                ),
             )
         ),
         'submission-summary' => array(
@@ -488,14 +501,27 @@ $configRoutes['lva-variation']['child_routes'] = array_merge(
                 )
             )
         ),
+        'pay-and-submit' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'pay-and-submit[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/PaymentSubmission',
+                    'action' => 'payAndSubmit'
+                ),
+            )
+        ),
         'payment' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'payment[/]',
+                'route' => 'payment[/stored-card-reference/:storedCardReference][/]',
                 'defaults' => array(
                     'controller' => 'LvaVariation/PaymentSubmission',
                     'action' => 'index'
-                )
+                ),
+                'constraints' => array(
+                    'storedCardReference' => 'OLCS-[0-9A-F\-]+',
+                ),
             )
         ),
         'result' => array(

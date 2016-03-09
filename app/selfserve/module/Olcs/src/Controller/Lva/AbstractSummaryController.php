@@ -63,6 +63,7 @@ abstract class AbstractSummaryController extends AbstractController
             'transportManagers' => $data['transportManagers'] ? $data['transportManagers'] : [],
             'outstandingFee' => $data['outstandingFee'],
             'importantText' => $this->getImportantText($data),
+            'hideContent' => ($data['appliedVia']['id'] !== RefData::APPLIED_VIA_SELFSERVE)
         ];
     }
 

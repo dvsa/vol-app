@@ -114,7 +114,17 @@ class ApplicationControllerTraitTest extends MockeryTestCase
 
         $this->sut->shouldReceive('getSectionStepProgress')
             ->with('my-page')
-            ->andReturn(['stepX' => 2, 'stepY' => 12]);
+            ->andReturn(['stepX' => 2, 'stepY' => 12])
+            ->shouldReceive('getApplicationData')
+            ->andReturn(
+                [
+                    'status' => ['id' => 'apsts_not_submitted'], 'licence' => ['licNo' => 'OB1']
+                ]
+            )
+            ->once()
+            ->shouldReceive('getApplicationId')
+            ->andReturn(1)
+            ->twice();
 
         $view = $this->sut->callRender('my-page');
 
@@ -131,6 +141,9 @@ class ApplicationControllerTraitTest extends MockeryTestCase
                 'form' => null,
                 'stepX' => 2,
                 'stepY' => 12,
+                'status' => 'apsts_not_submitted',
+                'lva' => 'application',
+                'reference' => 'OB1/1'
             ],
             (array)$children[0]->getVariables()
         );
@@ -149,7 +162,17 @@ class ApplicationControllerTraitTest extends MockeryTestCase
 
         $this->sut->shouldReceive('getSectionStepProgress')
             ->with('people')
-            ->andReturn(['stepX' => 2, 'stepY' => 12]);
+            ->andReturn(['stepX' => 2, 'stepY' => 12])
+            ->shouldReceive('getApplicationData')
+            ->andReturn(
+                [
+                    'status' => ['id' => 'apsts_not_submitted'], 'licence' => ['licNo' => 'OB1']
+                ]
+            )
+            ->once()
+            ->shouldReceive('getApplicationId')
+            ->andReturn(1)
+            ->twice();
 
         $view = $this->sut->callRender('person');
 
@@ -161,6 +184,9 @@ class ApplicationControllerTraitTest extends MockeryTestCase
                 'form'  => null,
                 'stepX' => 2,
                 'stepY' => 12,
+                'status' => 'apsts_not_submitted',
+                'lva' => 'application',
+                'reference' => 'OB1/1'
             ],
             (array)$children[0]->getVariables()
         );
