@@ -26,6 +26,12 @@ foreach ($messages as $message) {
 <?php
 }
 
+if (isset($searchForm)) {
+    $searchForm->prepare();
+    echo $this->formErrors($searchForm);
+    echo $this->form($searchForm);
+}
+
 if (isset($table)) {
     echo $table;
 }
