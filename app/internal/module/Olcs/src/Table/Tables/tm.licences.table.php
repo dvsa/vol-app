@@ -4,11 +4,6 @@ return array(
     'variables' => array(
         'title' => 'transport-manager.responsibilities.table.licences'
     ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array()
-        ),
-    ),
     'columns' => array(
         array(
             'title' => 'Manager type',
