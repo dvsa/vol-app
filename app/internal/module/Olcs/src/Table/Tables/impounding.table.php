@@ -9,6 +9,11 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'primary'),
                 'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
+                'generate' => array(
+                    'requireRows' => true,
+                    'class' => 'secondary js-require--one',
+                    'label' => 'Generate Letter'
+                ),
                 'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         ),

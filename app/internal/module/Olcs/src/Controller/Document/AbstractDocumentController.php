@@ -52,6 +52,7 @@ abstract class AbstractDocumentController extends AbstractController
         'opposition'       => Category::CATEGORY_ENVIRONMENTAL,
         'complaint'        => Category::CATEGORY_LICENSING,
         'irfoOrganisation' => Category::CATEGORY_IRFO,
+        'impounding'       => Category::CATEGORY_COMPLIANCE,
     ];
 
     /**
