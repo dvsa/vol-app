@@ -15,6 +15,7 @@ use Dvsa\Olcs\Transfer\Command\Cases\Si\SendResponse as SendResponseCmd;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Data\Mapper\GenericFields;
 use Dvsa\Olcs\Transfer\Query\Cases\Si\GetList as ListDto;
+use Zend\Http\Response as HttpResponse;
 
 /**
  * Si Controller
@@ -49,6 +50,9 @@ class SiController extends AbstractInternalController implements CaseControllerI
         'indexAction' => ['table-actions']
     );
 
+    /**
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -59,6 +63,8 @@ class SiController extends AbstractInternalController implements CaseControllerI
 
     /**
      * Sends the response back to Erru
+
+     * @return HttpResponse
      */
     public function sendAction()
     {

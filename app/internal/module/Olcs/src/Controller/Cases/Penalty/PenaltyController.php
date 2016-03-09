@@ -46,14 +46,14 @@ class PenaltyController extends AbstractInternalController implements CaseContro
     protected $commentItemParams = ['id' => 'case', 'case' => 'case'];
     protected $commentUpdateCommand = CommentUpdateDto::class;
     protected $commentMapperClass = CommentMapper::class;
-    protected $commentTitle = 'Erru Penalties';
+    protected $commentTitle = 'Erru penalties';
 
     protected $createCommand = CreateDto::class; //add action creates applied penalties
     protected $updateCommand = UpdateDto::class; //edit action updates applied penalties
 
     protected $deleteCommand = DeleteDto::class; //delete action deletes applied penalties
     protected $deleteParams = ['id'];
-    protected $deleteModalTitle = 'Delete Applied Penalty';
+    protected $deleteModalTitle = 'Delete applied penalty';
 
     protected $formClass = ErruPenalty::class;
     protected $mapperClass = GenericFields::class;
@@ -74,6 +74,9 @@ class PenaltyController extends AbstractInternalController implements CaseContro
         'indexAction' => ['table-actions']
     );
 
+    /**
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
