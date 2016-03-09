@@ -25,6 +25,11 @@ class PeopleController extends Lva\AbstractPeopleController
     protected $lva = 'licence';
     protected $location = 'external';
 
+    /**
+     * Alter form for LVA
+     *
+     * @param \Zend\Form\Form $form
+     */
     protected function alterFormForLva(Form $form)
     {
         $table = $form->get('table')->get('table')->getTable();
