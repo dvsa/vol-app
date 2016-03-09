@@ -5,12 +5,6 @@ return array(
         'title' => 'Serious Infringements'
     ),
     'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
-                'send' => array('requireRows' => true, 'class' => 'primary', 'label' => 'Send MSI response')
-            )
-        ),
         'paginate' => array(
             'limit' => array(
                 'default' => 10,

@@ -15,6 +15,7 @@ use Dvsa\Olcs\Transfer\Command\Cases\Si\SendResponse as SendResponseCmd;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Data\Mapper\GenericFields;
 use Dvsa\Olcs\Transfer\Query\Cases\Si\GetList as ListDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Cases as CaseDto;
 use Zend\Http\Response as HttpResponse;
 
 /**
@@ -32,6 +33,7 @@ class SiController extends AbstractInternalController implements CaseControllerI
     protected $navigationId = 'case_details_penalties';
 
     protected $tableName = 'serious-infringement';
+    protected $tableViewTemplate = 'sections/cases/pages/serious-infringement';
 
     protected $mapperClass = GenericFields::class;
     protected $listDto = ListDto::class;
@@ -59,6 +61,13 @@ class SiController extends AbstractInternalController implements CaseControllerI
         $view->setTemplate('sections/cases/partials/left');
 
         return $view;
+    }
+
+    public function indexAction(){
+        $case = $this->handleQuery(CaseDto::create(['id' => $this->params()->fromRoute('case')]));
+        $this->placeholder()->setPlaceholder('case', $case->getResult());
+
+        return parent::indexAction();
     }
 
     /**
