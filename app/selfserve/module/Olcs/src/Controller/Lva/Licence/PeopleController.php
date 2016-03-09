@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use Zend\Form\Form;
 
 /**
  * External Licence People Controller
@@ -23,4 +24,15 @@ class PeopleController extends Lva\AbstractPeopleController
 
     protected $lva = 'licence';
     protected $location = 'external';
+
+    /**
+     * Alter form for LVA
+     *
+     * @param \Zend\Form\Form $form
+     */
+    protected function alterFormForLva(Form $form)
+    {
+        $table = $form->get('table')->get('table')->getTable();
+        $table->removeColumn('actionLinks');
+    }
 }
