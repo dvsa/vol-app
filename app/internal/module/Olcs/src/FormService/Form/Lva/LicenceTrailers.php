@@ -1,37 +1,35 @@
 <?php
 
 /**
- * Licence Psv Vehicles
+ * Licence Trailers
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.pehkov@valtech.co.uk>
  */
 namespace Olcs\FormService\Form\Lva;
 
-use Common\FormService\Form\Lva\PsvVehicles as CommonPsvVehicles;
+use Common\FormService\Form\Lva\CommonLicenceTrailers as CommonLicenceTrailers;
 use Common\Service\Helper\FormHelperService;
 
 /**
- * Licence Psv Vehicles
+ * Licence Trailers
  *
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.pehkov@valtech.co.uk>
  */
-class LicencePsvVehicles extends CommonPsvVehicles
+class LicenceTrailers extends CommonLicenceTrailers
 {
     /**
      * Make form alterations
      *
      * @param \Zend\Form\Form $form
+     * @param TableBuilder $table
      * @return \Zend\Form\Form
      */
-    protected function alterForm($form)
+    protected function alterForm($form, $table)
     {
-        $this->showShareInfo = true;
-        parent::alterForm($form);
+        parent::alterForm($form, $table);
 
         $saveButton = $form->get('form-actions')->get('save');
-        $this->setPrimaryAction($form, 'save');
         $this->getFormHelper()->alterElementLabel($saveButton, 'internal.', FormHelperService::ALTER_LABEL_PREPEND);
-
         return $form;
     }
 }
