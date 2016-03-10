@@ -108,6 +108,9 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('transportManager')->set($data);
 
+        $latestNote = isset($data['latestNote']['comment']) ? $data['latestNote']['comment'] : '';
+        $placeholder->getContainer('note')->set($latestNote);
+
         //only show print form link for one controller and action
         if ($context['controller'] == 'TMDetailsResponsibilityController'
              && $context['action'] == 'edit-tm-application'
