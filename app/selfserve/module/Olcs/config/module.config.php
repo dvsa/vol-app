@@ -1136,6 +1136,8 @@ return array(
 
             'lva-licence-taxi_phv' => LvaFormService\LicenceTaxiPhv::class,
             'lva-application-taxi_phv' => LvaFormService\ApplicationTaxiPhv::class,
+
+            'lva-licence-trailers' => LvaFormService\LicenceTrailers::class,
         ],
     ],
     'zfc_rbac' => [
