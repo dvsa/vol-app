@@ -1,4 +1,7 @@
-<?php $busReg = $this->placeholder('busReg')->getValue(); ?>
+<?php
+    $busReg = $this->placeholder('busReg')->getValue();
+    $note = $this->placeholder('note')->getValue();
+?>
 <div class="small-module">
     <h4 class="title">Operator details</h4>
     <p class="small-module__details">
@@ -58,5 +61,21 @@ $nav = $this->navigation('right-sidebar')
     <div class="record-actions">
         <h4 class="title">Decisions</h4>
         <?php echo $nav; ?>
+    </div>
+<?php endif; ?>
+
+<?php if (!empty($note)):?>
+    <div class="latest-note">
+        <div class="latest-note__details"><?php echo substr($note, 0, 100); ?></div>
+        <a
+            class="latest-note__link"
+            href="<?php echo $this->url(
+                'licence/bus-processing/notes',
+                [
+                    'licence' => $busReg['licence']['id'],
+                    'busRegId' => $busReg['id']
+                ]
+            ); ?>"
+        >View all notes</a>
     </div>
 <?php endif; ?>
