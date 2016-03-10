@@ -23,13 +23,23 @@ class LicencePsvVehiclesTest extends AbstractLvaFormServiceTestCase
 
     public function testGetForm()
     {
-        $formActions = m::mock();
-        $formActions->shouldReceive('has')->with('save')->andReturn(true);
-        $formActions->shouldReceive('remove')->once()->with('save');
-        $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
-        $formActions->shouldReceive('remove')->once()->with('cancel');
-        $formActions->shouldReceive('has')->with('saveAndContinue')->andReturn(true);
-        $formActions->shouldReceive('remove')->once()->with('saveAndContinue');
+        $formActions = m::mock()
+            ->shouldReceive('has')
+            ->with('save')
+            ->once()
+            ->andReturn(true)
+            ->getMock()
+            ->shouldReceive('get')
+            ->with('save')
+            ->twice()
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setAttribute')
+                ->with('class', 'action--primary large')
+                ->once()
+                ->getMock()
+            )
+            ->getMock();
 
         $formActions->shouldReceive('get->setLabel')->with('internal.save.button');
 
@@ -42,9 +52,9 @@ class LicencePsvVehiclesTest extends AbstractLvaFormServiceTestCase
         $this->formHelper->shouldReceive('createForm')
             ->with($this->formName)
             ->andReturn($mockForm)
-            ->shouldReceive('remove')
+            ->shouldReceive('alterElementLabel')
             ->once()
-            ->with($mockForm, 'shareInfo');
+            ->getMock();
 
         $form = $this->sut->getForm();
 

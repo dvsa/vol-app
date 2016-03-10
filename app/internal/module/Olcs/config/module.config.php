@@ -106,6 +106,7 @@ return array(
             'LvaLicence/Discs' => 'Olcs\Controller\Lva\Licence\DiscsController',
             'LvaLicence/ConditionsUndertakings' => 'Olcs\Controller\Lva\Licence\ConditionsUndertakingsController',
             'LvaLicence/Variation' => 'Olcs\Controller\Lva\Licence\VariationController',
+            'LvaLicence/Trailers' => 'Olcs\Controller\Lva\Licence\TrailersController',
             'LvaVariation' => 'Olcs\Controller\Lva\Variation\OverviewController',
             'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Lva\Variation\TypeOfLicenceController',
             'LvaVariation/BusinessType' => 'Olcs\Controller\Lva\Variation\BusinessTypeController',
@@ -700,6 +701,8 @@ return array(
             'lva-licence-type-of-licence' => LvaFormService\LicenceTypeOfLicence::class,
             'lva-application-type-of-licence' => LvaFormService\ApplicationTypeOfLicence::class,
             'lva-variation-type-of-licence' => LvaFormService\VariationTypeOfLicence::class,
+
+            'lva-licence-trailers' => LvaFormService\LicenceTrailers::class,
         ]
     ],
     'business_service_manager' => [
