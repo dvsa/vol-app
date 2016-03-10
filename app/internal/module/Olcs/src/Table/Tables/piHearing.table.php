@@ -15,7 +15,7 @@ return array(
                 ),
                 'generate' => array(
                     'requireRows' => true,
-                    'class' => 'secondary js-require--multiple',
+                    'class' => 'secondary js-require--one',
                     'label' => 'Generate Letter'
                 ),
             ),
