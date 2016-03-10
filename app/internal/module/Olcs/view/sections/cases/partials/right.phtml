@@ -1,6 +1,8 @@
 <?php
 
 $case = $this->placeholder('case')->getValue();
+$note = $this->placeholder('note')->getValue();
+
 $transportManager = $this->placeholder('transportManager')->getValue();
 
 if (isset($case['licence']) && !empty($case['licence'])): ?>
@@ -81,37 +83,13 @@ echo $this->showMarkers(
  *
  * @var \Zend\Navigation\Navigation
  */
-$nav = $this->navigation('right-sidebar')
-    ->menu($this->navigation()->findOneBy('id', 'case-quick-actions'))
-    ->setPartial('partials/record-actions__group');
 ?>
-<?php if (count($nav->getContainer()) > 0): ?>
-<div class="record-actions">
-    <h4 class="title">Quick actions</h4>
-    <?php echo $nav; ?>
-</div>
-<?php endif; ?>
-
-<?php
-/**
- * Case decisions
- *
- * @var \Zend\Navigation\Navigation
- */
-
-$caseDecisions = $transportManager ? 'case-decisions-transport-manager' : 'case-decisions-licence';
-$nav = $this->navigation('right-sidebar')
-    ->menu($this->navigation()->findOneBy('id', $caseDecisions))
-    ->setPartial('partials/record-actions__group');
-?>
-<?php if (count($nav->getContainer()) > 0): ?>
-    <div class="record-actions">
-        <h4 class="title">Decisions</h4>
-        <?php echo $nav; ?>
+<?php if (!empty($note)): ?>
+    <div class="latest-note">
+        <div class="latest-note__details"><?php echo substr($note, 0, 100); ?></div>
+            <a
+                class="latest-note__link"
+                href="<?php echo $this->url('case_processing_notes', ['case' => $case['id']]); ?>"
+            >View all notes</a>
     </div>
 <?php endif; ?>
-
-<div class="latest-note">
-  <div class="latest-note__details">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidid...</div>
-  <a class="latest-note__link">View all 13 notes</a>
-</div>
