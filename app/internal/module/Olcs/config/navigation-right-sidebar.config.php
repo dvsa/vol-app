@@ -332,6 +332,13 @@ return array(
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ),
+                        array(
+                            'id' => 'application-decisions-submit',
+                            'label' => 'Submit application for the operator',
+                            'route' => 'lva-application/submit',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
                     ),
                 ),
             ),
