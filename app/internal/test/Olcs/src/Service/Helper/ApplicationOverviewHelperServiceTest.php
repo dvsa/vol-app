@@ -125,25 +125,17 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                             'allowEmail' => 'Y',
                             'id' => 72,
                             'name' => 'John Smith Haulage',
-                            'licences' => [
-                                ['id' => 210],
-                                ['id' => 208],
-                                ['id' => 203],
-                            ],
+                            'licences' => null,
                         ],
                         'tradingName' => 'TRADING_NAME',
-                        'licenceVehicles' => [
-                            ['id' => 1],
-                            ['id' => 2],
-                            ['id' => 3],
-                            ['id' => 4],
-                            ['id' => 5],
-                        ],
+                        'licenceVehicles' => null,
                         'operatingCentres' => [
                             ['id' => 1],
                             ['id' => 2],
                         ],
                         'changeOfEntitys' => [],
+                        'organisationLicenceCount' => 3,
+                        'numberOfVehicles' => 5
                     ],
                     'oppositionCount' => 2,
                     'feeCount' => 2,
@@ -224,9 +216,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                             'allowEmail' => 'N',
                             'id' => 72,
                             'name' => 'John Smith Taxis',
-                            'licences' => [
-                                ['id' => 210],
-                            ],
+                            'licences' => null,
                         ],
                         'tradingName' => 'TRADING_NAME',
                         'licenceVehicles' => [
@@ -235,6 +225,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                         ],
                         'operatingCentres' => [],
                         'changeOfEntitys' => [],
+                        'organisationLicenceCount' => 1
                     ],
                     'oppositionCount' => 2,
                     'feeCount' => 2,
