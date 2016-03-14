@@ -72,6 +72,8 @@ class OrganisationFurniture implements
         $placeholder = $this->getViewHelperManager()->get('placeholder');
 
         $placeholder->getContainer('horizontalNavigationId')->set('operator');
+        $placeholder->getContainer('organisationIsMlh')->set($organisation['organisationIsMlh']);
+        $placeholder->getContainer('isMlh')->set('');
 
         if (!$organisation['isUnlicensed']) {
             $right = new ViewModel();

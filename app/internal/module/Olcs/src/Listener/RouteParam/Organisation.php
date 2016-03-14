@@ -63,10 +63,6 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
     {
         $organisation = $this->getOrganisation($e->getValue());
 
-        $placeholder = $this->getViewHelperManager()->get('placeholder');
-        $placeholder->getContainer('organisationIsMlh')->set($organisation['organisationIsMlh']);
-        $placeholder->getContainer('isMlh')->set('');
-
         $navigationPlugin = $this->getViewHelperManager()->get('Navigation')->__invoke('navigation');
 
         $isIrfo = $organisation['isIrfo'] == 'Y';
