@@ -136,6 +136,7 @@ class ApplicationFurniture implements
         $placeholder->getContainer('pageSubtitle')->set($data['licence']['organisation']['name']);
         $placeholder->getContainer('status')->set($data['status']);
         $placeholder->getContainer('horizontalNavigationId')->set('application');
+        $placeholder->getContainer('isMlh')->set($data['isMlh']);
 
         $right = new ViewModel();
         $right->setTemplate('sections/application/partials/right');
