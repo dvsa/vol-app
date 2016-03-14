@@ -5,6 +5,13 @@ return array(
         'title' => 'IRFO PSV Authorisations'
     ),
     'settings' => array(
+        'crud' => array(
+            'actions' => array(
+                'renew' => array(
+                    'label' => 'Set to renew', 'class' => 'primary js-require--multiple', 'requireRows' => true
+                )
+            )
+        ),
         'paginate' => array(
             'limit' => array(
                 'default' => 25,
