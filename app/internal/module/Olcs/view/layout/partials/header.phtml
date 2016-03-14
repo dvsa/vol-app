@@ -30,6 +30,9 @@
     }
 
     echo $this->status($this->placeholder('status')->getValue());
+    if ( !empty($this->placeholder('organisationIsMlh')->getValue())) {
+        echo $this->status(['colour' => 'orange', 'value' => 'MLH']);
+    }
     ?>
   </div><!-- end .page-header__wrapper-->
 </div><!-- end .page-header-->

@@ -8,9 +8,16 @@
     <p class="small-module__details">
         <a href="<?php echo $this->url('operator', ['organisation' => $licence['organisation']['id']], [], true);?>">
             <?php echo $this->escapeHtml($licence['organisation']['name']); ?>
-        </a><br />
+        </a>
+        <?php
+        if (!empty($this->placeholder('isMlh')->getValue())) {
+            echo $this->status(['colour' => 'orange', 'value' => 'MLH']);
+        }
+        ?><br />
         <?php echo $this->escapeHtml($licence['licNo']); ?>
-        <?php echo $this->status($licence['status']); ?>
+        <?php
+        echo $this->status($licence['status']);
+        ?>
     </p>
 </div>
 
