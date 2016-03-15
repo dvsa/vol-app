@@ -101,6 +101,8 @@ class ApplicationFurnitureTest extends TestCase
             'id' => RefData::APPLICATION_STATUS_VALID
         ];
 
+        $isMlh = true;
+
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')
             ->with('pageTitle')
@@ -139,6 +141,15 @@ class ApplicationFurnitureTest extends TestCase
                     ->getMock()
             )
             ->shouldReceive('getContainer')
+            ->with('isMlh')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with($isMlh)
+                    ->getMock()
+            )
+            ->shouldReceive('getContainer')
             ->with('right')
             ->andReturn(
                 m::mock()
@@ -165,7 +176,8 @@ class ApplicationFurnitureTest extends TestCase
                     'name' => 'Foo ltd'
                 ],
             ],
-            'isVariation' => 0
+            'isVariation' => 0,
+            'isMlh' => $isMlh
         ];
 
         $response = m::mock();
@@ -189,6 +201,7 @@ class ApplicationFurnitureTest extends TestCase
         $status = [
             'id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED
         ];
+        $isMlh = true;
 
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')
@@ -228,6 +241,15 @@ class ApplicationFurnitureTest extends TestCase
                     ->getMock()
             )
             ->shouldReceive('getContainer')
+            ->with('isMlh')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with($isMlh)
+                    ->getMock()
+            )
+            ->shouldReceive('getContainer')
             ->with('right')
             ->andReturn(
                 m::mock()
@@ -254,7 +276,8 @@ class ApplicationFurnitureTest extends TestCase
                     'name' => 'Foo ltd'
                 ],
             ],
-            'isVariation' => 1
+            'isVariation' => 1,
+            'isMlh' => $isMlh
         ];
 
         $response = m::mock();
@@ -278,6 +301,7 @@ class ApplicationFurnitureTest extends TestCase
         $status = [
             'id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED
         ];
+        $isMlh = true;
 
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')
@@ -305,6 +329,15 @@ class ApplicationFurnitureTest extends TestCase
                     ->shouldReceive('set')
                     ->once()
                     ->with($status)
+                    ->getMock()
+            )
+            ->shouldReceive('getContainer')
+            ->with('isMlh')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with($isMlh)
                     ->getMock()
             )
             ->shouldReceive('getContainer')
@@ -339,7 +372,8 @@ class ApplicationFurnitureTest extends TestCase
                     'name' => 'Foo ltd'
                 ],
             ],
-            'isVariation' => 0
+            'isVariation' => 0,
+            'isMlh' => $isMlh
         ];
 
         $response = m::mock();
@@ -363,6 +397,7 @@ class ApplicationFurnitureTest extends TestCase
         $status = [
             'id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED
         ];
+        $isMlh = true;
 
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')
@@ -402,6 +437,15 @@ class ApplicationFurnitureTest extends TestCase
                     ->getMock()
             )
             ->shouldReceive('getContainer')
+            ->with('isMlh')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with($isMlh)
+                    ->getMock()
+            )
+            ->shouldReceive('getContainer')
             ->with('right')
             ->andReturn(
                 m::mock()
@@ -424,7 +468,8 @@ class ApplicationFurnitureTest extends TestCase
                     'name' => 'Foo ltd'
                 ],
             ],
-            'isVariation' => 0
+            'isVariation' => 0,
+            'isMlh' => $isMlh
         ];
 
         $response = m::mock();

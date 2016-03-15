@@ -84,11 +84,13 @@ class OrganisationFurnitureTest extends MockeryTestCase
     public function testOnOrganisationLicensed()
     {
         $id = 1;
+        $isMlh = true;
         $orgData = [
             'name' => 'org name',
             'isIrfo' => 'N',
             'isDisqualified' => true,
-            'isUnlicensed' => false
+            'isUnlicensed' => false,
+            'organisationIsMlh' => $isMlh
         ];
 
         $mockPlaceholder = m::mock()
@@ -107,6 +109,22 @@ class OrganisationFurnitureTest extends MockeryTestCase
                             $this->assertEquals('sections/operator/partials/right', $view->getTemplate());
                         }
                     )
+                    ->getMock()
+            )
+            ->shouldReceive('getContainer')->once()->with('organisationIsMlh')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with($isMlh)
+                    ->getMock()
+            )
+            ->shouldReceive('getContainer')->once()->with('isMlh')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with('')
                     ->getMock()
             )
             ->shouldReceive('getContainer')->once()
@@ -135,6 +153,7 @@ class OrganisationFurnitureTest extends MockeryTestCase
     public function testOnOrganisationUnlicensed()
     {
         $id = 1;
+        $isMlh = true;
         $orgData = [
             'name' => 'org name',
             'isIrfo' => 'N',
@@ -142,7 +161,8 @@ class OrganisationFurnitureTest extends MockeryTestCase
             'isUnlicensed' => true,
             'licence' => [
                 'licNo' => 'AB123456'
-            ]
+            ],
+            'organisationIsMlh' => $isMlh
         ];
 
         $mockPlaceholder = m::mock()
@@ -156,6 +176,22 @@ class OrganisationFurnitureTest extends MockeryTestCase
             ->andReturn(
                 m::mock()->shouldReceive('set')->once()
                     ->with('org name')
+                    ->getMock()
+            )
+            ->shouldReceive('getContainer')->once()->with('organisationIsMlh')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with($isMlh)
+                    ->getMock()
+            )
+            ->shouldReceive('getContainer')->once()->with('isMlh')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with('')
                     ->getMock()
             )
             ->shouldReceive('getContainer')->once()

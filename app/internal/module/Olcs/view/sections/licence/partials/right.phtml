@@ -8,6 +8,11 @@ $note = $this->placeholder('note')->getValue();
         <a href="<?php echo $this->url('operator', ['organisation' => $licence['organisation']['id']], [], true);?>">
             <?php echo $this->escapeHtml($licence['organisation']['name']); ?>
         </a>
+        <?php
+        if (!empty($this->placeholder('isMlh')->getValue())) {
+            echo $this->status(['colour' => 'orange', 'value' => 'MLH']);
+        }
+        ?>
     </p>
 </div>
 
@@ -42,4 +47,5 @@ if ($nav->getContainer()->hasPages(true)): ?>
         <a class="latest-note__link" href="<?php echo $this->url('licence/processing/notes', ['licence' => $licence['id']]); ?>">View all notes</a>
     </div>
 <?php endif; ?>
+
 <!-- end .small-details -->
