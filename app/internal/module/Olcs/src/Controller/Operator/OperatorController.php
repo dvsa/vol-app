@@ -13,6 +13,7 @@ use Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Controller\AbstractController;
+use Dvsa\Olcs\Transfer\Query\TrafficArea\TrafficAreaList;
 
 /**
  * Operator Controller
@@ -65,6 +66,7 @@ class OperatorController extends AbstractController implements OperatorControlle
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         $form = $formHelper->createForm('NewApplication');
+        $this->alterForm($form);
         $form->setData($data);
 
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
@@ -102,6 +104,19 @@ class OperatorController extends AbstractController implements OperatorControlle
         $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Create new application');
+    }
+
+    /**
+     * Alter form
+     *
+     * @param Form
+     */
+    protected function alterForm($form)
+    {
+        $organisationData = $this->getOrganisation($this->params()->fromRoute('organisation'));
+        if (isset($organisationData['taValueOptions'])) {
+            $form->get('trafficArea')->setValueOptions($organisationData['taValueOptions']);
+        }
     }
 
     protected function isUnlicensed()
