@@ -32,9 +32,8 @@ class NewApplication
      * @Form\Options({
      *     "label": "Traffic area",
      *     "disable_inarray_validator": false,
-     *     "service_name": "Common\Service\Data\TrafficArea",
      * })
-     * @Form\Type("DynamicSelect")
+     * @Form\Type("Select")
      */
     public $trafficArea = null;
 
