@@ -97,7 +97,7 @@ trait LicenceControllerTrait
     {
         $this->attachCurrentMessages();
 
-        if ($form instanceof Form) {
+        if ($form instanceof Form && !$form->getOption('readonly')) {
             $form->get('form-actions')->remove('saveAndContinue');
         }
 
