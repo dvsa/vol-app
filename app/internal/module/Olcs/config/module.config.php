@@ -88,6 +88,7 @@ return array(
             'LvaApplication/Undertakings' => 'Olcs\Controller\Lva\Application\UndertakingsController',
             'LvaApplication/DeclarationsInternal' => 'Olcs\Controller\Lva\Application\DeclarationsInternalController',
             'LvaApplication/Publish' => 'Olcs\Controller\Lva\Application\PublishController',
+            'LvaApplication/Submit' => 'Olcs\Controller\Lva\Application\SubmitController',
             'ApplicationSchedule41Controller' => 'Olcs\Controller\Application\ApplicationSchedule41Controller',
             'VariationSchedule41Controller' => 'Olcs\Controller\Variation\VariationSchedule41Controller',
             'LvaLicence' => 'Olcs\Controller\Lva\Licence\OverviewController',
@@ -106,6 +107,7 @@ return array(
             'LvaLicence/Discs' => 'Olcs\Controller\Lva\Licence\DiscsController',
             'LvaLicence/ConditionsUndertakings' => 'Olcs\Controller\Lva\Licence\ConditionsUndertakingsController',
             'LvaLicence/Variation' => 'Olcs\Controller\Lva\Licence\VariationController',
+            'LvaLicence/Trailers' => 'Olcs\Controller\Lva\Licence\TrailersController',
             'LvaVariation' => 'Olcs\Controller\Lva\Variation\OverviewController',
             'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Lva\Variation\TypeOfLicenceController',
             'LvaVariation/BusinessType' => 'Olcs\Controller\Lva\Variation\BusinessTypeController',
@@ -130,6 +132,7 @@ return array(
             'LvaVariation/Undertakings' => 'Olcs\Controller\Lva\Variation\UndertakingsController',
             'LvaVariation/Withdraw' => 'Olcs\Controller\Lva\Variation\WithdrawController',
             'LvaVariation/Refuse' => 'Olcs\Controller\Lva\Variation\RefuseController',
+            'LvaVariation/Submit' => 'Olcs\Controller\Lva\Variation\SubmitController',
             'LvaVariation/Revive' => 'Olcs\Controller\Lva\Variation\ReviveApplicationController',
             'LvaVariation/DeclarationsInternal' => 'Olcs\Controller\Lva\Variation\DeclarationsInternalController',
             'LvaVariation/Publish' => 'Olcs\Controller\Lva\Variation\PublishController',
@@ -161,6 +164,7 @@ return array(
             'CaseSubmissionDecisionController'
                 => 'Olcs\Controller\Cases\Submission\DecisionController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
+            'CaseSiController' => 'Olcs\Controller\Cases\Penalty\SiController',
             'CaseAppliedPenaltyController' => 'Olcs\Controller\Cases\Penalty\AppliedPenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionController',
             'CaseProhibitionDefectController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionDefectController',
@@ -699,6 +703,8 @@ return array(
             'lva-licence-type-of-licence' => LvaFormService\LicenceTypeOfLicence::class,
             'lva-application-type-of-licence' => LvaFormService\ApplicationTypeOfLicence::class,
             'lva-variation-type-of-licence' => LvaFormService\VariationTypeOfLicence::class,
+
+            'lva-licence-trailers' => LvaFormService\LicenceTrailers::class,
         ]
     ],
     'business_service_manager' => [

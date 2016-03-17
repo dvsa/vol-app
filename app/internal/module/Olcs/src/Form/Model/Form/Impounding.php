@@ -29,7 +29,7 @@ class Impounding
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\PublishActions")
      */
     public $formActions = null;
 }

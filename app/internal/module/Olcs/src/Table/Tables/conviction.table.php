@@ -66,17 +66,7 @@ return array(
         ),
         array(
             'title' => 'Description',
-            'formatter' => function ($row) {
-
-                if (count($row['convictionCategory']) && $row['convictionCategory']['id'] != 168) {
-                    $row['categoryText'] = $row['convictionCategory']['description'];
-                }
-
-                $categoryText = $row['categoryText'];
-
-                $append = strlen($categoryText) > 30 ? '...' : '';
-                return nl2br(substr($categoryText, 0, 30)) . $append;
-            }
+            'formatter' => 'ConvictionDescription',
         ),
         array(
             'title' => 'Court/FPN',

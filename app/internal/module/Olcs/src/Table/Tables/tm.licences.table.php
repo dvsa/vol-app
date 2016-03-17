@@ -4,22 +4,6 @@ return array(
     'variables' => array(
         'title' => 'transport-manager.responsibilities.table.licences'
     ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'edit-tm-licence' => array(
-                    'label' => 'Edit',
-                    'class' => 'secondary js-require--one',
-                    'requireRows' => true
-                ),
-                'delete-tm-licence' => array(
-                    'label' => 'Remove',
-                    'class' => 'secondary js-require--multiple',
-                    'requireRows' => true
-                )
-            )
-        ),
-    ),
     'columns' => array(
         array(
             'title' => 'Manager type',
@@ -62,9 +46,8 @@ return array(
             'columns' => ['hoursMon', 'hoursTue', 'hoursWed', 'hoursThu', 'hoursFri', 'hoursSat', 'hoursSun']
         ),
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}'
+            'type' => 'ActionLinks',
+            'deleteInputName' => 'table[action][delete-tm-licence][%d]'
         ),
     )
 );

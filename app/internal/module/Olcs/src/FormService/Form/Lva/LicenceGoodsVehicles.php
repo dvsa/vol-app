@@ -17,7 +17,6 @@ class LicenceGoodsVehicles extends \Common\FormService\Form\Lva\LicenceGoodsVehi
     protected function alterForm($form)
     {
         parent::alterForm($form);
-
-        $this->removeStandardFormActions($form);
+        $this->removeFormAction($form, 'saveAndContinue');
     }
 }

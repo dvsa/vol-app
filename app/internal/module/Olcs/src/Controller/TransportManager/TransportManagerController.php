@@ -97,38 +97,32 @@ class TransportManagerController extends AbstractController implements Transport
         }
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formName = isset($data['changeUserConfirm']) ? 'TmMergeConfirmation' : 'TransportManagerMerge';
         /* @var $form \Common\Form\Form */
-        $form = $formHelper->createForm('TransportManagerMerge');
+        $form = $formHelper->createForm($formName);
         $form->setData($data);
         $formHelper->setFormActionFromRequest($form, $request);
         $form->get('toTmId')->setAttribute('data-lookup-url', $this->url()->fromRoute('transport-manager-lookup'));
 
         if ($request->isPost() && $form->isValid()) {
             $toTmId = (int) $form->getData()['toTmId'];
+            $params = [
+                'id' => $transportManagerId,
+                'recipientTransportManager' => $toTmId
+            ];
+            if (isset($data['changeUserConfirm'])) {
+                $params['confirm'] = true;
+            }
             /* @var $response \Common\Service\Cqrs\Response */
             $response = $this->handleCommand(
-                \Dvsa\Olcs\Transfer\Command\Tm\Merge::create(
-                    ['id' => $transportManagerId, 'recipientTransportManager' => $toTmId]
-                )
+                \Dvsa\Olcs\Transfer\Command\Tm\Merge::create($params)
             );
 
             if ($response->isOk()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('form.tm-merge.success');
-
                 return $this->redirect()->toRouteAjax('transport-manager', ['transportManager' => $transportManagerId]);
-            } elseif ($response->isNotFound()) {
-                $formMessages['toTmId'][] = 'form.tm-merge.to-tm-id.validation.not-found';
-                $form->setMessages($formMessages);
             } else {
-                if (isset($response->getResult()['messages'])) {
-                    foreach (array_keys($response->getResult()['messages']) as $key) {
-                        $formMessages['toTmId'][] = 'form.tm-merge.to-tm-id.validation.'. $key;
-                    }
-                    $form->setMessages($formMessages);
-                } else {
-                    $this->getServiceLocator()->get('Helper\FlashMessenger')
-                        ->addErrorMessage('unknown-error');
-                }
+                $form = $this->processMergeFormMessages($response, $form, $toTmId);
             }
         }
 
@@ -138,6 +132,56 @@ class TransportManagerController extends AbstractController implements Transport
         $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Merge transport manager');
+    }
+
+    /**
+     * Process TM merge form messages
+     *
+     * @param Response $response
+     * @param Form $form
+     * @param int $toTmId
+     *
+     * return Form
+     */
+    protected function processMergeFormMessages($response, $form, $toTmId)
+    {
+        if ($response->isNotFound()) {
+            $formMessages['toTmId'][] = 'form.tm-merge.to-tm-id.validation.not-found';
+            $form->setMessages($formMessages);
+            return $form;
+        }
+        $result = $response->getResult();
+
+        if (isset($result['messages']) && !isset($result['messages']['TM_MERGE_BOTH_HAVE_USER_ACCOUNTS'])) {
+            foreach (array_keys($result['messages']) as $key) {
+                $formMessages['toTmId'][] = 'form.tm-merge.to-tm-id.validation.' . $key;
+            }
+            $form->setMessages($formMessages);
+        } elseif (isset($result['messages']['TM_MERGE_BOTH_HAVE_USER_ACCOUNTS'])) {
+            $form = $this->setupMergeConfirmationForm($toTmId);
+        } else {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addErrorMessage('unknown-error');
+        }
+        return $form;
+    }
+
+    /**
+     * Setup TM merge confirmation form
+     *
+     * @param $toTmId
+     * @return Form
+     */
+    protected function setupMergeConfirmationForm($toTmId)
+    {
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createForm('TmMergeConfirmation');
+        $form->get('messages')->get('message')->setValue('internal.confirm-merge.message');
+        $form->get('form-actions')->get('submit')->setLabel('internal.confirm-merge.button');
+        $form->get('toTmId')->setValue($toTmId);
+        $form->get('changeUserConfirm')->setValue('Y');
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
+        return $form;
     }
 
     /**

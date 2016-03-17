@@ -27,7 +27,7 @@ class NonPi implements MapperInterface
             }
         }
 
-        if (isset($formData['fields']['venue']) && !is_numeric($formData['fields']['venue'])) {
+        if (!empty($formData['fields']['venueOther'])) {
             $formData['fields']['venue'] = 'other';
         }
 

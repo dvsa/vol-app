@@ -78,8 +78,11 @@ trait DocumentSearchTrait
 
     protected function getDocumentsTable($filters = [])
     {
+        if (isset($filters['documentSubCategory'])) {
+            // query requires array of subcategories
+            $filters['documentSubCategory'] = [$filters['documentSubCategory']];
+        }
         $response = $this->handleQuery(DocumentList::create($filters));
-
         if (!$response->isOk()) {
             throw new \Exception('Error retrieving document list');
         }

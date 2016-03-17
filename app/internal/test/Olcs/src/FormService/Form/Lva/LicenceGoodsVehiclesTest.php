@@ -58,16 +58,9 @@ class LicenceGoodsVehiclesTest extends MockeryTestCase
             ->with('Lva\GoodsVehicles')
             ->andReturn($mockForm)
             ->shouldReceive('populateFormTable')
-            ->with($mockTableElement, $mockTable)
-            ->shouldReceive('remove')
-            ->once()
-            ->with($mockForm, 'shareInfo');
+            ->with($mockTableElement, $mockTable);
 
         $formActions = m::mock();
-        $formActions->shouldReceive('has')->with('save')->andReturn(true);
-        $formActions->shouldReceive('remove')->once()->with('save');
-        $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
-        $formActions->shouldReceive('remove')->once()->with('cancel');
         $formActions->shouldReceive('has')->with('saveAndContinue')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('saveAndContinue');
 

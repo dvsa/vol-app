@@ -35,8 +35,8 @@ class Impounding implements MapperInterface
             }
         }
 
-        if (isset($data['fields']['piVenueOther']) && $data['fields']['piVenueOther'] != '') {
-            $data['fields']['piVenue'] = 'other';
+        if (!empty($formData['fields']['venueOther'])) {
+            $formData['fields']['venue'] = 'other';
         }
 
         return $formData;
@@ -50,8 +50,8 @@ class Impounding implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
-        if ($data['fields']['piVenue'] != 'other') {
-            $data['fields']['piVenueOther'] = null;
+        if ($data['fields']['venue'] != 'other') {
+            $data['fields']['venueOther'] = null;
         }
 
         // must have a case
@@ -63,7 +63,16 @@ class Impounding implements MapperInterface
             $data['fields']['version'] = $data['base']['version'];
         }
 
+        // add the publish flag
+        $publish = 'N';
+
+        if (isset($data['form-actions']['publish']) && $data['form-actions']['publish'] !== null) {
+            $publish = 'Y';
+            $data['fields']['text2'] = $data['fields']['details'];
+        }
+
         $data = $data['fields'];
+        $data['publish'] = $publish;
 
         return $data;
     }

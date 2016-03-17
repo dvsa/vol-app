@@ -12,6 +12,7 @@ $(function () {
         "*": true,
         "team": hasValue("userType", "userType", "internal"),
         "localAuthority": hasValue("userType", "userType", "local-authority"),
+        ".tm-current": hasValue("userType", "userType", "transport-manager"),
         "#applicationTransportManagers": hasValue("userType", "userType", "transport-manager"),
         "transportManager": hasValue("userType", "userType", "transport-manager"),
         "licenceNumber": hasValue("userType", "userType", "operator"),

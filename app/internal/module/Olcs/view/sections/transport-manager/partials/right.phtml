@@ -1,4 +1,7 @@
 <?php
+$note = $this->placeholder('note')->getValue();
+$tm = $this->placeholder('transportManager')->getValue();
+
 echo $this->showMarkers();
 
 $nav = $this->navigation('right-sidebar')
@@ -14,3 +17,17 @@ if ($nav->getContainer()->hasPages()) {
 <?php
 }
 ?>
+<?php if (!empty($note)):?>
+    <div class="latest-note">
+        <div class="latest-note__details"><?php echo substr($note, 0, 100); ?></div>
+        <a
+            class="latest-note__link"
+            href="<?php echo $this->url(
+                'transport-manager/processing/notes',
+                [
+                    'transportManager' => $tm['id']
+                ]
+            ); ?>"
+        >View all notes</a>
+    </div>
+<?php endif; ?>

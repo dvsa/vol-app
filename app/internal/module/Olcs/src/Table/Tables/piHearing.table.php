@@ -15,7 +15,7 @@ return array(
                 ),
                 'generate' => array(
                     'requireRows' => true,
-                    'class' => 'secondary js-require--multiple',
+                    'class' => 'secondary js-require--one',
                     'label' => 'Generate Letter'
                 ),
             ),
@@ -55,7 +55,7 @@ return array(
         array(
             'title' => 'Venue',
             'formatter' => function ($data) {
-                return (isset($data['piVenue']['name']) ? $data['piVenue']['name'] : $data['piVenueOther']);
+                return (isset($data['venue']['name']) ? $data['venue']['name'] : $data['venueOther']);
             }
         ),
         array(
@@ -65,6 +65,18 @@ return array(
         array(
             'title' => 'Cancelled',
             'name' => 'isCancelled'
+        ),
+        array(
+            'title' => 'Hearing length',
+            'formatter' => function ($data) {
+                $hearingLength = 'Not known';
+                if ($data['isFullDay'] == 'Y') {
+                    $hearingLength = 'Full day';
+                } elseif ($data['isFullDay'] == 'N') {
+                    $hearingLength = 'Half day';
+                }
+                return $hearingLength;
+            }
         ),
     )
 );

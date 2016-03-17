@@ -171,6 +171,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         $showApproveSchedule41Button = $this->shouldShowApproveSchedule41Button($application);
         $showResetSchedule41Button = $this->shouldShowResetSchedule41Button($application);
         $showRefuseSchedule41Button = $this->shouldShowRefuseSchedule41Button($application);
+        $showSubmitButton = $this->shouldShowSubmitButton($status);
 
         if ($showGrantButton) {
             $showUndoGrantButton = false;
@@ -190,6 +191,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         $sidebarNav->findById('application-decisions-approve-schedule41')->setVisible($showApproveSchedule41Button);
         $sidebarNav->findById('application-decisions-reset-schedule41')->setVisible($showResetSchedule41Button);
         $sidebarNav->findById('application-decisions-refuse-schedule41')->setVisible($showRefuseSchedule41Button);
+        $sidebarNav->findById('application-decisions-submit')->setVisible($showSubmitButton);
 
         $sidebarNav->findById('application-quick-actions')->setVisible($this->shouldShowQuickActions($status));
 
@@ -318,6 +320,11 @@ class Application implements ListenerAggregateInterface, FactoryInterface
                 return true;
             }
         }
+    }
+
+    protected function shouldShowSubmitButton($status)
+    {
+        return ($status === \Common\RefData::APPLICATION_STATUS_NOT_SUBMITTED);
     }
 
     protected function shouldShowQuickActions($status)

@@ -23,4 +23,9 @@ class ApplicationOperatingCentres extends AbstractOperatingCentres
 
         parent::alterForm($form, $params);
     }
+
+    protected function allowChangingTrafficArea()
+    {
+        return true;
+    }
 }

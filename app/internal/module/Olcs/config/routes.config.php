@@ -346,16 +346,32 @@ $routes = [
     'case_penalty' => [
         'type' => 'segment',
         'options' => [
-            'route' => '/case/:case/penalty[/:action][/:id][/]',
+            'route' => '/case/:case/penalty[/:action][/]',
             'constraints' => [
                 'case' => '[0-9]+',
+                'action' => '(index|send)'
+            ],
+            'defaults' => [
+                'controller' => 'CaseSiController',
+                'action' => 'index'
+            ]
+        ]
+    ],
+    'case_penalty_applied' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/penalty/si[/:si][/:action][/:id][/]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'si' => '[0-9]+',
                 'id' => '[0-9]+',
+                'action' => '(index|add|edit)'
             ],
             'defaults' => [
                 'controller' => 'CasePenaltyController',
                 'action' => 'index'
             ]
-        ],
+        ]
     ],
     'case_complaint' => [
         'type' => 'segment',
@@ -541,7 +557,7 @@ $routes = [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
                 'section' => '[a-z\-]+',
-                'action' => '(assign|attach)'
+                'action' => '(assign|attach|information-complete)'
             ],
             'defaults' => [
                 'controller' => 'CaseProcessSubmissionController',
@@ -848,7 +864,7 @@ $routes = [
                 'options' => [
                     'route' => ':entityType/:entityId[/]',
                     'constraints' => [
-                        'entityType' => '(statement|hearing|opposition|complaint)',
+                        'entityType' => '(statement|hearing|opposition|complaint|impounding)',
                         'entityId' => '[0-9]+'
                     ]
                 ],
@@ -2510,6 +2526,16 @@ $routes['lva-variation']['child_routes'] = array_merge(
                 )
             )
         ),
+        'submit' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'submit[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/Submit',
+                    'action' => 'index'
+                )
+            )
+        ),
     )
 );
 
@@ -2582,6 +2608,16 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'route' => 'refuse[/]',
                 'defaults' => array(
                     'controller' => 'LvaApplication/Refuse',
+                    'action' => 'index'
+                )
+            )
+        ),
+        'submit' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'submit[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/Submit',
                     'action' => 'index'
                 )
             )

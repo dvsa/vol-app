@@ -93,13 +93,6 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                             ['isAdministrator' => 'Y']
                         ]
                     ],
-                    'licenceVehicles' => [
-                        ['id' => 1],
-                        ['id' => 2],
-                        ['id' => 3],
-                        ['id' => 4],
-                        ['id' => 5],
-                    ],
                     'operatingCentres' => [
                         ['id' => 1],
                         ['id' => 2],
@@ -124,6 +117,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     ],
                     'busCount' => '4',
                     'organisationLicenceCount' => 3,
+                    'numberOfVehicles' => 5
                 ],
                 // expected view data
                 [
@@ -188,21 +182,14 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                             ['isAdministrator' => 'N']
                         ]
                     ],
-                    'licenceVehicles' => [
-                        ['id' => 1],
-                        ['id' => 2],
-                        ['id' => 3],
-                        ['id' => 4],
-                        ['id' => 5],
-                    ],
                     'operatingCentres' => [
                         ['id' => 1],
                         ['id' => 2],
                     ],
                     'openCases' => [
-                        ['id' => 2, 'publicInquirys' => []],
-                        ['id' => 3, 'publicInquirys' => []],
-                        ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
+                        ['id' => 2, 'publicInquiry' => []],
+                        ['id' => 3, 'publicInquiry' => []],
+                        ['id' => 4, 'publicInquiry' => ['id' => 99]],
                     ],
                     'gracePeriods' => [
                         [
@@ -218,6 +205,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'tradingName' => 'None',
                     'busCount' => '4',
                     'organisationLicenceCount' => 3,
+                    'numberOfVehicles' => 5
                 ],
                 // expectedViewData
                 [
@@ -275,22 +263,19 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                         'leadTcArea' => ['id' => 'B'],
                         'organisationUsers' => []
                     ],
-                    'licenceVehicles' => [
-                        ['id' => 1],
-                        ['id' => 2],
-                    ],
                     'operatingCentres' => [],
                     'tradingName' => 'JSH R Us',
                     'complaintsCount' => 0,
                     'openCases' =>[
-                        ['id' => 2, 'publicInquirys' => []],
-                        ['id' => 3, 'publicInquirys' => []],
-                        ['id' => 4, 'publicInquirys' => [ 'id' => 99]],
+                        ['id' => 2, 'publicInquiry' => null],
+                        ['id' => 3, 'publicInquiry' => null],
+                        ['id' => 4, 'publicInquiry' => ['id' => 99]],
                     ],
                     'gracePeriods' => [],
                     'currentApplications' => [],
                     'busCount' => '4',
                     'organisationLicenceCount' => 1,
+                    'numberOfVehicles' => 2
                 ],
                 // expectedViewData
                 [

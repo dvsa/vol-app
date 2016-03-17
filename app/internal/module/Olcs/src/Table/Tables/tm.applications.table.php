@@ -8,10 +8,6 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('label' => 'Add', 'class' => 'primary'),
-                'edit-tm-application' =>
-                    array('label' => 'Edit', 'class' => 'secondary js-require--one', 'requireRows' => true),
-                'delete-tm-application' =>
-                    array('label' => 'Remove', 'class' => 'secondary js-require--multiple', 'requireRows' => true)
             )
         ),
     ),
@@ -55,9 +51,8 @@ return array(
             'columns' => ['hoursMon', 'hoursTue', 'hoursWed', 'hoursThu', 'hoursFri', 'hoursSat', 'hoursSun']
         ),
         array(
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/checkbox]}}'
+            'type' => 'ActionLinks',
+            'deleteInputName' => 'table[action][delete-tm-application][%d]'
         ),
     )
 );

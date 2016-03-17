@@ -25,8 +25,14 @@ class PiHearing implements MapperInterface
             $formData['fields']['witnesses'] = 0;
         }
 
-        if (!empty($formData['fields']['piVenueOther'])) {
-            $formData['fields']['piVenue'] = 'other';
+        if (!empty($formData['fields']['venueOther'])) {
+            $formData['fields']['venue'] = 'other';
+        }
+
+        if (!isset($formData['fields']['isFullDay']) ||
+            ($formData['fields']['isFullDay'] !== 'N' && $formData['fields']['isFullDay'] !== 'Y')
+        ) {
+            $formData['fields']['isFullDay'] = 'not-set';
         }
 
         foreach ($formData['fields'] as $key => $value) {
@@ -46,10 +52,10 @@ class PiHearing implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
-        if ($data['fields']['piVenue'] === 'other') {
-            $data['fields']['piVenue'] = null;
+        if ($data['fields']['venue'] === 'other') {
+            $data['fields']['venue'] = null;
         } else {
-            $data['fields']['piVenueOther'] = null;
+            $data['fields']['venueOther'] = null;
         }
 
         if ($data['fields']['isCancelled'] != 'Y') {

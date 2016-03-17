@@ -92,6 +92,7 @@ class LicenceFurniture implements
         $placeholder->getContainer('pageSubtitle')->set($data['organisation']['name']);
         $placeholder->getContainer('status')->set($data['status']);
         $placeholder->getContainer('horizontalNavigationId')->set('licence');
+        $placeholder->getContainer('isMlh')->set($data['isMlh']);
 
         $right = new ViewModel();
         $right->setTemplate('sections/licence/partials/right');

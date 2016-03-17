@@ -186,6 +186,13 @@ class ApplicationTest extends MockeryTestCase
                 false,
                 1
             ],
+            [
+                ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED,
+                LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
+                ApplicationEntityService::APPLICATION_TYPE_NEW,
+                true,
+                0
+            ],
         ];
     }
 
