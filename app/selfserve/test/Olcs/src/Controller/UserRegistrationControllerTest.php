@@ -155,6 +155,12 @@ class UserRegistrationControllerTest extends TestCase
         $response->shouldReceive('isOk')->andReturn(true);
         $this->sut->shouldReceive('handleCommand')->with(m::type(CreateDto::class))->andReturn($response);
 
+        $placeholder = m::mock();
+        $placeholder->shouldReceive('setPlaceholder')
+            ->with('pageTitle', 'user-registration.page.check-email.title')
+            ->once();
+        $this->sut->shouldReceive('placeholder')->andReturn($placeholder);
+
         $view = $this->sut->addAction();
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
@@ -305,6 +311,12 @@ class UserRegistrationControllerTest extends TestCase
         $response->shouldReceive('getResult')->andReturn($licData);
         $this->sut->shouldReceive('handleQuery')->with(m::type(LicenceByNumberDto::class))->andReturn($response);
 
+        $placeholder = m::mock();
+        $placeholder->shouldReceive('setPlaceholder')
+            ->with('pageTitle', 'user-registration.page.check-details.title')
+            ->once();
+        $this->sut->shouldReceive('placeholder')->andReturn($placeholder);
+
         $view = $this->sut->addAction();
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
@@ -431,6 +443,12 @@ class UserRegistrationControllerTest extends TestCase
         $response = m::mock('stdClass');
         $response->shouldReceive('isOk')->andReturn(true);
         $this->sut->shouldReceive('handleCommand')->with(m::type(CreateDto::class))->andReturn($response);
+
+        $placeholder = m::mock();
+        $placeholder->shouldReceive('setPlaceholder')
+            ->with('pageTitle', 'user-registration.page.account-created.title')
+            ->once();
+        $this->sut->shouldReceive('placeholder')->andReturn($placeholder);
 
         $view = $this->sut->addAction();
 

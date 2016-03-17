@@ -973,7 +973,13 @@ return array(
         ]
     ],
     'controller_plugins' => array(
-        'invokables' => array()
+        'invokables' => array(),
+        'factories' => [
+            \Olcs\Mvc\Controller\Plugin\Placeholder::class => \Olcs\Mvc\Controller\Plugin\PlaceholderFactory::class,
+        ],
+        'aliases' => array(
+            'placeholder' => \Olcs\Mvc\Controller\Plugin\Placeholder::class,
+        )
     ),
     'simple_date_format' => array(
         'default' => 'd-m-Y'

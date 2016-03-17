@@ -118,6 +118,12 @@ class UserForgotUsernameControllerTest extends TestCase
         $response->shouldReceive('getResult')->andReturn($result);
         $this->sut->shouldReceive('handleCommand')->with(m::type(RemindUsernameDto::class))->andReturn($response);
 
+        $placeholder = m::mock();
+        $placeholder->shouldReceive('setPlaceholder')
+            ->with('pageTitle', 'user-forgot-username.page.check-email.title')
+            ->once();
+        $this->sut->shouldReceive('placeholder')->andReturn($placeholder);
+
         $view = $this->sut->indexAction();
 
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
@@ -164,6 +170,12 @@ class UserForgotUsernameControllerTest extends TestCase
         $response->shouldReceive('isOk')->andReturn(true);
         $response->shouldReceive('getResult')->andReturn($result);
         $this->sut->shouldReceive('handleCommand')->with(m::type(RemindUsernameDto::class))->andReturn($response);
+
+        $placeholder = m::mock();
+        $placeholder->shouldReceive('setPlaceholder')
+            ->with('pageTitle', 'user-forgot-username.page.ask-admin.title')
+            ->once();
+        $this->sut->shouldReceive('placeholder')->andReturn($placeholder);
 
         $view = $this->sut->indexAction();
 
