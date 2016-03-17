@@ -6,9 +6,10 @@ echo $this->render('partials/read-only/main',
         'header' => (isset($this->data['description']) ? $this->data['description'] : ''),
         'multiItems' => [
             0 => [
-                ['label' => 'Title', 'value' => $data['title']],
-                ['label' => 'First name', 'value' => $data['forename']],
-                ['label' => 'Last name', 'value' => $data['familyName']],
+                [
+                    'label' => 'Name',
+                    'value' => $data['title'] . ' ' . $data['forename'] . ' ' . $data['familyName']
+                ],
                 ['label' => 'Email', 'value' => $data['emailAddress']],
                 ['label' => 'Dob', 'value' => $data['dob']],
                 ['label' => 'Place of birth', 'value' => $data['placeOfBirth']],
