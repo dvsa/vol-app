@@ -29,8 +29,6 @@ class UnlicensedGoodsVehicleData
      *     "label": "application_vehicle-safety_vehicle-sub-action.data.vrm"
      * })
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Common\Filter\Vrm"})
-     * @Form\Validator({"name":"Common\Form\Elements\Validators\Vrm"})
      */
     public $vrm = null;
 

@@ -32,11 +32,8 @@ class UnlicensedPsvVehicleData
      *         "class": "col-sm-2"
      *     },
      *     "column-size": "sm-5",
-     *     "help-block": "Between 2 and 50 characters."
      * })
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Common\Filter\Vrm"})
-     * @Form\Validator({"name":"Common\Form\Elements\Validators\Vrm"})
      */
     public $vrm = null;
 }
