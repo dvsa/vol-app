@@ -2,7 +2,7 @@
     echo $this->render(
         '/partials/page-header.phtml',
         array(
-            'pageTitle' => isset($this->pageTitle) ? $this->translate($this->pageTitle) : '',
+            'pageTitle' => $this->pageTitle(),
             'pageSubTitle'=> isset($this->pageSubtitle) ? $this->translate($this->pageSubtitle) : '',
             'pageHeaderText'=> isset($this->pageHeaderText) ? $this->translate($this->pageHeaderText) : '',
             'pageHeaderUrl'=> isset($this->pageHeaderUrl) ? $this->pageHeaderUrl : null,

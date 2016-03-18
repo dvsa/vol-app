@@ -67,7 +67,6 @@ class MyDetailsController extends AbstractController
         $view = new ViewModel(
             [
                 'form' => $this->alterForm($form),
-                'pageTitle' => 'my-account.page.title',
                 'showNav' => false
             ]
         );
