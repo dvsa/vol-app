@@ -18,10 +18,10 @@ class SubmissionSendTo extends Base
      * @Form\Type("DynamicSelect")
      * @Form\Options({
      *     "label": "Send to",
-     *     "service_name": "Olcs\Service\Data\User",
+     *     "service_name": "Olcs\Service\Data\UserInternalTeamList",
      *     "disable_inarray_validator": true,
      *     "help-block": "Please select a user",
-     *     "use_groups":false
+     *     "use_groups":true
      * })
      */
     public $recipientUser = null;
