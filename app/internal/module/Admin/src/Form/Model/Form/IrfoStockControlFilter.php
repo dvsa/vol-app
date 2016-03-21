@@ -27,7 +27,7 @@ class IrfoStockControlFilter
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Year",
-     *     "min_year_delta": "-5",
+     *     "min_year_delta": "-40",
      *     "max_year_delta": "+5"
      * })
      * @Form\Type("YearSelect")
