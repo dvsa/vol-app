@@ -18,8 +18,45 @@ use CommonTest\Service\Data\AbstractDataServiceTestCase;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class UserInternalTest extends AbstractDataServiceTestCase
+class UserListInternalTest extends AbstractDataServiceTestCase
 {
+    private $userList = [
+        [
+            'id' => 5,
+            'team' => [
+                'id' => 4,
+                'name' => 'admin'
+            ],
+            'contactDetails' => [
+                'person' => [
+                    'forename' => 'Paul',
+                    'familyName' => 'Aldridge'
+                ]
+            ]
+        ],
+        [
+            'id' => 9,
+            'team' => [
+                'id' => 4,
+                'name' => 'admin'
+            ],
+            'loginId' => 'usr999'
+        ],
+        [
+            'id' => 6,
+            'team' => [
+                'id' => 2,
+                'name' => 'marketing'
+            ],
+            'contactDetails' => [
+                'person' => [
+                    'forename' => 'Adam',
+                    'familyName' => 'Peterbottom'
+                ]
+            ]
+        ]
+    ];
+
     /**
      * Test fetchUserListData
      */
@@ -81,38 +118,10 @@ class UserInternalTest extends AbstractDataServiceTestCase
     /**
      * Test fetchListOptions
      */
-    public function testFetchListOptions()
+    public function testFetchListOptionsUsingGroups()
     {
-        $userList = [
-            [
-                'id' => 5,
-                'team' => [
-                    'id' => 4,
-                    'name' => 'admin'
-                ],
-                'contactDetails' => [
-                    'person' => [
-                        'forename' => 'Paul',
-                        'familyName' => 'Aldridge'
-                    ]
-                ]
-            ],
-            [
-                'id' => 6,
-                'team' => [
-                    'id' => 2,
-                    'name' => 'marketing'
-                ],
-                'contactDetails' => [
-                    'person' => [
-                        'forename' => 'Adam',
-                        'familyName' => 'Peterbottom'
-                    ]
-                ]
-            ]
-        ];
         $sut = new UserListInternal();
-        $sut->setData('userlist', $userList);
+        $sut->setData('userlist', $this->userList);
 
         // tests team name order ASC followed by person forename ASC
         $this->assertEquals(
@@ -120,7 +129,8 @@ class UserInternalTest extends AbstractDataServiceTestCase
                 4 => [
                     'label' => 'admin',
                     'options' => [
-                        5 => 'Paul Aldridge'
+                        5 => 'Paul Aldridge',
+                        9 => 'usr999'
                     ]
                 ],
                 2 => [
@@ -131,6 +141,25 @@ class UserInternalTest extends AbstractDataServiceTestCase
                 ]
             ],
             $sut->fetchListOptions([], true)
+        );
+    }
+
+    /**
+     * Test fetchListOptions
+     */
+    public function testFetchListOptionsWithoutGroups()
+    {
+        $sut = new UserListInternal();
+        $sut->setData('userlist', $this->userList);
+
+        // tests team name order ASC followed by person forename ASC
+        $this->assertEquals(
+            [
+                5 => 'Paul Aldridge',
+                6 => 'Adam Peterbottom',
+                9 => 'usr999'
+            ],
+            $sut->fetchListOptions([], false)
         );
     }
 

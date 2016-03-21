@@ -107,39 +107,6 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
     }
 
     /**
-     * Returns a team group label for display as drop down group identifier.
-     * This is either the team name, or if not present the fallback is 'Others'
-     *
-     * @param $datum
-     * @return string
-     */
-    private function getTeamGroupLabel($datum)
-    {
-        if (isset($datum['team'])) {
-            return $datum['team']['name'];
-        } else {
-            // use 'others'
-            return $datum['loginId'];
-        }
-    }
-
-    /**
-     * Returns a team group label for display as drop down group identifier.
-     * This is either the team name, or if not present the fallback is 'Others'
-     *
-     * @param $datum
-     * @return string
-     */
-    private function getTeamGroupIdentifier($datum)
-    {
-        if (isset($datum['team'])) {
-            return $datum['team']['id'];
-        }
-
-        return '';
-    }
-
-    /**
      * Format for groups
      *
      * @param array $data
@@ -150,10 +117,10 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
         $optionData = [];
 
         foreach ($data as $datum) {
-            $parentId = $this->getTeamGroupIdentifier($datum);
+            $parentId = $datum['team']['id'];
             if (!isset($optionData[$parentId])) {
                 $optionData[$parentId] = [
-                    'label' => $this->getTeamGroupLabel($datum),
+                    'label' => $datum['team']['name'],
                     'options' => []
                 ];
             }
