@@ -34,6 +34,8 @@ class UnlicensedPsvVehicleData
      *     "column-size": "sm-5",
      * })
      * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":20}})
      */
     public $vrm = null;
 }
