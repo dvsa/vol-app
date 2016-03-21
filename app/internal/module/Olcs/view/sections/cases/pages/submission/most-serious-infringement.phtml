@@ -9,8 +9,10 @@ echo $this->render('partials/read-only/main',
                 ['label' => 'Notification number', 'value' => $this->data['data']['overview']['notificationNumber']],
             ],
             1 => [
-                ['label' => 'Date of infringement', 'dateFormat' => 'Y-m-d', 'date' =>
-                $this->data['data']['overview']['infringementDate']],
+                [
+                    'label' => 'Date of infringement',
+                    'value' => $this->data['data']['overview']['infringementDate']
+                ],
                 ['label' => 'Date of check', 'dateFormat' => 'Y-m-d', 'date' => $this->data['data']['overview']['checkDate']],
                 ['label' => 'Category', 'value' => $this->data['data']['overview']['siCategory']],
                 [
