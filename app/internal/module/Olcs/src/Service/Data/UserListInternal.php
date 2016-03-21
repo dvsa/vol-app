@@ -77,7 +77,7 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
      * @param array $data
      * @return array
      */
-    public function formatData(array $data)
+    protected function formatData(array $data)
     {
         $optionData = [];
 
@@ -145,7 +145,7 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
      * @param array $data
      * @return array
      */
-    public function formatDataForGroups(array $data)
+    protected function formatDataForGroups(array $data)
     {
         $optionData = [];
 
