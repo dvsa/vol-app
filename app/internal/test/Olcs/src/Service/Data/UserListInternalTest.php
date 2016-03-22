@@ -122,7 +122,7 @@ class UserListInternalTest extends AbstractDataServiceTestCase
         $sut = new UserListInternal();
         $sut->setData('userlist', $this->userList);
 
-        // tests team name order ASC followed by person forename ASC
+        // tests formatGroups is called to give the array structure below
         $this->assertEquals(
             [
                 4 => [
@@ -151,7 +151,7 @@ class UserListInternalTest extends AbstractDataServiceTestCase
         $sut = new UserListInternal();
         $sut->setData('userlist', $this->userList);
 
-        // tests team name order ASC followed by person forename ASC
+        // tests formatData is called to give the array structure below
         $this->assertEquals(
             [
                 5 => 'Paul Aldridge',
