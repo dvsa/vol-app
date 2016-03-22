@@ -3,7 +3,9 @@
 $case = $this->placeholder('case')->getValue();
 
 if (!$case['isErru']) {
-    echo' This case is not Erru';
+    $header = ['header' => 'ERRU penalties'];
+    echo $this->render('partials/read-only/main', $header);
+    echo' <div class="empty"><p>There are no ERRU penalties</p></div>';
 } else{
     $header = ['header' => 'Msi response'];
 
