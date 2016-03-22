@@ -31,6 +31,28 @@ return array(
             'name' => 'serialNo',
         ),
         array(
+            'title' => 'Permit No',
+            'formatter' => function ($data) {
+                if (empty($data['irfoGvPermit']['id'])) {
+                    return '';
+                }
+
+                return sprintf(
+                    '<a href="%s" class="js-modal-ajax">%s</a>',
+                    $this->generateUrl(
+                        array(
+                            'action' => 'details',
+                            'id' => $data['irfoGvPermit']['id'],
+                            'organisation' => $data['irfoGvPermit']['organisation']['id']
+                        ),
+                        'operator/irfo/gv-permits',
+                        false
+                    ),
+                    $data['irfoGvPermit']['id']
+                );
+            }
+        ),
+        array(
             'title' => 'Status',
             'formatter' => function ($data) {
                 return $data['status']['description'];
