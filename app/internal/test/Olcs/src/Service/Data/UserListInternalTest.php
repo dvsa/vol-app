@@ -73,7 +73,6 @@ class UserListInternalTest extends AbstractDataServiceTestCase
                 function ($dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
-                    $this->assertTrue($dto->getIsInternal());
                     return 'query';
                 }
             )
