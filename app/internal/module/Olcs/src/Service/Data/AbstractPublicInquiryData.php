@@ -62,7 +62,7 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
         }
 
         $context['bundle'] = json_encode([]);
-        $context['limit'] = 1000;
+        $context['limit'] = 100;
 
         /**
          * @todo [OLCS-5306] check this, it appears to be an invalid order by

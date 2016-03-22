@@ -77,7 +77,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
                     'sort' => 'raisedDate',
                     'order' => 'ASC',
                     'page' => 1,
-                    'limit' => 1000,
+                    'limit' => 100,
                 ]
             )
         );
@@ -97,7 +97,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
                     'sort' => 'complaintDate',
                     'order' => 'ASC',
                     'page' => 1,
-                    'limit' => 1000,
+                    'limit' => 100,
                 ]
             )
         );
