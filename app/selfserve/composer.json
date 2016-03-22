@@ -70,6 +70,7 @@
         "preferred-install": "dist",
         "github-oauth": {
             "github.com": "9d28c36d14775b5d8c4a5ffeee6172eecbd8c9f4"
-        }
+        },
+        "secure-http" : false
     }
 }
