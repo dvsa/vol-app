@@ -98,7 +98,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
                     'sort' => 'raisedDate',
                     'order' => 'ASC',
                     'page' => 1,
-                    'limit' => 1000,
+                    'limit' => 100,
                 ]
             )
         );
@@ -118,7 +118,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
                     'sort' => 'complaintDate',
                     'order' => 'ASC',
                     'page' => 1,
-                    'limit' => 1000,
+                    'limit' => 100,
                 ]
             )
         );
