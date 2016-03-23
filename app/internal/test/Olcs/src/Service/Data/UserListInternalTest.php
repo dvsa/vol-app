@@ -152,11 +152,11 @@ class UserListInternalTest extends AbstractDataServiceTestCase
         $sut->setData('userlist', $this->userList);
 
         // tests formatData is called to give the array structure below
-        $this->assertEquals(
+        $this->assertSame(
             [
                 5 => 'Paul Aldridge',
-                6 => 'Adam Peterbottom',
-                9 => 'usr999'
+                9 => 'usr999',
+                6 => 'Adam Peterbottom'
             ],
             $sut->fetchListOptions([], false)
         );
