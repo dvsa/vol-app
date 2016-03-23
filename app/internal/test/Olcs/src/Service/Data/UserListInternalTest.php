@@ -92,6 +92,9 @@ class UserListInternalTest extends AbstractDataServiceTestCase
         $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
 
         $this->assertEquals($results['results'], $sut->fetchUserListData());
+
+        // test cached results
+        $this->assertEquals($results['results'], $sut->fetchUserListData());
     }
 
     /**
