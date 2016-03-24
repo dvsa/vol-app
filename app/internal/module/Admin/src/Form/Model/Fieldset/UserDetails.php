@@ -15,7 +15,7 @@ class UserDetails
      * @Form\Attributes({"id":"team","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Team",
-     *     "service_name": "Common\Service\Data\Team",
+     *     "service_name": "Olcs\Service\Data\Team",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
