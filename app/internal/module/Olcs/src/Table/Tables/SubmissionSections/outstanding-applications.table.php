@@ -26,16 +26,22 @@ return array(
     'columns' => array(
         array(
             'title' => 'Application No',
-            'name' => 'id'
+            'formatter' => function ($data) {
+                $string = $data['id'];
+                if (isset($data['licNo'])) {
+                    $string .= ' / ' . $data['licNo'];
+                }
+
+                return $string;
+            }
         ),
         array(
             'title' => 'Application type',
-            'name' => 'applicationType',
+            'name' => 'applicationType'
         ),
         array(
             'title' => 'Received date',
-            'name' => 'receivedDate',
-            'formatter' => 'Date'
+            'name' => 'receivedDate'
         ),
         array(
             'title' => 'OOO/OOR',
