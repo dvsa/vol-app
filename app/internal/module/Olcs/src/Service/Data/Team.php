@@ -6,7 +6,7 @@ use Common\Service\Data\AbstractData;
 use Common\Service\Data\ListDataInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Dvsa\Olcs\Transfer\Query\Team\TeamList as TeamQry;
+use Dvsa\Olcs\Transfer\Query\Team\TeamListData as TeamQry;
 
 /**
  * Class Team
@@ -17,10 +17,8 @@ class Team extends AbstractData implements ListDataInterface, ServiceLocatorAwar
     // @todo: move ServiceLocator to AbstractData during the Data services migration process
     use ServiceLocatorAwareTrait;
 
-    const DEFAULT_PAGE = 1;
-    const DEFAULT_LIMIT = 100;
     const DEFAULT_ORDER = 'ASC';
-    const DEFAULT_SORT = 'id';
+    const DEFAULT_SORT = 'name';
 
     protected $id;
     protected $serviceName = 'Team';
@@ -51,8 +49,6 @@ class Team extends AbstractData implements ListDataInterface, ServiceLocatorAwar
         if (is_null($this->getData('teamlist'))) {
 
             $params = [
-                'page'  => self::DEFAULT_PAGE,
-                'limit' => self::DEFAULT_LIMIT,
                 'sort'  => self::DEFAULT_SORT,
                 'order' => self::DEFAULT_ORDER
             ];

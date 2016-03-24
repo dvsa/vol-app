@@ -32,7 +32,7 @@ class UserType
      *     "label": "Team",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "service_name": "Common\Service\Data\Team",
+     *     "service_name": "Olcs\Service\Data\Team",
      *     "use_groups": "false"
      * })
      * @Form\Attributes({"id":"team","placeholder":"", "required":false})

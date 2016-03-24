@@ -186,12 +186,10 @@ trait ListDataTrait
      */
     public function getListDataTeam($firstOption = false)
     {
-        $dto = \Dvsa\Olcs\Transfer\Query\Team\TeamList::create(
+        $dto = \Dvsa\Olcs\Transfer\Query\Team\TeamListData::create(
             [
                 'order' => 'ASC',
                 'sort' => 'name',
-                'page' => 1,        // we are not paginating these lists so always on page 1
-                'limit' => 100      // we are not paginating these lists so set to a large(ish) amount
             ]
         );
 
