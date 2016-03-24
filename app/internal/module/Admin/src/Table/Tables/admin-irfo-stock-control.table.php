@@ -53,6 +53,26 @@ return array(
             }
         ),
         array(
+            'title' => 'Operator',
+            'formatter' => function ($data) {
+                if (empty($data['irfoGvPermit']['organisation']['id'])) {
+                    return '';
+                }
+
+                return sprintf(
+                    '<a href="%s">%s</a>',
+                    $this->generateUrl(
+                        array(
+                            'organisation' => $data['irfoGvPermit']['organisation']['id']
+                        ),
+                        'operator/irfo/gv-permits',
+                        false
+                    ),
+                    $data['irfoGvPermit']['organisation']['name']
+                );
+            }
+        ),
+        array(
             'title' => 'Status',
             'formatter' => function ($data) {
                 return $data['status']['description'];
