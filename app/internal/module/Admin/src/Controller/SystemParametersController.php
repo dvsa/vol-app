@@ -7,7 +7,6 @@
  */
 namespace Admin\Controller;
 
-use Common\Controller\Traits\GenericRenderView;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
@@ -26,7 +25,6 @@ use Admin\Form\Model\Form\SystemParameter as SystemParameterForm;
  */
 class SystemParametersController extends AbstractInternalController implements LeftViewProvider
 {
-    use GenericRenderView;
 
     protected $navigationId = 'admin-dashboard/admin-manage-system-parameters';
 
@@ -81,8 +79,6 @@ class SystemParametersController extends AbstractInternalController implements L
 
     public function indexAction()
     {
-        $view = $this->getView();
-        $view->setTemplate('placeholder');
 
         $this->placeholder()->setPlaceholder('pageTitle', 'System parameters');
 
