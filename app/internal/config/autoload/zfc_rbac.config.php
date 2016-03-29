@@ -38,6 +38,7 @@ return [
             'admin-dashboard/admin-partner-management*' => ['internal-admin'],
             'admin-dashboard/admin-printer-management*' => ['internal-admin'],
             'admin-dashboard/admin-user-management*' => ['internal-admin'],
+            'admin-dashboard/admin-system-parameters*' => ['internal-admin'],
 
             // All Internal users can see my account, to change their details, password etc
             'admin-dashboard/admin-my-account*' => [
