@@ -31,7 +31,7 @@ return array(
         ),
         array(
             'title' => 'DOB',
-            'name' => 'dob'
+            'name' => 'birthDate'
         ),
         array(
             'title' => 'Other Licences / Applications',
