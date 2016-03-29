@@ -33,8 +33,7 @@ return array(
         ),
         array(
             'title' => 'Date',
-            'name' => 'issuedDate',
-            'formatter' => 'Date'
+            'name' => 'issuedDate'
         ),
         array(
             'title' => 'Country',

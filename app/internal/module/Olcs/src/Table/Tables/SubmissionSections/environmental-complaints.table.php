@@ -26,8 +26,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Date received',
-            'name' => 'complaintDate',
-            'formatter' => 'Date'
+            'name' => 'complaintDate'
         ),
         array(
             'title' => 'Complainant',

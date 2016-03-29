@@ -33,12 +33,11 @@ return array(
             'title' => 'Date received',
             'name' => 'dateReceived',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'edit', 'opposition' => $data['id']),
                     'case_opposition',
                     true
-                ) . '">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '">' . $data['dateReceived'] . '</a>';
             },
         ),
         array(

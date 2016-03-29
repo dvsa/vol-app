@@ -24,7 +24,7 @@ echo $this->render('partials/read-only/main',
             2 => [
                 [
                     'label' => 'Member state',
-                    'value' => $this->data['data']['overview']['isMemberState'],
+                    'value' => $this->data['data']['overview']['isMemberState'] ? 'Yes' : 'No',
                     'class' => 'full-width'
                 ]
             ]

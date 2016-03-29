@@ -37,7 +37,6 @@ return array(
         ),
         array(
             'title' => 'DOB',
-            'formatter' => 'Date',
             'name' => 'birthDate'
         ),
         array(

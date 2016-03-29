@@ -33,13 +33,12 @@ return array(
                 }
 
                 $column['formatter'] = 'Date';
-                return $this->callFormatter($column, $data);
+                return $data['convictionDate']. '---' . $this->callFormatter($column, $data);
             },
             'name' => 'convictionDate'
         ),
         array(
             'title' => 'Date of offence',
-            'formatter' => 'Date',
             'name' => 'offenceDate'
         ),
         array(
