@@ -3,7 +3,6 @@
 namespace Admin\Form\Model\Fieldset;
 
 use Zend\Form\Annotation as Form;
-use Common\Form\Model\Form\Traits\IdTrait;
 
 /**
  * @codeCoverageIgnore No methods
