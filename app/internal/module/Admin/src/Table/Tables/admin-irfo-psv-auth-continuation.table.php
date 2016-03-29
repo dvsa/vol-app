@@ -9,6 +9,9 @@ return array(
             'actions' => array(
                 'renew' => array(
                     'label' => 'Set to renew', 'class' => 'primary js-require--multiple', 'requireRows' => true
+                ),
+                'print' => array(
+                    'label' => 'Print checklist', 'class' => 'secondary js-require--multiple', 'requireRows' => true
                 )
             )
         ),

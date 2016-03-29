@@ -167,7 +167,7 @@ return [
                                     'constraints' => [
                                         'year' => '([0-9]{4})',
                                         'month' => '([0-9]{1,2})',
-                                        'action' => '(renew)',
+                                        'action' => '(renew|print)',
                                         'id' => '([0-9]+,?)+',
                                     ],
                                     'defaults' => [

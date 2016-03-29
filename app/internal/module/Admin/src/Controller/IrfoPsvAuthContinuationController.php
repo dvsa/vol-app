@@ -6,6 +6,7 @@
 namespace Admin\Controller;
 
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthContinuationList as ListDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\PrintIrfoPsvAuthChecklist as PrintChecklistDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\RenewIrfoPsvAuth as RenewDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -44,6 +45,7 @@ class IrfoPsvAuthContinuationController extends AbstractInternalController imple
 
     protected $crudConfig = [
         'renew' => ['requireRows' => true],
+        'print' => ['requireRows' => true],
     ];
 
     /**
@@ -96,6 +98,20 @@ class IrfoPsvAuthContinuationController extends AbstractInternalController imple
         return $this->processCommand(
             new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id'))]),
             RenewDto::class
+        );
+    }
+
+    /**
+     * Print checklist action
+     *
+     * @return mixed
+     */
+    public function printAction()
+    {
+        return $this->processCommand(
+            new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id'))]),
+            PrintChecklistDto::class,
+            'Checklist printed'
         );
     }
 }
