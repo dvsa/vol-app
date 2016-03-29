@@ -37,11 +37,11 @@ return array(
         ),
         array(
             'title' => 'DOB',
-            'name' => 'dob',
+            'name' => 'birthDate',
         ),
         array(
             'title' => 'Place of birth',
-            'name' => 'placeOfBirth',
+            'name' => 'birthPlace',
         ),
         array(
             'title' => 'Type',
