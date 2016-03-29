@@ -23,8 +23,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Complaint date',
-            'name' => 'complaintDate',
-            'formatter' => 'Date',
+            'name' => 'complaintDate'
         ),
         array(
             'title' => 'Complainant name',

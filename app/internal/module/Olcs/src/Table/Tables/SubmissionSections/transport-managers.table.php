@@ -31,8 +31,7 @@ return array(
         ),
         array(
             'title' => 'DOB',
-            'name' => 'dob',
-            'formatter' => 'Date'
+            'name' => 'dob'
         ),
         array(
             'title' => 'Other Licences / Applications',

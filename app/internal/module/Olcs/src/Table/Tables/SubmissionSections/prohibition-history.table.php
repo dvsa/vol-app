@@ -25,13 +25,11 @@ return array(
     'columns' => array(
         array(
             'title' => 'Prohibition date',
-            'formatter' => 'Date',
             'name' => 'prohibitionDate'
         ),
         array(
             'title' => 'Date cleared',
-            'name' => 'clearedDate',
-            'formatter' => 'Date',
+            'name' => 'clearedDate'
         ),
         array(
             'title' => 'Vehicle',
