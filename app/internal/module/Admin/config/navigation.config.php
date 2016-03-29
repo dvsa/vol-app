@@ -214,7 +214,12 @@ return [
                             'route' => 'admin-dashboard/admin-report/exported-reports',
                         ],
                     ],
-                ]
+                ],
+                [
+                    'id' => 'admin-dashboard/admin-manage-system-parameters',
+                    'label' => 'System parameters',
+                    'route' => 'admin-dashboard/admin-system-parameters'
+                ],
             ]
         ]
     ]

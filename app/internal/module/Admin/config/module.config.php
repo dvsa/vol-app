@@ -324,6 +324,19 @@ return [
                             ]
                         ],
                     ],
+                    'admin-system-parameters' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'system-parameters[/:action][/:sp][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)'
+                            ],
+                            'defaults' => [
+                                'controller' => 'Admin\SystemParametersController',
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
                     'admin-payment-processing' => [
                         'type' => 'segment',
                         'options' => [
@@ -488,6 +501,7 @@ return [
             'Admin\FinancialStandingRateController' => 'Admin\Controller\FinancialStandingRateController',
             'Admin\CpmsReportController' => 'Admin\Controller\CpmsReportController',
             'Admin\TeamsController' => \Admin\Controller\TeamController::class,
+            'Admin\SystemParametersController' => \Admin\Controller\SystemParametersController::class,
         ]
     ],
     'view_manager' => [
