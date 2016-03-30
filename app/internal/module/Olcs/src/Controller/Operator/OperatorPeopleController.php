@@ -185,17 +185,17 @@ class OperatorPeopleController extends AbstractInternalController implements
     protected function alterForm($form, $showAddAnotherButton = false)
     {
         $data = $this->loadOrganisationData();
-
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
         // if org type is not Other, then remove position element
         if ($data['type']['id'] !== \Common\RefData::ORG_TYPE_OTHER) {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'data->position');
+            $formHelper->remove($form, 'data->position');
         }
         // if not a sole trader OR no person OR already disqualified then hide the disqualify button
         if ($data['type']['id'] !== \Common\RefData::ORG_TYPE_SOLE_TRADER ||
             !isset($data['organisationPersons'][0]['person']['id']) ||
             $data['organisationPersons'][0]['person']['disqualificationStatus'] !== 'None'
         ) {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->disqualify');
+            $formHelper->remove($form, 'form-actions->disqualify');
         } else {
             // put the correct link onto the form disqualify button
             $personId = $data['organisationPersons'][0]['person']['id'];
@@ -208,7 +208,10 @@ class OperatorPeopleController extends AbstractInternalController implements
         }
 
         if (!$showAddAnotherButton) {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->addAnother');
+            $formHelper->remove($form, 'form-actions->addAnother');
+        }
+        if ($data['isUnlicensed']) {
+            $form->getInputFilter()->get("data")->get('birthDate')->setRequired(false);
         }
 
         return $form;
