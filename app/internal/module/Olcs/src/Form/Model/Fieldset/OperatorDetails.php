@@ -79,8 +79,17 @@ class OperatorDetails
     public $isIrfo;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Allow email correspondence"})
-     * @Form\Type("OlcsCheckbox")
+     * @Form\Type("Radio")
+     * @Form\Options({
+     *      "label": "How would you like to receive your correspondence?",
+     *      "value_options":{
+     *          "N":"Post",
+     *          "Y":"Email"
+     *      },
+     * }),
+     * @Form\Attributes({
+     *      "value":"N"
+     * })
      */
     public $allowEmail;
 

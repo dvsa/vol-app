@@ -705,6 +705,10 @@ return array(
             'lva-variation-type-of-licence' => LvaFormService\VariationTypeOfLicence::class,
 
             'lva-licence-trailers' => LvaFormService\LicenceTrailers::class,
+
+            'lva-licence-business_details' => LvaFormService\LicenceBusinessDetails::class,
+            'lva-variation-business_details' => LvaFormService\VariationBusinessDetails::class,
+            'lva-application-business_details' => LvaFormService\ApplicationBusinessDetails::class,
         ]
     ],
     'business_service_manager' => [
