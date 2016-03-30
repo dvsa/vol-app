@@ -26,14 +26,18 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
 
     protected $fsm;
 
+    protected $fh;
+
     public function setUp()
     {
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
         $this->sm = Bootstrap::getServiceManager();
+        $this->fh = m::mock('\Common\Service\Helper\FormHelperService')->makePartial();
 
         $this->sut = new ApplicationBusinessDetails();
         $this->sut->setServiceLocator($this->sm);
         $this->sut->setFormServiceLocator($this->fsm);
+        $this->sut->setFormHelper($this->fh);
     }
 
     public function testAlterFormWithoutInforceLicences()
@@ -54,6 +58,10 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         $mockApplicationFormService->shouldReceive('alterForm')
             ->once()
             ->with($form);
+
+        $this->fh->shouldReceive('remove')
+            ->with($form, 'allow-email')
+            ->once();
 
         $this->sut->alterForm($form, $params);
     }
@@ -78,6 +86,10 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         $mockApplicationFormService->shouldReceive('alterForm')
             ->once()
             ->with($form);
+
+        $this->fh->shouldReceive('remove')
+            ->with($form, 'allow-email')
+            ->once();
 
         $mockLockBusinessDetailsFormService->shouldReceive('alterForm')
             ->once()
