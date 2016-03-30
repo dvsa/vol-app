@@ -24,6 +24,8 @@ class VariationBusinessDetails extends CommonVariationBusinessDetails implements
     {
         parent::alterForm($form, $params);
 
+        $this->getFormHelper()->remove($form, 'allow-email');
+
         $this->getFormServiceLocator()->get('lva-lock-business_details')->alterForm($form);
     }
 }
