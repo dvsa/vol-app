@@ -15,6 +15,7 @@ use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\CreateAgreedAndLegislation as CreateCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateAgreedAndLegislation as UpdateCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateDecision as UpdateDecisionCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateTmDecision as UpdateTmDecisionCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateSla as UpdateSlaCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\Close as CloseCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\Reopen as ReopenCmd;
@@ -41,6 +42,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
 
     /** Pi Decision */
     protected $updateDecisionCommand = UpdateDecisionCmd::class;
+    protected $updateTmDecisionCommand = UpdateTmDecisionCmd::class;
     protected $decisionForm = DecisionForm::class;
 
     /** Sla */
@@ -183,16 +185,18 @@ class PiController extends AbstractInternalController implements CaseControllerI
     public function decisionAction()
     {
         $pi = $this->getPi();
+        $updateCommand = $this->updateDecisionCommand;
 
         if ($pi['isTm']) {
             $this->decisionForm = TmDecisionForm::class;
+            $updateCommand = $this->updateTmDecisionCommand;
         }
 
         return $this->edit(
             $this->decisionForm,
             $this->itemDto,
             new GenericItem($this->itemParams),
-            $this->updateDecisionCommand,
+            $updateCommand,
             $this->mapperClass,
             $this->editViewTemplate,
             'Updated record',
