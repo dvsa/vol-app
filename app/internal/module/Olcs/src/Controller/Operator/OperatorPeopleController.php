@@ -211,7 +211,7 @@ class OperatorPeopleController extends AbstractInternalController implements
             $formHelper->remove($form, 'form-actions->addAnother');
         }
         if ($data['isUnlicensed']) {
-            $form->getInputFilter()->get("data")->get('birthDate')->setRequired(false);
+            $form->getInputFilter()->get('data')->get('birthDate')->setRequired(false);
         }
 
         return $form;
