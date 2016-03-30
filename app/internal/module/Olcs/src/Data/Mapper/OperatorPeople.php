@@ -57,7 +57,7 @@ class OperatorPeople implements MapperInterface
                 'forename' => $formData['data']['forename'],
                 'familyName' => $formData['data']['familyName'],
                 'otherName' => $formData['data']['otherName'],
-                'birthDate' => $formData['data']['birthDate'],
+                'birthDate' => empty($formData['data']['birthDate']) ? '' : $formData['data']['birthDate'],
             ],
         ];
 
