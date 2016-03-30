@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Cases\PublicInquiry;
 
+use Common\Exception\BadRequestException;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
@@ -185,6 +186,10 @@ class PiController extends AbstractInternalController implements CaseControllerI
     public function decisionAction()
     {
         $pi = $this->getPi();
+
+        if (empty($pi['piHearings'])) {
+            throw new BadRequestException('This Public Inquiry does not yet have any hearings');
+        }
         $updateCommand = $this->updateDecisionCommand;
 
         if ($pi['isTm']) {
