@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Cases\PublicInquiry;
 
+use Common\Exception\BadRequestException;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
@@ -15,6 +16,7 @@ use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\CreateAgreedAndLegislation as CreateCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateAgreedAndLegislation as UpdateCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateDecision as UpdateDecisionCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateTmDecision as UpdateTmDecisionCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateSla as UpdateSlaCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\Close as CloseCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\Reopen as ReopenCmd;
@@ -41,6 +43,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
 
     /** Pi Decision */
     protected $updateDecisionCommand = UpdateDecisionCmd::class;
+    protected $updateTmDecisionCommand = UpdateTmDecisionCmd::class;
     protected $decisionForm = DecisionForm::class;
 
     /** Sla */
@@ -184,15 +187,21 @@ class PiController extends AbstractInternalController implements CaseControllerI
     {
         $pi = $this->getPi();
 
+        if (empty($pi['piHearings'])) {
+            throw new BadRequestException('This Public Inquiry does not yet have any hearings');
+        }
+        $updateCommand = $this->updateDecisionCommand;
+
         if ($pi['isTm']) {
             $this->decisionForm = TmDecisionForm::class;
+            $updateCommand = $this->updateTmDecisionCommand;
         }
 
         return $this->edit(
             $this->decisionForm,
             $this->itemDto,
             new GenericItem($this->itemParams),
-            $this->updateDecisionCommand,
+            $updateCommand,
             $this->mapperClass,
             $this->editViewTemplate,
             'Updated record',
