@@ -52,6 +52,13 @@ class ApplicationOverviewTest extends \PHPUnit_Framework_TestCase
             'submissionForm'       => 'form',
             'receivedDate'         => '2015-01-14',
             'targetCompletionDate' => '2015-01-14',
+            'licence'              => [
+                'organisation' => [
+                    'type' => [
+                        'id' => 'org_typ_rc'
+                    ]
+                ]
+            ]
         ];
 
         $overview = new ApplicationOverview($data, $sections);
