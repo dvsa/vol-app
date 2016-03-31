@@ -59,7 +59,11 @@ trait ApplicationControllerTrait
                 $variables
             );
 
-            $title = 'lva.section.title.' . $content;
+            if ($content === 'people') {
+                $title = $form->get('table')->get('table')->getTable()->getVariable('title');
+            } else {
+                $title = 'lva.section.title.' . $content;
+            }
 
             $content = new ViewModel($sectionParams);
             $content->setTemplate('sections/lva/lva-details');
