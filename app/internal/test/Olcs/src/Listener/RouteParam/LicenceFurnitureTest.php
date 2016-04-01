@@ -84,6 +84,7 @@ class LicenceFurnitureTest extends TestCase
     public function testOnLicence()
     {
         $licenceId = 4;
+        $isMlh = true;
         $licence = [
             'id' => $licenceId,
             'organisation' => [
@@ -92,7 +93,8 @@ class LicenceFurnitureTest extends TestCase
             'licNo' => 'AB12345',
             'status' => [
                 'id' => RefData::LICENCE_STATUS_VALID
-            ]
+            ],
+            'isMlh' => $isMlh
         ];
 
         $this->onLicenceSetup($licence);
@@ -107,6 +109,14 @@ class LicenceFurnitureTest extends TestCase
             ->with('horizontalNavigationId')
             ->andReturn(
                 m::mock()->shouldReceive('set')->once()->with('licence')->getMock()
+            )
+            ->shouldReceive('getContainer')->once()->with('isMlh')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with($isMlh)
+                    ->getMock()
             )
             ->shouldReceive('getContainer')->once()
             ->with('right')

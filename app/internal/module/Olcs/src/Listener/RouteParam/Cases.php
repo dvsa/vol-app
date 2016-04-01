@@ -134,6 +134,9 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('case')->set($case);
 
+        $latestNote = isset($case['latestNote']['comment']) ? $case['latestNote']['comment'] : '';
+        $placeholder->getContainer('note')->set($latestNote);
+
         if (isset($case['licence']['id'])) {
             // Trigger the licence now - it won't trigger twice.
             $e->getTarget()->trigger('licence', $case['licence']['id']);
@@ -157,13 +160,6 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
 
             // Trigger the transportManager now - it won't trigger twice.
             $e->getTarget()->trigger('transportManager', $case['transportManager']['id']);
-
-            if (!empty($case['tmDecisions'])) {
-                $sidebarNav = $this->getSidebarNavigationService();
-                $sidebarNav->findOneById('case-decisions-transport-manager-repute-not-lost')->setVisible(false);
-                $sidebarNav->findOneById('case-decisions-transport-manager-declare-unfit')->setVisible(false);
-                $sidebarNav->findOneById('case-decisions-transport-manager-no-further-action')->setVisible(false);
-            }
         } else {
             $this->getNavigationService()->findOneById('case_details_serious_infringement')->setVisible(false);
             $this->getNavigationService()->findOneById('case_processing_decisions')->setVisible(false);

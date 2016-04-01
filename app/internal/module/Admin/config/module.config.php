@@ -163,10 +163,12 @@ return [
                             'irfo-psv-auth' => [
                                 'type' => 'Segment',
                                 'options' => [
-                                    'route' => 'irfo-psv-auth/:year/:month[/]',
+                                    'route' => 'irfo-psv-auth/:year/:month[/:action/:id][/]',
                                     'constraints' => [
                                         'year' => '([0-9]{4})',
                                         'month' => '([0-9]{1,2})',
+                                        'action' => '(renew)',
+                                        'id' => '([0-9]+,?)+',
                                     ],
                                     'defaults' => [
                                         'controller' => 'Admin\IrfoPsvAuthContinuationController',

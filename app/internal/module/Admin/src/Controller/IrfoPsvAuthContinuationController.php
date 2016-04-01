@@ -6,8 +6,10 @@
 namespace Admin\Controller;
 
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthContinuationList as ListDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\RenewIrfoPsvAuth as RenewDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -39,6 +41,10 @@ class IrfoPsvAuthContinuationController extends AbstractInternalController imple
     protected $tableName = 'admin-irfo-psv-auth-continuation';
     protected $listDto = ListDto::class;
     protected $listVars = ['year', 'month'];
+
+    protected $crudConfig = [
+        'renew' => ['requireRows' => true],
+    ];
 
     /**
      * Gets left view
@@ -78,5 +84,18 @@ class IrfoPsvAuthContinuationController extends AbstractInternalController imple
         $this->setPageTitle();
 
         return parent::indexAction();
+    }
+
+    /**
+     * Renew action
+     *
+     * @return mixed
+     */
+    public function renewAction()
+    {
+        return $this->processCommand(
+            new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id'))]),
+            RenewDto::class
+        );
     }
 }

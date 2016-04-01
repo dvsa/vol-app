@@ -68,6 +68,9 @@ class CasesTest extends MockeryTestCase
             ],
             'tmDecisions' => [
                 ['id' => 200]
+            ],
+            'latestNote' => [
+                'comment' => 'latest note'
             ]
         ];
 
@@ -86,6 +89,9 @@ class CasesTest extends MockeryTestCase
         $mockPlaceholder = m::mock()
             ->shouldReceive('getContainer')->once()->with('case')->andReturn(
                 m::mock()->shouldReceive('set')->once()->with($case)->getMock()
+            )
+            ->shouldReceive('getContainer')->once()->with('note')->andReturn(
+                m::mock()->shouldReceive('set')->once()->with($case['latestNote']['comment'])->getMock()
             )
             ->getMock();
 
@@ -123,21 +129,6 @@ class CasesTest extends MockeryTestCase
             ->getMock();
 
         $this->sut->setNavigationService($mockNavigation);
-
-        $mockSidebar = m::mock()
-            ->shouldReceive('findOneById')->once()->with('case-decisions-transport-manager-repute-not-lost')->andReturn(
-                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
-            )
-            ->shouldReceive('findOneById')->once()->with('case-decisions-transport-manager-declare-unfit')->andReturn(
-                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
-            )
-            ->shouldReceive('findOneById')->once()->with('case-decisions-transport-manager-no-further-action')
-            ->andReturn(
-                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
-            )
-            ->getMock();
-
-        $this->sut->setSidebarNavigationService($mockSidebar);
 
         $this->sut->onCase($event);
     }

@@ -94,7 +94,9 @@ class TaskController extends OlcsController\CrudAbstract implements CaseControll
             $filter['transportManager'] = $case['transportManager']['id'];
         }
 
-        $filter['case'] = $case['id'];
+        if (empty($filter)) {
+            throw new \RuntimeException('Must be filtered by licence or transportManager');
+        }
 
         return $filter;
     }

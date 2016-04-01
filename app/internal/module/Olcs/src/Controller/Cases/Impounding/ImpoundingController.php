@@ -15,6 +15,7 @@ use Dvsa\Olcs\Transfer\Query\Cases\Impounding\ImpoundingList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Form\Model\Form\Impounding;
 use Zend\View\Model\ViewModel;
 use Common\RefData as RefData;
@@ -26,6 +27,8 @@ use Common\RefData as RefData;
  */
 class ImpoundingController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
+    use ControllerTraits\GenerateActionTrait;
+
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -115,6 +118,17 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
     );
 
     /**
+     * Defines additional allowed POST actions
+     *
+     * Format is action => config array
+     *
+     * @var array
+     */
+    protected $crudConfig = [
+        'generate' => ['requireRows' => true],
+    ];
+
+    /**
      * Alter form for TM cases, set pubType and trafficAreas to be visible for publishing
      *
      * @param \Common\Controller\Form $form
@@ -129,7 +143,7 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
         } else {
             // set the label to republish if *any* publication has NOT been printed
             if (!empty($initialData['impounding']['publicationLinks'])) {
-                foreach ($data['impounding']['publicationLinks'] as $pl) {
+                foreach ($initialData['impounding']['publicationLinks'] as $pl) {
                     if (isset($pl['publication']) && $pl['publication']['pubStatus']['id'] !== 'pub_s_printed') {
                         $form->get('form-actions')->get('publish')->setLabel('Republish');
                         break;
@@ -139,5 +153,29 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
         }
 
         return $form;
+    }
+
+    /**
+     * Route for document generate action redirects
+     * @see Olcs\Controller\Traits\GenerateActionTrait
+     * @return string
+     */
+    protected function getDocumentGenerateRoute()
+    {
+        return 'case_licence_docs_attachments/entity/generate';
+    }
+
+    /**
+     * Route params for document generate action redirects
+     * @see Olcs\Controller\Traits\GenerateActionTrait
+     * @return array
+     */
+    protected function getDocumentGenerateRouteParams()
+    {
+        return [
+            'case' => $this->params()->fromRoute('case'),
+            'entityType' => 'impounding',
+            'entityId' => $this->params()->fromRoute('impounding')
+        ];
     }
 }

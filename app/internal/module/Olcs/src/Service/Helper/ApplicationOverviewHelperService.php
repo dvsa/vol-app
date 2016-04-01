@@ -28,7 +28,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         $viewData = [
             'operatorName'              => $licence['organisation']['name'],
             'operatorId'                => $licence['organisation']['id'], // used for URL generation
-            'numberOfLicences'          => count($licence['organisation']['licences']),
+            'numberOfLicences'          => $licence['organisationLicenceCount'],
             'tradingName'               => $licence['tradingName'],
             'currentApplications'       => $licenceOverviewHelper->getCurrentApplications($licence),
             'applicationCreated'        => $application['createdOn'],
@@ -208,8 +208,8 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         }
         return sprintf(
             '%d (%d)',
-            count($licence['licenceVehicles']),
-            count($licence['licenceVehicles']) + count($application['licenceVehicles'])
+            $licence['numberOfVehicles'],
+            $licence['numberOfVehicles'] + count($application['licenceVehicles'])
         );
     }
 

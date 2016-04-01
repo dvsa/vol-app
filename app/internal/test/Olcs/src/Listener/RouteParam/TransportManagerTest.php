@@ -41,6 +41,9 @@ class TransportManagerTest extends MockeryTestCase
         $tm['removedDate'] = 'notnull';
         $tm['hasBeenMerged'] = false;
         $tm['tmStatus']['id'] = RefData::TRANSPORT_MANAGER_STATUS_CURRENT;
+        $tm['latestNote'] = [
+            'comment' => 'latest note'
+        ];
 
         $url = '#';
 
@@ -117,6 +120,9 @@ class TransportManagerTest extends MockeryTestCase
         $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
         $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->with('transportManager')->andReturn($mockContainer);
+        $mockPlaceholder->shouldReceive('getContainer')->once()->with('note')->andReturn(
+            m::mock()->shouldReceive('set')->once()->with($tm['latestNote']['comment'])->getMock()
+        );
 
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
@@ -142,6 +148,9 @@ class TransportManagerTest extends MockeryTestCase
         $tm['removedDate'] = null;
         $tm['hasBeenMerged'] = false;
         $tm['tmStatus']['id'] = RefData::TRANSPORT_MANAGER_STATUS_CURRENT;
+        $tm['latestNote'] = [
+            'comment' => 'latest note'
+        ];
 
         $url = '#';
         $pageTitle = '<a href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
@@ -173,6 +182,9 @@ class TransportManagerTest extends MockeryTestCase
         $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
         $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->with('transportManager')->andReturn($mockContainer);
+        $mockPlaceholder->shouldReceive('getContainer')->once()->with('note')->andReturn(
+            m::mock()->shouldReceive('set')->once()->with($tm['latestNote']['comment'])->getMock()
+        );
 
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
@@ -219,6 +231,9 @@ class TransportManagerTest extends MockeryTestCase
         $tm['removedDate'] = null;
         $tm['hasBeenMerged'] = true;
         $tm['tmStatus']['id'] = RefData::TRANSPORT_MANAGER_STATUS_DISQUALIFIED;
+        $tm['latestNote'] = [
+            'comment' => 'latest note'
+        ];
 
         $url = '#';
         $pageTitle = '<a href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
@@ -250,6 +265,9 @@ class TransportManagerTest extends MockeryTestCase
         $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
         $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->with('transportManager')->andReturn($mockContainer);
+        $mockPlaceholder->shouldReceive('getContainer')->once()->with('note')->andReturn(
+            m::mock()->shouldReceive('set')->once()->with($tm['latestNote']['comment'])->getMock()
+        );
 
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);

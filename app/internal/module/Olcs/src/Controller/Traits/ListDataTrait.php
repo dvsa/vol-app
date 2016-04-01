@@ -191,7 +191,7 @@ trait ListDataTrait
                 'order' => 'ASC',
                 'sort' => 'name',
                 'page' => 1,        // we are not paginating these lists so always on page 1
-                'limit' => 200      // we are not paginating these lists so set to a large(ish) amount
+                'limit' => 100      // we are not paginating these lists so set to a large(ish) amount
             ]
         );
 

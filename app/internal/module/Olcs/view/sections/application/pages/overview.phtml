@@ -12,7 +12,7 @@ echo $this->render('partials/read-only/main',
                 ['label' => 'Previous operator name', 'value' => $previousOperatorName, 'hideIfEmpty' => true],
                 ['label' => 'Previous licence No.', 'value' => $previousLicenceNumber, 'hideIfEmpty' => true],
                 ['label' => 'No of licences ', 'numeric' => $numberOfLicences],
-                ['label' => 'Current applications ', 'numeric' => $currentApplications],
+                ['label' => 'Current applications ', 'value' => $currentApplications, 'noEscape' => true],
             ],
             1 => [
                 ['label' => 'Application created', 'date' => $applicationCreated],

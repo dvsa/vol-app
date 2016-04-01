@@ -17,12 +17,16 @@ class DeclarationsInternal
 
     /**
      * @Form\Type("\Common\Form\Elements\Types\Html")
+     * @Form\Options({"disable_html_escape": true})
      */
     public $summaryDownload = null;
 
     /**
      * @Form\Attributes({"value": "<h3>%s</h3>" })
-     * @Form\Options({"tokens": { 0: "section.name.undertakings" } })
+     * @Form\Options({
+     *      "tokens": {0: "section.name.undertakings" },
+     *      "disable_html_escape": true
+     * })
      * @Form\Type("\Common\Form\Elements\Types\HtmlTranslated")
      */
     public $heading = null;
