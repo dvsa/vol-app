@@ -90,7 +90,11 @@ trait VariationControllerTrait
                 $variables
             );
 
-            $title = 'lva.section.title.' . $content;
+            if ($content === 'people') {
+                $title = $form->get('table')->get('table')->getTable()->getVariable('title');
+            } else {
+                $title = 'lva.section.title.' . $content;
+            }
 
             $content = new Section($sectionParams);
 
