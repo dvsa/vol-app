@@ -19,15 +19,20 @@ class LicenceOverviewSectionTest extends MockeryTestCase
 {
     public function testView()
     {
-        $ref = 'type_of_licence';
+        $ref = 'people';
         $data = [
             'id' => 1,
             'idIndex' => 'licence',
-            'sectionNumber' => 1
+            'sectionNumber' => 1,
+            'organisation' => [
+                'type' => [
+                    'id' => 'org_t_llp'
+                ]
+            ]
         ];
 
         $viewModel = new LicenceOverviewSection($ref, $data);
-
+        $this->assertEquals('section.name.people.org_t_llp', $viewModel->getVariable('name'));
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
         $this->assertEquals($ref, $viewModel->getVariable('anchorRef'));
     }
