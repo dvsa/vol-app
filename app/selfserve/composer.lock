@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ccd5577592b1166f86dfa7a1d4774a29",
-    "content-hash": "b5e3275fc9158e8fc01b546c67f9363d",
+    "hash": "ab8bf7c8c34ba2b2a0ec96e633488653",
+    "content-hash": "96eafae38eaf965493b0694d401c43f8",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -213,17 +213,17 @@
         },
         {
             "name": "doctrine/common",
-            "version": "v2.5.3",
+            "version": "v2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "10f1f19651343f87573129ca970aef1a47a6f29e"
+                "reference": "a579557bc689580c19fee4e27487a67fe60defc0"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-common-10f1f19651343f87573129ca970aef1a47a6f29e-zip-5ce434.tar",
-                "reference": "10f1f19651343f87573129ca970aef1a47a6f29e",
-                "shasum": "af6bc3dff15a7b4edd370f0c72b3b4a1cc44faaf"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-common-a579557bc689580c19fee4e27487a67fe60defc0-zip-8747fd.tar",
+                "reference": "a579557bc689580c19fee4e27487a67fe60defc0",
+                "shasum": "1fdd7c9a8dff0e9b68b4180c405e707290c05047"
             },
             "require": {
                 "doctrine/annotations": "1.*",
@@ -231,20 +231,20 @@
                 "doctrine/collections": "1.*",
                 "doctrine/inflector": "1.*",
                 "doctrine/lexer": "1.*",
-                "php": ">=5.3.2"
+                "php": "~5.5|~7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~3.7"
+                "phpunit/phpunit": "~4.8|~5.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5.x-dev"
+                    "dev-master": "2.7.x-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Doctrine\\Common\\": "lib/"
+                "psr-4": {
+                    "Doctrine\\Common\\": "lib/Doctrine/Common"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -282,7 +282,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2015-12-25 13:10:16"
+            "time": "2015-12-25 13:18:31"
         },
         {
             "name": "doctrine/dbal",
@@ -357,22 +357,22 @@
         },
         {
             "name": "doctrine/doctrine-module",
-            "version": "0.10.0",
+            "version": "0.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineModule.git",
-                "reference": "3d08edccd7d813246004acee03ed9024e389d48f"
+                "reference": "8684c0bbee97d2d1477a9ac802e8b9df307671df"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-doctrine-module-3d08edccd7d813246004acee03ed9024e389d48f-zip-7eecbf.tar",
-                "reference": "3d08edccd7d813246004acee03ed9024e389d48f",
-                "shasum": "05958d34b84559290e3971fb89ca78b3bcfc7053"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-doctrine-module-8684c0bbee97d2d1477a9ac802e8b9df307671df-zip-799ad0.tar",
+                "reference": "8684c0bbee97d2d1477a9ac802e8b9df307671df",
+                "shasum": "6bf6f050dc7d8b9f53f66c562b332f4c0ccf9f85"
             },
             "require": {
                 "doctrine/cache": "~1.5",
-                "doctrine/common": ">=2.4,<2.6-dev",
-                "php": ">=5.4",
+                "doctrine/common": "~2.6",
+                "php": "^5.5 || ^7.0",
                 "symfony/console": "~2.3|~3.0",
                 "zendframework/zend-authentication": "~2.3",
                 "zendframework/zend-cache": "~2.3",
@@ -431,7 +431,7 @@
                 "module",
                 "zf2"
             ],
-            "time": "2015-12-01 22:04:42"
+            "time": "2016-03-21 23:55:21"
         },
         {
             "name": "doctrine/doctrine-orm-module",
@@ -764,11 +764,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/3.2.2",
+            "version": "dev-release/3.3",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git",
-                "reference": "403f54cd4b6b641d521a6eb9066135ee92d7806d"
+                "reference": "af0e74a78ed59e4b79d526b448b1918abb85b5b1"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -799,7 +799,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2016-03-09 12:16:53"
+            "time": "2016-04-01 11:05:28"
         },
         {
             "name": "olcs/autoload",
@@ -807,18 +807,18 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-autoload.git",
-                "reference": "4878028a8fbbb9e607745884fb4f1125c833fe4f"
+                "reference": "7341d5466605e8bcdd26d8b79806e8ab2a9a77a3"
             },
             "bin": [
                 "bin/autoload"
             ],
             "type": "library",
             "description": "OLCS optimised autoloader",
-            "time": "2015-07-17 09:12:14"
+            "time": "2016-03-16 16:59:28"
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "dev-release/3.2.2",
+            "version": "dev-release/3.3",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-auth.git",
@@ -849,7 +849,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-logging.git",
-                "reference": "d160921625ed76207b148695ad12677d78feac3e"
+                "reference": "0a8c128813241e5e4b5296ca91b0845a844011c1"
             },
             "require": {
                 "php": ">=5.4",
@@ -874,15 +874,15 @@
                 }
             },
             "description": "Logging Module for Olcs",
-            "time": "2016-01-28 09:39:20"
+            "time": "2016-03-23 15:15:10"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "dev-release/3.2.2",
+            "version": "dev-release/3.3",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-transfer.git",
-                "reference": "27d4b4abeb44550eb985cc93a663b3026f18ef70"
+                "reference": "e3ac0229d44f1d11f1a4e53562e69bd38a5e44dc"
             },
             "require": {
                 "php": ">=5.4",
@@ -900,15 +900,15 @@
                 }
             },
             "description": "OLCS Transfer",
-            "time": "2016-03-09 11:33:39"
+            "time": "2016-03-23 15:06:38"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "dev-release/3.2.2",
+            "version": "dev-release/3.3",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-utils.git",
-                "reference": "c9083c78bc6f9805175595d132901b17109f9fe9"
+                "reference": "fe9fb7b0fc6914a738304584418c215f00223c8e"
             },
             "require": {
                 "php": ">=5.4",
@@ -926,7 +926,7 @@
                 }
             },
             "description": "OLCS Utils",
-            "time": "2015-12-10 14:31:55"
+            "time": "2016-03-23 15:15:24"
         },
         {
             "name": "psr/log",
@@ -1078,7 +1078,7 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
@@ -1588,7 +1588,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-testhelpers.git",
-                "reference": "5143913186a7e8280679db5c877004a3b9b7e480"
+                "reference": "39b78ee1012d1a54ecdfc4b2013e5e260e6f0b46"
             },
             "require": {
                 "php": ">=5.4"
@@ -1605,7 +1605,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2015-07-07 09:35:36"
+            "time": "2016-03-16 16:39:23"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -1960,17 +1960,17 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.23",
+            "version": "4.8.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "6e351261f9cd33daf205a131a1ba61c6d33bd483"
+                "reference": "a1066c562c52900a142a0e2bbf0582994671385e"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-phpunit-6e351261f9cd33daf205a131a1ba61c6d33bd483-zip-7f34aa.tar",
-                "reference": "6e351261f9cd33daf205a131a1ba61c6d33bd483",
-                "shasum": "30f4615787d5ca1cd7a6746f35c54b7a107a7e73"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/phpunit-phpunit-a1066c562c52900a142a0e2bbf0582994671385e-zip-427079.tar",
+                "reference": "a1066c562c52900a142a0e2bbf0582994671385e",
+                "shasum": "4d6555b47897a70d7b5d3ed260b533a877652172"
             },
             "require": {
                 "ext-dom": "*",
@@ -2028,7 +2028,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-02-11 14:56:33"
+            "time": "2016-03-14 06:16:08"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

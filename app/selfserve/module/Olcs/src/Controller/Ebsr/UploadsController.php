@@ -40,6 +40,10 @@ class UploadsController extends ZendAbstractActionController
      */
     public function uploadAction()
     {
+        if ($this->isButtonPressed('cancel')) {
+            return $this->redirect()->toRoute('bus-registration/ebsr', ['action' => 'upload']);
+        }
+
         $fieldValues = $this->params()->fromFiles();
         $postFields = $this->params()->fromPost('fields');
         $fieldValues['fields']['submissionType'] = $postFields['submissionType'];

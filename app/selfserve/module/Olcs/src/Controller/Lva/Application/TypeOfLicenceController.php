@@ -56,9 +56,14 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
 
         $request = $this->getRequest();
 
-        $form = $this->getServiceLocator()->get('FormServiceManager')
-            ->get('lva-application-type-of-licence')
-            ->getForm();
+        $tolFormManagerService = $this->getServiceLocator()->get('FormServiceManager')
+            ->get('lva-application-type-of-licence');
+        $form = $tolFormManagerService->getForm();
+
+        $organisationData = $this->getOrganisation($this->getCurrentOrganisationId());
+        if (isset($organisationData['allowedOperatorLocation'])) {
+            $tolFormManagerService->setAndLockOperatorLocation($form, $organisationData['allowedOperatorLocation']);
+        }
 
         $form->get('form-actions')->remove('saveAndContinue')
             ->get('save')->setLabel('continue.button')->setAttribute('class', 'action--primary large');
@@ -67,13 +72,16 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
             $data = (array)$request->getPost();
 
             $form->setData($data);
+            if (isset($organisationData['allowedOperatorLocation'])) {
+                $tolFormManagerService->setAndLockOperatorLocation($form, $organisationData['allowedOperatorLocation']);
+            }
 
             if ($form->isValid()) {
 
                 $dto = CreateApplication::create(
                     [
                         'organisation' => $this->getCurrentOrganisationId(),
-                        'niFlag' => $data['type-of-licence']['operator-location'],
+                        'niFlag' => $this->getOperatorLocation($organisationData, $data),
                         'operatorType' => $data['type-of-licence']['operator-type'],
                         'licenceType' => $data['type-of-licence']['licence-type']
                     ]
@@ -100,5 +108,26 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
         $this->getServiceLocator()->get('Script')->loadFile('type-of-licence');
 
         return $this->renderCreateApplication('type_of_licence', $form);
+    }
+
+    /**
+     * Get Organisation data
+     *
+     * @param int $id
+     *
+     * @return array
+     * @throws \RuntimeException
+     */
+    protected function getOrganisation($id)
+    {
+        $response = $this->handleQuery(
+            \Dvsa\Olcs\Transfer\Query\Organisation\Organisation::create(['id' => $id])
+        );
+        if (!$response->isOk()) {
+            throw new \RuntimeException(
+                $this->getServiceLocator()->get('Helper\Translation')->translate('external.error-getting-organisation')
+            );
+        }
+        return $response->getResult();
     }
 }

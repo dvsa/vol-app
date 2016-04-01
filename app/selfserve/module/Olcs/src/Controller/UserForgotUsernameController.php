@@ -62,6 +62,7 @@ class UserForgotUsernameController extends AbstractController
                 // ask your administrator
                 $content = new ViewModel();
                 $content->setTemplate('olcs/user-forgot-username/ask-admin');
+                $this->placeholder()->setPlaceholder('pageTitle', 'user-forgot-username.page.ask-admin.title');
             } else {
                 // check your email page
                 $content = new ViewModel(
@@ -70,6 +71,7 @@ class UserForgotUsernameController extends AbstractController
                     ]
                 );
                 $content->setTemplate('olcs/user-forgot-username/check-email');
+                $this->placeholder()->setPlaceholder('pageTitle', 'user-forgot-username.page.check-email.title');
             }
 
             return $content;

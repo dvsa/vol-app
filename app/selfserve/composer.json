@@ -45,10 +45,10 @@
         "symfony/Filesystem": "~2.6.0",
         "zf-commons/zfc-rbac": "~2.4.0",
         "olcs/autoload": "dev-develop",
-        "olcs/OlcsCommon": "dev-release/3.2.2",
-        "olcs/olcs-transfer": "dev-release/3.2.2",
-        "olcs/olcs-utils": "dev-release/3.2.2",
-        "olcs/olcs-auth": "dev-release/3.2.2",
+        "olcs/OlcsCommon": "dev-release/3.3",
+        "olcs/olcs-transfer": "dev-release/3.3",
+        "olcs/olcs-utils": "dev-release/3.3",
+        "olcs/olcs-auth": "dev-release/3.3",
         "olcs/olcs-logging": "dev-develop"
     },
     "require-dev": {
@@ -70,6 +70,7 @@
         "preferred-install": "dist",
         "github-oauth": {
             "github.com": "9d28c36d14775b5d8c4a5ffeee6172eecbd8c9f4"
-        }
+        },
+        "secure-http" : false
     }
 }

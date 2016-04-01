@@ -137,6 +137,7 @@ class UserRegistrationController extends AbstractController
                 ]
             );
             $view->setTemplate('olcs/user-registration/check-details');
+            $this->placeholder()->setPlaceholder('pageTitle', 'user-registration.page.check-details.title');
 
             return $view;
         }
@@ -172,6 +173,7 @@ class UserRegistrationController extends AbstractController
         // account created page
         $content = new ViewModel();
         $content->setTemplate('olcs/user-registration/account-created');
+        $this->placeholder()->setPlaceholder('pageTitle', 'user-registration.page.account-created.title');
 
         return $content;
     }
@@ -191,6 +193,7 @@ class UserRegistrationController extends AbstractController
             ]
         );
         $content->setTemplate('olcs/user-registration/check-email');
+        $this->placeholder()->setPlaceholder('pageTitle', 'user-registration.page.check-email.title');
 
         return $content;
     }
