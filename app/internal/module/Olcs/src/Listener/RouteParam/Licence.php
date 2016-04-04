@@ -334,6 +334,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             RefData::LICENCE_STATUS_REVOKED,
             RefData::LICENCE_STATUS_CURTAILED,
             RefData::LICENCE_STATUS_SUSPENDED,
+            RefData::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
         ];
 
         if (!in_array($licence['status']['id'], $statuses)) {
