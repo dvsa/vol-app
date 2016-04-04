@@ -20,17 +20,24 @@ class VariationOverviewSectionTest extends MockeryTestCase
     public function testViewWithRequiresAttention()
     {
         $sectionDetails = ['status' => 1]; // VariationCompletionEntityService::STATUS_REQUIRES_ATTENTION
-        $ref = 'type_of_licence';
+        $ref = 'people';
         $data = [
             'id' => 1,
             'idIndex' => 'application',
             'sectionNumber' => 1,
+            'licence' => [
+                'organisation' => [
+                    'type' => [
+                        'id' => 'org_t_llp'
+                    ]
+                ]
+            ]
         ];
 
         $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
-
+        $this->assertEquals('section.name.people.org_t_llp', $viewModel->getVariable('name'));
         $this->assertEquals('orange', $viewModel->getVariable('statusColour'));
         $this->assertEquals('REQUIRES ATTENTION', $viewModel->getVariable('status'));
 
@@ -47,6 +54,13 @@ class VariationOverviewSectionTest extends MockeryTestCase
             'id' => 1,
             'idIndex' => 'application',
             'sectionNumber' => 1,
+            'licence' => [
+                'organisation' => [
+                    'type' => [
+                        'id' => 'org_t_llp'
+                    ]
+                ]
+            ]
         ];
 
         $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
@@ -67,6 +81,13 @@ class VariationOverviewSectionTest extends MockeryTestCase
             'id' => 1,
             'idIndex' => 'application',
             'sectionNumber' => 1,
+            'licence' => [
+                'organisation' => [
+                    'type' => [
+                        'id' => 'org_t_llp'
+                    ]
+                ]
+            ]
         ];
 
         $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
