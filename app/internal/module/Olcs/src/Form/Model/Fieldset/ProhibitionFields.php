@@ -55,25 +55,38 @@ class ProhibitionFields extends Base
     public $prohibitionType = null;
 
     /**
-     * @Form\Attributes({"id":"clearedDate"})
+     * @Form\Required(false)
+     * @Form\Attributes({"required":false, "id":"clearedDate"})
      * @Form\Options({
      *     "label": "Date cleared",
      *     "create_empty_option": true,
      *     "render_delimiters": "d m y"
      * })
-     * @Form\Required(false)
      * @Form\Type("DateSelect")
+     * @Form\AllowEmpty(true)
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
-     * @Form\Validator({
-     *     "name": "DateCompare",
-     *     "options": {
-     *         "compare_to":"prohibitionDate",
-     *         "compare_to_label":"Prohibition date",
-     *         "operator": "gte",
-     *     }
+     * @Form\Validator({"name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "prohibitionDate",
+     *          "context_values": {"--"},
+     *          "context_truth": false,
+     *          "allow_empty" : true,
+     *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
+     *              {"name": "Date", "options": {"format": "Y-m-d"}},
+     *              {
+     *                  "name": "DateCompare",
+     *                  "options": {
+     *                      "compare_to":"prohibitionDate",
+     *                      "compare_to_label":"Prohibition Date",
+     *                      "operator": "gte",
+     *                  }
+     *              }
+     *          }
+     *      }
      * })
      */
     public $clearedDate = null;
