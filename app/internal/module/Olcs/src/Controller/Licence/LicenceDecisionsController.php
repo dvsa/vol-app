@@ -102,6 +102,7 @@ class LicenceDecisionsController extends AbstractController
     {
         $licenceId = $this->fromRoute('licence');
         $licenceStatus = $this->fromRoute('status', null);
+
         if (!is_null($licenceStatus)) {
             if ($this->isButtonPressed('remove')) {
                 return $this->removeLicenceStatusRule(
@@ -112,6 +113,9 @@ class LicenceDecisionsController extends AbstractController
             }
 
             $licenceStatus = $this->getStatusForLicenceById($licenceStatus);
+
+            // get reasons into array of ids for array map
+            $licenceStatus['legislationReasons'] = array_column($licenceStatus['licence']['reasons'], 'id');
         }
 
         if ($this->isButtonPressed('affectImmediate')) {
@@ -134,6 +138,8 @@ class LicenceDecisionsController extends AbstractController
                 'curtailTo' => 'endDate'
             )
         );
+
+        $form->get('licence-decision-reasons')->get('reasons')->setValue($licenceStatus['legislationReasons']);
 
         if ($this->getRequest()->isPost()) {
 
@@ -182,14 +188,19 @@ class LicenceDecisionsController extends AbstractController
             }
 
             $licenceStatus = $this->getStatusForLicenceById($licenceStatus);
+
+            // get reasons into array of ids for array map
+            $licenceStatus['legislationReasons'] = array_column($licenceStatus['licence']['reasons'], 'id');
         }
 
         /* @todo $formData not set */
         if ($this->isButtonPressed('affectImmediate')) {
+            $postData = $this->getRequest()->getPost();
+
             return $this->affectImmediate(
                 array_merge(
                     ['licenceId' => $licenceId],
-                    ['reasons' => $formData['licence-decision-reasons']['reasons']]
+                    ['reasons' => $postData['licence-decision-reasons']['reasons']]
                 ),
                 RevokeLicence::class,
                 'licence-status.revocation.message.save.success'
@@ -203,6 +214,7 @@ class LicenceDecisionsController extends AbstractController
                 'revokeFrom' => 'startDate'
             )
         );
+        $form->get('licence-decision-reasons')->get('reasons')->setValue($licenceStatus['legislationReasons']);
 
         if ($this->getRequest()->isPost()) {
             $form->setData((array)$this->getRequest()->getPost());
@@ -215,6 +227,7 @@ class LicenceDecisionsController extends AbstractController
                     array(
                         'status' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_REVOKED,
                         'startDate' => $formData['licence-decision']['revokeFrom'],
+                        'reasons' => $formData['licence-decision-reasons']['reasons']
                     ),
                     $licenceStatus
                 );
@@ -251,10 +264,11 @@ class LicenceDecisionsController extends AbstractController
         }
         /* @todo $formData not set */
         if ($this->isButtonPressed('affectImmediate')) {
+            $postData = $this->getRequest()->getPost();
             return $this->affectImmediate(
                 array_merge(
                     ['licenceId' => $licenceId],
-                    ['reasons' => $formData['licence-decision-reasons']['reasons']]
+                    ['reasons' => $postData['licence-decision-reasons']['reasons']]
                 ),
                 SuspendLicence::class,
                 'licence-status.suspension.message.save.success'
@@ -281,7 +295,8 @@ class LicenceDecisionsController extends AbstractController
                     array(
                         'status' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_SUSPENDED,
                         'startDate' => $formData['licence-decision']['suspendFrom'],
-                        'endDate' => $formData['licence-decision']['suspendTo']
+                        'endDate' => $formData['licence-decision']['suspendTo'],
+                        'reasons' => $formData['licence-decision-reasons']['reasons']
                     ),
                     $licenceStatus
                 );
@@ -363,6 +378,7 @@ class LicenceDecisionsController extends AbstractController
                         'id' => $licenceId,
                         'surrenderDate' => $formData['licence-decision']['surrenderDate'],
                         'terminated' => false,
+                        'reasons' => $formData['licence-decision-reasons']['reasons']
                     ]
                 );
 
