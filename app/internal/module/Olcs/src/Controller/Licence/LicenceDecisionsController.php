@@ -193,7 +193,6 @@ class LicenceDecisionsController extends AbstractController
             $licenceStatus['legislationReasons'] = array_column($licenceStatus['licence']['reasons'], 'id');
         }
 
-        /* @todo $formData not set */
         if ($this->isButtonPressed('affectImmediate')) {
             $postData = $this->getRequest()->getPost();
 
@@ -206,7 +205,7 @@ class LicenceDecisionsController extends AbstractController
                 'licence-status.revocation.message.save.success'
             );
         }
-        
+
         $form = $this->getDecisionForm(
             'LicenceStatusDecisionRevoke',
             $licenceStatus,
@@ -262,7 +261,7 @@ class LicenceDecisionsController extends AbstractController
 
             $licenceStatus = $this->getStatusForLicenceById($licenceStatus);
         }
-        /* @todo $formData not set */
+
         if ($this->isButtonPressed('affectImmediate')) {
             $postData = $this->getRequest()->getPost();
             return $this->affectImmediate(

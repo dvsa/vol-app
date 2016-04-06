@@ -80,7 +80,7 @@ class PublicInquiryHearingFields extends Base
      * @Form\Attributes({"value": "not-set"})
      */
     public $isFullDay;
-    
+
     /**
      * @Form\Attributes({"id":"presidingTc","placeholder":"","class":"medium"})
      * @Form\Options({
@@ -233,10 +233,10 @@ class PublicInquiryHearingFields extends Base
      * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-large js-definition-source"})
      * @Form\Options({
      *     "label": "Definition",
-     *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",
-     *     "use_groups":true,
+     *     "service_name": "\Olcs\Service\Data\PublicInquiryDefinition",
+     *     "use_groups": true,
      *     "empty_option": "Add definition option"
      * })
      * @Form\Type("DynamicSelect")
