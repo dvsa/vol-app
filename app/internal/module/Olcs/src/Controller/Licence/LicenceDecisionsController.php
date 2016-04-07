@@ -18,6 +18,7 @@ use Dvsa\Olcs\Transfer\Command\Licence\CurtailLicence;
 use Dvsa\Olcs\Transfer\Command\Licence\SuspendLicence;
 use Dvsa\Olcs\Transfer\Command\Licence\SurrenderLicence;
 use Dvsa\Olcs\Transfer\Command\Licence\ResetToValid;
+use Olcs\Controller\Interfaces\LicenceControllerInterface;
 
 /**
  * Class LicenceDecisionsController
@@ -27,7 +28,8 @@ use Dvsa\Olcs\Transfer\Command\Licence\ResetToValid;
  *
  * @package Olcs\Controller\Licence
  */
-class LicenceDecisionsController extends AbstractController
+class LicenceDecisionsController extends AbstractController implements
+    LicenceControllerInterface
 {
     use LicenceControllerTrait;
 

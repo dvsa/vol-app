@@ -16,8 +16,8 @@ class LicenceStatusDecisionReasons
      *      "multiple" : true
      * })
      * @Form\Options({
-     *     "label": "Legislation",
-     *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
+     *     "label": "Legislatison",
+     *     "service_name": "Olcs\Service\Data\LicenceDecisionLegislation",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select applicable legislation",
      *     "use_groups":true
