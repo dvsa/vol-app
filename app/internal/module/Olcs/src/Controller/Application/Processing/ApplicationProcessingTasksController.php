@@ -44,6 +44,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
         );
 
         $table = $this->getTaskTable($filters);
+        $this->updateTableActionWithQuery($table);
 
         // the table's nearly all good except we don't want a couple of columns
         $table->removeColumn('name');
@@ -57,5 +58,15 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
         $view->setTemplate('pages/table');
 
         return $this->viewBuilder()->buildView($view);
+    }
+
+    protected function updateTableActionWithQuery($table)
+    {
+        $query = $this->getRequest()->getUri()->getQuery();
+        $action = $table->getVariable('action');
+        if ($query) {
+            $action .= '?' . $query;
+            $table->setVariable('action', $action);
+        }
     }
 }

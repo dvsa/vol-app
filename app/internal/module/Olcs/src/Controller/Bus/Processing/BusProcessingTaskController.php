@@ -65,6 +65,7 @@ class BusProcessingTaskController extends BusController
         );
 
         $table = $this->getTaskTable($filters);
+        $this->updateTableActionWithQuery($table);
         $table->removeColumn('name');
         $table->removeColumn('link');
 

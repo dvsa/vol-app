@@ -40,6 +40,8 @@ class IndexController extends AbstractController implements LeftViewProvider
         $filters = $this->mapTaskFilters();
 
         $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
+        $table = $this->getTaskTable($filters, true);
+        $this->updateTableActionWithQuery($table);
 
         // assignedToTeam or Category must be selected
         if (empty($filters['assignedToTeam']) && empty($filters['category'])) {
@@ -48,7 +50,7 @@ class IndexController extends AbstractController implements LeftViewProvider
             );
             $view = new ViewModel();
         } else {
-            $view = new ViewModel(['table' => $this->getTaskTable($filters, true)]);
+            $view = new ViewModel(['table' => $table]);
         }
 
         $view->setTemplate('pages/table');

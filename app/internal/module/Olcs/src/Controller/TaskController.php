@@ -193,6 +193,7 @@ class TaskController extends AbstractController
         }
 
         $form = $this->getForm('Task');
+        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
 
         if (isset($data['isClosed']) && $data['isClosed'] === 'Y') {
             /** @var FormHelperService $formHelper */
@@ -300,6 +301,8 @@ class TaskController extends AbstractController
         // always use params from route, not the task data!
         $taskType = $this->params('type');
         $taskTypeId = $this->params('typeId');
+        $query = $this->getRequest()->getQuery()->toArray();
+        $options = ['query' => $query];
         switch ($taskType) {
             case 'licence':
                 $route = 'licence/processing';
@@ -333,8 +336,7 @@ class TaskController extends AbstractController
                 $params = [];
                 break;
         }
-
-        return $this->redirect()->toRouteAjax($route, $params);
+        return $this->redirect()->toRouteAjax($route, $params, $options);
     }
 
     /**

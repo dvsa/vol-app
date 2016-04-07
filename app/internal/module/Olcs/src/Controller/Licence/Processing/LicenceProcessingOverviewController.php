@@ -18,7 +18,10 @@ class LicenceProcessingOverviewController extends AbstractLicenceProcessingContr
 
     public function indexAction()
     {
-        //this is just a placeholder, links to only page in processing for now, which is notes
-        return $this->redirectToRoute('licence/processing/tasks', [], [], true);
+        $query = $this->getRequest()->getQuery()->toArray();
+        $options = [
+            'query' => $query
+        ];
+        return $this->redirectToRoute('licence/processing/tasks', [], $options, true);
     }
 }

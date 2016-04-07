@@ -64,6 +64,7 @@ class OperatorProcessingTasksControllerTest extends MockeryTestCase
             ->with('link')
             ->getMock();
         $this->sut->shouldReceive('getTaskTable')->once()->with($filters)->andReturn($mockTable);
+        $this->sut->shouldReceive('updateTableActionWithQuery')->with($mockTable)->once();
 
         // mock form
         $mockForm =  m::mock();
