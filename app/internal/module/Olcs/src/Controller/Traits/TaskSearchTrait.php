@@ -175,8 +175,7 @@ trait TaskSearchTrait
             if ($action !== 'add') {
                 $params['task'] = $id;
             }
-            $query = $this->getRequest()->getQuery()->toArray();
-            $options = ['query' => $query];
+            $options = ['query' => $this->getRequest()->getQuery()->toArray()];
 
             return $this->redirect()->toRoute('task_action', $params, $options);
         }

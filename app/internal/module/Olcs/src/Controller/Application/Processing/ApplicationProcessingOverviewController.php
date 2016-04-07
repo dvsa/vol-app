@@ -16,9 +16,8 @@ class ApplicationProcessingOverviewController extends AbstractApplicationProcess
 
     public function indexAction()
     {
-        $query = $this->getRequest()->getQuery()->toArray();
         $options = [
-            'query' => $query
+            'query' => $this->getRequest()->getQuery()->toArray()
         ];
         return $this->redirectToRoute('lva-application/processing/tasks', [], $options, true);
     }

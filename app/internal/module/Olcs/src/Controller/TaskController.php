@@ -301,8 +301,7 @@ class TaskController extends AbstractController
         // always use params from route, not the task data!
         $taskType = $this->params('type');
         $taskTypeId = $this->params('typeId');
-        $query = $this->getRequest()->getQuery()->toArray();
-        $options = ['query' => $query];
+        $options = ['query' => $this->getRequest()->getQuery()->toArray()];
         switch ($taskType) {
             case 'licence':
                 $route = 'licence/processing';
