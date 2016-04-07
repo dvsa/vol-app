@@ -69,18 +69,6 @@ return array(
             }
         ),
         array(
-            'title' => 'Link',
-            'formatter' => function ($data, $column) {
-                return '-';
-            },
-        ),
-        array(
-            'title' => 'View',
-            'formatter' => function ($data, $column) {
-                return '-';
-            },
-        ),
-        array(
             'title' => 'Valid',
             'name' => 'isValid',
             'formatter' => 'RefData',
