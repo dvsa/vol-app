@@ -1,7 +1,9 @@
 <?php
 
 return array(
-    'variables' => array(),
+    'variables' => array(
+        'empty_message' => 'entity-view-table-transport-managers.table.empty',
+    ),
     'settings' => array(),
     'attributes' => array('id' => 'transport-managers'),
     'columns' => array(
