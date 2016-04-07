@@ -59,14 +59,4 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
 
         return $this->viewBuilder()->buildView($view);
     }
-
-    protected function updateTableActionWithQuery($table)
-    {
-        $query = $this->getRequest()->getUri()->getQuery();
-        $action = $table->getVariable('action');
-        if ($query) {
-            $action .= '?' . $query;
-            $table->setVariable('action', $action);
-        }
-    }
 }
