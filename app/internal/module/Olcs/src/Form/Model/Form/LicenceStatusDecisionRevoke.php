@@ -25,10 +25,10 @@ class LicenceStatusDecisionRevoke
     public $revoke = null;
 
     /**
-     * @Form\Name("licence-decision-reasons")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceStatusDecisionReasons")
+     * @Form\Name("licence-decision-legislation")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\LicenceDecisionLegislation")
      */
-    public $reasons = null;
+    public $licenceDecisionLegislation = null;
 
     /**
      * @Form\Name("form-actions")

@@ -5,9 +5,9 @@ namespace Olcs\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("licence-decision-reasons")
+ * @Form\Name("licence-decision-legislation")
  */
-class LicenceStatusDecisionReasons
+class LicenceDecisionLegislation
 {
     /**
      * @Form\Attributes({
@@ -16,7 +16,7 @@ class LicenceStatusDecisionReasons
      *      "multiple" : true
      * })
      * @Form\Options({
-     *     "label": "Legislatison",
+     *     "label": "Legislation",
      *     "service_name": "Olcs\Service\Data\LicenceDecisionLegislation",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select applicable legislation",
@@ -24,5 +24,5 @@ class LicenceStatusDecisionReasons
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $reasons = null;
+    public $decisions = null;
 }
