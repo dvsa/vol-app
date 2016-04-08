@@ -80,7 +80,7 @@ class PublicInquiryHearingFields extends Base
      * @Form\Attributes({"value": "not-set"})
      */
     public $isFullDay;
-    
+
     /**
      * @Form\Attributes({"id":"presidingTc","placeholder":"","class":"medium"})
      * @Form\Options({
