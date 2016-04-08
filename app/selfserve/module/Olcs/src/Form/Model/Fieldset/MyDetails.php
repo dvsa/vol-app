@@ -17,7 +17,7 @@ class MyDetails extends Base
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":40}})
+     * @Form\Validator({"name":"Common\Form\Elements\Validators\Username"})
      */
     public $loginId = null;
 
