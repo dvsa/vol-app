@@ -29,7 +29,7 @@ return array(
             'formatter' => function ($data) {
                 $string = $data['id'];
                 if (isset($data['licNo'])) {
-                    $string .= ' / ' . $data['licNo'];
+                    $string = $data['licNo'] . ' / ' . $string;
                 }
 
                 return $string;
