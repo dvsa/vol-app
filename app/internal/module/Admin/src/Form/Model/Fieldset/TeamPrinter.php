@@ -14,7 +14,7 @@ class TeamPrinter
      * @Form\Attributes({"id":"categoryTeam","placeholder":""})
      * @Form\Options({
      *     "label": "Category",
-     *     "service_name": "Olcs\Service\Data\DocumentCategory"
+     *     "service_name": "Olcs\Service\Data\Category"
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(true)
@@ -25,7 +25,7 @@ class TeamPrinter
      * @Form\Attributes({"id":"subCategoryTeam","placeholder":""})
      * @Form\Options({
      *     "label": "Sub category",
-     *     "service_name": "Olcs\Service\Data\DocumentSubCategory"
+     *     "service_name": "Olcs\Service\Data\SubCategory"
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(true)

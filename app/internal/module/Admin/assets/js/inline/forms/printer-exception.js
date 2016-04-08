@@ -21,13 +21,13 @@ OLCS.ready(function() {
   OLCS.cascadeInput({
     source: "#categoryTeam",
     dest: "#subCategoryTeam",
-    url: "/list/document-sub-categories-no-first-option"
+    url: "/list/sub-categories-no-first-option"
   });
 
   OLCS.cascadeInput({
     source: "#categoryUser",
     dest: "#subCategoryUser",
-    url: "/list/document-sub-categories",
+    url: "/list/sub-categories",
     emptyLabel: "Default setting"
   });
 });
