@@ -90,7 +90,9 @@ trait TaskSearchTrait
         $options = array_merge($filters, ['query' => $this->getRequest()->getQuery()]);
         $tableName = 'tasks' . ($noCreate ? '-no-create' : '');
 
-        return $this->getTable($tableName, $tasks, $options);
+        $table = $this->getTable($tableName, $tasks, $options);
+        $this->updateTableActionWithQuery($table);
+        return $table;
     }
 
     /**

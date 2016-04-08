@@ -41,7 +41,6 @@ class IndexController extends AbstractController implements LeftViewProvider
 
         $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
         $table = $this->getTaskTable($filters, true);
-        $this->updateTableActionWithQuery($table);
 
         // assignedToTeam or Category must be selected
         if (empty($filters['assignedToTeam']) && empty($filters['category'])) {
