@@ -16,7 +16,6 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  */
 class ApplicationProcessingOverviewControllerTest extends AbstractHttpControllerTestCase
 {
-
     public function testIndexAction()
     {
         $this->setApplicationConfig(
@@ -32,7 +31,7 @@ class ApplicationProcessingOverviewControllerTest extends AbstractHttpController
         // assert index action redirects to tasks (for now)
         $this->controller->expects($this->once())
             ->method('redirectToRoute')
-            ->with($expectedRoute, [], [], true);
+            ->with($expectedRoute, [], ['query' => []], true);
 
         $this->controller->indexAction();
     }

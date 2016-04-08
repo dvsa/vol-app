@@ -90,7 +90,9 @@ trait TaskSearchTrait
         $options = array_merge($filters, ['query' => $this->getRequest()->getQuery()]);
         $tableName = 'tasks' . ($noCreate ? '-no-create' : '');
 
-        return $this->getTable($tableName, $tasks, $options);
+        $table = $this->getTable($tableName, $tasks, $options);
+        $this->updateTableActionWithQuery($table);
+        return $table;
     }
 
     /**
@@ -175,8 +177,9 @@ trait TaskSearchTrait
             if ($action !== 'add') {
                 $params['task'] = $id;
             }
+            $options = ['query' => $this->getRequest()->getQuery()->toArray()];
 
-            return $this->redirect()->toRoute('task_action', $params);
+            return $this->redirect()->toRoute('task_action', $params, $options);
         }
 
         return false;
@@ -197,5 +200,20 @@ trait TaskSearchTrait
         $response = $this->handleQuery(TaskDetails::create(['id' => $id]));
 
         return $response->getResult();
+    }
+
+    /**
+     * Update table action with query
+     *
+     * @param Table $table
+     */
+    protected function updateTableActionWithQuery($table)
+    {
+        $query = $this->getRequest()->getUri()->getQuery();
+        $action = $table->getVariable('action');
+        if ($query) {
+            $action .= '?' . $query;
+            $table->setVariable('action', $action);
+        }
     }
 }
