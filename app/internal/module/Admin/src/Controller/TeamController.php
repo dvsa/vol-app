@@ -264,7 +264,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
 
         $defaultCategory = isset($formData['team-printer']['categoryTeam']) ?
             $formData['team-printer']['categoryTeam'] : Category::CATEGORY_APPLICATION;
-        $this->getServiceLocator()->get('Olcs\Service\Data\DocumentSubCategory')
+        $this->getServiceLocator()->get('Olcs\Service\Data\SubCategory')
             ->setCategory($defaultCategory);
 
         $defaultTeam = isset($formData['exception-details']['team']) ?
@@ -284,7 +284,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
      */
     protected function alterFormForAddRule($form, $formData)
     {
-        $this->getServiceLocator()->get('Olcs\Service\Data\DocumentSubCategory')
+        $this->getServiceLocator()->get('Olcs\Service\Data\SubCategory')
             ->setCategory(Category::CATEGORY_APPLICATION);
 
         $defaultTeam = isset($formData['exception-details']['team']) ?

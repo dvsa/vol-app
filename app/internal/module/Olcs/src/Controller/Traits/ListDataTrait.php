@@ -160,7 +160,7 @@ trait ListDataTrait
      *
      * @return array
      */
-    private function getListDataSubCategory(array $params, $categoryId = null, $firstOption = false)
+    public function getListDataSubCategory(array $params, $categoryId = null, $firstOption = false)
     {
         $defaultParams = [
             'order' => 'ASC',

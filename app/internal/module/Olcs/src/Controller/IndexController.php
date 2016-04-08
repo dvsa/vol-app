@@ -88,8 +88,11 @@ class IndexController extends AbstractController implements LeftViewProvider
             case 'document-sub-categories':
                 $results = $this->getListDataSubCategoryDocs($value, 'All');
                 break;
-            case 'document-sub-categories-no-first-option':
-                $results = $this->getListDataSubCategoryDocs($value, false);
+            case 'sub-categories-no-first-option':
+                $results = $this->getListDataSubCategory([], $value, false);
+                break;
+            case 'sub-categories':
+                $results = $this->getListDataSubCategory([], $value, true);
                 break;
             case 'scanning-sub-categories':
                 $results = $this->getListDataSubCategoryScan($value, 'All');
