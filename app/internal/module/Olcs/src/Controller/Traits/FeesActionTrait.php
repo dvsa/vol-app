@@ -115,6 +115,7 @@ trait FeesActionTrait
 
         $status = $this->params()->fromQuery('status');
         $table = $this->getFeesTable($status);
+        $this->updateTableActionWithQuery($table);
 
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('pages/table');
@@ -243,6 +244,7 @@ trait FeesActionTrait
         $fee = $this->getFee($id);
 
         $form = $this->alterFeeForm($this->getForm('Fee'), $fee);
+        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
         $form = $this->setDataFeeForm($fee, $form);
         $this->processForm($form);
 
@@ -1008,7 +1010,7 @@ trait FeesActionTrait
     {
         $route = $this->getFeesRoute();
         $params = $this->getFeesRouteParams();
-        return $this->redirect()->toRouteAjax($route, $params);
+        return $this->redirect()->toRouteAjax($route, $params, ['query' => $this->getRequest()->getQuery()->toArray()]);
     }
 
     /**
@@ -1019,7 +1021,7 @@ trait FeesActionTrait
         $feeId = $this->params()->fromRoute('fee', null);
         $route = $this->getFeesRoute() . '/fee_action';
         $params = ['fee' => $feeId, 'action' => 'pay-fees'];
-        $options = ['query' => ['backToFee' => $feeId]];
+        $options = ['query' => array_merge(['backToFee' => $feeId], $this->getRequest()->getQuery()->toArray())];
         return $this->redirect()->toRoute($route, $params, $options, true);
     }
 
@@ -1293,5 +1295,20 @@ trait FeesActionTrait
         array_unshift($feeTypes, ["value" => "", "label" => ""]);
 
         return new JsonModel($feeTypes);
+    }
+
+    /**
+     * Update table action with query
+     *
+     * @param Table $table
+     */
+    protected function updateTableActionWithQuery($table)
+    {
+        $query = $this->getRequest()->getUri()->getQuery();
+        $action = $table->getVariable('action');
+        if ($query) {
+            $action .= '?' . $query;
+            $table->setVariable('action', $action);
+        }
     }
 }
