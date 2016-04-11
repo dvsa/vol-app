@@ -41,7 +41,6 @@ class IndexController extends AbstractController implements LeftViewProvider
 
         $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
         $table = $this->getTaskTable($filters, true);
-        $this->updateTableActionWithQuery($table);
 
         // assignedToTeam or Category must be selected
         if (empty($filters['assignedToTeam']) && empty($filters['category'])) {
@@ -90,8 +89,11 @@ class IndexController extends AbstractController implements LeftViewProvider
             case 'document-sub-categories':
                 $results = $this->getListDataSubCategoryDocs($value, 'All');
                 break;
-            case 'document-sub-categories-no-first-option':
-                $results = $this->getListDataSubCategoryDocs($value, false);
+            case 'sub-categories-no-first-option':
+                $results = $this->getListDataSubCategory([], $value, false);
+                break;
+            case 'sub-categories':
+                $results = $this->getListDataSubCategory([], $value, true);
                 break;
             case 'scanning-sub-categories':
                 $results = $this->getListDataSubCategoryScan($value, 'All');

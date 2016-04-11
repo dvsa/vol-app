@@ -36,7 +36,6 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
         );
 
         $table = $this->getTaskTable($filters);
-        $this->updateTableActionWithQuery($table);
 
         // the table's nearly all good except we don't want a couple of columns
         $table->removeColumn('name');

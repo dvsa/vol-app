@@ -69,7 +69,6 @@ class TaskController extends OlcsController\CrudAbstract implements CaseControll
         $tableFilters = array_merge($filters, $this->getIdArrayForCase($case));
 
         $table = $this->getTaskTable($tableFilters);
-        $this->updateTableActionWithQuery($table);
         $table->removeColumn('name');
         $table->removeColumn('link');
 

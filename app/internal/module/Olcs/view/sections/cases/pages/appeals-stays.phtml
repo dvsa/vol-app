@@ -44,14 +44,29 @@ if (empty($appeal)){
                 ],
                 1 => [
                     ['label' => 'Date of appeal hearing', 'date' => $appeal['hearingDate']],
-                    ['label' => 'Date of decision', 'date' => $appeal['decisionDate'], 'dateFormat' => 'Y-m-d'],
-                    ['label' => 'Papers due at TC/DTC', 'date' => $appeal['papersDueTcDate'], 'dateFormat' =>
-                        'Y-m-d'],
-                    ['label' => 'Papers sent to TC/DTC date', 'date' => $appeal['papersSentTcDate'], 'dateFormat' =>
-                        'Y-m-d'],
+                    [
+                        'label' => 'Date of decision',
+                        'date' => $appeal['decisionDate'],
+                        // NB! dateFormat is not an output format, it's an input format,
+                        // we need it to convert the date to our standard formats (see list-item.phtml)
+                        'dateFormat' => \DB_DATE_FORMAT
+                    ],
+                    [
+                        'label' => 'Papers due at TC/DTC',
+                        'date' => $appeal['papersDueTcDate'],
+                        'dateFormat' => \DB_DATE_FORMAT
+                    ],
+                    [
+                        'label' => 'Papers sent to TC/DTC',
+                        'date' => $appeal['papersSentTcDate'],
+                        'dateFormat' => \DB_DATE_FORMAT
+                    ],
                     ['label' => 'Papers due at tribunal', 'date' => $appeal['papersDueDate']],
-                    ['label' => 'Papers sent to tribunal', 'date' => $appeal['papersSentDate'], 'dateFormat' =>
-                        'Y-m-d'],
+                    [
+                        'label' => 'Papers sent to tribunal',
+                        'date' => $appeal['papersSentDate'],
+                        'dateFormat' => \DB_DATE_FORMAT
+                    ],
                     ['label' => 'Outcome', 'value' => (isset($appeal['outcome']['description']) ?
                         $appeal['outcome']['description'] : '')],
                     ['label' => 'TM case Id', 'value' => isset($appeal['tmCaseId']) ? $appeal['tmCaseId'] : ''],
