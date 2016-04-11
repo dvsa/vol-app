@@ -164,7 +164,7 @@ trait FeesActionTrait
             return $this->redirect()->toRoute(
                 $this->getFeesRoute() . '/fee_action',
                 $params,
-                null,
+                ['query' => $this->getRequest()->getQuery()->toArray()],
                 true
             );
         }
@@ -236,7 +236,9 @@ trait FeesActionTrait
     {
         if ($this->isButtonPressed('refund')) {
             $route = $this->getFeesRoute() . '/fee_action';
-            return $this->redirect()->toRoute($route, ['action' => 'refund-fee'], [], true);
+            return $this->redirect()->toRoute(
+                $route, ['action' => 'refund-fee'], ['query' => $this->getRequest()->getQuery()->toArray()], true
+            );
         }
 
         $id = $this->params()->fromRoute('fee', null);
@@ -253,6 +255,7 @@ trait FeesActionTrait
         }
 
         $table = $this->getTable('fee-transactions', $fee['displayTransactions'], []);
+        $this->updateTableActionWithQuery($table);
 
         $viewParams = [
             'form' => $form,
@@ -317,7 +320,9 @@ trait FeesActionTrait
         $method = $ajax ? 'toRouteAjax' : 'toRoute';
 
         $route = $this->getFeesRoute() . '/fee_action';
-        return $this->redirect()->$method($route, ['action' => 'edit-fee'], [], true);
+        return $this->redirect()->$method(
+            $route, ['action' => 'edit-fee'], ['query' => $this->getRequest()->getQuery()->toArray()], true
+        );
     }
 
     /**
@@ -333,7 +338,9 @@ trait FeesActionTrait
             $params['transaction'] = $transactionId;
         }
 
-        return $this->redirect()->$method($route, $params, [], true);
+        return $this->redirect()->$method(
+            $route, $params, ['query' => $this->getRequest()->getQuery()->toArray()], true
+        );
     }
 
     /**
@@ -359,13 +366,14 @@ trait FeesActionTrait
         $fees = $transaction['fees'];
 
         $table = $this->getTable('transaction-fees', $fees);
+        $this->updateTableActionWithQuery($table);
 
         $urlHelper = $this->getServiceLocator()->get('Helper\Url');
 
         $backLink = $urlHelper->fromRoute(
             $this->getFeesRoute() . '/fee_action',
             ['action' => 'edit-fee'],
-            [],
+            ['query' => $this->getRequest()->getQuery()->toArray()],
             true
         );
 
@@ -428,7 +436,7 @@ trait FeesActionTrait
             return $this->getServiceLocator()->get('Helper\Url')->fromRoute(
                 $this->getFeesRoute() . '/fee_action/transaction/reverse',
                 ['transaction' => $transaction['id']],
-                [],
+                ['query' => $this->getRequest()->getQuery()->toArray()],
                 true
             );
         }
@@ -769,6 +777,7 @@ trait FeesActionTrait
             $form->get('details')->get('backToFee')->setValue($feeData['results'][0]['id']);
         }
 
+        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
         return $form;
     }
 
@@ -794,6 +803,7 @@ trait FeesActionTrait
         $options = $this->fetchFeeTypeValueOptions();
         $form->get('fee-details')->get('feeType')->setValueOptions($options);
 
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
         return $form;
     }
 
@@ -1047,7 +1057,9 @@ trait FeesActionTrait
                     ],
                     [
                         'force_canonical' => true,
-                        'query' => ['backToFee' => (int) $backToFee],
+                        'query' => array_merge(
+                            ['backToFee' => (int) $backToFee], $this->getRequest()->getQuery()->toArray()
+                        ),
                     ],
                     true
                 );
