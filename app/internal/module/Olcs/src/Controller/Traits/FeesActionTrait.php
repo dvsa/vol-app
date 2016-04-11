@@ -1317,9 +1317,8 @@ trait FeesActionTrait
     protected function updateTableActionWithQuery($table)
     {
         $query = $this->getRequest()->getUri()->getQuery();
-        $action = $table->getVariable('action');
         if ($query) {
-            $action .= '?' . $query;
+            $action = $table->getVariable('action') . '?' . $query;
             $table->setVariable('action', $action);
         }
     }
