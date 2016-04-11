@@ -45,7 +45,7 @@
         "symfony/Filesystem": "~2.6.0",
         "zf-commons/zfc-rbac": "~2.4.0",
         "olcs/autoload": "dev-develop",
-        "olcs/OlcsCommon": "dev-release/3.3",
+        "olcs/OlcsCommon": "dev-release/3.3.1",
         "olcs/olcs-transfer": "dev-release/3.3",
         "olcs/olcs-utils": "dev-release/3.3",
         "olcs/olcs-auth": "dev-release/3.3",
