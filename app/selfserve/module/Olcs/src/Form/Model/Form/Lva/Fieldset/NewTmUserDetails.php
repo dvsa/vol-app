@@ -76,8 +76,8 @@ class NewTmUserDetails
      * })
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Common\Form\Elements\Validators\Username"})
      * @Form\Required(false)
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":40}})
      */
     public $username = null;
 

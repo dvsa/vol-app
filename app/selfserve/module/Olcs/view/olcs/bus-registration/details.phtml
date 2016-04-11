@@ -12,150 +12,152 @@ echo $this->render(
 );
 ?>
 
-<div class="full-width">
-    <div class="read-only__header">
-  <h4 id="bus-registration-details" class="read-only__title"><?php echo $this->translate('Bus registration details');
-      ?></h4>
-    </div>
+<div class="row">
+  <div class="full-width">
+      <div class="read-only__header">
+    <h4 id="bus-registration-details" class="read-only__title"><?php echo $this->translate('Bus registration details');
+        ?></h4>
+      </div>
 
-  <?php
-  $serviceNos = $this->registrationDetails['serviceNo'];
-  if (!empty($this->registrationDetails['otherServices'])) {
-      for($i = 0; $i<count($this->registrationDetails['otherServices']);$i++) {
-            $serviceNos .= ', ' . $this->registrationDetails['otherServices'][$i]['serviceNo'];
-      }
-  }
+    <?php
+    $serviceNos = $this->registrationDetails['serviceNo'];
+    if (!empty($this->registrationDetails['otherServices'])) {
+        for($i = 0; $i<count($this->registrationDetails['otherServices']);$i++) {
+              $serviceNos .= ', ' . $this->registrationDetails['otherServices'][$i]['serviceNo'];
+        }
+    }
 
-  $busServiceTypes = [];
-  $localAuthoritiesList = [];
-  $trafficAreasList = [];
-  if (!empty($this->registrationDetails['busServiceTypes'])) {
-      for($i = 0; $i<count($this->registrationDetails['busServiceTypes']);$i++) {
-          $label = ($i == 0) ? 'Service type' : '';
-          $busServiceTypes[] = [
-              'label' => $label,
-              'value' => $this->registrationDetails['busServiceTypes'][$i]['description']
-          ];
-      }
-  } else {
-      $busServiceTypes[] = [
-          'label' => 'Service type',
-          'value' => ''
-      ];
-  }
-  
-  if (!empty($this->registrationDetails['localAuthoritys'])) {
-      for($i = 0; $i<count($this->registrationDetails['localAuthoritys']);$i++) {
-          $label = ($i == 0) ? 'Local authorities covered by route' : '';
-          $localAuthoritiesList[] = [
-              'label' => $label,
-              'value' => $this->registrationDetails['localAuthoritys'][$i]['description']
-          ];
-      }
-  } else {
-      $localAuthoritiesList[] = [
-          'label' => 'Local authorities covered by route',
-          'value' => ''
-      ];
-  }
-  
-  if (!empty($this->registrationDetails['trafficAreas'])) {
-      for($i = 0; $i<count($this->registrationDetails['trafficAreas']);$i++) {
-          $label = ($i == 0) ? 'TAOs covered by route' : '';
-          $trafficAreasList[] = [
-              'label' => $label,
-              'value' => $this->registrationDetails['trafficAreas'][$i]['name']
-          ];
-      }
-  } else {
-      $trafficAreasList[] = [
-          'label' => 'TAOs covered by route',
-          'value' => ''
-      ];
-  }
-  if ($this->registrationDetails['receivedDate']) {
-      $receivedDate = (new \DateTime($this->registrationDetails['receivedDate']))->format(\DATE_FORMAT);
-  } else {
-      $receivedDate = '';
-  }
-  if ($this->registrationDetails['effectiveDate']) {
-      $effectiveDate = (new \DateTime($this->registrationDetails['effectiveDate']))->format(\DATE_FORMAT);
-  } else {
-      $effectiveDate = '';
-  }
-  echo $this->render('partials/read-only/main',
-      [
-          'multiItems' => [
-              0 => [
-                  ['label' => 'Bus registration', 'value' => $this->registrationDetails['regNo']],
-              ],
-              1 => [
-                  ['label' => 'Variation No.', 'value' => $this->registrationDetails['variationNo']]
-              ],
-              2 => [
-                  ['label' => 'Status', 'value' => $this->registrationDetails['status']['description']]
-              ],
-              3 => [
-                  ['label' => 'Service No.', 'value' => $serviceNos]
-              ],
-              4 => $busServiceTypes,
-              5 => [
-                  ['label' => 'Start point', 'value' => $this->registrationDetails['startPoint']],
-                  ['label' => 'Finish point', 'value' => $this->registrationDetails['finishPoint']],
-                  ['label' => 'Via', 'value' => $this->registrationDetails['via']]
-              ],
-              6 => [
-                  ['label' => 'Date received', 'value' => $receivedDate],
-                  ['label' => 'Effective date', 'value' => $effectiveDate],
-                  ['label' => 'End date', 'value' => $this->registrationDetails['endDate']]
-              ],
-              7 => [
-                  [
-                      'label' => 'Supported by subsidies?',
-                      'type' => 'yesno',
-                      'value' => $this->registrationDetails['subsidised']['description']
-                  ]
-              ],
-              8 => $localAuthoritiesList,
-              9 => $trafficAreasList,
-              10 => [
-                  ['label' => 'N&P Reference', 'value' => $this->registrationDetails['npPublicationNo']]
-              ]
-          ]
-      ]
-  );
-  ?>
-      <?php echo $this->variationHistoryTable; ?>
-  
-      <?php
-  
-      if (!empty($documents)): ?>
-          <h3>Documents</h3>
-          <div class="files">
-              <?php
-  
-              foreach ($documents as $document):
-                  ?>
-                  <?php
-                      $url = $this->url(
-                          'getfile',
-                          [
-                              'identifier' => base64_encode($document['identifier']),
-                              'name' => $document['filename'],
-                              'namespace' => 'ebsr'
-                          ]
-                      );
-                  ?>
-                  <div class="field file-upload">
-                      <p>
-                          <a href="<?php echo $url?>">
-                              <b><?php echo $document['filename']?></b>
-                          </a>
-                          <span> (<?php echo $document['description']?>)</span>
-                      </p>
-                  </div>
-              <?php endforeach?>
-          </div>
-      <?php endif?>
+    $busServiceTypes = [];
+    $localAuthoritiesList = [];
+    $trafficAreasList = [];
+    if (!empty($this->registrationDetails['busServiceTypes'])) {
+        for($i = 0; $i<count($this->registrationDetails['busServiceTypes']);$i++) {
+            $label = ($i == 0) ? 'Service type' : '';
+            $busServiceTypes[] = [
+                'label' => $label,
+                'value' => $this->registrationDetails['busServiceTypes'][$i]['description']
+            ];
+        }
+    } else {
+        $busServiceTypes[] = [
+            'label' => 'Service type',
+            'value' => ''
+        ];
+    }
+
+    if (!empty($this->registrationDetails['localAuthoritys'])) {
+        for($i = 0; $i<count($this->registrationDetails['localAuthoritys']);$i++) {
+            $label = ($i == 0) ? 'Local authorities covered by route' : '';
+            $localAuthoritiesList[] = [
+                'label' => $label,
+                'value' => $this->registrationDetails['localAuthoritys'][$i]['description']
+            ];
+        }
+    } else {
+        $localAuthoritiesList[] = [
+            'label' => 'Local authorities covered by route',
+            'value' => ''
+        ];
+    }
+
+    if (!empty($this->registrationDetails['trafficAreas'])) {
+        for($i = 0; $i<count($this->registrationDetails['trafficAreas']);$i++) {
+            $label = ($i == 0) ? 'TAOs covered by route' : '';
+            $trafficAreasList[] = [
+                'label' => $label,
+                'value' => $this->registrationDetails['trafficAreas'][$i]['name']
+            ];
+        }
+    } else {
+        $trafficAreasList[] = [
+            'label' => 'TAOs covered by route',
+            'value' => ''
+        ];
+    }
+    if ($this->registrationDetails['receivedDate']) {
+        $receivedDate = (new \DateTime($this->registrationDetails['receivedDate']))->format(\DATE_FORMAT);
+    } else {
+        $receivedDate = '';
+    }
+    if ($this->registrationDetails['effectiveDate']) {
+        $effectiveDate = (new \DateTime($this->registrationDetails['effectiveDate']))->format(\DATE_FORMAT);
+    } else {
+        $effectiveDate = '';
+    }
+    echo $this->render('partials/read-only/main',
+        [
+            'multiItems' => [
+                0 => [
+                    ['label' => 'Bus registration', 'value' => $this->registrationDetails['regNo']],
+                ],
+                1 => [
+                    ['label' => 'Variation number', 'value' => $this->registrationDetails['variationNo']]
+                ],
+                2 => [
+                    ['label' => 'Status', 'value' => $this->registrationDetails['status']['description']]
+                ],
+                3 => [
+                    ['label' => 'Service number.', 'value' => $serviceNos]
+                ],
+                4 => $busServiceTypes,
+                5 => [
+                    ['label' => 'Start point', 'value' => $this->registrationDetails['startPoint']],
+                    ['label' => 'Finish point', 'value' => $this->registrationDetails['finishPoint']],
+                    ['label' => 'Via', 'value' => $this->registrationDetails['via']]
+                ],
+                6 => [
+                    ['label' => 'Date received', 'value' => $receivedDate],
+                    ['label' => 'Effective date', 'value' => $effectiveDate],
+                    ['label' => 'End date', 'value' => $this->registrationDetails['endDate']]
+                ],
+                7 => [
+                    [
+                        'label' => 'Supported by subsidies?',
+                        'type' => 'yesno',
+                        'value' => $this->registrationDetails['subsidised']['description']
+                    ]
+                ],
+                8 => $localAuthoritiesList,
+                9 => $trafficAreasList,
+                10 => [
+                    ['label' => 'N&P reference', 'value' => $this->registrationDetails['npPublicationNo']]
+                ]
+            ]
+        ]
+    );
+    ?>
+        <?php echo $this->variationHistoryTable; ?>
+
+        <?php
+
+        if (!empty($documents)): ?>
+            <h3>Documents</h3>
+            <div class="files">
+                <?php
+
+                foreach ($documents as $document):
+                    ?>
+                    <?php
+                        $url = $this->url(
+                            'getfile',
+                            [
+                                'identifier' => base64_encode($document['identifier']),
+                                'name' => $document['filename'],
+                                'namespace' => 'ebsr'
+                            ]
+                        );
+                    ?>
+                    <div class="field file-upload">
+                        <p>
+                            <a href="<?php echo $url?>">
+                                <b><?php echo $document['filename']?></b>
+                            </a>
+                            <span> (<?php echo $document['description']?>)</span>
+                        </p>
+                    </div>
+                <?php endforeach?>
+            </div>
+        <?php endif?>
+  </div>
+  <!-- .full-width -->
 </div>
-<!-- .full-width -->

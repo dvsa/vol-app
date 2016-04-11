@@ -1,3 +1,10 @@
+<ul id="top" class="breadcrumbs">
+    <li class="breadcrumbs__item">
+        <a  href="<?php echo $this->searchResultsLink; ?>"><?php echo $this->translate
+('search-result-nav-back-to-operator-search');?></a>
+    </li>
+</ul>
+
 <?php
 echo $this->render(
     '/partials/page-header.phtml',
@@ -14,11 +21,15 @@ echo $this->render(
 </div><!-- .one-quarter -->
  */ ?>
 
-<div id="top" class="full-width">
-    <?php echo $this->content; ?>
-    <div class="actions-container">
-        <a href="#top"><?php echo $this->translate('search-result-nav-back-to-top');?></a>
-        <a href="<?php echo $this->searchResultsLink; ?>"><?php echo $this->translate
-        ('search-result-nav-back-to-operator-search');?></a>
-    </div>
-</div><!-- .three-quarters -->
+<div class="row">
+
+    <div id="top" class="full-width">
+        <?php echo $this->content; ?>
+        <div class="actions-container">
+            <a class="action--tertiary large" href="#top"><?php echo $this->translate('search-result-nav-back-to-top');?></a>
+            <a class="action--tertiary large" href="<?php echo $this->searchResultsLink; ?>"><?php echo $this->translate
+            ('search-result-nav-back-to-operator-search');?></a>
+        </div>
+    </div><!-- .three-quarters -->
+
+</div>

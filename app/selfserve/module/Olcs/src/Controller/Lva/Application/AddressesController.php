@@ -29,5 +29,7 @@ class AddressesController extends Lva\AbstractAddressesController
     protected function alterFormForLva(Form $form)
     {
         $this->getServiceLocator()->get('Helper\Form')->remove($form, 'consultant');
+        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'consultantContact');
+        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'consultantAddress');
     }
 }
