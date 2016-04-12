@@ -29,7 +29,9 @@ class DocumentFinaliseController extends AbstractDocumentController
         }
 
         if ($this->isButtonPressed('cancelFinalise')) {
-            return $this->redirect()->toRoute(null, ['action' => 'cancel'], [], true);
+            return $this->redirect()->toRoute(
+                null, ['action' => 'cancel'], ['query' => $this->getRequest()->getQuery()->toArray()], true
+            );
         }
 
         $data = $this->fetchDocData();
@@ -109,7 +111,9 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnknownError();
 
-        return $this->redirect()->toRoute(null, ['action' => 'finalise'], [], true);
+        return $this->redirect()->toRoute(
+            null, ['action' => 'finalise'], ['query' => $this->getRequest()->getQuery()->toArray()], true
+        );
     }
 
     public function cancelAction()
@@ -122,7 +126,9 @@ class DocumentFinaliseController extends AbstractDocumentController
                 return $this->handleRedirectToDocumentRoute(true);
             }
 
-            return $this->redirect()->toRoute(null, ['action' => null], [], true);
+            return $this->redirect()->toRoute(
+                null, ['action' => null], ['query' => $this->getRequest()->getQuery()->toArray()], true
+            );
         }
 
         $form = $this->getServiceLocator()->get('Helper\Form')
@@ -182,7 +188,9 @@ class DocumentFinaliseController extends AbstractDocumentController
             return;
         }
 
-        return $this->redirect()->toRoute(null, ['action' => 'print'], [], true);
+        return $this->redirect()->toRoute(
+            null, ['action' => 'print'], ['query' => $this->getRequest()->getQuery()->toArray()], true
+        );
     }
 
     protected function handleRedirectToDocumentRoute($ajax = false)

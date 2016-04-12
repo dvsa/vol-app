@@ -53,6 +53,7 @@ trait DocumentSearchTrait
     protected function getDocumentForm($filters = [])
     {
         $form = $this->getForm('DocumentsHome');
+        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
 
         $category = (isset($filters['category'])) ? (int) $filters['category'] : null;
 
@@ -92,7 +93,22 @@ trait DocumentSearchTrait
         $filters['query'] = $this->getRequest()->getQuery();
 
         $table = $this->getTable($this->getDocumentTableName(), $documents, $filters);
+        $this->updateTableActionWithQuery($table);
 
         return $table;
+    }
+
+    /**
+     * Update table action with query
+     *
+     * @param Table $table
+     */
+    protected function updateTableActionWithQuery($table)
+    {
+        $query = $this->getRequest()->getUri()->getQuery();
+        if ($query) {
+            $action = $table->getVariable('action') . '?' . $query;
+            $table->setVariable('action', $action);
+        }
     }
 }
