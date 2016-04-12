@@ -252,6 +252,16 @@ return [
                                     ]
                                 ]
                             ],
+                            'pi' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => 'pi[/]',
+                                    'defaults' => [
+                                        'controller' => 'Admin\PiReportController',
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ],
                         ],
                     ],
                     'admin-user-management' => [
@@ -519,6 +529,7 @@ return [
             'Admin\TeamsController' => \Admin\Controller\TeamController::class,
             'Admin\SystemParametersController' => \Admin\Controller\SystemParametersController::class,
             'Admin\TaskAllocationRulesController' => \Admin\Controller\TaskAllocationRulesController::class,
+            'Admin\PiReportController' => 'Admin\Controller\PiReportController',
         ]
     ],
     'view_manager' => [
