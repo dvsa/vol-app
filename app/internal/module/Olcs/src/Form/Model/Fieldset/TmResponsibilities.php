@@ -96,6 +96,9 @@ class TmResponsibilities
      * })
      * @Form\Options({
      *     "label": "transport-manager.responsibilities.additional-information",
+     *     "label_options": {
+     *         "disable_html_escape": "true"
+     *     },
      *     "help-block": "Please provide additional information relating to any prior insolvency proceedings.
      You may also upload evidence such as a legal documents.",
      *     "label_attributes": {

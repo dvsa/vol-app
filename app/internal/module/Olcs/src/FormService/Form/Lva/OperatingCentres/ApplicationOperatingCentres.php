@@ -24,8 +24,9 @@ class ApplicationOperatingCentres extends AbstractOperatingCentres
         parent::alterForm($form, $params);
     }
 
-    protected function allowChangingTrafficArea()
+    protected function allowChangingTrafficArea($trafficAreaId)
     {
-        return true;
+        // Traffic area can be changed as long as its not Northern Irelend
+        return ($trafficAreaId !== 'N');
     }
 }
