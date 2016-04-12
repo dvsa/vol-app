@@ -9,8 +9,8 @@ OLCS.ready(function() {
   OLCS.formHandler({
     form: form,
     hideSubmit: true,
-    container: ".table__form",
-    filter: ".table__form"
+    container: ".js-body",
+    filter: ".js-body"
   });
 
   OLCS.cascadeInput({
