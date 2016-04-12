@@ -7,8 +7,11 @@
  */
 namespace OlcsTest\FormService\Form\Lva;
 
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Olcs\FormService\Form\Lva\VariationTypeOfLicence;
+use Zend\Form\Element;
 
 /**
  * Variation Type Of Licence Form Service Test
@@ -17,10 +20,17 @@ use Olcs\FormService\Form\Lva\VariationTypeOfLicence;
  */
 class VariationTypeOfLicenceTest extends AbstractLvaFormServiceTestCase
 {
+    /** @var FormHelperService|\Mockery\MockInterface  */
+    protected $formHelper;
+    /** @var FormServiceManager|\Mockery\MockInterface  */
+    protected $fsm;
+    /** @var VariationTypeOfLicence|\Mockery\MockInterface  */
+    protected $sut;
+
     public function setUp()
     {
-        $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
-        $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
+        $this->formHelper = m::mock(FormHelperService::class);
+        $this->fsm = m::mock(FormServiceManager::class)->makePartial();
 
         $this->sut = m::mock(VariationTypeOfLicence::class)
             ->makePartial()
@@ -59,7 +69,7 @@ class VariationTypeOfLicenceTest extends AbstractLvaFormServiceTestCase
             )
             ->getMock();
 
-        $licenceType = m::mock();
+        $licenceType = m::mock(Element\Select::class);
         $mockForm
             ->shouldReceive('get')
             ->with('type-of-licence')
@@ -95,6 +105,6 @@ class VariationTypeOfLicenceTest extends AbstractLvaFormServiceTestCase
 
         $form = $this->sut->getForm(['currentLicenceType' => 'foo']);
 
-        $this->assertSame($mockForm, $form);
+        static::assertSame($mockForm, $form);
     }
 }
