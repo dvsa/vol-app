@@ -45,9 +45,5 @@ return array(
             'formatter' => 'SumColumns',
             'columns' => ['hoursMon', 'hoursTue', 'hoursWed', 'hoursThu', 'hoursFri', 'hoursSat', 'hoursSun']
         ),
-        array(
-            'type' => 'ActionLinks',
-            'deleteInputName' => 'table[action][delete-tm-licence][%d]'
-        ),
     )
 );
