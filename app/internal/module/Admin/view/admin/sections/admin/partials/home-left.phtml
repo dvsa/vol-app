@@ -1,0 +1,19 @@
+<?php
+
+$navigationId = $this->getPlaceholder('navigationId')->asString();
+
+if (!empty($navigationId)) :
+
+    $navigation = $this->navigation('navigation')->findOneBy('id', $navigationId);
+
+    // Remove duplicate continuations page in Navigation. Used to correctly display continuation filters and
+    // 'Generate continuations' back link which would otherwise be an inactive link.
+    $navigation->removePage($navigation->findOneById('admin-dashboard/continuations-details'));
+    $navigation->removePage($navigation->findOneById('admin-dashboard/continuations-irfo'));
+
+    echo $this->partial(
+        'admin/sections/admin/partials/generic-left',
+        ['navigationId' => $navigationId, 'navigationTitle' => $navigation->getLabel()]
+    );
+
+endif;

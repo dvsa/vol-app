@@ -24,4 +24,17 @@ class IndexController extends AbstractController
 
         return $this->renderView($view, 'Admin');
     }
+
+    /**
+     * Get left view
+     *
+     * @return ViewModel
+     */
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('admin/sections/admin/partials/home-left');
+
+        return $view;
+    }
 }
