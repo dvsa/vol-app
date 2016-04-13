@@ -16,7 +16,7 @@ return [
                 [
                     'id'    => 'admin-dashboard/admin-user-management',
                     'label' => 'User management',
-                    'route' => 'admin-dashboard/admin-user-management',
+                    'route' => 'admin-dashboard/admin-team-management',
                     'pages' => [
                         [
                             'id' => 'admin-dashboard/admin-team-management',
