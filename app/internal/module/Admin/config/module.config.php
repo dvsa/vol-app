@@ -14,6 +14,22 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'task-allocation-rules' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'task-allocation-rules[/:action][/:id][/alpha-split/:alpha-split][/team/:team][/]',
+                            'constraints' => [
+                                'action' => '(add|edit|delete|AddAlphasplit|EditAlphasplit|DeleteAlphasplit)',
+                                'id' => '[0-9\,]+',
+                                'alpha-split' => '[0-9]+',
+                                'team' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => 'Admin\TaskAllocationRulesController',
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                     'admin-scanning' => [
                         'type' => 'segment',
                         'options' => [
@@ -502,6 +518,7 @@ return [
             'Admin\CpmsReportController' => 'Admin\Controller\CpmsReportController',
             'Admin\TeamsController' => \Admin\Controller\TeamController::class,
             'Admin\SystemParametersController' => \Admin\Controller\SystemParametersController::class,
+            'Admin\TaskAllocationRulesController' => \Admin\Controller\TaskAllocationRulesController::class,
         ]
     ],
     'view_manager' => [

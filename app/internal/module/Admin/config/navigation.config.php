@@ -220,6 +220,11 @@ return [
                     'label' => 'System parameters',
                     'route' => 'admin-dashboard/admin-system-parameters'
                 ],
+                [
+                    'label' => 'Task allocation rules',
+                    'id' => 'admin-dashboard/task-allocation-rules',
+                    'route' => 'admin-dashboard/task-allocation-rules',
+                ],
             ]
         ]
     ]

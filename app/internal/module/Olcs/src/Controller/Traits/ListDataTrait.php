@@ -202,11 +202,11 @@ trait ListDataTrait
      * @param int $teamId Option team to filter by
      * @param string $firstOption @see getListDataOptions
      *
-     * @return array
+     * @return array of User login ID's
      */
     public function getListDataUser($teamId = null, $firstOption = false)
     {
-        $params =             [
+        $params = [
             'order' => 'ASC',
             'sort' => 'loginId',
         ];
@@ -241,6 +241,9 @@ trait ListDataTrait
 
         $options = [];
         // Do we need to add a default first option
+        if (is_array($firstOption)) {
+            $options = $firstOption;
+        }
         if (is_string($firstOption)) {
             $options[''] = $firstOption;
         }

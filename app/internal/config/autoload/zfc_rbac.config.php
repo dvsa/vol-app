@@ -39,6 +39,7 @@ return [
             'admin-dashboard/admin-printer-management*' => ['internal-admin'],
             'admin-dashboard/admin-user-management*' => ['can-manage-user-internal'],
             'admin-dashboard/admin-system-parameters*' => ['internal-admin'],
+            'admin-dashboard/task-allocation-rules*' => ['internal-admin'],
 
             // All Internal users can see my account, to change their details, password etc
             'admin-dashboard/admin-my-account*' => [
