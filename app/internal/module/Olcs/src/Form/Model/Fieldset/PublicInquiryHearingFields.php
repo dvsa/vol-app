@@ -179,11 +179,11 @@ class PublicInquiryHearingFields extends Base
      * @Form\Required(true)
      * @Form\Attributes({"id":"adjournedDate"})
      * @Form\Options({
-     *     "label": "Adjourned date",
+     *     "label": "Date adjournment agreed",
      *     "create_empty_option": true,
      *     "max_year": 2016,
      *     "render_delimiters": true,
-     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""adjournedDate"">Adjourned time</label>'HH:mm:ss'</div>'",
+     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""adjournedDate"">Time adjournment agreed</label>'HH:mm:ss'</div>'",
      *     "category": "pi_hearing",
      *     "field": "adjournedDate"
      * })
