@@ -23,7 +23,7 @@ class UserDetails extends Base
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Common\Form\Elements\Validators\Username"})
+     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Username"})
      */
     public $loginId = null;
 
