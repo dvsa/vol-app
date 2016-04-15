@@ -80,6 +80,9 @@ class IndexController extends AbstractController implements LeftViewProvider
         $value = $this->params('value');
 
         switch ($key) {
+            case 'enforcement-area':
+                $results = $this->getListDataEnforcementArea($value, 'Please select');
+                break;
             case 'task-allocation-users':
                 $results = $this->getListDataUser($value, ['Unassigned', 'alpha-split' => 'Alpha split']);
                 break;
