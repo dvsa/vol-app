@@ -933,8 +933,6 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\LicencePeopleAdapter',
             'VariationPeopleAdapter'
                 => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
-            'LicenceTransportManagerAdapter'
-                => 'Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter',
             'DashboardProcessingService'
                 => 'Olcs\Service\Processing\DashboardProcessingService',
             'Email\TransportManagerCompleteDigitalForm'
@@ -947,6 +945,10 @@ return array(
             'Olcs\Service\Ebsr' => 'Olcs\Service\Ebsr',
             'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
             'Olcs\Navigation\DashboardNavigation' => 'Olcs\Navigation\DashboardNavigationFactory',
+            'LicenceTransportManagerAdapter' =>
+                \Olcs\Controller\Lva\Factory\Adapter\LicenceTransportManagerAdapterFactory::class,
+            'VariationTransportManagerAdapter' =>
+                \Olcs\Controller\Lva\Factory\Adapter\VariationTransportManagerAdapterFactory::class,
         )
     ),
     'search' => [
