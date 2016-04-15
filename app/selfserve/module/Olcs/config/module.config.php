@@ -1,16 +1,14 @@
 <?php
 
 use Olcs\Controller\IndexController;
-use Olcs\Controller\Search\SearchController;
 use Olcs\Controller\MyDetailsController;
+use Olcs\Controller\Search\SearchController;
 use Olcs\Controller\UserForgotUsernameController;
 use Olcs\Controller\UserRegistrationController;
-
-use Olcs\Form\Element\SearchFilterFieldsetFactory;
-use Olcs\Form\Element\SearchFilterFieldset;
-use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
 use Olcs\Form\Element\SearchDateRangeFieldset;
-
+use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
+use Olcs\Form\Element\SearchFilterFieldset;
+use Olcs\Form\Element\SearchFilterFieldsetFactory;
 use Olcs\FormService\Form\Lva as LvaFormService;
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
@@ -908,7 +906,7 @@ return array(
             'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
             'Olcs\Ebsr\BusRegistration' => 'Olcs\Controller\Ebsr\BusRegistrationController',
-            'Dashboard' => 'Olcs\Controller\DashboardController',
+            'Dashboard' => Olcs\Controller\DashboardController::class,
             'Fees' => 'Olcs\Controller\FeesController',
             'Correspondence' => 'Olcs\Controller\CorrespondenceController',
             'User' => 'Olcs\Controller\UserController',
