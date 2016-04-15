@@ -15,6 +15,7 @@ use Zend\ServiceManager\ServiceManager;
  * External Transport Managers Adapter Test
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
+ * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
  */
 class LicenceTransportManagerAdapterTest extends MockeryTestCase
 {

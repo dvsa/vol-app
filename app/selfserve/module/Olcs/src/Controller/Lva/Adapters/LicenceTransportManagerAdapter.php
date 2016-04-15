@@ -12,6 +12,7 @@ use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBu
  * External Licence Transport Manager Adater
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
+ * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
  */
 class LicenceTransportManagerAdapter extends CommonAdapter
 {

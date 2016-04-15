@@ -8,6 +8,8 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory for creation Licence Transport Manager Adapter
+ * 
+ * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
  */
 class LicenceTransportManagerAdapterFactory implements FactoryInterface
 {

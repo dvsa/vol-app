@@ -7,6 +7,8 @@ use Olcs\Controller\Lva\Adapters\VariationTransportManagerAdapter;
 
 /**
  * Factory for creation Variation Transport Manager Adapter
+ * 
+ * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
  */
 class VariationTransportManagerAdapterFactory extends AbstractTransportManagerAdapterFactory
 {
