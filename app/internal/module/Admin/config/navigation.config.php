@@ -213,6 +213,11 @@ return [
                             'label' => 'Exported reports',
                             'route' => 'admin-dashboard/admin-report/exported-reports',
                         ],
+                        [
+                            'id' => 'admin-dashboard/admin-report/pi',
+                            'label' => 'Public Inquiry listings',
+                            'route' => 'admin-dashboard/admin-report/pi',
+                        ],
                     ],
                 ],
                 [
