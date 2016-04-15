@@ -124,7 +124,7 @@ class CreateFeeDetails
      * @Form\Attributes({"required":false, "id":"amount"})
      * @Form\AllowEmpty(false)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Validator({"name": "Common\Form\Elements\Validators\Money"})
+     * @Form\Validator({"name": "Dvsa\Olcs\Transfer\Validators\Money"})
      */
     public $amount = null;
 
