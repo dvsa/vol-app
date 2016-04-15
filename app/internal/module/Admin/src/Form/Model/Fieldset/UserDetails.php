@@ -30,7 +30,7 @@ class UserDetails
      * @Form\Options({"label":"Username"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Common\Form\Elements\Validators\Username"})
+     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Username"})
      */
     public $loginId = null;
 }

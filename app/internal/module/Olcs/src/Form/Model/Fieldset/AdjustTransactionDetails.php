@@ -40,7 +40,7 @@ class AdjustTransactionDetails
      *      "label_attributes": {"id": "label-received"}
      * })
      * @Form\Type("Text")
-     * @Form\Validator({"name": "Common\Form\Elements\Validators\Money"})
+     * @Form\Validator({"name": "Dvsa\Olcs\Transfer\Validators\Money"})
      */
     public $received = null;
 
