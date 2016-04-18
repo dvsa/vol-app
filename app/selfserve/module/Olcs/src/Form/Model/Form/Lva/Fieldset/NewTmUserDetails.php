@@ -76,7 +76,7 @@ class NewTmUserDetails
      * })
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Common\Form\Elements\Validators\Username"})
+     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Username"})
      * @Form\Required(false)
      */
     public $username = null;
