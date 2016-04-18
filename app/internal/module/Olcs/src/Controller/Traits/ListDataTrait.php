@@ -222,6 +222,43 @@ trait ListDataTrait
     }
 
     /**
+     * Get a list of Enforcement areas for a traffic area
+     *
+     * @param string $trafficArea
+     * @param string $firstOption @see getListDataOptions
+     *
+     * @return array of enforcement areas eg ['21' => 'Nottingham', etc]
+     */
+    public function getListDataEnforcementArea($trafficArea, $firstOption = false)
+    {
+        $params = [
+            'id' => $trafficArea,
+        ];
+
+        $dto = \Dvsa\Olcs\Transfer\Query\TrafficArea\Get::create($params);
+        $response = $this->handleQuery($dto);
+
+        if (!$response->isOK()) {
+            // something went wrong, assume its a temporary error, as these list lookups should never fail
+            return [];
+        }
+
+        $options = [];
+        if (is_string($firstOption)) {
+            $options[''] = $firstOption;
+        }
+
+        // iterate through to create an array of options
+        foreach ($response->getResult()['trafficAreaEnforcementAreas'] as $item) {
+            $key = $item['enforcementArea']['id'];
+            $value = $item['enforcementArea']['name'];
+            $options[$key] = $value;
+        }
+
+        return $options;
+    }
+
+    /**
      * Take a DTO and create an array of items suitable for a select element
      *
      * @param \Dvsa\Olcs\Transfer\Query\AbstractQuery $dto
