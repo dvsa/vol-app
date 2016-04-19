@@ -15,7 +15,7 @@ if (!$case['isClosed']) {
     $editAction = [
         'label' => 'Edit',
         'url' => $this->url(null, ['action' => 'edit'], [], true),
-        'class' => 'js-modal-ajax action--secondary'
+        'class' => 'js-modal-ajax action--secondary small'
     ];
     $actions[] = $editAction;
 }
@@ -24,14 +24,14 @@ if ($case['canReopen']) {
     $reopenAction = [
         'label' => 'Reopen',
         'url' => $this->url(null, ['action' => 'reopen'], [], true),
-        'class' => 'js-modal-ajax action--secondary'
+        'class' => 'js-modal-ajax action--secondary small'
     ];
     $actions[] = $reopenAction;
 } else if ($case['canClose']) {
     $closeAction = [
         'label' => 'Close',
         'url' => $this->url(null, ['action' => 'close'], [], true),
-        'class' => 'js-modal-ajax action--secondary'
+        'class' => 'js-modal-ajax action--secondary small'
     ];
     $actions[] = $closeAction;
 }
