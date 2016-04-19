@@ -215,6 +215,11 @@ class TaskAllocationRulesController extends AbstractInternalController
                 'action' => $tableAction,
                 'alpha-split' => $query['id'],
             ];
+
+            // if clicked add alpha split then save any changes made to the rule first
+            if (strtolower($tableAction) === 'addalphasplit') {
+                $this->saveTaskAllocationRule($query);
+            }
             if (isset($query['details']['team'])) {
                 $params['team'] = $query['details']['team'];
             } else {
@@ -232,6 +237,21 @@ class TaskAllocationRulesController extends AbstractInternalController
         }
 
         $this->redirect()->toRoute(null, $params, ['code' => 303], true);
+    }
+
+    /**
+     * Save the task alloaction rule
+     *
+     * @param array $query
+     *
+     * @return bool
+     */
+    private function saveTaskAllocationRule($query)
+    {
+        $commandData = Mapper::mapFromForm($query);
+        $response = $this->handleCommand(UpdateDto::create($commandData));
+
+        return $response->isOk();
     }
 
     /**
