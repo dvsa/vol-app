@@ -19,12 +19,11 @@ class IndexController extends AbstractController
             return $this->redirect()->toRoute('auth/login');
         }
 
-        if (! $this->isGranted(RefData::PERMISSION_SELFSERVE_DASHBOARD)) {
-            // logout the user
-            return $this->redirect()->toRoute('auth/logout');
+        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_DASHBOARD)) {
+            // redir to the dashboard
+            return $this->redirect()->toRoute('dashboard', [], ['code' => 303]);
         }
 
-        // redir to the dashboard
-        return $this->redirect()->toRoute('dashboard', [], ['code' => 303]);
+        return $this->redirect()->toRoute('search');
     }
 }

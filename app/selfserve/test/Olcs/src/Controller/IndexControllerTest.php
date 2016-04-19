@@ -36,24 +36,6 @@ class IndexControllerTest extends MockeryTestCase
         static::assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
-    public function testIndexLogout()
-    {
-        $this->sut->shouldReceive('currentUser->getIdentity')
-            ->once()
-            ->andReturn(new User());
-
-        $this->sut->shouldReceive('isGranted')
-            ->with(RefData::PERMISSION_SELFSERVE_DASHBOARD)
-            ->andReturn(false);
-
-        $this->sut->shouldReceive('redirect->toRoute')
-            ->with('auth/logout')
-            ->once()
-            ->andReturn('REDIRECT');
-
-        static::assertEquals('REDIRECT', $this->sut->indexAction());
-    }
-
     public function testIndexDashboard()
     {
         $this->sut->shouldReceive('currentUser->getIdentity')
@@ -66,6 +48,24 @@ class IndexControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('redirect->toRoute')
             ->with('dashboard', [], ['code' => 303])
+            ->once()
+            ->andReturn('REDIRECT');
+
+        static::assertEquals('REDIRECT', $this->sut->indexAction());
+    }
+
+    public function testIndexSearch()
+    {
+        $this->sut->shouldReceive('currentUser->getIdentity')
+            ->once()
+            ->andReturn(new User());
+
+        $this->sut->shouldReceive('isGranted')
+            ->with(RefData::PERMISSION_SELFSERVE_DASHBOARD)
+            ->andReturn(false);
+
+        $this->sut->shouldReceive('redirect->toRoute')
+            ->with('search')
             ->once()
             ->andReturn('REDIRECT');
 
