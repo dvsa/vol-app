@@ -14,13 +14,14 @@ class IndexController extends AbstractController
 {
     public function indexAction()
     {
-        if ($this->currentUser()->getIdentity() === null) {
-            // redirect to the login
+        // redirect to the login
+        $identity = $this->currentUser()->getIdentity();
+        if ($identity === null || $identity->isAnonymous()) {
             return $this->redirect()->toRoute('auth/login');
         }
 
+        // redir to the dashboard
         if ($this->isGranted(RefData::PERMISSION_SELFSERVE_DASHBOARD)) {
-            // redir to the dashboard
             return $this->redirect()->toRoute('dashboard', [], ['code' => 303]);
         }
 
