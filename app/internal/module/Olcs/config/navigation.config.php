@@ -784,9 +784,15 @@ $nav = array(
                                     'use_route_match' => true,
                                 ),
                                 array(
-                                    'id' => 'operator_licences_applications',
-                                    'label' => 'internal-navigation-operator-licences_applications',
-                                    'route' => 'operator/licences-applications',
+                                    'id' => 'operator_licences',
+                                    'label' => 'internal-navigation-operator-licences',
+                                    'route' => 'operator/licences',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'operator_applications',
+                                    'label' => 'internal-navigation-operator-applications',
+                                    'route' => 'operator/applications',
                                     'use_route_match' => true,
                                 ),
                                 array(

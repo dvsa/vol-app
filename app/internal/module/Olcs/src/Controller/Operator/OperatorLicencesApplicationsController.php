@@ -24,15 +24,15 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
         return $view;
     }
 
-    public function indexAction()
+    public function licencesAction()
     {
-        /**
-         * Both methods return the same view
-         */
         $this->setupLicencesTable();
+        return $this->viewBuilder()->buildViewFromTemplate('sections/operator/pages/licences-and-applications');
+    }
 
-        $this->setupEnvironmentComplaintsTable();
-
+    public function applicationsAction()
+    {
+        $this->setupApplicationsTable();
         return $this->viewBuilder()->buildViewFromTemplate('sections/operator/pages/licences-and-applications');
     }
 
@@ -56,7 +56,7 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
         return $this->index(
             \Dvsa\Olcs\Transfer\Query\Licence\GetList::class,
             new \Olcs\Mvc\Controller\ParameterProvider\GenericList(['organisation']),
-            'licencesTable',
+            'table',
             'operator-licences',
             $this->tableViewTemplate
         );
@@ -67,7 +67,7 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
      *
      * @return \Zend\View\Model\ViewModel
      */
-    private function setupEnvironmentComplaintsTable()
+    private function setupApplicationsTable()
     {
         /* @var $request \Zend\Http\Request */
         $request = $this->getRequest();
@@ -77,7 +77,7 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
         return $this->index(
             \Dvsa\Olcs\Transfer\Query\Application\GetList::class,
             new \Olcs\Mvc\Controller\ParameterProvider\GenericList(['organisation']),
-            'applicationsTable',
+            'table',
             'operator-applications',
             $this->tableViewTemplate
         );
