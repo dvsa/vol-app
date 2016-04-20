@@ -25,9 +25,10 @@ class PresidingTc extends User
     /**
      * Fetch user list data
      *
+     * @param array $context
      * @return array
      */
-    public function fetchUserListData()
+    public function fetchUserListData($context = [])
     {
         if (is_null($this->getData('presiding-tc'))) {
             $params = [

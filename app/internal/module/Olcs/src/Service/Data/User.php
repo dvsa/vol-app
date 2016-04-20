@@ -58,7 +58,7 @@ class User extends AbstractDataService implements ListDataInterface
      */
     public function fetchListOptions($context, $useGroups = false)
     {
-        $data = $this->fetchUserListData();
+        $data = $this->fetchUserListData($context);
         $ret = [];
 
         if (!is_array($data)) {
@@ -75,9 +75,10 @@ class User extends AbstractDataService implements ListDataInterface
     /**
      * Fetch user list data
      *
+     * @param mixed $context
      * @return array
      */
-    public function fetchUserListData()
+    public function fetchUserListData($context = [])
     {
         if (is_null($this->getData('userlist'))) {
             $params = [
@@ -87,6 +88,9 @@ class User extends AbstractDataService implements ListDataInterface
             $team   = $this->getTeam();
             if (!empty($team)) {
                 $params['team'] = $team;
+            }
+            if (isset($context['isInternal'])) {
+                $params['isInternal'] = $context['isInternal'];
             }
 
             $dtoData = UserList::create($params);
