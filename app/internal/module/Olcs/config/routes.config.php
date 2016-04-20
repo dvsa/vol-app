@@ -1659,13 +1659,23 @@ $routes = [
                     ]
                 ]
             ],
-            'licences-applications' => [
+            'licences' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => 'licences-applications[/]',
+                    'route' => 'licences[/]',
                     'defaults' => [
                         'controller' => 'OperatorLicencesApplicationsController',
-                        'action' => 'index',
+                        'action' => 'licences',
+                    ]
+                ]
+            ],
+            'applications' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'applications[/]',
+                    'defaults' => [
+                        'controller' => 'OperatorLicencesApplicationsController',
+                        'action' => 'application',
                     ]
                 ]
             ],
