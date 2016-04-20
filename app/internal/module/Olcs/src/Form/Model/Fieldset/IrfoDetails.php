@@ -24,13 +24,16 @@ class IrfoDetails extends Base
      * @Form\ComposedObject({
      *      "target_object":"Olcs\Form\Model\Fieldset\TradingName",
      *      "is_collection":true,
-     *      "options":{"count":1, "label":"Trading names"}
+     *      "options":{
+     *          "count":1, 
+     *          "label":"Trading names"
+     *      }
      * })
      */
     public $tradingNames = null;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Attributes({"id":"trafficAreas","placeholder":"", "class":"chosen-select-fixed"})
      * @Form\Required(false)
      * @Form\Options({
      *     "label": "Country of origin",
