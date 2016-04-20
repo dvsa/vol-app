@@ -36,11 +36,33 @@ class IndexControllerTest extends MockeryTestCase
         static::assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
-    public function testIndexDashboard()
+    public function testIndexLoginAnon()
     {
+        /** @var User|m\MockInterface $mockIdentity */
+        $mockIdentity = m::mock(new User());
+        $mockIdentity->setUserType(User::USER_TYPE_ANON);
+
         $this->sut->shouldReceive('currentUser->getIdentity')
             ->once()
-            ->andReturn(new User());
+            ->andReturn($mockIdentity);
+
+        $this->sut->shouldReceive('redirect->toRoute')
+            ->with('auth/login')
+            ->once()
+            ->andReturn('REDIRECT');
+
+        static::assertEquals('REDIRECT', $this->sut->indexAction());
+    }
+
+    public function testIndexDashboard()
+    {
+        /** @var User|m\MockInterface $mockIdentity */
+        $mockIdentity = m::mock(new User());
+        $mockIdentity->setUserType(User::USER_TYPE_INTERNAL);
+
+        $this->sut->shouldReceive('currentUser->getIdentity')
+            ->once()
+            ->andReturn($mockIdentity);
 
         $this->sut->shouldReceive('isGranted')
             ->with(RefData::PERMISSION_SELFSERVE_DASHBOARD)
@@ -56,9 +78,13 @@ class IndexControllerTest extends MockeryTestCase
 
     public function testIndexSearch()
     {
+        /** @var User|m\MockInterface $mockIdentity */
+        $mockIdentity = m::mock(new User());
+        $mockIdentity->setUserType(User::USER_TYPE_INTERNAL);
+
         $this->sut->shouldReceive('currentUser->getIdentity')
             ->once()
-            ->andReturn(new User());
+            ->andReturn($mockIdentity);
 
         $this->sut->shouldReceive('isGranted')
             ->with(RefData::PERMISSION_SELFSERVE_DASHBOARD)
