@@ -38,8 +38,7 @@ class IndexControllerTest extends MockeryTestCase
 
     public function testIndexLoginAnon()
     {
-        /** @var User|m\MockInterface $mockIdentity */
-        $mockIdentity = m::mock(new User());
+        $mockIdentity = new User();
         $mockIdentity->setUserType(User::USER_TYPE_ANON);
 
         $this->sut->shouldReceive('currentUser->getIdentity')
@@ -56,8 +55,7 @@ class IndexControllerTest extends MockeryTestCase
 
     public function testIndexDashboard()
     {
-        /** @var User|m\MockInterface $mockIdentity */
-        $mockIdentity = m::mock(new User());
+        $mockIdentity = new User();
         $mockIdentity->setUserType(User::USER_TYPE_INTERNAL);
 
         $this->sut->shouldReceive('currentUser->getIdentity')
@@ -78,8 +76,7 @@ class IndexControllerTest extends MockeryTestCase
 
     public function testIndexSearch()
     {
-        /** @var User|m\MockInterface $mockIdentity */
-        $mockIdentity = m::mock(new User());
+        $mockIdentity = new User();
         $mockIdentity->setUserType(User::USER_TYPE_INTERNAL);
 
         $this->sut->shouldReceive('currentUser->getIdentity')
