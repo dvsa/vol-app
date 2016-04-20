@@ -33,7 +33,7 @@ class IrfoDetails extends Base
     public $tradingNames = null;
 
     /**
-     * @Form\Attributes({"id":"trafficAreas","placeholder":"", "class":"chosen-select-fixed"})
+     * @Form\Attributes({"id":"","placeholder":"", "class":"chosen-select-fixed"})
      * @Form\Required(false)
      * @Form\Options({
      *     "label": "Country of origin",
