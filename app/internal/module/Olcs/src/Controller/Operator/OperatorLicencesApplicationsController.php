@@ -30,7 +30,7 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
         return $this->viewBuilder()->buildViewFromTemplate('sections/operator/pages/licences-and-applications');
     }
 
-    public function applicationAction()
+    public function applicationsAction()
     {
         $this->setupApplicationsTable();
         return $this->viewBuilder()->buildViewFromTemplate('sections/operator/pages/licences-and-applications');
@@ -73,7 +73,6 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
         $request = $this->getRequest();
         // order by created date
         $request->getQuery()->set('sort', 'createdOn');
-        $request->getQuery()->get('limit') ? : $request->getQuery()->set('sort', 'createdOn');
 
         return $this->index(
             \Dvsa\Olcs\Transfer\Query\Application\GetList::class,

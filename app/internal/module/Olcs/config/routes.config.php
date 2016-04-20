@@ -1675,7 +1675,7 @@ $routes = [
                     'route' => 'applications[/]',
                     'defaults' => [
                         'controller' => 'OperatorLicencesApplicationsController',
-                        'action' => 'application',
+                        'action' => 'applications',
                     ]
                 ]
             ],
