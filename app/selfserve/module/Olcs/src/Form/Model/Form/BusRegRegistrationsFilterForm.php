@@ -11,11 +11,11 @@ use Zend\Form\Annotation as Form;
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true})
  */
-class BusRegFilterForm
+class BusRegRegistrationsFilterForm
 {
     /**
      * @Form\Name("fields")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\BusRegFilterFields")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\BusRegRegistrationsFilterFields")
      */
     public $fields = null;
 

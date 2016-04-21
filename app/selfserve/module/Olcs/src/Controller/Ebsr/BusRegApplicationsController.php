@@ -13,9 +13,9 @@ use Zend\View\Model\ViewModel;
 use Common\Rbac\User;
 
 /**
- * Class BusRegistrationController
+ * Class BusRegApplicationsController
  */
-class BusRegistrationController extends AbstractController
+class BusRegApplicationsController extends AbstractController
 {
     /**
      * Lists all EBSR's with filter search form
@@ -111,7 +111,7 @@ class BusRegistrationController extends AbstractController
 
         return $layout;
     }
-    
+
     /**
      * Generates one of two tables depending on user logged in.
      * LAs get the txc-inbox table to match the results returned. Operators get the ebsr-submissions table.

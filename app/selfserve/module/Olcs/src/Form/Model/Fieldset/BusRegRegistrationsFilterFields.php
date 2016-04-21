@@ -11,12 +11,12 @@ use Zend\Form\Annotation as Form;
  *     "label": "Filters"
  * })
  */
-class BusRegFilterFields
+class BusRegRegistrationsFilterFields
 {
     /**
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Registration type",
+     *     "label": "Organisation",
      *     "empty_option": "All",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a registration type",
@@ -41,4 +41,18 @@ class BusRegFilterFields
      * @Form\Type("DynamicSelect")
      */
     public $status;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Options({
+     *     "label": "Licence no",
+     *     "empty_option": "All",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\RefData",
+     *     "category": "ebsr_sub_status"
+     * })
+     * @Form\Attributes({"id":"status","placeholder":""})
+     * @Form\Type("DynamicSelect")
+     */
+    public $licenceId;
 }
