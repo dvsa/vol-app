@@ -80,7 +80,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
 
         $urlHelper = $this->getServiceLocator()->get('Helper\Url');
         $url = $urlHelper->fromRoute(
-            'operator/licences-applications',
+            'operator/applications',
             ['organisation' => (int) $licence['organisation']['id']]
         );
 
