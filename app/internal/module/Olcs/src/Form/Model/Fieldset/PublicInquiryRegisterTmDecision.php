@@ -159,7 +159,8 @@ class PublicInquiryRegisterTmDecision extends CaseBase
      *      "id":"trafficAreas",
      *      "placeholder":"",
      *      "multiple":true,
-     *      "value":"all"
+     *      "value":"all",
+     *      "class":"chosen-select-large"
      * })
      * @Form\Options({
      *      "label": "Traffic areas",

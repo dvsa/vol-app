@@ -276,7 +276,8 @@ class PublicInquiryHearingFields extends Base
      *      "id":"trafficAreas",
      *      "placeholder":"",
      *      "multiple":"multiple",
-     *      "value":"all"
+     *      "value":"all",
+     *      "class":"chosen-select-large"
      * })
      * @Form\Options({
      *      "label": "Traffic areas",
