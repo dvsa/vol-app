@@ -7,7 +7,7 @@ return array(
     'settings' => array(
         'paginate' => array(
             'limit' => array(
-                'default' => 10,
+                'default' => 25,
                 'options' => array(10, 25, 50)
             )
         ),
