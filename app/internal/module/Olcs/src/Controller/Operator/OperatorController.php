@@ -14,6 +14,7 @@ use Zend\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Controller\AbstractController;
 use Dvsa\Olcs\Transfer\Query\TrafficArea\TrafficAreaList;
+use Common\RefData;
 
 /**
  * Operator Controller
@@ -60,14 +61,14 @@ class OperatorController extends AbstractController implements OperatorControlle
         if ($request->isPost()) {
             $data = (array)$request->getPost();
         } else {
-            $data['receivedDate'] = $this->getServiceLocator()->get('Helper\Date')->getDateObject();
+            $data['details']['receivedDate'] = $this->getServiceLocator()->get('Helper\Date')->getDateObject();
         }
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         $form = $formHelper->createForm('NewApplication');
-        $this->alterForm($form);
         $form->setData($data);
+        $this->alterForm($form, $data);
 
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
 
@@ -75,14 +76,20 @@ class OperatorController extends AbstractController implements OperatorControlle
 
             $data = $form->getData();
 
-            $dto = CreateApplication::create(
-                [
-                    'organisation' => $this->params('organisation'),
-                    'receivedDate' => $data['receivedDate'],
-                    'trafficArea' => $data['trafficArea'],
-                    'appliedVia' => $data['appliedVia']
-                ]
-            );
+            $params = [
+                'organisation' => $this->params('organisation'),
+                'receivedDate' => $data['details']['receivedDate'],
+                'trafficArea' => $data['details']['trafficArea'],
+                'appliedVia' => $data['appliedVia'],
+                'licenceType' => $data['type-of-licence']['licence-type']
+            ];
+            if ($data['details']['trafficArea'] === RefData::NORTHERN_IRELAND_TRAFFIC_AREA_CODE) {
+                $params['niFlag'] = 'Y';
+            } else {
+                $params['niFlag'] = 'N';
+                $params['operatorType'] = $data['type-of-licence']['operator-type'];
+            }
+            $dto = CreateApplication::create($params);
 
             $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
 
@@ -100,6 +107,8 @@ class OperatorController extends AbstractController implements OperatorControlle
                 ->addErrorMessage('unknown-error');
         }
 
+        $this->getServiceLocator()->get('Script')->loadFile('forms/type-of-licence-operator');
+
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
 
@@ -110,12 +119,21 @@ class OperatorController extends AbstractController implements OperatorControlle
      * Alter form
      *
      * @param Form
+     * @param array $data
      */
-    protected function alterForm($form)
+    protected function alterForm($form, $data)
     {
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper->remove($form, 'type-of-licence->operator-location');
+        $formHelper->remove($form, 'type-of-licence->difference');
         $organisationData = $this->getOrganisation($this->params()->fromRoute('organisation'));
         if (isset($organisationData['taValueOptions'])) {
-            $form->get('trafficArea')->setValueOptions($organisationData['taValueOptions']);
+            $form->get('details')
+                ->get('trafficArea')
+                ->setValueOptions($organisationData['taValueOptions']);
+        }
+        if ($data['details']['trafficArea'] !== RefData::NORTHERN_IRELAND_TRAFFIC_AREA_CODE) {
+            $form->getInputFilter()->get('type-of-licence')->get('operator-type')->setRequired(true);
         }
     }
 
