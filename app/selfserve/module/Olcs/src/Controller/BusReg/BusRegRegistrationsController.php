@@ -22,7 +22,6 @@ class BusRegRegistrationsController extends AbstractController
     {
         if ($this->getRequest()->isPost()) {
             $request = $this->getRequest();
-
             $postData = $request->getPost();
 
             return $this->processSearch($postData);
@@ -31,23 +30,24 @@ class BusRegRegistrationsController extends AbstractController
         $userData = $this->currentUser()->getUserData();
 
         $params = [
-            'subType'   => $this->params()->fromQuery('subType'),
-            'busRegStatusId'    => $this->params()->fromQuery('status'),
-            'page'      => $this->params()->fromQuery('page', 1),
-            'order'     => $this->params()->fromQuery('order', 'ASC'),
-            'limit'     => $this->params()->fromQuery('limit', 25),
+            'organisationName'  => $this->params()->fromQuery('organisationName'),
+            'status'    => $this->params()->fromQuery('status'),
+            'licNo'             => $this->params()->fromQuery('licNo'),
+            'page'              => $this->params()->fromQuery('page', 1),
+            'order'             => $this->params()->fromQuery('order', 'ASC'),
+            'limit'             => $this->params()->fromQuery('limit', 25),
         ];
 
         $params['sort'] = $this->params()->fromQuery('sort', 'licNo, routeNo');
 
-        if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
-            $params['organisationId'] = null;
+/*        if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
+            $params['organisationName'] = null;
         } else {
-            $params['organisationId'] = $userData['organisation']['id'];
-        }
+            $params['organisationName'] = $userData['organisation']['name'];
+        }*/
+var_dump($params);
 
         $query = ListDto::create($params);
-
         // set query params for pagination
         $params['query'] = $params;
 
@@ -150,8 +150,9 @@ class BusRegRegistrationsController extends AbstractController
     {
         $params = $this->params()->fromQuery();
 
-        $params['subType'] = empty($data['fields']['subType']) ? null : $data['fields']['subType'];
+        $params['organisationName'] = empty($data['fields']['organisationName']) ? null : $data['fields']['organisationName'];
         $params['status'] = empty($data['fields']['status']) ? null : $data['fields']['status'];
+        $params['licNo'] = empty($data['fields']['licNo']) ? null : $data['fields']['licNo'];
 
         // initialise search results to page 1
         $params['page'] = 1;
@@ -205,8 +206,9 @@ class BusRegRegistrationsController extends AbstractController
         $filterForm->setData(
             [
                 'fields' => [
-                    'subType' => $params['subType'],
-                    'status' => $params['busRegStatusId']
+                    'organisationName' => $params['organisationName'],
+                    'licNo' => $params['licNo'],
+                    'status' => $params['status']
                 ]
             ]
         );

@@ -31,7 +31,7 @@ class BusRegRegistrationsFilterFields
     /**
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Status",
+     *     "label": "Registration status",
      *     "empty_option": "All",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select status",
@@ -41,7 +41,7 @@ class BusRegRegistrationsFilterFields
      * @Form\Attributes({"id":"status","placeholder":""})
      * @Form\Type("DynamicSelect")
      */
-    public $busRegStatusId;
+    public $status;
 
     /**
      * @Form\Required(false)
