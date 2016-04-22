@@ -40,12 +40,11 @@ class BusRegRegistrationsController extends AbstractController
 
         $params['sort'] = $this->params()->fromQuery('sort', 'licNo, routeNo');
 
-/*        if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
+        if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
             $params['organisationName'] = null;
         } else {
             $params['organisationName'] = $userData['organisation']['name'];
-        }*/
-var_dump($params);
+        }
 
         $query = ListDto::create($params);
         // set query params for pagination
@@ -70,29 +69,14 @@ var_dump($params);
 
         $filterForm = $this->getFilterForm($params);
 
-        $pageHeaderText = 'bus-registrations-index-subtitle';
-
-        /*$pageHeaderText = '';
-        $pageHeaderUrl = '';
-        if ($this->isGranted('selfserve-ebsr-upload')) {
-            $pageHeaderText = 'bus-registrations-index-subtitle';
-            $pageHeaderUrl = [
-                'route' => 'bus-registration/ebsr',
-                'params' => [
-                    'action' => 'upload'
-                ],
-                'text' => 'register-cancel-update-service'
-            ];
-        }*/
-
         // setup layout and view
         $layout = $this->generateLayout(
             [
                 'pageTitle' => 'bus-registrations-index-title',
-                //'pageHeaderText' => $pageHeaderText,
                 'searchForm' => $filterForm,
-                //'pageHeaderUrl' => $pageHeaderUrl,
-                'showNav' => false
+                'activeTab' => 'registrations',
+                'showNav' => false,
+                'tabs' => $this->generateTabs()
             ]
         );
 
@@ -121,14 +105,6 @@ var_dump($params);
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
         $tableBuilder = $this->getServiceLocator()->get('Table');
 
-        $userData = $this->currentUser()->getUserData();
-
-/*        if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
-            $tableName = 'txc-inbox';
-        } else {
-            $tableName = 'ebsr-submissions';
-        }
-*/
         $tableName = 'busreg-registrations';
 
         $busRegistrationTable = $tableBuilder->buildTable(
@@ -203,6 +179,15 @@ var_dump($params);
     {
         $filterForm = $this->getServiceLocator()->get('Helper\Form')->createForm('BusRegRegistrationsFilterForm');
 
+        if ($this->currentUser()->getUserData()['userType'] !== User::USER_TYPE_LOCAL_AUTHORITY)
+        {
+            // remove Organisation name filter for organisations
+            $filterForm->get('fields')->remove('organisationName');
+        } else {
+            // removed licence no filter for LAs
+            $filterForm->get('fields')->remove('licNo');
+        }
+
         $filterForm->setData(
             [
                 'fields' => [
@@ -214,5 +199,35 @@ var_dump($params);
         );
 
         return $filterForm;
+    }
+
+    /**
+     * Privagte method to generate the tabs config array. Only operators and LAs can see the tabs. This *should* never
+     * be executed by any other user type because of RBAC.
+     *
+     * @return array
+     */
+    private function generateTabs()
+    {
+        if (in_array(
+            $this->currentUser()->getUserData()['userType'],
+            [
+                User::USER_TYPE_LOCAL_AUTHORITY,
+                User::USER_TYPE_OPERATOR
+            ]
+        )) {
+            return [
+                0 => [
+                    'label' => 'busreg-tab-title-registrations',
+                    'route' => 'busreg-registrations',
+                    'active' => true
+                ],
+                1 => [
+                    'label' => 'busreg-tab-title-applications',
+                    'route' => 'bus-registration'
+                ]
+            ];
+        }
+        return [];
     }
 }

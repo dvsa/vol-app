@@ -1176,6 +1176,7 @@ return array(
 
                 // bus reg list accessible by operators and LAs
                 'bus-registration' => ['selfserve-ebsr-list'],
+                'busreg-registrations' => ['selfserve-ebsr-list'],
 
                 // details page accessible by everyone inc anon. users
                 'bus-registration/details' => ['*'],

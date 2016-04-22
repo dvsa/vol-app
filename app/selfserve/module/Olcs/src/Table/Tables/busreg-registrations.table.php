@@ -14,7 +14,7 @@ return array(
     ),
     'columns' => array(
         array(
-          //  'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
+            'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
             'title' => 'Organisation',
             'name' => 'organisationName'
         ),
@@ -23,7 +23,7 @@ return array(
             'formatter' => function ($data) {
                 if (isset($data['regNo'])) {
                     return '<a href="' . $this->generateUrl(
-                        array('action' => 'details', 'busRegId' => $data['regNo']),
+                        array('action' => 'details', 'busRegId' => $data['id']),
                         'bus-registration/details',
                         false
                     ) . '">' . $data['regNo'] . '</a>';
