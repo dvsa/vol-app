@@ -74,6 +74,10 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
         // order by created date
         $request->getQuery()->set('sort', 'createdOn');
 
+        if (!$request->getQuery()->get('limit')) {
+            $request->getQuery()->set('limit', 25);
+        }
+
         return $this->index(
             \Dvsa\Olcs\Transfer\Query\Application\GetList::class,
             new \Olcs\Mvc\Controller\ParameterProvider\GenericList(['organisation']),
