@@ -19,14 +19,14 @@ class BusRegRegistrationsFilterFields
      *     "label": "Organisation",
      *     "empty_option": "All",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a registration type",
-     *     "service_name": "Common\Service\Data\EbsrSubTypeListDataService",
-     *     "category": "ebsr_sub_type"
+     *     "help-block": "Please select an organisation",
+     *     "service_name": "Common\Service\Data\BusRegSearchViewListDataService",
+     *     "category": "organisationName"
      * })
      * @Form\Attributes({"id":"sub_type","placeholder":""})
      * @Form\Type("DynamicSelect")
      */
-    public $subType;
+    public $organisationName;
 
     /**
      * @Form\Required(false)
@@ -34,13 +34,14 @@ class BusRegRegistrationsFilterFields
      *     "label": "Status",
      *     "empty_option": "All",
      *     "disable_inarray_validator": false,
+     *     "help-block": "Please select status",
      *     "service_name": "Common\Service\Data\RefData",
-     *     "category": "ebsr_sub_status"
+     *     "category": "bus_reg_status"
      * })
      * @Form\Attributes({"id":"status","placeholder":""})
      * @Form\Type("DynamicSelect")
      */
-    public $status;
+    public $busRegStatusId;
 
     /**
      * @Form\Required(false)
@@ -48,11 +49,11 @@ class BusRegRegistrationsFilterFields
      *     "label": "Licence no",
      *     "empty_option": "All",
      *     "disable_inarray_validator": false,
-     *     "service_name": "Common\Service\Data\RefData",
-     *     "category": "ebsr_sub_status"
+     *     "service_name": "Common\Service\Data\BusRegSearchViewListDataService",
+     *     "category": "licNo"
      * })
      * @Form\Attributes({"id":"status","placeholder":""})
      * @Form\Type("DynamicSelect")
      */
-    public $licenceId;
+    public $licNo;
 }
