@@ -9,6 +9,13 @@ if ($entity['isApprovable']) {
         'class' => 'action--primary'
     ];
 }
+if ($entity['isGeneratable']) {
+    $actions[] = [
+        'url' => $this->url(null, ['action' => 'generate'], [], true),
+        'label' => 'Generate',
+        'class' => 'action--primary'
+    ];
+}
 if ($entity['irfoPermitStatus']['id'] === 'irfo_perm_s_pending') {
     $actions[] = [
         'url' => $this->url(null, ['action' => 'withdraw'], [], true),

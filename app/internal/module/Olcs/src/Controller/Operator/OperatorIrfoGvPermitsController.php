@@ -8,6 +8,7 @@ namespace Olcs\Controller\Operator;
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoGvPermit as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\ResetIrfoGvPermit as ResetDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\ApproveIrfoGvPermit as ApproveDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\GenerateIrfoGvPermit as GenerateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\WithdrawIrfoGvPermit as WithdrawDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\RefuseIrfoGvPermit as RefuseDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermit as ItemDto;
@@ -127,5 +128,14 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     public function refuseAction()
     {
         return $this->processCommand(new GenericItem(['id' => 'id']), RefuseDto::class);
+    }
+
+    public function generateAction()
+    {
+        return $this->processCommand(
+            new GenericItem(['id' => 'id']),
+            GenerateDto::class,
+            'IRFO GV Permit generated successfully'
+        );
     }
 }
