@@ -76,6 +76,10 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
             'canHaveSchedule41' => true,
             'canHaveCommunityLicences' => true,
             'isPsv' => false,
+            'trafficArea' => null,
+            'niFlag' => null,
+            'possibleTrafficAreas' => 'POSSIBLE_TRAFFIC_AREAS',
+            'possibleEnforcementAreas' => 'POSSIBLE_ENFORCEMENT_AREAS',
         ];
 
         $this->mockPopulateFormTable([]);
@@ -83,9 +87,13 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
         $this->mockFormHelper->shouldReceive('getValidator->setMessage')
             ->with('OperatingCentreNoOfOperatingCentres.required', 'required');
 
-        $this->mockFormHelper->shouldReceive('remove')
-            ->once()
-            ->with($this->form, 'dataTrafficArea');
+        $mockTaElement = m::mock();
+        $this->form->shouldReceive('get')->with('dataTrafficArea')->once()->andReturn($mockTaElement);
+
+        $mockTaElement->shouldReceive('get->setValueOptions')->with('POSSIBLE_TRAFFIC_AREAS')->once();
+        $mockTaElement->shouldReceive('remove')->with('trafficAreaSet')->once();
+
+        $mockTaElement->shouldReceive('get->setValueOptions')->with('POSSIBLE_ENFORCEMENT_AREAS')->once();
 
         $form = $this->sut->getForm($params);
         $this->assertSame($this->form, $form);
