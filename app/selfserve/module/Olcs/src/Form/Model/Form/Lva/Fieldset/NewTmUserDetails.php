@@ -72,7 +72,8 @@ class NewTmUserDetails
      * @Form\Attributes({"id": "username", "class":"medium", "data-container-class": "js-visible"})
      * @Form\Options({
      *     "label":"tm-add-user-username",
-     *     "short-label":"tm-add-user-username"
+     *     "short-label":"tm-add-user-username",
+     *     "hint":"tm-add-user-username.hint"
      * })
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
