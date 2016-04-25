@@ -91,7 +91,7 @@ class BusRegRegistrationsController extends AbstractController
 
         return $layout;
     }
-    
+
     /**
      * Generates one of two tables depending on user logged in.
      * LAs get the txc-inbox table to match the results returned. Operators get the ebsr-submissions table.
@@ -126,7 +126,8 @@ class BusRegRegistrationsController extends AbstractController
     {
         $params = $this->params()->fromQuery();
 
-        $params['organisationName'] = empty($data['fields']['organisationName']) ? null : $data['fields']['organisationName'];
+        $params['organisationName'] = empty($data['fields']['organisationName']) ?
+            null : $data['fields']['organisationName'];
         $params['status'] = empty($data['fields']['status']) ? null : $data['fields']['status'];
         $params['licNo'] = empty($data['fields']['licNo']) ? null : $data['fields']['licNo'];
 
@@ -179,8 +180,7 @@ class BusRegRegistrationsController extends AbstractController
     {
         $filterForm = $this->getServiceLocator()->get('Helper\Form')->createForm('BusRegRegistrationsFilterForm');
 
-        if ($this->currentUser()->getUserData()['userType'] !== User::USER_TYPE_LOCAL_AUTHORITY)
-        {
+        if ($this->currentUser()->getUserData()['userType'] !== User::USER_TYPE_LOCAL_AUTHORITY) {
             // remove Organisation name filter for organisations
             $filterForm->get('fields')->remove('organisationName');
         } else {

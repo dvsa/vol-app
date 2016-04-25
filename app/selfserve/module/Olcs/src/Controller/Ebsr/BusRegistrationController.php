@@ -111,7 +111,7 @@ class BusRegistrationController extends AbstractController
 
         return $layout;
     }
-    
+
     /**
      * Generates one of two tables depending on user logged in.
      * LAs get the txc-inbox table to match the results returned. Operators get the ebsr-submissions table.

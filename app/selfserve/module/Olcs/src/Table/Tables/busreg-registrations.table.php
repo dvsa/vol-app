@@ -38,7 +38,7 @@ return array(
         array(
             'title' => 'Service No.',
             'formatter' => function ($row) {
-                return str_replace('(',' (', $row['serviceNo']);
+                return str_replace('(', ' (', $row['serviceNo']);
             }
         ),
         array(
