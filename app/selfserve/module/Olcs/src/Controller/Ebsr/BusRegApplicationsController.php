@@ -96,7 +96,8 @@ class BusRegApplicationsController extends AbstractController
                 'pageHeaderText' => $pageHeaderText,
                 'searchForm' => $filterForm,
                 'pageHeaderUrl' => $pageHeaderUrl,
-                'showNav' => false
+                'showNav' => false,
+                'tabs' => $this->generateTabs()
             ]
         );
 
@@ -343,5 +344,35 @@ class BusRegApplicationsController extends AbstractController
         );
 
         return $filterForm;
+    }
+
+    /**
+     * Privagte method to generate the tabs config array. Only operators and LAs can see the tabs. This *should* never
+     * be executed by any other user type because of RBAC.
+     *
+     * @return array
+     */
+    private function generateTabs()
+    {
+        if (in_array(
+            $this->currentUser()->getUserData()['userType'],
+            [
+                User::USER_TYPE_LOCAL_AUTHORITY,
+                User::USER_TYPE_OPERATOR
+            ]
+        )) {
+            return [
+                0 => [
+                    'label' => 'busreg-tab-title-registrations',
+                    'route' => 'busreg-registrations'
+                ],
+                1 => [
+                    'label' => 'busreg-tab-title-applications',
+                    'route' => 'bus-registration',
+                    'active' => true
+                ]
+            ];
+        }
+        return [];
     }
 }

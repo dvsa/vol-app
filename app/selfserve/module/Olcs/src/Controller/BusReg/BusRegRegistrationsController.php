@@ -31,7 +31,7 @@ class BusRegRegistrationsController extends AbstractController
 
         $params = [
             'organisationName'  => $this->params()->fromQuery('organisationName'),
-            'status'    => $this->params()->fromQuery('status'),
+            'status'            => $this->params()->fromQuery('status'),
             'licNo'             => $this->params()->fromQuery('licNo'),
             'page'              => $this->params()->fromQuery('page', 1),
             'order'             => $this->params()->fromQuery('order', 'ASC'),
