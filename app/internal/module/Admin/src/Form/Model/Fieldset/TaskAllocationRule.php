@@ -113,7 +113,7 @@ class TaskAllocationRule
      * @Form\Options({
      *     "short-label": "User",
      *     "label": "User",
-     *     "service_name": "Olcs\Service\Data\User",
+     *     "service_name": "Olcs\Service\Data\UserListInternal",
      *     "empty_option": "Unassigned",
      *     "extra_option": {"alpha-split": "Alpha split"},
      * })
