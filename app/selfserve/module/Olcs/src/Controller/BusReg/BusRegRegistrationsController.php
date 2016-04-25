@@ -3,7 +3,7 @@
 namespace Olcs\Controller\BusReg;
 
 use Common\Exception\ResourceNotFoundException;
-use Dvsa\Olcs\Transfer\Query\Bus\BusRegList as ListDto;
+use Dvsa\Olcs\Transfer\Query\BusRegSearchView\BusRegSearchViewList as ListDto;
 use Common\Controller\Lva\AbstractController;
 use Zend\View\Model\ViewModel;
 use Common\Rbac\User;
