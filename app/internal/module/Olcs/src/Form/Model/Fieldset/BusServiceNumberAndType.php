@@ -30,7 +30,7 @@ class BusServiceNumberAndType extends BusRegDetails
     public $otherServices = null;
 
     /**
-     * @Form\Attributes({"class":"","id":"startPoint"})
+     * @Form\Attributes({"class":"medium","id":"startPoint"})
      * @Form\Options({"label":"Start point"})
      * @Form\Required(false)
      * @Form\Type("Text")
@@ -40,7 +40,7 @@ class BusServiceNumberAndType extends BusRegDetails
     public $startPoint = null;
 
     /**
-     * @Form\Attributes({"class":"","id":"finishPoint"})
+     * @Form\Attributes({"class":"medium","id":"finishPoint"})
      * @Form\Options({"label":"Finish point"})
      * @Form\Required(false)
      * @Form\Type("Text")
@@ -50,7 +50,7 @@ class BusServiceNumberAndType extends BusRegDetails
     public $finishPoint = null;
 
     /**
-     * @Form\Attributes({"class":"","id":"via"})
+     * @Form\Attributes({"class":"medium","id":"via"})
      * @Form\Options({"label":"Via"})
      * @Form\Required(false)
      * @Form\Type("Text")

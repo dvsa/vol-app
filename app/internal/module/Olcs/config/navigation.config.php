@@ -667,6 +667,8 @@ $nav = array(
                                     'route' => 'transport-manager/details/competences',
                                     'use_route_match' => true,
                                     'params' => [
+                                        'action' => null,
+                                        'id' => null
                                     ]
                                 ),
                                 array(
@@ -674,8 +676,6 @@ $nav = array(
                                     'label' => 'internal-navigation-transport-manager-details-responsibilities',
                                     'route' => 'transport-manager/details/responsibilities',
                                     'use_route_match' => true,
-                                    'params' => [
-                                    ]
                                 ),
                                 array(
                                     'id' => 'transport_manager_details_employment',
@@ -683,6 +683,8 @@ $nav = array(
                                     'route' => 'transport-manager/details/employment',
                                     'use_route_match' => true,
                                     'params' => [
+                                        'action' => null,
+                                        'id' => null
                                     ]
                                 ),
                                 array(
@@ -691,6 +693,8 @@ $nav = array(
                                     'route' => 'transport-manager/details/previous-history',
                                     'use_route_match' => true,
                                     'params' => [
+                                        'action' => null,
+                                        'id' => null
                                     ]
                                 ),
                             )
@@ -784,9 +788,15 @@ $nav = array(
                                     'use_route_match' => true,
                                 ),
                                 array(
-                                    'id' => 'operator_licences_applications',
-                                    'label' => 'internal-navigation-operator-licences_applications',
-                                    'route' => 'operator/licences-applications',
+                                    'id' => 'operator_licences',
+                                    'label' => 'internal-navigation-operator-licences',
+                                    'route' => 'operator/licences',
+                                    'use_route_match' => true,
+                                ),
+                                array(
+                                    'id' => 'operator_applications',
+                                    'label' => 'internal-navigation-operator-applications',
+                                    'route' => 'operator/applications',
                                     'use_route_match' => true,
                                 ),
                                 array(

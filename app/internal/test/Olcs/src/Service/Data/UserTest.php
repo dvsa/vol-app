@@ -35,7 +35,8 @@ class UserTest extends AbstractDataServiceTestCase
         $results = ['results' => 'results'];
         $params = [
             'sort' => 'loginId',
-            'order' => 'ASC'
+            'order' => 'ASC',
+            'isInternal' => true
         ];
         $team = 99;
         $dto = Qry::create($params);
@@ -45,6 +46,7 @@ class UserTest extends AbstractDataServiceTestCase
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
                     $this->assertEquals($team, $dto->getTeam());
+                    $this->assertEquals(true, $dto->getIsInternal());
                     return 'query';
                 }
             )
@@ -64,7 +66,7 @@ class UserTest extends AbstractDataServiceTestCase
         $sut->setTeam($team);
         $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
 
-        $this->assertEquals($results['results'], $sut->fetchUserListData([]));
+        $this->assertEquals($results['results'], $sut->fetchUserListData(['isInternal' => true]));
     }
 
     /**

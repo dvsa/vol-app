@@ -29,7 +29,8 @@ class TaskAssignment
      * @Form\Options({
      *     "label": "tasks.data.owner",
      *     "service_name": "Olcs\Service\Data\User",
-     *     "empty_option": "Unassigned"
+     *     "empty_option": "Unassigned",
+     *     "context": {"isInternal": "true"}
      * })
      * @Form\Type("DynamicSelect")
      */

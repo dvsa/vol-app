@@ -5,6 +5,12 @@ return array(
         'title' => 'Applications'
     ),
     'settings' => array(
+        'paginate' => array(
+            'limit' => array(
+                'default' => 25,
+                'options' => array(10, 25, 50)
+            )
+        ),
     ),
     'columns' => array(
         array(
