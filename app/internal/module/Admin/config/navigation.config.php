@@ -54,7 +54,7 @@ return [
                 [
                     'id' => 'admin-dashboard/admin-financial-standing',
                     'label' => 'Financial standing rates',
-                    'route' => 'admin-dashboard/admin-financial-standing'
+                    'route' => 'admin-dashboard/admin-financial-standing',
                 ],
                 [
                     'label' => 'Public holidays',
@@ -90,6 +90,9 @@ return [
                             'label' => 'admin-generate-continuations-title',
                             'route' => 'admin-dashboard/admin-continuation',
                             'pages' => [
+                                //  #TODO       POSSIBLE BUG OR NEVER USED
+                                //  route is require additional parameter :ID at the end,
+                                //  so basically route is wrong and it will not work
                                 [
                                     'label' => 'admin-generate-continuation-details-title',
                                     'route' => 'admin-dashboard/admin-continuation/detail'
@@ -99,8 +102,8 @@ return [
                         [
                             'label' => 'admin-continuations-checklist-reminders-title',
                             'route' => 'admin-dashboard/admin-continuation/checklist-reminder',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 // @NOTE Duplicate of the above but with a slightly different structure, to allow the user to click
                 // back to the generate page
@@ -153,6 +156,9 @@ return [
                             'label' => 'Miscellaneous fees',
                             'route' => 'admin-dashboard/admin-payment-processing/misc-fees',
                             'pages' => [
+                                //  #TODO       POSSIBLE BUG OR NEVER USED
+                                //  route of both items require additional parameter at the end,
+                                //  so basically both route is wrong and they will not work
                                 [
                                     'id' => 'admin-dashboard/admin-payment-processing/misc-fees/details',
                                     'label' => 'Fee details',
@@ -223,7 +229,7 @@ return [
                 [
                     'id' => 'admin-dashboard/admin-manage-system-parameters',
                     'label' => 'System parameters',
-                    'route' => 'admin-dashboard/admin-system-parameters'
+                    'route' => 'admin-dashboard/admin-system-parameters',
                 ],
                 [
                     'label' => 'Task allocation rules',
