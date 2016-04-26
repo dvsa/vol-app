@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class UserRegistration
 {
     /**
-     * @Form\Options({"label":"Username"})
+     * @Form\Options({"label":"Username", "hint": "user-registration.field.username.hint"})
      * @Form\Required(true)
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
      * @Form\Type("Text")
