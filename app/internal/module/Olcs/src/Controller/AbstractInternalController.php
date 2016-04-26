@@ -705,10 +705,7 @@ abstract class AbstractInternalController extends AbstractActionController
      *
      * @param ParameterProviderInterface $paramProvider
      * @param $command
-     * @param bool|true $displayApiSuccess
-     * @param bool|true $displayApiErrors
      * @param string $successMessage
-     * @param string $errorMessage
      * @return array|mixed
      */
     final protected function processCommand(
