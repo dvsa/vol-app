@@ -112,4 +112,37 @@ class LicenceProcessingNoteController extends AbstractInternalController impleme
     protected $inlineScripts = [
         'indexAction' => ['forms/filter', 'table-actions']
     ];
+
+    protected function alterTable($table, $data)
+    {
+        $this->updateTableActionWithQuery($table);
+        return $table;
+    }
+
+    protected function alterFormForAdd($form, $data)
+    {
+        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
+        return $form;
+    }
+
+    protected function alterFormForEdit($form, $data)
+    {
+        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
+        return $form;
+    }
+
+    /**
+     * Update table action with query
+     *
+     * @param Table $table
+     */
+    protected function updateTableActionWithQuery($table)
+    {
+        $query = $this->getRequest()->getUri()->getQuery();
+        $action = $table->getVariable('action');
+        if ($query) {
+            $action .= '?' . $query;
+            $table->setVariable('action', $action);
+        }
+    }
 }

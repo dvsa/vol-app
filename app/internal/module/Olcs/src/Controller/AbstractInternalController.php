@@ -820,10 +820,11 @@ abstract class AbstractInternalController extends AbstractActionController
 
         $routeParams = ArrayUtils::merge($defaults, $extraConfig);
 
+        $options = array_merge(['code' => '303'], ['query' => $this->getRequest()->getQuery()->toArray()]);
         return $this->redirect()->toRouteAjax(
             $routeParams['route'],
             $routeParams['params'],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
+            $options,
             $routeParams['reUseParams']
         );
     }
