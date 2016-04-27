@@ -55,9 +55,13 @@ class AbstractHistoryController extends AbstractInternalController implements Le
     public function alterFormForEdit($form, $formData)
     {
         $this->placeholder()->setPlaceholder('readOnlyData', $formData['readOnlyData']);
-        $form->get('event-history-details')->get('table')->get('table')->setTable(
-            $this->getDetailsTable($formData['eventHistoryDetails'])
-        );
+        if (is_array($formData['eventHistoryDetails']) && count($formData['eventHistoryDetails'])) {
+            $form->get('event-history-details')->get('table')->get('table')->setTable(
+                $this->getDetailsTable($formData['eventHistoryDetails'])
+            );
+        } else {
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'event-history-details->table');
+        }
         return $form;
 
     }
