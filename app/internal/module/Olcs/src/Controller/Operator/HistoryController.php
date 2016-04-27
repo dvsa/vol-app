@@ -5,6 +5,11 @@
  */
 namespace Olcs\Controller\Operator;
 
+use Dvsa\Olcs\Transfer\Query\EventHistory\EventHistory as ItemDto;
+use Olcs\Form\Model\Form\EventHistory as EventHistorytForm;
+use Olcs\Data\Mapper\EventHistory as Mapper;
+use Zend\View\Model\ViewModel;
+
 /**
  * History Controller
  */
@@ -109,5 +114,54 @@ class HistoryController extends OperatorController
         }
 
         return $default;
+    }
+
+    /**
+     * Edit action
+     */
+    public function editAction()
+    {
+        $response = $this->handleQuery(ItemDto::create(['id' => $this->params('id')]));
+
+        if (!$response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('Unknown error');
+            return $this->redirect()->toRouteAjax('operator/processing/history', ['action' => 'index'], [], true);
+        }
+        $form = $this->getEventHistoryDetailsForm(Mapper::mapFromResult($response->getResult()));
+        $this->placeholder()->setPlaceholder('form', $form);
+        return $this->viewBuilder()->buildViewFromTemplate('sections/processing/pages/event-history-popup');
+    }
+
+    /**
+     * Get event history details form
+     *
+     * @param array $data
+     * @return Form
+     */
+    protected function getEventHistoryDetailsForm($data)
+    {
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createForm(EventHistorytForm::class);
+        $form->setData($data);
+
+        $this->placeholder()->setPlaceholder('readOnlyData', $data['readOnlyData']);
+        $form->get('event-history-details')->get('table')->get('table')->setTable(
+            $this->getDetailsTable($data['eventHistoryDetails'])
+        );
+
+        return $form;
+    }
+
+    /**
+     * Get event details table
+     *
+     * @param array $details
+     * @return Table
+     */
+    protected function getDetailsTable($details)
+    {
+        return $this->getServiceLocator()
+            ->get('Table')
+            ->prepareTable('event-history-details', $details);
     }
 }

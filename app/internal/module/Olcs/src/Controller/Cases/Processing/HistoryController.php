@@ -1,44 +1,22 @@
 <?php
 /**
- * History Controller
+ * Application History Controller
+ *
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 namespace Olcs\Controller\Cases\Processing;
 
-use Dvsa\Olcs\Transfer\Query\Processing\History;
-use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Common\Controller\Traits as CommonTraits;
-use Zend\Mvc\MvcEvent as MvcEvent;
+use Olcs\Controller\AbstractHistoryController;
 
 /**
- * History Controller
+ * Application History Controller
+ *
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class HistoryController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
+class HistoryController extends AbstractHistoryController implements CaseControllerInterface
 {
-    /**
-     * Holds the navigation ID,
-     * required when an entire controller is
-     * represented by a single navigation id.
-     */
+    protected $itemParams = ['case', 'id' => 'id'];
     protected $navigationId = 'case_processing_history';
-
-    /**
-     * Holds an array of variables for the
-     * default index list page.
-     */
     protected $listVars = ['case'];
-    protected $defaultTableSortField = 'eventDatetime';
-    protected $tableName = 'event-history';
-    protected $listDto = History::class;
-
-    public function getLeftView()
-    {
-        $view = new ViewModel();
-        $view->setTemplate('sections/cases/partials/left');
-
-        return $view;
-    }
 }

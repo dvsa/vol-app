@@ -606,6 +606,9 @@ abstract class AbstractInternalController extends AbstractActionController
             $paramProvider->setParams($this->plugin('params'));
             $itemParams = $paramProvider->provideParameters();
             $response = $this->handleQuery($itemDto::create($itemParams));
+            echo '<pre>';
+            print_r($response);
+            die();
 
             if ($response->isNotFound()) {
                 return $this->notFoundAction();

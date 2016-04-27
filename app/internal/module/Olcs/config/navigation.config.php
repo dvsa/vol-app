@@ -315,7 +315,7 @@ $nav = array(
                             'id' => 'case_processing_history',
                             'label' => 'internal-crud-event-history',
                             'route' => 'processing_history',
-                            'action' => 'redirect',
+                            'action' => 'index',
                             'use_route_match' => true,
                         ),
                         array(
@@ -488,6 +488,9 @@ $nav = array(
                                             'label' => 'internal-crud-event-history',
                                             'route' => 'licence/bus-processing/event-history',
                                             'use_route_match' => true,
+                                            'params' => [
+                                                'action' => null,
+                                            ],
                                         ),
                                         array(
                                             'id' => 'licence_bus_processing_event-history',
