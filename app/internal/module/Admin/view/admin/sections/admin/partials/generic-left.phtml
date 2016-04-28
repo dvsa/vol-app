@@ -6,6 +6,6 @@ if (isset($navigation)): ?>
 <?php
 endif;
 
-echo $this->navigation('navigation')
-    ->menu($navigation)
+echo $this->navigation($navigation)
+    ->menu()
     ->setPartial('partials/vertical-navigation');

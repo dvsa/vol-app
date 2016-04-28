@@ -90,14 +90,11 @@ return [
                             'label' => 'admin-generate-continuations-title',
                             'route' => 'admin-dashboard/admin-continuation',
                             'pages' => [
-                                //  #TODO       POSSIBLE BUG OR NEVER USED
-                                //  route is require additional parameter :ID at the end,
-                                //  so basically route is wrong and it will not work
                                 [
                                     'label' => 'admin-generate-continuation-details-title',
-                                    'route' => 'admin-dashboard/admin-continuation/detail'
-                                ]
-                            ]
+                                    'route' => 'admin-dashboard/admin-continuation/detail',
+                                ],
+                            ],
                         ],
                         [
                             'label' => 'admin-continuations-checklist-reminders-title',
@@ -156,9 +153,6 @@ return [
                             'label' => 'Miscellaneous fees',
                             'route' => 'admin-dashboard/admin-payment-processing/misc-fees',
                             'pages' => [
-                                //  #TODO       POSSIBLE BUG OR NEVER USED
-                                //  route of both items require additional parameter at the end,
-                                //  so basically both route is wrong and they will not work
                                 [
                                     'id' => 'admin-dashboard/admin-payment-processing/misc-fees/details',
                                     'label' => 'Fee details',

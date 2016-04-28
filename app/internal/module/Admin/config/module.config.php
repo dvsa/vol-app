@@ -1,7 +1,5 @@
 <?php
 
-use Admin\Controller;
-
 return [
     'router' => [
         'routes' => [
@@ -10,7 +8,7 @@ return [
                 'options' => [
                     'route' => '/admin[/]',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
+                        'controller' => Admin\Controller\IndexController::class,
                         'action' => 'index',
                     ]
                 ],
@@ -19,7 +17,7 @@ return [
                     'task-allocation-rules' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => 
+                            'route' =>
                                 'task-allocation-rules[/:action][/:id][/alpha-split/:alpha-split][/team/:team][/]',
                             'constraints' => [
                                 'action' => '(add|edit|delete|AddAlphasplit|EditAlphasplit|DeleteAlphasplit)',
@@ -291,7 +289,7 @@ return [
                                 'rule' => '[0-9]+',
                             ],
                             'defaults' => [
-                                'controller' => Controller\TeamController::class,
+                                'controller' => Admin\Controller\TeamController::class,
                                 'action' => 'index'
                             ],
                         ]
@@ -508,7 +506,7 @@ return [
     ],
     'controllers' => [
         'invokables' => [
-            Controller\IndexController::class => Admin\Controller\IndexController::class,
+            Admin\Controller\IndexController::class => Admin\Controller\IndexController::class,
             'Admin\PrintingController' => 'Admin\Controller\PrintingController',
             'Admin\IrfoStockControlController' => 'Admin\Controller\IrfoStockControlController',
             'Admin\IrfoPsvAuthContinuationController' => 'Admin\Controller\IrfoPsvAuthContinuationController',
@@ -529,7 +527,7 @@ return [
             'Admin\CompaniesHouseAlertController' => 'Admin\Controller\CompaniesHouseAlertController',
             'Admin\FinancialStandingRateController' => 'Admin\Controller\FinancialStandingRateController',
             'Admin\CpmsReportController' => 'Admin\Controller\CpmsReportController',
-            Controller\TeamController::class => \Admin\Controller\TeamController::class,
+            Admin\Controller\TeamController::class => \Admin\Controller\TeamController::class,
             'Admin\SystemParametersController' => \Admin\Controller\SystemParametersController::class,
             'Admin\TaskAllocationRulesController' => \Admin\Controller\TaskAllocationRulesController::class,
             'Admin\PiReportController' => 'Admin\Controller\PiReportController',
