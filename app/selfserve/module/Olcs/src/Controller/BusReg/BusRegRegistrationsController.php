@@ -30,9 +30,9 @@ class BusRegRegistrationsController extends AbstractController
         $userData = $this->currentUser()->getUserData();
 
         $params = [
-            'organisationName'  => $this->params()->fromQuery('organisationName'),
-            'status'            => $this->params()->fromQuery('status'),
-            'licNo'             => $this->params()->fromQuery('licNo'),
+            'organisationId'    => $this->params()->fromQuery('organisationId', null),
+            'busRegStatus'      => $this->params()->fromQuery('busRegStatus', null),
+            'licId'             => $this->params()->fromQuery('licId', null),
             'page'              => $this->params()->fromQuery('page', 1),
             'order'             => $this->params()->fromQuery('order', 'ASC'),
             'limit'             => $this->params()->fromQuery('limit', 25),
@@ -40,13 +40,8 @@ class BusRegRegistrationsController extends AbstractController
 
         $params['sort'] = $this->params()->fromQuery('sort', 'licNo, routeNo');
 
-        if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
-            $params['organisationName'] = null;
-        } else {
-            $params['organisationName'] = $userData['organisation']['name'];
-        }
-
         $query = ListDto::create($params);
+
         // set query params for pagination
         $params['query'] = $params;
 
@@ -126,10 +121,10 @@ class BusRegRegistrationsController extends AbstractController
     {
         $params = $this->params()->fromQuery();
 
-        $params['organisationName'] = empty($data['fields']['organisationName']) ?
-            null : $data['fields']['organisationName'];
-        $params['status'] = empty($data['fields']['status']) ? null : $data['fields']['status'];
-        $params['licNo'] = empty($data['fields']['licNo']) ? null : $data['fields']['licNo'];
+        $params['organisationId'] = empty($data['fields']['organisationId']) ?
+            null : $data['fields']['organisationId'];
+        $params['busRegStatus'] = empty($data['fields']['busRegStatus']) ? null : $data['fields']['busRegStatus'];
+        $params['licId'] = empty($data['fields']['licId']) ? null : $data['fields']['licId'];
 
         // initialise search results to page 1
         $params['page'] = 1;
@@ -182,18 +177,18 @@ class BusRegRegistrationsController extends AbstractController
 
         if ($this->currentUser()->getUserData()['userType'] !== User::USER_TYPE_LOCAL_AUTHORITY) {
             // remove Organisation name filter for organisations
-            $filterForm->get('fields')->remove('organisationName');
+            $filterForm->get('fields')->remove('organisationId');
         } else {
             // removed licence no filter for LAs
-            $filterForm->get('fields')->remove('licNo');
+            $filterForm->get('fields')->remove('licId');
         }
 
         $filterForm->setData(
             [
                 'fields' => [
-                    'organisationName' => $params['organisationName'],
-                    'licNo' => $params['licNo'],
-                    'status' => $params['status']
+                    'organisationId' => $params['organisationId'],
+                    'licId' => $params['licId'],
+                    'busRegStatus' => $params['busRegStatus']
                 ]
             ]
         );

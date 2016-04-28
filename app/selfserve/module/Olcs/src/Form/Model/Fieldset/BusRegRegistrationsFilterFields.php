@@ -21,12 +21,12 @@ class BusRegRegistrationsFilterFields
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select an organisation",
      *     "service_name": "Common\Service\Data\BusRegSearchViewListDataService",
-     *     "category": "organisationName"
+     *     "category": "organisation"
      * })
-     * @Form\Attributes({"id":"sub_type","placeholder":""})
+     * @Form\Attributes({"id":"organisation","placeholder":""})
      * @Form\Type("DynamicSelect")
      */
-    public $organisationName;
+    public $organisationId;
 
     /**
      * @Form\Required(false)
@@ -35,13 +35,13 @@ class BusRegRegistrationsFilterFields
      *     "empty_option": "All",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select status",
-     *     "service_name": "Common\Service\Data\RefData",
-     *     "category": "bus_reg_status"
+     *     "service_name": "Common\Service\Data\BusRegSearchViewListDataService",
+     *     "category": "busRegStatus"
      * })
-     * @Form\Attributes({"id":"status","placeholder":""})
+     * @Form\Attributes({"id":"busRegStatus","placeholder":""})
      * @Form\Type("DynamicSelect")
      */
-    public $status;
+    public $busRegStatus;
 
     /**
      * @Form\Required(false)
@@ -50,10 +50,10 @@ class BusRegRegistrationsFilterFields
      *     "empty_option": "All",
      *     "disable_inarray_validator": false,
      *     "service_name": "Common\Service\Data\BusRegSearchViewListDataService",
-     *     "category": "licNo"
+     *     "category": "licence"
      * })
-     * @Form\Attributes({"id":"status","placeholder":""})
+     * @Form\Attributes({"id":"licId","placeholder":""})
      * @Form\Type("DynamicSelect")
      */
-    public $licNo;
+    public $licId;
 }
