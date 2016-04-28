@@ -27,8 +27,7 @@ class Module
 
     public function getConfig()
     {
-        $base = include __DIR__ . '/config/module.config.php';
-        return $base;
+        return include __DIR__ . '/config/module.config.php';
     }
 
     public function getAutoloaderConfig()
