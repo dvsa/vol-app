@@ -369,16 +369,13 @@ return array(
         )
     ),
     'view_helpers' => array(
-        'invokables' => array(
-            'addressFormat' => 'Olcs\View\Helper\Address',
-            'pageTitle' => 'Olcs\View\Helper\PageTitle',
-            'pageSubtitle' => 'Olcs\View\Helper\PageSubtitle',
-            'tableFilters' => 'Olcs\View\Helper\TableFilters',
-            'piListData' => 'Olcs\View\Helper\PiListData',
-            'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
-            'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
-            'submissionSectionOverview' => 'Olcs\View\Helper\SubmissionSectionOverview',
-        ),
+        'invokables' => [
+            'addressFormat' => Olcs\View\Helper\Address::class,
+            'piListData' => Olcs\View\Helper\PiListData::class,
+            'formSubmissionSections' => Olcs\Form\View\Helper\SubmissionSections::class,
+            'submissionSectionDetails' => Olcs\View\Helper\SubmissionSectionDetails::class,
+            'submissionSectionOverview' => Olcs\View\Helper\SubmissionSectionOverview::class,
+        ],
         'delegators' => array(
             'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
         ),
