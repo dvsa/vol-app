@@ -368,30 +368,27 @@ return array(
             'ViewJsonStrategy'
         )
     ),
-    'view_helpers' => array(
-        'invokables' => array(
-            'addressFormat' => 'Olcs\View\Helper\Address',
-            'pageTitle' => 'Olcs\View\Helper\PageTitle',
-            'pageSubtitle' => 'Olcs\View\Helper\PageSubtitle',
-            'tableFilters' => 'Olcs\View\Helper\TableFilters',
-            'piListData' => 'Olcs\View\Helper\PiListData',
-            'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
-            'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
-            'submissionSectionOverview' => 'Olcs\View\Helper\SubmissionSectionOverview',
-        ),
-        'delegators' => array(
-            'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
-        ),
-        'factories' => array(
-            'SubmissionSectionTable' => 'Olcs\View\Helper\SubmissionSectionTableFactory',
-            'SubmissionSectionMultipleTables' => 'Olcs\View\Helper\SubmissionSectionMultipleTablesFactory',
-            'Olcs\View\Helper\SlaIndicator' => 'Olcs\View\Helper\SlaIndicator',
+    'view_helpers' => [
+        'invokables' => [
+            'addressFormat' => Olcs\View\Helper\Address::class,
+            'piListData' => Olcs\View\Helper\PiListData::class,
+            'formSubmissionSections' => Olcs\Form\View\Helper\SubmissionSections::class,
+            'submissionSectionDetails' => Olcs\View\Helper\SubmissionSectionDetails::class,
+            'submissionSectionOverview' => Olcs\View\Helper\SubmissionSectionOverview::class,
+        ],
+        'delegators' => [
+            'formElement' => [Olcs\Form\View\Helper\FormElementDelegatorFactory::class],
+        ],
+        'factories' => [
+            'SubmissionSectionTable' => Olcs\View\Helper\SubmissionSectionTableFactory::class,
+            'SubmissionSectionMultipleTables' => Olcs\View\Helper\SubmissionSectionMultipleTablesFactory::class,
+            'Olcs\View\Helper\SlaIndicator' => Olcs\View\Helper\SlaIndicator::class,
             'showMarkers' => Olcs\View\Helper\MarkersFactory::class,
-        ),
+        ],
         'aliases' => [
-            'slaIndicator' => 'Olcs\View\Helper\SlaIndicator'
-        ]
-    ),
+            'slaIndicator' => 'Olcs\View\Helper\SlaIndicator',
+        ],
+    ],
     'local_forms_path' => array(
         __DIR__ . '/../src/Form/Forms/'
     ),
