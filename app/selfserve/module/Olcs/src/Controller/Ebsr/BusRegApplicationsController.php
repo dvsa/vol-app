@@ -13,9 +13,9 @@ use Zend\View\Model\ViewModel;
 use Common\Rbac\User;
 
 /**
- * Class BusRegistrationController
+ * Class BusRegApplicationsController
  */
-class BusRegistrationController extends AbstractController
+class BusRegApplicationsController extends AbstractController
 {
     /**
      * Lists all EBSR's with filter search form
@@ -96,7 +96,8 @@ class BusRegistrationController extends AbstractController
                 'pageHeaderText' => $pageHeaderText,
                 'searchForm' => $filterForm,
                 'pageHeaderUrl' => $pageHeaderUrl,
-                'showNav' => false
+                'showNav' => false,
+                'tabs' => $this->generateTabs()
             ]
         );
 
@@ -111,7 +112,7 @@ class BusRegistrationController extends AbstractController
 
         return $layout;
     }
-    
+
     /**
      * Generates one of two tables depending on user logged in.
      * LAs get the txc-inbox table to match the results returned. Operators get the ebsr-submissions table.
@@ -331,7 +332,7 @@ class BusRegistrationController extends AbstractController
      */
     public function getFilterForm($params)
     {
-        $filterForm = $this->getServiceLocator()->get('Helper\Form')->createForm('BusRegFilterForm');
+        $filterForm = $this->getServiceLocator()->get('Helper\Form')->createForm('BusRegApplicationsFilterForm');
 
         $filterForm->setData(
             [
@@ -343,5 +344,35 @@ class BusRegistrationController extends AbstractController
         );
 
         return $filterForm;
+    }
+
+    /**
+     * Privagte method to generate the tabs config array. Only operators and LAs can see the tabs. This *should* never
+     * be executed by any other user type because of RBAC.
+     *
+     * @return array
+     */
+    private function generateTabs()
+    {
+        if (in_array(
+            $this->currentUser()->getUserData()['userType'],
+            [
+                User::USER_TYPE_LOCAL_AUTHORITY,
+                User::USER_TYPE_OPERATOR
+            ]
+        )) {
+            return [
+                0 => [
+                    'label' => 'busreg-tab-title-registrations',
+                    'route' => 'busreg-registrations'
+                ],
+                1 => [
+                    'label' => 'busreg-tab-title-applications',
+                    'route' => 'bus-registration',
+                    'active' => true
+                ]
+            ];
+        }
+        return [];
     }
 }

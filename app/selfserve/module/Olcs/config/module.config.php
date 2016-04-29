@@ -155,13 +155,24 @@ $routes = array(
             )
         )
     ),
+    'busreg-registrations' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' =>
+                '/busreg-registrations[/]',
+            'defaults' => array(
+                'controller' => 'Olcs\BusReg\BusRegRegistrations',
+                'action' => 'index',
+            )
+        )
+    ),
     'bus-registration' => array(
         'type' => 'segment',
         'options' =>  array(
             'route' =>
                 '/bus-registration[/]',
             'defaults' => array(
-                'controller' => 'Olcs\Ebsr\BusRegistration',
+                'controller' => 'Olcs\Ebsr\BusRegApplications',
                 'action' => 'index',
             )
         ),
@@ -905,7 +916,8 @@ return array(
         'invokables' => array(
             'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
-            'Olcs\Ebsr\BusRegistration' => 'Olcs\Controller\Ebsr\BusRegistrationController',
+            'Olcs\Ebsr\BusRegApplications' => 'Olcs\Controller\Ebsr\BusRegApplicationsController',
+            'Olcs\BusReg\BusRegRegistrations' => 'Olcs\Controller\BusReg\BusRegRegistrationsController',
             'Dashboard' => Olcs\Controller\DashboardController::class,
             'Fees' => 'Olcs\Controller\FeesController',
             'Correspondence' => 'Olcs\Controller\CorrespondenceController',
@@ -1164,6 +1176,7 @@ return array(
 
                 // bus reg list accessible by operators and LAs
                 'bus-registration' => ['selfserve-ebsr-list'],
+                'busreg-registrations' => ['selfserve-ebsr-list'],
 
                 // details page accessible by everyone inc anon. users
                 'bus-registration/details' => ['*'],
