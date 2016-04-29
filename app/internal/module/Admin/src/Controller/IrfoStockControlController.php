@@ -7,12 +7,14 @@ namespace Admin\Controller;
 
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPermitStock as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPermitStock as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPermitStockIssued as IssuedDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPermitStockList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\IrfoStockControl as Mapper;
 use Admin\Form\Model\Form\IrfoStockControl as Form;
 use Admin\Form\Model\Form\IrfoStockControlFilter as FilterForm;
+use Admin\Form\Model\Form\IrfoStockControlIssued as IssuedForm;
 use Common\RefData;
 use Zend\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
@@ -147,7 +149,35 @@ class IrfoStockControlController extends AbstractInternalController implements L
 
     public function issuedAction()
     {
-        return $this->update(RefData::IRFO_STOCK_CONTROL_STATUS_ISSUED);
+        $request = $this->getRequest();
+
+        $form = $this->getForm(IssuedForm::class);
+
+        if ($request->isPost()) {
+            $dataFromPost = (array) $this->params()->fromPost();
+            $form->setData($dataFromPost);
+        }
+
+        if ($request->isPost() && $form->isValid()) {
+            $response = $this->handleCommand(
+                IssuedDto::create(
+                    [
+                        'ids' => explode(',', $this->params()->fromRoute('id')),
+                        'irfoGvPermit' => $form->getData()['fields']['irfoGvPermitId']
+                    ]
+                )
+            );
+
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Update successful');
+                return $this->redirectTo($response->getResult());
+            } else {
+                $this->handleErrors($response->getResult());
+            }
+        }
+
+        $this->placeholder()->setPlaceholder('form', $form);
+        return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
     }
 
     public function voidAction()

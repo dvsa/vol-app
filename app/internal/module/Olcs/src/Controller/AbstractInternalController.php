@@ -675,7 +675,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * @param array $restResponse
      * @return void
      */
-    private function handleErrors(array $restResponse)
+    public function handleErrors(array $restResponse)
     {
         $errors = [];
 
