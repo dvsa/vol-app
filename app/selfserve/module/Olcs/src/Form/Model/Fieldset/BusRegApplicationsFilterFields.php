@@ -11,7 +11,7 @@ use Zend\Form\Annotation as Form;
  *     "label": "Filters"
  * })
  */
-class BusRegFilterFields
+class BusRegApplicationsFilterFields
 {
     /**
      * @Form\Required(false)

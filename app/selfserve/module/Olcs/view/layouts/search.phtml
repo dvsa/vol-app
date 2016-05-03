@@ -7,12 +7,12 @@
             'pageHeaderText'=> isset($this->pageHeaderText) ? $this->translate($this->pageHeaderText) : '',
             'pageHeaderUrl'=> isset($this->pageHeaderUrl) ? $this->pageHeaderUrl : '',
             'showNav' => isset($this->showNav) && $this->showNav === false ? false : true,
+            'tabs' => isset($this->tabs) && !empty($this->tabs) ? $this->tabs : []
         )
     );
 ?>
 
 <div class="row">
-    
     <div class="one-quarter sidebar--plain">
         <?php
             $this->searchForm->prepare();

@@ -17,7 +17,13 @@
       <?php endif; ?>
   
       <h1><?php echo $this->pageTitle; ?></h1>
-  
+
+      <?php
+      if (isset($this->tabs)) {
+          echo $this->partial('partials/tabs');
+      }
+      ?>
+
       <?php if (isset($this->pageHeaderText) && $this->pageHeaderText != '') { ?>
         <div class="page-header__text">
             <p><?php echo $this->pageHeaderText; ?></p>
