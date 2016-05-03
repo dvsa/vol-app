@@ -64,10 +64,10 @@ class DocumentUploadController extends AbstractDocumentController
         $files = $files['details'];
 
         if (!isset($files['file']) || $files['file']['error'] !== UPLOAD_ERR_OK) {
-            // @TODO this needs to be handled better; by the time we get here we
-            // should *know* that our files are valid
-            $this->addErrorMessage('Sorry; there was a problem uploading the file. Please try again.');
-            return $this->redirectToDocumentRoute($type, 'upload', $routeParams);
+            // add validation error message to element, with reason upload errored
+            $form->get('details')->get('file')->setMessages(['message.file-upload-error.' . $files['file']['error']]);
+
+            return;
         }
 
         $data = array_merge(

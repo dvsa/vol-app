@@ -11,9 +11,4 @@ use Zend\Form\Form;
  */
 class LicenceOperatingCentres extends AbstractOperatingCentres
 {
-    protected function allowChangingTrafficArea($trafficAreaId)
-    {
-        // Traffic area can be changed as long as its not Northern Irelend
-        return ($trafficAreaId !== RefData::NORTHERN_IRELAND_TRAFFIC_AREA_CODE);
-    }
 }

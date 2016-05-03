@@ -133,7 +133,7 @@ class ContinuationController extends AbstractController
 
         $title = $translationHelper->translateReplace(
             'admin-continuations-list-title',
-            [$period, $data['trafficArea']['name']]
+            [$period, $data['name']]
         );
 
         $table = $tableHelper->prepareTable('admin-continuations', $tableData);
@@ -219,7 +219,7 @@ class ContinuationController extends AbstractController
         $response = $this->handleQuery(GetListQry::create($filters));
         if ($response->isOk()) {
             $result = $response->getResult();
-            $header = $response->getResult()['extra']['header'];
+            $header = $response->getResult()['header'];
         }
         if ($response->isServerError() || $response->isClientError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
