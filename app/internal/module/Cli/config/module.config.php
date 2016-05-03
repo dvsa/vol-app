@@ -22,6 +22,15 @@ return [
                         ],
                     ],
                 ],
+                'create-translation-csv' => [
+                    'options' => [
+                        'route' => 'create-translation-csv <source> <destination>',
+                        'defaults' => [
+                            'controller' => 'DevUtilsController',
+                            'action' => 'createTranslationCsv'
+                        ],
+                    ],
+                ],
             ]
         ]
     ],
@@ -33,6 +42,7 @@ return [
         'invokables' => [
             'BatchController' => 'Cli\Controller\BatchController',
             'QueueController' => 'Cli\Controller\QueueController',
+            'DevUtilsController' => 'Cli\Controller\DevUtilsController',
         ]
     ],
     'service_manager' => [
