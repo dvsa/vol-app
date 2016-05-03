@@ -30,6 +30,7 @@ return [
             'enqueue-ch-compare' => ['*'],
             'not-found' => ['*'],
             'server-error' => ['*'],
+            'create-translation-csv' => ['*'],
 
             // Admin Module Routes
             'admin-dashboard/admin-financial-standing*' => [RefData::PERMISSION_INTERNAL_ADMIN],
