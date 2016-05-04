@@ -40,9 +40,13 @@ class RenderMarkers extends AbstractHelper
      */
     public function __invoke(array $showMarkers = [])
     {
+        $markers = $this->getMarkerService()->getMarkers();
+        if (empty($markers)) {
+            return false;
+        }
         $html = '';
         $html .= '<div class="notice-container">';
-        foreach ($this->getMarkerService()->getMarkers() as $marker) {
+        foreach ($markers as $marker) {
             if (empty($showMarkers) || in_array(get_class($marker), $showMarkers)) {
                 $html .= $marker->render();
             }

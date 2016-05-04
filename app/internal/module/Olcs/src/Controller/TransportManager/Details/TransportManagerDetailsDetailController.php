@@ -96,7 +96,7 @@ class TransportManagerDetailsDetailController extends AbstractInternalController
                 $this->mapperClass,
                 $this->editViewTemplate,
                 'internal-transport-manager-updated',
-                'Transport manager details'
+                'Details'
             );
         } else {
             $this->placeholder()->setPlaceholder('pageTitle', 'internal-transport-manager-new-transport-manager');
