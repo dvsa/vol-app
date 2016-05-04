@@ -51,9 +51,9 @@ class IrfoPsvAuthFormActions
     public $approve = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"generateDocument"})
+     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"generate"})
      * @Form\Options({
-     *     "label": "Generate Document",
+     *     "label": "Generate",
      *     "label_attributes": {
      *         "class": "col-sm-2"
      *     },
@@ -61,7 +61,7 @@ class IrfoPsvAuthFormActions
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
-    public $generateDocument = null;
+    public $generate = null;
 
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cns"})
