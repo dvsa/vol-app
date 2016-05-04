@@ -39,7 +39,6 @@ class OverviewController extends AbstractController implements LicenceController
 
         // if unlicensed, redirect to unlicensed operator page
         if ($licence['status']['id'] == RefData::LICENCE_STATUS_UNLICENSED) {
-            $this->addInfoMessage('internal-operator-unlicensed-redirect');
             return $this->redirect()->toRoute(
                 'operator-unlicensed',
                 ['organisation' => $licence['organisation']['id']]
@@ -54,11 +53,10 @@ class OverviewController extends AbstractController implements LicenceController
             RefData::LICENCE_STATUS_REFUSED
         ];
         if (in_array($licence['status']['id'], $statusesForRedirect)) {
-            if (count($licence['applications']) > 0) {
+            if ($licence['firstApplicationId']) {
                 return $this->redirect()->toRoute(
                     'lva-application',
-                    // we should have only 1 application for a licence
-                    ['application' => $licence['applications'][0]['id']]
+                    ['application' => $licence['firstApplicationId']]
                 );
             }
         }
@@ -98,20 +96,6 @@ class OverviewController extends AbstractController implements LicenceController
 
         return $this->render($content);
     }
-
-
-    /**
-     * @NOTE I don't think this is used anymore, I am going to comment it out for a little while and see if anything
-     * breaks
-     * @todo Remove this code if nothing has broken around creating variations
-    public function createVariationAction()
-    {
-        $varId = $this->getServiceLocator()->get('Entity\Application')
-            ->createVariation($this->getIdentifier());
-
-        return $this->redirect()->toRouteAjax('lva-variation', ['application' => $varId]);
-    }
-     */
 
     protected function getOverviewData($licenceId)
     {

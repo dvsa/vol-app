@@ -143,9 +143,13 @@ abstract class AbstractDocumentController extends AbstractController
         }
 
         if ($ajax) {
-            return $this->redirect()->toRouteAjax($route, $routeParams);
+            return $this->redirect()->toRouteAjax(
+                $route, $routeParams, ['query' => $this->getRequest()->getQuery()->toArray()]
+            );
         }
-        return $this->redirect()->toRoute($route, $routeParams);
+        return $this->redirect()->toRoute(
+            $route, $routeParams, ['query' => $this->getRequest()->getQuery()->toArray()]
+        );
     }
 
     /**

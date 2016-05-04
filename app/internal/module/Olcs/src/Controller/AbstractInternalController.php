@@ -675,7 +675,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * @param array $restResponse
      * @return void
      */
-    private function handleErrors(array $restResponse)
+    public function handleErrors(array $restResponse)
     {
         $errors = [];
 
@@ -705,10 +705,7 @@ abstract class AbstractInternalController extends AbstractActionController
      *
      * @param ParameterProviderInterface $paramProvider
      * @param $command
-     * @param bool|true $displayApiSuccess
-     * @param bool|true $displayApiErrors
      * @param string $successMessage
-     * @param string $errorMessage
      * @return array|mixed
      */
     final protected function processCommand(

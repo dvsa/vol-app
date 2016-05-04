@@ -8,17 +8,18 @@
  * global file where the order can be controlled and easily debugged.
  *
  */
+use Common\RefData;
+
 return [
     'guards' => [
         'ZfcRbac\Guard\RoutePermissionsGuard' =>[
-
             // OLCS Module Routes
-            '*processing/notes*' => ['internal-notes'],
-            '*case*' => ['internal-case'],
-            '*documents*' => ['internal-documents'],
-            '*docs*' => ['internal-documents'],
-            'fetch_tmp_document' => ['internal-documents'],
-            'note' => ['internal-notes'],
+            '*processing/notes*' => [RefData::PERMISSION_INTERNAL_NOTES],
+            '*case*' => [RefData::PERMISSION_INTERNAL_CASE],
+            '*documents*' => [RefData::PERMISSION_INTERNAL_DOCUMENTS],
+            '*docs*' => [RefData::PERMISSION_INTERNAL_DOCUMENTS],
+            'fetch_tmp_document' => [RefData::PERMISSION_INTERNAL_DOCUMENTS],
+            'note' => [RefData::PERMISSION_INTERNAL_NOTES],
 
             // CLI module Routes
             'batch-licence-status' => ['*'],
@@ -29,29 +30,33 @@ return [
             'enqueue-ch-compare' => ['*'],
             'not-found' => ['*'],
             'server-error' => ['*'],
+            'create-translation-csv' => ['*'],
 
             // Admin Module Routes
-            'admin-dashboard/admin-financial-standing*' => ['internal-admin'],
-            'admin-dashboard/admin-system-message*' => ['internal-admin'],
-            'admin-dashboard/admin-public-holiday*' => ['internal-admin'],
-            'admin-dashboard/admin-team-management*' => ['internal-admin'],
-            'admin-dashboard/admin-partner-management*' => ['internal-admin'],
-            'admin-dashboard/admin-printer-management*' => ['internal-admin'],
-            'admin-dashboard/admin-user-management*' => ['can-manage-user-internal'],
-            'admin-dashboard/admin-system-parameters*' => ['internal-admin'],
+            'admin-dashboard/admin-financial-standing*' => [RefData::PERMISSION_INTERNAL_ADMIN],
+            'admin-dashboard/admin-system-message*' => [RefData::PERMISSION_INTERNAL_ADMIN],
+            'admin-dashboard/admin-public-holiday*' => [RefData::PERMISSION_INTERNAL_ADMIN],
+            'admin-dashboard/admin-team-management*' => [RefData::PERMISSION_INTERNAL_ADMIN],
+            'admin-dashboard/admin-partner-management*' => [RefData::PERMISSION_INTERNAL_ADMIN],
+            'admin-dashboard/admin-printer-management*' => [ RefData::PERMISSION_INTERNAL_ADMIN],
+            'admin-dashboard/admin-user-management*' => [RefData::PERMISSION_CAN_MANAGE_USER_INTERNAL],
+            'admin-dashboard/admin-system-parameters*' => [RefData::PERMISSION_INTERNAL_ADMIN],
+            'admin-dashboard/task-allocation-rules*' => [RefData::PERMISSION_INTERNAL_ADMIN],
 
             // All Internal users can see my account, to change their details, password etc
             'admin-dashboard/admin-my-account*' => [
-                'internal-view'
+                RefData::PERMISSION_INTERNAL_VIEW,
             ],
 
             // Other admin pages require mininmum internal-edit permission
             'admin-dashboard*' => [
-                'internal-edit',
+                RefData::PERMISSION_INTERNAL_EDIT,
             ],
 
             // Global route rule needs to be last
-            '*' => ['internal-view'],
+            '*' => [
+                RefData::PERMISSION_INTERNAL_VIEW,
+            ],
         ]
     ]
 ];

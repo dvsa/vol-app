@@ -47,7 +47,9 @@ trait DocumentActionTrait
                     'identifier' => base64_encode($data['identifier'])
                 ];
 
-                $currentUrl = $this->url()->fromRoute(null, [], [], true);
+                $currentUrl = $this->url()->fromRoute(
+                    null, [], ['query' => $this->getRequest()->getQuery()->toArray()], true
+                );
                 $documentUrl = $this->url()->fromRoute('getfile', $docParams, ['query' => ['inline' => 1]]);
 
                 $fragment = base64_encode($currentUrl . '|' . $documentUrl);
@@ -63,7 +65,9 @@ trait DocumentActionTrait
                 $params = array_merge($params, [$this->documentIdentifierName => implode(',', $ids)]);
             }
             $route  = $this->getDocumentRoute() . '/' . $action;
-            return $this->redirect()->toRoute($route, $params);
+            return $this->redirect()->toRoute(
+                $route, $params, ['query' => $this->getRequest()->getQuery()->toArray()]
+            );
         }
 
         $view = $this->getDocumentView();
@@ -94,7 +98,10 @@ trait DocumentActionTrait
         $this->handleCommand(DeleteDocuments::create(['ids' => $ids]));
 
         $this->addSuccessMessage('internal.documents.delete.deleted_successfully');
-
-        return $this->redirect()->toRouteAjax($this->getDocumentRoute(), $this->getDocumentRouteParams());
+        return $this->redirect()->toRouteAjax(
+            $this->getDocumentRoute(),
+            $this->getDocumentRouteParams(),
+            ['query' => $this->getRequest()->getQuery()->toArray()]
+        );
     }
 }

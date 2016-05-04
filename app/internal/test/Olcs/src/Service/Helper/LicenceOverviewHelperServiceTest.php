@@ -54,7 +54,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                 ->andReturn('GRACE_PERIOD_URL')
                 ->shouldReceive('fromRoute')
                 ->with(
-                    'operator/licences-applications',
+                    'operator/applications',
                     [
                         'organisation' => 72
                     ]

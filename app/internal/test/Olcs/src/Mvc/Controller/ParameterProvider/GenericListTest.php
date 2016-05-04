@@ -21,7 +21,10 @@ class GenericListTest extends TestCase
             'sort' => 'test',
             'order' => 'DESC',
             'limit' => 50,
-            'id' => 75
+            'id' => 75,
+            'otherOption' => 'other',
+            'startDate' => '2016-4-1',
+            'endDate' => '2016-4-30',
         ];
 
         $mockParams = m::mock(Params::class);
@@ -30,7 +33,14 @@ class GenericListTest extends TestCase
         $mockParams->shouldReceive('fromQuery')->with('order')->andReturn(null);
         $mockParams->shouldReceive('fromQuery')->with('limit')->andReturn(50);
 
-        $mockParams->shouldReceive('fromQuery')->with()->andReturn([]);
+        $mockParams->shouldReceive('fromQuery')->with()->andReturn(
+            [
+                'emptyOption' => '',
+                'otherOption' => 'other',
+                'startDate' => ['day' => 1, 'month' => 4, 'year' => 2016],
+                'endDate' => ['day' => 30, 'month' => 4, 'year' => 2016],
+            ]
+        );
 
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn(null);
         $mockParams->shouldReceive('fromRoute')->with('application')->andReturn(75);

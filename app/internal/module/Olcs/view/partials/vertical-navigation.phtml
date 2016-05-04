@@ -1,8 +1,18 @@
 <ul class="vertical-navigation" role="menu">
-    <?php foreach ($this->container as $key => $page) : ?>
-        <?php if($page->isVisible(true)): ?>
-            <li class="vertical-navigation__item <?php echo $page->isActive(true) ? 'current' : ''; ?>">
-                <?php if (!$page->isActive(true)) : ?>
+    <?php
+    /** @var \Zend\Navigation\Page\AbstractPage $page */
+    foreach ($this->container as $page) : ?>
+        <?php
+        if (! $this->navigation()->accept($page)) {
+            continue;
+        }
+
+        $isActive = $page->isActive(true);
+        $isVisible = $page->isVisible(true);
+        ?>
+        <?php if($isVisible): ?>
+            <li class="vertical-navigation__item <?php echo $isActive ? 'current' : ''; ?>">
+                <?php if (!$isActive) : ?>
                     <?php echo $this->navigation()->menu()->htmlify($page); ?>
                 <?php else: ?>
                     <span><?php echo $this->translate($page->getLabel()); ?></span>

@@ -1659,13 +1659,23 @@ $routes = [
                     ]
                 ]
             ],
-            'licences-applications' => [
+            'licences' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => 'licences-applications[/]',
+                    'route' => 'licences[/]',
                     'defaults' => [
                         'controller' => 'OperatorLicencesApplicationsController',
-                        'action' => 'index',
+                        'action' => 'licences',
+                    ]
+                ]
+            ],
+            'applications' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'applications[/]',
+                    'defaults' => [
+                        'controller' => 'OperatorLicencesApplicationsController',
+                        'action' => 'applications',
                     ]
                 ]
             ],
@@ -1707,7 +1717,7 @@ $routes = [
                         'options' => [
                             'route' => 'gv-permits[/:action][/:id][/]',
                             'constraints' => [
-                                'action' => '(add|details|reset|approve|withdraw|refuse)',
+                                'action' => '(add|details|reset|approve|generate|withdraw|refuse)',
                                 'id' => '[0-9]+'
                             ],
                             'defaults' => [

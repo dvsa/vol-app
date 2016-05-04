@@ -29,15 +29,9 @@ class Module implements ConsoleUsageProviderInterface
     public function getConsoleUsage(ConsoleAdapterInterface $console)
     {
         return array(
-            // Describe available commands
-            'batch-licence-status [--verbose|-v]' => 'Process licence status change rules',
-            'inspection-request-email [--verbose|-v]' => 'Process inspection request emails',
-            'process-inbox [--verbose|-v]' => 'Process inbox documents',
-            // Describe parameters
-            array( '--verbose|-v', '(optional) turn on verbose mode'),
-
-            'process-queue' => 'Process the queue',
-            array( '--type|-t', '(optional) queue message type to process'),
+            'create-translation-csv' => 'Create a translation CSV to be used for getting Welsh translations',
+            array( '<source>', 'Source file containing a list of translation keys'),
+            array( '<destination>', 'CSV file to be generated'),
         );
     }
 

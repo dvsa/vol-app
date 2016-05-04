@@ -65,7 +65,7 @@ class FinancialStandingRate
      *      "label_attributes": {"id": "label-firstVehicleRate"}
      * })
      * @Form\Type("Text")
-     * @Form\Validator({"name": "Common\Form\Elements\Validators\Money"})
+     * @Form\Validator({"name": "Dvsa\Olcs\Transfer\Validators\Money"})
      */
     public $firstVehicleRate = null;
 
@@ -78,7 +78,7 @@ class FinancialStandingRate
      *      "label_attributes": {"id": "label-additionalVehicleRate"}
      * })
      * @Form\Type("Text")
-     * @Form\Validator({"name": "Common\Form\Elements\Validators\Money"})
+     * @Form\Validator({"name": "Dvsa\Olcs\Transfer\Validators\Money"})
      */
     public $additionalVehicleRate = null;
 

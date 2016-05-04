@@ -369,16 +369,13 @@ return array(
         )
     ),
     'view_helpers' => array(
-        'invokables' => array(
-            'addressFormat' => 'Olcs\View\Helper\Address',
-            'pageTitle' => 'Olcs\View\Helper\PageTitle',
-            'pageSubtitle' => 'Olcs\View\Helper\PageSubtitle',
-            'tableFilters' => 'Olcs\View\Helper\TableFilters',
-            'piListData' => 'Olcs\View\Helper\PiListData',
-            'formSubmissionSections' => 'Olcs\Form\View\Helper\SubmissionSections',
-            'submissionSectionDetails' => 'Olcs\View\Helper\SubmissionSectionDetails',
-            'submissionSectionOverview' => 'Olcs\View\Helper\SubmissionSectionOverview',
-        ),
+        'invokables' => [
+            'addressFormat' => Olcs\View\Helper\Address::class,
+            'piListData' => Olcs\View\Helper\PiListData::class,
+            'formSubmissionSections' => Olcs\Form\View\Helper\SubmissionSections::class,
+            'submissionSectionDetails' => Olcs\View\Helper\SubmissionSectionDetails::class,
+            'submissionSectionOverview' => Olcs\View\Helper\SubmissionSectionOverview::class,
+        ],
         'delegators' => array(
             'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
         ),
@@ -650,6 +647,8 @@ return array(
         'invokables' => [
             // Operating Centres
             'lva-application-operating_centres' => LvaFormService\OperatingCentres\ApplicationOperatingCentres::class,
+            'lva-licence-operating_centres' => LvaFormService\OperatingCentres\LicenceOperatingCentres::class,
+            'lva-variation-operating_centres' => LvaFormService\OperatingCentres\VariationOperatingCentres::class,
             // Operating Centre
             'lva-application-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
             'lva-licence-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,

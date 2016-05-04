@@ -76,14 +76,16 @@ class ReportController extends ZendAbstractActionController implements LeftViewP
                     ]
                 );
 
+                $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
                 $response = $this->handleCommand($command);
                 if ($response->isOk()) {
-                    $this->getFlashMessenger()->addSuccessMessage('Mass Export Queued.');
+                    $flashMessenger->addSuccessMessage('Mass Export Queued.');
 
                     return $this->redirectToRouteAjax(
                         'admin-dashboard/admin-report/cpid-class'
                     );
                 }
+                $flashMessenger->addSuccessMessage('Unknown error');
             }
         }
 

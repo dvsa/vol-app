@@ -202,11 +202,11 @@ trait ListDataTrait
      * @param int $teamId Option team to filter by
      * @param string $firstOption @see getListDataOptions
      *
-     * @return array
+     * @return array of User login ID's
      */
     public function getListDataUser($teamId = null, $firstOption = false)
     {
-        $params =             [
+        $params = [
             'order' => 'ASC',
             'sort' => 'loginId',
         ];
@@ -219,6 +219,43 @@ trait ListDataTrait
         $dto = \Dvsa\Olcs\Transfer\Query\User\UserList::create($params);
 
         return $this->getListDataOptions($dto, 'id', 'loginId', $firstOption);
+    }
+
+    /**
+     * Get a list of Enforcement areas for a traffic area
+     *
+     * @param string $trafficArea
+     * @param string $firstOption @see getListDataOptions
+     *
+     * @return array of enforcement areas eg ['21' => 'Nottingham', etc]
+     */
+    public function getListDataEnforcementArea($trafficArea, $firstOption = false)
+    {
+        $params = [
+            'id' => $trafficArea,
+        ];
+
+        $dto = \Dvsa\Olcs\Transfer\Query\TrafficArea\Get::create($params);
+        $response = $this->handleQuery($dto);
+
+        if (!$response->isOK()) {
+            // something went wrong, assume its a temporary error, as these list lookups should never fail
+            return [];
+        }
+
+        $options = [];
+        if (is_string($firstOption)) {
+            $options[''] = $firstOption;
+        }
+
+        // iterate through to create an array of options
+        foreach ($response->getResult()['trafficAreaEnforcementAreas'] as $item) {
+            $key = $item['enforcementArea']['id'];
+            $value = $item['enforcementArea']['name'];
+            $options[$key] = $value;
+        }
+
+        return $options;
     }
 
     /**
@@ -241,6 +278,9 @@ trait ListDataTrait
 
         $options = [];
         // Do we need to add a default first option
+        if (is_array($firstOption)) {
+            $options = $firstOption;
+        }
         if (is_string($firstOption)) {
             $options[''] = $firstOption;
         }

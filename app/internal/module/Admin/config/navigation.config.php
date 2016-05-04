@@ -16,7 +16,7 @@ return [
                 [
                     'id'    => 'admin-dashboard/admin-user-management',
                     'label' => 'User management',
-                    'route' => 'admin-dashboard/admin-user-management',
+                    'route' => 'admin-dashboard/admin-team-management',
                     'pages' => [
                         [
                             'id' => 'admin-dashboard/admin-team-management',
@@ -54,7 +54,7 @@ return [
                 [
                     'id' => 'admin-dashboard/admin-financial-standing',
                     'label' => 'Financial standing rates',
-                    'route' => 'admin-dashboard/admin-financial-standing'
+                    'route' => 'admin-dashboard/admin-financial-standing',
                 ],
                 [
                     'label' => 'Public holidays',
@@ -92,15 +92,15 @@ return [
                             'pages' => [
                                 [
                                     'label' => 'admin-generate-continuation-details-title',
-                                    'route' => 'admin-dashboard/admin-continuation/detail'
-                                ]
-                            ]
+                                    'route' => 'admin-dashboard/admin-continuation/detail',
+                                ],
+                            ],
                         ],
                         [
                             'label' => 'admin-continuations-checklist-reminders-title',
                             'route' => 'admin-dashboard/admin-continuation/checklist-reminder',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 // @NOTE Duplicate of the above but with a slightly different structure, to allow the user to click
                 // back to the generate page
@@ -213,12 +213,22 @@ return [
                             'label' => 'Exported reports',
                             'route' => 'admin-dashboard/admin-report/exported-reports',
                         ],
+                        [
+                            'id' => 'admin-dashboard/admin-report/pi',
+                            'label' => 'Public Inquiry listings',
+                            'route' => 'admin-dashboard/admin-report/pi',
+                        ],
                     ],
                 ],
                 [
                     'id' => 'admin-dashboard/admin-manage-system-parameters',
                     'label' => 'System parameters',
-                    'route' => 'admin-dashboard/admin-system-parameters'
+                    'route' => 'admin-dashboard/admin-system-parameters',
+                ],
+                [
+                    'label' => 'Task allocation rules',
+                    'id' => 'admin-dashboard/task-allocation-rules',
+                    'route' => 'admin-dashboard/task-allocation-rules',
                 ],
             ]
         ]

@@ -13,29 +13,16 @@ use Zend\Form\Annotation as Form;
 class NewApplication
 {
     /**
-     * @Form\Attributes({"id":"receivedDate"})
-     * @Form\Options({
-     *     "label": "Application received",
-     *     "create_empty_option": true,
-     *     "render_delimiters": false
-     * })
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
-     * @Form\Type("DateSelect")
+     * @Form\Name("details")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\NewApplicationDetails")
      */
-    public $receivedDate = null;
+    public $details = null;
 
     /**
-     * @Form\Attributes({"id":"trafficArea","placeholder":""})
-     * @Form\Options({
-     *     "label": "Traffic area",
-     *     "disable_inarray_validator": false,
-     * })
-     * @Form\Type("Select")
+     * @Form\Name("type-of-licence")
+     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\TypeOfLicence")
      */
-    public $trafficArea = null;
+    public $typeOfLicence = null;
 
     /**
      * @Form\Type("Radio")

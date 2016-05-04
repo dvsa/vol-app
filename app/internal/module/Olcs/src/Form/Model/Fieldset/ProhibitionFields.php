@@ -31,7 +31,7 @@ class ProhibitionFields extends Base
      * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Common\Filter\Vrm"})
-     * @Form\Validator({"name":"Common\Form\Elements\Validators\Vrm"})
+     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Vrm"})
      */
     public $vrm = null;
 

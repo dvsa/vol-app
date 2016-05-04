@@ -161,7 +161,6 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
             // Trigger the transportManager now - it won't trigger twice.
             $e->getTarget()->trigger('transportManager', $case['transportManager']['id']);
         } else {
-            $this->getNavigationService()->findOneById('case_details_serious_infringement')->setVisible(false);
             $this->getNavigationService()->findOneById('case_processing_decisions')->setVisible(false);
         }
     }
