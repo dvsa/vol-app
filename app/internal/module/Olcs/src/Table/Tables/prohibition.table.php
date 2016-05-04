@@ -2,12 +2,13 @@
 
 return array(
     'variables' => array(
-        'title' => 'Prohibitions'
+        'title' => 'Prohibitions',
+        'empty_message' => 'There are no prohibitions'
     ),
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'primary'),
+                'add' => array('class' => 'primary', 'label' => 'Add prohibition'),
                 'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
                 'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )

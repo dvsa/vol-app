@@ -151,7 +151,7 @@ $nav = array(
                         ),
                         array(
                             'id' => 'case_details_conditions_undertakings',
-                            'label' => 'Conditions & Undertakings',
+                            'label' => 'Conditions & undertakings',
                             'route' => 'case_conditions_undertakings',
                             'action' => 'index',
                             'use_route_match' => true,

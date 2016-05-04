@@ -1,7 +1,8 @@
 <?php
 return array(
     'variables' => array(
-        'title' => 'Legacy offences'
+        'title' => 'Legacy offences',
+        'empty_message' => 'There are no legacy offences'
     ),
     'settings' => array(
         'crud' => array(

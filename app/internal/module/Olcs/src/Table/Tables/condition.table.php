@@ -2,13 +2,14 @@
 
 return array(
     'variables' => array(
-        'title' => 'Conditions & Undertakings'
+        'title' => 'Conditions & undertakings',
+        'empty_message' => 'There are no conditions or undertakings'
     ),
     'settings' => array(
         'crud' => array(
             'formName' => 'conditions',
             'actions' => array(
-                'add' => array('class' => 'primary'),
+                'add' => array('class' => 'primary', 'label' => 'Add condition or undertaking'),
                 'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
                 'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )

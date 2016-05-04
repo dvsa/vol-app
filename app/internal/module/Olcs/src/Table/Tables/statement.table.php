@@ -2,12 +2,13 @@
 
 return array(
     'variables' => array(
-        'title' => 'Statements'
+        'title' => 'Statements',
+        'empty_message' => 'There are no statements'
     ),
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'primary'),
+                'add' => array('class' => 'primary', 'label' => 'Add statement'),
                 'edit' => array('class' => 'secondary js-require--one', 'requireRows' => true),
                 'generate' => array(
                     'requireRows' => true,

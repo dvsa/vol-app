@@ -38,7 +38,7 @@ class AnnualTestHistoryController extends AbstractInternalController implements
     protected $updateCommand = UpdateAnnualTestHistoryCommand::class;
     protected $mapperClass = AnnualTestHistoryMapper::class;
     protected $formClass = AnnualTestHistoryForm::class;
-    protected $editContentTitle = 'Edit Annual Test History';
+    protected $editContentTitle = 'Annual test history';
 
     public function getLeftView()
     {
