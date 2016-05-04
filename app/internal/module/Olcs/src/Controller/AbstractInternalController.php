@@ -991,7 +991,7 @@ abstract class AbstractInternalController extends AbstractActionController
     {
         $query = $this->getRequest()->getUri()->getQuery();
         $action = $table->getVariable('action');
-        if ($query) {
+        if ($query && strpos('?', $action) === false) {
             $action .= '?' . $query;
             $table->setVariable('action', $action);
         }
