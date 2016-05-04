@@ -145,9 +145,14 @@ class HistoryController extends OperatorController
         $form->setData($data);
 
         $this->placeholder()->setPlaceholder('readOnlyData', $data['readOnlyData']);
-        $form->get('event-history-details')->get('table')->get('table')->setTable(
-            $this->getDetailsTable($data['eventHistoryDetails'])
-        );
+
+        if (is_array($data['eventHistoryDetails']) && count($data['eventHistoryDetails'])) {
+            $form->get('event-history-details')->get('table')->get('table')->setTable(
+                $this->getDetailsTable($data['eventHistoryDetails'])
+            );
+        } else {
+            $formHelper->remove($form, 'event-history-details->table');
+        }
 
         return $form;
     }
