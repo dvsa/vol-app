@@ -19,23 +19,21 @@ return array(
     ),
     'columns' => array(
         array(
+            'title' => 'Details',
+            'formatter' => 'EventHistoryDescription',
+        ),
+        array(
+            'title' => 'Info',
+            'name' => 'eventData',
+        ),
+        array(
             'title' => 'Date',
             'name' => 'eventDatetime',
             'formatter' => 'DateTime',
             'sort' => 'eventDatetime',
         ),
         array(
-            'title' => 'Description',
-            'formatter' => function ($row) {
-                return $row['eventHistoryType']['description'];
-            },
-        ),
-        array(
-            'title' => 'Data',
-            'name' => 'eventData',
-        ),
-        array(
-            'title' => 'User',
+            'title' => 'By',
             'formatter' => function ($row) {
                 return $row['user']['contactDetails']['person']['forename'] . ' '
                        . $row['user']['contactDetails']['person']['familyName'];
