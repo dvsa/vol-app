@@ -817,10 +817,11 @@ abstract class AbstractInternalController extends AbstractActionController
 
         $routeParams = ArrayUtils::merge($defaults, $extraConfig);
 
+        $options = array_merge(['code' => '303'], ['query' => $this->getRequest()->getQuery()->toArray()]);
         return $this->redirect()->toRouteAjax(
             $routeParams['route'],
             $routeParams['params'],
-            ['code' => '303'], // Why? No cache is set with a 303 :)
+            $options,
             $routeParams['reUseParams']
         );
     }
@@ -979,5 +980,20 @@ abstract class AbstractInternalController extends AbstractActionController
         }
 
         return $request->isPost() && isset($data['form-actions'][$button]);
+    }
+
+    /**
+     * Update table action with query
+     *
+     * @param Table $table
+     */
+    protected function updateTableActionWithQuery($table)
+    {
+        $query = $this->getRequest()->getUri()->getQuery();
+        $action = $table->getVariable('action');
+        if ($query && strpos('?', $action) === false) {
+            $action .= '?' . $query;
+            $table->setVariable('action', $action);
+        }
     }
 }

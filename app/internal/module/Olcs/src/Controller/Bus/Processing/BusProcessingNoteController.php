@@ -18,6 +18,7 @@ use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Data\Mapper\BusRegNotes as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Zend\View\Model\ViewModel;
+use Olcs\Controller\Traits\NotesProcessingTrait;
 
 /**
  * Note Controller
@@ -26,6 +27,8 @@ class BusProcessingNoteController extends AbstractInternalController implements
     BusRegControllerInterface,
     LeftViewProvider
 {
+    use NotesProcessingTrait;
+
     /**
      * Holds the navigation ID,
      * required when an entire controller is

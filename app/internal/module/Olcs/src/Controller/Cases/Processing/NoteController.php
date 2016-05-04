@@ -19,12 +19,15 @@ use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Data\Mapper\GenericFields as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Zend\View\Model\ViewModel;
+use Olcs\Controller\Traits\NotesProcessingTrait;
 
 /**
  * Note Controller
  */
 class NoteController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
+    use NotesProcessingTrait;
+
     /**
      * Holds the navigation ID,
      * required when an entire controller is

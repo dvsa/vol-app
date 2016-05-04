@@ -24,13 +24,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Created',
-            'formatter' => function ($data) {
-                $routeParams = ['action' => 'edit', 'id' => $data['id']];
-                $url = $this->generateUrl($routeParams, null, true);
-
-                return '<a class="js-modal-ajax" href="' . $url . '">'
-                . (new \DateTime($data['createdOn']))->format(\DATE_FORMAT) . '</a>';
-            },
+            'formatter' => 'NoteUrl',
             'sort' => 'createdOn'
         ),
         array(
