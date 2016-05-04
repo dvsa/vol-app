@@ -2,12 +2,13 @@
 
 return array(
     'variables' => array(
-        'title' => 'Complaints'
+        'title' => 'Complaints',
+        'empty_message' => 'There are no complaints'
     ),
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'primary'),
+                'add' => array('class' => 'primary', 'label' => 'Add complaint'),
                 'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
                 'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )

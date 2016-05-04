@@ -2,13 +2,14 @@
 
 return array(
     'variables' => array(
-        'title' => 'Convictions'
+        'title' => 'Convictions',
+        'empty_message' => 'There are no convicions'
     ),
     'settings' => array(
         'crud' => array(
             'formName' => 'conviction',
             'actions' => array(
-                'add' => array('class' => 'primary'),
+                'add' => array('class' => 'primary', 'label' => 'Add conviction'),
                 'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
                 /* 'dealt' => array('class' => 'secondary', 'requireRows' => true, 'label' => 'Mark as Dealt With'), */
                 'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
