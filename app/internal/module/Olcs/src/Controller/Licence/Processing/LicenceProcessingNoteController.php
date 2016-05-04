@@ -113,36 +113,42 @@ class LicenceProcessingNoteController extends AbstractInternalController impleme
         'indexAction' => ['forms/filter', 'table-actions']
     ];
 
+    /**
+     * Alter table
+     *
+     * @param \Olcs\Controller\Table $table
+     * @param array $data
+     * @return \Olcs\Controller\Table
+     */
     protected function alterTable($table, $data)
     {
         $this->updateTableActionWithQuery($table);
         return $table;
     }
 
+    /**
+     * Alter form for add
+     *
+     * @param Form $form
+     * @param array $data
+     * @return Form
+     */
     protected function alterFormForAdd($form, $data)
     {
         $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
         return $form;
     }
 
+    /**
+     * Alter form for edit
+     *
+     * @param Form $form
+     * @param array $data
+     * @return Form
+     */
     protected function alterFormForEdit($form, $data)
     {
         $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
         return $form;
-    }
-
-    /**
-     * Update table action with query
-     *
-     * @param Table $table
-     */
-    protected function updateTableActionWithQuery($table)
-    {
-        $query = $this->getRequest()->getUri()->getQuery();
-        $action = $table->getVariable('action');
-        if ($query) {
-            $action .= '?' . $query;
-            $table->setVariable('action', $action);
-        }
     }
 }

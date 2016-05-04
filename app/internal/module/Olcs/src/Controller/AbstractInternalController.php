@@ -984,4 +984,19 @@ abstract class AbstractInternalController extends AbstractActionController
 
         return $request->isPost() && isset($data['form-actions'][$button]);
     }
+
+    /**
+     * Update table action with query
+     *
+     * @param Table $table
+     */
+    protected function updateTableActionWithQuery($table)
+    {
+        $query = $this->getRequest()->getUri()->getQuery();
+        $action = $table->getVariable('action');
+        if ($query) {
+            $action .= '?' . $query;
+            $table->setVariable('action', $action);
+        }
+    }
 }
