@@ -18,6 +18,7 @@ use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Data\Mapper\BusRegNotes as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Zend\View\Model\ViewModel;
+use Olcs\Controller\Traits\NotesProcessingTrait;
 
 /**
  * Note Controller
@@ -26,6 +27,8 @@ class BusProcessingNoteController extends AbstractInternalController implements
     BusRegControllerInterface,
     LeftViewProvider
 {
+    use NotesProcessingTrait;
+
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -116,44 +119,5 @@ class BusProcessingNoteController extends AbstractInternalController implements
         $view->setTemplate('sections/bus/partials/left');
 
         return $view;
-    }
-
-    /**
-     * Alter table
-     *
-     * @param \Olcs\Controller\Table $table
-     * @param array $data
-     * @return \Olcs\Controller\Table
-     */
-    protected function alterTable($table, $data)
-    {
-        $this->updateTableActionWithQuery($table);
-        return $table;
-    }
-
-    /**
-     * Alter form for add
-     *
-     * @param Form $form
-     * @param array $data
-     * @return Form
-     */
-    protected function alterFormForAdd($form, $data)
-    {
-        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
-        return $form;
-    }
-
-    /**
-     * Alter form for edit
-     *
-     * @param Form $form
-     * @param array $data
-     * @return Form
-     */
-    protected function alterFormForEdit($form, $data)
-    {
-        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
-        return $form;
     }
 }
