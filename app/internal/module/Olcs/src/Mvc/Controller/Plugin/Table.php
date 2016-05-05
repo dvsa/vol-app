@@ -46,7 +46,7 @@ class Table extends AbstractPlugin
      * @param $tableName
      * @param $data
      * @param $params
-     * @return string
+     * @return string|TableBuilder
      */
     public function buildTable($tableName, $data, $params)
     {

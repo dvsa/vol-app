@@ -1,9 +1,12 @@
 <?php
-/**
- * History Controller
- */
+
 namespace Olcs\Controller;
 
+use Common\Data\Mapper\MapperInterface;
+use Common\Service\Cqrs\Response;
+use Common\Service\Table\TableBuilder;
+use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Olcs\Listener\CrudListener;
 use Olcs\Logging\Log\Logger;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
@@ -11,18 +14,13 @@ use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use Olcs\Mvc\Controller\ParameterProvider\ParameterProviderInterface;
+use Olcs\Mvc\Controller\Plugin;
+use Olcs\View\Builder\BuilderInterface as ViewBuilderInterface;
+use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\ArrayUtils;
 use Zend\View\Model\ViewModel;
-use Zend\Mvc\MvcEvent as MvcEvent;
-
-// for type hints
-use Olcs\View\Builder\BuilderInterface as ViewBuilderInterface;
-use Olcs\Mvc\Controller\Plugin;
-use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use Dvsa\Olcs\Transfer\Command\CommandInterface;
-use Common\Service\Cqrs\Response;
-use Zend\Http\Response as HttpResponse;
 
 /**
  * Abstract class to extend for BASIC list/edit/delete functions
@@ -85,7 +83,7 @@ abstract class AbstractInternalController extends AbstractActionController
     protected $defaultTableSortField = 'id';
     protected $defaultTableOrderField = 'DESC';
     protected $tableName = '';
-    protected $listDto = '';
+    protected $listDto;
     protected $listVars = [];
     protected $filterForm = '';
 
@@ -95,7 +93,7 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     protected $detailsViewTemplate = '';
     protected $detailsViewPlaceholderName = 'details';
-    protected $itemDto = '';
+    protected $itemDto;
     protected $itemParams = ['id'];
     protected $detailsContentTitle;
 
@@ -105,10 +103,11 @@ abstract class AbstractInternalController extends AbstractActionController
      * itemDto (see above) is also required.
      *
      * @var string $formClass This now represents the add or edit form, that is unless there's an $addFormClass
+     * @var  MapperInterface $mapperClass
      */
     protected $formClass = '';
-    protected $updateCommand = '';
-    protected $mapperClass = '';
+    protected $updateCommand;
+    protected $mapperClass;
 
     /**
      * Form class for add form. If this has a value, then this will be used, otherwise $formClass will be used.
@@ -129,7 +128,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * all these variables are required
      * itemDto (see above) is also required.
      */
-    protected $createCommand = '';
+    protected $createCommand;
 
     /**
      * Form data for the add form.
@@ -161,7 +160,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * Command is required, as are itemParams from above
      */
     protected $deleteParams = ['id'];
-    protected $deleteCommand = '';
+    protected $deleteCommand;
     protected $deleteModalTitle = 'Delete record';
     protected $deleteConfirmMessage = 'Are you sure you want to permanently delete the selected record(s)?';
     protected $deleteSuccessMessage = 'Record deleted';
@@ -172,7 +171,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * Command is required, as are itemParams from above
      */
     protected $closeParams = ['id'];
-    protected $closeCommand = '';
+    protected $closeCommand;
     protected $closeModalTitle = 'Close';
     protected $closeConfirmMessage = 'Are you sure you want to close the selected record(s)?';
     protected $closeSuccessMessage = 'Record closed';
@@ -183,7 +182,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * Command is required, as are itemParams from above
      */
     protected $reopenParams = ['id'];
-    protected $reopenCommand = '';
+    protected $reopenCommand;
     protected $reopenModalTitle = 'Reopen';
     protected $reopenConfirmMessage = 'Are you sure you want to reopen the selected record(s)?';
     protected $reopenSuccessMessage = 'Record reopened';
@@ -204,7 +203,7 @@ abstract class AbstractInternalController extends AbstractActionController
     protected $commentFormClass;
 
     /**
-     * @var string
+     * @var QueryInterface
      *
      * DTO to retrieve comment box data, likely to be case
      */
@@ -218,14 +217,14 @@ abstract class AbstractInternalController extends AbstractActionController
     protected $commentItemParams;
 
     /**
-     * @var string
+     * @var CommandInterface
      *
      * Comment box update command
      */
     protected $commentUpdateCommand;
 
     /**
-     * @var string
+     * @var MapperInterface
      *
      * Comment box mapper class
      */
@@ -267,7 +266,7 @@ abstract class AbstractInternalController extends AbstractActionController
 
     public function indexAction()
     {
-        if (!empty($this->commentItemDto)) {
+        if (null !== $this->commentItemDto) {
             $commentBox = $this->getCommentBox();
 
             if ($commentBox instanceof HttpResponse) {
@@ -367,7 +366,7 @@ abstract class AbstractInternalController extends AbstractActionController
     }
 
     final protected function index(
-        $listDto,
+        QueryInterface $listDto,
         ParameterProviderInterface $paramProvider,
         $tableViewPlaceholderName,
         $tableName,
@@ -419,7 +418,7 @@ abstract class AbstractInternalController extends AbstractActionController
     }
 
     final protected function details(
-        $itemDto,
+        QueryInterface $itemDto,
         ParameterProviderInterface $paramProvider,
         $detailsViewPlaceHolderName,
         $detailsViewTemplate,
@@ -470,17 +469,21 @@ abstract class AbstractInternalController extends AbstractActionController
      * 4. Map data into command
      * 5. Send command + handle result
      *
-     * @param $formClass
-     * @param $defaultData
-     * @param $createCommand
-     * @param $mapperClass
+     * @param                            $formClass
+     * @param ParameterProviderInterface $defaultDataProvider
+     * @param CommandInterface           $createCommand
+     * @param MapperInterface            $mapperClass
+     * @param string                     $editViewTemplate
+     * @param string                     $successMessage
+     * @param string|null                $contentTitle
+     *
      * @return mixed|ViewModel
      */
     final protected function add(
         $formClass,
         ParameterProviderInterface $defaultDataProvider,
-        $createCommand,
-        $mapperClass,
+        CommandInterface $createCommand,
+        MapperInterface $mapperClass,
         $editViewTemplate = 'pages/crud-form',
         $successMessage = 'Created record',
         $contentTitle = null
@@ -504,14 +507,17 @@ abstract class AbstractInternalController extends AbstractActionController
         $this->placeholder()->setPlaceholder('form', $form);
         $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
 
-        if ($this->getRequest()->isPost()) {
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
             $form->setData((array) $this->params()->fromPost());
         }
 
         $hasProcessed =
             $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
-        if (!$hasProcessed && $this->persist && $this->getRequest()->isPost() && $form->isValid()) {
+        if (!$hasProcessed && $this->persist && $request->isPost() && $form->isValid()) {
             $data = ArrayUtils::merge($initialData, $form->getData());
             $commandData = $mapperClass::mapFromForm($data);
             $response = $this->handleCommand($createCommand::create($commandData));
@@ -542,22 +548,24 @@ abstract class AbstractInternalController extends AbstractActionController
     }
 
     /**
-     * @param $formClass
-     * @param $itemDto
+     * @param                            $formClass
+     * @param QueryInterface             $itemDto
      * @param ParameterProviderInterface $paramProvider
-     * @param $updateCommand
-     * @param \Olcs\Data\Mapper\GenericFields $mapperClass
-     * @param string $editViewTemplate
-     * @param string $successMessage
+     * @param CommandInterface           $updateCommand
+     * @param MapperInterface  $mapperClass
+     * @param string                     $editViewTemplate
+     * @param string                     $successMessage
+     * @param null                       $contentTitle
+     *
      * @return array|ViewModel
      * @internal param $paramNames
      */
     final protected function edit(
         $formClass,
-        $itemDto,
+        QueryInterface $itemDto,
         ParameterProviderInterface $paramProvider,
-        $updateCommand,
-        $mapperClass,
+        CommandInterface $updateCommand,
+        MapperInterface $mapperClass,
         $editViewTemplate = 'pages/crud-form',
         $successMessage = 'Updated record',
         $contentTitle = null
@@ -565,6 +573,7 @@ abstract class AbstractInternalController extends AbstractActionController
         Logger::debug(__FILE__);
         Logger::debug(__METHOD__);
 
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
         $action = ucfirst($this->params()->fromRoute('action'));
         $form = $this->getForm($formClass);
@@ -635,7 +644,7 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     final protected function confirmCommand(
         ParameterProviderInterface $paramProvider,
-        $confirmCommand,
+        CommandInterface $confirmCommand,
         $modalTitle,
         $confirmMessage,
         $successMessage
@@ -704,13 +713,14 @@ abstract class AbstractInternalController extends AbstractActionController
      * Processes a command, and populates flash messages for the user
      *
      * @param ParameterProviderInterface $paramProvider
-     * @param $command
-     * @param string $successMessage
+     * @param CommandInterface           $command
+     * @param string                     $successMessage
+     *
      * @return array|mixed
      */
     final protected function processCommand(
         ParameterProviderInterface $paramProvider,
-        $command,
+        CommandInterface $command,
         $successMessage = 'Update successful'
     ) {
         Logger::debug(__FILE__);
@@ -741,7 +751,6 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     public function redirectConfig(array $restResponse)
     {
-
         $action = $this->params()->fromRoute('action', null);
         $action = strtolower($action);
 
@@ -888,6 +897,7 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     private function hasCancelledForm()
     {
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
 
         if (!$request->isPost()) {
@@ -954,10 +964,9 @@ abstract class AbstractInternalController extends AbstractActionController
      * Override in derived classes to alter table *presentation* based on the
      * list data
      *
-     * @param Table $table
+     * @param TableBuilder $table
      * @param array $data
-     * @return Table
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return TableBuilder
      */
     protected function alterTable($table, $data)
     {
@@ -973,6 +982,7 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     public function isButtonPressed($button, $data = null)
     {
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
 
         if (is_null($data)) {

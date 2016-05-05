@@ -226,6 +226,11 @@ return [
                     'route' => 'admin-dashboard/admin-system-parameters',
                 ],
                 [
+                    'id' => 'admin-dashboard/admin-system-info-message',
+                    'label' => 'System info messages',
+                    'route' => 'admin-dashboard/admin-system-info-message',
+                ],
+                [
                     'label' => 'Task allocation rules',
                     'id' => 'admin-dashboard/task-allocation-rules',
                     'route' => 'admin-dashboard/task-allocation-rules',
