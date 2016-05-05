@@ -7,6 +7,7 @@ namespace Olcs\Controller\Operator;
 
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPsvAuth as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPsvAuth as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\GenerateIrfoPsvAuth as GenerateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\GrantIrfoPsvAuth as GrantDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\ApproveIrfoPsvAuth as ApproveDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\RefuseIrfoPsvAuth as RefuseDto;
@@ -69,7 +70,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     protected $listDto = ListDto::class;
     protected $listVars = ['organisation'];
 
-    private $allActions = ['grant', 'approve', 'generateDocument', 'cns', 'withdraw', 'refuse', 'reset'];
+    private $allActions = ['grant', 'approve', 'generate', 'cns', 'withdraw', 'refuse', 'reset'];
 
     protected $crudConfig = [
         'reset' => ['requireRows' => true]
@@ -133,6 +134,8 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
             if ($this->isButtonPressed($action)) {
                 switch ($action)
                 {
+                    case 'generate':
+                        return GenerateDto::class;
                     case 'grant':
                         return GrantDto::class;
                     case 'approve':
@@ -262,6 +265,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     private function determineFormButton(ZendForm $form, $formData, $action)
     {
         $actionToFlag = [
+            'generate' => 'isGeneratable',
             'grant' => 'isGrantable',
             'approve' => 'isApprovable',
             'refuse' => 'isRefusable',
