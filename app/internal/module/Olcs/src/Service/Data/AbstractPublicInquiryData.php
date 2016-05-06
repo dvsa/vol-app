@@ -2,17 +2,20 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\AbstractData;
 use Common\Service\Data\ListDataInterface;
 use Common\Service\Data\LicenceServiceTrait;
 use Common\Service\Data\ApplicationServiceTrait;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Common\Service\Data\AbstractDataService;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Common\Service\Data\ListDataTrait;
+use Zend\ServiceManager\FactoryInterface;
 
 /**
  * Class PublicInquiryReason
  * @package Olcs\Service\Data
  */
-abstract class AbstractPublicInquiryData extends AbstractData implements ListDataInterface
+abstract class AbstractPublicInquiryData extends AbstractDataService implements ListDataInterface
 {
     use LicenceServiceTrait;
     use ApplicationServiceTrait;
@@ -91,14 +94,52 @@ abstract class AbstractPublicInquiryData extends AbstractData implements ListDat
     {
         if (is_null($this->getData('pid'))) {
 
-            $data = $this->getRestClient()->get('', $params);
-            $this->setData('pid', false);
-            if (isset($data['Results'])) {
-                $this->setData('pid', $data['Results']);
+            $result = $this->fetchListData($params);
+
+            if (isset($result['results'])) {
+                $this->setData('pid', $result['results']);
             }
+            return $this->getData('pid');
         }
 
+
         return $this->getData('pid');
+    }
+
+    /**
+     * Method to make the backend call to retrieve the PI data based on listDto set in the child class
+     *
+     * @param array $params
+     * @return array
+     * @throws UnexpectedResponseException
+     */
+    public function fetchListData(array $params)
+    {
+        if (isset($this->listDto)) {
+            $params = [
+                'sort' => $this->sort,
+                'order' => $this->order
+            ];
+            $listDto = $this->listDto;
+
+            $dtoData = $listDto::create($params);
+
+            $response = $this->handleQuery($dtoData);
+
+            if (!$response->isOk()) {
+                throw new UnexpectedResponseException('unknown-error');
+            }
+
+            return $response->getResult();
+        }
+
+        // old method
+        $result = $this->getRestClient()->get('', $params);
+
+        return [
+            'results' => $result['Results'],
+            'count' => $result['Count']
+        ];
     }
 
     /**

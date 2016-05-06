@@ -2,32 +2,23 @@
 
 namespace Olcs\Service\Data;
 
+use Common\Service\Data\ListDataInterface;
+use Zend\ServiceManager\FactoryInterface;
+use Common\Service\Data\LicenceServiceTrait;
+use Dvsa\Olcs\Transfer\Query\Reason\ReasonList as ReasonListDto;
+
 /**
  * Class PublicInquiryReason
  * @package Olcs\Service\Data
  */
-class SubmissionLegislation extends AbstractPublicInquiryData
+class SubmissionLegislation extends AbstractPublicInquiryData implements ListDataInterface, FactoryInterface
 {
+    protected $listDto = ReasonListDto::class;
+    protected $sort = 'id';
+    protected $order = 'ASC';
+
     /**
      * @var string
      */
     protected $serviceName = 'Reason';
-
-    public function formatData(array $data)
-    {
-        $optionData = [];
-
-        foreach ($data as $datum) {
-            $optionData[] =
-                [
-                    'label' => $datum['description'],
-                    'value' => $datum['id'],
-                    'attributes' => [
-                        'data-in-office-revokation' => $datum['isProposeToRevoke']
-                    ]
-            ];
-        }
-
-        return $optionData;
-    }
 }
