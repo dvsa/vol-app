@@ -103,7 +103,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * itemDto (see above) is also required.
      *
      * @var string $formClass This now represents the add or edit form, that is unless there's an $addFormClass
-     * @var  MapperInterface $mapperClass
+     * @var string|MapperInterface $mapperClass
      */
     protected $formClass = '';
     protected $updateCommand;
@@ -127,6 +127,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * Variables for controlling edit view rendering
      * all these variables are required
      * itemDto (see above) is also required.
+     * @var string|CommandInterface
      */
     protected $createCommand;
 
@@ -203,7 +204,7 @@ abstract class AbstractInternalController extends AbstractActionController
     protected $commentFormClass;
 
     /**
-     * @var QueryInterface
+     * @var string|QueryInterface
      *
      * DTO to retrieve comment box data, likely to be case
      */
@@ -217,14 +218,14 @@ abstract class AbstractInternalController extends AbstractActionController
     protected $commentItemParams;
 
     /**
-     * @var CommandInterface
+     * @var string|CommandInterface
      *
      * Comment box update command
      */
     protected $commentUpdateCommand;
 
     /**
-     * @var MapperInterface
+     * @var string|MapperInterface
      *
      * Comment box mapper class
      */
@@ -365,8 +366,18 @@ abstract class AbstractInternalController extends AbstractActionController
         );
     }
 
+    /**
+     * @param string|QueryInterface      $listDto
+     * @param ParameterProviderInterface $paramProvider
+     * @param string                     $tableViewPlaceholderName
+     * @param string                     $tableName
+     * @param string                     $tableViewTemplate
+     * @param string                     $filterForm
+     *
+     * @return array|ViewModel
+     */
     final protected function index(
-        QueryInterface $listDto,
+        $listDto,
         ParameterProviderInterface $paramProvider,
         $tableViewPlaceholderName,
         $tableName,
@@ -417,8 +428,17 @@ abstract class AbstractInternalController extends AbstractActionController
         return $this->viewBuilder()->buildViewFromTemplate($tableViewTemplate);
     }
 
+    /**
+     * @param string|QueryInterface      $itemDto
+     * @param ParameterProviderInterface $paramProvider
+     * @param string                     $detailsViewPlaceHolderName
+     * @param string                     $detailsViewTemplate
+     * @param string|null                $contentTitle
+     *
+     * @return array|ViewModel
+     */
     final protected function details(
-        QueryInterface $itemDto,
+        $itemDto,
         ParameterProviderInterface $paramProvider,
         $detailsViewPlaceHolderName,
         $detailsViewTemplate,
@@ -469,10 +489,10 @@ abstract class AbstractInternalController extends AbstractActionController
      * 4. Map data into command
      * 5. Send command + handle result
      *
-     * @param                            $formClass
+     * @param string                     $formClass
      * @param ParameterProviderInterface $defaultDataProvider
-     * @param CommandInterface           $createCommand
-     * @param MapperInterface|string     $mapperClass
+     * @param string|CommandInterface    $createCommand
+     * @param string|MapperInterface     $mapperClass
      * @param string                     $editViewTemplate
      * @param string                     $successMessage
      * @param string|null                $contentTitle
@@ -482,7 +502,7 @@ abstract class AbstractInternalController extends AbstractActionController
     final protected function add(
         $formClass,
         ParameterProviderInterface $defaultDataProvider,
-        CommandInterface $createCommand,
+        $createCommand,
         $mapperClass,
         $editViewTemplate = 'pages/crud-form',
         $successMessage = 'Created record',
@@ -548,11 +568,11 @@ abstract class AbstractInternalController extends AbstractActionController
     }
 
     /**
-     * @param                            $formClass
-     * @param QueryInterface             $itemDto
+     * @param string                     $formClass
+     * @param string|QueryInterface      $itemDto
      * @param ParameterProviderInterface $paramProvider
-     * @param CommandInterface           $updateCommand
-     * @param MapperInterface|string     $mapperClass
+     * @param string|CommandInterface    $updateCommand
+     * @param string|MapperInterface     $mapperClass
      * @param string                     $editViewTemplate
      * @param string                     $successMessage
      * @param null                       $contentTitle
@@ -562,9 +582,9 @@ abstract class AbstractInternalController extends AbstractActionController
      */
     final protected function edit(
         $formClass,
-        QueryInterface $itemDto,
+        $itemDto,
         ParameterProviderInterface $paramProvider,
-        CommandInterface $updateCommand,
+        $updateCommand,
         $mapperClass,
         $editViewTemplate = 'pages/crud-form',
         $successMessage = 'Updated record',
@@ -639,12 +659,20 @@ abstract class AbstractInternalController extends AbstractActionController
         return $this->viewBuilder()->buildViewFromTemplate($editViewTemplate);
     }
 
-    /*
+    /**
      * Handle single delete and multiple delete as well
+     *
+     * @param ParameterProviderInterface $paramProvider
+     * @param string|CommandInterface    $confirmCommand
+     * @param string                     $modalTitle
+     * @param string                     $confirmMessage
+     * @param string                     $successMessage
+     *
+     * @return array|mixed|ViewModel
      */
     final protected function confirmCommand(
         ParameterProviderInterface $paramProvider,
-        CommandInterface $confirmCommand,
+        $confirmCommand,
         $modalTitle,
         $confirmMessage,
         $successMessage
@@ -713,14 +741,14 @@ abstract class AbstractInternalController extends AbstractActionController
      * Processes a command, and populates flash messages for the user
      *
      * @param ParameterProviderInterface $paramProvider
-     * @param CommandInterface           $command
+     * @param string|CommandInterface    $command
      * @param string                     $successMessage
      *
      * @return array|mixed
      */
     final protected function processCommand(
         ParameterProviderInterface $paramProvider,
-        CommandInterface $command,
+        $command,
         $successMessage = 'Update successful'
     ) {
         Logger::debug(__FILE__);
@@ -995,7 +1023,7 @@ abstract class AbstractInternalController extends AbstractActionController
     /**
      * Update table action with query
      *
-     * @param Table $table
+     * @param TableBuilder $table
      */
     protected function updateTableActionWithQuery($table)
     {
