@@ -364,6 +364,19 @@ return [
                             ]
                         ]
                     ],
+                    'admin-system-info-message' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'system-info-message[/:action][/:msgId][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\SystemInfoMessageController::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
                     'admin-payment-processing' => [
                         'type' => 'segment',
                         'options' => [
@@ -529,6 +542,7 @@ return [
             'Admin\CpmsReportController' => 'Admin\Controller\CpmsReportController',
             Admin\Controller\TeamController::class => \Admin\Controller\TeamController::class,
             'Admin\SystemParametersController' => \Admin\Controller\SystemParametersController::class,
+            Admin\Controller\SystemInfoMessageController::class => Admin\Controller\SystemInfoMessageController::class,
             'Admin\TaskAllocationRulesController' => \Admin\Controller\TaskAllocationRulesController::class,
             'Admin\PiReportController' => 'Admin\Controller\PiReportController',
         ]
