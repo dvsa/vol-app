@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Query\Reason\ReasonList as ReasonListDto;
 class SubmissionLegislation extends AbstractPublicInquiryData implements ListDataInterface, FactoryInterface
 {
     protected $listDto = ReasonListDto::class;
-    protected $sort = 'id';
+    protected $sort = 'sectionCode';
     protected $order = 'ASC';
 
     /**

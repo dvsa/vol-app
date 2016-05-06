@@ -32,6 +32,7 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
      */
     public function fetchListOptions($context, $useGroups = false)
     {
+
         $context = empty($context) ?
             $this->getLicenceContext() : array_merge($context, $this->getLicenceContext());
 
@@ -53,25 +54,12 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
 
                         // use application's goodsOrPsv instead
                         $context['goodsOrPsv'] = $appContext['goodsOrPsv'];
-                        $context['isNi'] = $appContext['isNi'] === 'Y';
                     }
                 }
-            } else {
-                // @NOTE: we need booleans to filter properly...
-                $context['isNi'] = $context['isNi'] === 'Y';
             }
         } else {
             $context['goodsOrPsv'] = 'NULL';
         }
-
-        $context['bundle'] = json_encode([]);
-        $context['limit'] = 100;
-
-        /**
-         * @todo [OLCS-5306] check this, it appears to be an invalid order by
-        $context['order'] = 'sectionCode';
-         */
-        $context['sort'] = 'sectionCode';
 
         $data = $this->fetchPublicInquiryData($context);
 
@@ -115,31 +103,25 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
      */
     public function fetchListData(array $params)
     {
-        if (isset($this->listDto)) {
-            $params = [
+        $params = array_merge(
+            $params,
+            [
                 'sort' => $this->sort,
                 'order' => $this->order
-            ];
-            $listDto = $this->listDto;
+            ]
+        );
 
-            $dtoData = $listDto::create($params);
+        $listDto = $this->listDto;
 
-            $response = $this->handleQuery($dtoData);
+        $dtoData = $listDto::create($params);
 
-            if (!$response->isOk()) {
-                throw new UnexpectedResponseException('unknown-error');
-            }
+        $response = $this->handleQuery($dtoData);
 
-            return $response->getResult();
+        if (!$response->isOk()) {
+            throw new UnexpectedResponseException('unknown-error');
         }
 
-        // old method
-        $result = $this->getRestClient()->get('', $params);
-
-        return [
-            'results' => $result['Results'],
-            'count' => $result['Count']
-        ];
+        return $response->getResult();
     }
 
     /**
