@@ -472,7 +472,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * @param                            $formClass
      * @param ParameterProviderInterface $defaultDataProvider
      * @param CommandInterface           $createCommand
-     * @param MapperInterface            $mapperClass
+     * @param MapperInterface|string     $mapperClass
      * @param string                     $editViewTemplate
      * @param string                     $successMessage
      * @param string|null                $contentTitle
@@ -483,7 +483,7 @@ abstract class AbstractInternalController extends AbstractActionController
         $formClass,
         ParameterProviderInterface $defaultDataProvider,
         CommandInterface $createCommand,
-        MapperInterface $mapperClass,
+        $mapperClass,
         $editViewTemplate = 'pages/crud-form',
         $successMessage = 'Created record',
         $contentTitle = null
@@ -552,7 +552,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * @param QueryInterface             $itemDto
      * @param ParameterProviderInterface $paramProvider
      * @param CommandInterface           $updateCommand
-     * @param MapperInterface  $mapperClass
+     * @param MapperInterface|string     $mapperClass
      * @param string                     $editViewTemplate
      * @param string                     $successMessage
      * @param null                       $contentTitle
@@ -565,7 +565,7 @@ abstract class AbstractInternalController extends AbstractActionController
         QueryInterface $itemDto,
         ParameterProviderInterface $paramProvider,
         CommandInterface $updateCommand,
-        MapperInterface $mapperClass,
+        $mapperClass,
         $editViewTemplate = 'pages/crud-form',
         $successMessage = 'Updated record',
         $contentTitle = null
