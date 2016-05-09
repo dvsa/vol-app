@@ -78,10 +78,6 @@ return [
                     ]
                 ],
                 [
-                    'label' => 'System messages',
-                    'route' => 'admin-dashboard/admin-system-message',
-                ],
-                [
                     'id' => 'admin-dashboard/continuations',
                     'label' => 'admin-continuations-title',
                     'route' => 'admin-dashboard/admin-continuation',
@@ -227,7 +223,7 @@ return [
                 ],
                 [
                     'id' => 'admin-dashboard/admin-system-info-message',
-                    'label' => 'System info messages',
+                    'label' => 'System messages',
                     'route' => 'admin-dashboard/admin-system-info-message',
                 ],
                 [
