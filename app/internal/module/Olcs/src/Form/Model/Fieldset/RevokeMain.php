@@ -15,7 +15,6 @@ class RevokeMain extends CaseBase
      * @Form\Options({
      *     "label": "Select legislation",
      *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
-     *     "context": {"is_propose_to_revoke" : 1},
      *     "disable_inarray_validator": false,
      *     "help-block": "Use CTRL to select multiple",
      *     "use_groups":true
