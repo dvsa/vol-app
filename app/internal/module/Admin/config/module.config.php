@@ -331,16 +331,6 @@ return [
                             ]
                         ],
                     ],
-                    'admin-system-message' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => 'system-message[/]',
-                            'defaults' => [
-                                'controller' => 'Admin\SystemMessageController',
-                                'action' => 'index',
-                            ]
-                        ],
-                    ],
                     'admin-disc-printing' => [
                         'type' => 'Segment',
                         'options' => [
@@ -530,7 +520,6 @@ return [
             'Admin\ReportController' => 'Admin\Controller\ReportController',
             'Admin\UserManagementController' => 'Admin\Controller\UserManagementController',
             'Admin\PublicHolidayController' => 'Admin\Controller\PublicHolidayController',
-            'Admin\SystemMessageController' => 'Admin\Controller\SystemMessageController',
             'Admin\DiscPrintingController' => 'Admin\Controller\DiscPrintingController',
             'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController',
             'Admin\PaymentProcessingFeesController' => 'Admin\Controller\PaymentProcessingFeesController',

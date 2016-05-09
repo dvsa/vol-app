@@ -34,7 +34,6 @@ return [
 
             // Admin Module Routes
             'admin-dashboard/admin-financial-standing*' => [RefData::PERMISSION_INTERNAL_ADMIN],
-            'admin-dashboard/admin-system-message*' => [RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-public-holiday*' => [RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-team-management*' => [RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-partner-management*' => [RefData::PERMISSION_INTERNAL_ADMIN],
