@@ -23,26 +23,18 @@ OLCS.ready(function() {
     dest: form + " #documentTemplate",
     url: "/list/document-templates",
     emptyLabel: "Please select",
-    clearWhenEmpty: true
+    clearWhenEmpty: true,
   });
 
-  /**
-   * @TODO move this into a component if we can standardise it a bit
-   */
-  $(document).on("change", form + " #documentTemplate", function(e) {
-    e.preventDefault();
-    var value = $(this).val();
-
-    if (value === "") {
-      return F("bookmarks").hide();
-    }
-
-    $.ajax({
-      url: "/list-template-bookmarks/" + value,
-      success: function(response) {
-        var content = $(response).find("fieldset[data-group=bookmarks]");
-        F("bookmarks").replaceWith(content).show();
-      }
-    });
+  OLCS.cascadeInput({
+    source: form + " #documentTemplate",
+    dest: "fieldset[data-group=details]",
+    filter: "fieldset[data-group=bookmarks]",
+    url: "/list-template-bookmarks",
+    emptyLabel: "Please select",
+    clearWhenEmpty: true,
+    append: true,
+    disableDestination: false
   });
+
 });
