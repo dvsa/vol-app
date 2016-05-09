@@ -12,14 +12,7 @@ return [
                 'add' => [
                     'class' => 'primary',
                     'requireRows' => false,
-                ],
-                'edit' => [
-                    'requireRows' => true,
-                    'class' => 'secondary js-require--one',
-                ],
-                'delete' => [
-                    'requireRows' => true,
-                    'class' => 'secondary js-require--one',
+                    'label' => 'Add message',
                 ],
             ],
         ],
@@ -41,7 +34,7 @@ return [
             'title' => 'Displayed to',
             'sort' => 'isInternal',
             'formatter' => function ($row) {
-                return ($row['isInternal']
+                return ($row['isInternal'] === 'Y'
                     ? 'Internal'
                     : 'Self serve'
                 );

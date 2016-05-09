@@ -542,10 +542,10 @@ return [
             'Admin\CpmsReportController' => 'Admin\Controller\CpmsReportController',
             Admin\Controller\TeamController::class => \Admin\Controller\TeamController::class,
             'Admin\SystemParametersController' => \Admin\Controller\SystemParametersController::class,
-            Admin\Controller\SystemInfoMessageController::class => Admin\Controller\SystemInfoMessageController::class,
             'Admin\TaskAllocationRulesController' => \Admin\Controller\TaskAllocationRulesController::class,
             'Admin\PiReportController' => 'Admin\Controller\PiReportController',
-        ]
+            Admin\Controller\SystemInfoMessageController::class => Admin\Controller\SystemInfoMessageController::class,
+        ],
     ],
     'view_manager' => [
         'template_path_stack' => [
