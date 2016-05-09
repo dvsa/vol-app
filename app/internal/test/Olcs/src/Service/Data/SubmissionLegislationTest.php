@@ -11,13 +11,13 @@ use Olcs\Service\Data\SubmissionLegislation;
 class SubmissionLegislationTest extends \PHPUnit_Framework_TestCase
 {
     private $reasons = [
-        ['id' => 12, 'description' => 'Description 1', 'isProposeToRevoke' => 'Y'],
-        ['id' => 15, 'description' => 'Description 2', 'isProposeToRevoke' => 'N'],
+        0 => ['id' => 12, 'description' => 'Description 1', 'isProposeToRevoke' => 'Y'],
+        1 => ['id' => 15, 'description' => 'Description 2', 'isProposeToRevoke' => 'N'],
     ];
 
     private $reasons2 = [
-        ['value' => 12, 'label' => 'Description 1', 'attributes' => ['data-in-office-revokation' => 'Y']],
-        ['value' => 15, 'label' => 'Description 2', 'attributes' => ['data-in-office-revokation' => 'N']],
+        12 => 'Description 1',
+        15 => 'Description 2',
     ];
 
     public function testFormatData()
