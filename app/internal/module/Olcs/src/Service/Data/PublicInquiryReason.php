@@ -1,6 +1,7 @@
 <?php
 
 namespace Olcs\Service\Data;
+
 use Dvsa\Olcs\Transfer\Query\Reason\ReasonList as ReasonListDto;
 use Common\Service\Data\ListDataInterface;
 use Zend\ServiceManager\FactoryInterface;

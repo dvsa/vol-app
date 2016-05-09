@@ -90,7 +90,6 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
             return $this->getData('pid');
         }
 
-
         return $this->getData('pid');
     }
 
