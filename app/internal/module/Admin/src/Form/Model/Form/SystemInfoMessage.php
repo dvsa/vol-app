@@ -22,7 +22,7 @@ class SystemInfoMessage extends Base
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\FormCrudActions")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
 }

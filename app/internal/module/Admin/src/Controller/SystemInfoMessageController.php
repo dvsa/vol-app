@@ -3,7 +3,6 @@
 namespace Admin\Controller;
 
 use Admin\Form\Model\Form\SystemInfoMessage as AddEditForm;
-use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Command\System\InfoMessage\Create as CreateCmd;
 use Dvsa\Olcs\Transfer\Command\System\InfoMessage\Delete as DeleteCmd;
 use Dvsa\Olcs\Transfer\Command\System\InfoMessage\Update as UpdateCmd;
@@ -20,11 +19,6 @@ use Zend\View\Model\ViewModel;
  */
 class SystemInfoMessageController extends AbstractInternalController
 {
-    const ROUTE = 'admin-dashboard/admin-system-info-message';
-
-    /** @var \Common\Service\Helper\FormHelperService */
-    protected $formHelper;
-
     protected $navigationId = 'admin-dashboard/admin-system-info-message';
 
     protected $inlineScripts = [
@@ -62,32 +56,10 @@ class SystemInfoMessageController extends AbstractInternalController
 
     protected $tableViewTemplate = 'pages/system/info-messages';
 
-    /**
-     * @param FormHelperService $formHelper
-     */
-    public function __construct(FormHelperService $formHelper)
-    {
-        $this->formHelper = $formHelper;
-    }
-
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'System messages');
 
         return parent::indexAction();
-    }
-
-    protected function alterFormForAdd($form)
-    {
-        $this->formHelper->remove($form, 'form-actions->addAnother');
-
-        return $form;
-    }
-
-    protected function alterFormForEdit($form)
-    {
-        $this->formHelper->remove($form, 'form-actions->addAnother');
-
-        return $form;
     }
 }

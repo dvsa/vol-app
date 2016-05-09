@@ -544,10 +544,7 @@ return [
             'Admin\SystemParametersController' => \Admin\Controller\SystemParametersController::class,
             'Admin\TaskAllocationRulesController' => \Admin\Controller\TaskAllocationRulesController::class,
             'Admin\PiReportController' => 'Admin\Controller\PiReportController',
-        ],
-        'factories' => [
-            Admin\Controller\SystemInfoMessageController::class =>
-                Admin\Factory\Controller\SystemInfoMessageControllerFactory::class,
+            Admin\Controller\SystemInfoMessageController::class => Admin\Controller\SystemInfoMessageController::class,
         ],
     ],
     'view_manager' => [
