@@ -1,16 +1,12 @@
 <?php
 
-/**
- * Transport Manager Details Previous History Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Controller\TransportManager\Details;
 
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\View\Model\ViewModel;
-use Zend\Http\Response;
 use Common\Controller\Lva\Traits\CrudActionTrait;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Zend\Form\FormInterface;
+use Zend\Http\Response;
+use Zend\View\Model\ViewModel;
 
 /**
  * Transport Manager Details Previous History Controller
@@ -21,6 +17,8 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
     LeftViewProvider
 {
     use CrudActionTrait;
+
+    protected $navigationId = 'transport_manager_details_previous_history';
 
     public function getLeftView()
     {
@@ -37,6 +35,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      */
     public function indexAction()
     {
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -74,6 +73,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
+        /** @var \Zend\Form\FormInterface $form */
         $form = $formHelper->createForm('TmPreviousHistory');
 
         $this->getServiceLocator()->get('Helper\TransportManager')
@@ -170,18 +170,18 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
 
         return $this->renderView(
             $view,
-            $type . ($formName == 'TmConvictionsAndPenalties' ? ' previous conviction' : ' previous licence')
+            $type . ($formName === 'TmConvictionsAndPenalties' ? ' previous conviction' : ' previous licence')
         );
     }
 
     /**
      * Alter form
      *
-     * @param Zend\Form\Form $form
+     * @param FormInterface $form
      * @param string $type
-     * @return Zend\Form\Form
+     * @return FormInterface
      */
-    protected function alterForm($form, $type)
+    protected function alterForm(FormInterface $form, $type)
     {
         if ($type !== 'Add') {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->addAnother');
@@ -192,15 +192,15 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
     /**
      * Populate edit form
      *
-     * @param Zend\Form\Form $form
-     * @return Zend\Form\Form
+     * @param FormInterface $form
+     * @return FormInterface
      */
     protected function populateEditForm($form, $formName)
     {
         $id = $this->getFromRoute('id');
 
         $data = [];
-        if ($formName == 'TmConvictionsAndPenalties') {
+        if ($formName === 'TmConvictionsAndPenalties') {
             if (is_numeric($id)) {
                 $response = $this->handleQuery(
                     \Dvsa\Olcs\Transfer\Query\PreviousConviction\PreviousConviction::create(['id' => $id])
@@ -235,7 +235,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      * Process form and redirect back to list
      *
      * @param array $data
-     * @return redirect
+     * @return Response
      */
     protected function processForm($data)
     {
@@ -253,9 +253,9 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
                 'action' => $action
             ];
             return $this->redirect()->toRoute(null, $routeParams);
-        } else {
-            return $this->redirectToIndex();
         }
+
+        return $this->redirectToIndex();
     }
 
     /**

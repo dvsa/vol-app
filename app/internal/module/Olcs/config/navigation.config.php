@@ -664,14 +664,18 @@ $nav = array(
                                     'use_route_match' => true,
                                     'params' => [
                                         'action' => null,
-                                        'id' => null
-                                    ]
+                                        'id' => null,
+                                    ],
                                 ),
                                 array(
                                     'id' => 'transport_manager_details_responsibility',
                                     'label' => 'internal-navigation-transport-manager-details-responsibilities',
                                     'route' => 'transport-manager/details/responsibilities',
                                     'use_route_match' => true,
+                                    'params' => [
+                                        'action' => null,
+                                        'id' => null,
+                                    ],
                                 ),
                                 array(
                                     'id' => 'transport_manager_details_employment',
@@ -680,8 +684,8 @@ $nav = array(
                                     'use_route_match' => true,
                                     'params' => [
                                         'action' => null,
-                                        'id' => null
-                                    ]
+                                        'id' => null,
+                                    ],
                                 ),
                                 array(
                                     'id' => 'transport_manager_details_previous_history',
@@ -690,10 +694,10 @@ $nav = array(
                                     'use_route_match' => true,
                                     'params' => [
                                         'action' => null,
-                                        'id' => null
-                                    ]
+                                        'id' => null,
+                                    ],
                                 ),
-                            )
+                            ),
                         ),
                         array(
                             'id' => 'transport_manager_cases',

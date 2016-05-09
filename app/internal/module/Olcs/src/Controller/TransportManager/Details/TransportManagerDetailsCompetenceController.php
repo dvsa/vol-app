@@ -1,27 +1,24 @@
 <?php
 
-/**
- * Transport Manager Details Competence Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Controller\TransportManager\Details;
 
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use Olcs\Mvc\Controller\ParameterProvider\GenericList;
-use Zend\View\Model\ViewModel;
-use Olcs\Controller\AbstractInternalController;
-use Dvsa\Olcs\Transfer\Query\TmQualification\TmQualificationsList as TmQualificationsListQry;
-use Dvsa\Olcs\Transfer\Query\TmQualification\TmQualification as TmQualificationQry;
-use Dvsa\Olcs\Transfer\Query\Tm\Documents as DocumentsQry;
-use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 use Common\Controller\Traits\GenericUpload;
+use Common\Service\Cqrs\Response;
+use Dvsa\Olcs\Transfer\Command\TmQualification\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\TmQualification\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\TmQualification\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Tm\Documents as DocumentsQry;
+use Dvsa\Olcs\Transfer\Query\TmQualification\TmQualification as TmQualificationQry;
+use Dvsa\Olcs\Transfer\Query\TmQualification\TmQualificationsList as TmQualificationsListQry;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 use Olcs\Data\Mapper\TmQualification as Mapper;
 use Olcs\Form\Model\Form\Qualification as TmQualificationForm;
-use Dvsa\Olcs\Transfer\Command\TmQualification\Create as CreateDto;
-use Dvsa\Olcs\Transfer\Command\TmQualification\Update as UpdateDto;
-use Dvsa\Olcs\Transfer\Command\TmQualification\Delete as DeleteDto;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericList;
+use Zend\Form\FormInterface;
+use Zend\View\Model\ViewModel;
 
 /**
  * Transport Manager Details Competence Controller
@@ -33,6 +30,8 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
     LeftViewProvider
 {
     use GenericUpload;
+
+    protected $navigationId = 'transport_manager_details_competences';
 
     /**
      * @var string
@@ -126,7 +125,7 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
         );
     }
 
-    protected function alterFormForEdit($form, $data)
+    protected function alterFormForEdit(FormInterface $form, $data)
     {
         $form->get('form-actions')->remove('addAnother');
         return $form;
@@ -150,6 +149,7 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
                     )
                 );
 
+            /** @var Response $response */
             $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
             if ($response->isNotFound()) {
                 return $this->notFoundAction();
@@ -183,7 +183,7 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
         return $this->uploadFile($file, $data);
     }
 
-    protected function alterFormForIndex($form, $data)
+    protected function alterFormForIndex(FormInterface $form, $data)
     {
         if (!is_null($data['removedDate'])) {
             $form->setOption('readonly', true);

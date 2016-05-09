@@ -1,14 +1,10 @@
 <?php
 
-/**
- * Transport Manager Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Controller\TransportManager;
 
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
+use Zend\Mvc\MvcEvent;
 
 /**
  * Transport Manager Controller
@@ -17,6 +13,11 @@ use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
  */
 class TransportManagerController extends AbstractController implements TransportManagerControllerInterface
 {
+    /**
+     * Holds the navigation ID, required when an entire controller is represented by a single navigation id.
+     */
+    protected $navigationId;
+
     /**
      * Memoize TM details to prevent multiple backend calls with same id
      * @var array
@@ -80,6 +81,7 @@ class TransportManagerController extends AbstractController implements Transport
     {
         $transportManagerId = (int) $this->params()->fromRoute('transportManager');
 
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = (array)$request->getPost();
@@ -137,14 +139,16 @@ class TransportManagerController extends AbstractController implements Transport
     /**
      * Process TM merge form messages
      *
-     * @param Response $response
-     * @param Form $form
+     * @param \Common\Service\Cqrs\Response $response
+     * @param \Zend\Form\FormInterface $form
      * @param int $toTmId
      *
      * return Form
      */
     protected function processMergeFormMessages($response, $form, $toTmId)
     {
+        $formMessages = [];
+
         if ($response->isNotFound()) {
             $formMessages['toTmId'][] = 'form.tm-merge.to-tm-id.validation.not-found';
             $form->setMessages($formMessages);
@@ -170,7 +174,7 @@ class TransportManagerController extends AbstractController implements Transport
      * Setup TM merge confirmation form
      *
      * @param $toTmId
-     * @return Form
+     * @return \Zend\Form\FormInterface
      */
     protected function setupMergeConfirmationForm($toTmId)
     {
@@ -195,6 +199,7 @@ class TransportManagerController extends AbstractController implements Transport
             return $this->notFoundAction();
         }
 
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         /* @var $form \Common\Form\Form */
@@ -336,7 +341,9 @@ class TransportManagerController extends AbstractController implements Transport
 
     public function removeAction()
     {
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
+
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
             ->createFormWithRequest('GenericConfirmation', $request);
@@ -373,6 +380,7 @@ class TransportManagerController extends AbstractController implements Transport
 
     public function undoDisqualificationAction()
     {
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
@@ -412,5 +420,31 @@ class TransportManagerController extends AbstractController implements Transport
         $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'transport-manager-confirmation-remove-disqualification');
+    }
+
+    /**
+     * Sets the navigation to that specified in the controller. Useful for when a controller is
+     * 100% represented by a single navigation object.
+     */
+    final public function setNavigationCurrentLocation()
+    {
+        if (empty($this->navigationId)) {
+            return;
+        }
+
+        $navigation = $this->getServiceLocator()->get('Navigation');
+        $navigation->findOneBy('id', $this->navigationId)->setActive();
+    }
+
+    /**
+     * @codeCoverageIgnore this is part of the event system.
+     */
+    protected function attachDefaultListeners()
+    {
+        parent::attachDefaultListeners();
+
+        if (! empty($this->navigationId)) {
+            $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, [$this, 'setNavigationCurrentLocation'], 6);
+        }
     }
 }
