@@ -32,7 +32,7 @@ echo $this->render('partials/read-only/main',
             0 => [
                 ['label' => 'entity-view-label-company-registration-number', 'value' => $companyNumber],
                 ['label' => 'entity-view-label-registered-company-name', 'value' => $registeredCompanyName],
-                ['label' => 'entity-view-label-registered-address', 'value' => $registeredAddress],
+                ['noEscape' => true, 'label' => 'entity-view-label-registered-address', 'value' => $registeredAddress],
             ],
             1 => $directorsList,
             2 => [
