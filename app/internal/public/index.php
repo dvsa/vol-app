@@ -1,4 +1,5 @@
 <?php
+$startTime = microtime(true);
 
 error_reporting(-1);
 ini_set("display_errors", 1);
@@ -24,3 +25,6 @@ $applicationConfig = (PHP_SAPI === 'cli') ? 'application.cli.config.php' : 'appl
 
 // Run the application!
 Zend\Mvc\Application::init(require 'config/'. $applicationConfig)->run();
+
+$time = round(microtime(true) - $startTime, 5);
+\Olcs\Logging\Log\Logger::debug('Internal complete', ['time' => $time, 'url' => $_SERVER['REQUEST_URI']]);
