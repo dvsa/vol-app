@@ -26,8 +26,8 @@ class IrfoStockControl
      * @Form\Options({
      *     "label": "Year",
      *     "empty_option": "Please Select",
-     *     "min_year_delta": "-100",
-     *     "max_year_delta": "+3"
+     *     "min_year_delta": "-40",
+     *     "max_year_delta": "+5"
      * })
      * @Form\Type("YearSelect")
      */
