@@ -647,8 +647,6 @@ return array(
         'invokables' => [
             // Operating Centres
             'lva-application-operating_centres' => LvaFormService\OperatingCentres\ApplicationOperatingCentres::class,
-            'lva-licence-operating_centres' => LvaFormService\OperatingCentres\LicenceOperatingCentres::class,
-            'lva-variation-operating_centres' => LvaFormService\OperatingCentres\VariationOperatingCentres::class,
             // Operating Centre
             'lva-application-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
             'lva-licence-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
