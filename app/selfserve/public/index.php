@@ -1,4 +1,6 @@
 <?php
+$startTime = microtime(true);
+
 $profile = getenv("XHPROF_ENABLE") == 1;
 
 if ($profile) {
@@ -48,3 +50,6 @@ if ($profile) {
     fwrite($fp, $content);
     fclose($fp);
 }
+
+$time = round(microtime(true) - $startTime, 5);
+\Olcs\Logging\Log\Logger::debug('Selfserve complete', ['time' => $time, 'url' => $_SERVER['REQUEST_URI']]);

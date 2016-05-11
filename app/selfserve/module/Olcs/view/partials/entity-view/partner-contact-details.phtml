@@ -10,7 +10,13 @@ $phoneCount = 0;
 $address = isset($this->result['licenceContactDetails']['address']) ?
     $this->address($this->result['licenceContactDetails']['address']) : '';
 
-$items[] = [0 => ['label' => 'search-result-label-address', 'value' => $address]];
+$items[] = [
+    0 => [
+        'noEscape' => true,
+        'label' => 'search-result-label-address',
+        'value' => $address
+    ]
+];
 
 $phoneContacts = $this->result['licenceContactDetails']['phoneContacts'];
 if (!empty($phoneContacts)) {
