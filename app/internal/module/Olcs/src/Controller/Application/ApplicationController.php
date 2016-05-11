@@ -18,6 +18,7 @@ use Olcs\Controller\AbstractController;
 use Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
 use Common\Controller\Traits\CheckForCrudAction;
+use Dvsa\Olcs\Transfer\Query\Cases\ByApplication as CasesByApplication;
 
 /**
  * Application Controller
@@ -66,9 +67,17 @@ class ApplicationController extends AbstractController implements ApplicationCon
             array('query' => $this->getRequest()->getQuery())
         );
 
-        $results = $this->getServiceLocator()
-            ->get('DataServiceManager')
-            ->get('Olcs\Service\Data\Cases')->fetchList($params);
+        $dtoData = CasesByApplication::create($params);
+
+        $response = $this->handleQuery($dtoData);
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        if ($response->isOk()) {
+            $results = $response->getResult();
+        }
 
         $view = new ViewModel(['table' => $this->getTable('cases', $results, $params)]);
         $view->setTemplate('pages/table');
