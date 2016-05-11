@@ -35,6 +35,7 @@ use Zend\View\Model\ViewModel;
  * @method Plugin\Table table()
  * @method Response handleQuery(QueryInterface $query)
  * @method Response handleCommand(CommandInterface $query)
+ * @method \Common\Controller\Plugin\Redirect redirect()
  * @method Plugin\Confirm confirm($string)
  */
 abstract class AbstractInternalController extends AbstractActionController

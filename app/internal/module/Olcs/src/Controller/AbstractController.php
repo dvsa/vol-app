@@ -1,22 +1,23 @@
 <?php
 
+namespace Olcs\Controller;
+
+use Common\Controller\Traits as CommonTraits;
+use Common\Controller\Traits\GenericMethods;
+use Common\Controller\Traits\GenericRenderView;
+use Common\Util\FlashMessengerTrait;
+use Olcs\Controller\Traits as OlcsTraits;
+use Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+
 /**
  * Abstract Controller
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
-
-namespace Olcs\Controller;
-
-use Common\Controller\Traits as CommonTraits;
-use Olcs\Controller\Traits as OlcsTraits;
-use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
-use Common\Controller\Traits\GenericRenderView;
-use Common\Controller\Traits\GenericMethods;
-use Common\Util\FlashMessengerTrait;
-
-/**
- * Abstract Controller
+ *
+ * @method \Olcs\Mvc\Controller\Plugin\Placeholder placeholder()
+ * @method \Common\Service\Cqrs\Response handleQuery(\Dvsa\Olcs\Transfer\Query\QueryInterface $query)
+ * @method \Common\Service\Cqrs\Response handleCommand(\Dvsa\Olcs\Transfer\Command\CommandInterface $query)
+ * @method \Common\Controller\Plugin\Redirect redirect()
  */
 class AbstractController extends ZendAbstractActionController
 {
@@ -31,7 +32,7 @@ class AbstractController extends ZendAbstractActionController
      *
      * @param string $param
      * @param mixed $default
-     * @return type
+     * @return mixed
      */
     public function fromRoute($param, $default = null)
     {
@@ -43,7 +44,7 @@ class AbstractController extends ZendAbstractActionController
      *
      * @param string $param
      * @param mixed $default
-     * @return type
+     * @return mixed
      */
     public function fromPost($param, $default = null)
     {

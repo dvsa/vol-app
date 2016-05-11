@@ -43,6 +43,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         CheckForCrudAction::getActionFromFullActionName as parentGetActionFromFullActionName;
     }
 
+    protected $navigationId = 'transport_manager_details_responsibility';
+
     protected $responsibilities = null;
 
     protected $licenceId = null;
