@@ -71,6 +71,8 @@ class ApplicationController extends AbstractController implements ApplicationCon
 
         $response = $this->handleQuery($dtoData);
 
+        $results = [];
+        
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
