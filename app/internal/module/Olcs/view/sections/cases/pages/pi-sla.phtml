@@ -90,13 +90,13 @@ if (isset($pi['writtenOutcome']['id'])) {
                 'date' => $pi['writtenDecisionLetterDate'],
                 'dateFormat' => $dateFormat,
                 'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                    $pi['decisionLetterSentDate'],
-                    isset($pi['decisionLetterSentDateTarget']) ? $pi['decisionLetterSentDateTarget'] : null
+                    $pi['writtenDecisionLetterDate'],
+                    isset($pi['writtenDecisionLetterDateTarget']) ? $pi['writtenDecisionLetterDateTarget'] : null
                 )
             ];
             $items[] = [
                 'label' => 'Target date',
-                'date' => isset($pi['decisionLetterSentDateTarget']) ? $pi['decisionLetterSentDateTarget'] : null,
+                'date' => isset($pi['writtenDecisionLetterDateTarget']) ? $pi['writtenDecisionLetterDateTarget'] : null,
                 'dateFormat' => $dateFormat
             ];
             break;
