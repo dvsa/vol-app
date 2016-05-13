@@ -1,20 +1,14 @@
 <?php
 
-/**
- * Operator Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Controller\Operator;
 
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Application\CreateApplication;
+use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
-use Olcs\Controller\Interfaces\OperatorControllerInterface;
-use Olcs\Controller\AbstractController;
-use Dvsa\Olcs\Transfer\Query\TrafficArea\TrafficAreaList;
-use Common\RefData;
 
 /**
  * Operator Controller
@@ -56,6 +50,7 @@ class OperatorController extends AbstractController implements OperatorControlle
 
     public function newApplicationAction()
     {
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -66,6 +61,7 @@ class OperatorController extends AbstractController implements OperatorControlle
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
+        /** @var \Zend\Form\FormInterface $form */
         $form = $formHelper->createForm('NewApplication');
         $form->setData($data);
         $this->alterForm($form, $data);
@@ -73,7 +69,6 @@ class OperatorController extends AbstractController implements OperatorControlle
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
 
         if ($request->isPost() && $form->isValid()) {
-
             $data = $form->getData();
 
             $params = [
@@ -118,7 +113,7 @@ class OperatorController extends AbstractController implements OperatorControlle
     /**
      * Alter form
      *
-     * @param Form
+     * @param \Zend\Form\FormInterface $form
      * @param array $data
      */
     protected function alterForm($form, $data)
@@ -140,7 +135,7 @@ class OperatorController extends AbstractController implements OperatorControlle
     protected function isUnlicensed()
     {
         if (empty($this->params('organisation'))) {
-            return;
+            return false;
         }
 
         // need to determine if this is an unlicensed operator or not
@@ -164,6 +159,7 @@ class OperatorController extends AbstractController implements OperatorControlle
     {
         $organisationId = (int) $this->params()->fromRoute('organisation');
 
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = (array)$request->getPost();
@@ -177,9 +173,11 @@ class OperatorController extends AbstractController implements OperatorControlle
         }
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
         /* @var $form \Common\Form\Form */
         $form = $formHelper->createForm('OperatorMerge');
         $form->setData($data);
+
         $formHelper->setFormActionFromRequest($form, $request);
         $form->get('toOperatorId')->setAttribute('data-lookup-url', $this->url()->fromRoute('operator-lookup'));
 
@@ -194,7 +192,8 @@ class OperatorController extends AbstractController implements OperatorControlle
             if ($response->isOk()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')
                     ->addSuccessMessage('form.operator-merge.success');
-                return $this->redirect()->toRouteAjax('dashboard');
+
+                return $this->redirect()->toRouteAjax('operator/business-details', ['organisation' => $toOperatorId]);
             } else {
                 $formMessages['toOperatorId'][] = 'form.operator-merge.to-operator-id.validation';
                 $form->setMessages($formMessages);
