@@ -1,16 +1,8 @@
 <?php
 
-/**
- * Document Upload Controller
- *
- * @author Jessica Rowbottom <jess.rowbottom@valtech.co.uk>
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
- * @author Nick Payne <nick.payne@valtech.co.uk>
- */
 namespace Olcs\Controller\Document;
 
 use Common\Util\FileContent;
-use Dvsa\Olcs\Transfer\Command\Document\CreateDocument;
 use Dvsa\Olcs\Transfer\Command\Document\Upload;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
@@ -24,10 +16,15 @@ use Zend\View\Model\ViewModel;
  */
 class DocumentUploadController extends AbstractDocumentController
 {
+    const ERR_UPLOAD_DEF = '4';
+
     public function uploadAction()
     {
-        if ($this->getRequest()->isPost()) {
-            $data = (array)$this->getRequest()->getPost();
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $data = (array) $request->getPost();
             $category = $data['details']['category'];
         } else {
             $type = $this->params()->fromRoute('type');
@@ -63,18 +60,22 @@ class DocumentUploadController extends AbstractDocumentController
         $files = $this->getRequest()->getFiles()->toArray();
         $files = $files['details'];
 
-        if (!isset($files['file']) || $files['file']['error'] !== UPLOAD_ERR_OK) {
-            // add validation error message to element, with reason upload errored
-            $form->get('details')->get('file')->setMessages(['message.file-upload-error.' . $files['file']['error']]);
+        $file = (isset($files['file']) ? $files['file'] : null);
 
-            return;
+        if ($file === null || $file['error'] !== UPLOAD_ERR_OK) {
+            $errNr = (isset($file['error']) ? $file['error'] : self::ERR_UPLOAD_DEF);
+
+            // add validation error message to element, with reason upload errored
+            $form->get('details')->get('file')->setMessages(['message.file-upload-error.' . $errNr]);
+
+            return null;
         }
 
         $data = array_merge(
             $data,
             [
-                'filename'      => $files['file']['name'],
-                'content'       => new FileContent($files['file']['tmp_name']),
+                'filename'      => $file['name'],
+                'content'       => new FileContent($file['tmp_name']),
                 'description'   => $data['details']['description'],
                 'category'      => $data['details']['category'],
                 'subCategory'   => $data['details']['documentSubCategory'],
