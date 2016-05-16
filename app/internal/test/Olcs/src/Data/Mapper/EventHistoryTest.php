@@ -22,7 +22,6 @@ class EventHistoryTest extends MockeryTestCase
     public function testMapFromResult()
     {
         $data = [
-            'eventDescription' => 'foo',
             'eventData' => 'bar',
             'eventDatetime' => '2015-03-19T13:37:36+0000',
             'user' => [
@@ -33,7 +32,10 @@ class EventHistoryTest extends MockeryTestCase
                     ]
                 ]
             ],
-            'eventHistoryDetails' => 'qux'
+            'eventHistoryDetails' => 'qux',
+            'eventHistoryType' => [
+                'description' => 'foo'
+            ]
         ];
         $expected = [
             'readOnlyData' => [
