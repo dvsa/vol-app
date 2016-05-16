@@ -51,7 +51,6 @@ class TaskAllocationRule
      * })
      * @Form\Type("Radio")
      * @Form\Required(true)
-     * @Form\AllowEmpty(true)
      */
     public $goodsOrPsv = null;
 
