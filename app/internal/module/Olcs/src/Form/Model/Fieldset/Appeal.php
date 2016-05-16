@@ -51,7 +51,7 @@ class Appeal extends CaseBase
     public $appealNo = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"DVSA notified?"})
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"DVSA/DVA notified?"})
      * @Form\Type("OlcsCheckbox")
      */
     public $dvsaNotified = null;
@@ -113,7 +113,7 @@ class Appeal extends CaseBase
     /**
      * @Form\Attributes({"id":"papersDueTcDate"})
      * @Form\Options({
-     *     "label": "Papers due with TC/DTC",
+     *     "label": "Papers due with TC/DTC/HTRU/DHTRU",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
@@ -128,7 +128,7 @@ class Appeal extends CaseBase
     /**
      * @Form\Attributes({"id":"papersSentTcDate"})
      * @Form\Options({
-     *     "label": "Papers sent to TC/DTC",
+     *     "label": "Papers sent to TC/DTC/HTRU/DHTRU",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
