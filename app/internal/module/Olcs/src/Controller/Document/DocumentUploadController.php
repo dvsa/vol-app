@@ -80,7 +80,6 @@ class DocumentUploadController extends AbstractDocumentController
                 'category'      => $data['details']['category'],
                 'subCategory'   => $data['details']['documentSubCategory'],
                 'isExternal'    => false,
-                'isReadOnly'    => 'Y'
             ]
         );
 

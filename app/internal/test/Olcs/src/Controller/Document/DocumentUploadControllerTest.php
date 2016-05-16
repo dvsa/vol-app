@@ -600,7 +600,6 @@ class DocumentUploadControllerTest extends AbstractHttpControllerTestCase
             'category' => 3,
             'subCategory' => 2,
             'isExternal' => false,
-            'isReadOnly' => true,
             'size' => 1234
         );
 
