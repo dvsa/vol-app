@@ -1,35 +1,31 @@
 <?php
 
-/**
- * Transport Manager Details Responsibility Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Controller\TransportManager\Details;
 
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\Http\Response;
-use Zend\View\Model\ViewModel;
-use Dvsa\Olcs\Transfer\Query\TmResponsibilities\TmResponsibilitiesList;
-use Dvsa\Olcs\Transfer\Query\TmResponsibilities\GetDocumentsForResponsibilities as DocumentsQry;
-use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetForResponsibilities as GetForResponsibilitiesApp;
-use Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetForResponsibilities as GetForResponsibilitiesLic;
-use Olcs\Data\Mapper\TransportManagerLicence as TransportManagerLicenceMapper;
-use Olcs\Data\Mapper\TransportManagerApplication as TransportManagerApplicationMapper;
-use Olcs\Data\Mapper\OperatingCentres as OperatingCentresMapper;
-use Dvsa\Olcs\Transfer\Query\InspectionRequest\OperatingCentres as OperatingCentresQry;
-use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\CreateForResponsibilities as CreateTmaDto;
-use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\UpdateForResponsibilities as UpdateTmaDto;
-use Dvsa\Olcs\Transfer\Command\TransportManagerLicence\UpdateForResponsibilities as UpdateTmlDto;
-use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\DeleteForResponsibilities as DeleteTmaDto;
-use Dvsa\Olcs\Transfer\Command\TransportManagerLicence\DeleteForResponsibilities as DeleteTmlDto;
-use Dvsa\Olcs\Transfer\Command\OtherLicence\DeleteOtherLicence as DeleteOlDto;
-use Dvsa\Olcs\Transfer\Query\OtherLicence\OtherLicence as OtherLicenceQry;
-use Olcs\Data\Mapper\OtherLicence as OtherLicenceMapper;
+use Common\Controller\Traits\CheckForCrudAction;
+use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\OtherLicence\CreateForTma as CreateForTmaDto;
 use Dvsa\Olcs\Transfer\Command\OtherLicence\CreateForTml as CreateForTmlDto;
+use Dvsa\Olcs\Transfer\Command\OtherLicence\DeleteOtherLicence as DeleteOlDto;
 use Dvsa\Olcs\Transfer\Command\OtherLicence\UpdateForTma as UpdateForTmaDto;
-use Common\Controller\Traits\CheckForCrudAction;
+use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\CreateForResponsibilities as CreateTmaDto;
+use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\DeleteForResponsibilities as DeleteTmaDto;
+use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\UpdateForResponsibilities as UpdateTmaDto;
+use Dvsa\Olcs\Transfer\Command\TransportManagerLicence\DeleteForResponsibilities as DeleteTmlDto;
+use Dvsa\Olcs\Transfer\Command\TransportManagerLicence\UpdateForResponsibilities as UpdateTmlDto;
+use Dvsa\Olcs\Transfer\Query\InspectionRequest\OperatingCentres as OperatingCentresQry;
+use Dvsa\Olcs\Transfer\Query\OtherLicence\OtherLicence as OtherLicenceQry;
+use Dvsa\Olcs\Transfer\Query\TmResponsibilities\GetDocumentsForResponsibilities as DocumentsQry;
+use Dvsa\Olcs\Transfer\Query\TmResponsibilities\TmResponsibilitiesList;
+use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetForResponsibilities as GetForResponsibilitiesApp;
+use Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetForResponsibilities as GetForResponsibilitiesLic;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Data\Mapper\OperatingCentres as OperatingCentresMapper;
+use Olcs\Data\Mapper\OtherLicence as OtherLicenceMapper;
+use Olcs\Data\Mapper\TransportManagerApplication as TransportManagerApplicationMapper;
+use Olcs\Data\Mapper\TransportManagerLicence as TransportManagerLicenceMapper;
+use Zend\Http\Response;
+use Zend\View\Model\ViewModel;
 
 /**
  * Transport Manager Details Responsibility Controller
@@ -60,6 +56,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         'Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetForResponsibilities' => 'lic'
     ];
 
+    /** @var  \Zend\Form\FormInterface */
     protected $otherLicenceForm;
 
     public function getLeftView()
@@ -77,10 +74,10 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     public function indexAction()
     {
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-
             $response = $this->checkForCrudAction();
 
             if ($response instanceof Response) {
@@ -115,10 +112,11 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Add TM application action
      *
-     * @return Zend\View\Model\ViewModel
+     * @return \Zend\View\Model\ViewModel
      */
     public function addAction()
     {
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost() && $this->isButtonPressed('cancel')) {
@@ -156,11 +154,12 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
                     [
                         'transportManager' => $this->getFromRoute('transportManager'),
                         'licOrAppId' => $this->getFromRoute('id'),
-                        'type' => ($action == 'edit-tm-application') ? 'application' : 'licence'
+                        'type' => ($action === 'edit-tm-application') ? 'application' : 'licence'
                     ]
                 )
             );
 
+        /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
         if ($response->isNotFound()) {
             return $this->notFoundAction();
@@ -191,7 +190,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         $dataToSave = $this->getServiceLocator()->get('Helper\TransportManager')
             ->getResponsibilityFileData($tmId, $file);
-        if ($action == 'edit-tm-application') {
+        if ($action === 'edit-tm-application') {
             $key = 'application';
             $data = $this->tmResponsiblitiesDetails['app']['result'];
         } else {
@@ -200,7 +199,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         }
         $dataToSave[$key] = $data[$key]['id'];
 
-        if ($action == 'edit-tm-application') {
+        if ($action === 'edit-tm-application') {
             $dataToSave['licence'] = $data['application']['licence']['id'];
         }
         return $this->uploadFile($file, $dataToSave);
@@ -225,7 +224,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Edit TM application action
      *
-     * @return Zend\View\Model\ViewModel
+     * @return \Zend\View\Model\ViewModel
      */
     public function editTmApplicationAction()
     {
@@ -233,7 +232,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             return $this->redirectToIndex();
         }
 
-        $titleFlag = $this->getFromRoute('title', 0);
+        $titleFlag = $this->getFromRoute('title');
         $tmAppId = $this->getFromRoute('id');
         $title = $titleFlag ? 'Add application' : 'Edit application';
 
@@ -252,6 +251,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             array($this, 'getDocuments')
         );
 
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -294,7 +294,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Edit TM licence action
      *
-     * @return Zend\View\Model\ViewModel
+     * @return \Zend\View\Model\ViewModel
      */
     public function editTmLicenceAction()
     {
@@ -309,6 +309,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $this->licenceId = $tmLicData['licence']['id'];
         $form = $this->alterEditForm($this->getForm('TransportManagerApplicationOrLicenceFull'));
 
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
 
         $processed = $this->processFiles(
@@ -381,6 +382,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
                 $dtoClass::create(['id' => $id])
             );
 
+        /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
         if ($response->isNotFound()) {
             return $this->notFoundAction();
@@ -486,9 +488,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             return $tableData;
         }
 
-        $table = $this->getTable('tm.applications', $tableData);
-
-        return $table;
+        return $this->getTable('tm.applications', $tableData);
     }
 
     /**
@@ -503,9 +503,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             return $tableData;
         }
 
-        $table = $this->getTable('tm.licences', $tableData);
-
-        return $table;
+        return $this->getTable('tm.licences', $tableData);
     }
 
     protected function getResponsibilitiesData($type)
@@ -520,6 +518,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
                     TmResponsibilitiesList::create($query)
                 );
 
+            /** @var \Common\Service\Cqrs\Response $response */
             $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
             if ($response->isNotFound()) {
                 return $this->notFoundAction();
@@ -558,6 +557,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             ]
         );
         $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
+
         /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->getServiceLocator()->get('CommandService')->send($command);
         if ($response->isClientError()) {
@@ -565,9 +565,11 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($message);
             }
         }
+
         if ($response->isServerError()) {
             $this->addErrorMessage('unknown-error');
         }
+
         if ($response->isOk()) {
             $result = $response->getResult();
             $routeParams['id'] = $result['id']['transportManagerApplication'];
@@ -576,18 +578,21 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
                 $routeParams
             );
         }
+
+        return null;
     }
 
     /**
      * Alter edit form
      *
-     * @param Zend\Form\Form $form
-     * @return Zend\Form\Form
+     * @param \Zend\Form\FormInterface $form
+     * @return \Zend\Form\Form
      */
-    protected function alterEditForm($form, $appId = null)
+    protected function alterEditForm(\Zend\Form\FormInterface $form, $appId = null)
     {
         $action = $this->getFromRoute('action');
-        if ($action == 'edit-tm-licence') {
+
+        if ($action === 'edit-tm-licence') {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->tmApplicationStatus');
             $params = [
                 'type'       => 'licence',
@@ -618,6 +623,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
                     OperatingCentresQry::create($params)
                 );
 
+            /** @var \Common\Service\Cqrs\Response $response */
             $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
 
             if ($response->isClientError() || $response->isServerError()) {
@@ -626,11 +632,14 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
             $ocOptions = [];
             if ($response->isOk()) {
-                $result = $response->getResult();
-                $ocOptions = OperatingCentresMapper::mapFromResult($result);
+                $ocOptions = OperatingCentresMapper::mapFromResult(
+                    $response->getResult()
+                );
             }
+
             $this->operatingCentres = $ocOptions;
         }
+
         return $this->operatingCentres;
     }
 
@@ -651,16 +660,16 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Process form and redirect back to list
      *
-     * @param array $data
+     * @param \Zend\Form\FormInterface $form
      * @param bool $showMessage
-     * @return redirect
+     * @return \Zend\Http\Response
      */
     protected function processEditForm($form, $showMessage = true)
     {
         $data = $form->getData();
         $action = $this->getFromRoute('action');
 
-        if ($action == 'edit-tm-application') {
+        if ($action === 'edit-tm-application') {
             $message = 'The application has been updated';
             $mappedData = TransportManagerApplicationMapper::mapFromForm($data);
             $dto = UpdateTmaDto::create($mappedData);
@@ -671,11 +680,12 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         }
 
         $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
+
         /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->getServiceLocator()->get('CommandService')->send($command);
         if ($response->isClientError()) {
             $messages = $response->getResult()['messages'];
-            if ($action == 'edit-tm-application') {
+            if ($action === 'edit-tm-application') {
                 $errors = TransportManagerApplicationMapper::mapFromErrors($form, $messages);
             } else {
                 $errors = TransportManagerLicenceMapper::mapFromErrors($form, $messages);
@@ -686,9 +696,11 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
                 }
             }
         }
+
         if ($response->isServerError()) {
             $this->addErrorMessage('unknown-error');
         }
+
         if ($response->isOk()) {
             $result = $response->getResult();
             if ($showMessage) {
@@ -697,6 +709,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             }
             return $this->redirectToIndex();
         }
+
+        return null;
     }
 
     /**
@@ -781,6 +795,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             ->get('TransferAnnotationBuilder')
             ->createQuery(OtherLicenceQry::create(['id' => $otherLicenceId]));
 
+        /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
         if ($response->isNotFound()) {
             return $this->notFoundAction();
@@ -807,7 +822,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      */
     protected function formAction($type, $redirectAction)
     {
-        if ($type == 'Add') {
+        if ($type === 'Add') {
             $redirectId = $this->fromRoute('id');
         } else {
             $redirectId = $this->getTmRecordId($this->fromRoute('id'));
@@ -817,6 +832,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             return $this->redirectToAction($redirectAction, $redirectId);
         }
 
+        /** @var \Zend\Form\FormInterface $form */
         $form = $this->getForm('TmOtherLicence');
 
         $view = new ViewModel(['form' => $form]);
@@ -843,18 +859,20 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      * Populate other licence edit form
      *
      * @form Zend\Form\Form
+     * @param \Zend\Form\FormInterface $form
      * @param string $type
      * @param string $redirectAction
      * @param int $redirectId
-     * @return Zend\Form\Form
+     * @return \Zend\Form\Form
      */
     protected function populateOtherLicenceEditForm($form, $type, $redirectAction, $redirectId)
     {
-        if ($type == 'Edit') {
+        if ($type === 'Edit') {
             $queryToSend = $this->getServiceLocator()
                 ->get('TransferAnnotationBuilder')
                 ->createQuery(OtherLicenceQry::create(['id' => $this->fromRoute('id')]));
 
+            /** @var \Common\Service\Cqrs\Response $response */
             $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
             if ($response->isNotFound()) {
                 return $this->notFoundAction();
@@ -877,7 +895,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      * Process form and redirect back to list
      *
      * @param array $data
-     * @return redirect
+     * @return \Zend\Http\Response
      */
     protected function processOtherLicenceForm($data)
     {
@@ -894,7 +912,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->getServiceLocator()->get('CommandService')->send($command);
         if ($response->isClientError()) {
-            $errors = OtherLicenceMapper::mapFromErrors($this->otherLicenceform, $response->getResult()['messages']);
+            $errors = OtherLicenceMapper::mapFromErrors($this->otherLicenceForm, $response->getResult()['messages']);
             if ($errors) {
                 foreach ($errors as $error) {
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
@@ -914,7 +932,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      *
      * @param string $action
      * @param int $id
-     * @return redirect
+     * @return \Zend\Http\Response
      */
     protected function redirectToAction($action, $id)
     {
