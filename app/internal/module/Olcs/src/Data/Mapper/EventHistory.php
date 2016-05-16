@@ -16,7 +16,7 @@ class EventHistory
 {
     public static function mapFromResult(array $data)
     {
-        $result['details'] = $data['eventDescription'];
+        $result['details'] = $data['eventHistoryType']['description'];
         $result['info'] = $data['eventData'];
 
         $dateTime = \DateTime::createFromFormat(\DateTime::ISO8601, $data['eventDatetime']);
