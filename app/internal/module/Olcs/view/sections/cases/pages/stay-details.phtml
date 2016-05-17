@@ -21,7 +21,7 @@ echo $this->render('partials/read-only/main',
             ['label' => 'Decision date', 'date' => $decisionDate],
             ['label' => 'Is withdrawn', 'value' => (empty($withdrawnDate) ? 'N' : 'Y')],
             ['label' => 'Withdrawn date', 'date' => $withdrawnDate],
-            ['label' => 'DVSA notified?',
+            ['label' => 'DVSA/DVA notified?',
                 'type' => 'yesno',
                 'value' => $dvsaNotified
             ],

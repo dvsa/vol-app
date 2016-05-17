@@ -68,7 +68,7 @@ class Stay extends CaseBase
     public $decisionDate = null;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"DVSA notified?"})
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"DVSA/DVA notified?"})
      * @Form\Type("OlcsCheckbox")
      */
     public $dvsaNotified = null;
