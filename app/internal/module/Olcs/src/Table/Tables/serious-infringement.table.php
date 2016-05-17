@@ -5,6 +5,13 @@ return array(
         'title' => 'Serious Infringements'
     ),
     'settings' => array(
+        'crud' => array(
+            'actions' => array(
+                'add' => array('class' => 'primary'),
+                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
+                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
+            )
+        ),
         'paginate' => array(
             'limit' => array(
                 'default' => 10,
@@ -14,19 +21,19 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'ID',
-            'name' => 'id',
-            'formatter' => 'SeriousInfringementLink'
+            'title' => 'Id',
+            'formatter' => function ($data) {
+                return sprintf(
+                    '<a href="%s" class="js-modal-ajax">%s</a>',
+                    $this->generateUrl(array('action' => 'edit', 'id' => $data['id']), 'case_penalty'),
+                    $data['id']
+                );
+            }
         ),
         array(
             'title' => 'Opposition type',
             'formatter' => 'RefData',
             'name' => 'siCategoryType'
-        ),
-        array(
-            'title' => 'Response set',
-            'formatter' => 'YesNo',
-            'name' => 'responseSet'
         ),
         array(
             'title' => '',
