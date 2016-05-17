@@ -88,7 +88,7 @@ class Offence extends Base
     public $birthDate = null;
 
     /**
-     * @Form\Attributes({"id":"category","placeholder":"","class":"long"})
+     * @Form\Attributes({"id":"category","placeholder":"","class":"long chosen-select-medium"})
      * @Form\Options({
      *     "label": "Conviction description",
      *     "empty_option": "User Defined",
@@ -104,7 +104,11 @@ class Offence extends Base
 
     /**
      * @Form\Required(true)
-     * @Form\Attributes({"id":"categoryText","class":"extra-long", "required":false})
+     * @Form\Attributes({
+     *   "id":"categoryText",
+     *   "class":"extra-long", 
+     *   "required":false
+     * })
      * @Form\Options({
      *     "label": "Conviction description detail",
      * })
