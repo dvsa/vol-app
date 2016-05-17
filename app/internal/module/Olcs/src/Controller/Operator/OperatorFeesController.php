@@ -89,8 +89,10 @@ class OperatorFeesController extends OperatorController
         $options = $this->fetchFeeTypeValueOptions();
         $form->get('fee-details')->get('feeType')->setValueOptions($options);
 
+        $post = $this->getRequest()->getPost()->toArray();
         // populate GV Permit and PSV Auth dropdowns
-        $data = $this->fetchFeeTypeListData();
+        $currentFeeType = isset($post['fee-details']['feeType']) ? $post['fee-details']['feeType'] : null;
+        $data = $this->fetchFeeTypeListData(null, $currentFeeType);
 
         if (isset($data['extra']['valueOptions']['irfoGvPermit'])) {
             $form->get('fee-details')->get('irfoGvPermit')->setValueOptions(
@@ -103,17 +105,30 @@ class OperatorFeesController extends OperatorController
                 $data['extra']['valueOptions']['irfoPsvAuth']
             );
         }
+        if ($this->getRequest()->isPost() && !$data['extra']['showQuantity'] && $currentFeeType) {
+            $formHelper->remove($form, 'fee-details->quantity');
+        }
 
         return $form;
     }
 
+    /**
+     * Get create fee dto data
+     *
+     * @param $formData
+     * @return array
+     */
     protected function getCreateFeeDtoData($formData)
     {
-        return [
+        $params = [
             'invoicedDate' => $formData['fee-details']['createdDate'],
             'feeType' => $formData['fee-details']['feeType'],
             'irfoGvPermit' => $formData['fee-details']['irfoGvPermit'],
-            'irfoPsvAuth' => $formData['fee-details']['irfoPsvAuth'],
+            'irfoPsvAuth' => $formData['fee-details']['irfoPsvAuth']
         ];
+        if (isset($formData['fee-details']['quantity'])) {
+            $params['quantity'] = $formData['fee-details']['quantity'];
+        }
+        return $params;
     }
 }
