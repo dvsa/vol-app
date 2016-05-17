@@ -33,10 +33,12 @@ class Details
     public $documentSubCategory = null;
 
     /**
+     * @Form\Required(true)
      * @Form\Attributes({"class":"long","id":""})
      * @Form\Options({"label":"documents.data.description"})
-     * @Form\Required(false)
      * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":255}})
      */
     public $description = null;
 
