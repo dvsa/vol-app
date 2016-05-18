@@ -798,6 +798,7 @@ trait FeesActionTrait
         // remove IRFO fields by default
         $formHelper->remove($form, 'fee-details->irfoGvPermit');
         $formHelper->remove($form, 'fee-details->irfoPsvAuth');
+        $formHelper->remove($form, 'fee-details->quantity');
 
         // populate fee type select
         $options = $this->fetchFeeTypeValueOptions();
@@ -843,11 +844,13 @@ trait FeesActionTrait
     /**
      * Get value options array for create fee type form
      *
+     * @param string $effectiveDate string presentation of DateTime
+     * @param int $currentFeeType
      * @return array
      */
-    protected function fetchFeeTypeValueOptions($effectiveDate = null)
+    protected function fetchFeeTypeValueOptions($effectiveDate = null, $currentFeeType = null)
     {
-        $data = $this->fetchFeeTypeListData($effectiveDate);
+        $data = $this->fetchFeeTypeListData($effectiveDate, $currentFeeType);
         if (isset($data['extra']['valueOptions']['feeType'])) {
             return $data['extra']['valueOptions']['feeType'];
         }
@@ -856,13 +859,20 @@ trait FeesActionTrait
     }
 
     /**
+     * Fetch fee type list data
+     *
+     * @param string $effectiveDate string presentation of DateTime
+     * @param int $currentFeeType
      * @return array
      */
-    protected function fetchFeeTypeListData($effectiveDate = null)
+    protected function fetchFeeTypeListData($effectiveDate = null, $currentFeeType = null)
     {
         $dtoData = $this->getFeeTypeDtoData();
         if ($effectiveDate) {
             $dtoData['effectiveDate'] = $effectiveDate;
+        }
+        if ($currentFeeType) {
+            $dtoData['currentFeeType'] = $currentFeeType;
         }
         $response = $this->handleQuery(FeeTypeListQry::create($dtoData));
         if ($response->isOk()) {
@@ -1283,7 +1293,8 @@ trait FeesActionTrait
         return new JsonModel(
             [
                 'value' => $feeType['displayValue'],
-                'taxRate' => $feeType['vatRate']
+                'taxRate' => $feeType['vatRate'],
+                'showQuantity' => $feeType['showQuantity']
             ]
         );
     }

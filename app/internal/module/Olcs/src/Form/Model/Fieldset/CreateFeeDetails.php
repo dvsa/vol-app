@@ -114,6 +114,23 @@ class CreateFeeDetails
     public $irfoPsvAuth = null;
 
     /**
+     * @Form\Options({"label":"Quantity"})
+     * @Form\Type("Text")
+     * @Form\Attributes({"id":"quantity"})
+     * @Form\Validator(
+     *  {
+     *      "name": "Zend\Validator\GreaterThan",
+     *      "options": {
+     *          "min": 1,
+     *          "inclusive": true,
+     *          "messages": {"notGreaterThanInclusive": "You must enter %min% or above"}
+     *      }
+     *  }
+     * )
+     */
+    public $quantity = null;
+
+    /**
      * @Form\Options({
      *      "short-label":"fees.amount",
      *      "label":"fees.amount",

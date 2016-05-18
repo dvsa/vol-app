@@ -90,7 +90,7 @@ class OrganisationTest extends MockeryTestCase
         $event->setValue($id);
 
         $mockNavigation = m::mock('\StdClass');
-        $mockNavigation->shouldReceive('setVisible')->times(5)->with(false);
+        $mockNavigation->shouldReceive('setVisible')->times(6)->with(false);
 
         $mockMenu = m::mock('\Zend\Navigation\Navigation');
         $mockMenu->shouldReceive('__invoke')->with('navigation')->andReturnSelf();

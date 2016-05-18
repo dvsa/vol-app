@@ -69,6 +69,7 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
         if (!$isIrfo) {
             // hide IRFO navigation
             $navigationPlugin->findById('operator_irfo')->setVisible(false);
+            $navigationPlugin->findById('operator_fees')->setVisible(false);
         }
 
         if ($organisation['isDisqualified']) {

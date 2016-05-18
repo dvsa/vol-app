@@ -31,6 +31,14 @@ OLCS.ready(function() {
     }
   }
 
+  var showHideQuantity = function(showQuantity) {
+      if (showQuantity) {
+        $("#quantity").val('1').parent().show();
+      } else {
+        $("#quantity").val('').parent().hide();
+      }
+  }
+
   // populate Amount and VAT rate fields when FeeType is selected
   OLCS.cascadeInput({
     source: form + " #feeType",
@@ -44,6 +52,7 @@ OLCS.ready(function() {
         success: function(result) {
           callback(result);
           showHideVatRate(result.taxRate);
+          showHideQuantity(result.showQuantity);
         }
       });
     }
@@ -60,4 +69,6 @@ OLCS.ready(function() {
 
   // initially hide vat rate field
   showHideVatRate(0);
+  // initially hide quantity field
+  showHideQuantity(0);
 });
