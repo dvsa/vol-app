@@ -34,7 +34,7 @@ class TaskAllocationRule implements MapperInterface
                 'id' => $data['id'],
                 'version' => $data['version'],
                 'category' => $data['category'],
-                'goodsOrPsv' => isset($data['goodsOrPsv']['id']) ? $data['goodsOrPsv']['id'] : '',
+                'goodsOrPsv' => isset($data['goodsOrPsv']['id']) ? $data['goodsOrPsv']['id'] : 'na',
                 'isMlh' => $data['isMlh'] ? 'Y' : 'N',
                 'trafficArea' => $data['trafficArea'],
                 'teamId' => $data['team']['id'],
@@ -72,6 +72,10 @@ class TaskAllocationRule implements MapperInterface
         // if Alpha Split is selected then set user to null
         if ($data['user'] === 'alpha-split') {
             $data['user'] = null;
+        }
+        // if selected Not Applicable for goodsOrPsv
+        if ($data['goodsOrPsv'] === 'na') {
+            $data['goodsOrPsv'] = null;
         }
         if (empty($data['user'])) {
             unset($data['user']);
