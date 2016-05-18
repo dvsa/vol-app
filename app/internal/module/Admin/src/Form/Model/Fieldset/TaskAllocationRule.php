@@ -46,7 +46,7 @@ class TaskAllocationRule
      *      "value_options":{
      *          "lcat_gv":"Goods",
      *          "lcat_psv":"PSV",
-     *          "":"N/A"
+     *          "na":"N/A"
      *      }
      * })
      * @Form\Type("Radio")
