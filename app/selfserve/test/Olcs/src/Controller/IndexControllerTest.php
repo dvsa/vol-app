@@ -1,53 +1,97 @@
 <?php
-/**
- * Class Index Controller Test
- */
+
 namespace OlcsTest\Controller;
 
+use Common\Rbac\User;
 use Common\RefData;
 use Mockery as m;
-use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Olcs\Controller\IndexController as Sut;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\Controller\IndexController;
 
 /**
  * Class Index Controller Test
  */
-class IndexControllerTest extends TestCase
+class IndexControllerTest extends MockeryTestCase
 {
+    /** @var IndexController|\Mockery\MockInterface  */
     protected $sut;
 
     public function setUp()
     {
-        $this->sut = m::mock(Sut::class)
-            ->makePartial()
-            ->shouldAllowMockingProtectedMethods();
+        $this->sut = m::mock(IndexController::class)
+            ->makePartial();
     }
 
-    public function testIndexAction()
+    public function testIndexLogin()
     {
-        $this->sut->shouldReceive('isGranted')
-            ->with(RefData::PERMISSION_SELFSERVE_DASHBOARD)
-            ->andReturn(false);
+        $this->sut->shouldReceive('currentUser->getIdentity')
+            ->once()
+            ->andReturnNull();
 
         $this->sut->shouldReceive('redirect->toRoute')
-            ->with('search', [], ['code' => 303], false)
+            ->with('auth/login')
             ->once()
             ->andReturn('REDIRECT');
 
-        $this->assertEquals('REDIRECT', $this->sut->indexAction());
+        static::assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
-    public function testIndexActionWithDashboard()
+    public function testIndexLoginAnon()
     {
+        $mockIdentity = new User();
+        $mockIdentity->setUserType(User::USER_TYPE_ANON);
+
+        $this->sut->shouldReceive('currentUser->getIdentity')
+            ->once()
+            ->andReturn($mockIdentity);
+
+        $this->sut->shouldReceive('redirect->toRoute')
+            ->with('auth/login')
+            ->once()
+            ->andReturn('REDIRECT');
+
+        static::assertEquals('REDIRECT', $this->sut->indexAction());
+    }
+
+    public function testIndexDashboard()
+    {
+        $mockIdentity = new User();
+        $mockIdentity->setUserType(User::USER_TYPE_INTERNAL);
+
+        $this->sut->shouldReceive('currentUser->getIdentity')
+            ->once()
+            ->andReturn($mockIdentity);
+
         $this->sut->shouldReceive('isGranted')
             ->with(RefData::PERMISSION_SELFSERVE_DASHBOARD)
             ->andReturn(true);
 
         $this->sut->shouldReceive('redirect->toRoute')
-            ->with('dashboard', [], ['code' => 303], false)
+            ->with('dashboard', [], ['code' => 303])
             ->once()
             ->andReturn('REDIRECT');
 
-        $this->assertEquals('REDIRECT', $this->sut->indexAction());
+        static::assertEquals('REDIRECT', $this->sut->indexAction());
+    }
+
+    public function testIndexSearch()
+    {
+        $mockIdentity = new User();
+        $mockIdentity->setUserType(User::USER_TYPE_INTERNAL);
+
+        $this->sut->shouldReceive('currentUser->getIdentity')
+            ->once()
+            ->andReturn($mockIdentity);
+
+        $this->sut->shouldReceive('isGranted')
+            ->with(RefData::PERMISSION_SELFSERVE_DASHBOARD)
+            ->andReturn(false);
+
+        $this->sut->shouldReceive('redirect->toRoute')
+            ->with('search')
+            ->once()
+            ->andReturn('REDIRECT');
+
+        static::assertEquals('REDIRECT', $this->sut->indexAction());
     }
 }

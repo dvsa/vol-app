@@ -72,11 +72,12 @@ class NewTmUserDetails
      * @Form\Attributes({"id": "username", "class":"medium", "data-container-class": "js-visible"})
      * @Form\Options({
      *     "label":"tm-add-user-username",
-     *     "short-label":"tm-add-user-username"
+     *     "short-label":"tm-add-user-username",
+     *     "hint":"tm-add-user-username.hint"
      * })
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Common\Form\Elements\Validators\Username"})
+     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Username"})
      * @Form\Required(false)
      */
     public $username = null;

@@ -45,12 +45,17 @@
             echo $menu->setUlClass('proposition-nav');
             ?>
 
-        </nav>
+        </div>
       </div>
     </header><!-- .global-header -->
 
     <?php
+    //  system info messages
+    if (! $this->currentUser()->isLoggedIn()) :
+        echo $this->systemInfoMessages(false);
+    endif;
 
+    //  use cookie notification
     $showCookieBanner = $this->getPlaceholder('showCookieBanner')->asBool();
     if ($showCookieBanner === true) {
         ?>
