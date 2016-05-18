@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Abstract Internal Application Decsision Controller
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
@@ -19,42 +14,45 @@ use Zend\View\Model\ViewModel;
 abstract class AbstractApplicationDecisionController extends AbstractController implements
     ApplicationControllerInterface
 {
-    protected $lva;
-    protected $location;
-
     protected $cancelMessageKey;
     protected $successMessageKey;
     protected $titleKey;
 
     public function indexAction()
     {
+        $helperFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
+
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
         $id      = $this->params('application');
+
+        /** @var \Zend\Form\FormInterface $form */
         $form    = $this->getForm();
 
         if ($request->isPost()) {
-
             if ($this->isButtonPressed('cancel')) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')
-                    ->addWarningMessage($this->cancelMessageKey);
-                return $this->redirect()->toRouteAjax('lva-'.$this->lva, ['application' => $id]);
+                $helperFlashMsgr->addWarningMessage($this->cancelMessageKey);
+                return $this->redirect()->toRouteAjax('lva-' . $this->lva, ['application' => $id]);
             }
 
             $postData = (array)$request->getPost();
             $form->setData($postData);
 
             if ($form->isValid()) {
-
                 $data = $form->getData();
-                $this->processDecision($id, $data);
 
-                $message = $this->getServiceLocator()->get('Helper\Translation')
-                    ->translateReplace($this->successMessageKey, [$id]);
+                $response = $this->processDecision($id, $data);
 
-                $this->getServiceLocator()->get('Helper\FlashMessenger')
-                    ->addSuccessMessage($message);
+                if ($response->isOk()) {
+                    $message = $this->getServiceLocator()->get('Helper\Translation')
+                        ->translateReplace($this->successMessageKey, [$id]);
 
-                return $this->redirectOnSuccess($id);
+                    $helperFlashMsgr->addSuccessMessage($message);
+                } else {
+                    $helperFlashMsgr->addErrorMessage('unknown-error');
+                }
+
+                return $this->redirectToApp($id);
             }
         }
 
@@ -64,14 +62,14 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
         return $this->render($view);
     }
 
+    /**
+     * @return \Common\Service\Cqrs\Response
+     */
     abstract protected function processDecision($id, $data);
 
     abstract protected function getForm();
 
-    /**
-     * Default behaviour on success is to redirect to Licence overview page
-     */
-    protected function redirectOnSuccess($applicationId)
+    protected function redirectToApp($applicationId)
     {
         return $this->redirect()->toRouteAjax(
             'lva-application/overview',

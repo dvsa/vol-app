@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Form\Elements\InputFilters\SelectEmpty as SelectElement;
+use Common\Service\Cqrs\Response;
 use Zend\View\Model\ViewModel;
 use Dvsa\Olcs\Transfer\Query\Application\Overview as OverviewQry;
 use Dvsa\Olcs\Transfer\Command\Application\Overview as OverviewCmd;
@@ -18,7 +19,10 @@ trait ApplicationOverviewTrait
      */
     public function indexAction()
     {
-        if ($this->getRequest()->isPost() && $this->isButtonPressed('cancel')) {
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
+
+        if ($request->isPost() && $this->isButtonPressed('cancel')) {
             $this->addSuccessMessage('flash-discarded-changes');
             return $this->reload();
         }
@@ -33,15 +37,20 @@ trait ApplicationOverviewTrait
         $form = $this->getOverviewForm();
         $this->alterForm($form, $licence, $application);
 
-        if ($this->getRequest()->isPost()) {
-            $data = (array) $this->getRequest()->getPost();
+        if ($request->isPost()) {
+            $data = (array) $request->getPost();
+
             $form->setData($data);
+
             if ($form->isValid()) {
                 $dtoData = $this->mapData($form->getData());
                 $cmd = OverviewCmd::create($dtoData);
+
+                /** @var Response $response */
                 $response = $this->handleCommand($cmd);
                 if ($response->isOk()) {
                     $this->addSuccessMessage('application.overview.saved');
+
                     if ($this->isButtonPressed('saveAndContinue')) {
                         return $this->redirect()->toRoute(
                             'lva-'.$this->lva.'/type_of_licence',
@@ -59,8 +68,9 @@ trait ApplicationOverviewTrait
         }
 
         // Render the view
-        $viewData = $this->getServiceLocator()->get('Helper\ApplicationOverview')
-            ->getViewData($application, $this->lva);
+        /** @var \Olcs\Service\Helper\ApplicationOverviewHelperService $helper */
+        $helper = $this->getServiceLocator()->get('Helper\ApplicationOverview');
+        $viewData = $helper->getViewData($application, $this->lva);
 
         $content = new ViewModel(
             array_merge(
@@ -76,6 +86,9 @@ trait ApplicationOverviewTrait
         return $this->render($content);
     }
 
+    /**
+     * @return \Zend\Form\FormInterface
+     */
     protected function getOverviewForm()
     {
         return $this->getServiceLocator()->get('Helper\Form')
@@ -85,6 +98,7 @@ trait ApplicationOverviewTrait
     protected function getOverviewData($applicationId)
     {
         $query = OverviewQry::create(['id' => $applicationId]);
+
         $response = $this->handleQuery($query);
         return $response->getResult();
     }
@@ -110,7 +124,7 @@ trait ApplicationOverviewTrait
     }
 
     /**
-     * @param Zend\Form\Form $form
+     * @param \Zend\Form\FormInterface $form
      * @param array $licence licence overview data
      * @param array $application application overview data
      */
@@ -119,13 +133,17 @@ trait ApplicationOverviewTrait
         // build up the tracking fieldset dynamically, based on relevant sections
         $fieldset = $form->get('tracking');
         $stringHelper = $this->getServiceLocator()->get('Helper\String');
-        $sections = $this->getAccessibleSections();
+
         $options = $application['valueOptions']['tracking'];
+
+        $sections = $this->getAccessibleSections();
         foreach ($sections as $section) {
             $selectProperty = lcfirst($stringHelper->underscoreToCamel($section)) . 'Status';
+
             $select = new SelectElement($selectProperty);
             $select->setValueOptions($options);
             $select->setLabel('section.name.'.$section);
+
             $fieldset->add($select);
         }
 
@@ -147,18 +165,22 @@ trait ApplicationOverviewTrait
 
     protected function mapData($formData)
     {
+        $details = $formData['details'];
+
         $data = [
-            'id' => $formData['details']['id'],
-            'version' => $formData['details']['version'],
-            'leadTcArea' => $formData['details']['leadTcArea'],
+            'id' => $details['id'],
+            'version' => $details['version'],
+            'leadTcArea' => $details['leadTcArea'],
             'tracking' => $formData['tracking'],
-            'overrideOppositionDate' => $formData['details']['overrideOppositionDate'],
+            'overrideOppositionDate' => $details['overrideOppositionDate'],
         ];
-        if (isset($formData['details']['receivedDate'])) {
-            $data['receivedDate'] = $formData['details']['receivedDate'];
+
+        if (isset($details['receivedDate'])) {
+            $data['receivedDate'] = $details['receivedDate'];
         }
-        if (isset($formData['details']['targetCompletionDate'])) {
-            $data['targetCompletionDate'] = $formData['details']['targetCompletionDate'];
+
+        if (isset($details['targetCompletionDate'])) {
+            $data['targetCompletionDate'] = $details['targetCompletionDate'];
         }
 
         return $data;

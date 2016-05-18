@@ -1,14 +1,8 @@
 <?php
 
-/**
- * Application Controller Trait
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller\Traits;
 
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\View\Model\ViewModel;
 use Common\Service\Entity\LicenceEntityService;
 
 /**
@@ -18,13 +12,20 @@ use Common\Service\Entity\LicenceEntityService;
  */
 trait ApplicationControllerTrait
 {
+    /**
+     * @param \Zend\View\Model\ViewModel $view
+     * @param string|null  $title
+     * @param array $variables
+     *
+     * @return mixed
+     */
     protected function render($view, $title = null, array $variables = [])
     {
         if ($title === null) {
             $title = $view->getVariable('title');
         }
 
-        if (empty($variables)) {
+        if (count($variables) === 0) {
             $variables = $view->getVariables();
         }
 

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Abstract Internal Submit Controller
- *
- * @author Alex Peshkov <alex.peshkov@vltech.co.uk>
- */
 namespace Olcs\Controller\Lva;
 
 use Dvsa\Olcs\Transfer\Command\Application\SubmitApplication;
@@ -34,12 +29,12 @@ abstract class AbstractSubmitController extends AbstractApplicationDecisionContr
 
     protected function processDecision($id, $data)
     {
-        $command = SubmitApplication::create(
-            [
-                'id' => $id
-            ]
+        return $this->handleCommand(
+            SubmitApplication::create(
+                [
+                    'id' => $id,
+                ]
+            )
         );
-
-        $this->handleCommand($command);
     }
 }

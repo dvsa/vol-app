@@ -1,19 +1,13 @@
 <?php
 
-/**
- * AbstractReviveApplicationController.php
- */
 namespace Olcs\Controller\Lva;
 
-use Olcs\Controller\Lva\AbstractApplicationDecisionController;
 use Dvsa\Olcs\Transfer\Command\Application\ReviveApplication;
 
 /**
  * Class AbstractReviveApplicationController
  *
  * Revive an application.
- *
- * @package Olcs\Controller\Lva
  *
  * @author Joshua Curtis <josh.curtis@valtech.co.uk>
  */
@@ -39,25 +33,12 @@ abstract class AbstractReviveApplicationController extends AbstractApplicationDe
 
     protected function processDecision($id, $data)
     {
-        $response = $this->handleCommand(
+        return $this->handleCommand(
             ReviveApplication::create(
                 [
-                    'id' => $id
+                    'id' => $id,
                 ]
             )
-        );
-
-        return $response;
-    }
-
-    /**
-     * Redirect to Application rather than Licence overview page
-     */
-    protected function redirectOnSuccess($applicationId)
-    {
-        return $this->redirect()->toRouteAjax(
-            'lva-application/overview',
-            ['application' => $applicationId]
         );
     }
 }

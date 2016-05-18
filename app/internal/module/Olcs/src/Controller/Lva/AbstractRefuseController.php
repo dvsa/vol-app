@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Abstract Internal Refuse Controller
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\Controller\Lva;
 
 use Dvsa\Olcs\Transfer\Command\Application\RefuseApplication;
@@ -34,12 +29,12 @@ abstract class AbstractRefuseController extends AbstractApplicationDecisionContr
 
     protected function processDecision($id, $data)
     {
-        $command = RefuseApplication::create(
-            [
-                'id' => $id
-            ]
+        $this->handleCommand(
+            RefuseApplication::create(
+                [
+                    'id' => $id,
+                ]
+            )
         );
-
-        $this->handleCommand($command);
     }
 }
