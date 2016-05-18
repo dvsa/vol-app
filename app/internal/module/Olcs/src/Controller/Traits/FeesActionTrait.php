@@ -844,7 +844,7 @@ trait FeesActionTrait
     /**
      * Get value options array for create fee type form
      *
-     * @param Date $effectiveDate
+     * @param string $effectiveDate string presentation of DateTime
      * @param int $currentFeeType
      * @return array
      */
@@ -861,7 +861,7 @@ trait FeesActionTrait
     /**
      * Fetch fee type list data
      *
-     * @param Date $effectiveDate
+     * @param string $effectiveDate string presentation of DateTime
      * @param int $currentFeeType
      * @return array
      */
