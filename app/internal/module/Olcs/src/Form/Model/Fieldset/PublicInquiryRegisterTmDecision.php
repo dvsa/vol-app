@@ -14,7 +14,7 @@ class PublicInquiryRegisterTmDecision extends CaseBase
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
      * @Form\Options({
-     *     "label": "Presiding TC/DTC/TR/DTR",
+     *     "label": "Presiding TC/DTC/HTRU/DHTRU",
      *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
@@ -27,7 +27,7 @@ class PublicInquiryRegisterTmDecision extends CaseBase
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
      * @Form\Options({
-     *     "label": "Presiding TC/DTC/TR/DTR role",
+     *     "label": "Presiding TC/DTC/HTRU/DHTRU role",
      *     "category": "tc_role",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
