@@ -29,7 +29,7 @@ abstract class AbstractRefuseController extends AbstractApplicationDecisionContr
 
     protected function processDecision($id, $data)
     {
-        $this->handleCommand(
+        return $this->handleCommand(
             RefuseApplication::create(
                 [
                     'id' => $id,

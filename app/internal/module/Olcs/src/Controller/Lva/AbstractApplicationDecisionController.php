@@ -32,7 +32,8 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
         if ($request->isPost()) {
             if ($this->isButtonPressed('cancel')) {
                 $helperFlashMsgr->addWarningMessage($this->cancelMessageKey);
-                return $this->redirect()->toRouteAjax('lva-' . $this->lva, ['application' => $id]);
+
+                return $this->redirectToOverview($id);
             }
 
             $postData = (array)$request->getPost();
@@ -52,7 +53,7 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
                     $helperFlashMsgr->addErrorMessage('unknown-error');
                 }
 
-                return $this->redirectToApp($id);
+                return $this->redirectToOverview($id);
             }
         }
 
@@ -69,10 +70,10 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
 
     abstract protected function getForm();
 
-    protected function redirectToApp($applicationId)
+    protected function redirectToOverview($applicationId)
     {
         return $this->redirect()->toRouteAjax(
-            'lva-application/overview',
+            'lva-' . $this->lva . '/overview',
             ['application' => $applicationId]
         );
     }

@@ -14,6 +14,7 @@ use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteCo
 use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
 
 use Olcs\Controller\SearchController as SearchController;
+use Zend\Mvc\Router\Http\Segment;
 
 $feeActionRoute = [
     // child route config that is used in multiple places
@@ -2546,6 +2547,16 @@ $routes['lva-variation']['child_routes'] = array_merge(
                 )
             )
         ),
+        'overview' => [
+            'type' => Segment::class,
+            'options' => [
+                'route' => '',
+                'defaults' => [
+                    'controller' => 'LvaVariation',
+                    'action' => 'index',
+                ],
+            ],
+        ],
     )
 );
 

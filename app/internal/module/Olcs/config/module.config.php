@@ -59,7 +59,7 @@ return array(
             ),
         ),
         'lva_controllers' => array(
-            'LvaApplication' => 'Olcs\Controller\Lva\Application\OverviewController',
+            'LvaApplication' => Olcs\Controller\Lva\Application\OverviewController::class,
             'LvaApplication/TypeOfLicence' => 'Olcs\Controller\Lva\Application\TypeOfLicenceController',
             'LvaApplication/BusinessType' => 'Olcs\Controller\Lva\Application\BusinessTypeController',
             'LvaApplication/BusinessDetails' => 'Olcs\Controller\Lva\Application\BusinessDetailsController',
@@ -108,7 +108,7 @@ return array(
             'LvaLicence/ConditionsUndertakings' => 'Olcs\Controller\Lva\Licence\ConditionsUndertakingsController',
             'LvaLicence/Variation' => 'Olcs\Controller\Lva\Licence\VariationController',
             'LvaLicence/Trailers' => 'Olcs\Controller\Lva\Licence\TrailersController',
-            'LvaVariation' => 'Olcs\Controller\Lva\Variation\OverviewController',
+            'LvaVariation' => Olcs\Controller\Lva\Variation\OverviewController::class,
             'LvaVariation/TypeOfLicence' => 'Olcs\Controller\Lva\Variation\TypeOfLicenceController',
             'LvaVariation/BusinessType' => 'Olcs\Controller\Lva\Variation\BusinessTypeController',
             'LvaVariation/BusinessDetails' => 'Olcs\Controller\Lva\Variation\BusinessDetailsController',
