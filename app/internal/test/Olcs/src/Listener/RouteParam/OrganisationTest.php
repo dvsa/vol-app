@@ -2,11 +2,19 @@
 
 namespace OlcsTest\Listener\RouteParam;
 
-use Mockery\Adapter\Phpunit\MockeryTestCase as MockeryTestCase;
+use Common\Service\Cqrs\Query\CachingQueryService as QueryService;
+use Dvsa\Olcs\Transfer\Query\QueryContainerInterface;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\Organisation;
-use Mockery as m;
 use Olcs\Listener\RouteParams;
+use Olcs\Service\Marker\MarkerService;
+use Zend\EventManager\EventManagerInterface;
+use Zend\Navigation\AbstractContainer;
+use Zend\Navigation\Navigation;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class OrganisationTest
@@ -14,34 +22,101 @@ use Olcs\Listener\RouteParams;
  */
 class OrganisationTest extends MockeryTestCase
 {
+    /** @var  m\MockInterface */
+    private $mockAnnotationBldr;
+    /** @var  m\MockInterface */
+    private $mockQuerySrv;
+    /** @var  m\MockInterface */
+    private $mockMarkerSrv;
+    /** @var  m\MockInterface */
+    private $mockSideBar;
+    /** @var  m\MockInterface */
+    private $mocNavMenu;
+    /** @var  m\MockInterface */
+    private $mockResponse;
+
+    /** @var  Organisation */
+    protected $sut;
+
     public function setUp()
     {
+        $this->mockMarkerSrv = m::mock(MarkerService::class);
+
+        //  mock api response
+        $this->mockResponse = m::mock();
+        $query = m::mock(QueryContainerInterface::class);
+
+        $this->mockAnnotationBldr = m::mock(AnnotationBuilder::class);
+        $this->mockAnnotationBldr
+            ->shouldReceive('createQuery')
+            ->atMost(1)
+            ->andReturn($query);
+
+        $this->mockQuerySrv = m::mock(QueryService::class);
+        $this->mockQuerySrv
+            ->shouldReceive('send')
+            ->with($query)
+            ->atMost(1)
+            ->andReturn($this->mockResponse);
+
+        //  mock Navigation
+        $this->mockSideBar = m::mock(\Zend\Navigation\AbstractContainer::class);
+        $this->mocNavMenu = m::mock(\Zend\Navigation\AbstractContainer::class);
+
+        $mockNavPlugin = m::mock(Navigation::class)
+            ->shouldReceive('__invoke')
+            ->with('navigation')
+            ->andReturn($this->mocNavMenu)
+            ->getMock();
+
+        $helperMngr = m::mock(\Zend\View\HelperPluginManager::class)
+            ->shouldReceive('get')
+            ->once()
+            ->with('Navigation')
+            ->andReturn($mockNavPlugin)
+            ->getMock();
+
+        /** @var ServiceLocatorInterface|m\MockInterface $mockSl */
+        $mockSl = m::mock(ServiceLocatorInterface::class);
+        $mockSl->shouldReceive('get')
+            ->andReturnUsing(
+                function ($class) use ($helperMngr) {
+                    $map = [
+                        'TransferAnnotationBuilder' => $this->mockAnnotationBldr,
+                        'QueryService' => $this->mockQuerySrv,
+                        'right-sidebar' => $this->mockSideBar,
+                        MarkerService::class => $this->mockMarkerSrv,
+                        'ViewHelperManager' => $helperMngr,
+                    ];
+
+                    return $map[$class];
+                }
+            );
+
         $this->sut = new Organisation();
+        $this->sut->createService($mockSl);
+
         parent::setUp();
     }
 
-    public function setupOrganisation($orgData)
+    private function setupOrganisation($orgData)
     {
-        $mockAnnotationBuilder = m::mock();
-        $this->sut->setAnnotationBuilder($mockAnnotationBuilder);
-        $mockQueryService = m::mock();
-        $this->sut->setQueryService($mockQueryService);
-        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
-        $this->sut->setMarkerService($mockMarkerService);
+        $this->mockResponse
+            ->shouldReceive('isOk')->with()->once()->andReturn(true)
+            ->shouldReceive('getResult')->with()->once()->andReturn($orgData);
 
-        $mockResponse = m::mock();
-        $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturn('CREATE_QUERY');
-        $mockQueryService->shouldReceive('send')->with('CREATE_QUERY')->once()->andReturn($mockResponse);
-        $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
-        $mockResponse->shouldReceive('getResult')->with()->once()->andReturn($orgData);
-
-        $mockMarkerService->shouldReceive('addData')->with('organisation', $orgData);
+        $this->mockMarkerSrv
+            ->shouldReceive('addData')
+            ->with('organisation', $orgData);
     }
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
-        $mockEventManager->shouldReceive('attach')->once()
+        /** @var EventManagerInterface|m\MockInterface $mockEventManager */
+        $mockEventManager = m::mock(EventManagerInterface::class);
+        $mockEventManager
+            ->shouldReceive('attach')
+            ->once()
             ->with(RouteParams::EVENT_PARAM . 'organisation', [$this->sut, 'onOrganisation'], 1);
 
         $this->sut->attach($mockEventManager);
@@ -51,109 +126,89 @@ class OrganisationTest extends MockeryTestCase
     {
         $id = 1;
 
-        $mockAnnotationBuilder = m::mock();
-        $this->sut->setAnnotationBuilder($mockAnnotationBuilder);
-        $mockQueryService = m::mock();
-        $this->sut->setQueryService($mockQueryService);
+        $this->mockResponse
+            ->shouldReceive('isOk')
+            ->andReturn(false);
 
-        $mockResponse = m::mock();
-        $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturn('CREATE_QUERY');
-        $mockQueryService->shouldReceive('send')->with('CREATE_QUERY')->once()->andReturn($mockResponse);
-        $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(false);
-
-        $event = new RouteParam();
-        $event->setValue($id);
-
+        //  expect
         $this->setExpectedException(\Common\Exception\ResourceNotFoundException::class);
 
-        $this->sut->onOrganisation($event);
-    }
-
-    public function testOnOrganisationNotIrfoDisqualified()
-    {
-        $id = 1;
-        $orgData = [
-            'name' => 'org name',
-            'isIrfo' => 'N',
-            'isDisqualified' => true,
-            'isUnlicensed' => true
-        ];
-
-        $mockSideBar = m::mock();
-        $this->sut->setSidebarNavigationService($mockSideBar);
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
-        $this->sut->setViewHelperManager($mockViewHelperManager);
-
-        $this->setupOrganisation($orgData);
-
+        //  call
         $event = new RouteParam();
         $event->setValue($id);
 
-        $mockNavigation = m::mock('\StdClass');
-        $mockNavigation->shouldReceive('setVisible')->times(6)->with(false);
-
-        $mockMenu = m::mock('\Zend\Navigation\Navigation');
-        $mockMenu->shouldReceive('__invoke')->with('navigation')->andReturnSelf();
-        $mockMenu->shouldReceive('findById')->andReturn($mockNavigation);
-        $mockViewHelperManager->shouldReceive('get')->with('Navigation')->andReturn($mockMenu);
-
-        $mockNav = m::mock();
-        $mockNav->shouldReceive('setVisible')->once();
-        $mockSideBar->shouldReceive('findById')->with('operator-decisions-disqualify')->once()->andReturn($mockNav);
-
         $this->sut->onOrganisation($event);
     }
 
-    public function testOnOrganisationIrfoNotDisqualified()
+    public function testOnOrganisation()
     {
         $id = 1;
+
         $orgData = [
             'name' => 'org name',
             'isIrfo' => 'Y',
-            'isDisqualified' => false,
-            'isUnlicensed' => false
+            'isDisqualified' => true,
+            'isUnlicensed' => true,
         ];
-
-        $mockSideBar = m::mock();
-        $this->sut->setSidebarNavigationService($mockSideBar);
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
-        $this->sut->setViewHelperManager($mockViewHelperManager);
-
-        $mockNavigation = m::mock('\StdClass');
-        $mockNavigation->shouldReceive('setVisible')->times(3)->with(false);
-
-        $mockMenu = m::mock('\Zend\Navigation\Navigation');
-        $mockMenu->shouldReceive('__invoke')->with('navigation')->andReturnSelf();
-        $mockMenu->shouldReceive('findById')->andReturn($mockNavigation);
-        $mockViewHelperManager->shouldReceive('get')->with('Navigation')->andReturn($mockMenu);
-
         $this->setupOrganisation($orgData);
 
+        $mockMenuItem = m::mock()
+            ->shouldReceive('setVisible')
+            ->with(false)
+            ->getMock();
+
+        $this->mocNavMenu
+            ->shouldReceive('findById')
+            ->with('/^operator_/')
+            ->times(5)
+            ->andReturn($mockMenuItem);
+
+        $this->mockSideBar
+            ->shouldReceive('findById')
+            ->with('operator-decisions-disqualify')
+            ->once()
+            ->andReturn($mockMenuItem);
+
+        //  call
         $event = new RouteParam();
         $event->setValue($id);
 
         $this->sut->onOrganisation($event);
     }
 
-    public function testCreateService()
+    public function testOnOrganisationIsNotAll()
     {
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
-        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
+        $id = 1;
+        $orgData = [
+            'name' => 'org name',
+            'isIrfo' => 'not Y',
+            'isDisqualified' => false,
+            'isUnlicensed' => false,
+        ];
+        $this->setupOrganisation($orgData);
 
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
-        $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn('TransferAnnotationBuilder');
-        $mockSl->shouldReceive('get')->with('QueryService')->andReturn('QueryService');
-        $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn('right-sidebar');
-        $mockSl->shouldReceive('get')->with(\Olcs\Service\Marker\MarkerService::class)->andReturn($mockMarkerService);
+        $mockMenuItem = m::mock()
+            ->shouldReceive('setVisible')
+            ->with(false)
+            ->getMock();
 
-        $service = $this->sut->createService($mockSl);
+        $this->mocNavMenu
+            ->shouldReceive('findById')
+            ->times(3)
+            ->with('/^unlicensed_operator_/')
+            ->andReturn($mockMenuItem)
+            //
+            ->shouldReceive('findById')
+            ->times(2)
+            ->with(('/^operator_/'))
+            ->andReturn($mockMenuItem);
 
-        $this->assertSame($this->sut, $service);
-        $this->assertSame($mockViewHelperManager, $this->sut->getViewHelperManager());
-        $this->assertSame('TransferAnnotationBuilder', $this->sut->getAnnotationBuilder());
-        $this->assertSame('QueryService', $this->sut->getQueryService());
-        $this->assertSame('right-sidebar', $this->sut->getSidebarNavigationService());
-        $this->assertSame($mockMarkerService, $this->sut->getMarkerService());
+        $this->mockSideBar->shouldReceive('findById')->never();
+
+        //  call
+        $event = new RouteParam();
+        $event->setValue($id);
+
+        $this->sut->onOrganisation($event);
     }
 }

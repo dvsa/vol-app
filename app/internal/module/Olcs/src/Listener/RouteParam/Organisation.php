@@ -2,16 +2,19 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Common\Exception\ResourceNotFoundException;
+use Common\Service\Cqrs\Query\CachingQueryService as QueryService;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
+use Zend\Navigation\AbstractContainer;
 use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\View\Helper\Navigation;
 
 /**
  * Class Organisation
@@ -20,26 +23,19 @@ use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 class Organisation implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
-    use ViewHelperManagerAwareTrait;
     use ServiceLocatorAwareTrait;
 
+    /** @var  AbstractContainer */
     private $sidebarNavigationService;
+    /** @var  AnnotationBuilder */
+    private $annotationBuilder;
+    /** @var  QueryService */
+    private $queryService;
+    /** @var \Olcs\Service\Marker\MarkerService */
+    private $markerService;
 
-    /**
-     * @var \Olcs\Service\Marker\MarkerService
-     */
-    protected $markerService;
-
-    public function getMarkerService()
-    {
-        return $this->markerService;
-    }
-
-    public function setMarkerService(\Olcs\Service\Marker\MarkerService $markerService)
-    {
-        $this->markerService = $markerService;
-        return $this;
-    }
+    /** @var  Navigation */
+    private $navigationPlugin;
 
     /**
      * Attach one or more listeners
@@ -63,17 +59,17 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
     {
         $organisation = $this->getOrganisation($e->getValue());
 
-        $navigationPlugin = $this->getViewHelperManager()->get('Navigation')->__invoke('navigation');
+        /** @var AbstractContainer $navigationPlugin */
+        $navigationPlugin = $this->navigationPlugin->__invoke('navigation');
 
-        $isIrfo = $organisation['isIrfo'] == 'Y';
-        if (!$isIrfo) {
+        if ($organisation['isIrfo'] !== 'Y') {
             // hide IRFO navigation
             $navigationPlugin->findById('operator_irfo')->setVisible(false);
             $navigationPlugin->findById('operator_fees')->setVisible(false);
         }
 
         if ($organisation['isDisqualified']) {
-            $sidebarNav = $this->getSidebarNavigationService();
+            $sidebarNav = $this->sidebarNavigationService;
             $sidebarNav->findById('operator-decisions-disqualify')->setVisible(false);
         }
 
@@ -82,7 +78,8 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
             $navigationPlugin->findById('operator_business_details')->setVisible(false);
             $navigationPlugin->findById('operator_fees')->setVisible(false);
             $navigationPlugin->findById('operator_documents')->setVisible(false);
-            $navigationPlugin->findById('operator_licences_applications')->setVisible(false);
+            $navigationPlugin->findById('operator_licences')->setVisible(false);
+            $navigationPlugin->findById('operator_applications')->setVisible(false);
         } else {
             // Removed unlicenced only items
             $navigationPlugin->findById('unlicensed_operator_business_details')->setVisible(false);
@@ -90,7 +87,7 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
             $navigationPlugin->findById('unlicensed_operator_vehicles')->setVisible(false);
         }
 
-        $this->getMarkerService()->addData('organisation', $organisation);
+        $this->markerService->addData('organisation', $organisation);
     }
 
     /**
@@ -103,14 +100,15 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
      */
     private function getOrganisation($id)
     {
-        $query = $this->getAnnotationBuilder()->createQuery(
+        $query = $this->annotationBuilder->createQuery(
             \Dvsa\Olcs\Transfer\Query\Organisation\People::create(['id' => $id])
         );
 
-        $response = $this->getQueryService()->send($query);
+        /** @var \Common\Service\Cqrs\Response $response */
+        $response = $this->queryService->send($query);
 
         if (!$response->isOk()) {
-            throw new \Common\Exception\ResourceNotFoundException("Organisation id [$id] not found");
+            throw new ResourceNotFoundException("Organisation id [$id] not found");
         }
 
         return $response->getResult();
@@ -120,54 +118,17 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
+     *
      * @return mixed
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $this->setAnnotationBuilder($serviceLocator->get('TransferAnnotationBuilder'));
-        $this->setQueryService($serviceLocator->get('QueryService'));
-        $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
+        $this->annotationBuilder = $serviceLocator->get('TransferAnnotationBuilder');
+        $this->queryService = $serviceLocator->get('QueryService');
+        $this->sidebarNavigationService = $serviceLocator->get('right-sidebar');
+        $this->markerService = $serviceLocator->get(\Olcs\Service\Marker\MarkerService::class);
+        $this->navigationPlugin = $serviceLocator->get('ViewHelperManager')->get('Navigation');
 
         return $this;
-    }
-
-    /**
-     * @return \Zend\Navigation\Navigation
-     */
-    public function getSidebarNavigationService()
-    {
-        return $this->sidebarNavigationService;
-    }
-
-    /**
-     * @param \Zend\Navigation\Navigation $sidebarNavigationService
-     * @return $this
-     */
-    public function setSidebarNavigationService($sidebarNavigationService)
-    {
-        $this->sidebarNavigationService = $sidebarNavigationService;
-        return $this;
-    }
-
-    public function getAnnotationBuilder()
-    {
-        return $this->annotationBuilder;
-    }
-
-    public function getQueryService()
-    {
-        return $this->queryService;
-    }
-
-    public function setAnnotationBuilder($annotationBuilder)
-    {
-        $this->annotationBuilder = $annotationBuilder;
-    }
-
-    public function setQueryService($queryService)
-    {
-        $this->queryService = $queryService;
     }
 }

@@ -1,13 +1,7 @@
 <?php
 
-/**
- * Unlicensed Operator Business Details Controller
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\Controller\Operator;
 
-use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Operator\CreateUnlicensed as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Operator\UpdateUnlicensed as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Operator\UnlicensedBusinessDetails as BusinessDetailsDto;
@@ -22,6 +16,7 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
 {
     protected $subNavRoute = 'unlicensed_operator_profile';
 
+    /** @var  Mapper */
     protected $mapperClass = Mapper::class;
     protected $createDtoClass = CreateDto::class;
     protected $updateDtoClass = UpdateDto::class;
@@ -46,7 +41,6 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
     {
         $operator = $this->params()->fromRoute('organisation');
         $this->loadScripts(['operator-profile']);
-        $post = $this->params()->fromPost();
 
         if ($this->isButtonPressed('cancel')) {
             // user pressed cancel button in edit form
@@ -59,15 +53,22 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
             }
         }
 
+        /** @var \Zend\Form\FormInterface $form */
         $form = $this->getForm('UnlicensedOperator');
         $this->pageTitle = 'internal-operator-create-new-unlicensed-operator';
 
-        if ($this->getRequest()->isPost()) {
-            // if this is post always take organisation type from parameters
-            $form->setData($post);
-            if ($form->isValid()) {
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
 
+        if ($request->isPost()) {
+            $postData = $request->getPost();
+
+            // if this is post always take organisation type from parameters
+            $form->setData($postData);
+
+            if ($form->isValid()) {
                 $action = $operator ? 'edit' : 'add';
+
                 $response = $this->saveForm($form, $action, 'operator-unlicensed');
                 // we need to process redirect and catch flashMessenger messages if available
                 if ($response !== null) {

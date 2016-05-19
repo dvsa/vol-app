@@ -265,7 +265,8 @@ return array(
             'OperatorController' => 'Olcs\Controller\Operator\OperatorController',
             'OperatorDocsController' => 'Olcs\Controller\Operator\Docs\OperatorDocsController',
             'OperatorBusinessDetailsController' => 'Olcs\Controller\Operator\OperatorBusinessDetailsController',
-            'UnlicensedBusinessDetailsController' => 'Olcs\Controller\Operator\UnlicensedBusinessDetailsController',
+            Olcs\Controller\Operator\UnlicensedBusinessDetailsController::class =>
+                Olcs\Controller\Operator\UnlicensedBusinessDetailsController::class,
             'UnlicensedCasesOperatorController' => 'Olcs\Controller\Operator\Cases\UnlicensedCasesOperatorController',
             'UnlicensedOperatorVehiclesController' => 'Olcs\Controller\Operator\UnlicensedOperatorVehiclesController',
             'OperatorPeopleController' => 'Olcs\Controller\Operator\OperatorPeopleController',
