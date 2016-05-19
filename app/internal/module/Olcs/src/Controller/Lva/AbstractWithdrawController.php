@@ -1,13 +1,7 @@
 <?php
 
-/**
- * Abstract Internal Withdraw Controller
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\Controller\Lva;
 
-use Olcs\Controller\Lva\AbstractApplicationDecisionController;
 use Dvsa\Olcs\Transfer\Command\Application\WithdrawApplication;
 
 /**
@@ -35,15 +29,13 @@ abstract class AbstractWithdrawController extends AbstractApplicationDecisionCon
 
     protected function processDecision($id, $data)
     {
-        $reason = $data['withdraw-details']['reason'];
-
-        $command = WithdrawApplication::create(
-            [
-                'id' => $id,
-                'reason' => $reason
-            ]
+        return $this->handleCommand(
+            WithdrawApplication::create(
+                [
+                    'id' => $id,
+                    'reason' => $data['withdraw-details']['reason'],
+                ]
+            )
         );
-
-        $this->handleCommand($command);
     }
 }

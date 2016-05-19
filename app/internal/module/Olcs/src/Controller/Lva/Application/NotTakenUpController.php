@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Application Not Taken Up Controller
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\Controller\Lva\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\NotTakenUpApplication;
@@ -30,6 +25,8 @@ class NotTakenUpController extends AbstractApplicationDecisionController
     {
         $request  = $this->getRequest();
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
+        /** @var \Zend\Form\FormInterface $form */
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
 
         // override default label on confirm action button
@@ -40,23 +37,12 @@ class NotTakenUpController extends AbstractApplicationDecisionController
 
     protected function processDecision($id, $data)
     {
-        $command = NotTakenUpApplication::create(
-            [
-                'id' => $id
-            ]
-        );
-
-        $this->handleCommand($command);
-    }
-
-    /**
-     * Redirect to Application rather than Licence overview page
-     */
-    protected function redirectOnSuccess($applicationId)
-    {
-        return $this->redirect()->toRouteAjax(
-            'lva-application/overview',
-            ['application' => $applicationId]
+        return $this->handleCommand(
+            NotTakenUpApplication::create(
+                [
+                    'id' => $id,
+                ]
+            )
         );
     }
 }
