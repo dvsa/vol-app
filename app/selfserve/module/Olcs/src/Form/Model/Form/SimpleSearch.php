@@ -20,7 +20,10 @@ class SimpleSearch
     protected $search;
 
     /**
-     * @Form\Attributes({"class": "action--primary large", "value": "Search"})
+     * @Form\Attributes({
+     *    "class": "action--primary large", 
+     *    "value": "lookup-basic-search-submit"
+     * })
      * @Form\Type("Submit")
      */
     protected $submit;
