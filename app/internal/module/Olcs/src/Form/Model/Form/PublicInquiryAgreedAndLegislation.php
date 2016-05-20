@@ -6,7 +6,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Traffic Commissioner agreement and legislation")
+ * @Form\Name("traffic-commissioner-agreement-legislation")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({

@@ -84,7 +84,7 @@ class PublicInquiryHearingFields extends Base
     /**
      * @Form\Attributes({"id":"presidingTc","placeholder":"","class":"medium"})
      * @Form\Options({
-     *     "label": "Presiding TC/DTC/TR/DTR",
+     *     "label": "Presiding TC/DTC/HTRU/DHTRU",
      *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
@@ -97,7 +97,7 @@ class PublicInquiryHearingFields extends Base
     /**
      * @Form\Attributes({"id":"presidedByRole","placeholder":"","class":"medium"})
      * @Form\Options({
-     *     "label": "Presiding TC/DTC/TR/DTR Role",
+     *     "label": "Presiding TC/DTC/HTRU/DHTRU role",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "help-block": "Please select a category",

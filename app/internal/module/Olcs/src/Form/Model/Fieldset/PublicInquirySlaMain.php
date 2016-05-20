@@ -31,7 +31,7 @@ class PublicInquirySlaMain extends Base
 
     /**
      * @Form\Options({
-     *     "label": "Brief to TC",
+     *     "label": "Brief sent",
      *     "create_empty_option": true,
      *     "render_delimiters": "d m y",
      *     "category": "pi",
@@ -62,7 +62,7 @@ class PublicInquirySlaMain extends Base
 
     /**
      * @Form\Options({
-     *     "label": "Date of TC's written decision",
+     *     "label": "Date of written decision",
      *     "create_empty_option": true,
      *     "pattern": "d MMMM y '{{SLA_HINT}}</fieldset>'",
      *     "render_delimiters": "d m y",
@@ -123,7 +123,7 @@ class PublicInquirySlaMain extends Base
 
     /**
      * @Form\Options({
-     *     "label": "Date of TC's written reason",
+     *     "label": "Date of written reason",
      *     "create_empty_option": true,
      *     "render_delimiters": "d m y",
      *     "category": "pi",
