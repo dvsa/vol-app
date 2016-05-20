@@ -25,6 +25,7 @@ return array(
             'title' => 'Address',
             'width' => '350px',
             'formatter' => 'Address',
+            'addressFields' => 'FULL',
             'name' => 'OcAddress'
         ),
         array(
