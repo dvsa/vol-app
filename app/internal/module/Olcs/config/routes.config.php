@@ -1946,7 +1946,7 @@ $routes = [
                 'organisation' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'UnlicensedBusinessDetailsController',
+                'controller' => Olcs\Controller\Operator\UnlicensedBusinessDetailsController::class,
                 'action' => 'index-jump',
             ]
         ],
@@ -1957,7 +1957,7 @@ $routes = [
                 'options' => [
                     'route' => 'business-details[/]',
                     'defaults' => [
-                        'controller' => 'UnlicensedBusinessDetailsController',
+                        'controller' => Olcs\Controller\Operator\UnlicensedBusinessDetailsController::class,
                         'action' => 'index',
                     ]
                 ]
@@ -1992,7 +1992,7 @@ $routes = [
         'options' => [
             'route' => '/operator-unlicensed/create[/]',
             'defaults' => [
-                'controller' => 'UnlicensedBusinessDetailsController',
+                'controller' => Olcs\Controller\Operator\UnlicensedBusinessDetailsController::class,
                 'action' => 'index',
             ],
         ],
