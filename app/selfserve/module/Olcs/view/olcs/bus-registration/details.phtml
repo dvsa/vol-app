@@ -1,19 +1,33 @@
 <?php
+$linkBackToSearchLabel =$this->translate('search-result-nav-back-to-operator-search');
+?>
 
+<ul id="top" class="breadcrumbs">
+    <li class="breadcrumbs__item">
+        <a href="<?php echo $this->linkBackToSearchResult; ?>"><?php echo $linkBackToSearchLabel; ?></a>
+    </li>
+</ul>
+
+<?php
+$licence = $this->registrationDetails['licence'];
+$subTitleUrl = $this->url(
+    'entity-view', [
+        'entity' => 'licence',
+        'entityId' => $licence['id'],
+    ]
+);
 echo $this->render(
     '/partials/page-header.phtml',
-    array(
-        'pageTitle' => $this->translate($this->registrationDetails['licence']['organisation']['name']),
-        'pageSubTitle'=>
-            '<a href="' . $this->url('entity-view', ['entity' => 'licence', 'entityId' =>
-                $this->registrationDetails['licence']['id']]). '">' .
-            $this->registrationDetails['licence']['licNo'] . '</a>',
-    )
+    [
+        'pageTitle' => $this->translate($licence['organisation']['name']),
+        'pageSubTitle'=> '<a href="' . $subTitleUrl . '">' . $this->escapeHtml($licence['licNo']) . '</a>',
+        'showNav' => false,
+    ]
 );
 ?>
 
 <div class="row">
-  <div class="full-width">
+    <div class="full-width">
       <div class="read-only__header">
     <h4 id="bus-registration-details" class="read-only__title"><?php echo $this->translate('Bus registration details');
         ?></h4>
@@ -22,20 +36,17 @@ echo $this->render(
     <?php
     $serviceNos = $this->registrationDetails['serviceNo'];
     if (!empty($this->registrationDetails['otherServices'])) {
-        for($i = 0; $i<count($this->registrationDetails['otherServices']);$i++) {
-              $serviceNos .= ', ' . $this->registrationDetails['otherServices'][$i]['serviceNo'];
+        foreach ($this->registrationDetails['otherServices'] as $item) {
+            $serviceNos .= ', ' . $item['serviceNo'];
         }
     }
 
     $busServiceTypes = [];
-    $localAuthoritiesList = [];
-    $trafficAreasList = [];
     if (!empty($this->registrationDetails['busServiceTypes'])) {
-        for($i = 0; $i<count($this->registrationDetails['busServiceTypes']);$i++) {
-            $label = ($i == 0) ? 'Service type' : '';
+        foreach ($this->registrationDetails['busServiceTypes'] as $key => $item) {
             $busServiceTypes[] = [
-                'label' => $label,
-                'value' => $this->registrationDetails['busServiceTypes'][$i]['description']
+                'label' => ($key == 0 ? 'Service type' : ''),
+                'value' => $item['description'],
             ];
         }
     } else {
@@ -45,12 +56,12 @@ echo $this->render(
         ];
     }
 
+    $localAuthoritiesList = [];
     if (!empty($this->registrationDetails['localAuthoritys'])) {
-        for($i = 0; $i<count($this->registrationDetails['localAuthoritys']);$i++) {
-            $label = ($i == 0) ? 'Local authorities covered by route' : '';
+        foreach ($this->registrationDetails['localAuthoritys'] as $key => $item) {
             $localAuthoritiesList[] = [
-                'label' => $label,
-                'value' => $this->registrationDetails['localAuthoritys'][$i]['description']
+                'label' => ($key == 0 ? 'Local authorities covered by route' : ''),
+                'value' => $item['description'],
             ];
         }
     } else {
@@ -60,12 +71,12 @@ echo $this->render(
         ];
     }
 
+    $trafficAreasList = [];
     if (!empty($this->registrationDetails['trafficAreas'])) {
-        for($i = 0; $i<count($this->registrationDetails['trafficAreas']);$i++) {
-            $label = ($i == 0) ? 'TAOs covered by route' : '';
+        foreach ($this->registrationDetails['trafficAreas'] as $key => $item) {
             $trafficAreasList[] = [
-                'label' => $label,
-                'value' => $this->registrationDetails['trafficAreas'][$i]['name']
+                'label' => ($key == 0 ? 'TAOs covered by route' : ''),
+                'value' => $item['name'],
             ];
         }
     } else {
@@ -79,6 +90,7 @@ echo $this->render(
     } else {
         $receivedDate = '';
     }
+    
     if ($this->registrationDetails['effectiveDate']) {
         $effectiveDate = (new \DateTime($this->registrationDetails['effectiveDate']))->format(\DATE_FORMAT);
     } else {
@@ -158,6 +170,13 @@ echo $this->render(
                 <?php endforeach?>
             </div>
         <?php endif?>
-  </div>
-  <!-- .full-width -->
+
+        <div class="actions-container">
+            <a class="action--tertiary large"
+               href="#top"><?php echo $this->translate('search-result-nav-back-to-top'); ?></a>
+            <a class="action--tertiary large"
+               href="<?php echo $this->linkBackToSearchResult; ?>"><?php echo $linkBackToSearchLabel; ?></a>
+        </div>
+    </div>
+    <!-- .full-width -->
 </div>

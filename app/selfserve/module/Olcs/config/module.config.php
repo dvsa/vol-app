@@ -172,7 +172,7 @@ $routes = array(
             'route' =>
                 '/bus-registration[/]',
             'defaults' => array(
-                'controller' => 'Olcs\Ebsr\BusRegApplications',
+                'controller' => Olcs\Controller\Ebsr\BusRegApplicationsController::class,
                 'action' => 'index',
             )
         ),
@@ -364,7 +364,7 @@ $routes = array(
                 'entityId' => '[0-9]+',
             ),
             'defaults' => array(
-                'controller' => 'Entity\View',
+                'controller' => Olcs\Controller\Entity\ViewController::class,
                 'action' => 'details'
             )
         )
@@ -916,7 +916,8 @@ return array(
         'invokables' => array(
             'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
-            'Olcs\Ebsr\BusRegApplications' => 'Olcs\Controller\Ebsr\BusRegApplicationsController',
+            Olcs\Controller\Ebsr\BusRegApplicationsController::class =>
+                Olcs\Controller\Ebsr\BusRegApplicationsController::class,
             'Olcs\BusReg\BusRegRegistrations' => 'Olcs\Controller\BusReg\BusRegRegistrationsController',
             'Dashboard' => Olcs\Controller\DashboardController::class,
             'Fees' => 'Olcs\Controller\FeesController',
@@ -928,7 +929,7 @@ return array(
             MyDetailsController::class => MyDetailsController::class,
             SearchController::class => SearchController::class,
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
-            'Entity\View' => 'Olcs\Controller\Entity\ViewController',
+            Olcs\Controller\Entity\ViewController::class => Olcs\Controller\Entity\ViewController::class,
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
