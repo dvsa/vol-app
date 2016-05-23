@@ -1,15 +1,10 @@
 <?php
-/**
- * Entity View Controller
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
+
 namespace Olcs\Controller\Entity;
 
 use Common\Controller\Lva\AbstractController;
-use Common\Service\Entity\UserEntityService;
-use Dvsa\Olcs\Transfer\Query\Search\Licence as SearchLicence;
 use Common\RefData;
+use Dvsa\Olcs\Transfer\Query\Search\Licence as SearchLicence;
 use Zend\Session\Container;
 
 /**
@@ -41,7 +36,6 @@ class ViewController extends AbstractController
         $this->userType = $this->getUserType();
 
         if (method_exists($this, $action)) {
-
             return $this->$action();
         }
 
@@ -68,6 +62,7 @@ class ViewController extends AbstractController
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
+        $result = null;
         if ($response->isOk()) {
             $result = $response->getResult();
         }
@@ -165,21 +160,16 @@ class ViewController extends AbstractController
      */
     private function getUserType()
     {
-        if (empty($this->userType)) {
-            $authService = $this->getServiceLocator()->get('ZfcRbac\Service\AuthorizationService');
+        if (!empty($this->userType)) {
+            return $this->userType;
+        }
 
-            if ($authService->isGranted(
-                RefData::PERMISSION_SELFSERVE_PARTNER_ADMIN
-            ) ||
-                $authService->isGranted(
-                    RefData::PERMISSION_SELFSERVE_PARTNER_USER
-                )
-
-            ) {
-                $this->userType = self::USER_TYPE_PARTNER;
-            } else {
-                $this->userType = self::USER_TYPE_ANONYMOUS;
-            }
+        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_PARTNER_ADMIN)
+            || $this->isGranted(RefData::PERMISSION_SELFSERVE_PARTNER_USER)
+        ) {
+            $this->userType = self::USER_TYPE_PARTNER;
+        } else {
+            $this->userType = self::USER_TYPE_ANONYMOUS;
         }
 
         return $this->userType;

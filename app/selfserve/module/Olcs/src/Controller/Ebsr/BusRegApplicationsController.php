@@ -3,12 +3,14 @@
 namespace Olcs\Controller\Ebsr;
 
 use Common\Exception\ResourceNotFoundException;
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\EbsrSubmissionList;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\BusRegWithTxcInbox as ItemDto;
 use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\UpdateTxcInbox as UpdateTxcInboxDto;
 use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegVariationHistoryDto;
 use Common\Controller\Lva\AbstractController;
+use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 use Common\Rbac\User;
 
@@ -24,12 +26,13 @@ class BusRegApplicationsController extends AbstractController
      */
     public function indexAction()
     {
-        if ($this->getRequest()->isPost()) {
-            $request = $this->getRequest();
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
 
+        if ($request->isPost()) {
             $postData = $request->getPost();
 
-            if (isset($postData['action']) && isset($postData['table']) && $postData['table'] == 'txc-inbox') {
+            if (isset($postData['action'], $postData['table']) && $postData['table'] === 'txc-inbox') {
                 return $this->processMarkAsRead($postData);
             }
 
@@ -78,7 +81,7 @@ class BusRegApplicationsController extends AbstractController
 
         $pageHeaderText = '';
         $pageHeaderUrl = '';
-        if ($this->isGranted('selfserve-ebsr-upload')) {
+        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_EBSR_UPLOAD)) {
             $pageHeaderText = 'bus-registrations-index-subtitle';
             $pageHeaderUrl = [
                 'route' => 'bus-registration/ebsr',
@@ -169,12 +172,13 @@ class BusRegApplicationsController extends AbstractController
         }
 
         if ($response->isOk()) {
-
             $params['subType'] = $this->params()->fromQuery('subType');
             $params['status'] = $this->params()->fromQuery('status');
 
             return $this->redirect()->toRoute(null, $params, [], false);
         }
+
+        return null;
     }
 
     /**
@@ -205,8 +209,8 @@ class BusRegApplicationsController extends AbstractController
     {
         $id = $this->params()->fromRoute('busRegId');
 
+        // retrieve data
         $query = ItemDto::create(['id' => $id]);
-
         $response = $this->handleQuery($query);
 
         // handle response
@@ -218,20 +222,21 @@ class BusRegApplicationsController extends AbstractController
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
-        if ($response->isOk()) {
-            $results = $response->getResult();
-        }
+        $results = null;
         $documents = [];
 
-        if ($this->isGranted('selfserve-ebsr-documents')) {
-            if (!empty($results['txcInboxs'][0]['pdfDocument'])) {
-                $documents[] = $results['txcInboxs'][0]['pdfDocument'];
-            }
-            if (!empty($results['txcInboxs'][0]['routeDocument'])) {
-                $documents[] = $results['txcInboxs'][0]['routeDocument'];
-            }
-            if (!empty($results['txcInboxs'][0]['zipDocument'])) {
-                $documents[] = $results['txcInboxs'][0]['zipDocument'];
+        if ($response->isOk()) {
+            $results = $response->getResult();
+
+            if ($this->isGranted(RefData::PERMISSION_SELFSERVE_EBSR_DOCUMENTS)) {
+                $txcInboxs = (!empty($results['txcInboxs']) ? reset($results['txcInboxs']) : []);
+
+                foreach (['pdfDocument', 'routeDocument', 'zipDocument'] as $doc) {
+                    if (empty($txcInboxs[$doc])) {
+                        continue;
+                    }
+                    $documents[] = $txcInboxs[$doc];
+                }
             }
         }
 
@@ -241,7 +246,8 @@ class BusRegApplicationsController extends AbstractController
             [
                 'registrationDetails' => $results,
                 'documents' => $documents,
-                'variationHistoryTable' => $this->fetchVariationHistoryTable($results['id'])
+                'variationHistoryTable' => $this->fetchVariationHistoryTable($results['id']),
+                'linkBackToSearchResult' => $this->generateLinkBackToSearchResult(),
             ]
         );
 
@@ -319,9 +325,24 @@ class BusRegApplicationsController extends AbstractController
     private function generateContent($template, $data = [])
     {
         $content = new ViewModel($data);
-
         $content->setTemplate($template);
+
         return $content;
+    }
+
+    /**
+     * @return string
+     */
+    private function generateLinkBackToSearchResult()
+    {
+        $params = new Container('searchQuery');
+
+        $queryParams = [];
+        if (!empty($params->queryParams)) {
+            $queryParams = ['query' => $params->queryParams];
+        }
+
+        return $this->url()->fromRoute('search', $params->routeParams, $queryParams);
     }
 
     /**
@@ -332,6 +353,7 @@ class BusRegApplicationsController extends AbstractController
      */
     public function getFilterForm($params)
     {
+        /** @var \Zend\Form\FormInterface $filterForm */
         $filterForm = $this->getServiceLocator()->get('Helper\Form')->createForm('BusRegApplicationsFilterForm');
 
         $filterForm->setData(
@@ -359,7 +381,8 @@ class BusRegApplicationsController extends AbstractController
             [
                 User::USER_TYPE_LOCAL_AUTHORITY,
                 User::USER_TYPE_OPERATOR
-            ]
+            ],
+            true
         )) {
             return [
                 0 => [
