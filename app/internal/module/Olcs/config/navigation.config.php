@@ -98,7 +98,7 @@ $nav = array(
                         ),
                         array(
                             'id' => 'case_details_penalties',
-                            'label' => 'ERRU penalties',
+                            'label' => 'Serious infringements',
                             'route' => 'case_penalty',
                             'action' => 'index',
                             'use_route_match' => true,
