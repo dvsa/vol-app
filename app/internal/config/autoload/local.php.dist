@@ -92,5 +92,8 @@ return array(
                 ]
             ]
         ]
+    ],
+    'debug' => [
+        'showApiMessages' => false
     ]
 );
