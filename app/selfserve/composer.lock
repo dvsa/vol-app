@@ -1,11 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ab8bf7c8c34ba2b2a0ec96e633488653",
-    "content-hash": "96eafae38eaf965493b0694d401c43f8",
+    "hash": "b733dce5220b5cdbe04f44986baab1a4",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -764,11 +763,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/3.3",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git",
-                "reference": "af0e74a78ed59e4b79d526b448b1918abb85b5b1"
+                "reference": "e744ad640da4bac2f73e71bc5252419ee510516a"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -799,7 +798,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2016-04-01 11:05:28"
+            "time": "2016-05-10 13:47:39"
         },
         {
             "name": "olcs/autoload",
@@ -818,11 +817,11 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "dev-release/3.3",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-auth.git",
-                "reference": "67f41549cc9a3f78ca45b7360841b7403d6a0bfc"
+                "reference": "b2e012fca0d5a6a1f25cce29fef24cfd513feeb6"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -841,7 +840,7 @@
                 }
             },
             "description": "OLCS Authentication",
-            "time": "2016-02-29 11:05:02"
+            "time": "2016-05-09 10:03:48"
         },
         {
             "name": "olcs/olcs-logging",
@@ -849,7 +848,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-logging.git",
-                "reference": "0a8c128813241e5e4b5296ca91b0845a844011c1"
+                "reference": "061052ecea4066766a4ac0a544265efcc37e4033"
             },
             "require": {
                 "php": ">=5.4",
@@ -874,15 +873,15 @@
                 }
             },
             "description": "Logging Module for Olcs",
-            "time": "2016-03-23 15:15:10"
+            "time": "2016-05-04 13:20:38"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "dev-release/3.3",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-transfer.git",
-                "reference": "e3ac0229d44f1d11f1a4e53562e69bd38a5e44dc"
+                "reference": "5a9f1c6fafce5ee0efd19f0a2333c24f8cea253c"
             },
             "require": {
                 "php": ">=5.4",
@@ -900,15 +899,15 @@
                 }
             },
             "description": "OLCS Transfer",
-            "time": "2016-03-23 15:06:38"
+            "time": "2016-05-10 13:47:27"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "dev-release/3.3",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-utils.git",
-                "reference": "fe9fb7b0fc6914a738304584418c215f00223c8e"
+                "reference": "dd7d09cc15111cdd93afa89474e0ea0e1f42bd1d"
             },
             "require": {
                 "php": ">=5.4",
@@ -926,7 +925,7 @@
                 }
             },
             "description": "OLCS Utils",
-            "time": "2016-03-23 15:15:24"
+            "time": "2016-05-04 13:20:54"
         },
         {
             "name": "psr/log",
@@ -968,17 +967,17 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.3",
+            "version": "v2.8.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "56cc5caf051189720b8de974e4746090aaa10d44"
+                "reference": "48221d3de4dc22d2cd57c97e8b9361821da86609"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-console-56cc5caf051189720b8de974e4746090aaa10d44-zip-5de861.tar",
-                "reference": "56cc5caf051189720b8de974e4746090aaa10d44",
-                "shasum": "a66c45f6eff3e1b635ab2b81110485d1ea810fc7"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-console-48221d3de4dc22d2cd57c97e8b9361821da86609-zip-0e430b.tar",
+                "reference": "48221d3de4dc22d2cd57c97e8b9361821da86609",
+                "shasum": "31cd0ab5ea6a2741ad0946fdedf6a6bba9a6d125"
             },
             "require": {
                 "php": ">=5.3.9",
@@ -1024,7 +1023,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-02-28 16:20:50"
+            "time": "2016-04-26 12:00:47"
         },
         {
             "name": "symfony/filesystem",
@@ -1140,7 +1139,7 @@
             "version": "2.3.9",
             "source": {
                 "type": "git",
-                "url": "https://github.com/zendframework/zf2.git",
+                "url": "https://github.com/zendframework/zendframework.git",
                 "reference": "32858f883fffb5eef9f610b538ed026f6033b6de"
             },
             "dist": {
@@ -1473,17 +1472,17 @@
         },
         {
             "name": "mikey179/vfsStream",
-            "version": "v1.6.2",
+            "version": "v1.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikey179/vfsStream.git",
-                "reference": "fefd182fa739d4e23d9dc7c80d3344f528d600ab"
+                "reference": "c19925cd0390d3c436a0203ae859afa460d0474b"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/mikey179-vfsstream-fefd182fa739d4e23d9dc7c80d3344f528d600ab-zip-fb47c1.tar",
-                "reference": "fefd182fa739d4e23d9dc7c80d3344f528d600ab",
-                "shasum": "7b3eec22921962a452203083e0a3be7e4f9b3f57"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/mikey179-vfsstream-c19925cd0390d3c436a0203ae859afa460d0474b-zip-a00b8e.tar",
+                "reference": "c19925cd0390d3c436a0203ae859afa460d0474b",
+                "shasum": "552a1704e2d9fd67f26cb91c39872e6235630f8e"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1515,7 +1514,7 @@
             ],
             "description": "Virtual file system to mock the real file system in unit tests.",
             "homepage": "http://vfs.bovigo.org/",
-            "time": "2016-01-13 09:41:49"
+            "time": "2016-04-09 09:42:01"
         },
         {
             "name": "mockery/mockery",
@@ -2204,17 +2203,17 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "1.3.5",
+            "version": "1.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "dc7a29032cf72b54f36dac15a1ca5b3a1b6029bf"
+                "reference": "2292b116f43c272ff4328083096114f84ea46a56"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/sebastian-environment-dc7a29032cf72b54f36dac15a1ca5b3a1b6029bf-zip-4cd956.tar",
-                "reference": "dc7a29032cf72b54f36dac15a1ca5b3a1b6029bf",
-                "shasum": "4b328c1c5c401ee73bdc7ccb99f3367c9725d663"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/sebastian-environment-2292b116f43c272ff4328083096114f84ea46a56-zip-ffca1d.tar",
+                "reference": "2292b116f43c272ff4328083096114f84ea46a56",
+                "shasum": "f021e1cdbf9a5e179a9e9e980afa6b7097a3a455"
             },
             "require": {
                 "php": ">=5.3.3"
@@ -2250,7 +2249,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2016-02-26 18:40:46"
+            "time": "2016-05-04 07:59:13"
         },
         {
             "name": "sebastian/exporter",
@@ -2459,17 +2458,17 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.3",
+            "version": "v2.8.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "2a4ee40acb880c56f29fb1b8886e7ffe94f3b995"
+                "reference": "e4fbcc65f90909c999ac3b4dfa699ee6563a9940"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-yaml-2a4ee40acb880c56f29fb1b8886e7ffe94f3b995-zip-007e57.tar",
-                "reference": "2a4ee40acb880c56f29fb1b8886e7ffe94f3b995",
-                "shasum": "b25cdaea6df845d0f35438147c3a1b3cbc96d92d"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-yaml-e4fbcc65f90909c999ac3b4dfa699ee6563a9940-zip-822171.tar",
+                "reference": "e4fbcc65f90909c999ac3b4dfa699ee6563a9940",
+                "shasum": "b9cb9473d8cdc45fbddf10a0087d325d85cb3871"
             },
             "require": {
                 "php": ">=5.3.9"
@@ -2504,7 +2503,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-02-23 07:41:20"
+            "time": "2016-03-29 19:00:15"
         }
     ],
     "aliases": [],

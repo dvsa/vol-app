@@ -69,6 +69,7 @@ class SearchController extends AbstractController
 
         $view = new ViewModel(['searchForm' => $form]);
         $view->setTemplate('search/index-' . $this->params()->fromRoute('index') . '.phtml');
+
         return $view;
     }
 
@@ -162,6 +163,8 @@ class SearchController extends AbstractController
         }
 
         $view->setTemplate('layouts/main-search-results.phtml');
+
+        $this->getServiceLocator()->get('Script')->loadFile('search-results');
 
         return $view;
     }

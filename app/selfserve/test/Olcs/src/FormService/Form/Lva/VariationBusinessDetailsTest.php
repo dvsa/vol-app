@@ -23,12 +23,16 @@ class VariationBusinessDetailsTest extends MockeryTestCase
 
     protected $fsm;
 
+    protected $fh;
+
     public function setUp()
     {
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
 
         $this->sut = new VariationBusinessDetails();
         $this->sut->setFormServiceLocator($this->fsm);
+        $this->fh = m::mock('\Common\Service\Helper\FormHelperService')->makePartial();
+        $this->sut->setFormHelper($this->fh);
     }
 
     public function testAlterForm()
@@ -51,6 +55,10 @@ class VariationBusinessDetailsTest extends MockeryTestCase
         $mockApplicationFormService->shouldReceive('alterForm')
             ->once()
             ->with($form);
+
+        $this->fh->shouldReceive('remove')
+            ->with($form, 'allow-email')
+            ->once();
 
         $mockLockBusinessDetailsFormService->shouldReceive('alterForm')
             ->once()

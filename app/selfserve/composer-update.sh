@@ -36,7 +36,7 @@ fi
 if [ -L "vendor/olcs/olcs-auth" ]
 then
     echo "Removing symlink"
-    hadUtilsSymlink=true
+    hadAuthSymlink=true
     rm vendor/olcs/olcs-auth
 fi
 

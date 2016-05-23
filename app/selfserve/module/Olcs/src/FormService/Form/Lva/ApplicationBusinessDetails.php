@@ -24,6 +24,8 @@ class ApplicationBusinessDetails extends CommonApplicationBusinessDetails implem
     {
         parent::alterForm($form, $params);
 
+        $this->getFormHelper()->remove($form, 'allow-email');
+
         // if we have got any in force licences, lock the elements down
         if ($params['hasInforceLicences']) {
             $this->getFormServiceLocator()->get('lva-lock-business_details')->alterForm($form);

@@ -10,7 +10,14 @@ $phoneCount = 0;
 $address = isset($this->result['correspondenceAddress']['address']) ?
     $this->address($this->result['correspondenceAddress']['address']) : '';
 
-$items[] = [0 => ['label' => 'search-result-label-address', 'value' => $address]];
+// don't escape as the address formatter has already escaped the data
+$items[] = [
+    0 => [
+        'noEscape' => true,
+        'label' => 'search-result-label-address',
+        'value' => $address
+    ]
+];
 
 echo $this->render('partials/read-only/main',
     [

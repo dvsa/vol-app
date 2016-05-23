@@ -1,7 +1,9 @@
 <?php
 
 return array(
-    'variables' => array(),
+    'variables' => array(
+        'empty_message' => 'entity-view-table-related-operator-licences.table.empty',
+    ),
     'settings' => array(),
     'attributes' => array(),
     'columns' => array(

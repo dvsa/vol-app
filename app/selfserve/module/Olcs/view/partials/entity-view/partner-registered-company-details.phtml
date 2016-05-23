@@ -30,13 +30,26 @@ echo $this->render('partials/read-only/main',
     [
         'multiItems' => [
             0 => [
-                ['label' => 'entity-view-label-company-registration-number', 'value' => $companyNumber],
-                ['label' => 'entity-view-label-registered-company-name', 'value' => $registeredCompanyName],
-                ['label' => 'entity-view-label-registered-address', 'value' => $registeredAddress],
+                [
+                    'label' => 'entity-view-label-company-registration-number',
+                    'value' => $companyNumber
+                ],
+                [
+                    'label' => 'entity-view-label-registered-company-name',
+                    'value' => $registeredCompanyName
+                ],
+                [
+                    'noEscape' => true,
+                    'label' => 'entity-view-label-registered-address',
+                    'value' => $registeredAddress
+                ],
             ],
             1 => $directorsList,
             2 => [
-                ['label' => 'entity-view-label-subsidiaries', 'value' => implode(', ', $subsidiaryList)]
+                [
+                    'label' => 'entity-view-label-subsidiaries',
+                    'value' => implode(', ', $subsidiaryList)
+                ]
             ]
         ]
     ]

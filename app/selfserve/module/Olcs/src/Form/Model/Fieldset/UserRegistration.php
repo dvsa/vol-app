@@ -12,12 +12,12 @@ use Zend\Form\Annotation as Form;
 class UserRegistration
 {
     /**
-     * @Form\Options({"label":"Username"})
+     * @Form\Options({"label":"Username", "hint": "user-registration.field.username.hint"})
      * @Form\Required(true)
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":40}})
+     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Username"})
      */
     public $loginId = null;
 

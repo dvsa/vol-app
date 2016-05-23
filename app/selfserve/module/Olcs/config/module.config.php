@@ -1,16 +1,14 @@
 <?php
 
 use Olcs\Controller\IndexController;
-use Olcs\Controller\Search\SearchController;
 use Olcs\Controller\MyDetailsController;
+use Olcs\Controller\Search\SearchController;
 use Olcs\Controller\UserForgotUsernameController;
 use Olcs\Controller\UserRegistrationController;
-
-use Olcs\Form\Element\SearchFilterFieldsetFactory;
-use Olcs\Form\Element\SearchFilterFieldset;
-use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
 use Olcs\Form\Element\SearchDateRangeFieldset;
-
+use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
+use Olcs\Form\Element\SearchFilterFieldset;
+use Olcs\Form\Element\SearchFilterFieldsetFactory;
 use Olcs\FormService\Form\Lva as LvaFormService;
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
@@ -157,13 +155,24 @@ $routes = array(
             )
         )
     ),
+    'busreg-registrations' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' =>
+                '/busreg-registrations[/]',
+            'defaults' => array(
+                'controller' => 'Olcs\BusReg\BusRegRegistrations',
+                'action' => 'index',
+            )
+        )
+    ),
     'bus-registration' => array(
         'type' => 'segment',
         'options' =>  array(
             'route' =>
                 '/bus-registration[/]',
             'defaults' => array(
-                'controller' => 'Olcs\Ebsr\BusRegistration',
+                'controller' => 'Olcs\Ebsr\BusRegApplications',
                 'action' => 'index',
             )
         ),
@@ -907,8 +916,9 @@ return array(
         'invokables' => array(
             'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
-            'Olcs\Ebsr\BusRegistration' => 'Olcs\Controller\Ebsr\BusRegistrationController',
-            'Dashboard' => 'Olcs\Controller\DashboardController',
+            'Olcs\Ebsr\BusRegApplications' => 'Olcs\Controller\Ebsr\BusRegApplicationsController',
+            'Olcs\BusReg\BusRegRegistrations' => 'Olcs\Controller\BusReg\BusRegRegistrationsController',
+            'Dashboard' => Olcs\Controller\DashboardController::class,
             'Fees' => 'Olcs\Controller\FeesController',
             'Correspondence' => 'Olcs\Controller\CorrespondenceController',
             'User' => 'Olcs\Controller\UserController',
@@ -935,8 +945,6 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\LicencePeopleAdapter',
             'VariationPeopleAdapter'
                 => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
-            'LicenceTransportManagerAdapter'
-                => 'Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter',
             'DashboardProcessingService'
                 => 'Olcs\Service\Processing\DashboardProcessingService',
             'Email\TransportManagerCompleteDigitalForm'
@@ -949,6 +957,10 @@ return array(
             'Olcs\Service\Ebsr' => 'Olcs\Service\Ebsr',
             'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
             'Olcs\Navigation\DashboardNavigation' => 'Olcs\Navigation\DashboardNavigationFactory',
+            'LicenceTransportManagerAdapter' =>
+                \Olcs\Controller\Lva\Factory\Adapter\LicenceTransportManagerAdapterFactory::class,
+            'VariationTransportManagerAdapter' =>
+                \Olcs\Controller\Lva\Factory\Adapter\VariationTransportManagerAdapterFactory::class,
         )
     ),
     'search' => [
@@ -1164,6 +1176,7 @@ return array(
 
                 // bus reg list accessible by operators and LAs
                 'bus-registration' => ['selfserve-ebsr-list'],
+                'busreg-registrations' => ['selfserve-ebsr-list'],
 
                 // details page accessible by everyone inc anon. users
                 'bus-registration/details' => ['*'],

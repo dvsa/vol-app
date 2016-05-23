@@ -122,7 +122,7 @@ trait ExternalControllerTrait
         }
 
         $params = array_merge(
-            array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form),
+            array('form' => $form),
             $variables
         );
         if ($this->lva === 'licence') {
@@ -135,6 +135,10 @@ trait ExternalControllerTrait
             $params['status'] = $data['status']['id'];
             $params['licNo'] = $data['licNo'];
             $params['lva'] = 'licence';
+
+            $lvaTitleSuffix = ($titleSuffix === 'people') ?
+                ($titleSuffix . '.' . $data['organisation']['type']['id']) : $titleSuffix;
+            $params['title'] = 'lva.section.title.' . $lvaTitleSuffix;
         }
 
         return $this->renderView(new Section($params));

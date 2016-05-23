@@ -20,20 +20,27 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
     public function testViewWithRequiresAttention()
     {
         $sectionDetails = ['enabled' => true];
-        $ref = 'type_of_licence';
+        $ref = 'people';
         $data = [
             'id' => 1,
             'idIndex' => 'application',
             'sectionNumber' => 1,
             'applicationCompletion' => [
-                'typeOfLicenceStatus' => 1
+                'peopleStatus' => 1
+            ],
+            'licence' => [
+                'organisation' => [
+                    'type' => [
+                        'id' => 'org_t_llp'
+                    ]
+                ]
             ]
         ];
 
         $viewModel = new ApplicationOverviewSection($ref, $data, $sectionDetails);
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
-
+        $this->assertEquals('section.name.people.org_t_llp', $viewModel->getVariable('name'));
         $this->assertEquals('orange', $viewModel->getVariable('statusColour'));
         $this->assertEquals('INCOMPLETE', $viewModel->getVariable('status'));
         $this->assertTrue($viewModel->getVariable('enabled'));
@@ -50,6 +57,13 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
             'sectionNumber' => 1,
             'applicationCompletion' => [
                 'typeOfLicenceStatus' => 2
+            ],
+            'licence' => [
+                'organisation' => [
+                    'type' => [
+                        'id' => 'org_t_llp'
+                    ]
+                ]
             ]
         ];
 
@@ -73,6 +87,13 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
             'sectionNumber' => 1,
             'applicationCompletion' => [
                 'typeOfLicenceStatus' => 0
+            ],
+            'licence' => [
+                'organisation' => [
+                    'type' => [
+                        'id' => 'org_t_llp'
+                    ]
+                ]
             ]
         ];
 
