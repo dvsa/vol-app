@@ -1,8 +1,10 @@
 <div class="printable">
+  
     <div class="printable__address">
         <p><b><?php echo $this->translate('Return to'); ?>:</b></p>
         <p><?php echo $this->returnToAddress($isNi, ',<br />'); ?></p>
     </div>
+    
     <div class="printable__meta">
         <dl>
             <dt><?php echo $this->translate('Application reference'); ?></dt>
@@ -11,9 +13,11 @@
             <dd><?php echo $name; ?></dd>
         </dl>
     </div>
+    
     <div class="printable__header">
         <h2><?php echo $this->translate($title); ?></h2>
     </div>
+    
     <div class="printable__section">
         <p><?php echo $undertakings; ?></p>
     </div>
@@ -33,6 +37,7 @@
     </p>
 
 </div>
+
 <script type="text/javascript">
     window.print();
 </script>
