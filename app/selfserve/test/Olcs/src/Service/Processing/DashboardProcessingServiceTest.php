@@ -85,6 +85,7 @@ class DashboardProcessingServiceTest extends MockeryTestCase
                             'status' => ['id' => LicenceEntityService::LICENCE_STATUS_VALID],
                             'licenceType' => ['id' => 'type'],
                             'licNo' => '123',
+                            'trafficArea' => ['name' => 'foo']
                         ]
                     ],
                     'applications' => [
@@ -120,8 +121,9 @@ class DashboardProcessingServiceTest extends MockeryTestCase
                         'id' => 1,
                         'licenceType' => ['id' => 'type'],
                         'licNo' => '123',
-                        'status' => LicenceEntityService::LICENCE_STATUS_VALID,
+                        'status' => ['id' => LicenceEntityService::LICENCE_STATUS_VALID],
                         'type' => 'type',
+                        'trafficArea' => 'foo'
                     ]
                 ],
                 // variations
@@ -130,7 +132,7 @@ class DashboardProcessingServiceTest extends MockeryTestCase
                         'isVariation' => true,
                         'id' => 2,
                         'licNo' => '123',
-                        'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
+                        'status' => ['id' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION],
                         'licence' => [
                                 'licNo' => '123',
                         ],
@@ -144,7 +146,7 @@ class DashboardProcessingServiceTest extends MockeryTestCase
                         'isVariation' => false,
                         'id' => 1,
                         'licNo' => '123',
-                        'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
+                        'status' => ['id' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION],
                         'licence' => [
                                 'licNo' => '123',
                         ],

@@ -4,7 +4,8 @@ $translationPrefix = 'dashboard-table-licences';
 
 return array(
     'variables' => array(
-        'title' => $translationPrefix
+        'title' => $translationPrefix,
+        'empty_message' => 'dashboard-no-licences-text'
     ),
     'settings' => array(),
     'attributes' => array(),
@@ -12,12 +13,7 @@ return array(
         array(
             'title' => $translationPrefix . '-licNo',
             'name' => 'licNo',
-            'formatter' => function ($row) {
-                return '<b><a href="' . $this->url->fromRoute(
-                    'lva-licence',
-                    array('licence' => $row['id'])
-                ) . '">'.$row['licNo'].'</a></b>';
-            }
+            'formatter' => 'LicenceNumberAndStatus'
         ),
         array(
             'title' => $translationPrefix . '-licType',
@@ -25,8 +21,8 @@ return array(
             'formatter' => 'Translate'
         ),
         array(
-            'title' => $translationPrefix . '-status',
-            'name' => 'status',
+            'title' => $translationPrefix . '-area',
+            'name' => 'trafficArea',
             'formatter' => 'Translate'
         )
     )
