@@ -434,26 +434,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 break;
             case 'submission_type_o_mlh_clo':
                 $sections = [
-                    'case-outline',
-                    'people',
-                    'previous-history',
-                    'other-issues',
-                    'annex',
-                    'operating-centres',
-                    'conditions-and-undertakings',
-                    'intelligence-unit-check',
-                    'interim',
-                    'advertisement',
-                    'linked-licences-app-numbers',
-                    'lead-tc-area',
-                    'auth-requested-applied-for',
-                    'transport-managers',
-                    'continuous-effective-control',
-                    'fitness-and-repute',
-                    'local-licence-history',
-                    'linked-mlh-history',
-                    'maintenance-tachographs-hours',
-                    'financial-information'
+                    'lead-tc-area'
                 ];
                 break;
             case 'submission_type_o_otc':
