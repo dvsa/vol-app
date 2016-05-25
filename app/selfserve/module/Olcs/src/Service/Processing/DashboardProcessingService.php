@@ -33,19 +33,17 @@ class DashboardProcessingService implements ServiceLocatorAwareInterface
         $variations = $data['variations'];
 
         foreach ($licences as &$licence) {
-            $licence['status'] = $licence['status']['id'];
             $licence['type'] = $licence['licenceType']['id'];
+            $licence['trafficArea'] = isset($licence['trafficArea']['name']) ? $licence['trafficArea']['name'] : '';
         }
 
         foreach ($applications as &$application) {
             $application['licNo'] = $application['licence']['licNo'];
-            $application['status'] = $application['status']['id'];
             $application['type'] = $application['licenceType']['id'];
         }
 
         foreach ($variations as &$variation) {
             $variation['licNo'] = $variation['licence']['licNo'];
-            $variation['status'] = $variation['status']['id'];
             $variation['type'] = $variation['licenceType']['id'];
         }
 
