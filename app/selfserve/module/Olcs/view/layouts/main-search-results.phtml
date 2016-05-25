@@ -25,6 +25,21 @@ $results = $this->results;
                         ->getServiceLocator()->get('Helper\Translation')
                         ->translateReplace('search.result.subtitle.' . $this->index, [$count]); ?>
                 </p>
+                <?php
+                if ($this->index == 'publication') {
+                    // OLCS-11648 applies to publication SS search results only
+                ?>
+                    <p>
+                        <?php echo $this->translate('search.result.subtitle.publication.download');?>:
+                        <ul>
+                            <li><?php echo $this->translate('search.result.subtitle.publication.app-decs');?></li>
+                            <li><?php echo $this->translate('search.result.subtitle.publication.not-procs');?></li>
+                            <li><?php echo $this->translate('search.result.subtitle.publication.app-decs-ni');?></li>
+                        </ul>
+                    </p>
+                <?php
+                }
+                ?>
             </div>
 
         </div>
