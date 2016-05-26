@@ -1069,7 +1069,7 @@ return array(
                     ),
                     array(
                         'id' => 'selfserve-topnav-my-account',
-                        'label' => 'selfserve-topnav-my-account',
+                        'label' => 'selfserve-dashboard-topnav-my-account',
                         'route' => 'my-account',
                         'class' => 'proposition-nav__item',
                     )
