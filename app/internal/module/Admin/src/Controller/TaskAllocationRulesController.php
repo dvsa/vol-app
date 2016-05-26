@@ -157,7 +157,7 @@ class TaskAllocationRulesController extends AbstractInternalController
         // Setup the initial list of users in the dropdown dependant on the team
         if (isset($formData['details']['team']['id'])) {
             $this->getServiceLocator()->get('Olcs\Service\Data\UserListInternal')
-                ->setTeam($formData['details']['team']['id']);
+                ->setTeamId($formData['details']['team']['id']);
         }
 
         /* @var $formHelper \Common\Service\Helper\FormHelperService */

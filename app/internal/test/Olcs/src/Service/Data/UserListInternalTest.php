@@ -91,7 +91,7 @@ class UserListInternalTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $sut = new UserListInternal();
-        $sut->setTeam(1);
+        $sut->setTeamId(1);
         $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
 
         $this->assertEquals($results['results'], $sut->fetchUserListData());
@@ -182,10 +182,10 @@ class UserListInternalTest extends AbstractDataServiceTestCase
     /**
      * Test set team
      */
-    public function testSetTeam()
+    public function testSetTeamId()
     {
         $sut = new UserListInternal();
-        $sut->setTeam(1);
-        $this->assertEquals($sut->getTeam(), 1);
+        $sut->setTeamId(1);
+        $this->assertEquals($sut->getTeamId(), 1);
     }
 }
