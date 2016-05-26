@@ -15,5 +15,7 @@ echo $licences;
         </a>
     </div>
 <?php
-echo $variations;
+if ($showVariationTable) {
+    echo $variations;
+}
 echo $applications;

@@ -13,7 +13,9 @@
       if ($total === 0) {
           echo $this->partial('dashboard-empty');
       } else {
-          echo $this->partial('dashboard-tables', compact('applications', 'licences', 'variations'));
+          echo $this->partial(
+              'dashboard-tables', compact('applications', 'licences', 'variations', 'showVariationTable')
+          );
       }
     ?>
   </div>

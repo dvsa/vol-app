@@ -1,18 +1,18 @@
 <?php
 
-/**
- * Entity View Controller Test
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
 namespace OlcsTest\Controller;
 
+use Common\RefData;
 use Doctrine\DBAL\Schema\View;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Olcs\Controller\Entity\ViewController;
+use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\ServiceManager\ServiceManager;
+use Zend\Session\Container;
+use Zend\View\Model\ViewModel;
+use ZfcRbac\Mvc\Controller\Plugin\IsGranted;
 
 /**
  * Entity View Controller Test
@@ -21,6 +21,44 @@ use Zend\Mvc\Controller\AbstractActionController;
  */
 class ViewControllerTest extends MockeryTestCase
 {
+    /** @var  ViewController|m\MockInterface */
+    private $sut;
+    /** @var  \Zend\ServiceManager\ServiceLocatorInterface|m\MockInterface */
+    private $mockSl;
+    /** @var  \Zend\Mvc\Controller\PluginManager|m\MockInterface */
+    private $mockPluginManager;
+    /** @var  m\MockInterface */
+    private $mockIsGrantedPlgn;
+
+    public function setUp()
+    {
+        $this->mockSl = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class)->makePartial();
+        $this->mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
+
+        //  mock plugins
+        $this->mockPluginManager = (new ControllerPluginManagerHelper)->getMockPluginManager(
+            [
+                'handleQuery' => 'handleQuery',
+                'url' => 'Url',
+                'params' => 'Params',
+            ]
+        );
+
+        $urlPlugin = $this->mockPluginManager->get('url', '');
+        $urlPlugin->shouldReceive('fromRoute')->andReturn('foo');
+
+        $this->mockIsGrantedPlgn = m::mock(IsGranted::class);
+        $this->mockPluginManager
+            ->shouldReceive('get')
+            ->with('isGranted', null)
+            ->andReturn($this->mockIsGrantedPlgn);
+
+        //  instance of tested class
+        $this->sut = new ViewController();
+        $this->sut->setServiceLocator($this->mockSl);
+        $this->sut->setPluginManager($this->mockPluginManager);
+    }
+
     public function tearDown()
     {
         m::close();
@@ -45,35 +83,19 @@ class ViewControllerTest extends MockeryTestCase
             'operatingCentres' => []
         ];
 
-        $pluginManagerHelper = new ControllerPluginManagerHelper();
-        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(
-            [
-                'handleQuery' => 'handleQuery',
-                'url' => 'Url',
-                'params' => 'Params'
-            ]
-        );
-
-        // Mock the auth service
-        $mockAuthService = m::mock();
-        $mockAuthService->shouldReceive('isGranted')
-            ->matchArgs(['partner-admin','partner-user'])
-            ->andReturn(false);
-
-        $mockQueryHandler = $mockPluginManager->get('handleQuery', '');
+        //  mock plugins
+        $mockQueryHandler = $this->mockPluginManager->get('handleQuery', '');
         $mockQueryHandler->shouldReceive('isNotFound')->andReturn(false);
         $mockQueryHandler->shouldReceive('isClientError')->andReturn(false);
         $mockQueryHandler->shouldReceive('isServerError')->andReturn(false);
         $mockQueryHandler->shouldReceive('isOk')->andReturn(true);
         $mockQueryHandler->shouldReceive('getResult')->andReturn($mockResult);
 
-        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams = $this->mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('entity')->andReturn($entity);
         $mockParams->shouldReceive('fromRoute')->with('entityId')->andReturn($entityId);
 
-        $urlPlugin = $mockPluginManager->get('url', '');
-        $urlPlugin->shouldReceive('fromRoute')->andReturn('foo');
-
+        //  mock table
         $mockTable = m::mock('Common\Service\Table\TableBuilder');
         $mockTable->shouldReceive('buildTable')
             ->with('entity-view-related-operator-licences', $mockResult['otherLicences'])
@@ -91,26 +113,29 @@ class ViewControllerTest extends MockeryTestCase
             ->with('entity-view-oppositions-anonymous', $mockResult['operatingCentres'])
             ->andReturn('operatingCentresTableResult2');
 
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
-        $mockSl->shouldReceive('get')->with('ZfcRbac\Service\AuthorizationService')->andReturn($mockAuthService);
+        $this->mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
 
-        $sut = new ViewController();
-        $sut->setServiceLocator($mockSl);
-        $sut->setPluginManager($mockPluginManager);
+        //  mock permissions
+        $this->mockIsGrantedPlgn->shouldReceive('__invoke')
+            ->with(anyOf([RefData::PERMISSION_SELFSERVE_PARTNER_ADMIN, RefData::PERMISSION_SELFSERVE_PARTNER_USER]))
+            ->andReturn(false);
 
-        $result = $sut->detailsAction();
+        //  call & check
+        /** @var ViewModel $result */
+        $result = $this->sut->detailsAction();
         $children = $result->getChildren();
-        $content = $children[0];
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $result);
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $content);
 
-        $this->assertEquals($result->pageTitle, 'MYCOMPANY');
-        $this->assertEquals($result->pageSubtitle, 'OB12345');
-        $this->assertEquals($content->relatedOperatorLicencesTable, 'otherLicencesTableResult');
-        $this->assertEquals($content->transportManagerTable, 'transportManagersTableResult');
-        $this->assertEquals($content->operatingCentresTable, 'operatingCentresTableResult');
+        $content = reset($children);
+
+        static::assertInstanceOf(ViewModel::class, $result);
+        static::assertInstanceOf(ViewModel::class, $content);
+
+        static::assertEquals($result->pageTitle, 'MYCOMPANY');
+        static::assertEquals($result->pageSubtitle, 'OB12345');
+        static::assertEquals($result->userType, ViewController::USER_TYPE_ANONYMOUS);
+        static::assertEquals($content->relatedOperatorLicencesTable, 'otherLicencesTableResult');
+        static::assertEquals($content->transportManagerTable, 'transportManagersTableResult');
+        static::assertEquals($content->operatingCentresTable, 'operatingCentresTableResult');
     }
 
     /**
@@ -136,35 +161,19 @@ class ViewControllerTest extends MockeryTestCase
             'applications' => [],
         ];
 
-        $pluginManagerHelper = new ControllerPluginManagerHelper();
-        $mockPluginManager = $pluginManagerHelper->getMockPluginManager(
-            [
-                'handleQuery' => 'handleQuery',
-                'url' => 'Url',
-                'params' => 'Params'
-            ]
-        );
-
-        // Mock the auth service
-        $mockAuthService = m::mock();
-        $mockAuthService->shouldReceive('isGranted')
-            ->matchArgs(['partner-admin','partner-user'])
-            ->andReturn(true);
-
-        $mockQueryHandler = $mockPluginManager->get('handleQuery', '');
+        //  mock plugins
+        $mockQueryHandler = $this->mockPluginManager->get('handleQuery', '');
         $mockQueryHandler->shouldReceive('isNotFound')->andReturn(false);
         $mockQueryHandler->shouldReceive('isClientError')->andReturn(false);
         $mockQueryHandler->shouldReceive('isServerError')->andReturn(false);
         $mockQueryHandler->shouldReceive('isOk')->andReturn(true);
         $mockQueryHandler->shouldReceive('getResult')->andReturn($mockResult);
 
-        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams = $this->mockPluginManager->get('params', '');
         $mockParams->shouldReceive('fromRoute')->with('entity')->andReturn($entity);
         $mockParams->shouldReceive('fromRoute')->with('entityId')->andReturn($entityId);
 
-        $urlPlugin = $mockPluginManager->get('url', '');
-        $urlPlugin->shouldReceive('fromRoute')->andReturn('foo');
-
+        //  mock table
         $mockTable = m::mock('Common\Service\Table\TableBuilder');
         $mockTable->shouldReceive('buildTable')
             ->with('entity-view-related-operator-licences', $mockResult['otherLicences'])
@@ -194,28 +203,31 @@ class ViewControllerTest extends MockeryTestCase
             ->with('entity-view-conditions-undertakings-partner', $mockResult['conditionUndertakings'])
             ->andReturn('conditionsUndertakingsTableResult');
 
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
-        $mockSl->shouldReceive('get')->with('ZfcRbac\Service\AuthorizationService')->andReturn($mockAuthService);
+        $this->mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
 
-        $sut = new ViewController();
-        $sut->setServiceLocator($mockSl);
-        $sut->setPluginManager($mockPluginManager);
+        //  mock permissions
+        $this->mockIsGrantedPlgn->shouldReceive('__invoke')
+            ->with(anyOf([RefData::PERMISSION_SELFSERVE_PARTNER_ADMIN, RefData::PERMISSION_SELFSERVE_PARTNER_USER]))
+            ->andReturn(true);
 
-        $result = $sut->detailsAction();
+        //  call & check
+        /** @var ViewModel $result */
+        $result = $this->sut->detailsAction();
         $children = $result->getChildren();
-        $content = $children[0];
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $result);
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $content);
 
-        $this->assertEquals($result->pageTitle, 'MYCOMPANY');
-        $this->assertEquals($result->pageSubtitle, 'OB12345');
-        $this->assertEquals($content->relatedOperatorLicencesTable, 'otherLicencesTableResult');
-        $this->assertEquals($content->transportManagerTable, 'transportManagersTableResult');
-        $this->assertEquals($content->operatingCentresTable, 'operatingCentresTableResult');
-        $this->assertEquals($content->vehiclesTable, 'vehiclesTableResult');
-        $this->assertEquals($content->currentApplicationsTable, 'currentApplicationsTableResult');
-        $this->assertEquals($content->conditionsUndertakingsTable, 'conditionsUndertakingsTableResult');
+        $content = reset($children);
+
+        static::assertInstanceOf(ViewModel::class, $result);
+        static::assertInstanceOf(ViewModel::class, $content);
+
+        static::assertEquals($result->pageTitle, 'MYCOMPANY');
+        static::assertEquals($result->pageSubtitle, 'OB12345');
+        static::assertEquals($result->userType, ViewController::USER_TYPE_PARTNER);
+        static::assertEquals($content->relatedOperatorLicencesTable, 'otherLicencesTableResult');
+        static::assertEquals($content->transportManagerTable, 'transportManagersTableResult');
+        static::assertEquals($content->operatingCentresTable, 'operatingCentresTableResult');
+        static::assertEquals($content->vehiclesTable, 'vehiclesTableResult');
+        static::assertEquals($content->currentApplicationsTable, 'currentApplicationsTableResult');
+        static::assertEquals($content->conditionsUndertakingsTable, 'conditionsUndertakingsTableResult');
     }
 }

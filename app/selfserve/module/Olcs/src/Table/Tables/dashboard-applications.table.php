@@ -15,15 +15,6 @@ return array(
             'formatter' => 'DashboardApplicationLink'
         ),
         array(
-            'title' => $translationPrefix . '-licNo',
-            'formatter' => function ($row, $col, $sm) {
-                if (!empty($row['licNo'])) {
-                    return $row['licNo'];
-                }
-                return $sm->get('translator')->translate('dashboard-lic-no-not-allocated');
-            }
-        ),
-        array(
             'title' => $translationPrefix . '-createdDate',
             'name' => 'createdOn',
             'formatter' => 'Date'
@@ -33,10 +24,5 @@ return array(
             'name' => 'receivedDate',
             'formatter' => 'Date'
         ),
-        array(
-            'title' => $translationPrefix . '-status',
-            'name' => 'status',
-            'formatter' => 'Translate'
-        )
     )
 );
