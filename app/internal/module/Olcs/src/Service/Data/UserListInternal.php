@@ -27,24 +27,28 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
     /**
      * @var int
      */
-    protected $team = null;
+    protected $teamId = null;
 
     /**
-     * @param string $team
+     * Set teamnId
+     *
+     * @param int $teamId
      * @return $this
      */
-    public function setTeam($team)
+    public function setTeamId($teamId)
     {
-        $this->team = $team;
+        $this->teamId = $teamId;
         return $this;
     }
 
     /**
-     * @return string
+     * Get teamId
+     *
+     * @return int
      */
-    public function getTeam()
+    public function getTeamId()
     {
-        return $this->team;
+        return $this->teamId;
     }
 
     /**
@@ -79,9 +83,9 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
                 'sort' => $this->sort,
                 'order' => $this->order
             ];
-            $team = $this->getTeam();
-            if (!empty($team)) {
-                $params['team'] = $team;
+            $teamId = $this->getTeamId();
+            if ((int) $teamId > 0) {
+                $params['team'] = $teamId;
             }
 
             $dtoData = ListDto::create($params);

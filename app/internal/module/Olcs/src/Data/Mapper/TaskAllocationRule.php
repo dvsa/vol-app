@@ -55,24 +55,25 @@ class TaskAllocationRule implements MapperInterface
      */
     public static function mapFromForm(array $formData)
     {
+        $details = $formData['details'];
         $data = [
-            'id' => $formData['details']['id'],
-            'version' => $formData['details']['version'],
-            'category' => $formData['details']['category'],
-            'goodsOrPsv' => $formData['details']['goodsOrPsv'],
-            'trafficArea' => $formData['details']['trafficArea'],
-            'team' => $formData['details']['team'],
-            'user' => $formData['details']['user'],
+            'id' => $details['id'],
+            'version' => $details['version'],
+            'category' => $details['category'],
+            'goodsOrPsv' => $details['goodsOrPsv'],
+            'trafficArea' => $details['trafficArea'],
+            'team' => $details['team'],
+            'user' => $details['user'],
         ];
 
-        if ($formData['details']['goodsOrPsv'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
-            $data['isMlh'] = $formData['details']['isMlh'];
+        if ($details['goodsOrPsv'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $data['isMlh'] = $details['isMlh'];
         } else {
             $data['isMlh'] = null;
         }
 
-        if (empty($data['team']) && is_numeric($formData['details']['teamId'])) {
-            $data['team'] = $formData['details']['teamId'];
+        if (empty($data['team']) && is_numeric($details['teamId'])) {
+            $data['team'] = $details['teamId'];
         }
 
         // if Alpha Split is selected then set user to null

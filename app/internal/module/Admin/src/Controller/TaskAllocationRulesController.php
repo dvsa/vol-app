@@ -148,7 +148,7 @@ class TaskAllocationRulesController extends AbstractInternalController
      * Alter the Task allocation rule form when editing
      *
      * @param \Common\Form\Form $form
-     * @param array             $formData
+     * @param array $formData
      *
      * @return \Common\Form\Form
      */
@@ -295,8 +295,8 @@ class TaskAllocationRulesController extends AbstractInternalController
     protected function setUpUserList()
     {
         $teamId = $this->params()->fromRoute('team');
-        if (is_numeric($teamId)) {
-            $this->getServiceLocator()->get('Olcs\Service\Data\UserListInternal')->setTeam($teamId);
+        if ((int) $teamId) {
+            $this->getServiceLocator()->get('Olcs\Service\Data\UserListInternal')->setTeamId($teamId);
         }
     }
 

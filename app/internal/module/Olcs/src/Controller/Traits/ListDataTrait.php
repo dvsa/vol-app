@@ -237,21 +237,22 @@ trait ListDataTrait
             $params['team'] = $teamId;
         }
         $dto = \Dvsa\Olcs\Transfer\Query\User\UserListInternal::create($params);
-        $options = [
-            '' => 'Unassigned',
-            'alpha-split' => 'Alpha split'
-        ];
         $response = $this->handleQuery($dto);
         if (!$response->isOK()) {
             return [];
         }
+        $options = [
+            '' => 'Unassigned',
+            'alpha-split' => 'Alpha split'
+        ];
         $results = $response->getResult()['results'];
         foreach ($results as $result) {
+            $person = $result['contactDetails']['person'];
             if (
-                isset($result['contactDetails']['person']['forename']) &&
-                isset($result['contactDetails']['person']['familyName'])) {
-                $options[$result['id']] = $result['contactDetails']['person']['forename'] . ' ' .
-                    $result['contactDetails']['person']['familyName'];
+                isset($person['forename']) &&
+                isset($person['familyName'])) {
+                $options[$result['id']] = $person['forename'] . ' ' .
+                    $person['familyName'];
             } else {
                 $options[$result['id']] = $result['loginId'];
             }
