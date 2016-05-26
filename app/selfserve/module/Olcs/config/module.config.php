@@ -1041,7 +1041,7 @@ return array(
                 'pages' => array(
                     array(
                         'id' => 'selfserve-topnav-home',
-                        'label' => 'Home',
+                        'label' => 'selfserve-dashboard-topnav-home',
                         'route' => 'dashboard',
                         'class' => 'proposition-nav__item',
                     ),
@@ -1053,7 +1053,7 @@ return array(
                     ),
                     array(
                         'id' => 'selfserve-topnav-bus-registration',
-                        'label' => 'Bus registrations',
+                        'label' => 'selfserve-dashboard-topnav-bus-registrations',
                         'route' => 'bus-registration',
                         'action' => 'index',
                         'use_route_match' => true,
@@ -1069,7 +1069,7 @@ return array(
                     ),
                     array(
                         'id' => 'selfserve-topnav-my-account',
-                        'label' => 'My account',
+                        'label' => 'selfserve-topnav-my-account',
                         'route' => 'my-account',
                         'class' => 'proposition-nav__item',
                     )
