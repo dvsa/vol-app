@@ -13,6 +13,8 @@ use Dvsa\Olcs\Transfer\Query\TaskAllocationRule\GetList as ListDto;
 use Olcs\Data\Mapper\TaskAllocationRule as Mapper;
 use Olcs\Controller\AbstractInternalController;
 
+use Common\RefData;
+
 /**
  * TaskAllocationRulesController
  */
@@ -146,7 +148,7 @@ class TaskAllocationRulesController extends AbstractInternalController
      * Alter the Task allocation rule form when editing
      *
      * @param \Common\Form\Form $form
-     * @param array             $formData
+     * @param array $formData
      *
      * @return \Common\Form\Form
      */
@@ -154,8 +156,8 @@ class TaskAllocationRulesController extends AbstractInternalController
     {
         // Setup the initial list of users in the dropdown dependant on the team
         if (isset($formData['details']['team']['id'])) {
-            $this->getServiceLocator()->get('Olcs\Service\Data\User')
-                ->setTeam($formData['details']['team']['id']);
+            $this->getServiceLocator()->get('Olcs\Service\Data\UserListInternal')
+                ->setTeamId($formData['details']['team']['id']);
         }
 
         /* @var $formHelper \Common\Service\Helper\FormHelperService */
@@ -191,7 +193,7 @@ class TaskAllocationRulesController extends AbstractInternalController
         // isMlh is only required if operator type is goods
         $post = $this->params()->fromPost();
         if (isset($post['details']['goodsOrPsv'])) {
-            if ($post['details']['goodsOrPsv'] === 'lcat_gv') {
+            if ($post['details']['goodsOrPsv'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
                 $form->getInputFilter()->get('details')->get('isMlh')->setRequired(true);
             }
         }
@@ -264,10 +266,7 @@ class TaskAllocationRulesController extends AbstractInternalController
     protected function alterFormForAddAlphasplit($form)
     {
         // Setup the initial list of users dependant on the team
-        $teamId = $this->params()->fromRoute('team');
-        if (is_numeric($teamId)) {
-            $this->getServiceLocator()->get('Olcs\Service\Data\User')->setTeam($teamId);
-        }
+        $this->setUpUserList();
 
         return $form;
     }
@@ -285,7 +284,20 @@ class TaskAllocationRulesController extends AbstractInternalController
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         $formHelper->remove($form, 'form-actions->addAnother');
 
+        $this->setUpUserList();
+
         return $form;
+    }
+
+    /**
+     * Set up user list
+     */
+    protected function setUpUserList()
+    {
+        $teamId = $this->params()->fromRoute('team');
+        if ((int) $teamId) {
+            $this->getServiceLocator()->get('Olcs\Service\Data\UserListInternal')->setTeamId($teamId);
+        }
     }
 
     /**

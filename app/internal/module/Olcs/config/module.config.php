@@ -422,6 +422,7 @@ return array(
             'Olcs\Service\Data\DocumentSubCategory' => 'Olcs\Service\Data\DocumentSubCategory',
             'Olcs\Service\Data\DocumentCategory' => 'Olcs\Service\Data\DocumentCategory',
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
+            'Olcs\Service\Data\UserListInternal' => 'Olcs\Service\Data\UserListInternal',
             'Olcs\Service\Data\UserWithName' => 'Olcs\Service\Data\UserWithName',
             'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
             'Olcs\Service\Data\IrfoCountry' => 'Olcs\Service\Data\IrfoCountry',
