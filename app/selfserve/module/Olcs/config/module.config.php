@@ -86,6 +86,7 @@ $routes = array(
             'route' => '/search[/:index][/:action][/]',
             'defaults' => array(
                 'controller' => SearchController::class,
+                'action' => 'index',
             )
         )
     ),

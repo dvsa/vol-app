@@ -1,9 +1,7 @@
 <div class="page-header">
   
   <?php if (!isset($this->showNav) || $this->showNav !== false) {
-    /** @var \Zend\View\Helper\Navigation\Menu $menu */
-    $menu = $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs');
-    echo $menu;
+    echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs');
   } ?>
   
   <div class="row">
