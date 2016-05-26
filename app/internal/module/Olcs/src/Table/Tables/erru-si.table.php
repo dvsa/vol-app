@@ -24,7 +24,7 @@ return array(
             'name' => 'siCategoryType'
         ),
         array(
-            'title' => 'Response set',
+            'title' => 'Penalty applied',
             'formatter' => 'YesNo',
             'name' => 'responseSet'
         ),
