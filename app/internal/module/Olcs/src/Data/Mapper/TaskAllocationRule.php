@@ -4,6 +4,7 @@ namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
 use Zend\Form\FormInterface;
+use Common\RefData;
 
 /**
  * Class TaskAllocationRule
@@ -59,11 +60,16 @@ class TaskAllocationRule implements MapperInterface
             'version' => $formData['details']['version'],
             'category' => $formData['details']['category'],
             'goodsOrPsv' => $formData['details']['goodsOrPsv'],
-            'isMlh' => $formData['details']['isMlh'],
             'trafficArea' => $formData['details']['trafficArea'],
             'team' => $formData['details']['team'],
             'user' => $formData['details']['user'],
         ];
+
+        if ($formData['details']['goodsOrPsv'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $data['isMlh'] = $formData['details']['isMlh'];
+        } else {
+            $data['isMlh'] = null;
+        }
 
         if (empty($data['team']) && is_numeric($formData['details']['teamId'])) {
             $data['team'] = $formData['details']['teamId'];

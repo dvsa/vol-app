@@ -222,6 +222,44 @@ trait ListDataTrait
     }
 
     /**
+     * Get a list of users
+     *
+     * @param int $teamId
+     * @return array
+     */
+    public function getListDataUserInternal($teamId = null)
+    {
+        $params = [
+            'order' => 'ASC',
+            'sort' => 'p.forename',
+        ];
+        if ($teamId) {
+            $params['team'] = $teamId;
+        }
+        $dto = \Dvsa\Olcs\Transfer\Query\User\UserListInternal::create($params);
+        $options = [
+            '' => 'Unassigned',
+            'alpha-split' => 'Alpha split'
+        ];
+        $response = $this->handleQuery($dto);
+        if (!$response->isOK()) {
+            return [];
+        }
+        $results = $response->getResult()['results'];
+        foreach ($results as $result) {
+            if (
+                isset($result['contactDetails']['person']['forename']) &&
+                isset($result['contactDetails']['person']['familyName'])) {
+                $options[$result['id']] = $result['contactDetails']['person']['forename'] . ' ' .
+                    $result['contactDetails']['person']['familyName'];
+            } else {
+                $options[$result['id']] = $result['loginId'];
+            }
+        }
+        return $options;
+    }
+
+    /**
      * Get a list of Enforcement areas for a traffic area
      *
      * @param string $trafficArea

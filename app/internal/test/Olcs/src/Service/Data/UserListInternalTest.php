@@ -65,7 +65,8 @@ class UserListInternalTest extends AbstractDataServiceTestCase
         $results = ['results' => 'results'];
         $params = [
             'sort' => 'p.forename',
-            'order' => 'ASC'
+            'order' => 'ASC',
+            'team' => 1
         ];
         $dto = Qry::create($params);
         $mockTransferAnnotationBuilder = m::mock()
@@ -73,6 +74,7 @@ class UserListInternalTest extends AbstractDataServiceTestCase
                 function ($dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
+                    $this->assertEquals($params['team'], $dto->getTeam());
                     return 'query';
                 }
             )
@@ -89,6 +91,7 @@ class UserListInternalTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $sut = new UserListInternal();
+        $sut->setTeam(1);
         $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
 
         $this->assertEquals($results['results'], $sut->fetchUserListData());
@@ -174,5 +177,15 @@ class UserListInternalTest extends AbstractDataServiceTestCase
         $sut->setData('userlist', false);
 
         $this->assertEquals([], $sut->fetchListOptions([]));
+    }
+
+    /**
+     * Test set team
+     */
+    public function testSetTeam()
+    {
+        $sut = new UserListInternal();
+        $sut->setTeam(1);
+        $this->assertEquals($sut->getTeam(), 1);
     }
 }

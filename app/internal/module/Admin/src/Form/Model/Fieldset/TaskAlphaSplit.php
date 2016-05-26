@@ -20,7 +20,7 @@ class TaskAlphaSplit
      * @Form\Options({
      *     "short-label": "User",
      *     "label": "User",
-     *     "service_name": "Olcs\Service\Data\User",
+     *     "service_name": "Olcs\Service\Data\UserListInternal",
      *     "empty_option": "Please select",
      * })
      * @Form\Type("DynamicSelect")
