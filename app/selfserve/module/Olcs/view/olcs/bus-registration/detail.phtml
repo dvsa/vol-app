@@ -1,0 +1,16 @@
+<?php
+
+echo $this->render(
+    '/partials/page-header.phtml',
+    [
+        'pageTitle' => $this->pageTitle,
+        'pageSubTitleUrl'=> $this->pageSubTitleUrl,
+    ]
+);
+?>
+
+<div class="row">
+    <div class="full-width">
+        <?php echo $this->content; ?>
+    </div>
+</div>

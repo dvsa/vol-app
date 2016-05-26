@@ -10,6 +10,7 @@ use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
 use Olcs\Form\Element\SearchFilterFieldset;
 use Olcs\Form\Element\SearchFilterFieldsetFactory;
 use Olcs\FormService\Form\Lva as LvaFormService;
+use Zend\Mvc\Router\Http\Segment;
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
 $configRoutes = $sectionConfig->getAllRoutes();
@@ -78,13 +79,13 @@ $routes = array(
             )
         )
     ),
+    //  search result page with filter and table of results
     'search' => array(
         'type' => 'segment',
         'options' =>  array(
             'route' => '/search[/:index][/:action][/]',
             'defaults' => array(
                 'controller' => SearchController::class,
-                'action' => 'index'
             )
         )
     ),
@@ -122,17 +123,33 @@ $routes = array(
             )
         )
     ),
-    'search-bus' => array(
-        'type' => 'segment',
-        'options' =>  array(
-            'route' => '/search/bus[/:action][/]',
-            'defaults' => array(
+    'search-bus' => [
+        'type' => Segment::class,
+        'options' =>  [
+            'route' => '/search/bus[/]',
+            'defaults' => [
                 'controller' => SearchController::class,
                 'action' => 'index',
-                'index' => 'bus'
-            )
-        )
-    ),
+                'index' => 'bus',
+            ],
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'details' => [
+                'type' => Segment::class,
+                'options' =>  [
+                    'route' => 'details/:busRegId[/]',
+                    'defaults' => [
+                        'controller' => Olcs\Controller\Ebsr\BusRegApplicationsController::class,
+                        'action' => 'searchDetails',
+                    ],
+                    'constraints' => [
+                        'busRegId' => '[0-9]+',
+                    ],
+                ],
+            ],
+        ],
+    ],
     'search-publication' => array(
         'type' => 'segment',
         'options' =>  array(
