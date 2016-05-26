@@ -1,39 +1,9 @@
-<?php
-$linkBackToSearchLabel =$this->translate('search-result-nav-back-to-operator-search');
-?>
-
-<ul id="top" class="breadcrumbs">
-    <li class="breadcrumbs__item">
-        <a href="<?php echo $this->linkBackToSearchResult; ?>"><?php echo $linkBackToSearchLabel; ?></a>
-    </li>
-</ul>
+<div class="read-only__header">
+    <h4 id="bus-registration-details"
+        class="read-only__title"><?php echo $this->translate('Bus registration details'); ?></h4>
+</div>
 
 <?php
-$licence = $this->registrationDetails['licence'];
-$subTitleUrl = $this->url(
-    'entity-view', [
-        'entity' => 'licence',
-        'entityId' => $licence['id'],
-    ]
-);
-echo $this->render(
-    '/partials/page-header.phtml',
-    [
-        'pageTitle' => $this->translate($licence['organisation']['name']),
-        'pageSubTitle'=> '<a href="' . $subTitleUrl . '">' . $this->escapeHtml($licence['licNo']) . '</a>',
-        'showNav' => false,
-    ]
-);
-?>
-
-<div class="row">
-    <div class="full-width">
-      <div class="read-only__header">
-    <h4 id="bus-registration-details" class="read-only__title"><?php echo $this->translate('Bus registration details');
-        ?></h4>
-      </div>
-
-    <?php
     $serviceNos = $this->registrationDetails['serviceNo'];
     if (!empty($this->registrationDetails['otherServices'])) {
         foreach ($this->registrationDetails['otherServices'] as $item) {
@@ -90,12 +60,13 @@ echo $this->render(
     } else {
         $receivedDate = '';
     }
-    
+
     if ($this->registrationDetails['effectiveDate']) {
         $effectiveDate = (new \DateTime($this->registrationDetails['effectiveDate']))->format(\DATE_FORMAT);
     } else {
         $effectiveDate = '';
     }
+
     echo $this->render('partials/read-only/main',
         [
             'multiItems' => [
@@ -141,7 +112,6 @@ echo $this->render(
         <?php echo $this->variationHistoryTable; ?>
 
         <?php
-
         if (!empty($documents)): ?>
             <h3>Documents</h3>
             <div class="files">
@@ -170,13 +140,3 @@ echo $this->render(
                 <?php endforeach?>
             </div>
         <?php endif?>
-
-        <div class="actions-container">
-            <a class="action--tertiary large"
-               href="#top"><?php echo $this->translate('search-result-nav-back-to-top'); ?></a>
-            <a class="action--tertiary large"
-               href="<?php echo $this->linkBackToSearchResult; ?>"><?php echo $linkBackToSearchLabel; ?></a>
-        </div>
-    </div>
-    <!-- .full-width -->
-</div>
