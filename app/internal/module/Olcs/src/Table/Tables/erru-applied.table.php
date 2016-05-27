@@ -17,7 +17,8 @@ return array(
         array(
             'title' => '',
             'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
+            'format' => '{{[elements/radio]}}',
+            'hideWhenDisabled' => true
         ),
         array(
             'title' => 'Penalty ID',
@@ -32,6 +33,7 @@ return array(
                     true
                 ) . '" class="js-modal-ajax">' . $data['id'] . '</a>';
             },
+            'hideWhenDisabled' => true
         ),
         array(
             'title' => 'Penalty type',

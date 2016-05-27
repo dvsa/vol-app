@@ -6,6 +6,7 @@ use Dvsa\Olcs\Transfer\Command\Cases\Si\CreateSi as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\DeleteSi as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\UpdateSi as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\SendResponse as SendResponseCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\UpdatePenaltiesNote as CommentUpdateDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases as CaseDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Si\Si as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Si\SiList as ListDto;
@@ -13,6 +14,8 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\GenericFields;
+use Olcs\Data\Mapper\PenaltyCommentBox as CommentMapper;
+use Olcs\Form\Model\Form\Comment as CommentForm;
 use Olcs\Form\Model\Form\Si as Form;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Zend\View\Model\ViewModel;
@@ -107,6 +110,14 @@ class SiController extends AbstractInternalController implements CaseControllerI
      */
     protected $deleteCommand = DeleteDto::class;
 
+    // comment
+    protected $commentFormClass = CommentForm::class;
+    protected $commentItemDto = CaseDto::class;
+    protected $commentItemParams = ['id' => 'case'];
+    protected $commentUpdateCommand = CommentUpdateDto::class;
+    protected $commentMapperClass = CommentMapper::class;
+    protected $commentTitle = 'Serious Infringements';
+
     /**
      * Index action
      *
@@ -132,6 +143,12 @@ class SiController extends AbstractInternalController implements CaseControllerI
      */
     public function sendAction()
     {
-        return $this->processCommand(new GenericItem(['case' => 'case']), SendResponseCmd::class);
+        return $this->confirmCommand(
+            new GenericItem(['case' => 'case']),
+            SendResponseCmd::class,
+            'Send response',
+            'Are you sure you want to send the response?',
+            'Response sent'
+        );
     }
 }

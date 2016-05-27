@@ -12,10 +12,6 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
 use Common\Service\Table\TableBuilder;
-use Olcs\Form\Model\Form\Comment as CommentForm;
-use Olcs\Data\Mapper\PenaltyCommentBox as CommentMapper;
-use Dvsa\Olcs\Transfer\Query\Cases\Cases as CommentItemDto;
-use Dvsa\Olcs\Transfer\Command\Cases\UpdatePenaltiesNote as CommentUpdateDto;
 use Olcs\Data\Mapper\GenericFields;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Si\Applied\Penalty as ItemDto;
@@ -38,13 +34,6 @@ class PenaltyController extends AbstractInternalController implements CaseContro
      * represented by a single navigation id.
      */
     protected $navigationId = 'case_details_penalties';
-
-    protected $commentFormClass = CommentForm::class;
-    protected $commentItemDto = CommentItemDto::class;
-    protected $commentItemParams = ['id' => 'case', 'case' => 'case'];
-    protected $commentUpdateCommand = CommentUpdateDto::class;
-    protected $commentMapperClass = CommentMapper::class;
-    protected $commentTitle = 'Erru penalties';
 
     protected $createCommand = CreateDto::class; //add action creates applied penalties
     protected $updateCommand = UpdateDto::class; //edit action updates applied penalties
@@ -96,7 +85,6 @@ class PenaltyController extends AbstractInternalController implements CaseContro
         $this->getErruTable('erru-imposed', 'imposedErrus', $data);
         $this->getErruTable('erru-requested', 'requestedErrus', $data);
         $this->getErruTable('erru-applied', 'appliedPenalties', $data);
-        $this->getCommentBox();
 
         return $this->viewBuilder()->buildViewFromTemplate('sections/cases/pages/penalties');
     }
@@ -124,6 +112,13 @@ class PenaltyController extends AbstractInternalController implements CaseContro
 
         //multiple tables on a page, so we need to give our plugin a new table builder each time
         $tableBuilder = new TableBuilder($this->getServiceLocator());
+
+        if (!empty($data['case']['erruRequest']['responseSent'])
+            && ($data['case']['erruRequest']['responseSent'] === 'Y')
+        ) {
+            // set as disabled if response sent
+            $tableBuilder->setDisabled(true);
+        }
         $this->table()->setTableBuilder($tableBuilder);
         $this->placeholder()->setPlaceholder($tableName, $this->table()->buildTable($tableName, $tableData, []));
     }

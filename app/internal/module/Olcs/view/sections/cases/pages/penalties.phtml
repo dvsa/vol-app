@@ -2,6 +2,14 @@
     $data = $this->placeholder('penalties')->getValue();
 
     $infringement = [
+        'header' => 'Serious infringement',
+        'actions' => [
+            [
+                'url' => $this->url('case_penalty', ['action' => null], [], true),
+                'label' => 'Back',
+                'class' => 'action--primary'
+            ]
+        ],
         'multiItems' => [
             0 => [
                 ['label' => 'VRM', 'value' => $data['case']['erruRequest']['vrm']],

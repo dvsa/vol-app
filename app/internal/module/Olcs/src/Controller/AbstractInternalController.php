@@ -731,6 +731,10 @@ abstract class AbstractInternalController extends AbstractActionController
         if (empty($errors)) {
             // or display generic error message
             $errors = ['unknown-error'];
+
+            Logger::debug(__FILE__);
+            Logger::debug(__METHOD__);
+            Logger::debug('unknown-error', $restResponse);
         }
 
         foreach ($errors as $errorMessage) {
