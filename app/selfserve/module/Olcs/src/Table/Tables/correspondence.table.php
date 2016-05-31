@@ -16,17 +16,17 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'Title',
+            'title' => 'dashboard-correspondence.table.column.title',
             'name' => 'correspondence',
             'formatter' => 'AccessedCorrespondence'
         ),
         array(
-            'title' => 'Licence number',
+            'title' => 'dashboard-correspondence.table.column.licence-number',
             'name' => 'licence',
             'formatter' => 'LicenceNumberLink'
         ),
         array(
-            'title' => 'Created',
+            'title' => 'dashboard-correspondence.table.column.created',
             'name' => 'date',
             'formatter' => 'Date',
         ),
