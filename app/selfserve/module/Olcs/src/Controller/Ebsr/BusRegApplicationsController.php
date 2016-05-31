@@ -2,17 +2,16 @@
 
 namespace Olcs\Controller\Ebsr;
 
-use Common\Exception\ResourceNotFoundException;
+use Common\Controller\Lva\AbstractController;
+use Common\Rbac\User;
 use Common\RefData;
+use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\UpdateTxcInbox as UpdateTxcInboxDto;
+use Dvsa\Olcs\Transfer\Query;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\EbsrSubmissionList;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList;
-use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\BusRegWithTxcInbox as ItemDto;
-use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\UpdateTxcInbox as UpdateTxcInboxDto;
 use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegVariationHistoryDto;
-use Common\Controller\Lva\AbstractController;
 use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
-use Common\Rbac\User;
 
 /**
  * Class BusRegApplicationsController
@@ -22,7 +21,7 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Lists all EBSR's with filter search form
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
     public function indexAction()
     {
@@ -104,7 +103,7 @@ class BusRegApplicationsController extends AbstractController
             ]
         );
 
-        $content = $this->generateContent(
+        $content = $this->generateView(
             'olcs/bus-registration/index',
             [
                 'busRegistrationTable' => $busRegistrationTable,
@@ -152,7 +151,7 @@ class BusRegApplicationsController extends AbstractController
      * @param $data
      * @return array
      */
-    public function processMarkAsRead($data)
+    private function processMarkAsRead($data)
     {
         $command = UpdateTxcInboxDto::create(
             [
@@ -200,58 +199,109 @@ class BusRegApplicationsController extends AbstractController
     }
 
     /**
+     * Search result :: Bus registration details page
+     *
+     * @return ViewModel
+     */
+    public function searchDetailsAction()
+    {
+        return $this->details(
+            'layouts/entity-view',
+            [
+                'searchResultsLink' => $this->generateLinkBackToSearchResult(),
+            ]
+        );
+    }
+
+    /**
      * Bus registration details page
      *
-     * @return array|ViewModel
-     * @throws ResourceNotFoundException
+     * @return ViewModel
      */
     public function detailsAction()
     {
+        return $this->details('olcs/bus-registration/detail');
+    }
+
+    private function details($temlate, $options = [])
+    {
         $id = $this->params()->fromRoute('busRegId');
 
-        // retrieve data
-        $query = ItemDto::create(['id' => $id]);
+        //  request data from Api
+        $query = Query\Bus\Ebsr\BusRegWithTxcInbox::create(['id' => $id]);
+
         $response = $this->handleQuery($query);
 
-        // handle response
         if ($response->isNotFound()) {
             return $this->notFoundAction();
+
+        } else {
+            if (!$response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
+                return null;
+            }
         }
 
-        if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
+        //  build view
+        $result = $response->getResult();
 
-        $results = null;
+        $licence = $result['licence'];
+        $url = $this->url()->fromRoute(
+            'entity-view', [
+                'entity' => 'licence',
+                'entityId' => $licence['id'],
+            ]
+        );
+
+        $layout = new ViewModel(
+            [
+                'pageTitle' => $licence['organisation']['name'],
+                'pageSubTitleUrl' => [
+                    'url' => $url,
+                    'label' => $licence['licNo'],
+                ],
+                'searchResultsLink' => $this->generateLinkBackToSearchResult(),
+            ] + $options
+        );
+
+        $layout
+            ->setTemplate($temlate)
+            ->addChild($this->detailsContent($result), 'content');
+
+        return $layout;
+    }
+
+    /**
+     * Prepare content of Details view
+     *
+     * @param array $results
+     *
+     * @return ViewModel
+     */
+    private function detailsContent(array $results)
+    {
         $documents = [];
 
-        if ($response->isOk()) {
-            $results = $response->getResult();
+        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_EBSR_DOCUMENTS)) {
+            $txcInboxs = (!empty($results['txcInboxs']) ? reset($results['txcInboxs']) : []);
 
-            if ($this->isGranted(RefData::PERMISSION_SELFSERVE_EBSR_DOCUMENTS)) {
-                $txcInboxs = (!empty($results['txcInboxs']) ? reset($results['txcInboxs']) : []);
-
-                foreach (['pdfDocument', 'routeDocument', 'zipDocument'] as $doc) {
-                    if (empty($txcInboxs[$doc])) {
-                        continue;
-                    }
-                    $documents[] = $txcInboxs[$doc];
+            foreach (['pdfDocument', 'routeDocument', 'zipDocument'] as $doc) {
+                if (empty($txcInboxs[$doc])) {
+                    continue;
                 }
+                $documents[] = $txcInboxs[$doc];
             }
         }
 
         // setup layout and view
-        $content = $this->generateContent(
-            'olcs/bus-registration/details',
+        return $this->generateView(
+            'olcs/bus-registration/partial/details-content',
             [
                 'registrationDetails' => $results,
                 'documents' => $documents,
                 'variationHistoryTable' => $this->fetchVariationHistoryTable($results['id']),
-                'linkBackToSearchResult' => $this->generateLinkBackToSearchResult(),
             ]
         );
-
-        return $content;
     }
 
     /**
@@ -306,10 +356,7 @@ class BusRegApplicationsController extends AbstractController
      */
     private function generateLayout($data = [])
     {
-        $layout = new \Zend\View\Model\ViewModel(
-            $data
-        );
-
+        $layout = new ViewModel($data);
         $layout->setTemplate('layouts/search');
 
         return $layout;
@@ -322,7 +369,7 @@ class BusRegApplicationsController extends AbstractController
      * @param array $data
      * @return ViewModel
      */
-    private function generateContent($template, $data = [])
+    private function generateView($template, $data = [])
     {
         $content = new ViewModel($data);
         $content->setTemplate($template);
@@ -342,16 +389,16 @@ class BusRegApplicationsController extends AbstractController
             $queryParams = ['query' => $params->queryParams];
         }
 
-        return $this->url()->fromRoute('search', $params->routeParams, $queryParams);
+        return $this->url()->fromRoute('search', (array) $params->routeParams, $queryParams);
     }
 
     /**
      * Get and setup the filter form
      *
      * @param $params
-     * @return mixed
+     * @return \Zend\Form\FormInterface
      */
-    public function getFilterForm($params)
+    private function getFilterForm($params)
     {
         /** @var \Zend\Form\FormInterface $filterForm */
         $filterForm = $this->getServiceLocator()->get('Helper\Form')->createForm('BusRegApplicationsFilterForm');
