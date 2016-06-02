@@ -55,6 +55,13 @@ $results = $this->results;
                 if ($this->noResultsMessage) {
                     echo $this->translate($noResultsMessage);
                 } else {
+            ?>
+            <div class="content__header">
+                <h3 class="title"><?php
+                    echo $count . ' ' . $this->translate('search.result.publications');
+                    ?></h3>
+            </div>
+            <?php
                     echo $results;
                 }
             ?>
