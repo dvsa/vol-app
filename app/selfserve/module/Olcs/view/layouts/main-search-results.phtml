@@ -29,24 +29,18 @@ $results = $this->results;
                 if ($this->index == 'publication') {
                     // OLCS-11648 applies to publication SS search results only
                 ?>
-                    <p>
-                        <?php echo $this->translate('search.result.subtitle.publication.download');?>:
-                        <ul>
-                            <li><?php echo $this->translate('search.result.subtitle.publication.app-decs');?></li>
-                            <li><?php echo $this->translate('search.result.subtitle.publication.not-procs');?></li>
-                            <li><?php echo $this->translate('search.result.subtitle.publication.app-decs-ni');?></li>
-                        </ul>
-                    </p>
+                <p><?php echo $this->translate('search.result.subtitle.publication.download'); ?></p>
                 <?php
                 }
                 ?>
+
             </div>
+
 
         </div>
     </div><!-- page-header -->
 
     <div class="row">
-
         <div class="one-quarter sidebar--plain search-filter">
 
             <h3 id="filterTitle">Edit search</h3>
@@ -61,6 +55,13 @@ $results = $this->results;
                 if ($this->noResultsMessage) {
                     echo $this->translate($noResultsMessage);
                 } else {
+            ?>
+            <div class="content__header">
+                <h3 class="title"><?php
+                    echo $count . ' ' . $this->translate('search.result.publications');
+                    ?></h3>
+            </div>
+            <?php
                     echo $results;
                 }
             ?>

@@ -8,11 +8,12 @@
 <?php
 echo $this->render(
     '/partials/page-header.phtml',
-    array(
+    [
         'pageTitle' => isset($this->pageTitle) ? $this->translate($this->pageTitle) : '',
         'pageSubTitle'=> isset($this->pageSubtitle) ? $this->translate($this->pageSubtitle) : '',
-        'pageHeaderText'=> isset($this->pageHeaderText) ? $this->translate($this->pageHeaderText) : ''
-    )
+        'pageSubTitleUrl'=> $this->pageSubTitleUrl,
+        'pageHeaderText'=> isset($this->pageHeaderText) ? $this->translate($this->pageHeaderText) : '',
+    ]
 );
 ?>
 <?php /*

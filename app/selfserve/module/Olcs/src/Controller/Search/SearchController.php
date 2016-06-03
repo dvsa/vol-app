@@ -44,7 +44,6 @@ class SearchController extends AbstractController
         $form = $this->getIndexForm(SimpleSearch::class);
 
         if ($this->getRequest()->isPost()) {
-
             $sd = $this->getIncomingSearchData();
 
             $form->setData($sd);
@@ -68,12 +67,12 @@ class SearchController extends AbstractController
         $form->get('index')->setValue($index);
 
         $view = new ViewModel(['searchForm' => $form]);
-        $view->setTemplate('search/index-' . $this->params()->fromRoute('index') . '.phtml');
+        $view->setTemplate('search/index-' . $index . '.phtml');
 
         return $view;
     }
 
-    public function getIncomingSearchData()
+    private function getIncomingSearchData()
     {
         $remove = [
             'controller',
@@ -137,32 +136,35 @@ class SearchController extends AbstractController
 
     public function searchAction()
     {
-        // this order 1
+        $indexPrm = $this->params()->fromRoute('index');
+
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
+
+        //  get search criteria
         $data = $this->getIncomingSearchData();
-        $data['index'] = $this->params()->fromRoute('index');
+        $data['index'] = $indexPrm;
 
-        // this order 2
+        //  define search filter form
         $form = $this->initialiseFilterForm();
-        /* @var \Zend\Form\Form $form */
-        $form = $form->getValue();
-        $form->get('index')->setValue($this->params()->fromRoute('index'));
+        $form->get('index')->setValue($indexPrm);
 
-        $view = new ViewModel(['index'=>$this->params()->fromRoute('index')]);
+        $searchPostUrl = $this->url()->fromRoute('search', ['index' => $indexPrm, 'action' => 'index'], [], true);
+        $form->setAttribute('action', $searchPostUrl);
 
-        $this->getSearchService()->setQuery($this->getRequest()->getQuery())
-            ->setRequest($this->getRequest())
+        //  request data from API and build table of results
+        $this->getSearchService()->setQuery($request->getQuery())
+            ->setRequest($request)
             ->setIndex($data['index'])
             ->setSearch($data['search']);
 
-        $searchPostUrl = $this->url()->fromRoute('search', ['index' => $data['index'], 'action' => 'index'], [], true);
-        $form->setAttribute('action', $searchPostUrl);
+        $view = new ViewModel(['index' => $indexPrm]);
+        $view->setTemplate('layouts/main-search-results.phtml');
 
         $view->results = $this->getSearchService()->fetchResultsTable();
         if ($view->results->getTotal() === 0) {
-            $view->noResultsMessage = 'search-no-results-'. $data['index'];
+            $view->noResultsMessage = 'search-no-results-' . $indexPrm;
         }
-
-        $view->setTemplate('layouts/main-search-results.phtml');
 
         $this->getServiceLocator()->get('Script')->loadFile('search-results');
 
@@ -212,7 +214,7 @@ class SearchController extends AbstractController
     /**
      * @return \Common\Form\Form
      */
-    public function initialiseFilterForm()
+    private function initialiseFilterForm()
     {
         /** @var \Common\Form\Form $form */
         $form = $this->getFilterForm(SearchFilterForm::class);
@@ -239,7 +241,7 @@ class SearchController extends AbstractController
 
         $form->populateValues($this->getIncomingSearchData());
 
-        $form = $this->getServiceLocator()
+        $this->getServiceLocator()
             ->get('ViewHelperManager')
             ->get('placeholder')
             ->getContainer('searchFilter')
