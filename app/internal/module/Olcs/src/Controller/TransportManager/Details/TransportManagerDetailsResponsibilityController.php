@@ -192,9 +192,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             ->getResponsibilityFileData($tmId, $file);
         if ($action === 'edit-tm-application') {
             $key = 'application';
-            $data = $this->tmResponsiblitiesDetails['app']['result'];
+            $data = $this->tmResponsiblitiesDetails['app'];
         } else {
-            $data = $this->tmResponsiblitiesDetails['lic']['result'];
+            $data = $this->tmResponsiblitiesDetails['lic'];
             $key = 'licence';
         }
         $dataToSave[$key] = $data[$key]['id'];
