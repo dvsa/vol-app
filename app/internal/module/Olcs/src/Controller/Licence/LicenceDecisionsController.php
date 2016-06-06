@@ -103,6 +103,7 @@ class LicenceDecisionsController extends AbstractController implements
     public function curtailAction()
     {
         $licenceId = $this->fromRoute('licence');
+        // @todo it seems that the following part never going to work and possibly can be removed
         $licenceStatus = $this->fromRoute('status', null);
 
         if (!is_null($licenceStatus)) {
@@ -119,6 +120,7 @@ class LicenceDecisionsController extends AbstractController implements
             // get decisions into array of ids for array map
             $licenceStatus['legislationDecisions'] = array_column($licenceStatus['licence']['decisions'], 'id');
         }
+        // -----
 
         if ($this->isButtonPressed('affectImmediate')) {
             $postData = $this->getRequest()->getPost();
@@ -179,6 +181,7 @@ class LicenceDecisionsController extends AbstractController implements
     public function revokeAction()
     {
         $licenceId = $this->fromRoute('licence');
+        // @todo it seems that the following part never going to work and possibly can be removed
         $licenceStatus = $this->fromRoute('status', null);
         if (!is_null($licenceStatus)) {
             if ($this->isButtonPressed('remove')) {
@@ -194,6 +197,7 @@ class LicenceDecisionsController extends AbstractController implements
             // get decisions into array of ids for array map
             $licenceStatus['legislationDecisions'] = array_column($licenceStatus['licence']['decisions'], 'id');
         }
+        // -----
 
         if ($this->isButtonPressed('affectImmediate')) {
             $postData = $this->getRequest()->getPost();
@@ -251,6 +255,8 @@ class LicenceDecisionsController extends AbstractController implements
     public function suspendAction()
     {
         $licenceId = $this->fromRoute('licence');
+
+        // @todo it seems that the following part never going to work and possibly can be removed
         $licenceStatus = $this->fromRoute('status', null);
         if (!is_null($licenceStatus)) {
             if ($this->isButtonPressed('remove')) {
@@ -266,6 +272,7 @@ class LicenceDecisionsController extends AbstractController implements
             // get decisions into array of ids for array map
             $licenceStatus['legislationDecisions'] = array_column($licenceStatus['licence']['decisions'], 'id');
         }
+        // -------
 
         if ($this->isButtonPressed('affectImmediate')) {
             $postData = $this->getRequest()->getPost();
