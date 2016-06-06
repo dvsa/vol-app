@@ -3,6 +3,7 @@
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
+use Common\Rbac\User;
 use Common\RefData;
 
 /**
@@ -23,6 +24,11 @@ class IndexController extends AbstractController
         // redir to the dashboard
         if ($this->isGranted(RefData::PERMISSION_SELFSERVE_DASHBOARD)) {
             return $this->redirect()->toRoute('dashboard', [], ['code' => 303]);
+        }
+
+        // redir to the bus reg page
+        if ($identity->getUserType() === User::USER_TYPE_LOCAL_AUTHORITY) {
+            return $this->redirect()->toRoute('bus-registration', [], ['code' => 303]);
         }
 
         return $this->redirect()->toRoute('search');

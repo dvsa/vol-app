@@ -56,7 +56,7 @@ class IndexControllerTest extends MockeryTestCase
     public function testIndexDashboard()
     {
         $mockIdentity = new User();
-        $mockIdentity->setUserType(User::USER_TYPE_INTERNAL);
+        $mockIdentity->setUserType(User::USER_TYPE_OPERATOR);
 
         $this->sut->shouldReceive('currentUser->getIdentity')
             ->once()
@@ -74,10 +74,31 @@ class IndexControllerTest extends MockeryTestCase
         static::assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
+    public function testIndexBusReg()
+    {
+        $mockIdentity = new User();
+        $mockIdentity->setUserType(User::USER_TYPE_LOCAL_AUTHORITY);
+
+        $this->sut->shouldReceive('currentUser->getIdentity')
+            ->once()
+            ->andReturn($mockIdentity);
+
+        $this->sut->shouldReceive('isGranted')
+            ->with(RefData::PERMISSION_SELFSERVE_DASHBOARD)
+            ->andReturn(false);
+
+        $this->sut->shouldReceive('redirect->toRoute')
+            ->with('bus-registration', [], ['code' => 303])
+            ->once()
+            ->andReturn('REDIRECT');
+
+        static::assertEquals('REDIRECT', $this->sut->indexAction());
+    }
+
     public function testIndexSearch()
     {
         $mockIdentity = new User();
-        $mockIdentity->setUserType(User::USER_TYPE_INTERNAL);
+        $mockIdentity->setUserType(User::USER_TYPE_OPERATOR);
 
         $this->sut->shouldReceive('currentUser->getIdentity')
             ->once()
