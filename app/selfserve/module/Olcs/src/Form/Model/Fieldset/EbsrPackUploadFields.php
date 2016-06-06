@@ -30,17 +30,17 @@ class EbsrPackUploadFields
     public $submissionType;
 
     /**
-     * @Form\Name("file")
-     * @Form\Options({
-     *      "label": "EBSR pack upload",
-     *      "field-attributes" : {
-     *          "class":"file-upload"
-     *      }
-     * })
-     * @Form\Type("File")
-     * @Form\Input("Zend\InputFilter\FileInput")
-     * @Form\Filter({"name": "DecompressUploadToTmp"})
-     * @Form\Validator({"name": "FileMimeType", "options":{"mimeType": "application/zip"}})
+     * @Form\ComposedObject("\Common\Form\Model\Fieldset\MultipleZipUpload")
+     * @Form\Attributes({"id":"files"})
      */
-    public $file;
+    public $files = null;
+
+    /**
+     * @Form\AllowEmpty(true)
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Required(true)
+     * @Form\Attributes({"required":false, "id":"uploadedFileCount"})
+     * @Form\Type("Hidden")
+     */
+    public $uploadedFileCount = null;
 }

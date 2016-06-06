@@ -3,21 +3,25 @@
 namespace Olcs\Controller\Ebsr;
 
 use Common\Controller\Traits\GenericMethods;
-use Common\Controller\Traits\GenericRenderView;
-use Common\Util\FlashMessengerTrait;
 use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Zend\Http\Request as HttpRequest;
+use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\OrganisationUnprocessedList;
+use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\QueuePacks as QueuePacksCmd;
+use Zend\View\Model\ViewModel;
+use Common\Util\FlashMessengerTrait;
+
+use Common\Controller\Lva\AbstractController;
 
 /**
  * Class UploadsController
  */
-class UploadsController extends ZendAbstractActionController
+class UploadsController extends AbstractController
 {
-    use GenericMethods,
-        GenericRenderView,
-        FlashMessengerTrait;
+    use GenericMethods;
+    use FlashMessengerTrait;
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
     public function indexAction()
     {
@@ -32,47 +36,82 @@ class UploadsController extends ZendAbstractActionController
             false
         );
 
-        return $this->getView(['table' => $table]);
+        return new ViewModel(['table' => $table]);
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * Uploads EBSR packs and optionally queues for processing
+     *
+     * @return ViewModel
      */
     public function uploadAction()
     {
-        if ($this->isButtonPressed('cancel')) {
-            return $this->redirect()->toRoute('bus-registration/ebsr', ['action' => 'upload']);
+        /** @var HttpRequest $request */
+        $request = $this->getRequest();
+
+        /** @var \Common\Form\Form $form */
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createFormWithRequest('EbsrPackUpload', $request);
+
+        if ($request->isPost()) {
+            $postData = (array)$request->getPost();
+            $form->setData($postData);
         }
 
-        $fieldValues = $this->params()->fromFiles();
-        $postFields = $this->params()->fromPost('fields');
-        $fieldValues['fields']['submissionType'] = $postFields['submissionType'];
+        // handle files
+        $hasProcessedFiles = $this->processFiles(
+            $form,
+            'fields->files',
+            array($this, 'processEbsrFileUpload'),
+            array($this, 'deleteFile'),
+            array($this, 'getUploadedPacks'),
+            'fields->uploadedFileCount'
+        );
 
-        $form = $this->generateFormWithData('EbsrPackUpload', 'processSave', null, false, true, $fieldValues);
+        //if we have processed files, attempt to submit them for processing
+        if (!$hasProcessedFiles && $request->isPost() && $form->isValid()) {
+            $cmdData = ['submissionType' => $postData['fields']['submissionType']];
+            $response = $this->handleCommand(QueuePacksCmd::create($cmdData));
 
-        return $this->getView(['form' => $form]);
+            if ($response->isOk()) {
+                $this->addSuccessMessage('ebsr-upload-success');
+                return $this->redirect()->toRoute('bus-registration');
+            }
+
+            $this->addErrorMessage('ebsr-upload-fail');
+        }
+
+        return new ViewModel(['form' => $form]);
     }
 
     /**
-     * @param array $data
-     * @return void
+     * @param array $file
+     * @throws \Common\Exception\File\InvalidMimeException
+     * @throws \Exception
      */
-    public function processSave($data, $form = null, $additionalParams = null)
+    public function processEbsrFileUpload($file) {
+        $dtoData = [
+            'category' => 3,
+            'subCategory' => 36,
+            'description' => $file['name'],
+            'isExternal' => true,
+            'isEbsrPack' => true
+        ];
+
+        $this->uploadFile($file, $dtoData);
+    }
+
+    /**
+     * Gets a list of uploaded packs which have yet to be submitted
+     *
+     * @return array
+     */
+    public function getUploadedPacks()
     {
-        $dataService = $this->getEbsrService();
+        $response = $this->handleQuery(OrganisationUnprocessedList::create([]));
 
-        $result = $dataService->processPackUpload($data, $data['fields']['submissionType']);
-
-        if (isset($result['success'])) {
-            $this->addSuccessMessage($result['success']);
-        }
-        if (isset($result['errors'])) {
-            $messages['fields']['file'] = [];
-            foreach ((array) $result['errors'] as $message) {
-                array_push($messages['fields']['file'], $message);
-            }
-            $form->setMessages($messages);
-        }
+        return $response->getResult();
     }
 
     /**
