@@ -9,6 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\QueuePacks as QueuePacksCmd;
 use Zend\View\Model\ViewModel;
 use Common\Util\FlashMessengerTrait;
 use Common\Controller\Lva\AbstractController;
+use Common\Category;
 
 /**
  * Class UploadsController
@@ -72,8 +73,8 @@ class UploadsController extends AbstractController
     public function processEbsrFileUpload($file)
     {
         $dtoData = [
-            'category' => 3,
-            'subCategory' => 36,
+            'category' => Category::CATEGORY_BUS_REGISTRATION,
+            'subCategory' => Category::BUS_SUB_CATEGORY_EBSR,
             'description' => $file['name'],
             'isExternal' => true,
             'isEbsrPack' => true
