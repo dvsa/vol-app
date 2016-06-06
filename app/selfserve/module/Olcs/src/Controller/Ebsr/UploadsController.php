@@ -3,13 +3,11 @@
 namespace Olcs\Controller\Ebsr;
 
 use Common\Controller\Traits\GenericMethods;
-use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
 use Zend\Http\Request as HttpRequest;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\OrganisationUnprocessedList;
 use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\QueuePacks as QueuePacksCmd;
 use Zend\View\Model\ViewModel;
 use Common\Util\FlashMessengerTrait;
-
 use Common\Controller\Lva\AbstractController;
 
 /**
@@ -19,26 +17,7 @@ class UploadsController extends AbstractController
 {
     use GenericMethods;
     use FlashMessengerTrait;
-
-    /**
-     * @return ViewModel
-     */
-    public function indexAction()
-    {
-        /** @var \Common\Service\Table\TableBuilder $tableBuilder */
-        $tableBuilder = $this->getServiceLocator()->get('Table');
-        $dataService = $this->getEbsrDataService();
-
-        $table = $tableBuilder->buildTable(
-            'ebsr-packs',
-            $dataService->fetchList(),
-            ['url' => $this->plugin('url')],
-            false
-        );
-
-        return new ViewModel(['table' => $table]);
-    }
-
+    
     /**
      * Uploads EBSR packs and optionally queues for processing
      *
@@ -112,25 +91,5 @@ class UploadsController extends AbstractController
         $response = $this->handleQuery(OrganisationUnprocessedList::create([]));
 
         return $response->getResult();
-    }
-
-    /**
-     * @return \Olcs\Service\Data\EbsrPack
-     */
-    public function getEbsrDataService()
-    {
-        /** @var \Olcs\Service\Data\EbsrPack $dataService */
-        $dataService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\EbsrPack');
-        return $dataService;
-    }
-
-    /**
-     * @return \Olcs\Service\Ebsr
-     */
-    public function getEbsrService()
-    {
-        /** @var \Olcs\Service\Ebsr $dataService */
-        $dataService = $this->getServiceLocator()->get('Olcs\Service\Ebsr');
-        return $dataService;
     }
 }
