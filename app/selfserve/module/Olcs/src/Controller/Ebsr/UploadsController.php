@@ -17,7 +17,7 @@ class UploadsController extends AbstractController
 {
     use GenericMethods;
     use FlashMessengerTrait;
-    
+
     /**
      * Uploads EBSR packs and optionally queues for processing
      *
@@ -69,7 +69,8 @@ class UploadsController extends AbstractController
      * @throws \Common\Exception\File\InvalidMimeException
      * @throws \Exception
      */
-    public function processEbsrFileUpload($file) {
+    public function processEbsrFileUpload($file)
+    {
         $dtoData = [
             'category' => 3,
             'subCategory' => 36,
