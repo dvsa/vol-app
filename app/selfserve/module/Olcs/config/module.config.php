@@ -9,6 +9,8 @@ use Olcs\Form\Element\SearchDateRangeFieldset;
 use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
 use Olcs\Form\Element\SearchFilterFieldset;
 use Olcs\Form\Element\SearchFilterFieldsetFactory;
+use Olcs\Form\Element\SearchOrderFieldset;
+use Olcs\Form\Element\SearchOrderFieldsetFactory;
 use Olcs\FormService\Form\Lva as LvaFormService;
 use Zend\Mvc\Router\Http\Segment;
 
@@ -995,11 +997,13 @@ return array(
     'form_elements' => [
         'factories' => [
             SearchFilterFieldset::class => SearchFilterFieldsetFactory::class,
-            SearchDateRangeFieldset::class => SearchDateRangeFieldsetFactory::class
+            SearchDateRangeFieldset::class => SearchDateRangeFieldsetFactory::class,
+            SearchOrderFieldset::class => SearchOrderFieldsetFactory::class
         ],
         'aliases' => [
             'SearchFilterFieldset' => SearchFilterFieldset::class,
-            'SearchDateRangeFieldset' => SearchDateRangeFieldset::class
+            'SearchDateRangeFieldset' => SearchDateRangeFieldset::class,
+            'SearchOrderFieldset' => SearchOrderFieldset::class
         ]
     ],
     'controller_plugins' => array(
