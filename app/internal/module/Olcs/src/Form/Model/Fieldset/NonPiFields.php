@@ -14,7 +14,7 @@ class NonPiFields extends CaseBase
      * @Form\Required(true)
      * @Form\Attributes({"id":"agreedByTcDate"})
      * @Form\Options({
-     *     "label": "Agreed by TC/DTC/TR/DTR date",
+     *     "label": "Agreed by TC/DTC/HTRU/DHTRU date",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
