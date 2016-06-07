@@ -3,95 +3,95 @@
 namespace Olcs\Controller\Ebsr;
 
 use Common\Controller\Traits\GenericMethods;
-use Common\Controller\Traits\GenericRenderView;
+use Zend\Http\Request as HttpRequest;
+use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\OrganisationUnprocessedList;
+use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\QueuePacks as QueuePacksCmd;
+use Zend\View\Model\ViewModel;
 use Common\Util\FlashMessengerTrait;
-use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Common\Controller\Lva\AbstractController;
+use Common\Category;
 
 /**
  * Class UploadsController
  */
-class UploadsController extends ZendAbstractActionController
+class UploadsController extends AbstractController
 {
-    use GenericMethods,
-        GenericRenderView,
-        FlashMessengerTrait;
+    use GenericMethods;
+    use FlashMessengerTrait;
 
     /**
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function indexAction()
-    {
-        /** @var \Common\Service\Table\TableBuilder $tableBuilder */
-        $tableBuilder = $this->getServiceLocator()->get('Table');
-        $dataService = $this->getEbsrDataService();
-
-        $table = $tableBuilder->buildTable(
-            'ebsr-packs',
-            $dataService->fetchList(),
-            ['url' => $this->plugin('url')],
-            false
-        );
-
-        return $this->getView(['table' => $table]);
-    }
-
-    /**
-     * @return \Zend\View\Model\ViewModel
+     * Uploads EBSR packs and optionally queues for processing
+     *
+     * @return ViewModel
      */
     public function uploadAction()
     {
-        if ($this->isButtonPressed('cancel')) {
-            return $this->redirect()->toRoute('bus-registration/ebsr', ['action' => 'upload']);
+        /** @var HttpRequest $request */
+        $request = $this->getRequest();
+
+        /** @var \Common\Form\Form $form */
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createFormWithRequest('EbsrPackUpload', $request);
+
+        if ($request->isPost()) {
+            $postData = (array)$request->getPost();
+            $form->setData($postData);
         }
 
-        $fieldValues = $this->params()->fromFiles();
-        $postFields = $this->params()->fromPost('fields');
-        $fieldValues['fields']['submissionType'] = $postFields['submissionType'];
+        // handle files
+        $hasProcessedFiles = $this->processFiles(
+            $form,
+            'fields->files',
+            array($this, 'processEbsrFileUpload'),
+            array($this, 'deleteFile'),
+            array($this, 'getUploadedPacks'),
+            'fields->uploadedFileCount'
+        );
 
-        $form = $this->generateFormWithData('EbsrPackUpload', 'processSave', null, false, true, $fieldValues);
+        //if we have processed files, attempt to submit them for processing
+        if (!$hasProcessedFiles && $request->isPost() && $form->isValid()) {
+            $cmdData = ['submissionType' => $postData['fields']['submissionType']];
+            $response = $this->handleCommand(QueuePacksCmd::create($cmdData));
 
-        return $this->getView(['form' => $form]);
-    }
-
-    /**
-     * @param array $data
-     * @return void
-     */
-    public function processSave($data, $form = null, $additionalParams = null)
-    {
-        $dataService = $this->getEbsrService();
-
-        $result = $dataService->processPackUpload($data, $data['fields']['submissionType']);
-
-        if (isset($result['success'])) {
-            $this->addSuccessMessage($result['success']);
-        }
-        if (isset($result['errors'])) {
-            $messages['fields']['file'] = [];
-            foreach ((array) $result['errors'] as $message) {
-                array_push($messages['fields']['file'], $message);
+            if ($response->isOk()) {
+                $this->addSuccessMessage('ebsr-upload-success');
+                return $this->redirect()->toRoute('bus-registration');
             }
-            $form->setMessages($messages);
+
+            $this->addErrorMessage('ebsr-upload-fail');
         }
+
+        return new ViewModel(['form' => $form]);
     }
 
     /**
-     * @return \Olcs\Service\Data\EbsrPack
+     * @param array $file
+     * @throws \Common\Exception\File\InvalidMimeException
+     * @throws \Exception
      */
-    public function getEbsrDataService()
+    public function processEbsrFileUpload($file)
     {
-        /** @var \Olcs\Service\Data\EbsrPack $dataService */
-        $dataService = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\EbsrPack');
-        return $dataService;
+        $dtoData = [
+            'category' => Category::CATEGORY_BUS_REGISTRATION,
+            'subCategory' => Category::BUS_SUB_CATEGORY_EBSR,
+            'description' => $file['name'],
+            'isExternal' => true,
+            'isEbsrPack' => true
+        ];
+
+        $this->uploadFile($file, $dtoData);
     }
 
     /**
-     * @return \Olcs\Service\Ebsr
+     * Gets a list of uploaded packs which have yet to be submitted
+     *
+     * @return array
      */
-    public function getEbsrService()
+    public function getUploadedPacks()
     {
-        /** @var \Olcs\Service\Ebsr $dataService */
-        $dataService = $this->getServiceLocator()->get('Olcs\Service\Ebsr');
-        return $dataService;
+        $response = $this->handleQuery(OrganisationUnprocessedList::create([]));
+
+        return $response->getResult();
     }
 }

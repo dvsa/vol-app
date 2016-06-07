@@ -23,7 +23,7 @@ class EbsrPackUpload
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\SubmitButton")
      */
     public $formActions = null;
 }

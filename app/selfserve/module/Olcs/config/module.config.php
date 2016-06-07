@@ -973,7 +973,6 @@ return array(
             'CookieBannerListener' => \Olcs\Mvc\CookieBannerListener::class,
             'CookieBanner' => \Olcs\Mvc\CookieBanner::class,
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
-            'Olcs\Service\Ebsr' => 'Olcs\Service\Ebsr',
             'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
             'Olcs\Navigation\DashboardNavigation' => 'Olcs\Navigation\DashboardNavigationFactory',
             'LicenceTransportManagerAdapter' =>
@@ -1108,16 +1107,6 @@ return array(
         )
     ),
     'asset_path' => '//dev_dvsa-static.web01.olcs.mgt.mtpdvsa',
-    'service_api_mapping' => array(
-        'endpoints' => array(
-            'ebsr' => 'http://olcs-ebsr/'
-        )
-    ),
-    'rest_services' => array(
-        'delegators' => [
-            'Olcs\RestService\ebsr\pack' => ['Olcs\Service\Rest\EbsrPackDelegatorFactory']
-        ]
-    ),
     'form_service_manager' => [
         'invokables' => [
             // Operating Centres
