@@ -49,7 +49,7 @@ return array(
             }
         ),
         array(
-            'title' => 'Presiding TC/DTC',
+            'title' => 'Presiding TC/DTC/HTRU/DHTRU',
             'formatter' => function ($data) {
                 return (isset($data['presidingTc']['name']) ? $data['presidingTc']['name'] : '');
             }
