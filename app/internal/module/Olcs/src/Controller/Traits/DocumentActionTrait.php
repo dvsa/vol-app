@@ -14,13 +14,41 @@ trait DocumentActionTrait
 {
     use GenericUpload;
 
+    /**
+     * Route (prefix) for document action redirects
+     *
+     * @return string
+     */
     protected abstract function getDocumentRoute();
+
+    /**
+     * Route params for document action redirects
+     *
+     * @return array
+     */
     protected abstract function getDocumentRouteParams();
+
+    /**
+     * Get view model for document action
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     protected abstract function getDocumentView();
+
+    /**
+     * Get configured document form
+     *
+     * @return \Zend\Form\Form
+     */
     protected abstract function getConfiguredDocumentForm();
 
     protected $documentIdentifierName = 'doc';
 
+    /**
+     * Get left view
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel(['form' => $this->getConfiguredDocumentForm()]);
@@ -29,6 +57,11 @@ trait DocumentActionTrait
         return $view;
     }
 
+    /**
+     * Documents action
+     *
+     * @return \Zend\Http\Response
+     */
     public function documentsAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -81,6 +114,8 @@ trait DocumentActionTrait
 
     /**
      * Performs a delete document action and redirects to the index
+     *
+     * @return \Zend\Http\Response
      */
     public function deleteDocumentAction()
     {
@@ -95,9 +130,14 @@ trait DocumentActionTrait
         }
 
         $ids = explode(',', $id);
-        $this->handleCommand(DeleteDocuments::create(['ids' => $ids]));
+        $deleteResponse = $this->handleCommand(DeleteDocuments::create(['ids' => $ids]));
 
-        $this->addSuccessMessage('internal.documents.delete.deleted_successfully');
+        if ($deleteResponse->isOk()) {
+            $this->addSuccessMessage('internal.documents.delete.deleted_successfully');
+        } else {
+            $this->addErrorMessage('unknown-error');
+        }
+
         return $this->redirect()->toRouteAjax(
             $this->getDocumentRoute(),
             $this->getDocumentRouteParams(),
