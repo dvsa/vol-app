@@ -36,7 +36,7 @@ return array(
             'title' => 'By',
             'formatter' => function ($row) {
                 if (isset($row['user']['contactDetails']['person']['forename']) &&
-                    isset($row['user']['contactDetails']['person']['forename'])) {
+                    isset($row['user']['contactDetails']['person']['familyName'])) {
                     $by = $row['user']['contactDetails']['person']['forename'] . ' '
                         . $row['user']['contactDetails']['person']['familyName'];
                 } else {
