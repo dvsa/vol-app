@@ -12,9 +12,9 @@ use Common\Controller\Traits\ViewHelperManagerAware;
 use Common\Service\Data\Search\SearchType;
 use Common\Service\Data\Search\Search;
 use Olcs\Form\Model\Form\SearchFilter as SearchFilterForm;
-
 use Olcs\Form\Element\SearchFilterFieldset;
 use Olcs\Form\Element\SearchDateRangeFieldset;
+use Olcs\Form\Element\SearchOrderFieldset;
 use Zend\Session\Container;
 
 /**
@@ -236,6 +236,11 @@ class SearchController extends AbstractController
             // date ranges
             $fs = $this->getServiceLocator()->get('FormElementManager')
                 ->get(SearchDateRangeFieldset::class, ['index' => $index, 'name' => 'dateRanges']);
+            $form->add($fs);
+
+            // order
+            $fs = $this->getServiceLocator()->get('FormElementManager')
+                ->get(SearchOrderFieldset::class, ['index' => $index, 'name' => 'sort']);
             $form->add($fs);
         }
 
