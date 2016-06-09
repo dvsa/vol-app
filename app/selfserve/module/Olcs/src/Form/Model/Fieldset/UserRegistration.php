@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class UserRegistration
 {
     /**
-     * @Form\Options({"label":"Username", "hint": "user-registration.field.username.hint"})
+     * @Form\Options({"label":"user-name", "hint": "user-registration.field.username.hint"})
      * @Form\Required(true)
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
      * @Form\Type("Text")
@@ -23,7 +23,7 @@ class UserRegistration
 
     /**
      * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false})
-     * @Form\Options({"label":"First name"})
+     * @Form\Options({"label":"first-name"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
@@ -32,7 +32,7 @@ class UserRegistration
 
     /**
      * @Form\Attributes({"id":"familyName","placeholder":"","class":"medium", "required":false})
-     * @Form\Options({"label":"Last name"})
+     * @Form\Options({"label":"last-name"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
@@ -41,7 +41,7 @@ class UserRegistration
 
     /**
      * @Form\Attributes({"class":"medium"})
-     * @Form\Options({"label":"Email address"})
+     * @Form\Options({"label":"email-address"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
@@ -51,7 +51,7 @@ class UserRegistration
 
     /**
      * @Form\Attributes({"class":"medium"})
-     * @Form\Options({"label":"Confirm email address"})
+     * @Form\Options({"label":"confirm-email-address"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      */
