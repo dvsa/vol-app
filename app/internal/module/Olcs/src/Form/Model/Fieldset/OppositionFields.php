@@ -38,7 +38,7 @@ class OppositionFields extends CaseBase
     /**
      * @Form\AllowEmpty(true)
      * @Form\Required(false)
-     * @Form\Attributes({"id":"contactDetailsDescription","placeholder":"","class":"medium"})
+     * @Form\Attributes({"id":"contactDetailsDescription","placeholder":"","class":"extra-long"})
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({"label":"Objector body"})
      * @Form\Type("Text")

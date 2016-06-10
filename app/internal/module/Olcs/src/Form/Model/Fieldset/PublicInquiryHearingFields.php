@@ -51,7 +51,6 @@ class PublicInquiryHearingFields extends Base
      * @Form\Options({
      *     "label": "Date of PI",
      *     "create_empty_option": true,
-     *     "max_year": 2016,
      *     "render_delimiters": true,
      *     "pattern": "d MMMM y '{{SLA_HINT}}</fieldset><fieldset><div class=""field""><label for=""hearingDate"">Time of PI</label>'HH:mm:ss'</div>'",
      *     "category": "pi_hearing",
@@ -181,10 +180,8 @@ class PublicInquiryHearingFields extends Base
      * @Form\Options({
      *     "label": "Date adjournment agreed",
      *     "create_empty_option": true,
-     *     "max_year": 2016,
      *     "render_delimiters": true,
      *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""adjournedDate"">Time adjournment agreed</label>'HH:mm:ss'</div>'",
-     *     "category": "pi_hearing",
      *     "field": "adjournedDate"
      * })
      * @Form\AllowEmpty(true)
