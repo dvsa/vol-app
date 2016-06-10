@@ -5,7 +5,7 @@ if ($this->sectionId !== 'introduction') {
 
     //last submission
     echo $this->render(
-        'partials/read-only/main',
+    	'sections/cases/pages/submission/section',
         [
             'id' => $this->data['submissionSection'],
             'header' => (isset($this->data['description']) ? $this->data['description'] : ''),
