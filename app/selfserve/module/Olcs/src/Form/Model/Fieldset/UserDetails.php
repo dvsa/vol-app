@@ -20,7 +20,7 @@ use Zend\Form\Annotation as Form;
 class UserDetails extends Base
 {
     /**
-     * @Form\Options({"label":"user -name"})
+     * @Form\Options({"label":"user-name"})
      * @Form\Required(true)
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
      * @Form\Type("Text")
