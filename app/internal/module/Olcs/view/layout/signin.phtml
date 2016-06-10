@@ -12,6 +12,13 @@
           <h2 class="global-header__title">OLCS</h2>
       </div><!-- global-header__wrapper -->
     </div>
+    <?php
+    //  system info messages
+    if (! $this->currentUser()->isLoggedIn()) :
+      echo $this->systemInfoMessages(true);
+    endif;
+    ?>
+
     <div class="page-wrapper">
       <div id="main" role="main">
         <?php echo $this->content; ?>
