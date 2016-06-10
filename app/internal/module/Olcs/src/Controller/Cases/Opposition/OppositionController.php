@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Case Opposition Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
- */
 namespace Olcs\Controller\Cases\Opposition;
 
 use Dvsa\Olcs\Transfer\Command\Opposition\CreateOpposition as CreateDto;
@@ -159,9 +154,9 @@ class OppositionController extends AbstractInternalController implements CaseCon
     /**
      * Alter Form for add
      *
-     * @param \Common\Controller\Form $form
+     * @param \Common\Form\Form $form
      * @param array $initialData
-     * @return \Common\Controller\Form
+     * @return \Common\Form\Form
      */
     public function alterFormForAdd($form, $initialData)
     {
@@ -171,9 +166,9 @@ class OppositionController extends AbstractInternalController implements CaseCon
     /**
      * Alter Form for edit
      *
-     * @param \Common\Controller\Form $form
+     * @param \Common\Form\Form $form
      * @param array $initialData
-     * @return \Common\Controller\Form
+     * @return \Common\Form\Form
      */
     public function alterFormForEdit($form, $initialData)
     {
@@ -183,9 +178,9 @@ class OppositionController extends AbstractInternalController implements CaseCon
     /**
      * Alter Form based on Case details
      *
-     * @param \Common\Controller\Form $form
+     * @param \Common\Form\Form $form
      * @param array $initialData
-     * @return \Common\Controller\Form
+     * @return \Common\Form\Form
      */
     private function alterFormForCase($form, $initialData)
     {
