@@ -26,7 +26,7 @@ $results = $this->results;
                     ->translateReplace('search.result.subtitle.' . $this->index, [$count]); ?>
             </p>
             <?php
-            if ($this->index == 'publication') {
+            if ($this->index === 'publication') {
                 // OLCS-11648 applies to publication SS search results only
                 ?>
                 <p><?php echo $this->translate('search.result.subtitle.publication.download'); ?></p>
