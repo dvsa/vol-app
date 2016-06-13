@@ -1,7 +1,7 @@
 <?php
 $case = $this->placeholder('case')->getValue();
 
-echo $this->render('partials/read-only/main',
+echo $this->render('sections/cases/pages/submission/section',
     [
         'id' => $this->data['submissionSection'],
         'header' => (isset($this->data['description']) ? $this->data['description'] : ''),

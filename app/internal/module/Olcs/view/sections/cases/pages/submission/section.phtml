@@ -1,0 +1,18 @@
+<div class="submission-section"<?php echo isset($id) ? ' id="' . $id .'"' : '' ?>>
+    <?php
+    if (isset($header) || isset($actions)) {
+        echo $this->partial('sections/cases/pages/submission/section-header');
+    }
+
+    if (isset($multiItems)) {
+        foreach ($multiItems as $items) {
+            echo $this->render('partials/read-only/list', ['items' => $items]);
+        }
+    } elseif (isset($items)) {
+        echo $this->render('partials/read-only/list', ['items' => $items]);
+    }
+
+    if (isset($freetext)) { ?>
+        <p><?php echo $freetext; ?></p>
+    <?php } ?>
+</div>
