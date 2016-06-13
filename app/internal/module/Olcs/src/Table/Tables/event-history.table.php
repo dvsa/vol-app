@@ -35,14 +35,17 @@ return array(
         array(
             'title' => 'By',
             'formatter' => function ($row) {
-                if (isset($row['user']['contactDetails']['person']['forename']) &&
-                    isset($row['user']['contactDetails']['person']['familyName'])) {
-                    $by = $row['user']['contactDetails']['person']['forename'] . ' '
-                        . $row['user']['contactDetails']['person']['familyName'];
-                } else {
-                    $by = $row['user']['loginId'];
+                if (isset($row['user']['contactDetails']['person'])) {
+                    $person = $row['user']['contactDetails']['person'];
+                    if (isset($person['forename'])
+                        && isset($person['familyName'])
+                        && !empty($person['forename'])
+                        && !empty($person['familyName'])
+                    ) {
+                        return $person['forename'] . ' ' . $person['familyName'];
+                    }
                 }
-                return $by;
+                return $row['user']['loginId'];
             },
         )
     )
