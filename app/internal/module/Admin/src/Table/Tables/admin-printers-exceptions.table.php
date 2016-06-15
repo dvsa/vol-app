@@ -39,8 +39,7 @@ return array(
             'name' => 'printerName',
             'sort' => 'printerName',
             'formatter' => function ($row) {
-                return $row['printer']['printerName'] . ' - ' . ($row['printer']['printerTray'] ?
-                    $row['printer']['printerTray'] : 'Default tray');
+                return $row['printer']['printerName'];
             },
         ),
         array(

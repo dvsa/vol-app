@@ -22,7 +22,8 @@ class Printer extends AbstractDataService implements ListDataInterface
     /**
      * Format data
      *
-     * @param array $data
+     * @param array $data data
+     *
      * @return array
      */
     public function formatData(array $data)
@@ -30,17 +31,18 @@ class Printer extends AbstractDataService implements ListDataInterface
         $optionData = [];
 
         foreach ($data as $datum) {
-            $optionData[$datum['id']] = $datum['printerName'] . ' - ' .
-                (isset($datum['printerTray']) && !empty($datum['printerTray']) ?
-                    $datum['printerTray'] : 'Default tray');
+            $optionData[$datum['id']] = $datum['printerName'];
         }
 
         return $optionData;
     }
 
     /**
-     * @param $category
-     * @param bool $useGroups
+     * Fetch list options
+     *
+     * @param int  $category  category
+     * @param bool $useGroups use group
+     *
      * @return array
      */
     public function fetchListOptions($category, $useGroups = false)

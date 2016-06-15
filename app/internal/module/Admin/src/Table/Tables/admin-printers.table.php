@@ -34,14 +34,6 @@ return array(
             },
         ),
         array(
-            'title' => 'Tray',
-            'name' => 'printerTray',
-            'sort' => 'printerTray',
-            'formatter' => function ($row) {
-                return $row['printerTray'] ? $row['printerTray'] : 'Default tray';
-            },
-        ),
-        array(
             'title' => 'Description',
             'name' => 'description',
             'sort' => 'description'

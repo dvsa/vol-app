@@ -40,7 +40,6 @@ class PrinterTest extends MockeryTestCase
             'messages' => [
                 'printerName' => 'foo',
                 'description' => 'bar',
-                'printerTray' => 'cake',
                 'global' => 'baz'
             ]
         ];
@@ -52,8 +51,7 @@ class PrinterTest extends MockeryTestCase
         $formErrors = [
             'printer-details' => [
                 'printerName' => 'foo',
-                'description' => 'bar',
-                'printerTray' => 'cake'
+                'description' => 'bar'
             ]
         ];
 
