@@ -17,13 +17,13 @@
     </strong><br>
     <?php
     if ($this->startDateTime instanceof \DateTime) {
-        echo $this->startDateTime->format(\DATETIME_FORMAT);
+        echo $this->dateTime($this->startDateTime);
     } else {
         echo $this->translate('Unknown');
     }
 
     if (!empty($this->endDateTime)) {
-        echo ' to '. $this->endDateTime->format(\DATETIME_FORMAT);
+        echo ' to '. $this->dateTime($this->endDateTime);
     }
     ?>
 </p>
