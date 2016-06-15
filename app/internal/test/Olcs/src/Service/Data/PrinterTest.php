@@ -73,18 +73,16 @@ class PrinterTest extends AbstractDataServiceTestCase
         $data = [
             [
                 'id' => 1,
-                'printerName' => 'foo',
-                'printerTray' => 'bar'
+                'printerName' => 'foo'
             ],
             [
                 'id' => 2,
-                'printerName' => 'cake',
-                'printerTray' => null
+                'printerName' => 'cake'
             ]
         ];
         $expected = [
-            1 => 'foo - bar',
-            2 => 'cake - Default tray'
+            1 => 'foo',
+            2 => 'cake'
         ];
         $sut = new Printer();
         $sut->setData('Printer', $data);

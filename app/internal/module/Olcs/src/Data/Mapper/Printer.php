@@ -20,7 +20,9 @@ class Printer implements MapperInterface
     /**
      * Should map data from a result array into an array suitable for a form
      *
-     * @param array $data
+     * @param array $data data
+     *
+     * @return array
      */
     public static function mapFromResult(array $data)
     {
@@ -34,7 +36,8 @@ class Printer implements MapperInterface
     /**
      * Should map form data back into a command data structure
      *
-     * @param array $data
+     * @param array $data data
+     *
      * @return array
      */
     public static function mapFromForm(array $data)
@@ -47,8 +50,9 @@ class Printer implements MapperInterface
      * Should map errors onto the form, any global errors should be returned so they can be added
      * to the flash messenger
      *
-     * @param FormInterface $form
-     * @param array $errors
+     * @param FormInterface $form   form
+     * @param array         $errors errors
+     *
      * @return array
      */
     public static function mapFromErrors(FormInterface $form, array $errors)
@@ -57,10 +61,6 @@ class Printer implements MapperInterface
         if (isset($errors['messages']['printerName'])) {
             $messages['printer-details']['printerName'] = $errors['messages']['printerName'];
             unset($errors['messages']['printerName']);
-        }
-        if (isset($errors['messages']['printerTray'])) {
-            $messages['printer-details']['printerTray'] = $errors['messages']['printerTray'];
-            unset($errors['messages']['printerTray']);
         }
         if (isset($errors['messages']['description'])) {
             $messages['printer-details']['description'] = $errors['messages']['description'];
