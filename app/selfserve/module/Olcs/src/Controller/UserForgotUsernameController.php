@@ -1,12 +1,10 @@
 <?php
 
-/**
- * User Forgot Username Controller
- */
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
 use Dvsa\Olcs\Transfer\Command\User\RemindUsernameSelfserve as RemindUsernameDto;
+use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -14,6 +12,11 @@ use Zend\View\Model\ViewModel;
  */
 class UserForgotUsernameController extends AbstractController
 {
+    /**
+     * Index action
+     *
+     * @return ViewModel
+     */
     public function indexAction()
     {
         /** @var \Common\Form\Form $form */
@@ -28,7 +31,7 @@ class UserForgotUsernameController extends AbstractController
             $form->setData($this->params()->fromPost());
 
             if ($form->isValid()) {
-                $result = $this->remindUsername($form->getData());
+                $result = $this->remindUsername($form);
 
                 if ($result instanceof ViewModel) {
                     return $result;
@@ -47,8 +50,17 @@ class UserForgotUsernameController extends AbstractController
         return $view;
     }
 
-    private function remindUsername($formData)
+    /**
+     * Remind username
+     *
+     * @param Form $form Form
+     *
+     * @return ViewModel|null
+     */
+    private function remindUsername(Form $form)
     {
+        $formData = $form->getData();
+
         $data = $this->mapFromForm($formData);
 
         $response = $this->handleCommand(
@@ -58,23 +70,27 @@ class UserForgotUsernameController extends AbstractController
         if ($response->isOk()) {
             $result = $response->getResult();
 
-            if (array_shift($result['messages']) === 'USERNAME_REMINDER_SENT_MULTIPLE') {
-                // ask your administrator
-                $content = new ViewModel();
-                $content->setTemplate('olcs/user-forgot-username/ask-admin');
-                $this->placeholder()->setPlaceholder('pageTitle', 'user-forgot-username.page.ask-admin.title');
-            } else {
-                // check your email page
-                $content = new ViewModel(
-                    [
-                        'emailAddress' => $formData['fields']['emailAddress']
-                    ]
-                );
-                $content->setTemplate('olcs/user-forgot-username/check-email');
-                $this->placeholder()->setPlaceholder('pageTitle', 'user-forgot-username.page.check-email.title');
+            switch (array_shift($result['messages'])) {
+                case 'USERNAME_REMINDER_SENT_MULTIPLE':
+                    // ask your administrator
+                    $content = new ViewModel();
+                    $content->setTemplate('olcs/user-forgot-username/ask-admin');
+                    $this->placeholder()->setPlaceholder('pageTitle', 'user-forgot-username.page.ask-admin.title');
+                    return $content;
+                case 'USERNAME_REMINDER_SENT_SINGLE':
+                    // check your email page
+                    $content = new ViewModel(
+                        [
+                            'emailAddress' => $formData['fields']['emailAddress']
+                        ]
+                    );
+                    $content->setTemplate('olcs/user-forgot-username/check-email');
+                    $this->placeholder()->setPlaceholder('pageTitle', 'user-forgot-username.page.check-email.title');
+                    return $content;
+                default:
+                    $form->get('fields')->get('emailAddress')->setMessages(['ERR_FORGOT_USERNAME_NOT_FOUND']);
+                    break;
             }
-
-            return $content;
         } else {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
@@ -86,7 +102,8 @@ class UserForgotUsernameController extends AbstractController
      * Formats the data from what's in the form to what the service needs.
      * This is mapping, not business logic.
      *
-     * @param $data
+     * @param array $data Data
+     *
      * @return array
      */
     private function mapFromForm($data)
@@ -100,6 +117,8 @@ class UserForgotUsernameController extends AbstractController
 
     /**
      * Redirects to home
+     *
+     * @return \Zend\Http\Response
      */
     private function redirectToHome()
     {

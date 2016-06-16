@@ -183,6 +183,56 @@ class UserForgotUsernameControllerTest extends TestCase
         $this->assertEquals('olcs/user-forgot-username/ask-admin', $view->getTemplate());
     }
 
+    public function testIndexActionForPostNotFound()
+    {
+        $postData = [
+            'fields' => [
+                'licenceNumber' => 'AB12345678',
+                'emailAddress' => 'steve@example.com'
+            ]
+        ];
+
+        $mockRequest = m::mock();
+        $mockRequest->shouldReceive('isPost')->andReturn(true);
+        $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
+
+        $mockForm = m::mock('Common\Form\Form');
+        $mockForm->shouldReceive('setData')->once()->with($postData);
+        $mockForm->shouldReceive('isValid')->once()->andReturn(true);
+        $mockForm->shouldReceive('getData')->once()->andReturn($postData);
+        $mockForm->shouldReceive('get')->with('fields')->once()->andReturnSelf();
+        $mockForm->shouldReceive('get')->with('emailAddress')->once()->andReturnSelf();
+        $mockForm->shouldReceive('setMessages')->with(['ERR_FORGOT_USERNAME_NOT_FOUND'])->once()->andReturnSelf();
+
+        $mockFormHelper = m::mock();
+        $mockFormHelper
+            ->shouldReceive('createFormWithRequest')
+            ->with('UserForgotUsername', $mockRequest)
+            ->once()
+            ->andReturn($mockForm);
+        $this->sm->setService('Helper\Form', $mockFormHelper);
+
+        $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
+
+        $mockParams = m::mock();
+        $mockParams->shouldReceive('fromPost')->once()->andReturn($postData);
+        $this->sut->shouldReceive('params')->once()->andReturn($mockParams);
+
+        $result = [
+            'messages' => ['ERR_USERNAME_NOT_FOUND']
+        ];
+
+        $response = m::mock('stdClass');
+        $response->shouldReceive('isOk')->andReturn(true);
+        $response->shouldReceive('getResult')->andReturn($result);
+        $this->sut->shouldReceive('handleCommand')->with(m::type(RemindUsernameDto::class))->andReturn($response);
+
+        $view = $this->sut->indexAction();
+
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertEquals('olcs/user-forgot-username/index', $view->getTemplate());
+    }
+
     public function testIndexActionForPostWithError()
     {
         $postData = [
