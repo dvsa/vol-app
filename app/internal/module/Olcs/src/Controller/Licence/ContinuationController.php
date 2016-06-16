@@ -1,17 +1,13 @@
 <?php
 
-/**
- * Continuation Controller
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 namespace Olcs\Controller\Licence;
 
-use Olcs\Controller\AbstractController;
-use Zend\View\Model\ViewModel;
-use Common\Service\Entity\LicenceEntityService;
 use Common\Service\Entity\ContinuationDetailEntityService;
+use Common\Service\Entity\LicenceEntityService;
+use Olcs\Controller\AbstractController;
 use Olcs\Data\Mapper\Continuation as ContinuationMapper;
+use Olcs\Form\Model\Form;
+use Zend\View\Model\ViewModel;
 
 /**
  * Continuation Controller
@@ -29,20 +25,24 @@ class ContinuationController extends AbstractController
         $hasOutstandingContinuationFee = $data['hasOutstandingContinuationFee'];
         $numNotCeasedDiscs = $data['numNotCeasedDiscs'];
 
-        /* @var $form \Zend\Form\Form */
+        /** @var \Common\Form\Form $form */
         $form = $this->getForm('UpdateContinuation');
+
         $this->alterForm($form, $continuationDetail, $hasOutstandingContinuationFee);
         $this->populateFormDefaultValues($form, $continuationDetail, $numNotCeasedDiscs);
 
-        if ($this->getRequest()->isPost()) {
-            if ($this->isButtonPressed('printSeperator')) {
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
 
+        if ($request->isPost()) {
+            if ($this->isButtonPressed('printSeperator')) {
                 $this->createSeparatorSheet($continuationDetail['licence']['licNo']);
 
                 return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
             }
 
             $this->formPost($form);
+            //  there is hidden call of postSetFormData()
 
             if ($form->isValid()) {
                 if ($this->isButtonPressed('submit')) {
@@ -66,6 +66,30 @@ class ContinuationController extends AbstractController
         $this->getServiceLocator()->get('Script')->loadFile('forms/update-continuation');
 
         return $this->renderView($view, 'Continue licence');
+    }
+
+    /**
+     * Additional action with form after post.
+     * - for UpdateContinuation:  add 'checklistStatus' field if it disabled in form
+     *
+     * @param \Common\Form\Form $form
+     *
+     * @return \Common\Form\Form
+     */
+    protected function postSetFormData(\Common\Form\Form $form)
+    {
+        if ($form->getName() === 'UpdateContinuation') {
+            /** @var \Zend\Form\Fieldset $fields */
+            $fields = $form->get('fields');
+
+            if ($fields->get('received')->getValue() === 'N') {
+                $form->getInputFilter()
+                    ->get('fields')
+                    ->get('checklistStatus')->setRequired(false);
+            }
+        }
+
+        return $form;
     }
 
     /**
@@ -142,7 +166,7 @@ class ContinuationController extends AbstractController
      * Continue a Licence
      *
      * @param array $licence Licence data
-     * @param Form $form
+     * @param \Common\Form\Form $form
      * @return bool
      */
     protected function continueLicence(array $licence, $form)

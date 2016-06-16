@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Licence Psv Vehicles
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\PsvVehicles as CommonPsvVehicles;
