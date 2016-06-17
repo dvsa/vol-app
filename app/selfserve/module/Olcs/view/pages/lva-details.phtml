@@ -1,7 +1,7 @@
 <?php
-  if ($lva === 'application') {
-    $progressTranslated = sprintf($this->translate('application.progress'), $stepX, $stepY);
-  } elseif ($lva === 'licence') {
+  if ($this->lva === 'application') {
+    $progressTranslated = sprintf($this->translate('application.progress'), $this->stepX, $this->stepY);
+  } elseif ($this->lva === 'licence') {
     $startDateFormatted =  $startDate ? strftime("%d %B %G",strtotime($startDate)) : '';
     $renewalDateFormatted =  $renewalDate ? strftime("%d %B %G",strtotime($renewalDate)) : '';
   }

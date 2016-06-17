@@ -13,6 +13,7 @@ echo $this->render(
         'pageSubTitle'=> isset($this->pageSubtitle) ? $this->translate($this->pageSubtitle) : '',
         'pageSubTitleUrl'=> $this->pageSubTitleUrl,
         'pageHeaderText'=> isset($this->pageHeaderText) ? $this->translate($this->pageHeaderText) : '',
+        'showNav'=> $this->showNav,
     ]
 );
 ?>

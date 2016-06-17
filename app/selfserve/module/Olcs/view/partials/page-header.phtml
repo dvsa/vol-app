@@ -1,9 +1,17 @@
 <div class="page-header">
-  
+
   <?php if (!isset($this->showNav) || $this->showNav !== false) {
     echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs');
   } ?>
-  
+
+  <?php if (!empty($this->backUrl)) : ?>
+    <ol class="breadcrumbs">
+      <li class="breadcrumbs__item">
+        <a href="<?php echo $this->backUrl['url']; ?>"><?php echo $this->translate($this->backUrl['label']); ?></a>
+      </li>
+    </ol>
+  <?php endif; ?>
+
   <div class="row">
       
     <div class="page-header__wrapper two-thirds">

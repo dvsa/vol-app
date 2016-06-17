@@ -220,9 +220,22 @@ class BusRegApplicationsController extends AbstractController
      */
     public function detailsAction()
     {
-        return $this->details('olcs/bus-registration/detail');
+        return $this->details(
+            'olcs/bus-registration/detail',
+            [
+                'backUrl' => $this->generateLinkBackToBusRegs(),
+            ]
+        );
     }
 
+    /**
+     * Prepare view model for Details action with specified parameters
+     *
+     * @param string $temlate
+     * @param array $options
+     *
+     * @return null|ViewModel
+     */
     private function details($temlate, $options = [])
     {
         $id = $this->params()->fromRoute('busRegId');
@@ -260,7 +273,7 @@ class BusRegApplicationsController extends AbstractController
                     'url' => $url,
                     'label' => $licence['licNo'],
                 ],
-                'searchResultsLink' => $this->generateLinkBackToSearchResult(),
+                'showNav' => false,
             ] + $options
         );
 
@@ -375,6 +388,25 @@ class BusRegApplicationsController extends AbstractController
         $content->setTemplate($template);
 
         return $content;
+    }
+
+    /**
+     * Return back link to Bus registration page
+     *
+     * @return string
+     */
+    private function generateLinkBackToBusRegs()
+    {
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
+
+        /** @var \Zend\Http\Header\Referer $header */
+        $header = $request->getHeader('referer');
+
+        return [
+            'url' => $header->uri()->getPath(),
+            'label' => 'bus-registrations-index-title',
+        ];
     }
 
     /**
