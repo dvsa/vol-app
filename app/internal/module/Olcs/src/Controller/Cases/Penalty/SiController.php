@@ -59,6 +59,8 @@ class SiController extends AbstractInternalController implements CaseControllerI
     ];
 
     /**
+     * Get left view
+     *
      * @return ViewModel
      */
     public function getLeftView()
