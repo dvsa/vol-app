@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Internal Licence Vehicles PSV Controller
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- */
 namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva\AbstractVehiclesPsvController;
