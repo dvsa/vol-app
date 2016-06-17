@@ -50,7 +50,7 @@ return array(
             }
         ],
         [
-            'title' => '',
+            'title' => 'markup-table-th-remove',
             'type' => 'Action',
             'action' => 'delete',
             'class' => 'remove',
