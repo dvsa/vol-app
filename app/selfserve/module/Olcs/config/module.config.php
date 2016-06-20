@@ -178,10 +178,9 @@ $routes = array(
     'busreg-registrations' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' =>
-                '/busreg-registrations[/]',
+            'route' => '/busreg-registrations[/]',
             'defaults' => array(
-                'controller' => 'Olcs\BusReg\BusRegRegistrations',
+                'controller' => Olcs\Controller\BusReg\BusRegRegistrationsController::class,
                 'action' => 'index',
             )
         )
@@ -189,8 +188,7 @@ $routes = array(
     'bus-registration' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' =>
-                '/bus-registration[/]',
+            'route' => '/bus-registration[/]',
             'defaults' => array(
                 'controller' => Olcs\Controller\Ebsr\BusRegApplicationsController::class,
                 'action' => 'index',
@@ -938,7 +936,8 @@ return array(
             'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
             Olcs\Controller\Ebsr\BusRegApplicationsController::class =>
                 Olcs\Controller\Ebsr\BusRegApplicationsController::class,
-            'Olcs\BusReg\BusRegRegistrations' => 'Olcs\Controller\BusReg\BusRegRegistrationsController',
+            Olcs\Controller\BusReg\BusRegRegistrationsController::class =>
+                Olcs\Controller\BusReg\BusRegRegistrationsController::class,
             'Dashboard' => Olcs\Controller\DashboardController::class,
             'Fees' => 'Olcs\Controller\FeesController',
             'Correspondence' => 'Olcs\Controller\CorrespondenceController',
@@ -975,8 +974,8 @@ return array(
             'CookieBannerListener' => \Olcs\Mvc\CookieBannerListener::class,
             'CookieBanner' => \Olcs\Mvc\CookieBanner::class,
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
-            'navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
-            'Olcs\Navigation\DashboardNavigation' => 'Olcs\Navigation\DashboardNavigationFactory',
+            'navigation' => Zend\Navigation\Service\DefaultNavigationFactory::class,
+            'Olcs\Navigation\DashboardNavigation' => Olcs\Navigation\DashboardNavigationFactory::class,
             'LicenceTransportManagerAdapter' =>
                 \Olcs\Controller\Lva\Factory\Adapter\LicenceTransportManagerAdapterFactory::class,
             'VariationTransportManagerAdapter' =>

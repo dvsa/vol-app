@@ -2,11 +2,10 @@
 
 namespace Olcs\Controller\BusReg;
 
-use Common\Exception\ResourceNotFoundException;
-use Dvsa\Olcs\Transfer\Query\BusRegSearchView\BusRegSearchViewList as ListDto;
 use Common\Controller\Lva\AbstractController;
-use Zend\View\Model\ViewModel;
 use Common\Rbac\User;
+use Dvsa\Olcs\Transfer\Query\BusRegSearchView\BusRegSearchViewList as ListDto;
+use Zend\View\Model\ViewModel;
 
 /**
  * Class BusRegRegistrationsController
@@ -20,14 +19,13 @@ class BusRegRegistrationsController extends AbstractController
      */
     public function indexAction()
     {
-        if ($this->getRequest()->isPost()) {
-            $request = $this->getRequest();
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
+        if ($request->isPost()) {
             $postData = $request->getPost();
 
             return $this->processSearch($postData);
         }
-
-        $userData = $this->currentUser()->getUserData();
 
         $params = [
             'organisationId'    => $this->params()->fromQuery('organisationId', null),
@@ -71,7 +69,7 @@ class BusRegRegistrationsController extends AbstractController
                 'searchForm' => $filterForm,
                 'activeTab' => 'registrations',
                 'showNav' => false,
-                'tabs' => $this->generateTabs()
+                'tabs' => $this->generateTabs(),
             ]
         );
 
@@ -173,6 +171,7 @@ class BusRegRegistrationsController extends AbstractController
      */
     public function getFilterForm($params)
     {
+        /** @var \Common\Form\Form $filterForm */
         $filterForm = $this->getServiceLocator()->get('Helper\Form')->createForm('BusRegRegistrationsFilterForm');
 
         if ($this->currentUser()->getUserData()['userType'] !== User::USER_TYPE_LOCAL_AUTHORITY) {
