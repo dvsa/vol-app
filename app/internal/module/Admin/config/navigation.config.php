@@ -57,6 +57,7 @@ return [
                     'route' => 'admin-dashboard/admin-financial-standing',
                 ],
                 [
+                    'id' => 'admin-dashboard/admin-public-holiday',
                     'label' => 'Public holidays',
                     'route' => 'admin-dashboard/admin-public-holiday',
                 ],
