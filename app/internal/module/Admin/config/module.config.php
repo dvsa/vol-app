@@ -1,5 +1,7 @@
 <?php
 
+use Zend\Mvc\Router\Http\Segment;
+
 return [
     'router' => [
         'routes' => [
@@ -333,11 +335,14 @@ return [
                         ],
                     ],
                     'admin-public-holiday' => [
-                        'type' => 'Segment',
+                        'type' => Segment::class,
                         'options' => [
-                            'route' => 'public-holiday[/]',
+                            'route' => 'public-holiday[/:action][/:holidayId][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                            ],
                             'defaults' => [
-                                'controller' => 'Admin\PublicHolidayController',
+                                'controller' => Admin\Controller\PublicHolidayController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -532,7 +537,7 @@ return [
             'Admin\ContinuationController' => 'Admin\Controller\ContinuationController',
             'Admin\ReportController' => 'Admin\Controller\ReportController',
             'Admin\UserManagementController' => 'Admin\Controller\UserManagementController',
-            'Admin\PublicHolidayController' => 'Admin\Controller\PublicHolidayController',
+            Admin\Controller\PublicHolidayController::class => Admin\Controller\PublicHolidayController::class,
             'Admin\DiscPrintingController' => 'Admin\Controller\DiscPrintingController',
             'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController',
             'Admin\PaymentProcessingFeesController' => 'Admin\Controller\PaymentProcessingFeesController',
