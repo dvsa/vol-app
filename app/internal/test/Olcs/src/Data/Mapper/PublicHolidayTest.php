@@ -28,12 +28,21 @@ class PublicHolidayTest extends MockeryTestCase
             [
                 PublicHoliday::FIELDS => [
                     'id' => self::ID,
-                    'unit_Fld' => 'unit_Val',
                     'areas' => ['isEngland'],
                     'holidayDate' => 'unit_Date',
                 ],
             ],
             PublicHoliday::mapFromResult($data)
+        );
+    }
+
+    public function testMapFromResultIsEmpty()
+    {
+        static::assertEquals(
+            [
+                PublicHoliday::FIELDS => [],
+            ],
+            PublicHoliday::mapFromResult([])
         );
     }
 

@@ -14,6 +14,8 @@ class PublicHoliday implements MapperInterface
 {
     const FIELDS = 'fields';
 
+    private static $areas_fields = ['isEngland', 'isWales', 'isScotland', 'isNi'];
+
     /**
      * Should map data from a result array into an array suitable for a form
      *
@@ -21,29 +23,23 @@ class PublicHoliday implements MapperInterface
      */
     public static function mapFromResult(array $data)
     {
-        $flds = ['isEngland', 'isWales', 'isScotland', 'isNi'];
-
-        $data += [
-            'areas' => array_filter(
-                $flds,
-                function ($fld) use ($data) {
-                    return (isset($data[$fld]) && $data[$fld] === 'Y');
-                }
-            ),
-            'holidayDate' => $data['publicHolidayDate'],
-        ];
-
-        //  remove unused fields
-        $removed = array_merge($flds, ['publicHolidayDate']);
-        array_walk(
-            $removed,
-            function ($fls) use (&$data) {
-                unset($data[$fls]);
-            }
-        );
+        if (empty($data)) {
+            return [
+                self::FIELDS => []
+            ];
+        }
 
         return [
-            self::FIELDS => $data,
+            self::FIELDS => [
+                'id' => $data['id'],
+                'areas' => array_filter(
+                    self::$areas_fields,
+                    function ($fld) use ($data) {
+                        return (isset($data[$fld]) && $data[$fld] === 'Y');
+                    }
+                ),
+                'holidayDate' => $data['publicHolidayDate'],
+            ],
         ];
     }
 
