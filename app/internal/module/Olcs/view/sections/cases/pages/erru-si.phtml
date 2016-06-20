@@ -23,7 +23,7 @@ if (!$case['isErru']) {
         switch ($case['erruRequest']['msiType']['id']) {
             case RefData::ERRU_RESPONSE_SENT:
                 $erruResponseSent = new \DateTime($case['erruRequest']['responseTime']);
-                $header['header'] .= ' sent ' . $erruResponseSent->format('jS F Y');
+                $header['header'] .= ' sent ' . $this->dateTime($erruResponseSent, 'jS F Y');
                 break;
             case RefData::ERRU_RESPONSE_SENDING_FAILED:
                 $header['header'] .= ' sending failed';
