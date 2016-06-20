@@ -1,5 +1,7 @@
 <?php
 
+use Common\RefData;
+
 $case = $this->placeholder('case')->getValue();
 
 if (!$case['isErru']) {
@@ -17,11 +19,21 @@ if (!$case['isErru']) {
                 'class' => 'action--primary js-modal-ajax'
             ]
         ];
-    } elseif ($case['erruRequest']['responseSent'] == 'Y') {
-        $erruResponseSent = new \DateTime($case['erruRequest']['responseTime']);
-        $header['header'] .= ' sent ' . $erruResponseSent->format('jS F Y');
     } else {
-        $header['header'] .= ' can\'t be sent until all serious infringements have a response';
+        switch ($case['erruRequest']['msiType']['id']) {
+            case RefData::ERRU_RESPONSE_SENT:
+                $erruResponseSent = new \DateTime($case['erruRequest']['responseTime']);
+                $header['header'] .= ' sent ' . $this->dateTime($erruResponseSent, 'jS F Y');
+                break;
+            case RefData::ERRU_RESPONSE_SENDING_FAILED:
+                $header['header'] .= ' sending failed';
+                break;
+            case RefData::ERRU_RESPONSE_QUEUED:
+                $header['header'] .= ' queued for sending to INR';
+                break;
+            default:
+                $header['header'] .= ' can\'t be sent until all serious infringements have a response';
+        }
     }
 
     echo $this->render('pages/table');

@@ -5,7 +5,7 @@ namespace Olcs\Controller\Cases\Penalty;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\CreateSi as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\DeleteSi as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\UpdateSi as UpdateDto;
-use Dvsa\Olcs\Transfer\Command\Cases\Si\SendResponse as SendResponseCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\Si\CreateResponse as CreateResponseCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\UpdatePenaltiesNote as CommentUpdateDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases as CaseDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Si\Si as ItemDto;
@@ -59,6 +59,8 @@ class SiController extends AbstractInternalController implements CaseControllerI
     ];
 
     /**
+     * Get left view
+     *
      * @return ViewModel
      */
     public function getLeftView()
@@ -145,10 +147,10 @@ class SiController extends AbstractInternalController implements CaseControllerI
     {
         return $this->confirmCommand(
             new GenericItem(['case' => 'case']),
-            SendResponseCmd::class,
+            CreateResponseCmd::class,
             'Send response',
             'Are you sure you want to send the response?',
-            'Response sent'
+            'Response created and queued for sending'
         );
     }
 }
