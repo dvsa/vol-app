@@ -117,7 +117,7 @@ class CorrespondenceController extends AbstractController
         return $this->redirect()->toRoute(
             'getfile',
             array(
-                'identifier' => base64_encode($correspondence['document']['identifier'])
+                'identifier' => $correspondence['document']['id']
             )
         );
     }
@@ -125,7 +125,7 @@ class CorrespondenceController extends AbstractController
     /**
      * Format the correspondence data for displaying within the table.
      *
-     * @param array $correspondences
+     * @param array $correspondences Corresposdence data
      *
      * @return array
      */
