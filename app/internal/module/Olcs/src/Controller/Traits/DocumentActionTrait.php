@@ -44,7 +44,7 @@ trait DocumentActionTrait
                 $data = $response->getResult();
 
                 $docParams = [
-                    'identifier' => base64_encode($data['identifier'])
+                    'identifier' => $data['id']
                 ];
 
                 $currentUrl = $this->url()->fromRoute(
