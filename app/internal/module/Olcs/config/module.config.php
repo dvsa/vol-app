@@ -412,8 +412,7 @@ return array(
         'aliases' => [
             'RouteParamsListener' => 'Olcs\Listener\RouteParams',
             'right-sidebar' => 'Olcs\Navigation\RightHandNavigation',
-            'HeaderSearchListener' => 'Olcs\Listener\HeaderSearch',
-            'NysiisService' => 'Olcs\Service\Data\Nysiis'
+            'HeaderSearchListener' => 'Olcs\Listener\HeaderSearch'
         ],
         'invokables' => [
             'ApplicationUtility' => 'Olcs\Service\Utility\ApplicationUtility',
@@ -466,7 +465,6 @@ return array(
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
             'Olcs\Service\Nr\RestHelper' => 'Olcs\Service\Nr\RestHelper',
             'Olcs\Service\Data\SubmissionActionTypes' => 'Olcs\Service\Data\SubmissionActionTypes',
-            'Olcs\Service\Data\Nysiis' => 'Olcs\Service\Data\NysiisFactory',
         )
     ),
     'form_elements' => [
