@@ -634,7 +634,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
             if ($document['subCategory']['id'] == $this->sectionSubcategory) {
                 $document['url'] = $urlHelper->fromRoute(
                     'getfile',
-                    array('identifier' => base64_encode($document['identifier']))
+                    array('identifier' => $document['id'])
                 );
                 $sectionDocuments[] = $document;
             }
