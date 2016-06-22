@@ -16,7 +16,12 @@ return [
                 ],
             ],
         ],
-        'showTotal' => true,
+        'paginate' => [
+            'limit' => [
+                'default' => 25,
+                'options' => [10, 25, 50],
+            ],
+        ],
     ],
     'columns' => [
         [
