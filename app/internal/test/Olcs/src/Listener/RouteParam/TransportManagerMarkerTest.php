@@ -1,18 +1,15 @@
 <?php
 
-/**
- * Transport Manager Markers Service Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace OlcsTest\Listener\RouteParam;
 
-use Mockery\Adapter\Phpunit\MockeryTestCase;
-use OlcsTest\Bootstrap;
-use Olcs\Listener\RouteParam\TransportManagerMarker;
+use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Mockery as m;
-use Olcs\Listener\RouteParams;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Event\RouteParam;
+use Olcs\Listener\RouteParam\TransportManagerMarker;
+use Olcs\Listener\RouteParams;
+use OlcsTest\Bootstrap;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Transport Manager Markers Service Test
@@ -21,7 +18,15 @@ use Olcs\Event\RouteParam;
  */
 class TransportManagerMarkerTest extends MockeryTestCase
 {
+    /** @var  TransportManagerMarker */
     protected $sut;
+    /** @var  m\MockInterface */
+    private $mockQueryService;
+    /** @var  m\MockInterface */
+    private $mockAnnotationBuilderService;
+
+    /** @var m\MockInterface|\Olcs\Service\Marker\MarkerService  */
+    private $mockMarkerService;
 
     public function setUp()
     {
@@ -32,6 +37,10 @@ class TransportManagerMarkerTest extends MockeryTestCase
 
         $this->sut->setAnnotationBuilderService($this->mockAnnotationBuilderService);
         $this->sut->setQueryService($this->mockQueryService);
+
+        /** @var \Olcs\Service\Marker\MarkerService $mockMarkerService */
+        $this->mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
+        $this->sut->setMarkerService($this->mockMarkerService);
     }
 
     /**
@@ -41,7 +50,8 @@ class TransportManagerMarkerTest extends MockeryTestCase
      */
     public function testAttach()
     {
-        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface')
+        /** @var \Zend\EventManager\EventManagerInterface $mockEventManager */
+        $mockEventManager = m::mock(\Zend\EventManager\EventManagerInterface::class)
             ->shouldReceive('attach')
             ->with(RouteParams::EVENT_PARAM . 'transportManager', [$this->sut, 'onTransportManagerMarker'], 1)
             ->once()
@@ -63,7 +73,9 @@ class TransportManagerMarkerTest extends MockeryTestCase
      */
     public function testCreateService()
     {
-        $mockSl = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        /** @var m\MockInterface|ServiceLocatorInterface $mockSl */
+        $mockSl = m::mock(ServiceLocatorInterface::class);
+
         $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
         $mockQueryService = m::mock();
         $mockAnnotationBuilderService = m::mock();
@@ -90,12 +102,15 @@ class TransportManagerMarkerTest extends MockeryTestCase
     {
         $mockResponse = m::mock();
 
-        $this->mockAnnotationBuilderService->shouldReceive('createQuery')->once()->andReturnUsing(
-            function ($dto) use ($expectedDtoParams) {
-                $this->assertSame($expectedDtoParams, $dto->getArrayCopy());
-                return 'QUERY';
-            }
-        );
+        $this->mockAnnotationBuilderService
+            ->shouldReceive('createQuery')
+            ->once()
+            ->andReturnUsing(
+                function (AbstractQuery $dto) use ($expectedDtoParams) {
+                    $this->assertSame($expectedDtoParams, $dto->getArrayCopy());
+                    return 'QUERY';
+                }
+            );
 
         $this->mockQueryService->shouldReceive('send')->with('QUERY')->once()->andReturn($mockResponse);
         if ($result === false) {
@@ -114,23 +129,25 @@ class TransportManagerMarkerTest extends MockeryTestCase
      */
     public function testOnTransportManagerMarker()
     {
-        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
-        $this->sut->setMarkerService($mockMarkerService);
-
         $this->mockQuery(['id' => 12], 'TM');
-        $mockMarkerService->shouldReceive('addData')
+        $this->mockMarkerService->shouldReceive('addData')
             ->with('transportManager', array('result'=>'TM', 'results'=>'TM'))->once();
 
         $this->mockQuery(
-            ['user' => null, 'application' => null, 'transportManager' => 12, 'appStatuses' => null],
+            [
+                'user' => null,
+                'application' => null,
+                'transportManager' => 12,
+                'appStatuses' => [],
+            ],
             'TMAs'
         );
-        $mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
+        $this->mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
 
         $this->mockQuery(['licence' => null, 'transportManager' => 12], 'TMLs');
-        $mockMarkerService->shouldReceive('addData')->with('transportManagerLicences', 'TMLs')->once();
+        $this->mockMarkerService->shouldReceive('addData')->with('transportManagerLicences', 'TMLs')->once();
 
-        $mockMarkerService->shouldReceive('addData')->with('page', 'transportManager')->once();
+        $this->mockMarkerService->shouldReceive('addData')->with('page', 'transportManager')->once();
 
         $event = new RouteParam();
         $event->setValue(12);
@@ -145,12 +162,9 @@ class TransportManagerMarkerTest extends MockeryTestCase
      */
     public function testOnLicenceTransportManagerMarker()
     {
-        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
-        $this->sut->setMarkerService($mockMarkerService);
-
         $this->mockQuery(['licence' => 18, 'transportManager' => null], 'TMLs');
-        $mockMarkerService->shouldReceive('addData')->with('transportManagerLicences', 'TMLs')->once();
-        $mockMarkerService->shouldReceive('addData')->with('page', 'transportManagerLicence')->once();
+        $this->mockMarkerService->shouldReceive('addData')->with('transportManagerLicences', 'TMLs')->once();
+        $this->mockMarkerService->shouldReceive('addData')->with('page', 'transportManagerLicence')->once();
 
         $event = new RouteParam();
         $event->setValue(18);
@@ -160,9 +174,6 @@ class TransportManagerMarkerTest extends MockeryTestCase
 
     public function testOnLicenceTransportManagerMarkerQueryError()
     {
-        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
-        $this->sut->setMarkerService($mockMarkerService);
-
         $this->mockQuery(['licence' => 18, 'transportManager' => null], false);
 
         $event = new RouteParam();
@@ -180,9 +191,6 @@ class TransportManagerMarkerTest extends MockeryTestCase
      */
     public function testOnApplicationTransportManagerMarker()
     {
-        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
-        $this->sut->setMarkerService($mockMarkerService);
-
         $mockApplicationService = m::mock()
             ->shouldReceive('getMvcEvent')
             ->andReturn(
@@ -204,11 +212,16 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $this->sut->setApplicationService($mockApplicationService);
 
         $this->mockQuery(
-            ['user' => null, 'application' => 534, 'transportManager' => null, 'appStatuses' => null],
+            [
+                'user' => null,
+                'application' => 534,
+                'transportManager' => null,
+                'appStatuses' => [],
+            ],
             'TMAs'
         );
-        $mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
-        $mockMarkerService->shouldReceive('addData')->with('page', 'transportManagerApplication')->once();
+        $this->mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
+        $this->mockMarkerService->shouldReceive('addData')->with('page', 'transportManagerApplication')->once();
 
         $event = new RouteParam();
         $event->setValue(534);
@@ -223,9 +236,6 @@ class TransportManagerMarkerTest extends MockeryTestCase
      */
     public function testOnApplicationTransportManagerMarkerWithVariationRoute()
     {
-        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
-        $this->sut->setMarkerService($mockMarkerService);
-
         $mockApplicationService = m::mock()
             ->shouldReceive('getMvcEvent')
             ->andReturn(
@@ -247,15 +257,20 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $this->sut->setApplicationService($mockApplicationService);
 
         $this->mockQuery(
-            ['user' => null, 'application' => 534, 'transportManager' => null, 'appStatuses' => null],
+            [
+                'user' => null,
+                'application' => 534,
+                'transportManager' => null,
+                'appStatuses' => [],
+            ],
             'TMAs'
         );
-        $mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
+        $this->mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
 
         $this->mockQuery(['variation' => 534], 'TMAs1');
-        $mockMarkerService->shouldReceive('addData')->with('transportManagersFromLicence', 'TMAs1')->once();
+        $this->mockMarkerService->shouldReceive('addData')->with('transportManagersFromLicence', 'TMAs1')->once();
 
-        $mockMarkerService->shouldReceive('addData')->with('page', 'transportManagerVariation')->once();
+        $this->mockMarkerService->shouldReceive('addData')->with('page', 'transportManagerVariation')->once();
 
         $event = new RouteParam();
         $event->setValue(534);
@@ -268,11 +283,13 @@ class TransportManagerMarkerTest extends MockeryTestCase
      */
     public function testOnApplicationTransportManagerMarkerQueryError()
     {
-        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
-        $this->sut->setMarkerService($mockMarkerService);
-
         $this->mockQuery(
-            ['user' => null, 'application' => 534, 'transportManager' => null, 'appStatuses' => null],
+            [
+                'user' => null,
+                'application' => 534,
+                'transportManager' => null,
+                'appStatuses' => [],
+            ],
             false
         );
 
@@ -289,9 +306,6 @@ class TransportManagerMarkerTest extends MockeryTestCase
      */
     public function testOnApplicationTransportManagerMarkerWithVariationRouteQueryError()
     {
-        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
-        $this->sut->setMarkerService($mockMarkerService);
-
         $mockApplicationService = m::mock()
             ->shouldReceive('getMvcEvent')
             ->andReturn(
@@ -313,10 +327,15 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $this->sut->setApplicationService($mockApplicationService);
 
         $this->mockQuery(
-            ['user' => null, 'application' => 534, 'transportManager' => null, 'appStatuses' => null],
+            [
+                'user' => null,
+                'application' => 534,
+                'transportManager' => null,
+                'appStatuses' => [],
+            ],
             'TMAs'
         );
-        $mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
+        $this->mockMarkerService->shouldReceive('addData')->with('transportManagerApplications', 'TMAs')->once();
 
         $this->mockQuery(['variation' => 534], false);
 
