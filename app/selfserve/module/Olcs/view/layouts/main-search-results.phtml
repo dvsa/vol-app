@@ -5,56 +5,56 @@ $results = $this->results;
 
 ?>
 
-    <div class="page-header">
-        <ol class="breadcrumbs">
-            <li class="breadcrumbs__item">
-                <a href="<?php echo $this->url('search');?>"><?php echo $this->translate('search.form.back'); ?></a>
-            </li>
-        </ol>
-        <div class="page-header__wrapper">
+<div class="page-header">
+    <ol class="breadcrumbs">
+        <li class="breadcrumbs__item">
+            <a href="<?php echo $this->url('search');?>"><?php echo $this->translate('search.form.back'); ?></a>
+        </li>
+    </ol>
+    <div class="page-header__wrapper">
 
-            <h1>
+        <h1>
+            <?php echo $this->getHelperPluginManager()
+                ->getServiceLocator()->get('Helper\Translation')
+                ->translateReplace('search.result.title.' . $this->index, [$count]); ?>
+        </h1>
+
+        <div class="page-header__text">
+            <p>
                 <?php echo $this->getHelperPluginManager()
                     ->getServiceLocator()->get('Helper\Translation')
-                    ->translateReplace('search.result.title.' . $this->index, [$count]); ?>
-            </h1>
-
-            <div class="page-header__text">
-                <p>
-                    <?php echo $this->getHelperPluginManager()
-                        ->getServiceLocator()->get('Helper\Translation')
-                        ->translateReplace('search.result.subtitle.' . $this->index, [$count]); ?>
-                </p>
-                <?php
-                if ($this->index == 'publication') {
-                    // OLCS-11648 applies to publication SS search results only
+                    ->translateReplace('search.result.subtitle.' . $this->index, [$count]); ?>
+            </p>
+            <?php
+            if ($this->index === 'publication') {
+                // OLCS-11648 applies to publication SS search results only
                 ?>
                 <p><?php echo $this->translate('search.result.subtitle.publication.download'); ?></p>
                 <?php
-                }
-                ?>
-
-            </div>
-
+            }
+            ?>
 
         </div>
-    </div><!-- page-header -->
 
-    <div class="row">
-        <div class="one-quarter sidebar--plain search-filter">
 
-            <h3 id="filterTitle">Edit search</h3>
+    </div>
+</div><!-- page-header -->
 
-            <?php echo $this->form($this->placeholder('searchFilter')->getValue()) ?>
+<div class="row">
+    <div class="one-quarter sidebar--plain search-filter">
 
-        </div><!-- three-eights -->
+        <h3 id="filterTitle">Edit search</h3>
 
-        <div class="three-quarters">
+        <?php echo $this->form($this->placeholder('searchFilter')->getValue()) ?>
 
-            <?php
-                if ($this->noResultsMessage) {
-                    echo $this->translate($noResultsMessage);
-                } else {
+    </div><!-- three-eights -->
+
+    <div class="three-quarters">
+
+        <?php
+        if ($this->noResultsMessage) {
+            echo $this->translate($noResultsMessage);
+        } else {
             ?>
             <div class="content__header">
                 <h3 class="title"><?php
@@ -62,9 +62,9 @@ $results = $this->results;
                     ?></h3>
             </div>
             <?php
-                    echo $results;
-                }
-            ?>
+            echo $results;
+        }
+        ?>
 
-        </div><!-- five-eights -->
-    </div><!-- row -->
+    </div><!-- five-eights -->
+</div><!-- row -->
