@@ -165,14 +165,6 @@ class TransportManager
             $tmDetails['removedDate'] = $data['removedDate'];
         }
 
-        if (isset($data['nysiisForename'])) {
-            $tmDetails['nysiisForename'] = $data['nysiisForename'];
-        }
-
-        if (isset($data['nysiisFamilyname'])) {
-            $tmDetails['nysiisFamilyname'] = $data['nysiisFamilyname'];
-        }
-
         return [
             'transport-manager-details' => $tmDetails,
             'home-address' => $homeAddress,
