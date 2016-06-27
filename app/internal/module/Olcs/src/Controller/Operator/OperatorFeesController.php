@@ -28,6 +28,7 @@ class OperatorFeesController extends OperatorController
 
     /**
      * Route (prefix) for fees action redirects
+     *
      * @see Olcs\Controller\Traits\FeesActionTrait
      * @return string
      */
@@ -38,6 +39,7 @@ class OperatorFeesController extends OperatorController
 
     /**
      * The fees route redirect params
+     *
      * @see Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
@@ -50,6 +52,7 @@ class OperatorFeesController extends OperatorController
 
     /**
      * The controller specific fees table params
+     *
      * @see Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
@@ -61,11 +64,23 @@ class OperatorFeesController extends OperatorController
         ];
     }
 
+    /**
+     * Render layout
+     *
+     * @param \Zend\View\Model\ViewModel $view view
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     protected function renderLayout($view)
     {
         return $this->renderView($view);
     }
 
+    /**
+     * Get fee type dto data
+     *
+     * @return array
+     */
     protected function getFeeTypeDtoData()
     {
         return ['organisation' => $this->params()->fromRoute('organisation')];
@@ -74,7 +89,8 @@ class OperatorFeesController extends OperatorController
     /**
      * Alter create fee form
      *
-     * @param \Zend\Form\Form $form
+     * @param \Zend\Form\Form $form form
+     *
      * @return \Zend\Form\Form
      */
     protected function alterCreateFeeForm($form)
@@ -111,13 +127,18 @@ class OperatorFeesController extends OperatorController
             $formHelper->remove($form, 'fee-details->quantity');
         }
 
+        if ($request->isPost() && isset($data['extra']['showVatRate']) && !$data['extra']['showVatRate']) {
+            $formHelper->remove($form, 'fee-details->vatRate');
+        }
+
         return $form;
     }
 
     /**
      * Get create fee dto data
      *
-     * @param $formData
+     * @param array $formData form data
+     *
      * @return array
      */
     protected function getCreateFeeDtoData($formData)
