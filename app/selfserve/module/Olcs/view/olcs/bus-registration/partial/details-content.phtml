@@ -123,9 +123,7 @@
                         $url = $this->url(
                             'getfile',
                             [
-                                'identifier' => base64_encode($document['identifier']),
-                                'name' => $document['filename'],
-                                'namespace' => 'ebsr'
+                                'identifier' => $document['id']
                             ]
                         );
                     ?>
