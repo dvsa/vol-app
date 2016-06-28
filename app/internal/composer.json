@@ -50,7 +50,6 @@
         "olcs/olcs-utils": "dev-develop",
         "olcs/olcs-auth": "dev-develop",
         "olcs/olcs-logging": "dev-develop",
-        "zendframework/zend-developer-tools": "dev-master",
         "soflomo/purifier": "~0.1.0"
     },
     "require-dev": {
