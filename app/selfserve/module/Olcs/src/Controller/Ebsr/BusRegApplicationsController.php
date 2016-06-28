@@ -31,8 +31,14 @@ class BusRegApplicationsController extends AbstractController
         if ($request->isPost()) {
             $postData = $request->getPost();
 
-            if (isset($postData['action'], $postData['table']) && $postData['table'] === 'txc-inbox') {
-                return $this->processMarkAsRead($postData);
+            if (isset($postData['action'], $postData['table'])) {
+                //this is a mark as read request
+                if ($postData['table'] === 'txc-inbox') {
+                    return $this->processMarkAsRead($postData);
+                }
+
+                //this is a redirect to the EBSR upload page
+                return $this->redirect()->toRoute('bus-registration/ebsr');
             }
 
             return $this->processSearch($postData);
