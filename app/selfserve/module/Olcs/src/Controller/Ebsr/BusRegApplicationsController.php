@@ -84,26 +84,11 @@ class BusRegApplicationsController extends AbstractController
 
         $filterForm = $this->getFilterForm($params);
 
-        $pageHeaderText = '';
-        $pageHeaderUrl = '';
-        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_EBSR_UPLOAD)) {
-            $pageHeaderText = 'bus-registrations-index-subtitle';
-            $pageHeaderUrl = [
-                'route' => 'bus-registration/ebsr',
-                'params' => [
-                    'action' => 'upload'
-                ],
-                'text' => 'register-cancel-update-service'
-            ];
-        }
-
         // setup layout and view
         $layout = $this->generateLayout(
             [
                 'pageTitle' => 'bus-registrations-index-title',
-                'pageHeaderText' => $pageHeaderText,
                 'searchForm' => $filterForm,
-                'pageHeaderUrl' => $pageHeaderUrl,
                 'showNav' => false,
                 'tabs' => $this->generateTabs()
             ]
@@ -444,7 +429,6 @@ class BusRegApplicationsController extends AbstractController
         $filterForm->setData(
             [
                 'fields' => [
-                    'subType' => $params['subType'],
                     'status' => $params['status']
                 ]
             ]
