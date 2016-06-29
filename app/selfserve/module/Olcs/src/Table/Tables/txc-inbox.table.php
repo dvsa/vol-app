@@ -30,24 +30,21 @@ return array(
             'formatter' => 'StackValue',
         ),
         array(
-            'title' => 'Registration No.',
-            'formatter' => function ($data) {
-                if (isset($data['busReg']['id'])) {
-                    return '<a href="' . $this->generateUrl(
-                        array('busRegId' => $data['busReg']['id']),
-                        'bus-registration/details',
-                        false
-                    ) . '">' . $data['busReg']['regNo'] . '</a>';
-                }
-                return '';
+            'title' => 'Reg. number',
+            'formatter' => function ($data, $column) {
+                $column['formatter'] = 'EbsrRegNumberLink';
+                return $this->callFormatter($column, $data);
             }
         ),
         array(
-            'title' => 'Var No.',
-            'name' => 'variationNo'
+            'title' => 'Variation',
+            'formatter' => function ($data, $column) {
+                $column['formatter'] = 'EbsrVariationNumber';
+                return $this->callFormatter($column, $data);
+            }
         ),
         array(
-            'title' => 'Service No.',
+            'title' => 'Service numbers',
             'formatter' => function ($data) {
                 $string = '';
 
@@ -63,27 +60,18 @@ return array(
             }
         ),
         array(
-            'title' => 'Submitted',
+            'title' => 'Uploaded',
             'formatter' => function ($row) {
                 // DateTime formatter require data set at root of array
                 if (isset($row['busReg']['ebsrSubmissions'][0]['submittedDate'])) {
                     return date(\DATETIME_FORMAT, strtotime($row['busReg']['ebsrSubmissions'][0]['submittedDate']));
                 }
+
+                return '';
             }
         ),
         array(
-            'title' => 'Registration type',
-            'stack' => 'busReg->ebsrSubmissions->0->ebsrSubmissionType->description',
-            'formatter' => 'StackValue'
-        ),
-        array(
-            'title' => 'File status',
-            'stack' => 'busReg->ebsrSubmissions->0->ebsrSubmissionStatus->description',
-            'formatter' => 'StackValue'
-        ),
-        array(
             'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
-            'title' => 'Mark as read',
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}'
         )
