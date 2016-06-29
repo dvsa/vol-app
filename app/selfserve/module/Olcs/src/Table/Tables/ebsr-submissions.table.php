@@ -2,9 +2,17 @@
 
 return array(
     'variables' => array(
-        'title' => 'Registration history'
+        'title' => 'EBSR uploads'
     ),
     'settings' => array(
+        'crud' => array(
+            'actions' => array(
+                'ebsrUpload' => array(
+                    'value' => 'Upload EBSR files',
+                    'class' => 'primary'
+                )
+            )
+        ),
         'paginate' => array(
             'limit' => array(
                 'default' => 25,
@@ -14,30 +22,28 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'Registration No.',
-            'formatter' => function ($data) {
-                if (isset($data['busReg']['id'])) {
-                    return '<a href="' . $this->generateUrl(
-                        array('action' => 'details', 'busRegId' => $data['busReg']['id']),
-                        'bus-registration/details',
-                        false
-                    ) . '">' . $data['busReg']['regNo'] . '</a>';
-                }
-                return 'Unknown';
+            'title' => 'File name',
+            'formatter' => function ($data, $column) {
+                $column['formatter'] = 'EbsrDocumentLink';
+                return $this->callFormatter($column, $data);
             }
         ),
         array(
-            'title' => 'Var No.',
-            'formatter' => function ($data) {
-                $string = '';
-                if (isset($data['variationNo'])) {
-                    $string = $data['variationNo'];
-                }
-                return $string;
+            'title' => 'Reg. number',
+            'formatter' => function ($data, $column) {
+                $column['formatter'] = 'EbsrRegNumberLink';
+                return $this->callFormatter($column, $data);
             }
         ),
         array(
-            'title' => 'Service No.',
+            'title' => 'Variation',
+            'formatter' => function ($data, $column) {
+                $column['formatter'] = 'EbsrVariationNumber';
+                return $this->callFormatter($column, $data);
+            }
+        ),
+        array(
+            'title' => 'Service numbers',
             'formatter' => function ($data, $column, $sm) {
                 $string = '';
 
@@ -53,27 +59,12 @@ return array(
             }
         ),
         array(
-            'title' => 'Submitted',
-            'formatter' => function ($row) {
-                // DateTime formatter require data set at root of array
-                return date(\DATETIME_FORMAT, strtotime($row['submittedDate']));
-            }
-        ),
-        array(
-            'title' => 'Registration type',
-            'name' => 'ebsrSubmissionType',
-            'formatter' => function ($row) {
-                return $row['ebsrSubmissionType']['description'];
+            'title' => 'Uploaded',
+            'formatter' => function ($data, $column) {
+                $column['formatter'] = 'Date';
+                return $this->callFormatter($column, $data);
             },
-            'sort' => 'ebsrSubmissionType'
+            'name' => 'submittedDate'
         ),
-        array(
-            'title' => 'File status',
-            'name' => 'ebsrSubmissionStatus',
-            'formatter' => function ($row) {
-                return $row['ebsrSubmissionStatus']['description'];
-            },
-            'sort' => 'ebsrSubmissionStatus'
-        )
     )
 );
