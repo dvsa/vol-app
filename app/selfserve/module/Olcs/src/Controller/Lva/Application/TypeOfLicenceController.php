@@ -1,10 +1,5 @@
 <?php
 
-/**
- * External Type Of Licence Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller\Lva\Application;
 
 use Common\Controller\Lva\Application\AbstractTypeOfLicenceController;
@@ -54,10 +49,13 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
             return $this->redirect()->toRouteAjax('dashboard');
         }
 
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
 
+        /** @var \Common\FormService\Form\Lva\TypeOfLicence\ApplicationTypeOfLicence $tolFormManagerService */
         $tolFormManagerService = $this->getServiceLocator()->get('FormServiceManager')
             ->get('lva-application-type-of-licence');
+        /** @var \Common\Form\Form $form */
         $form = $tolFormManagerService->getForm();
 
         $organisationData = $this->getOrganisation($this->getCurrentOrganisationId());
@@ -72,12 +70,8 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
             $data = (array)$request->getPost();
 
             $form->setData($data);
-            if (isset($organisationData['allowedOperatorLocation'])) {
-                $tolFormManagerService->setAndLockOperatorLocation($form, $organisationData['allowedOperatorLocation']);
-            }
 
             if ($form->isValid()) {
-
                 $dto = CreateApplication::create(
                     [
                         'organisation' => $this->getCurrentOrganisationId(),
