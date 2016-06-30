@@ -12,6 +12,7 @@ use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList;
 use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegVariationHistoryDto;
 use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
+use Zend\Http\Response;
 
 /**
  * Class BusRegApplicationsController
@@ -110,8 +111,9 @@ class BusRegApplicationsController extends AbstractController
      * Generates one of two tables depending on user logged in.
      * LAs get the txc-inbox table to match the results returned. Operators get the ebsr-submissions table.
      *
-     * @param $result
-     * @param $params
+     * @param array $result array of results
+     * @param array $params array of params
+     *
      * @return string
      */
     private function generateTable($result, $params)
@@ -139,7 +141,8 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Process those marked in table as read
      *
-     * @param $data
+     * @param array $data data array
+     *
      * @return array
      */
     private function processMarkAsRead($data)
@@ -174,7 +177,9 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Process the search, simply sets up the GET params and redirects
      *
-     * @param $data
+     * @param array $data data array
+     *
+     * @return Response
      */
     private function processSearch($data)
     {
@@ -222,8 +227,8 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Prepare view model for Details action with specified parameters
      *
-     * @param string $temlate
-     * @param array $options
+     * @param string $temlate the template
+     * @param array  $options array of options
      *
      * @return null|ViewModel
      */
@@ -278,7 +283,7 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Prepare content of Details view
      *
-     * @param array $results
+     * @param array $results array of results
      *
      * @return ViewModel
      */
@@ -311,7 +316,8 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Method to generate the Variation History table
      *
-     * @param $busRegId
+     * @param int $busRegId the bus reg id
+     *
      * @return array|string
      */
     private function fetchVariationHistoryTable($busRegId)
@@ -354,9 +360,9 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Set up the layout with title, subtitle and content
      *
-     * @param null $title
-     * @param null $subtitle
-     * @return \Zend\View\Model\ViewModel
+     * @param array $data array of view variables
+     *
+     * @return ViewModel
      */
     private function generateLayout($data = [])
     {
@@ -369,8 +375,9 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Generate page content
      *
-     * @param $template
-     * @param array $data
+     * @param string $template the template
+     * @param array  $data     array of variables
+     *
      * @return ViewModel
      */
     private function generateView($template, $data = [])
@@ -401,6 +408,8 @@ class BusRegApplicationsController extends AbstractController
     }
 
     /**
+     * generate a link back to the search results
+     *
      * @return string
      */
     private function generateLinkBackToSearchResult()
@@ -418,7 +427,8 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Get and setup the filter form
      *
-     * @param $params
+     * @param array $params array of parameters
+     *
      * @return \Zend\Form\FormInterface
      */
     private function getFilterForm($params)
