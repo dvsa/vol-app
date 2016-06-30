@@ -468,6 +468,8 @@ trait FeesActionTrait
 
     /**
      * Common logic when handling payFeesAction
+     *
+     * @return mixed
      */
     protected function commonPayFeesAction()
     {
@@ -495,9 +497,21 @@ trait FeesActionTrait
 
         $this->loadScripts(['forms/fee-payment']);
 
-        if ($this->getRequest()->isPost()) {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = (array) $request->getPost();
+            $form->setData($data);
+        }
 
-            $data = (array)$this->getRequest()->getPost();
+        $hasProcessed = false;
+        if ($form->has('address')) {
+            $hasProcessed =
+                $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
+        }
+
+        if (!$hasProcessed && $request->isPost()) {
+
+            $data = (array) $request->getPost();
 
             // check if we need to recover serialized data from confirm step
             if ($this->isButtonPressed('confirm') && isset($data['custom'])) {
@@ -524,7 +538,11 @@ trait FeesActionTrait
                     }
                 }
 
-                return $this->initiatePaymentRequest($feeIds, $form->getData()['details'], $backToFee);
+                $formData = $form->getData();
+                $address = isset($formData['address']) ? $formData['address'] : null;
+                return $this->initiatePaymentRequest(
+                    $feeIds, $formData['details'], $backToFee, $address
+                );
             }
         }
 
@@ -534,21 +552,43 @@ trait FeesActionTrait
         return $this->renderView($view, $title);
     }
 
+    /**
+     * Refund fee action
+     *
+     * @return mixed
+     */
     public function refundFeeAction()
     {
         $feeId = $this->params('fee');
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $formHelper->createFormWithRequest('GenericConfirmation', $this->getRequest());
+        $form = $this->getRefundFeeForm();
+        $request = $this->getRequest();
 
-        if ($this->getRequest()->isPost()) {
+        if ($request->isPost()) {
+            $data = (array) $this->getRequest()->getPost();
+            $form->setData($data);
+        }
+        $hasProcessed = false;
+        if ($form->has('address')) {
+            $hasProcessed =
+                $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
+        }
+
+        if (!$hasProcessed && $this->getRequest()->isPost()) {
             if ($this->isButtonPressed('cancel')) {
                 return $this->redirectToFeeDetails();
             }
-            $data = (array) $this->getRequest()->getPost();
-            $form->setData($data);
             if ($form->isValid()) {
+                $dtoData = [
+                    'id' => $feeId
+                ];
+                if ($this->isMiscellaneousFees()) {
+                    $details = $data['details'];
+                    $dtoData['customerReference'] = $details['customerReference'];
+                    $dtoData['customerName'] = $details['customerName'];
+                    $dtoData['address'] = $data['address'];
+                }
                 $response = $this->handleCommand(
-                    RefundFeeCmd::create(['id' => $feeId])
+                    RefundFeeCmd::create($dtoData)
                 );
                 if ($response->isOk()) {
                     $this->addSuccessMessage('fees.refund.success');
@@ -559,21 +599,51 @@ trait FeesActionTrait
             }
         }
 
-        $form->get('messages')->get('message')->setValue('fees.refund.confirm');
-        $form->setSubmitLabel('Refund');
         $view = new ViewModel(array('form' => $form));
         $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'fees.refund.title');
     }
 
+    /**
+     * Get refund fee form
+     *
+     * @return Form
+     */
+    private function getRefundFeeForm()
+    {
+        $formName = $this->isMiscellaneousFees() ? 'RefundFee' : 'GenericConfirmation';
+        $form = $this->getServiceLocator()->get('Helper\Form')->createFormWithRequest($formName, $this->getRequest());
+        if (!$this->isMiscellaneousFees()) {
+            $form->setSubmitLabel('Refund');
+        }
+        $form->get('messages')->get('message')->setValue('fees.refund.confirm');
+        return $form;
+    }
+
+    /**
+     * Reverse rransaction action
+     *
+     * @return mixed
+     */
     public function reverseTransactionAction()
     {
         $transactionId = $this->params('transaction');
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $formHelper->createFormWithRequest('ReverseTransaction', $this->getRequest());
+        $form = $this->getReverseTransactionForm();
 
-        if ($this->getRequest()->isPost()) {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $data = (array) $request->getPost();
+            $form->setData($data);
+        }
+
+        $hasProcessed = false;
+        if ($form->has('address')) {
+            $hasProcessed =
+                $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
+        }
+
+        if (!$hasProcessed && $request->isPost()) {
             $redirect = $this->handleReverseTransactionPost($form, $transactionId);
             if (!is_null($redirect)) {
                 return $redirect;
@@ -607,6 +677,29 @@ trait FeesActionTrait
         return $this->renderView($view, 'fees.reverse-transaction.title');
     }
 
+    /**
+     * Get reverse transaction form
+     *
+     * @return Form
+     */
+    private function getReverseTransactionForm()
+    {
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createFormWithRequest('ReverseTransaction', $this->getRequest());
+        if (!$this->isMiscellaneousFees()) {
+            $formHelper->remove($form, 'details->customerReference');
+            $formHelper->remove($form, 'details->customerName');
+            $formHelper->remove($form, 'address');
+        }
+        return $form;
+    }
+
+    /**
+     * @param Form $form          formg
+     * @param int  $transactionId transaction id
+     *
+     * @return mixed
+     */
     private function handleReverseTransactionPost($form, $transactionId)
     {
         if ($this->isButtonPressed('cancel')) {
@@ -615,10 +708,17 @@ trait FeesActionTrait
         $data = (array) $this->getRequest()->getPost();
         $form->setData($data);
         if ($form->isValid()) {
+            $formData = $form->getData();
+            $formDataDetails = $formData['details'];
             $dtoData = [
                 'id' => $transactionId,
-                'reason' => $form->getData()['details']['reason'],
+                'reason' => $formDataDetails['reason']
             ];
+            if ($this->isMiscellaneousFees()) {
+                $dtoData['customerReference'] = $formDataDetails['customerReference'];
+                $dtoData['customerName'] = $formDataDetails['customerName'];
+                $dtoData['address'] = $formData['address'];
+            }
             $response = $this->handleCommand(ReverseTransactionCmd::create($dtoData));
             if ($response->isOk()) {
                 $this->addSuccessMessage('fees.reverse-transaction.success');
@@ -777,7 +877,14 @@ trait FeesActionTrait
             $form->get('details')->get('backToFee')->setValue($feeData['results'][0]['id']);
         }
 
-        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        if (!$this->isMiscellaneousFees()) {
+            $formHelper->remove($form, 'details->customerReference');
+            $formHelper->remove($form, 'details->customerName');
+            $formHelper->remove($form, 'address');
+        }
+
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
         return $form;
     }
 
@@ -1049,13 +1156,23 @@ trait FeesActionTrait
      * Kick off the CPMS payment process for a given amount
      * relating to a given array of fees
      *
-     * @param array  $feeIds
-     * @param array  $details
-     * @param boolean $backToFee
+     * @param array   $feeIds    fee ids
+     * @param array   $details   details
+     * @param boolean $backToFee back to fee
+     * @param address $address   address
+     *
+     * @return Redirect
      */
-    private function initiatePaymentRequest($feeIds, $details, $backToFee)
+    private function initiatePaymentRequest($feeIds, $details, $backToFee, $address = null)
     {
         $paymentMethod = $details['paymentType'];
+
+        $dtoData = [];
+        if ($this->isMiscellaneousFees()) {
+            $dtoData['customerReference'] = $details['customerReference'];
+            $dtoData['customerName'] = $details['customerName'];
+            $dtoData['address'] = $address;
+        }
 
         switch ($paymentMethod) {
             case RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE:
@@ -1074,7 +1191,7 @@ trait FeesActionTrait
                     true
                 );
 
-                $dtoData = compact('cpmsRedirectUrl', 'feeIds', 'paymentMethod');
+                $dtoData = array_merge($dtoData, compact('cpmsRedirectUrl', 'feeIds', 'paymentMethod'));
                 $dto = PayOutstandingFeesCmd::create($dtoData);
                 $response = $this->handleCommand($dto);
 
@@ -1100,39 +1217,48 @@ trait FeesActionTrait
                 return $this->renderView($view);
 
             case RefData::FEE_PAYMENT_METHOD_CASH:
-                $dtoData = [
-                    'feeIds' => $feeIds,
-                    'paymentMethod' => $paymentMethod,
-                    'received' => $details['received'],
-                    'receiptDate' => $details['receiptDate'],
-                    'payer' => $details['payer'],
-                    'slipNo' => $details['slipNo'],
-                ];
+                $dtoData = array_merge(
+                    $dtoData,
+                    [
+                        'feeIds' => $feeIds,
+                        'paymentMethod' => $paymentMethod,
+                        'received' => $details['received'],
+                        'receiptDate' => $details['receiptDate'],
+                        'payer' => $details['payer'],
+                        'slipNo' => $details['slipNo'],
+                    ]
+                );
                 break;
 
             case RefData::FEE_PAYMENT_METHOD_CHEQUE:
-                $dtoData = [
-                    'feeIds' => $feeIds,
-                    'paymentMethod' => $paymentMethod,
-                    'received' => $details['received'],
-                    'receiptDate' => $details['receiptDate'],
-                    'payer' => $details['payer'],
-                    'slipNo' => $details['slipNo'],
-                    'chequeNo' => $details['chequeNo'],
-                    'chequeDate' => $details['chequeDate'],
-                ];
+                $dtoData = array_merge(
+                    $dtoData,
+                    [
+                        'feeIds' => $feeIds,
+                        'paymentMethod' => $paymentMethod,
+                        'received' => $details['received'],
+                        'receiptDate' => $details['receiptDate'],
+                        'payer' => $details['payer'],
+                        'slipNo' => $details['slipNo'],
+                        'chequeNo' => $details['chequeNo'],
+                        'chequeDate' => $details['chequeDate'],
+                    ]
+                );
                 break;
 
             case RefData::FEE_PAYMENT_METHOD_POSTAL_ORDER:
-                $dtoData = [
-                    'feeIds' => $feeIds,
-                    'paymentMethod' => $paymentMethod,
-                    'received' => $details['received'],
-                    'receiptDate' => $details['receiptDate'],
-                    'payer' => $details['payer'],
-                    'slipNo' => $details['slipNo'],
-                    'poNo' => $details['poNo'],
-                ];
+                $dtoData = array_merge(
+                    $dtoData,
+                    [
+                        'feeIds' => $feeIds,
+                        'paymentMethod' => $paymentMethod,
+                        'received' => $details['received'],
+                        'receiptDate' => $details['receiptDate'],
+                        'payer' => $details['payer'],
+                        'slipNo' => $details['slipNo'],
+                        'poNo' => $details['poNo'],
+                    ]
+                );
                 break;
 
             default:
@@ -1332,5 +1458,15 @@ trait FeesActionTrait
             $action = $table->getVariable('action') . '?' . $query;
             $table->setVariable('action', $action);
         }
+    }
+
+    /**
+     * Is miscellaneous fees
+     *
+     * @return bool
+     */
+    protected function isMiscellaneousFees()
+    {
+        return $this->getFeesRoute() === 'admin-dashboard/admin-payment-processing/misc-fees';
     }
 }

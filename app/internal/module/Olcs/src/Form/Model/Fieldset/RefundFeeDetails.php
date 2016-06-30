@@ -9,29 +9,10 @@ use Zend\Form\Annotation as Form;
  * @Form\Attributes({"class":""})
  * @Form\Name("details")
  */
-class ReverseTransactionDetails
+class RefundFeeDetails
 {
     /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $id = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $version = null;
-
-    /**
-     * @Form\Attributes({"class":"long","id":""})
-     * @Form\Options({"label":"Reason"})
-     * @Form\Type("\Common\Form\Elements\InputFilters\Textarea")
-     */
-    public $reason = null;
-
-    /**
-     * Customer reference, required for misc payments
+     * Customer reference
      *
      * @Form\Options({
      *      "short-label":"Customer reference",

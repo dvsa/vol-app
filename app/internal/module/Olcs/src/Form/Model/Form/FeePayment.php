@@ -19,6 +19,13 @@ class FeePayment
     public $details = null;
 
     /**
+     * @Form\Name("address")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\Address")
+     * @Form\Options({"label":"address"})
+     */
+    public $address = null;
+
+    /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\FeePaymentActions")
