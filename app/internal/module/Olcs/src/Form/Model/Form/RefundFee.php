@@ -5,12 +5,12 @@ namespace Olcs\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("reverse-transaction")
+ * @Form\Name("refund-fee")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"prefer_form_input_filter": true, "action_lcfirst": true})
  */
-class ReverseTransaction
+class RefundFee
 {
     /**
      * @Form\Name("messages")
@@ -20,7 +20,7 @@ class ReverseTransaction
 
     /**
      * @Form\Name("details")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ReverseTransactionDetails")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\RefundFeeDetails")
      */
     public $details = null;
 
@@ -33,7 +33,7 @@ class ReverseTransaction
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ReverseTransactionActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\RefundFeeActions")
      */
     public $formActions = null;
 }
