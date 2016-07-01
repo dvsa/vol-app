@@ -20,15 +20,9 @@ return array(
         ),
         array(
             'title' => 'Bus registration No.',
-            'formatter' => function ($data) {
-                if (isset($data['regNo'])) {
-                    return '<a href="' . $this->generateUrl(
-                        array('action' => 'details', 'busRegId' => $data['id']),
-                        'bus-registration/details',
-                        false
-                    ) . '">' . $data['regNo'] . '</a>';
-                }
-                return '';
+            'formatter' => function ($data, $column) {
+                $column['formatter'] = 'EbsrRegNumberLink';
+                return $this->callFormatter($column, $data);
             }
         ),
         array(
@@ -44,10 +38,10 @@ return array(
         array(
             'title' => '1st registered / cancelled',
             'name' => 'date1stReg',
-            'formatter' => function ($row) {
-                // DateTime formatter require data set at root of array
-                return date(\DATE_FORMAT, strtotime($row['date1stReg']));
-            }
+            'formatter' => function ($data, $column) {
+                $column['formatter'] = 'Date';
+                return $this->callFormatter($column, $data);
+            },
         ),
         array(
             'title' => 'Starting point',
@@ -56,10 +50,6 @@ return array(
         array(
             'title' => 'Finishing point',
             'name' => 'finishPoint'
-        ),
-        array(
-            'title' => 'Status',
-            'name' => 'busRegStatusDesc'
         )
     )
 );
