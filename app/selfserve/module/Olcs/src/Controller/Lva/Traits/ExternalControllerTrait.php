@@ -122,7 +122,7 @@ trait ExternalControllerTrait
         }
 
         $params = array_merge(
-            array('form' => $form),
+            array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form),
             $variables
         );
         if ($this->lva === 'licence') {
