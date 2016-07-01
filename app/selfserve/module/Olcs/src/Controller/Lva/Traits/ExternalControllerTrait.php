@@ -23,6 +23,10 @@ trait ExternalControllerTrait
 {
     /**
      * Redirect back to overview
+     *
+     * @param int $lvaId Lva id
+     *
+     * @return \Zend\Http\Response
      */
     protected function handleCancelRedirect($lvaId)
     {
@@ -37,9 +41,7 @@ trait ExternalControllerTrait
     protected function getCurrentUser()
     {
         // get user data from Controller Plugin
-        $userData = $this->currentUser()->getUserData();
-
-        return $userData;
+        return $this->currentUser()->getUserData();
     }
 
     /**
@@ -80,7 +82,8 @@ trait ExternalControllerTrait
     /**
      * Check for redirect
      *
-     * @param int $lvaId
+     * @param int $lvaId Lva id
+     *
      * @return null|\Zend\Http\Response
      */
     protected function checkForRedirect($lvaId)
@@ -108,10 +111,11 @@ trait ExternalControllerTrait
     /**
      * Render the section
      *
-     * @param string $titleSuffix
-     * @param \Zend\Form\Form $form
-     * @param array $variables
-     * @return \Common\View\Model\Section
+     * @param string $titleSuffix Title suffix
+     * @param Form   $form        Form
+     * @param array  $variables   Variables
+     *
+     * @return ViewModel
      */
     protected function render($titleSuffix, Form $form = null, $variables = array())
     {
@@ -144,6 +148,13 @@ trait ExternalControllerTrait
         return $this->renderView(new Section($params));
     }
 
+    /**
+     * Render view
+     *
+     * @param Section $section Section
+     *
+     * @return ViewModel
+     */
     protected function renderView($section)
     {
         $template = $this->getRequest()->isXmlHttpRequest() ? 'ajax' : 'layout';
