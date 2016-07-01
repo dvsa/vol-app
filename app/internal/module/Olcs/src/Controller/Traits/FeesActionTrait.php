@@ -622,7 +622,7 @@ trait FeesActionTrait
     }
 
     /**
-     * Reverse rransaction action
+     * Reverse transaction action
      *
      * @return mixed
      */
