@@ -12,10 +12,7 @@ use Zend\Form\Annotation as Form;
 class MyDetails extends Base
 {
     /**
-     * @Form\Options({
-     *      "label":"user-name",
-     *      "error-message": "myDetails_loginId-error"
-     *  })
+     * @Form\Options({"label":"user-name"})
      * @Form\Required(true)
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
      * @Form\Type("Text")
@@ -27,9 +24,7 @@ class MyDetails extends Base
     /**
      * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false})
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({
-     *     "label":"first-name"
-     * })
+     * @Form\Options({"label":"first-name"})
      * @Form\Type("Text")
      * @Form\AllowEmpty(true)
      * @Form\Required(false)
@@ -52,10 +47,7 @@ class MyDetails extends Base
 
     /**
      * @Form\Attributes({"class":"medium"})
-     * @Form\Options({
-     *     "label":"email-address",
-     *      "error-message": "myDetails_emailAddress-error"
-     * })
+     * @Form\Options({"label":"email-address"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
@@ -65,10 +57,7 @@ class MyDetails extends Base
 
     /**
      * @Form\Attributes({"class":"medium"})
-     * @Form\Options({
-     *     "label": "confirm-email-address",
-     *     "error-message": "myDetails_emailConfirms-error"
-     * })
+     * @Form\Options({"label":"confirm-email-address"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      */
