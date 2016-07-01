@@ -1,8 +1,5 @@
 <?php
 
-/**
- * User Registration Controller
- */
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
