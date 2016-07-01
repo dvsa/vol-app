@@ -217,7 +217,7 @@ $routes = array(
                     'route' => 'ebsr[/:action][/]',
                     'defaults' => array(
                         'controller' => 'Olcs\Ebsr\Uploads',
-                        'action' => 'index'
+                        'action' => 'upload'
                     )
                 )
             ),
