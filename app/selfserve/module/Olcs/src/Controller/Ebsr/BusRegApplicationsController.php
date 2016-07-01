@@ -48,7 +48,6 @@ class BusRegApplicationsController extends AbstractController
         $userData = $this->currentUser()->getUserData();
 
         $params = [
-            'subType'   => $this->params()->fromQuery('subType'),
             'status'    => $this->params()->fromQuery('status'),
             'page'      => $this->params()->fromQuery('page', 1),
             'order'     => $this->params()->fromQuery('order', 'DESC'),
@@ -165,7 +164,6 @@ class BusRegApplicationsController extends AbstractController
         }
 
         if ($response->isOk()) {
-            $params['subType'] = $this->params()->fromQuery('subType');
             $params['status'] = $this->params()->fromQuery('status');
 
             return $this->redirect()->toRoute(null, $params, [], false);
@@ -184,8 +182,6 @@ class BusRegApplicationsController extends AbstractController
     private function processSearch($data)
     {
         $params = $this->params()->fromQuery();
-
-        $params['subType'] = empty($data['fields']['subType']) ? null : $data['fields']['subType'];
         $params['status'] = empty($data['fields']['status']) ? null : $data['fields']['status'];
 
         // initialise search results to page 1
