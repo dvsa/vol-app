@@ -1,0 +1,28 @@
+<div class="article">
+    <?php
+        echo $this->translate('markup-ebsr-failed');
+
+        if (!empty($ebsrSubmission['errors'])) { ?>
+        <ul>
+            <?php foreach ($ebsrSubmission['errors'] as $error) { ?>
+                <li><?php echo $this->escapeHtml($error); ?></li>
+            <?php } ?>
+        </ul>
+    <?php }
+    echo $this->render('partials/read-only/main',
+        [
+            'multiItems' => [
+                0 => [
+                    ['label' => 'ebsr-summary-file', 'class' => 'full-width', 'value' => $ebsrSubmission['document']['description'], 'url' => $documentUrl],
+                ],
+                1 => [
+                    ['label' => 'ebsr-summary-uploaded-date', 'date' => $ebsrSubmission['submittedDate']]
+                ]
+            ]
+        ]
+    );
+
+    ?>
+</div>
+
+<a href="<?php echo $this->url('bus-registration/ebsr');?>" class="action--primary"><?php echo $this->translate('ebsr-try-again'); ?></a>

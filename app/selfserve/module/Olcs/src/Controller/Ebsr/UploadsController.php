@@ -5,6 +5,7 @@ namespace Olcs\Controller\Ebsr;
 use Common\Controller\Traits\GenericMethods;
 use Zend\Http\Request as HttpRequest;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\OrganisationUnprocessedList;
+use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\EbsrSubmission as EbsrSubmissionQry;
 use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\QueuePacks as QueuePacksCmd;
 use Zend\View\Model\ViewModel;
 use Common\Util\FlashMessengerTrait;
@@ -18,6 +19,18 @@ class UploadsController extends AbstractController
 {
     use GenericMethods;
     use FlashMessengerTrait;
+
+    /**
+     * Returns an EBSR submission details page
+     *
+     * @return ViewModel
+     */
+    public function detailAction()
+    {
+        $ebsrSubmission = $this->getEbsrSubmission();
+
+        return new ViewModel(['ebsrSubmission' => $ebsrSubmission]);
+    }
 
     /**
      * Uploads EBSR packs and optionally queues for processing
@@ -91,6 +104,18 @@ class UploadsController extends AbstractController
     public function getUploadedPacks()
     {
         $response = $this->handleQuery(OrganisationUnprocessedList::create([]));
+
+        return $response->getResult();
+    }
+
+    /**
+     * Gets the EBSR submission
+     *
+     * @return array
+     */
+    public function getEbsrSubmission()
+    {
+        $response = $this->handleQuery(EbsrSubmissionQry::create(['id' => $this->params()->fromRoute('id')]));
 
         return $response->getResult();
     }
