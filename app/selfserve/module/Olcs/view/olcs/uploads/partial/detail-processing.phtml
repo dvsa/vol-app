@@ -1,0 +1,20 @@
+<div class="article">
+    <?php
+        echo $this->translate('markup-ebsr-processing');
+
+        echo $this->render('partials/read-only/main',
+            [
+                'multiItems' => [
+                    0 => [
+                        ['label' => 'ebsr-summary-file', 'class' => 'full-width', 'value' => $ebsrSubmission['document']['description'], 'url' => $documentUrl],
+                    ],
+                    1 => [
+                        ['label' => 'ebsr-summary-uploaded-date', 'date' => $ebsrSubmission['submittedDate']]
+                    ]
+                ]
+            ]
+        );
+    ?>
+</div>
+
+<a href="<?php echo $this->url('bus-registration');?>"><?php echo $this->translate('back-to-ebsr-uploads'); ?></a>

@@ -214,10 +214,13 @@ $routes = array(
             'ebsr' => array(
                 'type' => 'segment',
                 'options' =>  array(
-                    'route' => 'ebsr[/:action][/]',
+                    'route' => 'ebsr[/:action][/:id][/]',
                     'defaults' => array(
                         'controller' => 'Olcs\Ebsr\Uploads',
                         'action' => 'upload'
+                    ),
+                    'constraints' => array(
+                        'action' => '(upload|detail)'
                     )
                 )
             ),

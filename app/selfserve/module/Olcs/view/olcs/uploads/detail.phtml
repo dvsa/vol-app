@@ -1,0 +1,41 @@
+<div class="js-body">
+    <?php
+        echo $this->render(
+            '/partials/page-header.phtml',
+            array(
+                'pageTitle'=> $this->translate('ebsr-upload-result-title'),
+                'pageSubTitle' => $ebsrSubmission['document']['description']
+            )
+        );
+
+        if ($ebsrSubmission['isBeingProcessed']) {
+            $childView = 'olcs/uploads/partial/detail-processing';
+        } elseif ($ebsrSubmission['isFailure']) {
+            $childView = 'olcs/uploads/partial/detail-failed';
+        } elseif ($ebsrSubmission['isSuccess']) {
+            $childView = 'olcs/uploads/partial/detail-success';
+        } else {
+            echo'There is no additional information for this file'; //very basic handling of legacy until data is cleansed
+            return;
+        }
+
+        $documentUrl = $this->url(
+            'getfile',
+            [
+                'identifier' => $ebsrSubmission['document']['id']
+            ]
+        );
+    ?>
+    <div class="row">
+
+        <div class="two-thirds">
+            <?php echo $this->render($childView, ['documentUrl' => $documentUrl, 'ebsrSubmission' => $ebsrSubmission]); ?>
+        </div>
+
+        <div class="one-third">
+            <aside class="sidebar" role="complementary">
+                <?php echo $this->translate('markup-support-contact-address');?>
+            </aside>
+        </div>
+    </div>
+</div>
