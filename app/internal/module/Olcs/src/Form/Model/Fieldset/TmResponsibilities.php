@@ -99,11 +99,7 @@ class TmResponsibilities
      *     "label_options": {
      *         "disable_html_escape": "true"
      *     },
-     *     "help-block": "Please provide additional information relating to any prior insolvency proceedings.
-     You may also upload evidence such as a legal documents.",
-     *     "label_attributes": {
-     *         "class": "long"
-     *     },
+     *     "help-block": "Please provide additional information relating to any prior insolvency proceedings. You may also upload evidence such as a legal documents.",
      *     "column-size": "",
      * })
      *
