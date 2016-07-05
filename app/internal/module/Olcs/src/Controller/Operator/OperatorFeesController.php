@@ -127,7 +127,7 @@ class OperatorFeesController extends OperatorController
             $formHelper->remove($form, 'fee-details->quantity');
         }
 
-        if ($request->isPost() && isset($data['extra']['showVatRate']) && !$data['extra']['showVatRate']) {
+        if (isset($data['extra']['showVatRate']) && !$data['extra']['showVatRate']) {
             $formHelper->remove($form, 'fee-details->vatRate');
         }
 
