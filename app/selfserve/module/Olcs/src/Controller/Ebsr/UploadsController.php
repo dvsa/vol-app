@@ -79,7 +79,11 @@ class UploadsController extends AbstractController
     }
 
     /**
-     * @param array $file
+     * Uploads the EBSR file
+     *
+     * @param array $file file being uploaded
+     *
+     * @return void
      * @throws \Common\Exception\File\InvalidMimeException
      * @throws \Exception
      */
