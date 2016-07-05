@@ -43,17 +43,6 @@ return [
                             ]
                         ],
                     ],
-                    // * @todo remove after task allocation rules will be tested (OLCS-6844 & OLCS-12638)
-                    'admin-create-task-temp' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'create-task-temp[/]',
-                            'defaults' => [
-                                'controller' => 'Admin\CreateTaskTempController',
-                                'action' => 'index',
-                            ]
-                        ],
-                    ],
                     'admin-printing' => [
                         'type' => 'segment',
                         'options' => [
@@ -530,8 +519,6 @@ return [
             'Admin\IrfoStockControlController' => 'Admin\Controller\IrfoStockControlController',
             'Admin\IrfoPsvAuthContinuationController' => 'Admin\Controller\IrfoPsvAuthContinuationController',
             'Admin\ScanningController' => 'Admin\Controller\ScanningController',
-            // * @todo remove after task allocation rules will be tested (OLCS-6844 & OLCS-12638)
-            'Admin\CreateTaskTempController' => 'Admin\Controller\CreateTaskTempController',
             'Admin\PublicationController' => 'Admin\Controller\PublicationController',
             'Admin\RecipientController' => 'Admin\Controller\RecipientController',
             'Admin\ContinuationController' => 'Admin\Controller\ContinuationController',
