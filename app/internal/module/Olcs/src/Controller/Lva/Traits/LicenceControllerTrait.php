@@ -49,9 +49,11 @@ trait LicenceControllerTrait
         return $this->getIdentifier();
     }
 
-    protected function renderPage($content, $title, array $variables = [])
+    protected function renderPage($content, $title = '', array $variables = [])
     {
-        $this->placeholder()->setPlaceholder('contentTitle', $title);
+        if ($title) {
+            $this->placeholder()->setPlaceholder('contentTitle', $title);
+        }
 
         $layout = $this->viewBuilder()->buildView($content);
 
