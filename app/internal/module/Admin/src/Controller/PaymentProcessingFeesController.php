@@ -47,6 +47,9 @@ class PaymentProcessingFeesController extends ZendAbstractActionController imple
         $formHelper->remove($form, 'fee-details->irfoGvPermit');
         $formHelper->remove($form, 'fee-details->irfoPsvAuth');
 
+        $formHelper->remove($form, 'fee-details->quantity');
+        $formHelper->remove($form, 'fee-details->vatRate');
+
         return $form;
     }
 
