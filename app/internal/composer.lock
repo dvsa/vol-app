@@ -1,11 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "hash": "8233c78f0c39f11a339cf156192ce464",
-    "content-hash": "ba0216f33e8eba883a07c74e22b37dc3",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -812,7 +811,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git",
-                "reference": "726eaa56af83912ae4db69e8e7c6b792922e5905"
+                "reference": "c40852214cd366d850b00c030d228ca771cd5b66"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -843,7 +842,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2016-07-11 09:54:24"
+            "time": "2016-07-13 09:15:12"
         },
         {
             "name": "olcs/autoload",
