@@ -1,11 +1,5 @@
 <?php
 
-/**
- * External Licence Vehicles Goods Controller
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva\AbstractGoodsVehiclesController;
@@ -24,8 +18,18 @@ class VehiclesController extends AbstractGoodsVehiclesController
     protected $lva = 'licence';
     protected $location = 'external';
 
+    /**
+     * Specific functionality for CRUD actions
+     *
+     * @param string $action Crud Action
+     *
+     * @return \Zend\Http\Response|null
+     */
     protected function checkForAlternativeCrudAction($action)
     {
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
+
         if ($action === 'export') {
             /**
              * The Goods vehicle form is configured to submit certain
@@ -37,23 +41,23 @@ class VehiclesController extends AbstractGoodsVehiclesController
              * reset page and limit
              */
             $query = array_merge(
-                $this->getRequest()->getPost('query'),
+                $request->getPost('query'),
                 [
                     'page' => 1,
-                    'limit' => 'all'
+                    'limit' => 0,
                 ]
             );
-            $this->getRequest()->getPost()->set('query', $query);
+            $request->getPost()->set('query', $query);
 
             return $this->getServiceLocator()
                 ->get('Helper\Response')
                 ->tableToCsv(
                     $this->getResponse(),
-                    $this->getTable($this->getHeaderData()),
+                    $this->getTable($this->getHeaderData(false), $this->getFilters()),
                     'vehicles'
                 );
         }
 
-        return parent::checkForAlternativeCrudAction($action);
+        return null;
     }
 }
