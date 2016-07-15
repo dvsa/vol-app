@@ -799,7 +799,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2016-07-11 09:54:24"
+            "time": "2016-07-14 09:56:06"
         },
         {
             "name": "olcs/autoload",
@@ -849,7 +849,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-logging.git",
-                "reference": "0ab4d9e66d3150df821e4e08ee40f557b1589b1d"
+                "reference": "667be1d3a07dbc30a9835d3d341ccbb376ae1f5b"
             },
             "require": {
                 "php": ">=5.4",
@@ -874,7 +874,7 @@
                 }
             },
             "description": "Logging Module for Olcs",
-            "time": "2016-07-06 16:52:16"
+            "time": "2016-07-14 16:22:28"
         },
         {
             "name": "olcs/olcs-transfer",
