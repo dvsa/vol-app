@@ -121,6 +121,10 @@ class UploadsController extends AbstractController
     {
         $response = $this->handleQuery(EbsrSubmissionQry::create(['id' => $this->params()->fromRoute('id')]));
 
+        if (!$response->isOk()) {
+            return $this->notFoundAction();
+        }
+
         return $response->getResult();
     }
 }
