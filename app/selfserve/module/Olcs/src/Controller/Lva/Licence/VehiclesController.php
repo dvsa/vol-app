@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva\AbstractGoodsVehiclesController;
+use Dvsa\Olcs\Transfer\Query;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 
 /**
@@ -18,6 +19,12 @@ class VehiclesController extends AbstractGoodsVehiclesController
     protected $lva = 'licence';
     protected $location = 'external';
 
+    protected static $exportDataMap = [
+        'licence' => Query\Licence\GoodsVehiclesExport::class,
+        'variation' => Query\Variation\GoodsVehiclesExport::class,
+        'application' => Query\Application\GoodsVehiclesExport::class,
+    ];
+
     /**
      * Specific functionality for CRUD actions
      *
@@ -31,21 +38,11 @@ class VehiclesController extends AbstractGoodsVehiclesController
         $request = $this->getRequest();
 
         if ($action === 'export') {
-            /**
-             * The Goods vehicle form is configured to submit certain
-             * variables present in the query string so that the export
-             * represents the user's current filtered view of things
-             *
-             * However, one caveat is that we always want to get ALL
-             * results for a given filter, so we have to make sure we
-             * reset page and limit
-             */
-            $query = array_merge(
-                $request->getPost('query'),
-                [
-                    'page' => 1,
-                    'limit' => 0,
-                ]
+            // reset page and limit
+            $query = $request->getPost('query');
+            unset(
+                $query['page'],
+                $query['limit']
             );
             $request->getPost()->set('query', $query);
 
@@ -53,11 +50,30 @@ class VehiclesController extends AbstractGoodsVehiclesController
                 ->get('Helper\Response')
                 ->tableToCsv(
                     $this->getResponse(),
-                    $this->getTable($this->getHeaderData(false), $this->getFilters()),
+                    $this->getTable($this->getExportData(), $this->getFilters()),
                     'vehicles'
                 );
         }
 
         return null;
+    }
+
+    /**
+     * Request vehicle data for export
+     *
+     * @return array
+     */
+    private function getExportData()
+    {
+        $dtoData = $this->getFilters();
+        $dtoData['id'] = $this->getIdentifier();
+
+        $dtoClass = self::$exportDataMap[$this->lva];
+
+        $response = $this->handleQuery($dtoClass::create($dtoData));
+
+        return [
+            'licenceVehicles' => $response->getResult(),
+        ];
     }
 }
