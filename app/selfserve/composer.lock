@@ -768,7 +768,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git",
-                "reference": "40b87f6e9d49e7f6f420cc1125e8d60e4b1a14d0"
+                "reference": "95e3885e3d12cae0fdfab50961ff60a144cf1895"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -799,7 +799,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2016-07-14 09:56:06"
+            "time": "2016-07-14 13:14:46"
         },
         {
             "name": "olcs/autoload",
