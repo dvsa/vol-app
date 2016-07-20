@@ -57,9 +57,11 @@ class BusRegApplicationsController extends AbstractController
         if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
             $params['sort'] = $this->params()->fromQuery('sort', 'createdOn');
             $query = TxcInboxList::create($params);
+            $formName = 'BusRegApplicationsFilterForm';
         } else {
             $params['sort'] = $this->params()->fromQuery('sort', 'submittedDate');
             $query = EbsrSubmissionList::create($params);
+            $formName = 'BusRegApplicationsOperatorFilterForm';
         }
 
         // set query params for pagination
@@ -82,7 +84,7 @@ class BusRegApplicationsController extends AbstractController
             $busRegistrationTable = $this->generateTable($result, $params);
         }
 
-        $filterForm = $this->getFilterForm($params);
+        $filterForm = $this->getFilterForm($params, $formName);
 
         // setup layout and view
         $layout = $this->generateLayout(
@@ -423,14 +425,15 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Get and setup the filter form
      *
-     * @param array $params array of parameters
+     * @param array  $params   array of parameters
+     * @param string $formName name of the form
      *
      * @return \Zend\Form\FormInterface
      */
-    private function getFilterForm($params)
+    private function getFilterForm($params, $formName)
     {
         /** @var \Zend\Form\FormInterface $filterForm */
-        $filterForm = $this->getServiceLocator()->get('Helper\Form')->createForm('BusRegApplicationsFilterForm');
+        $filterForm = $this->getServiceLocator()->get('Helper\Form')->createForm($formName);
 
         $filterForm->setData(
             [

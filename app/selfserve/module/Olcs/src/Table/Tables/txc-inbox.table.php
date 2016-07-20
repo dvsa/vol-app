@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Registration history'
+        'title' => 'EBSR uploads'
     ),
     'settings' => array(
         'crud' => array(
