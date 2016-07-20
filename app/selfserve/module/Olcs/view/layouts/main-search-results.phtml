@@ -55,6 +55,9 @@ $results = $this->results;
         if ($this->noResultsMessage) {
             echo $this->translate($noResultsMessage);
         } else {
+            // OLCS-13312 - publication has a different view for the results so renders its own title in
+            // common/view/layouts/table/traffic-commissioner-publication.phml
+            if (strtolower($this->index) !== 'publication') {
             ?>
             <div class="content__header">
                 <h3 class="title"><?php
@@ -62,6 +65,7 @@ $results = $this->results;
                     ?></h3>
             </div>
             <?php
+            }
             echo $results;
         }
         ?>
