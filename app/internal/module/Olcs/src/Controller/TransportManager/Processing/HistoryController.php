@@ -19,4 +19,18 @@ class HistoryController extends AbstractHistoryController implements TransportMa
     protected $navigationId = 'transport_manager_processing_event-history';
     protected $listVars = ['transportManager'];
     protected $itemParams = ['transportManager', 'id' => 'id'];
+
+    /**
+     * Alter table
+     *
+     * @param \Common\Service\Table\TableBuilder $table table
+     * @param array                              $data  data
+     *
+     * @return \Common\Service\Table\TableBuilder
+     */
+    protected function alterTable($table, $data)
+    {
+        $table->removeColumn('appId');
+        return $table;
+    }
 }
