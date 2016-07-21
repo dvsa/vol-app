@@ -27,6 +27,13 @@ return array(
             'name' => 'eventData',
         ),
         array(
+            'title' => 'App. Id',
+            'name' => 'appId',
+            'formatter' => function ($row) {
+                return isset($row['application']['id']) ? $row['application']['id'] : null;
+            }
+        ),
+        array(
             'title' => 'Date',
             'name' => 'eventDatetime',
             'formatter' => 'DateTime',

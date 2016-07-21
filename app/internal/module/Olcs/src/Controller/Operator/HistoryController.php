@@ -52,7 +52,10 @@ class HistoryController extends OperatorController
 
             $data = $response->getResult();
 
-            $view->{'table'} = $this->getServiceLocator()->get('Table')->buildTable($tableName, $data, $params, false);
+            $table = $this->getServiceLocator()->get('Table')->buildTable($tableName, $data, $params, false);
+            $table->removeColumn('appId');
+
+            $view->{'table'} = $table;
         }
 
         return $this->renderView($view);
