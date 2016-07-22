@@ -7,7 +7,6 @@ use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadLicence;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQuery;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
@@ -70,14 +69,13 @@ class LicenceFurniture implements
     }
 
     /**
-     * @param RouteParam $e
+     * @param RouteParam $e RouteParam event
+     * 
+     * @throws ResourceNotFoundException
      */
     public function onLicenceFurniture(RouteParam $e)
     {
         $id = $e->getValue();
-
-        $this->getCommandSender()->send(ReadLicence::create(['id' => $id]));
-
         $response = $this->getQuerySender()->send(LicenceQuery::create(['id' => $id]));
 
         if (!$response->isOk()) {

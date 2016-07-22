@@ -190,6 +190,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
      */
     private function getTransportManager($id)
     {
+        // for performance reasons this query should be the same as used in other TM RouteListeners
         $query = $this->getAnnotationBuilder()->createQuery(
             \Dvsa\Olcs\Transfer\Query\Tm\TransportManager::create(['id' => $id])
         );

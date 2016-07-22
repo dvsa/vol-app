@@ -174,6 +174,7 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
      */
     private function getCase($id)
     {
+        // for performance reasons this query should be the same as used in other Case RouteListeners
         $query = $this->getAnnotationBuilder()->createQuery(
             ItemDto::create(['id' => $id])
         );

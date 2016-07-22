@@ -11,16 +11,13 @@ use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadTransportManager;
 use Dvsa\Olcs\Transfer\Query\Tm\TransportManager as TransportManagerQry;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\TransportManagerFurniture;
 use Mockery as m;
 use Zend\EventManager\EventManagerInterface;
-use Zend\Mvc\Router\RouteStackInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Helper\Url;
 use Zend\View\HelperPluginManager;
 use Zend\View\Model\ViewModel;
 
@@ -72,8 +69,6 @@ class TransportManagerFurnitureTest extends TestCase
     {
         $this->setExpectedException(ResourceNotFoundException::class);
 
-        $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadTransportManager::class));
-
         $event = m::mock(RouteParam::class);
         $event->shouldReceive('getValue')->andReturn(111);
 
@@ -95,8 +90,6 @@ class TransportManagerFurnitureTest extends TestCase
         ];
         $event = m::mock(RouteParam::class);
         $event->shouldReceive('getValue')->andReturn(111);
-
-        $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadTransportManager::class));
 
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')

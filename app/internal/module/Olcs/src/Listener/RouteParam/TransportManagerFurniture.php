@@ -7,7 +7,6 @@ use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadTransportManager;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -74,9 +73,6 @@ class TransportManagerFurniture implements
     public function onTransportManager(RouteParam $e)
     {
         $id = $e->getValue();
-
-        $this->getCommandSender()->send(ReadTransportManager::create(['id' => $id]));
-
         $data = $this->getTransportManager($id);
 
         $url = $this->getViewHelperManager()
@@ -109,6 +105,7 @@ class TransportManagerFurniture implements
      */
     private function getTransportManager($id)
     {
+        // for performance reasons this query should be the same as used in other TM RouteListeners
         $response = $this->getQuerySender()->send(
             \Dvsa\Olcs\Transfer\Query\Tm\TransportManager::create(['id' => $id])
         );

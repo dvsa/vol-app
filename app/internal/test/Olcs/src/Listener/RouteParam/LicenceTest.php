@@ -56,7 +56,7 @@ class LicenceTest extends TestCase
 
         $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
             function ($dto) use ($licenceId) {
-                $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\Licence\Markers::class, $dto);
+                $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\Licence\Licence::class, $dto);
                 $this->assertSame(['id' => $licenceId], $dto->getArrayCopy());
                 return 'QUERY';
             }

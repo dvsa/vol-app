@@ -7,7 +7,6 @@ use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadOrganisation;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -66,8 +65,6 @@ class OrganisationFurniture implements
     {
         $id = $e->getValue();
 
-        $this->getCommandSender()->send(ReadOrganisation::create(['id' => $id]));
-
         $organisation = $this->getOrganisation($id);
         $placeholder = $this->getViewHelperManager()->get('placeholder');
 
@@ -100,6 +97,7 @@ class OrganisationFurniture implements
      */
     private function getOrganisation($id)
     {
+        // for performance reasons this query should be the same as the one in OrganisationFurniture
         $response = $this->getQuerySender()->send(
             \Dvsa\Olcs\Transfer\Query\Organisation\People::create(['id' => $id])
         );

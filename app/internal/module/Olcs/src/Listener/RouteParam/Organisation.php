@@ -100,6 +100,7 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
      */
     private function getOrganisation($id)
     {
+        // for performance reasons this query should be the same as the one in OrganisationFurniture
         $query = $this->annotationBuilder->createQuery(
             \Dvsa\Olcs\Transfer\Query\Organisation\People::create(['id' => $id])
         );

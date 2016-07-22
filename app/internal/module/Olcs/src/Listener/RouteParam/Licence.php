@@ -168,7 +168,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     protected function getLicenceMarkerData($licenceId)
     {
         $query = $this->getAnnotationBuilderService()->createQuery(
-            \Dvsa\Olcs\Transfer\Query\Licence\Markers::create(['id' => $licenceId])
+            \Dvsa\Olcs\Transfer\Query\Licence\Licence::create(['id' => $licenceId])
         );
 
         $response = $this->getQueryService()->send($query);
