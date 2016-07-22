@@ -331,7 +331,7 @@ class TransportManagerController extends AbstractController implements Transport
             );
 
         // foreach message set a format to work with FormElement
-        foreach($messages as $m) {
+        foreach ($messages as $m) {
             $messageFormat .= '%s<br />';
         }
 
