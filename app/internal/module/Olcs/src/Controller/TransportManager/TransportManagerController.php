@@ -296,21 +296,22 @@ class TransportManagerController extends AbstractController implements Transport
 
     public function canRemoveAction()
     {
+        $messageFormat = '';
         $query = \Dvsa\Olcs\Transfer\Query\Tm\TransportManager::create(
             [
                 'id' => $this->params()->fromRoute('transportManager')
             ]
         );
-
         $response = $this->handleQuery($query);
 
         $messages = [];
+
         if ($response->getResult()['isDetached'] === false) {
             $messages[] = 'transport-manager-remove-not-detached-error';
         }
+
         if (is_array($response->getResult()['hasUsers'])) {
-            $suffix = implode(', ', $response->getResult()['hasUsers']);
-            $messages[] = 'transport-manager-remove-has-users-error' . $suffix;
+            $messages[] = 'transport-manager-remove-has-users-error';
         }
 
         if (count($messages) <= 0) {
@@ -329,7 +330,13 @@ class TransportManagerController extends AbstractController implements Transport
                 $this->getRequest()
             );
 
-        $form->get('messages')->get('message')->setValue(implode('<br />', $messages));
+        // foreach message set a format to work with FormElement
+        foreach($messages as $m) {
+            $messageFormat .= '%s<br />';
+        }
+
+        $form->get('messages')->get('message')->setValue($messageFormat);
+        $form->get('messages')->get('message')->setTokens($messages);
         $form->get('form-actions')->remove('continue');
 
         $view = $this->getViewWithTm(['form' => $form]);
