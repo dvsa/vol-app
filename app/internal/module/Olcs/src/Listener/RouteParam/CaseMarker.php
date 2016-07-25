@@ -98,6 +98,7 @@ class CaseMarker implements ListenerAggregateInterface, FactoryInterface
      */
     protected function getCaseData($caseId)
     {
+        // for performance reasons this query should be the same as used in other Case RouteListeners
         $query = $this->getAnnotationBuilderService()->createQuery(
             \Dvsa\Olcs\Transfer\Query\Cases\Cases::create(['id' => $caseId])
         );

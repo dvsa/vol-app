@@ -131,6 +131,7 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
      */
     private function getBusReg($id)
     {
+        // for performance reasons this query should be the same as used in other BusReg RouteListeners
         $query = $this->getAnnotationBuilder()->createQuery(
             ItemDto::create(['id' => $id])
         );

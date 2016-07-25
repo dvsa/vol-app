@@ -81,8 +81,6 @@ class ApplicationFurnitureTest extends TestCase
         $response = m::mock();
         $response->shouldReceive('isOk')->andReturn(false);
 
-        $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
-
         $this->mockQuerySender->shouldReceive('send')->once()
             ->with(m::type(ApplicationQry::class))
             ->andReturn($response);
@@ -94,8 +92,6 @@ class ApplicationFurnitureTest extends TestCase
     {
         $event = m::mock(RouteParam::class);
         $event->shouldReceive('getValue')->andReturn(111);
-
-        $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
 
         $status = [
             'id' => RefData::APPLICATION_STATUS_VALID
@@ -196,8 +192,6 @@ class ApplicationFurnitureTest extends TestCase
         $event = m::mock(RouteParam::class);
         $event->shouldReceive('getValue')->andReturn(111);
 
-        $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
-
         $status = [
             'id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED
         ];
@@ -296,8 +290,6 @@ class ApplicationFurnitureTest extends TestCase
         $event = m::mock(RouteParam::class);
         $event->shouldReceive('getValue')->andReturn(111);
 
-        $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
-
         $status = [
             'id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED
         ];
@@ -391,8 +383,6 @@ class ApplicationFurnitureTest extends TestCase
     {
         $event = m::mock(RouteParam::class);
         $event->shouldReceive('getValue')->andReturn(111);
-
-        $this->mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadApplication::class));
 
         $status = [
             'id' => RefData::APPLICATION_STATUS_NOT_SUBMITTED

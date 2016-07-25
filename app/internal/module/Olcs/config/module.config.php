@@ -28,6 +28,7 @@ use Olcs\Listener\RouteParam\BusRegFurniture;
 use Olcs\Listener\RouteParam\CasesFurniture;
 use Olcs\Listener\RouteParam\SubmissionsFurniture;
 use Olcs\Listener\RouteParam\TransportManagerFurniture;
+use Olcs\Listener\RouteParam;
 
 use Common\Data\Object\Search\Licence as LicenceSearch;
 use Olcs\Service\Marker;
@@ -485,72 +486,72 @@ return array(
         ]
     ],
     'route_param_listeners' => [
-        'Olcs\Controller\Interfaces\CaseControllerInterface' => [
-            CasesFurniture::class,
-            'Olcs\Listener\RouteParam\Cases',
-            LicenceListener::class,
-            'Olcs\Listener\RouteParam\CaseMarker',
-            ApplicationListener::class,
-            'Olcs\Listener\RouteParam\TransportManager',
-            'Olcs\Listener\RouteParam\Action',
-            'Olcs\Listener\HeaderSearch'
+        \Olcs\Controller\Interfaces\CaseControllerInterface::class => [
+            RouteParam\CasesFurniture::class,
+            RouteParam\Cases::class,
+            RouteParam\Licence::class,
+            RouteParam\CaseMarker::class,
+            RouteParam\Application::class,
+            RouteParam\TransportManager::class,
+            RouteParam\Action::class,
+            \Olcs\Listener\HeaderSearch::class
         ],
-        'Olcs\Controller\Interfaces\SubmissionControllerInterface' => [
-            SubmissionsFurniture::class,
-            'Olcs\Listener\RouteParam\Cases',
-            LicenceListener::class,
-            'Olcs\Listener\RouteParam\CaseMarker',
-            ApplicationListener::class,
-            'Olcs\Listener\RouteParam\TransportManager',
-            'Olcs\Listener\RouteParam\Action',
-            'Olcs\Listener\HeaderSearch'
+        \Olcs\Controller\Interfaces\SubmissionControllerInterface::class => [
+            RouteParam\SubmissionsFurniture::class,
+            RouteParam\Cases::class,
+            RouteParam\Licence::class,
+            RouteParam\CaseMarker::class,
+            RouteParam\Application::class,
+            RouteParam\TransportManager::class,
+            RouteParam\Action::class,
+            \Olcs\Listener\HeaderSearch::class
         ],
-        'Olcs\Controller\Interfaces\ApplicationControllerInterface' => [
-            ApplicationFurniture::class, // Decorates the layout with application stuff
-            ApplicationListener::class,
-            'Olcs\Listener\RouteParam\Cases',
-            LicenceListener::class,
-            'Olcs\Listener\RouteParam\CaseMarker',
-            'Olcs\Listener\RouteParam\TransportManager',
-            'Olcs\Listener\RouteParam\Action',
-            'Olcs\Listener\HeaderSearch'
+        \Olcs\Controller\Interfaces\ApplicationControllerInterface::class => [
+            RouteParam\ApplicationFurniture::class,
+            RouteParam\Application::class,
+            RouteParam\Cases::class,
+            RouteParam\Licence::class,
+            RouteParam\CaseMarker::class,
+            RouteParam\TransportManager::class,
+            RouteParam\Action::class,
+            \Olcs\Listener\HeaderSearch::class
         ],
         // @NOTE This needs to be mostly the same as ApplicationControllerInterface except for the furniture
-        'Olcs\Controller\Interfaces\VariationControllerInterface' => [
-            VariationFurniture::class, // Decorates the layout with variation stuff
-            ApplicationListener::class,
-            'Olcs\Listener\RouteParam\Cases',
-            LicenceListener::class,
-            'Olcs\Listener\RouteParam\CaseMarker',
-            'Olcs\Listener\RouteParam\TransportManager',
-            'Olcs\Listener\RouteParam\Action',
-            'Olcs\Listener\HeaderSearch'
+        \Olcs\Controller\Interfaces\VariationControllerInterface::class => [
+            RouteParam\VariationFurniture::class,
+            RouteParam\Application::class,
+            RouteParam\Cases::class,
+            RouteParam\Licence::class,
+            RouteParam\CaseMarker::class,
+            RouteParam\TransportManager::class,
+            RouteParam\Action::class,
+            \Olcs\Listener\HeaderSearch::class
         ],
-        'Olcs\Controller\Interfaces\BusRegControllerInterface' => [
-            BusRegFurniture::class,
-            'Olcs\Listener\RouteParam\CaseMarker',
-            ApplicationListener::class,
-            'Olcs\Listener\RouteParam\BusRegId',
-            'Olcs\Listener\RouteParam\BusRegAction',
-            'Olcs\Listener\RouteParam\BusRegMarker',
-            LicenceListener::class,
-            'Olcs\Listener\HeaderSearch'
+        \Olcs\Controller\Interfaces\BusRegControllerInterface::class => [
+            RouteParam\BusRegFurniture::class,
+            RouteParam\CaseMarker::class,
+            RouteParam\Application::class,
+            RouteParam\BusRegId::class,
+            RouteParam\BusRegAction::class,
+            RouteParam\BusRegMarker::class,
+            RouteParam\Licence::class,
+            \Olcs\Listener\HeaderSearch::class
         ],
-        'Olcs\Controller\Interfaces\TransportManagerControllerInterface' => [
-            TransportManagerFurniture::class,
-            'Olcs\Listener\RouteParam\TransportManager',
-            'Olcs\Listener\RouteParam\CaseMarker',
-            'Olcs\Listener\RouteParam\TransportManagerMarker',
-            'Olcs\Listener\HeaderSearch'
+        \Olcs\Controller\Interfaces\TransportManagerControllerInterface::class => [
+            RouteParam\TransportManagerFurniture::class,
+            RouteParam\TransportManager::class,
+            RouteParam\CaseMarker::class,
+            RouteParam\TransportManagerMarker::class,
+            \Olcs\Listener\HeaderSearch::class
         ],
-        'Olcs\Controller\Interfaces\LicenceControllerInterface' => [
-            LicenceFurniture::class,
-            LicenceListener::class,
-            'Olcs\Listener\HeaderSearch'
+        \Olcs\Controller\Interfaces\LicenceControllerInterface::class => [
+            RouteParam\LicenceFurniture::class,
+            RouteParam\Licence::class,
+            \Olcs\Listener\HeaderSearch::class
         ],
-        'Olcs\Controller\Interfaces\OperatorControllerInterface' => [
-            'Olcs\Listener\RouteParam\Organisation',
-            OrganisationFurniture::class
+        \Olcs\Controller\Interfaces\OperatorControllerInterface::class => [
+            RouteParam\Organisation::class,
+            RouteParam\OrganisationFurniture::class,
         ],
     ],
     'search' => [

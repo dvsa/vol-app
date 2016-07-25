@@ -6,7 +6,6 @@ use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use \Dvsa\Olcs\Transfer\Query\Cases\Cases as ItemDto;
@@ -72,9 +71,6 @@ class SubmissionsFurniture implements
     public function onSubmission(RouteParam $e)
     {
         $id = $e->getValue();
-
-        $this->getCommandSender()->send(ReadCase::create(['id' => $id]));
-
         $case = $this->getCase($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');

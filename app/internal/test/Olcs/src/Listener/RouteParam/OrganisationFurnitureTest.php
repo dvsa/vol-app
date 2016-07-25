@@ -9,7 +9,6 @@ namespace OlcsTest\Listener\RouteParam;
 
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadOrganisation;
 use Mockery\Adapter\Phpunit\MockeryTestCase as MockeryTestCase;
 use Olcs\Event\RouteParam;
 use Mockery as m;
@@ -43,10 +42,6 @@ class OrganisationFurnitureTest extends MockeryTestCase
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResponse);
         $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
         $mockResponse->shouldReceive('getResult')->with()->once()->andReturn($orgData);
-
-        $mockCommandSender = m::mock(CommandSender::class);
-        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadOrganisation::class));
-        $this->sut->setCommandSender($mockCommandSender);
     }
 
     public function testAttach()
@@ -64,10 +59,6 @@ class OrganisationFurnitureTest extends MockeryTestCase
 
         $mockQuerySender = m::mock(QuerySender::class);
         $this->sut->setQuerySender($mockQuerySender);
-
-        $mockCommandSender = m::mock(CommandSender::class);
-        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadOrganisation::class));
-        $this->sut->setCommandSender($mockCommandSender);
 
         $mockResponse = m::mock();
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResponse);

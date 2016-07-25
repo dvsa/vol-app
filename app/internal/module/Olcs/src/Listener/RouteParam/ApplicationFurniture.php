@@ -8,7 +8,6 @@ use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadApplication;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQuery;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
@@ -97,8 +96,7 @@ class ApplicationFurniture implements
     {
         $id = $e->getValue();
 
-        $this->getCommandSender()->send(ReadApplication::create(['id' => $id]));
-
+        // for performance reasons this query should be the same as used in other Application RouteListeners
         $response = $this->getQuerySender()->send(ApplicationQuery::create(['id' => $id]));
 
         if (!$response->isOk()) {
