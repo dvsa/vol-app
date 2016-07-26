@@ -108,6 +108,7 @@ class BusRegMarker implements ListenerAggregateInterface, FactoryInterface
      */
     protected function getBusRegData($busRegId)
     {
+        // for performance reasons this query should be the same as used in other BusReg RouteListeners
         $query = $this->getAnnotationBuilderService()->createQuery(
             \Dvsa\Olcs\Transfer\Query\Bus\BusReg::create(['id' => $busRegId])
         );

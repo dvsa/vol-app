@@ -44,10 +44,6 @@ class BusRegFurnitureTest extends MockeryTestCase
         $mockQuerySender = m::mock(QuerySender::class);
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResult);
         $this->sut->setQuerySender($mockQuerySender);
-
-        $mockCommandSender = m::mock(CommandSender::class);
-        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadBusReg::class));
-        $this->sut->setCommandSender($mockCommandSender);
     }
 
     public function testAttach()
@@ -205,10 +201,6 @@ class BusRegFurnitureTest extends MockeryTestCase
         $mockQuerySender ->shouldReceive('send')->once()->andReturn($mockResult);
 
         $this->sut->setQuerySender($mockQuerySender);
-
-        $mockCommandSender = m::mock(CommandSender::class);
-        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadBusReg::class));
-        $this->sut->setCommandSender($mockCommandSender);
 
         $this->sut->onBusRegFurniture($event);
     }

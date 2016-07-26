@@ -10,14 +10,12 @@ namespace OlcsTest\Listener\RouteParam;
 use Common\Exception\ResourceNotFoundException;
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadLicence;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\LicenceFurniture;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
 use Common\RefData;
-use Zend\View\Helper\Url;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -57,10 +55,6 @@ class LicenceFurnitureTest extends TestCase
         $this->sut->setViewHelperManager($mockViewHelperManager);
 
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResult);
-
-        $mockCommandSender = m::mock(CommandSender::class);
-        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadLicence::class));
-        $this->sut->setCommandSender($mockCommandSender);
 
         if ($licenceData === false) {
             $mockResult->shouldReceive('isOk')->with()->once()->andReturn(false);

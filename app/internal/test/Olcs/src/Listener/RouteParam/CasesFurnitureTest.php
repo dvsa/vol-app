@@ -9,7 +9,6 @@ namespace OlcsTest\Listener\RouteParam;
 
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\CasesFurniture;
 use Olcs\Listener\RouteParams;
@@ -46,10 +45,6 @@ class CasesFurnitureTest extends MockeryTestCase
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResult);
 
         $this->sut->setQuerySender($mockQuerySender);
-
-        $mockCommandSender = m::mock(CommandSender::class);
-        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadCase::class));
-        $this->sut->setCommandSender($mockCommandSender);
     }
 
     public function testAttach()
@@ -186,10 +181,6 @@ class CasesFurnitureTest extends MockeryTestCase
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResult);
 
         $this->sut->setQuerySender($mockQuerySender);
-
-        $mockCommandSender = m::mock(CommandSender::class);
-        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadCase::class));
-        $this->sut->setCommandSender($mockCommandSender);
 
         $this->sut->onCase($event);
     }

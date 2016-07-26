@@ -9,14 +9,12 @@ namespace OlcsTest\Listener\RouteParam;
 
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\SubmissionsFurniture;
 use Olcs\Listener\RouteParams;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Zend\View\Helper\Url;
-use Zend\View\Model\ViewModel;
 
 /**
  * Submissions Furniture Test
@@ -47,10 +45,6 @@ class SubmissionFurnitureTest extends MockeryTestCase
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResult);
 
         $this->sut->setQuerySender($mockQuerySender);
-
-        $mockCommandSender = m::mock(CommandSender::class);
-        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadCase::class));
-        $this->sut->setCommandSender($mockCommandSender);
     }
 
     public function testAttach()
@@ -175,10 +169,6 @@ class SubmissionFurnitureTest extends MockeryTestCase
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResult);
 
         $this->sut->setQuerySender($mockQuerySender);
-
-        $mockCommandSender = m::mock(CommandSender::class);
-        $mockCommandSender->shouldReceive('send')->once()->with(m::type(ReadCase::class));
-        $this->sut->setCommandSender($mockCommandSender);
 
         $this->sut->onSubmission($event);
     }

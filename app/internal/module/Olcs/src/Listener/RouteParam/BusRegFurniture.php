@@ -6,7 +6,6 @@ use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
-use Dvsa\Olcs\Transfer\Command\Audit\ReadBusReg;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use \Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
@@ -75,8 +74,6 @@ class BusRegFurniture implements
     public function onBusRegFurniture(RouteParam $e)
     {
         $id = $e->getValue();
-        $this->getCommandSender()->send(ReadBusReg::create(['id' => $id]));
-
         $busReg = $this->getBusReg($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
@@ -100,6 +97,7 @@ class BusRegFurniture implements
      */
     private function getBusReg($id)
     {
+        // for performance reasons this query should be the same as used in other BusReg RouteListeners
         $response = $this->getQuerySender()->send(
             ItemDto::create(['id' => $id])
         );

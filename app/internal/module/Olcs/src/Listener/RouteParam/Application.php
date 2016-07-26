@@ -212,6 +212,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
      */
     private function getApplication($id)
     {
+        // for performance reasons this query should be the same as used in other Application RouteListeners
         $query = $this->getAnnotationBuilder()->createQuery(
             \Dvsa\Olcs\Transfer\Query\Application\Application::create(['id' => $id])
         );
