@@ -46,6 +46,11 @@ class HearingAppealController extends AbstractInternalController implements Case
         ]
     ];
 
+    /**
+     * Gets left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -64,6 +69,11 @@ class HearingAppealController extends AbstractInternalController implements Case
         return $this->redirectTo([]);
     }
 
+    /**
+     * Details action
+     *
+     * @return ViewModel
+     */
     public function detailsAction()
     {
         Logger::debug(__FILE__);
