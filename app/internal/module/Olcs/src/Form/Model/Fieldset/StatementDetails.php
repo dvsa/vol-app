@@ -60,7 +60,7 @@ class StatementDetails extends CaseBase
     public $requestorsBody = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Date stopped",
      *     "create_empty_option": true,
@@ -79,7 +79,7 @@ class StatementDetails extends CaseBase
     public $stoppedDate = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Date requested",
      *     "create_empty_option": true,

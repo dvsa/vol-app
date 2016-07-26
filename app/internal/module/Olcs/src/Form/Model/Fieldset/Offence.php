@@ -148,7 +148,7 @@ class Offence extends Base
     public $offenceDate = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Conviction date",
      *     "create_empty_option": true,
