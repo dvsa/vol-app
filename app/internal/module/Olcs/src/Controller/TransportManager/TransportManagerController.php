@@ -122,7 +122,9 @@ class TransportManagerController extends AbstractController implements Transport
 
             if ($response->isOk()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('form.tm-merge.success');
-                return $this->redirect()->toRouteAjax('transport-manager', ['transportManager' => $transportManagerId]);
+                return $this->redirect()->toRouteAjax(
+                    'transport-manager/details', ['transportManager' => $transportManagerId]
+                );
             } else {
                 $form = $this->processMergeFormMessages($response, $form, $toTmId);
             }
@@ -225,7 +227,9 @@ class TransportManagerController extends AbstractController implements Transport
             if ($response->isOk()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('form.tm-unmerge.success');
 
-                return $this->redirect()->toRouteAjax('transport-manager', ['transportManager' => $transportManagerId]);
+                return $this->redirect()->toRouteAjax(
+                    'transport-manager/details', ['transportManager' => $transportManagerId]
+                );
             } else {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }

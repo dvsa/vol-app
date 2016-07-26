@@ -5,7 +5,7 @@
 <div class="small-module">
     <h4 class="title">Operator details</h4>
     <p class="small-module__details">
-        <a href="<?php echo $this->url('operator', ['organisation' => $busReg['licence']['organisation']['id']], [], true);?>">
+        <a href="<?php echo $this->url('operator/business-details', ['organisation' => $busReg['licence']['organisation']['id']], [], true);?>">
             <?php echo $this->escapeHtml($busReg['licence']['organisation']['name']); ?>
         </a>
     </p>

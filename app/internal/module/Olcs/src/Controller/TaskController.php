@@ -574,7 +574,7 @@ class TaskController extends AbstractController
 
     protected function getLinkForTaskFormForTm($taskTypeId, $linkDisplay)
     {
-        $url = $this->url()->fromRoute('transport-manager', ['transportManager' => $taskTypeId]);
+        $url = $this->url()->fromRoute('transport-manager/details', ['transportManager' => $taskTypeId]);
 
         return $this->getLinkMarkup($url, $linkDisplay, $taskTypeId);
     }
@@ -605,7 +605,7 @@ class TaskController extends AbstractController
 
     protected function getLinkForTaskFormForOrganisation($taskTypeId, $linkDisplay)
     {
-        $url = $this->url()->fromRoute('operator', ['organisation' => $taskTypeId]);
+        $url = $this->url()->fromRoute('operator/business-details', ['organisation' => $taskTypeId]);
 
         return $this->getLinkMarkup($url, $linkDisplay, $taskTypeId);
     }

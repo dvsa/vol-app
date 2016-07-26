@@ -5,7 +5,7 @@ $note = $this->placeholder('note')->getValue();
 <div class="small-module">
     <h4 class="title">Operator details</h4>
     <p class="small-module__details">
-        <a href="<?php echo $this->url('operator', ['organisation' => $licence['organisation']['id']], [], true);?>">
+        <a href="<?php echo $this->url('operator/business-details', ['organisation' => $licence['organisation']['id']], [], true);?>">
             <?php echo $this->escapeHtml($licence['organisation']['name']); ?>
         </a>
         <?php

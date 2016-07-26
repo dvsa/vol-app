@@ -10,7 +10,7 @@ if (isset($case['licence']) && !empty($case['licence'])): ?>
 <div class="small-module">
   <h4 class="title">Operator details</h4>
   <p class="small-module__details">
-    <a href="<?php echo $this->url('operator', ['organisation' => $case['licence']['organisation']['id']], [], true);?>">
+    <a href="<?php echo $this->url('operator/business-details', ['organisation' => $case['licence']['organisation']['id']], [], true);?>">
         <?php echo $case['licence']['organisation']['name']; ?>
     </a><br>
     <?php echo $this->translate($case['licence']['organisation']['type']['id']); ?><br>

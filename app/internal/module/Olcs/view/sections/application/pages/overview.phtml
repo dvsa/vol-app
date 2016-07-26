@@ -5,7 +5,7 @@ echo $this->render('partials/read-only/main',
             0 => [
                 [
                     'label' => 'Operator name',
-                    'url' => $this->url('operator', ['organisation' => $operatorId]),
+                    'url' => $this->url('operator/business-details', ['organisation' => $operatorId]),
                     'value' => $operatorName,
                 ],
                 ['label' => 'Trading name', 'value' => $tradingName],
