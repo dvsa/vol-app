@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'EBSR uploads'
+        'title' => 'selfserve-table-txc-inbox-heading'
     ),
     'settings' => array(
         'crud' => array(
@@ -30,21 +30,21 @@ return array(
             'formatter' => 'StackValue',
         ),
         array(
-            'title' => 'Reg. number',
+            'title' => 'selfserve-table-txc-inbox-reg-number',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'EbsrRegNumberLink';
                 return $this->callFormatter($column, $data);
             }
         ),
         array(
-            'title' => 'Variation',
+            'title' => 'selfserve-table-txc-inbox-variation',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'EbsrVariationNumber';
                 return $this->callFormatter($column, $data);
             }
         ),
         array(
-            'title' => 'Service numbers',
+            'title' => 'selfserve-table-txc-inbox-service-numbers',
             'formatter' => function ($data) {
                 $string = '';
 
@@ -60,7 +60,7 @@ return array(
             }
         ),
         array(
-            'title' => 'Uploaded',
+            'title' => 'selfserve-table-txc-inbox-uploaded',
             'formatter' => function ($row) {
                 // DateTime formatter require data set at root of array
                 if (isset($row['busReg']['ebsrSubmissions'][0]['submittedDate'])) {

@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'EBSR uploads'
+        'title' => 'selfserve-table-ebsr-submissions-heading'
     ),
     'settings' => array(
         'crud' => array(
@@ -22,28 +22,28 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'File name',
+            'title' => 'selfserve-table-ebsr-submissions-file-name',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'EbsrDocumentLink';
                 return $this->callFormatter($column, $data);
             }
         ),
         array(
-            'title' => 'Reg. number',
+            'title' => 'selfserve-table-ebsr-submissions-reg-number',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'EbsrRegNumberLink';
                 return $this->callFormatter($column, $data);
             }
         ),
         array(
-            'title' => 'Variation',
+            'title' => 'selfserve-table-ebsr-submissions-variation',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'EbsrVariationNumber';
                 return $this->callFormatter($column, $data);
             }
         ),
         array(
-            'title' => 'Service numbers',
+            'title' => 'selfserve-table-ebsr-submissions-service-numbers',
             'formatter' => function ($data, $column, $sm) {
                 $string = '';
 
@@ -59,7 +59,7 @@ return array(
             }
         ),
         array(
-            'title' => 'Uploaded',
+            'title' => 'selfserve-table-ebsr-submissions-uploaded',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'Date';
                 return $this->callFormatter($column, $data);

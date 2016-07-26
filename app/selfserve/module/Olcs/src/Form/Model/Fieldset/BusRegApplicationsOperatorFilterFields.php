@@ -16,7 +16,7 @@ class BusRegApplicationsOperatorFilterFields
     /**
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Status",
+     *     "label": "selfserve-ebsr-busreg-status-filter",
      *     "empty_option": "All",
      *     "disable_inarray_validator": false,
      *     "service_name": "Common\Service\Data\RefData",
