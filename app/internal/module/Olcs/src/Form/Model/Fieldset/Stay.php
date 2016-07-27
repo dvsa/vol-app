@@ -17,7 +17,7 @@ class Stay extends CaseBase
     public $stayType = null;
 
     /**
-     * @Form\Attributes({"id":"dob","class":"extra-long"})
+     * @Form\Attributes({"id":"","class":"extra-long"})
      * @Form\Options({
      *     "label": "Date of request",
      *     "create_empty_option": true,

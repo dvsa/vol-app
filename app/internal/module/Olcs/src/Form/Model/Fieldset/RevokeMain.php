@@ -37,7 +37,7 @@ class RevokeMain extends CaseBase
     public $presidingTc = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "PTR agreed date",
      *     "create_empty_option": true,
@@ -51,7 +51,7 @@ class RevokeMain extends CaseBase
     public $ptrAgreedDate = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Closed date",
      *     "create_empty_option": true,

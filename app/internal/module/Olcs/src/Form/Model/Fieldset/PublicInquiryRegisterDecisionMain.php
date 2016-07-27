@@ -44,7 +44,7 @@ class PublicInquiryRegisterDecisionMain
     //public $otherVenue = null;
 
     /*
-     * @Form\Attributes({"id":"dob","class":"long", "disabled":true})
+     * @Form\Attributes({"id":"","class":"long", "disabled":true})
      * @Form\Options({
      *     "label": "Date of PI",
      *     "create_empty_option": false,
@@ -176,7 +176,7 @@ class PublicInquiryRegisterDecisionMain
     public $witnesses = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Date of decision",
      *     "create_empty_option": true,
@@ -192,7 +192,7 @@ class PublicInquiryRegisterDecisionMain
     public $decisionDate = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Date of notification",
      *     "create_empty_option": true,

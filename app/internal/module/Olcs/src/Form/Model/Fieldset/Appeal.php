@@ -11,7 +11,7 @@ use Zend\Form\Annotation as Form;
 class Appeal extends CaseBase
 {
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Date appeal received",
      *     "create_empty_option": true,
@@ -25,7 +25,7 @@ class Appeal extends CaseBase
     public $appealDate = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Appeal deadline",
      *     "create_empty_option": true,
@@ -81,7 +81,7 @@ class Appeal extends CaseBase
     public $outlineGround = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Date of appeal hearing",
      *     "create_empty_option": true,
@@ -96,7 +96,7 @@ class Appeal extends CaseBase
     public $hearingDate = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Date of decision",
      *     "create_empty_option": true,
@@ -141,7 +141,7 @@ class Appeal extends CaseBase
     public $papersSentTcDate = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Papers due at tribunal",
      *     "create_empty_option": true,
@@ -156,7 +156,7 @@ class Appeal extends CaseBase
     public $papersDueDate = null;
 
     /**
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Papers sent to tribunal",
      *     "create_empty_option": true,
@@ -204,7 +204,7 @@ class Appeal extends CaseBase
      * @Form\Required(true)
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Attributes({"id":"dob"})
+     * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Withdrawn date",
      *     "create_empty_option": true,

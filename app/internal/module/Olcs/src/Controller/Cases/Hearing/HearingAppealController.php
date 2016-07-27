@@ -9,12 +9,11 @@
 namespace Olcs\Controller\Cases\Hearing;
 
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\AppealByCase as AppealDto;
-use Dvsa\Olcs\Transfer\Query\Cases\Hearing\StayList as StayDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Hearing\StayList as StayListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Logging\Log\Logger;
-use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -47,6 +46,11 @@ class HearingAppealController extends AbstractInternalController implements Case
         ]
     ];
 
+    /**
+     * Gets left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -65,21 +69,28 @@ class HearingAppealController extends AbstractInternalController implements Case
         return $this->redirectTo([]);
     }
 
+    /**
+     * Details action
+     *
+     * @return ViewModel
+     */
     public function detailsAction()
     {
         Logger::debug(__FILE__);
         Logger::debug(__METHOD__);
 
-        $this->placeholder()->setPlaceholder('case', $this->params()->fromRoute('case'));
+        $caseId = $this->params()->fromRoute('case');
 
-        $paramProvider = new GenericItem($this->itemParams);
-        $paramProvider->setParams($this->plugin('params'));
+        $this->placeholder()->setPlaceholder('case', $caseId);
 
-        $params = $paramProvider->provideParameters();
-        $appealDto = AppealDto::class;
-        $appealQuery = $appealDto::create($params);
+        $appeal = $this->handleQuery(
+            AppealDto::create(
+                [
+                    'case' => $caseId
+                ]
+            )
+        );
 
-        $appeal = $this->handleQuery($appealQuery);
         if ($appeal->isNotFound()) {
             $this->placeholder()->setPlaceholder('no-appeal', true);
             return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
@@ -87,10 +98,14 @@ class HearingAppealController extends AbstractInternalController implements Case
 
         $this->placeholder()->setPlaceholder('appeal', $appeal->getResult());
 
-        $stayDto = StayDto::class;
-        $params = array_merge($params, ['page' => 1, 'limit' => 20, 'sort' => 'id', 'order' => 'DESC']);
-        $stayQuery = $stayDto::create($params);
-        $stay = $this->handleQuery($stayQuery);
+        $stay = $this->handleQuery(
+            StayListDto::create(
+                [
+                    'case' => $caseId
+                ]
+            )
+        );
+
         if ($stay->isNotFound()) {
             $this->placeholder()->setPlaceholder('no-stay', true);
             return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
@@ -100,8 +115,8 @@ class HearingAppealController extends AbstractInternalController implements Case
 
         $stayRecords = [];
         if (isset($multipleStays['results'])) {
-            foreach ($multipleStays['results'] as $stay) {
-                $stayRecords[$stay['stayType']['id']] = $stay;
+            foreach ($multipleStays['results'] as $item) {
+                $stayRecords[$item['stayType']['id']] = $item;
             }
         }
 
