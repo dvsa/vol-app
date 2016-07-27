@@ -11,7 +11,7 @@ use Zend\Form\Annotation as Form;
  *     "label": "Filters"
  * })
  */
-class BusRegApplicationsFilterFields
+class BusRegApplicationsOperatorFilterFields
 {
     /**
      * @Form\Required(false)
@@ -19,8 +19,8 @@ class BusRegApplicationsFilterFields
      *     "label": "selfserve-ebsr-busreg-status-filter",
      *     "empty_option": "All",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select status",
-     *     "category": "bus_reg_status",
+     *     "service_name": "Common\Service\Data\RefData",
+     *     "category": "ebsr_sub_display_status"
      * })
      * @Form\Attributes({"id":"status","placeholder":""})
      * @Form\Type("DynamicSelect")
