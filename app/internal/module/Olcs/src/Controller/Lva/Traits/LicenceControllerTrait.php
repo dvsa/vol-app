@@ -91,8 +91,9 @@ trait LicenceControllerTrait
      * Render the section
      *
      * @param string|ViewModel $content
-     * @param \Zend\Form\Form $form
-     * @param array $variables
+     * @param \Zend\Form\Form  $form
+     * @param array            $variables
+     *
      * @return \Zend\View\Model\ViewModel
      */
     protected function render($content, Form $form = null, $variables = [])
@@ -100,7 +101,9 @@ trait LicenceControllerTrait
         $this->attachCurrentMessages();
 
         if ($form instanceof Form && !$form->getOption('readonly')) {
-            $form->get('form-actions')->remove('saveAndContinue');
+            if ($form->has('form-actions')) {
+                $form->get('form-actions')->remove('saveAndContinue');
+            }
         }
 
         if (! ($content instanceof ViewModel)) {
