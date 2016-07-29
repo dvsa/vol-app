@@ -17,6 +17,7 @@ use Dvsa\Olcs\Transfer\Command\Application\UpdateInterim;
 use Dvsa\Olcs\Transfer\Query\Application\Interim;
 use Zend\View\Model\ViewModel;
 use Common\Data\Mapper\Lva\Interim as Mapper;
+use Common\RefData;
 
 /**
  * Abstract Interim Controller
@@ -57,6 +58,7 @@ abstract class AbstractInterimController extends AbstractController
             $response = $this->handleCommand(UpdateInterim::create($dtoData));
 
             if ($response->isOk()) {
+                $this->maybeDisplayCreateFeeMessage($response->getResult()['messages']);
                 return $this->postSaveRedirect();
             }
 
@@ -67,6 +69,24 @@ abstract class AbstractInterimController extends AbstractController
         $this->getServiceLocator()->get('Script')->loadFiles(['forms/interim']);
 
         return $this->render('interim', $form);
+    }
+
+    /**
+     * Optionally display create fee message
+     *
+     * @param array $messages messages
+     *
+     * @return void
+     */
+    protected function maybeDisplayCreateFeeMessage($messages)
+    {
+        foreach ($messages as $message) {
+            if (is_array($message) && array_key_exists(RefData::ERROR_FEE_NOT_CREATED, $message)) {
+                $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
+                $fm->addWarningMessage($message[RefData::ERROR_FEE_NOT_CREATED]);
+                break;
+            }
+        }
     }
 
     public function grantAction()
