@@ -58,7 +58,7 @@ abstract class AbstractInterimController extends AbstractController
             $response = $this->handleCommand(UpdateInterim::create($dtoData));
 
             if ($response->isOk()) {
-                $this->maybeDisplayCreateFeeMessage($response->getResult()['messages']);
+                $this->maybeDisplayCreateFeeMessage($response->getResult());
                 return $this->postSaveRedirect();
             }
 
@@ -80,11 +80,13 @@ abstract class AbstractInterimController extends AbstractController
      */
     protected function maybeDisplayCreateFeeMessage($messages)
     {
-        foreach ($messages as $message) {
-            if (is_array($message) && array_key_exists(RefData::ERROR_FEE_NOT_CREATED, $message)) {
-                $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
-                $fm->addWarningMessage($message[RefData::ERROR_FEE_NOT_CREATED]);
-                break;
+        if (isset($messages['messages'])) {
+            foreach ($messages['messages'] as $message) {
+                if (is_array($message) && array_key_exists(RefData::ERROR_FEE_NOT_CREATED, $message)) {
+                    $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
+                    $fm->addWarningMessage($message[RefData::ERROR_FEE_NOT_CREATED]);
+                    break;
+                }
             }
         }
     }
