@@ -74,14 +74,14 @@ abstract class AbstractInterimController extends AbstractController
     /**
      * Optionally display create fee message
      *
-     * @param array $messages messages
+     * @param array $result result
      *
      * @return void
      */
-    protected function maybeDisplayCreateFeeMessage($messages)
+    protected function maybeDisplayCreateFeeMessage($result)
     {
-        if (isset($messages['messages'])) {
-            foreach ($messages['messages'] as $message) {
+        if (isset($result['messages'])) {
+            foreach ($result['messages'] as $message) {
                 if (is_array($message) && array_key_exists(RefData::ERROR_FEE_NOT_CREATED, $message)) {
                     $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
                     $fm->addWarningMessage($message[RefData::ERROR_FEE_NOT_CREATED]);
