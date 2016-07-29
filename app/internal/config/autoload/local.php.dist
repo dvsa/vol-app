@@ -7,6 +7,12 @@ return array(
 //        'release' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : '')
 //    ],
 
+    'cqrs_client' => [
+        'curloptions' => [
+            CURLOPT_TIMEOUT => 300,
+        ],
+    ],
+    
     // New Backend service
     'api_router' => [
         'routes' => [
