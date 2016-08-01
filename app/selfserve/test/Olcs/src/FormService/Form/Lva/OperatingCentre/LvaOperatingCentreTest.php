@@ -116,7 +116,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
             ->once()
             ->with(
                 'translated-markup-lva-oc-ad-send-by-post-text'
-                . '-Department of the Environment<br />The Central Licensing Office<br />PO Box 180'
+                . '-Department for Infrastructure<br />The Central Licensing Office<br />PO Box 180'
                 . '<br />Leeds<br />LS9 1BU'
                 . '-: <b>AB12345/111</b>'
             );

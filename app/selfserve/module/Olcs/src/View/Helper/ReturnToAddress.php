@@ -18,7 +18,7 @@ class ReturnToAddress extends AbstractHelper
 {
     protected static $addresses = [
         'ni' => [
-            'Department of the Environment',
+            'Department for Infrastructure',
             'The Central Licensing Office',
             'PO Box 180',
             'Leeds',
