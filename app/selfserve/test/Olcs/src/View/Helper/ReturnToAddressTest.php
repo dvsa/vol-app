@@ -25,7 +25,7 @@ class ReturnToAddressTest extends MockeryTestCase
         $response = $sut(true, ', ');
 
         $this->assertEquals(
-            'Department of the Environment, The Central Licensing Office, PO Box 180, Leeds, LS9 1BU',
+            'Department for Infrastructure, The Central Licensing Office, PO Box 180, Leeds, LS9 1BU',
             $response
         );
     }
@@ -50,7 +50,7 @@ class ReturnToAddressTest extends MockeryTestCase
         $response = $sut->render(true, '<br />');
 
         $this->assertEquals(
-            'Department of the Environment<br />The Central Licensing Office<br />PO Box 180<br />Leeds<br />LS9 1BU',
+            'Department for Infrastructure<br />The Central Licensing Office<br />PO Box 180<br />Leeds<br />LS9 1BU',
             $response
         );
     }
@@ -72,7 +72,7 @@ class ReturnToAddressTest extends MockeryTestCase
         $response = ReturnToAddress::getAddress(true, ', ');
 
         $this->assertEquals(
-            'Department of the Environment, The Central Licensing Office, PO Box 180, Leeds, LS9 1BU',
+            'Department for Infrastructure, The Central Licensing Office, PO Box 180, Leeds, LS9 1BU',
             $response
         );
     }
