@@ -1,34 +1,35 @@
 <?php
 
-/**
- * Application Type Of Licence Form Service Test
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
 use Olcs\FormService\Form\Lva\ApplicationTypeOfLicence;
 
 /**
- * Application Type Of Licence Form Service Test
- *
- * @author Dan Eggleston <dan@stolenegg.com>
+ * @covers Olcs\FormService\Form\Lva\ApplicationTypeOfLicence
  */
 class ApplicationTypeOfLicenceTest extends AbstractLvaFormServiceTestCase
 {
+    /** @var ApplicationTypeOfLicence */
+    protected $sut;
+
+    /** @var  m\MockInterface|\Common\Service\Helper\FormHelperService */
+    private $formHelper;
+    /** @var  m\MockInterface|\Common\FormService\FormServiceManager */
+    private $fsm;
+
     public function setUp()
     {
-        $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
-        $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
+        $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
+        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
 
         $this->sut = m::mock(ApplicationTypeOfLicence::class)
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
+
         $this->sut->setFormHelper($this->formHelper);
         $this->sut->setFormServiceLocator($this->fsm);
     }
-
 
     public function testGetForm()
     {

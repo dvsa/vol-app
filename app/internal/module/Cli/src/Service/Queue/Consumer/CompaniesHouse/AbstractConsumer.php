@@ -1,15 +1,9 @@
 <?php
 
-/**
- * Abstract Companies House Queue Consumer
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Cli\Service\Queue\Consumer\CompaniesHouse;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Common\BusinessService\Response;
 use Cli\Service\Queue\Consumer\MessageConsumerInterface;
 
 /**
@@ -29,13 +23,15 @@ abstract class AbstractConsumer implements MessageConsumerInterface, ServiceLoca
     /**
      * Process the message item
      *
-     * @param array $item
+     * @param array $item Message item
+     *
      * @return boolean
      */
     public function processMessage(array $item)
     {
         $options = (array) json_decode($item['options']);
 
+        /** @var \Common\BusinessService\Response $response */
         $response = $this->getServiceLocator()->get('BusinessServiceManager')
             ->get($this->businessServiceName)
             ->process(['companyNumber' => $options['companyNumber']]);
@@ -50,7 +46,9 @@ abstract class AbstractConsumer implements MessageConsumerInterface, ServiceLoca
     /**
      * Called when processing the message was successful
      *
-     * @param array $item
+     * @param array       $item    Message item
+     * @param string|null $message Description
+     *
      * @return string
      */
     protected function success(array $item, $message = null)
@@ -65,8 +63,9 @@ abstract class AbstractConsumer implements MessageConsumerInterface, ServiceLoca
     /**
      * Mark the message as failed
      *
-     * @param array $item
-     * @param string $reason
+     * @param array  $item   Message item
+     * @param string $reason Description
+     *
      * @return string
      */
     protected function failed(array $item, $reason = null)

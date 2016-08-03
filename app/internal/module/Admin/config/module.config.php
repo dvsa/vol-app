@@ -216,7 +216,7 @@ return [
                                         'id' => '[0-9\,]+'
                                     ],
                                     'defaults' => [
-                                        'controller' => 'Admin\CompaniesHouseAlertController',
+                                        'controller' => Admin\Controller\CompaniesHouseAlertController::class,
                                         'action' => 'index',
                                     ]
                                 ],
@@ -531,7 +531,8 @@ return [
             'Admin\PartnerController' => 'Admin\Controller\PartnerController',
             'Admin\ContinuationChecklistReminderController' =>
                 'Admin\Controller\ContinuationChecklistReminderController',
-            'Admin\CompaniesHouseAlertController' => 'Admin\Controller\CompaniesHouseAlertController',
+            Admin\Controller\CompaniesHouseAlertController::class =>
+                Admin\Controller\CompaniesHouseAlertController::class,
             'Admin\FinancialStandingRateController' => 'Admin\Controller\FinancialStandingRateController',
             'Admin\CpmsReportController' => 'Admin\Controller\CpmsReportController',
             Admin\Controller\TeamController::class => \Admin\Controller\TeamController::class,
