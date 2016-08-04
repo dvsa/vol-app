@@ -54,7 +54,7 @@ class CpmsReportOptions
      *      "options": {
      *          "has_time": false,
      *          "compare_to":"startDate",
-     *          "operator":"gt",
+     *          "operator":"gte",
      *          "compare_to_label":"Start date"
      *      }
      * })

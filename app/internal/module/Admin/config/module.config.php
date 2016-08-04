@@ -229,7 +229,7 @@ return [
                                         'id' => '[0-9\,]+'
                                     ],
                                     'defaults' => [
-                                        'controller' => 'Admin\CpmsReportController',
+                                        'controller' => Admin\Controller\CpmsReportController::class,
                                         'action' => 'index',
                                     ]
                                 ],
@@ -534,7 +534,7 @@ return [
             Admin\Controller\CompaniesHouseAlertController::class =>
                 Admin\Controller\CompaniesHouseAlertController::class,
             'Admin\FinancialStandingRateController' => 'Admin\Controller\FinancialStandingRateController',
-            'Admin\CpmsReportController' => 'Admin\Controller\CpmsReportController',
+            Admin\Controller\CpmsReportController::class => Admin\Controller\CpmsReportController::class,
             Admin\Controller\TeamController::class => \Admin\Controller\TeamController::class,
             'Admin\SystemParametersController' => \Admin\Controller\SystemParametersController::class,
             'Admin\TaskAllocationRulesController' => \Admin\Controller\TaskAllocationRulesController::class,

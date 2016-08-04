@@ -1,15 +1,12 @@
 <?php
 
-/**
- * Cpms Report Controller
- */
 namespace Admin\Controller;
 
+use Admin\Form\Model\Form\CpmsReport as Form;
 use Dvsa\Olcs\Transfer\Command\Cpms\RequestReport as GenerateCmd;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\CpmsReport as Mapper;
-use Admin\Form\Model\Form\CpmsReport as Form;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -24,6 +21,11 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
      */
     private $reports = [];
 
+    /**
+     * Left View setting
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -37,11 +39,21 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
         return $view;
     }
 
+    /**
+     * Process action - Index
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
         return $this->redirectToGenerate();
     }
 
+    /**
+     * Process action - Generate
+     *
+     * @return mixed|ViewModel
+     */
     public function generateAction()
     {
         $editViewTemplate = 'pages/crud-form';
@@ -49,6 +61,7 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
 
         $this->placeholder()->setPlaceholder('pageTitle', 'CPMS Financial report');
 
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
         $form = $this->getForm(Form::class);
         $this->setSelectReportList($form);
@@ -90,7 +103,9 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
     /**
      * Set the list of reports in the select element
      *
-     * @param \Common\Form\Form $form
+     * @param \Common\Form\Form $form Form
+     *
+     * @return void
      */
     private function setSelectReportList(\Common\Form\Form $form)
     {
@@ -110,7 +125,7 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
     /**
      * Get the report name from the code
      *
-     * @param string $code
+     * @param string $code Code
      *
      * @return string
      */
@@ -123,6 +138,11 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
         return "Unknown";
     }
 
+    /**
+     * Redirect to generate
+     *
+     * @return \Zend\Http\Response
+     */
     public function redirectToGenerate()
     {
         return $this->redirect()->toRouteAjax(
