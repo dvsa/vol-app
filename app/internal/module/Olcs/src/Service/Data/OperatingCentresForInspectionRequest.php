@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Operating Centres for Inspection Request data service
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Service\Data;
 
 use Common\Service\Data\ListDataInterface;
@@ -27,7 +22,8 @@ class OperatingCentresForInspectionRequest extends AbstractDataService implement
     /**
      * Format data
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return array
      */
     public function formatData(array $data)
@@ -46,11 +42,14 @@ class OperatingCentresForInspectionRequest extends AbstractDataService implement
     }
 
     /**
-     * @param $category
-     * @param bool $useGroups
+     * Fetch list options
+     *
+     * @param mixed $context   Context
+     * @param bool  $useGroups Use groups
+     *
      * @return array
      */
-    public function fetchListOptions($category, $useGroups = false)
+    public function fetchListOptions($context, $useGroups = false)
     {
         $data = $this->fetchListData();
 
@@ -102,7 +101,9 @@ class OperatingCentresForInspectionRequest extends AbstractDataService implement
     /**
      * Set type
      *
-     * @param string $type
+     * @param string $type Type
+     *
+     * @return void
      */
     public function setType($type)
     {
@@ -122,7 +123,9 @@ class OperatingCentresForInspectionRequest extends AbstractDataService implement
     /**
      * Set identifier
      *
-     * @param int $identifier
+     * @param int $identifier Identifier
+     *
+     * @return void
      */
     public function setIdentifier($identifier)
     {

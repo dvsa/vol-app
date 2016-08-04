@@ -19,8 +19,11 @@ class Team extends AbstractDataService implements ListDataInterface
     protected $serviceName = 'Team';
 
     /**
-     * @param mixed $context
-     * @param bool $useGroups
+     * Fetch list options
+     *
+     * @param mixed $context   Context
+     * @param bool  $useGroups Use groups
+     *
      * @return array
      */
     public function fetchListOptions($context, $useGroups = false)
@@ -39,6 +42,11 @@ class Team extends AbstractDataService implements ListDataInterface
         return $ret;
     }
 
+    /**
+     * Fetch list data
+     *
+     * @return array
+     */
     public function fetchTeamListData()
     {
         if (is_null($this->getData('teamlist'))) {
