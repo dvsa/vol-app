@@ -2,21 +2,16 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\AbstractData;
+use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use Dvsa\Olcs\Transfer\Query\Team\TeamListData as TeamQry;
 
 /**
  * Class Team
  * @package Olcs\Service
  */
-class Team extends AbstractData implements ListDataInterface, ServiceLocatorAwareInterface
+class Team extends AbstractDataService implements ListDataInterface
 {
-    // @todo: move ServiceLocator to AbstractData during the Data services migration process
-    use ServiceLocatorAwareTrait;
-
     const DEFAULT_ORDER = 'ASC';
     const DEFAULT_SORT = 'name';
 
@@ -31,12 +26,12 @@ class Team extends AbstractData implements ListDataInterface, ServiceLocatorAwar
     public function fetchListOptions($context, $useGroups = false)
     {
         $data = $this->fetchTeamListData();
-        $ret = [];
 
         if (!is_array($data)) {
             return [];
         }
 
+        $ret = [];
         foreach ($data as $datum) {
             $ret[$datum['id']] = $datum['name'];
         }
@@ -47,29 +42,21 @@ class Team extends AbstractData implements ListDataInterface, ServiceLocatorAwar
     public function fetchTeamListData()
     {
         if (is_null($this->getData('teamlist'))) {
+            $dtoData = TeamQry::create(
+                [
+                    'sort'  => self::DEFAULT_SORT,
+                    'order' => self::DEFAULT_ORDER
+                ]
+            );
+            $response = $this->handleQuery($dtoData);
 
-            $params = [
-                'sort'  => self::DEFAULT_SORT,
-                'order' => self::DEFAULT_ORDER
-            ];
-            $queryToSend = $this->getServiceLocator()
-                ->get('TransferAnnotationBuilder')
-                ->createQuery(
-                    TeamQry::create($params)
-                );
-
-            $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
-
-            if ($response->isClientError() || $response->isServerError()) {
+            if (!$response->isOk()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            }
+                return [];
 
-            $result = [];
-            if ($response->isOk()) {
-                $result = $response->getResult();
+            } elseif (isset($response->getResult()['results'])) {
+                $this->setData('teamlist', $response->getResult()['results']);
             }
-
-            $this->setData('teamlist', $result['results']);
         }
 
         return $this->getData('teamlist');

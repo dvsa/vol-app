@@ -2,75 +2,98 @@
 
 namespace OlcsTest\Service\Data;
 
+use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use Mockery as m;
 use Olcs\Service\Data\Team;
 
 /**
  * Class TeamTest
  * @package OlcsTest\Service\Data
  */
-class TeamTest extends \PHPUnit_Framework_TestCase
+class TeamTest extends AbstractDataServiceTestCase
 {
-    private $teams = [
-        ['id' => 1, 'name' => 'Development'],
-        ['id' => 5, 'name' => 'Some other team'],
-    ];
-
-    public function setUp()
+    /**
+     * @dataProvider provideFetchListOptions
+     */
+    public function testFetchListOptions($input, $expected)
     {
-        $this->markTestSkipped();
+        $sut = new Team();
+        $sut->setData('teamlist', $input);
+
+        $this->assertEquals($expected, $sut->fetchListOptions(''));
     }
 
-    public function testFetchTeamData()
+    public function provideFetchListOptions()
     {
-        $teams = ['Results' =>
-            $this->teams
+        return [
+            [$this->getSingleSource(), $this->getSingleExpected()],
+            [false, []]
         ];
-
-        $mockRestClient = $this->getMock('\Common\Util\RestClient', [], [], '', false);
-        $mockRestClient->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo(''), $this->isType('array'))
-            ->willReturn($teams);
-
-        $sut = new Team();
-        $sut->setRestClient($mockRestClient);
-
-        $this->assertEquals($this->teams, $sut->fetchTeamListData([]));
-        // test data is cached - once() assertion, above is important
-        $this->assertEquals($this->teams, $sut->fetchTeamListData([]));
     }
 
-    public function testFetchTeamDataFailure()
+    public function testFetchListData()
     {
-        $teams = [];
+        $results = ['results' => 'results'];
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturn('query')
+            ->once()
+            ->getMock();
 
-        $mockRestClient = $this->getMock('\Common\Util\RestClient', [], [], '', false);
-        $mockRestClient->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo(''), $this->isType('array'))
-            ->willReturn($teams);
+        $mockResponse = m::mock()
+            ->shouldReceive('isOk')
+            ->once()
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn($results)
+            ->getMock();
 
         $sut = new Team();
-        $sut->setRestClient($mockRestClient);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
-        $this->assertEquals(false, $sut->fetchTeamListData([]));
-        //test failure isn't retried
-        $this->assertEquals(false, $sut->fetchTeamListData([]));
+        $this->assertEquals($results['results'], $sut->fetchTeamListData());
+        $this->assertEquals($results['results'], $sut->fetchTeamListData());  //ensure data is cached
     }
 
-    public function testFetchListOptions()
+    public function testFetchLicenceDataWithError()
     {
-        $sut = new Team();
-        $sut->setData('teamlist', $this->teams);
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
 
-        $this->assertEquals([1 => 'Development', 5 => 'Some other team'], $sut->fetchListOptions([]));
+        $mockResponse = m::mock()
+            ->shouldReceive('isOk')
+            ->once()
+            ->andReturn(false)
+            ->getMock();
+
+        $sut = new Team();
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+
+        $this->mockServiceLocator->shouldReceive('get')
+            ->with('Helper\FlashMessenger')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('addErrorMessage')
+                    ->with('unknown-error')
+                    ->once()
+                    ->getMock()
+            );
+
+        $sut->fetchTeamListData();
     }
 
-    public function testFetchListOptionsEmpty()
+    protected function getSingleExpected()
     {
-        $sut = new Team();
-        $sut->setData('teamlist', false);
+        return [
+            '1' => 'Development',
+            '5' => 'Some other team',
+        ];
+    }
 
-        $this->assertEquals([], $sut->fetchListOptions([]));
+    protected function getSingleSource()
+    {
+        return [
+            ['id' => 1, 'name' => 'Development'],
+            ['id' => 5, 'name' => 'Some other team'],
+        ];
     }
 }
