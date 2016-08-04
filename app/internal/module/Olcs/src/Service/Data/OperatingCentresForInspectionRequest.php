@@ -8,9 +8,7 @@
 namespace Olcs\Service\Data;
 
 use Common\Service\Data\ListDataInterface;
-use Common\Service\Data\AbstractData;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Common\Service\Data\AbstractDataService;
 use Dvsa\Olcs\Transfer\Query\InspectionRequest\OperatingCentres as OperatingCentresQry;
 
 /**
@@ -18,12 +16,8 @@ use Dvsa\Olcs\Transfer\Query\InspectionRequest\OperatingCentres as OperatingCent
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OperatingCentresForInspectionRequest extends AbstractData implements
-    ListDataInterface,
-    ServiceLocatorAwareInterface
+class OperatingCentresForInspectionRequest extends AbstractDataService implements ListDataInterface
 {
-    use ServiceLocatorAwareTrait;
-
     protected $serviceName = 'LicenceOperatingCentre';
 
     protected $type = 'licence';
@@ -39,7 +33,7 @@ class OperatingCentresForInspectionRequest extends AbstractData implements
     public function formatData(array $data)
     {
         $optionData = [];
-        if (isset($data['results'])) {
+        if (!empty($data['results'])) {
             foreach ($data['results'] as $oc) {
                 $optionData[$oc['id']] =
                     $oc['address']['addressLine1'] . ', ' .
@@ -76,28 +70,22 @@ class OperatingCentresForInspectionRequest extends AbstractData implements
     {
         if (is_null($this->getData('OperatingCentres'))) {
 
-            $params = [
-                'type'       => $this->getType(),
-                'identifier' => $this->getIdentifier()
-            ];
-            $queryToSend = $this->getServiceLocator()
-                ->get('TransferAnnotationBuilder')
-                ->createQuery(
-                    OperatingCentresQry::create($params)
-                );
+            $dtoData = OperatingCentresQry::create(
+                [
+                    'type'       => $this->getType(),
+                    'identifier' => $this->getIdentifier()
+                ]
+            );
+            $response = $this->handleQuery($dtoData);
 
-            $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
-
-            if ($response->isClientError() || $response->isServerError()) {
+            if (!$response->isOk()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                return [];
             }
 
-            $result = [];
-            if ($response->isOk()) {
-                $result = $response->getResult();
-            }
-            $this->setData('OperatingCentres', $result);
+            $this->setData('OperatingCentres', $response->getResult());
         }
+
         return $this->getData('OperatingCentres');
     }
 
