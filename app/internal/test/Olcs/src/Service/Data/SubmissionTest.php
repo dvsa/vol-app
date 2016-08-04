@@ -79,23 +79,19 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtractSelectedSubmissionSectionsData($input, $expected)
     {
-        $this->markTestSkipped();
-        $mockRefDataService = $this->getMock('Common\Service\Data\RefData');
-
         $mockSectionRefData = $this->getMockSectionRefData();
-        $mockRefDataService->expects(
-            $this->once()
-        )->method(
-            'fetchListOptions'
-        )->with('submission_section')
-        ->willReturn($mockSectionRefData);
 
-        $this->sut->setRefDataService($mockRefDataService);
+        $submissionConfig = [
+            'sections' => [
+                'introduction' => [
+                    'section_type' => ['anything']
+                ]
+            ]
+        ];
 
-        $result = $this->sut->extractSelectedSubmissionSectionsData($input);
+        $result = $this->sut->extractSelectedSubmissionSectionsData($input, $mockSectionRefData, $submissionConfig);
 
         $this->assertEquals($result, $expected);
-
     }
 
     /**
@@ -105,31 +101,21 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtractSelectedTextOnlySubmissionSectionsData($input)
     {
-        $this->markTestSkipped();
-        $mockRefDataService = $this->getMock('Common\Service\Data\RefData');
-
         $mockSectionRefData = $this->getMockSectionRefData();
-        $mockRefDataService->expects(
-            $this->once()
-        )->method('fetchListOptions')->with('submission_section')
-            ->willReturn($mockSectionRefData);
 
-        $this->sut->setRefDataService($mockRefDataService);
-        $this->sut->setSubmissionConfig(
-            [
-                'sections' => [
-                    'introduction' => [
-                        'section_type' => ['text']
-                    ]
+        $submissionConfig = [
+            'sections' => [
+                'introduction' => [
+                    'section_type' => ['text']
                 ]
             ]
-        );
-        $result = $this->sut->extractSelectedSubmissionSectionsData($input);
+        ];
+
+        $result = $this->sut->extractSelectedSubmissionSectionsData($input, $mockSectionRefData, $submissionConfig);
 
         $this->assertArrayHasKey('introduction', $result);
         $this->assertArrayHasKey('data', $result['introduction']);
         $this->assertEmpty($result['introduction']['data']);
-
     }
 
     public function testGetAllSectionsRefData()
@@ -497,14 +483,14 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     'dataSnapshot' =>
-                        '{"introduction":{"data":[]}}',
+                        '{"introduction":{"data":["a"]}}',
                     'submissionSectionComments' =>
                         []
                 ],
                 [ 'introduction' => [
                     'sectionId' => 'introduction',
                     'description' => 'Introduction',
-                    'data' => [],
+                    'data' => ['a'],
                     'comments' => []
                     ]
                 ]
