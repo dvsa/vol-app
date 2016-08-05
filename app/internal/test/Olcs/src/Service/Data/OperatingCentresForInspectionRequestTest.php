@@ -7,16 +7,16 @@
 
 namespace OlcsTest\Service\Data;
 
-use Mockery\Adapter\Phpunit\MockeryTestCase;
+use CommonTest\Service\Data\AbstractDataServiceTestCase;
 use Mockery as m;
-use OlcsTest\Bootstrap;
+use Olcs\Service\Data\OperatingCentresForInspectionRequest;
 
 /**
  * OperatingCentresForInspectionRequest Service test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OperatingCentresForInspectionRequestTest extends MockeryTestCase
+class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCase
 {
     /**
      * @var Mock $service
@@ -28,12 +28,7 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
      */
     protected function setUp()
     {
-        $this->markTestSkipped();
-        $this->sut = m::mock('\Olcs\Service\Data\OperatingCentresForInspectionRequest')
-            ->makePartial()
-            ->shouldAllowMockingProtectedMethods();
-        $this->sm = Bootstrap::getServiceManager();
-        $this->sut->setServiceLocator($this->sm);
+        $this->sut = new OperatingCentresForInspectionRequest();
     }
 
     /**
@@ -64,34 +59,11 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
      * @dataProvider providerListOptions
      * @group operatingCentresForInspectionRequest1
      */
-    public function testFetchListOptions($type, $service, $data, $expected)
+    public function testFetchListOptions($data, $expected)
     {
-        $identifier = 1;
-        $this->sut->setType($type);
-        $this->sut->setIdentifier(1);
+        $this->sut->setData('OperatingCentres', $data);
 
-        if ($type === 'licence') {
-            $this->sm->setService(
-                $service,
-                m::mock()
-                ->shouldReceive('getAllForInspectionRequest')
-                ->with($identifier)
-                ->andReturn($data)
-                ->getMock()
-            );
-        } else {
-            $this->sm->setService(
-                $service,
-                m::mock()
-                ->shouldReceive('getForSelect')
-                ->with(1)
-                ->andReturn($data)
-                ->getMock()
-            );
-        }
-
-        $options = $this->sut->fetchListOptions('');
-        $this->assertEquals($options, $expected);
+        $this->assertEquals($expected, $this->sut->fetchListOptions(''));
     }
 
     /**
@@ -101,29 +73,15 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
     {
         return [
             [
-                'application',
-                'Entity\ApplicationOperatingCentre',
                 [
-                    1 => 'line1, line2, town'
-                ],
-                [
-                    1 => 'line1, line2, town'
-                ]
-            ],
-            [
-                'licence',
-                'Entity\LicenceOperatingCentre',
-                [
-                    'Results'  => [
+                    'results'  => [
                         [
-                            'operatingCentre' => [
-                                'id' => 2,
-                                'address' => [
-                                    'addressLine1' => 'line3',
-                                    'addressLine2' => 'line4',
-                                    'town' => 'town1'
-                                ]
-                            ],
+                            'id' => 2,
+                            'address' => [
+                                'addressLine1' => 'line3',
+                                'addressLine2' => 'line4',
+                                'town' => 'town1'
+                            ]
                         ]
                     ]
                 ],
@@ -132,13 +90,59 @@ class OperatingCentresForInspectionRequestTest extends MockeryTestCase
                 ]
             ],
             [
-                'licence',
-                'Entity\LicenceOperatingCentre',
                 [
-                    'Results'  => []
+                    'results'  => []
                 ],
                 []
             ],
         ];
+    }
+
+    public function testFetchListData()
+    {
+        $results = ['results' => 'results'];
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturn('query')
+            ->once()
+            ->getMock();
+
+        $mockResponse = m::mock()
+            ->shouldReceive('isOk')
+            ->once()
+            ->andReturn(true)
+            ->shouldReceive('getResult')
+            ->andReturn($results)
+            ->getMock();
+
+        $this->mockHandleQuery($this->sut, $mockTransferAnnotationBuilder, $mockResponse);
+
+        $this->assertEquals($results, $this->sut->fetchListData());
+        $this->assertEquals($results, $this->sut->fetchListData());  //ensure data is cached
+    }
+
+    public function testFetchLicenceDataWithError()
+    {
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+
+        $mockResponse = m::mock()
+            ->shouldReceive('isOk')
+            ->once()
+            ->andReturn(false)
+            ->getMock();
+
+        $this->mockHandleQuery($this->sut, $mockTransferAnnotationBuilder, $mockResponse);
+
+        $this->mockServiceLocator->shouldReceive('get')
+            ->with('Helper\FlashMessenger')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('addErrorMessage')
+                    ->with('unknown-error')
+                    ->once()
+                    ->getMock()
+            );
+
+        $this->sut->fetchListData();
     }
 }

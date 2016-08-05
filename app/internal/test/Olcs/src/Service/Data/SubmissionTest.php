@@ -79,23 +79,19 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtractSelectedSubmissionSectionsData($input, $expected)
     {
-        $this->markTestSkipped();
-        $mockRefDataService = $this->getMock('Common\Service\Data\RefData');
-
         $mockSectionRefData = $this->getMockSectionRefData();
-        $mockRefDataService->expects(
-            $this->once()
-        )->method(
-            'fetchListOptions'
-        )->with('submission_section')
-        ->willReturn($mockSectionRefData);
 
-        $this->sut->setRefDataService($mockRefDataService);
+        $submissionConfig = [
+            'sections' => [
+                'introduction' => [
+                    'section_type' => ['anything']
+                ]
+            ]
+        ];
 
-        $result = $this->sut->extractSelectedSubmissionSectionsData($input);
+        $result = $this->sut->extractSelectedSubmissionSectionsData($input, $mockSectionRefData, $submissionConfig);
 
         $this->assertEquals($result, $expected);
-
     }
 
     /**
@@ -105,31 +101,21 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtractSelectedTextOnlySubmissionSectionsData($input)
     {
-        $this->markTestSkipped();
-        $mockRefDataService = $this->getMock('Common\Service\Data\RefData');
-
         $mockSectionRefData = $this->getMockSectionRefData();
-        $mockRefDataService->expects(
-            $this->once()
-        )->method('fetchListOptions')->with('submission_section')
-            ->willReturn($mockSectionRefData);
 
-        $this->sut->setRefDataService($mockRefDataService);
-        $this->sut->setSubmissionConfig(
-            [
-                'sections' => [
-                    'introduction' => [
-                        'section_type' => ['text']
-                    ]
+        $submissionConfig = [
+            'sections' => [
+                'introduction' => [
+                    'section_type' => ['text']
                 ]
             ]
-        );
-        $result = $this->sut->extractSelectedSubmissionSectionsData($input);
+        ];
+
+        $result = $this->sut->extractSelectedSubmissionSectionsData($input, $mockSectionRefData, $submissionConfig);
 
         $this->assertArrayHasKey('introduction', $result);
         $this->assertArrayHasKey('data', $result['introduction']);
         $this->assertEmpty($result['introduction']['data']);
-
     }
 
     public function testGetAllSectionsRefData()
@@ -157,7 +143,6 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
     public function testSetAllSectionsRefData()
     {
         $this->sut->setAllSectionsRefData($this->getMockSectionRefData());
-        $result = $this->sut->getAllSectionsRefData();
 
         $this->assertEquals($this->getMockSectionRefData(), $this->sut->getAllSectionsRefData());
     }
@@ -218,13 +203,17 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests for submission sections where the data has already been extracted
-     *
-     * @dataProvider providerSubmissionSectionPrebuiltData
-     * @param $input
-     * @param $expected
      */
-    public function testCreateSubmissionSectionUsingPrebuiltData($input, $expected)
+    public function testCreateSubmissionSectionUsingPrebuiltData()
     {
+        $input = [
+            'caseId' => 24,
+            'sectionId' => 'persons',
+            'sectionConfig' => [
+                'bundle' => 'case-summary',
+            ]
+        ];
+
         $this->sut->setLoadedSectionDataForSection('bar', ['foo']);
 
         $result = $this->sut->loadCaseSectionData($input['caseId'], 'bar', $input['sectionConfig']);
@@ -428,83 +417,20 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    private function getMockSubmissionSectionInput($sectionId)
-    {
-        return [
-            'caseId' => 24,
-            'sectionId' => $sectionId,
-            'sectionConfig' => [
-                'service' => 'Cases',
-                'filter' => true,
-                'bundle' => ['some_bundle'],
-            ]
-        ];
-    }
-
-    private function getExpectedSectionResults($sectionId)
-    {
-        $wordFilter = new \Zend\Filter\Word\DashToCamelCase();
-
-        $fn = 'provide' . ucfirst($wordFilter->filter($sectionId)) . 'LoadedData';
-        $input = $this->$fn();
-
-        $fn = 'provide' . ucfirst($wordFilter->filter($sectionId)) . 'ExpectedResult';
-        $expected = $this->$fn();
-
-        return [
-            'loadedCaseSectionData' => $input,
-            'expected' => $expected
-        ];
-    }
-
-    public function providerSubmissionSectionPrebuiltData()
-    {
-        return [
-            [
-                [
-                    'caseId' => 24,
-                    'sectionId' => 'persons',
-                    'sectionConfig' => [
-                        'bundle' => 'case-summary',
-                    ]
-                ],
-                [
-                    'loadedCaseSectionData' => $this->getCaseSummaryMockData(),
-                    'filteredSectionData' => [
-                        1 => [
-                            'id' => 1,
-                            'title' => '',
-                            'forename' => 'Tom',
-                            'familyName' => 'Jones',
-                            'birthDate' => '1972-02-15T00:00:00+0100',
-                        ],
-                        0 => [
-                            'id' => 2,
-                            'title' => '',
-                            'forename' => 'Keith',
-                            'familyName' => 'Winnard',
-                            'birthDate' => '1975-03-15T00:00:00+0100',
-                        ]
-                    ]
-                ]
-            ]
-        ];
-    }
-
     public function providerSubmissions()
     {
         return [
             [
                 [
                     'dataSnapshot' =>
-                        '{"introduction":{"data":[]}}',
+                        '{"introduction":{"data":["a"]}}',
                     'submissionSectionComments' =>
                         []
                 ],
                 [ 'introduction' => [
                     'sectionId' => 'introduction',
                     'description' => 'Introduction',
-                    'data' => [],
+                    'data' => ['a'],
                     'comments' => []
                     ]
                 ]
@@ -652,90 +578,5 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
             'annex' => 'Annex',
             'statements' => 'Statements'
         );
-    }
-
-    private function getCaseSummaryMockData()
-    {
-        return [
-            'Results' => [ // branch test
-                'ecmsNo' => 'E123456',
-                'description' => 'Case for convictions against company directors',
-                'id' => 24,
-                'caseType' =>
-                    [
-                        'id' => 'case_t_lic',
-                    ],
-                'licence' => [
-                    'licNo' => 'OB1234567',
-                    'trailersInPossession' => null,
-                    'totAuthTrailers' => 4,
-                    'totAuthVehicles' => 12,
-                    'inForceDate' => '2010-01-12T00:00:00+0000',
-                    'status' => [
-                        'description' => 'New',
-                        'id' => 'lsts_consideration',
-                    ],
-                    'organisation' => [
-                        'isMlh' => 'Y',
-                        'name' => 'John Smith Haulage Ltd.',
-                        'natureOfBusiness' => 'Some whatever',
-                        'type' =>
-                            [
-                                'description' => 'Registered Company',
-                                'id' => 'org_t_rc',
-                            ],
-                        'organisationPersons' => [
-                            0 => [
-                                'person' => [
-                                    'id' => 1,
-                                    'title' => '',
-                                    'forename' => 'Tom',
-                                    'familyName' => 'Jones',
-                                    'birthDate' => '1972-02-15T00:00:00+0100',
-                                ],
-                            ],
-                            1 => [
-                                'person' => [
-                                    'id' => 2,
-                                    'title' => '',
-                                    'forename' => 'Keith',
-                                    'familyName' => 'Winnard',
-                                    'birthDate' => '1975-03-15T00:00:00+0100',
-                                ]
-                            ]
-                        ],
-                    ],
-                    'licenceVehicles' => [
-                        0 => [
-                            'id' => 1,
-                            'deletedDate' => null,
-                            'specifiedDate' => '2014-02-20T00:00:00+0000',
-                        ],
-                        1 => [
-                            'id' => 2,
-                            'deletedDate' => null,
-                            'specifiedDate' => '2014-02-20T00:00:00+0000',
-                        ],
-                        2 => [
-                            'id' => 3,
-                            'deletedDate' => null,
-                            'specifiedDate' => '2014-02-20T00:00:00+0000',
-                        ],
-                        3 => [
-                            'id' => 4,
-                            'deletedDate' => null,
-                            'specifiedDate' => '2014-02-20T00:00:00+0000',
-                        ],
-                    ],
-                    'licenceType' => [
-                        'description' => 'Standard National',
-                        'id' => 'ltyp_sn',
-                    ],
-                    'goodsOrPsv' => [
-                        'description' => 'Goods Vehicle',
-                    ],
-                ],
-            ]
-        ];
     }
 }
