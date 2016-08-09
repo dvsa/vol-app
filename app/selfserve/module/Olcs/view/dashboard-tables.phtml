@@ -1,5 +1,4 @@
 <?php
-
 /* @var \Zend\View\Helper\Navigation\Menu $menu */
 $menu = $this->navigation($this->navigation('navigation')->getContainer()
     ->findBy('id', 'dashboard-licences-applications'))->menu();
@@ -9,8 +8,8 @@ echo $menu->setMinDepth(0)->setMaxDepth(0)
 
 echo $licences;
 ?>
-    <div class="actions-container" style="margin-bottom: 3em;">
-        <a href="<?php echo $this->url('create_application'); ?>" class="action--primary">
+    <div class="actions-container new-application--wrapper">
+        <a href="<?php echo $this->url('create_application'); ?>" class="action--primary large">
             <?php echo $this->translate('application.new.button'); ?>
         </a>
     </div>
