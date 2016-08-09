@@ -21,14 +21,9 @@ return array(
             'formatter' => 'AccessedCorrespondence'
         ),
         array(
-            'title' => 'dashboard-correspondence.table.column.licence-number',
+            'title' => 'dashboard-correspondence.table.column.reference',
             'name' => 'licence',
             'formatter' => 'LicenceNumberLink'
-        ),
-        array(
-            'title' => 'dashboard-correspondence.table.column.created',
-            'name' => 'date',
-            'formatter' => 'Date',
         ),
     )
 );

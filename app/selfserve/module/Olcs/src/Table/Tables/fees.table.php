@@ -17,24 +17,15 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'selfserve-fees-table-fee-number',
-            'name' => 'id',
-        ),
-        array(
             'title' => 'selfserve-fees-table-fee-description',
             'name' => 'description',
             'formatter' => 'FeeUrl',
         ),
         array(
-            'title' => 'selfserve-fees-table-fee-licence-number',
+            'title' => 'selfserve-fees-table-fee-reference',
             'formatter' => function ($row, $col, $sm) {
                 return $row['licence']['licNo'];
             },
-        ),
-        array(
-            'title' => 'selfserve-fees-table-fee-licence-created',
-            'name' => 'invoicedDate',
-            'formatter' => 'Date',
         ),
         array(
             'title' => 'selfserve-fees-table-fee-licence-outstanding',
@@ -54,7 +45,7 @@ return array(
             'type' => 'th',
             'content' => 'dashboard-fees-total',
             'formatter' => 'Translate',
-            'colspan' => 4
+            'colspan' => 2
         ),
         array(
             'type' => 'th',
