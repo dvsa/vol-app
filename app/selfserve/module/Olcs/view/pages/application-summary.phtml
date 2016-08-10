@@ -3,7 +3,7 @@
     <div class="row">
       <div class="page-header__wrapper two-thirds">
           <h3 class="page-header__subtitle">
-              <?php echo $this->translate('application.overview.application-no') . $application; ?>
+              <?php echo $this->translate('application.overview.application-no') . ' ' . $application; ?>
           </h3>
           <h1><?php echo $this->translate('lva-summary-title'); ?></h1>
       </div>
@@ -142,8 +142,6 @@
   <div class="one-third">
     <aside class="sidebar" role="complementary">
       <dl class="meta">
-        <dt><?php echo $this->translate('application-reference-no.title'); ?></dt>
-        <dd><?php echo $licence . '/' . $application; ?></dd>
         <?php if ($paymentRef): ?>
           <dt><?php echo $this->translate('payment-reference-no.title'); ?></dt>
           <dd><?php echo $paymentRef; ?>
