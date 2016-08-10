@@ -232,7 +232,6 @@ class UserRegistrationController extends AbstractController
     {
         $output = [];
         $output['loginId'] = $data['fields']['loginId'];
-        $output['translateToWelsh'] = $data['fields']['translateToWelsh'];
         $output['contactDetails']['emailAddress'] = $data['fields']['emailAddress'];
         $output['contactDetails']['person']['familyName'] = $data['fields']['familyName'];
         $output['contactDetails']['person']['forename']   = $data['fields']['forename'];
