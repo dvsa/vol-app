@@ -138,17 +138,6 @@ class UserRegistration
     public $businessType = null;
 
     /**
-     * @Form\Attributes({"id":"translateToWelsh","placeholder":""})
-     * @Form\Options({
-     *     "label": "translate-to-welsh",
-     *     "checked_value":"Y",
-     *     "unchecked_value":"N"
-     * })
-     * @Form\Type("OlcsCheckbox")
-     */
-    public $translateToWelsh = null;
-
-    /**
      * @Form\Attributes({"id": "termsAgreed", "placeholder": "", "data-container-class": "confirm"})
      * @Form\Options({
      *     "label": "user-registration.field.termsAgreed.label",
