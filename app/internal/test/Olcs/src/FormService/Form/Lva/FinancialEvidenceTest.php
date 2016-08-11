@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Financial Evidence Form Service Test
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
@@ -12,22 +7,22 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\FinancialEvidence;
 
 /**
- * Financial Evidence Form Service Test
- *
- * @author Dan Eggleston <dan@stolenegg.com>
+ * @covers Olcs\FormService\Form\Lva\FinancialEvidence
  */
 class FinancialEvidenceTest extends MockeryTestCase
 {
+    /** @var  FinancialEvidence */
     protected $sut;
 
+    /** @var  m\MockInterface|\Common\Service\Helper\FormHelperService */
     protected $formHelper;
-
+    /** @var  \Common\FormService\FormServiceManager */
     protected $fsm;
 
     public function setUp()
     {
-        $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
-        $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
+        $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
+        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
 
         $this->sut = new FinancialEvidence();
         $this->sut->setFormHelper($this->formHelper);
@@ -36,7 +31,8 @@ class FinancialEvidenceTest extends MockeryTestCase
 
     public function testGetForm()
     {
-        $request = m::mock();
+        /** @var \Zend\Http\Request $request */
+        $request = m::mock(\Zend\Http\Request::class);
 
         // Mocks
         $mockForm = m::mock();
