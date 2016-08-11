@@ -846,6 +846,9 @@ $nav = array(
                             'label' => 'internal-navigation-operator-processing',
                             'route' => 'operator/processing/history',
                             'use_route_match' => true,
+                            'params' => [
+                                'action' => null,
+                            ],
                             'pages' => array(
                                 array(
                                     'id' => 'operator_processing_history',
