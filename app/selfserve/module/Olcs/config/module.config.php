@@ -1022,7 +1022,6 @@ return array(
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'returnToAddress' => \Olcs\View\Helper\ReturnToAddress::class,
             'generatePeopleList' => \Olcs\View\Helper\GeneratePeopleList::class
         )
     ),

@@ -1,15 +1,10 @@
 <?php
 
-/**
- * Lva Operating Centre
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\FormService\Form\Lva\OperatingCentre;
 
 use Common\FormService\Form\Lva\OperatingCentre\CommonOperatingCentre;
+use Common\View\Helper\ReturnToAddress;
 use Dvsa\Olcs\Utils\Helper\ValueHelper;
-use Olcs\View\Helper\ReturnToAddress;
 use Zend\Form\Form;
 
 /**
@@ -19,16 +14,20 @@ use Zend\Form\Form;
  */
 class LvaOperatingCentre extends CommonOperatingCentre
 {
-    /**
-     * @var \Common\Service\Helper\TranslationHelperService
-     */
+    /** @var \Common\Service\Helper\TranslationHelperService */
     protected $translator;
 
-    /**
-     * @var \Common\Service\Helper\UrlHelperService
-     */
+    /** @var \Common\Service\Helper\UrlHelperService */
     protected $url;
 
+    /**
+     * Alter form
+     *
+     * @param Form  $form   Form
+     * @param array $params Lva object data
+     *
+     * @return void
+     */
     public function alterForm(Form $form, array $params)
     {
         $isNi = $this->isNi($params);
@@ -40,8 +39,18 @@ class LvaOperatingCentre extends CommonOperatingCentre
         parent::alterForm($form, $params);
     }
 
+    /**
+     * Set label text in depend from parameters
+     *
+     * @param Form    $form        Form
+     * @param boolean $isNi        Is NI
+     * @param boolean $isVariation Is Variation
+     *
+     * @return void
+     */
     protected function setAdPlacedLabels(Form $form, $isNi, $isVariation)
     {
+        /** @var \Zend\Form\Element\Radio $adPlaced */
         $adPlaced = $form->get('advertisements')->get('adPlaced');
 
         $guideName = 'advertising-your-operating-centre';
@@ -75,8 +84,18 @@ class LvaOperatingCentre extends CommonOperatingCentre
         $adPlaced->setValueOptions($valuesOptions);
     }
 
+    /**
+     * Set Send By Post address in depend from parameters
+     *
+     * @param Form    $form   Form
+     * @param boolean $isNi   Is NI
+     * @param array   $params Lva object data
+     *
+     * @return void
+     */
     protected function setSendByPostContent(Form $form, $isNi, $params)
     {
+        /** @var \Common\Form\Elements\Types\HtmlTranslated $adSendByPost */
         $adSendByPost = $form->get('advertisements')->get('adSendByPost');
 
         if (empty($params['licNo'])) {
@@ -101,6 +120,8 @@ class LvaOperatingCentre extends CommonOperatingCentre
     }
 
     /**
+     * Get Translator service
+     *
      * @return \Common\Service\Helper\TranslationHelperService
      */
     protected function getTranslator()
@@ -113,6 +134,8 @@ class LvaOperatingCentre extends CommonOperatingCentre
     }
 
     /**
+     * Get url service
+     *
      * @return \Common\Service\Helper\UrlHelperService
      */
     protected function getUrl()
@@ -125,7 +148,10 @@ class LvaOperatingCentre extends CommonOperatingCentre
     }
 
     /**
-     * @param array $params
+     * Define is Nothern Ireland
+     *
+     * @param array $params Lva object data
+     *
      * @return bool
      */
     protected function isNi(array $params)
