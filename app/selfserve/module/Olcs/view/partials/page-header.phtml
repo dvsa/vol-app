@@ -18,8 +18,9 @@
 
       <?php if (!empty($this->pageSubTitleUrl)) : ?>
           <h3 class="page-header__subtitle">
-              <a href="<?php echo $this->pageSubTitleUrl['url'] ?>"
-                  ><?php echo $this->translate($this->pageSubTitleUrl['label']) ?></a>
+              <a href="<?php echo $this->pageSubTitleUrl['url'] ?>">
+                <?php echo $this->translate($this->pageSubTitleUrl['label']) ?>
+              </a>
           </h3>
       <?php endif; ?>
 
