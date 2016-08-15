@@ -241,7 +241,7 @@ $routes = array(
         'options' => array(
             'route' => '/fees[/]',
             'defaults' => array(
-                'controller' => 'Fees',
+                'controller' => Olcs\Controller\FeesController::class,
                 'action' => 'index',
             ),
         ),
@@ -255,7 +255,6 @@ $routes = array(
                         'fee' => '[0-9\,]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'Fees',
                         'action' => 'pay-fees',
                     ),
                 ),
@@ -265,7 +264,6 @@ $routes = array(
                 'options' => array(
                     'route' => 'result[/]',
                     'defaults' => array(
-                        'controller' => 'Fees',
                         'action' => 'handle-result',
                     ),
                 ),
@@ -275,10 +273,9 @@ $routes = array(
                 'options' => array(
                     'route' => 'receipt/:reference[/:action][/]',
                     'constraints' => array(
-                        'reference' => 'OLCS-[0-9A-F\-]+',
+                        'reference' => '(OLCS|WAIVE)-[0-9A-F\-]+',
                     ),
                     'defaults' => array(
-                        'controller' => 'Fees',
                         'action' => 'receipt',
                     ),
                 ),
@@ -942,7 +939,7 @@ return array(
             Olcs\Controller\BusReg\BusRegRegistrationsController::class =>
                 Olcs\Controller\BusReg\BusRegRegistrationsController::class,
             'Dashboard' => Olcs\Controller\DashboardController::class,
-            'Fees' => 'Olcs\Controller\FeesController',
+            Olcs\Controller\FeesController::class => Olcs\Controller\FeesController::class,
             'Correspondence' => 'Olcs\Controller\CorrespondenceController',
             'User' => 'Olcs\Controller\UserController',
             IndexController::class => IndexController::class,
