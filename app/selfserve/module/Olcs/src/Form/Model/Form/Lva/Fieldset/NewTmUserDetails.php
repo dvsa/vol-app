@@ -83,7 +83,7 @@ class NewTmUserDetails
     public $username = null;
 
     /**
-     * @Form\Attributes({"id": "emailAddress", "class":"medium", "data-container-class": "js-visible"})
+     * @Form\Attributes({"id": "emailAddress", "class":"long", "data-container-class": "js-visible"})
      * @Form\Options({
      *     "label":"tm-add-user-email",
      *     "short-label":"tm-add-user-email"
@@ -97,7 +97,7 @@ class NewTmUserDetails
     public $emailAddress = null;
 
     /**
-     * @Form\Attributes({"id": "emailConfirm", "class":"medium", "data-container-class": "js-visible"})
+     * @Form\Attributes({"id": "emailConfirm", "class":"long", "data-container-class": "js-visible"})
      * @Form\Options({
      *     "label":"tm-add-user-confirm-email",
      *     "short-label":"tm-add-user-confirm-email"
