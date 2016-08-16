@@ -41,7 +41,6 @@ class IndexController extends AbstractController implements LeftViewProvider
 
         // assignedToTeam or Category must be selected
         if (empty($filters['assignedToTeam'])
-            && empty($filters['assignedToUser'])
             && empty($filters['category'])
         ) {
             $table = $this->getTable('tasks-no-create', []);
@@ -51,6 +50,11 @@ class IndexController extends AbstractController implements LeftViewProvider
                 ->addWarningMessage('tasks.search.error.filter.needed');
 
         } else {
+            //  if user specified then remove team from filters (ignore team) @see OLCS-13501
+            if (!empty($filters['assignedToUser'])) {
+                unset($filters['assignedToTeam']);
+            }
+
             $table = $this->getTaskTable($filters, true);
 
             $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
