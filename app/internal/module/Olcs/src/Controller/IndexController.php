@@ -1,13 +1,5 @@
 <?php
 
-/**
- * Index Controller
- *
- * @author Mike Cooper <michael.cooper@valtech.co.uk>
- * @author Nick Payne <nick.payne@valtech.co.uk>
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller;
 
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -29,34 +21,52 @@ class IndexController extends AbstractController implements LeftViewProvider
 {
     use TaskSearchTrait;
 
+    /**
+     * Process action - Index
+     *
+     * @return bool|\Zend\Http\Response|ViewModel
+     * @throws \Exception
+     */
     public function indexAction()
     {
         $redirect = $this->processTasksActions();
-
         if ($redirect) {
             return $redirect;
         }
 
         $filters = $this->mapTaskFilters();
 
-        $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
-        $table = $this->getTaskTable($filters, true);
+        /** @var \Common\Service\Table\TableBuilder $table */
+        $table = null;
 
         // assignedToTeam or Category must be selected
-        if (empty($filters['assignedToTeam']) && empty($filters['category'])) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addWarningMessage(
-                'Please filter by either a team or a category.'
-            );
-            $view = new ViewModel();
+        if (empty($filters['assignedToTeam'])
+            && empty($filters['assignedToUser'])
+            && empty($filters['category'])
+        ) {
+            $table = $this->getTable('tasks-no-create', []);
+            $table->setEmptyMessage('tasks.search.error.filter.needed');
+
+            $this->getServiceLocator()->get('Helper\FlashMessenger')
+                ->addWarningMessage('tasks.search.error.filter.needed');
+
         } else {
-            $view = new ViewModel(['table' => $table]);
+            $table = $this->getTaskTable($filters, true);
+
+            $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
         }
 
+        $view = new ViewModel(['table' => $table]);
         $view->setTemplate('pages/table');
 
         return $this->renderView($view, 'Home');
     }
 
+    /**
+     * Build left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $filters = $this->mapTaskFilters();
@@ -84,7 +94,7 @@ class IndexController extends AbstractController implements LeftViewProvider
                 $results = $this->getListDataEnforcementArea($value, 'Please select');
                 break;
             case 'task-allocation-users':
-                $results = $this->getListDataUserInternal($value, ['Unassigned', 'alpha-split' => 'Alpha split']);
+                $results = $this->getListDataUserInternal($value);
                 break;
             case 'users':
                 $results = $this->getListDataUser($value, 'All');
