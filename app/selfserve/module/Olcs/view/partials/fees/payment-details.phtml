@@ -6,19 +6,23 @@
             [
                 [
                     'label' => 'pay-fees.success.operator-name',
-                    'value' => $operatorName,
+                    'value' => $this->operatorName,
                 ],
                 [
                     'label' => 'pay-fees.success.payment-reference',
-                    'value' => $payment['id'],
+                    'value' => $this->payment['id'],
                 ],
                 [
                     'label' => 'pay-fees.success.received',
-                    'date' => $payment['completedDate'],
+                    'date' => $this->payment['completedDate'],
                 ],
                 [
                     'label' => 'pay-fees.success.amount',
-                    'date' => $payment['amount'],
+                    'value' => '£' . number_format($this->payment['amount'], 2),
+                ],
+                [
+                    'label' => 'pay-fees.success.paid-by',
+                    'value' => $this->payment['paymentMethod']['description'],
                 ],
             ],
           ],
