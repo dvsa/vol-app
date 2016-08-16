@@ -33,7 +33,7 @@ class UserForgotUsername
      *         "aria-label": "Enter your email address"
      *     }
      * })
-     * @Form\Attributes({"class":"medium"})
+     * @Form\Attributes({"class":"long"})
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
      */

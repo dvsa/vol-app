@@ -51,7 +51,7 @@ class MyDetails extends Base
     public $familyName = null;
 
     /**
-     * @Form\Attributes({"class":"medium"})
+     * @Form\Attributes({"class":"long"})
      * @Form\Options({
      *     "label":"email-address",
      *      "error-message": "myDetails_emailAddress-error"
@@ -64,7 +64,7 @@ class MyDetails extends Base
     public $emailAddress = null;
 
     /**
-     * @Form\Attributes({"class":"medium"})
+     * @Form\Attributes({"class":"long"})
      * @Form\Options({
      *     "label": "confirm-email-address",
      *     "error-message": "myDetails_emailConfirms-error"

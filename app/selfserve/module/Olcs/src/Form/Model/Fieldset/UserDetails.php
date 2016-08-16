@@ -72,7 +72,7 @@ class UserDetails extends Base
     public $emailAddress = null;
 
     /**
-     * @Form\Attributes({"class":"medium"})
+     * @Form\Attributes({"class":"long"})
      * @Form\Options({
      *     "label":"confirm-email-address",
      *     "error-message": "userDetails_emailConfirm-error"
