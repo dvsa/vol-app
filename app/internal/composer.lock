@@ -812,7 +812,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git",
-                "reference": "3a82213b01eefb60c1457e3621aad96f53f7fa4a"
+                "reference": "601d62a7c56de003bbf4bbc84c71d6ca5e87bb03"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
