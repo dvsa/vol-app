@@ -121,16 +121,16 @@
         <?php
             if ($lva === 'application') {
               echo $translator->translateReplace(
-                      'markup-application-right-column', [$reference, $progressTranslated, $statusTranslated]
-                  );
+                'markup-application-right-column', [$reference, $progressTranslated, $statusTranslated]
+              );
             } elseif ($lva === 'variation') {
               echo $translator->translateReplace(
-                      'markup-variation-right-column', [$reference, $statusTranslated]
-                  );
+                'markup-variation-right-column', [$reference, $statusTranslated]
+              );
             } elseif ($lva === 'licence') {
-                echo $translator->translateReplace(
-                  'markup-licence-right-column', [$licNo, $statusTranslated, $renewalDateFormatted, $startDateFormatted]
-                );
+              echo $translator->translateReplace(
+                'markup-licence-right-column', [$licNo, $statusTranslated, $renewalDateFormatted, $startDateFormatted]
+              );
             }
       ?>
       </aside>
