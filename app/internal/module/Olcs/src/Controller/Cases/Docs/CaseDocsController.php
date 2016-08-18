@@ -1,31 +1,28 @@
 <?php
 
-/**
- * Case Docs Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller\Cases\Docs;
 
-use Zend\View\Model\ViewModel;
-use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\AbstractController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Controller\Cases\CaseController;
+use Olcs\Controller\Traits as ControllerTraits;
+use Zend\View\Model\ViewModel;
 
 /**
  * Case Docs Controller
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CaseDocsController extends CaseController implements LeftViewProvider
+class CaseDocsController extends AbstractController implements CaseControllerInterface, LeftViewProvider
 {
-    use ControllerTraits\DocumentActionTrait,
+    use ControllerTraits\CaseControllerTrait,
+        ControllerTraits\DocumentActionTrait,
         ControllerTraits\DocumentSearchTrait;
 
     /**
      * Table to use
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see Olcs\Controller\Traits\DocumentSearchTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -35,6 +32,7 @@ class CaseDocsController extends CaseController implements LeftViewProvider
 
     /**
      * Route (prefix) for document action redirects
+     *
      * @see Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
@@ -45,6 +43,7 @@ class CaseDocsController extends CaseController implements LeftViewProvider
 
     /**
      * Route params for document action redirects
+     *
      * @see Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
@@ -55,6 +54,7 @@ class CaseDocsController extends CaseController implements LeftViewProvider
 
     /**
      * Get view model for document action
+     *
      * @see Olcs\Controller\Traits\DocumentActionTrait
      * @return ViewModel
      */
@@ -67,7 +67,12 @@ class CaseDocsController extends CaseController implements LeftViewProvider
         return $this->getView(['table' => $table]);
     }
 
-    protected function getDocumentFilters()
+    /**
+     * Get document filters
+     *
+     * @return array
+     */
+    private function getDocumentFilters()
     {
         $case = $this->getCase();
 
@@ -84,6 +89,12 @@ class CaseDocsController extends CaseController implements LeftViewProvider
         return $this->mapDocumentFilters($filters);
     }
 
+    /**
+     * Get configured document form
+     *
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return ViewModel
+     */
     protected function getConfiguredDocumentForm()
     {
         $filters = $this->getDocumentFilters();
