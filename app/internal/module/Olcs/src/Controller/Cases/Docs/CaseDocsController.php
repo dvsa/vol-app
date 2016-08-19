@@ -6,7 +6,6 @@ use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits as ControllerTraits;
-use Zend\View\Model\ViewModel;
 
 /**
  * Case Docs Controller
@@ -56,7 +55,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
      * Get view model for document action
      *
      * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return ViewModel
+     * @return \Zend\View\Model\ViewModel
      */
     protected function getDocumentView()
     {
@@ -93,7 +92,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
      * Get configured document form
      *
      * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return ViewModel
+     * @return \Zend\View\Model\ViewModel
      */
     protected function getConfiguredDocumentForm()
     {
