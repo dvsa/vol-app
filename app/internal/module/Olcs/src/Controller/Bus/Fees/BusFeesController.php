@@ -1,14 +1,11 @@
 <?php
 
-/**
- * Bus Fees Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 namespace Olcs\Controller\Bus\Fees;
 
 use Common\Controller\Traits\GenericReceipt;
-use Olcs\Controller\Bus\BusController;
+use Olcs\Controller\AbstractController;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\FeesActionTrait;
 
 /**
@@ -16,16 +13,14 @@ use Olcs\Controller\Traits\FeesActionTrait;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusFeesController extends BusController
+class BusFeesController extends AbstractController implements BusRegControllerInterface, LeftViewProvider
 {
     use FeesActionTrait,
         GenericReceipt;
 
-    protected $section = 'fees';
-    protected $subNavRoute = 'licence_bus_fees';
-
     /**
      * Route (prefix) for fees action redirects
+     *
      * @see Olcs\Controller\Traits\FeesActionTrait
      * @return string
      */
@@ -36,6 +31,7 @@ class BusFeesController extends BusController
 
     /**
      * The fees route redirect params
+     *
      * @see Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
@@ -49,6 +45,7 @@ class BusFeesController extends BusController
 
     /**
      * The controller specific fees table params
+     *
      * @see Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
@@ -61,16 +58,25 @@ class BusFeesController extends BusController
         ];
     }
 
+    /**
+     * Render layout
+     *
+     * @param string|\Zend\View\Model\ViewModel $view View
+     *
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return \Zend\View\Model\ViewModel
+     */
     protected function renderLayout($view)
     {
         return $this->renderView($view);
     }
 
-    public function redirectToIndex()
-    {
-        return $this->redirectToList();
-    }
-
+    /**
+     * Get fee type dto data
+     *
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return array
+     */
     protected function getFeeTypeDtoData()
     {
         return [
@@ -79,6 +85,14 @@ class BusFeesController extends BusController
         ];
     }
 
+    /**
+     * Get create fee dto data
+     *
+     * @param array $formData Data
+     *
+     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @return array
+     */
     protected function getCreateFeeDtoData($formData)
     {
         return [
