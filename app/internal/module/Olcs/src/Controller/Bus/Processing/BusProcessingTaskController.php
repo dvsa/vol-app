@@ -1,45 +1,22 @@
 <?php
 
-/**
- * Bus Processing Task controller
- * Bus task search and display
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\Controller\Bus\Processing;
 
-use Olcs\Controller\Bus\BusController;
+use Olcs\Controller\AbstractController;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits;
 
 /**
  * Bus Processing Task controller
  * Bus task search and display
  *
- * @NOTE Migrated
- *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class BusProcessingTaskController extends BusController
+class BusProcessingTaskController extends AbstractController implements BusRegControllerInterface, LeftViewProvider
 {
-    use Traits\TaskSearchTrait,
-        Traits\ListDataTrait;
-
-    protected $identifierName = 'id';
-    protected $item = 'tasks';
-    protected $service = 'Task';
-
-    protected $section = 'processing';
-    protected $subNavRoute = 'licence_bus_processing';
-
-    /**
-     * Holds an array of variables for the
-     * default index list page.
-     */
-
-    protected $listVars = [
-        'licence',
-        'busRegId'
-    ];
+    use Traits\ProcessingControllerTrait,
+        Traits\TaskSearchTrait;
 
     /**
      * Render the tasks list or redirect if processing
@@ -54,11 +31,9 @@ class BusProcessingTaskController extends BusController
             return $redirect;
         }
 
-        $licenceId = $this->getFromRoute('licence');
-
         $filters = $this->mapTaskFilters(
             [
-                'licence' => $licenceId,
+                'licence' => $this->getFromRoute('licence'),
                 'assignedToTeam' => '',
                 'assignedToUser' => '',
             ]
