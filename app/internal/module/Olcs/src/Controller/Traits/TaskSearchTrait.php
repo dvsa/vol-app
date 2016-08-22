@@ -7,8 +7,6 @@ use Dvsa\Olcs\Transfer\Query\Task\TaskDetails;
 
 /**
  * Task Search Trait
- *
- * @NOTE Migrated
  */
 trait TaskSearchTrait
 {

@@ -13,8 +13,6 @@ use Olcs\Controller\Traits\TaskSearchTrait;
 /**
  * Transport Manager Processing Task Controller
  *
- * @NOTE Migrated
- *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */

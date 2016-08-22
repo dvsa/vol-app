@@ -26,8 +26,6 @@ use Common\Exception\BadRequestException;
 /**
  * Task Controller
  *
- * @NOTE Migrated
- *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>

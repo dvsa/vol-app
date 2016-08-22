@@ -11,8 +11,6 @@ use \Olcs\Controller\Traits\TaskSearchTrait;
 /**
  * Application Processing Tasks Controller
  *
- * @NOTE Migrated
- *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 class ApplicationProcessingTasksController extends AbstractApplicationProcessingController
