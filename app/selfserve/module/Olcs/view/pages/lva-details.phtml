@@ -36,7 +36,7 @@
     <?php
     if ($lva === 'application') {
       echo $translator->translateReplace(
-          'markup-application-right-column', [$reference, $progressTranslated, $statusTranslated]
+          'markup-application-right-column', [$reference, $statusTranslated]
       );
     } elseif ($lva === 'variation') {
       echo $translator->translateReplace(
@@ -121,7 +121,7 @@
         <?php
             if ($lva === 'application') {
               echo $translator->translateReplace(
-                'markup-application-right-column', [$reference, $progressTranslated, $statusTranslated]
+                'markup-application-right-column', [$reference, $statusTranslated]
               );
             } elseif ($lva === 'variation') {
               echo $translator->translateReplace(
