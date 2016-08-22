@@ -11,7 +11,6 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Cases\ByLicence as CasesByLicenceQry;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
-use Olcs\Controller\Traits;
 use Olcs\Controller\Lva;
 use Zend\View\Model\ViewModel;
 use Common\Controller\Traits\CheckForCrudAction;
@@ -24,7 +23,6 @@ use Common\Controller\Traits\CheckForCrudAction;
 class LicenceController extends AbstractController implements LicenceControllerInterface
 {
     use Lva\Traits\LicenceControllerTrait,
-        Traits\TaskSearchTrait,
         CheckForCrudAction;
 
     public function casesAction()
