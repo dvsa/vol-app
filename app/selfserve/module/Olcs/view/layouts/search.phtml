@@ -13,16 +13,13 @@
 ?>
 
 <div class="row">
+
     <div class="one-quarter sidebar--plain">
-        <?php
-            $this->searchForm->prepare();
-            echo $this->form()->render($this->searchForm);
-            echo $this->translate('markup-support-contact-address');
-        ?>
-    </div><!-- three-eights -->
-    
+        <?php $this->searchForm->prepare(); echo $this->form()->render($this->searchForm); ?>
+    </div>
+  
     <div class="three-quarters">
         <?php echo $this->content; ?>
-    </div><!-- five-eights -->
+    </div>
 
 </div>
