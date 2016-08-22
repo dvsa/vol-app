@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Licence Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 namespace Olcs\Controller\Licence;
 
 use Common\RefData;
@@ -25,6 +20,11 @@ class LicenceController extends AbstractController implements LicenceControllerI
     use Lva\Traits\LicenceControllerTrait,
         CheckForCrudAction;
 
+    /**
+     * Cases
+     *
+     * @return ViewModel
+     */
     public function casesAction()
     {
         $this->checkForCrudAction('case', [], 'case');
@@ -63,6 +63,8 @@ class LicenceController extends AbstractController implements LicenceControllerI
 
     /**
      * Opposition page
+     *
+     * @return ViewModel
      */
     public function oppositionAction()
     {
