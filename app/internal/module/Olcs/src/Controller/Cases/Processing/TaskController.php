@@ -19,8 +19,6 @@ use Zend\View\Model\ViewModel;
  * Case Task controller
  * Case task search and display
  *
- * @NOTE Migrated
- *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 class TaskController extends OlcsController\CrudAbstract implements CaseControllerInterface, LeftViewProvider

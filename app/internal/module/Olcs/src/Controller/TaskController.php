@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Task Controller
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller;
 
 use Common\Service\Helper\FormHelperService;
@@ -25,8 +18,6 @@ use Common\Exception\BadRequestException;
 
 /**
  * Task Controller
- *
- * @NOTE Migrated
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
@@ -131,7 +122,9 @@ class TaskController extends AbstractController
     /**
      * Callback invoked when the form is valid
      *
-     * @param array $data
+     * @param array $data Data
+     *
+     * @return \Zend\Http\Response
      */
     public function processCloseTask($data)
     {
@@ -151,7 +144,9 @@ class TaskController extends AbstractController
     /**
      * Callback invoked when the form is valid
      *
-     * @param array $data
+     * @param array $data Data
+     *
+     * @return \Zend\Http\Response
      */
     public function processAssignTask($data)
     {
@@ -177,7 +172,8 @@ class TaskController extends AbstractController
     /**
      * Set up and post form
      *
-     * @param string $type
+     * @param string $type Type
+     *
      * @return ViewModel
      */
     private function formAction($type)
@@ -244,7 +240,8 @@ class TaskController extends AbstractController
     /**
      * Callback invoked when the form is valid
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return void|\Zend\Http\Response
      */
     public function processAddTask($data)
@@ -269,7 +266,8 @@ class TaskController extends AbstractController
     /**
      * Callback invoked when the form is valid
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return void|\Zend\Http\Response
      */
     public function processEditTask($data)
@@ -392,7 +390,8 @@ class TaskController extends AbstractController
     /**
      * Flatten nested fieldset data into a collapsed array
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return array
      */
     private function flattenData($data)
@@ -422,12 +421,28 @@ class TaskController extends AbstractController
         return $data;
     }
 
+    /**
+     * Flatten data for licence
+     *
+     * @param array $data       Data
+     * @param int   $taskTypeId Task type id
+     *
+     * @return array
+     */
     protected function flattenDataForLicence($data, $taskTypeId)
     {
         $data['licence'] = $taskTypeId;
         return $data;
     }
 
+    /**
+     * Flatten data for application
+     *
+     * @param array $data       Data
+     * @param int   $taskTypeId Task type id
+     *
+     * @return array
+     */
     protected function flattenDataForApplication($data, $taskTypeId)
     {
         $data['application'] = $taskTypeId;
@@ -435,12 +450,28 @@ class TaskController extends AbstractController
         return $data;
     }
 
+    /**
+     * Flatten data for TM
+     *
+     * @param array $data       Data
+     * @param int   $taskTypeId Task type id
+     *
+     * @return array
+     */
     protected function flattenDataForTm($data, $taskTypeId)
     {
         $data['transportManager'] = $taskTypeId;
         return $data;
     }
 
+    /**
+     * Flatten data for bus reg
+     *
+     * @param array $data       Data
+     * @param int   $taskTypeId Task type id
+     *
+     * @return array
+     */
     protected function flattenDataForBusreg($data, $taskTypeId)
     {
         $data['busReg'] = $taskTypeId;
@@ -449,6 +480,14 @@ class TaskController extends AbstractController
         return $data;
     }
 
+    /**
+     * Flatten data for case
+     *
+     * @param array $data       Data
+     * @param int   $taskTypeId Task type id
+     *
+     * @return array
+     */
     protected function flattenDataForCase($data, $taskTypeId)
     {
         $data['case'] = $taskTypeId;
@@ -462,6 +501,14 @@ class TaskController extends AbstractController
         return $data;
     }
 
+    /**
+     * Flatten data for organisation
+     *
+     * @param array $data       Data
+     * @param int   $taskTypeId Task type id
+     *
+     * @return array
+     */
     protected function flattenDataForOrganisation($data, $taskTypeId)
     {
         $data['irfoOrganisation'] = $taskTypeId;
@@ -469,9 +516,10 @@ class TaskController extends AbstractController
     }
 
     /**
-     * Gets the case by ID.
+     * Gets the case by id
      *
-     * @param integer $id
+     * @param integer $id Id
+     *
      * @return array
      */
     protected function getCase($id)
@@ -483,7 +531,8 @@ class TaskController extends AbstractController
     /**
      * Expand a flattened array of data into form fieldsets
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return array
      */
     private function expandData($data)
@@ -550,6 +599,14 @@ class TaskController extends AbstractController
         return '';
     }
 
+    /**
+     * Get link to display in add / edit form for licence
+     *
+     * @param int    $taskTypeId  Task type id
+     * @param string $linkDisplay Text to display
+     *
+     * @return string
+     */
     protected function getLinkForTaskFormForLicence($taskTypeId, $linkDisplay)
     {
         if (!$linkDisplay) {
@@ -561,6 +618,14 @@ class TaskController extends AbstractController
         return sprintf('<a href="%s">%s</a>', $url, $linkDisplay ? $linkDisplay : $licence['licNo']);
     }
 
+    /**
+     * Get link to display in add / edit form for application
+     *
+     * @param int    $taskTypeId  Task type id
+     * @param string $linkDisplay Text to display
+     *
+     * @return string
+     */
     protected function getLinkForTaskFormForApplication($taskTypeId, $linkDisplay)
     {
         $application = $this->getApplication($taskTypeId);
@@ -572,6 +637,14 @@ class TaskController extends AbstractController
         return sprintf('<a href="%s">%s</a> / <a href="%s">%s</a>', $licUrl, $licNo, $appUrl, $taskTypeId);
     }
 
+    /**
+     * Get link to display in add / edit form for TM
+     *
+     * @param int    $taskTypeId  Task type id
+     * @param string $linkDisplay Text to display
+     *
+     * @return string
+     */
     protected function getLinkForTaskFormForTm($taskTypeId, $linkDisplay)
     {
         $url = $this->url()->fromRoute('transport-manager/details', ['transportManager' => $taskTypeId]);
@@ -579,6 +652,14 @@ class TaskController extends AbstractController
         return $this->getLinkMarkup($url, $linkDisplay, $taskTypeId);
     }
 
+    /**
+     * Get link to display in add / edit form for bus reg
+     *
+     * @param int    $taskTypeId  Task type id
+     * @param string $linkDisplay Text to display
+     *
+     * @return string
+     */
     protected function getLinkForTaskFormForBusreg($taskTypeId, $linkDisplay)
     {
         $busReg = $this->getBusReg($taskTypeId);
@@ -589,6 +670,14 @@ class TaskController extends AbstractController
         return $this->getLinkMarkup($url, $linkDisplay, $busReg['regNo']);
     }
 
+    /**
+     * Get link to display in add / edit form for case
+     *
+     * @param int    $taskTypeId  Task type id
+     * @param string $linkDisplay Text to display
+     *
+     * @return string
+     */
     protected function getLinkForTaskFormForCase($taskTypeId, $linkDisplay)
     {
         $url = $this->url()->fromRoute('case', ['case' => $taskTypeId]);
@@ -596,6 +685,14 @@ class TaskController extends AbstractController
         return $this->getLinkMarkup($url, $linkDisplay, $taskTypeId);
     }
 
+    /**
+     * Get link to display in add / edit form for opposition
+     *
+     * @param int    $taskTypeId  Task type id
+     * @param string $linkDisplay Text to display
+     *
+     * @return string
+     */
     protected function getLinkForTaskFormForOpposition($taskTypeId, $linkDisplay)
     {
         $url = $this->url()->fromRoute('case_opposition', ['case' => $taskTypeId]);
@@ -603,6 +700,14 @@ class TaskController extends AbstractController
         return $this->getLinkMarkup($url, $linkDisplay, $taskTypeId);
     }
 
+    /**
+     * Get link to display in add / edit form for organisation
+     *
+     * @param int    $taskTypeId  Task type id
+     * @param string $linkDisplay Text to display
+     *
+     * @return string
+     */
     protected function getLinkForTaskFormForOrganisation($taskTypeId, $linkDisplay)
     {
         $url = $this->url()->fromRoute('operator/business-details', ['organisation' => $taskTypeId]);
@@ -610,6 +715,15 @@ class TaskController extends AbstractController
         return $this->getLinkMarkup($url, $linkDisplay, $taskTypeId);
     }
 
+    /**
+     * Get link to display in add / edit form for submission
+     *
+     * @param int    $taskTypeId  Task type id
+     * @param string $linkDisplay Text to display
+     * @param int    $caseId      Case id
+     *
+     * @return string
+     */
     protected function getLinkForTaskFormForSubmission($taskTypeId, $linkDisplay, $caseId)
     {
         $url = $this->url()->fromRoute(
@@ -620,26 +734,63 @@ class TaskController extends AbstractController
         return $this->getLinkMarkup($url, $linkDisplay, $taskTypeId);
     }
 
+    /**
+     * Get link markup
+     *
+     * @param string $url         Url
+     * @param string $linkDisplay Text to display
+     * @param string $fallback    Default text
+     *
+     * @return string
+     */
     protected function getLinkMarkup($url, $linkDisplay, $fallback)
     {
         return sprintf('<a href="%s">%s</a>', $url, $linkDisplay ? $linkDisplay : $fallback);
     }
 
+    /**
+     * Get licence
+     *
+     * @param int $id Id
+     *
+     * @return array
+     */
     protected function getLicence($id)
     {
         return $this->handleQuery(Licence::create(['id' => $id]))->getResult();
     }
 
+    /**
+     * Get application
+     *
+     * @param int $id Id
+     *
+     * @return array
+     */
     protected function getApplication($id)
     {
         return $this->handleQuery(Application::create(['id' => $id]))->getResult();
     }
 
+    /**
+     * Get licence id for application
+     *
+     * @param int $id Id
+     *
+     * @return int
+     */
     protected function getLicenceIdForApplication($id)
     {
         return $this->getApplication($id)['licence']['id'];
     }
 
+    /**
+     * Get bus reg
+     *
+     * @param int $busRegId Id
+     *
+     * @return array
+     */
     protected function getBusReg($busRegId)
     {
         return $this->handleQuery(BusReg::create(['id' => $busRegId]))->getResult();

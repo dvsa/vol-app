@@ -10,8 +10,6 @@ use Olcs\Controller\Traits\TaskSearchTrait;
 /**
  * Index Controller
  *
- * @NOTE Migrated (Not converted to a "new" internal controller)
- *
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>

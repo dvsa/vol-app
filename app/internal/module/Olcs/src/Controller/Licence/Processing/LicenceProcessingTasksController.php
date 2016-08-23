@@ -1,11 +1,8 @@
 <?php
 
-/**
- * Licence Processing Tasks Controller
- */
 namespace Olcs\Controller\Licence\Processing;
 
-use Zend\View\Model\ViewModel;
+use Olcs\Controller\Traits;
 
 /**
  * Licence Processing Tasks Controller
@@ -15,40 +12,36 @@ use Zend\View\Model\ViewModel;
  */
 class LicenceProcessingTasksController extends AbstractLicenceProcessingController
 {
+    use Traits\TaskActionTrait;
+
     /**
      * @var string
      */
     protected $section = 'tasks';
 
-    public function indexAction()
+    /**
+     * Get task action type
+     *
+     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @return string
+     */
+    protected function getTaskActionType()
     {
-        $redirect = $this->processTasksActions('licence');
-        if ($redirect) {
-            return $redirect;
-        }
+        return 'licence';
+    }
 
-        $filters = $this->mapTaskFilters(
-            [
-                'licence' => $this->getFromRoute('licence'),
-                'assignedToTeam' => '',
-                'assignedToUser' => ''
-            ]
-        );
-
-        $table = $this->getTaskTable($filters);
-
-        // the table's nearly all good except we don't want a couple of columns
-        $table->removeColumn('name');
-        $table->removeColumn('link');
-
-        $this->setTableFilters($this->getTaskForm($filters));
-
-        $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
-
-        $view = new ViewModel(['table' => $table]);
-
-        $view->setTemplate('pages/table');
-
-        return $this->renderView($view);
+    /**
+     * Get task action filters
+     *
+     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @return array
+     */
+    protected function getTaskActionFilters()
+    {
+        return [
+            'licence' => $this->getFromRoute('licence'),
+            'assignedToTeam' => '',
+            'assignedToUser' => ''
+        ];
     }
 }

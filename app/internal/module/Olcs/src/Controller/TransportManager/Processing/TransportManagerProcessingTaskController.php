@@ -1,60 +1,42 @@
 <?php
 
-/**
- * Transport Manager Processing Task Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\Controller\TransportManager\Processing;
 
-use Olcs\Controller\Traits\TaskSearchTrait;
+use Olcs\Controller\Traits;
 
 /**
  * Transport Manager Processing Task Controller
- *
- * @NOTE Migrated
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 class TransportManagerProcessingTaskController extends AbstractTransportManagerProcessingController
 {
-    use TaskSearchTrait;
+    use Traits\TaskActionTrait;
 
     /**
-     * Render the tasks list or redirect if processing
+     * Get task action type
      *
-     * @return \Zend\View\Model\ViewModel
+     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @return string
      */
-    public function indexAction()
+    protected function getTaskActionType()
     {
-        $redirect = $this->processTasksActions('transportManager');
+        return 'transportManager';
+    }
 
-        if ($redirect) {
-            return $redirect;
-        }
-
-        $transportManagerId = $this->getFromRoute('transportManager');
-        $filters = $this->mapTaskFilters(
-            [
-                'transportManager' => $transportManagerId,
-                'assignedToTeam' => '',
-                'assignedToUser' => '',
-            ]
-        );
-
-        $table = $this->getTaskTable($filters);
-        $table->removeColumn('name');
-        $table->removeColumn('link');
-
-        $this->setTableFilters($this->getTaskForm($filters));
-
-        $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
-
-        $view = $this->getViewWithTm(['table' => $table]);
-        $view->setTemplate('pages/table');
-
-        return $this->renderView($view);
+    /**
+     * Get task action filters
+     *
+     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @return array
+     */
+    protected function getTaskActionFilters()
+    {
+        return [
+            'transportManager' => $this->getFromRoute('transportManager'),
+            'assignedToTeam' => '',
+            'assignedToUser' => ''
+        ];
     }
 }
