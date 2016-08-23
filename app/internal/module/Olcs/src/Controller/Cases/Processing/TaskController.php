@@ -1,19 +1,11 @@
 <?php
 
-/**
- * Case Task controller
- * Case task search and display
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\Controller\Cases\Processing;
 
-use Olcs\Controller as OlcsController;
-use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\View\Model\ViewModel;
+use Olcs\Controller\Traits as ControllerTraits;
 
 /**
  * Case Task controller
@@ -21,68 +13,51 @@ use Zend\View\Model\ViewModel;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TaskController extends OlcsController\CrudAbstract implements CaseControllerInterface, LeftViewProvider
+class TaskController extends AbstractController implements CaseControllerInterface, LeftViewProvider
 {
-    use ControllerTraits\TaskSearchTrait,
-        ControllerTraits\CaseControllerTrait,
-        ControllerTraits\ListDataTrait;
+    use ControllerTraits\CaseControllerTrait,
+        ControllerTraits\ProcessingControllerTrait,
+        ControllerTraits\TaskActionTrait;
 
     /**
-     * Holds the navigation ID,
-     * required when an entire controller is
-     * represented by a single navigation id.
+     * Get task action type
+     *
+     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @return string
      */
-    protected $navigationId = 'case_processing_tasks';
-
-    public function getLeftView()
+    protected function getTaskActionType()
     {
-        $view = new ViewModel();
-        $view->setTemplate('sections/processing/partials/left');
-
-        return $view;
+        return 'case';
     }
 
     /**
-     * Render the tasks list or redirect if processing
+     * Get task action filters
      *
-     * @return \Zend\View\Model\ViewModel
+     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @return array
      */
-    public function indexAction()
+    protected function getTaskActionFilters()
     {
-        $redirect = $this->processTasksActions('case');
-
-        if ($redirect) {
-            return $redirect;
-        }
-
-        $case = $this->getCase($this->params()->fromRoute('case', null));
-
-        $filters = $this->mapTaskFilters(
+        return array_merge(
             [
                 'assignedToTeam' => '',
-                'assignedToUser' => '',
-            ]
+                'assignedToUser' => ''
+            ],
+            $this->getIdArrayForCase()
         );
-
-        $tableFilters = array_merge($filters, $this->getIdArrayForCase($case));
-
-        $table = $this->getTaskTable($tableFilters);
-        $table->removeColumn('name');
-        $table->removeColumn('link');
-
-        $this->setTableFilters($this->getTaskForm($filters));
-
-        $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
-
-        $view = $this->getView(['table' => $table]);
-        $view->setTemplate('pages/table');
-
-        return $this->renderView($view);
     }
 
-    public function getIdArrayForCase($case)
+    /**
+     * Get id array for case
+     *
+     * @return array
+     * @throw \RuntimeException
+     */
+    private function getIdArrayForCase()
     {
         $filter = [];
+
+        $case = $this->getCase($this->params()->fromRoute('case', null));
 
         if (!is_null($case['licence'])) {
             $filter['licence'] = $case['licence']['id'];
@@ -93,29 +68,9 @@ class TaskController extends OlcsController\CrudAbstract implements CaseControll
         }
 
         if (empty($filter)) {
-            throw new \RuntimeException('Must be filtered by licence or transportManager');
+            throw new \RuntimeException('Must be filtered by licence or transport manager');
         }
 
         return $filter;
-    }
-
-    /**
-     * @NOTE Tmp override of CaseControllerTrait method until we have a better solution
-     *
-     * Gets the case by ID.
-     *
-     * @param integer $id
-     * @return array
-     */
-    public function getCase($id = null)
-    {
-        if (is_null($id)) {
-            $id = $this->params()->fromRoute('case');
-        }
-
-        $response = $this->handleQuery(Cases::create(['id' => $id]));
-
-        // @NOTE added for backwards compatibility until we know what we are doing with these objects
-        return new \Olcs\Data\Object\Cases($response->getResult());
     }
 }

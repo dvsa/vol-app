@@ -1,13 +1,8 @@
 <?php
 
-/**
- * Case Controller Trait
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 namespace Olcs\Controller\Traits;
 
-use Zend\Mvc\MvcEvent;
+use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 
 /**
  * Case Controller Trait
@@ -17,9 +12,10 @@ use Zend\Mvc\MvcEvent;
 trait CaseControllerTrait
 {
     /**
-     * Gets the case by ID.
+     * Gets the case by id
      *
-     * @param integer $id
+     * @param integer $id Id
+     *
      * @return array
      */
     public function getCase($id = null)
@@ -28,17 +24,8 @@ trait CaseControllerTrait
             $id = $this->params()->fromRoute('case');
         }
 
-        $service = $this->getServiceLocator()->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
-        return $service->fetchCaseData($id);
-    }
+        $response = $this->handleQuery(Cases::create(['id' => $id]));
 
-    /**
-     * Sets the table filters.
-     *
-     * @param mixed $filters
-     */
-    public function setTableFilters($filters)
-    {
-        $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
+        return $response->getResult();
     }
 }
