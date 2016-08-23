@@ -10,6 +10,7 @@ use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Dvsa\Olcs\Transfer\Query\ConditionUndertaking\GetList as ConditionUndertakingListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Data\Mapper\BusRegisterService as Mapper;
 use Olcs\Form\Model\Form\BusRegisterService as Form;
 use Common\RefData;
@@ -19,6 +20,8 @@ use Common\RefData;
  */
 class BusServiceController extends AbstractInternalController implements BusRegControllerInterface
 {
+    use ControllerTraits\BusControllerTrait;
+
     const CONDITION_TYPE_CONDITION = 'cdt_con';
 
     /**
@@ -130,19 +133,6 @@ class BusServiceController extends AbstractInternalController implements BusRegC
         }
 
         return $form;
-    }
-
-    /**
-     * Gets a Bus Reg - we'll have this query cached, and if it previously failed we'll have returned a 404 already
-     *
-     * @return array|mixed
-     */
-    private function getBusReg()
-    {
-        $params = ['id' => $this->params()->fromRoute('busRegId')];
-        $response = $this->handleQuery(ItemDto::create($params));
-
-        return $response->getResult();
     }
 
     public function indexAction()

@@ -8,12 +8,11 @@ use Dvsa\Olcs\Transfer\Command\Task\CreateTask;
 use Dvsa\Olcs\Transfer\Command\Task\ReassignTasks;
 use Dvsa\Olcs\Transfer\Command\Task\UpdateTask;
 use Dvsa\Olcs\Transfer\Query\Application\Application;
-use Dvsa\Olcs\Transfer\Query\Bus\BusReg;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Task\Task;
 use Zend\View\Model\ViewModel;
-use Olcs\Controller\Traits\TaskSearchTrait;
+use Olcs\Controller\Traits as ControllerTraits;
 use Common\Exception\BadRequestException;
 
 /**
@@ -25,10 +24,8 @@ use Common\Exception\BadRequestException;
  */
 class TaskController extends AbstractController
 {
-    /**
-     * Need to get some base task type details
-     */
-    use TaskSearchTrait;
+    use ControllerTraits\BusControllerTrait,
+        ControllerTraits\TaskSearchTrait;
 
     /**
      * Add a new task
@@ -782,17 +779,5 @@ class TaskController extends AbstractController
     protected function getLicenceIdForApplication($id)
     {
         return $this->getApplication($id)['licence']['id'];
-    }
-
-    /**
-     * Get bus reg
-     *
-     * @param int $busRegId Id
-     *
-     * @return array
-     */
-    protected function getBusReg($busRegId)
-    {
-        return $this->handleQuery(BusReg::create(['id' => $busRegId]))->getResult();
     }
 }

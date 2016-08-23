@@ -12,6 +12,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use \Olcs\Data\Mapper\BusReg as BusRegMapper;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Form\Model\Form\BusServiceNumberAndType as ServiceForm;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateServiceDetails as UpdateServiceCmd;
 use Olcs\Form\Model\Form\BusRegTa as TaForm;
@@ -32,6 +33,8 @@ class BusDetailsController extends AbstractInternalController implements
     BusRegControllerInterface,
     LeftViewProvider
 {
+    use ControllerTraits\BusControllerTrait;
+
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -131,19 +134,6 @@ class BusDetailsController extends AbstractInternalController implements
             $successMessage = 'Updated record',
             $contentTitle = 'Quality schemes'
         );
-    }
-
-    /**
-     * Gets a Bus Reg - we'll have this query cached, and if it previously failed we'll have returned a 404 already
-     *
-     * @return array|mixed
-     */
-    private function getBusReg()
-    {
-        $params = ['id' => $this->params()->fromRoute('busRegId')];
-        $response = $this->handleQuery(ItemDto::create($params));
-
-        return $response->getResult();
     }
 
     /**

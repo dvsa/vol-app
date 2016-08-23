@@ -8,11 +8,11 @@
 namespace Olcs\Controller\Bus\Short;
 
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Data\Mapper\BusRegShortNotice as ShortNoticeMapper;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Form\Model\Form\BusShortNotice as ShortNoticeForm;
 use Dvsa\Olcs\Transfer\Query\Bus\ShortNoticeByBusReg as ShortNoticeDto;
-use Dvsa\Olcs\Transfer\Query\Bus\BusReg as BusRegDto;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateShortNotice as UpdateShortNoticeCmd;
 
 /**
@@ -22,6 +22,8 @@ use Dvsa\Olcs\Transfer\Command\Bus\UpdateShortNotice as UpdateShortNoticeCmd;
  */
 class BusShortController extends AbstractInternalController implements BusRegControllerInterface
 {
+    use ControllerTraits\BusControllerTrait;
+
     protected $navigationId = 'licence_bus_short';
     protected $itemDto = ShortNoticeDto::class;
     protected $itemParams = ['id' => 'busRegId'];
@@ -44,18 +46,5 @@ class BusShortController extends AbstractInternalController implements BusRegCon
         }
 
         return $form;
-    }
-
-    /**
-     * Gets a Bus Reg - we'll have this query cached, and if it previously failed we'll have returned a 404 already
-     *
-     * @return array|mixed
-     */
-    private function getBusReg()
-    {
-        $params = ['id' => $this->params()->fromRoute('busRegId')];
-        $response = $this->handleQuery(BusRegDto::create($params));
-
-        return $response->getResult();
     }
 }
