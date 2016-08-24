@@ -1,19 +1,14 @@
 <?php
 
-/**
- * Bus Short Notice Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 namespace Olcs\Controller\Bus\Short;
 
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateShortNotice as UpdateShortNoticeCmd;
+use Dvsa\Olcs\Transfer\Query\Bus\ShortNoticeByBusReg as ShortNoticeDto;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Data\Mapper\BusRegShortNotice as ShortNoticeMapper;
-use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Form\Model\Form\BusShortNotice as ShortNoticeForm;
-use Dvsa\Olcs\Transfer\Query\Bus\ShortNoticeByBusReg as ShortNoticeDto;
-use Dvsa\Olcs\Transfer\Command\Bus\UpdateShortNotice as UpdateShortNoticeCmd;
 
 /**
  * Bus Short Notice Controller
@@ -33,8 +28,11 @@ class BusShortController extends AbstractInternalController implements BusRegCon
     protected $editContentTitle = 'Bus Short Notice';
 
     /**
-     * @param \Common\Form\Form $form
-     * @param array $formData
+     * Alter form for edit
+     *
+     * @param \Common\Form\Form $form     Form
+     * @param array             $formData Form data
+     *
      * @return \Common\Form\Form
      */
     protected function alterFormForEdit($form, $formData)

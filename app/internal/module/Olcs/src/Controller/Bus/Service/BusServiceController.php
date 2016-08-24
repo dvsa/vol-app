@@ -1,10 +1,8 @@
 <?php
 
-/**
- * Bus Service Controller
- */
 namespace Olcs\Controller\Bus\Service;
 
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateServiceRegister as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Dvsa\Olcs\Transfer\Query\ConditionUndertaking\GetList as ConditionUndertakingListDto;
@@ -13,7 +11,6 @@ use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Data\Mapper\BusRegisterService as Mapper;
 use Olcs\Form\Model\Form\BusRegisterService as Form;
-use Common\RefData;
 
 /**
  * Bus Service Controller
@@ -21,8 +18,6 @@ use Common\RefData;
 class BusServiceController extends AbstractInternalController implements BusRegControllerInterface
 {
     use ControllerTraits\BusControllerTrait;
-
-    const CONDITION_TYPE_CONDITION = 'cdt_con';
 
     /**
      * Holds the navigation ID,
@@ -56,8 +51,11 @@ class BusServiceController extends AbstractInternalController implements BusRegC
     protected $editContentTitle = 'Register service';
 
     /**
-     * @param $name
-     * @return mixed
+     * Get form
+     *
+     * @param string $name Form name
+     *
+     * @return \Common\Form\Form
      */
     public function getForm($name)
     {
@@ -72,6 +70,8 @@ class BusServiceController extends AbstractInternalController implements BusRegC
 
     /**
      * Get conditions table
+     *
+     * @return \Common\Service\Table\TableBuilder
      */
     protected function getConditionsTable()
     {
@@ -106,8 +106,9 @@ class BusServiceController extends AbstractInternalController implements BusRegC
     /**
      * Alter Form for edit
      *
-     * @param \Common\Controller\Form $form
-     * @param array $formData
+     * @param \Common\Controller\Form $form     Form
+     * @param array                   $formData Form data
+     *
      * @return \Common\Controller\Form
      */
     public function alterFormForEdit($form, $formData)
@@ -133,25 +134,5 @@ class BusServiceController extends AbstractInternalController implements BusRegC
         }
 
         return $form;
-    }
-
-    public function indexAction()
-    {
-        return $this->notFoundAction();
-    }
-
-    public function detailsAction()
-    {
-        return $this->notFoundAction();
-    }
-
-    public function addAction()
-    {
-        return $this->notFoundAction();
-    }
-
-    public function deleteAction()
-    {
-        return $this->notFoundAction();
     }
 }

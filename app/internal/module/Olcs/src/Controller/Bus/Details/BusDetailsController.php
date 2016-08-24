@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Bus Details Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 namespace Olcs\Controller\Bus\Details;
 
 use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
@@ -35,14 +30,6 @@ class BusDetailsController extends AbstractInternalController implements
 {
     use ControllerTraits\BusControllerTrait;
 
-    public function getLeftView()
-    {
-        $view = new ViewModel();
-        $view->setTemplate('sections/bus/partials/left');
-
-        return $view;
-    }
-
     protected $redirectConfig = [
         'service' => [
             'action' => 'service'
@@ -69,6 +56,21 @@ class BusDetailsController extends AbstractInternalController implements
     protected $subNavRoute = 'licence_bus_details';
 
     /**
+     * Get left view
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/bus/partials/left');
+
+        return $view;
+    }
+
+    /**
+     * Service page
+     *
      * @return array|\Zend\View\Model\ViewModel
      */
     public function serviceAction()
@@ -79,13 +81,15 @@ class BusDetailsController extends AbstractInternalController implements
             new GenericItem($this->itemParams),
             UpdateServiceCmd::class,
             $this->mapperClass,
-            $editViewTemplate = 'pages/crud-form',
-            $successMessage = 'Updated record',
-            $contentTitle = 'Service No. & type'
+            'pages/crud-form',
+            'Updated record',
+            'Service No. & type'
         );
     }
 
     /**
+     * TA page
+     *
      * @return array|\Zend\View\Model\ViewModel
      */
     public function taAction()
@@ -96,13 +100,15 @@ class BusDetailsController extends AbstractInternalController implements
             new GenericItem($this->itemParams),
             UpdateTaCmd::class,
             $this->mapperClass,
-            $editViewTemplate = 'pages/crud-form',
-            $successMessage = 'Updated record',
-            $contentTitle = 'TA\'s & authorities'
+            'pages/crud-form',
+            'Updated record',
+            'TA\'s & authorities'
         );
     }
 
     /**
+     * Stop page
+     *
      * @return array|\Zend\View\Model\ViewModel
      */
     public function stopAction()
@@ -113,13 +119,15 @@ class BusDetailsController extends AbstractInternalController implements
             new GenericItem($this->itemParams),
             UpdateStopCmd::class,
             $this->mapperClass,
-            $editViewTemplate = 'pages/crud-form',
-            $successMessage = 'Updated record',
-            $contentTitle = 'Stops, manoeuvres & subsidies'
+            'pages/crud-form',
+            'Updated record',
+            'Stops, manoeuvres & subsidies'
         );
     }
 
     /**
+     * Quality page
+     *
      * @return array|\Zend\View\Model\ViewModel
      */
     public function qualityAction()
@@ -130,16 +138,18 @@ class BusDetailsController extends AbstractInternalController implements
             new GenericItem($this->itemParams),
             UpdateQualityCmd::class,
             $this->mapperClass,
-            $editViewTemplate = 'pages/crud-form',
-            $successMessage = 'Updated record',
-            $contentTitle = 'Quality schemes'
+            'pages/crud-form',
+            'Updated record',
+            'Quality schemes'
         );
     }
 
     /**
-     * If not latest variation, or is EBSR, or status is 'registered' or 'cancelled', show read only form
-     * @param \Common\Form\Form $form
-     * @param array $formData
+     * Alter form
+     *
+     * @param \Common\Form\Form $form     Form
+     * @param array             $formData Form data
+     *
      * @return \Common\Form\Form
      */
     protected function alterForm($form, $formData)
@@ -147,6 +157,7 @@ class BusDetailsController extends AbstractInternalController implements
         $busReg = $this->getBusReg();
 
         if ($busReg['isReadOnly'] || $busReg['isFromEbsr']) {
+            // If read only or from EBSR show read only form
             $form->setOption('readonly', true);
         }
 
@@ -154,8 +165,11 @@ class BusDetailsController extends AbstractInternalController implements
     }
 
     /**
-     * @param \Common\Form\Form $form
-     * @param array $formData
+     * Alter form for service
+     *
+     * @param \Common\Form\Form $form     Form
+     * @param array             $formData Form data
+     *
      * @return \Common\Form\Form
      */
     protected function alterFormForService($form, $formData)
@@ -164,8 +178,11 @@ class BusDetailsController extends AbstractInternalController implements
     }
 
     /**
-     * @param \Common\Form\Form $form
-     * @param array $formData
+     * Alter form for TA
+     *
+     * @param \Common\Form\Form $form     Form
+     * @param array             $formData Form data
+     *
      * @return \Common\Form\Form
      */
     protected function alterFormForTa($form, $formData)
@@ -174,8 +191,11 @@ class BusDetailsController extends AbstractInternalController implements
     }
 
     /**
-     * @param \Common\Form\Form $form
-     * @param array $formData
+     * Alter form for stop
+     *
+     * @param \Common\Form\Form $form     Form
+     * @param array             $formData Form data
+     *
      * @return \Common\Form\Form
      */
     protected function alterFormForStop($form, $formData)
@@ -184,8 +204,11 @@ class BusDetailsController extends AbstractInternalController implements
     }
 
     /**
-     * @param \Common\Form\Form $form
-     * @param array $formData
+     * Alter form for quality
+     *
+     * @param \Common\Form\Form $form     Form
+     * @param array             $formData Form data
+     *
      * @return \Common\Form\Form
      */
     protected function alterFormForQuality($form, $formData)
