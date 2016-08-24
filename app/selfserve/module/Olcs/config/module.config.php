@@ -1073,7 +1073,7 @@ return array(
                     array(
                         'id' => 'selfserve-topnav-bus-registration',
                         'label' => 'selfserve-dashboard-topnav-bus-registrations',
-                        'route' => 'bus-registration',
+                        'route' => 'busreg-registrations',
                         'action' => 'index',
                         'use_route_match' => true,
                         'class' => 'proposition-nav__item',
