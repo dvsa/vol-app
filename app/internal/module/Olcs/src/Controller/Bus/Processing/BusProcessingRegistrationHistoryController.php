@@ -1,7 +1,5 @@
 <?php
-/**
- * Bus Processing Registration History Controller
- */
+
 namespace Olcs\Controller\Bus\Processing;
 
 use Dvsa\Olcs\Transfer\Query\Bus\BusReg;
@@ -68,7 +66,8 @@ class BusProcessingRegistrationHistoryController extends AbstractInternalControl
      * If there is a previous bus reg id then we override the redirect to the licence/bus page
      * and instead redirect to the registration history list
      *
-     * @param array $restResponse
+     * @param array $restResponse REST response
+     *
      * @return array
      */
     public function redirectConfig(array $restResponse)
@@ -87,6 +86,11 @@ class BusProcessingRegistrationHistoryController extends AbstractInternalControl
         return parent::redirectConfig($restResponse);
     }
 
+    /**
+     * Build left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();

@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Scanning Controller
- */
 namespace Admin\Controller;
 
 use Zend\View\Model\ViewModel;
@@ -19,6 +16,11 @@ class ScanningController extends ZendAbstractActionController
 {
     use GenericRenderView;
 
+    /**
+     * Index page
+     *
+     * @return ViewModel
+     */
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -114,6 +116,13 @@ class ScanningController extends ZendAbstractActionController
         return $this->renderView($view, 'Scanning');
     }
 
+    /**
+     * Get data service
+     *
+     * @param string $service Service name
+     *
+     * @return mixed
+     */
     private function getDataService($service)
     {
         return $this->getServiceLocator()
@@ -121,6 +130,13 @@ class ScanningController extends ZendAbstractActionController
             ->get('Olcs\Service\Data\\' . $service);
     }
 
+    /**
+     * Create form with data
+     *
+     * @param array $data Data
+     *
+     * @return \Common\Form\Form
+     */
     private function createFormWithData($data)
     {
         $form = $this->getServiceLocator()

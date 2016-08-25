@@ -1,9 +1,5 @@
 <?php
-/**
- * Abstract History Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
+
 namespace Olcs\Controller;
 
 use Dvsa\Olcs\Transfer\Query\Processing\History;
@@ -45,9 +41,10 @@ class AbstractHistoryController extends AbstractInternalController implements Le
     /**
      * Alter form for edit
      *
-     * @param Form $form
-     * @param array $formData
-     * @return Form
+     * @param \Common\Form\Form $form     Form
+     * @param array             $formData Form data
+     *
+     * @return \Common\Form\Form
      */
     public function alterFormForEdit($form, $formData)
     {
@@ -66,8 +63,9 @@ class AbstractHistoryController extends AbstractInternalController implements Le
     /**
      * Get event details table
      *
-     * @param array $details
-     * @return Table
+     * @param array $details Details
+     *
+     * @return \Common\Service\Table\TableBuilder
      */
     protected function getDetailsTable($details)
     {

@@ -33,6 +33,11 @@ class LegacyOffenceController extends AbstractInternalController implements Case
     protected $listDto = LegacyOffenceList::class;
     protected $listVars = ['case'];
 
+    /**
+     * Build left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
