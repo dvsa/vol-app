@@ -5,10 +5,9 @@
  */
 namespace Admin\Controller;
 
-use Common\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Common\Service\Data\CategoryDataService;
-use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
 
 /**

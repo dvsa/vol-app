@@ -8,10 +8,7 @@ namespace Olcs\Controller;
 
 use Dvsa\Olcs\Transfer\Query\Processing\History;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Common\Controller\Traits as CommonTraits;
-use Zend\Mvc\MvcEvent as MvcEvent;
 use Olcs\Form\Model\Form\EventHistory as EventHistorytForm;
 use Olcs\Data\Mapper\EventHistory as Mapper;
 use Dvsa\Olcs\Transfer\Query\EventHistory\EventHistory as ItemDto;

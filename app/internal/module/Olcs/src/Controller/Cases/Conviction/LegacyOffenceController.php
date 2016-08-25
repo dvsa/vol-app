@@ -7,7 +7,6 @@ use Dvsa\Olcs\Transfer\Query\Cases\LegacyOffenceList;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 /**

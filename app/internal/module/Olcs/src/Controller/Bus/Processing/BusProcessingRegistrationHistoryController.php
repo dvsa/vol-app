@@ -10,10 +10,7 @@ use Dvsa\Olcs\Transfer\Command\Bus\DeleteBus;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Common\Controller\Traits as CommonTraits;
-use Zend\Mvc\MvcEvent as MvcEvent;
 
 /**
  * Bus Processing Registration History Controller
