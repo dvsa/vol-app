@@ -31,40 +31,6 @@ class LicencePeopleAdapterTest extends MockeryTestCase
         $this->sut->setServiceLocator($this->sm);
     }
 
-    public function testAddMessagesWithExceptionalOrganisation()
-    {
-        $this->markTestSkipped();
-
-        $this->mockOrg(123, OrganisationEntityService::ORG_TYPE_SOLE_TRADER);
-
-        $this->sm->setService(
-            'Lva\Variation',
-            m::mock()
-            ->shouldReceive('addVariationMessage')
-            ->never()
-            ->getMock()
-        );
-
-        $this->sut->addMessages(123, 321);
-    }
-
-    public function testAddMessagesWithNormalOrganisation()
-    {
-        $this->markTestSkipped();
-
-        $this->mockOrg(123, OrganisationEntityService::ORG_TYPE_OTHER);
-
-        $this->sm->setService(
-            'Lva\Variation',
-            m::mock()
-            ->shouldReceive('addVariationMessage')
-            ->with(321)
-            ->getMock()
-        );
-
-        $this->sut->addMessages(123, 321);
-    }
-
     public function testAlterFormForOrganisation()
     {
         $form = m::mock('Zend\Form\Form');
@@ -81,45 +47,8 @@ class LicencePeopleAdapterTest extends MockeryTestCase
         $this->sut->alterFormForOrganisation($form, $table, 123);
     }
 
-    public function testAlterAddOrEditForOrganisation()
-    {
-        $this->markTestSkipped();
-
-        $this->mockOrg(123, OrganisationEntityService::ORG_TYPE_OTHER);
-
-        $form = m::mock('Zend\Form\Form');
-
-        $this->sm->setService(
-            'Lva\People',
-            m::mock()
-            ->shouldReceive('lockPersonForm')
-            ->with($form, OrganisationEntityService::ORG_TYPE_OTHER)
-            ->getMock()
-        );
-
-        $this->sut->alterAddOrEditFormForOrganisation($form, 123);
-    }
-
     public function testCanModify()
     {
         $this->assertFalse($this->sut->canModify(123));
-    }
-
-    private function mockOrg($id, $type)
-    {
-        $this->sm->setService(
-            'Entity\Organisation',
-            m::mock()
-            ->shouldReceive('getType')
-            ->with($id)
-            ->andReturn(
-                [
-                    'type' => [
-                        'id' => $type
-                    ]
-                ]
-            )
-            ->getMock()
-        );
     }
 }
