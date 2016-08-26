@@ -7,7 +7,6 @@ use Dvsa\Olcs\Transfer\Query\Cases\LegacyOffenceList;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -34,6 +33,11 @@ class LegacyOffenceController extends AbstractInternalController implements Case
     protected $listDto = LegacyOffenceList::class;
     protected $listVars = ['case'];
 
+    /**
+     * Build left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
