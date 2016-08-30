@@ -1,25 +1,28 @@
 <?php
-    echo $this->render(
-        '/partials/page-header.phtml',
-        array(
-            'pageTitle' => isset($this->pageTitle) ? $this->translate($this->pageTitle) : '',
-            'pageSubTitle'=> isset($this->pageSubtitle) ? $this->translate($this->pageSubtitle) : '',
-            'pageHeaderText'=> isset($this->pageHeaderText) ? $this->translate($this->pageHeaderText) : '',
-            'pageHeaderUrl'=> isset($this->pageHeaderUrl) ? $this->pageHeaderUrl : '',
-            'showNav' => isset($this->showNav) && $this->showNav === false ? false : true,
-            'tabs' => isset($this->tabs) && !empty($this->tabs) ? $this->tabs : []
-        )
-    );
+  echo $this->render(
+    '/partials/page-header.phtml',
+    array(
+      'pageTitle' => isset($this->pageTitle) ? $this->translate($this->pageTitle) : '',
+      'pageSubTitle'=> isset($this->pageSubtitle) ? $this->translate($this->pageSubtitle) : '',
+      'pageHeaderText'=> isset($this->pageHeaderText) ? $this->translate($this->pageHeaderText) : '',
+      'pageHeaderUrl'=> isset($this->pageHeaderUrl) ? $this->pageHeaderUrl : '',
+      'showNav' => isset($this->showNav) && $this->showNav === false ? false : true,
+      'tabs' => isset($this->tabs) && !empty($this->tabs) ? $this->tabs : []
+    )
+  );
 ?>
 
 <div class="row">
 
-    <div class="one-quarter sidebar--plain">
-        <?php $this->searchForm->prepare(); echo $this->form()->render($this->searchForm); ?>
-    </div>
-  
-    <div class="three-quarters">
-        <?php echo $this->content; ?>
-    </div>
+  <div class="one-quarter sidebar--plain">
+    <?php 
+      $this->searchForm->prepare(); 
+      echo $this->form()->render($this->searchForm);
+    ?>
+  </div>
+
+  <div class="three-quarters">
+    <?php echo $this->content; ?>
+  </div>
 
 </div>
