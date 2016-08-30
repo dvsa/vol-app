@@ -26,16 +26,11 @@
             ]
         );
     ?>
+    
     <div class="row">
-
         <div class="two-thirds">
             <?php echo $this->render($childView, ['documentUrl' => $documentUrl, 'ebsrSubmission' => $ebsrSubmission]); ?>
         </div>
-
-        <div class="one-third">
-            <aside class="sidebar" role="complementary">
-                <?php echo $this->translate('markup-support-contact-address');?>
-            </aside>
-        </div>
     </div>
+
 </div>

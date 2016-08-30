@@ -1,32 +1,38 @@
 <?php echo $this->doctype(); ?>
 <html lang="en-GB">
 
-    <head>
-        <meta charset="utf-8">
-        <?php echo $this->headTitle($this->pageTitle()); ?>
-        <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')->appendHttpEquiv('X-UA-Compatible', 'IE=edge'); ?>
-        <?php echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css'), ['media' => 'screen,print']); ?>
-        <?php echo $this->headScript(); ?>
-        <!--[if IE]>
-          <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-    </head>
+  <head>
+    <meta charset="utf-8">
+    <?php echo $this->headTitle($this->pageTitle()); ?>
+    <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')->appendHttpEquiv('X-UA-Compatible', 'IE=edge'); ?>
+    <?php echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css'), ['media' => 'screen,print']); ?>
+    <?php echo $this->headScript(); ?>
+    <!--[if IE]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
 
   <body class="selfserve" id="<?php echo $this->pageId(); ?>">
+
     <?php echo $this->version(); ?>
+    
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
     <a class="visually-hidden" id="skipToContent" href="#main"><?php echo $this->translate('skip-content'); ?></a>
 
     <header role="banner" class="global-header">
       <div class="global-header__wrapper">
+
         <a href="/" title="Go to dashboard" class="global-header__logo">
           <img aria-label="GOV-dot-U.K logo" src="<?php echo $this->assetPath('/images/bitmap/gov.uk_logotype_crown.png') ?>" alt="GOV.UK logo">
           <span aria-hidden="true">GOV.UK</span>
         </a>
 
         <div class="proposition" role="navigation">
-          <h2 class="proposition__title"><?php echo $this->translate('header-vehicle-operator-licensing'); ?></h2>
+
+          <h2 class="proposition__title">
+            <?php echo $this->translate('header-vehicle-operator-licensing'); ?>
+          </h2>
 
           <a class="proposition__toggle" href="#">Menu</a>
 
@@ -46,6 +52,7 @@
             ?>
 
         </div>
+
       </div>
     </header><!-- .global-header -->
 
@@ -57,18 +64,16 @@
 
     //  use cookie notification
     $showCookieBanner = $this->getPlaceholder('showCookieBanner')->asBool();
-    if ($showCookieBanner === true) {
-        ?>
-        <div class="cookie-banner">
-            <div class="cookie-banner__wrapper">
-                <p><?php echo $this->translate('cookie-banner'); ?> <a
-                        href="<?php echo $this->url('cookies'); ?>"><?php echo $this->translate('Find out more'); ?></a>
-                </p>
-            </div>
+    if ($showCookieBanner === true) { ?>
+      <div class="cookie-banner">
+        <div class="cookie-banner__wrapper">
+            <p>
+              <?php echo $this->translate('cookie-banner'); ?>
+              <a href="<?php echo $this->url('cookies'); ?>"><?php echo $this->translate('Find out more'); ?></a>
+            </p>
         </div>
-        <?php
-    }
-    ?>
+      </div>
+    <?php } ?>
 
     <div class="page-wrapper">
         <div class="user-header">
@@ -98,27 +103,29 @@
     </div><!-- page-wrapper-->
 
     <footer class="global-footer" role="contentinfo">
-        <div class="global-footer__wrapper">
-            <ul class="global-footer__links">
-                <li class="global-footer__link">
-                    <a href="<?php echo $this->url('terms-and-conditions');?>"><?php echo $this->translate('terms-and-conditions-title') ?></a>
-                </li>
-                <li class="global-footer__link">
-                    <a href="<?php echo $this->url('cookies');?>"><?php echo $this->translate('privacy-and-cookies-title') ?></a>
-                </li>
-                <li class="global-footer__link">
-                    <?php echo $this->languageLink(); ?>
-                </li>
-                <li class="global-footer__link">
-                    <?php echo $this->translate('built-by'); ?> <a href="<?php echo $this->translate('DVSA-link'); ?>">Driver and Vehicle Standards Agency</a>
-                </li>
-            </ul>
-            <div class="global-footer__copyright">
-                <a href="<?php echo $this->translate('crown-copyright-link'); ?>" target="blank">&copy; <?php echo $this->translate('crown-copyright'); ?></a>
-            </div>
+      <div class="global-footer__wrapper">
+        <ul class="global-footer__links">
+          <li class="global-footer__support">
+            <?php echo $this->translate('markup-support-helpline');?>
+          </li>
+          <li class="global-footer__link">
+            <a href="<?php echo $this->url('terms-and-conditions');?>"><?php echo $this->translate('terms-and-conditions-title') ?></a>
+          </li>
+          <li class="global-footer__link">
+            <a href="<?php echo $this->url('cookies');?>"><?php echo $this->translate('privacy-and-cookies-title') ?></a>
+          </li>
+          <li class="global-footer__link">
+            <?php echo $this->languageLink(); ?>
+          </li>
+          <li class="global-footer__link">
+            <?php echo $this->translate('built-by'); ?> <a href="<?php echo $this->translate('DVSA-link'); ?>">Driver and Vehicle Standards Agency</a>
+          </li>
+        </ul>
+        <div class="global-footer__copyright">
+          <a href="<?php echo $this->translate('crown-copyright-link'); ?>" target="blank">&copy; <?php echo $this->translate('crown-copyright'); ?></a>
         </div>
+      </div>
     </footer><!-- global-footer -->
-
 
     <?php echo $this->inlineScript()
         ->prependFile($this->assetPath('js/' . $this->applicationName() . '.js')) ?>

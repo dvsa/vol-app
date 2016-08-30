@@ -48,7 +48,6 @@
       );
     }
     ?>
-    <?php echo $this->translate('markup-support-contact-address');?>
   </div>
 
   <div class="three-quarters lva-details">
@@ -119,22 +118,21 @@
     <div class="one-third">
       <aside class="sidebar" role="complementary">
         <?php
-            if ($lva === 'application') {
-              echo $translator->translateReplace(
-                'markup-application-right-column', [$reference, $statusTranslated]
-              );
-            } elseif ($lva === 'variation') {
-              echo $translator->translateReplace(
-                'markup-variation-right-column', [$reference, $statusTranslated]
-              );
-            } elseif ($lva === 'licence') {
-              echo $translator->translateReplace(
-                'markup-licence-right-column', [$licNo, $statusTranslated, $renewalDateFormatted, $startDateFormatted]
-              );
-            }
-      ?>
+          if ($lva === 'application') {
+            echo $translator->translateReplace(
+              'markup-application-right-column', [$reference, $statusTranslated]
+            );
+          } elseif ($lva === 'variation') {
+            echo $translator->translateReplace(
+              'markup-variation-right-column', [$reference, $statusTranslated]
+            );
+          } elseif ($lva === 'licence') {
+            echo $translator->translateReplace(
+              'markup-licence-right-column', [$licNo, $statusTranslated, $renewalDateFormatted, $startDateFormatted]
+            );
+          }
+        ?>
       </aside>
-      <?php echo $this->translate('markup-support-contact-address');?>
     </div>
   <?php endif; ?>
 
