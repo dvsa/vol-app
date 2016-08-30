@@ -444,7 +444,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'people',
                     'previous-history',
                     'operating-centres',
-                    'conditions-and-undertakings',
+                    'te-reports',
                     'linked-licences-app-numbers',
                     'current-submissions',
                     'transport-managers',
