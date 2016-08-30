@@ -29,7 +29,7 @@
 
     <target name="clean" description="Clean (remove) temporary files">
         <delete file="data/autoload/classmap.php"/>
-        <delete includeEmptyDirs="true">
+        <delete>
             <fileset dir="data/cache" includes="**"/>
         </delete>
     </target>
