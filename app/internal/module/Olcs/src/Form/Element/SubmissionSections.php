@@ -25,14 +25,14 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     /**
      * Select form element that contains values for submission type
      *
-     * @var Select
+     * @var \Zend\Form\Element\Select
      */
     protected $submissionType;
 
     /**
      * Array of checkbox elements suitable for submission type
      *
-     * @var Array
+     * @var array
      */
     protected $sections;
 
@@ -40,7 +40,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      * Select button to submit the submission type, which dictates what
      * checkboxes are required.
      *
-     * @var Button
+     * @var \Zend\Form\Element\Button
      */
     protected $submissionTypeSubmit;
 
@@ -52,15 +52,22 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     protected $transportManager;
 
     /**
-     * @param \Olcs\Form\Element\Hidden $transportManager
+     * Set transport manager
+     *
+     * @param \Zend\Form\Element\Text $transportManager Transport Manager text element
+     *
+     * @return SubmissionSections
      */
     public function setTransportManager($transportManager)
     {
         $this->transportManager = $transportManager;
+        return $this;
     }
 
     /**
-     * @return \Olcs\Form\Element\Hidden
+     * Get transport manager
+     *
+     * @return \Zend\Form\Element\Text
      */
     public function getTransportManager()
     {
@@ -69,9 +76,10 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
 
     /**
      * Set submission type
-     * @param \Common\Form\Elements\Custom\Select $submissionType
      *
-     * @return $this
+     * @param \Common\Form\Elements\Custom\Select $submissionType Submission type select element
+     *
+     * @return SubmissionSections
      */
     public function setSubmissionType($submissionType)
     {
@@ -81,7 +89,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
 
     /**
      * Get submission type
-     * @return \Common\Form\Elements\Custom\Select
+     *
+     * @return \Zend\Form\Element\Select
      */
     public function getSubmissionType()
     {
@@ -90,9 +99,10 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
 
     /**
      * Set sections
-     * @param Array $sections
      *
-     * @return $this
+     * @param array $sections Array of submission sections to set
+     *
+     * @return SubmissionSections
      */
     public function setSections($sections)
     {
@@ -102,7 +112,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
 
     /**
      * Get sections from element
-     * @return Array
+     *
+     * @return array
      */
     public function getSections()
     {
@@ -110,7 +121,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     }
 
     /**
-     * @param \Olcs\Form\Element\Button $submissionTypeSubmit
+     * Set submission type submit
+     *
+     * @param \Olcs\Form\Element\Button $submissionTypeSubmit Submission type submit button
+     *
+     * @return void
      */
     public function setSubmissionTypeSubmit($submissionTypeSubmit)
     {
@@ -118,7 +133,9 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     }
 
     /**
-     * @return \Olcs\Form\Element\Button
+     * Get submission type submit button
+     *
+     * @return \Zend\Form\Element\Button
      */
     public function getSubmissionTypeSubmit()
     {
@@ -128,7 +145,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     /**
      * Prepare the form element (mostly used for rendering purposes)
      *
-     * @param  FormInterface $form
+     * @param FormInterface $form Form - not currently used
+     *
      * @return mixed
      */
     public function prepareElement(FormInterface $form)
@@ -170,8 +188,9 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     /**
      * Removes TM sections from section list array
      *
-     * @param $sections
-     * @return mixed
+     * @param array $sections Array of current sections from which to remove TM sections
+     *
+     * @return array
      */
     private function removeTmSections($sections)
     {
@@ -185,8 +204,9 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     /**
      * Set value for element(s)
      *
-     * @param array $value
-     * @return void|ZendElement
+     * @param array $value value to set the element to.
+     *
+     * @return SubmissionSections
      */
     public function setValue($value)
     {
@@ -217,8 +237,10 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      * Adds a class to highlight those options which were originally selected but not included in a new submission
      * type, when one is posted.
      *
-     * @param array $postedSections
-     * @param array $newDefaultSections
+     * @param array $postedSections     array of POSTed sections
+     * @param array $newDefaultSections array of new default sections
+     *
+     * @return void
      */
     public function addCssToDifference($postedSections = array(), $newDefaultSections = array())
     {
@@ -271,7 +293,8 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     /**
      * Returns the Preselected section keys for a given submission type
      *
-     * @param string $submissionType
+     * @param string $submissionType Submission type reference to determine which sections to pre-select
+     *
      * @return array
      */
     private function getPreselectedSectionsForType($submissionType)
@@ -529,6 +552,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      * Gets list of Transport Manager specific sections.
      *
      * @note These may be removed by the controller/JS if the case type is NOT TM
+     *
      * @return array
      */
     public function getTmOnlySections()
@@ -546,6 +570,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      * Gets list of All Transport Manager sections.
      *
      * @note These may be removed by the controller/JS if the case type is NOT TM
+     *
      * @return array
      */
     public function getAllTmSections()
