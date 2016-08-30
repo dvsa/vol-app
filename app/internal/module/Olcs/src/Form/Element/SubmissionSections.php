@@ -403,7 +403,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                     'people',
                     'previous-history',
                     'operating-centres',
-                    'conditions-and-undertakings',
+                    'te-reports',
                     'linked-licences-app-numbers',
                     'lead-tc-area',
                     'auth-requested-applied-for',
@@ -518,7 +518,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     private function getMandatorySections()
     {
         return [
-            'introduction',
             'case-summary',
             'case-outline',
             'people',
@@ -553,7 +552,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     {
         return array_merge(
             [
-                'introduction',
                 'case-outline',
                 'most-serious-infringement',
                 'intelligence-unit-check',
