@@ -2,21 +2,22 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\AbstractData;
+use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Dvsa\Olcs\Transfer\Query\Si\SiPenaltyTypeListData;
 
 /**
  * Class SiPenaltyType
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class SiPenaltyType extends AbstractData implements ListDataInterface
+class SiPenaltyType extends AbstractDataService implements ListDataInterface
 {
-    protected $serviceName = 'SiPenaltyType';
-
     /**
-     * Format data!
+     * Format data
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return array
      */
     public function formatData(array $data)
@@ -31,8 +32,11 @@ class SiPenaltyType extends AbstractData implements ListDataInterface
     }
 
     /**
-     * @param $category
-     * @param bool $useGroups
+     * Fetch list options
+     *
+     * @param string $category  Category
+     * @param bool   $useGroups Use groups
+     *
      * @return array
      */
     public function fetchListOptions($category, $useGroups = false)
@@ -47,21 +51,25 @@ class SiPenaltyType extends AbstractData implements ListDataInterface
     }
 
     /**
-     * Ensures only a single call is made to the backend for each dataset
+     * Fetch list data
      *
-     * @internal param $category
      * @return array
      */
     public function fetchListData()
     {
         if (is_null($this->getData('SiPenaltyType'))) {
+            $response = $this->handleQuery(
+                SiPenaltyTypeListData::create([])
+            );
 
-            $data = $this->getRestClient()->get('', []);
+            if (!$response->isOk()) {
+                throw new UnexpectedResponseException('unknown-error');
+            }
 
             $this->setData('SiPenaltyType', false);
 
-            if (isset($data['Results'])) {
-                $this->setData('SiPenaltyType', $data['Results']);
+            if (isset($response->getResult()['results'])) {
+                $this->setData('SiPenaltyType', $response->getResult()['results']);
             }
         }
 
