@@ -1,16 +1,11 @@
 <?php
 
-/**
- * Bus Docs Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\Controller\Bus\Docs;
 
-use Olcs\Controller\Bus\BusController;
-use Olcs\Controller\Traits;
-use Zend\View\Model\ViewModel;
+use Olcs\Controller\AbstractController;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Traits as ControllerTraits;
 
 /**
  * Bus Docs Controller
@@ -18,26 +13,32 @@ use Zend\View\Model\ViewModel;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class BusDocsController extends BusController
+class BusDocsController extends AbstractController implements BusRegControllerInterface, LeftViewProvider
 {
-    use Traits\DocumentActionTrait,
-        Traits\DocumentSearchTrait,
-        Traits\ListDataTrait;
+    use ControllerTraits\DocumentActionTrait,
+        ControllerTraits\DocumentSearchTrait;
 
-    protected $section = 'docs';
-    protected $subNavRoute = 'licence_bus_docs';
-
+    /**
+     * Get configured document form
+     *
+     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @return \Zend\View\Model\ViewModel
+     */
     protected function getConfiguredDocumentForm()
     {
-        $licence = $this->getFromRoute('licence');
-        $filters = $this->mapDocumentFilters(['licence' => $licence]);
+        $filters = $this->mapDocumentFilters(
+            [
+                'licence' => $this->getFromRoute('licence')
+            ]
+        );
+
         return $this->getDocumentForm($filters);
     }
 
     /**
      * Table to use
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see Olcs\Controller\Traits\DocumentSearchTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -47,6 +48,7 @@ class BusDocsController extends BusController
 
     /**
      * Route (prefix) for document action redirects
+     *
      * @see Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
@@ -57,26 +59,36 @@ class BusDocsController extends BusController
 
     /**
      * Route params for document action redirects
+     *
      * @see Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
     {
-        return ['busRegId' => $this->getFromRoute('busRegId'), 'licence' => $this->getFromRoute('licence')];
+        return [
+            'busRegId' => $this->getFromRoute('busRegId'),
+            'licence' => $this->getFromRoute('licence')
+        ];
     }
 
     /**
      * Get view model for document action
+     *
      * @see Olcs\Controller\Traits\DocumentActionTrait
      * @return \Zend\View\Model\ViewModel
      */
     protected function getDocumentView()
     {
-        $licence = $this->getFromRoute('licence');
-        $filters = $this->mapDocumentFilters(['licence' => $licence]);
+        $filters = $this->mapDocumentFilters(
+            [
+                'licence' => $this->getFromRoute('licence')
+            ]
+        );
 
-        $table = $this->getDocumentsTable($filters);
-
-        return $this->getView(['table' => $table]);
+        return $this->getView(
+            [
+                'table' => $this->getDocumentsTable($filters)
+            ]
+        );
     }
 }

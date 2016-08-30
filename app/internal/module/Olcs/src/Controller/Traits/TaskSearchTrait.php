@@ -7,15 +7,14 @@ use Dvsa\Olcs\Transfer\Query\Task\TaskDetails;
 
 /**
  * Task Search Trait
- *
- * @NOTE Migrated
  */
 trait TaskSearchTrait
 {
     /**
      * Inspect the request to see if we have any filters set, and if necessary, filter them down to a valid subset
      *
-     * @param array $extra
+     * @param array $extra Extra filters
+     *
      * @return array
      */
     protected function mapTaskFilters(array $extra = [])
@@ -51,8 +50,9 @@ trait TaskSearchTrait
     /**
      * Get task form
      *
-     * @param array $filters
-     * @return mixed
+     * @param array $filters Filters
+     *
+     * @return \Zend\Form\Form
      */
     protected function getTaskForm(array $filters = [])
     {
@@ -82,6 +82,14 @@ trait TaskSearchTrait
         return $form;
     }
 
+    /**
+     * Get task table
+     *
+     * @param array $filters  Filters
+     * @param bool  $noCreate Whether to create table without Create option
+     *
+     * @return \Common\Service\Table\TableBuilder
+     */
     protected function getTaskTable($filters = [], $noCreate = false)
     {
         $response = $this->handleQuery(TaskList::create($filters));
@@ -98,7 +106,8 @@ trait TaskSearchTrait
     /**
      * Hold processing of task actions
      *
-     * @param string $type
+     * @param string $type Type
+     *
      * @return bool|\Zend\Http\Response
      */
     protected function processTasksActions($type = '')
@@ -188,7 +197,8 @@ trait TaskSearchTrait
     /**
      * Get task details
      *
-     * @param int $id
+     * @param int $id Id
+     *
      * @return array
      */
     protected function getTaskDetails($id = null)
@@ -205,7 +215,9 @@ trait TaskSearchTrait
     /**
      * Update table action with query
      *
-     * @param Table $table
+     * @param Table $table Table
+     *
+     * @return void
      */
     protected function updateTableActionWithQuery($table)
     {

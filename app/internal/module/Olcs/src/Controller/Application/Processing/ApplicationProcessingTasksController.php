@@ -1,61 +1,48 @@
 <?php
 
-/**
- * Application Processing Tasks Controller
- */
 namespace Olcs\Controller\Application\Processing;
 
-use Zend\View\Model\ViewModel;
-use \Olcs\Controller\Traits\TaskSearchTrait;
+use Olcs\Controller\Traits;
 
 /**
  * Application Processing Tasks Controller
- *
- * @NOTE Migrated
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 class ApplicationProcessingTasksController extends AbstractApplicationProcessingController
 {
-    use TaskSearchTrait;
+    use Traits\TaskActionTrait;
 
     /**
      * @var string
      */
     protected $section = 'tasks';
 
-    public function indexAction()
+    /**
+     * Get task action type
+     *
+     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @return string
+     */
+    protected function getTaskActionType()
     {
-        $redirect = $this->processTasksActions('application');
+        return 'application';
+    }
 
-        if ($redirect) {
-            return $redirect;
-        }
-
-        // we want all tasks related to the licence, not just this application
-        $applicationId = $this->params('application');
-        $licenceId = $this->getLicenceIdForApplication($applicationId);
-        $filters = $this->mapTaskFilters(
-            [
-                'licence' => $licenceId,
-                'assignedToTeam' => '',
-                'assignedToUser' => ''
-            ]
-        );
-
-        $table = $this->getTaskTable($filters);
-
-        // the table's nearly all good except we don't want a couple of columns
-        $table->removeColumn('name');
-        $table->removeColumn('link');
-
-        $this->setTableFilters($this->getTaskForm($filters));
-
-        $this->loadScripts(['tasks', 'table-actions', 'forms/filter']);
-
-        $view = new ViewModel(['table' => $table]);
-        $view->setTemplate('pages/table');
-
-        return $this->viewBuilder()->buildView($view);
+    /**
+     * Get task action filters
+     *
+     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @return array
+     */
+    protected function getTaskActionFilters()
+    {
+        return [
+            'licence' => $this->getLicenceIdForApplication(
+                $this->params('application')
+            ),
+            'assignedToTeam' => '',
+            'assignedToUser' => ''
+        ];
     }
 }

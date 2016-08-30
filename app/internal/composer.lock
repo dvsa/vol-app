@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "29ef33d49afc9c229072c9fb17399f70",
-    "content-hash": "2385038b09cc40c18e8c13bffab9798a",
+    "hash": "e37ff88a6bc5ab75b7b0a0a346468f6e",
+    "content-hash": "795e78ba39c2c7ff463b03aa2ed7d3bb",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -808,11 +808,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/3.7",
+            "version": "dev-release/3.8",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git",
-                "reference": "601d62a7c56de003bbf4bbc84c71d6ca5e87bb03"
+                "reference": "4225a027325fd2503e018c377f9a007757b1ccd1"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -843,7 +843,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2016-08-11 16:25:36"
+            "time": "2016-08-24 09:26:32"
         },
         {
             "name": "olcs/autoload",
@@ -862,7 +862,7 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "dev-release/3.7",
+            "version": "dev-release/3.8",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-auth.git",
@@ -893,7 +893,7 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-logging.git",
-                "reference": "b8f6d683bdce67bfd7ee8261766cb260bd30a6cb"
+                "reference": "d106712c54f2fc06ae2b378467b77d8a8df517db"
             },
             "require": {
                 "php": ">=5.4",
@@ -919,15 +919,15 @@
                 }
             },
             "description": "Logging Module for Olcs",
-            "time": "2016-08-11 16:08:17"
+            "time": "2016-08-15 13:02:19"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "dev-release/3.7",
+            "version": "dev-release/3.8",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-transfer.git",
-                "reference": "6c8099f18caf124f8ea52b56ac5e7e81e1925d55"
+                "reference": "6c99de00c63fec2ad52918f106dbfd778075e2f8"
             },
             "require": {
                 "php": ">=5.4",
@@ -945,15 +945,15 @@
                 }
             },
             "description": "OLCS Transfer",
-            "time": "2016-08-11 09:38:55"
+            "time": "2016-08-18 12:52:58"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "dev-release/3.7",
+            "version": "dev-release/3.8",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-utils.git",
-                "reference": "55dfeaa803d0017c64a29c3914614bbb3da2ea7f"
+                "reference": "47401d854d83fd3814aa7a6abca302d5d192493c"
             },
             "require": {
                 "php": ">=5.4",
@@ -971,7 +971,7 @@
                 }
             },
             "description": "OLCS Utils",
-            "time": "2016-08-04 11:21:34"
+            "time": "2016-08-22 14:19:20"
         },
         {
             "name": "psr/log",
@@ -2356,23 +2356,23 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "1.3.7",
+            "version": "1.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "4e8f0da10ac5802913afc151413bc8c53b6c2716"
+                "reference": "be2c607e43ce4c89ecd60e75c6a85c126e754aea"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/sebastian-environment-4e8f0da10ac5802913afc151413bc8c53b6c2716-zip-65fddb.tar",
-                "reference": "4e8f0da10ac5802913afc151413bc8c53b6c2716",
-                "shasum": "869a75066c08e09cb0ca04246ec2e14b99d118f4"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/sebastian-environment-be2c607e43ce4c89ecd60e75c6a85c126e754aea-zip-edab34.tar",
+                "reference": "be2c607e43ce4c89ecd60e75c6a85c126e754aea",
+                "shasum": "e9c90c85c1d9a4d068443a5d6c3fa416e9e60299"
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": "^5.3.3 || ^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.4"
+                "phpunit/phpunit": "^4.8 || ^5.0"
             },
             "type": "library",
             "extra": {
@@ -2402,7 +2402,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2016-05-17 03:18:57"
+            "time": "2016-08-18 05:49:44"
         },
         {
             "name": "sebastian/exporter",

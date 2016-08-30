@@ -1,17 +1,11 @@
 <?php
 
-/**
- * Licence Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 namespace Olcs\Controller\Licence;
 
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Cases\ByLicence as CasesByLicenceQry;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
-use Olcs\Controller\Traits;
 use Olcs\Controller\Lva;
 use Zend\View\Model\ViewModel;
 use Common\Controller\Traits\CheckForCrudAction;
@@ -24,9 +18,13 @@ use Common\Controller\Traits\CheckForCrudAction;
 class LicenceController extends AbstractController implements LicenceControllerInterface
 {
     use Lva\Traits\LicenceControllerTrait,
-        Traits\TaskSearchTrait,
         CheckForCrudAction;
 
+    /**
+     * Cases
+     *
+     * @return ViewModel
+     */
     public function casesAction()
     {
         $this->checkForCrudAction('case', [], 'case');
@@ -65,6 +63,8 @@ class LicenceController extends AbstractController implements LicenceControllerI
 
     /**
      * Opposition page
+     *
+     * @return ViewModel
      */
     public function oppositionAction()
     {

@@ -377,7 +377,7 @@ return [
                         'options' => [
                             'route' => 'payment-processing[/]',
                             'defaults' => [
-                                'controller' => 'Admin\PaymentProcessingFeesController',
+                                'controller' => Admin\Controller\PaymentProcessingFeesController::class,
                                 'action' => 'redirect',
                             ]
                         ],
@@ -388,7 +388,6 @@ return [
                                 'options' => [
                                     'route' => 'fees[/]',
                                     'defaults' => [
-                                        'controller' => 'Admin\PaymentProcessingFeesController',
                                         'action' => 'index'
                                     ]
                                 ],
@@ -449,7 +448,6 @@ return [
                                                 'reference' => 'OLCS-[0-9A-F\-]+',
                                             ],
                                             'defaults' => [
-                                                'controller' => 'Admin\PaymentProcessingFeesController',
                                                 'action' => 'print',
                                             ],
                                         ],
@@ -527,7 +525,8 @@ return [
             Admin\Controller\PublicHolidayController::class => Admin\Controller\PublicHolidayController::class,
             'Admin\DiscPrintingController' => 'Admin\Controller\DiscPrintingController',
             'Admin\MyDetailsController' => 'Admin\Controller\MyDetailsController',
-            'Admin\PaymentProcessingFeesController' => 'Admin\Controller\PaymentProcessingFeesController',
+            Admin\Controller\PaymentProcessingFeesController::class =>
+                Admin\Controller\PaymentProcessingFeesController::class,
             'Admin\PartnerController' => 'Admin\Controller\PartnerController',
             'Admin\ContinuationChecklistReminderController' =>
                 'Admin\Controller\ContinuationChecklistReminderController',

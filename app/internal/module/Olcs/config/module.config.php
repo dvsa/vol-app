@@ -143,7 +143,6 @@ return array(
                 => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
             \Olcs\Controller\Cases\Overview\OverviewController::class
                 => \Olcs\Controller\Cases\Overview\OverviewController::class,
-            'CaseController' => 'Olcs\Controller\Cases\CaseController',
             'CaseDocsController' => 'Olcs\Controller\Cases\Docs\CaseDocsController',
             'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
             'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
@@ -166,7 +165,6 @@ return array(
                 => 'Olcs\Controller\Cases\Submission\DecisionController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
             'CaseSiController' => 'Olcs\Controller\Cases\Penalty\SiController',
-            'CaseAppliedPenaltyController' => 'Olcs\Controller\Cases\Penalty\AppliedPenaltyController',
             'CaseProhibitionController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionController',
             'CaseProhibitionDefectController' => 'Olcs\Controller\Cases\Prohibition\ProhibitionDefectController',
             'CaseAnnualTestHistoryController' => 'Olcs\Controller\Cases\AnnualTestHistory\AnnualTestHistoryController',
