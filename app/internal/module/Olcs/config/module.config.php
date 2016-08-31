@@ -429,6 +429,8 @@ return array(
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
             'Olcs\Service\Data\Team' => 'Olcs\Service\Data\Team',
             \Olcs\Service\Data\SiPenaltyType::class => \Olcs\Service\Data\SiPenaltyType::class,
+            'Olcs\Service\Data\OperatingCentresForInspectionRequest'
+            => 'Olcs\Service\Data\OperatingCentresForInspectionRequest',
         ],
         'factories' => array(
             \Olcs\Service\Marker\MarkerService::class => \Olcs\Service\Marker\MarkerService::class,
@@ -457,8 +459,6 @@ return array(
             'Olcs\Service\Data\SubmissionSectionComment' => 'Olcs\Service\Data\SubmissionSectionComment',
             'Olcs\Service\Data\Cases' => 'Olcs\Service\Data\Cases',
             'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
-            'Olcs\Service\Data\OperatingCentresForInspectionRequest'
-                => 'Olcs\Service\Data\OperatingCentresForInspectionRequest',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
