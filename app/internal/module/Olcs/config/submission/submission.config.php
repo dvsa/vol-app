@@ -1,20 +1,11 @@
 <?php
 return [
     'mandatory-sections' => [
-        'introduction',
         'case-summary',
         'case-outline',
         'persons'
     ],
     'sections' => [
-        'introduction' => [
-            'subcategoryId' => 115,
-            'config' => [],
-            'section_type' => [],
-            'allow_comments' => true,
-            'allow_attachments' => true,
-            'config' => []
-        ],
         'case-summary' => [
             'subcategoryId' => 116,
             'config' => [],
