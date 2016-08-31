@@ -462,7 +462,6 @@ return array(
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
-            'Olcs\Service\Nr\RestHelper' => 'Olcs\Service\Nr\RestHelper',
             'Olcs\Service\Data\SubmissionActionTypes' => 'Olcs\Service\Data\SubmissionActionTypes',
         )
     ),
@@ -713,8 +712,6 @@ return array(
             'Lva\GracePeriod' => 'Olcs\BusinessService\Service\Lva\GracePeriod',
             'Lva\Schedule41' => 'Olcs\BusinessService\Service\Lva\Schedule41',
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
-            'Cases\Penalty\ErruAppliedPenaltyResponse'
-                => 'Olcs\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse',
         ]
     ],
     'business_rule_manager' => [
