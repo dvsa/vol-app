@@ -41,9 +41,11 @@
     </target>
 
     <target name="composer-install" depends="composer-init" description="Install composer dependencies">
+        <!-- THIS IS TEMPORARY SHOULD BE "INSTALL" NOT "UPDATED" -->
+        <!-- Need a condition to do update if no composer.lock else do install -->
         <exec executable="php" failonerror="true">
             <arg value="composer.phar"/>
-            <arg value="install"/>
+            <arg value="update"/>
             <arg value="--optimize-autoloader"/>
             <arg value="--no-interaction"/>
         </exec>
