@@ -12,8 +12,6 @@ use Common\Service\Data\CloseableInterface;
  */
 class Cases extends AbstractData implements CloseableInterface
 {
-    use CloseableTrait;
-
     /**
      * @var string
      */
