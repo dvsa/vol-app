@@ -713,8 +713,6 @@ return array(
             'Lva\GracePeriod' => 'Olcs\BusinessService\Service\Lva\GracePeriod',
             'Lva\Schedule41' => 'Olcs\BusinessService\Service\Lva\Schedule41',
             'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
-            'Cases\Penalty\ErruAppliedPenaltyResponse'
-                => 'Olcs\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse',
         ]
     ],
     'business_rule_manager' => [
