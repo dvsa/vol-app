@@ -12,7 +12,10 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class SubmissionSectionsFactory implements FactoryInterface
 {
     /**
-     * @param ServiceLocatorInterface $formElementManager
+     * Create service
+     *
+     * @param ServiceLocatorInterface $formElementManager Form element manager
+     *
      * @return SubmissionSections
      */
     public function createService(ServiceLocatorInterface $formElementManager)
@@ -75,8 +78,9 @@ class SubmissionSectionsFactory implements FactoryInterface
     /**
      * Method to extract the case in order to get the transport manager and set it's id value as hidden field
      *
-     * @param $serviceLocator
-     * @return array $case
+     * @param ServiceLocatorInterface $serviceLocator Service locator
+     *
+     * @return array
      */
     private function getCase($serviceLocator)
     {
