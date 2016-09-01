@@ -5,10 +5,7 @@ namespace OlcsTest\Form\Element;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Form\Element\SubmissionSectionsFactory;
 use Mockery as m;
-use Zend\Mvc\Service\ServiceManagerConfig;
-use Zend\ServiceManager\ServiceManager;
 use \Olcs\TestHelpers\ControllerPluginManagerHelper;
-use \Olcs\Data\Object\Cases;
 
 /**
  * Class SubmissionSectionsFactoryTest
@@ -27,13 +24,16 @@ class SubmissionSectionsFactoryTest extends MockeryTestCase
         $mockParamsPlugin->shouldReceive('fromRoute')->with('case')
             ->andReturn($caseId);
 
-        $mockCase = new \Olcs\Data\Object\Cases();
-        $mockCase['id'] = 24;
-        $mockCase['transportManager'] = ['id' => $transportManagerId];
+        $caseData = [
+            'id' => 24,
+            'transportManager' => [
+                'id' => $transportManagerId
+            ]
+        ];
 
         $mockCaseService = m::mock('Olcs\Service\Data\Cases');
-        $mockCaseService->shouldReceive('fetchCaseData')->with($caseId)
-            ->andReturn($mockCase);
+        $mockCaseService->shouldReceive('fetchData')->with($caseId)
+            ->andReturn($caseData);
 
         $mockFormElementManager = m::mock('\Zend\Form\FormElementManager');
 
@@ -65,7 +65,6 @@ class SubmissionSectionsFactoryTest extends MockeryTestCase
             ->andReturn($mockDynamicMultiCheckboxElement);
 
         $sut = new SubmissionSectionsFactory();
-        $service = $sut->createService($mockFormElementManager);
-
+        $sut->createService($mockFormElementManager);
     }
 }
