@@ -431,6 +431,7 @@ return array(
             \Olcs\Service\Data\SiPenaltyType::class => \Olcs\Service\Data\SiPenaltyType::class,
             'Olcs\Service\Data\OperatingCentresForInspectionRequest'
             => 'Olcs\Service\Data\OperatingCentresForInspectionRequest',
+            \Olcs\Service\Data\Cases::class => \Olcs\Service\Data\Cases::class,
         ],
         'factories' => array(
             \Olcs\Service\Marker\MarkerService::class => \Olcs\Service\Marker\MarkerService::class,
@@ -457,7 +458,6 @@ return array(
             'Olcs\Listener\RouteParam\Organisation' => 'Olcs\Listener\RouteParam\Organisation',
             'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
             'Olcs\Service\Data\SubmissionSectionComment' => 'Olcs\Service\Data\SubmissionSectionComment',
-            'Olcs\Service\Data\Cases' => 'Olcs\Service\Data\Cases',
             'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
