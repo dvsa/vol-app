@@ -114,7 +114,7 @@
       </div> <!-- /js-body -->
     </div>
 
-  <?php if (!isset($filterForm)): ?>
+  <?php if (!isset($filterForm) && (isset($reference) || isset($licNo)) ): ?>
     <div class="one-third">
       <aside class="sidebar" role="complementary">
         <?php
