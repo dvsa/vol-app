@@ -1,25 +1,62 @@
 <project name="OLCS Selfserve/SSWEB" default="build">
 
-    <basename property="tar-file" file="${basedir}"/>
+    <property name="version-file" value="config/version"/>
+    <property name="tar-file" value="olcs-selfserve"/>
 
-    <target name="composer-init" description="Perform syntax check of sourcecode files">
-        <condition property="composer.url" value="http://getcomposer.org">
-            <isreachable host="getcomposer.org" timeout="2" />
+    <target name="init-environment">
+        <exec executable="hostname" outputproperty="computer.hostname"/>
+        <condition property="environment.isSkyScape">
+            <contains string="${computer.hostname}" substring=".mtpdvsa" casesensitive="false"/>
         </condition>
-        <condition property="composer.url" value="http://satis.inf.mgt.mtpdvsa">
-            <isreachable host="satis.inf.mgt.mtpdvsa" timeout="2" />
+        <condition property="environment.isAws">
+            <contains string="${computer.hostname}" substring=".aws" casesensitive="false"/>
         </condition>
-        <!--For AWS-->
-        <!--<condition property="composer.url" value="http://satis.inf.mgt.mtpdvsa">-->
-            <!--<isreachable host="satis.inf.mgt.mtpdvsa" timeout="2" />-->
-        <!--</condition>-->
-        <get src="${composer.url}/composer.phar" dest="composer.phar"/>
+        <condition property="environment.isOther">
+            <and>
+                <not>
+                    <contains string="${computer.hostname}" substring=".mtpdvsa" casesensitive="false"/>
+                </not>
+                <not>
+                    <contains string="${computer.hostname}" substring=".aws" casesensitive="false"/>
+                </not>
+            </and>
+        </condition>
+    </target>
+
+    <target name="init-composer-aws" if="environment.isAws">
+        <exec executable="s3cmd" dir="." failonerror="true">
+            <arg line="get s3://rpm-repo001/composer.phar --skip-existing"/>
+        </exec>
+
+        <exec executable="sed" dir="." failonerror="true">
+            <arg line="-i -e 's/satis.inf.mgt.mtpdvsa/devrepo.shd.ci.nonprod.dvsa.aws/g' composer.json"/>
+        </exec>
+        <exec executable="sed" dir=".">
+            <arg line="-i -e 's/satis.inf.mgt.mtpdvsa/devrepo.shd.ci.nonprod.dvsa.aws/g' composer.lock"/>
+        </exec>
+
+        <exec executable="sed" dir="." failonerror="true">
+            <arg line="-i -e 's/gitlab.inf.mgt.mtpdvsa/repo.shd.ci.nonprod.dvsa.aws/g' composer.json"/>
+        </exec>
+        <exec executable="sed" dir=".">
+            <arg line="-i -e 's/gitlab.inf.mgt.mtpdvsa/repo.shd.ci.nonprod.dvsa.aws/g' composer.lock"/>
+        </exec>
+    </target>
+
+    <target name="init-composer-skyscape" if="environment.isSkyScape">
+        <get src="http://satis.inf.mgt.mtpdvsa/composer.phar" dest="composer.phar"/>
+    </target>
+
+    <target name="init-composer-other" if="environment.isOther">
+        <get src="http://getcomposer.org/composer.phar" dest="composer.phar"/>
+    </target>
+
+    <target name="init-composer" depends="init-environment, init-composer-aws, init-composer-other, init-composer-skyscape">
     </target>
 
     <target name="lint" description="Perform syntax check of sourcecode files">
         <apply executable="php" failonerror="true">
             <arg value="-l"/>
-
             <fileset dir=".">
                 <include name="**/*.php"/>
                 <exclude name="vendor/**"/>
@@ -36,28 +73,41 @@
 
     <target name="unittest" description="Run unit tests">
         <exec executable="vendor/bin/phpunit" dir="." failonerror="true">
-            <arg value="-ctest/phpunit.xml"/>
+            <arg line="-ctest/phpunit.xml"/>
         </exec>
     </target>
 
-    <target name="composer-install" depends="composer-init" description="Install composer dependencies">
-        <!-- THIS IS TEMPORARY SHOULD BE "INSTALL" NOT "UPDATED" -->
-        <!-- Need a condition to do update if no composer.lock else do install -->
+    <target name="composer-update" depends="init-composer" description="Update composer dependencies">
         <exec executable="php" failonerror="true">
             <arg value="composer.phar"/>
             <arg value="update"/>
             <arg value="--optimize-autoloader"/>
             <arg value="--no-interaction"/>
+            <arg value="--ignore-platform-reqs"/>
+            <arg value="--no-progress"/>
         </exec>
     </target>
 
-    <target name="composer-install-nodev" depends="composer-init" description="Install composer dependencies exclude dev dependencies">
+    <target name="composer-install" depends="init-composer" description="Install composer dependencies">
+        <exec executable="php" failonerror="true">
+            <arg value="composer.phar"/>
+            <arg value="install"/>
+            <arg value="--optimize-autoloader"/>
+            <arg value="--no-interaction"/>
+            <arg value="--ignore-platform-reqs"/>
+            <arg value="--no-progress"/>
+        </exec>
+    </target>
+
+    <target name="composer-install-nodev" depends="init-composer" description="Install composer dependencies exclude dev dependencies">
         <exec executable="php" failonerror="true">
             <arg value="composer.phar"/>
             <arg value="install"/>
             <arg value="--optimize-autoloader"/>
             <arg value="--no-dev"/>
             <arg value="--no-interaction"/>
+            <arg value="--ignore-platform-reqs"/>
+            <arg value="--no-progress"/>
         </exec>
     </target>
 
@@ -72,14 +122,10 @@
         </exec>
     </target>
 
-    <target name="write-info" description="Write build info to a file">
-        <condition property="version-file" value="${basedir}/config/version" else="${basedir}/version">
-            <available file="${basedir}/config" />
-        </condition>
+    <target name="write-info" description="Write build info to a file" if="version-file">
         <exec executable="git" output="${version-file}" failonerror="true">
             <arg line="describe"/>
         </exec>
-        <exec executable="date" output="${version-file}" append="true" failonerror="true">
-        </exec>
+        <exec executable="date" output="${version-file}" append="true" failonerror="true"/>
     </target>
 </project>
