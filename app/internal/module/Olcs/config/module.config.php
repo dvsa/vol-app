@@ -644,17 +644,6 @@ return array(
             'lva-application-business_details' => LvaFormService\ApplicationBusinessDetails::class,
         ]
     ],
-    'business_service_manager' => [
-        'invokables' => [
-            'Lva\GracePeriod' => 'Olcs\BusinessService\Service\Lva\GracePeriod',
-            'Lva\Schedule41' => 'Olcs\BusinessService\Service\Lva\Schedule41',
-            'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
-        ]
-    ],
-    'business_rule_manager' => [
-        'invokables' => [
-        ]
-    ],
     'service_api_mapping' => array(
         'endpoints' => array(
             'nr' => 'http://olcs-nr/',

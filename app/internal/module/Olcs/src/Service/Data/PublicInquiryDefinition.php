@@ -2,28 +2,24 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\ListDataInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Common\Service\Data\LicenceServiceTrait;
 use Dvsa\Olcs\Transfer\Query\Cases\Pi\PiDefinitionList as PiDefinitionListDto;
 
 /**
- * Class PublicInquiryDefinition
+ * Class Public Inquiry Definition
+ *
  * @package Olcs\Service\Data
  */
-class PublicInquiryDefinition extends AbstractPublicInquiryData implements ListDataInterface, FactoryInterface
+class PublicInquiryDefinition extends AbstractPublicInquiryData
 {
     protected $listDto = PiDefinitionListDto::class;
     protected $sort = 'sectionCode';
     protected $order = 'ASC';
 
     /**
-     * @var string
-     */
-    protected $serviceName = 'PiDefinition';
-
-    /**
-     * @param $data
+     * Format data for groups
+     *
+     * @param array $data Data
+     *
      * @return array
      */
     public function formatDataForGroups($data)

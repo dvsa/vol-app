@@ -2,20 +2,20 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\ListDataInterface;
-use Common\Service\Data\LicenceServiceTrait;
-use Common\Service\Data\ApplicationServiceTrait;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\Service\Data\AbstractDataService;
+use Common\Service\Data\ApplicationServiceTrait;
+use Common\Service\Data\LicenceServiceTrait;
+use Common\Service\Data\ListDataInterface;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
-use Common\Service\Data\ListDataTrait;
 use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Class PublicInquiryReason
+ * Class Abstract Public Inquiry Data
+ *
  * @package Olcs\Service\Data
  */
-abstract class AbstractPublicInquiryData extends AbstractDataService implements ListDataInterface
+abstract class AbstractPublicInquiryData extends AbstractDataService implements ListDataInterface, FactoryInterface
 {
     use LicenceServiceTrait;
     use ApplicationServiceTrait;
@@ -26,20 +26,19 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
      * data as a multi dimensioned array suitable for display in opt-groups. It is permissible for the method to ignore
      * this flag if the data doesn't allow for option groups to be constructed.
      *
-     * @param mixed $context
-     * @param bool $useGroups
-     * @return array|void
+     * @param array $context   Context
+     * @param bool  $useGroups Use groups
+     *
+     * @return array
      */
     public function fetchListOptions($context, $useGroups = false)
     {
-
-        $context = empty($context) ?
-            $this->getLicenceContext() : array_merge($context, $this->getLicenceContext());
+        $params = empty($context) ? $this->getLicenceContext() : array_merge($context, $this->getLicenceContext());
 
         $licenceId = $this->getLicenceService()->getId();
 
         if ($licenceId !== null) {
-            if (empty($context['goodsOrPsv'])) {
+            if (empty($params['goodsOrPsv'])) {
                 if (empty($this->getApplicationService()->getId())) {
                     // find an application linked to the licence
                     $applicationsForLicence = $this->getServiceLocator()
@@ -53,15 +52,15 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
                         $appContext = $this->getApplicationContext();
 
                         // use application's goodsOrPsv instead
-                        $context['goodsOrPsv'] = $appContext['goodsOrPsv'];
+                        $params['goodsOrPsv'] = $appContext['goodsOrPsv'];
                     }
                 }
             }
         } else {
-            $context['goodsOrPsv'] = 'NULL';
+            $params['goodsOrPsv'] = 'NULL';
         }
 
-        $data = $this->fetchPublicInquiryData($context);
+        $data = $this->fetchPublicInquiryData($params);
 
         if (!is_array($data)) {
             return [];
@@ -75,7 +74,10 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
     }
 
     /**
-     * @param $params
+     * Fetch public inquiry data
+     *
+     * @param array $params Params
+     *
      * @return array
      */
     public function fetchPublicInquiryData($params)
@@ -87,7 +89,6 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
             if (isset($result['results'])) {
                 $this->setData('pid', $result['results']);
             }
-            return $this->getData('pid');
         }
 
         return $this->getData('pid');
@@ -96,23 +97,24 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
     /**
      * Method to make the backend call to retrieve the PI data based on listDto set in the child class
      *
-     * @param array $params
+     * @param array $params Params
+     *
      * @return array
      * @throws UnexpectedResponseException
      */
     public function fetchListData(array $params)
     {
-        $params = array_merge(
-            $params,
-            [
-                'sort' => $this->sort,
-                'order' => $this->order
-            ]
-        );
-
         $listDto = $this->listDto;
 
-        $dtoData = $listDto::create($params);
+        $dtoData = $listDto::create(
+            array_merge(
+                $params,
+                [
+                    'sort' => $this->sort,
+                    'order' => $this->order
+                ]
+            )
+        );
 
         $response = $this->handleQuery($dtoData);
 
@@ -124,7 +126,10 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
     }
 
     /**
-     * @param array $data
+     * Format data
+     *
+     * @param array $data Data
+     *
      * @return array
      */
     public function formatData(array $data)
@@ -139,7 +144,10 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
     }
 
     /**
-     * @param $data
+     * Format data for groups
+     *
+     * @param array $data Data
+     *
      * @return array
      */
     public function formatDataForGroups($data)
@@ -163,7 +171,9 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
     /**
      * Set service locator
      *
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param ServiceLocatorInterface $serviceLocator Service locator
+     *
+     * @return void
      */
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
@@ -183,8 +193,9 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
     /**
      * Create service
      *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
+     * @param ServiceLocatorInterface $serviceLocator Service locator
+     *
+     * @return $this
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

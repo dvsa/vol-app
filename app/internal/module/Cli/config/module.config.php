@@ -62,11 +62,6 @@ return [
                 'Cli\Service\Queue\Consumer\ContinuationChecklistReminderGenerateLetter',
         ]
     ],
-    'business_service_manager' => [
-        'invokables' => [
-            'Cli\ContinuationDetail' => 'Cli\BusinessService\Service\ContinuationDetail'
-        ]
-    ],
     'cache' => [
         'adapter' => [
             // apc_cli is not currently enabled in environments therefore change it
