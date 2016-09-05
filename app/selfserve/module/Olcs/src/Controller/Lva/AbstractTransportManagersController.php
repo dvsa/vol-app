@@ -391,6 +391,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             } else {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')
                     ->addErrorMessage('unknown-error');
+                return $this->render('transport_managers-details-' . $mode . '-' . $type, $form);
             }
 
             if ($this->isButtonPressed('addAnother')) {
