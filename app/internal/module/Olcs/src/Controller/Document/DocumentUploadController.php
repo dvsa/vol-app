@@ -18,6 +18,11 @@ class DocumentUploadController extends AbstractDocumentController
 {
     const ERR_UPLOAD_DEF = '4';
 
+    /**
+     * Upload action
+     *
+     * @return ViewModel
+     */
     public function uploadAction()
     {
         /** @var \Zend\Http\Request $request */
@@ -52,6 +57,14 @@ class DocumentUploadController extends AbstractDocumentController
         return $this->renderView($view, 'Upload document');
     }
 
+    /**
+     * Process file uploads
+     *
+     * @param array $data Form data
+     * @param Form  $form Form to display messages
+     *
+     * @return Form|\Zend\Http\Response
+     */
     public function processUpload($data, Form $form)
     {
         $routeParams = $this->params()->fromRoute();
@@ -67,6 +80,21 @@ class DocumentUploadController extends AbstractDocumentController
 
             // add validation error message to element, with reason upload errored
             $form->get('details')->get('file')->setMessages(['message.file-upload-error.' . $errNr]);
+
+            return null;
+        }
+
+        // eg onAccess anti-virus removed it
+        if (!file_exists($file['tmp_name'])) {
+            $form->get('details')->get('file')->setMessages(['message.file-upload-error.' . 'missing']);
+
+            return null;
+        }
+
+        // Run virus scan on file
+        $scanner = $this->getServiceLocator()->get(\Common\Service\AntiVirus\Scan::class);
+        if ($scanner->isEnabled() && !$scanner->isClean($file['tmp_name'])) {
+            $form->get('details')->get('file')->setMessages(['message.file-upload-error.' . 'virus']);
 
             return null;
         }
