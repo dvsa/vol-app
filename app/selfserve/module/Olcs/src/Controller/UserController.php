@@ -1,21 +1,16 @@
 <?php
 
-/**
- * User Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Lva\Traits\CrudTableTrait;
-use Olcs\View\Model\User;
-use Olcs\View\Model\Form;
-use Dvsa\Olcs\Transfer\Query\User\UserListSelfserve as ListDto;
-use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as ItemDto;
 use Dvsa\Olcs\Transfer\Command\User\CreateUserSelfserve as CreateDto;
 use Dvsa\Olcs\Transfer\Command\User\UpdateUserSelfserve as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\User\DeleteUserSelfserve as DeleteDto;
+use Dvsa\Olcs\Transfer\Query\User\UserListSelfserve as ListDto;
+use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as ItemDto;
+use Olcs\View\Model\User;
+use Olcs\View\Model\Form;
 
 /**
  * User Controller
@@ -29,6 +24,8 @@ class UserController extends AbstractController
 
     /**
      * Dashboard index action
+     *
+     * @return \Olcs\View\Model\User
      */
     public function indexAction()
     {
@@ -69,6 +66,11 @@ class UserController extends AbstractController
         return $view;
     }
 
+    /**
+     * Save
+     *
+     * @return \Olcs\View\Model\Form|\Zend\Http\Response
+     */
     protected function save()
     {
         /** @var \Common\Form\Form $form */
@@ -133,6 +135,14 @@ class UserController extends AbstractController
         return $view;
     }
 
+    /**
+     * Alter form
+     *
+     * @param \Olcs\View\Model\Form $form Form
+     * @param array                 $data Data
+     *
+     * @return \Olcs\View\Model\Form
+     */
     public function alterForm($form, $data)
     {
         if (!isset($data['main']['currentPermission']) || ($data['main']['currentPermission'] !== 'tm')) {
@@ -145,6 +155,11 @@ class UserController extends AbstractController
         return $form;
     }
 
+    /**
+     * Delete action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function deleteAction()
     {
         $request = $this->getRequest();
@@ -179,7 +194,8 @@ class UserController extends AbstractController
      * Formats the data from what the service gives us, to what the form needs.
      * This is mapping, not business logic.
      *
-     * @param $data
+     * @param array $data Data
+     *
      * @return array
      */
     public function formatLoadData($data)
@@ -205,7 +221,8 @@ class UserController extends AbstractController
      * Formats the data from what's in the form to what the service needs.
      * This is mapping, not business logic.
      *
-     * @param $data
+     * @param array $data Data
+     *
      * @return array
      */
     public function formatSaveData($data)
@@ -240,7 +257,7 @@ class UserController extends AbstractController
     /**
      * Checks for crud actions.
      *
-     * @return \Zend\Http\Response
+     * @return \Zend\Http\Response|null
      */
     public function checkForCrudAction()
     {
@@ -274,6 +291,8 @@ class UserController extends AbstractController
     }
 
     /**
+     * Get request
+     *
      * @return \Zend\Http\Request
      */
     public function getRequest()
@@ -284,7 +303,7 @@ class UserController extends AbstractController
     /**
      * Add action - proxy method.
      *
-     * @return mixed
+     * @return \Olcs\View\Model\Form|\Zend\Http\Response
      */
     public function addAction()
     {
@@ -294,7 +313,7 @@ class UserController extends AbstractController
     /**
      * Add action - proxy method.
      *
-     * @return mixed
+     * @return \Olcs\View\Model\Form|\Zend\Http\Response
      */
     public function editAction()
     {
@@ -303,6 +322,8 @@ class UserController extends AbstractController
 
     /**
      * Redirects to index
+     *
+     * @return \Zend\Http\Response
      */
     private function redirectToIndex()
     {
