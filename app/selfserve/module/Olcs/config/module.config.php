@@ -967,8 +967,6 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
             'DashboardProcessingService'
                 => 'Olcs\Service\Processing\DashboardProcessingService',
-            'Email\TransportManagerCompleteDigitalForm'
-                => 'Olcs\Service\Email\TransportManagerCompleteDigitalForm',
         ),
         'factories' => array(
             'CookieBannerListener' => \Olcs\Mvc\CookieBannerListener::class,
