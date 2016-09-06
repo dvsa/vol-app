@@ -1211,13 +1211,6 @@ return array(
             ]
         ]
     ],
-    'business_service_manager' => [
-        'invokables' => [
-            'Lva\LicenceAddresses' => 'Olcs\BusinessService\Service\Lva\LicenceVariationAddresses',
-            'Lva\VariationAddresses' => 'Olcs\BusinessService\Service\Lva\LicenceVariationAddresses',
-            'Lva\AddressesChangeTask' => 'Olcs\BusinessService\Service\Lva\AddressesChangeTask',
-        ]
-    ],
     'date_settings' => [
         'date_format' => 'd M Y',
         'datetime_format' => 'd M Y H:i',
