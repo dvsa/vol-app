@@ -120,10 +120,6 @@ class UserControllerTest extends TestCase
         $sl = m::mock('\Zend\ServiceManager\ServiceManager');
         $controller->setServiceLocator($sl);
 
-        $br = new UserMappingContactDetails();
-        $sl->shouldReceive('get')->with('BusinessRuleManager')->andReturnSelf();
-        $sl->shouldReceive('get')->with('UserMappingContactDetails')->andReturn($br);
-
         $pm = m::mock('\Zend\Mvc\Controller\PluginManager');
         $pm->shouldReceive('setController')->with($controller);
         $controller->setPluginManager($pm);
@@ -177,10 +173,6 @@ class UserControllerTest extends TestCase
 
         $sl = m::mock('\Zend\ServiceManager\ServiceManager');
         $controller->setServiceLocator($sl);
-
-        $br = new UserMappingContactDetails();
-        $sl->shouldReceive('get')->with('BusinessRuleManager')->andReturnSelf();
-        $sl->shouldReceive('get')->with('UserMappingContactDetails')->andReturn($br);
 
         $pm = m::mock('\Zend\Mvc\Controller\PluginManager');
         $pm->shouldReceive('setController')->with($controller);

@@ -184,9 +184,21 @@ class UserController extends AbstractController
      */
     public function formatLoadData($data)
     {
-        return $this->getServiceLocator()
-            ->get('BusinessRuleManager')
-            ->get('UserMappingContactDetails')->{__FUNCTION__}($data);
+        $output = [];
+        $output['main']['id']            = $data['id'];
+        $output['main']['version']       = $data['version'];
+        $output['main']['loginId']       = $data['loginId'];
+        $output['main']['permission']    = $data['permission'];
+        $output['main']['currentPermission'] = $data['permission'];
+        $output['main']['translateToWelsh']  = $data['translateToWelsh'];
+
+        $output['main']['emailAddress']  = $data['contactDetails']['emailAddress'];
+        $output['main']['emailConfirm']  = $data['contactDetails']['emailAddress'];
+
+        $output['main']['familyName']    = $data['contactDetails']['person']['familyName'];
+        $output['main']['forename']      = $data['contactDetails']['person']['forename'];
+
+        return $output;
     }
 
     /**
@@ -198,9 +210,21 @@ class UserController extends AbstractController
      */
     public function formatSaveData($data)
     {
-        return $this->getServiceLocator()
-            ->get('BusinessRuleManager')
-            ->get('UserMappingContactDetails')->{__FUNCTION__}($data);
+        $output = [];
+
+        $output['id']      = $data['main']['id'];
+        $output['version'] = $data['main']['version'];
+
+        $output['loginId'] = $data['main']['loginId'];
+        $output['permission'] = $data['main']['permission'];
+        $output['translateToWelsh'] = $data['main']['translateToWelsh'];
+
+        $output['contactDetails']['emailAddress'] = $data['main']['emailAddress'];
+
+        $output['contactDetails']['person']['familyName'] = $data['main']['familyName'];
+        $output['contactDetails']['person']['forename']   = $data['main']['forename'];
+
+        return $output;
     }
 
     /**

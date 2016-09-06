@@ -1211,11 +1211,6 @@ return array(
             ]
         ]
     ],
-    'business_rule_manager' => [
-        'invokables' => [
-            'UserMappingContactDetails' => 'Olcs\BusinessRule\Rule\UserMappingContactDetails',
-        ]
-    ],
     'business_service_manager' => [
         'invokables' => [
             'Lva\LicenceAddresses' => 'Olcs\BusinessService\Service\Lva\LicenceVariationAddresses',
