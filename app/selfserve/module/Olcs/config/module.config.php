@@ -967,8 +967,6 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
             'DashboardProcessingService'
                 => 'Olcs\Service\Processing\DashboardProcessingService',
-            'Email\TransportManagerCompleteDigitalForm'
-                => 'Olcs\Service\Email\TransportManagerCompleteDigitalForm',
         ),
         'factories' => array(
             'CookieBannerListener' => \Olcs\Mvc\CookieBannerListener::class,
@@ -1211,18 +1209,6 @@ return array(
                 'server-error' => ['*'],
                 '*' => ['selfserve-user'],
             ]
-        ]
-    ],
-    'business_rule_manager' => [
-        'invokables' => [
-            'UserMappingContactDetails' => 'Olcs\BusinessRule\Rule\UserMappingContactDetails',
-        ]
-    ],
-    'business_service_manager' => [
-        'invokables' => [
-            'Lva\LicenceAddresses' => 'Olcs\BusinessService\Service\Lva\LicenceVariationAddresses',
-            'Lva\VariationAddresses' => 'Olcs\BusinessService\Service\Lva\LicenceVariationAddresses',
-            'Lva\AddressesChangeTask' => 'Olcs\BusinessService\Service\Lva\AddressesChangeTask',
         ]
     ],
     'date_settings' => [
