@@ -18,16 +18,11 @@ use Common\Service\Entity\ContinuationDetailEntityService as Cdes;
  */
 class ContinuationControllerTest extends AbstractLvaControllerTestCase
 {
-    protected $bsm;
-
     public function setUp()
     {
         parent::setUp();
 
         $this->mockController('\Olcs\Controller\Licence\ContinuationController');
-
-        $this->bsm = \Mockery::mock();
-        $this->sm->setService('BusinessServiceManager', $this->bsm);
     }
 
     public function testAlterFormActionsComplete()
