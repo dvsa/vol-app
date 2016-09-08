@@ -6,8 +6,6 @@
  */
 namespace OlcsTest\Controller;
 
-use Olcs\BusinessRule\Rule\UserMappingContactDetails;
-use Olcs\Controller\UserController;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
