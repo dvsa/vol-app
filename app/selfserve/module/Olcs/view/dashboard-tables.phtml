@@ -7,14 +7,13 @@ echo $menu->setMinDepth(0)->setMaxDepth(0)
     ->setPartial('partials/dashboard-nav');
 
 echo $licences;
-?>
-    <div class="actions-container new-application--wrapper">
-        <a href="<?php echo $this->url('create_application'); ?>" class="action--primary large">
-            <?php echo $this->translate('application.new.button'); ?>
-        </a>
-    </div>
-<?php
 if ($showVariationTable) {
     echo $variations;
 }
 echo $applications;
+?>
+<div class="actions-container new-application--wrapper">
+        <a href="<?php echo $this->url('create_application'); ?>" class="action--primary large">
+            <?php echo $this->translate('application.new.button'); ?>
+</a>
+</div>

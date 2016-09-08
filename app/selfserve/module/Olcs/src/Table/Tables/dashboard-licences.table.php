@@ -11,17 +11,14 @@ return array(
     'attributes' => array(),
     'columns' => array(
         array(
-            'title' => $translationPrefix . '-licNo',
             'name' => 'licNo',
             'formatter' => 'LicenceNumberAndStatus'
         ),
         array(
-            'title' => $translationPrefix . '-licType',
             'name' => 'type',
             'formatter' => 'Translate'
         ),
         array(
-            'title' => $translationPrefix . '-area',
             'name' => 'trafficArea',
             'formatter' => 'Translate'
         )
