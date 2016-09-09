@@ -767,7 +767,7 @@ $applicationNavigation = array(
                 ),
                 array(
                     'id' => 'dashboard-correspondence',
-                    'label' => 'dashboard-nav-correspondence',
+                    'label' => 'dashboard-nav-documents',
                     'route' => 'correspondence',
                 ),
             ),
