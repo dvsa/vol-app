@@ -20,11 +20,8 @@ if (php_sapi_name() === 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['RE
 // Setup autoloading
 require 'init_autoloader.php';
 
-// load dependent on where application is running from
-$applicationConfig = (PHP_SAPI === 'cli') ? 'application.cli.config.php' : 'application.config.php';
-
 // Run the application!
-Zend\Mvc\Application::init(require 'config/'. $applicationConfig)->run();
+Zend\Mvc\Application::init(require 'config/application.config.php')->run();
 
 $time = round(microtime(true) - $startTime, 5);
 \Olcs\Logging\Log\Logger::debug('Internal complete', ['time' => $time, 'url' => $_SERVER['REQUEST_URI']]);

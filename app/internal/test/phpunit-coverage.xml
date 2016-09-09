@@ -9,7 +9,6 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../module/Olcs/src</directory>
-            <directory suffix=".php">../module/Cli/src</directory>
             <directory suffix=".php">../module/Admin/src</directory>
             <exclude>
                 <directory>../module/Olcs/src/Form/Forms</directory>
