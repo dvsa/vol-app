@@ -4,7 +4,8 @@ $translationPrefix = 'dashboard-table-applications';
 
 return array(
     'variables' => array(
-        'title' => $translationPrefix
+        'title' => $translationPrefix,
+        'hide_column_headers' => true,
     ),
     'settings' => array(),
     'attributes' => array(),

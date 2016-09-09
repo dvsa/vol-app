@@ -4,7 +4,8 @@ $translationPrefix = 'dashboard-table-variations';
 
 return array(
     'variables' => array(
-        'title' => $translationPrefix
+        'title' => $translationPrefix,
+        'hide_column_headers' => true,
     ),
     'settings' => array(),
     'attributes' => array(),
