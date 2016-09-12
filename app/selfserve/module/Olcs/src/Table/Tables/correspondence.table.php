@@ -2,9 +2,9 @@
 
 return array(
     'variables' => array(
-        'title' => 'dashboard-correspondence.table.title',
-        'titleSingular' => 'dashboard-correspondence.table.title',
-        'empty_message' => 'dashboard-correspondence-empty-message',
+        'title' => 'dashboard-documents.table.title',
+        'titleSingular' => 'dashboard-documents.table.title',
+        'empty_message' => 'dashboard-documents-empty-message',
     ),
     'settings' => array(
         'crud' => array(
