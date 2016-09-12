@@ -407,7 +407,7 @@ class BusRegApplicationsController extends AbstractController
         $header = $request->getHeader('referer');
 
         return [
-            //'url' => $header->uri()->getPath(),
+            'url' => $header->uri()->getPath(),
             'label' => 'bus-registrations-index-title',
         ];
     }
