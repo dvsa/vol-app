@@ -1188,6 +1188,7 @@ return array(
 
                 // details page accessible by everyone inc anon. users
                 'bus-registration/details' => ['*'],
+                'search-bus/details' => ['*'],
 
                 'entity-view' => [
                     '*'
