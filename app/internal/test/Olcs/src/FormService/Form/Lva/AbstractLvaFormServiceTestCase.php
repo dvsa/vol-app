@@ -19,10 +19,17 @@ abstract class AbstractLvaFormServiceTestCase extends MockeryTestCase
 {
     protected $classToTest = 'override_me';
 
+    /** @var  m\MockInterface */
+    protected $formHelper;
+    /** @var  m\MockInterface */
+    protected $fsm;
+    /** @var  \Common\FormService\Form\AbstractFormService */
+    protected $sut;
+
     public function setUp()
     {
-        $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
-        $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
+        $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
+        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
 
         $class = $this->classToTest;
         $this->sut = new $class();
