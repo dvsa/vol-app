@@ -7,7 +7,7 @@ use Zend\Form\Annotation as Form;
 /**
  * @Form\Name("MyDetails")
  * @Form\Attributes({"method":"post"})
- * @Form\Options({"prefer_form_input_filter": true, "label": "my-account.form.my-details.label"})
+ * @Form\Options({"prefer_form_input_filter": true, "label": ""})
  */
 class MyDetails extends Base
 {
@@ -75,7 +75,7 @@ class MyDetails extends Base
     public $emailConfirm = null;
 
     /**
-     * @Form\Attributes({"id":"translateToWelsh","placeholder":""})
+     * @Form\Attributes({"id":"translateToWelsh","placeholder":"", "data-container-class": "confirm"})
      * @Form\Options({
      *     "label": "translate-to-welsh",
      *     "checked_value":"Y",

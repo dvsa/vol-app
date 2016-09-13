@@ -66,31 +66,15 @@ class MyDetailsController extends AbstractController
 
         $view = new ViewModel(
             [
-                'form' => $this->alterForm($form),
+                'form' => $form,
                 'showNav' => false
             ]
         );
-        $view->setTemplate('pages/my-account-page');
+        $view->setTemplate('pages/my-details-page');
 
-        $this->getServiceLocator()->get('Script')->loadFile('my-account');
+        $this->getServiceLocator()->get('Script')->loadFile('my-details');
 
         return $view;
-    }
-
-
-    protected function alterForm(Form $form)
-    {
-        // inject link into change password label
-        $label = $this->getServiceLocator()->get('Helper\Translation')->translateReplace(
-            'my-account.field.change-password.label',
-            [
-                $this->getServiceLocator()->get('Helper\Url')->fromRoute('change-password')
-            ]
-        );
-
-        $form->get('securityFields')->get('changePasswordHtml')->setValue($label);
-
-        return $form;
     }
 
     /**
@@ -141,6 +125,6 @@ class MyDetailsController extends AbstractController
      */
     private function redirectToIndex()
     {
-        return $this->redirect()->toRoute('my-account', ['action' => 'edit'], array(), false);
+        return $this->redirect()->toRoute('your-account', ['action' => 'edit'], array(), false);
     }
 }

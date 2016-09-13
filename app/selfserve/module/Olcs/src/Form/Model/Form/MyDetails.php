@@ -20,16 +20,9 @@ class MyDetails
     public $fields = null;
 
     /**
-     * @Form\Name("securityFields")
-     * @Form\Options({"label":""})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Security")
-     */
-    public $securityFields = null;
-
-    /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\SaveButton")
      */
     public $formActions = null;
 }
