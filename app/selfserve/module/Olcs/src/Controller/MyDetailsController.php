@@ -1,21 +1,22 @@
 <?php
 
-/**
- * My Details Controller
- */
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
-use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as ItemDto;
 use Dvsa\Olcs\Transfer\Command\MyAccount\UpdateMyAccountSelfserve as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as ItemDto;
 use Zend\View\Model\ViewModel;
-use Zend\Form\Form;
 
 /**
  * My Details Controller
  */
 class MyDetailsController extends AbstractController
 {
+    /**
+     * Edit action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function editAction()
     {
         /** @var \Common\Form\Form $form */
@@ -79,49 +80,55 @@ class MyDetailsController extends AbstractController
 
     /**
      * Formats the data from what the service gives us, to what the form needs.
-     * This is mapping, not business logic.
      *
-     * @param $data
+     * @param array $data Data
+     *
      * @return array
      */
     private function formatLoadData($data)
     {
-        $output = [];
-        $output['main']['id']            = $data['id'];
-        $output['main']['version']       = $data['version'];
-        $output['main']['loginId']       = $data['loginId'];
-        $output['main']['translateToWelsh'] = $data['translateToWelsh'];
-        $output['main']['emailAddress']  = $data['contactDetails']['emailAddress'];
-        $output['main']['emailConfirm']  = $data['contactDetails']['emailAddress'];
-        $output['main']['familyName']    = $data['contactDetails']['person']['familyName'];
-        $output['main']['forename']      = $data['contactDetails']['person']['forename'];
-
-        return $output;
+        return [
+            'main' => [
+                'id' => $data['id'],
+                'version' => $data['version'],
+                'loginId' => $data['loginId'],
+                'translateToWelsh' => $data['translateToWelsh'],
+                'emailAddress' => $data['contactDetails']['emailAddress'],
+                'emailConfirm' => $data['contactDetails']['emailAddress'],
+                'familyName' => $data['contactDetails']['person']['familyName'],
+                'forename' => $data['contactDetails']['person']['forename'],
+            ]
+        ];
     }
 
     /**
      * Formats the data from what's in the form to what the service needs.
-     * This is mapping, not business logic.
      *
-     * @param $data
+     * @param array $data Data
+     *
      * @return array
      */
     private function formatSaveData($data)
     {
-        $output = [];
-        $output['id'] = $data['main']['id'];
-        $output['version'] = $data['main']['version'];
-        $output['loginId'] = $data['main']['loginId'];
-        $output['translateToWelsh'] = $data['main']['translateToWelsh'];
-        $output['contactDetails']['emailAddress'] = $data['main']['emailAddress'];
-        $output['contactDetails']['person']['familyName'] = $data['main']['familyName'];
-        $output['contactDetails']['person']['forename']   = $data['main']['forename'];
-
-        return $output;
+        return [
+            'id' => $data['main']['id'],
+            'version' => $data['main']['version'],
+            'loginId' => $data['main']['loginId'],
+            'translateToWelsh' => $data['main']['translateToWelsh'],
+            'contactDetails' => [
+                'emailAddress' => $data['main']['emailAddress'],
+                'person' => [
+                    'familyName' => $data['main']['familyName'],
+                    'forename' => $data['main']['forename'],
+                ]
+            ]
+        ];
     }
 
     /**
      * Redirects to index
+     *
+     * @return \Zend\Http\Response
      */
     private function redirectToIndex()
     {
