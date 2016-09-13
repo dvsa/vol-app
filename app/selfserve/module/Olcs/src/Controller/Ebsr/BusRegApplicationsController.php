@@ -9,6 +9,8 @@ use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\UpdateTxcInbox as UpdateTxcInboxDto;
 use Dvsa\Olcs\Transfer\Query;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\EbsrSubmissionList;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList;
+use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\BusRegWithTxcInbox;
+use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegVariationHistoryDto;
 use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
@@ -235,7 +237,12 @@ class BusRegApplicationsController extends AbstractController
         $id = $this->params()->fromRoute('busRegId');
 
         //  request data from Api
-        $query = Query\Bus\Ebsr\BusRegWithTxcInbox::create(['id' => $id]);
+        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_EBSR_DOCUMENTS)) {
+            $query = BusRegWithTxcInbox::create(['id' => $id]);
+        } else {
+            // Any other user can access the bus reg (inc. anonymous)
+            $query = ItemDto::create(['id' => $id]);
+        }
 
         $response = $this->handleQuery($query);
 
