@@ -45,10 +45,10 @@
         "symfony/Filesystem": "~2.6.0",
         "zf-commons/zfc-rbac": "~2.4.0",
         "olcs/autoload": "dev-develop",
-        "olcs/OlcsCommon": "dev-release/3.9",
-        "olcs/olcs-transfer": "dev-release/3.9",
-        "olcs/olcs-utils": "dev-release/3.9",
-        "olcs/olcs-auth": "dev-release/3.9",
+        "olcs/OlcsCommon": "dev-develop",
+        "olcs/olcs-transfer": "dev-develop",
+        "olcs/olcs-utils": "dev-develop",
+        "olcs/olcs-auth": "dev-develop",
         "olcs/olcs-logging": "dev-develop"
     },
     "require-dev": {
