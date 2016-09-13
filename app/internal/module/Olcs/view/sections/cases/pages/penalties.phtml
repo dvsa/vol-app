@@ -53,7 +53,7 @@
     ];
 
     echo $this->render('partials/read-only/main', $infringement);
-    echo $this->placeholder('erru-imposed')->getValue() . '<br />';
-    echo $this->placeholder('erru-requested')->getValue() . '<br />';
-    echo $this->placeholder('erru-applied')->getValue() . '<br />';
+    echo $this->placeholder('erru-imposed')->getValue();
+    echo $this->placeholder('erru-requested')->getValue();
+    echo $this->placeholder('erru-applied')->getValue();
     echo $this->render('pages/comments');

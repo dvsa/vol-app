@@ -8,7 +8,6 @@
  */
 namespace OlcsTest\Controller\Lva\Licence;
 
-use Common\BusinessService\Response;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Licence\Overview as OverviewCommand;
 use Dvsa\Olcs\Transfer\Query\Licence\Overview as OverviewQuery;
@@ -29,34 +28,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockController('\Olcs\Controller\Lva\Licence\OverviewController');
     }
-
-    /**
-     * @NOTE I don't think this is used anymore, I am going to comment it out for a little while and see if anything
-     * breaks
-     * @todo Remove this code if nothing has broken around creating variations
-    public function testCreateVariationAction()
-    {
-        $licenceId = 3;
-        $varId = 5;
-
-        $mockApplicationService = m::mock();
-        $this->sm->setService('Entity\Application', $mockApplicationService);
-
-        $this->sut->shouldReceive('params')
-            ->with('licence')
-            ->andReturn($licenceId);
-
-        $mockApplicationService->shouldReceive('createVariation')
-            ->with($licenceId)
-            ->andReturn($varId);
-
-        $this->sut->shouldReceive('redirect->toRouteAjax')
-            ->with('lva-variation', ['application' => $varId])
-            ->andReturn('RESPONSE');
-
-        $this->assertEquals('RESPONSE', $this->sut->createVariationAction());
-    }
-     */
 
     /**
      * @dataProvider indexProvider
@@ -511,28 +482,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                             ->getMock()
                     )
                 ->getMock()
-        );
-    }
-
-    public function testPrintAction()
-    {
-        $this->markTestSkipped();
-        $this->sut->shouldReceive('params')
-            ->with('licence')
-            ->andReturn(123);
-
-        $this->mockService('Processing\Licence', 'generateDocument')
-            ->with(123);
-
-        $this->sut->shouldReceive('addSuccessMessage')->once();
-
-        $this->sut->shouldReceive('redirect->toRoute')
-            ->with('lva-licence/overview', [], [], true)
-            ->andReturn('RESPONSE');
-
-        $this->assertEquals(
-            'RESPONSE',
-            $this->sut->printAction()
         );
     }
 

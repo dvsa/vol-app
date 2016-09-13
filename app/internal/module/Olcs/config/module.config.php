@@ -428,6 +428,10 @@ return array(
             'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
             'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
             'Olcs\Service\Data\Team' => 'Olcs\Service\Data\Team',
+            \Olcs\Service\Data\SiPenaltyType::class => \Olcs\Service\Data\SiPenaltyType::class,
+            'Olcs\Service\Data\OperatingCentresForInspectionRequest'
+            => 'Olcs\Service\Data\OperatingCentresForInspectionRequest',
+            \Olcs\Service\Data\Cases::class => \Olcs\Service\Data\Cases::class,
         ],
         'factories' => array(
             \Olcs\Service\Marker\MarkerService::class => \Olcs\Service\Marker\MarkerService::class,
@@ -452,17 +456,11 @@ return array(
             LicenceListener::class => LicenceListener::class,
             'Olcs\Listener\RouteParam\CaseMarker' => 'Olcs\Listener\RouteParam\CaseMarker',
             'Olcs\Listener\RouteParam\Organisation' => 'Olcs\Listener\RouteParam\Organisation',
-            'Olcs\Service\Data\SiPenaltyType' => 'Olcs\Service\Data\SiPenaltyType',
             'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
-            'Olcs\Service\Data\SubmissionSectionComment' => 'Olcs\Service\Data\SubmissionSectionComment',
-            'Olcs\Service\Data\Cases' => 'Olcs\Service\Data\Cases',
             'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
-            'Olcs\Service\Data\OperatingCentresForInspectionRequest'
-                => 'Olcs\Service\Data\OperatingCentresForInspectionRequest',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
-            'Olcs\Service\Nr\RestHelper' => 'Olcs\Service\Nr\RestHelper',
             'Olcs\Service\Data\SubmissionActionTypes' => 'Olcs\Service\Data\SubmissionActionTypes',
         )
     ),
@@ -580,68 +578,6 @@ return array(
             'Olcs\Service\Data\LicenceDecisionLegislation' => 'Olcs\Service\Data\LicenceDecisionLegislation'
         ]
     ],
-    'filters' => [
-        'invokables' => [
-            'Olcs\Filter\SubmissionSection\ComplianceComplaints' =>
-                'Olcs\Filter\SubmissionSection\ComplianceComplaints',
-            'Olcs\Filter\SubmissionSection\ConditionsAndUndertakings' =>
-                'Olcs\Filter\SubmissionSection\ConditionsAndUndertakings',
-            'Olcs\Filter\SubmissionSection\ConvictionFpnOffenceHistory' =>
-                'Olcs\Filter\SubmissionSection\ConvictionFpnOffenceHistory',
-            'Olcs\Filter\SubmissionSection\CaseSummary' => 'Olcs\Filter\SubmissionSection\CaseSummary',
-            'Olcs\Filter\SubmissionSection\CaseOutline' => 'Olcs\Filter\SubmissionSection\CaseOutline',
-            'Olcs\Filter\SubmissionSection\Persons' => 'Olcs\Filter\SubmissionSection\Persons',
-            'Olcs\Filter\SubmissionSection\Oppositions' => 'Olcs\Filter\SubmissionSection\Oppositions',
-            'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers' =>
-                'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers',
-            'Olcs\Filter\SubmissionSection\LeadTcArea' => 'Olcs\Filter\SubmissionSection\LeadTcArea',
-            'Olcs\Filter\SubmissionSection\ProhibitionHistory' => 'Olcs\Filter\SubmissionSection\ProhibitionHistory',
-            'Olcs\Filter\SubmissionSection\Penalties' => 'Olcs\Filter\SubmissionSection\Penalties',
-            'Olcs\Filter\SubmissionSection\AnnualTestHistory' => 'Olcs\Filter\SubmissionSection\AnnualTestHistory',
-            'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor' =>
-                'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor',
-            'Olcs\Filter\SubmissionSection\EnvironmentalComplaints' =>
-                'Olcs\Filter\SubmissionSection\EnvironmentalComplaints',
-            'Olcs\Filter\SubmissionSection\OutstandingApplications' =>
-                'Olcs\Filter\SubmissionSection\OutstandingApplications',
-            'Olcs\Filter\SubmissionSection\Statements' => 'Olcs\Filter\SubmissionSection\Statements',
-            'Olcs\Filter\SubmissionSection\TransportManagers' => 'Olcs\Filter\SubmissionSection\TransportManagers',
-            'Olcs\Filter\SubmissionSection\OperatingCentres' => 'Olcs\Filter\SubmissionSection\OperatingCentres',
-            'Olcs\Filter\SubmissionSection\MostSeriousInfringement' =>
-                'Olcs\Filter\SubmissionSection\MostSeriousInfringement',
-            'Olcs\Filter\SubmissionSection\TmDetails' => 'Olcs\Filter\SubmissionSection\TmDetails',
-            'Olcs\Filter\SubmissionSection\TmQualifications' => 'Olcs\Filter\SubmissionSection\TmQualifications',
-            'Olcs\Filter\SubmissionSection\TmResponsibilities' => 'Olcs\Filter\SubmissionSection\TmResponsibilities',
-            'Olcs\Filter\SubmissionSection\TmOtherEmployment' => 'Olcs\Filter\SubmissionSection\TmOtherEmployment',
-            'Olcs\Filter\SubmissionSection\TmPreviousHistory' => 'Olcs\Filter\SubmissionSection\TmPreviousHistory'
-
-        ],
-        'aliases' => [
-            'ComplianceComplaints' => 'Olcs\Filter\SubmissionSection\ComplianceComplaints',
-            'ConditionsAndUndertakings' => 'Olcs\Filter\SubmissionSection\ConditionsAndUndertakings',
-            'ConvictionFpnOffenceHistory' => 'Olcs\Filter\SubmissionSection\ConvictionFpnOffenceHistory',
-            'CaseSummary' => 'Olcs\Filter\SubmissionSection\CaseSummary',
-            'CaseOutline' => 'Olcs\Filter\SubmissionSection\CaseOutline',
-            'Persons' => 'Olcs\Filter\SubmissionSection\Persons',
-            'Oppositions' => 'Olcs\Filter\SubmissionSection\Oppositions',
-            'LinkedLicencesAppNumbers' => 'Olcs\Filter\SubmissionSection\LinkedLicencesAppNumbers',
-            'LeadTcArea' => 'Olcs\Filter\SubmissionSection\LeadTcArea',
-            'ProhibitionHistory' => 'Olcs\Filter\SubmissionSection\ProhibitionHistory',
-            'Penalties' => 'Olcs\Filter\SubmissionSection\Penalties',
-            'AnnualTestHistory' => 'Olcs\Filter\SubmissionSection\AnnualTestHistory',
-            'AuthRequestedAppliedFor' => 'Olcs\Filter\SubmissionSection\AuthRequestedAppliedFor',
-            'EnvironmentalComplaints' => 'Olcs\Filter\SubmissionSection\EnvironmentalComplaints',
-            'Statements' => 'Olcs\Filter\SubmissionSection\Statements',
-            'TransportManagers' => 'Olcs\Filter\SubmissionSection\TransportManagers',
-            'OperatingCentres' => 'Olcs\Filter\SubmissionSection\OperatingCentres',
-            'MostSeriousInfringement' => 'Olcs\Filter\SubmissionSection\MostSeriousInfringement',
-            'TmDetails' => 'Olcs\Filter\SubmissionSection\TmDetails',
-            'TmQualifications' => 'Olcs\Filter\SubmissionSection\TmQualifications',
-            'TmResponsibilities' => 'Olcs\Filter\SubmissionSection\TmResponsibilities',
-            'TmOtherEmployment' => 'Olcs\Filter\SubmissionSection\TmOtherEmployment',
-            'TmPreviousHistory' => 'Olcs\Filter\SubmissionSection\TmPreviousHistory',
-        ]
-    ],
     'form_service_manager' => [
         'invokables' => [
             // Operating Centres
@@ -706,19 +642,6 @@ return array(
             'lva-licence-business_details' => LvaFormService\LicenceBusinessDetails::class,
             'lva-variation-business_details' => LvaFormService\VariationBusinessDetails::class,
             'lva-application-business_details' => LvaFormService\ApplicationBusinessDetails::class,
-        ]
-    ],
-    'business_service_manager' => [
-        'invokables' => [
-            'Lva\GracePeriod' => 'Olcs\BusinessService\Service\Lva\GracePeriod',
-            'Lva\Schedule41' => 'Olcs\BusinessService\Service\Lva\Schedule41',
-            'InspectionRequest' => 'Olcs\BusinessService\Service\InspectionRequest',
-            'Cases\Penalty\ErruAppliedPenaltyResponse'
-                => 'Olcs\BusinessService\Service\Cases\Penalty\ErruAppliedPenaltyResponse',
-        ]
-    ],
-    'business_rule_manager' => [
-        'invokables' => [
         ]
     ],
     'service_api_mapping' => array(

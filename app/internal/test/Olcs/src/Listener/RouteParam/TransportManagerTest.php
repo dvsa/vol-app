@@ -6,14 +6,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as MockeryTestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\TransportManager as SystemUnderTest;
 use Mockery as m;
-use Olcs\Service\Nr\RestHelper as NrRestHelper;
 use Zend\Navigation\Navigation;
 use Zend\Navigation\Page\Uri as PageUri;
 use Zend\Navigation\Page\Mvc as PageMvc;
-use Zend\Http\Response;
 use Dvsa\Olcs\Transfer\Query\Tm\TransportManager as TmQry;
 use Dvsa\Olcs\Transfer\Query\Nr\ReputeUrl as ReputeQry;
-use Zend\Json\Json;
 use Common\RefData;
 
 /**
@@ -60,9 +57,6 @@ class TransportManagerTest extends MockeryTestCase
         $event = new RouteParam();
         $event->setValue($tmId);
         $event->setContext($context);
-
-        $mockNr = m::mock(NrRestHelper::class);
-        $mockNr->shouldReceive('fetchTmReputeUrl')->with($tmId)->andReturn($reputeUrl);
 
         $mockCheckRepute = m::mock(PageUri::class);
         $mockCheckRepute->shouldReceive('setVisible')->with(true)->andReturnSelf();

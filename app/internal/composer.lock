@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e37ff88a6bc5ab75b7b0a0a346468f6e",
-    "content-hash": "795e78ba39c2c7ff463b03aa2ed7d3bb",
+    "hash": "d018863d8c597b243526a1842a602f83",
+    "content-hash": "056da9a60bf1f952d988a18b408804cf",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -808,11 +808,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/3.8",
+            "version": "dev-release/3.9",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git",
-                "reference": "4225a027325fd2503e018c377f9a007757b1ccd1"
+                "reference": "f8f65270bd277b285abbd95b23bbf6f153472205"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -843,7 +843,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2016-08-24 09:26:32"
+            "time": "2016-09-07 16:16:47"
         },
         {
             "name": "olcs/autoload",
@@ -862,7 +862,7 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "dev-release/3.8",
+            "version": "dev-release/3.9",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-auth.git",
@@ -923,11 +923,11 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "dev-release/3.8",
+            "version": "dev-release/3.9",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-transfer.git",
-                "reference": "6c99de00c63fec2ad52918f106dbfd778075e2f8"
+                "reference": "812fdc153bbceb1689dab4b974a8e8fc0824ede3"
             },
             "require": {
                 "php": ">=5.4",
@@ -945,11 +945,11 @@
                 }
             },
             "description": "OLCS Transfer",
-            "time": "2016-08-18 12:52:58"
+            "time": "2016-09-07 15:14:10"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "dev-release/3.8",
+            "version": "dev-release/3.9",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-utils.git",
@@ -1066,17 +1066,17 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.8.9",
+            "version": "v2.8.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "36e62335caca8a6e909c5c5bac4a8128149911c9"
+                "reference": "3d3e4fa5f0614c8e45220e5de80332322e33bd90"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-console-36e62335caca8a6e909c5c5bac4a8128149911c9-zip-d1cd11.tar",
-                "reference": "36e62335caca8a6e909c5c5bac4a8128149911c9",
-                "shasum": "a86818267e2386e7db3cf4ee6f3b13a8f34a3978"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-console-3d3e4fa5f0614c8e45220e5de80332322e33bd90-zip-f90d67.tar",
+                "reference": "3d3e4fa5f0614c8e45220e5de80332322e33bd90",
+                "shasum": "98abf37093ff33cc4580a04c9a3c061e819b30f3"
             },
             "require": {
                 "php": ">=5.3.9",
@@ -1122,7 +1122,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-07-30 07:20:35"
+            "time": "2016-09-06 10:55:00"
         },
         {
             "name": "symfony/filesystem",
@@ -2612,17 +2612,17 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.9",
+            "version": "v2.8.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "0ceab136f43ed9d3e97b3eea32a7855dc50c121d"
+                "reference": "e7540734bad981fe59f8ef14b6fc194ae9df8d9c"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-yaml-0ceab136f43ed9d3e97b3eea32a7855dc50c121d-zip-23cd97.tar",
-                "reference": "0ceab136f43ed9d3e97b3eea32a7855dc50c121d",
-                "shasum": "bb67a36fc8d8650af2aa73e85f0d49890375af4e"
+                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-yaml-e7540734bad981fe59f8ef14b6fc194ae9df8d9c-zip-c17009.tar",
+                "reference": "e7540734bad981fe59f8ef14b6fc194ae9df8d9c",
+                "shasum": "24ac99847ce00b5dc9c3c300381d4472a57bc5ef"
             },
             "require": {
                 "php": ">=5.3.9"
@@ -2657,7 +2657,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-07-17 09:06:15"
+            "time": "2016-09-02 01:57:56"
         },
         {
             "name": "webmozart/assert",

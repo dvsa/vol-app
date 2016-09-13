@@ -2,21 +2,17 @@
 
 namespace OlcsTest\Service\Data;
 
-use Olcs\Service\Data\SiPenaltyType;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use CommonTest\Service\Data\AbstractDataServiceTestCase;
 use Mockery as m;
+use Olcs\Service\Data\SiPenaltyType;
 
 /**
  * Class SiPenaltyType Test
  * @package CommonTest\Service
  */
-class SiPenaltyTypeTest extends \PHPUnit_Framework_TestCase
+class SiPenaltyTypeTest extends AbstractDataServiceTestCase
 {
-    public function testGetServiceName()
-    {
-        $sut = new SiPenaltyType();
-        $this->assertEquals('SiPenaltyType', $sut->getServiceName());
-    }
-
     public function testFormatData()
     {
         $source = $this->getSingleSource();
@@ -29,8 +25,6 @@ class SiPenaltyTypeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideFetchListOptions
-     * @param $input
-     * @param $expected
      */
     public function testFetchListOptions($input, $expected)
     {
@@ -48,55 +42,66 @@ class SiPenaltyTypeTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideFetchListData
-     * @param $data
-     * @param $expected
-     */
-    public function testFetchListData($data, $expected)
+    public function testFetchListData()
     {
-        $mockRestClient = m::mock('Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('', [])->andReturn($data);
+        $results = ['results' => 'results'];
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturn('query')
+            ->once()
+            ->getMock();
+
+        $mockResponse = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->once()
+            ->shouldReceive('getResult')
+            ->andReturn($results)
+            ->twice()
+            ->getMock();
 
         $sut = new SiPenaltyType();
-        $sut->setRestClient($mockRestClient);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
-        $this->assertEquals($expected, $sut->fetchListData());
-        $sut->fetchListData(); //ensure data is cached
-    }
-
-    public function provideFetchListData()
-    {
-        return [
-            [false, false],
-            [['Results' => $this->getSingleSource()], $this->getSingleSource()],
-            [['some' => 'data'],  false]
-        ];
+        $this->assertEquals($results['results'], $sut->fetchListData());
+        $this->assertEquals($results['results'], $sut->fetchListData()); //ensure data is cached
     }
 
     /**
-     * @return array
+     * Test fetchListData with exception
      */
+    public function testFetchListDataWithException()
+    {
+        $this->setExpectedException(UnexpectedResponseException::class);
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+
+        $mockResponse = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(false)
+            ->once()
+            ->getMock();
+
+        $sut = new SiPenaltyType();
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+
+        $sut->fetchListData([]);
+    }
+
     protected function getSingleExpected()
     {
-        $expected = [
+        return [
             'val-1' => 'val-1 - Value 1',
             'val-2' => 'val-2 - Value 2',
             'val-3' => 'val-3 - Value 3',
         ];
-        return $expected;
     }
 
-    /**
-     * @return array
-     */
     protected function getSingleSource()
     {
-        $source = [
+        return [
             ['id' => 'val-1', 'description' => 'Value 1'],
             ['id' => 'val-2', 'description' => 'Value 2'],
             ['id' => 'val-3', 'description' => 'Value 3'],
         ];
-        return $source;
     }
 }

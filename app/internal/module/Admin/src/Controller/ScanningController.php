@@ -1,14 +1,10 @@
 <?php
 
-/**
- * Scanning Controller
- */
 namespace Admin\Controller;
 
-use Common\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Common\Service\Data\CategoryDataService;
-use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
 
 /**
@@ -18,8 +14,19 @@ use Common\Controller\Traits\GenericRenderView;
  */
 class ScanningController extends ZendAbstractActionController
 {
+    const ERR_NO_ENTITY_FOR_CATEGORY = 'ERR_NO_ENTITY_FOR_CATEGORY';
+
+    const ERR_ENTITY_NAME_NOT_SETUP = 'ERR_ENTITY_NAME_NOT_SETUP';
+
+    const ERR_NO_DESCRIPTION = 'ERR_NO_DESCRIPTION';
+
     use GenericRenderView;
 
+    /**
+     * Index page
+     *
+     * @return ViewModel
+     */
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -77,13 +84,7 @@ class ScanningController extends ZendAbstractActionController
                 );
 
                 if (!$response->isOk()) {
-                    $form->setMessages(
-                        [
-                            'details' => [
-                                'entityIdentifier' => ['scanning.error.entity.' . $category]
-                            ]
-                        ]
-                    );
+                    $this->processMessages($response, $form, $category);
                 } else {
                     $this->getServiceLocator()
                         ->get('Helper\FlashMessenger')
@@ -115,6 +116,49 @@ class ScanningController extends ZendAbstractActionController
         return $this->renderView($view, 'Scanning');
     }
 
+    /**
+     * Process response messages
+     *
+     * @param \Common\Service\Cqrs\Response $response response
+     * @param \Common\Form\Form             $form     form
+     * @param int                           $category category
+     *
+     * @return void
+     */
+    private function processMessages($response, $form, $category)
+    {
+        $result = $response->getResult();
+        $errors = [
+            'details' => []
+        ];
+
+        if (isset($result['messages'])) {
+            $messages = $result['messages'];
+
+            if (array_key_exists(self::ERR_NO_ENTITY_FOR_CATEGORY, $messages)
+                || array_key_exists(self::ERR_ENTITY_NAME_NOT_SETUP, $messages)) {
+                $errors['details']['entityIdentifier'] = ['scanning.error.entity.' . $category];
+            }
+
+            if (array_key_exists(self::ERR_NO_DESCRIPTION, $messages)) {
+                $errors['details']['description'] = ['scanning.error.description'];
+            }
+        }
+
+        if (count($errors['details'])) {
+            $form->setMessages($errors);
+        } else {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+    }
+
+    /**
+     * Get data service
+     *
+     * @param string $service Service name
+     *
+     * @return mixed
+     */
     private function getDataService($service)
     {
         return $this->getServiceLocator()
@@ -122,6 +166,13 @@ class ScanningController extends ZendAbstractActionController
             ->get('Olcs\Service\Data\\' . $service);
     }
 
+    /**
+     * Create form with data
+     *
+     * @param array $data Data
+     *
+     * @return \Common\Form\Form
+     */
     private function createFormWithData($data)
     {
         $form = $this->getServiceLocator()

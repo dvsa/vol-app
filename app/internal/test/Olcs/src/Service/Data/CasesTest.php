@@ -2,117 +2,62 @@
 
 namespace OlcsTest\Service\Data;
 
-use PHPUnit_Framework_TestCase as TestCase;
-use Olcs\Service\Data\Cases;
+use Common\Exception\ResourceNotFoundException;
+use CommonTest\Service\Data\AbstractDataServiceTestCase;
 use Mockery as m;
-use Olcs\Data\Object\Cases as CaseDataObject;
+use Olcs\Service\Data\Cases;
 
 /**
  * Class CasesTest
  * @package OlcsTest\Service\Data
  */
-class CasesTest extends TestCase
+class CasesTest extends AbstractDataServiceTestCase
 {
-    public function testFetchCaseData()
-    {
-        $mockRestClient = m::mock('\Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('/33', m::type('array'))->andReturn(['id' => 33]);
-        $sut = new Cases();
-        $sut->setRestClient($mockRestClient);
-
-        $this->assertEquals(new CaseDataObject(['id' => 33]), $sut->fetchCaseData(33));
-        $sut->fetchCaseData(33);
-    }
-
-    public function testGetBundle()
-    {
-        $sut = new Cases();
-        $this->assertInternalType('array', $sut->getBundle());
-    }
-
     public function testFetchData()
     {
-        $mockRestClient = m::mock('\Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('/33', m::type('array'))->andReturn(['id' => 33]);
-        $sut = new Cases();
-        $sut->setRestClient($mockRestClient);
+        $id = 123;
+        $caseData = ['id' => $id];
 
-        $this->assertEquals(new CaseDataObject(['id' => 33]), $sut->fetchCaseData(33));
-        $sut->fetchData(33);
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturn('query')
+            ->once()
+            ->getMock();
+
+        $mockResponse = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(true)
+            ->once()
+            ->shouldReceive('getResult')
+            ->andReturn($caseData)
+            ->once()
+            ->getMock();
+
+        $sut = new Cases();
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+
+        $this->assertEquals($caseData, $sut->fetchData($id));
+        $this->assertEquals($caseData, $sut->fetchData($id)); //ensure data is cached
     }
 
-    public function testCanCloseAble()
+    /**
+     * Test fetchListData with exception
+     */
+    public function testFetchListDataWithException()
     {
-        $mockCase = [
-            'id' => 33,
-            'closedDate' => null,
-            'outcomes' => [
-                0 => [
-                    'id' => 'case_o_curtail',
-                    'description' => 'Curtail'
-                ]
-            ]
-        ];
-        $mockRestClient = m::mock('\Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('/33', m::type('array'))->andReturn($mockCase);
+        $this->setExpectedException(ResourceNotFoundException::class);
+
+        $mockTransferAnnotationBuilder = m::mock()
+            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+
+        $mockResponse = m::mock()
+            ->shouldReceive('isOk')
+            ->andReturn(false)
+            ->once()
+            ->getMock();
+
         $sut = new Cases();
-        $sut->setRestClient($mockRestClient);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
-        $this->assertTrue($sut->canClose(33));
-    }
-
-    public function testCanCloseAlreadyClosed()
-    {
-        $mockCase = [
-            'id' => 33,
-            'closedDate' => '2015-02-16',
-            'outcome' => [
-                0 => [
-                    'id' => 'case_o_curtail',
-                    'description' => 'Curtail'
-                ]
-            ]
-        ];
-        $mockRestClient = m::mock('\Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('/33', m::type('array'))->andReturn($mockCase);
-        $sut = new Cases();
-        $sut->setRestClient($mockRestClient);
-
-        $this->assertFalse($sut->canClose(33));
-    }
-
-    public function testCanCloseNoOutcome()
-    {
-        $mockCase = [
-            'id' => 33,
-            'closedDate' => null,
-            'outcome' => null
-        ];
-        $mockRestClient = m::mock('\Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('/33', m::type('array'))->andReturn($mockCase);
-        $sut = new Cases();
-        $sut->setRestClient($mockRestClient);
-
-        $this->assertFalse($sut->canClose(33));
-    }
-
-    public function testCanReopen()
-    {
-        $mockCase = [
-            'id' => 33,
-            'closedDate' => '2015-02-16',
-            'outcome' => [
-                0 => [
-                    'id' => 'case_o_curtail',
-                    'description' => 'Curtail'
-                ]
-            ]
-        ];
-        $mockRestClient = m::mock('\Common\Util\RestClient');
-        $mockRestClient->shouldReceive('get')->once()->with('/33', m::type('array'))->andReturn($mockCase);
-        $sut = new Cases();
-        $sut->setRestClient($mockRestClient);
-
-        $this->assertTrue($sut->canReopen(33));
+        $sut->fetchData(123);
     }
 }

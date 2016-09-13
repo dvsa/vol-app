@@ -2,31 +2,25 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\ListDataInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Common\Service\Data\LicenceServiceTrait;
 use Dvsa\Olcs\Transfer\Query\Reason\ReasonList as ReasonListDto;
 
 /**
- * Class PublicInquiryReason
+ * Class Submission Legislation
+ *
  * @package Olcs\Service\Data
  */
-class SubmissionLegislation extends AbstractPublicInquiryData implements ListDataInterface, FactoryInterface
+class SubmissionLegislation extends AbstractPublicInquiryData
 {
     protected $listDto = ReasonListDto::class;
     protected $sort = 'sectionCode';
     protected $order = 'ASC';
 
     /**
-     * @var string
-     */
-    protected $serviceName = 'Reason';
-
-    /**
      * Format data for drop down. Note data-in-office-revokation flag used to set attribute against the option. JS
      * then used to filter out.
      * 
-     * @param array $data
+     * @param array $data Data
+     *
      * @return array
      */
     public function formatData(array $data)
