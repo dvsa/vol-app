@@ -23,14 +23,14 @@ class MyDetailsController extends AbstractInternalController implements LeftView
      * required when an entire controller is
      * represented by a single navigation id.
      */
-    protected $navigationId = 'admin-dashboard/admin-my-account';
+    protected $navigationId = 'admin-dashboard/admin-your-account';
 
     public function getLeftView()
     {
         $view = new ViewModel(
             [
-                'navigationId' => 'admin-dashboard/admin-my-account',
-                'navigationTitle' => 'My account'
+                'navigationId' => 'admin-dashboard/admin-your-account',
+                'navigationTitle' => 'Your account'
             ]
         );
         $view->setTemplate('admin/sections/admin/partials/generic-left');
@@ -54,39 +54,24 @@ class MyDetailsController extends AbstractInternalController implements LeftView
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
 
-    protected $editContentTitle = 'My account';
+    protected $editContentTitle = 'Your account';
 
     public function indexAction()
     {
         return $this->redirectToIndex();
     }
 
-    public function detailsAction()
-    {
-        return $this->notFoundAction();
-    }
-
-    public function addAction()
-    {
-        return $this->notFoundAction();
-    }
-
     public function editAction()
     {
-        $this->placeholder()->setPlaceholder('pageTitle', 'My account');
+        $this->placeholder()->setPlaceholder('pageTitle', 'Your account');
 
         return parent::editAction();
-    }
-
-    public function deleteAction()
-    {
-        return $this->notFoundAction();
     }
 
     public function redirectToIndex()
     {
         return $this->redirect()->toRouteAjax(
-            'admin-dashboard/admin-my-account/details',
+            'admin-dashboard/admin-your-account/details',
             ['action' => 'edit'],
             ['code' => '303'],
             true

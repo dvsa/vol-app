@@ -6,14 +6,14 @@ return [
     'route' => 'admin-dashboard',
     'pages' => [
         [
-            'id' => 'admin-my-account',
-            'label' => 'My account',
-            'route' => 'admin-dashboard/admin-my-account',
+            'id' => 'admin-your-account',
+            'label' => 'Your account',
+            'route' => 'admin-dashboard/admin-your-account',
             'pages' => [
                 [
-                    'id' => 'admin-dashboard/admin-my-account/details',
-                    'label' => 'My account',
-                    'route' => 'admin-dashboard/admin-my-account/details'
+                    'id' => 'admin-dashboard/admin-your-account/details',
+                    'label' => 'Your account',
+                    'route' => 'admin-dashboard/admin-your-account/details'
                 ],
                 [
                     'id' => 'logout',
