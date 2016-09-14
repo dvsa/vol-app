@@ -80,7 +80,7 @@ class TaskDetails
      * @Form\Options({
      *     "label": "tasks.data.description"
      * })
-     * @Form\Type("Text")
+     * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":255}})
      */
