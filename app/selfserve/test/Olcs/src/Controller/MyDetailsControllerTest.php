@@ -1,7 +1,5 @@
 <?php
-/**
- * Class My Details Controller Test
- */
+
 namespace OlcsTest\Controller;
 
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as ItemDto;
@@ -71,13 +69,8 @@ class MyDetailsControllerTest extends TestCase
         $response->shouldReceive('getResult')->andReturn($rawEditData);
         $this->sut->shouldReceive('handleQuery')->with(m::type(ItemDto::class))->andReturn($response);
 
-        $changePasswordHtmlElement = new \Zend\Form\Element;
-
         $mockForm = m::mock('Common\Form\Form');
-        $mockForm
-            ->shouldReceive('setData')->with($formattedData)->once()
-            ->shouldReceive('get')->with('securityFields')->once()->andReturnSelf()
-            ->shouldReceive('get')->with('changePasswordHtml')->once()->andReturn($changePasswordHtmlElement);
+        $mockForm->shouldReceive('setData')->with($formattedData)->once();
 
         $mockFormHelper = m::mock();
         $mockFormHelper
@@ -87,33 +80,16 @@ class MyDetailsControllerTest extends TestCase
             ->andReturn($mockForm);
         $this->sm->setService('Helper\Form', $mockFormHelper);
 
-        $mockTranslation = m::mock();
-        $mockTranslation
-            ->shouldReceive('translateReplace')
-            ->with('my-account.field.change-password.label', ['URL'])
-            ->once()
-            ->andReturn('translated-label');
-        $this->sm->setService('Helper\Translation', $mockTranslation);
-
-        $mockUrl = m::mock();
-        $mockUrl
-            ->shouldReceive('fromRoute')
-            ->with('change-password')
-            ->once()
-            ->andReturn('URL');
-        $this->sm->setService('Helper\Url', $mockUrl);
-
         $mockScript = m::mock();
         $mockScript
             ->shouldReceive('loadFile')
-            ->with('my-account')
+            ->with('my-details')
             ->once();
         $this->sm->setService('Script', $mockScript);
 
         $view = $this->sut->editAction();
 
         $this->assertInstanceOf('Common\Form\Form', $view->getVariable('form'));
-        $this->assertEquals('translated-label', $changePasswordHtmlElement->getValue());
     }
 
     public function testEditActionForGetWithError()
@@ -126,13 +102,8 @@ class MyDetailsControllerTest extends TestCase
         $response->shouldReceive('isOk')->andReturn(false);
         $this->sut->shouldReceive('handleQuery')->with(m::type(ItemDto::class))->andReturn($response);
 
-        $changePasswordHtmlElement = new \Zend\Form\Element;
-
         $mockForm = m::mock('Common\Form\Form');
-        $mockForm
-            ->shouldReceive('setData')->never()
-            ->shouldReceive('get')->with('securityFields')->once()->andReturnSelf()
-            ->shouldReceive('get')->with('changePasswordHtml')->once()->andReturn($changePasswordHtmlElement);
+        $mockForm->shouldReceive('setData')->never();
 
         $mockFormHelper = m::mock();
         $mockFormHelper
@@ -149,33 +120,16 @@ class MyDetailsControllerTest extends TestCase
             ->with('unknown-error');
         $this->sm->setService('Helper\FlashMessenger', $mockFlashMessengerHelper);
 
-        $mockTranslation = m::mock();
-        $mockTranslation
-            ->shouldReceive('translateReplace')
-            ->with('my-account.field.change-password.label', ['URL'])
-            ->once()
-            ->andReturn('translated-label');
-        $this->sm->setService('Helper\Translation', $mockTranslation);
-
-        $mockUrl = m::mock();
-        $mockUrl
-            ->shouldReceive('fromRoute')
-            ->with('change-password')
-            ->once()
-            ->andReturn('URL');
-        $this->sm->setService('Helper\Url', $mockUrl);
-
         $mockScript = m::mock();
         $mockScript
             ->shouldReceive('loadFile')
-            ->with('my-account')
+            ->with('my-details')
             ->once();
         $this->sm->setService('Script', $mockScript);
 
         $view = $this->sut->editAction();
 
         $this->assertInstanceOf('Common\Form\Form', $view->getVariable('form'));
-        $this->assertEquals('translated-label', $changePasswordHtmlElement->getValue());
     }
 
     public function testEditActionForPost()
@@ -228,7 +182,7 @@ class MyDetailsControllerTest extends TestCase
         $this->sm->setService('Helper\FlashMessenger', $mockFlashMessengerHelper);
 
         $this->sut->shouldReceive('redirect->toRoute')
-            ->with('my-account', ['action' => 'edit'], array(), false)
+            ->with('your-account', ['action' => 'edit'], array(), false)
             ->once()
             ->andReturn('REDIRECT');
 
@@ -254,15 +208,11 @@ class MyDetailsControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $changePasswordHtmlElement = new \Zend\Form\Element;
-
         $mockForm = m::mock('Common\Form\Form');
         $mockForm->shouldReceive('setData')->once()->with($postData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
         $mockForm->shouldReceive('setMessages')->once()->with(m::type('array'));
-        $mockForm->shouldReceive('get')->with('securityFields')->once()->andReturnSelf();
-        $mockForm->shouldReceive('get')->with('changePasswordHtml')->once()->andReturn($changePasswordHtmlElement);
 
         $mockFormHelper = m::mock();
         $mockFormHelper
@@ -287,33 +237,16 @@ class MyDetailsControllerTest extends TestCase
         );
         $this->sut->shouldReceive('handleCommand')->with(m::type(UpdateDto::class))->andReturn($response);
 
-        $mockTranslation = m::mock();
-        $mockTranslation
-            ->shouldReceive('translateReplace')
-            ->with('my-account.field.change-password.label', ['URL'])
-            ->once()
-            ->andReturn('translated-label');
-        $this->sm->setService('Helper\Translation', $mockTranslation);
-
-        $mockUrl = m::mock();
-        $mockUrl
-            ->shouldReceive('fromRoute')
-            ->with('change-password')
-            ->once()
-            ->andReturn('URL');
-        $this->sm->setService('Helper\Url', $mockUrl);
-
         $mockScript = m::mock();
         $mockScript
             ->shouldReceive('loadFile')
-            ->with('my-account')
+            ->with('my-details')
             ->once();
         $this->sm->setService('Script', $mockScript);
 
         $view = $this->sut->editAction();
 
         $this->assertInstanceOf('Common\Form\Form', $view->getVariable('form'));
-        $this->assertEquals('translated-label', $changePasswordHtmlElement->getValue());
     }
 
     public function testEditActionForPostWithCancel()
@@ -336,7 +269,7 @@ class MyDetailsControllerTest extends TestCase
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(true);
 
         $this->sut->shouldReceive('redirect->toRoute')
-            ->with('my-account', ['action' => 'edit'], array(), false)
+            ->with('your-account', ['action' => 'edit'], array(), false)
             ->once()
             ->andReturn('REDIRECT');
 
