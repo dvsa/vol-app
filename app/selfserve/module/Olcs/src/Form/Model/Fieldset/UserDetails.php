@@ -9,10 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Attributes({"method":"post","label":"User details"})
  * @Form\Options({
  *     "prefer_form_input_filter": true, 
- *     "label": "User details",
- *     "label_attributes": {
- *         "class": "modal__title" 
- *     }
+ *     "label": "User details"
  * })
  */
 class UserDetails extends Base
@@ -51,7 +48,7 @@ class UserDetails extends Base
     public $familyName = null;
 
     /**
-     * @Form\Attributes({"class":"medium"})
+     * @Form\Attributes({"class":"long"})
      * @Form\Options({
      *     "label":"email-address",
      *     "error-message": "userDetails_emailAddress-error"
@@ -78,13 +75,16 @@ class UserDetails extends Base
      * @Form\Name("permission")
      * @Form\Options({
      *     "label": "manage-users.field.permission.label",
+     *     "label_options": {
+     *         "disable_html_escape": "true"
+     *     },
      *     "value_options":{
      *          "tm":"manage-users.field.permission.tm.label",
      *          "user":"manage-users.field.permission.user.label",
      *          "admin":"manage-users.field.permission.admin.label",
      *      },
      *      "fieldset-attributes" : {
-     *          "class":"checkbox"
+     *          "class":"checkbox has-advanced-labels"
      *      }
      * })
      * @Form\Required(true)
