@@ -5,8 +5,6 @@ namespace Olcs\Form\Model\Fieldset;
 use Zend\Form\Annotation as Form;
 
 /**
- * @TODO it looks like not used anythere
- * 
  * @Form\Name("UserDetails")
  * @Form\Attributes({"method":"post","label":"User details"})
  * @Form\Options({
@@ -34,13 +32,10 @@ class UserDetails extends Base
 
     /**
      * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({
      *     "label":"first-name"
      * })
      * @Form\Type("Text")
-     * @Form\AllowEmpty(true)
-     * @Form\Required(false)
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
      */
@@ -48,11 +43,8 @@ class UserDetails extends Base
 
     /**
      * @Form\Attributes({"id":"familyName","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({"label":"last-name"})
      * @Form\Type("Text")
-     * @Form\AllowEmpty(true)
-     * @Form\Required(false)
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
      */
