@@ -53,7 +53,7 @@ return array(
             'title' => 'markup-table-th-remove',
             'type' => 'Action',
             'action' => 'delete',
-            'class' => 'remove',
+            'class' => 'remove right-aligned',
             'formatter' => function () {
                 return 'Remove';
             }
