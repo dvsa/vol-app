@@ -55,8 +55,25 @@ class PhoneContact implements MapperInterface
      */
     public static function mapFromErrors(FormInterface $form, array $errors)
     {
-        $form->setMessages([self::DETAILS => $errors['messages']]);
+        $errMsgs = $errors['messages'];
+        if (empty($errMsgs)) {
+            return [];
+        }
 
-        return $errors;
+        /** @var \Zend\Form\Fieldset $formFields */
+        $formFields = $form->get(self::DETAILS);
+
+        /** @var \Zend\Form\Element $field */
+        foreach ($formFields as $field) {
+            $fldName = $field->getName();
+            if (!isset($errMsgs[$fldName])) {
+                continue;
+            }
+
+            $field->setMessages($errMsgs[$fldName]);
+            unset($errMsgs[$fldName]);
+        }
+
+        return $errMsgs;
     }
 }

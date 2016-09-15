@@ -11,7 +11,7 @@ use Common\FormService\Form\Lva\Addresses as CommonAddresses;
  */
 class Addresses extends CommonAddresses
 {
-    private $tableConfigName = 'lva-phone-contacts';
+    private static $tableConfigName = 'lva-phone-contacts';
 
     /**
      * Alter Form
@@ -29,16 +29,29 @@ class Addresses extends CommonAddresses
 
         //  fill table
         $table = $this->getFormServiceLocator()->getServiceLocator()->get('Table')
-            ->prepareTable(
-                $this->tableConfigName,
-                ($params['apiData']['correspondenceCd']['phoneContacts'] ?: [])
-            );
+            ->prepareTable(self::$tableConfigName, ($params['corrPhoneContacts'] ?: []));
 
         $this->getFormHelper()->populateFormTable($form->get('phoneContactsTable'), $table);
 
-        //  remove phone fields
-        $this->getFormHelper()
-            ->remove($form, 'contact->phone-validator')
-            ->remove($form, 'contact');
+        //  remove phones fields
+        /** @var \Zend\Form\Element $field */
+        /** @var \Zend\Form\Fieldset $contactFieldset */
+        $contactFieldset = $form->get('contact');
+        foreach ($contactFieldset as $field) {
+            $fldName = $field->getName();
+            if ($fldName !== 'email') {
+                $this->getFormHelper()->remove($form, 'contact->' . $fldName);
+            }
+        }
+
+        $contactFieldset->setOptions([]);
+        $contactFieldset->setLabel('');
+
+        //  change email settings
+        /** @var \Zend\InputFilter\Input $emailElm */
+        $emailElm = $form->getInputFilter()->get('contact')->get('email');
+        $emailElm
+            ->setRequired(false)
+            ->setAllowEmpty(true);
     }
 }

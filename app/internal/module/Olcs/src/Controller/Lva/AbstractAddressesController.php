@@ -30,6 +30,32 @@ class AbstractAddressesController extends Lva\AbstractAddressesController
     ];
 
     /**
+     * Get Phone contacts
+     *
+     * @param int $contactDetailsId Contact Details Id
+     *
+     * @return array
+     */
+    protected function getPhoneContacts($contactDetailsId)
+    {
+        $response = $this->handleQuery(
+            TransferQry\ContactDetail\PhoneContact\GetList::create(
+                [
+                    'contactDetailsId' => $contactDetailsId,
+                    'sort' => '_type, phoneNumber',
+                    'order' => 'ASC',
+                ]
+            )
+        );
+
+        if (!$response->isOk()) {
+            return [];
+        }
+
+        return $response->getResult()['results'] ?: [];
+    }
+
+    /**
      * Process crud action - Add
      *
      * @return \Common\View\Model\Section|Response
@@ -64,8 +90,6 @@ class AbstractAddressesController extends Lva\AbstractAddressesController
         if (!in_array($mode, [self::MODE_ADD, self::MODE_EDIT], true)) {
             throw new \Exception('Invalid mode');
         }
-
-        $this->initHelpers();
 
         $this->section = 'phone_contact';
 

@@ -5,6 +5,7 @@ namespace OlcsTest\FormService\Form\Lva;
 use Common\Service\Table\TableBuilder;
 use Mockery as m;
 use Olcs\FormService\Form\Lva\Addresses;
+use Zend\InputFilter\InputFilter;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -60,9 +61,47 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
             ->once();
 
         //  check remove elements
+        $mockFieldEmail = m::mock(\Zend\Form\ElementInterface::class)
+            ->shouldReceive('getName')->once()->andReturn('email')
+            ->getMock();
+        $mockFieldOther = m::mock(\Zend\Form\ElementInterface::class)
+            ->shouldReceive('getName')->once()->andReturn('unit_not_email_field')
+            ->getMock();
+
+        $mockFieldset = m::mock(\Zend\Form\FieldsetInterface::class)
+            ->shouldReceive('getIterator')->once()->andReturn(
+                new \ArrayIterator([$mockFieldOther, $mockFieldEmail])
+            )
+            ->shouldReceive('setOptions')->once()->with([])->andReturnSelf()
+            ->shouldReceive('setLabel')->once()->with('')
+            ->getMock();
+
+        $mockForm
+            ->shouldReceive('get')->with('contact')->once()->andReturn($mockFieldset);
+
         $this->formHelper
-            ->shouldReceive('remove')->with($mockForm, 'contact->phone-validator')->once()->andReturnSelf()
-            ->shouldReceive('remove')->with($mockForm, 'contact')->once();
+            ->shouldReceive('remove')->with($mockForm, 'contact->unit_not_email_field')->once();
+
+        //  check change email setting
+        $mockInputFilter = m::mock(InputFilter::class)
+            ->shouldReceive('get')
+            ->with('contact')
+            ->once()
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('email')
+                    ->andReturn(
+                        m::mock(\Zend\InputFilter\Input::class)
+                            ->shouldReceive('setRequired')->once()->with(false)->andReturnSelf()
+                            ->shouldReceive('setAllowEmpty')->once()->with(true)
+                            ->getMock()
+                    )
+                    ->getMock()
+            )
+            ->getMock();
+
+        $mockForm->shouldReceive('getInputFilter')->once()->andReturn($mockInputFilter);
 
         //  call
         $form = $this->sut->getForm(
@@ -70,14 +109,12 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
                 'typeOfLicence' => [
                     'licenceType' => 'ltyp_sn',
                 ],
-                'apiData' => [
-                    'correspondenceCd' => [
-                        'phoneContacts' => ['unit_PhoneContacts'],
-                    ],
+                'corrPhoneContacts' => [
+                    'unit_PhoneContacts',
                 ],
             ]
         );
 
-        $this->assertSame($mockForm, $form);
+        static::assertSame($mockForm, $form);
     }
 }

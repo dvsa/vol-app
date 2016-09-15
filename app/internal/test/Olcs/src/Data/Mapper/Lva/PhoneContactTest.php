@@ -57,33 +57,48 @@ class PhoneContactTest extends MockeryTestCase
         );
     }
 
+    public function testMapFromErrorsNull()
+    {
+        /** @var \Zend\Form\FormInterface $mockForm */
+        $mockForm = m::mock(FormInterface::class);
+
+        static::assertEquals([], PhoneContact::mapFromErrors($mockForm, ['messages'=> []]));
+    }
+
     public function testMapFromErrors()
     {
         $errors = [
             'messages' => [
-                'field' => [
-                    'invalid',
+                [
+                    'unit_CommonErr',
+                ],
+                'unit_Field' => [
+                    'unit_Field_ErrMsg',
                 ],
             ],
         ];
 
+        $mockField = m::mock(\Zend\Form\ElementInterface::class)
+            ->shouldReceive('getName')->once()->andReturn('unit_Field')
+            ->shouldReceive('setMessages')->once()->with(['unit_Field_ErrMsg'])
+            ->getMock();
+
+        $mockField2 = m::mock(\Zend\Form\ElementInterface::class)
+            ->shouldReceive('getName')->once()->andReturn('unit_Field2')
+            ->getMock();
+
         /** @var \Zend\Form\Form $mockForm */
         $mockForm = m::mock(FormInterface::class)
-            ->shouldReceive('setMessages')
-            ->once()
-            ->with(
-                [
-                    PhoneContact::DETAILS => [
-                        'field' => [
-                            'invalid',
-                        ],
-                    ],
-                ]
-            )
+            ->shouldReceive('get')->once()->with(PhoneContact::DETAILS)->andReturn([$mockField, $mockField2])
             ->getMock();
 
         $actual = PhoneContact::mapFromErrors($mockForm, $errors);
 
-        static::assertEquals($errors, $actual);
+        static::assertEquals(
+            [
+                ['unit_CommonErr'],
+            ],
+            $actual
+        );
     }
 }
