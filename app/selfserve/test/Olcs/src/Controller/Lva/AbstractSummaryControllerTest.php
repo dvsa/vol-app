@@ -42,7 +42,11 @@ class AbstractSummaryControllerTest extends MockeryTestCase
             'isVariation' => true,
             'licenceType' => ['id' => \Common\RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
             'goodsOrPsv' => ['id' => \Common\RefData::LICENCE_CATEGORY_GOODS_VEHICLE],
-            'appliedVia' => ['id' => \Common\RefData::APPLIED_VIA_SELFSERVE]
+            'appliedVia' => ['id' => \Common\RefData::APPLIED_VIA_SELFSERVE],
+            'interimStart' => '2016-01-01',
+            'interimStatus' => [
+                'description' => 'In-Force'
+            ],
         ];
         $this->sut
             ->shouldReceive('getIdentifier')->with()->once()->andReturn(712)
@@ -66,7 +70,9 @@ class AbstractSummaryControllerTest extends MockeryTestCase
                             'transportManagers' => 'TRANSPORT_MANAGERS',
                             'outstandingFee' => 'OUTSTANDING_FEE',
                             'importantText' => 'application-summary-important-goods-var',
-                            'hideContent' => false
+                            'hideContent' => false,
+                            'interimStatus' => 'In-Force',
+                            'interimStart' => '2016-01-01',
                         ],
                         $view->getVariables()
                     );
