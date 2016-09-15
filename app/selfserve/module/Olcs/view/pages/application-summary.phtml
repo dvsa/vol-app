@@ -155,6 +155,12 @@
         <dd><?php echo $this->date(strtotime($completionDate)); ?></dd>
         <dt><?php echo $this->translate('status.title'); ?></dt>
         <dd><?php echo $this->translate($status); ?></dd>
+        <?php if ($interimStatus !== null): ?>
+          <dt><?php echo $this->translate('interim.status.title'); ?></dt>
+          <dd><?php echo $this->translate($interimStatus); ?></dd>
+            <dt><?php echo $this->translate('interim.start.title'); ?></dt>
+          <dd><?php echo $this->date(strtotime($interimStart)); ?></dd>
+        <?php endif; ?>
       </dl>
     </aside>
   </div>
