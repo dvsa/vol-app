@@ -1063,17 +1063,17 @@ return array(
                         'class' => 'proposition-nav__item',
                     ),
                     array(
-                        'id' => 'selfserve-topnav-search',
-                        'label' => 'search',
-                        'route' => 'search',
-                        'class' => 'proposition-nav__item',
-                    ),
-                    array(
                         'id' => 'selfserve-topnav-bus-registration',
                         'label' => 'selfserve-dashboard-topnav-bus-registrations',
                         'route' => 'busreg-registrations',
                         'action' => 'index',
                         'use_route_match' => true,
+                        'class' => 'proposition-nav__item',
+                    ),
+                    array(
+                        'id' => 'selfserve-topnav-search',
+                        'label' => 'search',
+                        'route' => 'search',
                         'class' => 'proposition-nav__item',
                     ),
                     array(
@@ -1088,6 +1088,12 @@ return array(
                         'id' => 'selfserve-topnav-your-account',
                         'label' => 'selfserve-dashboard-topnav-your-account',
                         'route' => 'your-account',
+                        'class' => 'proposition-nav__item',
+                    ),
+                    array(
+                        'id' => 'selfserve-topnav-sign-out',
+                        'label' => 'selfserve-dashboard-topnav-sign-out',
+                        'route' => 'auth/logout',
                         'class' => 'proposition-nav__item',
                     )
                 ),
