@@ -2,7 +2,7 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\AbstractData;
+use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -13,7 +13,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @package Olcs\Service
  */
-class SubmissionActionTypes extends AbstractData implements FactoryInterface, ListDataInterface
+class SubmissionActionTypes extends AbstractDataService implements FactoryInterface, ListDataInterface
 {
     /**
      * Ref data category ID for submission action types
