@@ -17,7 +17,7 @@
     ?>
       <h3 class="page-header__subtitle">
     <?php
-      echo !empty($licNo) ? $licNo : '';
+      echo !empty($licNo) ? $this->escapeHtml($licNo) : '';
     ?>
       </h3>
     <?php
@@ -42,7 +42,7 @@
     ?>
       <h3 class="page-header__subtitle">
     <?php
-          echo $this->reference;
+          echo $this->escapeHtml($this->reference);
         }
     ?>
       </h3>
@@ -66,15 +66,16 @@
     <?php
     if ($lva === 'application') {
       echo $translator->translateReplace(
-          'markup-application-right-column', [$reference, $statusTranslated]
+          'markup-application-right-column', [$this->escapeHtml($reference), $statusTranslated]
       );
     } elseif ($lva === 'variation') {
       echo $translator->translateReplace(
-          'markup-variation-right-column', [$reference, $statusTranslated]
+          'markup-variation-right-column', [$this->escapeHtml($reference), $statusTranslated]
       );
     } else {
       echo $translator->translateReplace(
-          'markup-licence-right-column', [$licNo, $statusTranslated, $renewalDateFormatted, $startDateFormatted]
+          'markup-licence-right-column', [$this->escapeHtml($licNo), $statusTranslated, $renewalDateFormatted,
+              $startDateFormatted]
       );
     }
     ?>
