@@ -143,7 +143,7 @@ class ApplicationControllerTraitTest extends MockeryTestCase
                 'stepY' => 12,
                 'status' => 'apsts_not_submitted',
                 'lva' => 'application',
-                'reference' => 'OB1/1'
+                'reference' => 'OB1 / 1'
             ],
             (array)$children[0]->getVariables()
         );
@@ -186,7 +186,7 @@ class ApplicationControllerTraitTest extends MockeryTestCase
                 'stepY' => 12,
                 'status' => 'apsts_not_submitted',
                 'lva' => 'application',
-                'reference' => 'OB1/1'
+                'reference' => 'OB1 / 1'
             ],
             (array)$children[0]->getVariables()
         );

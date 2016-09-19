@@ -27,14 +27,16 @@ class VariationOverview extends LvaOverview
     protected $sectionModel = 'Variation\\VariationOverviewSection';
 
     /**
-     * Set the overview data
+     * VariationOverview constructor. Sets the overview data
      *
-     * @param array $data
-     * @param array $sections
+     * @param array $data           Data array
+     * @param array $sections       Sections array
+     * @param null  $submissionForm Submission form
      */
     public function __construct($data, array $sections = array(), $submissionForm = null)
     {
         $this->setVariable('applicationId', $data['id']);
+        $this->setVariable('licNo', isset($data['licence']['licNo']) ? $data['licence']['licNo'] : '');
         $this->setVariable('createdOn', date('d F Y', strtotime($data['createdOn'])));
         $this->setVariable('status', $data['status']['id']);
         $this->setVariable('receivedDate', $data['receivedDate']);

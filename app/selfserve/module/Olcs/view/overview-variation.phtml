@@ -11,7 +11,8 @@
   <div class="row">
     <div class="page-header__wrapper two-thirds">
       <h3 class="page-header__subtitle">
-          <?php echo $this->translate('application.overview.application-no') . ' ' . $applicationId; ?>
+          <?php echo !empty($licNo) ? $this->escapeHtml($licNo) . ' / ' : ''; ?>
+          <?php echo !empty($applicationId) ? $this->escapeHtml($applicationId) : ''; ?>
       </h3>
       <h1><?php echo $this->translate('application.apply-to-change-licence.title'); ?></h1>
     </div><!-- end .page-header__wrapper -->

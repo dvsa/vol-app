@@ -18,6 +18,13 @@ class ApplicationOverviewSection extends LvaOverviewSection
 {
     protected $type = 'application';
 
+    /**
+     * ApplicationOverviewSection constructor.
+     *
+     * @param array|null|\Traversable $ref            Reference
+     * @param array|null|\Traversable $data           Data array
+     * @param array                   $sectionDetails Setion details
+     */
     public function __construct($ref, $data, $sectionDetails)
     {
         $filter = new \Zend\Filter\Word\DashToCamelCase();
@@ -26,7 +33,6 @@ class ApplicationOverviewSection extends LvaOverviewSection
         $status = isset($data['applicationCompletion'][$index . 'Status'])
             ? $data['applicationCompletion'][$index . 'Status']
             : null;
-        $statusColour = '';
 
         switch ($status) {
             case 1:
