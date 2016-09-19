@@ -69,6 +69,7 @@ trait ApplicationControllerTrait
         }
 
         $progress = $this->getSectionStepProgress($sectionName);
+
         $data = $this->getApplicationData($this->getApplicationId());
 
         $lvaTitleSuffix = ($titleSuffix === 'people') ?
@@ -77,7 +78,7 @@ trait ApplicationControllerTrait
             [
                 'title' => 'lva.section.title.' . $lvaTitleSuffix,
                 'form' => $form,
-                'reference' => $data['licence']['licNo']  . '/' . $this->getApplicationId(),
+                'reference' => $data['licence']['licNo']  . ' / ' . $this->getApplicationId(),
                 'status' => $data['status']['id'],
                 'lva' => $this->lva
             ],

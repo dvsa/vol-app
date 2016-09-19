@@ -26,7 +26,6 @@ class ApplicationOverviewSection extends LvaOverviewSection
         $status = isset($data['applicationCompletion'][$index . 'Status'])
             ? $data['applicationCompletion'][$index . 'Status']
             : null;
-        $statusColour = '';
 
         switch ($status) {
             case 1:
