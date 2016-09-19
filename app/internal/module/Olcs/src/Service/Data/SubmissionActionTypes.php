@@ -11,7 +11,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * Class SubmissionActionTypes
  * Provides list options of submission action types
  *
- * @package Olcs\Service
+ * @package Olcs\Service\Data
  */
 class SubmissionActionTypes extends AbstractDataService implements FactoryInterface, ListDataInterface
 {
@@ -27,8 +27,11 @@ class SubmissionActionTypes extends AbstractDataService implements FactoryInterf
     protected $refDataService;
 
     /**
-     * @param $category
-     * @param bool $useGroups
+     * Fetch list options
+     *
+     * @param array|string $context   Context
+     * @param bool         $useGroups Use groups
+     *
      * @return array
      */
     public function fetchListOptions($context, $useGroups = false)
@@ -47,10 +50,8 @@ class SubmissionActionTypes extends AbstractDataService implements FactoryInterf
     }
 
     /**
-     * Filters out all options but those allowable / implemented
+     * Fetch list data
      *
-     * @param null $context
-     * @param bool $useGroups
      * @return array
      */
     public function fetchListData()
@@ -66,11 +67,11 @@ class SubmissionActionTypes extends AbstractDataService implements FactoryInterf
         return $this->getData('SubmissionActionTypes');
     }
 
-
     /**
-     * Format data!
+     * Format data
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return array
      */
     public function formatData(array $data)
@@ -87,7 +88,8 @@ class SubmissionActionTypes extends AbstractDataService implements FactoryInterf
     /**
      * Format for groups
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return array
      */
     public function formatDataForGroups(array $data)
@@ -96,12 +98,14 @@ class SubmissionActionTypes extends AbstractDataService implements FactoryInterf
 
         foreach ($data as $datum) {
             $parentId = $datum['parent']['id'];
+
             if (!isset($optionData[$parentId])) {
                 $optionData[$parentId] = [
                     'label' => $datum['parent']['description'],
                     'options' => []
                 ];
             }
+
             $optionData[$parentId]['options'][$datum['id']] = $datum['description'];
         }
 
@@ -112,8 +116,9 @@ class SubmissionActionTypes extends AbstractDataService implements FactoryInterf
     /**
      * Create service
      *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
+     * @param ServiceLocatorInterface $serviceLocator Service locator
+     *
+     * @return $this
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -123,14 +128,22 @@ class SubmissionActionTypes extends AbstractDataService implements FactoryInterf
     }
 
     /**
-     * @param string $refDataService
+     * Set ref data service
+     *
+     * @param string $refDataService Ref data service
+     *
+     * @return $this
      */
     public function setRefDataService($refDataService)
     {
         $this->refDataService = $refDataService;
+
+        return $this;
     }
 
     /**
+     * Get ref data service
+     *
      * @return string
      */
     public function getRefDataService()

@@ -1,28 +1,23 @@
 <?php
 
-/**
- * Printer data service
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\ListDataInterface;
 use Common\Service\Data\AbstractDataService;
-use Dvsa\Olcs\Transfer\Query\Printer\PrinterList;
+use Common\Service\Data\ListDataInterface;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Dvsa\Olcs\Transfer\Query\Printer\PrinterList;
 
 /**
  * Printer data service
  *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @package Olcs\Service\Data
  */
 class Printer extends AbstractDataService implements ListDataInterface
 {
     /**
      * Format data
      *
-     * @param array $data data
+     * @param array $data Data
      *
      * @return array
      */
@@ -40,12 +35,12 @@ class Printer extends AbstractDataService implements ListDataInterface
     /**
      * Fetch list options
      *
-     * @param int  $category  category
-     * @param bool $useGroups use group
+     * @param array|string $context   Context
+     * @param bool         $useGroups Use groups
      *
      * @return array
      */
-    public function fetchListOptions($category, $useGroups = false)
+    public function fetchListOptions($context, $useGroups = false)
     {
         $data = $this->fetchListData();
 
@@ -57,22 +52,24 @@ class Printer extends AbstractDataService implements ListDataInterface
     }
 
     /**
-     * Ensures only a single call is made to the backend for each dataset
+     * Fetch list data
      *
      * @return array
+     * @throw UnexpectedResponseException
      */
     public function fetchListData()
     {
         if (is_null($this->getData('Printer'))) {
             $dtoData = PrinterList::create([]);
-
             $response = $this->handleQuery($dtoData);
 
             if (!$response->isOk()) {
                 throw new UnexpectedResponseException('unknown-error');
             }
+
             $this->setData('Printer', false);
             $result = $response->getResult();
+
             if (isset($result['results'])) {
                 $this->setData('Printer', $result['results']);
             }

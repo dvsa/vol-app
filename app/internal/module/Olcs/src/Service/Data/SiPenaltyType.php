@@ -9,7 +9,8 @@ use Dvsa\Olcs\Transfer\Query\Si\SiPenaltyTypeListData;
 
 /**
  * Class SiPenaltyType
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ *
+ * @package Olcs\Service\Data
  */
 class SiPenaltyType extends AbstractDataService implements ListDataInterface
 {
@@ -34,12 +35,12 @@ class SiPenaltyType extends AbstractDataService implements ListDataInterface
     /**
      * Fetch list options
      *
-     * @param string $category  Category
-     * @param bool   $useGroups Use groups
+     * @param array|string $context   Context
+     * @param bool         $useGroups Use groups
      *
      * @return array
      */
-    public function fetchListOptions($category, $useGroups = false)
+    public function fetchListOptions($context, $useGroups = false)
     {
         $data = $this->fetchListData();
 

@@ -1,19 +1,14 @@
 <?php
 
-/**
- * Presiding TC data service
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Service\Data;
 
-use Dvsa\Olcs\Transfer\Query\Cases\PresidingTc\GetList;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Dvsa\Olcs\Transfer\Query\Cases\PresidingTc\GetList;
 
 /**
  * Presiding TC data service
  *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @package Olcs\Service\Data
  */
 class PresidingTc extends User
 {
@@ -25,8 +20,10 @@ class PresidingTc extends User
     /**
      * Fetch user list data
      *
-     * @param array $context
+     * @param array $context Context
+     *
      * @return array
+     * @throw UnexpectedResponseException
      */
     public function fetchUserListData($context = [])
     {
@@ -38,14 +35,18 @@ class PresidingTc extends User
 
             $dtoData = GetList::create($params);
             $response = $this->handleQuery($dtoData);
+
             if (!$response->isOk()) {
                 throw new UnexpectedResponseException('unknown-error');
             }
+
             $this->setData('presiding-tc', false);
+
             if (isset($response->getResult()['results'])) {
                 $this->setData('presiding-tc', $response->getResult()['results']);
             }
         }
+
         return $this->getData('presiding-tc');
     }
 }

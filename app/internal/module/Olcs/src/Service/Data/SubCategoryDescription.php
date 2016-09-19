@@ -2,14 +2,15 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\ListDataInterface;
 use Common\Service\Data\AbstractDataService;
+use Common\Service\Data\ListDataInterface;
 use Common\Service\Data\ListDataTrait;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Dvsa\Olcs\Transfer\Query\SubCategoryDescription\GetList;
 
 /**
  * Class SubCategoryDescription
+ *
  * @package Olcs\Service\Data
  */
 class SubCategoryDescription extends AbstractDataService implements ListDataInterface
@@ -22,7 +23,10 @@ class SubCategoryDescription extends AbstractDataService implements ListDataInte
     protected $subCategory;
 
     /**
-     * @param string $subCategory
+     * Set sub category
+     *
+     * @param string $subCategory Sub category
+     *
      * @return $this
      */
     public function setSubCategory($subCategory)
@@ -32,6 +36,8 @@ class SubCategoryDescription extends AbstractDataService implements ListDataInte
     }
 
     /**
+     * Get sub category
+     *
      * @return string
      */
     public function getSubCategory()
@@ -40,9 +46,10 @@ class SubCategoryDescription extends AbstractDataService implements ListDataInte
     }
 
     /**
-     * Ensures only a single call is made to the backend for each dataset
+     * Fetch list data
      *
-     * @param $params
+     * @param array $params Params
+     *
      * @return array
      */
     public function fetchListData($params)
@@ -50,6 +57,7 @@ class SubCategoryDescription extends AbstractDataService implements ListDataInte
         $subCategory = $this->getSubCategory();
 
         $key = 'all';
+
         if (!empty($subCategory)) {
             $params['subCategory'] = $subCategory;
             $key = $subCategory;
@@ -58,11 +66,13 @@ class SubCategoryDescription extends AbstractDataService implements ListDataInte
         if (is_null($this->getData($key))) {
             $dtoData = GetList::create($params);
             $response = $this->handleQuery($dtoData);
+
             if (!$response->isOk()) {
                 throw new UnexpectedResponseException('unknown-error');
             }
 
             $this->setData($key, false);
+
             if (isset($response->getResult()['results'])) {
                 $this->setData($key, $response->getResult()['results']);
             }
@@ -74,9 +84,9 @@ class SubCategoryDescription extends AbstractDataService implements ListDataInte
     /**
      * Look up an item's description by its ID
      *
-     * @param int $id
+     * @param int $id Id
      *
-     * @return string
+     * @return string|null
      */
     public function getDescriptionFromId($id)
     {

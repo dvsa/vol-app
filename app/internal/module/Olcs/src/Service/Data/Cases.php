@@ -8,7 +8,8 @@ use Dvsa\Olcs\Transfer\Query\Cases\Cases as CasesDto;
 
 /**
  * Class Cases
- * @package Olcs\Service
+ *
+ * @package Olcs\Service\Data
  */
 class Cases extends AbstractDataService
 {
