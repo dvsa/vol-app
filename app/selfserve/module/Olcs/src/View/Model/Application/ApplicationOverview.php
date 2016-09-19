@@ -27,10 +27,11 @@ class ApplicationOverview extends LvaOverview
     protected $sectionModel = 'Application\\ApplicationOverviewSection';
 
     /**
-     * Set the overview data
+     * ApplicationOverview constructor. Sets the overview data
      *
-     * @param array $data
-     * @param array $sections
+     * @param array $data           Data array
+     * @param array $sections       Sections array
+     * @param null  $submissionForm Submission form
      */
     public function __construct($data, array $sections = array(), $submissionForm = null)
     {

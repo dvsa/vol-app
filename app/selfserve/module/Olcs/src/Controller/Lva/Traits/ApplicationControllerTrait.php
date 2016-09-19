@@ -27,6 +27,8 @@ trait ApplicationControllerTrait
 
     /**
      * Hook into the dispatch before the controller action is executed
+     *
+     * @return mixed
      */
     protected function preDispatch()
     {
@@ -37,6 +39,13 @@ trait ApplicationControllerTrait
         return $this->checkForRedirect($this->getApplicationId());
     }
 
+    /**
+     * Returns true if application has not been submitted. False otherwise.
+     *
+     * @param integer $applicationId Application Id
+     *
+     * @return bool
+     */
     protected function checkAppStatus($applicationId)
     {
         $data = $this->getApplicationData($applicationId);
@@ -46,10 +55,11 @@ trait ApplicationControllerTrait
     /**
      * Render the section
      *
-     * @param string $titleSuffix
-     * @param \Zend\Form\Form $form
-     * @param array $variables
-     * @return \Common\View\Model\Section
+     * @param string    $titleSuffix Title suffix
+     * @param Form|null $form        Form to render
+     * @param array     $variables   View variables to set
+     *
+     * @return ViewModel
      */
     protected function render($titleSuffix, Form $form = null, $variables = array())
     {
@@ -99,7 +109,10 @@ trait ApplicationControllerTrait
     }
 
     /**
-     * @param string $currentSection
+     * Get array of step progress data.
+     *
+     * @param string $currentSection Current section
+     *
      * @return array
      */
     protected function getSectionStepProgress($currentSection)
@@ -128,6 +141,13 @@ trait ApplicationControllerTrait
         return ['stepX' => $index+1, 'stepY' => count($sections)];
     }
 
+    /**
+     * Method called post saving
+     *
+     * @param string $section Section being saved
+     *
+     * @return void
+     */
     protected function postSave($section)
     {
         $applicationId = $this->getApplicationId();
@@ -139,12 +159,26 @@ trait ApplicationControllerTrait
         $this->updateCompletionStatuses($applicationId, $section);
     }
 
+    /**
+     * Reset undertakings
+     *
+     * @param integer $applicationId Application Id
+     *
+     * @return void
+     */
     protected function resetUndertakings($applicationId)
     {
         $this->getServiceLocator()->get('Entity\Application')
             ->forceUpdate($applicationId, ['declarationConfirmation' => 'N']);
     }
 
+    /**
+     * Get application data from database
+     *
+     * @param integer $applicationId Application ID
+     *
+     * @return mixed
+     */
     protected function getApplicationData($applicationId)
     {
         // query is already cached

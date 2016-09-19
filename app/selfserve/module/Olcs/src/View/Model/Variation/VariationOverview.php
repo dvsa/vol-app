@@ -27,10 +27,11 @@ class VariationOverview extends LvaOverview
     protected $sectionModel = 'Variation\\VariationOverviewSection';
 
     /**
-     * Set the overview data
+     * VariationOverview constructor. Sets the overview data
      *
-     * @param array $data
-     * @param array $sections
+     * @param array $data           Data array
+     * @param array $sections       Sections array
+     * @param null  $submissionForm Submission form
      */
     public function __construct($data, array $sections = array(), $submissionForm = null)
     {
