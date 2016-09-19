@@ -34,8 +34,6 @@ trait VariationControllerTrait
      */
     protected function completeSection($section)
     {
-        $this->addSectionUpdatedMessage($section);
-
         if ($this->isButtonPressed('saveAndContinue')) {
             return $this->goToNextSection($section);
         }

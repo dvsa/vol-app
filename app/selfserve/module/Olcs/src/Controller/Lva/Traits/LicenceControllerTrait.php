@@ -51,8 +51,6 @@ trait LicenceControllerTrait
      */
     protected function completeSection($section)
     {
-        $this->addSectionUpdatedMessage($section);
-
         return $this->goToOverviewAfterSave($this->getLicenceId());
     }
 
