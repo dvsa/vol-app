@@ -95,9 +95,9 @@
                       <table>
                           <thead>
                               <tr>
-                                  <th><?php echo $this->translate('name'); ?></th>
-                                  <th><?php echo $this->translate('dob'); ?></th>
-                                  <th><?php echo $this->translate('actions'); ?></th>
+                                  <th><?php echo $this->translate('approve-tm.table.column.name.title'); ?></th>
+                                  <th><?php echo $this->translate('approve-tm.table.column.dob.title'); ?></th>
+                                  <th><?php echo $this->translate('approve-tm.table.column.actions.title'); ?></th>
                               </tr>
                           </thead>
                           <tbody>
@@ -121,7 +121,8 @@
                                       <?php echo $this->transportManagerApplicationStatus($tmStatus['id'], $tmStatus['description']); ?>
                                   </td>
                                   <td><?php echo $this->date(strtotime($tmPerson['birthDate'])); ?></td>
-                                  <td><a class="remove" href="<?php echo $tmLink; ?>"><?php echo $this->translate('View details'); ?></a></td>
+                                  <td><a class="remove" href="<?php echo $tmLink; ?>"
+                                      ><?php echo $this->translate('approve-tm.table.action.view-details'); ?></a></td>
                               </tr>
                               <?php
                           }

@@ -2,7 +2,7 @@
 
 return array(
     'variables' => [
-        'title' => 'Users'
+        'title' => 'manage-users.table.title.count'
     ],
     'settings' => array(
         'crud' => array(
@@ -29,13 +29,13 @@ return array(
             }
         ],
         [
-            'title' => 'Email address',
+            'title' => 'email-address',
             'formatter' => function ($row) {
                 return $row['contactDetails']['emailAddress'];
             }
         ],
         [
-            'title' => 'Permission',
+            'title' => 'manage-users.table.column.permission.title',
             'formatter' => function ($row, $column, $sm) {
                 return implode(
                     ',',
@@ -50,13 +50,12 @@ return array(
             }
         ],
         [
+            'formatter' => 'Translate',
             'title' => 'markup-table-th-remove',
             'type' => 'Action',
             'action' => 'delete',
             'class' => 'remove right-aligned',
-            'formatter' => function () {
-                return 'Remove';
-            }
+            'content' => 'Remove',
         ],
     ]
 );
