@@ -3,17 +3,17 @@
 return array(
     'variables' => array(
         'title' => '',
-        'empty_message' => 'dashboard-tm-applications.table.EmptyMessage'
+        'empty_message' => 'dashboard.tm-applications.table.EmptyMessage'
     ),
     'settings' => array(),
     'attributes' => array(),
     'columns' => array(
         array(
-            'title' => 'Application No.',
+            'title' => 'dashboard.tm-applications.table.column.app-no.title',
             'formatter' => 'DashboardTmApplicationId'
         ),
         array(
-            'title' => 'Licence number',
+            'title' => 'dashboard.tm-applications.table.column.lic-no.title',
             'name' => 'licNo',
         ),
         array(
