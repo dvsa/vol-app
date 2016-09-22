@@ -1,27 +1,27 @@
 <?php
 
-/**
- * User data service
- *
- * @author someone <someone@valtech.co.uk>
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
-use Dvsa\Olcs\Transfer\Query\User\UserListInternal as ListDto;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Dvsa\Olcs\Transfer\Query\User\UserListInternal as ListDto;
 
 /**
  * Internal User data service
  *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
+ * @package Olcs\Service\Data
  */
 class UserListInternal extends AbstractDataService implements ListDataInterface
 {
+    /**
+     * @var string
+     */
     protected $sort = 'p.forename';
 
+    /**
+     * @var string
+     */
     protected $order = 'ASC';
 
     /**
@@ -32,17 +32,19 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
     /**
      * Set teamnId
      *
-     * @param int $teamId
+     * @param int $teamId Team id
+     *
      * @return $this
      */
     public function setTeamId($teamId)
     {
         $this->teamId = $teamId;
+
         return $this;
     }
 
     /**
-     * Get teamId
+     * Get team id
      *
      * @return int
      */
@@ -52,8 +54,11 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
     }
 
     /**
-     * @param mixed $context
-     * @param bool $useGroups
+     * Fetch list options
+     *
+     * @param array|string $context   Context
+     * @param bool         $useGroups Use groups
+     *
      * @return array
      */
     public function fetchListOptions($context, $useGroups = false)
@@ -63,6 +68,7 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
         if (!is_array($data)) {
             return [];
         }
+
         if ($useGroups) {
             return $this->formatDataForGroups($data);
         }
@@ -74,7 +80,7 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
      * Fetch user list data
      *
      * @return array
-     * @throws UnexpectedResponseException
+     * @throw UnexpectedResponseException
      */
     public function fetchUserListData()
     {
@@ -84,16 +90,20 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
                 'order' => $this->order
             ];
             $teamId = $this->getTeamId();
+
             if ((int) $teamId > 0) {
                 $params['team'] = $teamId;
             }
 
             $dtoData = ListDto::create($params);
             $response = $this->handleQuery($dtoData);
+
             if (!$response->isOk()) {
                 throw new UnexpectedResponseException('unknown-error');
             }
+
             $this->setData('userlist', false);
+
             if (isset($response->getResult()['results'])) {
                 $this->setData('userlist', $response->getResult()['results']);
             }
@@ -105,7 +115,8 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
     /**
      * Format data
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return array
      */
     protected function formatData(array $data)
@@ -123,7 +134,8 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
      * Returns a person row identifier for display as drop down value. This is either the person name, or if not
      * present fallback is the login ID
      *
-     * @param $datum
+     * @param array $datum Data
+     *
      * @return string
      */
     private function getPersonIdentifier($datum)
@@ -140,7 +152,8 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
     /**
      * Format for groups
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return array
      */
     protected function formatDataForGroups(array $data)
@@ -149,12 +162,14 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
 
         foreach ($data as $datum) {
             $parentId = $datum['team']['id'];
+
             if (!isset($optionData[$parentId])) {
                 $optionData[$parentId] = [
                     'label' => $datum['team']['name'],
                     'options' => []
                 ];
             }
+
             $optionData[$parentId]['options'][$datum['id']] = $this->getPersonIdentifier($datum);
         }
 

@@ -2,22 +2,23 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\ListDataInterface;
 use Common\Service\Data\AbstractDataService;
-use Common\Service\Data\ListDataTrait;
-use Dvsa\Olcs\Transfer\Query\Bus\BusServiceTypeList;
+use Common\Service\Data\ListDataInterface;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Dvsa\Olcs\Transfer\Query\Bus\BusServiceTypeList;
 
 /**
  * Class BusServiceType
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ *
+ * @package Olcs\Service\Data
  */
 class BusServiceType extends AbstractDataService implements ListDataInterface
 {
     /**
-     * Format data!
+     * Format data
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return array
      */
     public function formatData(array $data)
@@ -32,11 +33,14 @@ class BusServiceType extends AbstractDataService implements ListDataInterface
     }
 
     /**
-     * @param $category
-     * @param bool $useGroups
+     * Fetch list options
+     *
+     * @param array|string $context   Context
+     * @param bool         $useGroups Use groups
+     *
      * @return array
      */
-    public function fetchListOptions($category, $useGroups = false)
+    public function fetchListOptions($context, $useGroups = false)
     {
         $data = $this->fetchListData();
 
@@ -48,9 +52,10 @@ class BusServiceType extends AbstractDataService implements ListDataInterface
     }
 
     /**
-     * Ensures only a single call is made to the backend for each dataset
+     * Fetch list data
      *
      * @return array
+     * @throw UnexpectedResponseException
      */
     public function fetchListData()
     {
@@ -58,11 +63,13 @@ class BusServiceType extends AbstractDataService implements ListDataInterface
 
             $dtoData = BusServiceTypeList::create([]);
             $response = $this->handleQuery($dtoData);
+
             if (!$response->isOk()) {
                 throw new UnexpectedResponseException('unknown-error');
             }
 
             $this->setData('BusServiceType', false);
+
             if (isset($response->getResult()['results'])) {
                 $this->setData('BusServiceType', $response->getResult()['results']);
             }

@@ -3,35 +3,36 @@
 namespace Olcs\Service\Data;
 
 use Common\Service\Data\LicenceServiceTrait;
-use Dvsa\Olcs\Transfer\Query\RefData\RefDataList;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
-use Zend\ServiceManager\FactoryInterface;
 use Common\Service\Data\RefData;
+use Zend\ServiceManager\FactoryInterface;
 
 /**
  * Class ImpoundingLegislation
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ *
+ * @package Olcs\Service\Data
  */
 class ImpoundingLegislation extends RefData implements FactoryInterface
 {
     use LicenceServiceTrait;
 
     /**
-    * @param mixed $context
-    * @param bool $useGroups
-    * @return array|void
-    */
+     * Fetch list options
+     *
+     * @param array|string $context   Context
+     * @param bool         $useGroups Use groups
+     *
+     * @return array
+     */
     public function fetchListOptions($context, $useGroups = false)
     {
-        $context = empty($context)? $this->getLicenceContext() : $context;
+        $params = empty($context)? $this->getLicenceContext() : $context;
 
         //decide which ref data category we need
-        if (empty($context)) {
+        if (empty($params)) {
             $data = $this->fetchListData('impound_legislation_goods_gb');
-        } elseif ($context['goodsOrPsv'] == 'lcat_psv') {
+        } elseif ($params['goodsOrPsv'] == 'lcat_psv') {
             $data = $this->fetchListData('impound_legislation_psv_gb');
-        } elseif ($context['isNi'] == 'Y') {
+        } elseif ($params['isNi'] == 'Y') {
             $data = $this->fetchListData('impound_legislation_goods_ni');
         } else {
             $data = $this->fetchListData('impound_legislation_goods_gb');

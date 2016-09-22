@@ -11,8 +11,19 @@ use Dvsa\Olcs\Transfer\Query\Cases\Pi\PiDefinitionList as PiDefinitionListDto;
  */
 class PublicInquiryDefinition extends AbstractPublicInquiryData
 {
+    /**
+     * @var string
+     */
     protected $listDto = PiDefinitionListDto::class;
+
+    /**
+     * @var string
+     */
     protected $sort = 'sectionCode';
+
+    /**
+     * @var string
+     */
     protected $order = 'ASC';
 
     /**
@@ -37,6 +48,7 @@ class PublicInquiryDefinition extends AbstractPublicInquiryData
             $optionData[$parent]['options'] = $this->formatData($groupData);
             $optionData[$parent]['label'] = $parent;
         }
+
         return $optionData;
     }
 }

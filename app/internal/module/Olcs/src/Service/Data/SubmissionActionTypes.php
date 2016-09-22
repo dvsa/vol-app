@@ -2,7 +2,7 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\AbstractData;
+use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -11,9 +11,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * Class SubmissionActionTypes
  * Provides list options of submission action types
  *
- * @package Olcs\Service
+ * @package Olcs\Service\Data
  */
-class SubmissionActionTypes extends AbstractData implements FactoryInterface, ListDataInterface
+class SubmissionActionTypes extends AbstractDataService implements FactoryInterface, ListDataInterface
 {
     /**
      * Ref data category ID for submission action types
@@ -27,8 +27,11 @@ class SubmissionActionTypes extends AbstractData implements FactoryInterface, Li
     protected $refDataService;
 
     /**
-     * @param $category
-     * @param bool $useGroups
+     * Fetch list options
+     *
+     * @param array|string $context   Context
+     * @param bool         $useGroups Use groups
+     *
      * @return array
      */
     public function fetchListOptions($context, $useGroups = false)
@@ -47,10 +50,8 @@ class SubmissionActionTypes extends AbstractData implements FactoryInterface, Li
     }
 
     /**
-     * Filters out all options but those allowable / implemented
+     * Fetch list data
      *
-     * @param null $context
-     * @param bool $useGroups
      * @return array
      */
     public function fetchListData()
@@ -66,11 +67,11 @@ class SubmissionActionTypes extends AbstractData implements FactoryInterface, Li
         return $this->getData('SubmissionActionTypes');
     }
 
-
     /**
-     * Format data!
+     * Format data
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return array
      */
     public function formatData(array $data)
@@ -87,7 +88,8 @@ class SubmissionActionTypes extends AbstractData implements FactoryInterface, Li
     /**
      * Format for groups
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return array
      */
     public function formatDataForGroups(array $data)
@@ -96,12 +98,14 @@ class SubmissionActionTypes extends AbstractData implements FactoryInterface, Li
 
         foreach ($data as $datum) {
             $parentId = $datum['parent']['id'];
+
             if (!isset($optionData[$parentId])) {
                 $optionData[$parentId] = [
                     'label' => $datum['parent']['description'],
                     'options' => []
                 ];
             }
+
             $optionData[$parentId]['options'][$datum['id']] = $datum['description'];
         }
 
@@ -112,8 +116,9 @@ class SubmissionActionTypes extends AbstractData implements FactoryInterface, Li
     /**
      * Create service
      *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
+     * @param ServiceLocatorInterface $serviceLocator Service locator
+     *
+     * @return $this
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -123,14 +128,22 @@ class SubmissionActionTypes extends AbstractData implements FactoryInterface, Li
     }
 
     /**
-     * @param string $refDataService
+     * Set ref data service
+     *
+     * @param string $refDataService Ref data service
+     *
+     * @return $this
      */
     public function setRefDataService($refDataService)
     {
         $this->refDataService = $refDataService;
+
+        return $this;
     }
 
     /**
+     * Get ref data service
+     *
      * @return string
      */
     public function getRefDataService()

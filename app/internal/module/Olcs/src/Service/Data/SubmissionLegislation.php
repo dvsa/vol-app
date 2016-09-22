@@ -11,8 +11,19 @@ use Dvsa\Olcs\Transfer\Query\Reason\ReasonList as ReasonListDto;
  */
 class SubmissionLegislation extends AbstractPublicInquiryData
 {
+    /**
+     * @var string
+     */
     protected $listDto = ReasonListDto::class;
+
+    /**
+     * @var string
+     */
     protected $sort = 'sectionCode';
+
+    /**
+     * @var string
+     */
     protected $order = 'ASC';
 
     /**

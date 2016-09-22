@@ -11,7 +11,18 @@ use Dvsa\Olcs\Transfer\Query\Decision\DecisionList as DecisionListDto;
  */
 class PublicInquiryDecision extends AbstractPublicInquiryData
 {
+    /**
+     * @var string
+     */
     protected $listDto = DecisionListDto::class;
+
+    /**
+     * @var string
+     */
     protected $sort = 'sectionCode';
+
+    /**
+     * @var string
+     */
     protected $order = 'ASC';
 }
