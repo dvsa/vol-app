@@ -12,8 +12,9 @@ use Zend\Form\Annotation as Form;
 class TextSearch
 {
     /**
+     * @Form\Name("search")
      * @Form\Attributes({"value":"", "class":"extra-long"})
-     * @Form\Options({"label": "search.form.label", "hint": "search.form.hint"})
+     * @Form\Options({"label": "search.form.label"})
      * @Form\Type("Text")
      */
     public $search = null;

@@ -43,6 +43,9 @@ class SearchController extends AbstractController
         /** @var \Zend\Form\Form $form */
         $form = $this->getIndexForm(SimpleSearch::class);
 
+        // OLCS-13903 set custom hints depending on the search being performed
+        $form->get('search')->setOption('hint', 'search.form.hint.' . $index);
+
         if ($this->getRequest()->isPost()) {
             $sd = $this->getIncomingSearchData();
 
@@ -251,6 +254,9 @@ class SearchController extends AbstractController
             ->get('placeholder')
             ->getContainer('searchFilter')
             ->set($form);
+
+        // OLCS-13903 set custom hints depending on the search being performed
+        $form->get('text')->get('search')->setOption('hint', 'search.form.hint.' . $index);
 
         return $form;
     }
