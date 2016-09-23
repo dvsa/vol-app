@@ -127,8 +127,8 @@ class OperatorController extends AbstractController implements OperatorControlle
                 ->get('trafficArea')
                 ->setValueOptions($organisationData['taValueOptions']);
         }
-        if ($data['details']['trafficArea'] !== RefData::NORTHERN_IRELAND_TRAFFIC_AREA_CODE) {
-            $form->getInputFilter()->get('type-of-licence')->get('operator-type')->setRequired(true);
+        if ($data['details']['trafficArea'] === RefData::NORTHERN_IRELAND_TRAFFIC_AREA_CODE) {
+            $form->getInputFilter()->get('type-of-licence')->get('operator-type')->setRequired(false);
         }
     }
 
