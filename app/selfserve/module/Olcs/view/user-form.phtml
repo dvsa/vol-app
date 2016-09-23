@@ -1,15 +1,15 @@
 <?php
     echo $this->render(
         '/partials/page-header.phtml',
-        array(
+        [
             'pageTitle' => $this->pageTitle(),
-        )
+        ]
     );
 ?>
 <div class="row">
   <div class="two-thirds">
-    <?php echo $this->flashMessengerAll(); ?>
     <?php
+      echo $this->flashMessengerAll();
       echo $this->formErrors($this->form);
       echo $this->form($this->form);
     ?>
