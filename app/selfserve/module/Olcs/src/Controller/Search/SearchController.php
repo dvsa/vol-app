@@ -28,6 +28,8 @@ class SearchController extends AbstractController
      * Search index action
      *
      * There should probably be a search box on this page I expect.
+     *
+     * @return \Zend\Http\Response|ViewModel
      */
     public function indexAction()
     {
@@ -42,6 +44,9 @@ class SearchController extends AbstractController
 
         /** @var \Zend\Form\Form $form */
         $form = $this->getIndexForm(SimpleSearch::class);
+
+        // OLCS-13903 set custom hints depending on the search being performed
+        $form->get('search')->setOption('hint', 'search.form.hint.' . $index);
 
         if ($this->getRequest()->isPost()) {
             $sd = $this->getIncomingSearchData();
@@ -72,6 +77,11 @@ class SearchController extends AbstractController
         return $view;
     }
 
+    /**
+     * Get incoming search data to generate the search url
+     *
+     * @return array|mixed
+     */
     private function getIncomingSearchData()
     {
         $remove = [
@@ -124,7 +134,10 @@ class SearchController extends AbstractController
      * Store search params in the session to generate 'Back to search results' links
      * Taken from route params and query params stored in the session
      *
-     * @param array $params
+     * @param array $routeParams Route params
+     * @param array $queryParams Query params
+     *
+     * @return void
      */
     private function storeSearchUrl($routeParams, $queryParams)
     {
@@ -134,6 +147,11 @@ class SearchController extends AbstractController
         $sessionSearch->queryParams = $queryParams;
     }
 
+    /**
+     * Search action
+     *
+     * @return ViewModel
+     */
     public function searchAction()
     {
         $indexPrm = $this->params()->fromRoute('index');
@@ -172,7 +190,10 @@ class SearchController extends AbstractController
     }
 
     /**
-     * @param $name
+     * Generate the search form for index page
+     *
+     * @param string $name Form name
+     *
      * @return mixed
      */
     public function getIndexForm($name)
@@ -183,7 +204,10 @@ class SearchController extends AbstractController
     }
 
     /**
-     * @param $name
+     * Generate filter form
+     *
+     * @param string $name Form name
+     *
      * @return mixed
      */
     public function getFilterForm($name)
@@ -212,6 +236,8 @@ class SearchController extends AbstractController
     }
 
     /**
+     * Initialise the filter form
+     *
      * @return \Common\Form\Form
      */
     private function initialiseFilterForm()
@@ -252,10 +278,15 @@ class SearchController extends AbstractController
             ->getContainer('searchFilter')
             ->set($form);
 
+        // OLCS-13903 set custom hints depending on the search being performed
+        $form->get('text')->get('search')->setOption('hint', 'search.form.hint.' . $index);
+
         return $form;
     }
 
     /**
+     * Get the search service
+     *
      * @return Search
      */
     public function getSearchService()
@@ -264,6 +295,8 @@ class SearchController extends AbstractController
     }
 
     /**
+     * Get search type service
+     *
      * @return SearchType
      */
     public function getSearchTypeService()
