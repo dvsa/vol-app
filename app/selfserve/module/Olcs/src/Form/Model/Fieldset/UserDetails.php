@@ -7,10 +7,7 @@ use Zend\Form\Annotation as Form;
 /**
  * @Form\Name("UserDetails")
  * @Form\Attributes({"method":"post","label":"User details"})
- * @Form\Options({
- *     "prefer_form_input_filter": true, 
- *     "label": "User details"
- * })
+ * @Form\Options({"prefer_form_input_filter": true})
  */
 class UserDetails extends Base
 {
