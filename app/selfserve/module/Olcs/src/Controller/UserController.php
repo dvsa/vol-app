@@ -11,6 +11,7 @@ use Dvsa\Olcs\Transfer\Query\User\UserListSelfserve as ListDto;
 use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as ItemDto;
 use Olcs\View\Model\User;
 use Olcs\View\Model\Form;
+use Zend\View\Model\ViewModel;
 
 /**
  * User Controller
@@ -127,10 +128,12 @@ class UserController extends AbstractController
             $form->setData($data);
         }
 
-        $view = new Form();
-        $view->setForm(
-            $this->alterForm($form, $data)
+        $view = new ViewModel(
+            [
+                'form' => $this->alterForm($form, $data),
+            ]
         );
+        $view->setTemplate('user-form');
 
         return $view;
     }
