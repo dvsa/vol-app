@@ -1,53 +1,42 @@
-<?php
-  if ($this->lva === 'application') {
-    $progressTranslated = sprintf($this->translate('application.progress'), $this->stepX, $this->stepY);
-  } elseif ($this->lva === 'licence') {
-    $startDateFormatted =  $startDate ? strftime("%d %B %G",strtotime($startDate)) : '';
-    $renewalDateFormatted =  $renewalDate ? strftime("%d %B %G",strtotime($renewalDate)) : '';
-  }
-  $statusTranslated = $this->translate($status);
-  $translator = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');
-?>
 <div class="page-header">
   <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
+
   <div class="page-header__wrapper">
     <?php
     switch ($this->lva) {
       case "licence":
-    ?>
-      <h3 class="page-header__subtitle">
-    <?php
-      echo !empty($licNo) ? $this->escapeHtml($licNo) : '';
-    ?>
-      </h3>
-    <?php
+        ?>
+        <h3 class="page-header__subtitle">
+          <?php echo !empty($licNo) ? $this->escapeHtml($licNo) : ''; ?>
+        </h3>
+        <?php
         break;
+
       case "application":
-        if (isset($stepX)):
-    ?>
-      <h3 class="page-header__subtitle">
-    <?php
+        if ((int)$this->stepX > 0):
+          ?>
+          <h3 class="page-header__subtitle">
+          <?php
+          echo (
+            (int)$this->stepY > 0
+            ? sprintf($this->translate('application.steps'), $this->stepX, $this->stepY)
+            : sprintf($this->translate('application.step'), $this->stepX)
+          );
+          ?>
+          </h3>
+        <?php
         endif;
-        if (isset($stepY)) {
-          echo sprintf($this->translate('application.steps'), $stepX, $stepY);
-        } else {
-          echo sprintf($this->translate('application.step'), $stepX);
-        }
-    ?>
-      </h3>
-    <?php
         break;
+
       case "variation":
-        if (!empty($this->reference)) {
-    ?>
-      <h3 class="page-header__subtitle">
-    <?php
-          echo $this->escapeHtml($this->reference);
-        }
-    ?>
-      </h3>
-    <?php
+        if (!empty($this->reference)) : ?>
+          <h3 class="page-header__subtitle">
+            <?php echo $this->escapeHtml($this->reference); ?>
+          </h3>
+        <?php
+        endif;
         break;
+      
       default:
         break;
     }
@@ -64,18 +53,27 @@
     <h4>Filter by:</h4>
     <?php echo $this->form($filterForm); ?>
     <?php
-    if ($lva === 'application') {
+    $statusTranslated = $this->translate($this->status);
+    /** @var  \Common\Service\Helper\TranslationHelperService $translator */
+    $translator = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');
+
+    if ($this->lva === 'application') {
       echo $translator->translateReplace(
           'markup-application-right-column', [$this->escapeHtml($reference), $statusTranslated]
       );
-    } elseif ($lva === 'variation') {
+    } elseif ($this->lva === 'variation') {
       echo $translator->translateReplace(
           'markup-variation-right-column', [$this->escapeHtml($reference), $statusTranslated]
       );
-    } else {
+    } elseif ($this->lva === 'licence') {
       echo $translator->translateReplace(
-          'markup-licence-right-column', [$this->escapeHtml($licNo), $statusTranslated, $renewalDateFormatted,
-              $startDateFormatted]
+          'markup-licence-right-column',
+          [
+              $this->escapeHtml($this->licNo),
+              $statusTranslated,
+              ($this->renewalDate ? strftime("%d %B %G",strtotime($this->renewalDate)) : ''),
+              ($this->startDate ? strftime("%d %B %G",strtotime($this->startDate)) : ''),
+          ]
       );
     }
     ?>
