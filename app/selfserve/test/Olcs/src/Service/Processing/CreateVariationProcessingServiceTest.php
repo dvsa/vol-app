@@ -106,7 +106,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
                 ->andReturn(
                     m::mock()
                     ->shouldReceive('setLabel')
-                    ->with('create-variation-button')
+                    ->with('save.continue.button')
                     ->getMock()
                 )->getMock()
             );
@@ -146,7 +146,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
                 ->andReturn(
                     m::mock()
                     ->shouldReceive('setLabel')
-                    ->with('create-variation-button')
+                    ->with('save.continue.button')
                     ->getMock()
                 )->getMock()
             );
