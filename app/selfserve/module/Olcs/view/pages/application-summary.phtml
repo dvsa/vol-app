@@ -77,14 +77,12 @@
                       <?php
                       foreach ($actions['SUPPLY_SUPPORTING_EVIDENCE'] as $evidence) {
                           ?>
-                          <li><b><?php echo $this->translate($evidence); ?></b></li>
+                          <li><?php echo $this->translate($evidence); ?></li>
                           <?php
                       }
                       ?>
                   </ul>
-                  <p>
-                      <?php echo $this->translate('supply-supporting-evidence-text-2'); ?> (<?php echo $licence . '/' . $application; ?>).
-                  </p>
+                  <p><?php echo $this->translate('supply-supporting-evidence-text-2'); ?> (<?php echo $licence . '/' . $application; ?>).</p>
               </div>
           <?php endif; ?>
 
@@ -134,9 +132,11 @@
           <?php endif; ?>
 
           <p class="important"><strong><?php echo $this->translate($this->importantText); ?></strong></p>
+
       </div><!-- .article -->
-      <hr>
+
       <p><a href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('return-home-button-text'); ?></a></p>
+
   </div>
 
   <div class="one-third">
