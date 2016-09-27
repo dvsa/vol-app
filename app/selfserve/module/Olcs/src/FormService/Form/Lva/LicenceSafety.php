@@ -2,15 +2,17 @@
 
 namespace Olcs\FormService\Form\Lva;
 
+use Common\FormService\Form\Lva\Safety as CommonSafety;
+
 /**
- * Licence Psv Vehicles
+ * Licence safety
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LicencePsvVehicles extends PsvVehicles
+class LicenceSafety extends CommonSafety
 {
     /**
-     * Alter form
+     * Make form alterations
      *
      * @param \Zend\Form\Form $form form
      *
@@ -19,8 +21,8 @@ class LicencePsvVehicles extends PsvVehicles
     protected function alterForm($form)
     {
         parent::alterForm($form);
-        $this->removeFormAction($form, 'saveAndContinue');
         $form->get('form-actions')->get('save')->setAttribute('class', 'action--primary large');
+
         return $form;
     }
 }
