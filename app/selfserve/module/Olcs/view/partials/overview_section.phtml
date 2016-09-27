@@ -1,4 +1,6 @@
 <li class="overview-item <?php echo ($enabled ? '' : 'disabled'); ?>">
+
+  <h3>
   <?php if ($enabled) : ?>
   <a
    class="overview-item__link"
@@ -10,21 +12,22 @@
   <?php else : ?>
   <div class="overview-item__link">
   <?php endif; ?>
-  <h4>
   <?php
     if (isset($sectionNumber)){
         echo $sectionNumber . '. ';
     }
     echo $this->translate($name);
   ?>
-  </h4>
+  <?php if ($enabled) : ?></a><?php else : ?></div><?php endif; ?>
+  </h3>
+
+
   <?php if ($enabled) : ?>
     <?php if (isset($status) && $status !== ''): ?>
       <span class="status <?php echo $statusColour; ?>"><?php echo $this->translate($status); ?></span>
     <?php endif; ?>
-    <p><?php echo $this->translate($link); ?></p>
   <?php else : ?>
     <span class="status grey"><?php echo $this->translate('selfserve-app-overview-status-cant-start'); ?></span>
   <?php endif; ?>
-  <?php if ($enabled) : ?></a><?php else : ?></div><?php endif; ?>
+
 </li>
