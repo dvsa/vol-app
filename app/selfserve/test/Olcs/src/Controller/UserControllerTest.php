@@ -178,6 +178,7 @@ class UserControllerTest extends TestCase
 
         $request = m::mock('\Zend\Http\Request');
         $request->shouldReceive('isPost')->andReturn(true); // true to simulate form submission
+        $request->shouldReceive('getPost')->andReturn($rawEditData);
         $controller->getEvent()->setRequest($request);
 
         $params = m::mock('\Zend\Mvc\Controller\Plugin\Params');
