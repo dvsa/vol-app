@@ -1,30 +1,16 @@
-<div class="page-header">
-    <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
-    <div class="row">
-      <div class="page-header__wrapper two-thirds">
-          <h3 class="page-header__subtitle">
-              <?php echo $this->escapeHtml($licence . ' / ' . $application); ?>
-          </h3>
-          <h1><?php echo $this->translate('lva-summary-title'); ?></h1>
-      </div>
-      <ul class="page-header__actions one-third">
-          <li>
-              <a href="<?php echo $this->url('lva-' . $lva . '/review', [], [], true); ?>" target="_blank"
-                  class="page-header__action"><?php echo $this->translate('view-full-application') ?></a>
-          </li>
-          <?php if ($canWithdraw): ?>
-              <li>
-                  <a href="<?php echo $this->url('lva-' . $lva . '/withdraw', [], [], true); ?>"
-                      class="page-header__action js-modal-ajax"><?php echo $this->translate('withdraw-application') ?></a>
-              </li>
-          <?php endif; ?>
-      </ul>
-  </div>
-</div><!-- page-header -->
 
 <div class="row">
 
   <div class="two-thirds">
+    <div class="page-header">
+      <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
+        <div class="page-header__wrapper">
+            <h3 class="page-header__subtitle">
+                <?php echo $this->escapeHtml($licence . ' / ' . $application); ?>
+            </h3>
+            <h1><?php echo $this->translate('lva-summary-title'); ?></h1>
+        </div>
+    </div><!-- page-header -->
       <?php if ($justPaid): ?>
       <p>
           <?php
@@ -140,7 +126,19 @@
   </div>
 
   <div class="one-third">
-    <aside class="sidebar" role="complementary">
+    <aside role="complementary">
+      <ul class="page-header__actions">
+          <li>
+              <a href="<?php echo $this->url('lva-' . $lva . '/review', [], [], true); ?>" target="_blank"
+                  class="page-header__action"><?php echo $this->translate('view-full-application') ?></a>
+          </li>
+          <?php if ($canWithdraw): ?>
+              <li>
+                  <a href="<?php echo $this->url('lva-' . $lva . '/withdraw', [], [], true); ?>"
+                      class="page-header__action js-modal-ajax"><?php echo $this->translate('withdraw-application') ?></a>
+              </li>
+          <?php endif; ?>
+      </ul>
       <dl class="meta">
         <?php if ($paymentRef): ?>
           <dt><?php echo $this->translate('payment-reference-no.title'); ?></dt>

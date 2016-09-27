@@ -1,45 +1,26 @@
-<div class="js-body">
-  
+
+  <div class="row js-body">
+
     <?php $form->prepare(); ?>
     <?php echo $this->form()->openTag($form); ?>
 
-    <div class="page-header">
-      <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
-      <div class="row">
-        <div class="page-header__wrapper two-thirds">
+    <div class="two-thirds">
+
+      <div class="page-header">
+        <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
+        <div class="page-header__wrapper">
           <h1><?php echo $this->translate($title); ?></h1>
           <div class="page-header__text">
               <p><?php echo $this->translate($subTitle); ?></p>
           </div>
-          <ul class="page-header__actions one-third">
-              <?php
-              foreach ($form->get('form-actions')->getElements() as $element) {
-  
-                  // Remember the previous attributes
-                  $attributes = $element->getAttributes();
-  
-                  // Override the class of the button
-                  $element->setAttribute('class', 'page-header__action');
-                  ?>
-                  <li><?php echo $this->formElement($element); ?></li>
-                  <?php
-  
-                  // Restore the previous attributes
-                  $element->setAttributes($attributes);
-              }
-              ?>
-          </ul>
         </div>
-      </div>
-    </div><!-- page-header-->
-    
-    <div class="row">
-  
-      <div class="two-thirds border">
+      </div><!-- page-header-->
+
+
       <?php
-  
+
       $guidanceMessage = $this->placeholder('guidance');
-  
+
       if (!empty($guidanceMessage)) {
           foreach ($guidanceMessage as $message):
           ?>
@@ -49,19 +30,43 @@
           <?php
           endforeach;
       }
-  
+
       if (isset($sectionText)) {
           ?><p><?php echo $this->translate($sectionText); ?></p><?php
       }
-  
+
       echo $this->flashMessengerAll();
-  
+
       echo $this->formErrors($form);
       echo $this->form()->render($form, false);
       ?>
-      </div>
-      <?php echo $this->form()->closeTag(); ?>
-      
+
+
     </div>
-    
+
+    <div class="one-third">
+      <ul class="page-header__actions">
+          <?php
+          foreach ($form->get('form-actions')->getElements() as $element) {
+
+              // Remember the previous attributes
+              $attributes = $element->getAttributes();
+
+              // Override the class of the button
+              $element->setAttribute('class', 'page-header__action');
+              ?>
+              <li><?php echo $this->formElement($element); ?></li>
+              <?php
+
+              // Restore the previous attributes
+              $element->setAttributes($attributes);
+          }
+          ?>
+      </ul>
+    </div><!-- one-third -->
+
+  <?php echo $this->form()->closeTag(); ?>
+
 </div>
+
+
