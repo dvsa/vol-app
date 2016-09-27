@@ -3,6 +3,7 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\Safety as CommonSafety;
+use Zend\Form\Form;
 
 /**
  * Licence safety
@@ -14,9 +15,9 @@ class LicenceSafety extends CommonSafety
     /**
      * Make form alterations
      *
-     * @param \Zend\Form\Form $form form
+     * @param Form $form form
      *
-     * @return \Zend\Form\Form
+     * @return Form
      */
     protected function alterForm($form)
     {

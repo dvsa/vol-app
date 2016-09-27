@@ -2,6 +2,8 @@
 
 namespace Olcs\FormService\Form\Lva;
 
+use Zend\Form\Form;
+
 /**
  * Licence Psv Vehicles
  *
@@ -12,9 +14,9 @@ class LicencePsvVehicles extends PsvVehicles
     /**
      * Alter form
      *
-     * @param \Zend\Form\Form $form form
+     * @param Form $form form
      *
-     * @return \Zend\Form\Form
+     * @return Form
      */
     protected function alterForm($form)
     {
