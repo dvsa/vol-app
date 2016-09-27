@@ -4,14 +4,16 @@ namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\FormService\Form\Lva\LicencePsvVehicles;
+use Olcs\FormService\Form\Lva\LicenceAddresses;
+use Common\Service\Entity\LicenceEntityService;
+use Zend\Form\Form;
 
 /**
- * Licence Psv Vehicles Test
+ * Licence Addresses Test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LicencePsvVehiclesTest extends MockeryTestCase
+class LicenceAddressesTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -24,19 +26,17 @@ class LicencePsvVehiclesTest extends MockeryTestCase
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService')->makePartial();
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
 
-        $this->sut = new LicencePsvVehicles();
+        $this->sut = new LicenceAddresses();
         $this->sut->setFormServiceLocator($this->fsm);
         $this->sut->setFormHelper($this->formHelper);
     }
 
     public function testGetForm()
     {
-        $mockLicenceVehicles = m::mock('\Common\FormService\FormServiceInterface');
-        $this->fsm->setService('lva-licence-vehicles_psv', $mockLicenceVehicles);
+        $mockAddresses = m::mock('\Common\FormService\FormServiceInterface');
+        $this->fsm->setService('lva-licence-addresses', $mockAddresses);
 
         $formActions = m::mock();
-        $formActions->shouldReceive('has')->with('saveAndContinue');
-        $formActions->shouldReceive('remove')->with('saveAndContinue');
         $formActions->shouldReceive('get')
             ->with('save')
             ->andReturn(
@@ -49,16 +49,22 @@ class LicencePsvVehiclesTest extends MockeryTestCase
             ->once()
             ->getMock();
 
-        $mockForm = m::mock();
+        $mockForm = m::mock(Form::class);
         $mockForm->shouldReceive('has')->with('form-actions')->andReturn(true);
         $mockForm->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
-        $this->formHelper->shouldReceive('createForm')
-            ->with('Lva\PsvVehicles')
+        $this->formHelper
+            ->shouldReceive('createForm')
+            ->with('Lva\Addresses')
             ->andReturn($mockForm)
+            ->once()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'phoneContactsTable')
+            ->once()
             ->getMock();
 
-        $this->sut->getForm();
-
+        $this->sut->getForm(
+            ['typeOfLicence' => ['licenceType' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL]]
+        );
     }
 }

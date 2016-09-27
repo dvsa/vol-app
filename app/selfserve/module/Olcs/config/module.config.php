@@ -1116,6 +1116,12 @@ return array(
     'asset_path' => '//dev_dvsa-static.web01.olcs.mgt.mtpdvsa',
     'form_service_manager' => [
         'invokables' => [
+            // Address
+            'lva-licence-addresses' => LvaFormService\LicenceAddresses::class,
+
+            // Safety
+            'lva-licence-safety' => LvaFormService\LicenceSafety::class,
+
             // Operating Centres
             'lva-licence-operating_centres' => LvaFormService\OperatingCentres\LicenceOperatingCentres::class,
             'lva-variation-operating_centres' => LvaFormService\OperatingCentres\VariationOperatingCentres::class,
