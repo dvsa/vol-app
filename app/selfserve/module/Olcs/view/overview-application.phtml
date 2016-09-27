@@ -6,26 +6,41 @@
  */
 ?>
 
-<div class="page-header">
-  <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
-  <div class="row">
-    <div class="page-header__wrapper two-thirds">
-        <?php
-        if (!empty($licNo)) {
-            ?>
-            <h3 class="page-header__subtitle">
-                <?php
-                $reference = $licNo;
-                $reference .= !empty($applicationId) ? ' / ' . $applicationId : '';
-                echo $this->escapeHtml($reference);
-                ?>
-            </h3>
+<div class="row">
+  <?php echo $this->flashMessengerAll(); ?>
+  <div class="two-thirds">
+    <div class="page-header">
+      <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
+        <div class="page-header__wrapper">
             <?php
-        }
+            if (!empty($licNo)) {
+                ?>
+                <h3 class="page-header__subtitle">
+                    <?php
+                    $reference = $licNo;
+                    $reference .= !empty($applicationId) ? ' / ' . $applicationId : '';
+                    echo $this->escapeHtml($reference);
+                    ?>
+                </h3>
+                <?php
+            }
+            ?>
+          <h1><?php echo $this->translate('application.apply-for-new-licence.title'); ?></h1>
+        </div>
+    </div><!-- page-header -->
+    <ul class="overview-navigation">
+        <?php
+            foreach ($sections as $section) {
+                echo $this->render($section);
+            }
         ?>
-      <h1><?php echo $this->translate('application.apply-for-new-licence.title'); ?></h1>
-    </div>
-    <ul class="page-header__actions one-third">
+    </ul>
+    <?php if (isset($submissionForm)): ?>
+      <?php echo $this->form($submissionForm); ?>
+    <?php endif ?>
+  </div>
+  <div class="one-third">
+    <ul class="page-header__actions">
       <?php if ($canCancel): ?>
       <li>
           <a
@@ -37,50 +52,21 @@
       </li>
       <?php endif; ?>
     </ul>
-  </div>
-</div><!-- page-header -->
 
-<div class="row">
+    <dl class="meta">
+      <dt><?php echo $this->translate('progress'); ?></dt>
+      <dd><?php echo sprintf($this->translate('application.progress'), $progressX, $progressY); ?></dd>
+      <dt><?php echo $this->translate('status'); ?></dt>
+      <dd><?php echo $this->translate($status); ?></dd>
+      <?php if ($receivedDate): ?>
+          <dt><?php echo $this->translate('selfserve-dashboard-submission-date'); ?></dt>
+          <dd><?php echo strftime("%d %B %G",strtotime($receivedDate)); ?></dd>
+      <?php endif; ?>
+      <?php if ($completionDate): ?>
+          <dt><?php echo $this->translate('target-completion-date'); ?></dt>
+          <dd><?php echo strftime("%d %B %G",strtotime($completionDate)); ?></dd>
+      <?php endif; ?>
+    </dl>
 
-  <div class="two-thirds border">
-      
-      <?php echo $this->flashMessengerAll(); ?>
-      
-      <ul class="overview-navigation">
-          <?php 
-              foreach ($sections as $section) {
-                  echo $this->render($section);
-              } 
-          ?>
-      </ul>
-  
-      <?php if (isset($submissionForm)): ?>
-          <?php echo $this->form($submissionForm); ?>
-      <?php endif ?>
-    
   </div>
-  
-  <div class="one-third">
-    
-    <aside class="sidebar" role="complementary">
-      
-        <dl class="meta">
-            <dt><?php echo $this->translate('progress'); ?></dt>
-            <dd><?php echo sprintf($this->translate('application.progress'), $progressX, $progressY); ?></dd>
-            <dt><?php echo $this->translate('status'); ?></dt>
-            <dd><?php echo $this->translate($status); ?></dd>
-            <?php if ($receivedDate): ?>
-                <dt><?php echo $this->translate('selfserve-dashboard-submission-date'); ?></dt>
-                <dd><?php echo strftime("%d %B %G",strtotime($receivedDate)); ?></dd>
-            <?php endif; ?>
-            <?php if ($completionDate): ?>
-                <dt><?php echo $this->translate('target-completion-date'); ?></dt>
-                <dd><?php echo strftime("%d %B %G",strtotime($completionDate)); ?></dd>
-            <?php endif; ?>
-        </dl>
-      
-     </aside>
-    
-  </div>
-
 </div>
