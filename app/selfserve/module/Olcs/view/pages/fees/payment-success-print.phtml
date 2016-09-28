@@ -1,22 +1,28 @@
 <?php echo $this->doctype(); ?>
 <html lang="en" class="review">
+
   <?php echo $this->partial('partials/review-header'); ?>
+
   <body>
+
     <h1><?php echo $this->translate('pay-fees.success.print-title'); ?></h1>
 
     <div class="review-section">
-<?php echo $this->partial(
-    'partials/fees/payment-details',
-    compact('operatorName', 'fees', 'payment')
-);?>
+      <?php echo $this->partial(
+        'partials/fees/payment-details', compact('operatorName', 'fees', 'payment')
+      );?>
     </div>
 
     <div class="review-section">
-<?php if (isset($table)): ?>
-<?php echo $table; ?>
-<?php endif; ?>
+      <?php if (isset($table)): ?>
+        <?php echo $table; ?>
+      <?php endif; ?>
     </div>
 
     <div class="review-section">
-<?php echo $this->translate('markup-pay-fees-success-notice' . ($hasContinuation ? '-continuation' : '')); ?>
+      <?php echo $this->translate('markup-pay-fees-success-notice' . ($hasContinuation ? '-continuation' : '')); ?>
     </div>
+
+  </body>
+
+</html>
