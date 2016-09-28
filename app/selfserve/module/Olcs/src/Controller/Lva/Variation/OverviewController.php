@@ -21,6 +21,8 @@ class OverviewController extends AbstractOverviewController
 {
     use VariationControllerTrait;
 
+    const UNDERTAKINGS_KEY = 'undertakings';
+
     protected $lva = 'variation';
     protected $location = 'external';
 
@@ -29,14 +31,25 @@ class OverviewController extends AbstractOverviewController
         return new VariationOverview($data, $sections, $form);
     }
 
-    protected function isReadyToSubmit($sections)
+    /**
+     * Is ready to submit
+     *
+     * @param array $sections                 variation sections
+     * @param bool  $shouldIgnoreUndertakings should we ignore undertakings section
+     *
+     * @return bool
+     */
+    protected function isReadyToSubmit($sections, $shouldIgnoreUndertakings = false)
     {
         $updated = 0;
-        foreach ($sections as $section) {
-            if ($section['status'] == RefData::VARIATION_STATUS_REQUIRES_ATTENTION) {
+        foreach ($sections as $key => $section) {
+            if ($shouldIgnoreUndertakings && $key === self::UNDERTAKINGS_KEY) {
+                continue;
+            }
+            if ($section['status'] === RefData::VARIATION_STATUS_REQUIRES_ATTENTION) {
                 return false;
             }
-            if ($section['status'] == RefData::VARIATION_STATUS_UPDATED) {
+            if ($section['status'] === RefData::VARIATION_STATUS_UPDATED) {
                 $updated++;
             }
         }
@@ -64,11 +77,13 @@ class OverviewController extends AbstractOverviewController
             $accessible
         );
 
-        return array_map(
+        $sections = array_map(
             function ($value) {
                 return ['status' => $value];
             },
             $sections
         );
+        $sections[self::UNDERTAKINGS_KEY]['enabled'] = $this->isReadyToSubmit($sections, true);
+        return $sections;
     }
 }
