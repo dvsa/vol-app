@@ -81,6 +81,10 @@ class UserController extends AbstractController
         $data = [];
 
         if ($this->getRequest()->isPost()) {
+            if ($this->isButtonPressed('cancel')) {
+                return $this->redirectToIndex();
+            }
+
             $data = $this->params()->fromPost();
             $form->setData($data);
 
@@ -168,6 +172,10 @@ class UserController extends AbstractController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
+            if ($this->isButtonPressed('cancel')) {
+                return $this->redirectToIndex();
+            }
+
             $response = $this->handleCommand(
                 DeleteDto::create(
                     ['id' => $this->params()->fromRoute('id', null)]
