@@ -4,14 +4,16 @@ namespace Olcs\Service\Data;
 
 /**
  * Class DocumentCategory
+ *
  * @package Olcs\Service\Data
  */
 class DocumentCategory extends Category
 {
     /**
-     * Ensures only a single call is made to the backend for each dataset
+     * Fetch list data
      *
-     * @param $params
+     * @param array $params Params
+     *
      * @return array
      */
     public function fetchListData($params)

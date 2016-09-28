@@ -43,8 +43,8 @@ return [
             'admin-dashboard/admin-system-info-message*' => [RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/task-allocation-rules*' => [RefData::PERMISSION_INTERNAL_ADMIN],
 
-            // All Internal users can see my account, to change their details, password etc
-            'admin-dashboard/admin-my-account*' => [
+            // All Internal users can see your account, to change their details, password etc
+            'admin-dashboard/admin-your-account*' => [
                 RefData::PERMISSION_INTERNAL_VIEW,
             ],
 

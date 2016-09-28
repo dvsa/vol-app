@@ -14,9 +14,9 @@ class ApplicationTypeOfLicenceTest extends AbstractLvaFormServiceTestCase
     protected $sut;
 
     /** @var  m\MockInterface|\Common\Service\Helper\FormHelperService */
-    private $formHelper;
+    protected $formHelper;
     /** @var  m\MockInterface|\Common\FormService\FormServiceManager */
-    private $fsm;
+    protected $fsm;
 
     public function setUp()
     {

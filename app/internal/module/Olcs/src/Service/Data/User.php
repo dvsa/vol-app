@@ -1,26 +1,22 @@
 <?php
 
-/**
- * User data service
- *
- * @author someone <someone@valtech.co.uk>
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
-use Dvsa\Olcs\Transfer\Query\User\UserList;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Dvsa\Olcs\Transfer\Query\User\UserList;
 
 /**
  * User data service
  *
- * @author someone <someone@valtech.co.uk>
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @package Olcs\Service\Data
  */
 class User extends AbstractDataService implements ListDataInterface
 {
+    /**
+     * @var string
+     */
     protected $titleKey = 'loginId';
 
     /**
@@ -29,17 +25,23 @@ class User extends AbstractDataService implements ListDataInterface
     protected $team = null;
 
     /**
-     * @param string $team
+     * Set team
+     *
+     * @param int $team Team id
+     *
      * @return $this
      */
     public function setTeam($team)
     {
         $this->team = $team;
+
         return $this;
     }
 
     /**
-     * @return string
+     * Get team
+     *
+     * @return int
      */
     public function getTeam()
     {
@@ -52,8 +54,9 @@ class User extends AbstractDataService implements ListDataInterface
      * data as a multi dimensioned array suitable for display in opt-groups. It is permissible for the method to ignore
      * this flag if the data doesn't allow for option groups to be constructed.
      *
-     * @param mixed $context
-     * @param bool $useGroups
+     * @param array|string $context   Context
+     * @param bool         $useGroups Use groups
+     *
      * @return array
      */
     public function fetchListOptions($context, $useGroups = false)
@@ -75,8 +78,10 @@ class User extends AbstractDataService implements ListDataInterface
     /**
      * Fetch user list data
      *
-     * @param mixed $context
+     * @param array $context Context
+     *
      * @return array
+     * @throw UnexpectedResponseException
      */
     public function fetchUserListData($context = [])
     {
@@ -86,19 +91,24 @@ class User extends AbstractDataService implements ListDataInterface
                 'order' => 'ASC'
             ];
             $team   = $this->getTeam();
+
             if (!empty($team)) {
                 $params['team'] = $team;
             }
+
             if (isset($context['isInternal'])) {
                 $params['isInternal'] = $context['isInternal'];
             }
 
             $dtoData = UserList::create($params);
             $response = $this->handleQuery($dtoData);
+
             if (!$response->isOk()) {
                 throw new UnexpectedResponseException('unknown-error');
             }
+
             $this->setData('userlist', false);
+
             if (isset($response->getResult()['results'])) {
                 $this->setData('userlist', $response->getResult()['results']);
             }

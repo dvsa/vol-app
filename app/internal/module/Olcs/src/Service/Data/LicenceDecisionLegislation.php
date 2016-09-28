@@ -2,29 +2,39 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\ListDataInterface;
 use Common\Service\Data\AbstractDataService;
-use Dvsa\Olcs\Transfer\Query\Decision\DecisionList as DecisionListDto;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\Service\Data\LicenceServiceTrait;
+use Common\Service\Data\ListDataInterface;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Dvsa\Olcs\Transfer\Query\Decision\DecisionList as DecisionListDto;
+use Zend\ServiceManager\FactoryInterface;
 
 /**
  * Class LicenceDecisionLegislation
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
+ *
+ * @package Olcs\Service\Data
  */
 class LicenceDecisionLegislation extends AbstractDataService implements ListDataInterface, FactoryInterface
 {
     use LicenceServiceTrait;
 
+    /**
+     * @var string
+     */
     protected $sort = 'sectionCode';
+
+    /**
+     * @var string
+     */
     protected $order = 'ASC';
 
     /**
-     * @param mixed $context
-     * @param bool $useGroups
-     * @return array|void
+     * Fetch list options
+     *
+     * @param array|string $context   Context
+     * @param bool         $useGroups Use groups
+     *
+     * @return array
      */
     public function fetchListOptions($context, $useGroups = false)
     {
@@ -46,10 +56,12 @@ class LicenceDecisionLegislation extends AbstractDataService implements ListData
     }
 
     /**
-     * Fetch decision list data
+     * Fetch list data
+     *
+     * @param array $context Context
      *
      * @return array
-     * @throws UnexpectedResponseException
+     * @throw UnexpectedResponseException
      */
     public function fetchListData($context)
     {
@@ -64,10 +76,13 @@ class LicenceDecisionLegislation extends AbstractDataService implements ListData
 
             $dtoData = DecisionListDto::create($params);
             $response = $this->handleQuery($dtoData);
+
             if (!$response->isOk()) {
                 throw new UnexpectedResponseException('unknown-error');
             }
+
             $this->setData('licenceDecisionLegislation', false);
+
             if (isset($response->getResult()['results'])) {
                 $this->setData('licenceDecisionLegislation', $response->getResult()['results']);
             }
@@ -76,11 +91,11 @@ class LicenceDecisionLegislation extends AbstractDataService implements ListData
         return $this->getData('licenceDecisionLegislation');
     }
 
-
     /**
      * Format data
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return array
      */
     protected function formatData(array $data)
@@ -97,7 +112,8 @@ class LicenceDecisionLegislation extends AbstractDataService implements ListData
     /**
      * Format for groups
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return array
      */
     protected function formatDataForGroups(array $data)

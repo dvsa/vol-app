@@ -124,7 +124,7 @@
 
     <target name="write-info" description="Write build info to a file" if="version-file">
         <exec executable="git" output="${version-file}" failonerror="true">
-            <arg line="describe"/>
+            <arg line="describe --all"/>
         </exec>
         <exec executable="date" output="${version-file}" append="true" failonerror="true"/>
     </target>

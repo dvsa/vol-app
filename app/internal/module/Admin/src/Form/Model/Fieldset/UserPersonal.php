@@ -13,11 +13,8 @@ class UserPersonal
 {
     /**
      * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({"label":"First name"})
      * @Form\Type("Text")
-     * @Form\AllowEmpty(true)
-     * @Form\Required(false)
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
      */
@@ -25,11 +22,8 @@ class UserPersonal
 
     /**
      * @Form\Attributes({"id":"familyName","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({"label":"Last name"})
      * @Form\Type("Text")
-     * @Form\AllowEmpty(true)
-     * @Form\Required(false)
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
      */

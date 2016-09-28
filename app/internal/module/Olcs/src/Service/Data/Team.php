@@ -8,21 +8,29 @@ use Dvsa\Olcs\Transfer\Query\Team\TeamListData as TeamQry;
 
 /**
  * Class Team
- * @package Olcs\Service
+ *
+ * @package Olcs\Service\Data
  */
 class Team extends AbstractDataService implements ListDataInterface
 {
     const DEFAULT_ORDER = 'ASC';
     const DEFAULT_SORT = 'name';
 
+    /**
+     * @var int
+     */
     protected $id;
+
+    /**
+     * @var string
+     */
     protected $serviceName = 'Team';
 
     /**
      * Fetch list options
      *
-     * @param mixed $context   Context
-     * @param bool  $useGroups Use groups
+     * @param array|string $context   Context
+     * @param bool         $useGroups Use groups
      *
      * @return array
      */
@@ -35,6 +43,7 @@ class Team extends AbstractDataService implements ListDataInterface
         }
 
         $ret = [];
+
         foreach ($data as $datum) {
             $ret[$datum['id']] = $datum['name'];
         }

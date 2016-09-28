@@ -125,10 +125,10 @@ return [
                             ]
                         ]
                     ],
-                    'admin-my-account' => [
+                    'admin-your-account' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => 'my-account[/]',
+                            'route' => 'your-account[/]',
                             'defaults' => [
                                 'controller' => 'Admin\MyDetailsController',
                                 'action' => 'index',
@@ -566,5 +566,5 @@ return [
     ),
     //-------- End navigation -----------------
     'local_scripts_path' => [__DIR__ . '/../assets/js/inline/'],
-    'my_account_route' => 'admin-dashboard/admin-my-account',
+    'my_account_route' => 'admin-dashboard/admin-your-account',
 ];

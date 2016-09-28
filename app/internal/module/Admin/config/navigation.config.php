@@ -168,17 +168,17 @@ return [
                     ]
                 ],
                 [
-                    'id'    => 'admin-dashboard/admin-my-account',
-                    'label' => 'My account',
-                    'route' => 'admin-dashboard/admin-my-account',
+                    'id'    => 'admin-dashboard/admin-your-account',
+                    'label' => 'Your account',
+                    'route' => 'admin-dashboard/admin-your-account',
                     'pages' => [
                         [
-                            'id' => 'admin-dashboard/admin-my-account/details',
+                            'id' => 'admin-dashboard/admin-your-account/details',
                             'label' => 'Details',
-                            'route' => 'admin-dashboard/admin-my-account/details'
+                            'route' => 'admin-dashboard/admin-your-account/details'
                         ],
                         [
-                            'id' => 'admin-dashboard/admin-my-account/change-password',
+                            'id' => 'admin-dashboard/admin-your-account/change-password',
                             'label' => 'Change password',
                             'route' => 'change-password',
                             'class' => 'js-modal-ajax',

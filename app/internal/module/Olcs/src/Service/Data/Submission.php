@@ -2,11 +2,12 @@
 
 namespace Olcs\Service\Data;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class Submission
+ *
  * @package Olcs\Service
  */
 class Submission implements FactoryInterface
@@ -83,11 +84,13 @@ class Submission implements FactoryInterface
     public function filterCommentsBySection($sectionId, $comments)
     {
         $sectionComments = [];
+
         foreach ($comments as $comment) {
             if ($sectionId == $comment['submissionSection']['id']) {
                 $sectionComments[] = $comment;
             }
         }
+
         return $sectionComments;
     }
 
@@ -104,6 +107,7 @@ class Submission implements FactoryInterface
                     'submission_section'
                 );
         }
+
         return $this->allSectionsRefData;
     }
 
@@ -117,6 +121,7 @@ class Submission implements FactoryInterface
     public function setAllSectionsRefData($allSectionsRefData)
     {
         $this->allSectionsRefData = $allSectionsRefData;
+
         return $this;
     }
 
@@ -130,6 +135,7 @@ class Submission implements FactoryInterface
     public function setRefDataService($refDataService)
     {
         $this->refDataService = $refDataService;
+
         return $this;
     }
 

@@ -2,21 +2,25 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\ListDataInterface;
 use Common\Service\Data\AbstractDataService;
+use Common\Service\Data\ListDataInterface;
 use Dvsa\Olcs\Transfer\Query\InspectionRequest\OperatingCentres as OperatingCentresQry;
 
 /**
  * Operating Centres for Inspection Request data service
  *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @package Olcs\Service\Data
  */
 class OperatingCentresForInspectionRequest extends AbstractDataService implements ListDataInterface
 {
-    protected $serviceName = 'LicenceOperatingCentre';
-
+    /**
+     * @var string
+     */
     protected $type = 'licence';
 
+    /**
+     * @var int
+     */
     protected $identifier;
 
     /**
@@ -29,6 +33,7 @@ class OperatingCentresForInspectionRequest extends AbstractDataService implement
     public function formatData(array $data)
     {
         $optionData = [];
+
         if (!empty($data['results'])) {
             foreach ($data['results'] as $oc) {
                 $optionData[$oc['id']] =
@@ -44,8 +49,8 @@ class OperatingCentresForInspectionRequest extends AbstractDataService implement
     /**
      * Fetch list options
      *
-     * @param mixed $context   Context
-     * @param bool  $useGroups Use groups
+     * @param array|string $context   Context
+     * @param bool         $useGroups Use groups
      *
      * @return array
      */
@@ -61,7 +66,7 @@ class OperatingCentresForInspectionRequest extends AbstractDataService implement
     }
 
     /**
-     * Ensures only a single call is made to the backend for each dataset
+     * Fetch list data
      *
      * @return array
      */

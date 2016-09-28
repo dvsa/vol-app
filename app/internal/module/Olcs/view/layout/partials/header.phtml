@@ -8,7 +8,7 @@
           ->setPartial(array('layout/partials/breadcrumbs', 'Olcs'));
 
         $userNav = $this->navigation('user-details')
-          ->menu($this->navigation()->findOneBy('id', 'admin-my-account'))
+          ->menu($this->navigation()->findOneBy('id', 'admin-your-account'))
           ->setPartial('layout/partials/user-details');
 
         if (count($userNav->getContainer()) > 0) {
