@@ -39,6 +39,9 @@ class VariationOverviewSection extends LvaOverviewSection
                 break;
         }
 
+        if (isset($sectionDetails['enabled'])) {
+            $this->setVariable('enabled', $sectionDetails['enabled']);
+        }
         $this->setVariable('status', $statusText);
         $this->setVariable('statusColour', $statusColour);
 
