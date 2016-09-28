@@ -99,4 +99,32 @@ class VariationOverviewSectionTest extends MockeryTestCase
 
         $this->assertNull($viewModel->getVariable('sectionNumber'));
     }
+
+    public function testViewWithNotEnabled()
+    {
+        $sectionDetails = ['status' => 0, 'enabled' => 0];
+        $ref = 'type_of_licence';
+        $data = [
+            'id' => 1,
+            'idIndex' => 'application',
+            'sectionNumber' => 1,
+            'licence' => [
+                'organisation' => [
+                    'type' => [
+                        'id' => 'org_t_llp'
+                    ]
+                ]
+            ]
+        ];
+
+        $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
+
+        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
+
+        $this->assertEquals('', $viewModel->getVariable('statusColour'));
+        $this->assertEquals('', $viewModel->getVariable('status'));
+        $this->assertEquals(0, $viewModel->getVariable('enabled'));
+
+        $this->assertNull($viewModel->getVariable('sectionNumber'));
+    }
 }
