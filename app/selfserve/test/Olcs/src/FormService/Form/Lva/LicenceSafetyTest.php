@@ -4,14 +4,14 @@ namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\FormService\Form\Lva\LicencePsvVehicles;
+use Olcs\FormService\Form\Lva\LicenceSafety;
 
 /**
- * Licence Psv Vehicles Test
+ * Licence Safety Test
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LicencePsvVehiclesTest extends MockeryTestCase
+class LicenceSafetyTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -24,7 +24,7 @@ class LicencePsvVehiclesTest extends MockeryTestCase
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService')->makePartial();
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
 
-        $this->sut = new LicencePsvVehicles();
+        $this->sut = new LicenceSafety();
         $this->sut->setFormServiceLocator($this->fsm);
         $this->sut->setFormHelper($this->formHelper);
     }
@@ -35,8 +35,6 @@ class LicencePsvVehiclesTest extends MockeryTestCase
         $this->fsm->setService('lva-licence-vehicles_psv', $mockLicenceVehicles);
 
         $formActions = m::mock();
-        $formActions->shouldReceive('has')->with('saveAndContinue');
-        $formActions->shouldReceive('remove')->with('saveAndContinue');
         $formActions->shouldReceive('get')
             ->with('save')
             ->andReturn(
@@ -54,11 +52,10 @@ class LicencePsvVehiclesTest extends MockeryTestCase
         $mockForm->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
         $this->formHelper->shouldReceive('createForm')
-            ->with('Lva\PsvVehicles')
+            ->with('Lva\Safety')
             ->andReturn($mockForm)
             ->getMock();
 
         $this->sut->getForm();
-
     }
 }

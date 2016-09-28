@@ -71,6 +71,8 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
 
             $form->setData($data);
 
+            $tolFormManagerService->maybeAlterFormForNi($form);
+
             if ($form->isValid()) {
                 $dto = CreateApplication::create(
                     [
