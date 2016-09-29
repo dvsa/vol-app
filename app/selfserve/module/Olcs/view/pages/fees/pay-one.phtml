@@ -1,25 +1,19 @@
-<div class="page-header">
+<?php
+/** @var \Zend\Navigation\Page\Mvc $backPage */
+$backPage = $this->navigationParentPage();
 
-  <ol class="breadcrumbs">
-    <li class="breadcrumbs__item">
-      <a href="<?php echo $this->url('fees');?>"><?php echo $this->translate('dashboard.link'); ?></a>
-    </li>
-    <?php if ($type === 'submit'): ?>
-      <li class="breadcrumbs__item">
-        <a href="<?php echo $this->url('lva-application', [], [], true);?>">
-          <?php echo $this->translate('application.overview.title'); ?>
-        </a>
-      </li>
-    <?php endif; ?>
-  </ol>
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $this->fee['description'],
+        'pageSubTitle' => $this->translate('licence') . ' ' . $this->fee['licence']['licNo'],
+        'backUrl' => [
+            'url' => ($backPage !== null ? $backPage->getHref() : $this->url('fees')),
+        ],
+    ]
+);
+?>
 
-  <div class="page-header__wrapper">
-    <h3 class="page-header__subtitle">
-      <?php echo $this->translate('licence'); ?> <?php echo $fee['licence']['licNo']; ?>
-    </h3>
-    <h1><?php echo $fee['description']; ?></h1>
-  </div><!-- end .page-header__wrapper -->
-</div>
 
 <div class="row">
 

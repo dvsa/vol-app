@@ -1,36 +1,35 @@
 <div class="page-header">
 
-  <?php if (!isset($this->showNav) || $this->showNav !== false) {
-    echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs');
-  } ?>
+  <?php
+  if ($this->backUrl === true) {
+      echo $this->linkBack();
 
-  <?php if (!empty($this->backUrl)) : ?>
-    <ol class="breadcrumbs">
-      <li class="breadcrumbs__item">
-        <a href="<?php echo $this->backUrl['url']; ?>"><?php echo $this->translate($this->backUrl['label']); ?></a>
-      </li>
-    </ol>
-  <?php endif; ?>
+  } elseif (is_array($this->backUrl) && count($this->backUrl) > 0) {
+      echo $this->linkBack($this->backUrl);
+  }
+  ?>
 
   <div class="row">
-      
     <div class="page-header__wrapper two-thirds">
 
       <?php if (!empty($this->pageSubTitleUrl)) : ?>
           <h3 class="page-header__subtitle">
-              <a href="<?php echo $this->pageSubTitleUrl['url'] ?>">
-                <?php echo $this->translate($this->pageSubTitleUrl['label']) ?>
-              </a>
+              <a href="<?php echo $this->pageSubTitleUrl['url'] ?>"><?php
+                  echo $this->escapeHtml($this->translate($this->pageSubTitleUrl['label'])); ?></a>
           </h3>
       <?php endif; ?>
 
       <?php if (isset($this->pageSubTitle) && $this->pageSubTitle != '') : ?>
-        <h3 class="page-header__subtitle">
-          <?php echo $this->pageSubTitle; ?>
-        </h3>
+          <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($this->pageSubTitle); ?></h3>
       <?php endif; ?>
   
-      <h1><?php echo $this->pageTitle; ?></h1>
+      <h1><?php
+          echo (
+              $this->pageTitleEscape === false 
+              ? $this->pageTitle 
+              : $this->escapeHtml($this->pageTitle)
+          ); 
+      ?></h1>
 
       <?php
       if (isset($this->tabs)) {
@@ -40,7 +39,13 @@
 
       <?php if (isset($this->pageHeaderText) && $this->pageHeaderText != '') { ?>
         <div class="page-header__text">
-            <p><?php echo $this->pageHeaderText; ?></p>
+            <p><?php
+                echo (
+                    $this->pageHeaderTextEscape !== false
+                    ? $this->escapeHtml($this->pageHeaderText)
+                    : $this->pageHeaderText
+                );
+            ?></p>
         </div>
       <?php } ?>
           
@@ -48,17 +53,39 @@
         <p>
           <b>
             <a href="<?php echo $this->url($this->pageHeaderUrl['route'], $this->pageHeaderUrl['params']);?>">
-              <?php echo $this->translate($this->pageHeaderUrl['text']); ?>
+              <?php echo $this->escapeHtml($this->translate($this->pageHeaderUrl['text'])); ?>
             </a>
           </b>
         </p>
       <?php } ?>
-          
+
     </div>
-    
-    <ul class="page-header__actions one-third">
-    </ul>
+
+    <?php if (!empty($this->actionsElms)) { ?>
+        <ul class="page-header__actions one-third">
+            <?php
+            /** @var \Zend\Form\ElementInterface|string $element */
+            foreach ($this->actionsElms as $element) :
+                if (empty($element)) {
+                    continue;
+                }
+
+                if (!$element instanceof \Zend\Form\ElementInterface) {
+                    echo '<li>' . $element . '</li>';
+
+                    continue;
+                }
+
+                //  zend element
+                $tmpElm = clone $element;
+                $tmpElm->setAttribute('class', 'page-header__action');
+                ?>
+                <li><?php echo $this->formElement($tmpElm); ?></li>
+                <?php
+            endforeach; ?>
+        </ul>
+    <?php } ?>
       
-  </div>
+  </div><!-- row -->
     
 </div><!-- .page-header -->

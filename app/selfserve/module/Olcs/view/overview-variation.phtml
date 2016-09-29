@@ -3,31 +3,28 @@
  * @NOTE: might want to DRY up with Licence / Application Variation overview
  * templates if maintaining three is a pain. Lots of common ground, but they're
  * small templates so no biggie to have them separate for now
-*/
+ */
 ?>
 
 <div class="row">
   <?php echo $this->flashMessengerAll(); ?>
   <div class="two-thirds">
-    <div class="page-header">
-      <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
-        <div class="page-header__wrapper">
-         <?php
-                if (!empty($licNo)) {
-              ?>
-              <h3 class="page-header__subtitle">
-                  <?php
-                  $reference = $licNo;
-                  $reference .= !empty($applicationId) ? ' / ' . $applicationId : '';
-                  echo $this->escapeHtml($reference);
-                  ?>
-              </h3>
-              <?php
-                }
-              ?>
-              <h1><?php echo $this->translate('application.apply-to-change-licence.title'); ?></h1>
-        </div>
-    </div><!-- page-header -->
+    <?php
+    echo $this->partial(
+        'partials/page-header-simple',
+        [
+            'pageTitle' => $this->translate('application.apply-to-change-licence.title'),
+            'pageSubTitle' => (
+                !empty($this->licNo)
+                ? $this->licNo . (!empty($this->applicationId) ? ' / ' . $this->applicationId : '')
+                : ''
+            ),
+            'backUrl' => [
+                'url' => $this->url('dashboard'),
+            ],
+        ]
+    );
+    ?>
     <p><?php echo $this->translate('application.apply-to-change-licence.guide.text'); ?></p>
     <ul class="overview-navigation">
         <?php
@@ -74,7 +71,3 @@
     </aside>
   </div>
 </div>
-
-
-
-

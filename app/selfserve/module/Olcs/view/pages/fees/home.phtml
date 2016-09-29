@@ -1,13 +1,16 @@
-<div class="page-header">
-  <div class="page-header__wrapper">
-    <h1><?php echo $this->translate('dashboard.title'); ?></h1>
-  </div>
-</div><!-- page-header-->
+<?php
+echo $this->render(
+    '/partials/page-header-simple.phtml',
+    [
+        'pageTitle' => $this->translate('dashboard.title'),
+    ]
+);
+?>
 
 <div class="row">
     
   <div class="dashboard two-thirds">
-    
+
     <?php echo $this->flashMessengerAll(); ?>
   
     <?php

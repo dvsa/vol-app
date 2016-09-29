@@ -3,6 +3,9 @@
         '/partials/page-header.phtml',
         [
             'pageTitle' => $this->pageTitle(),
+            'backUrl' => [
+                'url' => $this->url('manage-user'),
+            ],
         ]
     );
 ?>
