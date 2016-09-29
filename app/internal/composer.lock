@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ba2ddb36b0272d7639ce85a651d0eada",
-    "content-hash": "c1a9379d0e2da6aae43c4548cf5fd6cc",
+    "hash": "e880649d21fe1e71d5b3d75e5a8551d9",
+    "content-hash": "bfa25f903582c8f36a192785d9e48870",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -808,11 +808,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/4.0",
+            "version": "dev-release/4.0.1",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git",
-                "reference": "a00340a977ab76611f18b8a5d8cf6a95b359f3da"
+                "reference": "bc24a1bc7aa0c2522fab79483640399c28c16d8a"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -843,7 +843,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2016-09-28 08:58:24"
+            "time": "2016-09-29 08:54:38"
         },
         {
             "name": "olcs/autoload",
