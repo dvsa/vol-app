@@ -1076,6 +1076,7 @@ return array(
                         'label' => 'search',
                         'route' => 'search',
                         'class' => 'proposition-nav__item',
+                        'visible' => false,
                     ),
                     array(
                         'id' => 'selfserve-topnav-manage-users',

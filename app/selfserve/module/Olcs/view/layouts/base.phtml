@@ -53,13 +53,15 @@
           <a class="proposition__toggle" href="#">Menu</a>
 
             <?php
-            if($this->currentUser()->isLoggedIn()) {
+            $currentUser = $this->currentUser();
+
+            if ($currentUser->isLoggedIn()) {
                 // get Home navigation
                 $navigation = $this->navigation('navigation')->getContainer()->findBy('id', 'home');
 
-                if ($this->currentUser()->isOperator()) {
-                    // operator - remove Search
-                    $navigation->removePage($navigation->findOneById('selfserve-topnav-search'));
+                if ($currentUser->isLocalAuthority() || $currentUser->isPartner()) {
+                    // show Search
+                    $navigation->findOneById('selfserve-topnav-search')->setVisible(true);
                 }
 
                 /* @var \Zend\View\Helper\Navigation\Menu $menu */
