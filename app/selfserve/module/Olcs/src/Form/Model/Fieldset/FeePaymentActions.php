@@ -22,5 +22,5 @@ class FeePaymentActions
      * @Form\Options({"label": "cancel.button"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
-    public $cancel = null;
+    public $customCancel = null;
 }

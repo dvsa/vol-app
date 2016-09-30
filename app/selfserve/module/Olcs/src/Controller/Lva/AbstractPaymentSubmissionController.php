@@ -179,13 +179,20 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
      */
     public function payAndSubmitAction()
     {
-        if (!$this->getRequest()->isPost()) {
-            return $this->redirectToOverview();
-        }
-
         $applicationId = $this->getApplicationId();
         if (empty($applicationId)) {
             throw new BadRequestException('Invalid payment submission request');
+        }
+        $post = (array) $this->getRequest()->getPost();
+
+        if ($this->isButtonPressed('customCancel')) {
+            $back = $this->params()->fromRoute('redirect-back', 'overview');
+            if ($back === 'undertakings') {
+                return $this->redirect()->toRouteAjax(
+                    'lva-' . $this->lva . '/undertakings', [$this->getIdentifierIndex() => $applicationId]
+                );
+            }
+            return $this->gotoOverview();
         }
 
         $fees = $this->getOutstandingFeeDataForApplication($applicationId);
@@ -194,7 +201,6 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             return $this->submitApplication($applicationId, $postData['version']);
         }
 
-        $post = (array) $this->getRequest()->getPost();
         if (isset($post['form-actions']['pay'])) {
             /*
              * If pay POST param exists that mean we are on 2nd step
