@@ -29,7 +29,8 @@ trait VariationControllerTrait
      * @todo this logic is the same as CommonApplicationControllerTrait, this could potentially be re-used however I am
      *   not sure whether there would be any complications
      *
-     * @param string $section
+     * @param  string $section section
+     *
      * @return \Zend\Http\Response
      */
     protected function completeSection($section)
@@ -39,5 +40,36 @@ trait VariationControllerTrait
         }
 
         return $this->goToOverviewAfterSave();
+    }
+
+    /**
+     * Get variation sections
+     *
+     * @param array $data variation data
+     *
+     * @return array
+     */
+    protected function getVariationSections($data)
+    {
+        $completions = $data['variationCompletion'];
+
+        $accessible = array_keys($data['sections']);
+
+        $accessible = array_flip($accessible);
+        $sections = array_intersect_key(
+            array_merge(
+                $accessible,
+                $completions
+            ),
+            $accessible
+        );
+
+        $sections = array_map(
+            function ($value) {
+                return ['status' => $value];
+            },
+            $sections
+        );
+        return $sections;
     }
 }

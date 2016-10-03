@@ -415,10 +415,14 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
         'pay-and-submit' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'pay-and-submit[/]',
+                'route' => 'pay-and-submit[/:redirect-back][/]',
                 'defaults' => array(
                     'controller' => 'LvaApplication/PaymentSubmission',
-                    'action' => 'payAndSubmit'
+                    'action' => 'payAndSubmit',
+                    'redirect-back' => 'overview',
+                ),
+                'constraints' => array(
+                    'redirect-back' => '[a-z\-]+',
                 ),
             )
         ),
@@ -531,10 +535,14 @@ $configRoutes['lva-variation']['child_routes'] = array_merge(
         'pay-and-submit' => array(
             'type' => 'segment',
             'options' => array(
-                'route' => 'pay-and-submit[/]',
+                'route' => 'pay-and-submit[/:redirect-back][/]',
                 'defaults' => array(
                     'controller' => 'LvaVariation/PaymentSubmission',
-                    'action' => 'payAndSubmit'
+                    'action' => 'payAndSubmit',
+                    'redirect-back' => 'overview',
+                ),
+                'constraints' => array(
+                    'redirect-back' => '[a-z\-]+',
                 ),
             )
         ),
