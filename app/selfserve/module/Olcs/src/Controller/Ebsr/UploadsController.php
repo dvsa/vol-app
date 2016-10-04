@@ -91,7 +91,7 @@ class UploadsController extends AbstractController
     {
         $dtoData = [
             'category' => Category::CATEGORY_BUS_REGISTRATION,
-            'subCategory' => Category::BUS_SUB_CATEGORY_EBSR,
+            'subCategory' => Category::BUS_SUB_CATEGORY_TRANSXCHANGE_FILE,
             'description' => $file['name'],
             'isExternal' => true,
             'isEbsrPack' => true
