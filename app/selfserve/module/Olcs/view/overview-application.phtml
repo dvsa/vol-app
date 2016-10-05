@@ -26,9 +26,7 @@
             <?php } ?>
           <h1><?php echo $this->translate('application.apply-for-new-licence.title'); ?></h1>
         </div>
-
       </div><!-- page-header -->
-      
       <ul class="overview-navigation">
           <?php 
               foreach ($sections as $section) {
@@ -36,16 +34,13 @@
               } 
           ?>
       </ul>
-    
   </div>
   
   <div class="one-third">
-    
     <aside class="sidebar" role="complementary">
-
       <div class="sidebar__panel">
         <h4 class="sidebar__panel__title">Submit application</h4>
-        <p>You can't submit your application until you've fired the lazer</p>
+
         <?php if (isset($submissionForm)): ?>
             <?php echo $this->form($submissionForm); ?>
         <?php endif ?>
@@ -75,9 +70,6 @@
           <dd><?php echo strftime("%d %B %G",strtotime($completionDate)); ?></dd>
         <?php endif; ?>
       </dl>
-      
     </aside>
-    
   </div>
-
 </div>
