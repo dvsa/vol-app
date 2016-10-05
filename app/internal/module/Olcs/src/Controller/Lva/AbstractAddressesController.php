@@ -192,7 +192,7 @@ class AbstractAddressesController extends Lva\AbstractAddressesController
      */
     protected function isValid(Form $form, array $formData)
     {
-        if (null !== $this->getCrudAction([$formData['table']])) {
+        if (null !== $this->getCrudAction([isset($formData['table']) ? $formData['table'] : null])) {
             $this->hlpForm->disableValidation($form->getInputFilter());
 
             return true;
