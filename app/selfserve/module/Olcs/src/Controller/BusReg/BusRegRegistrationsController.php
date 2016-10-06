@@ -207,7 +207,8 @@ class BusRegRegistrationsController extends AbstractController
             $this->currentUser()->getUserData()['userType'],
             [
                 User::USER_TYPE_LOCAL_AUTHORITY,
-                User::USER_TYPE_OPERATOR
+                User::USER_TYPE_OPERATOR,
+                User::USER_TYPE_TRANSPORT_MANAGER
             ]
         )) {
             return [
