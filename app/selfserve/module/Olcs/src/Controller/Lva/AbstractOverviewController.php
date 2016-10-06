@@ -1,18 +1,13 @@
 <?php
 
-/**
- * Abstract External Overview Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 use Dvsa\Olcs\Transfer\Command\Application\CancelApplication as CancelApplicationCmd;
 use Dvsa\Olcs\Transfer\Command\Application\WithdrawApplication as WithdrawApplicationCmd;
+use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
+use Zend\Mvc\MvcEvent;
 
 /**
  * Abstract External Overview Controller
@@ -26,6 +21,11 @@ abstract class AbstractOverviewController extends AbstractController
     protected $lva;
     protected $location = 'external';
 
+    /**
+     * Process action : Index
+     *
+     * @return \Olcs\View\Model\LvaOverview
+     */
     public function indexAction()
     {
         $applicationId = $this->getApplicationId();
@@ -33,30 +33,37 @@ abstract class AbstractOverviewController extends AbstractController
         $data = $this->getOverviewData($applicationId);
         $data['idIndex'] = $this->getIdentifierIndex();
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-
-        $form = $formHelper->createForm('Lva\PaymentSubmission');
-
-        $form->setData($data);
+        $isVisible = ($data['status']['id'] === RefData::APPLICATION_STATUS_NOT_SUBMITTED);
 
         $sections = $this->getSections($data);
 
-        $enabled = $this->isReadyToSubmit($sections);
-        $visible = ($data['status']['id'] == RefData::APPLICATION_STATUS_NOT_SUBMITTED);
-        $actionUrl = $this->url()->fromRoute(
-            'lva-'.$this->lva.'/pay-and-submit',
-            [$this->getIdentifierIndex() => $applicationId]
-        );
-        $feeAmount = $data['outstandingFeeTotal'];
-        $disableCardPayments = (bool) $data['disableCardPayments'];
-
-        $this->getServiceLocator()->get('Helper\PaymentSubmissionForm')
-            ->updatePaymentSubmissonForm($form, $actionUrl, $visible, $enabled, $feeAmount, $disableCardPayments);
+        $form = null;
+        if ($isVisible) {
+            /** @var \Common\Form\Form $form */
+            $form = $this->getServiceLocator()->get('FormServiceManager')
+                ->get('lva-' . $this->lva . '-overview-submission')
+                ->getForm(
+                    $data,
+                    [
+                        'sections' => $sections,
+                        'isReadyToSubmit' => $this->isReadyToSubmit($sections),
+                        'actionUrl' => $this->url()->fromRoute(
+                            'lva-' . $this->lva . '/pay-and-submit',
+                            [$this->getIdentifierIndex() => $applicationId]
+                        ),
+                    ]
+                )
+                ->setData($data);
+        }
 
         return $this->getOverviewView($data, $sections, $form);
-
     }
 
+    /**
+     * Process action : Cancel
+     *
+     * @return \Common\View\Model\Section|\Zend\Http\Response
+     */
     public function cancelAction()
     {
         if ($this->getRequest()->isPost() && $this->isButtonPressed('submit')) {
@@ -80,6 +87,11 @@ abstract class AbstractOverviewController extends AbstractController
         return $this->render('cancel_appliction_confirmation', $form);
     }
 
+    /**
+     * Process action : Withdraw
+     *
+     * @return \Common\View\Model\Section|\Zend\Http\Response
+     */
     public function withdrawAction()
     {
         if ($this->getRequest()->isPost() && $this->isButtonPressed('submit')) {
@@ -108,6 +120,13 @@ abstract class AbstractOverviewController extends AbstractController
         return $this->render('withdraw_application_confirmation', $form);
     }
 
+    /**
+     * Check for redirect after CRUD
+     *
+     * @param int $lvaId LVA identifier
+     *
+     * @return null|\Zend\Http\Response
+     */
     protected function checkForRedirect($lvaId)
     {
         if ($this->isButtonPressed('cancel') &&
@@ -117,6 +136,13 @@ abstract class AbstractOverviewController extends AbstractController
         return parent::checkForRedirect($lvaId);
     }
 
+    /**
+     * Return Api data for specified application
+     *
+     * @param int $applicationId Application Identifier
+     *
+     * @return array|mixed
+     */
     protected function getOverviewData($applicationId)
     {
         $dto = ApplicationQry::create(['id' => $applicationId]);
@@ -125,7 +151,32 @@ abstract class AbstractOverviewController extends AbstractController
         return $response->getResult();
     }
 
+    /**
+     * Return view
+     *
+     * @param array                    $data     Api/Form Data
+     * @param array                    $sections Sections
+     * @param \Zend\Form\FormInterface $form     Form
+     *
+     * @return \Olcs\View\Model\LvaOverview
+     */
     abstract protected function getOverviewView($data, $sections, $form);
 
+    /**
+     * Return available sections
+     *
+     * @param array $data Api/Form data
+     *
+     * @return array
+     */
     abstract protected function getSections($data);
+
+    /**
+     * Is Application\Variation Ready to submbit
+     *
+     * @param array $sections Sections Array
+     *
+     * @return boolean
+     */
+    abstract protected function isReadyToSubmit($sections);
 }
