@@ -1,7 +1,7 @@
 <?php $this->doctype(); ?>
 <html lang="en">
   <head>
-    <?php echo $this->partial('partials/head', ['title' => $title]); ?>
+    <?php echo $this->partial('partials/head', ['title' => $this->pageTitle()]); ?>
   </head>
   <body class="internal sign-in" id="<?php echo $this->pageId(); ?>">
     <?php echo $this->version(); ?>
