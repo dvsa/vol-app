@@ -1,10 +1,15 @@
-<div class="page-header">
-    <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
-    <div class="page-header__wrapper">
-        <h1><?php echo $this->pageTitle(); ?></h1>
-    </div>
-</div><!-- page-header -->
-  
+<?php
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $this->pageTitle(),
+        'backUrl' => [
+            'url' => $this->url('search'),
+        ],
+    ]
+);
+?>
+
 <div class="row">
 
   <div class="two-thirds">

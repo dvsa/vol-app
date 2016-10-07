@@ -1,24 +1,25 @@
-
-  <div class="row js-body">
-
+<div class="row js-body">
     <?php $form->prepare(); ?>
     <?php echo $this->form()->openTag($form); ?>
 
     <div class="two-thirds">
-
-      <div class="page-header">
-        <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
-        <div class="page-header__wrapper">
-          <h1><?php echo $this->translate($title); ?></h1>
-          <div class="page-header__text">
-              <p><?php echo $this->translate($subTitle); ?></p>
-          </div>
-        </div>
-      </div><!-- page-header-->
-
-
       <?php
+      /** @var \Zend\Navigation\Page\Mvc $backPage */
+      $backPage = $this->navigationParentPage();
 
+      echo $this->partial(
+          'partials/page-header-simple',
+          [
+              'pageTitle' => $this->translate($this->title),
+              'pageHeaderText' => $this->translate($this->subTitle),
+              'pageHeaderTextEscape' => false,
+              'backUrl' => [
+                  'url' => ($backPage !== null ? $backPage->getHref() : null),
+              ],
+          ]
+      );
+
+      //  guidance
       $guidanceMessage = $this->placeholder('guidance');
 
       if (!empty($guidanceMessage)) {
@@ -40,8 +41,6 @@
       echo $this->formErrors($form);
       echo $this->form()->render($form, false);
       ?>
-
-
     </div>
 
     <div class="one-third">
@@ -68,5 +67,3 @@
   <?php echo $this->form()->closeTag(); ?>
 
 </div>
-
-

@@ -1,9 +1,6 @@
 <main id="main" role="main">
-    <div class="page-header">
-        <div class="page-header__wrapper">
-            <h1><?php echo $this->pageTitle(); ?></h1>
-        </div><!-- .page-header__wrapper -->
-    </div><!-- .page-header -->
+    <?php echo $this->partial('partials/page-header-simple', ['pageTitle' => $this->pageTitle()]); ?>
+
     <div class="row">
         <div class="two-thirds">
             <p><?php echo sprintf($this->translate('signin-or-register-text'), $this->url('user-registration')); ?></p>

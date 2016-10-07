@@ -1,19 +1,21 @@
-<div class="page-header">
-  <div class="page-header__wrapper">
-    <h1><?php echo $this->pageTitle(); ?></h1>
-    <div class="page-header__text">
-      <div class="guidance">
-        <p>
-            <?php 
-              echo $this->getHelperPluginManager()
-              ->getServiceLocator()->get('Helper\Translation')
-              ->translateReplace('user-registration.page.check-email.guidance', [$this->emailAddress]); 
-            ?>
-        </p>
-      </div>
-    </div>
-  </div>
-</div><!-- page-header -->
+<?php
+/** @var \Common\Service\Helper\TranslationHelperService $translationHlp */
+$translationHlp = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');
+
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $this->pageTitle(),
+        'pageHeaderText' =>
+            '<div class="guidance"><p>' .
+                $translationHlp->translateReplace(
+                    'user-registration.page.check-email.guidance', [$this->emailAddress]
+                ) .
+            '</p></div>',
+        'pageHeaderTextEscape' => false,
+    ]
+);
+?>
 
 <div class="row">
   

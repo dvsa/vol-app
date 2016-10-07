@@ -3,7 +3,8 @@ echo $this->render(
     'partials/page-header.phtml',
     array(
         'pageTitle' => 'Something&#39s gone wrong',
-        'pageSubTitle'=> $this->message
+        'pageTitleEscape' => false,
+        'pageSubTitle'=> $this->message,
     )
 );
 ?>

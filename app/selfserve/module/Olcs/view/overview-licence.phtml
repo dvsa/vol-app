@@ -9,15 +9,18 @@
 <div class="row">
   <?php echo $this->flashMessengerAll(); ?>
   <div class="two-thirds">
-    <div class="page-header">
-      <?php echo $this->navigation('navigation')->breadcrumbs()->setPartial('partials/breadcrumbs'); ?>
-        <div class="page-header__wrapper">
-          <h3 class="page-header__subtitle">
-              <?php echo $this->escapeHtml($licenceId); ?>
-          </h3>
-          <h1><?php echo $this->translate('licence.overview.title'); ?></h1>
-        </div>
-    </div><!-- page-header -->
+    <?php
+    echo $this->partial(
+        'partials/page-header-simple',
+        [
+            'pageTitle' => $this->translate('licence.overview.title'),
+            'pageSubTitle' => $this->licenceId,
+            'backUrl' => [
+                'url' => $this->url('dashboard'),
+            ],
+        ]
+    );
+    ?>
     <ul class="overview-navigation">
         <?php
         foreach ($sections as $section) {
@@ -30,7 +33,8 @@
     <ul class="page-header__actions">
       <?php if (isset($this->shouldShowCreateVariation) && $this->shouldShowCreateVariation): ?>
       <li>
-          <a href="<?php echo $this->url('lva-licence/variation', [], [], true); ?>" class="page-header__action js-modal-ajax">
+          <a href="<?php echo $this->url('lva-licence/variation', [], [], true); ?>" 
+             class="page-header__action js-modal-ajax">
               <?php echo $this->translate('licence.apply-to-change'); ?>
           </a>
       </li>
@@ -48,5 +52,3 @@
 
   </div>
 </div>
-
-

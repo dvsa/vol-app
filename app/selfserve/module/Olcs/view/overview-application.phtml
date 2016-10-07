@@ -7,35 +7,33 @@
 ?>
 
 <div class="row page-content">
-
   <div class="two-thirds">
-      
-      <?php echo $this->flashMessengerAll(); ?>
-
-      <div class="page-header">
-
-        <div class="page-header__wrapper">
-            <?php if (!empty($licNo)) { ?>
-              <h3 class="page-header__subtitle">
-                  <?php
-                  $reference = $licNo;
-                  $reference .= !empty($applicationId) ? ' / ' . $applicationId : '';
-                  echo $this->escapeHtml($reference);
-                  ?>
-              </h3>
-            <?php } ?>
-          <h1><?php echo $this->translate('application.apply-for-new-licence.title'); ?></h1>
-        </div>
-      </div><!-- page-header -->
-      <ul class="overview-navigation">
-          <?php 
-              foreach ($sections as $section) {
-                  echo $this->render($section);
-              } 
-          ?>
-      </ul>
+    <?php echo $this->flashMessengerAll(); ?>
+    <?php
+    echo $this->partial(
+        'partials/page-header-simple',
+        [
+            'pageTitle' => $this->translate('application.apply-for-new-licence.title'),
+            'pageSubTitle' => (
+                !empty($this->licNo)
+                ? $this->licNo . (!empty($this->applicationId) ? ' / ' . $this->applicationId : '')
+                : ''
+            ),
+            'backUrl' => [
+                'url' => $this->url('dashboard'),
+            ],
+        ]
+    );
+    ?>
+    <ul class="overview-navigation">
+        <?php
+            foreach ($sections as $section) {
+                echo $this->render($section);
+            }
+        ?>
+    </ul>
   </div>
-  
+    
   <div class="one-third">
     <aside class="sidebar" role="complementary">
       <div class="sidebar__panel">
