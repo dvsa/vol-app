@@ -398,7 +398,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 return $this->redirect()->refresh();
             }
 
-            return $this->backToDetails();
+            return $this->backToDetails($type);
         }
 
         return $this->render('transport_managers-details-' . $mode . '-' . $type, $form);
@@ -810,9 +810,19 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
     }
 
-    protected function backToDetails()
+    /**
+     * @param string $which Which section has just been completed
+     *
+     * @return \Zend\Http\Response
+     */
+    protected function backToDetails($which)
     {
-        return $this->redirect()->toRouteAjax('lva-' . $this->lva . '/transport_manager_details', [], [], true);
+        return $this->redirect()->toRouteAjax(
+            'lva-' . $this->lva . '/transport_manager_details',
+            [],
+            ['fragment' => lcfirst($which)],
+            true
+        );
     }
 
     protected function getFormTables($postData)
