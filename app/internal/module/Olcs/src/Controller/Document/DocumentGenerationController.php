@@ -1,20 +1,14 @@
 <?php
 
-/**
- * Document Generation Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
- * @author Nick Payne <nick.payne@valtech.co.uk>
- */
 namespace Olcs\Controller\Document;
 
+use Common\Form\Elements\InputFilters\MultiCheckboxEmpty;
 use Dvsa\Olcs\Transfer\Command\Document\CreateLetter;
 use Dvsa\Olcs\Transfer\Query\Document\TemplateParagraphs;
 use Olcs\Logging\Log\Logger;
-use Zend\View\Model\ViewModel;
-use Zend\Form\Form;
 use Zend\Form\Fieldset;
-use Common\Form\Elements\InputFilters\MultiCheckboxEmpty;
+use Zend\Form\Form;
+use Zend\View\Model\ViewModel;
 
 /**
  * Document Generation Controller
@@ -29,6 +23,11 @@ class DocumentGenerationController extends AbstractDocumentController
      */
     const EMPTY_LABEL = 'Please select';
 
+    /**
+     * Process action - Generate
+     * 
+     * @return ViewModel
+     */
     public function generateAction()
     {
         $form = $this->generateForm('GenerateDocument', 'processGenerate');
@@ -42,6 +41,11 @@ class DocumentGenerationController extends AbstractDocumentController
         return $this->renderView($view, 'Generate letter');
     }
 
+    /**
+     * Process action - List Template Bookmarks
+     * 
+     * @return ViewModel
+     */
     public function listTemplateBookmarksAction()
     {
         $form = new Form();
@@ -62,6 +66,10 @@ class DocumentGenerationController extends AbstractDocumentController
 
     /**
      * Wrap the callback with a try/catch to handle any bookmark errors.
+     *
+     * @param array $data Form Data
+     *
+     * @return null|\Zend\Http\Response
      */
     public function processGenerate($data)
     {
@@ -72,8 +80,18 @@ class DocumentGenerationController extends AbstractDocumentController
             $this->getServiceLocator()->get('Helper\FlashMessenger')
                 ->addCurrentErrorMessage('Unable to generate the document');
         }
+
+        return null;
     }
 
+    /**
+     * Generate document
+     *
+     * @param array $data Form Data
+     *
+     * @return \Zend\Http\Response
+     * @throws \ErrorException
+     */
     protected function processGenerateDocument($data)
     {
         $routeParams = $this->params()->fromRoute();
@@ -132,6 +150,13 @@ class DocumentGenerationController extends AbstractDocumentController
         return $this->redirectToDocumentRoute($routeParams['type'], 'finalise', $redirectParams);
     }
 
+    /**
+     * Make changes in form in depend form selected options
+     *
+     * @param \Zend\Form\FormInterface $form Form
+     *
+     * @return mixed
+     */
     protected function alterFormBeforeValidation($form)
     {
         $categories = $this->getListDataCategoryDocs();
@@ -146,10 +171,12 @@ class DocumentGenerationController extends AbstractDocumentController
         $data = [];
         $docTemplates = ['' => self::EMPTY_LABEL];
 
-        if ($this->getRequest()->isPost()) {
-            $data = (array)$this->getRequest()->getPost();
-        } elseif ($this->params('doc')) {
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
 
+        if ($request->isPost()) {
+            $data = (array)$request->getPost();
+        } elseif ($this->params('doc')) {
             $data = $this->fetchDocData();
             $this->removeDocument($this->params('doc'));
         }
@@ -180,6 +207,14 @@ class DocumentGenerationController extends AbstractDocumentController
         return $form;
     }
 
+    /**
+     * Add template bookmarks
+     *
+     * @param int                          $id       Template Id
+     * @param \Zend\Form\FieldsetInterface $fieldset Target container element
+     *
+     * @return void
+     */
     private function addTemplateBookmarks($id, $fieldset)
     {
         if (empty($id)) {
@@ -187,7 +222,6 @@ class DocumentGenerationController extends AbstractDocumentController
         }
 
         $response = $this->handleQuery(TemplateParagraphs::create(['id' => $id]));
-
         if (!$response->isOk()) {
             return;
         }
@@ -197,13 +231,13 @@ class DocumentGenerationController extends AbstractDocumentController
         $bookmarks = $result['docTemplateBookmarks'];
 
         foreach ($bookmarks as $bookmark) {
-
             $bookmark = $bookmark['docBookmark'];
 
-            if (!empty($bookmark['description'])) {
-                $description = $bookmark['description'];
-            } else {
-                $description = $bookmark['name'];
+            $description = (empty($bookmark['description']) ? $bookmark['name'] : $bookmark['description']);
+
+            $paragraphs = (array) ($bookmark['docParagraphBookmarks'] ? $bookmark['docParagraphBookmarks'] : null);
+            if (0 === count($paragraphs)) {
+                continue;
             }
 
             $element = new MultiCheckboxEmpty();
@@ -213,8 +247,7 @@ class DocumentGenerationController extends AbstractDocumentController
             $element->setOptions(['required' => false]);
 
             $options = [];
-            foreach ($bookmark['docParagraphBookmarks'] as $paragraph) {
-
+            foreach ($paragraphs as $paragraph) {
                 $paragraph = $paragraph['docParagraph'];
                 $options[$paragraph['id']] = $paragraph['paraTitle'];
             }
