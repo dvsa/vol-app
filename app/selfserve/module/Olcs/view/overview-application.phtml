@@ -6,7 +6,7 @@
  */
 ?>
 
-<div class="row page-content">
+<div class="row">
   <div class="two-thirds">
     <?php echo $this->flashMessengerAll(); ?>
     <?php
@@ -33,14 +33,14 @@
         ?>
     </ul>
   </div>
-    
+
   <div class="one-third">
     <aside class="sidebar" role="complementary">
       <div class="sidebar__panel">
         <h4 class="sidebar__panel__title">Submit application</h4>
 
         <?php if (isset($submissionForm)): ?>
-            <?php echo $this->form($submissionForm); ?>
+          <?php echo $this->form($submissionForm); ?>
         <?php endif ?>
       </div>
 
