@@ -808,11 +808,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/4.0.1",
+            "version": "dev-release/4.0.2",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "5296fee679821a40e4ce3e97639bbab833f998a7"
+                "reference": "77a916a54e5b55bab9eb770e710050924fdbfd78"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
