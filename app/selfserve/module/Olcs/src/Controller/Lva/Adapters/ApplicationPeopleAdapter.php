@@ -19,6 +19,7 @@ class ApplicationPeopleAdapter extends VariationPeopleAdapter
     public function alterFormForOrganisation(Form $form, $table)
     {
         if ($this->canModify()) {
+            parent::alterFormForOrganisation($form, $table);
             return;
         }
 
