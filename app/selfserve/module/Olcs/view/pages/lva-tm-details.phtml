@@ -44,7 +44,8 @@
     </div>
 
     <div class="one-third">
-      <ul class="page-header__actions">
+      <aside class="sidebar" role="complementary">
+        <ul class="sidebar__actions">
           <?php
           foreach ($form->get('form-actions')->getElements() as $element) {
 
@@ -52,7 +53,7 @@
               $attributes = $element->getAttributes();
 
               // Override the class of the button
-              $element->setAttribute('class', 'page-header__action');
+              $element->setAttribute('class', '');
               ?>
               <li><?php echo $this->formElement($element); ?></li>
               <?php
@@ -61,7 +62,8 @@
               $element->setAttributes($attributes);
           }
           ?>
-      </ul>
+        </ul>
+      </aside>
     </div><!-- one-third -->
 
   <?php echo $this->form()->closeTag(); ?>
