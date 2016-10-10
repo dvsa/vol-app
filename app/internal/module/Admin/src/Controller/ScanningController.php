@@ -15,9 +15,7 @@ use Common\Controller\Traits\GenericRenderView;
 class ScanningController extends ZendAbstractActionController
 {
     const ERR_NO_ENTITY_FOR_CATEGORY = 'ERR_NO_ENTITY_FOR_CATEGORY';
-
     const ERR_ENTITY_NAME_NOT_SETUP = 'ERR_ENTITY_NAME_NOT_SETUP';
-
     const ERR_NO_DESCRIPTION = 'ERR_NO_DESCRIPTION';
 
     use GenericRenderView;
@@ -29,9 +27,17 @@ class ScanningController extends ZendAbstractActionController
      */
     public function indexAction()
     {
-        if ($this->getRequest()->isPost()) {
-            $data = (array)$this->getRequest()->getPost();
-        } else {
+        $prg = $this->prg();
+
+        // If have posted, and need to redirect to get
+        if ($prg instanceof \Zend\Http\Response) {
+            return $prg;
+        }
+
+        $data = $prg;
+
+        //  there is not POST
+        if ($prg === false) {
             $data = [
                 'details' => [
                     'category' => CategoryDataService::CATEGORY_LICENSING,
@@ -57,18 +63,18 @@ class ScanningController extends ZendAbstractActionController
 
         $this->getServiceLocator()->get('Script')->loadFile('forms/scanning');
 
-        if ($this->getRequest()->isPost()) {
-
+        //  is POST
+        if ($prg !== false) {
             $details = $data['details'];
 
             if (isset($details['description'])) {
+                /** @var  \Common\Service\Helper\FormHelperService */
                 $this->getServiceLocator()
                     ->get('Helper\Form')
                     ->remove($form, 'details->otherDescription');
             }
 
             if ($form->isValid()) {
-
                 /* @var $response \Common\Service\Cqrs\Response */
                 $response = $this->handleCommand(
                     \Dvsa\Olcs\Transfer\Command\Scan\CreateSeparatorSheet::create(
