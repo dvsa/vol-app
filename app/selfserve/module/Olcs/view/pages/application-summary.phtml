@@ -125,16 +125,16 @@
   </div>
 
   <div class="one-third">
-    <aside role="complementary">
-      <ul class="page-header__actions">
+    <aside class="sidebar" role="complementary">
+      <ul class="sidebar__actions">
           <li>
               <a href="<?php echo $this->url('lva-' . $lva . '/review', [], [], true); ?>" target="_blank"
-                  class="page-header__action"><?php echo $this->translate('view-full-application') ?></a>
+                  class=""><?php echo $this->translate('view-full-application') ?></a>
           </li>
           <?php if ($canWithdraw): ?>
               <li>
                   <a href="<?php echo $this->url('lva-' . $lva . '/withdraw', [], [], true); ?>"
-                      class="page-header__action js-modal-ajax"><?php echo $this->translate('withdraw-application') ?></a>
+                      class="js-modal-ajax"><?php echo $this->translate('withdraw-application') ?></a>
               </li>
           <?php endif; ?>
       </ul>
