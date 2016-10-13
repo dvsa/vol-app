@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Bus\Docs;
 
+use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -26,13 +27,19 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
      */
     protected function getConfiguredDocumentForm()
     {
-        $filters = $this->mapDocumentFilters(
+        $filters = $this->getDocumentFilters();
+
+        $form = $this->getDocumentForm($filters);
+
+        /** @var \Zend\Form\Element\Select $option */
+        $option = $form->get('showDocs');
+        $option->setValueOptions(
             [
-                'licence' => $this->getFromRoute('licence')
+                FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-reg-only',
             ]
         );
 
-        return $this->getDocumentForm($filters);
+        return $form;
     }
 
     /**
@@ -72,6 +79,21 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
     }
 
     /**
+     * Get document filters
+     *
+     * @return array
+     */
+    private function getDocumentFilters()
+    {
+        return $this->mapDocumentFilters(
+            [
+                'licence' => $this->getFromRoute('licence'),
+                'busReg' => $this->getFromRoute('busRegId'),
+            ]
+        );
+    }
+
+    /**
      * Get view model for document action
      *
      * @see Olcs\Controller\Traits\DocumentActionTrait
@@ -79,11 +101,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
      */
     protected function getDocumentView()
     {
-        $filters = $this->mapDocumentFilters(
-            [
-                'licence' => $this->getFromRoute('licence')
-            ]
-        );
+        $filters = $this->getDocumentFilters();
 
         return $this->getView(
             [

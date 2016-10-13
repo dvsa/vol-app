@@ -37,12 +37,13 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
      */
     protected function getTaskActionFilters()
     {
+        $appId = $this->params('application');
+
         return [
-            'licence' => $this->getLicenceIdForApplication(
-                $this->params('application')
-            ),
+            'licence' => $this->getLicenceIdForApplication($appId),
             'assignedToTeam' => '',
-            'assignedToUser' => ''
+            'assignedToUser' => '',
+            'application' => $appId,
         ];
     }
 }

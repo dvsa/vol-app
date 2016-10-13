@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Cases\Docs;
 
+use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -75,7 +76,10 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     {
         $case = $this->getCase();
 
-        $filters = [];
+        $filters = [
+            'case' => $case['id'],
+        ];
+
         switch ($case['caseType']['id']) {
             case 'case_t_tm':
                 $filters['transportManager'] = $case['transportManager']['id'];
@@ -98,6 +102,16 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     {
         $filters = $this->getDocumentFilters();
 
-        return $this->getDocumentForm($filters);
+        $form = $this->getDocumentForm($filters);
+
+        /** @var \Zend\Form\Element\Select $option */
+        $option = $form->get('showDocs');
+        $option->setValueOptions(
+            [
+                FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-case-only',
+            ]
+        );
+
+        return $form;
     }
 }
