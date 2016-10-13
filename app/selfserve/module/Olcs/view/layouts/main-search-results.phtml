@@ -8,7 +8,7 @@ $results = $this->results;
 <div class="page-header">
     <ol class="breadcrumbs">
         <li class="breadcrumbs__item">
-            <a href="<?php echo $this->url('search');?>"><?php echo $this->translate('search.form.back'); ?></a>
+            <a href="<?php echo $this->url($this->backRoute);?>"><?php echo $this->translate('search.form.back'); ?></a>
         </li>
     </ol>
     <div class="page-header__wrapper">
@@ -53,19 +53,10 @@ $results = $this->results;
 
         <?php
         if ($this->noResultsMessage) {
-            echo $this->translate($noResultsMessage);
+            echo $this->translate($this->noResultsMessage);
         } else {
             // OLCS-13312 - publication has a different view for the results so renders its own title in
-            // common/view/layouts/table/traffic-commissioner-publication.phml
-            if (strtolower($this->index) !== 'publication') {
-            ?>
-            <div class="content__header">
-                <h3 class="title"><?php
-                    echo $count . ' ' . $this->translate('search.result.results-title.' . $this->index);
-                    ?></h3>
-            </div>
-            <?php
-            }
+            // Common/view/table/layouts/traffic-commissioner-publication-selfserve.phtml
             echo $results;
         }
         ?>

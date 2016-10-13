@@ -17,7 +17,6 @@ class SimpleSearch
      * @Form\Validator({"name": "NotEmpty"})
      * @Form\Options({
      *     "label": "search.form.label", 
-     *     "hint": "search.form.hint",
      *     "error-message": "simpleSearch_search-error"
      * })
      */
