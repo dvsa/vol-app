@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Bus\Processing;
 
+use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -16,12 +17,15 @@ use Olcs\Controller\Traits;
 class BusProcessingTaskController extends AbstractController implements BusRegControllerInterface, LeftViewProvider
 {
     use Traits\ProcessingControllerTrait,
-        Traits\TaskActionTrait;
+        Traits\TaskActionTrait {
+            Traits\TaskActionTrait::getTaskForm as trait_getTaskForm;
+        }
 
     /**
      * Get task action type
      *
-     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @see \Olcs\Controller\Traits\TaskActionTrait
+     * 
      * @return string
      */
     protected function getTaskActionType()
@@ -32,7 +36,8 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
     /**
      * Get task action filters
      *
-     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @see \Olcs\Controller\Traits\TaskActionTrait
+     *
      * @return array
      */
     protected function getTaskActionFilters()
@@ -41,6 +46,29 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
             'licence' => $this->getFromRoute('licence'),
             'assignedToTeam' => '',
             'assignedToUser' => '',
+            'busReg' => $this->getFromRoute('busRegId'),
         ];
+    }
+
+    /**
+     * Create filter form
+     *
+     * @param array $filters Field values
+     *
+     * @return \Zend\Form\FormInterface
+     */
+    protected function getTaskForm(array $filters = [])
+    {
+        $form = $this->trait_getTaskForm($filters);
+
+        /** @var \Zend\Form\Element\Select $option */
+        $this->updateSelectValueOptions(
+            $form->get('showTasks'),
+            [
+                FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-reg-only',
+            ]
+        );
+
+        return $form;
     }
 }

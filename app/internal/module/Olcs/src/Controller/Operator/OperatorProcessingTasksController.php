@@ -9,7 +9,9 @@ use Olcs\Controller\Traits;
  */
 class OperatorProcessingTasksController extends OperatorController
 {
-    use Traits\TaskActionTrait;
+    use Traits\TaskActionTrait {
+        Traits\TaskActionTrait::getTaskForm as trait_getTaskForm;
+    }
 
     /**
      * @var string
@@ -24,7 +26,7 @@ class OperatorProcessingTasksController extends OperatorController
     /**
      * Get task action type
      *
-     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @see \Olcs\Controller\Traits\TaskActionTrait
      * @return string
      */
     protected function getTaskActionType()
@@ -35,7 +37,7 @@ class OperatorProcessingTasksController extends OperatorController
     /**
      * Get task action filters
      *
-     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @see \Olcs\Controller\Traits\TaskActionTrait
      * @return array
      */
     protected function getTaskActionFilters()
@@ -45,5 +47,18 @@ class OperatorProcessingTasksController extends OperatorController
             'assignedToTeam' => '',
             'assignedToUser' => ''
         ];
+    }
+
+    /**
+     * Create filter form
+     *
+     * @param array $filters Field values
+     *
+     * @return \Zend\Form\FormInterface
+     */
+    protected function getTaskForm(array $filters = [])
+    {
+        return $this->trait_getTaskForm($filters)
+            ->remove('showTasks');
     }
 }
