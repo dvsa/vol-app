@@ -611,6 +611,9 @@ return array(
             'lva-variation-safety' => LvaFormService\Safety::class,
             'lva-application-safety' => LvaFormService\Safety::class,
 
+            'lva-application-people' => LvaFormService\ApplicationPeople::class,
+            'lva-application-taxi-phv' => LvaFormService\ApplicationTaxiPhv::class,
+
             'lva-licence-financial_history' => LvaFormService\FinancialHistory::class,
             'lva-variation-financial_history' => LvaFormService\FinancialHistory::class,
             'lva-application-financial_history' => LvaFormService\FinancialHistory::class,
