@@ -1,6 +1,6 @@
 <?php
 
-namespace Olcs\FormService\Form\Lva;
+namespace Olcs\FormService\Form\Lva\Addresses;
 
 use Common\FormService\Form\Lva\Addresses as CommonAddress;
 use Zend\Form\Form;
@@ -24,6 +24,7 @@ class LicenceAddresses extends CommonAddress
     {
         parent::alterForm($form, $params);
         $form->get('form-actions')->get('save')->setAttribute('class', 'action--primary large');
+        $this->getFormHelper()->remove($form, 'form-actions->cancel');
 
         return $form;
     }

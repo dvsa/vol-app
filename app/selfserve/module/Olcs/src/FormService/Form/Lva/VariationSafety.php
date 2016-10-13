@@ -6,25 +6,22 @@ use Common\FormService\Form\Lva\Safety as CommonSafety;
 use Zend\Form\Form;
 
 /**
- * Licence safety
+ * Variation safety
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LicenceSafety extends CommonSafety
+class VariationSafety extends CommonSafety
 {
     /**
-     * Make form alterations
+     * Alter form
      *
      * @param Form $form form
      *
-     * @return Form
+     * @return void
      */
     protected function alterForm($form)
     {
         parent::alterForm($form);
-        $form->get('form-actions')->get('save')->setAttribute('class', 'action--primary large');
         $this->getFormHelper()->remove($form, 'form-actions->cancel');
-
-        return $form;
     }
 }

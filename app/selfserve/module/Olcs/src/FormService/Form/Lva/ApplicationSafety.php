@@ -2,16 +2,19 @@
 
 namespace Olcs\FormService\Form\Lva;
 
-use Common\FormService\Form\Lva\Safety as CommonSafety;
+use Common\FormService\Form\Lva\Safety;
 use Zend\Form\Form;
+use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**
- * Licence safety
+ * Application safety
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LicenceSafety extends CommonSafety
+class ApplicationSafety extends Safety
 {
+    use ButtonsAlterations;
+
     /**
      * Make form alterations
      *
@@ -22,8 +25,7 @@ class LicenceSafety extends CommonSafety
     protected function alterForm($form)
     {
         parent::alterForm($form);
-        $form->get('form-actions')->get('save')->setAttribute('class', 'action--primary large');
-        $this->getFormHelper()->remove($form, 'form-actions->cancel');
+        $this->alterButtons($form);
 
         return $form;
     }
