@@ -46,7 +46,7 @@ return [
     ],
 
     // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific*
-    'asset_path' => 'https://demo-olcs-static.i-env.net',
+    'asset_path' => 'https://iuap1.olcs.dev.nonprod.dvsa.aws/static/public',
 
     'openam' => [
         'url' => 'http://olcs-auth.olcs.gov.uk:8081/secure/',
