@@ -500,7 +500,7 @@ $routes = [
                 'id' => '[0-9]+',
             ],
             'defaults' => [
-                'controller' => 'CaseSubmissionRecommendationController',
+                'controller' => Olcs\Controller\Cases\Submission\RecommendationController::class,
                 'action' => 'add'
             ]
         ]

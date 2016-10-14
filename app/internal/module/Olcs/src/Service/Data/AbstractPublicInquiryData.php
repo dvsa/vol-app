@@ -20,6 +20,13 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
     use LicenceServiceTrait;
     use ApplicationServiceTrait;
 
+    /** @var string */
+    protected $listDto;
+    /** @var string */
+    protected $sort;
+    /** @var string */
+    protected $order;
+
     /**
      * Fetch back a set of options for a drop down list, context passed is parameters which may need to be passed to the
      * back end to filter the result set returned, use groups when specified should, cause this method to return the
@@ -37,27 +44,25 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
 
         $licenceId = $this->getLicenceService()->getId();
 
-        if ($licenceId !== null) {
-            if (empty($params['goodsOrPsv'])) {
-                if (empty($this->getApplicationService()->getId())) {
-                    // find an application linked to the licence
-                    $applicationsForLicence = $this->getServiceLocator()
-                        ->get('Entity\Application')
-                        ->getApplicationsForLicence($licenceId);
+        if ($licenceId === null) {
+            $params['goodsOrPsv'] = 'NULL';
 
-                    if (!empty($applicationsForLicence['Results'])) {
-                        $app = array_pop($applicationsForLicence['Results']);
-                        $this->getApplicationService()->setId($app['id']);
+        } elseif (empty($params['goodsOrPsv'])) {
+            //  if application not loaded
+            if ($this->getApplicationService()->getId() === null) {
+                // find an application linked to the licence
+                $applicationsForLicence = $this->getServiceLocator()
+                    ->get('Entity\Application')
+                    ->getApplicationsForLicence($licenceId);
 
-                        $appContext = $this->getApplicationContext();
-
-                        // use application's goodsOrPsv instead
-                        $params['goodsOrPsv'] = $appContext['goodsOrPsv'];
-                    }
+                if (!empty($applicationsForLicence['Results'])) {
+                    $app = array_pop($applicationsForLicence['Results']);
+                    $this->getApplicationService()->setId($app['id']);
                 }
             }
-        } else {
-            $params['goodsOrPsv'] = 'NULL';
+
+            // use application's goodsOrPsv instead
+            $params['goodsOrPsv'] = $this->getApplicationContext()['goodsOrPsv'];
         }
 
         $data = $this->fetchPublicInquiryData($params);
@@ -104,6 +109,7 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
      */
     public function fetchListData(array $params)
     {
+        /** @var \Dvsa\Olcs\Transfer\Query\QueryInterface $listDto */
         $listDto = $this->listDto;
 
         $dtoData = $listDto::create(
@@ -167,28 +173,6 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
         }
 
         return $optionData;
-    }
-
-    /**
-     * Set service locator
-     *
-     * @param ServiceLocatorInterface $serviceLocator Service locator
-     *
-     * @return void
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-    }
-
-    /**
-     * Get service locator
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
     }
 
     /**
