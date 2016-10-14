@@ -180,7 +180,8 @@ return array(
             'PublicInquiry\RegisterDecisionController'
                 => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
             CaseNoteController::class => CaseNoteController::class,
-            'CaseTaskController' => 'Olcs\Controller\Cases\Processing\TaskController',
+            Olcs\Controller\Cases\Processing\TaskController::class =>
+                Olcs\Controller\Cases\Processing\TaskController::class,
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseDecisionsReputeNotLostController'
                 => 'Olcs\Controller\Cases\Processing\DecisionsReputeNotLostController',

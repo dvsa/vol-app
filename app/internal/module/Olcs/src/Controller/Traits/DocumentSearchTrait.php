@@ -3,16 +3,24 @@
 namespace Olcs\Controller\Traits;
 
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
+use Dvsa\Olcs\Utils\Constants\FilterOptions;
 
 /**
  * Document Search Trait
  */
 trait DocumentSearchTrait
 {
+    /**
+     * Get Document Table Name
+     *
+     * @return string
+     */
     protected abstract function getDocumentTableName();
 
     /**
      * Inspect the request to see if we have any filters set, and if necessary, filter them down to a valid subset
+     *
+     * @param array $extra Filters data
      *
      * @return array
      */
@@ -22,7 +30,8 @@ trait DocumentSearchTrait
             'sort' => 'issuedDate',
             'order' => 'DESC',
             'page' => 1,
-            'limit' => 10
+            'limit' => 10,
+            'showDocs' => FilterOptions::SHOW_SELF_ONLY,
         ];
 
         $filters = array_merge(
@@ -50,6 +59,13 @@ trait DocumentSearchTrait
         );
     }
 
+    /**
+     * Create filter form
+     *
+     * @param array $filters Filters data
+     *
+     * @return \Zend\Form\FormInterface
+     */
     protected function getDocumentForm($filters = [])
     {
         $form = $this->getForm('DocumentsHome');
@@ -61,7 +77,7 @@ trait DocumentSearchTrait
         // various dropdowns on the filter form
         $selects = [
             'category' => $this->getListDataCategoryDocs('All'),
-            'documentSubCategory' => $this->getListDataSubCategoryDocs($category, 'All')
+            'documentSubCategory' => $this->getListDataSubCategoryDocs($category, 'All'),
         ];
 
         // insert relevant data into the corresponding form inputs
@@ -77,12 +93,21 @@ trait DocumentSearchTrait
         return $form;
     }
 
+    /**
+     * Create table and populate with data from Api
+     *
+     * @param array $filters Filters data
+     *
+     * @return \Common\Service\Table\TableBuilder
+     * @throws \Exception
+     */
     protected function getDocumentsTable($filters = [])
     {
         if (isset($filters['documentSubCategory'])) {
             // query requires array of subcategories
             $filters['documentSubCategory'] = [$filters['documentSubCategory']];
         }
+
         $response = $this->handleQuery(DocumentList::create($filters));
         if (!$response->isOk()) {
             throw new \Exception('Error retrieving document list');
@@ -101,7 +126,9 @@ trait DocumentSearchTrait
     /**
      * Update table action with query
      *
-     * @param Table $table
+     * @param \Common\Service\Table\TableBuilder $table Table
+     *
+     * @return void
      */
     protected function updateTableActionWithQuery($table)
     {

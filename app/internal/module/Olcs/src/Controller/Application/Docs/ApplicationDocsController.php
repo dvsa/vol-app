@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Application Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller\Application\Docs;
 
 use Olcs\Controller\Application\ApplicationController;
@@ -35,6 +30,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
 
     /**
      * Route (prefix) for document action redirects
+     *
      * @see Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
@@ -45,6 +41,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
 
     /**
      * Route params for document action redirects
+     *
      * @see Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
@@ -54,28 +51,46 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
     }
 
     /**
+     * Get document filters
+     *
+     * @return array
+     */
+    private function getDocumentFilters()
+    {
+        $appId = $this->getFromRoute('application');
+        $licence = $this->getLicenceIdForApplication($appId);
+
+        return $this->mapDocumentFilters(
+            [
+                'licence' => $licence,
+                'application' => $this->getFromRoute('application'),
+            ]
+        );
+    }
+
+    /**
      * Get view model for document action
+     *
      * @see Olcs\Controller\Traits\DocumentActionTrait
      * @return ViewModel
      */
     protected function getDocumentView()
     {
-        $application = $this->getFromRoute('application');
-        $licence = $this->getLicenceIdForApplication($application);
-
-        $filters = $this->mapDocumentFilters(['licence' => $licence]);
+        $filters = $this->getDocumentFilters();
 
         $table = $this->getDocumentsTable($filters);
 
         return $this->getViewWithApplication(['table' => $table]);
     }
 
+    /**
+     * Get Customized Document Form
+     *
+     * @return \Zend\Form\FormInterface
+     */
     protected function getConfiguredDocumentForm()
     {
-        $application = $this->getFromRoute('application');
-        $licence = $this->getLicenceIdForApplication($application);
-
-        $filters = $this->mapDocumentFilters(['licence' => $licence]);
+        $filters = $this->getDocumentFilters();
 
         return $this->getDocumentForm($filters);
     }

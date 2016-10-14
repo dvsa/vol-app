@@ -88,6 +88,22 @@ class TasksHome
     public $status = null;
 
     /**
+     * @Form\Attributes({
+     *      "value": "self-only",
+     * })
+     * @Form\Options({
+     *     "label": "documents.filter.show-tasks.title",
+     *     "value_options": {
+     *         "self-only": "documents.filter.option.this-app-only",
+     *     },
+     *     "empty_option": "documents.filter.option.all-tasks",
+     *     "disable_inarray_validator": false
+     * })
+     * @Form\Type("\Zend\Form\Element\Select")
+     */
+    public $showTasks = null;
+
+    /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "tasks.data.urgent",

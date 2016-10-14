@@ -4,6 +4,7 @@ namespace Olcs\Controller\Traits;
 
 use Dvsa\Olcs\Transfer\Query\Task\TaskList;
 use Dvsa\Olcs\Transfer\Query\Task\TaskDetails;
+use Dvsa\Olcs\Utils\Constants\FilterOptions;
 
 /**
  * Task Search Trait
@@ -29,7 +30,8 @@ trait TaskSearchTrait
             'sort' => 'urgent,actionDate',
             'order' => 'DESC,ASC',
             'page' => 1,
-            'limit' => 10
+            'limit' => 10,
+            'showTasks' => FilterOptions::SHOW_SELF_ONLY,
         ];
 
         $filters = array_merge(
@@ -215,7 +217,7 @@ trait TaskSearchTrait
     /**
      * Update table action with query
      *
-     * @param Table $table Table
+     * @param \Common\Service\Table\TableBuilder $table Table
      *
      * @return void
      */

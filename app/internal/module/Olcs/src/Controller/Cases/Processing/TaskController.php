@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Cases\Processing;
 
+use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -17,7 +18,9 @@ class TaskController extends AbstractController implements CaseControllerInterfa
 {
     use ControllerTraits\CaseControllerTrait,
         ControllerTraits\ProcessingControllerTrait,
-        ControllerTraits\TaskActionTrait;
+        ControllerTraits\TaskActionTrait {
+            ControllerTraits\TaskActionTrait::getTaskForm as trait_getTaskForm;
+        }
 
     /**
      * Get task action type
@@ -55,9 +58,11 @@ class TaskController extends AbstractController implements CaseControllerInterfa
      */
     private function getIdArrayForCase()
     {
-        $filter = [];
-
         $case = $this->getCase($this->params()->fromRoute('case', null));
+
+        $filter = [
+            'case' => $case['id'],
+        ];
 
         if (!is_null($case['licence'])) {
             $filter['licence'] = $case['licence']['id'];
@@ -72,5 +77,27 @@ class TaskController extends AbstractController implements CaseControllerInterfa
         }
 
         return $filter;
+    }
+
+    /**
+     * Create filter form
+     *
+     * @param array $filters Field values
+     *
+     * @return \Zend\Form\FormInterface
+     */
+    protected function getTaskForm(array $filters = [])
+    {
+        $form = $this->trait_getTaskForm($filters);
+
+        /** @var \Zend\Form\Element\Select $option */
+        $option = $form->get('showTasks');
+        $option->setValueOptions(
+            [
+                FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-case-only',
+            ]
+        );
+
+        return $form;
     }
 }

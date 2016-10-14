@@ -692,7 +692,7 @@ $routes = [
                 'action' => '(index|add|edit|details|overview)'
             ],
             'defaults' => [
-                'controller' => 'CaseTaskController',
+                'controller' => Olcs\Controller\Cases\Processing\TaskController::class,
                 'action' => 'index'
             ]
         ]
