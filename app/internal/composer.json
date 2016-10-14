@@ -6,51 +6,51 @@
             "packagist": false
         },
         {
-            "url": "http://satis.inf.mgt.mtpdvsa",
+            "url": "http://devrepo.shd.ci.nonprod.dvsa.aws",
             "type": "composer"
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-common.git"
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git"
         },
         {
-            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-transfer.git",
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
             "type": "vcs"
         },
         {
-            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-utils.git",
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-utils.git",
             "type": "vcs"
         },
         {
-            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-auth.git",
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
             "type": "vcs"
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-testhelpers.git"
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-testhelpers.git"
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-logging.git"
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git"
         },
         {
             "type": "vcs",
-            "url": "git@gitlab.inf.mgt.mtpdvsa:olcs/olcs-autoload.git"
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-autoload.git"
         }
     ],
     "require": {
         "php": ">=5.4",
-        "zendframework/zendframework": "~2.3.5",
-        "doctrine/annotations": "^1.2.3",
-        "symfony/Filesystem": "~2.6.0",
-        "zf-commons/zfc-rbac": "~2.4.0",
-        "olcs/autoload": "dev-develop",
-        "olcs/OlcsCommon": "dev-release/4.0.1",
-        "olcs/olcs-transfer": "dev-release/4.0",
-        "olcs/olcs-utils": "dev-release/4.0",
-        "olcs/olcs-auth": "dev-release/4.0",
-        "olcs/olcs-logging": "dev-develop",
-        "soflomo/purifier": "~0.1.0"
+        "zendframework/zendframework": "2.3.9",
+        "doctrine/annotations": "v1.2.7",
+        "symfony/Filesystem": "v2.6.13",
+        "zf-commons/zfc-rbac": "2.4.2",
+        "olcs/autoload": "dev-develop#7341d5466605e8bcdd26d8b79806e8ab2a9a77a3",
+        "olcs/OlcsCommon": "dev-release/4.0.2",
+        "olcs/olcs-transfer": "dev-develop#d39e22e8c5039b0e1e832f17f11706ed14cc6ba6",
+        "olcs/olcs-utils": "dev-develop#47401d854d83fd3814aa7a6abca302d5d192493c",
+        "olcs/olcs-auth": "dev-develop#704f73709737931141993f72af43e85fb8332fff",
+        "olcs/olcs-logging": "dev-develop#d106712c54f2fc06ae2b378467b77d8a8df517db",
+        "soflomo/purifier": "v0.1.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.0.0",
@@ -69,9 +69,6 @@
     },
     "config": {
         "preferred-install": "dist",
-        "github-oauth": {
-            "github.com": "9d28c36d14775b5d8c4a5ffeee6172eecbd8c9f4"
-        },
-        "secure-http" : false
+        "secure-http": false
     }
 }
