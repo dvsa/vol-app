@@ -33,9 +33,12 @@ class SafetyController extends Lva\AbstractSafetyController
     /**
      * This method allows both trait alterFormForLva methods to be called
      *
-     * @param \Zend\Form\Form
+     * @param Form $form Form to alter
+     * @param null $data Required for compatability with parent method signature
+     *
+     * @return void
      */
-    protected function alterFormForLva(Form $form)
+    protected function alterFormForLva(Form $form, $data = null)
     {
         $this->licenceAlterFormForLva($form);
         $this->licenceSafetyAlterFormForLva($form);
