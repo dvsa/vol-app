@@ -159,8 +159,8 @@ return array(
             'CaseProcessSubmissionController' => 'Olcs\Controller\Cases\Submission\ProcessSubmissionController',
             'CaseSubmissionSectionCommentController'
                 => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
-            'CaseSubmissionRecommendationController'
-                => 'Olcs\Controller\Cases\Submission\RecommendationController',
+            Olcs\Controller\Cases\Submission\RecommendationController::class =>
+                Olcs\Controller\Cases\Submission\RecommendationController::class,
             'CaseSubmissionDecisionController'
                 => 'Olcs\Controller\Cases\Submission\DecisionController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
