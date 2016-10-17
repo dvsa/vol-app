@@ -4,7 +4,6 @@ namespace Olcs\FormService\Form\Lva\TypeOfLicence;
 
 use Common\FormService\Form\Lva\TypeOfLicence\ApplicationTypeOfLicence as CommonLicenceTypeOfLicence;
 use Zend\Form\Form;
-use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**
  * Application Type Of Licence Form
@@ -13,8 +12,6 @@ use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
  */
 class ApplicationTypeOfLicence extends CommonLicenceTypeOfLicence
 {
-    use ButtonsAlterations;
-
     /**
      * Alter form
      *
@@ -26,6 +23,7 @@ class ApplicationTypeOfLicence extends CommonLicenceTypeOfLicence
     public function alterForm(Form $form, $params = [])
     {
         parent::alterForm($form, $params);
-        $this->alterButtons($form);
+        $form->get('form-actions')->get('saveAndContinue')->setLabel('lva.external.save_and_continue.button');
+        $this->getFormHelper()->remove($form, 'form-actions->save');
     }
 }
