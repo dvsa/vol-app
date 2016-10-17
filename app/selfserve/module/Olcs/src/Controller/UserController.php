@@ -171,30 +171,34 @@ class UserController extends AbstractController
     {
         $request = $this->getRequest();
 
+        $form = $this->getServiceLocator()->get('Helper\Form')
+            ->createFormWithRequest('GenericDeleteConfirmation', $request);
+
         if ($request->isPost()) {
             if ($this->isButtonPressed('cancel')) {
                 return $this->redirectToIndex();
             }
 
-            $response = $this->handleCommand(
-                DeleteDto::create(
-                    ['id' => $this->params()->fromRoute('id', null)]
-                )
-            );
+            $form->setData((array)$request->getPost());
 
-            if ($response->isOk()) {
-                $this->getFlashMessenger()->addSuccessMessage('manage-users.delete.success');
-            } elseif ($response->isClientError()) {
-                $this->getFlashMessenger()->addErrorMessage('manage-users.delete.error');
-            } else {
-                $this->getFlashMessenger()->addErrorMessage('unknown-error');
+            if ($form->isValid()) {
+                $response = $this->handleCommand(
+                    DeleteDto::create(
+                        ['id' => $this->params()->fromRoute('id', null)]
+                    )
+                );
+
+                if ($response->isOk()) {
+                    $this->getFlashMessenger()->addSuccessMessage('manage-users.delete.success');
+                } elseif ($response->isClientError()) {
+                    $this->getFlashMessenger()->addErrorMessage('manage-users.delete.error');
+                } else {
+                    $this->getFlashMessenger()->addErrorMessage('unknown-error');
+                }
+
+                return $this->redirectToIndex();
             }
-
-            return $this->redirectToIndex();
         }
-
-        $form = $this->getServiceLocator()->get('Helper\Form')
-            ->createFormWithRequest('GenericDeleteConfirmation', $request);
 
         $params = ['sectionText' => $this->getDeleteMessage()];
 
