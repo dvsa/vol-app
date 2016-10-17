@@ -6,7 +6,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationTaxiPhv;
 
-class ApplicationtaxiPhvTest extends MockeryTestCase
+class ApplicationTaxiPhvTest extends MockeryTestCase
 {
     /** @var  ApplicationTaxiPhv */
     protected $sut;
