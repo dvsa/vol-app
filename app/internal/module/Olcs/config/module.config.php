@@ -159,8 +159,8 @@ return array(
             'CaseProcessSubmissionController' => 'Olcs\Controller\Cases\Submission\ProcessSubmissionController',
             'CaseSubmissionSectionCommentController'
                 => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
-            'CaseSubmissionRecommendationController'
-                => 'Olcs\Controller\Cases\Submission\RecommendationController',
+            Olcs\Controller\Cases\Submission\RecommendationController::class =>
+                Olcs\Controller\Cases\Submission\RecommendationController::class,
             'CaseSubmissionDecisionController'
                 => 'Olcs\Controller\Cases\Submission\DecisionController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
@@ -180,7 +180,8 @@ return array(
             'PublicInquiry\RegisterDecisionController'
                 => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
             CaseNoteController::class => CaseNoteController::class,
-            'CaseTaskController' => 'Olcs\Controller\Cases\Processing\TaskController',
+            Olcs\Controller\Cases\Processing\TaskController::class =>
+                Olcs\Controller\Cases\Processing\TaskController::class,
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseDecisionsReputeNotLostController'
                 => 'Olcs\Controller\Cases\Processing\DecisionsReputeNotLostController',
