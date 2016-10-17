@@ -138,7 +138,7 @@ class UserRegistration
     public $businessType = null;
 
     /**
-     * @Form\Attributes({"id":"translateToWelsh","placeholder":"", "data-container-class": "confirm"})
+     * @Form\Attributes({"id":"translateToWelsh","placeholder":"", "data-container-class": "confirm checkbox"})
      * @Form\Options({
      *     "label": "translate-to-welsh",
      *     "checked_value":"Y",
@@ -150,7 +150,7 @@ class UserRegistration
     public $translateToWelsh = null;
 
     /**
-     * @Form\Attributes({"id": "termsAgreed", "placeholder": "", "data-container-class": "confirm"})
+     * @Form\Attributes({"id": "termsAgreed", "placeholder": "", "data-container-class": "confirm checkbox"})
      * @Form\Options({
      *     "label": "user-registration.field.termsAgreed.label",
      *     "checked_value":"Y",
