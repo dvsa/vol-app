@@ -37,6 +37,13 @@ class SearchFilter
     public $search = null;
 
     /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     * 
+     */
+    public $searchBy = null;
+
+    /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
      * @Form\Options({
      *     "label": "search.form.filter.update_button"
@@ -44,5 +51,4 @@ class SearchFilter
      * @Form\Type("\Zend\Form\Element\Button")
      */
     public $submit = null;
-
 }

@@ -47,15 +47,20 @@
         <div class="proposition" role="navigation">
 
           <h2 class="proposition__title">
-            <?php echo $this->translate('header-vehicle-operator-licensing'); ?>
+            <?php
+                $currentUser = $this->currentUser();
+                $isLoggedIn = $currentUser->isLoggedIn();
+
+                echo (!$isLoggedIn && ($this->placeholder('usePageTitleAsHeader')->getValue() === true))
+                    ? $this->pageTitle()
+                    : $this->translate('header-vehicle-operator-licensing');
+            ?>
           </h2>
 
           <a class="proposition__toggle" href="#">Menu</a>
 
             <?php
-            $currentUser = $this->currentUser();
-
-            if ($currentUser->isLoggedIn()) {
+            if ($isLoggedIn) {
                 // get Home navigation
                 $navigation = $this->navigation('navigation')->getContainer()->findBy('id', 'home');
 

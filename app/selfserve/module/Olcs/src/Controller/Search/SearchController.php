@@ -7,6 +7,7 @@ namespace Olcs\Controller\Search;
 
 use Common\Controller\Lva\AbstractController;
 use Zend\View\Model\ViewModel;
+use Olcs\Form\Model\Form\SearchOperator;
 use Olcs\Form\Model\Form\SimpleSearch;
 use Common\Controller\Traits\ViewHelperManagerAware;
 use Common\Service\Data\Search\SearchType;
@@ -43,10 +44,7 @@ class SearchController extends AbstractController
         }
 
         /** @var \Zend\Form\Form $form */
-        $form = $this->getIndexForm(SimpleSearch::class);
-
-        // OLCS-13903 set custom hints depending on the search being performed
-        $form->get('search')->setOption('hint', 'search.form.hint.' . $index);
+        $form = $this->getFormForIndex($index);
 
         if ($this->getRequest()->isPost()) {
             $sd = $this->getIncomingSearchData();
@@ -59,6 +57,10 @@ class SearchController extends AbstractController
                  */
                 $index = $sd['index'];
                 unset($sd['index']);
+
+                if (!empty($sd['searchBy'])) {
+                    $index = $this->getIndexForSearchBy($sd['searchBy']);
+                }
 
                 return $this->redirect()->toRoute(
                     'search',
@@ -74,7 +76,29 @@ class SearchController extends AbstractController
         $view = new ViewModel(['searchForm' => $form]);
         $view->setTemplate('search/index-' . $index . '.phtml');
 
+        $this->placeholder()->setPlaceholder('usePageTitleAsHeader', true);
+
         return $view;
+    }
+
+    /**
+     * Get index for data
+     *
+     * @param string $searchBy Search by
+     *
+     * @return string|null
+     */
+    private function getIndexForSearchBy($searchBy)
+    {
+        // searchBy to index mapping
+        $mapping = [
+            'address' => 'operating-centre',
+            'business' => 'operator',
+            'licence' => 'operator',
+            'person' => 'person',
+        ];
+
+        return isset($mapping[$searchBy]) ? $mapping[$searchBy] : null;
     }
 
     /**
@@ -176,30 +200,85 @@ class SearchController extends AbstractController
             ->setIndex($data['index'])
             ->setSearch($data['search']);
 
-        $view = new ViewModel(['index' => $indexPrm]);
+        $view = new ViewModel(
+            [
+                'index' => $indexPrm,
+                'backRoute' => $this->getBackRoute($indexPrm)
+            ]
+        );
         $view->setTemplate('layouts/main-search-results.phtml');
 
         $view->results = $this->getSearchService()->fetchResultsTable();
+
         if ($view->results->getTotal() === 0) {
-            $view->noResultsMessage = 'search-no-results-' . $indexPrm;
+            $view->noResultsMessage = 'search-no-results';
         }
 
         $this->getServiceLocator()->get('Script')->loadFile('search-results');
+
+        $this->placeholder()->setPlaceholder('pageTitle', 'page.title.search-'.$indexPrm.'.index');
+        $this->placeholder()->setPlaceholder('usePageTitleAsHeader', true);
 
         return $view;
     }
 
     /**
+     * Get back route name
+     *
+     * @param string $index Index
+     *
+     * @return string
+     */
+    private function getBackRoute($index)
+    {
+        // index to back route mapping
+        $mapping = [
+            'operating-centre' => 'search-operator',
+            'operator' => 'search-operator',
+            'person' => 'search-operator',
+            'publication' => 'search-publication',
+            'bus' => 'search-bus',
+            'vehicle-external' => 'search-vehicle-external',
+        ];
+
+        return isset($mapping[$index]) ? $mapping[$index] : 'search';
+    }
+
+    /**
      * Generate the search form for index page
      *
-     * @param string $name Form name
+     * @param string $index Index name
      *
      * @return mixed
      */
-    public function getIndexForm($name)
+    private function getFormForIndex($index)
     {
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm($name);
-        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
+        $formName = ($index === 'operator') ? SearchOperator::class : SimpleSearch::class;
+
+        $serviceLocator = $this->getServiceLocator();
+
+        /** @var \Zend\Form\Form $form */
+        $form = $serviceLocator->get('Helper\Form')->createForm($formName);
+        $serviceLocator->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
+
+        if ($formName === SearchOperator::class) {
+            $translator = $serviceLocator->get('Helper\Translation');
+
+            $form->get('search')->setLabelAttributes(
+                [
+                    'data-search-address' => $translator->translate('search.operator.field.search.address.label'),
+                    'data-search-business' => $translator->translate('search.operator.field.search.business.label'),
+                    'data-search-licence' => $translator->translate('search.operator.field.search.licence.label'),
+                    'data-search-person' => $translator->translate('search.operator.field.search.person.label'),
+                ]
+            );
+
+            $serviceLocator->get('Script')->loadFile('search-operator');
+        } else {
+            // OLCS-13903 set custom hints depending on the search being performed
+            $form->get('search')->setLabel('search.form.label.' . $index);
+        }
+
         return $form;
     }
 
@@ -279,7 +358,7 @@ class SearchController extends AbstractController
             ->set($form);
 
         // OLCS-13903 set custom hints depending on the search being performed
-        $form->get('text')->get('search')->setOption('hint', 'search.form.hint.' . $index);
+        $form->get('text')->get('search')->setLabel('search.form.label.' . $index);
 
         return $form;
     }

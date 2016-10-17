@@ -5,28 +5,40 @@ $results = $this->results;
 
 ?>
 
-<?php
-/** @var \Common\Service\Helper\TranslationHelperService $translationHlp */
-$translationHlp = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');
+<div class="page-header">
+    <ol class="breadcrumbs">
+        <li class="breadcrumbs__item">
+            <a href="<?php echo $this->url($this->backRoute);?>"><?php echo $this->translate('search.form.back'); ?></a>
+        </li>
+    </ol>
+    <div class="page-header__wrapper">
 
-echo $this->partial(
-    'partials/page-header-simple',
-    [
-        'pageTitle' => $this->translate('search.result.title.' . $this->index),
-        'pageHeaderText' =>
-            '<p>' . $translationHlp->translateReplace('search.result.subtitle.' . $this->index, [$count]) . '</p>' .
-            (
-                $this->index === 'publication'
-                ? '<p>' . $this->translate('search.result.subtitle.publication.download') .'</p>'
-                : ''
-            ),
-        'pageHeaderTextEscape' => false,
-        'backUrl' => [
-            'url' => $this->url('search'),
-        ],
-    ]
-);
-?>
+        <h1>
+            <?php echo $this->getHelperPluginManager()
+                ->getServiceLocator()->get('Helper\Translation')
+                ->translateReplace('search.result.title.' . $this->index, [$count]); ?>
+        </h1>
+
+        <div class="page-header__text">
+            <p>
+                <?php echo $this->getHelperPluginManager()
+                    ->getServiceLocator()->get('Helper\Translation')
+                    ->translateReplace('search.result.subtitle.' . $this->index, [$count]); ?>
+            </p>
+            <?php
+            if ($this->index === 'publication') {
+                // OLCS-11648 applies to publication SS search results only
+                ?>
+                <p><?php echo $this->translate('search.result.subtitle.publication.download'); ?></p>
+                <?php
+            }
+            ?>
+
+        </div>
+
+
+    </div>
+</div><!-- page-header -->
 
 <div class="row">
     <div class="one-quarter sidebar--plain search-filter">
@@ -41,19 +53,10 @@ echo $this->partial(
 
         <?php
         if ($this->noResultsMessage) {
-            echo $this->translate($noResultsMessage);
+            echo $this->translate($this->noResultsMessage);
         } else {
             // OLCS-13312 - publication has a different view for the results so renders its own title in
-            // common/view/layouts/table/traffic-commissioner-publication.phml
-            if (strtolower($this->index) !== 'publication') {
-            ?>
-            <div class="content__header">
-                <h3 class="title"><?php
-                    echo $count . ' ' . $this->translate('search.result.results-title.' . $this->index);
-                    ?></h3>
-            </div>
-            <?php
-            }
+            // Common/view/table/layouts/traffic-commissioner-publication-selfserve.phtml
             echo $results;
         }
         ?>
