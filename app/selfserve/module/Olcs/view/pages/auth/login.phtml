@@ -1,53 +1,56 @@
-<main id="main" role="main">
-    <?php echo $this->partial('partials/page-header-simple', ['pageTitle' => $this->pageTitle()]); ?>
 
-    <div class="row">
-        <div class="two-thirds">
-            <p><?php echo sprintf($this->translate('signin-or-register-text'), $this->url('user-registration')); ?></p>
-            <hr>
+<?php echo $this->partial('partials/page-header-simple', ['pageTitle' => $this->pageTitle()]); ?>
+
+<div class="row">
+    <div class="two-thirds">
+        <p><?php echo sprintf($this->translate('signin-or-register-text'), $this->url('user-registration')); ?></p>
+        <hr>
+        <?php
+        echo $this->flashMessengerAll();
+        echo $this->formErrors($form);
+        if (isset($failed) && $failed) {
+            ?>
+            <div class="validation-summary">
+                <h3><?php echo $this->translate('auth.login.failed.title'); ?></h3>
+                <p><?php echo $this->translate('auth.login.failed.reason.' . $failureReason); ?></p>
+            </div>
             <?php
-            echo $this->flashMessengerAll();
-            echo $this->formErrors($form);
-            if (isset($failed) && $failed) {
-                ?>
-                <div class="validation-summary">
-                    <h3><?php echo $this->translate('auth.login.failed.title'); ?></h3>
-                    <p><?php echo $this->translate('auth.login.failed.reason.' . $failureReason); ?></p>
+        }
+
+        $username = $form->get('username');
+        $username->setAttribute('class', $username->getAttribute('class') . ' long');
+
+        $password = $form->get('password');
+        $password->setAttribute('class', $password->getAttribute('class') . ' long');
+
+        echo $this->form()->openTag($form); ?>
+            <fieldset>
+                <?php echo $this->formRow($form->get('username')); ?>
+                <?php echo $this->formRow($form->get('password')); ?>
+                <p><?php echo sprintf($this->translate('auth.login.termsAgreed'), $this->url('terms-and-conditions')); ?></p>
+                <div class="actions-container">
+                    <?php echo $this->formElement($form->get('submit')); ?>
                 </div>
-                <?php
-            }
-
-            $username = $form->get('username');
-            $username->setAttribute('class', $username->getAttribute('class') . ' long');
-
-            $password = $form->get('password');
-            $password->setAttribute('class', $password->getAttribute('class') . ' long');
-
-            echo $this->form()->openTag($form); ?>
-                <fieldset>
-                    <?php echo $this->formRow($form->get('username')); ?>
-                    <?php echo $this->formRow($form->get('password')); ?>
-                    <p><?php echo sprintf($this->translate('auth.login.termsAgreed'), $this->url('terms-and-conditions')); ?></p>
-                    <div class="actions-container">
-                        <?php echo $this->formElement($form->get('submit')); ?>
+                <ul class="actions-container list--compound">
+                    <li>
                         <a 
-                          href="<?php echo $this->url('user-forgot-username'); ?>" 
-                          class="action--tertiary list" 
-                          aria-label="<?php echo $this->translate('auth.forgot-username.label.audio'); ?>"
+                        href="<?php echo $this->url('user-forgot-username'); ?>"
+                        aria-label="<?php echo $this->translate('auth.forgot-username.label.audio'); ?>"
                         >
                             <?php echo $this->translate('auth.forgot-username.label'); ?>
                         </a>
+                    </li>
+                    <li>
                         <a 
-                          href="<?php echo $this->url('auth/forgot-password'); ?>" 
-                          class="action--tertiary list"
-                          aria-label="<?php echo $this->translate('auth.forgot-password.label.audio'); ?>"
+                        href="<?php echo $this->url('auth/forgot-password'); ?>"
+                        aria-label="<?php echo $this->translate('auth.forgot-password.label.audio'); ?>"
                         >
                             <?php echo $this->translate('auth.forgot-password.label'); ?>
                         </a>
-                    </div>
-                </fieldset>
-            <?php echo $this->formElement($form->get('security')); ?>
-            <?php echo $this->form()->closeTag(); ?>
-        </div>
+                    </li>
+                </ul>
+            </fieldset>
+        <?php echo $this->formElement($form->get('security')); ?>
+        <?php echo $this->form()->closeTag(); ?>
     </div>
-</main>
+</div>

@@ -1,15 +1,9 @@
-<?php
-echo $this->partial(
-    'partials/page-header-simple',
-    [
-        'pageTitle' => $this->pageTitle(),
-        'backUrl' => [
-            'url' => $this->url('search'),
-        ],
-    ]
-);
-?>
-
+<div class="page-header">
+    <div class="page-header__wrapper">
+        <h1><?php echo $this->pageTitle(); ?></h1>
+    </div>
+</div><!-- page-header -->
+  
 <div class="row">
 
   <div class="two-thirds">
