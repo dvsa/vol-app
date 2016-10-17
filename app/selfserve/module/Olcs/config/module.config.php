@@ -89,36 +89,18 @@ $routes = array(
             'defaults' => array(
                 'controller' => SearchController::class,
                 'action' => 'index',
+            ),
+            'constraints' => array(
+                'index' => '(bus|operator|operating-centre|person|publication|vehicle-external)',
+                'action' => '(index|search)'
             )
         )
     ),
     // Unfortunately, we need separate routes
-    'search-operating-centre' => array(
-        'type' => 'segment',
-        'options' =>  array(
-            'route' => '/search/operating-centre[/:action][/]',
-            'defaults' => array(
-                'controller' => SearchController::class,
-                'action' => 'index',
-                'index' => 'operating-centre'
-            )
-        )
-    ),
-    'search-person' => array(
-        'type' => 'segment',
-        'options' =>  array(
-            'route' => '/search/person[/:action][/]',
-            'defaults' => array(
-                'controller' => SearchController::class,
-                'action' => 'index',
-                'index' => 'person'
-            )
-        )
-    ),
     'search-operator' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/search/operator[/:action][/]',
+            'route' => '/search/find-lorry-bus-operators[/]',
             'defaults' => array(
                 'controller' => SearchController::class,
                 'action' => 'index',
@@ -129,7 +111,7 @@ $routes = array(
     'search-bus' => [
         'type' => Segment::class,
         'options' =>  [
-            'route' => '/search/bus[/]',
+            'route' => '/search/find-registered-local-bus-services[/]',
             'defaults' => [
                 'controller' => SearchController::class,
                 'action' => 'index',
@@ -156,7 +138,7 @@ $routes = array(
     'search-publication' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/search/publication[/:action][/]',
+            'route' => '/search/check-vehicle-operator-decisions-applications[/]',
             'defaults' => array(
                 'controller' => SearchController::class,
                 'action' => 'index',
@@ -167,7 +149,7 @@ $routes = array(
     'search-vehicle-external' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/search/vehicle-external[/:action][/]',
+            'route' => '/search/find-vehicles[/]',
             'defaults' => array(
                 'controller' => SearchController::class,
                 'action' => 'index',
@@ -807,15 +789,8 @@ $searchNavigation = array(
 
         array(
             'id' => 'search-operator',
-            'label' => 'search-list-vehicle-operators',
+            'label' => 'search-list-operator',
             'route' => 'search-operator',
-            'use_route_match' => true,
-            'class' => 'search-navigation__item',
-        ),
-        array(
-            'id' => 'search-bus',
-            'label' => 'search-list-bus-registrations',
-            'route' => 'search-bus',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         ),
@@ -827,23 +802,16 @@ $searchNavigation = array(
             'class' => 'search-navigation__item',
         ),
         array(
+            'id' => 'search-bus',
+            'label' => 'search-list-bus-registrations',
+            'route' => 'search-bus',
+            'use_route_match' => true,
+            'class' => 'search-navigation__item',
+        ),
+        array(
             'id' => 'search-vehicle-external',
             'label' => 'search-list-vehicles',
             'route' => 'search-vehicle-external',
-            'use_route_match' => true,
-            'class' => 'search-navigation__item',
-        ),
-        array(
-            'id' => 'search-operating-centre',
-            'label' => 'search-list-operating-centres',
-            'route' => 'search-operating-centre',
-            'use_route_match' => true,
-            'class' => 'search-navigation__item',
-        ),
-        array(
-            'id' => 'search-person',
-            'label' => 'search-list-people',
-            'route' => 'search-person',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
         )
