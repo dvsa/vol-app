@@ -109,7 +109,7 @@ class NewTmUserDetails
     public $emailConfirm = null;
 
     /**
-     * @Form\Attributes({"id":"translateToWelsh","placeholder":"", "data-container-class": "confirm"})
+     * @Form\Attributes({"id":"translateToWelsh","placeholder":"", "data-container-class": "confirm checkbox"})
      * @Form\Options({
      *     "label": "translate-to-welsh",
      *     "checked_value":"Y",
