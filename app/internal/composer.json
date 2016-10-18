@@ -44,12 +44,12 @@
         "doctrine/annotations": "v1.2.7",
         "symfony/Filesystem": "v2.6.13",
         "zf-commons/zfc-rbac": "2.4.2",
-        "olcs/autoload": "dev-develop#7341d5466605e8bcdd26d8b79806e8ab2a9a77a3",
-        "olcs/OlcsCommon": "dev-release/4.0.2",
-        "olcs/olcs-transfer": "dev-develop#d39e22e8c5039b0e1e832f17f11706ed14cc6ba6",
-        "olcs/olcs-utils": "dev-develop#47401d854d83fd3814aa7a6abca302d5d192493c",
-        "olcs/olcs-auth": "dev-develop#704f73709737931141993f72af43e85fb8332fff",
-        "olcs/olcs-logging": "dev-develop#d106712c54f2fc06ae2b378467b77d8a8df517db",
+        "olcs/autoload": "dev-release/4.0.3",
+        "olcs/OlcsCommon": "dev-release/4.0.3",
+        "olcs/olcs-transfer": "dev-release/4.0.3",
+        "olcs/olcs-utils": "dev-release/4.0.3",
+        "olcs/olcs-auth": "dev-release/4.0.3",
+        "olcs/olcs-logging": "dev-release/4.0.3",
         "soflomo/purifier": "v0.1.1"
     },
     "require-dev": {
