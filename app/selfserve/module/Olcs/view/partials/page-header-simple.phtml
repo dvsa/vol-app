@@ -1,8 +1,11 @@
 <div class="page-header">
+
+    <?php echo $this->flashMessengerAll(); ?>
+
     <?php
     if ($this->backUrl === true) {
         echo $this->linkBack();
-        
+
     } elseif (is_array($this->backUrl) && count($this->backUrl) > 0) {
         echo $this->linkBack($this->backUrl);
     }
