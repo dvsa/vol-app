@@ -6,7 +6,6 @@ return [
 //        'environment' => 'Local Dev',
 //        'release' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : '')
 //    ],
-    'google-tag' => '',
 
     // New Backend service
     'api_router' => [
@@ -99,4 +98,8 @@ return [
     'debug' => [
         'showApiMessages' => false
     ],
+
+    // Google Tag Manager id. If empty or not exists (commented out), then no Google Tag Manager code will be rendered
+    'google-tag' => '',
+
 ];
