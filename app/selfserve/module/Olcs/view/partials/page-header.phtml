@@ -1,5 +1,7 @@
 <div class="page-header">
 
+  <?php echo $this->flashMessengerAll(); ?>
+
   <?php
   if ($this->backUrl === true) {
       echo $this->linkBack();
@@ -22,13 +24,13 @@
       <?php if (isset($this->pageSubTitle) && $this->pageSubTitle != '') : ?>
           <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($this->pageSubTitle); ?></h3>
       <?php endif; ?>
-  
+
       <h1><?php
           echo (
-              $this->pageTitleEscape === false 
-              ? $this->pageTitle 
+              $this->pageTitleEscape === false
+              ? $this->pageTitle
               : $this->escapeHtml($this->pageTitle)
-          ); 
+          );
       ?></h1>
 
       <?php if (isset($this->pageHeaderText) && $this->pageHeaderText != '') { ?>
@@ -42,7 +44,7 @@
             ?></p>
         </div>
       <?php } ?>
-          
+
       <?php if (isset($this->pageHeaderUrl) && !empty($this->pageHeaderUrl)) { ?>
         <p>
           <b>
@@ -79,9 +81,9 @@
             endforeach; ?>
         </ul>
     <?php } ?>
-      
+
   </div><!-- row -->
-    
+
 </div><!-- .page-header -->
 
 <?php
