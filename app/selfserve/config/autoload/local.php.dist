@@ -98,4 +98,8 @@ return [
     'debug' => [
         'showApiMessages' => false
     ],
+
+    // Google Tag Manager id. If empty or not exists (commented out), then no Google Tag Manager code will be rendered
+    'google-tag' => '',
+
 ];
