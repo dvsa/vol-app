@@ -817,11 +817,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     protected function backToDetails($which = null)
     {
-        $fragment = $which ? ['fragment' => lcfirst($which)] : [];
         return $this->redirect()->toRouteAjax(
             'lva-' . $this->lva . '/transport_manager_details',
             [],
-            $fragment,
+            $which === null ? [] : ['fragment' => lcfirst($which)],
             true
         );
     }
