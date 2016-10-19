@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Application People Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva\People;
 
 use Common\Form\Elements\InputFilters\Lva\BackToApplicationActionLink;
@@ -12,6 +7,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\People\ApplicationPeople as Sut;
 use Zend\Form\Form;
+use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**
  * Application People Test
@@ -20,6 +16,8 @@ use Zend\Form\Form;
  */
 class ApplicationPeopleTest extends MockeryTestCase
 {
+    use ButtonsAlterations;
+
     protected $sut;
 
     protected $formHelper;
@@ -39,12 +37,8 @@ class ApplicationPeopleTest extends MockeryTestCase
     public function testGetForm()
     {
         $formActions = m::mock();
-        $formActions->shouldReceive('has')->with('save')->andReturn(true);
-        $formActions->shouldReceive('remove')->once()->with('save');
         $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('cancel');
-
-        $formActions->shouldReceive('add')->once()->with(m::type(BackToApplicationActionLink::class));
 
         $form = m::mock();
         $form->shouldReceive('has')->with('form-actions')->andReturn(true);
@@ -53,6 +47,8 @@ class ApplicationPeopleTest extends MockeryTestCase
         $this->formHelper->shouldReceive('createForm')->once()
             ->with('Lva\People')
             ->andReturn($form);
+
+        $this->mockAlterButtons($form, $this->formHelper, $formActions);
 
         $this->sut->getForm();
     }

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Application Sole Trader Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva\People\SoleTrader;
 
 use Common\Form\Elements\InputFilters\Lva\BackToApplicationActionLink;
@@ -14,6 +9,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\People\SoleTrader\ApplicationSoleTrader as Sut;
 use Zend\Form\Form;
+use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**
  * Application Sole Trader Test
@@ -22,6 +18,8 @@ use Zend\Form\Form;
  */
 class ApplicationSoleTraderTest extends MockeryTestCase
 {
+    use ButtonsAlterations;
+
     protected $sut;
 
     protected $formHelper;
@@ -65,6 +63,8 @@ class ApplicationSoleTraderTest extends MockeryTestCase
             ->with('Lva\SoleTrader')
             ->andReturn($form);
 
+        $this->mockAlterButtons($form, $this->formHelper, $formActions);
+
         $this->sut->getForm($params);
     }
 
@@ -78,10 +78,17 @@ class ApplicationSoleTraderTest extends MockeryTestCase
             'disqualifyUrl' => 'foo'
         ];
 
-        $formActions = m::mock();
-        $formActions->shouldReceive('get->setValue')
-            ->once()
-            ->with('foo');
+        $formActions = m::mock()
+            ->shouldReceive('get')
+            ->with('disqualify')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setValue')
+                    ->with('foo')
+                    ->once()
+                    ->getMock()
+            )
+            ->getMock();
 
         $form = m::mock();
 
@@ -91,6 +98,8 @@ class ApplicationSoleTraderTest extends MockeryTestCase
         $this->formHelper->shouldReceive('createForm')->once()
             ->with('Lva\SoleTrader')
             ->andReturn($form);
+
+        $this->mockAlterButtons($form, $this->formHelper, $formActions);
 
         $this->sut->getForm($params);
     }
@@ -106,16 +115,38 @@ class ApplicationSoleTraderTest extends MockeryTestCase
             'orgType' => 'bar'
         ];
 
-        $formActions = m::mock();
-        $formActions->shouldReceive('get->setValue')
-            ->once()
-            ->with('foo');
+        $formActions = m::mock()
+            ->shouldReceive('get')
+            ->with('disqualify')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setValue')
+                    ->with('foo')
+                    ->once()
+                    ->getMock()
+            )
+            ->getMock();
 
         $formActions->shouldReceive('has')->with('save')->andReturn(true);
-        $formActions->shouldReceive('remove')->once()->with('save');
         $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('cancel');
-        $formActions->shouldReceive('add')->once()->with(m::type(BackToApplicationActionLink::class));
+        $formActions->shouldReceive('get')
+            ->with('save')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setLabel')
+                    ->with('lva.external.return.link')
+                    ->once()
+                    ->shouldReceive('removeAttribute')
+                    ->with('class')
+                    ->once()
+                    ->shouldReceive('setAttribute')
+                    ->with('class', 'action--tertiary large')
+                    ->once()
+                    ->getMock()
+            )
+            ->times(3)
+            ->getMock();
 
         $form = m::mock();
 

@@ -54,6 +54,9 @@ class LicenceSafetyTest extends MockeryTestCase
         $this->formHelper->shouldReceive('createForm')
             ->with('Lva\Safety')
             ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->cancel')
+            ->once()
             ->getMock();
 
         $this->sut->getForm();

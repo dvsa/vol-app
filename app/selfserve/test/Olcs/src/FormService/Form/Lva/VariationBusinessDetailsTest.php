@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Variation Business Details Form Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
@@ -58,7 +53,11 @@ class VariationBusinessDetailsTest extends MockeryTestCase
 
         $this->fh->shouldReceive('remove')
             ->with($form, 'allow-email')
-            ->once();
+            ->once()
+            ->shouldReceive('remove')
+            ->with($form, 'form-actions->cancel')
+            ->once()
+            ->getMock();
 
         $mockLockBusinessDetailsFormService->shouldReceive('alterForm')
             ->once()

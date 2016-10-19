@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Licence Operating Centres Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva\OperatingCentres;
 
 use Olcs\FormService\Form\Lva\OperatingCentres\LicenceOperatingCentres;
@@ -130,9 +125,6 @@ class LicenceOperatingCentresTest extends MockeryTestCase
         $formActions->shouldReceive('remove')->once()->with('cancel');
         $formActions->shouldReceive('has')->with('saveAndContinue')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('saveAndContinue');
-
-        $formActions->shouldReceive('add')->once()
-            ->with(m::type(\Common\Form\Elements\InputFilters\Lva\BackToLicenceActionLink::class));
 
         $this->form->shouldReceive('has')->with('form-actions')->andReturn(true);
         $this->form->shouldReceive('get')->with('form-actions')->andReturn($formActions);

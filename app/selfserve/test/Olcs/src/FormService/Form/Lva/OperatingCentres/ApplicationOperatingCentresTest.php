@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Application Operating Centres Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva\OperatingCentres;
 
 use Olcs\FormService\Form\Lva\OperatingCentres\ApplicationOperatingCentres;
@@ -19,6 +14,7 @@ use Zend\Form\Fieldset;
 use Zend\Form\Form;
 use Zend\Http\Request;
 use Common\Service\Helper\FormHelperService;
+use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**
  * Application Operating Centres Test
@@ -27,6 +23,8 @@ use Common\Service\Helper\FormHelperService;
  */
 class ApplicationOperatingCentresTest extends MockeryTestCase
 {
+    use ButtonsAlterations;
+
     protected $form;
 
     /**
@@ -120,6 +118,8 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
                 ->with('enforcementArea')
                 ->getMock()
             );
+
+        $this->mockAlterButtons($this->form, $this->mockFormHelper);
 
         $form = $this->sut->getForm($params);
         $this->assertSame($this->form, $form);

@@ -12,6 +12,7 @@ use Olcs\FormService\Form\Lva\ApplicationTaxiPhv;
 use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**
  * Application Taxi Phv Test
@@ -20,6 +21,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class ApplicationTaxiPhvTest extends MockeryTestCase
 {
+    use ButtonsAlterations;
+
     /**
      * @var ApplicationTaxiPhv
      */
@@ -52,6 +55,7 @@ class ApplicationTaxiPhvTest extends MockeryTestCase
         $formActions->shouldReceive('add')->with(m::type(BackToApplicationActionLink::class));
 
         $form = m::mock();
+        $this->mockAlterButtons($form, $this->formHelper, $formActions);
         $form->shouldReceive('has')->with('form-actions')->andReturn(true);
         $form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
