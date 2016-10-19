@@ -3,7 +3,7 @@ $subTitle = '';
 
 if ($this->lva === 'licence') {
     $subTitle = $this->licNo;
-  
+
 } elseif ($this->lva === 'application') {
     if ((int)$this->stepX > 0) {
         $subTitle = (
@@ -12,7 +12,7 @@ if ($this->lva === 'licence') {
             : sprintf($this->translate('application.step'), $this->stepX)
         );
     }
-  
+
 } elseif ($this->lva === 'variation') {
     $subTitle = $this->reference;
 }
@@ -72,7 +72,7 @@ echo $this->partial(
 
     <?php else : ?>
 
-  <div class="two-thirds lva-details">
+  <div class="three-quarters lva-details">
 
     <div class="js-body">
 
