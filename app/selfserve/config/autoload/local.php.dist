@@ -6,6 +6,7 @@ return [
 //        'environment' => 'Local Dev',
 //        'release' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : '')
 //    ],
+    'google-tag' => '',
 
     // New Backend service
     'api_router' => [
