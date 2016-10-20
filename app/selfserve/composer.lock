@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "42f610b3151052cdb407940007eb64f5",
-    "content-hash": "03a21e315a8175b9bd711308a92a707d",
+    "hash": "81bc4d5c9b34e60a0fddb3def3a5f18b",
+    "content-hash": "e2225e71d067fc4b713a7fd211b61aad",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -17,9 +17,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-annotations-f25c8aab83e0c3e976fd7d19875f198ccf2f7535-zip-b3ba6f.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-annotations-f25c8aab83e0c3e976fd7d19875f198ccf2f7535-zip-b3ba6f.tar",
                 "reference": "f25c8aab83e0c3e976fd7d19875f198ccf2f7535",
-                "shasum": "52c8a28be9a32ed022cc37efd1a3c1952c72d8c8"
+                "shasum": "baa87baa8aa9e696531c5709ec7ba3def3cf1531"
             },
             "require": {
                 "doctrine/lexer": "1.*",
@@ -85,9 +85,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-cache-f8af318d14bdb0eff0336795b428b547bd39ccb6-zip-1c5416.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-cache-f8af318d14bdb0eff0336795b428b547bd39ccb6-zip-1c5416.tar",
                 "reference": "f8af318d14bdb0eff0336795b428b547bd39ccb6",
-                "shasum": "41d15187b918f463726d2e35924e1a4194d83de1"
+                "shasum": "17764b9bba49b9bae8a0d0052195ed7876c127a2"
             },
             "require": {
                 "php": "~5.5|~7.0"
@@ -155,9 +155,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-collections-6c1e4eef75f310ea1b3e30945e9f06e652128b8a-zip-02a8e4.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-collections-6c1e4eef75f310ea1b3e30945e9f06e652128b8a-zip-02a8e4.tar",
                 "reference": "6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
-                "shasum": "fb64c5235edd5dc4124aa7264f0a92309c9e39da"
+                "shasum": "7aaa3342e855c251897767bdd34dbd91d7201064"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -221,9 +221,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-common-a579557bc689580c19fee4e27487a67fe60defc0-zip-8747fd.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-common-a579557bc689580c19fee4e27487a67fe60defc0-zip-8747fd.tar",
                 "reference": "a579557bc689580c19fee4e27487a67fe60defc0",
-                "shasum": "1fdd7c9a8dff0e9b68b4180c405e707290c05047"
+                "shasum": "c44670be5caff3f1ca94ba72a6d77f0e85f10d11"
             },
             "require": {
                 "doctrine/annotations": "1.*",
@@ -294,9 +294,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-dbal-9f8c05cd5225a320d56d4bfdb4772f10d045a0c9-zip-0be004.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-dbal-9f8c05cd5225a320d56d4bfdb4772f10d045a0c9-zip-0be004.tar",
                 "reference": "9f8c05cd5225a320d56d4bfdb4772f10d045a0c9",
-                "shasum": "7e368de5d080848205cf166a15abf077baebeb17"
+                "shasum": "8fe64efe24847b7284ddab77039e6217bbd3bff7"
             },
             "require": {
                 "doctrine/common": ">=2.4,<2.7-dev",
@@ -365,9 +365,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-doctrine-module-8684c0bbee97d2d1477a9ac802e8b9df307671df-zip-799ad0.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-doctrine-module-8684c0bbee97d2d1477a9ac802e8b9df307671df-zip-799ad0.tar",
                 "reference": "8684c0bbee97d2d1477a9ac802e8b9df307671df",
-                "shasum": "6bf6f050dc7d8b9f53f66c562b332f4c0ccf9f85"
+                "shasum": "7002625927192670efdcdaa997096ebe10900a71"
             },
             "require": {
                 "doctrine/cache": "~1.5",
@@ -443,9 +443,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-doctrine-orm-module-847db36f0f7ef8d940414e433e8b241aa601a6a7-zip-01eccf.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-doctrine-orm-module-847db36f0f7ef8d940414e433e8b241aa601a6a7-zip-01eccf.tar",
                 "reference": "847db36f0f7ef8d940414e433e8b241aa601a6a7",
-                "shasum": "7222cd5238f2f205906a1e75dcd3c8e8378b5df8"
+                "shasum": "f574021d9b233477ad533da5627629267d8ec305"
             },
             "require": {
                 "doctrine/dbal": ">=2.4,<2.7",
@@ -521,9 +521,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-inflector-90b2128806bfde671b6952ab8bea493942c1fdae-zip-a91357.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-inflector-90b2128806bfde671b6952ab8bea493942c1fdae-zip-a91357.tar",
                 "reference": "90b2128806bfde671b6952ab8bea493942c1fdae",
-                "shasum": "80f844879663514811200271d28819d05ca40ba9"
+                "shasum": "954612837de376b3a60620469b25c08ede5e05d3"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -588,9 +588,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-instantiator-8e884e78f9f0eb1329e445619e04456e64d8051d-zip-681b88.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-instantiator-8e884e78f9f0eb1329e445619e04456e64d8051d-zip-681b88.tar",
                 "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
-                "shasum": "b4d84bb5662c9e1ee85939d5f86c44d399328a0c"
+                "shasum": "28a9e175080a0f3e1ebc896662453e66acc5d1c4"
             },
             "require": {
                 "php": ">=5.3,<8.0-DEV"
@@ -642,9 +642,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-lexer-83893c552fd2045dd78aef794c31e694c37c0b8c-zip-53c158.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-lexer-83893c552fd2045dd78aef794c31e694c37c0b8c-zip-53c158.tar",
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "shasum": "bdcbb326ce6b293b13f28ff23f543b0f833c2021"
+                "shasum": "276abea3cde6334f51d91a84ebf97aedcb2ef950"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -696,9 +696,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/doctrine-orm-73e4be7c7b3ba26f96b781a40b33feba4dfa6d45-zip-caaa0d.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-orm-73e4be7c7b3ba26f96b781a40b33feba4dfa6d45-zip-caaa0d.tar",
                 "reference": "73e4be7c7b3ba26f96b781a40b33feba4dfa6d45",
-                "shasum": "ec019e8fc3f44baf612cfea8eed6cecd771b2dc1"
+                "shasum": "9595c519ab0a1a794ba23eec994f1dba8113c758"
             },
             "require": {
                 "doctrine/cache": "~1.4",
@@ -764,11 +764,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/4.0.2",
+            "version": "dev-release/4.0.3",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "b658bd97d3f51daa90f96f52e7dce2fc80b1eb91"
+                "reference": "9d5df2c0279e55f6ec0e32e2c73d34b35d1a2d1d"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -783,8 +783,8 @@
                 "mikey179/vfsstream": "~1.4.0",
                 "mockery/mockery": "~0.9.3",
                 "olcs/olcs-testhelpers": "dev-develop",
-                "olcs/olcs-transfer": "dev-develop",
-                "olcs/olcs-utils": "dev-develop",
+                "olcs/olcs-transfer": "dev-release/4.0.3",
+                "olcs/olcs-utils": "dev-release/4.0.3",
                 "phpunit/phpunit": "^4.4.0",
                 "soflomo/purifier": "~0.1.0",
                 "squizlabs/php_codesniffer": "~1.5.3"
@@ -799,7 +799,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2016-10-16 09:19:27"
+            "time": "2016-10-19 15:41:08"
         },
         {
             "name": "olcs/autoload",
@@ -807,22 +807,22 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-autoload.git",
-                "reference": "7341d5466605e8bcdd26d8b79806e8ab2a9a77a3"
+                "reference": "eba5e292aa8a2835b576ce70aab8d4a25d7f76de"
             },
             "bin": [
                 "bin/autoload"
             ],
             "type": "library",
             "description": "OLCS optimised autoloader",
-            "time": "2016-03-16 16:59:28"
+            "time": "2016-10-04 09:48:47"
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "dev-develop",
+            "version": "dev-release/4.0.3",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "704f73709737931141993f72af43e85fb8332fff"
+                "reference": "6e3ad1921bc6e4d59993b1a86b02c3fe4f151a0c"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -841,20 +841,19 @@
                 }
             },
             "description": "OLCS Authentication",
-            "time": "2016-09-21 16:05:52"
+            "time": "2016-09-28 15:10:14"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "dev-develop",
+            "version": "dev-release/4.0.3",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git",
-                "reference": "d106712c54f2fc06ae2b378467b77d8a8df517db"
+                "reference": "55911ada4b530ac113658dae3861564375fc0444"
             },
             "require": {
                 "php": ">=5.4",
                 "psr/log": "~1.0",
-                "zendframework/zend-console": "~2.3.5",
                 "zendframework/zend-eventmanager": "~2.3.5",
                 "zendframework/zend-http": "~2.3.5",
                 "zendframework/zend-log": "~2.3.5",
@@ -875,11 +874,11 @@
                 }
             },
             "description": "Logging Module for Olcs",
-            "time": "2016-08-15 13:02:19"
+            "time": "2015-10-16 09:10:32"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "dev-develop",
+            "version": "dev-release/4.0.3",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
@@ -905,11 +904,11 @@
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "dev-develop",
+            "version": "dev-release/4.0.3",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-utils.git",
-                "reference": "47401d854d83fd3814aa7a6abca302d5d192493c"
+                "reference": "e03e1fb1254c9470454242b2b7b32ebfe51060c9"
             },
             "require": {
                 "php": ">=5.4",
@@ -917,7 +916,7 @@
             },
             "require-dev": {
                 "mockery/mockery": "~0.9.3",
-                "olcs/olcs-logging": "dev-develop",
+                "olcs/olcs-logging": "dev-release/4.0.3",
                 "phpunit/phpunit": "^4.0.0"
             },
             "type": "library",
@@ -927,7 +926,7 @@
                 }
             },
             "description": "OLCS Utils",
-            "time": "2016-08-22 14:19:20"
+            "time": "2016-10-18 16:29:33"
         },
         {
             "name": "psr/log",
@@ -1105,9 +1104,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-filesystem-823c035b1a5c13a4924e324d016eb07e70f94735-zip-9c1b69.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-filesystem-823c035b1a5c13a4924e324d016eb07e70f94735-zip-9c1b69.tar",
                 "reference": "823c035b1a5c13a4924e324d016eb07e70f94735",
-                "shasum": "c4a8012820b290250a7bda5a5bc1030d4aa651d0"
+                "shasum": "59f3f924e0707faceaafbcfb74ec87e425397dc4"
             },
             "require": {
                 "php": ">=5.3.3"
@@ -1154,9 +1153,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/symfony-polyfill-mbstring-dff51f72b0706335131b00a7f49606168c582594-zip-aa7928.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-polyfill-mbstring-dff51f72b0706335131b00a7f49606168c582594-zip-aa7928.tar",
                 "reference": "dff51f72b0706335131b00a7f49606168c582594",
-                "shasum": "7790a2acec1461c0aa6b082a53135fef48d86903"
+                "shasum": "1509a3883a1d2ab75c4022bd4c5e40de1f8d3fc6"
             },
             "require": {
                 "php": ">=5.3.3"
@@ -1213,9 +1212,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/zendframework-zendframework-32858f883fffb5eef9f610b538ed026f6033b6de-zip-061607.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zendframework-zendframework-32858f883fffb5eef9f610b538ed026f6033b6de-zip-061607.tar",
                 "reference": "32858f883fffb5eef9f610b538ed026f6033b6de",
-                "shasum": "e7d6f02022fa7885c631bb1d4470b4d9a51a076e"
+                "shasum": "07e14b09b1cb9c9bdb4b42e188aa4bfbbbf84911"
             },
             "require": {
                 "php": ">=5.3.23",
@@ -1331,9 +1330,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/zendframework-zendxml-7b64507bc35d841c9c5802d67f6f87ef8e1a58c9-zip-41dd75.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zendframework-zendxml-7b64507bc35d841c9c5802d67f6f87ef8e1a58c9-zip-41dd75.tar",
                 "reference": "7b64507bc35d841c9c5802d67f6f87ef8e1a58c9",
-                "shasum": "4322193a5444778adace7621836a98ff2dea1976"
+                "shasum": "31d2d54fa03b09cbd01a95dfe6c93330808718f5"
             },
             "require": {
                 "php": "^5.3.3 || ^7.0"
@@ -1376,9 +1375,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/zf-commons-zfc-rbac-42f466656ad9730025a6bbbfd4144ac2f3abb64c-zip-fcc7d7.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zf-commons-zfc-rbac-42f466656ad9730025a6bbbfd4144ac2f3abb64c-zip-fcc7d7.tar",
                 "reference": "42f466656ad9730025a6bbbfd4144ac2f3abb64c",
-                "shasum": "97ae06af6f9ad961e06c93ee1fd3995c689eab2b"
+                "shasum": "787280f9044b9b8ccd29bacf02db0d9915ddbd3b"
             },
             "require": {
                 "php": ">=5.4",
@@ -1452,9 +1451,9 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "http://satis.inf.mgt.mtpdvsa/dist/zfr-rbac-493711bfc2a637fd7c6f23b71b7b55a621c35d9d-zip-85e76c.tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zfr-rbac-493711bfc2a637fd7c6f23b71b7b55a621c35d9d-zip-85e76c.tar",
                 "reference": "493711bfc2a637fd7c6f23b71b7b55a621c35d9d",
-                "shasum": "d01c15fbf0047c3157b4152949dcd7ad900e5cdd"
+                "shasum": "a9e1f77e175a2824acaa7c30e9662f8c65429a58"
             },
             "require": {
                 "php": ">=5.4"
