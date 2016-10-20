@@ -88,6 +88,18 @@
         </exec>
     </target>
 
+    <target name="composer-update-olcs" depends="init-composer" description="Update composer OLCS dependencies">
+        <exec executable="php" failonerror="true">
+            <arg value="composer.phar"/>
+            <arg value="update"/>
+            <arg value="--optimize-autoloader"/>
+            <arg value="--no-interaction"/>
+            <arg value="--ignore-platform-reqs"/>
+            <arg value="--no-progress"/>
+            <arg value="olcs/*"/>
+        </exec>
+    </target>
+
     <target name="composer-install" depends="init-composer" description="Install composer dependencies">
         <exec executable="php" failonerror="true">
             <arg value="composer.phar"/>
