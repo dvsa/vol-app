@@ -893,11 +893,12 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git",
-                "reference": "55911ada4b530ac113658dae3861564375fc0444"
+                "reference": "a91a7388a9864d3a0b2cb055a1039886dd276eba"
             },
             "require": {
                 "php": ">=5.4",
                 "psr/log": "~1.0",
+                "zendframework/zend-console": "~2.3.5",
                 "zendframework/zend-eventmanager": "~2.3.5",
                 "zendframework/zend-http": "~2.3.5",
                 "zendframework/zend-log": "~2.3.5",
@@ -918,7 +919,7 @@
                 }
             },
             "description": "Logging Module for Olcs",
-            "time": "2015-10-16 09:10:32"
+            "time": "2016-10-12 17:05:34"
         },
         {
             "name": "olcs/olcs-transfer",
