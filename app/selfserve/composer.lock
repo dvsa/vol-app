@@ -803,7 +803,7 @@
         },
         {
             "name": "olcs/autoload",
-            "version": "dev-develop",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-autoload.git",
