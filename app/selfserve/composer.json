@@ -44,7 +44,7 @@
         "doctrine/annotations": "v1.2.7",
         "symfony/Filesystem": "v2.6.13",
         "zf-commons/zfc-rbac": "2.4.2",
-        "olcs/autoload": "dev-release/4.0.3",
+        "olcs/autoload": "@dev",
         "olcs/OlcsCommon": "dev-release/4.0.3",
         "olcs/olcs-transfer": "dev-release/4.0.3",
         "olcs/olcs-utils": "dev-release/4.0.3",
