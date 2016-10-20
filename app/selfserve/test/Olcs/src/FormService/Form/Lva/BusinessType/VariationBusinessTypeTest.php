@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Variation Business Type Form Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva\BusinessType;
 
 use Common\Form\Elements\InputFilters\Lva\BackToVariationActionLink;
@@ -85,7 +80,10 @@ class VariationBusinessTypeTest extends MockeryTestCase
             ->with($mockElement, 'business-type.locked')
             ->shouldReceive('disableElement')
             ->once()
-            ->with($mockForm, 'data->type');
+            ->with($mockForm, 'data->type')
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions')
+            ->once();
 
         $mockVariation = m::mock(FormServiceInterface::class);
         $mockVariation->shouldReceive('alterForm')

@@ -63,9 +63,6 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
             $tolFormManagerService->setAndLockOperatorLocation($form, $organisationData['allowedOperatorLocation']);
         }
 
-        $form->get('form-actions')->remove('saveAndContinue')
-            ->get('save')->setLabel('continue.button')->setAttribute('class', 'action--primary large');
-
         if ($request->isPost()) {
             $data = (array)$request->getPost();
 

@@ -1,13 +1,10 @@
 <?php
 
-/**
- * Application Taxi Phv
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\TaxiPhv as CommonTaxiPhv;
+use Zend\Form\Form;
+use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**
  * Application Taxi Phv
@@ -16,16 +13,19 @@ use Common\FormService\Form\Lva\TaxiPhv as CommonTaxiPhv;
  */
 class ApplicationTaxiPhv extends CommonTaxiPhv
 {
+    use ButtonsAlterations;
+
     /**
      * Make form alterations
      *
-     * @param \Zend\Form\Form $form
-     * @return \Zend\Form\Form
+     * @param Form $form form
+     *
+     * @return Form
      */
     protected function alterForm($form)
     {
         parent::alterForm($form);
-        $this->addBackToOverviewLink($form, 'application', false);
+        $this->alterButtons($form);
 
         return $form;
     }

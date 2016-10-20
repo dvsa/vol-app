@@ -1,25 +1,24 @@
 <?php
 
-/**
- * Application TransportManager Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva\TransportManager;
 
-use Common\Form\Elements\InputFilters\Lva\BackToApplicationActionLink;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\TransportManager\ApplicationTransportManager as Sut;
-use Zend\Form\Form;
+use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
+use Common\Service\Helper\FormHelperService;
+use Common\FormService\FormServiceManager;
 
 /**
  * Application TransportManager Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
+ * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class ApplicationTransportManagerTest extends MockeryTestCase
 {
+    use ButtonsAlterations;
+
     protected $sut;
 
     protected $formHelper;
@@ -28,8 +27,8 @@ class ApplicationTransportManagerTest extends MockeryTestCase
 
     public function setUp()
     {
-        $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
-        $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
+        $this->formHelper = m::mock(FormHelperService::class);
+        $this->fsm = m::mock(FormServiceManager::class)->makePartial();
 
         $this->sut = new Sut();
         $this->sut->setFormHelper($this->formHelper);
@@ -38,44 +37,13 @@ class ApplicationTransportManagerTest extends MockeryTestCase
 
     public function testGetForm()
     {
-        $formActions = m::mock();
-        $formActions->shouldReceive('has')->with('save')->andReturn(true);
-        $formActions->shouldReceive('remove')->once()->with('save');
-
-        $formActions->shouldReceive('add')->once()->with(m::type(BackToApplicationActionLink::class));
-
-        $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
-        $formActions->shouldReceive('remove')->once()->with('cancel');
-
         $form = m::mock();
-        $form->shouldReceive('has')->with('form-actions')->andReturn(true);
-        $form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
         $this->formHelper->shouldReceive('createForm')->once()
             ->with('Lva\TransportManagers')
             ->andReturn($form);
 
-        $this->sut->getForm();
-    }
-
-    public function testGetFormWithoutFormAction()
-    {
-        $formActions = m::mock();
-        $formActions->shouldReceive('has')->with('save')->andReturn(true);
-        $formActions->shouldReceive('remove')->once()->with('save');
-
-        $formActions->shouldReceive('add')->once()->with(m::type(BackToApplicationActionLink::class));
-
-        $formActions->shouldReceive('has')->with('cancel')->andReturn(false);
-        $formActions->shouldReceive('remove')->never()->with('cancel');
-
-        $form = m::mock();
-        $form->shouldReceive('has')->with('form-actions')->andReturn(true);
-        $form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
-
-        $this->formHelper->shouldReceive('createForm')->once()
-            ->with('Lva\TransportManagers')
-            ->andReturn($form);
+        $this->mockAlterButtons($form, $this->formHelper);
 
         $this->sut->getForm();
     }

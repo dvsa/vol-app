@@ -1,15 +1,12 @@
 <?php
 
-/**
- * Application Business Details Form
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\BusinessDetails\ApplicationBusinessDetails as CommonApplicationBusinessDetails;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
+use Common\Form\Form;
 
 /**
  * Application Business Details Form
@@ -18,8 +15,15 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
  */
 class ApplicationBusinessDetails extends CommonApplicationBusinessDetails implements ServiceLocatorAwareInterface
 {
-    use ServiceLocatorAwareTrait;
+    use ServiceLocatorAwareTrait,
+        ButtonsAlterations;
 
+    /**
+     * Alter form
+     *
+     * @param Form  $form   form
+     * @param array $params params
+     */
     public function alterForm($form, $params)
     {
         parent::alterForm($form, $params);
@@ -30,5 +34,6 @@ class ApplicationBusinessDetails extends CommonApplicationBusinessDetails implem
         if ($params['hasInforceLicences']) {
             $this->getFormServiceLocator()->get('lva-lock-business_details')->alterForm($form);
         }
+        $this->alterButtons($form);
     }
 }

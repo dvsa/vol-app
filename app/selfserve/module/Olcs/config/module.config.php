@@ -1121,11 +1121,19 @@ return array(
     'asset_path' => '//dev_dvsa-static.web01.olcs.mgt.mtpdvsa',
     'form_service_manager' => [
         'invokables' => [
+            // Type of Licence
+            'lva-licence-type_of_licence' => LvaFormService\TypeOfLicence\LicenceTypeOfLicence::class,
+            'lva-variation-type_of_licence' => LvaFormService\TypeOfLicence\VariationTypeOfLicence::class,
+            'lva-application-type_of_licence' => LvaFormService\TypeOfLicence\ApplicationTypeOfLicence::class,
+
             // Address
-            'lva-licence-addresses' => LvaFormService\LicenceAddresses::class,
+            'lva-licence-addresses' => LvaFormService\Addresses\LicenceAddresses::class,
+            'lva-variation-addresses' => LvaFormService\Addresses\VariationAddresses::class,
+            'lva-application-addresses' => LvaFormService\Addresses\ApplicationAddresses::class,
 
             // Safety
             'lva-licence-safety' => LvaFormService\LicenceSafety::class,
+            'lva-variation-safety' => LvaFormService\VariationSafety::class,
 
             // Operating Centres
             'lva-licence-operating_centres' => LvaFormService\OperatingCentres\LicenceOperatingCentres::class,
@@ -1150,9 +1158,7 @@ return array(
             // External common goods vehicles vehicle form service
             'lva-application-goods-vehicles-add-vehicle' => LvaFormService\GoodsVehicles\AddVehicle::class,
             'lva-licence-vehicles_psv' => LvaFormService\LicencePsvVehicles::class,
-            'lva-variation-vehicles_psv' => LvaFormService\VariationPsvVehicles::class,
             'lva-licence-goods-vehicles' => LvaFormService\LicenceGoodsVehicles::class,
-            'lva-variation-goods-vehicles' => LvaFormService\VariationGoodsVehicles::class,
             'lva-licence-goods-vehicles-add-vehicle' => LvaFormService\GoodsVehicles\AddVehicle::class,
             'lva-variation-goods-vehicles-add-vehicle' => LvaFormService\GoodsVehicles\AddVehicle::class,
             'lva-application-goods-vehicles-edit-vehicle' => LvaFormService\GoodsVehicles\EditVehicle::class,
@@ -1163,22 +1169,22 @@ return array(
             // External common vehicles vehicle form service (Goods and PSV)
             'lva-vehicles-vehicle' => LvaFormService\VehiclesVehicle::class,
 
-            'lva-licence-people' => LvaFormService\People\LicencePeople::class,
-            'lva-variation-people' => LvaFormService\People\VariationPeople::class,
             'lva-application-people' => LvaFormService\People\ApplicationPeople::class,
+            'lva-application-financial_evidence' => LvaFormService\ApplicationFinancialEvidence::class,
+            'lva-application-vehicles_declarations' => LvaFormService\ApplicationVehiclesDeclarations::class,
+            'lva-application-safety' => LvaFormService\ApplicationSafety::class,
+            'lva-application-financial_history' => LvaFormService\ApplicationFinancialHistory::class,
+            'lva-application-licence_history' => LvaFormService\ApplicationLicenceHistory::class,
+            'lva-application-convictions_penalties' => LvaFormService\ApplicationConvictionsPenalties::class,
+            'lva-application-vehicles_psv' => LvaFormService\ApplicationPsvVehicles::class,
+            'lva-application-goods-vehicles' => LvaFormService\ApplicationGoodsVehicles::class,
 
             'lva-licence-sole_trader' => LvaFormService\People\SoleTrader\LicenceSoleTrader::class,
             'lva-variation-sole_trader' => LvaFormService\People\SoleTrader\VariationSoleTrader::class,
             'lva-application-sole_trader' => LvaFormService\People\SoleTrader\ApplicationSoleTrader::class,
 
-            'lva-licence-transport_managers' => LvaFormService\TransportManager\LicenceTransportManager::class,
-            'lva-variation-transport_managers' => LvaFormService\TransportManager\VariationTransportManager::class,
             'lva-application-transport_managers' => LvaFormService\TransportManager\ApplicationTransportManager::class,
 
-            'lva-licence-discs' => LvaFormService\PsvDiscs\LicencePsvDiscs::class,
-            'lva-variation-discs' => LvaFormService\PsvDiscs\VariationPsvDiscs::class,
-
-            'lva-licence-taxi_phv' => LvaFormService\LicenceTaxiPhv::class,
             'lva-application-taxi_phv' => LvaFormService\ApplicationTaxiPhv::class,
 
             'lva-licence-trailers' => LvaFormService\LicenceTrailers::class,

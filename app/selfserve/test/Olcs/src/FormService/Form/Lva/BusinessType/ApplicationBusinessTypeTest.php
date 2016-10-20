@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Application Business Type Form Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva\BusinessType;
 
 use Common\Form\Elements\InputFilters\Lva\BackToApplicationActionLink;
@@ -15,6 +10,7 @@ use Olcs\FormService\Form\Lva\BusinessType\ApplicationBusinessType;
 use Common\FormService\FormServiceInterface;
 use Zend\Form\Form;
 use Zend\Form\Element;
+use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**
  * Application Business Type Form Test
@@ -34,6 +30,8 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
 
     protected $sm;
 
+    use ButtonsAlterations;
+
     public function setUp()
     {
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
@@ -49,6 +47,7 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
     public function testGetFormWithoutInforceLicences()
     {
         $mockForm = m::mock(Form::class);
+        $this->mockAlterButtons($mockForm, $this->fh);
 
         $this->fh->shouldReceive('createForm')
             ->once()
@@ -75,10 +74,25 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
         $formActions->shouldReceive('has')->with('save')->andReturn(true);
         $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
 
-        $formActions->shouldReceive('remove')->once()->with('save');
         $formActions->shouldReceive('remove')->once()->with('cancel');
 
-        $formActions->shouldReceive('add')->once()->with(m::type(BackToApplicationActionLink::class));
+        $formActions->shouldReceive('get')
+            ->with('save')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setLabel')
+                ->with('lva.external.return.link')
+                ->once()
+                ->shouldReceive('removeAttribute')
+                ->with('class')
+                ->once()
+                ->shouldReceive('setAttribute')
+                ->with('class', 'action--tertiary large')
+                ->once()
+                ->getMock()
+            )
+            ->times(3)
+            ->getMock();
 
         $mockForm = m::mock(Form::class);
         $mockForm->shouldReceive('get')->with('data')

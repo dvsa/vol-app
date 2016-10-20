@@ -1,16 +1,13 @@
 <?php
 
-/**
- * Licence Business Details Form Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\LicenceBusinessDetails;
 use Common\Service\Entity\OrganisationEntityService;
+use Common\Service\Helper\FormHelperService;
+use Common\FormService\FormServiceManager;
 
 /**
  * Licence Business Details Form Test
@@ -25,10 +22,12 @@ class LicenceBusinessDetailsTest extends MockeryTestCase
 
     public function setUp()
     {
-        $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
+        $this->fsm = m::mock(FormServiceManager::class)->makePartial();
+        $this->formHelper = m::mock(FormHelperService::class)->makePartial();
 
         $this->sut = new LicenceBusinessDetails();
         $this->sut->setFormServiceLocator($this->fsm);
+        $this->sut->setFormHelper($this->formHelper);
     }
 
     public function testAlterForm()
@@ -55,6 +54,11 @@ class LicenceBusinessDetailsTest extends MockeryTestCase
         $mockLockBusinessDetailsFormService->shouldReceive('alterForm')
             ->once()
             ->with($form);
+
+        $this->formHelper->shouldReceive('remove')
+            ->with($form, 'form-actions->cancel')
+            ->once()
+            ->getMock();
 
         $this->sut->alterForm($form, $params);
     }

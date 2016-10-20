@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Variation Sole Trader Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva\People\SoleTrader;
 
 use Common\Form\Elements\InputFilters\Lva\BackToVariationActionLink;
@@ -65,7 +60,6 @@ class VariationSoleTraderTest extends MockeryTestCase
         $formActions->shouldReceive('remove')->once()->with('cancel');
         $formActions->shouldReceive('has')->with('saveAndContinue')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('saveAndContinue');
-        $formActions->shouldReceive('add')->once()->with(m::type(BackToVariationActionLink::class));
 
         $formActions->shouldReceive('has')->with('disqualify')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('disqualify');
@@ -103,7 +97,6 @@ class VariationSoleTraderTest extends MockeryTestCase
         $formActions->shouldReceive('remove')->once()->with('cancel');
         $formActions->shouldReceive('has')->with('saveAndContinue')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('saveAndContinue');
-        $formActions->shouldReceive('add')->once()->with(m::type(BackToVariationActionLink::class));
 
         $formActions->shouldReceive('get->setValue')
             ->once()
@@ -143,7 +136,6 @@ class VariationSoleTraderTest extends MockeryTestCase
         $formActions->shouldReceive('remove')->once()->with('cancel');
         $formActions->shouldReceive('has')->with('saveAndContinue')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('saveAndContinue');
-        $formActions->shouldReceive('add')->once()->with(m::type(BackToVariationActionLink::class));
 
         $formActions->shouldReceive('get->setValue')
             ->once()

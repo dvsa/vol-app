@@ -20,6 +20,12 @@ class VariationBusinessDetails extends CommonVariationBusinessDetails implements
 {
     use ServiceLocatorAwareTrait;
 
+    /**
+     * Alter form
+     *
+     * @param Form  $form   form
+     * @param array $params params
+     */
     public function alterForm($form, $params)
     {
         parent::alterForm($form, $params);
@@ -27,5 +33,6 @@ class VariationBusinessDetails extends CommonVariationBusinessDetails implements
         $this->getFormHelper()->remove($form, 'allow-email');
 
         $this->getFormServiceLocator()->get('lva-lock-business_details')->alterForm($form);
+        $this->getFormHelper()->remove($form, 'form-actions->cancel');
     }
 }

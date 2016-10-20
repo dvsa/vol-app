@@ -4,7 +4,7 @@ namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\FormService\Form\Lva\LicenceAddresses;
+use Olcs\FormService\Form\Lva\Addresses\LicenceAddresses;
 use Common\Service\Entity\LicenceEntityService;
 use Zend\Form\Form;
 
@@ -60,6 +60,9 @@ class LicenceAddressesTest extends MockeryTestCase
             ->once()
             ->shouldReceive('remove')
             ->with($mockForm, 'phoneContactsTable')
+            ->once()
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions->cancel')
             ->once()
             ->getMock();
 

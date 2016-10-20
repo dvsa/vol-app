@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Application Business Details Form Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\RefData;
@@ -12,6 +7,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
 use Olcs\FormService\Form\Lva\ApplicationBusinessDetails;
+use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**
  * Application Business Details Form Test
@@ -20,6 +16,8 @@ use Olcs\FormService\Form\Lva\ApplicationBusinessDetails;
  */
 class ApplicationBusinessDetailsTest extends MockeryTestCase
 {
+    use ButtonsAlterations;
+
     protected $sut;
 
     protected $sm;
@@ -44,6 +42,7 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
     {
         // Params
         $form = m::mock();
+        $this->mockAlterButtons($form, $this->fh);
         $params = [
             'orgType' => RefData::ORG_TYPE_LLP,
             'hasInforceLicences' =>false
@@ -70,6 +69,7 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
     {
         // Params
         $form = m::mock();
+        $this->mockAlterButtons($form, $this->fh);
         $params = [
             'orgType' => RefData::ORG_TYPE_LLP,
             'hasInforceLicences' => true

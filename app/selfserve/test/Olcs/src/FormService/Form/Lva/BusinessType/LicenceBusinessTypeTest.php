@@ -85,7 +85,11 @@ class LicenceBusinessTypeTest extends MockeryTestCase
             ->with($mockElement, 'business-type.locked')
             ->shouldReceive('disableElement')
             ->once()
-            ->with($mockForm, 'data->type');
+            ->with($mockForm, 'data->type')
+            ->shouldReceive('remove')
+            ->with($mockForm, 'form-actions')
+            ->once()
+            ->getMock();
 
         $mockLicence = m::mock(FormServiceInterface::class);
         $mockLicence->shouldReceive('alterForm')

@@ -37,6 +37,8 @@ class LicencePsvVehiclesTest extends MockeryTestCase
         $formActions = m::mock();
         $formActions->shouldReceive('has')->with('saveAndContinue');
         $formActions->shouldReceive('remove')->with('saveAndContinue');
+        $formActions->shouldReceive('has')->with('cancel');
+        $formActions->shouldReceive('remove')->with('cancel');
         $formActions->shouldReceive('get')
             ->with('save')
             ->andReturn(

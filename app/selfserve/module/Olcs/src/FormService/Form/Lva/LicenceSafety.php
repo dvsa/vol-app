@@ -23,6 +23,7 @@ class LicenceSafety extends CommonSafety
     {
         parent::alterForm($form);
         $form->get('form-actions')->get('save')->setAttribute('class', 'action--primary large');
+        $this->getFormHelper()->remove($form, 'form-actions->cancel');
 
         return $form;
     }

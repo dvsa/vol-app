@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Variation Operating Centres Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva\OperatingCentres;
 
 use Olcs\FormService\Form\Lva\OperatingCentres\VariationOperatingCentres;
@@ -95,6 +90,10 @@ class VariationOperatingCentresTest extends MockeryTestCase
         $this->mockFormHelper->shouldReceive('remove')
             ->once()
             ->with($this->form, 'dataTrafficArea');
+
+        $this->mockFormHelper->shouldReceive('remove')
+            ->once()
+            ->with($this->form, 'form-actions->cancel');
 
         $this->translator->shouldReceive('translateReplace')
             ->with('current-authorisation-hint', [11])
