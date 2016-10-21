@@ -786,6 +786,7 @@ $nav = array(
                                     'label' => 'internal-navigation-operator-people',
                                     'route' => 'operator/people',
                                     'use_route_match' => true,
+                                    'action' => 'index',
                                 ),
                                 array(
                                     'id' => 'operator_licences',
