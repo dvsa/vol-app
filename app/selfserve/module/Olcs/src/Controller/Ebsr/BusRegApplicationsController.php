@@ -400,14 +400,8 @@ class BusRegApplicationsController extends AbstractController
      */
     private function generateLinkBackToBusRegs()
     {
-        /** @var \Zend\Http\Request $request */
-        $request = $this->getRequest();
-
-        /** @var \Zend\Http\Header\Referer $header */
-        $header = $request->getHeader('referer');
-
         return [
-            'url' => $header->uri()->getPath(),
+            'url' => $this->url()->fromRoute('busreg-registrations'),
             'label' => 'bus-registrations-index-title',
         ];
     }
