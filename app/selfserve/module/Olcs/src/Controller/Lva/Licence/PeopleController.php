@@ -1,11 +1,5 @@
 <?php
 
-/**
- * External Licence People Controller
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva;
@@ -28,9 +22,12 @@ class PeopleController extends Lva\AbstractPeopleController
     /**
      * Alter form for LVA
      *
-     * @param \Zend\Form\Form $form
+     * @param Form  $form Form
+     * @param array $data Api/Form Data
+     *
+     * @return void
      */
-    protected function alterFormForLva(Form $form)
+    protected function alterFormForLva(Form $form, $data = null)
     {
         $table = $form->get('table')->get('table')->getTable();
         $table->removeColumn('actionLinks');

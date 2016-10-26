@@ -1,15 +1,7 @@
 <?php
 
-/**
- * Abstract Licence Controller
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- * @author Rob Caiger <rob.caiger@clocal.co.uk>
- */
 namespace Olcs\Controller\Lva\Traits;
 
-use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
-use Olcs\Logging\Log\Logger;
 use Zend\Form\Form;
 
 /**
@@ -24,6 +16,8 @@ trait LicenceControllerTrait
 
     /**
      * Hook into the dispatch before the controller action is executed
+     *
+     * @return null|\Zend\Http\Response
      */
     protected function preDispatch()
     {
@@ -35,8 +29,10 @@ trait LicenceControllerTrait
     /**
      * Get licence id
      *
-     * @return int
+     * @param int $lva Lva
+     *
      * @inheritdoc
+     * @return string
      */
     protected function getLicenceId($lva = null)
     {
@@ -47,6 +43,8 @@ trait LicenceControllerTrait
      * Complete a section and potentially redirect to the next
      * one depending on the user's choice
      *
+     * @param string $section Section
+     *
      * @return \Zend\Http\Response
      */
     protected function completeSection($section)
@@ -54,7 +52,15 @@ trait LicenceControllerTrait
         return $this->goToOverviewAfterSave($this->getLicenceId());
     }
 
-    protected function alterFormForLva(Form $form)
+    /**
+     * Alter form
+     *
+     * @param Form  $form Form
+     * @param array $data Api/Form Data
+     *
+     * @return mixed
+     */
+    protected function alterFormForLva(Form $form, $data = null)
     {
         return $this->getServiceLocator()->get('LicenceLvaAdapter')->alterForm($form);
     }
