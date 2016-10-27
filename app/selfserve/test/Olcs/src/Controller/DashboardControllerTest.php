@@ -75,9 +75,6 @@ class DashboardControllerTest extends MockeryTestCase
         $this->sut->indexAction();
     }
 
-    /**
-     * @group test123
-     */
     public function testDashboardStandard()
     {
         $organisationId = 45;
