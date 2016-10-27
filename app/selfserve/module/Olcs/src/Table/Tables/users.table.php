@@ -55,7 +55,7 @@ return array(
             'type' => 'Action',
             'action' => 'delete',
             'class' => 'remove right-aligned',
-            'content' => 'Remove',
+            'content' => 'manage-users.table.action.remove',
         ],
     ]
 );
