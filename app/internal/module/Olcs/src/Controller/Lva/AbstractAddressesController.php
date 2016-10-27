@@ -36,7 +36,7 @@ class AbstractAddressesController extends Lva\AbstractAddressesController
      *
      * @return array
      */
-    protected function getPhoneContacts($contactDetailsId)
+    protected function getPhoneContacts($contactDetailsId = null)
     {
         $response = $this->handleQuery(
             TransferQry\ContactDetail\PhoneContact\GetList::create(
