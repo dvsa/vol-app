@@ -99,7 +99,7 @@ class DashboardControllerTest extends MockeryTestCase
 
         $dashboardData = [
             'licences' => [],
-            'application' => [],
+            'applications' => [],
             'variations' => [],
             'feeCount' => 99,
             'correspondenceCount' => 123,

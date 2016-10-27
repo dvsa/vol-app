@@ -66,7 +66,8 @@ class DashboardController extends AbstractController
         $params = $this->getServiceLocator()->get('DashboardProcessingService')->getTables($dashboardData);
 
         $params['total'] = $total;
-        $params['showVariationTable'] = count($dashboardData['licences']) > 0 ? true : false;
+        $params['showVariationTable'] = count($dashboardData['variations']) > 0;
+        $params['showApplicationTable'] = count($dashboardData['applications']) > 0;
 
         // setup view
         $view = new \Zend\View\Model\ViewModel($params);
