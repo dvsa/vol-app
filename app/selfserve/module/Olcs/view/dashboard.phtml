@@ -16,7 +16,8 @@ echo $this->partial(
           echo $this->partial('dashboard-empty');
       } else {
           echo $this->partial(
-              'dashboard-tables', compact('applications', 'licences', 'variations', 'showVariationTable')
+              'dashboard-tables',
+              compact('applications', 'licences', 'variations', 'showVariationTable', 'showApplicationTable')
           );
       }
     ?>

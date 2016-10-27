@@ -10,7 +10,9 @@ echo $licences;
 if ($showVariationTable) {
     echo $variations;
 }
-echo $applications;
+if ($showApplicationTable) {
+    echo $applications;
+}
 ?>
 <div class="actions-container new-application--wrapper">
         <a href="<?php echo $this->url('create_application'); ?>" class="action--primary large">

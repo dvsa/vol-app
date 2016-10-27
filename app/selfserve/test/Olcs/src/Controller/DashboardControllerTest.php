@@ -75,6 +75,9 @@ class DashboardControllerTest extends MockeryTestCase
         $this->sut->indexAction();
     }
 
+    /**
+     * @group test123
+     */
     public function testDashboardStandard()
     {
         $organisationId = 45;
@@ -99,7 +102,7 @@ class DashboardControllerTest extends MockeryTestCase
 
         $dashboardData = [
             'licences' => [],
-            'application' => [],
+            'applications' => [],
             'variations' => [],
             'feeCount' => 99,
             'correspondenceCount' => 123,
