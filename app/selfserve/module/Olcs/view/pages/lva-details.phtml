@@ -66,38 +66,27 @@ echo $this->partial(
     ?>
   </div>
 
-  <div class="three-quarters lva-details">
+  <?php endif; ?>
 
+  <div class="<?php echo $this->mainWrapperCssClass ?: 'three-quarters' ?> lva-details">
     <div class="js-body">
 
-    <?php else : ?>
-
-  <div class="three-quarters lva-details">
-
-    <div class="js-body">
-
-    <?php endif; ?>
-
       <?php
-        $guidanceMessage = $this->placeholder('guidance');
-        if (!empty($guidanceMessage)) {
-          foreach ($guidanceMessage as $message):
+      $guidanceMessage = $this->placeholder('guidance');
+      if (!empty($guidanceMessage)) {
+          foreach ($guidanceMessage as $message): ?>
+              <div class="guidance">
+                  <p><?php echo $this->translate($message); ?></p>
+              </div>
+          <?php endforeach;
+      }
+
+      if (isset($sectionText)) {
+          echo $this->translate($sectionText);
+      }
       ?>
 
-      <div class="guidance">
-        <p><?php echo $this->translate($message); ?></p>
-      </div>
-
-      <?php endforeach; }
-        if (isset($sectionText)) {
-      ?>
-
-      <?php echo $this->translate($sectionText); ?>
-
-      <?php } ?>
-
       <?php
-
         $messages = $this->flashMessengerAll('norender')->getMessagesFromNamespace('prominent-error');
 
         foreach ($messages as $message) {
