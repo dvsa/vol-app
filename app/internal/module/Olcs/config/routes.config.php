@@ -531,7 +531,7 @@ $routes = [
                 'action' => '(index|add|edit|details|close|reopen|delete|print)'
             ],
             'defaults' => [
-                'controller' => 'CaseSubmissionController',
+                'controller' => Olcs\Controller\Cases\Submission\SubmissionController::class,
                 'action' => 'index'
             ]
         ]
@@ -546,7 +546,7 @@ $routes = [
                 'action' => '(index|add|edit|details|update-table)'
             ],
             'defaults' => [
-                'controller' => 'CaseSubmissionController',
+                'controller' => Olcs\Controller\Cases\Submission\SubmissionController::class,
                 'action' => 'update-table'
             ]
         ]
@@ -1631,7 +1631,7 @@ $routes = [
                 'organisation' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'OperatorController',
+                'controller' => Olcs\Controller\Operator\OperatorController::class,
                 'action' => 'index-jump',
             ]
         ],
@@ -1686,7 +1686,7 @@ $routes = [
                 'options' => [
                     'route' => 'new-application[/]',
                     'defaults' => [
-                        'controller' => 'OperatorController',
+                        'controller' => Olcs\Controller\Operator\OperatorController::class,
                         'action' => 'newApplication',
                     ]
                 ]
@@ -1911,7 +1911,7 @@ $routes = [
                 'options' => [
                     'route' => 'merge[/]',
                     'defaults' => [
-                        'controller' => 'OperatorController',
+                        'controller' => Olcs\Controller\Operator\OperatorController::class,
                         'action' => 'merge',
                     ]
                 ],
@@ -1923,7 +1923,7 @@ $routes = [
         'options' => [
             'route' => '/operator/lookup[/]',
             'defaults' => [
-                'controller' => 'OperatorController',
+                'controller' => Olcs\Controller\Operator\OperatorController::class,
                 'action' => 'lookup',
             ]
         ],

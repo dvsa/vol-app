@@ -30,6 +30,11 @@ class OperatorController extends AbstractController implements OperatorControlle
      */
     protected $section;
 
+    /**
+     * Get Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -48,6 +53,11 @@ class OperatorController extends AbstractController implements OperatorControlle
         return $this->redirect()->toRoute('operator/business-details', [], [], true);
     }
 
+    /**
+     * Process action - Application
+     *
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function newApplicationAction()
     {
         /** @var \Zend\Http\Request $request */
@@ -113,8 +123,10 @@ class OperatorController extends AbstractController implements OperatorControlle
     /**
      * Alter form
      *
-     * @param \Zend\Form\FormInterface $form
-     * @param array $data
+     * @param \Zend\Form\FormInterface $form Form
+     * @param array                    $data Api/Form Data
+     *
+     * @return void
      */
     protected function alterForm($form, $data)
     {
@@ -127,11 +139,20 @@ class OperatorController extends AbstractController implements OperatorControlle
                 ->get('trafficArea')
                 ->setValueOptions($organisationData['taValueOptions']);
         }
-        if ($data['details']['trafficArea'] === RefData::NORTHERN_IRELAND_TRAFFIC_AREA_CODE) {
+
+        if (
+            isset($data['details']['trafficArea'])
+            && $data['details']['trafficArea'] === RefData::NORTHERN_IRELAND_TRAFFIC_AREA_CODE
+        ) {
             $form->getInputFilter()->get('type-of-licence')->get('operator-type')->setRequired(false);
         }
     }
 
+    /**
+     * Is Unlicensed
+     *
+     * @return bool
+     */
     protected function isUnlicensed()
     {
         if (empty($this->params('organisation'))) {
@@ -154,6 +175,8 @@ class OperatorController extends AbstractController implements OperatorControlle
 
     /**
      * Transfer associated entities from one Operator to another
+     *
+     * @return \Zend\Http\Response|ViewModel
      */
     public function mergeAction()
     {
