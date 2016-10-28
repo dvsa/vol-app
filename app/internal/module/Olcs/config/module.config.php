@@ -155,7 +155,8 @@ return array(
             'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',
             'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
             'CaseLegacyOffenceController' => 'Olcs\Controller\Cases\Conviction\LegacyOffenceController',
-            'CaseSubmissionController' => 'Olcs\Controller\Cases\Submission\SubmissionController',
+            Olcs\Controller\Cases\Submission\SubmissionController::class =>
+                Olcs\Controller\Cases\Submission\SubmissionController::class,
             'CaseProcessSubmissionController' => 'Olcs\Controller\Cases\Submission\ProcessSubmissionController',
             'CaseSubmissionSectionCommentController'
                 => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
@@ -261,7 +262,7 @@ return array(
             'BusFeesPlaceholderController' => 'Olcs\Controller\Bus\Fees\BusFeesPlaceholderController',
             'BusServiceController' => 'Olcs\Controller\Bus\Service\BusServiceController',
             'BusRequestMapController' => 'Olcs\Controller\Bus\BusRequestMapController',
-            'OperatorController' => 'Olcs\Controller\Operator\OperatorController',
+            Olcs\Controller\Operator\OperatorController::class => Olcs\Controller\Operator\OperatorController::class,
             'OperatorDocsController' => 'Olcs\Controller\Operator\Docs\OperatorDocsController',
             'OperatorBusinessDetailsController' => 'Olcs\Controller\Operator\OperatorBusinessDetailsController',
             Olcs\Controller\Operator\UnlicensedBusinessDetailsController::class =>
