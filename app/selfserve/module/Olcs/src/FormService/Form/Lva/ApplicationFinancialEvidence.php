@@ -25,7 +25,13 @@ class ApplicationFinancialEvidence extends FinancialEvidence
     protected function alterForm($form)
     {
         parent::alterForm($form);
-        $this->alterButtons($form);
+        $formActions = $form->get('form-actions');
+        $saveButton = $formActions->get('save');
+        $saveButton->setLabel('lva.external.save_and_return.link');
+        $saveButton->removeAttribute('class');
+        $saveButton->setAttribute('class', 'action--tertiary large');
+        $formActions->get('saveAndContinue')->setLabel('lva.external.save_and_continue.button');
+        $formActions->remove('cancel');
 
         return $form;
     }
