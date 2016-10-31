@@ -238,7 +238,7 @@ class TaskAllocationRulesController extends AbstractInternalController
             return parent::editAction();
         }
 
-        $this->redirect()->toRoute(null, $params, ['code' => 303], true);
+        return $this->redirect()->toRoute(null, $params, ['code' => 303], true);
     }
 
     /**

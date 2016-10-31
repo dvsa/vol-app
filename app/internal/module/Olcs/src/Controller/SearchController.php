@@ -214,7 +214,7 @@ class SearchController extends AbstractController implements LeftViewProvider
          */
         $url = $this->url()->fromRoute('operators/operators-params', [], array('query' => $data));
 
-        $this->redirect()->toUrl($url);
+        return $this->redirect()->toUrl($url);
     }
 
     /**
