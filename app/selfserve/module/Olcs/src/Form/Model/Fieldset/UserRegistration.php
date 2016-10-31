@@ -12,7 +12,11 @@ use Zend\Form\Annotation as Form;
 class UserRegistration
 {
     /**
-     * @Form\Options({"label":"user-name", "hint": "user-registration.field.username.hint"})
+     * @Form\Options({
+     *     "label":"user-name",
+     *     "hint": "user-registration.field.username.hint",
+     *     "hint-position": "above",
+     * })
      * @Form\Required(true)
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
      * @Form\Type("Text")
@@ -65,9 +69,12 @@ class UserRegistration
      *          "N":"select-option-no",
      *          "Y":"select-option-yes",
      *      },
-     *      "fieldset-attributes" : {
-     *          "class":"checkbox inline"
-     *      }
+     *      "label_attributes": {
+     *          "class": "inline",
+     *      },
+     *      "fieldset-attributes": {
+     *          "class":"checkbox inline",
+     *      },
      * })
      * @Form\Required(true)
      * @Form\Attributes({"id":"isLicenceHolder", "placeholder":"", "required":false})

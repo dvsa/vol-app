@@ -1106,7 +1106,6 @@ return array(
             ),
             array(
                 'id' => 'signin',
-                'label' => 'back-to-sign-in',
                 'route' => 'auth/login',
                 'pages' => array(
                     array(
