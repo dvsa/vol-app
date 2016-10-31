@@ -936,7 +936,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
             if ($response->isOk()) {
                 $flashMessenger->addSuccessMessage('lva-tm-details-submit-success');
-                $this->redirect()->refresh();
+                return $this->redirect()->refresh();
             } else {
                 $flashMessenger->addErrorMessage('unknown-error');
             }
@@ -1036,7 +1036,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
                 if ($response->isOk()) {
                     $flashMessenger->addSuccessMessage('operator-approve-message');
-                    $this->redirect()->refresh();
+                    return $this->redirect()->refresh();
                 } else {
                     $flashMessenger->addErrorMessage('unknown-error');
                 }
