@@ -923,7 +923,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $this->addErrorMessage('unknown-error');
         }
         if ($response->isOk()) {
-            $this->redirectToAction($data['data']['redirectAction'], $data['data']['redirectId']);
+            return $this->redirectToAction($data['data']['redirectAction'], $data['data']['redirectId']);
         }
     }
 

@@ -385,7 +385,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
                 $this->editContentTitle
             );
         }
-        $this->redirect()->toRoute(null, $params, ['code' => 303], true);
+        return $this->redirect()->toRoute(null, $params, ['code' => 303], true);
     }
 
     /**

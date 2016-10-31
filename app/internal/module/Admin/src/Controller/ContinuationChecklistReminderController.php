@@ -153,7 +153,7 @@ class ContinuationChecklistReminderController extends AbstractController
         );
         if ($response->isServerError() || $response->isClientError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            $this->redirect()->toRouteAjax(null, ['action' => null, 'child_id' => null], [], true);
+            return $this->redirect()->toRouteAjax(null, ['action' => null, 'child_id' => null], [], true);
         }
         $results = [];
         if ($response->isOk()) {
