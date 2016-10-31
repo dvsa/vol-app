@@ -212,7 +212,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             if ($storedCardReference) {
                 $params['storedCardReference'] = $storedCardReference;
             }
-            $this->redirect()->toRoute('lva-'.$this->lva.'/payment', $params);
+            return $this->redirect()->toRoute('lva-'.$this->lva.'/payment', $params);
         }
 
         /* @var $form \Common\Form\Form */
