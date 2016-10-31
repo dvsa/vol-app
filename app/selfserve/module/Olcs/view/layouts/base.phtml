@@ -2,9 +2,8 @@
 <html lang="en-GB">
 
   <head>
-      <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
-
     <meta charset="utf-8">
+    <?php echo $this->headLink(['rel' => 'icon', 'href' => $this->assetPath('/images/bitmap/favicon.ico'), 'type' => 'image/x-icon'], 'PREPEND'); ?>
     <?php echo $this->headTitle(strip_tags($this->pageTitle())); ?>
     <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')->appendHttpEquiv('X-UA-Compatible', 'IE=edge'); ?>
     <?php echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css'), ['media' => 'screen,print']); ?>
