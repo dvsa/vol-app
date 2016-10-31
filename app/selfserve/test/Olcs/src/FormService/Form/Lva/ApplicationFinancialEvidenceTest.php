@@ -87,4 +87,3 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
         $this->assertSame($mockForm, $form);
     }
 }
-
