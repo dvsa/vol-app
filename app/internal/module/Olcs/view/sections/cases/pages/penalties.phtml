@@ -15,8 +15,21 @@
                 ['label' => 'VRM', 'value' => $data['case']['erruRequest']['vrm']],
             ],
             1 => [
-                ['label' => 'Infringement ID', 'value' => $data['id']],
-                ['label' => 'Notification number', 'value' => $data['case']['erruRequest']['notificationNumber']],
+                [
+                    'label' => 'Infringement ID',
+                    'value' => $data['id'],
+                    'class' => 'full-width'
+                ],
+                [
+                    'label' => 'Business case ID',
+                    'value' => $data['case']['erruRequest']['notificationNumber'],
+                    'class' => 'full-width'
+                ],
+                [
+                    'label' => 'Workflow ID',
+                    'value' => $data['case']['erruRequest']['workflowId'],
+                    'class' => 'full-width'
+                ],
             ],
             2 => [
                 [
