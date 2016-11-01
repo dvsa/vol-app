@@ -104,8 +104,9 @@ class TaskAllocationRulesController extends AbstractInternalController
     /**
      * Overwrite getForm method to inject the table
      *
-     * @param $name
-     * @return mixed
+     * @param string $name Form name
+     *
+     * @return \Zend\Form\Form
      */
     public function getForm($name)
     {
@@ -122,6 +123,8 @@ class TaskAllocationRulesController extends AbstractInternalController
 
     /**
      * Get the Task alpha split table
+     *
+     * @return \Common\Service\Table\TableBuilder
      */
     protected function getAlphaSplitTable()
     {
@@ -147,8 +150,8 @@ class TaskAllocationRulesController extends AbstractInternalController
     /**
      * Alter the Task allocation rule form when editing
      *
-     * @param \Common\Form\Form $form
-     * @param array $formData
+     * @param \Common\Form\Form $form     Form
+     * @param array             $formData Form data
      *
      * @return \Common\Form\Form
      */
@@ -176,7 +179,7 @@ class TaskAllocationRulesController extends AbstractInternalController
     /**
      * Alter the Task allocation rule form when adding
      *
-     * @param Form $form
+     * @param Form $form Form
      *
      * @return Form
      */
@@ -244,7 +247,7 @@ class TaskAllocationRulesController extends AbstractInternalController
     /**
      * Save the task alloaction rule
      *
-     * @param array $query
+     * @param array $query Query data
      *
      * @return bool
      */
@@ -259,7 +262,7 @@ class TaskAllocationRulesController extends AbstractInternalController
     /**
      * Alter form for add alpha split
      *
-     * @param Form  $form
+     * @param Form $form Form
      *
      * @return Form
      */
@@ -274,7 +277,7 @@ class TaskAllocationRulesController extends AbstractInternalController
     /**
      * Alter form for add alpha split
      *
-     * @param Form  $form
+     * @param Form $form Form
      *
      * @return Form
      */
@@ -291,6 +294,8 @@ class TaskAllocationRulesController extends AbstractInternalController
 
     /**
      * Set up user list
+     *
+     * @return void
      */
     protected function setUpUserList()
     {

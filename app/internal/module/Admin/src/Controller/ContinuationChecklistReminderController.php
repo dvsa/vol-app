@@ -1,11 +1,5 @@
 <?php
 
-/**
- * ContinuationChecklistReminderController
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Admin\Controller;
 
 use Zend\View\Model\ViewModel;
@@ -27,6 +21,8 @@ class ContinuationChecklistReminderController extends AbstractController
 
     /**
      * Display a list of Continuation checklist reminders
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function indexAction()
     {
@@ -85,8 +81,8 @@ class ContinuationChecklistReminderController extends AbstractController
     /**
      * Get the filter form
      *
-     * @param int $defaultMonth
-     * @param int $defaultYear
+     * @param int $defaultMonth Default month
+     * @param int $defaultYear  Default year
      *
      * @return \Zend\Form\Form
      */
@@ -116,6 +112,8 @@ class ContinuationChecklistReminderController extends AbstractController
 
     /**
      * Generate Continuation checklist reminder letters
+     *
+     * @return \Zend\Http\Response
      */
     public function generateLettersAction()
     {
@@ -143,6 +141,8 @@ class ContinuationChecklistReminderController extends AbstractController
 
     /**
      * Export table as CSV action
+     *
+     * @return \Zend\Http\Response
      */
     public function exportAction()
     {

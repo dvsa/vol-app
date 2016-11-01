@@ -1,9 +1,4 @@
 <?php
-/**
- * Team management controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 
 namespace Admin\Controller;
 
@@ -107,6 +102,11 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         ]
     ];
 
+    /**
+     * Get left view
+     *
+     * @return \Olcs\View\Model\ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -120,6 +120,11 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         return $view;
     }
 
+    /**
+     * Index action
+     *
+     * @return \Olcs\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Teams');
@@ -127,12 +132,24 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         return parent::indexAction();
     }
 
+    /**
+     * Set navigation id
+     *
+     * @param int $id Id
+     *
+     * @return void
+     */
     protected function setNavigationId($id)
     {
         $this->getServiceLocator()->get('viewHelperManager')->get('placeholder')
             ->getContainer('navigationId')->set($id);
     }
 
+    /**
+     * Delete action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function deleteAction()
     {
         // validate if we can remove the team
@@ -175,6 +192,13 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         return $this->redirectTo($response->getResult());
     }
 
+    /**
+     * Process remove team form
+     *
+     * @param int $noOfTasks No of tasks
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     protected function processRemoveTeamForm($noOfTasks)
     {
         $form = $this->alterTeamsForm($this->getForm('TeamRemove'));
@@ -199,6 +223,13 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         return $this->renderView($form, $noOfTasks);
     }
 
+    /**
+     * Prepare params
+     *
+     * @param array $defaultParams Default params
+     *
+     * @return array
+     */
     protected function prepareParams($defaultParams = [])
     {
         $paramProvider = new ConfirmItem($this->deleteParams, $this->hasMultiDelete);
@@ -213,6 +244,14 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         return $params;
     }
 
+    /**
+     * Render view
+     *
+     * @param \Zend\Form\Form $form      Form
+     * @param int             $noOfTasks No of tasks
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     protected function renderView($form, $noOfTasks)
     {
         $view = new ViewModel();
@@ -227,6 +266,13 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         return $this->viewBuilder()->buildView($view);
     }
 
+    /**
+     * Alter teams form
+     *
+     * @param \Zend\Form\Form $form Form
+     *
+     * @return \Zend\Form\Form
+     */
     protected function alterTeamsForm($form)
     {
         $valueOptions = $form->get('team-remove-details')->get('newTeam')->getValueOptions();
@@ -239,9 +285,9 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Alter form for add action - remove the printers exceptions table
      *
-     * @param Form $form
-     * @param array $formData
-     * @return Form
+     * @param \Zend\Form\Form $form Form
+     *
+     * @return \Zend\Form\Form
      */
     protected function alterFormForAdd($form)
     {
@@ -253,9 +299,10 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Alter form for editRule action, set default values for listboxes
      *
-     * @param Form $form
-     * @param array $formData
-     * @return Form
+     * @param \Zend\Form\Form $form     Form
+     * @param array           $formData Form data
+     *
+     * @return \Zend\Form\Form
      */
     protected function alterFormForEditRule($form, $formData)
     {
@@ -278,9 +325,10 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Alter form for addRule action, set default values for listboxes
      *
-     * @param Form $form
-     * @param array $formData
-     * @return Form
+     * @param \Zend\Form\Form $form     Form
+     * @param array           $formData Form data
+     *
+     * @return \Zend\Form\Form
      */
     protected function alterFormForAddRule($form, $formData)
     {
@@ -298,8 +346,9 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Overwrite getForm method to inject the table
      *
-     * @param $name
-     * @return mixed
+     * @param string $name Name
+     *
+     * @return \Zend\Form\Form
      */
     public function getForm($name)
     {
@@ -321,6 +370,8 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
 
     /**
      * Get printer exceptions table
+     *
+     * @return \Common\Service\Table\TableBuilder
      */
     protected function getExceptionsTable()
     {
@@ -358,6 +409,8 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
 
     /**
      * Edit action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function editAction()
     {
@@ -390,6 +443,8 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
 
     /**
      * Add rule action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function addRuleAction()
     {
@@ -406,6 +461,8 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
 
     /**
      * Edit rule action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function editRuleAction()
     {
@@ -423,6 +480,8 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
 
     /**
      * Delete rule action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function deleteRuleAction()
     {

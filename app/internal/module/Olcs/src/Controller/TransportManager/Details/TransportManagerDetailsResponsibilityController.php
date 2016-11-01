@@ -59,6 +59,11 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /** @var  \Zend\Form\FormInterface */
     protected $otherLicenceForm;
 
+    /**
+     * Get left view
+     *
+     * @return \Olcs\View\Model\ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -70,7 +75,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Index action
      *
-     * @return ViewModel
+     * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -112,7 +117,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Add TM application action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function addAction()
     {
@@ -141,7 +146,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Get transport manager documents
      *
-     * @return array
+     * @return array|\Zend\Http\Response
      */
     public function getDocuments()
     {
@@ -179,7 +184,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Handle the file upload
      *
-     * @param array $file
+     * @param array $file File data
+     *
      * @return array
      */
     public function processAdditionalInformationFileUpload($file)
@@ -207,6 +213,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
     /**
      * Delete TM application action
+     *
+     * @return \Zend\Http\Response
      */
     public function deleteTmApplicationAction()
     {
@@ -215,6 +223,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
     /**
      * Delete TM licence action
+     *
+     * @return \Zend\Http\Response
      */
     public function deleteTmLicenceAction()
     {
@@ -224,7 +234,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Edit TM application action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function editTmApplicationAction()
     {
@@ -294,7 +304,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Edit TM licence action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function editTmLicenceAction()
     {
@@ -356,6 +366,13 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         return $this->renderView($view, 'Edit licence');
     }
 
+    /**
+     * Get transport manager application
+     *
+     * @param int $tmAppId TM application id
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     protected function getTransportManagerApplication($tmAppId)
     {
         return $this->getTransportManagerApplicationOrLicence(
@@ -365,6 +382,13 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         );
     }
 
+    /**
+     * Get transport manager licence
+     *
+     * @param int $tmLicenceId TM licence id
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     protected function getTransportManagerLicence($tmLicenceId)
     {
         return $this->getTransportManagerApplicationOrLicence(
@@ -374,6 +398,15 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         );
     }
 
+    /**
+     * Get transport manager application or licence
+     *
+     * @param string $dtoClass    Dto class
+     * @param string $mapperClass Mapper class
+     * @param int    $id          Id
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     protected function getTransportManagerApplicationOrLicence($dtoClass, $mapperClass, $id)
     {
         $queryToSend = $this->getServiceLocator()
@@ -405,7 +438,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      * Check for alternative crud action
      * Need this to handle edit other licence action when clicking the table link
      *
-     * @param $action mixed
+     * @param string $action Action
+     *
+     * @return \Zend\Http\Response
      */
     protected function checkForAlternativeCrudAction($action)
     {
@@ -426,11 +461,12 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Delete TM application or licence
      *
-     * @param string $dtoClass
-     * @param int|array $idToDelete
-     * @param string $redirectToAction
-     * @param int $redirectToId
-     * @return Redirect
+     * @param string    $dtoClass         Dto class
+     * @param int|array $idToDelete       Id(s) to delete
+     * @param string    $redirectToAction Redirect to action
+     * @param int       $redirectToId     Redirect to id
+     *
+     * @return \Zend\Http\Response
      */
     protected function deleteTmRecord($dtoClass, $idToDelete = null, $redirectToAction = '', $redirectToId = null)
     {
@@ -479,7 +515,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Get applications table
      *
-     * @return TableBuilder
+     * @return \Common\Service\Table\TableBuilder
      */
     protected function getApplicationsTable()
     {
@@ -494,7 +530,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Get licences table
      *
-     * @return TableBuilder
+     * @return \Common\Service\Table\TableBuilder
      */
     protected function getLicencesTable()
     {
@@ -506,6 +542,13 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         return $this->getTable('tm.licences', $tableData);
     }
 
+    /**
+     * Get responsibilities data
+     *
+     * @param string $type Type
+     *
+     * @return array|\Zend\Http\Response
+     */
     protected function getResponsibilitiesData($type)
     {
         if ($this->responsibilities === null) {
@@ -542,7 +585,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Process form and redirect back to list or to the next step
      *
-     * @param array $data
+     * @param array $data Data
+     *
+     * @return null|\Zend\Http\Response
      */
     protected function processAddForm($data)
     {
@@ -585,7 +630,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Alter edit form
      *
-     * @param \Zend\Form\FormInterface $form
+     * @param \Zend\Form\FormInterface $form  Form
+     * @param int                      $appId Application id
+     *
      * @return \Zend\Form\Form
      */
     protected function alterEditForm(\Zend\Form\FormInterface $form, $appId = null)
@@ -614,6 +661,13 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         return $form;
     }
 
+    /**
+     * Get OC for list box
+     *
+     * @param array $params Params
+     *
+     * @return array
+     */
     protected function getOcForListBox($params)
     {
         if ($this->operatingCentres === null) {
@@ -645,6 +699,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
     /**
      * Get other licences table
+     *
+     * @return \Common\Service\Table\TableBuilder
      */
     protected function getOtherLicencesTable()
     {
@@ -660,9 +716,10 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Process form and redirect back to list
      *
-     * @param \Zend\Form\FormInterface $form
-     * @param bool $showMessage
-     * @return \Zend\Http\Response
+     * @param \Zend\Form\FormInterface $form        Form
+     * @param bool                     $showMessage Show message
+     *
+     * @return null|\Zend\Http\Response
      */
     protected function processEditForm($form, $showMessage = true)
     {
@@ -716,6 +773,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Add other licence action, calling from licence edit action
      *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function addOtherLicenceLicencesAction()
     {
@@ -725,6 +783,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Add other licence action, calling from application edit action
      *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function addOtherLicenceApplicationsAction()
     {
@@ -734,6 +793,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Edit other licence action, calling from licence edit action
      *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function editOtherLicenceLicencesAction()
     {
@@ -743,6 +803,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Edit other licence action, calling from application edit action
      *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function editOtherLicenceApplicationsAction()
     {
@@ -752,6 +813,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Delete other licence action, calling from application edit action
      *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function deleteOtherLicenceApplicationsAction()
     {
@@ -761,6 +823,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Delete other licence action, calling from licence edit action
      *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function deleteOtherLicenceLicencesAction()
     {
@@ -770,7 +833,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Delete other licence action
      *
-     * @param string $redirectAction
+     * @param string $redirectAction Redirect action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function deleteOtherLicence($redirectAction)
     {
@@ -786,8 +851,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Get required tm record id by othere licence id
      *
-     * @param int $otherLicenceId
-     * @return array
+     * @param int $otherLicenceId Other licence id
+     *
+     * @return array|\Zend\Http\Response
      */
     protected function getTmRecordId($otherLicenceId)
     {
@@ -816,9 +882,10 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Form action
      *
-     * @param string $type
-     * @param string $redirectAction
-     * @return mixed
+     * @param string $type           Type
+     * @param string $redirectAction Redirect action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     protected function formAction($type, $redirectAction)
     {
@@ -858,11 +925,11 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Populate other licence edit form
      *
-     * @form Zend\Form\Form
-     * @param \Zend\Form\FormInterface $form
-     * @param string $type
-     * @param string $redirectAction
-     * @param int $redirectId
+     * @param \Zend\Form\FormInterface $form           Form
+     * @param string                   $type           Type
+     * @param string                   $redirectAction Redirect action
+     * @param int                      $redirectId     Redirect id
+     *
      * @return \Zend\Form\Form
      */
     protected function populateOtherLicenceEditForm($form, $type, $redirectAction, $redirectId)
@@ -894,7 +961,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Process form and redirect back to list
      *
-     * @param array $data
+     * @param array $data Data
+     *
      * @return \Zend\Http\Response
      */
     protected function processOtherLicenceForm($data)
@@ -930,8 +998,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Redirect to given action
      *
-     * @param string $action
-     * @param int $id
+     * @param string $action Action
+     * @param int    $id     Id
+     *
      * @return \Zend\Http\Response
      */
     protected function redirectToAction($action, $id)
@@ -948,7 +1017,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Override parent method
      *
-     * @param string $action
+     * @param string $action Action
      *
      * @return string
      */
