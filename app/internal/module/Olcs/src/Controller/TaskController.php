@@ -135,7 +135,7 @@ class TaskController extends AbstractController
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
 
-        $this->redirectToList();
+        return $this->redirectToList();
     }
 
     /**
@@ -163,7 +163,7 @@ class TaskController extends AbstractController
             }
 
         }
-        $this->redirectToList();
+        return $this->redirectToList();
     }
 
     /**
