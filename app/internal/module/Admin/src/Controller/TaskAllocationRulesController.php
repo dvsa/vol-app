@@ -159,7 +159,7 @@ class TaskAllocationRulesController extends AbstractInternalController
     {
         // Setup the initial list of users in the dropdown dependant on the team
         if (isset($formData['details']['team']['id'])) {
-            $this->getServiceLocator()->get('Olcs\Service\Data\UserListInternal')
+            $this->getServiceLocator()->get(\Olcs\Service\Data\UserListInternal::class)
                 ->setTeamId($formData['details']['team']['id']);
         }
 
@@ -300,8 +300,8 @@ class TaskAllocationRulesController extends AbstractInternalController
     protected function setUpUserList()
     {
         $teamId = $this->params()->fromRoute('team');
-        if ((int) $teamId) {
-            $this->getServiceLocator()->get('Olcs\Service\Data\UserListInternal')->setTeamId($teamId);
+        if ((int)$teamId) {
+            $this->getServiceLocator()->get(\Olcs\Service\Data\UserListInternal::class)->setTeamId($teamId);
         }
     }
 
