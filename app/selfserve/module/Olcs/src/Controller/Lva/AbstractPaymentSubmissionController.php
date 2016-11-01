@@ -1,12 +1,5 @@
 <?php
 
-/**
- * External Abstract Payment Submission Controller
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- * @author Dan Eggleston <dan@stolenegg.com>
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
@@ -40,6 +33,11 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     protected $location = 'external';
     protected $disableCardPayments = false;
 
+    /**
+     * Index action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function indexAction()
     {
         $applicationId = $this->getApplicationId();
@@ -94,6 +92,14 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         return $this->render($view);
     }
 
+    /**
+     * Submit application
+     *
+     * @param int $applicationId Application id
+     * @param int $version       Version
+     *
+     * @return \Zend\Http\Response
+     */
     protected function submitApplication($applicationId, $version)
     {
         $dto = SubmitApplicationCmd::create(
@@ -115,6 +121,8 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
     /**
      * Handle response from third-party payment gateway
+     *
+     * @return \Zend\Http\Response
      */
     public function paymentResultAction()
     {
@@ -155,6 +163,13 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         return $this->redirectToOverview();
     }
 
+    /**
+     * Redirect to summary
+     *
+     * @param string $ref Reference
+     *
+     * @return \Zend\Http\Response
+     */
     protected function redirectToSummary($ref = null)
     {
         return $this->redirect()->toRoute(
@@ -166,6 +181,11 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         );
     }
 
+    /**
+     * Redirect to overview
+     *
+     * @return \Zend\Http\Response
+     */
     protected function redirectToOverview()
     {
         return $this->redirect()->toRoute(
@@ -176,6 +196,8 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
     /**
      * Display stored cards form
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function payAndSubmitAction()
     {
@@ -218,7 +240,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             if ($storedCardReference) {
                 $params['storedCardReference'] = $storedCardReference;
             }
-            $this->redirect()->toRoute('lva-'.$this->lva.'/payment', $params);
+            return $this->redirect()->toRoute('lva-'.$this->lva.'/payment', $params);
         }
 
         /* @var $form \Common\Form\Form */
@@ -231,9 +253,10 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     /**
      * Get stored cards view
      *
-     * @param array $fees
-     * @param \Common\Form\Form $form
-     * @return View
+     * @param array             $fees Fees
+     * @param \Common\Form\Form $form Form
+     *
+     * @return ViewModel
      */
     protected function getStoredCardsView($fees, $form)
     {
@@ -267,8 +290,10 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     /**
      * Get outstanding fees for application
      *
-     * @param int $applicationId
+     * @param int $applicationId Application id
+     *
      * @return array
+     * @throw ResourceNotFoundException
      */
     protected function getOutstandingFeeDataForApplication($applicationId)
     {

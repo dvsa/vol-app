@@ -102,7 +102,7 @@ trait ExternalControllerTrait
             $matchedRouteName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
 
             if (!in_array($matchedRouteName, $allowedRoutes) && !$this->checkAppStatus($lvaId)) {
-                $this->redirect()->toRoute($submissionRouteName, ['application' => $lvaId]);
+                return $this->redirect()->toRoute($submissionRouteName, ['application' => $lvaId]);
             }
         }
 

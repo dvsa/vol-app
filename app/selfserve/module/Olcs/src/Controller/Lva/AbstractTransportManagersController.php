@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Abstract Transport Managers Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractTmController;
@@ -51,6 +46,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     /**
      * Revert to editing the form
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function editAction()
     {
@@ -65,6 +62,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     /**
      * Display details of the Transport Manager Application process
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function detailsAction()
     {
@@ -106,6 +105,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     /**
      * Details page, the big form for TM to input all details
+     *
+     * @param array $transportManagerApplicationData TM application data
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -238,11 +239,21 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $layout;
     }
 
+    /**
+     * Add other licence applications action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function addOtherLicenceApplicationsAction()
     {
         return $this->addOrEdit(self::TYPE_OTHER_LICENCE, 'add');
     }
 
+    /**
+     * Edit other licence applications action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function editOtherLicenceApplicationsAction()
     {
         $id = $this->params('grand_child_id');
@@ -250,11 +261,21 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $this->addOrEdit(self::TYPE_OTHER_LICENCE, 'edit', $id);
     }
 
+    /**
+     * Add previous conviction action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function addPreviousConvictionAction()
     {
         return $this->addOrEdit(self::TYPE_PREVIOUS_CONVICTION, 'add');
     }
 
+    /**
+     * Edit previous conviction action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function editPreviousConvictionAction()
     {
         $id = $this->params('grand_child_id');
@@ -262,11 +283,21 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $this->addOrEdit(self::TYPE_PREVIOUS_CONVICTION, 'edit', $id);
     }
 
+    /**
+     * Add previous licence action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function addPreviousLicenceAction()
     {
         return $this->addOrEdit(self::TYPE_PREVIOUS_LICENCE, 'add');
     }
 
+    /**
+     * Edit previous licence action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function editPreviousLicenceAction()
     {
         $id = $this->params('grand_child_id');
@@ -274,11 +305,21 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $this->addOrEdit(self::TYPE_PREVIOUS_LICENCE, 'edit', $id);
     }
 
+    /**
+     * Add employment action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function addEmploymentAction()
     {
         return $this->addOrEdit(self::TYPE_OTHER_EMPLOYMENT, 'add');
     }
 
+    /**
+     * Edit employment action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function editEmploymentAction()
     {
         $id = $this->params('grand_child_id');
@@ -286,21 +327,41 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $this->addOrEdit(self::TYPE_OTHER_EMPLOYMENT, 'edit', $id);
     }
 
+    /**
+     * Delete other licence applications action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function deleteOtherLicenceApplicationsAction()
     {
         return $this->genericDelete(self::TYPE_OTHER_LICENCE);
     }
 
+    /**
+     * Delete previous conviction action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function deletePreviousConvictionAction()
     {
         return $this->genericDelete(self::TYPE_PREVIOUS_CONVICTION);
     }
 
+    /**
+     * Delete previous licence action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function deletePreviousLicenceAction()
     {
         return $this->genericDelete(self::TYPE_PREVIOUS_LICENCE);
     }
 
+    /**
+     * Delete employment action
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     public function deleteEmploymentAction()
     {
         return $this->genericDelete(self::TYPE_OTHER_EMPLOYMENT);
@@ -310,7 +371,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      * Delete confirmation and processing for each sub-section of TM
      *
      * @param string $type (Contant used to lookup services)
-     * @return mixed
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function genericDelete($type = null)
     {
@@ -344,6 +406,15 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $this->render('delete', $form, $params);
     }
 
+    /**
+     * Add or edit
+     *
+     * @param string $type Type
+     * @param string $mode Mode
+     * @param int    $id   Id
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     */
     protected function addOrEdit($type, $mode, $id = null)
     {
         if ($this->isButtonPressed('cancel')) {
@@ -404,13 +475,25 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $this->render('transport_managers-details-' . $mode . '-' . $type, $form);
     }
 
+    /**
+     * Is address form
+     *
+     * @param string $type Type
+     *
+     * @return bool
+     */
     protected function isAddressForm($type)
     {
-        if ($type === self::TYPE_OTHER_EMPLOYMENT) {
-            return true;
-        }
+        return ($type === self::TYPE_OTHER_EMPLOYMENT);
     }
 
+    /**
+     * Get other licences create command
+     *
+     * @param array $data Data
+     *
+     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     */
     protected function getOtherLicencesCreateCommand($data)
     {
         $command = Command\OtherLicence\CreateForTma::create(
@@ -427,6 +510,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $command;
     }
 
+    /**
+     * Get other licences update command
+     *
+     * @param array $data Data
+     *
+     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     */
     protected function getOtherLicencesUpdateCommand($data)
     {
         $command = Command\OtherLicence\UpdateForTma::create(
@@ -444,6 +534,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $command;
     }
 
+    /**
+     * Get other employments create command
+     *
+     * @param array $data Data
+     *
+     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     */
     protected function getOtherEmploymentsCreateCommand($data)
     {
         $command = Command\TmEmployment\Create::create(
@@ -467,6 +564,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $command;
     }
 
+    /**
+     * Get other employments update command
+     *
+     * @param array $data Data
+     *
+     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     */
     protected function getOtherEmploymentsUpdateCommand($data)
     {
         $command = Command\TmEmployment\Update::create(
@@ -492,6 +596,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $command;
     }
 
+    /**
+     * Get previous convictions create command
+     *
+     * @param array $data Data
+     *
+     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     */
     protected function getPreviousConvictionsCreateCommand($data)
     {
         $command = Command\PreviousConviction\CreateForTma::create(
@@ -508,6 +619,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $command;
     }
 
+    /**
+     * Get previous convictions update command
+     *
+     * @param array $data Data
+     *
+     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     */
     protected function getPreviousConvictionsUpdateCommand($data)
     {
         $command = Command\PreviousConviction\UpdatePreviousConviction::create(
@@ -525,6 +643,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $command;
     }
 
+    /**
+     * Get previous licences create command
+     *
+     * @param array $data Data
+     *
+     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     */
     protected function getPreviousLicencesCreateCommand($data)
     {
         $command = Command\OtherLicence\CreatePreviousLicence::create(
@@ -538,6 +663,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $command;
     }
 
+    /**
+     * Get previous licences update command
+     *
+     * @param array $data Data
+     *
+     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     */
     protected function getPreviousLicencesUpdateCommand($data)
     {
         $command = Command\OtherLicence\UpdateForTma::create(
@@ -552,6 +684,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $command;
     }
 
+    /**
+     * Get other licences data
+     *
+     * @param int $id id
+     *
+     * @return array
+     */
     protected function getOtherLicencesData($id)
     {
         $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
@@ -562,6 +701,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return ['data' => $response->getResult()];
     }
 
+    /**
+     * Get previous convictions data
+     *
+     * @param int $id id
+     *
+     * @return array
+     */
     protected function getPreviousConvictionsData($id)
     {
         $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
@@ -572,6 +718,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return ['tm-convictions-and-penalties-details' => $response->getResult()];
     }
 
+    /**
+     * Get previous licences data
+     *
+     * @param int $id id
+     *
+     * @return array
+     */
     protected function getPreviousLicencesData($id)
     {
         $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
@@ -582,6 +735,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return ['tm-previous-licences-details' => $response->getResult()];
     }
 
+    /**
+     * Get other employments data
+     *
+     * @param int $id id
+     *
+     * @return array
+     */
     protected function getOtherEmploymentsData($id)
     {
         return $this->getServiceLocator()->get('Helper\TransportManager')->getOtherEmploymentData($id);
@@ -590,7 +750,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Handle the upload of transport manager certificates
      *
-     * @param array $file
+     * @param array $file File data
+     *
      * @return array
      */
     public function processCertificateUpload($file)
@@ -610,7 +771,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Handle the upload of responsibility files
      *
-     * @param array $file
+     * @param array $file File data
+     *
      * @return array
      */
     public function processResponsibilityFileUpload($file)
@@ -670,6 +832,14 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $documents;
     }
 
+    /**
+     * Format form data
+     *
+     * @param array $data     Data
+     * @param array $postData POST data
+     *
+     * @return array
+     */
     protected function formatFormData($data, $postData)
     {
         $contactDetails = $data['transportManager']['homeCd'];
@@ -724,6 +894,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $formData;
     }
 
+    /**
+     * Get details form
+     *
+     * @param array $tma TM application data
+     *
+     * @return \Zend\Form\Form
+     */
     protected function getDetailsForm($tma)
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
@@ -760,7 +937,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Get the operating centre select options
      *
-     * @param array $tma
+     * @param array $tma TM application data
      *
      * @return array
      */
@@ -787,7 +964,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $options;
     }
 
-
+    /**
+     * Get other licences table
+     *
+     * @param array $otherLicences Other licences
+     *
+     * @return \Common\Service\Table\TableBuilder
+     */
     protected function getOtherLicencesTable($otherLicences)
     {
         return $this->getServiceLocator()->get('Table')->prepareTable('tm.otherlicences-applications', $otherLicences);
@@ -795,6 +978,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     /**
      * Need to override this, as the TM detials page is special
+     *
+     * @param int $lvaId LVA id
+     *
+     * @return \Zend\Http\Response
      */
     protected function checkForRedirect($lvaId)
     {
@@ -811,6 +998,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     }
 
     /**
+     * Redirect to the details page
+     *
      * @param string $which Which section has just been completed
      *
      * @return \Zend\Http\Response
@@ -825,6 +1014,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         );
     }
 
+    /**
+     * Get form tables
+     *
+     * @param array $postData POST data
+     *
+     * @return array
+     */
     protected function getFormTables($postData)
     {
         $formTables = [];
@@ -842,6 +1038,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Redirect to TM Application details page or display a message if application is not pre-granted
      * This action is reached from an email sent to TM's
+     *
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     public function editDetailsAction()
     {
@@ -867,6 +1065,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     /**
      * Redirect a user to ether the dashboard or transport managers page depending on permissions
+     *
+     * @return \Zend\Http\Response
      */
     protected function redirectTmToHome()
     {
@@ -883,6 +1083,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
     }
 
+    /**
+     * Get TM application details
+     *
+     * @param int $tmaId TM application id
+     *
+     * @return array
+     */
     protected function getTmaDetails($tmaId)
     {
         /* @var $response \Common\Service\Cqrs\Response */
@@ -899,11 +1106,11 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Update TMA status
      *
-     * @param int    $tmaId
-     * @param string $newStatus
-     * @param int    $version
+     * @param int    $tmaId     TM application id
+     * @param string $newStatus New status
+     * @param int    $version   Version
      *
-     * @return bool Success?
+     * @return bool
      */
     protected function updateTmaStatus($tmaId, $newStatus, $version = null)
     {
@@ -922,9 +1129,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * TM form is complete, but not submitted yet
      *
-     * @param array $tma
+     * @param array $tma TM application
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     private function page1Point2(array $tma)
     {
@@ -936,7 +1143,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
             if ($response->isOk()) {
                 $flashMessenger->addSuccessMessage('lva-tm-details-submit-success');
-                $this->redirect()->refresh();
+                return $this->redirect()->refresh();
             } else {
                 $flashMessenger->addErrorMessage('unknown-error');
             }
@@ -969,7 +1176,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Incomplete, resend email to TM
      *
-     * @param array $tma
+     * @param array $tma TM application
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -1000,7 +1207,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * TM signed, TM view
      *
-     * @param array $tma
+     * @param array $tma TM application
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -1017,7 +1224,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * TM signed, Operator view
      *
-     * @param array $tma
+     * @param array $tma TM application
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -1036,7 +1243,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
                 if ($response->isOk()) {
                     $flashMessenger->addSuccessMessage('operator-approve-message');
-                    $this->redirect()->refresh();
+                    return $this->redirect()->refresh();
                 } else {
                     $flashMessenger->addErrorMessage('unknown-error');
                 }
@@ -1073,8 +1280,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Operator signed
      *
-     * @param array $tma
-     * @param bool $isUserTm
+     * @param array $tma      TM application
+     * @param bool  $isUserTm Is user TM
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -1103,7 +1310,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Received
      *
-     * @param array $tma
+     * @param array $tma TM application
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -1118,7 +1325,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Postal application
      *
-     * @param array $tma
+     * @param array $tma TM application
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -1136,10 +1343,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Render the Transport manager application process pages
      *
-     * @param string $title
-     * @param \Common\Form\Form $form
-     * @param array $tma
-     * @param array $params
+     * @param string            $title  Title
+     * @param \Common\Form\Form $form   Form
+     * @param array             $tma    TM application
+     * @param array             $params Params
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -1168,8 +1375,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     /**
      * Get the URL to review wth TMA
-     *
-     * @param id $tmaId
      *
      * @return string
      */
@@ -1208,7 +1413,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Is the TMA set as the operator/owner
      *
-     * @param array $tma
+     * @param array $tma TM application
      *
      * @return book
      */
@@ -1238,6 +1443,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     /**
      * Resend the TMA application email to the TM
+     *
+     * @return void
      */
     private function resendTmEmail()
     {
