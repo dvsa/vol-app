@@ -122,7 +122,7 @@ $routes = [
         'options' => [
             'route' => '/',
             'defaults' => [
-                'controller' => 'IndexController',
+                'controller' => Olcs\Controller\IndexController::class,
                 'action' => 'index',
             ]
         ]
@@ -925,7 +925,7 @@ $routes = [
         'options' => [
             'route' => '/list/[:type]/[:value]',
             'defaults' => [
-                'controller' => 'IndexController',
+                'controller' => Olcs\Controller\IndexController::class,
                 'action' => 'entityList'
             ]
         ]

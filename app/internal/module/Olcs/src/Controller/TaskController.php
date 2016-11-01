@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller;
 
+use Common\Exception\BadRequestException;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Command\Task\CloseTasks;
 use Dvsa\Olcs\Transfer\Command\Task\CreateTask;
@@ -11,9 +12,8 @@ use Dvsa\Olcs\Transfer\Query\Application\Application;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Task\Task;
-use Zend\View\Model\ViewModel;
 use Olcs\Controller\Traits as ControllerTraits;
-use Common\Exception\BadRequestException;
+use Zend\View\Model\ViewModel;
 
 /**
  * Task Controller
@@ -57,12 +57,17 @@ class TaskController extends AbstractController
         $data = $this->mapDefaultData();
 
         // Set up the data services so that dynamic selects populate correctly if we already have data
-        if (isset($data['assignedToTeam'])) {
-            $this->getServiceLocator()->get('Olcs\Service\Data\User')->setTeam($data['assignedToTeam']);
-        }
+        $teamId = null;
         if (isset($data['assignment']['assignedToTeam'])) {
             // on POST, the data is nested
-            $this->getServiceLocator()->get('Olcs\Service\Data\User')->setTeam($data['assignment']['assignedToTeam']);
+            $teamId = $data['assignment']['assignedToTeam'];
+        } elseif (isset($data['assignedToTeam'])) {
+            $teamId = $data['assignedToTeam'];
+        }
+
+        if ($teamId !== null) {
+            $this->getServiceLocator()->get(\Olcs\Service\Data\UserListInternal::class)
+                ->setTeamId($teamId);
         }
 
         $form = $this->getForm('TaskReassign')
