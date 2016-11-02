@@ -45,11 +45,11 @@
         "symfony/Filesystem": "v2.6.13",
         "zf-commons/zfc-rbac": "2.4.2",
         "olcs/autoload": "@dev",
-        "olcs/OlcsCommon": "dev-release/4.0.4",
-        "olcs/olcs-transfer": "dev-release/4.0.4",
-        "olcs/olcs-utils": "dev-release/4.0.4",
-        "olcs/olcs-auth": "dev-release/4.0.4",
-        "olcs/olcs-logging": "dev-release/4.0.4",
+        "olcs/OlcsCommon": "dev-release/4.0.5",
+        "olcs/olcs-transfer": "dev-release/4.0.5",
+        "olcs/olcs-utils": "dev-release/4.0.5",
+        "olcs/olcs-auth": "dev-release/4.0.5",
+        "olcs/olcs-logging": "dev-release/4.0.5",
         "soflomo/purifier": "v0.1.1"
     },
     "require-dev": {
