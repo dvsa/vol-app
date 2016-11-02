@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Submission Recommendation Controller
- */
 namespace Olcs\Controller\Cases\Submission;
 
 use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionAction as CreateDto;
@@ -12,7 +9,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\SubmissionAction as Mapper;
 use Olcs\Form\Model\Form\SubmissionRecommendation as Form;
-use \Zend\Form\Form as ZendForm;
+use Zend\Form\FormInterface;
 
 /**
  * Submission Recommendation Controller
@@ -41,11 +38,17 @@ class RecommendationController extends AbstractInternalController implements Cas
         'add' => [
             'route' => 'submission',
             'action' => 'details',
+            'options' => [
+                'fragment' => 'submissionActions',
+            ],
             'reUseParams' => true,
         ],
         'edit' => [
             'route' => 'submission',
             'action' => 'details',
+            'options' => [
+                'fragment' => 'submissionActions',
+            ],
             'reUseParams' => true,
         ]
     ];
@@ -88,37 +91,58 @@ class RecommendationController extends AbstractInternalController implements Cas
         'isDecision' => 'N',
     ];
 
+    /**
+     * Process action - Index
+     *
+     * @return \Zend\View\Model\ConsoleModel|\Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * Process action - Details
+     *
+     * @return \Zend\View\Model\ConsoleModel|\Zend\View\Model\ViewModel
+     */
     public function detailsAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * Process action - Delete
+     *
+     * @return \Zend\View\Model\ConsoleModel|\Zend\View\Model\ViewModel
+     */
     public function deleteAction()
     {
         return $this->notFoundAction();
     }
 
     /**
-     * @param ZendForm $form
-     * @param $formData
-     * @return ZendForm
+     * Alter form for Add
+     *
+     * @param FormInterface $form     Form
+     * @param array         $formData Form Data
+     *
+     * @return FormInterface
      */
-    protected function alterFormForAdd(ZendForm $form, $formData)
+    protected function alterFormForAdd(FormInterface $form, $formData)
     {
         return $this->alterForm($form, $formData['id']);
     }
 
     /**
-     * @param ZendForm $form
-     * @param $formData
-     * @return ZendForm
+     * Alter form for Edit
+     *
+     * @param FormInterface $form     Form
+     * @param array         $formData Form Data
+     *
+     * @return FormInterface
      */
-    protected function alterFormForEdit(ZendForm $form, $formData)
+    protected function alterFormForEdit(FormInterface $form, $formData)
     {
         return $this->alterForm($form, $formData['fields']['id']);
     }
@@ -126,11 +150,14 @@ class RecommendationController extends AbstractInternalController implements Cas
     /**
      * Change the id of the text area to be unique (avoid DOM clashes with multiple TinyMCE instances
      *
-     * @param ZendForm $form
-     * @param $id
-     * @return ZendForm
+     * Alter form for Add
+     *
+     * @param FormInterface $form Form
+     * @param int           $id   Identifier
+     *
+     * @return FormInterface
      */
-    private function alterForm(ZendForm $form, $id)
+    private function alterForm(FormInterface $form, $id)
     {
         $form->get('fields')->get('comment')->setAttribute('id', $id . time());
         return $form;

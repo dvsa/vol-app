@@ -562,7 +562,7 @@ $routes = [
                 'action' => '(assign|attach|information-complete)'
             ],
             'defaults' => [
-                'controller' => 'CaseProcessSubmissionController',
+                'controller' => Olcs\Controller\Cases\Submission\ProcessSubmissionController::class,
             ]
         ]
     ],

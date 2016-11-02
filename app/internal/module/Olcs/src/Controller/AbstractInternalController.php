@@ -532,7 +532,7 @@ abstract class AbstractInternalController extends AbstractActionController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $form->setData((array) $this->params()->fromPost());
+            $form->setData((array)$this->params()->fromPost());
         }
 
         $hasProcessed =
@@ -602,7 +602,7 @@ abstract class AbstractInternalController extends AbstractActionController
         $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
 
         if ($request->isPost()) {
-            $dataFromPost = (array) $this->params()->fromPost();
+            $dataFromPost = (array)$this->params()->fromPost();
             $form->setData($dataFromPost);
 
             if (method_exists($this, 'alterFormFor' . $action)) {
@@ -837,6 +837,11 @@ abstract class AbstractInternalController extends AbstractActionController
             $redirect['reUseParams'] = $config['reUseParams'];
         }
 
+        //  options
+        if (isset($config['options'])) {
+            $redirect['options'] = $config['options'];
+        }
+
         return $redirect;
     }
 
@@ -852,18 +857,21 @@ abstract class AbstractInternalController extends AbstractActionController
             'route' => null,
             'params' => [
                 'action' => 'index',
-                $this->routeIdentifier => null // ID Not required for index.
+                $this->routeIdentifier => null, // ID Not required for index.
             ],
-            'reUseParams' => true
+            'options' => [
+                'code' => '303',
+                'query' => $this->getRequest()->getQuery()->toArray(),
+            ],
+            'reUseParams' => true,
         ];
 
         $routeParams = ArrayUtils::merge($defaults, $extraConfig);
 
-        $options = array_merge(['code' => '303'], ['query' => $this->getRequest()->getQuery()->toArray()]);
         return $this->redirect()->toRouteAjax(
             $routeParams['route'],
             $routeParams['params'],
-            $options,
+            $routeParams['options'],
             $routeParams['reUseParams']
         );
     }
