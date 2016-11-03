@@ -96,8 +96,31 @@ class IndexController extends AbstractController implements LeftViewProvider
                 $results = $this->getListDataEnforcementArea($value, 'Please select');
                 break;
             case 'task-allocation-users':
-                $results = $this->getListDataUserInternal($value);
+                /** @var \Olcs\Service\Data\UserListInternal $srv */
+                $srv = $this->getServiceLocator()->get(\Olcs\Service\Data\UserListInternal::class);
+                $srv->setTeamId($value);
+
+                $results =
+                    [
+                        '' => 'Unassigned',
+                        'alpha-split' => 'Alpha split',
+                    ] +
+                    $srv->fetchListOptions(null);
+
                 break;
+            case 'users-internal':
+                /** @var \Olcs\Service\Data\UserListInternal $srv */
+                $srv = $this->getServiceLocator()->get(\Olcs\Service\Data\UserListInternal::class);
+                $srv->setTeamId($value);
+
+                $results =
+                    [
+                        '' => 'Unassigned',
+                    ] +
+                    $srv->fetchListOptions(null);
+
+                break;
+
             case 'users':
                 $results = $this->getListDataUser($value, 'All');
                 break;
