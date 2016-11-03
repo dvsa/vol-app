@@ -30,15 +30,17 @@ class UserContactDetails
     public $emailConfirm = null;
 
     /**
-     * @Form\AllowEmpty(true)
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"phone","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({"label":"Phone"})
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":45}})
+     * @Form\Attributes({
+     *     "id":"phone",
+     *     "placeholder":"",
+     *     "class":"medium",
+     *     "required":false,
+     * })
+     * @Form\Options({
+     *     "label":"Phone",
+     * })
      * @Form\Name("phone_business")
+     * @Form\Type("\Common\Form\Elements\InputFilters\Phone")
      */
     public $phoneBusiness = null;
 
@@ -57,14 +59,16 @@ class UserContactDetails
     public $phoneBusinessVersion = null;
 
     /**
-     * @Form\AllowEmpty(true)
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"fax","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({"label":"Fax"})
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":45}})
+     * @Form\Attributes({
+     *     "id":"fax",
+     *     "placeholder":"",
+     *     "class":"medium",
+     *     "required":false,
+     * })
+     * @Form\Options({
+     *     "label":"Fax",
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\Phone")
      * @Form\Name("phone_fax")
      */
     public $phoneFax = null;
