@@ -27,6 +27,10 @@ use Common\RefData;
  */
 abstract class AbstractInterimController extends AbstractController
 {
+    const ACTION_GRANTED = 'granted';
+    const ACTION_IN_FORCE = 'in_force';
+    const ACTION_FEE_REQUEST = 'fee_request';
+
     public function indexAction()
     {
         if ($this->isButtonPressed('cancel')) {
@@ -111,10 +115,15 @@ abstract class AbstractInterimController extends AbstractController
             $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
 
             if ($response->isOk()) {
-                if ($response->getResult()['id']['action'] === 'fee_request') {
-                    $fm->addSuccessMessage('internal.interim.interim_granted_fee_requested');
-                } elseif ($response->getResult()['id']['action'] === 'in_force') {
-                    $fm->addSuccessMessage('internal.interim.form.interim_in_force');
+
+                $messageMap = [
+                    self::ACTION_FEE_REQUEST => 'internal.interim.interim_granted_fee_requested',
+                    self::ACTION_IN_FORCE    => 'internal.interim.form.interim_in_force',
+                    self::ACTION_GRANTED     => 'internal.interim.interim_granted',
+                ];
+                $action = $response->getResult()['id']['action'];
+                if (array_key_exists($action, $messageMap)) {
+                    $fm->addSuccessMessage($messageMap[$action]);
                 }
                 return $this->redirectToOverview();
             } else {
