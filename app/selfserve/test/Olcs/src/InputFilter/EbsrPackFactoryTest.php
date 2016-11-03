@@ -2,14 +2,15 @@
 
 namespace OlcsTest\InputFilter;
 
-use Olcs\InputFilter\EbsrPackFactory;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\InputFilter\EbsrPackFactory;
 
 /**
  * Class EbsrPackFactoryTest
  * @package OlcsTest\InputFilter
  */
-class EbsrPackFactoryTest extends \PHPUnit_Framework_TestCase
+class EbsrPackFactoryTest extends MockeryTestCase
 {
     public function testCreateService()
     {
