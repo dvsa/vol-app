@@ -4,14 +4,13 @@ namespace Olcs\Controller\Ebsr;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Rbac\User;
-use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\UpdateTxcInbox as UpdateTxcInboxDto;
-use Dvsa\Olcs\Transfer\Query;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\EbsrSubmissionList;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\BusRegWithTxcInbox;
 use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegVariationHistoryDto;
+use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 use Zend\Http\Response;
@@ -201,7 +200,10 @@ class BusRegApplicationsController extends AbstractController
      */
     public function searchDetailsAction()
     {
+        $id = $this->params()->fromRoute('busRegId');
+
         return $this->details(
+            ItemDto::create(['id' => $id]),
             'layouts/entity-view',
             [
                 'searchResultsLink' => $this->generateLinkBackToSearchResult(),
@@ -216,7 +218,10 @@ class BusRegApplicationsController extends AbstractController
      */
     public function detailsAction()
     {
+        $id = $this->params()->fromRoute('busRegId');
+
         return $this->details(
+            BusRegWithTxcInbox::create(['id' => $id]),
             'olcs/bus-registration/detail',
             [
                 'backUrl' => $this->generateLinkBackToBusRegs(),
@@ -227,23 +232,14 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Prepare view model for Details action with specified parameters
      *
-     * @param string $temlate the template
-     * @param array  $options array of options
+     * @param QueryInterface $query   the query
+     * @param string         $temlate the template
+     * @param array          $options array of options
      *
      * @return null|ViewModel
      */
-    private function details($temlate, $options = [])
+    private function details(QueryInterface $query, $temlate, $options = [])
     {
-        $id = $this->params()->fromRoute('busRegId');
-
-        //  request data from Api
-        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_EBSR_DOCUMENTS)) {
-            $query = BusRegWithTxcInbox::create(['id' => $id]);
-        } else {
-            // Any other user can access the bus reg (inc. anonymous)
-            $query = ItemDto::create(['id' => $id]);
-        }
-
         $response = $this->handleQuery($query);
 
         if ($response->isNotFound()) {
@@ -296,15 +292,13 @@ class BusRegApplicationsController extends AbstractController
     {
         $documents = [];
 
-        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_EBSR_DOCUMENTS)) {
-            $txcInboxs = (!empty($results['txcInboxs']) ? reset($results['txcInboxs']) : []);
+        $txcInboxs = (!empty($results['txcInboxs']) ? reset($results['txcInboxs']) : []);
 
-            foreach (['pdfDocument', 'routeDocument', 'zipDocument'] as $doc) {
-                if (empty($txcInboxs[$doc])) {
-                    continue;
-                }
-                $documents[] = $txcInboxs[$doc];
+        foreach (['pdfDocument', 'routeDocument', 'zipDocument'] as $doc) {
+            if (empty($txcInboxs[$doc])) {
+                continue;
             }
+            $documents[] = $txcInboxs[$doc];
         }
 
         // setup layout and view
