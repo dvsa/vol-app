@@ -48,10 +48,11 @@ class PiReportFilter
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
-     *     "label": "Traffic area",
+     *     "label": "Venue",
      *     "disable_inarray_validator": false,
      *     "service_name": "Common\Service\Data\TrafficArea",
-     *     "other_option": true
+     *     "other_option": false,
+     *     "extra_option": {"other": "Other Venue"},
      * })
      * @Form\Type("DynamicMultiCheckbox")
      */
