@@ -1097,7 +1097,7 @@ trait FeesActionTrait
      * @param string           $message        message
      * @param bool             $redirectToList redirect to list
      *
-     * @return null
+     * @return \Zend\Http\Response
      */
     protected function updateFeeAndRedirectToList($command, $message = '', $redirectToList = true)
     {
