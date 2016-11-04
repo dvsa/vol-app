@@ -1,7 +1,5 @@
 <?php
-/**
- * Submission Decision Controller
- */
+
 namespace Olcs\Controller\Cases\Submission;
 
 use Dvsa\Olcs\Transfer\Command\Submission\AssignSubmission as AssignUpdateDto;
@@ -10,8 +8,8 @@ use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\Submission as Mapper;
-use Olcs\Form\Model\Form\SubmissionSendTo as SendToForm;
 use Olcs\Form\Model\Form\SubmissionInformationComplete as CompleteForm;
+use Olcs\Form\Model\Form\SubmissionSendTo as SendToForm;
 
 /**
  * Process Submission Controller
@@ -32,11 +30,17 @@ class ProcessSubmissionController extends AbstractInternalController implements 
         'assign' => [
             'route' => 'submission',
             'action' => 'details',
+            'options' => [
+                'fragment' => 'submissionActions',
+            ],
             'reUseParams' => true,
         ],
         'information-complete' => [
             'route' => 'submission',
             'action' => 'details',
+            'options' => [
+                'fragment' => 'submissionActions',
+            ],
             'reUseParams' => true,
         ]
     ];
@@ -49,12 +53,6 @@ class ProcessSubmissionController extends AbstractInternalController implements 
 
     protected $itemParams = ['id' => 'submission'];
 
-    /**
-     * Variables for controlling edit view rendering
-     * all these variables are required
-     * itemDto (see above) is also required.
-     */
-    protected $formClass = Form::class;
     protected $mapperClass = Mapper::class;
 
     /**

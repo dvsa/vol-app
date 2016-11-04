@@ -157,7 +157,8 @@ return array(
             'CaseLegacyOffenceController' => 'Olcs\Controller\Cases\Conviction\LegacyOffenceController',
             Olcs\Controller\Cases\Submission\SubmissionController::class =>
                 Olcs\Controller\Cases\Submission\SubmissionController::class,
-            'CaseProcessSubmissionController' => 'Olcs\Controller\Cases\Submission\ProcessSubmissionController',
+            Olcs\Controller\Cases\Submission\ProcessSubmissionController::class =>
+                Olcs\Controller\Cases\Submission\ProcessSubmissionController::class,
             'CaseSubmissionSectionCommentController'
                 => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
             Olcs\Controller\Cases\Submission\RecommendationController::class =>

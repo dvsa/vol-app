@@ -133,13 +133,13 @@ echo $this->partial(
     <?php foreach ($submission['submissionActions'] as $sa): ?>
     <li class="submission-item">
 
-        <h4><?php echo $sa['isDecision'] == 'Y' ? 'Decision reason' : 'Recommendation'; ?>:
+        <h4><?php echo $sa['isDecision'] === 'Y' ? 'Decision reason' : 'Recommendation'; ?>:
             <?php
             echo implode(', ', array_column($sa['actionTypes'], 'description'));
             ?></h4>
 
         <?php if (!$readonly): ?>
-            <?php $route = 'submission_action_' . ($sa['isDecision'] == 'Y' ? 'decision' : 'recommendation'); ?>
+            <?php $route = 'submission_action_' . ($sa['isDecision'] === 'Y' ? 'decision' : 'recommendation'); ?>
             <a class="submission-item__edit js-modal-ajax" href="<?php echo $this->url($route, ['action' => 'edit', 'id' => $sa['id']], [], true); ?>">Edit</a>
         <?php endif; ?>
 
@@ -155,7 +155,7 @@ echo $this->partial(
 <div>&nbsp;</div>
 
 <?php if (!$readonly): ?>
-<div class="actions-container" data-group="form-actions">
+<div id="submissionActions" class="actions-container" data-group="form-actions">
     <a href="<?php echo $this->url('submission_action_recommendation', ['action' => 'add'], [], true); ?>"
        class="action--primary large js-modal-ajax">Add recommendation</a>
     <a href="<?php echo $this->url('submission_action_decision', ['action' => 'add'], [], true); ?>"

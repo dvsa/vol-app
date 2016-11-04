@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Submission Decision Controller
- */
 namespace Olcs\Controller\Cases\Submission;
 
 use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionAction as CreateDto;
@@ -12,7 +9,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\SubmissionAction as Mapper;
 use Olcs\Form\Model\Form\SubmissionDecision as Form;
-use \Zend\Form\Form as ZendForm;
+use Zend\Form\Form as ZendForm;
 
 /**
  * Submission Decision Controller
@@ -41,11 +38,17 @@ class DecisionController extends AbstractInternalController implements CaseContr
         'add' => [
             'route' => 'submission',
             'action' => 'details',
+            'options' => [
+                'fragment' => 'submissionActions',
+            ],
             'reUseParams' => true,
         ],
         'edit' => [
             'route' => 'submission',
             'action' => 'details',
+            'options' => [
+                'fragment' => 'submissionActions',
+            ],
             'reUseParams' => true,
         ]
     ];
