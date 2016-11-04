@@ -25,7 +25,6 @@ return array(
         array(
             'title' => 'Created',
             'formatter' => 'NoteUrl',
-            'sort' => 'createdOn'
         ),
         array(
             'title' => 'Author',
@@ -40,7 +39,6 @@ return array(
             'title' => 'Note',
             'formatter' => 'Comment',
             'name' => 'comment',
-            'sort' => 'comment'
         ),
         array(
             'title' => 'Note type',
@@ -69,7 +67,6 @@ return array(
         array(
             'title' => 'Priority',
             'name' => 'priority',
-            'sort' => 'priority'
         ),
         array(
             'title' => '',
