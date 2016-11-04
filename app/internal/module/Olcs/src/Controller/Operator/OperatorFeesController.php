@@ -7,6 +7,7 @@ namespace Olcs\Controller\Operator;
 
 use Common\Controller\Traits\GenericReceipt;
 use Olcs\Controller\Traits\FeesActionTrait;
+use Common\Service\Table\TableBuilder;
 
 /**
  * Operator Fees Controller
@@ -154,5 +155,29 @@ class OperatorFeesController extends OperatorController
             $params['quantity'] = $feeDetails['quantity'];
         }
         return $params;
+    }
+
+    /**
+     * Alter table
+     *
+     * @param TableBuilder $table   table
+     * @param array        $results results
+     *
+     * @return TableBuilder
+     */
+    protected function alterFeeTable($table, $results)
+    {
+        $translator = $this->getServiceLocator()->get('Translator');
+        $table->setVariable(
+            'title',
+            $translator->translate(
+                'internal-navigation-operator-irfo-fees' . (count($results['results']) === 1 ? '-singular' : '')
+            )
+        );
+        if ($results['extra']['allowFeePayments'] === false) {
+            $table->disableAction('pay');
+        }
+
+        return $table;
     }
 }
