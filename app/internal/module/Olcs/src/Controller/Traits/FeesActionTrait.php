@@ -1052,7 +1052,7 @@ trait FeesActionTrait
             ]
         );
 
-        $this->updateFeeAndRedirectToList($dto, 'Waive recommended');
+        $this->updateFeeAndRedirectToList($dto, 'Waive recommended', false);
     }
 
     /**
@@ -1069,7 +1069,7 @@ trait FeesActionTrait
             ]
         );
 
-        return $this->updateFeeAndRedirectToList($dto, 'Waive rejected');
+        return $this->updateFeeAndRedirectToList($dto, 'Waive rejected', false);
     }
 
     /**
@@ -1091,12 +1091,15 @@ trait FeesActionTrait
     }
 
     /**
-     * Update fee and redirect to list
+     * Update fee and redirect to list (optional)
      *
-     * @param CommandInterface $command
-     * @param string $message
+     * @param CommandInterface $command        command
+     * @param string           $message        message
+     * @param bool             $redirectToList redirect to list
+     *
+     * @return null
      */
-    protected function updateFeeAndRedirectToList($command, $message = '')
+    protected function updateFeeAndRedirectToList($command, $message = '', $redirectToList = true)
     {
         $response = $this->handleCommand($command);
 
@@ -1108,7 +1111,9 @@ trait FeesActionTrait
             $this->addErrorMessage('unknown-error');
         }
 
-        $this->redirectToList();
+        return $redirectToList
+            ? $this->redirectToList()
+            : $this->redirect()->toRouteAjax(null, [], ['code' => '303'], true);
     }
 
     /**
