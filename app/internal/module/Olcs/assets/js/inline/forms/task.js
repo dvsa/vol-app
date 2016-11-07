@@ -6,7 +6,7 @@ OLCS.ready(function() {
   OLCS.cascadeInput({
     source: form + " #assignedToTeam",
     dest: form + " #assignedToUser",
-    url: "/list/users",
+    url: "/list/users-internal",
     emptyLabel: "Unassigned"
   });
 

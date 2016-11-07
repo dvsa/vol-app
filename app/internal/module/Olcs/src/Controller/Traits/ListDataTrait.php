@@ -2,17 +2,18 @@
 
 namespace Olcs\Controller\Traits;
 
+use \Dvsa\Olcs\Transfer\Query as TranferQry;
+
 /**
  * Class ListDataTrait
- * @package Olcs\Controller
  */
 trait ListDataTrait
 {
     /**
      * Get a list of sub category description
      *
-     * @param int $subCategoryId        Sub category to filter by
-     * @param bool|string $firstOption
+     * @param int         $subCategoryId Sub category to filter by
+     * @param bool|string $firstOption   First Option
      *
      * @return array
      */
@@ -32,9 +33,9 @@ trait ListDataTrait
     /**
      * Get a list of doc templates
      *
-     * @param int $categoryId           Category to filter by
-     * @param int $subCategoryId        Sub category to filter by
-     * @param bool|string $firstOption
+     * @param int         $categoryId    Category to filter by
+     * @param int         $subCategoryId Sub category to filter by
+     * @param bool|string $firstOption   First Option
      *
      * @return array
      */
@@ -55,7 +56,7 @@ trait ListDataTrait
     /**
      * Get a list of Task categories
      *
-     * @param bool|string $firstOption
+     * @param bool|string $firstOption First Option
      *
      * @return array
      */
@@ -75,7 +76,7 @@ trait ListDataTrait
     /**
      * Get a list of Doc categories
      *
-     * @param bool|string $firstOption
+     * @param bool|string $firstOption First Option
      *
      * @return array
      */
@@ -95,7 +96,7 @@ trait ListDataTrait
     /**
      * Get a list of Scan categories
      *
-     * @param bool|string $firstOption
+     * @param bool|string $firstOption First option
      *
      * @return array
      */
@@ -115,8 +116,8 @@ trait ListDataTrait
     /**
      * Get a list of Task sub categories
      *
-     * @param int $categoryId          Category to filter by
-     * @param bool|string $firstOption
+     * @param int         $categoryId  Category to filter by
+     * @param bool|string $firstOption First option
      *
      * @return array
      */
@@ -128,8 +129,8 @@ trait ListDataTrait
     /**
      * Get a list of Doc sub categories
      *
-     * @param int $categoryId          Category to filter by
-     * @param bool|string $firstOption
+     * @param int         $categoryId  Category to filter by
+     * @param bool|string $firstOption First Option
      *
      * @return array
      */
@@ -141,8 +142,8 @@ trait ListDataTrait
     /**
      * Get a list of Scan sub categories
      *
-     * @param int $categoryId          Category to filter by
-     * @param bool|string $firstOption
+     * @param int         $categoryId  Category to filter by
+     * @param bool|string $firstOption First option
      *
      * @return array
      */
@@ -154,8 +155,8 @@ trait ListDataTrait
     /**
      * Get a list of sub categorys
      *
-     * @param array $params            Params to pass to the dto
-     * @param int $categoryId          Category to filter by
+     * @param array       $params      Params to pass to the dto
+     * @param int         $categoryId  Category to filter by
      * @param string|bool $firstOption @see getListDataOptions
      *
      * @return array
@@ -168,8 +169,8 @@ trait ListDataTrait
         ];
         $dtoParams = array_merge($defaultParams, $params);
 
-        if ((int) $categoryId !== 0) {
-            $dtoParams['category'] = (int) $categoryId;
+        if ((int)$categoryId !== 0) {
+            $dtoParams['category'] = (int)$categoryId;
         }
 
         $dto = \Dvsa\Olcs\Transfer\Query\SubCategory\GetList::create($dtoParams);
@@ -199,7 +200,7 @@ trait ListDataTrait
     /**
      * Get a list of users
      *
-     * @param int $teamId Option team to filter by
+     * @param int    $teamId      Option team to filter by
      * @param string $firstOption @see getListDataOptions
      *
      * @return array of User login ID's
@@ -210,7 +211,8 @@ trait ListDataTrait
             'order' => 'ASC',
             'sort' => 'loginId',
         ];
-        if ((int) $teamId !== 0) {
+
+        if ((int)$teamId !== 0) {
             $params['team'] = $teamId;
         } else {
             $params['isInternal'] = true;
@@ -222,48 +224,9 @@ trait ListDataTrait
     }
 
     /**
-     * Get a list of users
-     *
-     * @param int $teamId
-     * @return array
-     */
-    public function getListDataUserInternal($teamId = null)
-    {
-        $params = [
-            'order' => 'ASC',
-            'sort' => 'p.forename',
-        ];
-        if ($teamId) {
-            $params['team'] = $teamId;
-        }
-        $dto = \Dvsa\Olcs\Transfer\Query\User\UserListInternal::create($params);
-        $response = $this->handleQuery($dto);
-        if (!$response->isOK()) {
-            return [];
-        }
-        $options = [
-            '' => 'Unassigned',
-            'alpha-split' => 'Alpha split'
-        ];
-        $results = $response->getResult()['results'];
-        foreach ($results as $result) {
-            $person = $result['contactDetails']['person'];
-            if (
-                isset($person['forename']) &&
-                isset($person['familyName'])) {
-                $options[$result['id']] = $person['forename'] . ' ' .
-                    $person['familyName'];
-            } else {
-                $options[$result['id']] = $result['loginId'];
-            }
-        }
-        return $options;
-    }
-
-    /**
      * Get a list of Enforcement areas for a traffic area
      *
-     * @param string $trafficArea
+     * @param string $trafficArea Traffic area
      * @param string $firstOption @see getListDataOptions
      *
      * @return array of enforcement areas eg ['21' => 'Nottingham', etc]
@@ -275,9 +238,10 @@ trait ListDataTrait
         ];
 
         $dto = \Dvsa\Olcs\Transfer\Query\TrafficArea\Get::create($params);
+        /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->handleQuery($dto);
 
-        if (!$response->isOK()) {
+        if (!$response->isOk()) {
             // something went wrong, assume its a temporary error, as these list lookups should never fail
             return [];
         }
@@ -300,17 +264,19 @@ trait ListDataTrait
     /**
      * Take a DTO and create an array of items suitable for a select element
      *
-     * @param \Dvsa\Olcs\Transfer\Query\AbstractQuery $dto
-     * @param string $keyName   The key from the dto response to use as the select options id
-     * @param string $valueName The key from the dto response to use as the select options text
-     * @param bool|string $firstOption false = disable first option, or a string of the text for the first option
+     * @param TranferQry\QueryInterface $dto         Dto
+     * @param string                    $keyName     The key from the dto response to use as the select options id
+     * @param string                    $valueName   The key from the dto response to use as the select options text
+     * @param bool|string|array         $firstOption false = disable first option, or a string of the text for the first
+     *                                               option
      *
      * @return array
      */
     private function getListDataOptions($dto, $keyName, $valueName, $firstOption = false)
     {
+        /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->handleQuery($dto);
-        if (!$response->isOK()) {
+        if (!$response->isOk()) {
             // something went wrong, assume its a temporary error, as these list lookups should never fail
             return [];
         }
@@ -318,7 +284,7 @@ trait ListDataTrait
         $options = [];
         // Do we need to add a default first option
         if (is_array($firstOption)) {
-            $options = $firstOption;
+            $options = (array)$firstOption;
         }
         if (is_string($firstOption)) {
             $options[''] = $firstOption;
