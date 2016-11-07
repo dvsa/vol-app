@@ -269,7 +269,7 @@ $routes = array(
         'options' => array(
             'route' => '/correspondence[/]',
             'defaults' => array(
-                'controller' => 'Correspondence',
+                'controller' => Olcs\Controller\CorrespondenceController::class,
                 'action' => 'index'
             )
         ),
@@ -280,8 +280,7 @@ $routes = array(
                 'options' => array(
                     'route' => 'access/:correspondenceId[/]',
                     'defaults' => array(
-                        'controller' => 'Correspondence',
-                        'action' => 'accessCorrespondence'
+                        'action' => 'accessCorrespondence',
                     ),
                 )
             )
@@ -311,6 +310,19 @@ $routes = array(
             )
         )
     ),
+    'licence-print' => [
+        'type' => Segment::class,
+        'options' => [
+            'route' => '/licence/print/:licence[/]',
+            'constraints' => [
+                'licence' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'LvaLicence',
+                'action' => 'print',
+            ],
+        ],
+    ],
     'user-registration' => array(
         'type' => 'segment',
         'options' => array(
@@ -898,7 +910,7 @@ return array(
             'LvaApplication/PaymentSubmission'      => 'Olcs\Controller\Lva\Application\PaymentSubmissionController',
             'LvaApplication/Summary'                => 'Olcs\Controller\Lva\Application\SummaryController',
             'LvaApplication/Review'                 => \Common\Controller\Lva\ReviewController::class,
-            'LvaLicence'                            => 'Olcs\Controller\Lva\Licence\OverviewController',
+            'LvaLicence'                            => Olcs\Controller\Lva\Licence\OverviewController::class,
             'LvaLicence/Variation'                  => 'Olcs\Controller\Lva\Licence\VariationController',
             'LvaLicence/TypeOfLicence'              => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
             'LvaLicence/BusinessType'               => 'Olcs\Controller\Lva\Licence\BusinessTypeController',
@@ -945,7 +957,7 @@ return array(
                 Olcs\Controller\BusReg\BusRegRegistrationsController::class,
             'Dashboard' => Olcs\Controller\DashboardController::class,
             Olcs\Controller\FeesController::class => Olcs\Controller\FeesController::class,
-            'Correspondence' => 'Olcs\Controller\CorrespondenceController',
+            Olcs\Controller\CorrespondenceController::class => Olcs\Controller\CorrespondenceController::class,
             'User' => 'Olcs\Controller\UserController',
             IndexController::class => IndexController::class,
             UserForgotUsernameController::class => UserForgotUsernameController::class,
