@@ -931,6 +931,14 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $formHelper->remove($form, 'responsibilities->tmApplicationStatus');
 
+        $formActions = $form->get('form-actions');
+        $formActions->get('submit')->setLabel('lva.external.save_and_continue.button');
+        $saveButton = $formActions->get('save');
+        $saveButton->setLabel('lva.external.save_and_return_to_tm.link');
+        $saveButton->removeAttribute('class');
+        $saveButton->setAttribute('class', 'action--tertiary large');
+        $formHelper->remove($form, 'form-actions->cancel');
+
         return $form;
     }
 
