@@ -879,7 +879,7 @@ $nav = array(
                         ),
                         array(
                             'id' => 'operator_fees',
-                            'label' => 'internal-navigation-operator-fees',
+                            'label' => 'internal-navigation-operator-irfo-fees',
                             'route' => 'operator/fees',
                             'use_route_match' => true,
                             'pages' => array(
