@@ -43,29 +43,6 @@
       ?>
     </div>
 
-    <div class="one-third">
-      <aside class="sidebar" role="complementary">
-        <ul class="sidebar__actions">
-          <?php
-          foreach ($form->get('form-actions')->getElements() as $element) {
-
-              // Remember the previous attributes
-              $attributes = $element->getAttributes();
-
-              // Override the class of the button
-              $element->setAttribute('class', '');
-              ?>
-              <li><?php echo $this->formElement($element); ?></li>
-              <?php
-
-              // Restore the previous attributes
-              $element->setAttributes($attributes);
-          }
-          ?>
-        </ul>
-      </aside>
-    </div><!-- one-third -->
-
   <?php echo $this->form()->closeTag(); ?>
 
 </div>
