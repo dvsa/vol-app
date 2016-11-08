@@ -5,15 +5,15 @@ namespace Olcs\Controller\Ebsr;
 use Common\Controller\Lva\AbstractController;
 use Common\Rbac\User;
 use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\UpdateTxcInbox as UpdateTxcInboxDto;
+use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\BusRegWithTxcInbox;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\EbsrSubmissionList;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList;
-use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\BusRegWithTxcInbox;
-use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegVariationHistoryDto;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Zend\Http\Response;
 use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
-use Zend\Http\Response;
 
 /**
  * Class BusRegApplicationsController
@@ -145,7 +145,7 @@ class BusRegApplicationsController extends AbstractController
      *
      * @param array $data data array
      *
-     * @return array
+     * @return null|Response|\Zend\View\Model\ConsoleModel|ViewModel
      */
     private function processMarkAsRead($data)
     {
@@ -206,7 +206,7 @@ class BusRegApplicationsController extends AbstractController
             ItemDto::create(['id' => $id]),
             'layouts/entity-view',
             [
-                'searchResultsLink' => $this->generateLinkBackToSearchResult(),
+                'urlBackToSearch' => $this->getUrlBackToSearchResult(),
             ]
         );
     }
@@ -224,7 +224,9 @@ class BusRegApplicationsController extends AbstractController
             BusRegWithTxcInbox::create(['id' => $id]),
             'olcs/bus-registration/detail',
             [
-                'backUrl' => $this->generateLinkBackToBusRegs(),
+                'backLink' => [
+                    'url' => $this->url()->fromRoute('busreg-registrations'),
+                ],
             ]
         );
     }
@@ -236,41 +238,28 @@ class BusRegApplicationsController extends AbstractController
      * @param string         $temlate the template
      * @param array          $options array of options
      *
-     * @return null|ViewModel
+     * @return null|\Zend\View\Model\ConsoleModel|ViewModel
      */
     private function details(QueryInterface $query, $temlate, $options = [])
     {
         $response = $this->handleQuery($query);
 
-        if ($response->isNotFound()) {
+        if ($response === null || $response->isNotFound()) {
             return $this->notFoundAction();
+        }
 
-        } else {
-            if (!$response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
-                return null;
-            }
+        if (!$response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
+            return null;
         }
 
         //  build view
         $result = $response->getResult();
 
-        $licence = $result['licence'];
-        $url = $this->url()->fromRoute(
-            'entity-view', [
-                'entity' => 'licence',
-                'entityId' => $licence['id'],
-            ]
-        );
-
         $layout = new ViewModel(
             [
-                'pageTitle' => $licence['organisation']['name'],
-                'pageSubTitleUrl' => [
-                    'url' => $url,
-                    'label' => $licence['licNo'],
-                ],
-                'showNav' => false,
+                'pageTitle' => 'search.bus-reg.details.title',
+                'pageSubTitle' => $result['regNo'],
             ] + $options
         );
 
@@ -388,24 +377,11 @@ class BusRegApplicationsController extends AbstractController
     }
 
     /**
-     * Return back link to Bus registration page
-     *
-     * @return string
-     */
-    private function generateLinkBackToBusRegs()
-    {
-        return [
-            'url' => $this->url()->fromRoute('busreg-registrations'),
-            'label' => 'bus-registrations-index-title',
-        ];
-    }
-
-    /**
      * generate a link back to the search results
      *
      * @return string
      */
-    private function generateLinkBackToSearchResult()
+    private function getUrlBackToSearchResult()
     {
         $params = new Container('searchQuery');
 
@@ -414,7 +390,7 @@ class BusRegApplicationsController extends AbstractController
             $queryParams = ['query' => $params->queryParams];
         }
 
-        return $this->url()->fromRoute('search', (array) $params->routeParams, $queryParams);
+        return $this->url()->fromRoute('search', (array)$params->routeParams, $queryParams);
     }
 
     /**

@@ -26,11 +26,8 @@
       <?php endif; ?>
 
       <h1><?php
-          echo (
-              $this->pageTitleEscape === false
-              ? $this->pageTitle
-              : $this->escapeHtml($this->pageTitle)
-          );
+          $pageTitle = $this->translate($this->pageTitle);
+          echo ($this->pageTitleEscape === false ? $pageTitle : $this->escapeHtml($pageTitle));
       ?></h1>
 
       <?php if (isset($this->pageHeaderText) && $this->pageHeaderText != '') { ?>

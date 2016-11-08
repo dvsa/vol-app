@@ -1,10 +1,3 @@
-<ul id="top" class="breadcrumbs">
-    <li class="breadcrumbs__item">
-        <a  href="<?php echo $this->searchResultsLink; ?>"><?php echo $this->translate
-('search-result-nav-back-to-operator-search');?></a>
-    </li>
-</ul>
-
 <?php
 echo $this->render(
     '/partials/page-header.phtml',
@@ -13,24 +6,22 @@ echo $this->render(
         'pageSubTitle'=> isset($this->pageSubtitle) ? $this->translate($this->pageSubtitle) : '',
         'pageSubTitleUrl'=> $this->pageSubTitleUrl,
         'pageHeaderText'=> isset($this->pageHeaderText) ? $this->translate($this->pageHeaderText) : '',
-        'showNav'=> $this->showNav,
+        'backUrl' => [
+            'url' => $this->urlBackToSearch,
+        ],
     ]
 );
 ?>
-<?php /*
-<div class="one-quarter">
-    <?php echo $this->partial('partials/entity-view/entity-details-nav-' . $this->userType); ?>
-</div><!-- .one-quarter -->
- */ ?>
 
 <div class="row">
 
     <div id="top" class="full-width">
         <?php echo $this->content; ?>
         <div class="actions-container">
-            <a class="action--tertiary large" href="#top"><?php echo $this->translate('search-result-nav-back-to-top');?></a>
-            <a class="action--tertiary large" href="<?php echo $this->searchResultsLink; ?>"><?php echo $this->translate
-            ('search-result-nav-back-to-operator-search');?></a>
+            <a class="action--tertiary large" href="#top"
+                ><?php echo $this->translate('search-result-nav-back-to-top');?></a>
+            <a class="action--tertiary large" href="<?php echo $this->urlBackToSearch; ?>"
+                ><?php echo $this->translate('search-result-nav-back-to-operator-search');?></a>
         </div>
     </div><!-- .three-quarters -->
 
