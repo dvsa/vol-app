@@ -3,7 +3,6 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\Safety as CommonSafety;
-use Zend\Form\Form;
 
 /**
  * Licence safety
@@ -13,15 +12,14 @@ use Zend\Form\Form;
 class LicenceSafety extends CommonSafety
 {
     /**
-     * Make form alterations
+     * Returns form
      *
-     * @param Form $form form
-     *
-     * @return Form
+     * @return \Zend\Form\FormInterface
      */
-    protected function alterForm($form)
+    public function getForm()
     {
-        parent::alterForm($form);
+        $form = parent::getForm();
+
         $form->get('form-actions')->get('save')->setAttribute('class', 'action--primary large');
         $this->getFormHelper()->remove($form, 'form-actions->cancel');
 

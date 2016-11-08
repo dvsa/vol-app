@@ -3,7 +3,6 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\Safety as CommonSafety;
-use Zend\Form\Form;
 
 /**
  * Variation safety
@@ -13,15 +12,16 @@ use Zend\Form\Form;
 class VariationSafety extends CommonSafety
 {
     /**
-     * Alter form
+     * Returns form
      *
-     * @param Form $form form
-     *
-     * @return void
+     * @return \Zend\Form\FormInterface
      */
-    protected function alterForm($form)
+    public function getForm()
     {
-        parent::alterForm($form);
+        $form = parent::getForm();
+
         $this->getFormHelper()->remove($form, 'form-actions->cancel');
+
+        return $form;
     }
 }
