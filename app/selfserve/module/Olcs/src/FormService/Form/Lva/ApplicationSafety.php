@@ -3,7 +3,6 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\Safety;
-use Zend\Form\Form;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**
@@ -16,15 +15,14 @@ class ApplicationSafety extends Safety
     use ButtonsAlterations;
 
     /**
-     * Make form alterations
+     * Returns form
      *
-     * @param Form $form form
-     *
-     * @return Form
+     * @return \Zend\Form\FormInterface
      */
-    protected function alterForm($form)
+    public function getForm()
     {
-        parent::alterForm($form);
+        $form = $this->getFormHelper()->createForm('Lva\Safety');
+
         $this->alterButtons($form);
 
         return $form;
