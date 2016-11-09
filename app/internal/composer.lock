@@ -1707,7 +1707,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-testhelpers.git",
-                "reference": "39b78ee1012d1a54ecdfc4b2013e5e260e6f0b46"
+                "reference": "214055eeb70282fc3e845bf9effb7fa1b69be2eb"
             },
             "require": {
                 "php": ">=5.4"
@@ -1724,7 +1724,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2016-03-16 16:39:23"
+            "time": "2016-11-09 12:22:04"
         },
         {
             "name": "phpdocumentor/reflection-common",
