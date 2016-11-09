@@ -1,9 +1,7 @@
-<div class="read-only__header">
-    <h4 id="bus-registration-details"
-        class="read-only__title"><?php echo $this->translate('Bus registration details'); ?></h4>
-</div>
-
 <?php
+    /** @var \Common\View\Helper\CurrentUser $curUser */
+    $curUser = $this->currentUser();
+
     $serviceNos = $this->registrationDetails['serviceNo'];
     if (!empty($this->registrationDetails['otherServices'])) {
         foreach ($this->registrationDetails['otherServices'] as $item) {
@@ -67,11 +65,19 @@
         $effectiveDate = '';
     }
 
+    $licence = $this->registrationDetails['licence'];
+
     echo $this->render('partials/read-only/main',
         [
             'multiItems' => [
                 0 => [
                     ['label' => 'Bus registration', 'value' => $this->registrationDetails['regNo']],
+                    ['label' => 'Licence Number', 'value' => $licence['licNo']],
+                    [
+                        'label' => 'Operator name',
+                        'value' => ($curUser->isLocalAuthority() === false ? null : $licence['organisation']['name']),
+                        'hideIfEmpty' => true,
+                    ],
                 ],
                 1 => [
                     ['label' => 'Variation number', 'value' => $this->registrationDetails['variationNo']]
