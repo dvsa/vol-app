@@ -1,6 +1,7 @@
 <?php
 $licence = $this->placeholder('licence')->getValue();
 $note = $this->placeholder('note')->getValue();
+$isPriorityNote = isset($licence['latestNote']['priority']) && $licence['latestNote']['priority'] === 'Y';
 ?>
 <div class="small-module">
     <h4 class="title">Operator details</h4>
@@ -43,7 +44,9 @@ if ($nav->getContainer()->hasPages(true)): ?>
 
 <?php if ($note): ?>
     <div class="latest-note">
-        <div class="latest-note__details"><?php echo substr($note, 0, 100); ?></div>
+        <div class="latest-note__<?php echo ($isPriorityNote ? "priority" : "details"); ?>">
+            <?php echo substr($note, 0, 100); ?>
+        </div>
         <a class="latest-note__link" href="<?php echo $this->url('licence/processing/notes', ['licence' => $licence['id']]); ?>">View all notes</a>
     </div>
 <?php endif; ?>
