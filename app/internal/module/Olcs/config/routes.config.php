@@ -1,19 +1,16 @@
 <?php
 
-use Olcs\Controller\Cases\Hearing\HearingAppealController as HearingAppealController;
+use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController;
+use Olcs\Controller\Bus\Processing\BusProcessingNoteController;
 use Olcs\Controller\Cases\Hearing\AppealController as CaseAppealController;
+use Olcs\Controller\Cases\Hearing\HearingAppealController;
 use Olcs\Controller\Cases\Hearing\StayController as CaseStayController;
-
 use Olcs\Controller\Cases\Processing\NoteController as CaseNoteController;
-use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController as ApplicationProcessingNoteController;
-use Olcs\Controller\Bus\Processing\BusProcessingNoteController as BusProcessingNoteController;
-use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController as LicenceProcessingNoteController;
-use Olcs\Controller\Operator\OperatorProcessingNoteController as OperatorProcessingNoteController;
-use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
-
 use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
-
-use Olcs\Controller\SearchController as SearchController;
+use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController;
+use Olcs\Controller\Operator\OperatorProcessingNoteController;
+use Olcs\Controller\SearchController;
+use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 use Zend\Mvc\Router\Http\Segment;
 
 $feeActionRoute = [
@@ -1105,8 +1102,8 @@ $routes = [
                                 'id' => '[0-9]+'
                             ],
                             'defaults' => [
-                                'controller' => 'BusRegistrationController',
-                                'action' => 'index'
+                                'controller' => Olcs\Controller\Bus\Registration\BusRegistrationController::class,
+                                'action' => 'index',
                             ]
                         ]
                     ],
@@ -1118,8 +1115,8 @@ $routes = [
                                 'constraints' => [
                                     'busRegId' => '[0-9]+',
                                 ],
-                                'controller' => 'BusRegistrationController',
-                                'action' => 'createVariation'
+                                'controller' => Olcs\Controller\Bus\Registration\BusRegistrationController::class,
+                                'action' => 'createVariation',
                             ]
                         ]
                     ],
@@ -1131,8 +1128,8 @@ $routes = [
                                 'constraints' => [
                                     'busRegId' => '[0-9]+',
                                 ],
-                                'controller' => 'BusRegistrationController',
-                                'action' => 'createCancellation'
+                                'controller' => Olcs\Controller\Bus\Registration\BusRegistrationController::class,
+                                'action' => 'createCancellation',
                             ]
                         ]
                     ],
@@ -1145,9 +1142,33 @@ $routes = [
                                     'busRegId' => '[0-9]+',
                                 ],
                                 'controller' => 'BusRequestMapController',
-                                'action' => 'add'
+                                'action' => 'add',
                             ]
                         ]
+                    ],
+                    'print' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => 'print/:busRegId[/]',
+                            'defaults' => [
+                                'constraints' => [
+                                    'busRegId' => '[0-9]+',
+                                ],
+                                'controller' => Olcs\Controller\Bus\Registration\BusRegistrationController::class,
+                            ],
+                        ],
+                        'may_terminate' => false,
+                        'child_routes' => [
+                            'reg-letter' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => 'reg-letter[/]',
+                                    'defaults' => [
+                                        'action' => 'printLetter',
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                 ]
             ],
@@ -1156,7 +1177,7 @@ $routes = [
                 'options' => [
                     'route' => 'bus/:busRegId/details[/]',
                     'defaults' => [
-                        'controller' => 'BusDetailsController',
+                        'controller' => Olcs\Controller\Bus\Details\BusDetailsController::class,
                         'action' => 'service',
                     ]
                 ],
@@ -1167,7 +1188,7 @@ $routes = [
                         'options' => [
                             'route' => 'service[/]',
                             'defaults' => [
-                                'controller' => 'BusDetailsController',
+//                                'controller' => Olcs\Controller\Bus\Details\BusDetailsController::class,
                                 'action' => 'service',
                             ]
                         ],
@@ -1177,7 +1198,7 @@ $routes = [
                         'options' => [
                             'route' => 'stop[/]',
                             'defaults' => [
-                                'controller' => 'BusDetailsController',
+//                                'controller' => Olcs\Controller\Bus\Details\BusDetailsController::class,
                                 'action' => 'stop',
                             ]
                         ],
@@ -1187,7 +1208,7 @@ $routes = [
                         'options' => [
                             'route' => 'ta[/]',
                             'defaults' => [
-                                'controller' => 'BusDetailsController',
+//                                'controller' => Olcs\Controller\Bus\Details\BusDetailsController::class,
                                 'action' => 'ta',
                             ]
                         ],
@@ -1197,7 +1218,7 @@ $routes = [
                         'options' => [
                             'route' => 'quality[/]',
                             'defaults' => [
-                                'controller' => 'BusDetailsController',
+//                                'controller' => Olcs\Controller\Bus\Details\BusDetailsController::class,
                                 'action' => 'quality',
                             ]
                         ],
@@ -1220,7 +1241,7 @@ $routes = [
                 'options' => [
                     'route' => 'bus/:busRegId/register-service[/]',
                     'defaults' => [
-                        'controller' => 'BusServiceController',
+                        'controller' => Olcs\Controller\Bus\Service\BusServiceController::class,
                         'action' => 'edit',
                     ]
                 ],
@@ -1299,7 +1320,7 @@ $routes = [
                 'options' => [
                     'route' => 'bus/:busRegId/processing[/]',
                     'defaults' => [
-                        'controller' => 'BusProcessingDecisionController',
+                        'controller' => Olcs\Controller\Bus\Processing\BusProcessingDecisionController::class,
                         'action' => 'details',
                     ]
                 ],
@@ -1313,7 +1334,7 @@ $routes = [
                                 'action' => '(cancel|grant|refuse-by-short-notice|refuse|republish|reset|withdraw)'
                             ],
                             'defaults' => [
-                                'controller' => 'BusProcessingDecisionController',
+                                'controller' => Olcs\Controller\Bus\Processing\BusProcessingDecisionController::class,
                                 'action' => 'details'
                             ]
                         ],

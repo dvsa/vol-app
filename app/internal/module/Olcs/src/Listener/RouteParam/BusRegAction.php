@@ -32,11 +32,17 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
 
     protected $queryService;
 
+    /**
+     * @return \Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder
+     */
     public function getAnnotationBuilder()
     {
         return $this->annotationBuilder;
     }
 
+    /**
+     * @return \Common\Service\Cqrs\Query\QueryService
+     */
     public function getQueryService()
     {
         return $this->queryService;
@@ -116,6 +122,8 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
             ->setVisible($this->shouldShowCreateCancellationButton($busReg));
         $sidebarNav->findById('bus-registration-quick-actions-create-variation')
             ->setVisible($this->shouldShowCreateVariationButton($busReg));
+        $sidebarNav->findById('bus-registration-quick-actions-print-reg-letter')
+            ->setVisible($this->isVisiblePrintLetterButton($busReg));
         $sidebarNav->findById('bus-registration-quick-actions-request-new-route-map')
             ->setVisible($this->shouldShowRequestNewRouteMapButton($busReg));
         $sidebarNav->findById('bus-registration-quick-actions-request-withdrawn')
@@ -142,7 +150,8 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     /**
      * Get the Bus Reg data
      *
-     * @param id $id
+     * @param int $id Bus Registration identifier
+     *
      * @return array
      * @throws ResourceNotFoundException
      */
@@ -169,6 +178,25 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     private function shouldShowCreateVariationButton($busReg)
     {
         return ($busReg['isLatestVariation'] && ($busReg['status']['id'] === RefData::BUSREG_STATUS_REGISTERED));
+    }
+
+    /**
+     * Define is button Print letter should be visible
+     *
+     * @param array $busReg Bus Registration data
+     *
+     * @return bool
+     */
+    private function isVisiblePrintLetterButton($busReg)
+    {
+        return in_array(
+            $busReg['status']['id'],
+            [
+                RefData::BUSREG_STATUS_REGISTERED,
+                RefData::BUSREG_STATUS_CANCELLED,
+            ],
+            true
+        );
     }
 
     private function shouldShowRequestNewRouteMapButton($busReg)

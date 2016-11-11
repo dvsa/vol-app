@@ -15,6 +15,9 @@ use Mockery as m;
  */
 class BusRegActionTest extends MockeryTestCase
 {
+    /** @var  BusRegAction */
+    private $sut;
+
     public function setUp()
     {
         $this->sut = new BusRegAction();
@@ -78,7 +81,7 @@ class BusRegActionTest extends MockeryTestCase
             ->andReturn(
                 m::mock()
                 ->shouldReceive('setVisible')
-                ->times(10)
+                ->times(11)
                 ->andReturn(
                     m::mock()
                     ->shouldReceive('setClass')
@@ -726,6 +729,41 @@ class BusRegActionTest extends MockeryTestCase
                     'isLatestVariation' => false,
                     'status' => [
                         'id' => RefData::BUSREG_STATUS_REGISTERED
+                    ],
+                ],
+                false
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dpTestIsVisiblePrintLetterButton
+     */
+    public function testIsVisiblePrintLetterButton($data, $expected)
+    {
+        $method = new \ReflectionMethod($this->sut, 'isVisiblePrintLetterButton');
+        $method->setAccessible(true);
+
+        static::assertEquals($expected, $method->invoke($this->sut, $data));
+    }
+
+    public function dpTestIsVisiblePrintLetterButton()
+    {
+        return [
+            //  REGISTERED
+            [
+                [
+                    'status' => [
+                        'id' => RefData::BUSREG_STATUS_REGISTERED
+                    ],
+                ],
+                true
+            ],
+            // not visible
+            [
+                [
+                    'status' => [
+                        'id' => 'UNIT_OTHER',
                     ],
                 ],
                 false

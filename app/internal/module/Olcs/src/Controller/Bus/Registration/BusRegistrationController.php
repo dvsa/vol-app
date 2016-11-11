@@ -1,21 +1,36 @@
 <?php
 
-/**
- * Bus Registration Controller
- */
 namespace Olcs\Controller\Bus\Registration;
 
-use Dvsa\Olcs\Transfer\Command\Bus\CreateBus as CreateBusDto;
-use Dvsa\Olcs\Transfer\Command\Bus\CreateVariation as CreateVariationDto;
-use Dvsa\Olcs\Transfer\Command\Bus\CreateCancellation as CreateCancellationDto;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Zend\Mvc\Controller\AbstractActionController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Zend\Mvc\MvcEvent;
 
 /**
  * Bus Registration Controller
+ *
+ * @method \Common\Service\Cqrs\Response handleCommand(\Dvsa\Olcs\Transfer\Command\CommandInterface $query)
+ * @method \Common\Controller\Plugin\Redirect redirect()
  */
 class BusRegistrationController extends AbstractActionController implements BusRegControllerInterface
 {
+    /** @var  FlashMessengerHelperService */
+    private $hlpFlashMsgr;
+
+    /** @var  int */
+    private $busRegId;
+
+    public function onDispatch(MvcEvent $e)
+    {
+        $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
+
+        $this->busRegId = $this->params()->fromRoute('busRegId');
+
+        parent::onDispatch($e);
+    }
+
     public function indexAction()
     {
         return $this->notFoundAction();
@@ -27,8 +42,7 @@ class BusRegistrationController extends AbstractActionController implements BusR
     public function addAction()
     {
         return $this->process(
-            CreateBusDto::class,
-            ['licence' => $this->params()->fromRoute('licence')]
+            TransferCmd\Bus\CreateBus::create(['licence' => $this->params()->fromRoute('licence')])
         );
     }
 
@@ -46,8 +60,7 @@ class BusRegistrationController extends AbstractActionController implements BusR
     public function createVariationAction()
     {
         return $this->process(
-            CreateVariationDto::class,
-            ['id' => $this->params()->fromRoute('busRegId')]
+            TransferCmd\Bus\CreateVariation::create(['id' => $this->busRegId])
         );
     }
 
@@ -57,32 +70,49 @@ class BusRegistrationController extends AbstractActionController implements BusR
     public function createCancellationAction()
     {
         return $this->process(
-            CreateCancellationDto::class,
-            ['id' => $this->params()->fromRoute('busRegId')]
+            TransferCmd\Bus\CreateCancellation::create(['id' => $this->busRegId])
         );
     }
 
     private function redirectToDetails($id)
     {
-        return $this->redirect()->toRouteAjax(
-            'licence/bus-details/service',
-            ['busRegId' => $id],
-            [],
-            true
-        );
+        return $this->redirect()->toRouteAjax('licence/bus-details/service', ['busRegId' => $id], [], true);
     }
 
-    private function process($command, $data)
+    /**
+     * Process command
+     *
+     * @param TransferCmd\CommandInterface $command
+     *
+     * @return \Zend\Http\Response
+     */
+    private function process($command)
     {
-        $response = $this->handleCommand($command::create($data));
-
-        if ($response->isServerError() || $response->isClientError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
+        $response = $this->handleCommand($command);
 
         if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Created record');
-            return $this->redirectToDetails($response->getResult()['id']['bus']);
+            $this->hlpFlashMsgr->addSuccessMessage('Created record');
+        } else {
+            $this->hlpFlashMsgr->addUnknownError();
         }
+
+        return $this->redirectToDetails($response->getResult()['id']['bus']);
+    }
+
+    public function printLetterAction()
+    {
+        $response = $this->handleCommand(
+            TransferCmd\Bus\PrintLetter::create(
+                ['id' => $this->busRegId]
+            )
+        );
+
+        if ($response->isOk()) {
+            $this->hlpFlashMsgr->addSuccessMessage('Bus registration letter created');
+        } else {
+            $this->hlpFlashMsgr->addErrorMessage('Bus registration letter not created');
+        }
+
+        return $this->redirect()->toRouteAjax('licence/bus-docs', ['busRegId' => $this->busRegId], [], true);
     }
 }
