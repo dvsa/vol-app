@@ -69,19 +69,25 @@ class Module
             ]
         );
 
-        $this->onFatalError();
+        $identifier = $sm->get('LogProcessorManager')
+            ->get(\Olcs\Logging\Log\Processor\RequestId::class)
+            ->getIdentifier();
+
+        $this->onFatalError($identifier);
     }
 
     /**
      * Catch fatal error
      *
+     * @param string $identifier Identifier
+     *
      * @return void
      */
-    public function onFatalError()
+    public function onFatalError($identifier)
     {
         // Handle fatal errors //
         register_shutdown_function(
-            function () {
+            function () use ($identifier) {
                 // get error
                 $error = error_get_last();
                 // check and allow only errors
@@ -96,7 +102,7 @@ class Module
 
                 /** @var Response $response */
                 $response = new Response();
-                $response->getHeaders()->addHeaderLine('Location', '/error');
+                $response->getHeaders()->addHeaderLine('Location', '/error?id='.$identifier);
                 $response->setStatusCode(Response::STATUS_CODE_302);
                 $response->sendHeaders();
 
