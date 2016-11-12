@@ -11,7 +11,8 @@ use Dvsa\Olcs\Transfer\Query\Submission\SubmissionSectionComment as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\SubmissionSectionComment as Mapper;
-use Olcs\Form\Model\Form\SubmissionSectionComment as Form;
+use Olcs\Form\Model\Form\SubmissionSectionAddComment as AddForm;
+use Olcs\Form\Model\Form\SubmissionSectionEditComment as EditForm;
 use \Zend\Form\Form as ZendForm;
 
 /**
@@ -59,7 +60,7 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
      * all these variables are required
      * itemDto (see above) is also required.
      */
-    protected $formClass = Form::class;
+    protected $formClass = AddForm::class;
     protected $updateCommand = UpdateDto::class;
     protected $mapperClass = Mapper::class;
     protected $addContentTitle = 'Add comment';
@@ -87,8 +88,23 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
     ];
 
     /**
-     * @param ZendForm $form
-     * @param $formData
+     * Swaps the default add form for the edit form
+     *
+     * @return array|\Zend\View\Model\ViewModel
+     */
+    public function editAction()
+    {
+        $this->formClass = EditForm::class;
+
+        return parent::editAction();
+    }
+
+    /**
+     * Alters the add form at runtime
+     *
+     * @param ZendForm $form     the form
+     * @param array    $formData form data
+     *
      * @return ZendForm
      */
     protected function alterFormForAdd(ZendForm $form, $formData)
@@ -97,8 +113,11 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
     }
 
     /**
-     * @param ZendForm $form
-     * @param $formData
+     * Alters the edit form at runtime
+     *
+     * @param ZendForm $form     the form
+     * @param array    $formData form data
+     *
      * @return ZendForm
      */
     protected function alterFormForEdit(ZendForm $form, $formData)
@@ -109,8 +128,9 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
     /**
      * Change the id of the text area to be unique (avoid DOM clashes with multiple TinyMCE instances
      *
-     * @param ZendForm $form
-     * @param $id
+     * @param ZendForm $form the form
+     * @param int      $id   the id
+     *
      * @return ZendForm
      */
     private function alterForm(ZendForm $form, $id)
