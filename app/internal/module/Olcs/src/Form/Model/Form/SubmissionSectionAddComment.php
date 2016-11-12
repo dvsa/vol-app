@@ -6,15 +6,15 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("SubmissionSectionComment")
+ * @Form\Name("SubmissionSectionAddComment")
  * @Form\Attributes({"method":"post"})
  */
-class SubmissionSectionComment
+class SubmissionSectionAddComment
 {
     /**
      * @Form\Name("fields")
      * @Form\Options({"label":"","class":""})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\SubmissionSectionComment")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\SubmissionSectionAddComment")
      */
     public $fields = null;
 
