@@ -9,7 +9,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("submission-section-comment-fields")
  * @Form\Options({"label":""})
  */
-class SubmissionSectionComment extends Base
+class SubmissionSectionAddComment extends Base
 {
     /**
      * @Form\Attributes({"value":""})
