@@ -9,20 +9,8 @@ use Zend\Form\Annotation as Form;
  * @Form\Name("submission-section-comment-fields")
  * @Form\Options({"label":""})
  */
-class SubmissionSectionAddComment extends Base
+class SubmissionSectionAddComment extends SubmissionSectionComment
 {
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $submission = null;
-
-    /**
-     * @Form\Attributes({"value":""})
-     * @Form\Type("Hidden")
-     */
-    public $submissionSection = null;
-
     /**
      * @Form\Attributes({"id":"","class":"extra-long tinymce","name":"comment"})
      * @Form\Options({
