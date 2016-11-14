@@ -625,17 +625,26 @@ class SubmissionController extends AbstractInternalController implements Submiss
      */
     public function loadFiles()
     {
+        $config = $this->getServiceLocator()->get('config');
+        $previewExtensions = isset($config['allow_file_preview']['extensions']['images'])
+            ? explode(',', $config['allow_file_preview']['extensions']['images'])
+            : [];
+
         $urlHelper = $this->getServiceLocator()->get('Helper\Url');
 
         $submission = $this->getSubmissionData();
         $sectionDocuments = [];
         foreach ($submission['documents'] as $document) {
             // ensure only the file only uploads to the section we are dealing with by checking subCategory
-            if ($document['subCategory']['id'] == $this->sectionSubcategory) {
+            if ($document['subCategory']['id'] === $this->sectionSubcategory) {
                 $document['url'] = $urlHelper->fromRoute(
                     'getfile',
                     array('identifier' => $document['id'])
                 );
+
+                $info = pathinfo($document['filename']);
+                $document['showPreview'] = in_array($info['extension'], $previewExtensions);
+
                 $sectionDocuments[] = $document;
             }
         }
