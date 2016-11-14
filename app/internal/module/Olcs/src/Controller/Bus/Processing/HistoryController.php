@@ -18,7 +18,7 @@ use Olcs\Controller\AbstractHistoryController;
  */
 class HistoryController extends AbstractHistoryController implements BusRegControllerInterface
 {
-    protected $navigationId = 'licence_bus_processing';
+    protected $navigationId = 'licence_bus_processing_event-history';
     protected $listVars = ['busReg' => 'busRegId'];
     protected $listDto = BusRegHistoryList::class;
     protected $itemParams = ['busReg', 'id' => 'id'];
