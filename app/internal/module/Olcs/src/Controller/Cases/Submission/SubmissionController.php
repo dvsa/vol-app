@@ -643,7 +643,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
                 );
 
                 $info = pathinfo($document['filename']);
-                $document['showPreview'] = in_array($info['extension'], $previewExtensions);
+                $document['canPreview'] = isset($info['extension']) && in_array($info['extension'], $previewExtensions);
 
                 $sectionDocuments[] = $document;
             }

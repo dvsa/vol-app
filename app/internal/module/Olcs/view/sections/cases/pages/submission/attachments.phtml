@@ -1,7 +1,7 @@
 <?php foreach ($this->attachments as $attachment): ?>
     <div>
         <p><?php echo $attachment['description']; ?></p>
-        <?php if ($attachment['showPreview']): ?>
+        <?php if ($attachment['canPreview']): ?>
               <p><img src="<?php echo $attachment['url']; ?>" alt="<?php echo $attachment['description']; ?>"/></p>
         <?php endif; ?>
     </div>
