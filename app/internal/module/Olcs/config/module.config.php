@@ -241,8 +241,10 @@ return array(
             LicenceProcessingNoteController::class => LicenceProcessingNoteController::class,
             'LicenceProcessingInspectionRequestController'
                 => 'Olcs\Controller\Licence\Processing\LicenceProcessingInspectionRequestController',
-            'BusRegistrationController' => 'Olcs\Controller\Bus\Registration\BusRegistrationController',
-            'BusDetailsController' => 'Olcs\Controller\Bus\Details\BusDetailsController',
+            Olcs\Controller\Bus\Registration\BusRegistrationController::class =>
+                Olcs\Controller\Bus\Registration\BusRegistrationController::class,
+            Olcs\Controller\Bus\Details\BusDetailsController::class =>
+                Olcs\Controller\Bus\Details\BusDetailsController::class,
             'BusDetailsServiceController' => 'Olcs\Controller\Bus\Details\BusDetailsServiceController',
             'BusDetailsStopController' => 'Olcs\Controller\Bus\Details\BusDetailsStopController',
             'BusDetailsTaController' => 'Olcs\Controller\Bus\Details\BusDetailsTaController',
@@ -255,14 +257,16 @@ return array(
             'BusTrcPlaceholderController' => 'Olcs\Controller\Bus\Trc\BusTrcPlaceholderController',
             'BusDocsController' => 'Olcs\Controller\Bus\Docs\BusDocsController',
             'BusDocsPlaceholderController' => 'Olcs\Controller\Bus\Docs\BusDocsPlaceholderController',
-            'BusProcessingDecisionController' => 'Olcs\Controller\Bus\Processing\BusProcessingDecisionController',
+            Olcs\Controller\Bus\Processing\BusProcessingDecisionController::class =>
+                Olcs\Controller\Bus\Processing\BusProcessingDecisionController::class,
             BusProcessingNoteController::class => BusProcessingNoteController::class,
             'BusProcessingRegistrationHistoryController'
                 => 'Olcs\Controller\Bus\Processing\BusProcessingRegistrationHistoryController',
             'BusProcessingTaskController' => 'Olcs\Controller\Bus\Processing\BusProcessingTaskController',
             'BusFeesController' => 'Olcs\Controller\Bus\Fees\BusFeesController',
             'BusFeesPlaceholderController' => 'Olcs\Controller\Bus\Fees\BusFeesPlaceholderController',
-            'BusServiceController' => 'Olcs\Controller\Bus\Service\BusServiceController',
+            Olcs\Controller\Bus\Service\BusServiceController::class =>
+                Olcs\Controller\Bus\Service\BusServiceController::class,
             'BusRequestMapController' => 'Olcs\Controller\Bus\BusRequestMapController',
             Olcs\Controller\Operator\OperatorController::class => Olcs\Controller\Operator\OperatorController::class,
             'OperatorDocsController' => 'Olcs\Controller\Operator\Docs\OperatorDocsController',

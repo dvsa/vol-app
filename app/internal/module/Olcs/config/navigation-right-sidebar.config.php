@@ -147,6 +147,13 @@ return array(
                             'class' => 'action--secondary js-modal-ajax'
                         ),
                         array(
+                            'id' => 'bus-registration-quick-actions-print-reg-letter',
+                            'label' => 'Print letter',
+                            'route' => 'licence/bus/print/reg-letter',
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax',
+                        ),
+                        array(
                             'id' => 'bus-registration-quick-actions-request-new-route-map',
                             'label' => 'Request new route map',
                             'route' => 'licence/bus/request_map',
