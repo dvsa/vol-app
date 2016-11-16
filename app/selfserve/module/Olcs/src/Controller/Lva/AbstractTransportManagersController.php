@@ -1199,7 +1199,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             'content' => $translationHelper->translate('markup-tma-ab1-3'),
             'bottomContent' => $translationHelper->translateReplace(
                 'TMA_RESEND_TM1',
-                $translationHelper->translate('TM1_FORM_LINK')
+                [$translationHelper->translate('TM1_FORM_LINK')]
             ),
         ];
 

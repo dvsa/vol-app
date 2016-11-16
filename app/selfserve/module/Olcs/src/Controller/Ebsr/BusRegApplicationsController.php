@@ -220,6 +220,13 @@ class BusRegApplicationsController extends AbstractController
     {
         $id = $this->params()->fromRoute('busRegId');
 
+        $identity = $this->currentUser()->getIdentity();
+
+        if ($identity === null || $identity->isAnonymous()) {
+            // redir to the public version of the bus reg page
+            return $this->redirect()->toRoute('search-bus/details', ['busRegId' => $id], ['code' => 303]);
+        }
+
         return $this->details(
             BusRegWithTxcInbox::create(['id' => $id]),
             'olcs/bus-registration/detail',

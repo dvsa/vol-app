@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Entity;
 
 use Common\Controller\Lva\AbstractController;
+use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Search\Licence as SearchLicence;
 use Zend\Session\Container;
@@ -26,7 +27,8 @@ class ViewController extends AbstractController
 
     /**
      * Wrapper method to call appropriate entity action
-     * @return array
+     *
+     * @return \Zend\View\Model\ConsoleModel|\Zend\View\Model\ViewModel
      */
     public function detailsAction()
     {
@@ -44,10 +46,17 @@ class ViewController extends AbstractController
 
     /**
      * licence action
+     *
+     * @return \Zend\View\Model\ConsoleModel|\Zend\View\Model\ViewModel
+     * @throws ResourceNotFoundException
      */
     public function licenceAction()
     {
-        $entityId = $this->params()->fromRoute('entityId');
+        $entityId = (int)$this->params()->fromRoute('entityId');
+
+        if ($entityId === 0) {
+            throw new ResourceNotFoundException('Licence identifier not provided or invalid');
+        }
 
         // retrieve data
         $query = SearchLicence::create(['id' => $entityId]);
@@ -79,8 +88,9 @@ class ViewController extends AbstractController
     /**
      * Set up the layout with title, subtitle and content
      *
-     * @param null $title
-     * @param null $subtitle
+     * @param string $title    Title
+     * @param string $subtitle SubTitle
+     *
      * @return \Zend\View\Model\ViewModel
      */
     private function generateLayout($title = null, $subtitle = null)
@@ -100,7 +110,9 @@ class ViewController extends AbstractController
 
     /**
      * Generate page content
-     * @param $result
+     *
+     * @param array $result Api Data
+     *
      * @return \Zend\View\Model\ViewModel
      */
     private function generateContent($result)
@@ -156,6 +168,7 @@ class ViewController extends AbstractController
 
     /**
      * Get the user type
+     *
      * @return string
      */
     private function getUserType()
@@ -176,7 +189,9 @@ class ViewController extends AbstractController
     }
     /**
      * Generate Tables
-     * @param $data
+     *
+     * @param array $data Api data
+     *
      * @return array
      */
     private function generateTables($data)
@@ -186,40 +201,39 @@ class ViewController extends AbstractController
 
         $tables['relatedOperatorLicencesTable'] = $tableService->buildTable(
             'entity-view-related-operator-licences',
-            $data['otherLicences']
+            $data['otherLicences'] ?: []
         );
 
         $tables['transportManagerTable'] = $tableService->buildTable(
             'entity-view-transport-managers',
-            $data['transportManagers']
+            $data['transportManagers'] ?: []
         );
 
         $tables['operatingCentresTable'] = $tableService->buildTable(
             'entity-view-operating-centres-' . $this->userType,
-            $data['operatingCentres']
+            $data['operatingCentres'] ?: []
         );
 
         // Using OCs again, just using different data
         $tables['oppositionsTable'] = $tableService->buildTable(
             'entity-view-oppositions-' . $this->userType,
-            $data['operatingCentres']
+            $data['operatingCentres'] ?: []
         );
 
         if ($this->userType == self::USER_TYPE_PARTNER) {
-
             $tables['vehiclesTable'] = $tableService->buildTable(
                 'entity-view-vehicles-' . $this->userType,
-                $data['vehicles']
+                $data['vehicles'] ?: []
             );
 
             $tables['currentApplicationsTable'] = $tableService->buildTable(
                 'entity-view-current-applications-' . $this->userType,
-                $data['applications']
+                $data['applications'] ?: []
             );
 
             $tables['conditionsUndertakingsTable'] = $tableService->buildTable(
                 'entity-view-conditions-undertakings-' . $this->userType,
-                $data['conditionUndertakings']
+                $data['conditionUndertakings'] ?: []
             );
         }
 
