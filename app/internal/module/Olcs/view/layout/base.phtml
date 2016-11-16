@@ -37,8 +37,7 @@ $this->doctype(); ?>
 
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-      <?php echo $this->partial('partials/head', ['title' => $title]); ?>
+    <?php echo $this->partial('partials/head', ['title' => $title]); ?>
   </head>
   <body class="internal" id="<?php echo $this->pageId(); ?>">
     <?php echo $this->version(); ?>
