@@ -249,7 +249,11 @@ class BusRegApplicationsController extends AbstractController
     {
         $response = $this->handleQuery($query);
 
-        if (!$response instanceof Response || $response->isServerError() || $response->isClientError()) {
+        if (
+            !$response instanceof \Common\Service\Cqrs\Response
+            || $response->isServerError()
+            || $response->isClientError()
+        ) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
 
             return null;
