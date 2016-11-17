@@ -97,7 +97,7 @@ class Module
                 if (null === $error || (isset($error['type']) && in_array($error['type'], $minorErrors))) {
                     return null;
                 }
-                
+
                 // check and allow only errors
                 // clean any previous output from buffer
                 while (ob_get_level() > 0) {
