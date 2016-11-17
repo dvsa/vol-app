@@ -7,7 +7,10 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'primary', 'label' => 'manage-users.action.add'),
+                'add' => array(
+                    'class' => 'tertiary large',
+                    'label' => 'manage-users.action.add'
+                ),
             )
         ),
         'paginate' => array(

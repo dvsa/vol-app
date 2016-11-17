@@ -9,7 +9,7 @@ return array(
             'actions' => array(
                 'ebsrUpload' => array(
                     'value' => 'Upload EBSR files',
-                    'class' => 'primary'
+                    'class' => 'tertiary large'
                 )
             )
         ),
