@@ -2918,16 +2918,6 @@ $routes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
-        'undertakings' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'undertakings[/]',
-                'defaults' => array(
-                    'controller' => 'LvaApplication/Undertakings',
-                    'action' => 'index'
-                )
-            )
-        ),
         'publish' => array(
             'type' => 'segment',
             'options' => array(
