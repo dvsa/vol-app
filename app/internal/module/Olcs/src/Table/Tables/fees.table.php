@@ -47,7 +47,7 @@ return array(
         array(
             'title' => 'Fee amount',
             'name' => 'amount',
-            'sort' => 'amount',
+            'sort' => 'grossAmount',
             'formatter' => 'FeeAmount',
         ),
         array(
