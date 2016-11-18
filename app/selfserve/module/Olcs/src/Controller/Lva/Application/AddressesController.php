@@ -26,7 +26,15 @@ class AddressesController extends Lva\AbstractAddressesController
     protected $lva = 'application';
     protected $location = 'external';
 
-    protected function alterFormForLva(Form $form)
+    /**
+     * Alter form for LVA
+     *
+     * @param Form  $form form
+     * @param array $data data
+     *
+     * @return void
+     */
+    protected function alterFormForLva(Form $form, $data = null)
     {
         $this->getServiceLocator()->get('Helper\Form')->remove($form, 'consultant');
         $this->getServiceLocator()->get('Helper\Form')->remove($form, 'consultantContact');

@@ -29,8 +29,11 @@ class PeopleController extends Lva\AbstractPeopleController
      * Alter form for LVA
      *
      * @param \Zend\Form\Form $form
+     * @param array           $data
+     *
+     * @return void
      */
-    protected function alterFormForLva(Form $form)
+    protected function alterFormForLva(Form $form, $data = null)
     {
         $table = $form->get('table')->get('table')->getTable();
         $table->removeColumn('actionLinks');
