@@ -136,7 +136,15 @@
                     <div class="field file-upload">
                         <p>
                             <a href="<?php echo $url?>">
-                                <b><?php echo $document['description']?></b>
+                                <b><?php
+                                    if (!empty($document['description'])) {
+                                        echo $document['description'];
+                                    } elseif (!empty($document['filename'])) {
+                                        echo basename($document['filename']);
+                                    } else {
+                                        echo $this->translate('documents.unknown-file-description');
+                                    }
+                                ?></b>
                             </a>
                         </p>
                     </div>
