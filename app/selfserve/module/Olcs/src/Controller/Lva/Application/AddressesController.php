@@ -24,7 +24,7 @@ class AddressesController extends Lva\AbstractAddressesController
      *
      * @param Form  $form Form
      * @param array $data Api/Form Data
-     * 
+     *
      * @return void
      */
     protected function alterFormForLva(Form $form, $data = null)

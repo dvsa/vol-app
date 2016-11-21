@@ -251,7 +251,7 @@ class BusRegApplicationsController extends AbstractController
     {
         $response = $this->handleQuery($query);
 
-        if ($response === null || $response->isNotFound()) {
+        if (!$response instanceof \Common\Service\Cqrs\Response || $response->isNotFound()) {
             return $this->notFoundAction();
         }
 
