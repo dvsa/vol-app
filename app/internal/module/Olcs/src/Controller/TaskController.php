@@ -349,7 +349,7 @@ class TaskController extends AbstractController
 
         $taskId = $this->params('task');
 
-        if ($taskId) {
+        if ($taskId && strpos($taskId, '-') === false) {
             $childProperties = [
                 'category',
                 'subCategory',
