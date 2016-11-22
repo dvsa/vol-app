@@ -81,7 +81,7 @@ class Module
      *
      * @param string $identifier Identifier
      *
-     * @return void
+     * @return Response|null;
      */
     public function onFatalError($identifier)
     {
@@ -90,11 +90,15 @@ class Module
             function () use ($identifier) {
                 // get error
                 $error = error_get_last();
-                // check and allow only errors
-                if (null === $error) {
+
+                $minorErrors = [
+                    E_WARNING, E_NOTICE, E_USER_NOTICE, E_DEPRECATED, E_USER_DEPRECATED
+                ];
+                if (null === $error || (isset($error['type']) && in_array($error['type'], $minorErrors))) {
                     return null;
                 }
 
+                // check and allow only errors
                 // clean any previous output from buffer
                 while (ob_get_level() > 0) {
                     ob_end_clean();
