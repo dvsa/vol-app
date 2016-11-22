@@ -145,7 +145,7 @@ class BusRegApplicationsController extends AbstractController
      *
      * @param array $data data array
      *
-     * @return array
+     * @return null|Response|\Zend\View\Model\ConsoleModel|ViewModel
      */
     private function processMarkAsRead($data)
     {
@@ -249,14 +249,14 @@ class BusRegApplicationsController extends AbstractController
     {
         $response = $this->handleQuery($query);
 
-        if ($response->isNotFound()) {
+        if (!$response instanceof \Common\Service\Cqrs\Response || $response->isNotFound()) {
             return $this->notFoundAction();
+        }
 
-        } else {
-            if (!$response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
-                return null;
-            }
+        if ($response->isServerError() || $response->isClientError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
+
+            return null;
         }
 
         //  build view
