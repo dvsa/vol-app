@@ -354,7 +354,7 @@ class TaskController extends AbstractController
 
         $taskId = $this->params('task');
 
-        if ($taskId) {
+        if ($taskId && is_numeric($taskId)) {
             $childProperties = [
                 'category',
                 'subCategory',
