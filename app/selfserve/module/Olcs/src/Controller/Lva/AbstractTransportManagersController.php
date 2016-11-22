@@ -794,7 +794,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     }
 
     /**
-     * Need to override this, as the TM detials page is special
+     * Need to override this, as the TM details page is special
      */
     protected function checkForRedirect($lvaId)
     {
@@ -802,7 +802,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             // If we are on a sub-section, we need to go back to the section
             $action = $this->params('action');
             $childId = $this->params('child_id');
-            if ($childId !== null && $action !== 'details' && $action !== 'index') {
+            $normalRedirect = ['details', 'index', 'addTm', 'add'];
+            if ($childId !== null && !in_array($action, $normalRedirect)) {
                 return $this->backToDetails();
             }
 
