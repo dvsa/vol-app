@@ -667,7 +667,7 @@ trait FeesActionTrait
         $translator = $this->getServiceLocator()->get('Helper\Translation');
         $message = $translator->translateReplace(
             'fees.reverse-transaction.confirm',
-            strtolower($transaction['paymentMethod']['description'])
+            [strtolower($transaction['paymentMethod']['description'])]
         );
         $form->get('messages')->get('message')->setValue($message);
 
