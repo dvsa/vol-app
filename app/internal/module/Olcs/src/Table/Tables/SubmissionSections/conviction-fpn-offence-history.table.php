@@ -26,14 +26,12 @@ return array(
     'columns' => array(
         array(
             'title' => 'Date of conviction',
-            'formatter' => function ($data, $column) {
-
+            'formatter' => function ($data) {
                 if ($data['convictionDate'] == null) {
                     return 'N/A';
                 }
 
-                $column['formatter'] = 'Date';
-                return $data['convictionDate']. '---' . $this->callFormatter($column, $data);
+                return $data['convictionDate'];
             },
             'name' => 'convictionDate'
         ),
@@ -43,7 +41,7 @@ return array(
         ),
         array(
             'title' => 'Name / defendant type',
-            'formatter' => function ($data, $column, $sm) {
+            'formatter' => function ($data) {
                 return $data['name'] . '<br />' . $data['defendantType'];
             },
             'name' => 'name'
