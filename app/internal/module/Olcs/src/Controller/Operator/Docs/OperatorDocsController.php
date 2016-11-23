@@ -1,13 +1,7 @@
 <?php
 
-/**
- * Operator Docs Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller\Operator\Docs;
 
-use Dvsa\Olcs\Transfer\Command\Application\CreateApplication;
 use Olcs\Controller\Operator\OperatorController;
 use Olcs\Controller\Traits;
 use Zend\View\Model\ViewModel;
@@ -25,7 +19,7 @@ class OperatorDocsController extends OperatorController
     /**
      * Table to use
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -35,7 +29,8 @@ class OperatorDocsController extends OperatorController
 
     /**
      * Route (prefix) for document action redirects
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     *
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentRoute()
@@ -45,7 +40,8 @@ class OperatorDocsController extends OperatorController
 
     /**
      * Route params for document action redirects
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     *
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
@@ -55,7 +51,8 @@ class OperatorDocsController extends OperatorController
 
     /**
      * Get view model for document action
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     *
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return ViewModel
      */
     protected function getDocumentView()
@@ -65,15 +62,21 @@ class OperatorDocsController extends OperatorController
         return $this->getViewWithOrganisation(
             [
                 'table' => $this->getDocumentsTable($filters),
-                'documents' => true
+                'documents' => true,
             ]
         );
     }
 
+    /**
+     * Get Form
+     *
+     * @return \Zend\Form\FieldsetInterface
+     */
     protected function getConfiguredDocumentForm()
     {
         $filters = $this->mapDocumentFilters(['irfoOrganisation' => $this->getFromRoute('organisation')]);
 
-        return $this->getDocumentForm($filters);
+        return $this->getDocumentForm($filters)
+            ->remove('showDocs');
     }
 }
