@@ -184,10 +184,13 @@ class TaskController extends AbstractController
 
         // Set up the data services so that dynamic selects populate correctly if we already have data
         if (isset($data['category'])) {
-            $this->getServiceLocator()->get('Olcs\Service\Data\SubCategory')->setCategory($data['category']);
+            $this->getServiceLocator()->get(\Olcs\Service\Data\SubCategory::class)->setCategory($data['category']);
         }
+
+        // Set up the data services so that dynamic selects populate correctly if we already have data
         if (isset($data['assignedToTeam'])) {
-            $this->getServiceLocator()->get('Olcs\Service\Data\User')->setTeam($data['assignedToTeam']);
+            $this->getServiceLocator()->get(\Olcs\Service\Data\UserListInternal::class)
+                ->setTeamId($data['assignedToTeam']);
         }
 
         $form = $this->getForm('Task');
