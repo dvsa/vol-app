@@ -1,9 +1,5 @@
 <?php
-/**
- * Licence Bus Reg Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
+
 namespace Olcs\Controller\Licence;
 
 use Olcs\Controller\AbstractInternalController;
@@ -41,7 +37,8 @@ class BusRegistrationController extends AbstractInternalController implements
      */
     protected $tableViewPlaceholderName = 'table';
     protected $tableViewTemplate = 'pages/table';
-    protected $defaultTableSortField = 'regNo';
+    protected $defaultTableSortField = 'routeNo';
+    protected $defaultTableOrderField = 'ASC';
     protected $tableName = 'busreg';
     protected $listDto = ListDto::class;
     protected $listVars = [
@@ -58,6 +55,11 @@ class BusRegistrationController extends AbstractInternalController implements
         'indexAction' => ['forms/filter', 'table-actions']
     );
 
+    /**
+     * Set left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
