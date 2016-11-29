@@ -28,7 +28,7 @@ return array(
                     true
                 ) . '">' . $data['regNo'] . '</a>';
             },
-            'sort' => 'regNo'
+            'sort' => 'routeNo',
         ),
         array(
             'title' => 'Var No.',
