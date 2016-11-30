@@ -129,6 +129,7 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
             $this->addErrorMessage('unknown-error');
         }
         if ($response->isOk()) {
+            $form->get('queueId')->setValue($response->getResult()['id']['queue']);
             $this->hasDiscsToPrint = true;
         }
     }
@@ -336,7 +337,8 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
                 'startNumber' => $params['startNumber'],
                 'endNumber' => $params['endNumber'],
                 'discSequence' => $params['discSequence'],
-                'isSuccessfull' => $params['isSuccessfull']
+                'isSuccessfull' => $params['isSuccessfull'],
+                'queueId' => $params['queueId'],
             ];
         } else {
             $dtoClass = ConfirmPrintingGoodsDto::class;
@@ -346,7 +348,8 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
                 'startNumber' => $params['startNumber'],
                 'endNumber' => $params['endNumber'],
                 'discSequence' => $params['discSequence'],
-                'isSuccessfull' => $params['isSuccessfull']
+                'isSuccessfull' => $params['isSuccessfull'],
+                'queueId' => $params['queueId'],
             ];
         }
 

@@ -22,6 +22,7 @@ $(function() {
   var niFlagText = niFlag.filter(':checked').parent().text();
   var operatorTypeText = operatorType.filter(':checked').parent().text();
   var licenceTypeText = licenceType.filter(':checked').parent().text();
+  var queueId = $('#queueId');
 
   // two variations for the message
   var discsVoided;
@@ -78,7 +79,8 @@ $(function() {
       'discPrefix': $('#discSequence :selected').text(),
       'discSequence': discSequence.val(),
       'endNumber': endNumber.val(),
-      'startNumberEntered': startNumber.val()
+      'startNumberEntered': startNumber.val(),
+      'queueId': queueId.val()
     };
     
     $('#confirmDiscWarning').remove();
