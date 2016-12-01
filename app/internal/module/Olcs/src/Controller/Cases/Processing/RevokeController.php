@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Revoke Controller
- */
 namespace Olcs\Controller\Cases\Processing;
 
 use Dvsa\Olcs\Transfer\Command\Cases\ProposeToRevoke\CreateProposeToRevoke as CreateDto;
@@ -26,14 +23,6 @@ class RevokeController extends AbstractInternalController implements CaseControl
      * represented by a single navigation id.
      */
     protected $navigationId = 'case_processing_in_office_revocation';
-
-    public function getLeftView()
-    {
-        $view = new ViewModel();
-        $view->setTemplate('sections/cases/partials/left');
-
-        return $view;
-    }
 
     /**
      * Variables for controlling details view rendering
@@ -76,16 +65,31 @@ class RevokeController extends AbstractInternalController implements CaseControl
         'case' => 'route',
     ];
 
+    /**
+     * Lock unused actions
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
         return $this->redirectToIndex();
     }
 
+    /**
+     * Lock unused actions
+     *
+     * @return ViewModel
+     */
     public function deleteAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * Redirect to index
+     *
+     * @return \Zend\Http\Response
+     */
     public function redirectToIndex()
     {
         return $this->redirect()->toRouteAjax(
@@ -97,10 +101,15 @@ class RevokeController extends AbstractInternalController implements CaseControl
     }
 
     /**
-     * Not found is a valid response for this particular controller
+     * Set left part
+     *
+     * @return ViewModel
      */
-    public function notFoundAction()
+    public function getLeftView()
     {
-        return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
+        $view = new ViewModel();
+        $view->setTemplate('sections/cases/partials/left');
+
+        return $view;
     }
 }
