@@ -120,6 +120,16 @@ $routes = array(
         ],
         'may_terminate' => true,
         'child_routes' => [
+            'browse' => array(
+                'type' => 'segment',
+                'options' =>  array(
+                    'route' => 'browse[/]',
+                    'defaults' => array(
+                        'controller' => Olcs\Controller\BusReg\BusRegBrowseController::class,
+                        'action' => 'index',
+                    ),
+                )
+            ),
             'details' => [
                 'type' => Segment::class,
                 'options' =>  [
@@ -818,6 +828,27 @@ $searchNavigation = array(
     )
 );
 
+$busRegSearchTabs = array(
+    'id' => 'search-bus-tabs',
+    'label' => 'search',
+    'route' => 'search-bus',
+    'pages' => array(
+        // bus search tabs
+        array(
+            'id' => 'search-bus',
+            'label' => 'search',
+            'route' => 'search-bus',
+            'use_route_match' => true,
+            'class' => 'search-navigation__item',
+        ),
+        array(
+            'id' => 'search-bus-browse',
+            'label' => 'browse',
+            'route' => 'search-bus/browse',
+        ),
+    ),
+);
+
 $myAccountNav = array(
     'id' => 'your-account',
     'label' => 'selfserve-dashboard-topnav-your-account',
@@ -907,6 +938,8 @@ return array(
                 Olcs\Controller\Ebsr\BusRegApplicationsController::class,
             Olcs\Controller\BusReg\BusRegRegistrationsController::class =>
                 Olcs\Controller\BusReg\BusRegRegistrationsController::class,
+            Olcs\Controller\BusReg\BusRegBrowseController::class =>
+                Olcs\Controller\BusReg\BusRegBrowseController::class,
             'Dashboard' => Olcs\Controller\DashboardController::class,
             Olcs\Controller\FeesController::class => Olcs\Controller\FeesController::class,
             'Correspondence' => 'Olcs\Controller\CorrespondenceController',
@@ -1018,6 +1051,7 @@ return array(
         'default' => array(
             $applicationNavigation,
             $searchNavigation,
+            $busRegSearchTabs,
             $busRegNav,
             $myAccountNav,
             array(
