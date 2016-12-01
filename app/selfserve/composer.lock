@@ -883,7 +883,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
-                "reference": "33610d7cbf34c1b269e63861014f36c8fd9ed4db"
+                "reference": "e1a2f578feefdd53b826ac16fbb263240c3ae9c1"
             },
             "require": {
                 "php": ">=5.4",
@@ -901,7 +901,7 @@
                 }
             },
             "description": "OLCS Transfer",
-            "time": "2016-11-30 18:32:55"
+            "time": "2016-12-01 09:59:47"
         },
         {
             "name": "olcs/olcs-utils",
