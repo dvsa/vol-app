@@ -49,6 +49,13 @@ class DiscPrinting
     public $noDiscs = null;
 
     /**
+     * @Form\Name("queueId")
+     * @Form\Attributes({"id":"queueId"})
+     * @Form\Type("Hidden")
+     */
+    public $queueId = null;
+
+    /**
      * @Form\Name("form-actions")
      * @Form\ComposedObject("Admin\Form\Model\Fieldset\DiscActions")
      */

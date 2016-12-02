@@ -50,7 +50,8 @@ class DiscPrintingTest extends MockeryTestCase
                     'prefix' => ['discSequence' => 2],
                     'discPrefix' =>  'OB',
                     'isSuccessfull' => 1,
-                    'endNumber' => 5
+                    'endNumber' => 5,
+                    'queueId' => 1,
                 ],
                 [
                     'niFlag' => 'Y',
@@ -60,7 +61,8 @@ class DiscPrintingTest extends MockeryTestCase
                     'discSequence' => 2,
                     'discPrefix' =>  'OB',
                     'isSuccessfull' => 1,
-                    'endNumber' => 5
+                    'endNumber' => 5,
+                    'queueId' => 1,
                  ]
             ],
             [
@@ -72,7 +74,8 @@ class DiscPrintingTest extends MockeryTestCase
                     'discSequence' => 2,
                     'discPrefix' =>  'OB',
                     'isSuccessfull' => 1,
-                    'endNumber' => 5
+                    'endNumber' => 5,
+                    'queueId' => 1,
                 ],
                 [
                     'niFlag' => 'Y',
@@ -82,11 +85,14 @@ class DiscPrintingTest extends MockeryTestCase
                     'discSequence' => 2,
                     'discPrefix' =>  'OB',
                     'isSuccessfull' => 1,
-                    'endNumber' => 5
+                    'endNumber' => 5,
+                    'queueId' => 1,
                 ]
             ],
             [
-                [],
+                [
+                    'queueId' => 1,
+                ],
                 [
                     'niFlag' => '',
                     'operatorType' => '',
@@ -95,7 +101,8 @@ class DiscPrintingTest extends MockeryTestCase
                     'discSequence' => '',
                     'discPrefix' =>  '',
                     'isSuccessfull' => '',
-                    'endNumber' => ''
+                    'endNumber' => '',
+                    'queueId' => 1,
                 ]
             ],
         ];
