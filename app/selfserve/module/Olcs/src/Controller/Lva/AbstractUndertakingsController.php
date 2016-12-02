@@ -33,7 +33,7 @@ abstract class AbstractUndertakingsController extends AbstractController
             return $this->goToOverview();
         }
 
-        if  ($this->isButtonPressed('submitAndPay') || $this->isButtonPressed('submit')) {
+        if ($this->isButtonPressed('submitAndPay') || $this->isButtonPressed('submit')) {
             $shouldCompleteSection = true;
         } else {
             $shouldCompleteSection = false;
