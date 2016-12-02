@@ -118,5 +118,4 @@ class DiscPrintingTest extends MockeryTestCase
 
         $this->assertEquals($expected, Sut::mapFromErrors($mockForm, $errors));
     }
-
 }
