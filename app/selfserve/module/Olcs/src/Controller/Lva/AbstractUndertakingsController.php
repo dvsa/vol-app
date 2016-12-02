@@ -2,17 +2,25 @@
 
 namespace Olcs\Controller\Lva;
 
-use Common\Controller\Lva\AbstractUndertakingsController as LvaAbstractUndertakingsController;
 use Common\Service\Entity\LicenceEntityService as Licence;
+use Common\RefData;
+use Common\Controller\Lva\Traits\EnabledSectionTrait;
+use Common\Controller\Lva\AbstractController;
+use Dvsa\Olcs\Transfer\Command\Application\UpdateDeclaration;
+use Common\Form\Form;
 
 /**
  * External Abstract Undertakings Controller
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-abstract class AbstractUndertakingsController extends LvaAbstractUndertakingsController
+abstract class AbstractUndertakingsController extends AbstractController
 {
     protected $location = 'external';
+
+    protected $data = [];
+
+    use EnabledSectionTrait;
 
     /**
      * Index action
@@ -24,14 +32,82 @@ abstract class AbstractUndertakingsController extends LvaAbstractUndertakingsCon
         if ($this->isButtonPressed('change')) {
             return $this->goToOverview();
         }
-        $this->getServiceLocator()->get('Script')->loadFile('undertakings');
 
-        $response = parent::indexAction();
+        if  ($this->isButtonPressed('submitAndPay') || $this->isButtonPressed('submit')) {
+            $shouldCompleteSection = true;
+        } else {
+            $shouldCompleteSection = false;
+        }
 
-        if (
-            $response instanceof \Zend\Http\PhpEnvironment\Response
-            && ($this->isButtonPressed('submitAndPay') || $this->isButtonPressed('submit'))
-        ) {
+        $request = $this->getRequest();
+        $applicationData = $this->getUndertakingsData();
+        $form = $this->updateForm($this->getForm(), $applicationData);
+
+        $files = ['undertakings-interim'];
+        if ($this->lva === 'application' && !$this->data['disableSignatures']) {
+            $files[] = 'undertakings-verify';
+        }
+        $this->getServiceLocator()->get('Script')->loadFiles($files);
+
+        if ($request->isPost()) {
+            $data = (array) $request->getPost();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $response = $this->save($form->getData(), $shouldCompleteSection);
+                if ($response->isOk()) {
+                    $this->completeSection('undertakings');
+                    $this->goToNextStep();
+                }
+            } else {
+                // validation failed, we need to use the application data
+                // for markup but use the POSTed values to render the form again
+                $formData = array_replace_recursive(
+                    $this->formatDataForForm($applicationData),
+                    $data
+                );
+                // don't call setData again here or we lose validation messages
+                $form->populateValues($formData);
+            }
+        } else {
+            $data = $this->formatDataForForm($applicationData);
+            $form->setData($data);
+        }
+
+        return $this->render('undertakings', $form);
+    }
+
+    /**
+     * Save the form data
+     *
+     * @param array $formData              form data
+     * @param bool  $shouldCompleteSection should complete section
+     *
+     * @return \Common\Service\Cqrs\Response
+     */
+    protected function save($formData, $shouldCompleteSection = true)
+    {
+        $dto = $this->createUpdateDeclarationDto($formData, $shouldCompleteSection);
+
+        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
+
+        /* @var $response \Common\Service\Cqrs\Response */
+        $response = $this->getServiceLocator()->get('CommandService')->send($command);
+
+        if (!$response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
+        return $response;
+    }
+
+    /**
+     * Go to the next step
+     *
+     * @return \Zend\Http\Response
+     */
+    protected function goToNextStep()
+    {
+        if ($this->isButtonPressed('submitAndPay') || $this->isButtonPressed('submit')) {
             // section completed
             $this->redirect()->toRoute(
                 'lva-'.$this->lva . '/pay-and-submit',
@@ -40,8 +116,66 @@ abstract class AbstractUndertakingsController extends LvaAbstractUndertakingsCon
                 true
             );
         }
+        if ($this->isButtonPressed('sign')) {
+            // section not yet completed
+            return $this->redirect()->toUrl('http://google.co.uk');
+        }
+    }
 
-        return $response;
+    /**
+     * Create update declaration dto
+     *
+     * @param array $formData              form data
+     * @param bool  $shouldCompleteSection should complete section
+     *
+     * @return UpdateDeclaration
+     */
+    protected function createUpdateDeclarationDto($formData, $shouldCompleteSection = true)
+    {
+        $signatureType = null;
+        if ($this->lva === 'variation') {
+            $signatureType = RefData::SIGNATURE_TYPE_NOT_REQUIRED;
+        } elseif ($shouldCompleteSection) {
+            $signatureType = RefData::SIGNATURE_TYPE_PHYSICAL_SIGNATURE;
+        }
+
+        $data = [
+            'id' => $this->getIdentifier(),
+            'version' => $formData['declarationsAndUndertakings']['version'],
+            'declarationConfirmation' => $shouldCompleteSection ? 'Y' : 'N',
+            'interimRequested' => isset($formData['interim']) ?
+                $formData['interim']['goodsApplicationInterim'] : null,
+            'interimReason' => isset($formData['interim']) ?
+                $formData['interim']['goodsApplicationInterimReason'] : null
+        ];
+        if ($signatureType) {
+            $data['signatureType'] = $signatureType;
+        }
+        $dto = UpdateDeclaration::create($data);
+
+        return $dto;
+    }
+
+    /**
+     * Get undertakings data
+     *
+     * @return array|false
+     */
+    protected function getUndertakingsData()
+    {
+        $query = \Dvsa\Olcs\Transfer\Query\Application\Declaration::create(['id' => $this->getIdentifier()]);
+
+        $response =  $this->handleQuery($query);
+
+        if ($response->isOk()) {
+            $result = $response->getResult();
+            $this->data = $result;
+            return $result;
+        }
+
+        $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+
+        return false;
     }
 
     /**
@@ -78,8 +212,8 @@ abstract class AbstractUndertakingsController extends LvaAbstractUndertakingsCon
     /**
      * Update submit buttons
      *
-     * @param \Common\Form\Form $form            form
-     * @param array             $applicationData application data
+     * @param Form  $form            form
+     * @param array $applicationData application data
      *
      * @return void
      */
@@ -105,6 +239,5 @@ abstract class AbstractUndertakingsController extends LvaAbstractUndertakingsCon
         } else {
             $formHelper->remove($form, 'form-actions->submitAndPay');
         }
-
     }
 }

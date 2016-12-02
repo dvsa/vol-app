@@ -12,21 +12,28 @@ class FormActionsUndertakings
 {
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large"})
+     * @Form\Attributes({"type":"submit","class":"action--primary large","id":"sign"})
+     * @Form\Options({"label": "application.review-declarations.sign-button"})
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
+     */
+    public $sign = null;
+
+    /**
+     * @Form\Attributes({"type":"submit","class":"action--primary large","id":"submitAndPay"})
      * @Form\Options({"label": "submitandpay.button"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $submitAndPay = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large"})
+     * @Form\Attributes({"type":"submit","class":"action--primary large","id":"submit"})
      * @Form\Options({"label": "submitapplication.button"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $submit = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--tertiary large"})
+     * @Form\Attributes({"type":"submit","class":"action--tertiary large","id":"change"})
      * @Form\Options({"label": "change.button"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */

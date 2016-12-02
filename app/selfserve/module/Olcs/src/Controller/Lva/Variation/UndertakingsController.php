@@ -6,6 +6,7 @@ use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Common\Service\Entity\LicenceEntityService as Licence;
 use Olcs\Controller\Lva\AbstractUndertakingsController;
 use Common\RefData;
+use Common\Form\Form;
 
 /**
  * External Variation Undertakings Controller
@@ -34,20 +35,35 @@ class UndertakingsController extends AbstractUndertakingsController
     /**
      * Update form
      *
-     * @param \Common\Form\Form $form            form
-     * @param array             $applicationData application data
+     * @param Form  $form            form
+     * @param array $applicationData application data
      *
-     * @return void
+     * @return Form
      */
     protected function updateForm($form, $applicationData)
     {
-        parent::updateForm($form, $applicationData);
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        $fieldset = $form->get('declarationsAndUndertakings');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
+        $summaryDownload = $translator->translateReplace(
+            'undertakings_summary_download',
+            [
+                $this->url()->fromRoute('lva-' . $this->lva . '/review', [], [], true),
+                $translator->translate('view-full-application'),
+            ]
+        );
+
+        $fieldset->get('summaryDownload')->setAttribute('value', $summaryDownload);
         if (!$applicationData['canHaveInterimLicence']) {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'interim');
+            $formHelper->remove($form, 'interim');
         }
 
+        $formHelper->remove($form, 'form-actions->sign');
+        $formHelper->remove($form, 'form-actions->saveAndContinue');
         $this->updateSubmitButtons($form, $applicationData);
+
+        return $form;
     }
 
     /**
