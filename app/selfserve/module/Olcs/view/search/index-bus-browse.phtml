@@ -1,23 +1,26 @@
-<?php
-echo $this->partial(
-    'partials/page-header-simple',
-    [
-        'pageTitle' => $this->pageTitle(),
-    ]
-);
-?>
+<div class="page-header">
+    <div class="page-header__wrapper">
+        <h1><?php echo $this->pageTitle(); ?></h1>
+    </div>
+</div><!-- page-header -->
 
 <div class="row">
 
   <div class="two-thirds">
       <?php
+        echo $this->flashMessengerAll();
+
         /* @var \Zend\View\Helper\Navigation\Menu $menu */
         $menu = $this->navigation(
             $this->navigation('navigation')->getContainer()->findBy('id', 'search-bus-tabs')
         )->menu();
 
         echo $menu->setMinDepth(0)->setMaxDepth(0)->setPartial('partials/tabs-nav');
+      ?>
 
+        <p><?php echo $this->translate('selfserve.search.busreg.browse.form.hint');?></p>
+
+      <?php
         echo $this->partial('search/form.phtml', ['form' => $this->searchForm]);
       ?>
   </div>

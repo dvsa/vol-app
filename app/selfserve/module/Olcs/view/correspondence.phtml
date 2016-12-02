@@ -19,7 +19,7 @@ echo $this->partial(
       $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'dashboard-licences-applications'))->menu();
       
       echo $menu->setMinDepth(0)->setMaxDepth(0)
-      ->setPartial('partials/dashboard-nav');
+      ->setPartial('partials/tabs-nav');
     
     ?>
     
