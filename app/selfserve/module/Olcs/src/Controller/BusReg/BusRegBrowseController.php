@@ -31,13 +31,12 @@ class BusRegBrowseController extends AbstractController
             if ($form->isValid()) {
                 // export data
                 $postData = $request->getPost();
-
                 $query = BusRegBrowseExport::create(
                     [
                         'trafficAreas' => $postData['trafficAreas'],
                         'status' => $postData['status'],
                         'acceptedDate' => sprintf(
-                            '%s-%s-%s',
+                            '%04d-%02d-%02d',
                             $postData['acceptedDate']['year'],
                             $postData['acceptedDate']['month'],
                             $postData['acceptedDate']['day']
