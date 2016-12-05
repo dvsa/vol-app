@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Cases\Processing;
 
+use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -17,12 +18,14 @@ class TaskController extends AbstractController implements CaseControllerInterfa
 {
     use ControllerTraits\CaseControllerTrait,
         ControllerTraits\ProcessingControllerTrait,
-        ControllerTraits\TaskActionTrait;
+        ControllerTraits\TaskActionTrait {
+            ControllerTraits\TaskActionTrait::getTaskForm as traitGetTaskForm;
+        }
 
     /**
      * Get task action type
      *
-     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @see \Olcs\Controller\Traits\TaskActionTrait
      * @return string
      */
     protected function getTaskActionType()
@@ -33,7 +36,7 @@ class TaskController extends AbstractController implements CaseControllerInterfa
     /**
      * Get task action filters
      *
-     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @see \Olcs\Controller\Traits\TaskActionTrait
      * @return array
      */
     protected function getTaskActionFilters()
@@ -55,9 +58,11 @@ class TaskController extends AbstractController implements CaseControllerInterfa
      */
     private function getIdArrayForCase()
     {
-        $filter = [];
-
         $case = $this->getCase($this->params()->fromRoute('case', null));
+
+        $filter = [
+            'case' => $case['id'],
+        ];
 
         if (!is_null($case['licence'])) {
             $filter['licence'] = $case['licence']['id'];
@@ -72,5 +77,26 @@ class TaskController extends AbstractController implements CaseControllerInterfa
         }
 
         return $filter;
+    }
+
+    /**
+     * Create filter form
+     *
+     * @param array $filters Field values
+     *
+     * @return \Zend\Form\FormInterface
+     */
+    protected function getTaskForm(array $filters = [])
+    {
+        $form = $this->traitGetTaskForm($filters);
+
+        $this->updateSelectValueOptions(
+            $form->get('showTasks'),
+            [
+                FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-case-only',
+            ]
+        );
+
+        return $form;
     }
 }

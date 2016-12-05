@@ -73,7 +73,10 @@ class IndexController extends AbstractController implements LeftViewProvider
     {
         $filters = $this->mapTaskFilters();
 
-        $left = new ViewModel(['form' => $this->getTaskForm($filters)]);
+        $form = $this->getTaskForm($filters)
+            ->remove('showTasks');
+
+        $left = new ViewModel(['form' => $form]);
         $left->setTemplate('sections/home/partials/left');
 
         return $left;

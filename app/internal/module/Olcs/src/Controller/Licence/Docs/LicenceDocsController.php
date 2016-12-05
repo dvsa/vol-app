@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Licence Docs Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller\Licence\Docs;
 
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -25,7 +20,7 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
     /**
      * Table to use
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -35,7 +30,8 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
 
     /**
      * Route (prefix) for document action redirects
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     *
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentRoute()
@@ -45,7 +41,8 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
 
     /**
      * Route params for document action redirects
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     *
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
@@ -53,16 +50,23 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
         return ['licence' => $this->getFromRoute('licence')];
     }
 
+    /**
+     * Get Form
+     *
+     * @return \Zend\Form\FieldsetInterface
+     */
     protected function getConfiguredDocumentForm()
     {
         $filters = $this->mapDocumentFilters(['licence' => $this->getFromRoute('licence')]);
 
-        return $this->getDocumentForm($filters);
+        return $this->getDocumentForm($filters)
+            ->remove('showDocs');
     }
 
     /**
      * Get view model for document action
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     *
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return ViewModel
      */
     protected function getDocumentView()

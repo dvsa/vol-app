@@ -12,7 +12,9 @@ use Olcs\Controller\Traits;
  */
 class LicenceProcessingTasksController extends AbstractLicenceProcessingController
 {
-    use Traits\TaskActionTrait;
+    use Traits\TaskActionTrait {
+        Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
+    }
 
     /**
      * @var string
@@ -22,7 +24,7 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
     /**
      * Get task action type
      *
-     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @see \Olcs\Controller\Traits\TaskActionTrait
      * @return string
      */
     protected function getTaskActionType()
@@ -33,7 +35,7 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
     /**
      * Get task action filters
      *
-     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @see \Olcs\Controller\Traits\TaskActionTrait
      * @return array
      */
     protected function getTaskActionFilters()
@@ -43,5 +45,18 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
             'assignedToTeam' => '',
             'assignedToUser' => ''
         ];
+    }
+
+    /**
+     * Create filter form
+     *
+     * @param array $filters Field values
+     *
+     * @return \Zend\Form\FormInterface
+     */
+    protected function getTaskForm(array $filters = [])
+    {
+        return $this->traitGetTaskForm($filters)
+            ->remove('showTasks');
     }
 }

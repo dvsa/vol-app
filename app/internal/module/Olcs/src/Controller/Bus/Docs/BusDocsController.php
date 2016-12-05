@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Bus\Docs;
 
+use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -21,24 +22,29 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
     /**
      * Get configured document form
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return \Zend\View\Model\ViewModel
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @return \Zend\Form\FormInterface
      */
     protected function getConfiguredDocumentForm()
     {
-        $filters = $this->mapDocumentFilters(
+        $filters = $this->getDocumentFilters();
+
+        $form = $this->getDocumentForm($filters);
+
+        $this->updateSelectValueOptions(
+            $form->get('showDocs'),
             [
-                'licence' => $this->getFromRoute('licence')
+                FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-reg-only',
             ]
         );
 
-        return $this->getDocumentForm($filters);
+        return $form;
     }
 
     /**
      * Table to use
      *
-     * @see Olcs\Controller\Traits\DocumentSearchTrait
+     * @see \Olcs\Controller\Traits\DocumentSearchTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -49,7 +55,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
     /**
      * Route (prefix) for document action redirects
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentRoute()
@@ -60,7 +66,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
     /**
      * Route params for document action redirects
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
@@ -72,18 +78,29 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
     }
 
     /**
+     * Get document filters
+     *
+     * @return array
+     */
+    private function getDocumentFilters()
+    {
+        return $this->mapDocumentFilters(
+            [
+                'licence' => $this->getFromRoute('licence'),
+                'busReg' => $this->getFromRoute('busRegId'),
+            ]
+        );
+    }
+
+    /**
      * Get view model for document action
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Zend\View\Model\ViewModel
      */
     protected function getDocumentView()
     {
-        $filters = $this->mapDocumentFilters(
-            [
-                'licence' => $this->getFromRoute('licence')
-            ]
-        );
+        $filters = $this->getDocumentFilters();
 
         return $this->getView(
             [

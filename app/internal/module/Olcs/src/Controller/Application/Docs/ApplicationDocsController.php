@@ -1,12 +1,8 @@
 <?php
 
-/**
- * Application Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller\Application\Docs;
 
+use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Olcs\Controller\Application\ApplicationController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits;
@@ -25,7 +21,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
     /**
      * Table to use
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -35,7 +31,8 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
 
     /**
      * Route (prefix) for document action redirects
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     *
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentRoute()
@@ -45,7 +42,8 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
 
     /**
      * Route params for document action redirects
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     *
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
@@ -54,29 +52,56 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
     }
 
     /**
+     * Get document filters
+     *
+     * @return array
+     */
+    private function getDocumentFilters()
+    {
+        $appId = $this->getFromRoute('application');
+        $licence = $this->getLicenceIdForApplication($appId);
+
+        return $this->mapDocumentFilters(
+            [
+                'licence' => $licence,
+                'application' => $this->getFromRoute('application'),
+            ]
+        );
+    }
+
+    /**
      * Get view model for document action
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     *
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return ViewModel
      */
     protected function getDocumentView()
     {
-        $application = $this->getFromRoute('application');
-        $licence = $this->getLicenceIdForApplication($application);
-
-        $filters = $this->mapDocumentFilters(['licence' => $licence]);
+        $filters = $this->getDocumentFilters();
 
         $table = $this->getDocumentsTable($filters);
 
         return $this->getViewWithApplication(['table' => $table]);
     }
 
+    /**
+     * Get Customized Document Form
+     *
+     * @return \Zend\Form\FormInterface
+     */
     protected function getConfiguredDocumentForm()
     {
-        $application = $this->getFromRoute('application');
-        $licence = $this->getLicenceIdForApplication($application);
+        $filters = $this->getDocumentFilters();
 
-        $filters = $this->mapDocumentFilters(['licence' => $licence]);
+        $form = $this->getDocumentForm($filters);
 
-        return $this->getDocumentForm($filters);
+        $this->updateSelectValueOptions(
+            $form->get('showDocs'),
+            [
+                FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-app-only',
+            ]
+        );
+
+        return $form;
     }
 }

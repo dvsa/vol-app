@@ -3,16 +3,25 @@
 namespace Olcs\Controller\Traits;
 
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
+use Dvsa\Olcs\Utils\Constants\FilterOptions;
+use Zend\Form\Element\Select;
 
 /**
  * Document Search Trait
  */
 trait DocumentSearchTrait
 {
+    /**
+     * Get Document Table Name
+     *
+     * @return string
+     */
     protected abstract function getDocumentTableName();
 
     /**
      * Inspect the request to see if we have any filters set, and if necessary, filter them down to a valid subset
+     *
+     * @param array $extra Filters data
      *
      * @return array
      */
@@ -22,7 +31,8 @@ trait DocumentSearchTrait
             'sort' => 'issuedDate',
             'order' => 'DESC',
             'page' => 1,
-            'limit' => 10
+            'limit' => 10,
+            'showDocs' => FilterOptions::SHOW_SELF_ONLY,
         ];
 
         $filters = array_merge(
@@ -50,8 +60,16 @@ trait DocumentSearchTrait
         );
     }
 
+    /**
+     * Create filter form
+     *
+     * @param array $filters Filters data
+     *
+     * @return \Zend\Form\FormInterface
+     */
     protected function getDocumentForm($filters = [])
     {
+        /** @var \Zend\Form\FormInterface $form */
         $form = $this->getForm('DocumentsHome');
         $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
 
@@ -61,13 +79,22 @@ trait DocumentSearchTrait
         // various dropdowns on the filter form
         $selects = [
             'category' => $this->getListDataCategoryDocs('All'),
-            'documentSubCategory' => $this->getListDataSubCategoryDocs($category, 'All')
+            'documentSubCategory' => $this->getListDataSubCategoryDocs($category, 'All'),
         ];
 
         // insert relevant data into the corresponding form inputs
         foreach ($selects as $name => $options) {
             $form->get($name)->setValueOptions($options);
         }
+
+        //  show document field
+        /** @var Select $option */
+        $option = $form->get('showDocs');
+        $option->setValueOptions(
+            [
+                FilterOptions::SHOW_ALL => 'documents.filter.option.all-docs',
+            ]
+        );
 
         // setting $this->enableCsrf = false won't sort this; we never POST
         $form->remove('csrf');
@@ -77,12 +104,21 @@ trait DocumentSearchTrait
         return $form;
     }
 
+    /**
+     * Create table and populate with data from Api
+     *
+     * @param array $filters Filters data
+     *
+     * @return \Common\Service\Table\TableBuilder
+     * @throws \Exception
+     */
     protected function getDocumentsTable($filters = [])
     {
         if (isset($filters['documentSubCategory'])) {
             // query requires array of subcategories
             $filters['documentSubCategory'] = [$filters['documentSubCategory']];
         }
+
         $response = $this->handleQuery(DocumentList::create($filters));
         if (!$response->isOk()) {
             throw new \Exception('Error retrieving document list');
@@ -101,7 +137,9 @@ trait DocumentSearchTrait
     /**
      * Update table action with query
      *
-     * @param Table $table
+     * @param \Common\Service\Table\TableBuilder $table Table
+     *
+     * @return void
      */
     protected function updateTableActionWithQuery($table)
     {
@@ -110,5 +148,25 @@ trait DocumentSearchTrait
             $action = $table->getVariable('action') . '?' . $query;
             $table->setVariable('action', $action);
         }
+    }
+
+    /**
+     * Add/Remove Select options
+     *
+     * @param Select $el      Target element
+     * @param array  $options Add/remove options (for remove value should be null)
+     *
+     * @return void
+     */
+    protected function updateSelectValueOptions(Select $el, array $options = [])
+    {
+        $el->setValueOptions(
+            array_filter(
+                $options + $el->getValueOptions(),
+                function ($arg) {
+                    return $arg !== null;
+                }
+            )
+        );
     }
 }

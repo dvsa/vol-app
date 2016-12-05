@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Cases\Docs;
 
+use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -21,7 +22,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     /**
      * Table to use
      *
-     * @see Olcs\Controller\Traits\DocumentSearchTrait
+     * @see \Olcs\Controller\Traits\DocumentSearchTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -32,7 +33,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     /**
      * Route (prefix) for document action redirects
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentRoute()
@@ -43,7 +44,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     /**
      * Route params for document action redirects
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
@@ -54,7 +55,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     /**
      * Get view model for document action
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Zend\View\Model\ViewModel
      */
     protected function getDocumentView()
@@ -75,7 +76,10 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     {
         $case = $this->getCase();
 
-        $filters = [];
+        $filters = [
+            'case' => $case['id'],
+        ];
+
         switch ($case['caseType']['id']) {
             case 'case_t_tm':
                 $filters['transportManager'] = $case['transportManager']['id'];
@@ -91,13 +95,22 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     /**
      * Get configured document form
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return \Zend\View\Model\ViewModel
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @return \Zend\Form\FormInterface
      */
     protected function getConfiguredDocumentForm()
     {
         $filters = $this->getDocumentFilters();
 
-        return $this->getDocumentForm($filters);
+        $form = $this->getDocumentForm($filters);
+
+        $this->updateSelectValueOptions(
+            $form->get('showDocs'),
+            [
+                FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-case-only',
+            ]
+        );
+
+        return $form;
     }
 }
