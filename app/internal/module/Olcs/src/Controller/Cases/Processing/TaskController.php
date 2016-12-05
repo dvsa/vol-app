@@ -19,7 +19,7 @@ class TaskController extends AbstractController implements CaseControllerInterfa
     use ControllerTraits\CaseControllerTrait,
         ControllerTraits\ProcessingControllerTrait,
         ControllerTraits\TaskActionTrait {
-            ControllerTraits\TaskActionTrait::getTaskForm as trait_getTaskForm;
+            ControllerTraits\TaskActionTrait::getTaskForm as traitGetTaskForm;
         }
 
     /**
@@ -88,7 +88,7 @@ class TaskController extends AbstractController implements CaseControllerInterfa
      */
     protected function getTaskForm(array $filters = [])
     {
-        $form = $this->trait_getTaskForm($filters);
+        $form = $this->traitGetTaskForm($filters);
 
         $this->updateSelectValueOptions(
             $form->get('showTasks'),

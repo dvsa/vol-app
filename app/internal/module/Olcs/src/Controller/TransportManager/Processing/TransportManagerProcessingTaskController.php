@@ -13,7 +13,7 @@ use Olcs\Controller\Traits;
 class TransportManagerProcessingTaskController extends AbstractTransportManagerProcessingController
 {
     use Traits\TaskActionTrait {
-        Traits\TaskActionTrait::getTaskForm as trait_getTaskForm;
+        Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
     }
 
     /**
@@ -51,7 +51,7 @@ class TransportManagerProcessingTaskController extends AbstractTransportManagerP
      */
     protected function getTaskForm(array $filters = [])
     {
-        return $this->trait_getTaskForm($filters)
+        return $this->traitGetTaskForm($filters)
             ->remove('showTasks');
     }
 }

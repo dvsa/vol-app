@@ -13,7 +13,7 @@ use Olcs\Controller\Traits;
 class ApplicationProcessingTasksController extends AbstractApplicationProcessingController
 {
     use Traits\TaskActionTrait {
-            Traits\TaskActionTrait::getTaskForm as trait_getTaskForm;
+            Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
         }
 
     /**
@@ -59,7 +59,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
      */
     protected function getTaskForm(array $filters = [])
     {
-        $form = $this->trait_getTaskForm($filters);
+        $form = $this->traitGetTaskForm($filters);
 
         $this->updateSelectValueOptions(
             $form->get('showTasks'),

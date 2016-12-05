@@ -18,7 +18,7 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
 {
     use Traits\ProcessingControllerTrait,
         Traits\TaskActionTrait {
-            Traits\TaskActionTrait::getTaskForm as trait_getTaskForm;
+            Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
         }
 
     /**
@@ -59,7 +59,7 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
      */
     protected function getTaskForm(array $filters = [])
     {
-        $form = $this->trait_getTaskForm($filters);
+        $form = $this->traitGetTaskForm($filters);
 
         /** @var \Zend\Form\Element\Select $option */
         $this->updateSelectValueOptions(
