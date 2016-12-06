@@ -42,9 +42,6 @@ class DocumentsHome
     public $isExternal = null;
 
     /**
-     * @Form\Attributes({
-     *      "value": "tsw_self_only",
-     * })
      * @Form\Options({
      *     "label": "documents.filter.show-docs.title",
      *     "value_options": {
