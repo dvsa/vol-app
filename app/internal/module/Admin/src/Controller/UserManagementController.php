@@ -15,6 +15,9 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\User as Mapper;
 use Admin\Form\Model\Form\User as Form;
 use Zend\View\Model\ViewModel;
+use Common\RefData;
+use Zend\Form\Fieldset as FormFieldset;
+use Zend\Form\Element\Radio as RadioElement;
 
 /**
  * User Management Controller
@@ -176,8 +179,14 @@ class UserManagementController extends AbstractInternalController implements Lef
      */
     protected function alterFormForEdit($form, $data)
     {
+        /**
+         * @var FormFieldset $userLoginSecurity
+         * @var RadioElement $resetPwField
+         */
+        $userLoginSecurity = $form->get('userLoginSecurity');
+
         if (empty($data['userLoginSecurity']['disabledDate'])) {
-            $form->get('userLoginSecurity')->remove('disabledDate');
+            $userLoginSecurity->remove('disabledDate');
         }
 
         if (!empty($data['userType']['currentTransportManager'])
@@ -194,6 +203,24 @@ class UserManagementController extends AbstractInternalController implements Lef
             $form->get('userType')->get('currentTransportManagerHtml')->setValue($value);
         } else {
             $form->get('userType')->remove('currentTransportManagerHtml');
+        }
+
+        //password reset options
+        switch ($data['userType']['userType']) {
+            case RefData::USER_TYPE_INTERNAL:
+                //no reset option for internal user
+                $userLoginSecurity->remove('resetPassword');
+                break;
+            case RefData::USER_TYPE_PARTNER:
+            case RefData::USER_TYPE_LOCAL_AUTHORITY:
+                //for partners and local authorities, remove the post option
+                $resetPwField = $userLoginSecurity->get('resetPassword');
+                $valueOptions = $resetPwField->getValueOptions();
+                unset($valueOptions['post']);
+                $resetPwField->setValueOptions($valueOptions);
+                break;
+            default:
+                //transport manager and operator, we don't modify the form
         }
 
         return $form;
