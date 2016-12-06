@@ -40,7 +40,6 @@ class ApplicationPeopleTest extends MockeryTestCase
     {
         $formActions = m::mock();
         $formActions->shouldReceive('has')->with('save')->andReturn(true);
-        $formActions->shouldReceive('remove')->once()->with('save');
         $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('cancel');
 
