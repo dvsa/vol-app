@@ -19,13 +19,13 @@ class TaskController extends AbstractController implements CaseControllerInterfa
     use ControllerTraits\CaseControllerTrait,
         ControllerTraits\ProcessingControllerTrait,
         ControllerTraits\TaskActionTrait {
-            ControllerTraits\TaskActionTrait::getTaskForm as trait_getTaskForm;
+            ControllerTraits\TaskActionTrait::getTaskForm as traitGetTaskForm;
         }
 
     /**
      * Get task action type
      *
-     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @see \Olcs\Controller\Traits\TaskActionTrait
      * @return string
      */
     protected function getTaskActionType()
@@ -36,7 +36,7 @@ class TaskController extends AbstractController implements CaseControllerInterfa
     /**
      * Get task action filters
      *
-     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @see \Olcs\Controller\Traits\TaskActionTrait
      * @return array
      */
     protected function getTaskActionFilters()
@@ -88,11 +88,10 @@ class TaskController extends AbstractController implements CaseControllerInterfa
      */
     protected function getTaskForm(array $filters = [])
     {
-        $form = $this->trait_getTaskForm($filters);
+        $form = $this->traitGetTaskForm($filters);
 
-        /** @var \Zend\Form\Element\Select $option */
-        $option = $form->get('showTasks');
-        $option->setValueOptions(
+        $this->updateSelectValueOptions(
+            $form->get('showTasks'),
             [
                 FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-case-only',
             ]

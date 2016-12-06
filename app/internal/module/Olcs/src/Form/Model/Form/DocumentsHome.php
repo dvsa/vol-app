@@ -43,14 +43,12 @@ class DocumentsHome
 
     /**
      * @Form\Attributes({
-     *      "value": "self-only",
+     *      "value": "tsw_self_only",
      * })
      * @Form\Options({
      *     "label": "documents.filter.show-docs.title",
      *     "value_options": {
-     *         "self-only": "documents.filter.option.this-app-only",
      *     },
-     *     "empty_option": "documents.filter.option.all-docs",
      *     "disable_inarray_validator": false
      * })
      * @Form\Type("\Zend\Form\Element\Select")

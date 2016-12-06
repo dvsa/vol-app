@@ -4,6 +4,7 @@ namespace Olcs\Controller\Traits;
 
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
+use Zend\Form\Element\Select;
 
 /**
  * Document Search Trait
@@ -68,6 +69,7 @@ trait DocumentSearchTrait
      */
     protected function getDocumentForm($filters = [])
     {
+        /** @var \Zend\Form\FormInterface $form */
         $form = $this->getForm('DocumentsHome');
         $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
 
@@ -84,6 +86,15 @@ trait DocumentSearchTrait
         foreach ($selects as $name => $options) {
             $form->get($name)->setValueOptions($options);
         }
+
+        //  show document field
+        /** @var Select $option */
+        $option = $form->get('showDocs');
+        $option->setValueOptions(
+            [
+                FilterOptions::SHOW_ALL => 'documents.filter.option.all-docs',
+            ]
+        );
 
         // setting $this->enableCsrf = false won't sort this; we never POST
         $form->remove('csrf');
@@ -137,5 +148,25 @@ trait DocumentSearchTrait
             $action = $table->getVariable('action') . '?' . $query;
             $table->setVariable('action', $action);
         }
+    }
+
+    /**
+     * Add/Remove Select options
+     *
+     * @param Select $el      Target element
+     * @param array  $options Add/remove options (for remove value should be null)
+     *
+     * @return void
+     */
+    protected function updateSelectValueOptions(Select $el, array $options = [])
+    {
+        $el->setValueOptions(
+            array_filter(
+                $options + $el->getValueOptions(),
+                function ($arg) {
+                    return $arg !== null;
+                }
+            )
+        );
     }
 }

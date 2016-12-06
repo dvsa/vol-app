@@ -5,6 +5,7 @@ namespace Olcs\Controller\Traits;
 use Dvsa\Olcs\Transfer\Query\Task\TaskList;
 use Dvsa\Olcs\Transfer\Query\Task\TaskDetails;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
+use Zend\Form\Element\Select;
 
 /**
  * Task Search Trait
@@ -58,6 +59,7 @@ trait TaskSearchTrait
      */
     protected function getTaskForm(array $filters = [])
     {
+        /** @var \Zend\Form\FormInterface $form */
         $form = $this->getForm('TasksHome');
 
         $team = (isset($filters['assignedToTeam'])) ? (int) $filters['assignedToTeam'] : null;
@@ -77,6 +79,16 @@ trait TaskSearchTrait
             $form->get($name)->setValueOptions($options);
         }
 
+        //  show task fiels
+        /** @var \Zend\Form\Element\Select $option */
+        $option = $form->get('showTasks');
+        $option->setValueOptions(
+            [
+                FilterOptions::SHOW_ALL => 'documents.filter.option.all-tasks',
+            ]
+        );
+
+        //  remove fields
         $form->remove('csrf');
 
         $form->setData($filters);
@@ -229,5 +241,25 @@ trait TaskSearchTrait
             $action .= '?' . $query;
             $table->setVariable('action', $action);
         }
+    }
+
+    /**
+     * Add/Remove Select options
+     *
+     * @param Select $el      Target element
+     * @param array  $options Add/remove options (for remove value should be null)
+     *
+     * @return void
+     */
+    protected function updateSelectValueOptions(Select $el, array $options = [])
+    {
+        $el->setValueOptions(
+            array_filter(
+                $options + $el->getValueOptions(),
+                function ($arg) {
+                    return $arg !== null;
+                }
+            )
+        );
     }
 }
