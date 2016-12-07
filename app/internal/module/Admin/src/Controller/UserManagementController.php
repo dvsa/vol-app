@@ -128,7 +128,7 @@ class UserManagementController extends AbstractInternalController implements Lef
     /**
      * Gets a form from either a built or custom form config.
      *
-     * @param string $type
+     * @param string $type form type
      *
      * @return \Zend\Form\Form
      */
@@ -154,7 +154,7 @@ class UserManagementController extends AbstractInternalController implements Lef
      * Alters the form for add
      *
      * @param \Zend\Form\Form $form The form to alter
-     * @param array $data Form data
+     * @param array           $data Form data
      *
      * @return \Zend\Form\Form
      */
@@ -173,7 +173,7 @@ class UserManagementController extends AbstractInternalController implements Lef
      * Alters the form for edit
      *
      * @param \Zend\Form\Form $form The form to alter
-     * @param array $data Form data
+     * @param array           $data Form data
      *
      * @return \Zend\Form\Form
      */
@@ -229,7 +229,7 @@ class UserManagementController extends AbstractInternalController implements Lef
     /**
      * Presentation logic to process an application look up
      *
-     * @param $form
+     * @param \Zend\Form\Form $form the form
      *
      * @return \Zend\Form\Form
      */
@@ -275,7 +275,7 @@ class UserManagementController extends AbstractInternalController implements Lef
     /**
      * Fetches a list of Transport Managers by application Id
      *
-     * @param integer $applicationId
+     * @param int $applicationId application id
      *
      * @return array
      */
