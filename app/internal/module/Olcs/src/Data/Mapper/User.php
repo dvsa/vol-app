@@ -30,6 +30,7 @@ class User implements MapperInterface
             $formData['version'] = $data['version'];
 
             $formData['userLoginSecurity']['loginId'] = $data['loginId'];
+            $formData['userLoginSecurity']['lastLoggedInOn'] = $data['lastLoggedInOn'];
             $formData['userLoginSecurity']['accountDisabled'] = $data['accountDisabled'];
 
             if (!empty($data['disabledDate'])) {

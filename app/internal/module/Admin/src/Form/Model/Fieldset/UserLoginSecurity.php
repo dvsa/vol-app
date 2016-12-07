@@ -30,6 +30,14 @@ class UserLoginSecurity
     public $createdOn = null;
 
     /**
+     * @Form\Options({"label":"Last logged in on"})
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"lastLoginOn", "required": false})
+     * @Form\Type("Common\Form\Elements\Types\HtmlDateTime")
+     */
+    public $lastLoggedInOn = null;
+
+    /**
      * @Form\Type("Radio")
      * @Form\Options({
      *      "label": "Reset password / Unlock account",
