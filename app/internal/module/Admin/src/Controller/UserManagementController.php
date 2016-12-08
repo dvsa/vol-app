@@ -15,6 +15,9 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\User as Mapper;
 use Admin\Form\Model\Form\User as Form;
 use Zend\View\Model\ViewModel;
+use Common\RefData;
+use Zend\Form\Fieldset as FormFieldset;
+use Zend\Form\Element\Radio as RadioElement;
 
 /**
  * User Management Controller
@@ -125,7 +128,7 @@ class UserManagementController extends AbstractInternalController implements Lef
     /**
      * Gets a form from either a built or custom form config.
      *
-     * @param string $type
+     * @param string $type form type
      *
      * @return \Zend\Form\Form
      */
@@ -151,7 +154,7 @@ class UserManagementController extends AbstractInternalController implements Lef
      * Alters the form for add
      *
      * @param \Zend\Form\Form $form The form to alter
-     * @param array $data Form data
+     * @param array           $data Form data
      *
      * @return \Zend\Form\Form
      */
@@ -170,14 +173,20 @@ class UserManagementController extends AbstractInternalController implements Lef
      * Alters the form for edit
      *
      * @param \Zend\Form\Form $form The form to alter
-     * @param array $data Form data
+     * @param array           $data Form data
      *
      * @return \Zend\Form\Form
      */
     protected function alterFormForEdit($form, $data)
     {
+        /**
+         * @var FormFieldset $userLoginSecurity
+         * @var RadioElement $resetPwField
+         */
+        $userLoginSecurity = $form->get('userLoginSecurity');
+
         if (empty($data['userLoginSecurity']['disabledDate'])) {
-            $form->get('userLoginSecurity')->remove('disabledDate');
+            $userLoginSecurity->remove('disabledDate');
         }
 
         if (!empty($data['userType']['currentTransportManager'])
@@ -196,13 +205,31 @@ class UserManagementController extends AbstractInternalController implements Lef
             $form->get('userType')->remove('currentTransportManagerHtml');
         }
 
+        //password reset options
+        switch ($data['userType']['userType']) {
+            case RefData::USER_TYPE_INTERNAL:
+                //no reset option for internal user
+                $userLoginSecurity->remove('resetPassword');
+                break;
+            case RefData::USER_TYPE_PARTNER:
+            case RefData::USER_TYPE_LOCAL_AUTHORITY:
+                //for partners and local authorities, remove the post option
+                $resetPwField = $userLoginSecurity->get('resetPassword');
+                $valueOptions = $resetPwField->getValueOptions();
+                unset($valueOptions['post']);
+                $resetPwField->setValueOptions($valueOptions);
+                break;
+            default:
+                //transport manager and operator, we don't modify the form
+        }
+
         return $form;
     }
 
     /**
      * Presentation logic to process an application look up
      *
-     * @param $form
+     * @param \Zend\Form\Form $form the form
      *
      * @return \Zend\Form\Form
      */
@@ -248,7 +275,7 @@ class UserManagementController extends AbstractInternalController implements Lef
     /**
      * Fetches a list of Transport Managers by application Id
      *
-     * @param integer $applicationId
+     * @param int $applicationId application id
      *
      * @return array
      */
