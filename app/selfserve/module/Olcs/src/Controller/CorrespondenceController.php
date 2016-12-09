@@ -1,8 +1,5 @@
 <?php
 
-/**
- * CorrespondenceController.php
- */
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
@@ -34,41 +31,40 @@ class CorrespondenceController extends AbstractController
      */
     public function indexAction()
     {
-        $query = Correspondences::create(
-            [
-                'organisation' => $this->getCurrentOrganisationId()
-            ]
-        );
+        $params = [
+            'page' => $this->params()->fromQuery('page', 1),
+            'limit' => $this->params()->fromQuery('limit', 10),
+            'organisation' => $this->getCurrentOrganisationId(),
+            'query' => $this->params()->fromQuery(),
+        ];
 
-        $response = $this->handleQuery($query);
-        if (!$response->isOk()) {
-            if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            }
-
+        $response = $this->handleQuery(Correspondences::create($params));
+        if ($response === null || $response->isNotFound()) {
             return $this->notFoundAction();
         }
 
-        $correspondence = $response->getResult();
+        if ($response->isOk()) {
+            $docs = $response->getResult();
+        } else {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $docs = [];
+        }
 
         $table = $this->getServiceLocator()->get('Table')
-            ->buildTable(
-                'correspondence',
-                $this->formatTableData($correspondence)
-            );
+            ->prepareTable('correspondence', $this->formatTableData($docs), $params);
 
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('correspondence');
 
         $count = 0;
         array_walk(
-            $correspondence['results'],
+            $docs['results'],
             function ($record) use (&$count) {
-                $count = ($record['accessed'] === 'N' ? $count + 1 : $count);
+                $count += ($record['accessed'] === 'N' ? 1 : 0);
             }
         );
 
-        $this->populateTabCounts($correspondence['extra']['feeCount'], $count);
+        $this->populateTabCounts($docs['extra']['feeCount'], $count);
 
         return $view;
     }
@@ -125,22 +121,24 @@ class CorrespondenceController extends AbstractController
     /**
      * Format the correspondence data for displaying within the table.
      *
-     * @param array $correspondences Corresposdence data
+     * @param array $docs Corresposdence data
      *
      * @return array
      */
-    protected function formatTableData(array $correspondences = array())
+    protected function formatTableData(array $docs = [])
     {
-        return array_map(
+        $docs['results'] = array_map(
             function ($correspondence) {
                 return array(
                     'id' => $correspondence['id'],
                     'correspondence' => $correspondence,
                     'licence' => $correspondence['licence'],
-                    'date' => $correspondence['createdOn']
+                    'date' => $correspondence['createdOn'],
                 );
             },
-            $correspondences['results']
+            $docs['results']
         );
+
+        return $docs;
     }
 }
