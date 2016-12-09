@@ -30,8 +30,7 @@ class BusRegBrowseForm
      *     "label": "selfserve.search.busreg.browse.form.status.label",
      *     "empty_option": "All",
      *     "disable_inarray_validator": false,
-     *     "service_name": "Common\Service\Data\BusRegBrowseListDataService",
-     *     "context": "eventRegistrationStatus"
+     *     "category": "bus_reg_browse_status"
      * })
      * @Form\Attributes({"id":"status", "placeholder":"", "class":"long"})
      * @Form\Type("DynamicSelect")
