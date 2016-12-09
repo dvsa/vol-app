@@ -88,9 +88,6 @@ class TasksHome
     public $status = null;
 
     /**
-     * @Form\Attributes({
-     *      "value": "tsw_self_only",
-     * })
      * @Form\Options({
      *     "label": "documents.filter.show-tasks.title",
      *     "value_options": {
