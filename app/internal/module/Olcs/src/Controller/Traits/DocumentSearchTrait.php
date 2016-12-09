@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Traits;
 
+use Common\Service\Cqrs\Response;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Zend\Form\Element\Select;
@@ -32,7 +33,7 @@ trait DocumentSearchTrait
             'order' => 'DESC',
             'page' => 1,
             'limit' => 10,
-            'showDocs' => FilterOptions::SHOW_SELF_ONLY,
+            'showDocs' => FilterOptions::SHOW_ALL,
         ];
 
         $filters = array_merge(
@@ -119,6 +120,7 @@ trait DocumentSearchTrait
             $filters['documentSubCategory'] = [$filters['documentSubCategory']];
         }
 
+        /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->handleQuery(DocumentList::create($filters));
         if (!$response->isOk()) {
             throw new \Exception('Error retrieving document list');

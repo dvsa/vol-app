@@ -32,7 +32,7 @@ trait TaskSearchTrait
             'order' => 'DESC,ASC',
             'page' => 1,
             'limit' => 10,
-            'showTasks' => FilterOptions::SHOW_SELF_ONLY,
+            'showTasks' => FilterOptions::SHOW_ALL,
         ];
 
         $filters = array_merge(
@@ -106,6 +106,7 @@ trait TaskSearchTrait
      */
     protected function getTaskTable($filters = [], $noCreate = false)
     {
+        /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->handleQuery(TaskList::create($filters));
         $tasks = $response->getResult();
 
@@ -221,6 +222,7 @@ trait TaskSearchTrait
             $id = $this->params('task');
         }
 
+        /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->handleQuery(TaskDetails::create(['id' => $id]));
 
         return $response->getResult();
