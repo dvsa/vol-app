@@ -11,19 +11,24 @@ return array(
             'formName' => 'correspondence',
             'actions' => array()
         ),
+        'paginate' => [
+            'limit' => [
+                'default' => 10,
+                'options' => [10, 25, 50],
+            ],
+        ],
     ),
-    'attributes' => array(
-    ),
+    'attributes' => [],
     'columns' => array(
         array(
             'title' => 'dashboard-correspondence.table.column.title',
             'name' => 'correspondence',
-            'formatter' => 'AccessedCorrespondence'
+            'formatter' => 'AccessedCorrespondence',
         ),
         array(
             'title' => 'dashboard-correspondence.table.column.reference',
             'name' => 'licence',
-            'formatter' => 'LicenceNumberLink'
+            'formatter' => 'LicenceNumberLink',
         ),
     )
 );
