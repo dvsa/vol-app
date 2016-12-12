@@ -24,13 +24,11 @@ return array(
             'title' => 'dashboard-correspondence.table.column.title',
             'name' => 'correspondence',
             'formatter' => 'AccessedCorrespondence',
-            'sort' => 'correspondence->document->description',
         ),
         array(
             'title' => 'dashboard-correspondence.table.column.reference',
             'name' => 'licence',
             'formatter' => 'LicenceNumberLink',
-            'sort' => 'licence->licNo',
         ),
     )
 );

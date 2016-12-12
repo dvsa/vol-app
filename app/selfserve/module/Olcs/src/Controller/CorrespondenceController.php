@@ -3,12 +3,10 @@
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
-
-use Zend\View\Model\ViewModel;
-
+use Dvsa\Olcs\Transfer\Command\Correspondence\AccessCorrespondence;
 use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondence;
 use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondences;
-use Dvsa\Olcs\Transfer\Command\Correspondence\AccessCorrespondence;
+use Zend\View\Model\ViewModel;
 
 /**
  * Class CorrespondenceController
@@ -51,7 +49,7 @@ class CorrespondenceController extends AbstractController
         }
 
         $table = $this->getServiceLocator()->get('Table')
-            ->prepareTable('correspondence', $this->formatTableData($docs), $params);
+            ->buildTable('correspondence', $this->formatTableData($docs), $params);
 
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('correspondence');
@@ -73,7 +71,7 @@ class CorrespondenceController extends AbstractController
      * A gateway method for accessing a document with method sets the accessed
      * parameter on the correspondence record.
      *
-     * @return \Zend\Http\Response
+     * @return \Zend\Http\Response|ViewModel
      */
     public function accessCorrespondenceAction()
     {
