@@ -82,7 +82,7 @@ class DocumentSearchTraitTest extends MockeryTestCase
             'order' => 'DESC',
             'page' => 1,
             'limit' => 10,
-            'showDocs' => FilterOptions::SHOW_SELF_ONLY,
+            'showDocs' => FilterOptions::SHOW_ALL,
             'query' => 'unit_Query',
         ];
 
