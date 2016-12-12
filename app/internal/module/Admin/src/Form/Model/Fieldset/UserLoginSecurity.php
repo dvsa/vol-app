@@ -38,6 +38,14 @@ class UserLoginSecurity
     public $lastLoggedInOn = null;
 
     /**
+     * @Form\Options({"label":"Password last reset"})
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"passwordLastReset", "required": false})
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $passwordLastReset = null;
+
+    /**
      * @Form\Type("Radio")
      * @Form\Options({
      *      "label": "Reset password / Unlock account",

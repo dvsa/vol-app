@@ -47,6 +47,14 @@ class User implements MapperInterface
                 );
             }
 
+            if (!empty($data['latestPasswordResetEvent'])) {
+                $formData['userLoginSecurity']['passwordLastReset'] = sprintf(
+                    '%s on %s',
+                    $data['latestPasswordResetEvent']['eventData'],
+                    (new \DateTime($data['latestPasswordResetEvent']['eventDatetime']))->format(\DATETIMESEC_FORMAT)
+                );
+            }
+
             $formData['userType']['id'] = $data['id'];
             $formData['userType']['userType'] = $data['userType'];
 
