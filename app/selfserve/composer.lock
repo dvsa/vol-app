@@ -807,14 +807,14 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-autoload.git",
-                "reference": "eba5e292aa8a2835b576ce70aab8d4a25d7f76de"
+                "reference": "15f44011d645440a828bbc1eee4f64181f7e5f28"
             },
             "bin": [
                 "bin/autoload"
             ],
             "type": "library",
             "description": "OLCS optimised autoloader",
-            "time": "2016-10-04 09:48:47"
+            "time": "2016-12-14 10:30:26"
         },
         {
             "name": "olcs/olcs-auth",
@@ -1656,7 +1656,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-testhelpers.git",
-                "reference": "214055eeb70282fc3e845bf9effb7fa1b69be2eb"
+                "reference": "07b4fddcd07f53e8d75a2a8e3061e62790dd1a85"
             },
             "require": {
                 "php": ">=5.4"
@@ -1673,7 +1673,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2016-11-09 12:22:04"
+            "time": "2016-12-14 10:42:45"
         },
         {
             "name": "phpdocumentor/reflection-common",
