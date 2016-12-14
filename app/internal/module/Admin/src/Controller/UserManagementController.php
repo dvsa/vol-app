@@ -208,9 +208,6 @@ class UserManagementController extends AbstractInternalController implements Lef
         //password reset options
         switch ($data['userType']['userType']) {
             case RefData::USER_TYPE_INTERNAL:
-                //no reset option for internal user
-                $userLoginSecurity->remove('resetPassword');
-                break;
             case RefData::USER_TYPE_PARTNER:
             case RefData::USER_TYPE_LOCAL_AUTHORITY:
                 //for partners and local authorities, remove the post option
