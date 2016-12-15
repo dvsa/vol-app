@@ -10,6 +10,13 @@
         )
     );
 ?>
+
+<p id="top" class="actions-container">
+    <a class="action--tertiary" href="<?php echo $this->url('change-password'); ?>">
+        <?php echo $this->translate('my-details.change-password.label');?>
+    </a>
+</p>
+
 <div class="row">
   <div class="two-thirds">
     <?php echo $this->flashMessengerAll(); ?>
@@ -18,13 +25,4 @@
       echo $this->form($this->form);
     ?>
   </div>
-</div>
-<div class="row">
-    <div id="top" class="full-width">
-        <div class="actions-container">
-            <a class="action--tertiary" href="<?php echo $this->url('change-password'); ?>">
-                <?php echo $this->translate('my-details.change-password.label');?>
-            </a>
-        </div>
-    </div>
 </div>
