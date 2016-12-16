@@ -22,7 +22,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     /**
      * Table to use
      *
-     * @see Olcs\Controller\Traits\DocumentSearchTrait
+     * @see \Olcs\Controller\Traits\DocumentSearchTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -33,7 +33,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     /**
      * Route (prefix) for document action redirects
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentRoute()
@@ -44,7 +44,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     /**
      * Route params for document action redirects
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
@@ -55,7 +55,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     /**
      * Get view model for document action
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Zend\View\Model\ViewModel
      */
     protected function getDocumentView()
@@ -95,8 +95,8 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     /**
      * Get configured document form
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return \Zend\View\Model\ViewModel
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @return \Zend\Form\FormInterface
      */
     protected function getConfiguredDocumentForm()
     {
@@ -104,9 +104,8 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
 
         $form = $this->getDocumentForm($filters);
 
-        /** @var \Zend\Form\Element\Select $option */
-        $option = $form->get('showDocs');
-        $option->setValueOptions(
+        $this->updateSelectValueOptions(
+            $form->get('showDocs'),
             [
                 FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-case-only',
             ]

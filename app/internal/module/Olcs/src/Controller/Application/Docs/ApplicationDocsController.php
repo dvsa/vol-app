@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Application\Docs;
 
+use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Olcs\Controller\Application\ApplicationController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits;
@@ -20,7 +21,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
     /**
      * Table to use
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -31,7 +32,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
     /**
      * Route (prefix) for document action redirects
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentRoute()
@@ -42,7 +43,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
     /**
      * Route params for document action redirects
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
@@ -71,7 +72,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
     /**
      * Get view model for document action
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return ViewModel
      */
     protected function getDocumentView()
@@ -92,6 +93,15 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
     {
         $filters = $this->getDocumentFilters();
 
-        return $this->getDocumentForm($filters);
+        $form = $this->getDocumentForm($filters);
+
+        $this->updateSelectValueOptions(
+            $form->get('showDocs'),
+            [
+                FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-app-only',
+            ]
+        );
+
+        return $form;
     }
 }

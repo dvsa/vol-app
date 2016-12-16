@@ -2,8 +2,10 @@
 
 namespace Olcs\Controller\Traits;
 
+use Common\Service\Cqrs\Response;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
+use Zend\Form\Element\Select;
 
 /**
  * Document Search Trait
@@ -31,7 +33,7 @@ trait DocumentSearchTrait
             'order' => 'DESC',
             'page' => 1,
             'limit' => 10,
-            'showDocs' => FilterOptions::SHOW_SELF_ONLY,
+            'showDocs' => FilterOptions::SHOW_ALL,
         ];
 
         $filters = array_merge(
@@ -68,6 +70,7 @@ trait DocumentSearchTrait
      */
     protected function getDocumentForm($filters = [])
     {
+        /** @var \Zend\Form\FormInterface $form */
         $form = $this->getForm('DocumentsHome');
         $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
 
@@ -84,6 +87,15 @@ trait DocumentSearchTrait
         foreach ($selects as $name => $options) {
             $form->get($name)->setValueOptions($options);
         }
+
+        //  show document field
+        /** @var Select $option */
+        $option = $form->get('showDocs');
+        $option->setValueOptions(
+            [
+                FilterOptions::SHOW_ALL => 'documents.filter.option.all-docs',
+            ]
+        );
 
         // setting $this->enableCsrf = false won't sort this; we never POST
         $form->remove('csrf');
@@ -108,6 +120,7 @@ trait DocumentSearchTrait
             $filters['documentSubCategory'] = [$filters['documentSubCategory']];
         }
 
+        /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->handleQuery(DocumentList::create($filters));
         if (!$response->isOk()) {
             throw new \Exception('Error retrieving document list');
@@ -137,5 +150,25 @@ trait DocumentSearchTrait
             $action = $table->getVariable('action') . '?' . $query;
             $table->setVariable('action', $action);
         }
+    }
+
+    /**
+     * Add/Remove Select options
+     *
+     * @param Select $el      Target element
+     * @param array  $options Add/remove options (for remove value should be null)
+     *
+     * @return void
+     */
+    protected function updateSelectValueOptions(Select $el, array $options = [])
+    {
+        $el->setValueOptions(
+            array_filter(
+                $options + $el->getValueOptions(),
+                function ($arg) {
+                    return $arg !== null;
+                }
+            )
+        );
     }
 }

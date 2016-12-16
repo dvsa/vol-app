@@ -68,6 +68,13 @@ echo $this->render('partials/read-only/main',
 
     <ul class="submission-actions" style="width: 100%">
         <?php foreach ($submission['submissionActions'] as $sa): ?>
+            <?php
+            $createdBy = '';
+            if (isset($sa['createdBy']['contactDetails']['person'])) {
+                $createdBy = $sa['createdBy']['contactDetails']['person']['forename'] . ' ' .
+                    $sa['createdBy']['contactDetails']['person']['familyName'];
+            }
+            ?>
             <li class="submission-item">
 
                 <h4><?php echo $sa['isDecision'] == 'Y' ? 'Decision reason' : 'Recommendation'; ?>:
@@ -84,6 +91,7 @@ echo $this->render('partials/read-only/main',
 
                 <p><?php echo nl2br($sa['comment']); ?></p>
                 <p><strong>Legislation:</strong><br /><?php echo implode('<br />', array_map(function($item){return $item['sectionCode'] . ' - '. $item['description'];}, $sa['reasons'])); ?></p>
+                <p><b>Created by:</b><br /><?php echo $createdBy; ?></p>
                 <p><b>Created:</b><br /><?php echo $this->date(strtotime($sa['createdOn']), \DATETIME_FORMAT); ?></p>
             </li><!-- submission-item -->
         <?php endforeach; ?>

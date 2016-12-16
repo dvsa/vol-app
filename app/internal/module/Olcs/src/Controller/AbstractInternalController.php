@@ -637,7 +637,7 @@ abstract class AbstractInternalController extends AbstractActionController
             $itemParams = $paramProvider->provideParameters();
             $response = $this->handleQuery($itemDto::create($itemParams));
 
-            if ($response->isNotFound()) {
+            if (!$response instanceof Response || $response->isNotFound()) {
                 return $this->notFoundAction();
             }
 

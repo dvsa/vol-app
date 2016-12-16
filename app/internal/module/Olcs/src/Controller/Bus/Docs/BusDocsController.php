@@ -22,8 +22,8 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
     /**
      * Get configured document form
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
-     * @return \Zend\View\Model\ViewModel
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @return \Zend\Form\FormInterface
      */
     protected function getConfiguredDocumentForm()
     {
@@ -31,9 +31,8 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
 
         $form = $this->getDocumentForm($filters);
 
-        /** @var \Zend\Form\Element\Select $option */
-        $option = $form->get('showDocs');
-        $option->setValueOptions(
+        $this->updateSelectValueOptions(
+            $form->get('showDocs'),
             [
                 FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-reg-only',
             ]
@@ -45,7 +44,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
     /**
      * Table to use
      *
-     * @see Olcs\Controller\Traits\DocumentSearchTrait
+     * @see \Olcs\Controller\Traits\DocumentSearchTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -56,7 +55,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
     /**
      * Route (prefix) for document action redirects
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentRoute()
@@ -67,7 +66,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
     /**
      * Route params for document action redirects
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
@@ -96,7 +95,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
     /**
      * Get view model for document action
      *
-     * @see Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Zend\View\Model\ViewModel
      */
     protected function getDocumentView()

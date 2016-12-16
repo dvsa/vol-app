@@ -10,7 +10,7 @@ use Olcs\Controller\Traits;
 class OperatorProcessingTasksController extends OperatorController
 {
     use Traits\TaskActionTrait {
-        Traits\TaskActionTrait::getTaskForm as trait_getTaskForm;
+        Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
     }
 
     /**
@@ -58,7 +58,7 @@ class OperatorProcessingTasksController extends OperatorController
      */
     protected function getTaskForm(array $filters = [])
     {
-        return $this->trait_getTaskForm($filters)
+        return $this->traitGetTaskForm($filters)
             ->remove('showTasks');
     }
 }

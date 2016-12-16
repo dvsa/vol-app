@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Application\Processing;
 
+use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Olcs\Controller\Traits;
 
 /**
@@ -11,7 +12,9 @@ use Olcs\Controller\Traits;
  */
 class ApplicationProcessingTasksController extends AbstractApplicationProcessingController
 {
-    use Traits\TaskActionTrait;
+    use Traits\TaskActionTrait {
+            Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
+        }
 
     /**
      * @var string
@@ -21,7 +24,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
     /**
      * Get task action type
      *
-     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @see \Olcs\Controller\Traits\TaskActionTrait
      * @return string
      */
     protected function getTaskActionType()
@@ -32,7 +35,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
     /**
      * Get task action filters
      *
-     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @see \Olcs\Controller\Traits\TaskActionTrait
      * @return array
      */
     protected function getTaskActionFilters()
@@ -45,5 +48,26 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
             'assignedToUser' => '',
             'application' => $appId,
         ];
+    }
+
+    /**
+     * Create filter form
+     *
+     * @param array $filters Field values
+     *
+     * @return \Zend\Form\FormInterface
+     */
+    protected function getTaskForm(array $filters = [])
+    {
+        $form = $this->traitGetTaskForm($filters);
+
+        $this->updateSelectValueOptions(
+            $form->get('showTasks'),
+            [
+                FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-app-only',
+            ]
+        );
+
+        return $form;
     }
 }

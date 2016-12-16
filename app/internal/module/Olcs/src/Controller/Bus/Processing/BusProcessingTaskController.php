@@ -18,14 +18,14 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
 {
     use Traits\ProcessingControllerTrait,
         Traits\TaskActionTrait {
-            Traits\TaskActionTrait::getTaskForm as trait_getTaskForm;
+            Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
         }
 
     /**
      * Get task action type
      *
-     * @see Olcs\Controller\Traits\TaskActionTrait
-     * 
+     * @see \Olcs\Controller\Traits\TaskActionTrait
+     *
      * @return string
      */
     protected function getTaskActionType()
@@ -36,7 +36,7 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
     /**
      * Get task action filters
      *
-     * @see Olcs\Controller\Traits\TaskActionTrait
+     * @see \Olcs\Controller\Traits\TaskActionTrait
      *
      * @return array
      */
@@ -59,11 +59,11 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
      */
     protected function getTaskForm(array $filters = [])
     {
-        $form = $this->trait_getTaskForm($filters);
+        $form = $this->traitGetTaskForm($filters);
 
         /** @var \Zend\Form\Element\Select $option */
-        $option = $form->get('showTasks');
-        $option->setValueOptions(
+        $this->updateSelectValueOptions(
+            $form->get('showTasks'),
             [
                 FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-reg-only',
             ]
