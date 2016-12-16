@@ -30,21 +30,6 @@
     </ul>
   </div>
   <div class="one-third">
-    <aside class="sidebar" role="complementary">
-      <?php if (isset($this->shouldShowCreateVariation) && $this->shouldShowCreateVariation): ?>
-      <ul class="sidebar__actions">
-        <li>
-            <a href="<?php echo $this->url('lva-licence/variation', [], [], true); ?>" class="js-modal-ajax">
-                <?php echo $this->translate('licence.apply-to-change'); ?>
-            </a>
-        </li>
-        <li>
-            <a href="<?php echo $this->url('licence-print', [], [], true); ?>"
-                ><?php echo $this->translate('licence.print'); ?></a>
-        </li>
-      </ul>
-      <?php endif; ?>
-    </aside>
 
     <dl class="meta">
       <dt><?php echo $this->translate('selfserve-dashboard-target-start-date'); ?></dt>

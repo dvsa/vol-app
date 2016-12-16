@@ -8,25 +8,21 @@ echo $this->partial(
 ?>
 
 <div class="row">
-  
-  <div class="dashboard two-thirds">
-    
-    <?php echo $this->flashMessengerAll(); ?>
-    
-    <?php
-    
+
+  <div class="dashboard two-thirds js-body">
+      <?php
+      echo $this->flashMessengerAll();
+
       /* @var \Zend\View\Helper\Navigation\Menu $menu */
       $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'dashboard-licences-applications'))->menu();
       
       echo $menu->setMinDepth(0)->setMaxDepth(0)
-      ->setPartial('partials/dashboard-nav');
-    
-    ?>
-    
-    <?php if (isset($table)): ?>
-      <?php echo $table; ?>
-    <?php endif; ?>
-    
+      ->setPartial('partials/tabs-nav');
+
+      if (isset($table)):
+        echo $table;
+      endif;
+      ?>
   </div>
 
   <?php echo $this->partial('partials/dashboard-right-column'); ?>
