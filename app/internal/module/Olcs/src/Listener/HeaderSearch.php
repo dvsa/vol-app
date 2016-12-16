@@ -14,6 +14,7 @@ use \Common\Form\Annotation\CustomAnnotationBuilder;
 use Zend\Session\Container;
 use Common\Service\Data\Search\Search as SearchService;
 use Zend\Form\FormElementManager as FormElementManager;
+use Olcs\Form\Element\SearchOrderFieldset;
 
 /**
  * Class HeaderSearch
@@ -77,12 +78,19 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
         $index = $e->getRouteMatch()->getParam('index');
         if (isset($index)) {
             $this->getSearchService()->setIndex($index);
+
             // terms filters
             $fs = $this->getFormElementManager()->get('SearchFilterFieldset', ['index' => $index, 'name' => 'filter']);
             $searchFilterForm->add($fs);
+
             // date ranges
             $fs = $this->getFormElementManager()
                 ->get('SearchDateRangeFieldset', ['index' => $index, 'name' => 'dateRanges']);
+            $searchFilterForm->add($fs);
+
+            // order
+            $fs = $this->getFormElementManager()
+                ->get(SearchOrderFieldset::class, ['index' => $index, 'name' => 'sort']);
             $searchFilterForm->add($fs);
         }
 

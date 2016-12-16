@@ -96,6 +96,12 @@ class SearchController extends AbstractController implements LeftViewProvider
             $input->setRequired(false);
         }
 
+        // make all elements not required
+        foreach ($form->getInputFilter()->get('sort')->getInputs() as $input) {
+            /* @var $input \Zend\InputFilter\Input */
+            $input->setRequired(false);
+        }
+
         // if valid then generate results
         if ($form->isValid()) {
             $elasticSearch->configureNavigation();

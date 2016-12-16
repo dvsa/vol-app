@@ -6,6 +6,7 @@ use Common\Service\Data\Search\Search;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 use Olcs\Form\Element\SearchDateRangeFieldset;
+use Olcs\Form\Element\SearchOrderFieldset;
 use Olcs\Listener\HeaderSearch;
 use Zend\Mvc\MvcEvent;
 use \Common\Form\Annotation\CustomAnnotationBuilder;
@@ -50,7 +51,6 @@ class HeaderSearchTest extends TestCase
         $mockSearchService->shouldReceive('getFilters')->with([]);
         $this->sut->setSearchService($mockSearchService);
 
-
         $formElementManager = m::mock('\Zend\Form\FormElementManager');
 
         $sff = new SearchFilterFieldset;
@@ -67,6 +67,12 @@ class HeaderSearchTest extends TestCase
             ->with('SearchDateRangeFieldset', ['index' => $index, 'name' => 'dateRanges'])
             ->andReturn($srf);
 
+        $sof = new SearchOrderFieldset;
+        $sof->setName('sort');
+        $sof->setSearchService($mockSearchService);
+        $formElementManager->shouldReceive('get')
+            ->with(SearchOrderFieldset::class, ['index' => $index, 'name' => 'sort'])
+            ->andReturn($sof);
 
         $this->sut->setFormElementManager($formElementManager);
 
