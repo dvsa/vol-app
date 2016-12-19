@@ -13,6 +13,13 @@ class SearchOrderFieldsetFactory implements FactoryInterface
 {
     protected $options;
 
+    /**
+     * Construct
+     *
+     * @param array $options Options
+     *
+     * @return $this
+     */
     public function __construct($options)
     {
         $this->options = $options;
@@ -21,8 +28,9 @@ class SearchOrderFieldsetFactory implements FactoryInterface
     /**
      * Create service
      *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
+     * @param ServiceLocatorInterface $serviceLocator Service locator
+     *
+     * @return SearchOrderFieldset
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

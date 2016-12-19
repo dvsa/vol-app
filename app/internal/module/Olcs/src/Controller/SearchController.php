@@ -1,17 +1,9 @@
 <?php
 
-/**
- * Search controller
- * Search for operators and licences
- *
- * @author Mike Cooper <michael.cooper@valtech.co.uk>
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller;
 
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
 
 /**
  * Main search controller
@@ -29,6 +21,8 @@ class SearchController extends AbstractController implements LeftViewProvider
     /**
      * At first glance this seems a little unnecessary, but we need to intercept the post
      * and turn it into a get. This way the search URL contains the search params.
+     *
+     * @return \Zend\Http\Response
      */
     public function postAction()
     {
@@ -50,6 +44,11 @@ class SearchController extends AbstractController implements LeftViewProvider
         );
     }
 
+    /**
+     * Back action
+     *
+     * @return \Zend\Http\Response
+     */
     public function backAction()
     {
         $sd = $this->ElasticSearch()->getSearchData();
@@ -68,11 +67,21 @@ class SearchController extends AbstractController implements LeftViewProvider
         );
     }
 
+    /**
+     * Index action
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
         return $this->backAction();
     }
 
+    /**
+     * Search action
+     *
+     * @return ViewModel|\Zend\Http\Response
+     */
     public function searchAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -111,6 +120,11 @@ class SearchController extends AbstractController implements LeftViewProvider
         return $this->renderView($view, 'Search results');
     }
 
+    /**
+     * Reset action
+     *
+     * @return \Zend\Http\Response
+     */
     public function resetAction()
     {
         /** @var \Common\Controller\Plugin\ElasticSearch $elasticSearch */
@@ -128,6 +142,11 @@ class SearchController extends AbstractController implements LeftViewProvider
         );
     }
 
+    /**
+     * Get left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -138,6 +157,8 @@ class SearchController extends AbstractController implements LeftViewProvider
 
     /**
      * Remove Vehicle Section 26 marker
+     *
+     * @return ViewModel|\Zend\Http\Response
      */
     protected function vehicleremove26Action()
     {
@@ -169,6 +190,8 @@ class SearchController extends AbstractController implements LeftViewProvider
 
     /**
      * Set Vehicle Section 26 marker
+     *
+     * @return ViewModel|\Zend\Http\Response
      */
     protected function vehicleset26Action()
     {
@@ -201,7 +224,9 @@ class SearchController extends AbstractController implements LeftViewProvider
     /**
      * Process the search
      *
-     * @param array $data
+     * @param array $data Data
+     *
+     * @return \Zend\Http\Response
      */
     public function processSearch($data)
     {

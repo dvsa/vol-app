@@ -13,6 +13,11 @@ class SearchOrderFieldset extends Fieldset
 {
     use SearchAwareTrait;
 
+    /**
+     * Init
+     *
+     * @return void
+     */
     public function init()
     {
         $index = $this->getOption('index');
