@@ -100,7 +100,7 @@ class ViewController extends AbstractController
                 'pageTitle' => $title,
                 'pageSubtitle' => $subtitle,
                 'userType' => $this->getUserType(),
-                'searchResultsLink' => $this->generateSearchResultsLink()
+                'urlBackToSearch' => $this->generateSearchResultsLink()
             ]
         );
         $layout->setTemplate('layouts/entity-view');
