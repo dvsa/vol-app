@@ -1,17 +1,9 @@
 <?php
 
-/**
- * Search controller
- * Search for operators and licences
- *
- * @author Mike Cooper <michael.cooper@valtech.co.uk>
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller;
 
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
 
 /**
  * Main search controller
@@ -109,6 +101,12 @@ class SearchController extends AbstractController implements LeftViewProvider
 
         // make all elements not required
         foreach ($form->getInputFilter()->get('filter')->getInputs() as $input) {
+            /* @var $input \Zend\InputFilter\Input */
+            $input->setRequired(false);
+        }
+
+        // make all elements not required
+        foreach ($form->getInputFilter()->get('sort')->getInputs() as $input) {
             /* @var $input \Zend\InputFilter\Input */
             $input->setRequired(false);
         }

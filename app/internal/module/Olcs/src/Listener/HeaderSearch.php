@@ -2,18 +2,17 @@
 
 namespace Olcs\Listener;
 
-use Common\Service\FormAnnotationBuilderFactory;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
 use Zend\Mvc\MvcEvent;
-use Zend\View\Helper\Placeholder;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use \Common\Form\Annotation\CustomAnnotationBuilder;
 use Zend\Session\Container;
 use Common\Service\Data\Search\Search as SearchService;
 use Zend\Form\FormElementManager as FormElementManager;
+use Olcs\Form\Element\SearchOrderFieldset;
 
 /**
  * Class HeaderSearch
@@ -51,7 +50,7 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
      * Implementors may add an optional $priority argument; the EventManager
      * implementation will pass this to the aggregate.
      *
-     * @param EventManagerInterface $events
+     * @param EventManagerInterface $events Events
      *
      * @return void
      */
@@ -61,7 +60,11 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param MvcEvent $e
+     * onDispatch
+     *
+     * @param MvcEvent $e Event
+     *
+     * @return void
      */
     public function onDispatch(MvcEvent $e)
     {
@@ -77,12 +80,19 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
         $index = $e->getRouteMatch()->getParam('index');
         if (isset($index)) {
             $this->getSearchService()->setIndex($index);
+
             // terms filters
             $fs = $this->getFormElementManager()->get('SearchFilterFieldset', ['index' => $index, 'name' => 'filter']);
             $searchFilterForm->add($fs);
+
             // date ranges
             $fs = $this->getFormElementManager()
                 ->get('SearchDateRangeFieldset', ['index' => $index, 'name' => 'dateRanges']);
+            $searchFilterForm->add($fs);
+
+            // order
+            $fs = $this->getFormElementManager()
+                ->get(SearchOrderFieldset::class, ['index' => $index, 'name' => 'sort']);
             $searchFilterForm->add($fs);
         }
 
@@ -106,8 +116,9 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     /**
      * Create service
      *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
+     * @param ServiceLocatorInterface $serviceLocator Service locator
+     *
+     * @return HeaderSearch
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -122,7 +133,8 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     /**
      * Set ViewHelperManager
      *
-     * @param mixed $viewHelperManager
+     * @param mixed $viewHelperManager View helper manager
+     *
      * @return HeaderSearch
      */
     public function setViewHelperManager($viewHelperManager)
@@ -132,7 +144,8 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * GetViewHelperManager
+     * Get ViewHelperManager
+     *
      * @return mixed
      */
     public function getViewHelperManager()
@@ -143,7 +156,8 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     /**
      * Set FormAnnotationBuilder
      *
-     * @param \Common\Form\Annotation\CustomAnnotationBuilder $formAnnotationBuilder
+     * @param \Common\Form\Annotation\CustomAnnotationBuilder $formAnnotationBuilder Form annotation builder
+     *
      * @return HeaderSearch
      */
     public function setFormAnnotationBuilder(CustomAnnotationBuilder $formAnnotationBuilder)
@@ -154,6 +168,7 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * Get FormAnnotationBuilder
+     *
      * @return \Common\Service\FormAnnotationBuilderFactory
      */
     public function getFormAnnotationBuilder()
@@ -162,6 +177,8 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
+     * Get search service
+     *
      * @return SearchService
      */
     public function getSearchService()
@@ -170,7 +187,10 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param SearchService $searchService
+     * Set search service
+     *
+     * @param SearchService $searchService Search service
+     *
      * @return HeaderSearch
      */
     public function setSearchService(SearchService $searchService)
@@ -190,7 +210,10 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param FormElementManager $formElementManager
+     * Set form element manager
+     *
+     * @param FormElementManager $formElementManager Form element manager
+     *
      * @return HeaderSearch
      */
     public function setFormElementManager(FormElementManager $formElementManager)
