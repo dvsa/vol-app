@@ -30,6 +30,7 @@ return array(
         array(
             'title' => 'Email',
             'name' => 'emailAddress',
+            'sort' => 'emailAddress',
         ),
         array(
             'title' => '',
