@@ -3,7 +3,7 @@
 return [
     'application-name' => 'selfserve',
     'cqrs_client' => [
-        'adapter' => \Zend\Http\Client\Adapter\Curl::class,
+        'adapter' => \Common\Service\Cqrs\Adapter\Curl::class,
         'timeout' => 60,
     ],
 ];
