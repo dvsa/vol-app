@@ -57,9 +57,9 @@ class UndertakingsController extends AbstractUndertakingsController
     /**
      * Update review fieldset
      *
-     * @param array $applicationData application data
-     * @param \Zend\Form\Fieldset $fieldset fieldset
-     * @param \Common\Service\Helper\TranslationHelperService $translator
+     * @param array                                           $applicationData application data
+     * @param \Zend\Form\Fieldset                             $fieldset        fieldset
+     * @param \Common\Service\Helper\TranslationHelperService $translator      translator
      *
      * @return void
      */
@@ -98,8 +98,8 @@ class UndertakingsController extends AbstractUndertakingsController
     /**
      * Update declaration element
      *
-     * @param \Zend\Form\Fieldset $fieldset fieldset
-     * @param \Common\Service\Helper\TranslationHelperService $translator
+     * @param \Zend\Form\Fieldset                             $fieldset   fieldset
+     * @param \Common\Service\Helper\TranslationHelperService $translator translator
      *
      * @return void
      */
