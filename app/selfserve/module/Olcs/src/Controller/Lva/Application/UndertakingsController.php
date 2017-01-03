@@ -6,6 +6,7 @@ use Olcs\Controller\Lva\AbstractUndertakingsController;
 use Common\RefData;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Common\Service\Entity\LicenceEntityService as Licence;
+use Common\Form\Form;
 
 /**
  * External Application Undertakings Controller
@@ -34,22 +35,132 @@ class UndertakingsController extends AbstractUndertakingsController
     /**
      * Update form
      *
-     * @param \Common\Form\Form $form            form
-     * @param array             $applicationData application data
+     * @param Form  $form            form
+     * @param array $applicationData application data
      *
-     * @return void
+     * @return Form
      */
     protected function updateForm($form, $applicationData)
     {
-        parent::updateForm($form, $applicationData);
+        $fieldset = $form->get('declarationsAndUndertakings');
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
 
+        $this->updateReviewElement($applicationData, $fieldset, $translator);
+        $this->updateDeclarationElement($fieldset, $translator);
+        $this->updateInterimFieldset($form, $applicationData);
+        $this->updateSubmitButtons($form, $applicationData);
+        $this->updateFormBasedOnDisableSignatureSetting($form);
+
+        return $form;
+    }
+
+    /**
+     * Update review fieldset
+     *
+     * @param array                                           $applicationData application data
+     * @param \Zend\Form\Fieldset                             $fieldset        fieldset
+     * @param \Common\Service\Helper\TranslationHelperService $translator      translator
+     *
+     * @return void
+     */
+    protected function updateReviewElement($applicationData, $fieldset, $translator)
+    {
+        switch ($applicationData['licence']['organisation']['type']['id']) {
+            case RefData::ORG_TYPE_SOLE_TRADER:
+                $person = 'application.review-declarations.review.business-owner';
+                break;
+            case RefData::ORG_TYPE_OTHER:
+                $person = 'application.review-declarations.review.person';
+                break;
+            case RefData::ORG_TYPE_PARTNERSHIP:
+                $person = 'application.review-declarations.review.partner';
+                break;
+            case RefData::ORG_TYPE_REGISTERED_COMPANY:
+            case RefData::ORG_TYPE_LLP:
+                $person = 'application.review-declarations.review.director';
+                break;
+            default:
+                $person = 'application.review-declarations.review.director';
+                break;
+        }
+
+        $reviewElement = $fieldset->get('review');
+        $reviewText = $translator->translateReplace(
+            'markup-review-text',
+            [
+                $translator->translate($person),
+                $this->url()->fromRoute('lva-' . $this->lva . '/review', [], [], true)
+            ]
+        );
+        $reviewElement->setAttribute('value', $reviewText);
+    }
+
+    /**
+     * Update declaration element
+     *
+     * @param \Zend\Form\Fieldset                             $fieldset   fieldset
+     * @param \Common\Service\Helper\TranslationHelperService $translator translator
+     *
+     * @return void
+     */
+    protected function updateDeclarationElement($fieldset, $translator)
+    {
+        $fieldset->get('declaration')->setValue($this->data['declarations']);
+        $fieldset->get('declaration')->setAttribute('class', 'guidance');
+
+        $declarationDownload = $translator->translateReplace(
+            'undertakings_declaration_download',
+            [
+                $this->url()->fromRoute('lva-' . $this->lva . '/declaration', [], [], true),
+                $translator->translate('print-declaration-form'),
+            ]
+        );
+
+        $fieldset->get('declarationDownload')->setAttribute('value', $declarationDownload);
+    }
+
+    /**
+     * Update interim fieldset
+     *
+     * @param Form  $form            form
+     * @param array $applicationData application data
+     *
+     * @return void
+     */
+    protected function updateInterimFieldset($form, $applicationData)
+    {
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
 
         if ($goodsOrPsv !== Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'interim');
         }
+    }
 
-        $this->updateSubmitButtons($form, $applicationData);
+    /**
+     * Update form based on disable signature setting
+     *
+     * @param Form $form form
+     *
+     * @return void
+     */
+    protected function updateFormBasedOnDisableSignatureSetting($form)
+    {
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        if ($this->data['disableSignatures']) {
+            // remove options radio, sign button, checkbox, enable print sign and return fieldset
+            $formHelper->remove($form, 'declarationsAndUndertakings->signatureOptions');
+            $formHelper->remove($form, 'declarationsAndUndertakings->declarationConfirmation');
+            $formHelper->remove($form, 'form-actions->sign');
+        } else {
+            $formHelper->remove($form, 'declarationsAndUndertakings->disabledReview');
+            $data = (array) $this->getRequest()->getPost();
+            if (
+                isset($data['declarationsAndUndertakings']['signatureOptions'])
+                && $data['declarationsAndUndertakings']['signatureOptions'] === 'N'
+            ) {
+                $formHelper->remove($form, 'declarationsAndUndertakings->declarationConfirmation');
+            }
+        }
     }
 
     /**
