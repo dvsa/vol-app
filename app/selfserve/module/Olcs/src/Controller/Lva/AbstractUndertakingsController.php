@@ -33,12 +33,6 @@ abstract class AbstractUndertakingsController extends AbstractController
             return $this->goToOverview();
         }
 
-        if ($this->isButtonPressed('submitAndPay') || $this->isButtonPressed('submit')) {
-            $shouldCompleteSection = true;
-        } else {
-            $shouldCompleteSection = false;
-        }
-
         $request = $this->getRequest();
         $applicationData = $this->getUndertakingsData();
         $form = $this->updateForm($this->getForm(), $applicationData);
@@ -53,10 +47,15 @@ abstract class AbstractUndertakingsController extends AbstractController
             $data = (array) $request->getPost();
             $form->setData($data);
             if ($form->isValid()) {
+                if ($this->isButtonPressed('submitAndPay') || $this->isButtonPressed('submit')) {
+                    $shouldCompleteSection = true;
+                } else {
+                    $shouldCompleteSection = false;
+                }
                 $response = $this->save($form->getData(), $shouldCompleteSection);
                 if ($response->isOk()) {
                     $this->completeSection('undertakings');
-                    $this->goToNextStep();
+                    return $this->goToNextStep();
                 }
             } else {
                 // validation failed, we need to use the application data
@@ -84,7 +83,7 @@ abstract class AbstractUndertakingsController extends AbstractController
      *
      * @return \Common\Service\Cqrs\Response
      */
-    protected function save($formData, $shouldCompleteSection = true)
+    protected function save($formData, $shouldCompleteSection = false)
     {
         $dto = $this->createUpdateDeclarationDto($formData, $shouldCompleteSection);
 
@@ -109,14 +108,13 @@ abstract class AbstractUndertakingsController extends AbstractController
     {
         if ($this->isButtonPressed('submitAndPay') || $this->isButtonPressed('submit')) {
             // section completed
-            $this->redirect()->toRoute(
+            return $this->redirect()->toRoute(
                 'lva-'.$this->lva . '/pay-and-submit',
                 [$this->getIdentifierIndex() => $this->getIdentifier(), 'redirect-back' => 'undertakings'],
                 [],
                 true
             );
-        }
-        if ($this->isButtonPressed('sign')) {
+        } elseif ($this->isButtonPressed('sign')) {
             // section not yet completed
             return $this->redirect()->toUrl('http://google.co.uk');
         }
