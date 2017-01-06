@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c6cbaae9703154489ddf37a6a1448402",
-    "content-hash": "5d59bc45987ac208936a366986acc6ac",
+    "hash": "51b32296c08c951d8b6543985d232f9a",
+    "content-hash": "21908c72b501d4da782c3d4230627ebf",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -157,7 +157,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-collections-6c1e4eef75f310ea1b3e30945e9f06e652128b8a-zip-02a8e4.tar",
                 "reference": "6c1e4eef75f310ea1b3e30945e9f06e652128b8a",
-                "shasum": "7aaa3342e855c251897767bdd34dbd91d7201064"
+                "shasum": "45b95f15a200426fb13ed01dcdaf4b76e3383d29"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -296,7 +296,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-dbal-9f8c05cd5225a320d56d4bfdb4772f10d045a0c9-zip-0be004.tar",
                 "reference": "9f8c05cd5225a320d56d4bfdb4772f10d045a0c9",
-                "shasum": "8fe64efe24847b7284ddab77039e6217bbd3bff7"
+                "shasum": "d7e0a21f754b591740173e436a32805e31cd2712"
             },
             "require": {
                 "doctrine/common": ">=2.4,<2.7-dev",
@@ -367,7 +367,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-doctrine-module-8684c0bbee97d2d1477a9ac802e8b9df307671df-zip-799ad0.tar",
                 "reference": "8684c0bbee97d2d1477a9ac802e8b9df307671df",
-                "shasum": "7002625927192670efdcdaa997096ebe10900a71"
+                "shasum": "f4b359161db0ae5e58ae1ecd0473fac559c8c7fe"
             },
             "require": {
                 "doctrine/cache": "~1.5",
@@ -445,7 +445,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-doctrine-orm-module-847db36f0f7ef8d940414e433e8b241aa601a6a7-zip-01eccf.tar",
                 "reference": "847db36f0f7ef8d940414e433e8b241aa601a6a7",
-                "shasum": "f574021d9b233477ad533da5627629267d8ec305"
+                "shasum": "a0c70cceea96a8783154ff5bc54f5d7da0bf2aef"
             },
             "require": {
                 "doctrine/dbal": ">=2.4,<2.7",
@@ -523,7 +523,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-inflector-90b2128806bfde671b6952ab8bea493942c1fdae-zip-a91357.tar",
                 "reference": "90b2128806bfde671b6952ab8bea493942c1fdae",
-                "shasum": "954612837de376b3a60620469b25c08ede5e05d3"
+                "shasum": "36afb41eb4ca5dac80d06a31ebd853f521ac92f4"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -590,7 +590,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-instantiator-8e884e78f9f0eb1329e445619e04456e64d8051d-zip-681b88.tar",
                 "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
-                "shasum": "28a9e175080a0f3e1ebc896662453e66acc5d1c4"
+                "shasum": "cf5e99553fa1eaf68a0b8fd419a5a9a6788f6c14"
             },
             "require": {
                 "php": ">=5.3,<8.0-DEV"
@@ -644,7 +644,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-lexer-83893c552fd2045dd78aef794c31e694c37c0b8c-zip-53c158.tar",
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "shasum": "276abea3cde6334f51d91a84ebf97aedcb2ef950"
+                "shasum": "18b43deed479b7939e25cc21789b44020b28a10f"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -764,11 +764,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/4.0.11",
+            "version": "dev-release/4.0.11.3",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "17e4304cd66e8142cb900ed139cc1ea2f0e86a3d"
+                "reference": "2e8233dbdea64fbd6e65aba109d7f949ca515cac"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -799,7 +799,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2016-12-12 10:22:22"
+            "time": "2017-01-06 16:30:59"
         },
         {
             "name": "olcs/autoload",
@@ -807,14 +807,14 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-autoload.git",
-                "reference": "eba5e292aa8a2835b576ce70aab8d4a25d7f76de"
+                "reference": "15f44011d645440a828bbc1eee4f64181f7e5f28"
             },
             "bin": [
                 "bin/autoload"
             ],
             "type": "library",
             "description": "OLCS optimised autoloader",
-            "time": "2016-10-04 09:48:47"
+            "time": "2016-12-14 10:30:26"
         },
         {
             "name": "olcs/olcs-auth",
@@ -1107,7 +1107,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-filesystem-823c035b1a5c13a4924e324d016eb07e70f94735-zip-9c1b69.tar",
                 "reference": "823c035b1a5c13a4924e324d016eb07e70f94735",
-                "shasum": "59f3f924e0707faceaafbcfb74ec87e425397dc4"
+                "shasum": "539d153f2b1aa605a3ac89ec6c5e8b25b867e0db"
             },
             "require": {
                 "php": ">=5.3.3"
@@ -1215,7 +1215,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zendframework-zendframework-32858f883fffb5eef9f610b538ed026f6033b6de-zip-061607.tar",
                 "reference": "32858f883fffb5eef9f610b538ed026f6033b6de",
-                "shasum": "07e14b09b1cb9c9bdb4b42e188aa4bfbbbf84911"
+                "shasum": "5f9e93fb16d0536b630c32aa61ac10b8ba859a5c"
             },
             "require": {
                 "php": ">=5.3.23",
@@ -1333,7 +1333,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zendframework-zendxml-7b64507bc35d841c9c5802d67f6f87ef8e1a58c9-zip-41dd75.tar",
                 "reference": "7b64507bc35d841c9c5802d67f6f87ef8e1a58c9",
-                "shasum": "31d2d54fa03b09cbd01a95dfe6c93330808718f5"
+                "shasum": "5fb5d1677f587dd78f9b63fb4ddcb1793545971c"
             },
             "require": {
                 "php": "^5.3.3 || ^7.0"
@@ -1378,7 +1378,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zf-commons-zfc-rbac-42f466656ad9730025a6bbbfd4144ac2f3abb64c-zip-fcc7d7.tar",
                 "reference": "42f466656ad9730025a6bbbfd4144ac2f3abb64c",
-                "shasum": "787280f9044b9b8ccd29bacf02db0d9915ddbd3b"
+                "shasum": "d773441c43af84c131611f78dee3032410c4dc76"
             },
             "require": {
                 "php": ">=5.4",
@@ -1454,7 +1454,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zfr-rbac-493711bfc2a637fd7c6f23b71b7b55a621c35d9d-zip-85e76c.tar",
                 "reference": "493711bfc2a637fd7c6f23b71b7b55a621c35d9d",
-                "shasum": "a9e1f77e175a2824acaa7c30e9662f8c65429a58"
+                "shasum": "0e4ba62f47c21d1a3559f72dbdfdef262fd78b05"
             },
             "require": {
                 "php": ">=5.4"
@@ -1506,7 +1506,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/hamcrest-hamcrest-php-b37020aa976fa52d3de9aa904aa2522dc518f79c-zip-2bc6c0.tar",
                 "reference": "b37020aa976fa52d3de9aa904aa2522dc518f79c",
-                "shasum": "8aff7f465506eb417f758c2ae887381d9a431a50"
+                "shasum": "c3e66895d7ec4bb63e10b70b6120fe1951a1231e"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -1551,7 +1551,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/mikey179-vfsstream-0247f57b2245e8ad2e689d7cee754b45fbabd592-zip-e4d067.tar",
                 "reference": "0247f57b2245e8ad2e689d7cee754b45fbabd592",
-                "shasum": "65558232ba88757896748aa1f6b46781832549d9"
+                "shasum": "fe3f13635af29eef3f381be4df19e7abcdfbd2bb"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1656,7 +1656,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-testhelpers.git",
-                "reference": "214055eeb70282fc3e845bf9effb7fa1b69be2eb"
+                "reference": "07b4fddcd07f53e8d75a2a8e3061e62790dd1a85"
             },
             "require": {
                 "php": ">=5.4"
@@ -1673,7 +1673,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2016-11-09 12:22:04"
+            "time": "2016-12-14 10:42:45"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -1687,7 +1687,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpdocumentor-reflection-common-144c307535e82c8fdcaacbcfc1d6d8eeb896687c-zip-c3be2d.tar",
                 "reference": "144c307535e82c8fdcaacbcfc1d6d8eeb896687c",
-                "shasum": "65ee02adcb2f17c91ea0cec4eb18523503956c42"
+                "shasum": "22127f65575291ff4649a6b5d52b9d05ab080e19"
             },
             "require": {
                 "php": ">=5.5"
@@ -1741,7 +1741,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpdocumentor-reflection-docblock-8331b5efe816ae05461b7ca1e721c01b46bafb3e-zip-319752.tar",
                 "reference": "8331b5efe816ae05461b7ca1e721c01b46bafb3e",
-                "shasum": "ceda327315b2bb35c7f71b9fd952a50a4c45df08"
+                "shasum": "4c0c34bbf5d29ac1b4695e46d9735f63e1238553"
             },
             "require": {
                 "php": ">=5.5",
@@ -1895,7 +1895,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpunit-php-code-coverage-eabf68b476ac7d0f73793aada060f1c1a9bf8979-zip-36457d.tar",
                 "reference": "eabf68b476ac7d0f73793aada060f1c1a9bf8979",
-                "shasum": "0ce21c5ecaa3413a24bb3b5abf8dca4403a751d9"
+                "shasum": "5aaa6ef5ada48f34c51bd8555a95bb7693972486"
             },
             "require": {
                 "php": ">=5.3.3",
@@ -2004,7 +2004,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpunit-php-text-template-31f8b717e51d9a2afca6c9f046f5d69fc27c8686-zip-c6bcbd.tar",
                 "reference": "31f8b717e51d9a2afca6c9f046f5d69fc27c8686",
-                "shasum": "8407c40cdf420d39abf59ed6f234a945c74ef0a4"
+                "shasum": "fe021fc7cd878081e202335219f6abd6a2595e78"
             },
             "require": {
                 "php": ">=5.3.3"
@@ -2045,7 +2045,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpunit-php-timer-38e9124049cf1a164f1e4537caf19c99bf1eb260-zip-cb2ac7.tar",
                 "reference": "38e9124049cf1a164f1e4537caf19c99bf1eb260",
-                "shasum": "3ccff7b602fbfb0de6b9828d03329ffabe859fe2"
+                "shasum": "84e88673c3b00dd98a4fcbd3f2b29263c6289fbd"
             },
             "require": {
                 "php": ">=5.3.3"
@@ -2210,7 +2210,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpunit-phpunit-mock-objects-ac8e7a3db35738d56ee9a76e78a4e03d97628983-zip-83ccd8.tar",
                 "reference": "ac8e7a3db35738d56ee9a76e78a4e03d97628983",
-                "shasum": "7794b0e4c7d5e76428b8cac7ec4d3f84947dc126"
+                "shasum": "ff03538a37dbcdbd891d3f889d202140faac25fb"
             },
             "require": {
                 "doctrine/instantiator": "^1.0.2",
@@ -2330,7 +2330,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-diff-13edfd8706462032c2f52b4b862974dd46b71c9e-zip-13c115.tar",
                 "reference": "13edfd8706462032c2f52b4b862974dd46b71c9e",
-                "shasum": "b325bd955b22ad74ac6175f82094589e8f484f89"
+                "shasum": "8c1f4b236f4afba18ede11a0adbea00100e1d516"
             },
             "require": {
                 "php": ">=5.3.3"
@@ -2382,7 +2382,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-environment-be2c607e43ce4c89ecd60e75c6a85c126e754aea-zip-edab34.tar",
                 "reference": "be2c607e43ce4c89ecd60e75c6a85c126e754aea",
-                "shasum": "5e5ecf5157502b1b69e2afd141a863e889cd4c97"
+                "shasum": "b8efb9b586f32cf6552259fe61dae70613801824"
             },
             "require": {
                 "php": "^5.3.3 || ^7.0"
@@ -2432,7 +2432,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-exporter-42c4c2eec485ee3e159ec9884f95b431287edde4-zip-3c7575.tar",
                 "reference": "42c4c2eec485ee3e159ec9884f95b431287edde4",
-                "shasum": "7f2491801a145e2087cbbcbcd4813c37347af473"
+                "shasum": "292ac6f8cc9885cc714606f7d32421de75f4a261"
             },
             "require": {
                 "php": ">=5.3.3",
@@ -2499,7 +2499,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-global-state-bc37d50fea7d017d3d340f230811c9f1d7280af4-zip-c4abec.tar",
                 "reference": "bc37d50fea7d017d3d340f230811c9f1d7280af4",
-                "shasum": "f45b48372a8b140db4fbb77b83268bf99a8932c2"
+                "shasum": "b3f47390f9f8739d9471060e35f16b7df53320ba"
             },
             "require": {
                 "php": ">=5.3.3"
@@ -2550,7 +2550,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-recursion-context-913401df809e99e4f47b27cdd781f4a258d58791-zip-205e4a.tar",
                 "reference": "913401df809e99e4f47b27cdd781f4a258d58791",
-                "shasum": "4b5049d1ef8f30c95bc909bc29a76ceedef1996f"
+                "shasum": "19c6a1765e24e05269f3b06a27138a85b26293ee"
             },
             "require": {
                 "php": ">=5.3.3"
@@ -2603,7 +2603,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-version-58b3a85e7999757d6ad81c787a1fbf5ff6c628c6-zip-8093ed.tar",
                 "reference": "58b3a85e7999757d6ad81c787a1fbf5ff6c628c6",
-                "shasum": "a05e7e10c86df15d309b8d4546b83a8883ede3c9"
+                "shasum": "6bb455c2af2a29475e618ed3e04696cdc5cb2ff0"
             },
             "type": "library",
             "autoload": {
