@@ -240,7 +240,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         $form = $this->alterEditForm(
             $this->getForm('TransportManagerApplicationOrLicenceFull'),
-            $tmAppData['application']['id']
+            $tmAppData['application']
         );
 
         $processed = $this->processFiles(
@@ -585,12 +585,18 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Alter edit form
      *
-     * @param \Zend\Form\FormInterface $form
+     * @param \Zend\Form\FormInterface $form        Form
+     * @param array                    $application Array of application data
+     *
      * @return \Zend\Form\Form
      */
-    protected function alterEditForm(\Zend\Form\FormInterface $form, $appId = null)
+    protected function alterEditForm(\Zend\Form\FormInterface $form, $application = [])
     {
         $action = $this->getFromRoute('action');
+
+        // Add in the NI translations. Eg for form element labels
+        $niTranslation = $this->getServiceLocator()->get('Utils\NiTextTranslation');
+        $niTranslation->setLocaleForNiFlag($application['niFlag']);
 
         if ($action === 'edit-tm-licence') {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->tmApplicationStatus');
@@ -601,7 +607,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         } else {
             $params = [
                 'type'       => 'application',
-                'identifier' => $appId
+                'identifier' => $application['id'],
             ];
         }
 
