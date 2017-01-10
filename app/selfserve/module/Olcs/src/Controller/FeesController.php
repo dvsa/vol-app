@@ -93,7 +93,8 @@ class FeesController extends AbstractController
 
         /* @var $form \Common\Form\Form */
         $form = $this->getForm();
-        $this->setupSelectStoredCards($form);
+        $firstFee = reset($fees);
+        $this->setupSelectStoredCards($form, $firstFee['feeType']['isNi']);
 
         if (count($fees) > 1) {
             $table = $this->getServiceLocator()->get('Table')

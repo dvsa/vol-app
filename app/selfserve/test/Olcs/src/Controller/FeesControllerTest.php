@@ -322,7 +322,8 @@ class FeesControllerTest extends MockeryTestCase
                 'feeType' => [
                     'feeType' => [
                         'id' => 'CONT'
-                    ]
+                    ],
+                    'isNi' => 'Y'
                 ]
             ],
         ];
@@ -429,7 +430,8 @@ class FeesControllerTest extends MockeryTestCase
                 'feeType' => [
                     'feeType' => [
                         'id' => 'CONT'
-                    ]
+                    ],
+                    'isNi' => 'Y'
                 ]
             ],
         ];
@@ -483,7 +485,7 @@ class FeesControllerTest extends MockeryTestCase
             ->andReturn(true)
             ->shouldReceive('getResult')
             ->andReturn(
-                ['outstandingFees' => $outstandingFees,'disableCardPayments' => true]
+                ['outstandingFees' => $outstandingFees, 'disableCardPayments' => true]
             );
 
         $this->sut
@@ -532,7 +534,8 @@ class FeesControllerTest extends MockeryTestCase
                 'feeType' => [
                     'feeType' => [
                         'id' => 'APP'
-                    ]
+                    ],
+                    'isNi' => 'Y'
                 ]
             ],
             [
@@ -545,7 +548,8 @@ class FeesControllerTest extends MockeryTestCase
                 'feeType' => [
                     'feeType' => [
                         'id' => 'APP'
-                    ]
+                    ],
+                    'isNi' => 'Y'
                 ]
             ],
         ];

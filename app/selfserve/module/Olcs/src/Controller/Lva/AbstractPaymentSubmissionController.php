@@ -245,7 +245,8 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
         /* @var $form \Common\Form\Form */
         $form = $this->getServiceLocator()->get('Helper\Form')->createForm('FeePayment');
-        $this->setupSelectStoredCards($form);
+        $firstFee = reset($fees);
+        $this->setupSelectStoredCards($form, $firstFee['feeType']['isNi']);
 
         return $this->getStoredCardsView($fees, $form);
     }
