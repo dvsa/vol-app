@@ -822,7 +822,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "b67ba39534279d2b670f09cf113166591dfab6d3"
+                "reference": "7c3f8e61b2c42d11a535d6be674934898328cb61"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -841,7 +841,7 @@
                 }
             },
             "description": "OLCS Authentication",
-            "time": "2016-11-23 16:20:23"
+            "time": "2017-01-10 11:08:08"
         },
         {
             "name": "olcs/olcs-logging",
