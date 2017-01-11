@@ -38,6 +38,7 @@ class UserTest extends MockeryTestCase
                     'loginId' => 'testuser',
                     'createdOn' => '2012-06-01 17:11:12',
                     'lastLoggedInOn' => '2016-12-06T16:12:46+0000',
+                    'lockedOn' => '2016-10-01T10:11:46+0000',
                     'latestPasswordResetEvent' => [
                         'eventData' => 'By email',
                         'eventDatetime' => '2016-12-09 14:13:36',
@@ -93,6 +94,7 @@ class UserTest extends MockeryTestCase
                         'passwordLastReset' => 'By email on 09/12/2016 14:13:36',
                         'accountDisabled' => 'Y',
                         'disabledDate' => '07/06/2015 17:11:12',
+                        'locked' => 'Yes on 01/10/2016 10:11:46',
                     ],
                     'userType' => [
                         'id' => 987,
@@ -173,6 +175,7 @@ class UserTest extends MockeryTestCase
                         'lastLoggedInOn' => null,
                         'loginId' => 'testuser',
                         'accountDisabled' => 'Y',
+                        'locked' => 'No',
                     ],
                     'userType' => [
                         'id' => 987,
@@ -242,6 +245,7 @@ class UserTest extends MockeryTestCase
                         'createdOn' => '01/06/2012 17:11:12',
                         'lastLoggedInOn' => null,
                         'accountDisabled' => 'Y',
+                        'locked' => 'No',
                     ],
                     'userType' => [
                         'id' => 987,
@@ -310,6 +314,7 @@ class UserTest extends MockeryTestCase
                         'createdOn' => '01/06/2012 17:11:12',
                         'lastLoggedInOn' => null,
                         'accountDisabled' => 'Y',
+                        'locked' => 'No',
                     ],
                     'userType' => [
                         'id' => 987,

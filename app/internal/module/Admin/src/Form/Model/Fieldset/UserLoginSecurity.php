@@ -38,6 +38,14 @@ class UserLoginSecurity
     public $lastLoggedInOn = null;
 
     /**
+     * @Form\Options({"label":"Account locked"})
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"locked", "required": false})
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $locked = null;
+
+    /**
      * @Form\Options({"label":"Password last reset"})
      * @Form\Required(false)
      * @Form\Attributes({"id":"passwordLastReset", "required": false})

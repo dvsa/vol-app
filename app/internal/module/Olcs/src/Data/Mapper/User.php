@@ -47,6 +47,14 @@ class User implements MapperInterface
                 );
             }
 
+            $formData['userLoginSecurity']['locked']
+                = !empty($data['lockedOn'])
+                    ? sprintf(
+                        'Yes on %s',
+                        (new \DateTime($data['lockedOn']))->format(\DATETIMESEC_FORMAT)
+                    )
+                    : 'No';
+
             if (!empty($data['latestPasswordResetEvent'])) {
                 $formData['userLoginSecurity']['passwordLastReset'] = sprintf(
                     '%s on %s',
