@@ -426,16 +426,6 @@ return [
                                                         ],
                                                         'may_terminate' => true,
                                                     ],
-                                                    'adjust' => [
-                                                        'type' => 'segment',
-                                                        'options' => [
-                                                            'route' => 'adjust[/]',
-                                                            'defaults' => [
-                                                                'action' => 'adjustTransaction',
-                                                            ]
-                                                        ],
-                                                        'may_terminate' => true,
-                                                    ],
                                                 ],
                                             ],
                                         ],

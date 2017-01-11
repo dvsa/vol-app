@@ -50,18 +50,6 @@ $feeActionRoute = [
                     ],
                     'may_terminate' => true,
                 ],
-                /* OLCS-11825
-                'adjust' => [
-                    'type' => 'segment',
-                    'options' => [
-                        'route' => 'adjust[/]',
-                        'defaults' => [
-                            'action' => 'adjustTransaction',
-                        ]
-                    ],
-                    'may_terminate' => true,
-                ],
-                */
             ],
         ],
     ],
