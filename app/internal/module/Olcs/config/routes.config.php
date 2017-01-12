@@ -50,18 +50,6 @@ $feeActionRoute = [
                     ],
                     'may_terminate' => true,
                 ],
-                /* OLCS-11825
-                'adjust' => [
-                    'type' => 'segment',
-                    'options' => [
-                        'route' => 'adjust[/]',
-                        'defaults' => [
-                            'action' => 'adjustTransaction',
-                        ]
-                    ],
-                    'may_terminate' => true,
-                ],
-                */
             ],
         ],
     ],
@@ -108,7 +96,7 @@ $feePrintReceiptRoute = [
     'options' => [
         'route' => 'print-receipt/:reference[/]',
         'constraints' => [
-            'reference' => 'OLCS-[0-9A-F\-]+',
+            'reference' => '[0-9A-Za-z]+-[0-9A-F\-]+',
         ],
         'defaults' => [
             'action' => 'print',
