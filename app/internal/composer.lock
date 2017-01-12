@@ -812,7 +812,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "c1a6a0c8d80b63534b2b564c08cf77caecbbde93"
+                "reference": "fea00211909177044d13c0e5a659053914952a37"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -843,7 +843,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2017-01-11 16:44:37"
+            "time": "2017-01-12 12:05:17"
         },
         {
             "name": "olcs/autoload",
@@ -866,7 +866,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "7c3f8e61b2c42d11a535d6be674934898328cb61"
+                "reference": "4dc0074904c89c63f6e606d6e3383c24d4e6742c"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -885,7 +885,7 @@
                 }
             },
             "description": "OLCS Authentication",
-            "time": "2017-01-10 11:08:08"
+            "time": "2017-01-12 11:46:24"
         },
         {
             "name": "olcs/olcs-logging",
