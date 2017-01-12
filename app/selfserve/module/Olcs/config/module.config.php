@@ -265,7 +265,7 @@ $routes = array(
                 'options' => array(
                     'route' => 'receipt/:reference[/:action][/]',
                     'constraints' => array(
-                        'reference' => '(OLCS|WAIVE|OLNI)-[0-9A-F\-]+',
+                        'reference' => '[0-9A-Za-z]+-[0-9A-F\-]+',
                     ),
                     'defaults' => array(
                         'action' => 'receipt',
@@ -439,7 +439,7 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
                     'action' => 'index'
                 ),
                 'constraints' => array(
-                    'storedCardReference' => '(OLCS|OLNI)-[0-9A-F\-]+',
+                    'storedCardReference' => '[0-9A-Za-z]+-[0-9A-F\-]+',
                 ),
             )
         ),
@@ -458,7 +458,7 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'summary[/:reference][/]',
                 'constraints' => array(
-                    'reference' => '(OLCS|OLNI)-[0-9A-F\-]+',
+                    'reference' => '[0-9A-Za-z]+-[0-9A-F\-]+',
                 ),
                 'defaults' => array(
                     'controller' => 'LvaApplication/Summary',
@@ -528,7 +528,7 @@ $configRoutes['lva-variation']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'summary[/:reference][/]',
                 'constraints' => array(
-                    'reference' => '(OLCS|OLNI)-[0-9A-F\-]+',
+                    'reference' => '[0-9A-Za-z]+-[0-9A-F\-]+',
                 ),
                 'defaults' => array(
                     'controller' => 'LvaVariation/Summary',
@@ -559,7 +559,7 @@ $configRoutes['lva-variation']['child_routes'] = array_merge(
                     'action' => 'index'
                 ),
                 'constraints' => array(
-                    'storedCardReference' => '(OLCS|OLNI)-[0-9A-F\-]+',
+                    'storedCardReference' => '[0-9A-Za-z]+-[0-9A-F\-]+',
                 ),
             )
         ),
