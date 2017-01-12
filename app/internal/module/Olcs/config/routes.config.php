@@ -96,7 +96,7 @@ $feePrintReceiptRoute = [
     'options' => [
         'route' => 'print-receipt/:reference[/]',
         'constraints' => [
-            'reference' => '(OLCS|OLNI)-[0-9A-F\-]+',
+            'reference' => '[0-9A-Za-z]+-[0-9A-F\-]+',
         ],
         'defaults' => [
             'action' => 'print',
