@@ -94,6 +94,11 @@ return [
         //'cliCommand' => 'clamscan %s',
     ],
 
+    // Document service
+    'document_share' => [
+        'max_upload_size' => '80MB',
+    ],
+
     // Show extra debug info in flash messages
     'debug' => [
         'showApiMessages' => false
