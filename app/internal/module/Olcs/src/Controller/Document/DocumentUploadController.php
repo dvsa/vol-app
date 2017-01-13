@@ -5,6 +5,7 @@ namespace Olcs\Controller\Document;
 use Common\Util\FileContent;
 use Dvsa\Olcs\Transfer\Command\Document\Upload;
 use Zend\Form\Form;
+use Zend\Validator\File\FilesSize;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -17,6 +18,7 @@ use Zend\View\Model\ViewModel;
 class DocumentUploadController extends AbstractDocumentController
 {
     const ERR_UPLOAD_DEF = '4';
+    const FILE_UPLOAD_ERR_PREFIX = 'message.file-upload-error.';
 
     /**
      * Upload action
@@ -79,31 +81,44 @@ class DocumentUploadController extends AbstractDocumentController
             $errNr = (isset($file['error']) ? $file['error'] : self::ERR_UPLOAD_DEF);
 
             // add validation error message to element, with reason upload errored
-            $form->get('details')->get('file')->setMessages(['message.file-upload-error.' . $errNr]);
+            $form->get('details')->get('file')->setMessages([self::FILE_UPLOAD_ERR_PREFIX . $errNr]);
 
             return null;
         }
 
+        $fileTmpName = $file['tmp_name'];
+
         // eg onAccess anti-virus removed it
-        if (!file_exists($file['tmp_name'])) {
-            $form->get('details')->get('file')->setMessages(['message.file-upload-error.' . 'missing']);
+        if (!file_exists($fileTmpName)) {
+            $form->get('details')->get('file')->setMessages([self::FILE_UPLOAD_ERR_PREFIX . 'missing']);
+
+            return null;
+        }
+
+        $cfg = $this->getServiceLocator()->get('Config');
+
+        $validator = new FilesSize($cfg['document_share']['max_upload_size']);
+        if (!$validator->isValid($fileTmpName)) {
+            $form->get('details')->get('file')->setMessages([self::FILE_UPLOAD_ERR_PREFIX . UPLOAD_ERR_INI_SIZE]);
 
             return null;
         }
 
         // Run virus scan on file
         $scanner = $this->getServiceLocator()->get(\Common\Service\AntiVirus\Scan::class);
-        if ($scanner->isEnabled() && !$scanner->isClean($file['tmp_name'])) {
-            $form->get('details')->get('file')->setMessages(['message.file-upload-error.' . 'virus']);
+        if ($scanner->isEnabled() && !$scanner->isClean($fileTmpName)) {
+            $form->get('details')->get('file')->setMessages([self::FILE_UPLOAD_ERR_PREFIX . 'virus']);
 
             return null;
         }
+
+        $mimeType = (isset($file['type']) ? $file['type'] : null);
 
         $data = array_merge(
             $data,
             [
                 'filename'      => $file['name'],
-                'content'       => new FileContent($file['tmp_name']),
+                'content'       => new FileContent($fileTmpName, $mimeType),
                 'description'   => $data['details']['description'],
                 'category'      => $data['details']['category'],
                 'subCategory'   => $data['details']['documentSubCategory'],
