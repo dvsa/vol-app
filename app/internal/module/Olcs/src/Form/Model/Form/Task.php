@@ -56,6 +56,12 @@ class Task
     public $assignedBy = null;
 
     /**
+     * @Form\Name("lastModifiedBy")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TaskLastModifiedBy")
+     */
+    public $lastModifiedBy = null;
+
+    /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TaskFormActions")
