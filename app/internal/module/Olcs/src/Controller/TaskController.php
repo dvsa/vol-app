@@ -212,17 +212,13 @@ class TaskController extends AbstractController
 
         if ($type === 'Add') {
             $form->get('form-actions')->remove('close');
+            $form->remove('lastModifiedBy');
         }
 
         $details->get('link')->setValue($url);
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
 
-        if (isset($data['assignedByUser']['contactDetails']['person']['familyName'])) {
-            $person = $data['assignedByUser']['contactDetails']['person'];
-            $data['assignedByUserName'] = $person['forename'] . ' ' . $person['familyName'];
-        } else {
-            $data['assignedByUserName'] = 'Not set';
-        }
+        $data = $this->prepareInfoColumns($data);
 
         $form->setData($this->expandData($data));
         $this->formPost($form, 'process' . $type . 'Task');
@@ -240,6 +236,36 @@ class TaskController extends AbstractController
         $view->setTemplate('pages/form');
 
         return $this->renderView($view, $type . ' task');
+    }
+
+    /**
+     * Prepare info columns
+     *
+     * @param array $data data
+     *
+     * @return array
+     */
+    protected function prepareInfoColumns($data)
+    {
+        if (isset($data['assignedByUser']['contactDetails']['person']['familyName'])) {
+            $person = $data['assignedByUser']['contactDetails']['person'];
+            $data['assignedByUserName'] = $person['forename'] . ' ' . $person['familyName'];
+        } else {
+            $data['assignedByUserName'] = 'Not set';
+        }
+
+        if (isset($data['lastModifiedBy']['contactDetails']['person']['familyName'])) {
+            $person = $data['lastModifiedBy']['contactDetails']['person'];
+            $data['lastModifiedByDetails'] = $person['forename'] . ' ' . $person['familyName'];
+        } else {
+            $data['lastModifiedByDetails'] = 'Not set';
+        }
+
+        if (isset($data['lastModifiedOn'])) {
+            $data['lastModifiedByDetails'] .=
+                ' (' . (new \DateTime($data['lastModifiedOn']))->format(\DATETIMESEC_FORMAT) . ')';
+        }
+        return $data;
     }
 
     /**
@@ -546,6 +572,7 @@ class TaskController extends AbstractController
             'details' => $data,
             'assignment' => $data,
             'assignedBy' => $data,
+            'lastModifiedBy' => $data,
             'id' => isset($data['id']) ? $data['id'] : '',
             'version' => isset($data['version']) ? $data['version'] : ''
         ];
