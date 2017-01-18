@@ -2,108 +2,116 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\AbstractDataService;
-use Common\Service\Data\ListDataInterface;
-use Common\Service\Data\ListDataTrait;
+use Common\Service\Data\AbstractListDataService;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
-use Dvsa\Olcs\Transfer\Query\Category\GetList;
+use Dvsa\Olcs\Transfer\Query as TransferQry;
 
 /**
  * Class Category
  *
  * @package Olcs\Service\Data
  */
-class Category extends AbstractDataService implements ListDataInterface
+class Category extends AbstractListDataService
 {
-    use ListDataTrait;
+    const TYPE_IS_SCAN = 1;
+    const TYPE_IS_DOC = 2;
+    const TYPE_IS_TASK = 3;
 
-    /*
-     * @var string
-     */
-    protected $isScanCategory = null;
+    protected static $sort = 'description';
+    protected static $order = 'ASC';
+
+    /** @var  int */
+    protected $catType;
+    /** @var  bool */
+    protected $isOnlyWithItems = false;
 
     /**
      * Fetch list data
      *
-     * @param array $params Params
+     * @param array $context Parameters
      *
      * @return array
      * @throw UnexpectedResponseException
      */
-    public function fetchListData($params)
+    public function fetchListData($context = null)
     {
-        if (is_null($this->getData('categories'))) {
-            $params['sort'] = 'description';
-            $params['order'] = 'ASC';
+        $data = (array)$this->getData('categories');
 
-            $isScanCategory = $this->getIsScanCategory();
-
-            if ($isScanCategory) {
-                $params['isScanCategory'] = $isScanCategory;
-            }
-
-            $dtoData = GetList::create($params);
-            $response = $this->handleQuery($dtoData);
-
-            if (!$response->isOk()) {
-                throw new UnexpectedResponseException('unknown-error');
-            }
-
-            $this->setData('categories', false);
-            $result = $response->getResult();
-
-            if (isset($result['results'])) {
-                $this->setData('categories', $result['results']);
-            }
+        if (0 !== count($data)) {
+            return $data;
         }
+
+        $params = array_filter(
+            [
+                'sort' => self::$sort,
+                'order' => self::$order,
+                'isScanCategory' => (self::TYPE_IS_SCAN === $this->catType ? 'Y' : null),
+                'isDocCategory' => (self::TYPE_IS_DOC === $this->catType ? 'Y' : null),
+                'isTaskCategory' => (self::TYPE_IS_TASK === $this->catType ? 'Y' : null),
+                'isOnlyWithItems' => ($this->isOnlyWithItems ? 'Y' : null),
+            ]
+        );
+
+        $response = $this->handleQuery(
+            TransferQry\Category\GetList::create($params)
+        );
+
+        if (!$response->isOk()) {
+            throw new UnexpectedResponseException('unknown-error');
+        }
+
+        $result = $response->getResult();
+
+        $this->setData('categories', (isset($result['results']) ? $result['results'] : null));
 
         return $this->getData('categories');
     }
 
     /**
-     * Get id from handle
+     * Set category type
      *
-     * @param string $handle Handle
+     * @param string $catType Type of Category
      *
-     * @return string|null
+     * @return $this
      */
-    public function getIdFromHandle($handle)
+    public function setCategoryType($catType)
     {
-        return $this->getPropertyFromKey('handle', 'id', $handle);
-    }
+        $this->catType = $catType;
 
-    /**
-     * Look up an item's description by its ID
-     *
-     * @param int $id Id
-     *
-     * @return string|null
-     */
-    public function getDescriptionFromId($id)
-    {
-        return $this->getPropertyFromKey('id', 'description', $id);
-    }
-
-    /**
-     * Get isScanCategory
-     *
-     * @return string
-     */
-    public function getIsScanCategory()
-    {
-        return $this->isScanCategory;
-    }
-
-    /**
-     * Set isScanCategory
-     *
-     * @param string $isScanCategory Is scan category
-     *
-     * @return \Olcs\Service\Data\Category
-     */
-    public function setIsScanCategory($isScanCategory)
-    {
-        $this->isScanCategory = $isScanCategory;
         return $this;
+    }
+
+    /**
+     * Get category type
+     *
+     * @return int
+     */
+    public function getCategoryType()
+    {
+        return $this->catType;
+    }
+
+    /**
+     * Set is show caterories without items
+     *
+     * @param bool $isWithItems If true, then show options only with items
+     *
+     * @return $this
+     */
+    public function setIsOnlyWithItems($isWithItems)
+    {
+        $this->isOnlyWithItems = $isWithItems;
+
+        return $this;
+    }
+
+    /**
+     * Get is show caterories without items
+     *
+     * @return bool
+     */
+    public function getIsOnlyWithItems()
+    {
+        return $this->isOnlyWithItems;
     }
 }

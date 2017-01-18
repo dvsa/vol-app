@@ -3,20 +3,25 @@
 namespace OlcsTest\Controller\Traits;
 
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\Service\Data\DocumentSubCategory as DocumentSubCategoryDS;
 
 /**
  * @covers \Olcs\Controller\Traits\DocumentSearchTrait
  */
 class DocumentSearchTraitTest extends MockeryTestCase
 {
-    /** @var \OlcsTest\Controller\Traits\Stub\StubDocumentSearchTrait */
+    const CAT_ID = 8001;
+
+    /** @var Stub\StubDocumentSearchTrait */
     private $sut;
 
     public function setUp()
     {
-        $this->sut = new \OlcsTest\Controller\Traits\Stub\StubDocumentSearchTrait();
+        $this->sut = m::mock(\OlcsTest\Controller\Traits\Stub\StubDocumentSearchTrait::class)
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods(true);
     }
 
     public function testUpdateSelectValueOptions()
@@ -67,7 +72,7 @@ class DocumentSearchTraitTest extends MockeryTestCase
         $mockRequest = m::mock(\Zend\Http\Request::class);
         $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn(['query' => 'unit_Query']);
 
-        $this->sut->request = $mockRequest;
+        $this->sut->shouldReceive('getRequest')->once()->andReturn($mockRequest);
 
         static::assertEquals(
             $expect,
@@ -101,7 +106,7 @@ class DocumentSearchTraitTest extends MockeryTestCase
                         'limit' => 10,
                         'isExternal' => 'N',
                         'newKey' => 'unit_NewKey',
-                        'query' => 'unit_Query'
+                        'query' => 'unit_Query',
                     ],
             ],
             [
@@ -124,5 +129,46 @@ class DocumentSearchTraitTest extends MockeryTestCase
                 'expect' => $def,
             ],
         ];
+    }
+
+    public function testGetDocumentForm()
+    {
+        $expectCategory = 8777;
+        $filters = [
+            'category' => $expectCategory,
+        ];
+
+        $mockRequest = m::mock(\Zend\Http\Request::class);
+
+        $mockField = m::mock(\Zend\Form\Element::class)->makePartial()
+            ->shouldReceive('setValueOptions')->once()->with(m::hasKey(FilterOptions::SHOW_ALL))
+            ->getMock();
+
+        $mockForm = m::mock(\Zend\Form\FormInterface::class)->makePartial()
+            ->shouldReceive('remove')->once()->with('csrf')
+            ->shouldReceive('setData')->once()->with($filters)
+            ->shouldReceive('get')->once()->with('showDocs')->andReturn($mockField)
+            ->getMock();
+
+        $mockFormHelper = m::mock(\Common\Service\Helper\FormHelperService::class)->makePartial()
+            ->shouldReceive('setFormActionFromRequest')->once()->with($mockForm, $mockRequest)
+            ->getMock();
+
+        $mockDocSubCatDs = m::mock(DocumentSubCategoryDS::class)
+            ->shouldReceive('setCategory')->once()->with($expectCategory)
+            ->getMock();
+
+        $mockSm = m::mock(\Zend\Di\ServiceLocatorInterface::class)
+            ->shouldReceive('get')->with('Helper\Form')->once()->andReturn($mockFormHelper)
+            ->shouldReceive('get')->with(DocumentSubCategoryDS::class)->once()->andReturn($mockDocSubCatDs)
+            ->getMock();
+
+        //  call
+        $this->sut
+            ->shouldReceive('getRequest')->once()->andReturn($mockRequest)
+            ->shouldReceive('getServiceLocator')->once()->andReturn($mockSm)
+            ->shouldReceive('getForm')->once()->andReturn($mockForm);
+
+        $this->sut->traitGetDocumentForm($filters);
     }
 }

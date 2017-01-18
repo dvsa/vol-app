@@ -3,11 +3,9 @@
 namespace Olcs\Service\Data;
 
 /**
- * Class DocumentSubCategory
- *
- * @package Olcs\Service\Data
+ * @author Dmitry Golubev <dmitrij.golubev@valtech.com>
  */
-class DocumentSubCategory extends SubCategory
+class DocumentCategoryWithDocs extends Category
 {
     /**
      * constructor.
@@ -15,5 +13,6 @@ class DocumentSubCategory extends SubCategory
     public function __construct()
     {
         $this->setCategoryType(self::TYPE_IS_DOC);
+        $this->setIsOnlyWithItems(true);
     }
 }

@@ -38,7 +38,7 @@ return [
                         'options' => [
                             'route' => 'scanning[/]',
                             'defaults' => [
-                                'controller' => 'Admin\ScanningController',
+                                'controller' => Admin\Controller\ScanningController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -506,7 +506,7 @@ return [
             'Admin\PrintingController' => 'Admin\Controller\PrintingController',
             'Admin\IrfoStockControlController' => 'Admin\Controller\IrfoStockControlController',
             'Admin\IrfoPsvAuthContinuationController' => 'Admin\Controller\IrfoPsvAuthContinuationController',
-            'Admin\ScanningController' => 'Admin\Controller\ScanningController',
+            Admin\Controller\ScanningController::class => Admin\Controller\ScanningController::class,
             'Admin\PublicationController' => 'Admin\Controller\PublicationController',
             'Admin\RecipientController' => 'Admin\Controller\RecipientController',
             'Admin\ContinuationController' => 'Admin\Controller\ContinuationController',

@@ -2,7 +2,6 @@
 
 namespace Olcs\Controller\Traits;
 
-use Common\Service\Cqrs\Response;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Zend\Form\Element\Select;
@@ -70,23 +69,19 @@ trait DocumentSearchTrait
      */
     protected function getDocumentForm($filters = [])
     {
+        /** @var \Zend\Di\ServiceLocator $sm */
+        $sm = $this->getServiceLocator();
+
         /** @var \Zend\Form\FormInterface $form */
         $form = $this->getForm('DocumentsHome');
-        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
+        $sm->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
 
         $category = (isset($filters['category'])) ? (int) $filters['category'] : null;
 
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
-        $selects = [
-            'category' => $this->getListDataCategoryDocs('All'),
-            'documentSubCategory' => $this->getListDataSubCategoryDocs($category, 'All'),
-        ];
-
-        // insert relevant data into the corresponding form inputs
-        foreach ($selects as $name => $options) {
-            $form->get($name)->setValueOptions($options);
-        }
+        $sm->get(\Olcs\Service\Data\DocumentSubCategory::class)
+            ->setCategory($category);
 
         //  show document field
         /** @var Select $option */

@@ -13,9 +13,10 @@ class GenerateDocumentDetails
      * @Form\Attributes({"id": "category"})
      * @Form\Options({
      *     "label": "documents.data.category",
-     *     "disable_inarray_validator": false
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Olcs\Service\Data\DocumentCategoryWithDocs",
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $category = null;
 
@@ -23,9 +24,11 @@ class GenerateDocumentDetails
      * @Form\Attributes({"id": "documentSubCategory"})
      * @Form\Options({
      *     "label": "documents.data.sub_category",
-     *     "disable_inarray_validator": false
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Olcs\Service\Data\DocumentSubCategoryWithDocs",
+     *     "empty_option": "Please select",
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $documentSubCategory = null;
 

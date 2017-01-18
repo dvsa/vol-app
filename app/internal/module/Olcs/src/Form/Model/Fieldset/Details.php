@@ -14,8 +14,7 @@ class Details
      * @Form\Attributes({"id":"category","placeholder":""})
      * @Form\Options({
      *     "label": "documents.data.category",
-     *     "service_name": "Olcs\Service\Data\Category",
-     *     "context": {"isDocCategory": "Y" }
+     *     "service_name": "Olcs\Service\Data\DocumentCategory",
      * })
      * @Form\Type("DynamicSelect")
      */

@@ -23,7 +23,7 @@ class ScanningController extends ZendAbstractActionController
     /**
      * Index page
      *
-     * @return ViewModel
+     * @return array|\Zend\Http\Response|ViewModel
      */
     public function indexAction()
     {
@@ -49,19 +49,19 @@ class ScanningController extends ZendAbstractActionController
         $category    = $data['details']['category'];
         $subCategory = $data['details']['subCategory'];
 
-        $this->getDataService('SubCategory')
-            ->setCategory($category)
-            ->setIsScanCategory('Y');
+        //  set parameters of Dinamyc Selectors
+        $sm = $this->getServiceLocator();
 
-        $this->getDataService('SubCategoryDescription')
+        $sm->get(\Olcs\Service\Data\ScannerSubCategory::class)
+            ->setCategory($category);
+
+        $sm->get(\Olcs\Service\Data\SubCategoryDescription::class)
             ->setSubCategory($subCategory);
 
-        $this->getDataService('Category')
-            ->setIsScanCategory('Y');
-
+        //  create form
         $form = $this->createFormWithData($data);
 
-        $this->getServiceLocator()->get('Script')->loadFile('forms/scanning');
+        $sm->get('Script')->loadFile('forms/scanning');
 
         //  is POST
         if ($prg !== false) {
@@ -69,9 +69,7 @@ class ScanningController extends ZendAbstractActionController
 
             if (isset($details['description'])) {
                 /** @var  \Common\Service\Helper\FormHelperService */
-                $this->getServiceLocator()
-                    ->get('Helper\Form')
-                    ->remove($form, 'details->otherDescription');
+                $sm->get('Helper\Form')->remove($form, 'details->otherDescription');
             }
 
             if ($form->isValid()) {
@@ -92,9 +90,7 @@ class ScanningController extends ZendAbstractActionController
                 if (!$response->isOk()) {
                     $this->processMessages($response, $form, $category);
                 } else {
-                    $this->getServiceLocator()
-                        ->get('Helper\FlashMessenger')
-                        ->addSuccessMessage('scanning.message.success');
+                    $sm->get('Helper\FlashMessenger')->addSuccessMessage('scanning.message.success');
 
                     // The AC says sub cat & description dropdowns should be reset to their defaults, but
                     // this presents an issue; description depends on sub category,
@@ -111,7 +107,7 @@ class ScanningController extends ZendAbstractActionController
 
                     // ... so we load in some extra JS which will fire off our cascade
                     // input, which in turn will populate the list of descriptions
-                    $this->getServiceLocator()->get('Script')->loadFile('scanning-success');
+                    $sm->get('Script')->loadFile('scanning-success');
                 }
             }
         }
@@ -156,20 +152,6 @@ class ScanningController extends ZendAbstractActionController
         } else {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
-    }
-
-    /**
-     * Get data service
-     *
-     * @param string $service Service name
-     *
-     * @return mixed
-     */
-    private function getDataService($service)
-    {
-        return $this->getServiceLocator()
-            ->get('DataServiceManager')
-            ->get('Olcs\Service\Data\\' . $service);
     }
 
     /**

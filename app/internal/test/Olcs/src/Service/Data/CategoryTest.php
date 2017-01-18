@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Category Data Service Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\Category;
@@ -14,9 +9,7 @@ use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
- * Category Data Service Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @covers \Olcs\Service\Data\Category
  */
 class CategoryTest extends AbstractDataServiceTestCase
 {
@@ -26,15 +19,15 @@ class CategoryTest extends AbstractDataServiceTestCase
         $params = [
             'sort' => 'description',
             'order' => 'ASC',
-            'isScanCategory' => 'Y'
         ];
-        $dto = Qry::create($params);
+
         $mockTransferAnnotationBuilder = m::mock()
             ->shouldReceive('createQuery')->once()->andReturnUsing(
-                function ($dto) use ($params) {
+                function (Qry $dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
-                    $this->assertEquals($params['isScanCategory'], $dto->getIsScanCategory());
+                    $this->assertEquals('Y', $dto->getIsScanCategory());
+                    $this->assertEquals('Y', $dto->getIsOnlyWithItems());
                     return 'query';
                 }
             )
@@ -42,19 +35,45 @@ class CategoryTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $mockResponse = m::mock()
-            ->shouldReceive('isOk')
-            ->andReturn(true)
-            ->once()
-            ->shouldReceive('getResult')
-            ->andReturn($results)
-            ->once()
+            ->shouldReceive('isOk')->andReturn(true)->once()
+            ->shouldReceive('getResult')->andReturn($results)->once()
             ->getMock();
 
         $sut = new Category();
-        $sut->setIsScanCategory('Y');
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
+        $sut->setCategoryType(Category::TYPE_IS_SCAN);
+        $sut->setIsOnlyWithItems(true);
+
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
         $this->assertEquals($results['results'], $sut->fetchListData([]));
+    }
+
+    public function testSetters()
+    {
+        $sut = new Category();
+
+        static::assertNull($sut->getCategoryType());
+        static::assertFalse($sut->getIsOnlyWithItems());
+
+        $sut->setCategoryType(Category::TYPE_IS_DOC);
+        $sut->setIsOnlyWithItems(true);
+
+        static::assertEquals(Category::TYPE_IS_DOC, $sut->getCategoryType());
+        static::assertTrue($sut->getIsOnlyWithItems());
+    }
+
+    public function testFetchListDataCache()
+    {
+        $data = [
+            [
+                'id' => 9999,
+                'description'=> 'EXPECTED'
+            ],
+        ];
+        $sut = new Category();
+        $sut->setData('categories', $data);
+
+        static::assertEquals([9999 => 'EXPECTED'], $sut->fetchListOptions());
     }
 
     public function testFetchListDataWithException()
@@ -68,28 +87,12 @@ class CategoryTest extends AbstractDataServiceTestCase
             ->andReturn(false)
             ->once()
             ->getMock();
+
         $sut = new Category();
-        $sut->setIsScanCategory('Y');
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, []);
+        $sut->setCategoryType(Category::TYPE_IS_SCAN);
+
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
         $sut->fetchListData([]);
-    }
-
-    public function testGetIdFromHandle()
-    {
-        $sut = new Category();
-        $sut->setData('categories', [['handle' => 'test', 'id' => 4]]);
-
-        $this->assertEquals(4, $sut->getIdFromHandle('test'));
-        $this->assertNull($sut->getIdFromHandle('non-existant'));
-    }
-
-    public function testGetDescriptionFromId()
-    {
-        $sut = new Category();
-        $sut->setData('categories', [['description' => 'test', 'id' => 4]]);
-
-        $this->assertEquals('test', $sut->getDescriptionFromId(4));
-        $this->assertNull($sut->getDescriptionFromId(123));
     }
 }

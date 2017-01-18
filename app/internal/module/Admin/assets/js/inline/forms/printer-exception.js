@@ -14,7 +14,7 @@ OLCS.ready(function() {
     rulesets: {
       "data": '*',
       "team-printer": showTeamFieldset,
-      "user-printer": showUserFieldset,
+      "user-printer": showUserFieldset
     }
   });
 
@@ -27,7 +27,7 @@ OLCS.ready(function() {
   OLCS.cascadeInput({
     source: "#categoryUser",
     dest: "#subCategoryUser",
-    url: "/list/sub-categories",
+    url: "/list/document-sub-categories",
     emptyLabel: "Default setting"
   });
 });

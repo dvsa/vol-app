@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Document Category Data Service Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\DocumentCategory;
@@ -13,9 +8,7 @@ use Dvsa\Olcs\Transfer\Query\Category\GetList as Qry;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
- * Document Category Data Service Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @covers \Olcs\Service\Data\DocumentCategory
  */
 class DocumentCategoryTest extends AbstractDataServiceTestCase
 {
@@ -27,10 +20,10 @@ class DocumentCategoryTest extends AbstractDataServiceTestCase
             'order' => 'ASC',
             'isDocCategory' => 'Y'
         ];
-        $dto = Qry::create($params);
+
         $mockTransferAnnotationBuilder = m::mock()
             ->shouldReceive('createQuery')->once()->andReturnUsing(
-                function ($dto) use ($params) {
+                function (Qry $dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
                     $this->assertEquals($params['isDocCategory'], $dto->getIsDocCategory());
@@ -50,8 +43,9 @@ class DocumentCategoryTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $sut = new DocumentCategory();
-        $sut->setIsScanCategory('Y');
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
+        $sut->setCategoryType(DocumentCategory::TYPE_IS_DOC);
+
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
         $this->assertEquals($results['results'], $sut->fetchListData([]));
     }
