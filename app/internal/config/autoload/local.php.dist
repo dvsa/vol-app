@@ -49,7 +49,6 @@ return array(
     'document_share' => [
         // File hyperlink to document
         'uri_pattern' => 'file://///fs01.olcs.mgt.mtpdvsa/OLCS/olcs/%s',
-        'max_upload_size' => '90MB',
     ],
 
     // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific*
