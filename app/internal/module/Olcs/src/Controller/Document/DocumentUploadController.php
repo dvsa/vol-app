@@ -5,7 +5,6 @@ namespace Olcs\Controller\Document;
 use Common\Util\FileContent;
 use Dvsa\Olcs\Transfer\Command\Document\Upload;
 use Zend\Form\Form;
-use Zend\Validator\File\FilesSize;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -91,15 +90,6 @@ class DocumentUploadController extends AbstractDocumentController
         // eg onAccess anti-virus removed it
         if (!file_exists($fileTmpName)) {
             $form->get('details')->get('file')->setMessages([self::FILE_UPLOAD_ERR_PREFIX . 'missing']);
-
-            return null;
-        }
-
-        $cfg = $this->getServiceLocator()->get('Config');
-
-        $validator = new FilesSize($cfg['document_share']['max_upload_size']);
-        if (!$validator->isValid($fileTmpName)) {
-            $form->get('details')->get('file')->setMessages([self::FILE_UPLOAD_ERR_PREFIX . UPLOAD_ERR_INI_SIZE]);
 
             return null;
         }
