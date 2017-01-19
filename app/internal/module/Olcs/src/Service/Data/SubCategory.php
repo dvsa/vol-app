@@ -2,30 +2,20 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\AbstractDataService;
-use Common\Service\Data\ListDataInterface;
-use Common\Service\Data\ListDataTrait;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
-use Dvsa\Olcs\Transfer\Query\SubCategory\GetList;
+use Dvsa\Olcs\Transfer\Query as TransferQry;
 
 /**
  * Class SubCategory
  *
  * @package Olcs\Service\Data
  */
-class SubCategory extends AbstractDataService implements ListDataInterface
+class SubCategory extends Category
 {
-    use ListDataTrait;
+    protected static $sort = 'subCategoryName';
 
-    /**
-     * @var string
-     */
-    protected $category;
-
-    /*
-     * @var string
-     */
-    protected $isScanCategory = null;
+    /** @var string */
+    private $category;
 
     /**
      * Set category
@@ -53,45 +43,48 @@ class SubCategory extends AbstractDataService implements ListDataInterface
     /**
      * Fetch list data
      *
-     * @param array $params Params
+     * @param array $context Parameters
      *
      * @return array
      * @throw UnexpectedResponseException
      */
-    public function fetchListData($params)
+    public function fetchListData($context = null)
     {
-        $params['sort'] = 'subCategoryName';
-        $params['order'] = 'ASC';
+        $catId = (int)$this->getCategory();
 
-        $isScanCategory = $this->getIsScanCategory();
+        $key = (0 !== $catId ? $catId : 'all');
 
-        if ($isScanCategory) {
-            $params['isScanCategory'] = $isScanCategory;
+        //  check data in cache
+        $data = (array)$this->getData($key);
+        if (0 !== count($data)) {
+            return $data;
         }
 
-        $category = $this->getCategory();
-        $key = 'all';
+        //  build query
+        $params = array_filter(
+            [
+                'category' => $catId,
+                'sort' => self::$sort,
+                'order' => self::$order,
+                'isScanCategory' => (self::TYPE_IS_SCAN === $this->catType ? 'Y' : null),
+                'isDocCategory' => (self::TYPE_IS_DOC === $this->catType ? 'Y' : null),
+                'isTaskCategory' => (self::TYPE_IS_TASK === $this->catType ? 'Y' : null),
+                'isOnlyWithItems' => ($this->isOnlyWithItems ? 'Y' : null),
+            ]
+        );
 
-        if (!empty($category)) {
-            $params['category'] = $category;
-            $key = $category;
+        $response = $this->handleQuery(
+            TransferQry\SubCategory\GetList::create($params)
+        );
+
+        if (!$response->isOk()) {
+            throw new UnexpectedResponseException('unknown-error');
         }
 
-        if (is_null($this->getData($key))) {
+        //  store to cache
+        $result = $response->getResult();
 
-            $dtoData = GetList::create($params);
-            $response = $this->handleQuery($dtoData);
-
-            if (!$response->isOk()) {
-                throw new UnexpectedResponseException('unknown-error');
-            }
-
-            $this->setData($key, false);
-
-            if (isset($response->getResult()['results'])) {
-                $this->setData($key, $response->getResult()['results']);
-            }
-        }
+        $this->setData($key, (isset($result['results']) ? $result['results'] : null));
 
         return $this->getData($key);
     }
@@ -112,40 +105,5 @@ class SubCategory extends AbstractDataService implements ListDataInterface
         }
 
         return $optionData;
-    }
-
-    /**
-     * Look up an item's description by its ID
-     *
-     * @param int $id Id
-     *
-     * @return string|null
-     */
-    public function getDescriptionFromId($id)
-    {
-        return $this->getPropertyFromKey('id', 'subCategoryName', $id);
-    }
-
-    /**
-     * Get isScanCategory
-     *
-     * @return string
-     */
-    public function getIsScanCategory()
-    {
-        return $this->isScanCategory;
-    }
-
-    /**
-     * Set isScanCategory
-     *
-     * @param string $isScanCategory Is scan category
-     *
-     * @return \Olcs\Service\Data\SubCategory
-     */
-    public function setIsScanCategory($isScanCategory)
-    {
-        $this->isScanCategory = $isScanCategory;
-        return $this;
     }
 }

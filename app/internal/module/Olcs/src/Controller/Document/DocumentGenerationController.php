@@ -159,7 +159,6 @@ class DocumentGenerationController extends AbstractDocumentController
      */
     protected function alterFormBeforeValidation($form)
     {
-        $categories = $this->getListDataCategoryDocs();
         $entityType = $this->getFromRoute('entityType');
 
         $categoryMapType = !empty($entityType) ? $this->getFromRoute('entityType') : $this->params('type');
@@ -169,7 +168,6 @@ class DocumentGenerationController extends AbstractDocumentController
         ];
 
         $data = [];
-        $docTemplates = ['' => self::EMPTY_LABEL];
 
         /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
@@ -185,17 +183,18 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $details = isset($data['details']) ? $data['details'] : [];
 
-        $category = (int) $details['category'];
+        $catId = (int)$details['category'];
 
-        $subCategories = $this->getListDataSubCategoryDocs($category, self::EMPTY_LABEL);
+        //  set dynamic select
+        $this->getServiceLocator()->get(\Olcs\Service\Data\DocumentSubCategoryWithDocs::class)
+            ->setCategory($catId);
 
+        $docTemplates = ['' => self::EMPTY_LABEL];
         if (isset($details['documentSubCategory'])) {
             $subCategoryId = (int) $details['documentSubCategory'];
             $docTemplates = $this->getListDataDocTemplates(null, $subCategoryId);
         }
 
-        $form->get('details')->get('category')->setValueOptions($categories);
-        $form->get('details')->get('documentSubCategory')->setValueOptions($subCategories);
         $form->get('details')->get('documentTemplate')->setValueOptions($docTemplates);
 
         if (isset($details['documentTemplate'])) {

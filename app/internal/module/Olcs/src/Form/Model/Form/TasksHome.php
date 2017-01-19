@@ -43,12 +43,11 @@ class TasksHome
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "tasks.data.category",
-     *     "value_options": {
-     *
-     *     },
-     *     "disable_inarray_validator": false
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Olcs\Service\Data\TaskCategory",
+     *     "empty_option": "All",
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $category = null;
 
@@ -56,12 +55,11 @@ class TasksHome
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "tasks.data.sub_category",
-     *     "value_options": {
-     *
-     *     },
-     *     "disable_inarray_validator": false
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Olcs\Service\Data\TaskSubCategory",
+     *     "empty_option": "All",
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $taskSubCategory = null;
 

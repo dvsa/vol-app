@@ -91,6 +91,8 @@ class IndexController extends AbstractController implements LeftViewProvider
      */
     public function entityListAction()
     {
+        $sm = $this->getServiceLocator();
+
         $key = $this->params('type');
         $value = $this->params('value');
 
@@ -100,7 +102,7 @@ class IndexController extends AbstractController implements LeftViewProvider
                 break;
             case 'task-allocation-users':
                 /** @var \Olcs\Service\Data\UserListInternal $srv */
-                $srv = $this->getServiceLocator()->get(\Olcs\Service\Data\UserListInternal::class);
+                $srv = $sm->get(\Olcs\Service\Data\UserListInternal::class);
                 $srv->setTeamId($value);
 
                 $results =
@@ -113,7 +115,7 @@ class IndexController extends AbstractController implements LeftViewProvider
                 break;
             case 'users-internal':
                 /** @var \Olcs\Service\Data\UserListInternal $srv */
-                $srv = $this->getServiceLocator()->get(\Olcs\Service\Data\UserListInternal::class);
+                $srv = $sm->get(\Olcs\Service\Data\UserListInternal::class);
                 $srv->setTeamId($value);
 
                 $results =
@@ -123,30 +125,54 @@ class IndexController extends AbstractController implements LeftViewProvider
                     $srv->fetchListOptions(null);
 
                 break;
-
             case 'users':
                 $results = $this->getListDataUser($value, 'All');
                 break;
             case 'task-sub-categories':
-                $results = $this->getListDataSubCategoryTask($value, 'All');
+                /** @var \Olcs\Service\Data\SubCategory $srv */
+                $srv = $sm->get(\Olcs\Service\Data\TaskSubCategory::class)
+                    ->setCategory($value);
+
+                $results = ['' => 'All'] + $srv->fetchListOptions();
+
                 break;
             case 'document-sub-categories':
-                $results = $this->getListDataSubCategoryDocs($value, 'All');
+                /** @var \Olcs\Service\Data\DocumentSubCategory $srv */
+                $srv = $sm->get(\Olcs\Service\Data\DocumentSubCategory::class)
+                    ->setCategory($value);
+
+                $results = ['' => 'All'] + $srv->fetchListOptions();
+
+                break;
+            case 'document-sub-categories-with-docs':
+                /** @var \Olcs\Service\Data\DocumentSubCategory $srv */
+                $srv = $sm->get(\Olcs\Service\Data\DocumentSubCategoryWithDocs::class)
+                    ->setCategory($value);
+
+                $results = ['' => 'All'] + $srv->fetchListOptions();
+
                 break;
             case 'sub-categories-no-first-option':
-                $results = $this->getListDataSubCategory([], $value, false);
-                break;
-            case 'sub-categories':
-                $results = $this->getListDataSubCategory([], $value, true);
+                $results = $sm->get(\Olcs\Service\Data\SubCategory::class)
+                    ->setCategory($value)
+                    ->fetchListOptions();
+
                 break;
             case 'scanning-sub-categories':
-                $results = $this->getListDataSubCategoryScan($value, 'All');
+                /** @var \Olcs\Service\Data\SubCategory $srv */
+                $srv = $sm->get(\Olcs\Service\Data\ScannerSubCategory::class)
+                    ->setCategory($value);
+
+                $results = ['' => 'All'] + $srv->fetchListOptions();
                 break;
             case 'document-templates':
                 $results = $this->getListDataDocTemplates(null, $value, 'All');
                 break;
             case 'sub-category-descriptions':
-                $results = $this->getListDataSubCategoryDescription($value);
+                $results =  $sm->get(\Olcs\Service\Data\SubCategoryDescription::class)
+                    ->setSubCategory($value)
+                    ->fetchListOptions();
+
                 break;
             default:
                 throw new \Exception('Invalid entity filter key: ' . $key);

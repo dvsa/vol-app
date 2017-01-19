@@ -1,30 +1,22 @@
 <?php
 
-/**
- * SubCategoryDescription Data Service Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace OlcsTest\Service\Data;
 
-use Olcs\Service\Data\SubCategoryDescription;
-use Mockery as m;
-use Dvsa\Olcs\Transfer\Query\SubCategoryDescription\GetList as Qry;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use Mockery as m;
+use Olcs\Service\Data\SubCategoryDescription;
 
 /**
- * SubCategoryDescription Data Service Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @covers \Olcs\Service\Data\SubCategoryDescription
  */
 class SubCategoryDescriptionTest extends AbstractDataServiceTestCase
 {
     public function testFetchListData()
     {
         $results = ['results' => 'results'];
-        $subCategory = 'subCat';
-        $dto = Qry::create([]);
+        $subCategory = '9001';
+
         $mockTransferAnnotationBuilder = m::mock()
             ->shouldReceive('createQuery')->once()->andReturnUsing(
                 function ($dto) use ($subCategory) {
@@ -36,19 +28,33 @@ class SubCategoryDescriptionTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $mockResponse = m::mock()
-            ->shouldReceive('isOk')
-            ->andReturn(true)
-            ->once()
-            ->shouldReceive('getResult')
-            ->andReturn($results)
-            ->twice()
+            ->shouldReceive('isOk')->andReturn(true)->once()
+            ->shouldReceive('getResult')->andReturn($results)->once()
             ->getMock();
 
         $sut = new SubCategoryDescription();
         $sut->setSubCategory($subCategory);
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
 
-        $this->assertEquals($results['results'], $sut->fetchListData([]));
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+
+        $this->assertEquals($results['results'], $sut->fetchListData());
+    }
+
+    public function testFetchListDataCache()
+    {
+        $subCategory = 8888;
+
+        $data = [
+            [
+                'id' => 9999,
+                'description'=> 'EXPECTED'
+            ],
+        ];
+        $sut = new SubCategoryDescription();
+        $sut->setSubCategory($subCategory);
+        $sut->setData($subCategory, $data);
+
+        static::assertEquals([9999 => 'EXPECTED'], $sut->fetchListOptions());
     }
 
     public function testFetchListDataWithException()
@@ -63,19 +69,12 @@ class SubCategoryDescriptionTest extends AbstractDataServiceTestCase
             ->andReturn(false)
             ->once()
             ->getMock();
+
         $sut = new SubCategoryDescription();
         $sut->setSubCategory($subCategory);
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, []);
+
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
         $sut->fetchListData([]);
-    }
-
-    public function testGetDescriptionFromId()
-    {
-        $sut = new SubCategoryDescription();
-        $sut->setData('all', [['description' => 'test', 'id' => 4]]);
-
-        $this->assertEquals('test', $sut->getDescriptionFromId(4));
-        $this->assertNull($sut->getDescriptionFromId(123));
     }
 }

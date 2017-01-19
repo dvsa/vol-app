@@ -2,20 +2,19 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\AbstractDataService;
-use Common\Service\Data\ListDataInterface;
-use Common\Service\Data\ListDataTrait;
+use Common\Service\Data\AbstractListDataService;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
-use Dvsa\Olcs\Transfer\Query\SubCategoryDescription\GetList;
+use Dvsa\Olcs\Transfer\Query as TransferQry;
 
 /**
  * Class SubCategoryDescription
  *
  * @package Olcs\Service\Data
  */
-class SubCategoryDescription extends AbstractDataService implements ListDataInterface
+class SubCategoryDescription extends AbstractListDataService
 {
-    use ListDataTrait;
+    protected static $sort = 'description';
+    protected static $order = 'ASC';
 
     /**
      * @var string
@@ -48,48 +47,43 @@ class SubCategoryDescription extends AbstractDataService implements ListDataInte
     /**
      * Fetch list data
      *
-     * @param array $params Params
+     * @param array $context Parameters
      *
      * @return array
      */
-    public function fetchListData($params)
+    public function fetchListData($context = null)
     {
-        $subCategory = $this->getSubCategory();
+        $subCatId = (int)$this->getSubCategory();
 
-        $key = 'all';
+        $key = (0 !== $subCatId ? $subCatId : 'all');
 
-        if (!empty($subCategory)) {
-            $params['subCategory'] = $subCategory;
-            $key = $subCategory;
+        //  check data in cache
+        $data = (array)$this->getData($key);
+        if (0 !== count($data)) {
+            return $data;
         }
 
-        if (is_null($this->getData($key))) {
-            $dtoData = GetList::create($params);
-            $response = $this->handleQuery($dtoData);
+        $params = array_filter(
+            [
+                'sort' => self::$sort,
+                'order' => self::$order,
+                'subCategory' => $subCatId,
+            ]
+        );
 
-            if (!$response->isOk()) {
-                throw new UnexpectedResponseException('unknown-error');
-            }
+        $response = $this->handleQuery(
+            TransferQry\SubCategoryDescription\GetList::create($params)
+        );
 
-            $this->setData($key, false);
-
-            if (isset($response->getResult()['results'])) {
-                $this->setData($key, $response->getResult()['results']);
-            }
+        if (!$response->isOk()) {
+            throw new UnexpectedResponseException('unknown-error');
         }
+
+        //  store to cache
+        $result = $response->getResult();
+
+        $this->setData($key, (isset($result['results']) ? $result['results'] : null));
 
         return $this->getData($key);
-    }
-
-    /**
-     * Look up an item's description by its ID
-     *
-     * @param int $id Id
-     *
-     * @return string|null
-     */
-    public function getDescriptionFromId($id)
-    {
-        return $this->getPropertyFromKey('id', 'description', $id);
     }
 }

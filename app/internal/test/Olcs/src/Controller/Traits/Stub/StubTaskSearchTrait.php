@@ -9,7 +9,6 @@ class StubTaskSearchTrait
 {
     use \Olcs\Controller\Traits\TaskSearchTrait;
 
-    public $request;
     public $currentUser;
 
     public function traitUpdateSelectValueOptions($el, $options)
@@ -22,9 +21,9 @@ class StubTaskSearchTrait
         return $this->mapTaskFilters($extra);
     }
 
-    public function getRequest()
+    public function traitGetTaskForm($filters)
     {
-        return $this->request;
+        return $this->getTaskForm($filters);
     }
 
     public function currentUser()

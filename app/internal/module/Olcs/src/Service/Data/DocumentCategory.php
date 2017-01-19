@@ -10,15 +10,10 @@ namespace Olcs\Service\Data;
 class DocumentCategory extends Category
 {
     /**
-     * Fetch list data
-     *
-     * @param array $params Params
-     *
-     * @return array
+     * constructor
      */
-    public function fetchListData($params)
+    public function __construct()
     {
-        $params['isDocCategory'] = 'Y';
-        return parent::fetchListData($params);
+        $this->setCategoryType(self::TYPE_IS_DOC);
     }
 }

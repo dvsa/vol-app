@@ -13,10 +13,7 @@ class ScanningDetails
      * @Form\Attributes({"id":"category","placeholder":""})
      * @Form\Options({
      *     "label": "scanning.data.category",
-     *     "service_name": "Olcs\Service\Data\Category",
-     *     "context": {
-     *       "isScanCategory": "Y"
-     *     }
+     *     "service_name": "Olcs\Service\Data\ScannerCategory",
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -26,10 +23,7 @@ class ScanningDetails
      * @Form\Attributes({"id":"subCategory","placeholder":""})
      * @Form\Options({
      *     "label": "scanning.data.sub_category",
-     *     "service_name": "Olcs\Service\Data\SubCategory",
-     *     "context": {
-     *       "isScan": true
-     *     }
+     *     "service_name": "Olcs\Service\Data\ScannerSubCategory",
      * })
      * @Form\Type("DynamicSelect")
      */

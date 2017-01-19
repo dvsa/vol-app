@@ -1,10 +1,5 @@
 <?php
 
-/**
- * SubCategory Data Service Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\DocumentSubCategory;
@@ -13,28 +8,26 @@ use Dvsa\Olcs\Transfer\Query\SubCategory\GetList as Qry;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
- * SubCategory Data Service Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @covers \Olcs\Service\Data\DocumentSubCategory
  */
 class DocumentSubCategoryTest extends AbstractDataServiceTestCase
 {
+    const CAT_ID = 8001;
+
     public function testFetchListData()
     {
         $results = ['results' => 'results'];
         $params = [
             'sort' => 'subCategoryName',
             'order' => 'ASC',
-            'isDocCategory' => 'Y',
-            'category' => 'cat'
         ];
-        $dto = Qry::create($params);
+
         $mockTransferAnnotationBuilder = m::mock()
             ->shouldReceive('createQuery')->once()->andReturnUsing(
-                function ($dto) use ($params) {
+                function (Qry $dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
-                    $this->assertEquals($params['category'], $dto->getCategory());
+                    $this->assertEquals(self::CAT_ID, $dto->getCategory());
                     return 'query';
                 }
             )
@@ -42,17 +35,14 @@ class DocumentSubCategoryTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $mockResponse = m::mock()
-            ->shouldReceive('isOk')
-            ->andReturn(true)
-            ->once()
-            ->shouldReceive('getResult')
-            ->andReturn($results)
-            ->twice()
+            ->shouldReceive('isOk')->andReturn(true)->once()
+            ->shouldReceive('getResult')->andReturn($results)->once()
             ->getMock();
 
         $sut = new DocumentSubCategory();
-        $sut->setCategory('cat');
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
+        $sut->setCategory(self::CAT_ID);
+
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
         $this->assertEquals($results['results'], $sut->fetchListData([]));
     }

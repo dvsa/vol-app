@@ -13,7 +13,7 @@ OLCS.ready(function() {
   OLCS.cascadeInput({
     source: form + " #category",
     dest: form + " #documentSubCategory",
-    url: "/list/document-sub-categories",
+    url: "/list/document-sub-categories-with-docs",
     emptyLabel: "Please select",
     clearWhenEmpty: true
   });
@@ -23,7 +23,7 @@ OLCS.ready(function() {
     dest: form + " #documentTemplate",
     url: "/list/document-templates",
     emptyLabel: "Please select",
-    clearWhenEmpty: true,
+    clearWhenEmpty: true
   });
 
   OLCS.cascadeInput({
