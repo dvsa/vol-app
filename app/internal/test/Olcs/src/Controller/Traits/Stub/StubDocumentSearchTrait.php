@@ -9,8 +9,6 @@ class StubDocumentSearchTrait
 {
     use \Olcs\Controller\Traits\DocumentSearchTrait;
 
-    public $request;
-
     protected function getDocumentTableName()
     {
         return 'DocTableName';
@@ -26,8 +24,8 @@ class StubDocumentSearchTrait
         return $this->mapDocumentFilters($extra);
     }
 
-    public function getRequest()
+    public function traitGetDocumentForm(array $extra)
     {
-        return $this->request;
+        return $this->getDocumentForm($extra);
     }
 }

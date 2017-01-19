@@ -2,8 +2,10 @@
 
 namespace OlcsTest\Controller\Traits;
 
+use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
+use Olcs\Service\Data\SubCategory as SubCategoryDS;
 
 /**
  * @covers \Olcs\Controller\Traits\TaskSearchTrait
@@ -18,7 +20,9 @@ class TaskSearchTraitTest extends MockeryTestCase
 
     public function setUp()
     {
-        $this->sut = new \OlcsTest\Controller\Traits\Stub\StubTaskSearchTrait();
+        $this->sut = m::mock(\OlcsTest\Controller\Traits\Stub\StubTaskSearchTrait::class)
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods(true);
     }
 
     public function testUpdateSelectValueOptions()
@@ -73,14 +77,16 @@ class TaskSearchTraitTest extends MockeryTestCase
             ],
         ];
 
-        $this->sut->currentUser = m::mock(\Zend\Http\Request::class)
+        $mockUser = m::mock(\Zend\Http\Request::class)
             ->shouldReceive('getUserData')->once()->andReturn($userData)
             ->getMock();
 
         $mockRequest = m::mock(\Zend\Http\Request::class);
         $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn(['query' => 'unit_Query']);
 
-        $this->sut->request = $mockRequest;
+        $this->sut
+            ->shouldReceive('getRequest')->once()->andReturn($mockRequest)
+            ->shouldReceive('currentUser')->once()->andReturn($mockUser);
 
         static::assertEquals(
             $expect,
@@ -113,5 +119,55 @@ class TaskSearchTraitTest extends MockeryTestCase
                     ],
             ],
         ];
+    }
+
+    public function testGetTaskForm()
+    {
+        $expectCategory = 8001;
+        $expectTeam = 9001;
+        $filters = [
+            'assignedToTeam' => $expectTeam,
+            'category' => $expectCategory,
+        ];
+
+        $listData = [
+            'assignedToTeam' => ['unit_ListDataTeam'],
+            'assignedToUser' => ['unit_ListDataUser'],
+        ];
+
+        $mockShowField = m::mock(\Zend\Form\Element::class);
+        $mockShowField->shouldReceive('setValueOptions')->once()->with(m::hasKey(FilterOptions::SHOW_ALL));
+
+        $mockTeamField = m::mock(\Zend\Form\Element\Select::class);
+        $mockTeamField->shouldReceive('setValueOptions')->once()->with($listData['assignedToTeam']);
+        $mockUserField = m::mock(\Zend\Form\Element\Select::class);
+        $mockUserField->shouldReceive('setValueOptions')->once()->with($listData['assignedToUser']);
+
+        $mockForm = m::mock(\Zend\Form\FormInterface::class)->makePartial()
+            ->shouldReceive('remove')->once()->with('csrf')
+            ->shouldReceive('setData')->once()->with($filters)
+            ->shouldReceive('get')->once()->with('assignedToTeam')->andReturn($mockTeamField)
+            ->shouldReceive('get')->once()->with('assignedToUser')->andReturn($mockUserField)
+            ->shouldReceive('get')->once()->with('showTasks')->andReturn($mockShowField)
+            ->getMock();
+
+        $mockSubCatDs = m::mock(SubCategoryDS::class)
+            ->shouldReceive('setCategory')->once()->with($expectCategory)
+            ->getMock();
+
+        $mockSm = m::mock(\Zend\Di\ServiceLocatorInterface::class)
+            ->shouldReceive('get')->with(SubCategoryDS::class)->once()->andReturn($mockSubCatDs)
+            ->getMock();
+
+        //  call
+        /** @var \OlcsTest\Controller\Traits\Stub\StubTaskSearchTrait $sut */
+        $this->sut
+            ->shouldReceive('getServiceLocator')->once()->andReturn($mockSm)
+            ->shouldReceive('getForm')->once()->andReturn($mockForm)
+            ->shouldReceive('getListDataTeam')->once()->andReturn($listData['assignedToTeam'])
+            ->shouldReceive('getListDataUser')->once()->with($expectTeam, 'All')->andReturn($listData['assignedToUser'])
+            ->getMock();
+
+        $this->sut->traitGetTaskForm($filters);
     }
 }

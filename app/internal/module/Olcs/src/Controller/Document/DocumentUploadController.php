@@ -42,10 +42,8 @@ class DocumentUploadController extends AbstractDocumentController
             ];
         }
 
-        // @todo data services for list data are changing as part of another story
-        $this->getServiceLocator()
-            ->get('DataServiceManager')
-            ->get('Olcs\Service\Data\DocumentSubCategory')
+        //  set dynamic select
+        $this->getServiceLocator()->get(\Olcs\Service\Data\DocumentSubCategory::class)
             ->setCategory($category);
 
         $form = $this->generateFormWithData('UploadDocument', 'processUpload', $data);

@@ -3,6 +3,7 @@
 namespace Admin\Controller;
 
 use Common\Controller\Traits\GenericRenderView;
+use Common\Service\Cqrs\Response;
 use Dvsa\Olcs\Transfer\Command\Team\CreateTeam as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Team\UpdateTeam as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Team\DeleteTeam as DeleteDto;
@@ -105,7 +106,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Get left view
      *
-     * @return \Olcs\View\Model\ViewModel
+     * @return ViewModel
      */
     public function getLeftView()
     {
@@ -148,7 +149,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Delete action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return array|mixed|\Zend\Http\Response|ViewModel
      */
     public function deleteAction()
     {
@@ -311,11 +312,13 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
 
         $defaultCategory = isset($formData['team-printer']['categoryTeam']) ?
             $formData['team-printer']['categoryTeam'] : Category::CATEGORY_APPLICATION;
-        $this->getServiceLocator()->get('Olcs\Service\Data\SubCategory')
+
+        $this->getServiceLocator()->get(\Olcs\Service\Data\DocumentSubCategory::class)
             ->setCategory($defaultCategory);
 
         $defaultTeam = isset($formData['exception-details']['team']) ?
             $formData['exception-details']['team'] : $this->params()->fromRoute('team', null);
+
         $this->getServiceLocator()->get('Olcs\Service\Data\UserWithName')
             ->setTeam($defaultTeam);
 
@@ -332,7 +335,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
      */
     protected function alterFormForAddRule($form, $formData)
     {
-        $this->getServiceLocator()->get('Olcs\Service\Data\SubCategory')
+        $this->getServiceLocator()->get(\Olcs\Service\Data\DocumentSubCategory::class)
             ->setCategory(Category::CATEGORY_APPLICATION);
 
         $defaultTeam = isset($formData['exception-details']['team']) ?

@@ -55,7 +55,7 @@ trait TaskSearchTrait
      *
      * @param array $filters Filters
      *
-     * @return \Zend\Form\Form
+     * @return \Zend\Form\FormInterface
      */
     protected function getTaskForm(array $filters = [])
     {
@@ -67,11 +67,12 @@ trait TaskSearchTrait
 
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
+        $this->getServiceLocator()->get(\Olcs\Service\Data\SubCategory::class)
+            ->setCategory($category);
+
         $selects = [
             'assignedToTeam' => $this->getListDataTeam('All'),
             'assignedToUser' => $this->getListDataUser($team, 'All'),
-            'category' => $this->getListDataCategoryTasks('All'),
-            'taskSubCategory' => $this->getListDataSubCategoryTask($category, 'All'),
         ];
 
         // bang the relevant data into the corresponding form inputs

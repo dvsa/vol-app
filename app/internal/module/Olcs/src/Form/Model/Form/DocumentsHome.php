@@ -15,18 +15,22 @@ class DocumentsHome
     /**
      * @Form\Options({
      *     "label": "documents-home.data.category",
-     *     "disable_inarray_validator": false
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Olcs\Service\Data\DocumentCategory",
+     *     "empty_option": "All",
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $category = null;
 
     /**
      * @Form\Options({
      *     "label": "documents-home.data.sub_category",
-     *     "disable_inarray_validator": false
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Olcs\Service\Data\DocumentSubCategory",
+     *     "empty_option": "All",
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("DynamicSelect")
      */
     public $documentSubCategory = null;
 
