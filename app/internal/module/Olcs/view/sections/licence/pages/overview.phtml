@@ -16,7 +16,7 @@ echo $this->render('partials/read-only/main',
                 ['label' => 'Previous licence No.', 'value' => $previousLicenceNumber, 'hideIfEmpty' => true],
             ],
             2 => [
-                ['label' => 'No of licences ', 'numeric' => $numberOfLicences],
+                ['label' => 'No. of licences ', 'numeric' => $numberOfLicences],
                 [
                     'label' => 'Current applications ',
                     'value' => $currentApplications,
@@ -26,13 +26,13 @@ echo $this->render('partials/read-only/main',
             3 => [
                 ['label' => 'Licence number', 'value' => $licenceNumber],
                 [
-                    'label' => 'Licence Start Date',
+                    'label' => 'Licence start date',
                     'date' => (!empty($licenceStartDate) ? $licenceStartDate : '<empty>'),
                     'dateFormat' => 'Y-m-d',
                 ],
-                ['label' => 'Licence Type', 'value' => $this->translate($licenceType)],
+                ['label' => 'Licence type', 'value' => $this->translate($licenceType)],
                 ['label' => 'Licence status', 'value' => $this->status($licenceStatus), 'noEscape' => true],
-                ['label' => 'Grace Period', 'value' => $licenceGracePeriods, 'noEscape' => true],
+                ['label' => 'Grace period', 'value' => $licenceGracePeriods, 'noEscape' => true],
                 [
                     'label' => $isPsv ? 'Terminated date' : 'Surrendered date',
                     'date' => $surrenderedDate,
@@ -41,7 +41,7 @@ echo $this->render('partials/read-only/main',
             ],
             5 => [
                 [
-                    'label' => 'No. of Vehicles',
+                    'label' => 'No. of vehicles',
                     'numeric' => $numberOfVehicles,
                     'hideIfEmpty' => true,
                 ],
@@ -82,14 +82,14 @@ echo $this->render('partials/read-only/main',
                     'value' => $openCases, // not numeric, may be suffixed with ' (PI)'
                 ],
                 [
-                    'label' => 'Current Review Complaints',
+                    'label' => 'Current review complaints',
                     'numeric' => $currentReviewComplaints,
                     'hideIfEmpty' => true,
                 ],
             ],
             7 => [
                 [
-                    'label' => 'Receives Mail Electronically',
+                    'label' => 'Receives mail electronically',
                     'value' => $receivesMailElectronically,
                     'hideIfEmpty' => true
                 ],
