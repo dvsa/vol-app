@@ -11,7 +11,7 @@ class LicenceOverviewDetails
 {
     /**
      * @Form\Options({
-     *     "label": "Continuation Date",
+     *     "label": "Continuation date",
      *     "create_empty_option": true,
      *     "render_delimiters": false,
      *     "required": false,
