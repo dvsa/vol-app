@@ -29,16 +29,24 @@
         ?>
     </ul>
   </div>
-  <div class="one-third">
 
-    <dl class="meta">
-      <dt><?php echo $this->translate('selfserve-dashboard-target-start-date'); ?></dt>
-      <dd><?php echo $startDate ? strftime("%d %B %G",strtotime($startDate)) : ''; ?></dd>
-      <dt><?php echo $this->translate('selfserve-dashboard-target-renewal-date'); ?></dt>
-      <dd><?php echo $renewalDate ? strftime("%d %B %G",strtotime($renewalDate)) : ''; ?></dd>
-      <dt><?php echo $this->translate('status'); ?></dt>
-      <dd><?php echo $this->translate($status); ?></dd>
-    </dl>
+    <div class="one-third">
+        <aside class="sidebar" role="complementary">
+            <ul class="sidebar__actions">
+                <li>
+                    <a href="<?php echo $this->url('licence-print', [], [], true); ?>"
+                    ><?php echo $this->translate('licence.print'); ?></a>
+                </li>
+            </ul>
+        </aside>
 
-  </div>
+        <dl class="meta">
+            <dt><?php echo $this->translate('selfserve-dashboard-target-start-date'); ?></dt>
+            <dd><?php echo $startDate ? strftime("%d %B %G",strtotime($startDate)) : ''; ?></dd>
+            <dt><?php echo $this->translate('selfserve-dashboard-target-renewal-date'); ?></dt>
+            <dd><?php echo $renewalDate ? strftime("%d %B %G",strtotime($renewalDate)) : ''; ?></dd>
+            <dt><?php echo $this->translate('status'); ?></dt>
+            <dd><?php echo $this->translate($status); ?></dd>
+        </dl>
+    </div>
 </div>
