@@ -14,9 +14,11 @@ use Common\RefData;
 class ApplicationOverviewHelperService extends AbstractHelperService
 {
     /**
-     * @param array $application application overview data
-     * @param array $licence licence overview data
-     * @param string $lva 'application'|'variation' used for URL generation
+     * Gets application view data
+     *
+     * @param array  $application application overview data
+     * @param string $lva         'application'|'variation' used for URL generation
+     *
      * @return array view data
      */
     public function getViewData($application, $lva)
@@ -76,8 +78,11 @@ class ApplicationOverviewHelperService extends AbstractHelperService
     }
 
     /**
-     * @param array $application application data
-     * @param string $lva 'application'|'variation' used for URL generation
+     * Gets interim status string
+     *
+     * @param array  $application application overview data
+     * @param string $lva         'application'|'variation' used for URL generation
+     *
      * @return string|null
      */
     public function getInterimStatus($application, $lva)
@@ -107,7 +112,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
 
 
     /**
-     * The the change of entity status.
+     * Gets the change of entity status.
      *
      * @param array $application application data
      *
@@ -141,9 +146,12 @@ class ApplicationOverviewHelperService extends AbstractHelperService
     }
 
     /**
+     * Gets total vehicle authorisation
+     *
      * @param array $application application overview data
-     * @param array $licence licence overview data
-     * @return string
+     * @param array $licence     licence overview data
+     *
+     * @return string|null
      */
     public function getTotalVehicleAuthorisation($application, $licence)
     {
@@ -161,9 +169,12 @@ class ApplicationOverviewHelperService extends AbstractHelperService
     }
 
     /**
+     * Gets total trailer authorisation
+     *
      * @param array $application application overview data
-     * @param array $licence licence overview data
-     * @return string
+     * @param array $licence     licence overview data
+     *
+     * @return string|null
      */
     public function getTotalTrailerAuthorisation($application, $licence)
     {
@@ -181,8 +192,11 @@ class ApplicationOverviewHelperService extends AbstractHelperService
     }
 
     /**
+     * Gets number of operating centres
+     *
      * @param array $application application overview data
-     * @param array $licence licence overview data
+     * @param array $licence     licence overview data
+     *
      * @return string|null
      */
     protected function getNumberOfOperatingCentres($application, $licence)
@@ -198,8 +212,11 @@ class ApplicationOverviewHelperService extends AbstractHelperService
     }
 
     /**
+     * Gets number of vehicles
+     *
      * @param array $application application overview data
-     * @param array $licence licence overview data
+     * @param array $licence     licence overview data
+     *
      * @return string|null
      */
     protected function getNumberOfVehicles($application, $licence)
@@ -215,8 +232,11 @@ class ApplicationOverviewHelperService extends AbstractHelperService
     }
 
     /**
+     * Gets number of issued discs
+     *
      * @param array $application application overview data
-     * @param array $licence licence overview data
+     * @param array $licence     licence overview data
+     *
      * @return string|null
      */
     protected function getNumberOfIssuedDiscs($application, $licence)
