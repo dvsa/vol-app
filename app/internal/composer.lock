@@ -812,7 +812,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "43c17b28c7b3101b1b2bbf3c735640aba7434808"
+                "reference": "e156aa0ac2c8f0c5ff79b3312abffdd368e48f2a"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -843,7 +843,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2017-01-18 16:18:42"
+            "time": "2017-01-19 12:42:02"
         },
         {
             "name": "olcs/autoload",
@@ -927,7 +927,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
-                "reference": "18a9138f34e7c2489d075d5ec244286f6979e4f1"
+                "reference": "38dc654bbcdfb878d51f60f9536a0dde2bf8079d"
             },
             "require": {
                 "php": ">=5.4",
@@ -945,7 +945,7 @@
                 }
             },
             "description": "OLCS Transfer",
-            "time": "2017-01-18 10:42:16"
+            "time": "2017-01-19 12:40:10"
         },
         {
             "name": "olcs/olcs-utils",
