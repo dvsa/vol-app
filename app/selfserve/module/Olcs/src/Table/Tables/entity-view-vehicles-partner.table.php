@@ -7,13 +7,8 @@ return array(
     'columns' => array(
         array(
             'title' => 'Interim',
-            'formatter' => function ($data) {
-                if (!is_null($data['interimApplication'])) {
-                    return 'Yes';
-                }
-
-                return 'No';
-            }
+            'name' => 'interimApplication',
+            'formatter' => 'yesno',
         ),
         array(
             'title' => 'Vehicle registration number',

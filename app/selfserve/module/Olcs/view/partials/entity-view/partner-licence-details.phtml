@@ -1,8 +1,9 @@
 <?php
 
 $items = [];
+$tradingNamesList = [];
 if (!empty($this->result['tradingNames'])) {
-    for($i = 0; $i<count($this->result['tradingNames']);$i++) {
+    for ($i = 0, $n = count($this->result['tradingNames']); $i < $n; $i++) {
         $label = ($i == 0) ? 'search-result-label-trading-names' : '';
         $tradingNamesList[] = [
             'label' => $label,
@@ -18,8 +19,10 @@ if (!empty($this->result['tradingNames'])) {
 $items[] = $tradingNamesList;
 
 if (!in_array($this->result['organisation']['type']['id'], $this->soleTraderOrRegisteredCompanyType)) {
+    $partnersList = [];
+
     if (!empty($this->result['partners'])) {
-        for ($i = 0; $i < count($this->result['partners']); $i++) {
+        for ($i = 0, $n = count($this->result['partners']); $i < $n; $i++) {
             $label = ($i == 0) ? 'search-result-label-partners' : '';
             $partnersList[] = [
                 'label' => $label,
@@ -74,7 +77,10 @@ echo $this->render('partials/read-only/main',
             array_merge(
                 [
                     0 => [
-                        ['label' => 'search-result-label-business-type', 'value' => $businessType],
+                        [
+                            'label' => 'search-result-label-business-type',
+                            'value' => $this->translate($businessType),
+                        ],
                     ]
                 ],
                 $items,
@@ -82,8 +88,14 @@ echo $this->render('partials/read-only/main',
                     4 => [
                         ['label' => 'search-result-label-licence-start-date', 'value' => $licenceStartDate],
                         ['label' => 'search-result-label-licence-review-date', 'value' => $licenceReviewDate],
-                        ['label' => 'search-result-label-licence-type', 'value' => $licenceType],
-                        ['label' => 'search-result-label-licence-status', 'value' => $licenceStatus],
+                        [
+                            'label' => 'search-result-label-licence-type',
+                            'value' => $this->translate($licenceType),
+                        ],
+                        [
+                            'label' => 'search-result-label-licence-status',
+                            'value' => $this->translate($licenceStatus),
+                        ],
                         [
                             'label' => 'search-result-label-continuation-date',
                             'dateFormat' => 'Y-m-d',
@@ -98,8 +110,10 @@ echo $this->render('partials/read-only/main',
                     ],
                     6 => [
                         ['label' => 'search-result-label-existing-pi', 'value' => $totalPiRecords],
-                        ['label' => 'search-result-label-operator-disqualified', 'value' =>
-                            $isDisqualified],
+                        [
+                            'label' => 'search-result-label-operator-disqualified',
+                            'value' => $this->translate($isDisqualified),
+                        ],
                         [
                             'label' => 'search-result-label-total-community-licences',
                             'value' => $activeCommunityLicences
