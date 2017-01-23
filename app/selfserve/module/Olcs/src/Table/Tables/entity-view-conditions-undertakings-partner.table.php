@@ -28,8 +28,14 @@ return array(
         ),
         array(
             'title' => $translationPrefix . '.status',
-            'formatter' => function ($data) {
-                return $data['isDraft'] == 'Y' ? 'Draft' : 'Approved';
+            'formatter' => function ($data, $col, $sl) {
+                /** @var \Zend\I18n\Translator\Translator $translator */
+                $translator = $sl->get('translator');
+
+                return $translator->translate(
+                    'common.table.status.' .
+                    ($data['isDraft'] === 'Y' ? 'draft' : 'approved')
+                );
             }
         )
     )

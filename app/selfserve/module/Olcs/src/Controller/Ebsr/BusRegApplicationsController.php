@@ -23,7 +23,7 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Lists all EBSR's with filter search form
      *
-     * @return ViewModel
+     * @return array|Response|ViewModel
      */
     public function indexAction()
     {
@@ -145,7 +145,7 @@ class BusRegApplicationsController extends AbstractController
      *
      * @param array $data data array
      *
-     * @return null|Response|\Zend\View\Model\ConsoleModel|ViewModel
+     * @return array|Response
      */
     private function processMarkAsRead($data)
     {
@@ -163,16 +163,12 @@ class BusRegApplicationsController extends AbstractController
         }
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
         }
 
-        if ($response->isOk()) {
-            $params['status'] = $this->params()->fromQuery('status');
+        $params['status'] = $this->params()->fromQuery('status');
 
-            return $this->redirect()->toRoute(null, $params, [], false);
-        }
-
-        return null;
+        return $this->redirect()->toRoute(null, [], ['query' => $params], false);
     }
 
     /**
@@ -245,7 +241,7 @@ class BusRegApplicationsController extends AbstractController
      * @param string         $temlate the template
      * @param array          $options array of options
      *
-     * @return null|\Zend\View\Model\ConsoleModel|ViewModel
+     * @return array|null|ViewModel
      */
     private function details(QueryInterface $query, $temlate, $options = [])
     {

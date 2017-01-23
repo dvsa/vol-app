@@ -26,9 +26,8 @@ return array(
         ),
         array(
             'title' => 'Status',
-            'formatter' => function ($data) {
-                return $data['status']['description'];
-            }
+            'formatter' => 'Translate',
+            'name' => 'status->description',
         ),
         array(
             'title' => 'Application type',

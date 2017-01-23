@@ -6,7 +6,7 @@ $registeredAddress = isset($this->result['organisation']['contactDetails']['addr
     $this->address($this->result['organisation']['contactDetails']['address']) : '';
 
 if (!empty($this->result['directors'])) {
-    for ($i = 0; $i<count($this->result['directors']);$i++) {
+    for ($i = 0, $n = count($this->result['directors']); $i < $n; $i++) {
         $label = ($i == 0) ? 'search-result-label-directors' : '';
         $directorsList[] = [
             'label' => $label,

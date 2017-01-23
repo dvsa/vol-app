@@ -20,7 +20,7 @@ $items[] = [
 
 $phoneContacts = $this->result['licenceContactDetails']['phoneContacts'];
 if (!empty($phoneContacts)) {
-    for($i = 0; $i<count($phoneContacts);$i++) {
+    for ($i = 0, $n = count($phoneContacts); $i < $n; $i++) {
         if ($phoneContacts[$i]['phoneContactType']['id'] === RefData::TYPE_FAX) {
             $faxLabel = ($faxCount == 0) ? 'search-result-label-fax-numbers' : '';
             $faxList[] = [
