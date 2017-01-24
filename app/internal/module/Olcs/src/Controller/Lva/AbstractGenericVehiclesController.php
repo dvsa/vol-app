@@ -40,6 +40,6 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
             $fm->addErrorMessage('vehicle-list-print-failed');
         }
 
-        return $this->redirect()->toRoute(null, ['action' => null], [], true);
+        return $this->redirect()->toRoute($this->getBaseRoute(), ['action' => null], [], true);
     }
 }
