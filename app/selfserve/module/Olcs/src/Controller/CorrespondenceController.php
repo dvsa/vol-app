@@ -32,6 +32,8 @@ class CorrespondenceController extends AbstractController
         $params = [
             'page' => $this->params()->fromQuery('page', 1),
             'limit' => $this->params()->fromQuery('limit', 10),
+            'sort' => $this->params()->fromQuery('sort', 'd.issuedDate'),
+            'order' => $this->params()->fromQuery('order', 'DESC'),
             'organisation' => $this->getCurrentOrganisationId(),
             'query' => $this->params()->fromQuery(),
         ];
