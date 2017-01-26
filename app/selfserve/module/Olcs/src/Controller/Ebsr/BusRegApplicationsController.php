@@ -393,7 +393,11 @@ class BusRegApplicationsController extends AbstractController
             $queryParams = ['query' => $params->queryParams];
         }
 
-        return $this->url()->fromRoute('search', (array)$params->routeParams, $queryParams);
+        return $this->url()->fromRoute(
+            !empty($params->route) ? $params->route : 'search',
+            (array)$params->routeParams,
+            $queryParams
+        );
     }
 
     /**
