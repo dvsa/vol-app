@@ -73,8 +73,8 @@ class UserRegistration
      *          "class": "inline",
      *      },
      *      "fieldset-attributes": {
-     *          "class":"checkbox inline",
-     *      },
+     *          "class":"checkbox",
+     *      }
      * })
      * @Form\Required(true)
      * @Form\Attributes({"id":"isLicenceHolder", "placeholder":"", "required":false})
