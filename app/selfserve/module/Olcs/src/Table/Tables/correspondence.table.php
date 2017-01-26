@@ -22,6 +22,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'dashboard-correspondence.table.column.issuedDate',
+            'width' => '20%',
             'formatter' => function ($row) {
                 if (isset($row['correspondence']['document']['issuedDate'])) {
                     return date(\DATE_FORMAT, strtotime($row['correspondence']['document']['issuedDate']));
