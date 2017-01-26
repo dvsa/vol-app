@@ -23,7 +23,7 @@ return array(
         array(
             'title' => 'selfserve-fees-table-fee-description',
             'name' => 'description',
-            'formatter' => 'FeeUrl',
+            'formatter' => 'FeeUrlExternal',
         ),
         array(
             'title' => 'selfserve-fees-table-fee-reference',
@@ -42,6 +42,9 @@ return array(
             'type' => 'Checkbox',
             'width' => 'checkbox',
             'name' => 'checkbox',
+            'disabled-callback' => function ($row) {
+                return $row['isExpiredForLicence'];
+            }
         )
     ),
     'footer' => array(

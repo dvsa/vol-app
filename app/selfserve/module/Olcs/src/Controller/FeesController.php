@@ -16,6 +16,7 @@ use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentById;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePayment;
 use Common\Controller\Traits\GenericReceipt;
+use Dvsa\Olcs\Transfer\Query\Fee\Fee;
 
 /**
  * Fees Controller
@@ -303,6 +304,26 @@ class FeesController extends AbstractController
         );
         $view->setTemplate('cpms/payment');
 
+        return $this->render($view);
+    }
+
+    /**
+     * Late fee action
+     *
+     * @return ViewModel
+     */
+    public function lateFeeAction()
+    {
+        $feeId = $this->params('fee');
+        $response = $this->handleQuery(Fee::create(['id' => $feeId]));
+        if (!$response->isOk()) {
+            throw new ResourceNotFoundException('Fee not found');
+        }
+        $result = $response->getResult();
+        $view = new ViewModel(
+            ['licenceExpiryDate' => date('d F Y', strtotime($result['licenceExpiryDate']))]
+        );
+        $view->setTemplate('pages/fees/late');
         return $this->render($view);
     }
 }
