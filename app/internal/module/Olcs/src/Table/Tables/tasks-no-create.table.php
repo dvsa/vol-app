@@ -35,6 +35,7 @@ return array(
         ),
         array(
             'title' => 'Sub category',
+            'class' => 'no-wrap',
             'name' => 'taskSubCategoryName',
             'sort' => 'taskSubCategoryName',
         ),
