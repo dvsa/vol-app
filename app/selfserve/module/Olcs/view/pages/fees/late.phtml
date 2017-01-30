@@ -22,7 +22,10 @@ $translator = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\
 
   <div class="three-quarters">
 
-      <?php echo $translator->translateReplace('markup-late-fee', [$licenceExpiryDate]); ?>
+      <?php echo $translator->translateReplace(
+          'markup-late-fee',
+          [$this->escapeHtml($licenceExpiryDate)]
+      ); ?>
 
   </div>
 
