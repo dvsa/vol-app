@@ -272,6 +272,18 @@ $routes = array(
                     ),
                 ),
             ),
+            'late' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'late/:fee[/]',
+                    'constraints' => array(
+                        'fee' => '[0-9\,]+',
+                    ),
+                    'defaults' => array(
+                        'action' => 'late-fee',
+                    ),
+                ),
+            ),
         ),
     ),
     'correspondence' => array(

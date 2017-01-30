@@ -1,0 +1,32 @@
+<?php
+/** @var \Zend\Navigation\Page\Mvc $backPage */
+
+$backPage = $this->navigationParentPage();
+
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $this->translate('pay-fee.title'),
+        'backUrl' => [
+            'url' => ($backPage !== null ? $backPage->getHref() : $this->url('fees')),
+        ],
+    ]
+);
+
+/** @var  \Common\Service\Helper\TranslationHelperService $translator */
+$translator = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');
+?>
+
+
+<div class="row">
+
+  <div class="three-quarters">
+
+      <?php echo $translator->translateReplace(
+          'markup-late-fee',
+          [$this->escapeHtml($licenceExpiryDate)]
+      ); ?>
+
+  </div>
+
+</div>
