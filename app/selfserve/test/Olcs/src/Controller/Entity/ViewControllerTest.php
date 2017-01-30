@@ -80,7 +80,8 @@ class ViewControllerTest extends MockeryTestCase
             'licNo' => 'OB12345',
             'otherLicences' => [],
             'transportManagers' => [],
-            'operatingCentres' => []
+            'operatingCentres' => [],
+            'status' => ['id' => 'foo'],
         ];
 
         //  mock plugins
@@ -159,6 +160,7 @@ class ViewControllerTest extends MockeryTestCase
             'currentApplications' => [],
             'conditionUndertakings' => [],
             'applications' => [],
+            'status' => ['id' => 'foo'],
         ];
 
         //  mock plugins

@@ -76,6 +76,17 @@ class ViewController extends AbstractController
             $result = $response->getResult();
         }
 
+        // https://jira.i-env.net/browse/OLCS-14852
+        // Cannot view licence that is in one of these statuses
+        $cannotViewStatuses = [
+            RefData::LICENCE_STATUS_NOT_SUBMITTED,
+            RefData::LICENCE_STATUS_UNLICENSED,
+            RefData::LICENCE_STATUS_WITHDRAWN,
+        ];
+        if (in_array($result['status']['id'], $cannotViewStatuses)) {
+            return $this->notFoundAction();
+        };
+
         // setup layout and view
         $content = $this->generateContent($result);
 
