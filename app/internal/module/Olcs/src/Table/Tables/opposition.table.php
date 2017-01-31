@@ -18,12 +18,6 @@ return array(
                 'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         ),
-        'paginate' => array(
-            'limit' => array(
-                'default' => 10,
-                'options' => array(10, 25, 50)
-            )
-        )
     ),
     'columns' => array(
         array(

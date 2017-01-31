@@ -21,12 +21,6 @@ return array(
                 'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
             )
         ),
-        'paginate' => array(
-            'limit' => array(
-                'default' => 100,
-                'options' => array(100)
-            )
-        )
     ),
     'columns' => array(
         array(
