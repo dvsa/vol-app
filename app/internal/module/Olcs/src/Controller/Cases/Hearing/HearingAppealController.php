@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Hearing & Appeal Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 namespace Olcs\Controller\Cases\Hearing;
 
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\AppealByCase as AppealDto;
@@ -81,7 +75,7 @@ class HearingAppealController extends AbstractInternalController implements Case
 
         $caseId = $this->params()->fromRoute('case');
 
-        $this->placeholder()->setPlaceholder('case', $caseId);
+        $this->placeholder()->setPlaceholder('caseId', $caseId);
 
         $appeal = $this->handleQuery(
             AppealDto::create(

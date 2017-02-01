@@ -1,7 +1,7 @@
 <?php
 $appeal = $this->placeholder('appeal')->getValue();
 
-$caseId = $this->placeholder('case')->getValue();
+$caseId = $this->placeholder('caseId')->getValue();
 $stayRecords = $this->placeholder('stays')->getValue();
 
 /**
@@ -86,9 +86,7 @@ if (empty($appeal)){
 
     if (empty($appeal['withdrawnDate'])) {
         if (isset($stayRecords['stay_t_tc']) && !empty($stayRecords['stay_t_tc'])):
-
             echo $this->partial('sections/cases/pages/stay-details', $stayRecords['stay_t_tc']);
-
         else:
             echo $this->render('partials/read-only/empty',
                 [
@@ -108,11 +106,8 @@ if (empty($appeal)){
         endif;
 
         if (isset($stayRecords['stay_t_ut']) && !empty($stayRecords['stay_t_ut'])):
-
             echo $this->partial('sections/cases/pages/stay-details', $stayRecords['stay_t_ut']);
-
         else:
-
             echo $this->render('partials/read-only/empty',
                 [
                     'header' => 'Upper Tribunal stay',
