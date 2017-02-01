@@ -167,6 +167,7 @@ class SearchController extends AbstractController
     {
         $sessionSearch = new Container('searchQuery');
 
+        $sessionSearch->route = 'search';
         $sessionSearch->routeParams = $routeParams;
         $sessionSearch->queryParams = $queryParams;
     }

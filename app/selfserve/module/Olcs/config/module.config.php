@@ -128,7 +128,19 @@ $routes = array(
                         'controller' => Olcs\Controller\BusReg\BusRegBrowseController::class,
                         'action' => 'index',
                     ),
-                )
+                ),
+                'may_terminate' => true,
+                'child_routes' => [
+                    'results' => array(
+                        'type' => 'segment',
+                        'options' =>  array(
+                            'route' => 'results[/]',
+                            'defaults' => array(
+                                'action' => 'results',
+                            ),
+                        )
+                    ),
+                ],
             ),
             'details' => [
                 'type' => Segment::class,
