@@ -143,11 +143,14 @@ class DocumentSearchTraitTest extends MockeryTestCase
         $mockField = m::mock(\Zend\Form\Element::class)->makePartial()
             ->shouldReceive('setValueOptions')->once()->with(m::hasKey(FilterOptions::SHOW_ALL))
             ->getMock();
+        $mockFormatSelect = m::mock(\Zend\Form\Element\Select::class);
+        $mockFormatSelect->shouldReceive('setValueOptions')->with(['' => 'All', 'RTF' => 'RTF', 'D' => 'D'])->once();
 
         $mockForm = m::mock(\Zend\Form\FormInterface::class)->makePartial()
             ->shouldReceive('remove')->once()->with('csrf')
             ->shouldReceive('setData')->once()->with($filters)
             ->shouldReceive('get')->once()->with('showDocs')->andReturn($mockField)
+            ->shouldReceive('get')->once()->with('format')->andReturn($mockFormatSelect)
             ->getMock();
 
         $mockFormHelper = m::mock(\Common\Service\Helper\FormHelperService::class)->makePartial()
@@ -163,12 +166,53 @@ class DocumentSearchTraitTest extends MockeryTestCase
             ->shouldReceive('get')->with(DocumentSubCategoryDS::class)->once()->andReturn($mockDocSubCatDs)
             ->getMock();
 
+        $mockDocumentListResponse = m::mock(\Common\Service\Cqrs\Response::class);
+        $mockDocumentListResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
+        $mockDocumentListResponse->shouldReceive('getResult')->with()->once()->andReturn(
+            ['extra' => ['extensionList' => ['RTF', 'D']]]
+        );
+
         //  call
         $this->sut
             ->shouldReceive('getRequest')->once()->andReturn($mockRequest)
             ->shouldReceive('getServiceLocator')->once()->andReturn($mockSm)
+            ->shouldReceive('handleQuery')->once()->andReturn($mockDocumentListResponse)
             ->shouldReceive('getForm')->once()->andReturn($mockForm);
 
         $this->sut->traitGetDocumentForm($filters);
+    }
+
+    public function testGetDocumentsTable()
+    {
+        $mockDocumentListResponse = m::mock(\Common\Service\Cqrs\Response::class);
+        $mockDocumentListResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
+        $mockDocumentListResponse->shouldReceive('getResult')->with()->once()->andReturn('DOCUMENT_LIST');
+
+        $mockRequest = m::mock();
+        $mockRequest->shouldReceive('getQuery')->with()->once()->andReturn('QUERY');
+        $mockRequest->shouldReceive('getUri->getQuery')->with()->once()->andReturn(null);
+
+        $filters = ['foo' => 'bar'];
+        $this->sut->shouldReceive('getRequest')->with()->twice()->andReturn($mockRequest);
+        $this->sut->shouldReceive('handleQuery')->once()->andReturn($mockDocumentListResponse);
+        $this->sut->shouldReceive('getDocumentTableName')->with()->once()->andReturn('TABLE_NAME');
+        $this->sut->shouldReceive('getTable')
+            ->with('TABLE_NAME', 'DOCUMENT_LIST', ['foo' => 'bar', 'query' => 'QUERY'])
+            ->once()
+            ->andReturn('TABLE');
+
+        $this->assertSame('TABLE', $this->sut->getDocumentsTable($filters));
+    }
+
+    public function testGetExtensionListNoValues()
+    {
+        $mockDocumentListResponse = m::mock(\Common\Service\Cqrs\Response::class);
+        $mockDocumentListResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
+        $mockDocumentListResponse->shouldReceive('getResult')->with()->once()->andReturn([]);
+
+        $filters = ['foo' => 'bar'];
+        $this->sut->shouldReceive('handleQuery')->once()->andReturn($mockDocumentListResponse);
+
+        $this->assertSame([], $this->sut->getDocumentsExtensionList($filters));
     }
 }

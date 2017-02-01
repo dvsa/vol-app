@@ -92,6 +92,11 @@ trait DocumentSearchTrait
             ]
         );
 
+        // Populate the "Format" filter select element with values
+        /** @var \Zend\Form\Element\Select $formatSelectElement */
+        $formatSelectElement = $form->get('format');
+        $formatSelectElement->setValueOptions(array_merge(['' => 'All'], $this->getDocumentsExtensionList($filters)));
+
         // setting $this->enableCsrf = false won't sort this; we never POST
         $form->remove('csrf');
 
@@ -106,9 +111,48 @@ trait DocumentSearchTrait
      * @param array $filters Filters data
      *
      * @return \Common\Service\Table\TableBuilder
-     * @throws \Exception
      */
     protected function getDocumentsTable($filters = [])
+    {
+        $response = $this->getDocumentList($filters);
+        $documents = $response->getResult();
+
+        $filters['query'] = $this->getRequest()->getQuery();
+
+        $table = $this->getTable($this->getDocumentTableName(), $documents, $filters);
+        $this->updateTableActionWithQuery($table);
+
+        return $table;
+    }
+
+    /**
+     * Get a the list of used file extensions in the document list
+     *
+     * @param array $filters Filters
+     *
+     * @return array Eg ['RTF' => 'RTF']
+     */
+    protected function getDocumentsExtensionList(array $filters = [])
+    {
+        $response = $this->getDocumentList($filters);
+        $result = $response->getResult();
+        if (!isset($result['extra']['extensionList'])) {
+            return [];
+        }
+
+        // Use array_combine to make the key = $value, Eg 'RTF' => 'RTF'
+        return array_combine($result['extra']['extensionList'], $result['extra']['extensionList']);
+    }
+
+    /**
+     * Get the Document List
+     *
+     * @param array $filters Filters
+     *
+     * @return \Common\Service\Cqrs\Response
+     * @throws \Exception
+     */
+    private function getDocumentList($filters)
     {
         if (isset($filters['documentSubCategory'])) {
             // query requires array of subcategories
@@ -121,14 +165,7 @@ trait DocumentSearchTrait
             throw new \Exception('Error retrieving document list');
         }
 
-        $documents = $response->getResult();
-
-        $filters['query'] = $this->getRequest()->getQuery();
-
-        $table = $this->getTable($this->getDocumentTableName(), $documents, $filters);
-        $this->updateTableActionWithQuery($table);
-
-        return $table;
+        return $response;
     }
 
     /**
