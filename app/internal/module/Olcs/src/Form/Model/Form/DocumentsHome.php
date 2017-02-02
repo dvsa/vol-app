@@ -57,6 +57,18 @@ class DocumentsHome
     public $showDocs = null;
 
     /**
+     * @Form\Options({
+     *     "label": "documents.filter.format.title",
+     *     "value_options": {
+     *          "" : "All",
+     *     },
+     *     "disable_inarray_validator": false
+     * })
+     * @Form\Type("\Zend\Form\Element\Select")
+     */
+    public $format = null;
+
+    /**
      * @Form\Attributes({"type":"submit","class":"action--primary"})
      * @Form\Options({
      *     "label": "documents-home.submit.filter",
