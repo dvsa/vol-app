@@ -20,17 +20,17 @@ echo $this->partial(
 ?>
 
 <div class="row">
-    <div class="one-quarter sidebar--plain search-filter">
+    <div class="one-third sidebar--plain search-filter">
 
         <h3 id="filterTitle"><?php echo $this->translate('search.form.title') ?></h3>
 
         <?php echo $this->form($this->filterForm) ?>
 
-    </div><!-- three-eights -->
+    </div>
 
-    <div class="three-quarters">
+    <div class="two-thirds">
 
         <?php echo ($this->noResultsMessage) ? $this->translate($this->noResultsMessage) : $results; ?>
 
-    </div><!-- five-eights -->
+    </div>
 </div><!-- row -->
