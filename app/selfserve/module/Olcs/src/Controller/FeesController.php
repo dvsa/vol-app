@@ -74,7 +74,7 @@ class FeesController extends AbstractController
     public function payFeesAction()
     {
         if ($this->getRequest()->isPost()) {
-            if ($this->isButtonPressed('cancel')) {
+            if ($this->isButtonPressed('cancel') || $this->isButtonPressed('customCancel')) {
                 return $this->redirectToIndex();
             }
             $storedCardReference = (is_array($this->getRequest()->getPost('storedCards')) &&
