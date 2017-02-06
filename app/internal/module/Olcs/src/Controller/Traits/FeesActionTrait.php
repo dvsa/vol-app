@@ -1081,6 +1081,24 @@ trait FeesActionTrait
                     return $this->redirectToList();
                 }
 
+                $messages = $response->getResult()['messages'];
+                $translateHelper = $this->getServiceLocator()->get('Helper\Translation');
+
+                $errorMessage = '';
+                foreach ($messages as $message) {
+                    if (is_array($message) && array_key_exists(RefData::ERR_WAIT, $message)) {
+                        $errorMessage = $translateHelper->translate('payment.error.15sec');
+                        break;
+                    } elseif (is_array($message) && array_key_exists(RefData::ERR_NO_FEES, $message)) {
+                        $errorMessage = $translateHelper->translate('payment.error.feepaid');
+                        break;
+                    }
+                }
+                if ($errorMessage !== '') {
+                    $this->addErrorMessage($errorMessage);
+                    return $this->redirectToList();
+                }
+
                 // Look up the new payment in order to get the redirect data
                 $transactionId = $response->getResult()['id']['transaction'];
                 $response = $this->handleQuery(PaymentByIdQry::create(['id' => $transactionId]));
