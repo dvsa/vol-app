@@ -63,6 +63,24 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         $dto = PayOutstandingFeesCmd::create($dtoData);
         $response = $this->handleCommand($dto);
 
+        $messages = $response->getResult()['messages'];
+
+        $translateHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $errorMessage = '';
+        foreach ($messages as $message) {
+            if (is_array($message) && array_key_exists(RefData::ERR_WAIT, $message)) {
+                $errorMessage = $translateHelper->translate('payment.error.15sec');
+                break;
+            } elseif (is_array($message) && array_key_exists(RefData::ERR_NO_FEES, $message)) {
+                $errorMessage = $translateHelper->translate('payment.error.feepaid');
+                break;
+            }
+        }
+        if ($errorMessage !== '') {
+            $this->addErrorMessage($errorMessage);
+            return $this->redirectToOverview();
+        }
+
         if (!$response->isOk()) {
             $this->addErrorMessage('feeNotPaidError');
             return $this->redirectToOverview();

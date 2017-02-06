@@ -284,6 +284,24 @@ class FeesController extends AbstractController
 
         /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->handleCommand($dto);
+
+        $messages = $response->getResult()['messages'];
+        $translateHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $errorMessage = '';
+        foreach ($messages as $message) {
+            if (is_array($message) && array_key_exists(RefData::ERR_WAIT, $message)) {
+                $errorMessage = $translateHelper->translate('payment.error.15sec');
+                break;
+            } elseif (is_array($message) && array_key_exists(RefData::ERR_NO_FEES, $message)) {
+                $errorMessage = $translateHelper->translate('payment.error.feepaid');
+                break;
+            }
+        }
+        if ($errorMessage !== '') {
+            $this->addErrorMessage($errorMessage);
+            return $this->redirectToIndex();
+        }
+
         if (!$response->isOk()) {
             $this->addErrorMessage('payment-failed');
             return $this->redirectToIndex();
