@@ -22,7 +22,7 @@ class IrfoDetails extends Base
 
     /**
      * @Form\ComposedObject({
-     *      "target_object":"Olcs\Form\Model\Fieldset\TradingName",
+     *      "target_object":"Common\Form\Model\Form\Lva\Fieldset\TradingNames",
      *      "is_collection":true,
      *      "options":{
      *          "count":1, 
