@@ -24,25 +24,31 @@ class UnlicensedGoodsVehicleData
     public $version = null;
 
     /**
-     * @Form\Attributes({"class":"medium","id":"vrm","placeholder":""})
-     * @Form\Options({
-     *     "label": "application_vehicle-safety_vehicle-sub-action.data.vrm"
+     * @Form\Attributes({
+     *     "class": "medium",
+     *     "id": "vrm",
+     *     "placeholder": "",
      * })
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":20}})
+     * @Form\Options({
+     *     "label": "application_vehicle-safety_vehicle-sub-action.data.vrm",
+     *     "error-message": "vehicle.error.top.vrm",
+     * })
+     * @Form\Type("\Common\Form\Elements\Custom\VehicleVrmAny")
      */
     public $vrm = null;
 
     /**
-     * @Form\Attributes({"class":"small","id":"plated_weight","placeholder":""})
-     * @Form\Options({
-     *     "label": "application_vehicle-safety_vehicle-sub-action.data.weight"
+     * @Form\Attributes({
+     *     "class": "small",
+     *     "id": "plated_weight",
+     *     "placeholder": "",
      * })
-     * @Form\Validator({"name": "Zend\Validator\Digits"})
-     * @Form\Validator({"name": "Zend\Validator\Between", "options": {"min": 0, "max": 999999}})
-     * @Form\Type("Text")
-     * @Form\Required(false)
+     * @Form\Options({
+     *     "label": "application_vehicle-safety_vehicle-sub-action.data.weight",
+     *     "error-message": "vehicle.error.top.platedWeight",
+     *     "allow_empty": true,
+     * })
+     * @Form\Type("\Common\Form\Elements\Custom\VehiclePlatedWeight")
      */
     public $platedWeight = null;
 }

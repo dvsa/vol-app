@@ -27,11 +27,10 @@ class UnlicensedPsvVehicleData
     /**
      * @Form\Attributes({"id":"vrm","placeholder":""})
      * @Form\Options({
-     *     "label": "application_vehicle-safety_vehicle-psv-sub-action.data.vrm"
+     *     "label": "application_vehicle-safety_vehicle-psv-sub-action.data.vrm",
+     *     "error-message": "vehicle.error.top.vrm",
      * })
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":20}})
+     * @Form\Type("\Common\Form\Elements\Custom\VehicleVrmAny")
      */
     public $vrm = null;
 }
