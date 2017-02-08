@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Cases Submission Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 namespace Olcs\Controller\Cases\Submission;
 
 use Common\Service\Data\CategoryDataService;
@@ -29,7 +24,6 @@ use Dvsa\Olcs\Transfer\Command\Submission\CloseSubmission as CloseCmd;
 use Dvsa\Olcs\Transfer\Command\Submission\ReopenSubmission as ReopenCmd;
 use Zend\View\Model\ViewModel;
 use Zend\View\Renderer\PhpRenderer;
-use Olcs\Controller\Interfaces\RightViewProvider;
 
 /**
  * Cases Submission Controller
@@ -625,11 +619,6 @@ class SubmissionController extends AbstractInternalController implements Submiss
      */
     public function loadFiles()
     {
-        $config = $this->getServiceLocator()->get('config');
-        $previewExtensions = isset($config['allow_file_preview']['extensions']['images'])
-            ? explode(',', $config['allow_file_preview']['extensions']['images'])
-            : [];
-
         $urlHelper = $this->getServiceLocator()->get('Helper\Url');
 
         $submission = $this->getSubmissionData();
@@ -641,10 +630,6 @@ class SubmissionController extends AbstractInternalController implements Submiss
                     'getfile',
                     array('identifier' => $document['id'])
                 );
-
-                $info = pathinfo($document['filename']);
-                $document['canPreview'] = isset($info['extension']) && in_array($info['extension'], $previewExtensions);
-
                 $sectionDocuments[] = $document;
             }
         }

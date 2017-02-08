@@ -25,14 +25,6 @@ foreach ($allSections as $sectionId => $sectionDescription) {
             $readonly,
             $submission['version']
         );
-        // if (isset($submissionConfig[$sectionId]['allow_attachments']) &&
-        //     $submissionConfig[$sectionId]['allow_attachments'] && !$readonly) {
-
-        //     $freetext .= $this->partial(
-        //         'pages/form',
-        //         ['form' => $selectedSectionsArray[$sectionId]['attachmentsForm']]
-        //     );
-        // }
         if (isset($submissionConfig[$sectionId]['allow_comments']) && $submissionConfig[$sectionId]['allow_comments']) {
             $freetext .= $this->partial('sections/cases/pages/submission/attach-comment',
                 [
