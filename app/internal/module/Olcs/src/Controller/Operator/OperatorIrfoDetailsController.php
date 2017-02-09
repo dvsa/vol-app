@@ -32,7 +32,7 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
      * @var array
      */
     protected $inlineScripts = [
-        'editAction' => ['trading-names', 'irfo-partners']
+        'editAction' => []
     ];
 
     protected $redirectConfig = [
