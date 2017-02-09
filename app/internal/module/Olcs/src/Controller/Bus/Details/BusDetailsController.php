@@ -42,12 +42,12 @@ class BusDetailsController extends AbstractInternalController implements
         ],
         'quality' => [
             'action' => 'quality'
-        ],
+        ]
     ];
 
     protected $navigationId = 'licence_bus_details';
 
-    protected $inlineScripts = ['serviceAction' => ['bus-servicenumbers'], 'taAction' => ['forms/bus-details-ta']];
+    protected $inlineScripts = ['serviceAction' => [], 'taAction' => ['forms/bus-details-ta']];
 
     protected $itemDto = ItemDto::class;
     protected $itemParams = ['id' => 'busRegId'];

@@ -21,10 +21,16 @@ class BusServiceNumberAndType extends BusRegDetails
     public $serviceNo = null;
 
     /**
+     * @Form\Attributes({"class":"add-another"})
      * @Form\ComposedObject({
-     *      "target_object":"Olcs\Form\Model\Fieldset\BusReg\OtherServices",
-     *      "is_collection":true,
-     *      "options":{"count":1, "label":"Other Service numbers"}
+     *     "target_object":"Olcs\Form\Model\Fieldset\BusReg\OtherServices",
+     *     "is_collection":true,
+     *     "options":{
+     *         "count":1, 
+     *         "label":"Other Service numbers",
+     *          "hint":"markup-other-service-numbers-hint",
+     *          "hint_at_bottom":true
+     *     }
      * })
      */
     public $otherServices = null;

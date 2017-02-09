@@ -3,13 +3,12 @@
 namespace Olcs\Form\Model\Fieldset\BusReg;
 
 use Zend\Form\Annotation as Form;
-use Olcs\Form\Model\Fieldset\Base;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("bus-service-other-services")
  */
-class OtherServices extends Base
+class OtherServices
 {
     /**
      * @Form\Attributes({"class":"","id":"serviceNo"})
