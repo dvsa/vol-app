@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "470c0a3912274a288bcc43d1b3a6572f",
-    "content-hash": "abdc1282d67b8e27f599adbf0a99640f",
+    "hash": "c3b0d0e80cc8a3bf5a6e17a676dabe8f",
+    "content-hash": "4da93e58ee9652e74f1805c8ef5f6cda",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -765,11 +765,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-develop",
+            "version": "dev-release/4.7",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "a97c733cc7873af68cd23f913bf7797e1e0c0d06"
+                "reference": "95c4657d7749219a4da1109f3142a1046cb89f8d"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -784,8 +784,8 @@
                 "mikey179/vfsstream": "~1.4.0",
                 "mockery/mockery": "~0.9.3",
                 "olcs/olcs-testhelpers": "dev-develop",
-                "olcs/olcs-transfer": "dev-develop",
-                "olcs/olcs-utils": "dev-develop",
+                "olcs/olcs-transfer": "dev-release/4.7",
+                "olcs/olcs-utils": "dev-release/4.7",
                 "phpunit/phpunit": "^4.4.0",
                 "soflomo/purifier": "~0.1.0",
                 "squizlabs/php_codesniffer": "~1.5.3"
@@ -800,11 +800,11 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2017-02-06 17:39:19"
+            "time": "2017-02-07 12:34:03"
         },
         {
             "name": "olcs/autoload",
-            "version": "dev-develop",
+            "version": "dev-release/4.7",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-autoload.git",
@@ -819,11 +819,11 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "dev-develop",
+            "version": "dev-release/4.7",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "fc1fd60ced91d3bd8082596fa4c536e745cc07af"
+                "reference": "0a53c45c9eb28d74620934aabef4da8f5a0cce90"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -842,15 +842,15 @@
                 }
             },
             "description": "OLCS Authentication",
-            "time": "2017-01-18 16:51:08"
+            "time": "2017-02-07 12:34:49"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "dev-develop",
+            "version": "dev-release/4.7",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git",
-                "reference": "6d3cea2ddebdf680e25c28b38b4a5a20e36ff631"
+                "reference": "af389ca9d2ba7ac9a856b5bc9c909ec69d3a5aec"
             },
             "require": {
                 "php": ">=5.4",
@@ -876,15 +876,15 @@
                 }
             },
             "description": "Logging Module for Olcs",
-            "time": "2017-01-18 16:51:12"
+            "time": "2017-02-07 12:36:28"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "dev-develop",
+            "version": "dev-release/4.7",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
-                "reference": "fe99a61e0fc59178b8f345201f366285a6282494"
+                "reference": "e559539608fdc31ad5ee503509462cb90471980a"
             },
             "require": {
                 "php": ">=5.4",
@@ -902,15 +902,15 @@
                 }
             },
             "description": "OLCS Transfer",
-            "time": "2017-02-02 13:26:42"
+            "time": "2017-02-07 12:29:08"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "dev-develop",
+            "version": "dev-release/4.7",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-utils.git",
-                "reference": "cd995e6ea118bf41e839485155a0faf8e401a0d2"
+                "reference": "23ba3348452d0af89abaa9332e8d0c00b1af42ba"
             },
             "require": {
                 "php": ">=5.4",
@@ -918,7 +918,7 @@
             },
             "require-dev": {
                 "mockery/mockery": "~0.9.3",
-                "olcs/olcs-logging": "dev-develop",
+                "olcs/olcs-logging": "dev-release/4.7",
                 "phpunit/phpunit": "^4.0.0"
             },
             "type": "library",
@@ -928,7 +928,7 @@
                 }
             },
             "description": "OLCS Utils",
-            "time": "2017-01-18 16:51:09"
+            "time": "2017-02-07 12:35:29"
         },
         {
             "name": "psr/log",
