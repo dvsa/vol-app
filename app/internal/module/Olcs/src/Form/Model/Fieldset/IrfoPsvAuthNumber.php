@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("irfo-psv-auth-number")
  */
-class IrfoPsvAuthNumber
+class IrfoPsvAuthNumber extends Base
 {
     /**
      * @Form\Attributes({"class":"","id":"irfoPsvAuthNumber"})

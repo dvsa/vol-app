@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("irfo-partner")
  */
-class IrfoPartner
+class IrfoPartner extends Base
 {
     /**
      * @Form\Attributes({"class":"","id":"irfoPartner"})
