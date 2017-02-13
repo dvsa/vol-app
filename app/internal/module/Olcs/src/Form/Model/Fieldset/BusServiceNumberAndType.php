@@ -60,7 +60,12 @@ class BusServiceNumberAndType extends BusRegDetails
     public $via = null;
 
     /**
-     * @Form\Attributes({"id":"busServiceTypes","placeholder":"", "class":"chosen-select-medium", "multiple":"multiple"})
+     * @Form\Attributes({
+     *     "id":"busServiceTypes",
+     *     "placeholder":"",
+     *     "class":"chosen-select-medium",
+     *     "multiple":"multiple",
+     * })
      * @Form\Required(false)
      * @Form\Options({
      *     "label": "Service type",
