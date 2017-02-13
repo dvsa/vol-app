@@ -1,15 +1,10 @@
 <?php
 
-/**
- * Internal Variation Conditions Undertakings Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller\Lva\Variation;
 
 use Common\Controller\Lva;
-use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Olcs\Controller\Interfaces\VariationControllerInterface;
+use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 
 /**
  * Internal Variation Conditions Undertakings Controller
@@ -25,9 +20,11 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
     protected $location = 'internal';
 
     /**
+     * Action - Restore CU
+     *
      * @NOTE At the moment this method can only be called from variation
      *
-     * @return ViewModel
+     * @return \Zend\Http\Response
      */
     public function restoreAction()
     {
@@ -52,7 +49,7 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
         }
 
         return $this->redirect()->toRouteAjax(
-            null,
+            $this->getBaseRoute(),
             array($this->getIdentifierIndex() => $this->getIdentifier())
         );
     }
