@@ -14,11 +14,7 @@ class ResetFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
      * @Form\Options({
-     *     "label": "Save",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "Save"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -27,11 +23,7 @@ class ResetFormActions
     /**
      * @Form\Attributes({"type":"reset","class":"action--secondary large"})
      * @Form\Options({
-     *     "label": "Cancel",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "Cancel"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */

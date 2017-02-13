@@ -20,7 +20,6 @@ class SubmissionSendTo extends Base
      *     "label": "Send to",
      *     "service_name": "Olcs\Service\Data\UserInternalTeamList",
      *     "disable_inarray_validator": true,
-     *     "help-block": "Please select a user",
      *     "use_groups":true
      * })
      */

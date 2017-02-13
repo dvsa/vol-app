@@ -17,7 +17,6 @@ class Person
      *     "label": "Title",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "category": "person_title"
      * })
      * @Form\Type("DynamicSelect")

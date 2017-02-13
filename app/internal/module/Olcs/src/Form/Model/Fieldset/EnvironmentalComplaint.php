@@ -31,9 +31,7 @@ class EnvironmentalComplaint extends CaseBase
      *     "label": "Description",
      *     "label_attributes": {
      *         "class": ""
-     *     },
-     *     "column-size": "",
-     *     "help-block": "Complaint description"
+     *     }
      * })
      * @Form\Type("TextArea")
      * @Form\Required(true)
@@ -48,7 +46,6 @@ class EnvironmentalComplaint extends CaseBase
      * @Form\Options({
      *     "label": "Complaint status",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a status",
      *     "category": "env_complaint_status"
      * })
      * @Form\Type("DynamicSelect")

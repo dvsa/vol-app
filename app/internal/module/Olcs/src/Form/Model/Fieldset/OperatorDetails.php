@@ -41,8 +41,7 @@ class OperatorDetails
     /**
      * @Form\Attributes({"class":"extra-long"})
      * @Form\Options({
-     *     "label": "Nature of Business",
-     *     "help-block": "Please select a nature of business"
+     *     "label": "Nature of Business"
      * })
      * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      */

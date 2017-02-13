@@ -17,9 +17,7 @@ class AnnualTestHistory extends Base
      *     "label": "",
      *     "label_attributes": {
      *         "class": ""
-     *     },
-     *     "column-size": "",
-     *     "help-block": "Annual Test History"
+     *     }
      * })
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})

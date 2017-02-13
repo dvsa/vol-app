@@ -50,7 +50,6 @@ class Complaint extends CaseBase
      *     "label": "Complaint type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "category": "complaint_type"
      * })
      * @Form\Type("DynamicSelect")
@@ -63,7 +62,6 @@ class Complaint extends CaseBase
      *     "label": "Complaint status",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a status",
      *     "category": "complaint_status"
      * })
      * @Form\Type("DynamicSelect")
@@ -76,9 +74,7 @@ class Complaint extends CaseBase
      *     "label": "Description",
      *     "label_attributes": {
      *         "class": ""
-     *     },
-     *     "column-size": "",
-     *     "help-block": "Complaint description"
+     *     }
      * })
      * @Form\Type("TextArea")
      * @Form\Required(false)
@@ -93,8 +89,7 @@ class Complaint extends CaseBase
      *     "label": "Vehicle registration mark",
      *     "label_attributes": {
      *         "class": ""
-     *     },
-     *     "column-size": ""
+     *     }
      * })
      * @Form\Type("Text")
      * @Form\Required(false)

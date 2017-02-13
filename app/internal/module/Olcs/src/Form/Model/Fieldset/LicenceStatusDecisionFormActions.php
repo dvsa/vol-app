@@ -15,11 +15,7 @@ class LicenceStatusDecisionFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large","id":"affect-immediate"})
      * @Form\Options({
-     *     "label": "Affect now",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "Affect now"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -28,11 +24,7 @@ class LicenceStatusDecisionFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large","id":"submit"})
      * @Form\Options({
-     *     "label": "Save",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "Save"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -41,11 +33,7 @@ class LicenceStatusDecisionFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
      * @Form\Options({
-     *     "label": "Cancel",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "Cancel"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -54,11 +42,7 @@ class LicenceStatusDecisionFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large","id":"remove"})
      * @Form\Options({
-     *     "label": "licence-status.remove",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "licence-status.remove"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */

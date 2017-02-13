@@ -27,11 +27,7 @@ class UnlicensedPsvVehicleData
     /**
      * @Form\Attributes({"id":"vrm","placeholder":""})
      * @Form\Options({
-     *     "label": "application_vehicle-safety_vehicle-psv-sub-action.data.vrm",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-5",
+     *     "label": "application_vehicle-safety_vehicle-psv-sub-action.data.vrm"
      * })
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})

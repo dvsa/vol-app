@@ -52,8 +52,7 @@ class PublicInquirySlaMain extends Base
      *     "label": "Written outcome",
      *     "category": "pi_written_outcome",
      *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
+     *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(false)

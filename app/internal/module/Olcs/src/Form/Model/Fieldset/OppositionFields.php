@@ -28,7 +28,6 @@ class OppositionFields extends CaseBase
      *     "label": "Opposition type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select an objector type",
      *     "category": "obj_type"
      * })
      * @Form\Type("DynamicSelect")
@@ -86,7 +85,6 @@ class OppositionFields extends CaseBase
      *     "label": "Objector type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select an objector type",
      *     "category": "opposer_type",
      * })
      * @Form\Type("DynamicSelect")
@@ -153,7 +151,6 @@ class OppositionFields extends CaseBase
      * @Form\Options({
      *     "label": "Status",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a status",
      *     "category": "opposition_status"
      * })
      * @Form\Type("DynamicSelect")
@@ -199,7 +196,6 @@ class OppositionFields extends CaseBase
      * @Form\Options({
      *     "label": "Grounds",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select grounds for opposition",
      *     "category": "obj_grounds"
      * })
      * @Form\Type("DynamicSelect")

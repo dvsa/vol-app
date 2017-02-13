@@ -129,7 +129,6 @@ class TmCaseUnfit extends CaseBase
      * @Form\Options({
      *     "label": "Reason for unfitness",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a reason for unfitness",
      *     "category": "tm_unfit_reason"
      * })
      * @Form\Type("DynamicSelect")
@@ -142,7 +141,6 @@ class TmCaseUnfit extends CaseBase
      * @Form\Options({
      *     "label": "Rehabilitation measure",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a rehabilitation measure",
      *     "category": "tm_case_rehab"
      * })
      * @Form\Type("DynamicSelect")

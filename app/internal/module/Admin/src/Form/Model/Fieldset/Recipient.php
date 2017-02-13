@@ -81,7 +81,6 @@ class Recipient extends Base
      * @Form\Options({
      *     "label": "Traffic area",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Use CTRL to select multiple",
      *     "service_name": "Common\Service\Data\TrafficArea",
      *     "use_groups": "false"
      * })

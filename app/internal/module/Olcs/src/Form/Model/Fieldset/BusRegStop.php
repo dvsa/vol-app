@@ -52,9 +52,7 @@ class BusRegStop extends BusRegDetails
      *     "label": "Manoeuvres comments",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": "",
-     *     "help-block": "Manoeuvres comments"
+     *     }
      * })
      *
      * @Form\Required(false)
@@ -95,9 +93,7 @@ class BusRegStop extends BusRegDetails
      *     "label": "Need new bus stops comments",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": "",
-     *     "help-block": "Need new bus stops comments"
+     *     }
      * })
      *
      * @Form\Required(false)
@@ -138,9 +134,7 @@ class BusRegStop extends BusRegDetails
      *     "label": "No fixed stopping points comments",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": "",
-     *     "help-block": "No fixed stopping points comments"
+     *     }
      * })
      *
      * @Form\Required(false)
@@ -181,9 +175,7 @@ class BusRegStop extends BusRegDetails
      *     "label": "Supported by subsidies comments",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": "",
-     *     "help-block": "Supported by subsidies comments"
+     *     }
      * })
      *
      * @Form\Required(false)

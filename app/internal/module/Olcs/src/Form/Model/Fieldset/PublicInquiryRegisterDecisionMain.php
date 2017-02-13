@@ -27,8 +27,7 @@ class PublicInquiryRegisterDecisionMain
      *
      *     },
      *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
+     *     "disable_inarray_validator": false
      * })
      * @Form\Required(false)
      * @Form\Type("\Zend\Form\Element\Select")
@@ -64,8 +63,7 @@ class PublicInquiryRegisterDecisionMain
      *     "label": "Presiding TC/DTC/HTRU/DHTRU",
      *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
+     *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -77,8 +75,7 @@ class PublicInquiryRegisterDecisionMain
      *     "label": "Presiding TC/DTC/HTRU/DHTRU role",
      *     "category": "tc_role",
      *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
+     *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -91,7 +88,6 @@ class PublicInquiryRegisterDecisionMain
      *     "label":"Reason for PI",
      *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "use_groups":true
      * })
      * @Form\Type("DynamicSelect")
@@ -106,7 +102,6 @@ class PublicInquiryRegisterDecisionMain
      *     "label": "Decisions",
      *     "service_name": "Olcs\Service\Data\PublicInquiryDecision",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "use_groups":true
      * })
      * @Form\Type("DynamicSelect")
@@ -159,7 +154,6 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Options({
      *     "label":"TM decision",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please choose the appropriate decisions",
      *     "category":"pi_tm_decision"
      * })
      *
@@ -212,7 +206,6 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "service_name": "\Olcs\Service\Data\PublicInquiryDefinition",
      *     "use_groups": true,
      *     "empty_option": "Add definition option"
@@ -225,12 +218,7 @@ class PublicInquiryRegisterDecisionMain
     /**
      * @Form\Attributes({"id":"","class":"extra-long js-definition-target"})
      * @Form\Options({
-     *     "label": "Details to be published",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-6",
-     *     "help-block": "You can type anything in this box."
+     *     "label": "Details to be published"
      * })
      * @Form\Required(false)
      * @Form\Type("TextArea")

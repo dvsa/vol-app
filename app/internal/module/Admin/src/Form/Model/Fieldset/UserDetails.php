@@ -17,8 +17,7 @@ class UserDetails
      *     "label": "Team",
      *     "service_name": "Olcs\Service\Data\Team",
      *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
+     *     "disable_inarray_validator": false
      * })
      *
      * @Form\Type("DynamicSelect")

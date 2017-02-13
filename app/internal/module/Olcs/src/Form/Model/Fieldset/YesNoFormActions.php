@@ -13,11 +13,7 @@ class YesNoFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
      * @Form\Options({
-     *     "label": "Yes",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "Yes"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -26,11 +22,7 @@ class YesNoFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"no"})
      * @Form\Options({
-     *     "label": "No",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "No"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */

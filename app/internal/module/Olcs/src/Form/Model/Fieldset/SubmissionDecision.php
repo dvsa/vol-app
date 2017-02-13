@@ -30,7 +30,6 @@ class SubmissionDecision extends Base
      *     "label": "Legislation",
      *     "service_name": "Olcs\Service\Data\SubmissionLegislation",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "use_groups":true
      * })
      * @Form\Type("DynamicSelect")
