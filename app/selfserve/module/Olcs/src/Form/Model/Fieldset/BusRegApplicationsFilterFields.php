@@ -19,7 +19,6 @@ class BusRegApplicationsFilterFields
      *     "label": "selfserve-ebsr-busreg-status-filter",
      *     "empty_option": "All",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select status",
      *     "category": "bus_reg_status",
      * })
      * @Form\Attributes({"id":"status","placeholder":""})

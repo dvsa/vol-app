@@ -19,7 +19,6 @@ class BusRegRegistrationsFilterFields
      *     "label": "Organisation",
      *     "empty_option": "All",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select an organisation",
      *     "service_name": "Common\Service\Data\BusRegSearchViewListDataService",
      *     "category": "organisation"
      * })
@@ -34,7 +33,6 @@ class BusRegRegistrationsFilterFields
      *     "label": "Registration status",
      *     "empty_option": "All",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select status",
      *     "service_name": "Common\Service\Data\BusRegSearchViewListDataService",
      *     "category": "busRegStatus"
      * })

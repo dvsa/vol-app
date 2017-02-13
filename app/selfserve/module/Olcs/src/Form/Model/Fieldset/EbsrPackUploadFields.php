@@ -14,7 +14,6 @@ class EbsrPackUploadFields
      * @Form\Name("submissionType")
      * @Form\Options({
      *     "label": "ebsr-upload-type",
-     *     "help-block": "ebsr-upload-type-select",
      *     "value_options":{
      *          "ebsrt_new":"ebsr-new",
      *          "ebsrt_refresh":"ebsr-refresh"
