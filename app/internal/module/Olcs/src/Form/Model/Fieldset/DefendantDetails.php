@@ -18,7 +18,6 @@ class DefendantDetails
      *     "label": "Defendant type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a defendant type",
      *     "category": "def_type"
      * })
      * @Form\Type("DynamicSelect")
@@ -28,11 +27,7 @@ class DefendantDetails
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary small","value":"Select"})
      * @Form\Options({
-     *     "label": "Select",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "Select"
      * })
      * @Form\Type("\Zend\Form\Element\Button")
      */

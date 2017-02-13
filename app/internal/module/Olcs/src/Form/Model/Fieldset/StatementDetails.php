@@ -17,7 +17,6 @@ class StatementDetails extends CaseBase
      *     "label": "Statement type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a statement type",
      *     "category": "statement_type"
      * })
      * @Form\Type("DynamicSelect")
@@ -114,7 +113,6 @@ class StatementDetails extends CaseBase
      *     "label": "Request mode",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "category": "contact_method"
      * })
      * @Form\Type("DynamicSelect")
@@ -158,9 +156,7 @@ class StatementDetails extends CaseBase
      *     "label": "Authorised decision",
      *     "label_attributes": {
      *         "class": ""
-     *     },
-     *     "column-size": "",
-     *     "help-block": ""
+     *     }
      * })
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})

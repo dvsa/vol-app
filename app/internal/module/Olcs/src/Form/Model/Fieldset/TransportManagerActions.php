@@ -14,11 +14,7 @@ class TransportManagerActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary"})
      * @Form\Options({
-     *     "label": "transport-manager-details-save",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "transport-manager-details-save"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -27,11 +23,7 @@ class TransportManagerActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary","id":"cancel"})
      * @Form\Options({
-     *     "label": "transport-manager-details-cancel",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "transport-manager-details-cancel"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */

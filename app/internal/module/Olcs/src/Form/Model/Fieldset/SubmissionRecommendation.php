@@ -30,7 +30,6 @@ class SubmissionRecommendation extends Base
      *     "label": "Legislation",
      *     "service_name": "Olcs\Service\Data\SubmissionLegislation",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "use_groups":true
      * })
      * @Form\AllowEmpty(true)
@@ -55,8 +54,7 @@ class SubmissionRecommendation extends Base
      *     "label": "Recommendation reason",
      *     "label_attributes": {
      *         "class": ""
-     *     },
-     *     "column-size": "",
+     *     }
      * })
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})

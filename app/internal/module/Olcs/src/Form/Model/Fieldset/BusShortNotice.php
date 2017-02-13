@@ -51,8 +51,7 @@ class BusShortNotice extends Base
      *     "label": "Unforeseen circumstances comments",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": "",
+     *     }
      * })
      *
      * @Form\Required(false)
@@ -91,8 +90,7 @@ class BusShortNotice extends Base
      *     "label": "Timetable change (< 10 minutes +/- originally registered service) comments",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": "",
+     *     }
      * })
      *
      * @Form\Required(false)
@@ -131,8 +129,7 @@ class BusShortNotice extends Base
      *     "label": "Service to replace substantially similar service run by another operator comments",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": "",
+     *     }
      * })
      *
      * @Form\Required(false)
@@ -171,8 +168,7 @@ class BusShortNotice extends Base
      *     "label": "Service not available to/used by general public comments",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": "",
+     *     }
      * })
      *
      * @Form\Required(false)
@@ -211,8 +207,7 @@ class BusShortNotice extends Base
      *     "label": "Cater for additional demands for special occasions / events comments",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": "",
+     *     }
      * })
      *
      * @Form\Required(false)
@@ -251,8 +246,7 @@ class BusShortNotice extends Base
      *     "label": "Change to match changed connecting rail/ferry/air service comments",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": "",
+     *     }
      * })
      *
      * @Form\Required(false)
@@ -291,8 +285,7 @@ class BusShortNotice extends Base
      *     "label": "Change <= 14 days to match local public holiday or widely observed local holiday comments",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": "",
+     *     }
      * })
      *
      * @Form\Required(false)
@@ -331,8 +324,7 @@ class BusShortNotice extends Base
      *     "label": "To comply with TRC comments",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": "",
+     *     }
      * })
      *
      * @Form\Required(false)
@@ -371,8 +363,7 @@ class BusShortNotice extends Base
      *     "label": "Police / Traffic Authority requires change for road safety reasons comments",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": "",
+     *     }
      * })
      *
      * @Form\Required(false)

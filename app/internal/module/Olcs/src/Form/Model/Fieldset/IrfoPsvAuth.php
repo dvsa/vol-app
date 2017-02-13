@@ -16,7 +16,6 @@ class IrfoPsvAuth extends OrganisationBase
      *     "label": "Service type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a service type",
      *     "service_name": "Olcs\Service\Data\IrfoPsvAuthType"
      * })
      * @Form\Type("DynamicSelect")
@@ -185,7 +184,6 @@ class IrfoPsvAuth extends OrganisationBase
      *     "label": "Journey frequency",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a journey frequency",
      *     "category": "irfo_psv_journey_freq"
      * })
      * @Form\Type("DynamicSelect")

@@ -38,9 +38,7 @@ class BusRegQuality extends BusRegDetails
      *     "label": "Local transport authority or lead authority for Quality Partnership Scheme",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": "",
-     *     "help-block": "Local transport authority or lead authority for Quality Partnership Scheme"
+     *     }
      * })
      *
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
@@ -106,8 +104,7 @@ class BusRegQuality extends BusRegDetails
      *     "label": "Local transport authority or lead authority for Quality Contract Scheme",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": ""
+     *     }
      * })
      *
      * @Form\Type("Textarea")

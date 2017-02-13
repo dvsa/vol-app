@@ -35,11 +35,7 @@ class CompaniesHouseAlertFilters
      * @Form\Attributes({"type":"submit","class":"action--primary"})
      * @Form\Options({
      *     "label": "tasks.submit.filter",
-     *     "empty_option": "ch_alert_reason.all",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "empty_option": "ch_alert_reason.all"
      * })
      * @Form\Type("\Zend\Form\Element\Button")
      */

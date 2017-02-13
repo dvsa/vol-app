@@ -22,8 +22,7 @@ class InterimDetails
      *     "label": "internal.interim.form.interim_reason",
      *     "label_attributes": {
      *         "class": "long"
-     *     },
-     *     "column-size": ""
+     *     }
      * })
      *
      * @Form\Type("TextArea")

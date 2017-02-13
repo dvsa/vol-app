@@ -13,11 +13,7 @@ class ApplicationChangeOfEntityFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large","id":"submit"})
      * @Form\Options({
-     *     "label": "save",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "save"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -26,11 +22,7 @@ class ApplicationChangeOfEntityFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
      * @Form\Options({
-     *     "label": "cancel",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "cancel"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -39,11 +31,7 @@ class ApplicationChangeOfEntityFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large","id":"remove"})
      * @Form\Options({
-     *     "label": "licence-status.remove",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "licence-status.remove"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */

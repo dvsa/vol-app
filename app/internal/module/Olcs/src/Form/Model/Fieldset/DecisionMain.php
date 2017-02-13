@@ -17,7 +17,6 @@ class DecisionMain
      *     "label": "Decision type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "category": "submission_decision"
      * })
      * @Form\Type("DynamicSelect")
@@ -29,7 +28,6 @@ class DecisionMain
      * @Form\Options({
      *     "label": "Select legislation",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Use CTRL to select multiple",
      *     "category": "pi-reasons"
      * })
      * @Form\Type("DynamicSelect")
@@ -42,7 +40,6 @@ class DecisionMain
      *     "label": "Send to",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "category": "user-list"
      * })
      * @Form\Type("DynamicSelect")

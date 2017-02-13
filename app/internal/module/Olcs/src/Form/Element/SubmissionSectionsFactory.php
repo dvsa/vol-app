@@ -53,7 +53,7 @@ class SubmissionSectionsFactory implements FactoryInterface
         $submissionTypeSubmit->setOptions(
             [
                 'label' => 'Select type',
-                'label_attributes' => ['type' => 'submit', 'class' => 'col-sm-2'],
+                'label_attributes' => ['type' => 'submit'],
                 'column-size' => 'sm-10',
             ]
         );

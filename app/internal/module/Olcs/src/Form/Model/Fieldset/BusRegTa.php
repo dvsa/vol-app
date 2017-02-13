@@ -15,7 +15,6 @@ class BusRegTa extends BusRegDetails
      * @Form\Options({
      *     "label": "TAOs covered by route",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Use CTRL to select multiple",
      *     "service_name": "Common\Service\Data\TrafficArea",
      *     "use_groups": "false"
      * })
@@ -29,7 +28,6 @@ class BusRegTa extends BusRegDetails
      * @Form\Options({
      *     "label": "Local authorities covered by route",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Use CTRL to select multiple",
      *     "service_name": "Common\Service\Data\LocalAuthority",
      *     "use_groups": "true"
      * })
@@ -47,8 +45,7 @@ class BusRegTa extends BusRegDetails
      *     "label": "Stopping arrangements (Tours and excursions only)",
      *     "label_attributes": {
      *         "class": "extra-long"
-     *     },
-     *     "column-size": ""
+     *     }
      * })
      *
      * @Form\Type("Textarea")

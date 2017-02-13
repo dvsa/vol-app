@@ -103,7 +103,6 @@ class TasksHome
      *     "value_options": {
      *
      *     },
-     *     "help-block": "Please choose",
      *     "must_be_checked": true
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\Checkbox")
@@ -113,11 +112,7 @@ class TasksHome
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary"})
      * @Form\Options({
-     *     "label": "tasks.submit.filter",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "tasks.submit.filter"
      * })
      * @Form\Type("\Zend\Form\Element\Button")
      */

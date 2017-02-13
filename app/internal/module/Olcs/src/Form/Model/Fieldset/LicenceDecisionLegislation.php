@@ -19,7 +19,6 @@ class LicenceDecisionLegislation
      *     "label": "Legislation",
      *     "service_name": "Olcs\Service\Data\LicenceDecisionLegislation",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select applicable legislation",
      *     "use_groups":true
      * })
      * @Form\Type("DynamicSelect")

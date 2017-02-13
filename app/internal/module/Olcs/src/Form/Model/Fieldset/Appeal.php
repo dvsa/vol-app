@@ -61,7 +61,6 @@ class Appeal extends CaseBase
      *     "label": "Reason",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "category": "appeal_reason"
      * })
      * @Form\Required(true)
@@ -177,7 +176,6 @@ class Appeal extends CaseBase
      *     "label": "Outcome",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "category": "appeal_outcome"
      * })
      * @Form\Type("DynamicSelect")

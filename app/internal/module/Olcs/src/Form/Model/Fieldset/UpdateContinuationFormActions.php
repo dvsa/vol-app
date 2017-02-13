@@ -13,11 +13,7 @@ class UpdateContinuationFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large","id":"continue-licence"})
      * @Form\Options({
-     *     "label": "Continue Licence",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "Continue Licence"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -26,11 +22,7 @@ class UpdateContinuationFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"submit"})
      * @Form\Options({
-     *     "label": "save",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "save"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -39,11 +31,7 @@ class UpdateContinuationFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
      * @Form\Options({
-     *     "label": "cancel",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "cancel"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -52,11 +40,7 @@ class UpdateContinuationFormActions
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"print-separator"})
      * @Form\Options({
-     *     "label": "Print separator",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "Print separator"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */

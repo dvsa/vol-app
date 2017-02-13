@@ -15,7 +15,6 @@ class ConditionUndertaking extends CaseBase
      *     "label": "Condition / Undertaking type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select",
      *     "category": "cond_type"
      * })
      * @Form\Type("DynamicSelect")
@@ -31,12 +30,7 @@ class ConditionUndertaking extends CaseBase
     /**
      * @Form\Attributes({"id":"","class":"extra-long"})
      * @Form\Options({
-     *     "label": "Description",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-6",
-     *     "help-block": "You can type anything in this box."
+     *     "label": "Description"
      * })
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
@@ -49,8 +43,7 @@ class ConditionUndertaking extends CaseBase
      * @Form\Options({
      *     "checked_value": "Y",
      *     "unchecked_value": "N",
-     *     "label": "Fulfilled",
-     *     "help-block": "Please choose"
+     *     "label": "Fulfilled"
      * })
      * @Form\Type("OlcsCheckbox")
      */
