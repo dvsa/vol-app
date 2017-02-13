@@ -13,11 +13,7 @@ class UserRegistrationAddressButtons
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
      * @Form\Options({
-     *     "label": "user-registration.form-actions.post-account.label",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "user-registration.form-actions.post-account.label"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
