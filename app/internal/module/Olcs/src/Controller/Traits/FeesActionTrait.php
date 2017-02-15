@@ -448,6 +448,24 @@ trait FeesActionTrait
     protected function commonPayFeesAction()
     {
         $feeIds = explode(',', $this->params('fee'));
+
+        $dtoData = [
+            'feeIds' => $feeIds,
+            'shouldResolveOnly' => true
+        ];
+        $response = $this->handleCommand(PayOutstandingFeesCmd::create($dtoData));
+
+        if (!$response->isOk()) {
+            $this->addErrorMessage('unknown-error');
+            return $this->redirectToList();
+        }
+
+        $errorMessage = $this->getResolvingErrorMessage($response->getResult()['messages']);
+        if ($errorMessage !== '') {
+            $this->addErrorMessage($errorMessage);
+            return $this->redirectToList();
+        }
+
         $feeData = $this->getFees(['ids' => $feeIds]);
         $fees = $feeData['results'];
         $title = 'Pay fee' . (count($fees) !== 1 ? 's' : '');
@@ -1081,19 +1099,7 @@ trait FeesActionTrait
                     return $this->redirectToList();
                 }
 
-                $messages = $response->getResult()['messages'];
-                $translateHelper = $this->getServiceLocator()->get('Helper\Translation');
-
-                $errorMessage = '';
-                foreach ($messages as $message) {
-                    if (is_array($message) && array_key_exists(RefData::ERR_WAIT, $message)) {
-                        $errorMessage = $translateHelper->translate('payment.error.15sec');
-                        break;
-                    } elseif (is_array($message) && array_key_exists(RefData::ERR_NO_FEES, $message)) {
-                        $errorMessage = $translateHelper->translate('payment.error.feepaid');
-                        break;
-                    }
-                }
+                $errorMessage = $this->getResolvingErrorMessage($response->getResult()['messages']);
                 if ($errorMessage !== '') {
                     $this->addErrorMessage($errorMessage);
                     return $this->redirectToList();
@@ -1178,6 +1184,29 @@ trait FeesActionTrait
         }
 
         return $this->redirectToList();
+    }
+
+    /**
+     * Get resolving error message
+     *
+     * @param array $messages messages
+     *
+     * @return string
+     */
+    protected function getResolvingErrorMessage($messages)
+    {
+        $errorMessage = '';
+        $translateHelper = $this->getServiceLocator()->get('Helper\Translation');
+        foreach ($messages as $message) {
+            if (is_array($message) && array_key_exists(RefData::ERR_WAIT, $message)) {
+                $errorMessage = $translateHelper->translate('payment.error.15sec');
+                break;
+            } elseif (is_array($message) && array_key_exists(RefData::ERR_NO_FEES, $message)) {
+                $errorMessage = $translateHelper->translate('payment.error.feepaid');
+                break;
+            }
+        }
+        return $errorMessage;
     }
 
     /**
