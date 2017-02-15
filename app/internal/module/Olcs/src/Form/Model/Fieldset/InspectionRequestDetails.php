@@ -28,7 +28,6 @@ class InspectionRequestDetails
      *     "label": "Report type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select report type",
      *     "category": "insp_report_type"
      * })
      * @Form\Required(true)
@@ -65,7 +64,6 @@ class InspectionRequestDetails
      *     "label": "Request type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select request type",
      *     "category": "insp_request_type"
      * })
      * @Form\Required(true)
@@ -125,7 +123,6 @@ class InspectionRequestDetails
      *     "label": "Result",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select result type",
      *     "category": "insp_result_type"
      * })
      * @Form\Required(true)

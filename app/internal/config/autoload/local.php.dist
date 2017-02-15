@@ -104,9 +104,4 @@ return array(
     'debug' => [
         'showApiMessages' => false
     ],
-    'allow_file_preview' => [
-        'extensions' => [
-            'images' => 'jpeg,jpg,png,tif,tiff,gif,jfif,bmp'
-        ]
-    ],
 );

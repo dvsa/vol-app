@@ -17,9 +17,7 @@ class SubmissionSectionEditComment extends Base
      *     "label": "",
      *     "label_attributes": {
      *         "class": ""
-     *     },
-     *     "column-size": "",
-     *     "help-block": "Comment"
+     *     }
      * })
      * @Form\Type("TextArea")
      * @Form\Required(false)

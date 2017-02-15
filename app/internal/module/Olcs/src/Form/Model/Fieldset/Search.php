@@ -69,11 +69,7 @@ class Search
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
      * @Form\Options({
-     *     "label": "Search",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "Search"
      * })
      * @Form\Type("\Zend\Form\Element\Button")
      */

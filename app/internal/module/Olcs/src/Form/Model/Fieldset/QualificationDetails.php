@@ -68,7 +68,6 @@ class QualificationDetails
      *     "label": "transport-manager.competences.form.country",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a country",
      *     "service_name": "Common\Service\Data\Country"
      * })
      * @Form\Type("DynamicSelect")

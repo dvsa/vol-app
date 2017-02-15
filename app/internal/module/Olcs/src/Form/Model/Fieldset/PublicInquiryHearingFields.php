@@ -17,7 +17,6 @@ class PublicInquiryHearingFields extends Base
      *     "service_name": "Common\Service\Data\Venue",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "other_option" : true
      * })
      *
@@ -87,7 +86,6 @@ class PublicInquiryHearingFields extends Base
      *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -99,7 +97,6 @@ class PublicInquiryHearingFields extends Base
      *     "label": "Presiding TC/DTC/HTRU/DHTRU role",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "category": "tc_role"
      * })
      * @Form\Type("DynamicSelect")
@@ -231,7 +228,6 @@ class PublicInquiryHearingFields extends Base
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "service_name": "\Olcs\Service\Data\PublicInquiryDefinition",
      *     "use_groups": true,
      *     "empty_option": "Add definition option"

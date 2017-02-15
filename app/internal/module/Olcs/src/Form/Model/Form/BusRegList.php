@@ -28,11 +28,7 @@ class BusRegList
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary"})
      * @Form\Options({
-     *     "label": "internal-licence-bus.submit.filter",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "internal-licence-bus.submit.filter"
      * })
      * @Form\Type("\Zend\Form\Element\Button")
      */

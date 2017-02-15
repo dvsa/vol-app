@@ -71,11 +71,7 @@ class DocumentsHome
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary"})
      * @Form\Options({
-     *     "label": "documents-home.submit.filter",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "documents-home.submit.filter"
      * })
      * @Form\Type("\Zend\Form\Element\Button")
      */

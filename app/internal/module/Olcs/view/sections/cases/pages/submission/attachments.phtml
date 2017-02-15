@@ -1,8 +1,0 @@
-<?php foreach ($this->attachments as $attachment): ?>
-    <div>
-        <p><?php echo $attachment['description']; ?></p>
-        <?php if (isset($attachment['canPreview']) && $attachment['canPreview']): ?>
-              <p><img src="<?php echo $attachment['url']; ?>" alt="<?php echo $attachment['description']; ?>"/></p>
-        <?php endif; ?>
-    </div>
-<?php endforeach; ?>

@@ -16,7 +16,6 @@ class IrfoGvPermit extends OrganisationBase
      *     "label": "Permit type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a permit type",
      *     "service_name": "Olcs\Service\Data\IrfoGvPermitType"
      * })
      * @Form\Type("DynamicSelect")

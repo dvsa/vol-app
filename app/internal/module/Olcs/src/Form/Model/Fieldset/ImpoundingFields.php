@@ -16,7 +16,6 @@ class ImpoundingFields
      *     "label": "Impounding type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "category": "impound_type"
      * })
      * @Form\Type("DynamicSelect")
@@ -41,11 +40,7 @@ class ImpoundingFields
     /**
      * @Form\Attributes({"id":"vrm","placeholder":"","class":"medium"})
      * @Form\Options({
-     *     "label": "Vehicle registration mark",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-5"
+     *     "label": "Vehicle registration mark"
      * })
      * 
      * @Form\Type("Text")
@@ -60,7 +55,6 @@ class ImpoundingFields
      * @Form\Options({
      *     "label": "Grounds of application for return",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Use CTRL to select multiple",
      *     "service_name": "Olcs\Service\Data\ImpoundingLegislation",
      *     "use_groups": "false"
      * })
@@ -110,7 +104,6 @@ class ImpoundingFields
      *     "service_name": "Common\Service\Data\Venue",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "other_option" : true
      * })
      *
@@ -146,8 +139,7 @@ class ImpoundingFields
      *     "label": "Agreed by",
      *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
+     *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -160,7 +152,6 @@ class ImpoundingFields
      *     "label": "Outcome",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "category": "impound_outcome"
      * })
      * @Form\Type("DynamicSelect")

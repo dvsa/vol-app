@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("bus-service-other-services")
  */
-class OtherServices
+class OtherServices extends \Olcs\Form\Model\Fieldset\Base
 {
     /**
      * @Form\Attributes({"class":"","id":"serviceNo"})

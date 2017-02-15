@@ -45,8 +45,7 @@ class InspectionRequestGrantDetails
      *     "label": "internal.inspection-request.form.caseworker-notes",
      *     "label_attributes": {
      *         "class": "long"
-     *     },
-     *     "column-size": ""
+     *     }
      * })
      *
      * @Form\Type("TextArea")

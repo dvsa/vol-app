@@ -61,7 +61,6 @@ class NonPiFields extends CaseBase
      *     "service_name": "Common\Service\Data\Venue",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "other_option" : true
      * })
      *
@@ -118,8 +117,7 @@ class NonPiFields extends CaseBase
      *     "label": "Outcome",
      *     "empty_option": "Please Select",
      *     "category": "non_pi_type_outcome",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select an outcome",
+     *     "disable_inarray_validator": false
      * })
      *
      * @Form\Required(false)

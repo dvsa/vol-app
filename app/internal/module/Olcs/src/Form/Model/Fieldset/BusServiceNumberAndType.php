@@ -66,13 +66,16 @@ class BusServiceNumberAndType extends BusRegDetails
     public $via = null;
 
     /**
-     * @Form\Attributes({"id":"busServiceTypes","placeholder":"", "class":"chosen-select-medium",
-     *     "multiple":"multiple"})
+     * @Form\Attributes({
+     *     "id":"busServiceTypes",
+     *     "placeholder":"",
+     *     "class":"chosen-select-medium",
+     *     "multiple":"multiple",
+     * })
      * @Form\Required(false)
      * @Form\Options({
      *     "label": "Service type",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Use CTRL to select multiple",
      *     "service_name": "Olcs\Service\Data\BusServiceType",
      *     "use_groups": "false"
      * })
@@ -142,8 +145,7 @@ class BusServiceNumberAndType extends BusRegDetails
      *     "label": "Rules",
      *     "service_name": "Olcs\Service\Data\BusNoticePeriod",
      *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select rules",
+     *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
      */

@@ -40,8 +40,7 @@ class TeamDetails
      *     "label": "Traffic area",
      *     "service_name": "Common\Service\Data\TrafficArea",
      *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a traffic area",
+     *     "disable_inarray_validator": false
      * })
      * @Form\Required(false)
      * @Form\Type("DynamicSelect")
@@ -54,8 +53,7 @@ class TeamDetails
      *     "label": "Default printer",
      *     "service_name": "Olcs\Service\Data\Printer",
      *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a default printer",
+     *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
      */

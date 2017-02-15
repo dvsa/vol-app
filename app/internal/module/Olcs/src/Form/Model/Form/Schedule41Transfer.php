@@ -33,11 +33,7 @@ class Schedule41Transfer
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
      * @Form\Options({
-     *     "label": "Transfer",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "Transfer"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -46,11 +42,7 @@ class Schedule41Transfer
     /**
      * @Form\Attributes({"type":"submit","class":"action--secondary large", "id": "cancel"})
      * @Form\Options({
-     *     "label": "Cancel",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-10"
+     *     "label": "Cancel"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */

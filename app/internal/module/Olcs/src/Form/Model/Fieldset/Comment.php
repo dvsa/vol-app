@@ -17,9 +17,7 @@ class Comment extends Base
      *     "label": "",
      *     "label_attributes": {
      *         "class": ""
-     *     },
-     *     "column-size": "",
-     *     "help-block": "Comment"
+     *     }
      * })
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})

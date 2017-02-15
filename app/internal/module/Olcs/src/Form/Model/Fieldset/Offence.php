@@ -17,7 +17,6 @@ class Offence extends Base
      *     "label": "Defendant type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a defendant type",
      *     "category": "def_type"
      * })
      * @Form\Type("DynamicSelect")
@@ -93,7 +92,6 @@ class Offence extends Base
      *     "label": "Conviction description",
      *     "empty_option": "User Defined",
      *     "disable_inarray_validator": false,
-     *     "help-block": "",
      *     "category": "conv_category",
      *     "use_groups": true
      * })
@@ -168,8 +166,7 @@ class Offence extends Base
      *     "label": "SI",
      *     "empty_option": "Please Select",
      *     "value_options": {"Y": "Yes", "N": "No"},
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category"
+     *     "disable_inarray_validator": false
      * })
      * @Form\Type("Select")
      */
@@ -208,12 +205,7 @@ class Offence extends Base
     /**
      * @Form\Attributes({"id":"","class":"extra-long"})
      * @Form\Options({
-     *     "label": "Conviction notes",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-6",
-     *     "help-block": "You can type anything in this box."
+     *     "label": "Conviction notes"
      * })
      * @Form\Required(false)
      * @Form\Type("TextArea")
@@ -225,12 +217,7 @@ class Offence extends Base
     /**
      * @Form\Attributes({"id":"","class":"extra-long"})
      * @Form\Options({
-     *     "label": "Taken into consideration",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-6",
-     *     "help-block": "You can type anything in this box."
+     *     "label": "Taken into consideration"
      * })
      * @Form\Required(false)
      * @Form\Type("TextArea")
@@ -245,7 +232,6 @@ class Offence extends Base
      *     "label": "Declared to TC/TR",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Has this conviction been declared to traffic commissioner?",
      *     "value_options": {"Y": "Yes", "N": "No"},
      * })
      * @Form\Type("Select")

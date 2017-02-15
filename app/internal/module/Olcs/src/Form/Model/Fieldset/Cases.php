@@ -15,7 +15,6 @@ class Cases extends Base
      *     "label": "Case type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a case type",
      *     "category": "case_type"
      * })
      * @Form\Type("DynamicSelect")
@@ -27,7 +26,6 @@ class Cases extends Base
      * @Form\Options({
      *     "label": "Case category",
      *     "disable_inarray_validator": true,
-     *     "help-block": "Please select a case category",
      *     "category": "case_category",
      *     "use_groups": true
      * })
@@ -41,8 +39,7 @@ class Cases extends Base
      *     "label": "Case outline",
      *     "label_attributes": {
      *         "class": ""
-     *     },
-     *     "help-block": "Description of the case"
+     *     }
      * })
      * @Form\Required(false)
      * @Form\Type("TextArea")
@@ -67,7 +64,6 @@ class Cases extends Base
      * @Form\Options({
      *     "label": "Outcome",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a case type",
      *     "category": "case_outcome"
      * })
      * @Form\Type("DynamicSelect")

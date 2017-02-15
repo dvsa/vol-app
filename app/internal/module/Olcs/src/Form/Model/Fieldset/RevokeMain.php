@@ -16,7 +16,6 @@ class RevokeMain extends CaseBase
      *     "label": "Select legislation",
      *     "service_name": "Olcs\Service\Data\PublicInquiryReason",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Use CTRL to select multiple",
      *     "use_groups":true
      * })
      * @Form\Type("DynamicSelect")
@@ -29,8 +28,7 @@ class RevokeMain extends CaseBase
      *     "label": "Agreed by",
      *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
+     *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -68,12 +66,7 @@ class RevokeMain extends CaseBase
     /**
      * @Form\Attributes({"id":"","class":"extra-long"})
      * @Form\Options({
-     *     "label": "Notes",
-     *     "label_attributes": {
-     *         "class": "col-sm-2"
-     *     },
-     *     "column-size": "sm-6",
-     *     "help-block": "You can type anything in this box."
+     *     "label": "Notes"
      * })
      * @Form\Required(false)
      * @Form\Type("TextArea")

@@ -47,7 +47,6 @@ class ProhibitionFields extends Base
      *     "label": "Type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "help-block": "Please select a category",
      *     "category": "prohibition_type"
      * })
      * @Form\Type("DynamicSelect")

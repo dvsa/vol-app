@@ -145,10 +145,7 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
 
         $routeName = $this->getApplicationService()->getMvcEvent()->getRouteMatch()->getMatchedRouteName();
         if (substr($routeName, 0, 13) == 'lva-variation') {
-            $this->getMarkerService()->addData(
-                'transportManagersFromLicence',
-                $this->getTransportManagerFromLicenceData($e->getValue())
-            );
+            $this->addTransportManagerFromLicenceData($e->getValue());
             $this->getMarkerService()->addData('page', 'transportManagerVariation');
         } else {
             $this->getMarkerService()->addData('page', 'transportManagerApplication');
@@ -242,12 +239,12 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
     /**
      * Get Transport Manager Licence data based on variation id
      *
-     * @param int $variationId
+     * @param int $variationId Variation ID
      *
      * @return array
      * @throws \RuntimeException
      */
-    protected function getTransportManagerFromLicenceData($variationId)
+    protected function addTransportManagerFromLicenceData($variationId)
     {
         $query = $this->getAnnotationBuilderService()->createQuery(
             \Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetListByVariation::create(
@@ -259,7 +256,11 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
         if (!$response->isOk()) {
             throw new \RuntimeException('Error getting TransportManagerLicence data using variation id ');
         }
+        $result = $response->getResult();
 
-        return $response->getResult()['results'];
+        // Only add "transportManagersFromLicence" data if the variation requires TM's to have an SI qualification
+        if (isset($result['extra']['requiresSiQualification']) && $result['extra']['requiresSiQualification'] == true) {
+            $this->getMarkerService()->addData('transportManagersFromLicence', $result['results']);
+        }
     }
 }
