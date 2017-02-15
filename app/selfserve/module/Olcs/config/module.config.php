@@ -386,7 +386,7 @@ $routes = array(
                 'id' => '[0-9]+',
             ),
             'defaults' => array(
-                'controller' => 'User',
+                'controller' => Olcs\Controller\UserController::class,
                 'action' => 'index'
             )
         )
@@ -944,7 +944,7 @@ return array(
     'controllers' => array(
         'lva_controllers' => array(
             'LvaApplication'                        => 'Olcs\Controller\Lva\Application\OverviewController',
-            'LvaApplication/TypeOfLicence'          => 'Olcs\Controller\Lva\Application\TypeOfLicenceController',
+            'LvaApplication/TypeOfLicence'          => Olcs\Controller\Lva\Application\TypeOfLicenceController::class,
             'LvaApplication/BusinessType'           => 'Olcs\Controller\Lva\Application\BusinessTypeController',
             'LvaApplication/BusinessDetails'        => 'Olcs\Controller\Lva\Application\BusinessDetailsController',
             'LvaApplication/Addresses'              => 'Olcs\Controller\Lva\Application\AddressesController',
@@ -1015,7 +1015,7 @@ return array(
             'Dashboard' => Olcs\Controller\DashboardController::class,
             Olcs\Controller\FeesController::class => Olcs\Controller\FeesController::class,
             Olcs\Controller\CorrespondenceController::class => Olcs\Controller\CorrespondenceController::class,
-            'User' => 'Olcs\Controller\UserController',
+            Olcs\Controller\UserController::class => Olcs\Controller\UserController::class,
             IndexController::class => IndexController::class,
             UserForgotUsernameController::class => UserForgotUsernameController::class,
             UserRegistrationController::class => UserRegistrationController::class,
