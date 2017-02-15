@@ -149,9 +149,17 @@ class UndertakingsController extends AbstractUndertakingsController
         if ($this->data['disableSignatures']) {
             // remove options radio, sign button, checkbox, enable print sign and return fieldset
             $formHelper->remove($form, 'declarationsAndUndertakings->signatureOptions');
+            $formHelper->remove($form, 'declarationsAndUndertakings->declarationForVerify');
             $formHelper->remove($form, 'form-actions->sign');
         } else {
             $formHelper->remove($form, 'declarationsAndUndertakings->disabledReview');
+            $data = (array) $this->getRequest()->getPost();
+            if (
+                isset($data['declarationsAndUndertakings']['signatureOptions'])
+                && $data['declarationsAndUndertakings']['signatureOptions'] === 'N'
+            ) {
+                $formHelper->remove($form, 'declarationsAndUndertakings->declarationForVerify');
+            }
         }
     }
 
