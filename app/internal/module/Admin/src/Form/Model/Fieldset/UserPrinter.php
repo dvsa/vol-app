@@ -26,7 +26,7 @@ class UserPrinter
      * @Form\Attributes({"id":"categoryUser","placeholder":""})
      * @Form\Options({
      *     "label": "Category",
-     *     "service_name": "Olcs\Service\Data\DocumentCategory",
+     *     "service_name": "Olcs\Service\Data\Category",
      *     "empty_option": "Default setting"
      * })
      * @Form\Type("DynamicSelect")
@@ -38,7 +38,7 @@ class UserPrinter
      * @Form\Attributes({"id":"subCategoryUser","placeholder":""})
      * @Form\Options({
      *     "label": "Sub category",
-     *     "service_name": "Olcs\Service\Data\DocumentSubCategory",
+     *     "service_name": "Olcs\Service\Data\SubCategory",
      *     "empty_option": "Default setting"
      * })
      * @Form\Type("DynamicSelect")

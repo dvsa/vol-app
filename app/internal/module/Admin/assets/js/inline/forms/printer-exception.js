@@ -27,7 +27,7 @@ OLCS.ready(function() {
   OLCS.cascadeInput({
     source: "#categoryUser",
     dest: "#subCategoryUser",
-    url: "/list/document-sub-categories",
+    url: "/list/sub-categories",
     emptyLabel: "Default setting"
   });
 });
