@@ -128,6 +128,20 @@ class IndexController extends AbstractController implements LeftViewProvider
             case 'users':
                 $results = $this->getListDataUser($value, 'All');
                 break;
+            case 'sub-categories':
+                /** @var \Olcs\Service\Data\DocumentSubCategory $srv */
+                $srv = $sm->get(\Olcs\Service\Data\SubCategory::class)
+                    ->setCategory($value);
+
+                $results = ['' => 'All'] + $srv->fetchListOptions();
+
+                break;
+            case 'sub-categories-no-first-option':
+                $results = $sm->get(\Olcs\Service\Data\SubCategory::class)
+                    ->setCategory($value)
+                    ->fetchListOptions();
+
+                break;
             case 'task-sub-categories':
                 /** @var \Olcs\Service\Data\SubCategory $srv */
                 $srv = $sm->get(\Olcs\Service\Data\TaskSubCategory::class)
@@ -150,12 +164,6 @@ class IndexController extends AbstractController implements LeftViewProvider
                     ->setCategory($value);
 
                 $results = ['' => 'All'] + $srv->fetchListOptions();
-
-                break;
-            case 'sub-categories-no-first-option':
-                $results = $sm->get(\Olcs\Service\Data\SubCategory::class)
-                    ->setCategory($value)
-                    ->fetchListOptions();
 
                 break;
             case 'scanning-sub-categories':

@@ -2,29 +2,28 @@
 
 namespace Admin\Controller;
 
+use Admin\Form\Model\Form\PrinterException as PrinterExceptionForm;
+use Admin\Form\Model\Form\Team as TeamForm;
+use Common\Category;
 use Common\Controller\Traits\GenericRenderView;
-use Common\Service\Cqrs\Response;
 use Dvsa\Olcs\Transfer\Command\Team\CreateTeam as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Team\UpdateTeam as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Team\DeleteTeam as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Team\UpdateTeam as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\TeamPrinter\CreateTeamPrinter as CreateTeamPrinterDto;
+use Dvsa\Olcs\Transfer\Command\TeamPrinter\DeleteTeamPrinter as DeleteTeamPrinterDto;
+use Dvsa\Olcs\Transfer\Command\TeamPrinter\UpdateTeamPrinter as UpdateTeamPrinterDto;
 use Dvsa\Olcs\Transfer\Query\Team\Team as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Team\TeamList as ListDto;
-use Dvsa\Olcs\Transfer\Query\TeamPrinter\TeamPrinterExceptionsList as TeamPrinterExceptionsListDto;
 use Dvsa\Olcs\Transfer\Query\TeamPrinter\TeamPrinter as TeamPrinterItemDto;
-use Dvsa\Olcs\Transfer\Command\TeamPrinter\CreateTeamPrinter as CreateTeamPrinterDto;
-use Dvsa\Olcs\Transfer\Command\TeamPrinter\UpdateTeamPrinter as UpdateTeamPrinterDto;
-use Dvsa\Olcs\Transfer\Command\TeamPrinter\DeleteTeamPrinter as DeleteTeamPrinterDto;
+use Dvsa\Olcs\Transfer\Query\TeamPrinter\TeamPrinterExceptionsList as TeamPrinterExceptionsListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Data\Mapper\Team as TeamMapper;
-use Admin\Form\Model\Form\Team as TeamForm;
-use Admin\Form\Model\Form\PrinterException as PrinterExceptionForm;
 use Olcs\Data\Mapper\PrinterException as PrinterExceptionMapper;
-use Zend\View\Model\ViewModel;
+use Olcs\Data\Mapper\Team as TeamMapper;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Common\Category;
+use Zend\View\Model\ViewModel;
 
 /**
  * Team management controller
@@ -154,12 +153,14 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     public function deleteAction()
     {
         // validate if we can remove the team
+        /** @var DeleteDto $deleteCommand */
         $deleteCommand = $this->deleteCommand;
         $params = $this->prepareParams(['validate' => true]);
         $response = $this->handleCommand($deleteCommand::create($params));
         if ($response->isNotFound()) {
             return $this->notFoundAction();
         }
+
         $result = $response->getResult();
         // can't remove the team - display error messages
         if (isset($result['messages']) && $response->isClientError()) {
@@ -171,7 +172,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
             $message = implode('<br />', $messages);
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($message);
         } elseif ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnknownError();
         }
 
         // it's possible to remove the team, now need to confirm it
@@ -206,7 +207,9 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         if ($this->getRequest()->isPost()) {
             $post = $this->params()->fromPost();
             $form->setData($post);
+
             if ($form->isValid()) {
+                /** @var DeleteDto $deleteCommand */
                 $deleteCommand = $this->deleteCommand;
                 $response = $this->handleCommand(
                     $deleteCommand::create($this->prepareParams($post))
@@ -313,7 +316,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         $defaultCategory = isset($formData['team-printer']['categoryTeam']) ?
             $formData['team-printer']['categoryTeam'] : Category::CATEGORY_APPLICATION;
 
-        $this->getServiceLocator()->get(\Olcs\Service\Data\DocumentSubCategory::class)
+        $this->getServiceLocator()->get(\Olcs\Service\Data\SubCategory::class)
             ->setCategory($defaultCategory);
 
         $defaultTeam = isset($formData['exception-details']['team']) ?
@@ -335,7 +338,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
      */
     protected function alterFormForAddRule($form, $formData)
     {
-        $this->getServiceLocator()->get(\Olcs\Service\Data\DocumentSubCategory::class)
+        $this->getServiceLocator()->get(\Olcs\Service\Data\SubCategory::class)
             ->setCategory(Category::CATEGORY_APPLICATION);
 
         $defaultTeam = isset($formData['exception-details']['team']) ?
@@ -392,12 +395,11 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         if (empty($this->params()->fromRoute('team'))) {
             return [];
         }
-        $query = TeamPrinterExceptionsListDto::class;
+
         $data = [
             'team' => $this->params()->fromRoute('team'),
         ];
-
-        $response = $this->handleQuery($query::create($data));
+        $response = $this->handleQuery(TeamPrinterExceptionsListDto::create($data));
 
         if ($response->isServerError() || $response->isClientError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
@@ -417,6 +419,8 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
      */
     public function editAction()
     {
+        $params = [];
+
         $query = $this->params()->fromQuery();
         $tableAction = null;
         if (isset($query['table']['action'])) {
