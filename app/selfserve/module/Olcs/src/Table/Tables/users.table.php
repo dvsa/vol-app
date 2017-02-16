@@ -53,12 +53,12 @@ return array(
             }
         ],
         [
-            'formatter' => 'Translate',
-            'title' => 'markup-table-th-remove',
-            'type' => 'Action',
-            'action' => 'delete',
-            'class' => 'remove right-aligned',
-            'content' => 'manage-users.table.action.remove',
+            'type' => 'ActionLinks',
+            'isRemoveVisible' => function ($row) {
+                /** $var TableBuilder $this */
+                return ($row['id'] !== $this->authService->getIdentity()->getUserData()['id']);
+            },
+            'deleteInputName' => 'action[delete][%d]',
         ],
     ]
 );

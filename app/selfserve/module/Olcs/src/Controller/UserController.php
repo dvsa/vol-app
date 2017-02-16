@@ -5,12 +5,11 @@ namespace Olcs\Controller;
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Lva\Traits\CrudTableTrait;
 use Dvsa\Olcs\Transfer\Command\User\CreateUserSelfserve as CreateDto;
-use Dvsa\Olcs\Transfer\Command\User\UpdateUserSelfserve as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\User\DeleteUserSelfserve as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\User\UpdateUserSelfserve as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\User\UserListSelfserve as ListDto;
 use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as ItemDto;
 use Olcs\View\Model\User;
-use Olcs\View\Model\Form;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -26,7 +25,7 @@ class UserController extends AbstractController
     /**
      * Dashboard index action
      *
-     * @return \Olcs\View\Model\User
+     * @return User|\Zend\Http\Response
      */
     public function indexAction()
     {
@@ -37,13 +36,12 @@ class UserController extends AbstractController
         }
 
         $params = [
-            'page'    => $this->getPluginManager()->get('params')->fromQuery('page', 1),
-            'sort'    => $this->getPluginManager()->get('params')->fromQuery('sort', 'id'),
-            'order'   => $this->getPluginManager()->get('params')->fromQuery('order', 'DESC'),
-            'limit'   => $this->getPluginManager()->get('params')->fromQuery('limit', 10),
+            'page' => $this->params()->fromQuery('page', 1),
+            'sort' => $this->params()->fromQuery('sort', 'id'),
+            'order' => $this->params()->fromQuery('order', 'DESC'),
+            'limit' => $this->params()->fromQuery('limit', 10),
+            'query' => $this->params()->fromQuery(),
         ];
-
-        $params['query'] = $this->getPluginManager()->get('params')->fromQuery();
 
         $response = $this->handleQuery(
             ListDto::create(
@@ -54,7 +52,7 @@ class UserController extends AbstractController
         if ($response->isOk()) {
             $users = $response->getResult();
         } else {
-            $this->getFlashMessenger()->addErrorMessage('unknown-error');
+            $this->getFlashMessenger()->addUnknownError();
             $users = [];
         }
 
@@ -70,17 +68,19 @@ class UserController extends AbstractController
     /**
      * Save
      *
-     * @return \Olcs\View\Model\Form|\Zend\Http\Response
+     * @return \Zend\Http\Response|ViewModel
      */
     protected function save()
     {
-        /** @var \Common\Form\Form $form */
-        $form = $this->getServiceLocator()->get('Helper\Form')->createFormWithRequest('User', $this->getRequest());
+        /** @var \Zend\Http\PhpEnvironment\Request $request */
+        $request = $this->getRequest();
+        /** @var \Zend\Form\FormInterface $form */
+        $form = $this->getServiceLocator()->get('Helper\Form')->createFormWithRequest('User', $request);
 
         $id = $this->params()->fromRoute('id', null);
         $data = [];
 
-        if ($this->getRequest()->isPost()) {
+        if ($request->isPost()) {
             if ($this->isButtonPressed('cancel')) {
                 return $this->redirectToIndex();
             }
@@ -103,18 +103,18 @@ class UserController extends AbstractController
                 if ($response->isOk()) {
                     $this->getFlashMessenger()->addSuccessMessage($successMessage);
                     return $this->redirectToIndex();
-                } else {
-                    $result = $response->getResult();
+                }
 
-                    if (!empty($result['messages'])) {
-                        $form->setMessages(
-                            [
-                                'main' => $result['messages']
-                            ]
-                        );
-                    } else {
-                        $this->getFlashMessenger()->addErrorMessage('unknown-error');
-                    }
+                $result = $response->getResult();
+
+                if (!empty($result['messages'])) {
+                    $form->setMessages(
+                        [
+                            'main' => $result['messages'],
+                        ]
+                    );
+                } else {
+                    $this->getFlashMessenger()->addUnknownError();
                 }
             }
         } elseif ($id) {
@@ -124,7 +124,7 @@ class UserController extends AbstractController
                 )
             );
             if (!$response->isOk()) {
-                $this->getFlashMessenger()->addErrorMessage('unknown-error');
+                $this->getFlashMessenger()->addUnknownError();
                 return $this->redirectToIndex();
             }
 
@@ -145,10 +145,10 @@ class UserController extends AbstractController
     /**
      * Alter form
      *
-     * @param \Olcs\View\Model\Form $form Form
-     * @param array                 $data Data
+     * @param \Zend\Form\FormInterface $form Form
+     * @param array                    $data Data
      *
-     * @return \Olcs\View\Model\Form
+     * @return \Zend\Form\FormInterface
      */
     public function alterForm($form, $data)
     {
@@ -169,8 +169,17 @@ class UserController extends AbstractController
      */
     public function deleteAction()
     {
+        $userId = (int)$this->params()->fromRoute('id', null);
+
+        //  check - user can not delete himself
+        if ($userId === $this->getCurrentUser()['id']) {
+            return $this->redirectToIndex();
+        }
+
+        /** @var \Zend\Http\PhpEnvironment\Request $request */
         $request = $this->getRequest();
 
+        /** @var \Zend\Form\FormInterface $form */
         $form = $this->getServiceLocator()->get('Helper\Form')
             ->createFormWithRequest('GenericDeleteConfirmation', $request);
 
@@ -182,18 +191,14 @@ class UserController extends AbstractController
             $form->setData((array)$request->getPost());
 
             if ($form->isValid()) {
-                $response = $this->handleCommand(
-                    DeleteDto::create(
-                        ['id' => $this->params()->fromRoute('id', null)]
-                    )
-                );
+                $response = $this->handleCommand(DeleteDto::create(['id' => $userId]));
 
                 if ($response->isOk()) {
                     $this->getFlashMessenger()->addSuccessMessage('manage-users.delete.success');
                 } elseif ($response->isClientError()) {
                     $this->getFlashMessenger()->addErrorMessage('manage-users.delete.error');
                 } else {
-                    $this->getFlashMessenger()->addErrorMessage('unknown-error');
+                    $this->getFlashMessenger()->addUnknownError();
                 }
 
                 return $this->redirectToIndex();
@@ -276,10 +281,10 @@ class UserController extends AbstractController
      */
     public function checkForCrudAction()
     {
+        /** @var \Zend\Http\PhpEnvironment\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-
             $data = (array)$request->getPost();
 
             $crudAction = null;
@@ -293,26 +298,6 @@ class UserController extends AbstractController
         }
 
         return null;
-    }
-
-    /**
-     * Returns a params object. Made literal here.
-     *
-     * @return \Zend\Mvc\Controller\Plugin\Params
-     */
-    public function params()
-    {
-        return $this->getPluginManager()->get('params');
-    }
-
-    /**
-     * Get request
-     *
-     * @return \Zend\Http\Request
-     */
-    public function getRequest()
-    {
-        return $this->getEvent()->getRequest();
     }
 
     /**
@@ -342,6 +327,6 @@ class UserController extends AbstractController
      */
     private function redirectToIndex()
     {
-        return $this->redirect()->toRouteAjax('manage-user', ['action' => 'index'], array(), false);
+        return $this->redirect()->toRouteAjax('manage-user', ['action' => 'index'], [], false);
     }
 }
