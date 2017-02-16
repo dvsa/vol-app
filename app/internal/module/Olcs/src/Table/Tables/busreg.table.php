@@ -42,9 +42,8 @@ return array(
         ),
         array(
             'title' => '1st registered / cancelled',
-            'formatter' => function ($data) {
-                return date(\DATE_FORMAT, strtotime($data['date1stReg']));
-            },
+            'formatter' => 'Date',
+            'name' => 'date1stReg'
         ),
         array(
             'title' => 'Starting point',
