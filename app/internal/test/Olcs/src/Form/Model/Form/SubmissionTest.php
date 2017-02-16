@@ -9,10 +9,15 @@ use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
  *
  * @group FormTests
  */
-class SubmissionTest extends AbstractFormValidationTestCase
+class SubmissionTest
 {
     /**
      * @var string The class name of the form being tested
      */
     protected $formName = \Olcs\Form\Model\Form\Submission::class;
+
+    protected function setUp()
+    {
+        $this->markTestIncomplete(sprintf('"%s" form not tested', $this->formName));
+    }
 }
