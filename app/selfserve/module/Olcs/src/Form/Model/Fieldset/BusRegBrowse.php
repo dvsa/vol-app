@@ -45,7 +45,8 @@ class BusRegBrowse
      * @Form\Attributes({"id":"acceptedDate", "placeholder":""})
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $acceptedDate;
