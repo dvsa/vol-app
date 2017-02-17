@@ -14,6 +14,13 @@ echo $this->render(
 <?php if(isset($this->exception) && $this->exception instanceof Exception): ?>
 <hr/>
 <h2><?php echo $this->translate('Additional information') ?>:</h2>
+
+<!-- Add some inline styles to fix the page layout, This is only a dev page so I'm forgiving doing it like this! -->
+<style>
+    dd {
+        width: 100%;
+    }
+</style>
 <dl>
     <dt><?php echo $this->translate('File') ?>:</dt>
     <dd>
