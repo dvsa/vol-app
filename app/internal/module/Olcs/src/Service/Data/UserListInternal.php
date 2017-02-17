@@ -2,27 +2,19 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Data\AbstractDataService;
-use Common\Service\Data\ListDataInterface;
+use Common\Service\Data\AbstractListDataService;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
-use Dvsa\Olcs\Transfer\Query\User\UserListInternal as ListDto;
+use Dvsa\Olcs\Transfer\Query as TransferQry;
 
 /**
  * Internal User data service
  *
  * @package Olcs\Service\Data
  */
-class UserListInternal extends AbstractDataService implements ListDataInterface
+class UserListInternal extends AbstractListDataService
 {
-    /**
-     * @var string
-     */
-    protected $sort = 'p.forename';
-
-    /**
-     * @var string
-     */
-    protected $order = 'ASC';
+    protected static $sort = 'p.forename';
+    protected static $order = 'ASC';
 
     /**
      * @var int
@@ -30,7 +22,7 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
     protected $teamId = null;
 
     /**
-     * Set teamnId
+     * Set teamId
      *
      * @param int $teamId Team id
      *
@@ -54,60 +46,40 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
     }
 
     /**
-     * Fetch list options
+     * Fetch list data
      *
-     * @param array|string $context   Context
-     * @param bool         $useGroups Use groups
-     *
-     * @return array
-     */
-    public function fetchListOptions($context, $useGroups = false)
-    {
-        $data = $this->fetchUserListData();
-
-        if (!is_array($data)) {
-            return [];
-        }
-
-        if ($useGroups) {
-            return $this->formatDataForGroups($data);
-        }
-
-        return $this->formatData($data);
-    }
-
-    /**
-     * Fetch user list data
+     * @param array $context Context
      *
      * @return array
-     * @throw UnexpectedResponseException
+     * @throws UnexpectedResponseException
      */
-    public function fetchUserListData()
+    public function fetchListData($context = null)
     {
-        if (is_null($this->getData('userlist'))) {
-            $params = [
-                'sort' => $this->sort,
-                'order' => $this->order
-            ];
-            $teamId = $this->getTeamId();
+        $data = $this->getData('userlist');
 
-            if ((int) $teamId > 0) {
-                $params['team'] = $teamId;
-            }
-
-            $dtoData = ListDto::create($params);
-            $response = $this->handleQuery($dtoData);
-
-            if (!$response->isOk()) {
-                throw new UnexpectedResponseException('unknown-error');
-            }
-
-            $this->setData('userlist', false);
-
-            if (isset($response->getResult()['results'])) {
-                $this->setData('userlist', $response->getResult()['results']);
-            }
+        if (0 !== count($data)) {
+            return $data;
         }
+
+        $teamId = (int)$this->getTeamId();
+
+        $response = $this->handleQuery(
+            TransferQry\User\UserListInternal::create(
+                [
+                    'sort' => self::$sort,
+                    'order' => self::$order,
+                    'team' => ($teamId > 0 ? $teamId : null),
+                ]
+            )
+        );
+
+        if (!$response->isOk()) {
+            throw new UnexpectedResponseException('unknown-error');
+        }
+
+        $result = $response->getResult();
+
+        $this->setData('userlist', (isset($result['results']) ? $result['results'] : null));
 
         return $this->getData('userlist');
     }
@@ -119,7 +91,7 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
      *
      * @return array
      */
-    protected function formatData(array $data)
+    public function formatData(array $data)
     {
         $optionData = [];
 
@@ -138,15 +110,20 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
      *
      * @return string
      */
-    private function getPersonIdentifier($datum)
+    private function getPersonIdentifier(array $datum)
     {
+        $label = null;
         if (isset($datum['contactDetails']['person'])) {
-            return $datum['contactDetails']['person']['forename'] . ' ' .
-            $datum['contactDetails']['person']['familyName'];
-        } else {
-            // use login ID
-            return $datum['loginId'];
+            $person = $datum['contactDetails']['person'];
+
+            $label = trim($person['forename'] . ' ' . $person['familyName']);
         }
+
+        if (!empty($label)) {
+            return $label;
+        }
+
+        return $datum['loginId'];
     }
 
     /**
@@ -156,7 +133,7 @@ class UserListInternal extends AbstractDataService implements ListDataInterface
      *
      * @return array
      */
-    protected function formatDataForGroups(array $data)
+    public function formatDataForGroups($data)
     {
         $optionData = [];
 

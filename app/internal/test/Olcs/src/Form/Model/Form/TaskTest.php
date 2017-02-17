@@ -12,7 +12,7 @@ use Olcs\TestHelpers\FormTester\Data\Object as F;
  */
 class TaskTest extends AbstractFormTest
 {
-    protected $formName = '\Olcs\Form\Model\Form\Task';
+    protected $formName = \Olcs\Form\Model\Form\Task::class;
 
     protected function getDynamicSelectData()
     {
@@ -43,8 +43,6 @@ class TaskTest extends AbstractFormTest
 
         $todayStr     = $dateHelper->getDate('Y-m-d');
         $today        = array_combine(['Y', 'm', 'd'], explode('-', $todayStr));
-        $yesterdayStr = $dateHelper->getDateObject('yesterday')->format('Y-m-d');
-        $yesterday    = array_combine(['Y', 'm', 'd'], explode('-', $yesterdayStr));
 
         return [
             new F\Test(
@@ -69,7 +67,7 @@ class TaskTest extends AbstractFormTest
                 new F\Stack(['assignment', 'assignedToTeam']),
                 new F\Value(F\Value::VALID, 't1'),
                 new F\Value(F\Value::VALID, 't2'),
-                new F\Value(F\Value::INVALID, null)
+                new F\Value(F\Value::VALID, null)
             ),
             new F\Test(
                 new F\Stack(['assignment', 'assignedToUser']),

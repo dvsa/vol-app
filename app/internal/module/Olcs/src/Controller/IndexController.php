@@ -120,7 +120,7 @@ class IndexController extends AbstractController implements LeftViewProvider
 
                 $results =
                     [
-                        '' => 'Unassigned',
+                        '' => ((int)$value > 0 ? 'Unassigned' : 'Please select'),
                     ] +
                     $srv->fetchListOptions(null);
 
