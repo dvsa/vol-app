@@ -115,8 +115,10 @@ abstract class AbstractUndertakingsController extends AbstractController
                 true
             );
         } elseif ($this->isButtonPressed('sign')) {
-            // section not yet completed
-            return $this->redirect()->toUrl('http://google.co.uk');
+            return $this->redirect()->toRoute(
+                'verify/initiate-request',
+                [$this->getIdentifierIndex() => $this->getIdentifier()]
+            );
         }
     }
 
