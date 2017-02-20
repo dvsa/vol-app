@@ -14,8 +14,7 @@ class UserRegistration
     /**
      * @Form\Options({
      *     "label":"user-name",
-     *     "hint": "user-registration.field.username.hint",
-     *     "hint-position": "above",
+     *     "hint": "user-registration.field.username.hint"
      * })
      * @Form\Required(true)
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
