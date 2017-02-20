@@ -3,13 +3,12 @@
 namespace Olcs\Form\Model\Fieldset;
 
 use Zend\Form\Annotation as Form;
-use Olcs\Form\Model\Fieldset\Base;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("irfo-partner")
  */
-class IrfoPartner extends Base
+class IrfoPartner
 {
     /**
      * @Form\Attributes({"class":"","id":"irfoPartner"})
