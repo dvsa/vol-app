@@ -12,10 +12,10 @@ class UserInternalTeamList extends UserListInternal
     /**
      * @var string
      */
-    protected $sort = 't.name, p.forename';
+    protected static $sort = 't.name, p.forename';
 
     /**
      * @var string
      */
-    protected $order = 'ASC';
+    protected static $order = 'ASC';
 }

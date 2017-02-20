@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Internal user data service test
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\UserListInternal;
@@ -14,9 +9,8 @@ use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
- * Internal user data service test
- *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
+ * @covers \Olcs\Service\Data\UserListInternal
  */
 class UserListInternalTest extends AbstractDataServiceTestCase
 {
@@ -54,7 +48,21 @@ class UserListInternalTest extends AbstractDataServiceTestCase
                     'familyName' => 'Peterbottom'
                 ]
             ]
-        ]
+        ],
+        [
+            'id' => 7,
+            'team' => [
+                'id' => 2,
+                'name' => 'unit_Team',
+            ],
+            'contactDetails' => [
+                'person' => [
+                    'forename' => null,
+                    'familyName' => null,
+                ],
+            ],
+            'loginId' => 'usr888'
+        ],
     ];
 
     /**
@@ -68,10 +76,10 @@ class UserListInternalTest extends AbstractDataServiceTestCase
             'order' => 'ASC',
             'team' => 1
         ];
-        $dto = Qry::create($params);
+
         $mockTransferAnnotationBuilder = m::mock()
             ->shouldReceive('createQuery')->once()->andReturnUsing(
-                function ($dto) use ($params) {
+                function (Qry $dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
                     $this->assertEquals($params['team'], $dto->getTeam());
@@ -82,22 +90,18 @@ class UserListInternalTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $mockResponse = m::mock()
-            ->shouldReceive('isOk')
-            ->andReturn(true)
-            ->once()
-            ->shouldReceive('getResult')
-            ->andReturn($results)
-            ->twice()
+            ->shouldReceive('isOk')->andReturn(true)->once()
+            ->shouldReceive('getResult')->andReturn($results)->once()
             ->getMock();
 
         $sut = new UserListInternal();
         $sut->setTeamId(1);
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
-        $this->assertEquals($results['results'], $sut->fetchUserListData());
+        $this->assertEquals($results['results'], $sut->fetchListData());
 
         // test cached results
-        $this->assertEquals($results['results'], $sut->fetchUserListData());
+        $this->assertEquals($results['results'], $sut->fetchListData());
     }
 
     /**
@@ -114,10 +118,11 @@ class UserListInternalTest extends AbstractDataServiceTestCase
             ->andReturn(false)
             ->once()
             ->getMock();
-        $sut = new UserListInternal();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, []);
 
-        $sut->fetchUserListData();
+        $sut = new UserListInternal();
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+
+        $sut->fetchListData();
     }
 
     /**
@@ -141,7 +146,8 @@ class UserListInternalTest extends AbstractDataServiceTestCase
                 2 => [
                     'label' => 'marketing',
                     'options' => [
-                        6 => 'Adam Peterbottom'
+                        6 => 'Adam Peterbottom',
+                        7 => 'usr888',
                     ]
                 ]
             ],
@@ -162,7 +168,8 @@ class UserListInternalTest extends AbstractDataServiceTestCase
             [
                 5 => 'Paul Aldridge',
                 9 => 'usr999',
-                6 => 'Adam Peterbottom'
+                6 => 'Adam Peterbottom',
+                7 => 'usr888',
             ],
             $sut->fetchListOptions([], false)
         );

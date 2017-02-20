@@ -3,7 +3,6 @@
 namespace Olcs\Controller;
 
 use Common\Exception\BadRequestException;
-use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Command\Task\CloseTasks;
 use Dvsa\Olcs\Transfer\Command\Task\CreateTask;
 use Dvsa\Olcs\Transfer\Command\Task\ReassignTasks;
@@ -13,6 +12,7 @@ use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Task\Task;
 use Olcs\Controller\Traits as ControllerTraits;
+use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -26,6 +26,23 @@ class TaskController extends AbstractController
 {
     use ControllerTraits\BusControllerTrait,
         ControllerTraits\TaskSearchTrait;
+
+    /** @var  \Common\Service\Helper\FlashMessengerHelperService */
+    private $hlpFlashMsgr;
+
+    /**
+     * Constructor
+     *
+     * @param MvcEvent $e Event
+     *
+     * @return mixed
+     */
+    public function onDispatch(MvcEvent $e)
+    {
+        $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
+
+        return parent::onDispatch($e);
+    }
 
     /**
      * Add a new task
@@ -50,28 +67,32 @@ class TaskController extends AbstractController
     /**
      * Re-assign one or several tasks to a different team/user
      *
-     * @return ViewModel
+     * @return \Zend\Stdlib\ResponseInterface|ViewModel
      */
     public function reassignAction()
     {
         $data = $this->mapDefaultData();
 
         // Set up the data services so that dynamic selects populate correctly if we already have data
-        $teamId = null;
+        $teamId = 0;
         if (isset($data['assignment']['assignedToTeam'])) {
             // on POST, the data is nested
-            $teamId = $data['assignment']['assignedToTeam'];
+            $teamId = (int)$data['assignment']['assignedToTeam'];
         } elseif (isset($data['assignedToTeam'])) {
-            $teamId = $data['assignedToTeam'];
+            $teamId = (int)$data['assignedToTeam'];
         }
 
-        if ($teamId !== null) {
+        if ($teamId > 0) {
             $this->getServiceLocator()->get(\Olcs\Service\Data\UserListInternal::class)
                 ->setTeamId($teamId);
         }
 
         $form = $this->getForm('TaskReassign')
             ->setData($this->expandData($data));
+
+        if ($teamId === 0) {
+            $form->get('assignment')->get('assignedToUser')->setEmptyOption('please-select');
+        }
 
         $this->formPost($form, 'processAssignTask');
 
@@ -94,7 +115,7 @@ class TaskController extends AbstractController
     /**
      * Close one or several tasks to a different team/user
      *
-     * @return ViewModel
+     * @return \Zend\Stdlib\ResponseInterface|ViewModel
      */
     public function closeAction()
     {
@@ -152,23 +173,35 @@ class TaskController extends AbstractController
      */
     public function processAssignTask($data)
     {
-        if (isset($data['assignment'])) {
-            $dtoData = [
+        if (!isset($data['assignment'])) {
+            return $this->redirectToList();
+        }
+
+        $cmd = ReassignTasks::create(
+            [
                 'ids' => explode('-', $this->params('task')),
                 'user' => $data['assignment']['assignedToUser'],
                 'team' => $data['assignment']['assignedToTeam']
-            ];
+            ]
+        );
+        $response = $this->handleCommand($cmd);
 
-            $response = $this->handleCommand(ReassignTasks::create($dtoData));
-
-            if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('task-reassign-success');
-            } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            }
-
+        if ($response->isOk()) {
+            $this->hlpFlashMsgr->addSuccessMessage('task-reassign-success');
+            return $this->redirectToList();
         }
-        return $this->redirectToList();
+
+        if ($response->isClientError()) {
+            $errors = $response->getResult()['messages'];
+
+            foreach ($errors as $section => $err) {
+                $this->hlpFlashMsgr->addErrorMessage($err);
+            }
+        } else {
+            $this->hlpFlashMsgr->addUnknownError();
+        }
+
+        return null;
     }
 
     /**
@@ -176,7 +209,7 @@ class TaskController extends AbstractController
      *
      * @param string $type Type
      *
-     * @return ViewModel
+     * @return \Zend\Stdlib\ResponseInterface|ViewModel
      */
     private function formAction($type)
     {
@@ -197,7 +230,7 @@ class TaskController extends AbstractController
         $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
 
         if (isset($data['isClosed']) && $data['isClosed'] === 'Y') {
-            /** @var FormHelperService $formHelper */
+            /** @var \Common\Service\Helper\FormHelperService $formHelper */
             $formHelper = $this->getServiceLocator()->get('Helper\Form');
             $formHelper->disableElements($form);
             $formHelper->enableElements($form->get('form-actions')->get('cancel'));

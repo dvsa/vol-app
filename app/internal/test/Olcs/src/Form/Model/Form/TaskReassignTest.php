@@ -5,14 +5,13 @@ namespace OlcsTest\Form\Model\Form;
 use Olcs\TestHelpers\FormTester\Data\Object as F;
 
 /**
- * Class TaskReassignTest
- * @package OlcsTest\FormTest
+ * @covers \Olcs\Form\Model\Form\Task
  * @group ComponentTests
  * @group FormTests
  */
 class TaskReassignTest extends AbstractFormTest
 {
-    protected $formName = '\Olcs\Form\Model\Form\Task';
+    protected $formName = \Olcs\Form\Model\Form\Task::class;
 
     protected function getDynamicSelectData()
     {
@@ -35,7 +34,7 @@ class TaskReassignTest extends AbstractFormTest
                 new F\Stack(['assignment', 'assignedToTeam']),
                 new F\Value(F\Value::VALID, 't1'),
                 new F\Value(F\Value::VALID, 't2'),
-                new F\Value(F\Value::INVALID, null)
+                new F\Value(F\Value::VALID, null)
             ),
             new F\Test(
                 new F\Stack(['assignment', 'assignedToUser']),

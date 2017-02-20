@@ -13,11 +13,12 @@ use Zend\Form\Annotation as Form;
 class TaskAssignment
 {
     /**
+     * @Form\Required(false)
      * @Form\Attributes({"id":"assignedToTeam","placeholder":""})
      * @Form\Options({
      *     "label": "tasks.data.team",
      *     "service_name": "Olcs\Service\Data\Team",
-     *     "empty_option": "Please select"
+     *     "empty_option": "please-select"
      * })
      * @Form\Type("DynamicSelect")
      */
