@@ -9,6 +9,7 @@ use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
+ * @author Shaun Lizzio <shaun@lizzio.co.uk>
  * @covers \Olcs\Service\Data\UserListInternal
  */
 class UserListInternalTest extends AbstractDataServiceTestCase

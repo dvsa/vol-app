@@ -74,7 +74,7 @@ class TaskController extends AbstractController
         $data = $this->mapDefaultData();
 
         // Set up the data services so that dynamic selects populate correctly if we already have data
-        $teamId = null;
+        $teamId = 0;
         if (isset($data['assignment']['assignedToTeam'])) {
             // on POST, the data is nested
             $teamId = (int)$data['assignment']['assignedToTeam'];
@@ -90,7 +90,7 @@ class TaskController extends AbstractController
         $form = $this->getForm('TaskReassign')
             ->setData($this->expandData($data));
 
-        if (0 === $teamId) {
+        if ($teamId === 0) {
             $form->get('assignment')->get('assignedToUser')->setEmptyOption('please-select');
         }
 
@@ -194,7 +194,9 @@ class TaskController extends AbstractController
         if ($response->isClientError()) {
             $errors = $response->getResult()['messages'];
 
-            $this->hlpFlashMsgr->addErrorMessage(current($errors));
+            foreach ($errors as $section => $err) {
+                $this->hlpFlashMsgr->addErrorMessage($err);
+            }
         } else {
             $this->hlpFlashMsgr->addUnknownError();
         }

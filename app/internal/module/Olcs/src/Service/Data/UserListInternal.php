@@ -57,7 +57,7 @@ class UserListInternal extends AbstractListDataService
     {
         $data = $this->getData('userlist');
 
-        if (0 !== count($data)) {
+        if (count($data) !== 0) {
             return $data;
         }
 
@@ -133,7 +133,7 @@ class UserListInternal extends AbstractListDataService
      *
      * @return array
      */
-    public function formatDataForGroups($data)
+    public function formatDataForGroups(array $data)
     {
         $optionData = [];
 
