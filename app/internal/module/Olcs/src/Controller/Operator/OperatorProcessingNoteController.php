@@ -44,7 +44,7 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
 
     /**
      * Get left view
-     * 
+     *
      * @return ViewModel
      */
     public function getLeftView()
@@ -141,9 +141,9 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
      * @param TableBuilder $table table
      * @param array        $data  data
      *
-     * @return Table
+     * @return TableBuilder
      */
-    protected function alterTable(TableBuilder $table, array $data)
+    protected function alterTable($table, $data)
     {
         $title = ($table->getTotal() === 1)
             ? 'internal-operator-processing-notes-table-header-singular'

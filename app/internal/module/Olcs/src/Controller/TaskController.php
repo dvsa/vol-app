@@ -14,6 +14,7 @@ use Dvsa\Olcs\Transfer\Query\Task\Task;
 use Olcs\Controller\Traits as ControllerTraits;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
+use \Olcs\Data\Mapper;
 
 /**
  * Task Controller
@@ -26,6 +27,9 @@ class TaskController extends AbstractController
 {
     use ControllerTraits\BusControllerTrait,
         ControllerTraits\TaskSearchTrait;
+
+    const METHOD_ADD = 'Add';
+    const METHOD_EDIT = 'Edit';
 
     /** @var  \Common\Service\Helper\FlashMessengerHelperService */
     private $hlpFlashMsgr;
@@ -51,7 +55,7 @@ class TaskController extends AbstractController
      */
     public function addAction()
     {
-        return $this->formAction('Add');
+        return $this->formAction(self::METHOD_ADD);
     }
 
     /**
@@ -61,7 +65,7 @@ class TaskController extends AbstractController
      */
     public function editAction()
     {
-        return $this->formAction('Edit');
+        return $this->formAction(self::METHOD_EDIT);
     }
 
     /**
@@ -156,9 +160,9 @@ class TaskController extends AbstractController
         $response = $this->handleCommand(CloseTasks::create(['ids' => $ids]));
 
         if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('task-close-success');
+            $this->hlpFlashMsgr->addSuccessMessage('task-close-success');
         } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->hlpFlashMsgr->addUnknownError();
         }
 
         return $this->redirectToList();
@@ -167,11 +171,12 @@ class TaskController extends AbstractController
     /**
      * Callback invoked when the form is valid
      *
-     * @param array $data Data
+     * @param array                    $data Data
+     * @param \Zend\Form\FormInterface $form Form
      *
      * @return \Zend\Http\Response
      */
-    public function processAssignTask($data)
+    public function processAssignTask($data, $form)
     {
         if (!isset($data['assignment'])) {
             return $this->redirectToList();
@@ -192,11 +197,7 @@ class TaskController extends AbstractController
         }
 
         if ($response->isClientError()) {
-            $errors = $response->getResult()['messages'];
-
-            foreach ($errors as $section => $err) {
-                $this->hlpFlashMsgr->addErrorMessage($err);
-            }
+            Mapper\Task::mapFormErrors($response->getResult()['messages'], $form, $this->hlpFlashMsgr);
         } else {
             $this->hlpFlashMsgr->addUnknownError();
         }
@@ -207,11 +208,11 @@ class TaskController extends AbstractController
     /**
      * Set up and post form
      *
-     * @param string $type Type
+     * @param string $method Method
      *
      * @return \Zend\Stdlib\ResponseInterface|ViewModel
      */
-    private function formAction($type)
+    private function formAction($method)
     {
         $data = $this->mapDefaultData();
 
@@ -221,7 +222,8 @@ class TaskController extends AbstractController
         }
 
         // Set up the data services so that dynamic selects populate correctly if we already have data
-        if (isset($data['assignedToTeam'])) {
+        $teamId = (int)$data['assignedToTeam'];
+        if ($teamId > 0) {
             $this->getServiceLocator()->get(\Olcs\Service\Data\UserListInternal::class)
                 ->setTeamId($data['assignedToTeam']);
         }
@@ -229,32 +231,35 @@ class TaskController extends AbstractController
         $form = $this->getForm('Task');
         $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
 
+        if ($teamId === 0) {
+            $form->get('assignment')->get('assignedToUser')->setEmptyOption('please-select');
+        }
+
         if (isset($data['isClosed']) && $data['isClosed'] === 'Y') {
             /** @var \Common\Service\Helper\FormHelperService $formHelper */
             $formHelper = $this->getServiceLocator()->get('Helper\Form');
             $formHelper->disableElements($form);
             $formHelper->enableElements($form->get('form-actions')->get('cancel'));
+
             $textStatus = 'Closed';
         } else {
             $textStatus = 'Open';
         }
 
-        $url = $this->getLinkForTaskForm();
-
-        $details = $form->get('details');
-
-        if ($type === 'Add') {
+        if ($method === self::METHOD_ADD) {
             $form->get('form-actions')->remove('close');
             $form->remove('lastModifiedBy');
         }
 
-        $details->get('link')->setValue($url);
+        /** @var \Zend\Form\Fieldset $details */
+        $details = $form->get('details');
+        $details->get('link')->setValue($this->getLinkForTaskForm());
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
 
         $data = $this->prepareInfoColumns($data);
 
         $form->setData($this->expandData($data));
-        $this->formPost($form, 'process' . $type . 'Task');
+        $this->formPost($form, 'process' . $method . 'task');
 
         // we have to allow for the fact that our process callback has
         // already set some response data. If so, respect it and
@@ -268,7 +273,9 @@ class TaskController extends AbstractController
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
 
-        return $this->renderView($view, $type . ' task');
+        $title = ($method === self::METHOD_EDIT ? 'Edit' : 'Add') . ' task';
+
+        return $this->renderView($view, $title);
     }
 
     /**
@@ -304,53 +311,67 @@ class TaskController extends AbstractController
     /**
      * Callback invoked when the form is valid
      *
-     * @param array $data Data
+     * @param array                    $data Data
+     * @param \Zend\Form\FormInterface $form Form
      *
-     * @return void|\Zend\Http\Response
+     * @return null|\Zend\Http\Response
      */
-    public function processAddTask($data)
+    public function processAddTask($data, $form)
     {
-        $data = $this->flattenData($data);
-
-        if ($this->isButtonPressed('cancel')) {
-            return $this->redirectToList();
-        }
-
-        $response = $this->handleCommand(CreateTask::create($data));
-
-        if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('task-create-success');
-        } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
-
-        return $this->redirectToList();
+        return $this->processAddEditTask(self::METHOD_ADD, $data, $form);
     }
 
     /**
      * Callback invoked when the form is valid
      *
-     * @param array $data Data
+     * @param array                    $data Data
+     * @param \Zend\Form\FormInterface $form Form
      *
-     * @return void|\Zend\Http\Response
+     * @return null|\Zend\Http\Response
      */
-    public function processEditTask($data)
+    public function processEditTask($data, $form)
     {
-        $data = $this->flattenData($data);
+        return $this->processAddEditTask(self::METHOD_EDIT, $data, $form);
+    }
 
+    /**
+     * Callback invoked when the form is valid
+     *
+     * @param string                   $method Method
+     * @param array                    $data   Data
+     * @param \Zend\Form\FormInterface $form   Form
+     *
+     * @return null|\Zend\Http\Response
+     */
+    private function processAddEditTask($method, $data, $form)
+    {
         if ($this->isButtonPressed('cancel')) {
             return $this->redirectToList();
         }
 
-        $response = $this->handleCommand(UpdateTask::create($data));
+        $isEdit = ($method === self::METHOD_EDIT);
+
+        $data = $this->flattenData($data);
+
+        $response = $this->handleCommand(
+            $isEdit
+            ? UpdateTask::create($data)
+            : CreateTask::create($data)
+        );
 
         if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('task-update-success');
-        } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->hlpFlashMsgr->addSuccessMessage($isEdit ? 'task-update-success' : 'task-create-success');
+
+            return $this->redirectToList();
         }
 
-        return $this->redirectToList();
+        if ($response->isClientError()) {
+            Mapper\Task::mapFormErrors($response->getResult()['messages'], $form, $this->hlpFlashMsgr);
+        } else {
+            $this->hlpFlashMsgr->addUnknownError();
+        }
+
+        return null;
     }
 
     /**
