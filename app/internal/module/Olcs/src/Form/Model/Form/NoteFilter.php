@@ -19,7 +19,8 @@ class NoteFilter
      *     "label": "internal-licence-processing-notes.data.notetype",
      *     "disable_inarray_validator": false,
      *     "category": "note_type",
-     *     "empty_option": "All"
+     *     "empty_option": "All",
+     *     "exclude":{"note_t_org"}
      * })
      * @Form\Type("DynamicSelect")
      */

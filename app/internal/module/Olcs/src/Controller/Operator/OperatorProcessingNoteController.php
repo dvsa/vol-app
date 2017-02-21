@@ -1,7 +1,4 @@
 <?php
-/**
- * Note Controller
- */
 namespace Olcs\Controller\Operator;
 
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Create as CreateDto;
@@ -17,6 +14,7 @@ use Olcs\Form\Model\Form\NoteEdit as EditForm;
 use Olcs\Data\Mapper\GenericFields as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Zend\View\Model\ViewModel;
+use Common\Service\Table\TableBuilder;
 
 /**
  * Note Controller
@@ -125,5 +123,22 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
         $organisation = $response->getResult();
 
         return $organisation['isUnlicensed'];
+    }
+
+    /**
+     * Alter table
+     *
+     * @param TableBuilder $table table
+     *
+     * @return Table
+     */
+    protected function alterTable($table)
+    {
+        $title = ($table->getTotal() === 1)
+            ? 'internal-operator-processing-notes-table-header-singular'
+            : 'internal-operator-processing-notes-table-header';
+        $table->setVariable('title', $this->getServiceLocator()->get('Helper\Translation')->translate($title));
+
+        return $table;
     }
 }
