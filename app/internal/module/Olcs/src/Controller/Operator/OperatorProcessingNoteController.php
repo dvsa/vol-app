@@ -132,7 +132,7 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
      *
      * @return Table
      */
-    protected function alterTable($table)
+    protected function alterTable(TableBuilder $table)
     {
         $title = ($table->getTotal() === 1)
             ? 'internal-operator-processing-notes-table-header-singular'
