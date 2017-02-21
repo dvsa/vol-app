@@ -22,6 +22,50 @@ class UndertakingsController extends AbstractUndertakingsController
     protected $location = 'external';
 
     /**
+     * View Declarations page
+     *
+     * @return \Common\View\Model\Section|\Zend\Http\Response
+     */
+    public function indexAction()
+    {
+        return parent::indexAction();
+    }
+
+    /**
+     * Shows Declaration page after being signed by GDS Verify
+     *
+     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
+    public function signedAction()
+    {
+        $form = $this->getServiceLocator()->get('Helper\Form')->createForm('Lva\ApplicationSigned');
+
+        // If form submitted then go to payment page
+        if ($this->getRequest()->isPost()) {
+            return $this->redirect()->toRoute(
+                'lva-'.$this->lva . '/pay-and-submit',
+                [$this->getIdentifierIndex() => $this->getIdentifier(), 'redirect-back' => 'undertakings'],
+                [],
+                true
+            );
+        }
+
+        // Get signature details from backend
+        $applicationData = $this->getUndertakingsData();
+        $signedBy = $applicationData['signature']['name'];
+        $signedDate = new \DateTime($applicationData['signature']['date']);
+
+        // Update the form HTML with details name of person who signed
+        /** @var \Common\Service\Helper\TranslationHelperService $translator */
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        $form->get('signatureDetails')->get('signature')->setValue(
+            $translator->translateReplace('undertakings_signed', [$signedBy, $signedDate->format(\DATE_FORMAT)])
+        );
+
+        return $this->render('undertakings', $form);
+    }
+
+    /**
      * Get form
      *
      * @return \Common\Form\Form

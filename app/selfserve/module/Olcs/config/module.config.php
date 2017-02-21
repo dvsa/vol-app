@@ -414,12 +414,53 @@ $routes = array(
                 'action' => 'details'
             )
         )
-    )
+    ),
+    'verify' => array(
+        'type' => \Zend\Mvc\Router\Http\Literal::class,
+        'options' => array(
+            'route' => '/verify',
+            'defaults' => [
+                'controller' => Olcs\Controller\GdsVerifyController::class,
+                'action' => 'index',
+            ]
+        ),
+        'may_terminate' => false,
+        'child_routes' => array(
+            'initiate-request' => array(
+                'type' => Segment::class,
+                'options' => array(
+                    'route' => '/initiate-request[/application/:application][/]',
+                    'defaults' => array(
+                        'action' => 'initiate-request',
+                    ),
+                )
+            ),
+            'process-response' => array(
+                'type' => Segment::class,
+                'options' => array(
+                    'route' => '/process-response[/]',
+                    'defaults' => array(
+                        'action' => 'process-response',
+                    ),
+                )
+            )
+        )
+    ),
 );
 
 $configRoutes['lva-application']['child_routes'] = array_merge(
     $configRoutes['lva-application']['child_routes'],
     array(
+        'signed' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'signed[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/Undertakings',
+                    'action' => 'signed'
+                )
+            )
+        ),
         'review' => array(
             'type' => 'segment',
             'options' => array(
@@ -1023,6 +1064,7 @@ return array(
             SearchController::class => SearchController::class,
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             Olcs\Controller\Entity\ViewController::class => Olcs\Controller\Entity\ViewController::class,
+            Olcs\Controller\GdsVerifyController::class => Olcs\Controller\GdsVerifyController::class,
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
