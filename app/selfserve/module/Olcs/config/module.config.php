@@ -956,7 +956,7 @@ $busRegSearchTabs = array(
         ),
         array(
             'id' => 'search-bus-browse',
-            'label' => 'browse',
+            'label' => 'view',
             'route' => 'search-bus/browse',
         ),
     ),
