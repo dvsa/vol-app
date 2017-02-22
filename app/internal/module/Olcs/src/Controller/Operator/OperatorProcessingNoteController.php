@@ -42,6 +42,11 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
     protected $listDto = ListDto::class;
     protected $listVars = ['organisation'];
 
+    /**
+     * Get left view
+     * 
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -109,6 +114,11 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
         'indexAction' => ['forms/filter', 'table-actions']
     ];
 
+    /**
+     * Is unlicensed
+     *
+     * @return bool
+     */
     protected function isUnlicensed()
     {
         // need to determine if this is an unlicensed operator or not
@@ -129,10 +139,11 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
      * Alter table
      *
      * @param TableBuilder $table table
+     * @param array        $data  data
      *
      * @return Table
      */
-    protected function alterTable(TableBuilder $table)
+    protected function alterTable(TableBuilder $table, array $data)
     {
         $title = ($table->getTotal() === 1)
             ? 'internal-operator-processing-notes-table-header-singular'
