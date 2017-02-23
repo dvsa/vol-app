@@ -14,12 +14,10 @@ class EbsrPackUploadFields
      * @Form\Name("submissionType")
      * @Form\Options({
      *     "label": "ebsr-upload-type",
+     *     "label_attributes": {"class": "form-control form-control--radio"},
      *     "value_options":{
      *          "ebsrt_new":"ebsr-new",
      *          "ebsrt_refresh":"ebsr-refresh"
-     *      },
-     *      "fieldset-attributes" : {
-     *          "class":"checkbox"
      *      }
      * })
      * @Form\Required(true)
