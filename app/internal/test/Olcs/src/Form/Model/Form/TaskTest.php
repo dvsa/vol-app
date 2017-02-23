@@ -32,7 +32,7 @@ class TaskTest extends AbstractFormTest
             [
                 ['assignment', 'assignedToUser'],
                 ['u1' => 'User 1', 'u2' => 'User 2']
-            ]
+            ],
         ];
     }
 
@@ -67,7 +67,9 @@ class TaskTest extends AbstractFormTest
                 new F\Stack(['assignment', 'assignedToTeam']),
                 new F\Value(F\Value::VALID, 't1'),
                 new F\Value(F\Value::VALID, 't2'),
-                new F\Value(F\Value::VALID, null)
+                new F\Value(F\Value::INVALID, null),
+                new F\Value(F\Value::VALID, null, new F\Context(new F\Stack(['assignment', 'assignedToTeam']), 'u1')),
+                new F\Value(F\Value::INVALID, null, new F\Context(new F\Stack(['assignment', 'assignedToTeam']), null))
             ),
             new F\Test(
                 new F\Stack(['assignment', 'assignedToUser']),
