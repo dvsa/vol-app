@@ -27,6 +27,13 @@ class TmEmploymentDetails
      * @Form\Options({"label":"transport-manager.employment.form.position"})
      * @Form\Required(false)
      * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({
+     *     "name": "Zend\Validator\StringLength",
+     *     "options": {
+     *          "max": 45,
+     *     },
+     * })
      */
     public $position = null;
 
@@ -35,6 +42,13 @@ class TmEmploymentDetails
      * @Form\Options({"label":"transport-manager.employment.form.hoursPerWeek"})
      * @Form\Required(false)
      * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({
+     *     "name": "Zend\Validator\StringLength",
+     *     "options": {
+     *          "max": 100,
+     *     },
+     * })
      */
     public $hoursPerWeek = null;
 }
