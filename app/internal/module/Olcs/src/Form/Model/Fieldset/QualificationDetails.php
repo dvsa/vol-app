@@ -40,8 +40,15 @@ class QualificationDetails
     /**
      * @Form\Attributes({"class":"long","id":"serialNo"})
      * @Form\Options({"label":"transport-manager.competences.form.serial"})
-     * @Form\Required(false)
      * @Form\Type("Text")
+     * @Form\Required(false)
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({
+     *     "name": "Zend\Validator\StringLength",
+     *     "options": {
+     *          "max": 20,
+     *     },
+     * })
      */
     public $serialNo = null;
 

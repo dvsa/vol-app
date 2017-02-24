@@ -15,6 +15,13 @@ class TmEmployerNameDetails
      * @Form\Options({"label":"transport-manager.employment.form.employerName"})
      * @Form\Required(true)
      * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({
+     *     "name": "Zend\Validator\StringLength",
+     *     "options": {
+     *          "max": 90,
+     *     },
+     * })
      */
     public $employerName = null;
 }
