@@ -451,16 +451,6 @@ $routes = array(
 $configRoutes['lva-application']['child_routes'] = array_merge(
     $configRoutes['lva-application']['child_routes'],
     array(
-        'signed' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'signed[/]',
-                'defaults' => array(
-                    'controller' => 'LvaApplication/Undertakings',
-                    'action' => 'signed'
-                )
-            )
-        ),
         'review' => array(
             'type' => 'segment',
             'options' => array(
