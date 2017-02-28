@@ -28,6 +28,14 @@ class UndertakingsController extends AbstractUndertakingsController
      */
     public function indexAction()
     {
+        // Get signature details from backend
+        $applicationData = $this->getUndertakingsData();
+        // If application has digital signature then show digital signature page
+        $signed = !empty($applicationData['signature']['name']) && !empty($applicationData['signature']['date']);
+        if ($signed) {
+            return $this->signedAction();
+        }
+
         return parent::indexAction();
     }
 

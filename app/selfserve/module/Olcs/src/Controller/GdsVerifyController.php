@@ -66,14 +66,10 @@ class GdsVerifyController extends AbstractController
         $response = $this->handleCommand($dto);
 
         if ($applicationId) {
-            if ($response->isOk()) {
-                return $this->redirect()->toRoute(
-                    'lva-application/signed',
-                    ['application' => $applicationId]
-                );
+            if (!$response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('undertakings_not_signed');
             }
 
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('undertakings_not_signed');
             return $this->redirect()->toRoute(
                 'lva-application/undertakings',
                 ['application' => $applicationId]
