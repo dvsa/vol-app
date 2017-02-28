@@ -26,11 +26,6 @@ class DecisionController extends AbstractInternalController implements CaseContr
     /**
      * @var array
      */
-    protected $scriptFiles = ['tinymce/jquery.tinymce.min.js'];
-
-    /**
-     * @var array
-     */
     protected $inlineScripts = [
         'addAction' => ['forms/submission-recommendation-decision'],
         'editAction' => ['forms/submission-recommendation-decision'],
