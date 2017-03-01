@@ -8,8 +8,7 @@ return array(
         'crud' => array(
             'actions' => array(
                 'ebsrUpload' => array(
-                    'value' => 'Upload EBSR files',
-                    'class' => 'tertiary large'
+                    'value' => 'Upload EBSR files'
                 )
             )
         ),
