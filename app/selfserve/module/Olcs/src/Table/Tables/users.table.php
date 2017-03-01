@@ -8,7 +8,6 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array(
-                    'class' => 'tertiary large',
                     'label' => 'manage-users.action.add'
                 ),
             )
