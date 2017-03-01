@@ -69,9 +69,12 @@ class MyDetails extends Base
     public $emailConfirm = null;
 
     /**
-     * @Form\Attributes({"id":"translateToWelsh","placeholder":"", "data-container-class": "confirm checkbox"})
+     * @Form\Attributes({"id":"translateToWelsh","placeholder":""})
      * @Form\Options({
      *     "label": "translate-to-welsh",
+     *     "label_attributes" : {
+     *         "class":"form-control form-control--checkbox form-control--confirm"
+     *     },
      *     "checked_value":"Y",
      *     "unchecked_value":"N"
      * })

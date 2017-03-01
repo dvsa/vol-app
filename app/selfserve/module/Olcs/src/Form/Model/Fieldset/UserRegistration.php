@@ -64,16 +64,8 @@ class UserRegistration
      * @Form\Name("isLicenceHolder")
      * @Form\Options({
      *     "label": "user-registration.field.isLicenceHolder.label",
-     *     "value_options":{
-     *          "N":"select-option-no",
-     *          "Y":"select-option-yes",
-     *      },
-     *      "label_attributes": {
-     *          "class": "inline",
-     *      },
-     *      "fieldset-attributes": {
-     *          "class":"checkbox",
-     *      }
+     *     "value_options":{"N":"select-option-no", "Y":"select-option-yes"},
+     *     "label_attributes": {"class": "form-control form-control--radio form-control--inline"}
      * })
      * @Form\Required(true)
      * @Form\Attributes({"id":"isLicenceHolder", "placeholder":"", "required":false})
@@ -122,11 +114,9 @@ class UserRegistration
      * @Form\Type("DynamicRadio")
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({
-     *      "fieldset-attributes": {
-     *          "id": "businessType",
-     *          "class": "checkbox"
-     *      },
+     *     "fieldset-attributes": {"id": "businessType"},
      *     "label": "user-registration.field.businessType.label",
+     *     "label_attributes": {"class": "form-control form-control--radio"},
      *     "disable_inarray_validator": false,
      *     "category": "org_type",
      *     "exclude": {"org_t_ir"}
@@ -144,9 +134,12 @@ class UserRegistration
     public $businessType = null;
 
     /**
-     * @Form\Attributes({"id":"translateToWelsh","placeholder":"", "data-container-class": "confirm checkbox"})
+     * @Form\Attributes({"id":"translateToWelsh","placeholder":""})
      * @Form\Options({
      *     "label": "translate-to-welsh",
+     *     "label_attributes" : {
+     *         "class":"form-control form-control--checkbox form-control--confirm"
+     *     },
      *     "checked_value":"Y",
      *     "unchecked_value":"N"
      * })
@@ -156,9 +149,12 @@ class UserRegistration
     public $translateToWelsh = null;
 
     /**
-     * @Form\Attributes({"id": "termsAgreed", "placeholder": "", "data-container-class": "confirm checkbox"})
+     * @Form\Attributes({"id": "termsAgreed", "placeholder": ""})
      * @Form\Options({
      *     "label": "user-registration.field.termsAgreed.label",
+     *     "label_attributes" : {
+     *         "class":"form-control form-control--checkbox form-control--confirm"
+     *     },
      *     "checked_value":"Y",
      *     "unchecked_value":"N",
      *     "must_be_value": "Y"

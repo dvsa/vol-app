@@ -14,14 +14,12 @@ class SearchOperator
      * @Form\Name("searchBy")
      * @Form\Options({
      *     "label": "search.operator.field.searchBy.label",
+     *     "label_attributes": {"class": "form-control form-control--radio"},
      *     "value_options":{
      *          "address":"search.operator.field.searchBy.address.label",
      *          "business":"search.operator.field.searchBy.business.label",
      *          "licence":"search.operator.field.searchBy.licence.label",
      *          "person":"search.operator.field.searchBy.person.label"
-     *      },
-     *      "fieldset-attributes" : {
-     *          "class":"checkbox"
      *      }
      * })
      * @Form\Required(true)

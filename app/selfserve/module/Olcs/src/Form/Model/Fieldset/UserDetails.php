@@ -75,13 +75,13 @@ class UserDetails extends Base
      *     "label_options": {
      *         "disable_html_escape": "true"
      *     },
+     *     "label_attributes" : {
+     *         "class":"form-control form-control--radio form-control--advanced"
+     *     },
      *     "value_options":{
      *          "tm":"manage-users.field.permission.tm.label",
      *          "user":"manage-users.field.permission.user.label",
      *          "admin":"manage-users.field.permission.admin.label",
-     *      },
-     *      "fieldset-attributes" : {
-     *          "class":"checkbox has-advanced-labels"
      *      }
      * })
      * @Form\Required(true)
@@ -91,9 +91,12 @@ class UserDetails extends Base
     public $permission;
 
     /**
-     * @Form\Attributes({"id":"translateToWelsh","placeholder":"", "data-container-class": "confirm checkbox"})
+     * @Form\Attributes({"id":"translateToWelsh","placeholder":""})
      * @Form\Options({
      *     "label": "translate-to-welsh",
+     *     "label_attributes" : {
+     *         "class":"form-control form-control--checkbox form-control--confirm"
+     *     },
      *     "checked_value":"Y",
      *     "unchecked_value":"N"
      * })

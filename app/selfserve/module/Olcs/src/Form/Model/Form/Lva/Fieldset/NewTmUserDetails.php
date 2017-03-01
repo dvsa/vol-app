@@ -53,15 +53,11 @@ class NewTmUserDetails
     /**
      * @Form\Attributes({"id":"hasEmail"})
      * @Form\Options({
-     *     "fieldset-attributes": {
-     *         "class": "checkbox inline js-visible"
-     *     },
+     *     "fieldset-attributes": {"class": "js-visible"},
      *     "label": "tm-add-user-hasEmail",
+     *     "label_attributes": {"class": "form-control form-control--radio form-control--inline"},
      *     "short-label":"tm-add-user-hasEmail",
-     *     "value_options": {"Y": "Yes", "N": "No"},
-     *     "label_attributes": {
-     *         "class": "inline"
-     *     }
+     *     "value_options": {"Y": "Yes", "N": "No"}
      * })
      * @Form\Required(false)
      * @Form\Type("\Zend\Form\Element\Radio")
@@ -109,9 +105,12 @@ class NewTmUserDetails
     public $emailConfirm = null;
 
     /**
-     * @Form\Attributes({"id":"translateToWelsh","placeholder":"", "data-container-class": "confirm checkbox"})
+     * @Form\Attributes({"id":"translateToWelsh","placeholder":""})
      * @Form\Options({
      *     "label": "translate-to-welsh",
+     *     "label_attributes" : {
+     *         "class":"form-control form-control--checkbox form-control--confirm"
+     *     },
      *     "checked_value":"Y",
      *     "unchecked_value":"N"
      * })
