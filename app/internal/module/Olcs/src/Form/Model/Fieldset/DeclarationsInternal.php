@@ -32,6 +32,11 @@ class DeclarationsInternal
     public $heading = null;
 
     /**
+     * @Form\Type("\Common\Form\Elements\Types\Html")
+     */
+    public $verifySignatureText = null;
+
+    /**
      * @Form\Options({
      *     "checked_value": "Y",
      *     "unchecked_value": "N",
