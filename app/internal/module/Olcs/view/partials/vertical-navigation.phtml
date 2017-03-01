@@ -3,7 +3,7 @@
     /** @var \Zend\Navigation\Page\AbstractPage $page */
     foreach ($this->container as $page) : ?>
         <?php
-        if (! $this->navigation()->accept($page)) {
+        if (! $this->navigation()->accept($page, false)) {
             continue;
         }
 
