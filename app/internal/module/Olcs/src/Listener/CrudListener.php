@@ -28,9 +28,15 @@ class CrudListener implements ListenerAggregateInterface
     protected $identifier;
 
     protected $defaultCrudConfig = [
-        'add' => ['requireRows' => false],
-        'edit' => ['requireRows' => true],
-        'delete' => ['requireRows' => true]
+        'add' => [
+            'requireRows' => false
+        ],
+        'edit' => [
+            'requireRows' => true
+        ],
+        'delete' => [
+            'requireRows' => true
+         ]
     ];
 
     protected $crudConfig = [];

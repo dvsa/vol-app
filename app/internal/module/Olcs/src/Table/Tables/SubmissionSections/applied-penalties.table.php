@@ -13,8 +13,8 @@ return array(
         'crud' => array(
             'formName' => 'applied-penalties',
             'actions' => array(
-                'refresh-table' => array('label' => 'Refresh table', 'class' => 'secondary', 'requireRows' => false),
-                'delete-row' => array('label' => 'Delete row', 'class' => 'secondary', 'requireRows' => true)
+                'refresh-table' => array('label' => 'Refresh table', 'class' => 'action--secondary', 'requireRows' => false),
+                'delete-row' => array('label' => 'Delete row', 'action--class' => 'secondary', 'requireRows' => true)
             ),
             'action_field_name' => 'formAction'
         ),

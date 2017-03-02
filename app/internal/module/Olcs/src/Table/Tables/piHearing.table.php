@@ -7,15 +7,15 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'addHearing' => array('class' => 'primary', 'label' => 'Add'),
+                'addHearing' => array('class' => 'action--primary', 'label' => 'Add'),
                 'editHearing' => array(
-                    'class' => 'secondary js-require--one',
+                    'class' => 'action--secondary js-require--one',
                     'requireRows' => true,
                     'label' => 'Edit'
                 ),
                 'generate' => array(
                     'requireRows' => true,
-                    'class' => 'secondary js-require--one',
+                    'class' => 'action--secondary js-require--one',
                     'label' => 'Generate Letter'
                 ),
             ),

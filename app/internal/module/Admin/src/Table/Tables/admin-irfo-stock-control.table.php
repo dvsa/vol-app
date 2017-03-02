@@ -7,13 +7,13 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'primary', 'requireRows' => false),
+                'add' => array('class' => 'action--primary', 'requireRows' => false),
                 'in-stock' => array(
-                    'label' => 'In Stock', 'class' => 'secondary js-require--multiple', 'requireRows' => true
+                    'label' => 'In Stock', 'class' => 'action--secondary js-require--multiple', 'requireRows' => true
                 ),
-                'issued' => array('class' => 'secondary js-require--multiple', 'requireRows' => true),
-                'void' => array('class' => 'secondary js-require--multiple', 'requireRows' => true),
-                'returned' => array('class' => 'secondary js-require--multiple', 'requireRows' => true)
+                'issued' => array('class' => 'action--secondary js-require--multiple', 'requireRows' => true),
+                'void' => array('class' => 'action--secondary js-require--multiple', 'requireRows' => true),
+                'returned' => array('class' => 'action--secondary js-require--multiple', 'requireRows' => true)
             )
         ),
         'paginate' => array(

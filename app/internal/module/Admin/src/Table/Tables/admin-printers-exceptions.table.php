@@ -10,12 +10,20 @@ return array(
         'crud' => array(
             'formName' => 'printerExceptions',
             'actions' => array(
-                'addRule' => array('class' => 'primary', 'requireRows' => false, 'label' => 'add'),
+                'addRule' => array(
+                    'class' => 'action--primary', 
+                    'requireRows' => false, 
+                    'label' => 'add'
+                ),
                 'editRule' => array(
-                    'requireRows' => true, 'class' => 'secondary js-require--one', 'label' => 'edit'
+                    'requireRows' => true, 
+                    'class' => 'action--secondary js-require--one', 
+                    'label' => 'edit'
                 ),
                 'deleteRule' => array(
-                    'requireRows' => true, 'class' => 'secondary js-require--one', 'label' => 'delete'
+                    'requireRows' => true, 
+                    'class' => 'action--secondary js-require--one', 
+                    'label' => 'delete'
                 )
             )
         ),

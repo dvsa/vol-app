@@ -9,9 +9,9 @@ return array(
         'crud' => array(
             'formName' => 'conditions',
             'actions' => array(
-                'add' => array('class' => 'primary', 'label' => 'Add condition or undertaking'),
-                'edit' => array('requireRows' => true, 'class' => 'secondary js-require--one'),
-                'delete' => array('requireRows' => true, 'class' => 'secondary js-require--one')
+                'add' => array('class' => 'action--primary', 'label' => 'Add condition or undertaking'),
+                'edit' => array('requireRows' => true, 'class' => 'action--secondary js-require--one'),
+                'delete' => array('requireRows' => true, 'class' => 'action--secondary js-require--one')
             )
         )
     ),
