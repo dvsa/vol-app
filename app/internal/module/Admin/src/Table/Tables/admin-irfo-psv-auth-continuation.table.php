@@ -8,10 +8,14 @@ return array(
         'crud' => array(
             'actions' => array(
                 'renew' => array(
-                    'label' => 'Set to renew', 'class' => 'primary js-require--multiple', 'requireRows' => true
+                    'label' => 'Set to renew', 
+                    'class' => 'action--primary js-require--multiple', 
+                    'requireRows' => true
                 ),
                 'print' => array(
-                    'label' => 'Print checklist', 'class' => 'secondary js-require--multiple', 'requireRows' => true
+                    'label' => 'Print checklist', 
+                    'class' => 'action--secondary js-require--multiple', 
+                    'requireRows' => true
                 )
             )
         ),

@@ -11,7 +11,7 @@ return array(
             'actions' => array(
                 'generate' => array(
                     'label' => 'Generate checklists',
-                    'class' => 'primary js-require--multiple',
+                    'class' => 'action--primary js-require--multiple',
                     'requireRows' => true
                 ),
             )

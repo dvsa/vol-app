@@ -9,11 +9,11 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'primary'),
+                'add' => array('class' => 'action--primary'),
                 'edit' => array('requireRows' => true),
                 'delete' => array(
                     'label' => 'people_table_action.delete.label',
-                    'class' => 'secondary',
+                    'class' => 'action--secondary',
                     'requireRows' => true,
                 ),
             )

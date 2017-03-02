@@ -10,7 +10,7 @@ return [
         'crud' => [
             'actions' => [
                 'add' => [
-                    'class' => 'primary',
+                    'class' => 'action--primary',
                     'requireRows' => false,
                     'label' => 'Add message',
                 ],

@@ -8,14 +8,14 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'primary', 'label' => 'Add statement'),
-                'edit' => array('class' => 'secondary js-require--one', 'requireRows' => true),
+                'add' => array('class' => 'action--primary', 'label' => 'Add statement'),
+                'edit' => array('class' => 'action--secondary js-require--one', 'requireRows' => true),
                 'generate' => array(
                     'requireRows' => true,
-                    'class' => 'secondary js-require--one',
+                    'class' => 'action--secondary js-require--one',
                     'label' => 'Generate Letter'
                 ),
-                'delete' => array('class' => 'secondary js-require--one', 'requireRows' => true)
+                'delete' => array('class' => 'action--secondary js-require--one', 'requireRows' => true)
             )
         )
     ),

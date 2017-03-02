@@ -8,7 +8,10 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'close' => array('class' => 'primary js-require--multiple', 'requireRows' => false),
+                'close' => array(
+                    'class' => 'action--primary js-require--multiple', 
+                    'requireRows' => false
+                ),
             )
         ),
         'paginate' => array(
@@ -16,7 +19,7 @@ return array(
                 'default' => 10,
                 'options' => array(10, 25, 50)
             )
-        ),
+        )
     ),
     'columns' => array(
         array(

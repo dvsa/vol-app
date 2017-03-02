@@ -8,7 +8,7 @@ return array(
         'crud' => array(
             'formName' => 'conviction',
             'actions' => array(
-                'addHearing' => array('class' => 'primary', 'value' => 'Add Hearing'),
+                'addHearing' => array('class' => 'action--primary', 'value' => 'Add Hearing'),
                 'editHearing' => array('requireRows' => true, 'value' => 'Edit Hearing')
             )
         ),

@@ -7,11 +7,11 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'upload' => array('class' => 'primary'),
+                'upload' => array('class' => 'action--primary'),
                 'New letter' => array(),
-                'delete' => array('class' => 'secondary js-require--multiple', 'requireRows' => true),
-                'split' => array('class' => 'secondary', 'requireRows' => true),
-                'relink' => array('class' => 'secondary js-require--multiple', 'requireRows' => true)
+                'delete' => array('class' => 'action--secondary js-require--multiple', 'requireRows' => true),
+                'split' => array('class' => 'action--secondary', 'requireRows' => true),
+                'relink' => array('class' => 'action--secondary js-require--multiple', 'requireRows' => true)
             )
         ),
         'paginate' => array(

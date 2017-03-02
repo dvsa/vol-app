@@ -8,14 +8,14 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'addAlphasplit' => array('class' => 'primary', 'label' => 'add'),
+                'addAlphasplit' => array('class' => 'action--primary', 'label' => 'add'),
                 'editAlphasplit' => array(
-                    'class' => 'secondary js-require--one',
+                    'class' => 'action--secondary js-require--one',
                     'label' => 'edit',
                     'requireRows' => true
                 ),
                 'deleteAlphasplit' => array(
-                    'class' => 'secondary js-require--multiple',
+                    'class' => 'action--secondary js-require--multiple',
                     'label' => 'delete',
                     'requireRows' => true
                 )
