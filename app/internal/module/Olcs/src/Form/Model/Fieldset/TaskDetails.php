@@ -13,6 +13,7 @@ class TaskDetails
      * @Form\Type("Common\Form\Elements\Types\Html")
      * @Form\Options({
      *     "label": "tasks.data.link",
+     *     "disable_html_escape": true
      * })
      */
     public $link = null;
@@ -21,6 +22,7 @@ class TaskDetails
      * @Form\Type("Common\Form\Elements\Types\Html")
      * @Form\Options({
      *     "label": "tasks.data.status",
+     *     "disable_html_escape": true
      * })
      */
     public $status = null;
