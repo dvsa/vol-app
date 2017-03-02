@@ -7,9 +7,7 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array(
-                    'label' => 'manage-users.action.add'
-                ),
+                'add' => array(),
             )
         ),
         'paginate' => array(

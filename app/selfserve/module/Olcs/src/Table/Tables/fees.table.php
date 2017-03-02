@@ -10,7 +10,7 @@ return array(
             'formName' => 'fees',
             'actions' => array(
                 'pay' => array(
-                    'class' => 'tertiary large js-require--multiple',
+                    'class' => 'action--secondary js-require--multiple',
                     'value' => 'Pay',
                     'requireRows' => true
                 ),

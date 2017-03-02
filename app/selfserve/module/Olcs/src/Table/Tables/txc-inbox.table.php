@@ -10,7 +10,6 @@ return array(
             'actions' => array(
                 'mark-as-read' => array(
                     'value' => 'Mark as read',
-                    'class' => 'secondary',
                     'requireRows' => true
                 )
             )
