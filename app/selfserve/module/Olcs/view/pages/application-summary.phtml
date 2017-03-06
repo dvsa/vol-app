@@ -45,7 +45,7 @@
           <?php if (array_key_exists('PRINT_SIGN_RETURN', $actions) && !$hideContent): ?>
               <div class="incomplete-section">
                   <h3><?php echo $this->translate('print-sign-return-declaration-form'); ?></h3>
-                  <p><?php echo $this->translate('print-sign-return-declaration-form-text'); ?></p>
+                  <p><?php echo $this->translate('print-sign-return-declaration-form-text' . ($isNi ? '-ni' : '')); ?></p>
                   <p>
                       <a href="<?php echo $this->url('lva-' . $lva . '/declaration', [], [], true); ?>" target="_blank" class="download">
                           <?php echo $this->translate('print-declaration-form'); ?>
@@ -67,7 +67,7 @@
                       }
                       ?>
                   </ul>
-                  <p><?php echo $this->translate('supply-supporting-evidence-text-2'); ?> (<?php echo $licence . '/' . $application; ?>).</p>
+                  <p><?php echo $this->translate('supply-supporting-evidence-text-2' . ($isNi ? '-ni' : '')); ?> (<?php echo $this->escapeHtml($licence) . '/' . $this->escapeHtml($application); ?>).</p>
               </div>
           <?php endif; ?>
 
