@@ -21,16 +21,33 @@ abstract class AbstractSummaryController extends AbstractController
 {
     protected $location = 'external';
 
+    /**
+     * Index action
+     *
+     * @return \Common\View\Model\Section
+     */
     public function indexAction()
     {
         return $this->renderSummary($this->getParams(true));
     }
 
+    /**
+     * post submit summary
+     *
+     * @return \Common\View\Model\Section
+     */
     public function postSubmitSummaryAction()
     {
         return $this->renderSummary($this->getParams());
     }
 
+    /**
+     * Render summary
+     *
+     * @param array $params params
+     *
+     * @return \Common\View\Model\Section
+     */
     public function renderSummary($params)
     {
         $view = new ViewModel($params);
@@ -39,6 +56,13 @@ abstract class AbstractSummaryController extends AbstractController
         return $this->render($view);
     }
 
+    /**
+     * get params
+     *
+     * @param bool $justPaid just paid
+     *
+     * @return array
+     */
     protected function getParams($justPaid = false)
     {
         $id = $this->getIdentifier();
@@ -66,6 +90,7 @@ abstract class AbstractSummaryController extends AbstractController
             'hideContent' => ($data['appliedVia']['id'] !== RefData::APPLIED_VIA_SELFSERVE),
             'interimStatus' => isset($data['interimStatus']) ? $data['interimStatus']['description'] : null,
             'interimStart' => isset($data['interimStatus']) ? $data['interimStart'] : null,
+            'isNi' => isset($data['niFlag']) && $data['niFlag'] === 'Y' ? true : false
         ];
     }
 

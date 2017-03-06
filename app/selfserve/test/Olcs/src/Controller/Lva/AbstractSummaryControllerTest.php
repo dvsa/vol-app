@@ -28,7 +28,13 @@ class AbstractSummaryControllerTest extends MockeryTestCase
             ->shouldAllowMockingProtectedMethods();
     }
 
-    public function testIndexAction()
+    /**
+     * @dataProvider indexActionProvider
+     *
+     * @param $niFlag
+     * @param $isNi
+     */
+    public function testIndexAction($niFlag, $isNi)
     {
         $applicationData = [
             'id' => 712,
@@ -47,6 +53,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
             'interimStatus' => [
                 'description' => 'In-Force'
             ],
+            'niFlag' => $niFlag
         ];
         $this->sut
             ->shouldReceive('getIdentifier')->with()->once()->andReturn(712)
@@ -54,7 +61,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
                 m::mock()->shouldReceive('getResult')->andReturn($applicationData)->getMock()
             )
             ->shouldReceive('render')->once()->andReturnUsing(
-                function ($view) {
+                function ($view) use ($isNi) {
                     $this->assertSame(
                         [
                             'justPaid' => true,
@@ -73,6 +80,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
                             'hideContent' => false,
                             'interimStatus' => 'In-Force',
                             'interimStart' => '2016-01-01',
+                            'isNi' => $isNi,
                         ],
                         $view->getVariables()
                     );
@@ -84,6 +92,14 @@ class AbstractSummaryControllerTest extends MockeryTestCase
         $this->assertSame('RENDERED', $this->sut->indexAction());
     }
 
+    public function indexActionProvider()
+    {
+        return [
+            ['Y', true],
+            ['N', false],
+            [null, false]
+        ];
+    }
 
     /**
      * @dataProvider dataProviderImportantText
