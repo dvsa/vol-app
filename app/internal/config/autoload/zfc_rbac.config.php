@@ -53,6 +53,26 @@ return [
                 RefData::PERMISSION_INTERNAL_EDIT,
             ],
 
+            // Quick action routes
+            'print_licence' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-licence/variation' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'licence/active-licence-check' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'licence/reset-to-valid' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'licence/undo-surrender' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'licence/undo-terminate' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+
             // Global route rule needs to be last
             '*' => [
                 RefData::PERMISSION_INTERNAL_VIEW,
