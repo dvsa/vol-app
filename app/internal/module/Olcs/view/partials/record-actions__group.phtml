@@ -1,6 +1,6 @@
 <ul class="record-actions__group">
     <?php foreach ($this->container as $page): ?>
-        <?php if($page->isVisible(true)): ?>
+        <?php if($page->isVisible(true) && $this->navigation()->accept($page, false)): ?>
             <?php
                 if (is_null($page->getClass())) {
                     $page->setClass('action--secondary');
