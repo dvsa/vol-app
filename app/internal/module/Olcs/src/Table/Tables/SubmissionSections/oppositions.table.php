@@ -65,6 +65,10 @@ return array(
             'name' => 'isInTime'
         ),
         array(
+            'title' => 'Willing to attend PI',
+            'name' => 'isWillingToAttendPi',
+        ),
+        array(
             'title' => 'Public Inquiry',
             'name' => 'isPublicInquiry'
         ),
