@@ -113,7 +113,8 @@ class LicenceTest extends TestCase
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
             'licenceStatusRules' => [],
-            'latestNote' => ['comment' => 'latest note']
+            'latestNote' => ['comment' => 'latest note'],
+            'canHaveInspectionRequest' => false,
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -127,7 +128,28 @@ class LicenceTest extends TestCase
         $this->sut->setNavigationService($mockSidebar);
 
         $mainNav = m::mock();
-        $mainNav->shouldReceive('findOneBy->setVisible')->with(0);
+        $mainNav
+            ->shouldReceive('findOneBy')
+            ->with('id', 'licence_bus')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setVisible')
+                ->with(0)
+                ->once()
+                ->getMock()
+            )
+            ->once()
+            ->shouldReceive('findOneBy')
+            ->with('id', 'licence_processing_inspection_request')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(false)
+                    ->once()
+                    ->getMock()
+            )
+            ->once()
+            ->getMock();
 
         $this->sut->setMainNavigationService($mainNav);
 
@@ -156,7 +178,8 @@ class LicenceTest extends TestCase
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
             'licenceStatusRules' => [],
-            'latestNote' => ['comment' => 'latest note']
+            'latestNote' => ['comment' => 'latest note'],
+            'canHaveInspectionRequest' => true,
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -193,7 +216,8 @@ class LicenceTest extends TestCase
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
             'licenceStatusRules' => [],
-            'latestNote' => ['comment' => 'latest note']
+            'latestNote' => ['comment' => 'latest note'],
+            'canHaveInspectionRequest' => true,
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -235,7 +259,8 @@ class LicenceTest extends TestCase
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
             'licenceStatusRules' => [],
-            'latestNote' => ['comment' => 'latest note']
+            'latestNote' => ['comment' => 'latest note'],
+            'canHaveInspectionRequest' => true,
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -282,7 +307,8 @@ class LicenceTest extends TestCase
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
             'licenceStatusRules' => [],
-            'latestNote' => ['comment' => 'latest note']
+            'latestNote' => ['comment' => 'latest note'],
+            'canHaveInspectionRequest' => true,
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -331,7 +357,8 @@ class LicenceTest extends TestCase
                     'licenceStatus' => ['id' => 'lsts_suspended'],
                 ]
             ],
-            'latestNote' => ['comment' => 'latest note']
+            'latestNote' => ['comment' => 'latest note'],
+            'canHaveInspectionRequest' => true,
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -382,7 +409,8 @@ class LicenceTest extends TestCase
                     'licenceStatus' => ['id' => 'lsts_suspended'],
                 ]
             ],
-            'latestNote' => ['comment' => 'latest note']
+            'latestNote' => ['comment' => 'latest note'],
+            'canHaveInspectionRequest' => true,
         ];
 
         $this->onLicenceSetup($licenceId, $licence);
@@ -428,7 +456,8 @@ class LicenceTest extends TestCase
                     'licenceStatus' => ['id' => 'lsts_suspended'],
                 ]
             ],
-            'latestNote' => ['comment' => 'latest note']
+            'latestNote' => ['comment' => 'latest note'],
+            'canHaveInspectionRequest' => true,
         ];
 
         $this->onLicenceSetup($licenceId, $licence);

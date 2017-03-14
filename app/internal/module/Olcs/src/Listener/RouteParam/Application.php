@@ -199,6 +199,12 @@ class Application implements ListenerAggregateInterface, FactoryInterface
             // hide application case link in the navigation
             $this->getNavigationService()->findOneById('application_case')->setVisible(false);
         }
+        if (!$application['canHaveInspectionRequest']) {
+            // hide application case link in the navigation
+            $this->getNavigationService()
+                ->findOneById('application_processing_inspection_request')
+                ->setVisible(false);
+        }
 
         $this->setupPublishApplicationButton($application);
     }
