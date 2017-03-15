@@ -155,6 +155,11 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $this->getMainNavigationService()->findOneBy('id', 'licence_bus')->setVisible(0);
         }
+        if (!$licence['canHaveInspectionRequest']) {
+            $this->getMainNavigationService()
+                ->findOneBy('id', 'licence_processing_inspection_request')
+                ->setVisible(false);
+        }
     }
 
     /**
