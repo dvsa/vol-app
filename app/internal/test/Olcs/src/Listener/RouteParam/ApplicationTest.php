@@ -98,7 +98,8 @@ class ApplicationTest extends MockeryTestCase
             ],
             'licenceType' => ['id' => 'foo'],
             'existingPublication' => false,
-            'latestNote' => ['comment' => 'latest note']
+            'latestNote' => ['comment' => 'latest note'],
+            'canHaveInspectionRequest' => false,
         ];
 
         $quickViewActionsVisible = ($status !== ApplicationEntityService::APPLICATION_STATUS_VALID);
@@ -115,8 +116,20 @@ class ApplicationTest extends MockeryTestCase
         $mockApplicationCaseNavigationService->shouldReceive('setVisible')->times($expectedCallsNo)->with(false);
 
         $mockNavigationService = m::mock('Zend\Navigation\Navigation');
-        $mockNavigationService->shouldReceive('findOneById')
-            ->with('application_case')->andReturn($mockApplicationCaseNavigationService);
+        $mockNavigationService
+            ->shouldReceive('findOneById')
+            ->with('application_case')
+            ->andReturn($mockApplicationCaseNavigationService)
+            ->shouldReceive('findOneById')
+            ->with('application_processing_inspection_request')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(false)
+                    ->once()
+                    ->getMock()
+            )
+            ->once();
 
         $this->setupMockApplication($applicationId, $application);
 
@@ -210,7 +223,8 @@ class ApplicationTest extends MockeryTestCase
             'canCreateCase' => false,
             'licenceType' => ['id' => 'xx'],
             'existingPublication' => true,
-            'latestNote' => ['comment' => 'latest note']
+            'latestNote' => ['comment' => 'latest note'],
+            'canHaveInspectionRequest' => true,
         ];
 
         $this->setupMockApplication(1066, $applicationData);
@@ -264,7 +278,8 @@ class ApplicationTest extends MockeryTestCase
             'canCreateCase' => false,
             'licenceType' => ['id' => 'xx'],
             'existingPublication' => false,
-            'latestNote' => ['comment' => 'latest note']
+            'latestNote' => ['comment' => 'latest note'],
+            'canHaveInspectionRequest' => true,
         ];
 
         $this->setupMockApplication(1066, $applicationData);
@@ -317,7 +332,8 @@ class ApplicationTest extends MockeryTestCase
             'canCreateCase' => false,
             'licenceType' => ['id' => 'xx'],
             'existingPublication' => false,
-            'latestNote' => ['comment' => 'latest note']
+            'latestNote' => ['comment' => 'latest note'],
+            'canHaveInspectionRequest' => true,
         ];
 
         $this->setupMockApplication(1066, $applicationData);

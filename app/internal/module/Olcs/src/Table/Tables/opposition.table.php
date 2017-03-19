@@ -79,6 +79,11 @@ return array(
             'sort' => 'isInTime'
         ),
         array(
+            'title' => 'Willing to attend PI',
+            'name' => 'isWillingToAttendPi',
+            'sort' => 'isWillingToAttendPi'
+        ),
+        array(
             'title' => 'Public Inquiry',
             'name' => 'isPublicInquiry',
             'sort' => 'isPublicInquiry'
