@@ -29,7 +29,7 @@ class DiscPrintingTest extends AbstractFormValidationTestCase
         $this->assertFormElementNotValid(
             $element,
             'X',
-            [InArray::NOT_IN_ARRAY,]
+            [InArray::NOT_IN_ARRAY]
         );
     }
 
@@ -42,7 +42,7 @@ class DiscPrintingTest extends AbstractFormValidationTestCase
         $this->assertFormElementNotValid(
             $element,
             'X',
-            [InArray::NOT_IN_ARRAY,]
+            [InArray::NOT_IN_ARRAY]
         );
     }
 
@@ -56,7 +56,7 @@ class DiscPrintingTest extends AbstractFormValidationTestCase
         $this->assertFormElementNotValid(
             $element,
             'X',
-            [InArray::NOT_IN_ARRAY,]
+            [InArray::NOT_IN_ARRAY]
         );
     }
 

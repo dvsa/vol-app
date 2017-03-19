@@ -34,7 +34,7 @@ class FinancialStandingRateTest extends AbstractFormValidationTestCase
         $this->assertFormElementType($element, Radio::class);
         $this->assertFormElementValid($element, 'lcat_gv');
         $this->assertFormElementValid($element, 'lcat_psv');
-        $this->assertFormElementNotValid($element, 'X', [InArray::NOT_IN_ARRAY,]);
+        $this->assertFormElementNotValid($element, 'X', [InArray::NOT_IN_ARRAY]);
     }
 
     public function testLicenceType()
@@ -44,7 +44,7 @@ class FinancialStandingRateTest extends AbstractFormValidationTestCase
         $this->assertFormElementValid($element, 'ltyp_r');
         $this->assertFormElementValid($element, 'ltyp_sn');
         $this->assertFormElementValid($element, 'ltyp_si');
-        $this->assertFormElementNotValid($element, 'X', [InArray::NOT_IN_ARRAY,]);
+        $this->assertFormElementNotValid($element, 'X', [InArray::NOT_IN_ARRAY]);
     }
 
     public function testFirstVehicleRate()
