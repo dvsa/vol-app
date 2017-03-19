@@ -35,8 +35,16 @@ class CpmsReportTest extends AbstractFormValidationTestCase
             'inFuture',
         ];
 
-        $this->assertFormElementValid($element, ['day' => 1, 'month' => '2', 'year' => $pastYear]);
-        $this->assertFormElementNotValid($element, ['day' => '1', 'month' => '1', 'year' => $pastYear+2], $errorMessages);
+        $this->assertFormElementValid(
+            $element,
+            ['day' => 1, 'month' => '2', 'year' => $pastYear]
+        );
+
+        $this->assertFormElementNotValid(
+            $element,
+            ['day' => '1', 'month' => '1', 'year' => $pastYear+2],
+            $errorMessages
+        );
     }
 
     public function testEndDate()
@@ -49,7 +57,11 @@ class CpmsReportTest extends AbstractFormValidationTestCase
             'invalidField',
         ];
 
-        $this->assertFormElementNotValid($element, ['day' => '1', 'month' => '1', 'year' => $pastYear+2], $errorMessages);
+        $this->assertFormElementNotValid(
+            $element,
+            ['day' => '1', 'month' => '1', 'year' => $pastYear+2],
+            $errorMessages
+        );
     }
 
     public function testGenerate()
