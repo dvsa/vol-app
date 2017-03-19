@@ -26,8 +26,16 @@ class PiReportFilterTest extends AbstractFormValidationTestCase
             'dateInvalidDate',
         ];
 
-        $this->assertFormElementValid($element, ['day' => 1, 'month' => '2', 'year' => $pastYear]);
-        $this->assertFormElementNotValid($element, ['day' => 'ABC', 'month' => '1', 'year' => $pastYear+2], $errorMessages);
+        $this->assertFormElementValid(
+            $element,
+            ['day' => 1, 'month' => '2', 'year' => $pastYear]
+        );
+
+        $this->assertFormElementNotValid(
+            $element,
+            ['day' => 'ABC', 'month' => '1', 'year' => $pastYear+2],
+            $errorMessages
+        );
     }
 
     public function testEndDate()
@@ -40,7 +48,11 @@ class PiReportFilterTest extends AbstractFormValidationTestCase
             'invalidField',
         ];
 
-        $this->assertFormElementNotValid($element, ['day' => '1', 'month' => '1', 'year' => $pastYear+2], $errorMessages);
+        $this->assertFormElementNotValid(
+            $element,
+            ['day' => '1', 'month' => '1', 'year' => $pastYear+2],
+            $errorMessages
+        );
     }
 
     public function testTrafficAreas()
