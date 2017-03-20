@@ -74,7 +74,7 @@ class TaskAllocationRuleTest extends AbstractFormValidationTestCase
         $this->assertFormElementValid($element, 'na');
     }
 
-    public function testGIsMlh()
+    public function testIsMlh()
     {
         $element = ['details', 'isMlh'];
 
