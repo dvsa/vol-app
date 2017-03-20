@@ -17,7 +17,6 @@ class BusRegQualityTest extends AbstractFormValidationTestCase
      */
     protected $formName = \Olcs\Form\Model\Form\BusRegQuality::class;
 
-
     public function testId()
     {
         $element = ['fields', 'id'];
