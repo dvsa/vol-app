@@ -24,16 +24,4 @@ class PeopleController extends Lva\AbstractPeopleController implements Applicati
 
     protected $lva = 'application';
     protected $location = 'internal';
-
-    public function disqualifyAction()
-    {
-        return $this->forward()->dispatch(
-            \Olcs\Controller\DisqualifyController::class,
-            [
-                'action' => 'index',
-                'application' => $this->params()->fromRoute('application'),
-                'person' => $this->params()->fromRoute('child_id')
-            ]
-        );
-    }
 }
