@@ -2,7 +2,6 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Common\Validator\DateCompare;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Common\Form\Elements\Custom\OlcsCheckbox;
 
