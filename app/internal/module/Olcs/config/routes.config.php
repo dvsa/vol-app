@@ -2377,7 +2377,38 @@ $routes = [
                 'action' => 'index'
             ]
         ]
-    ]
+    ],
+    'disqualify-person' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/disqualify-person/:person',
+            'defaults' => [
+                'controller' => Olcs\Controller\DisqualifyController::class,
+                'action' => 'index',
+            ],
+        ],
+        'may_terminate' => false,
+        'child_routes' => [
+            'application' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/application/:application[/]',
+                ],
+            ],
+            'variation' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/variation/:variation[/]',
+                ],
+            ],
+            'licence' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/licence/:licence[/]',
+                ],
+            ],
+        ],
+    ],
 ];
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
