@@ -43,4 +43,22 @@ class AddUnlicensedGoodsVehicleTest extends AbstractFormValidationTestCase
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementNumber($element, 0, 999999);
     }
+
+    public function testAddAnother()
+    {
+        $element = ['form-actions', 'addAnother'];
+        $this->assertFormElementActionButton($element);
+    }
+
+    public function testSubmit()
+    {
+        $element = ['form-actions', 'submit'];
+        $this->assertFormElementActionButton($element);
+    }
+
+    public function testCancel()
+    {
+        $element = ['form-actions', 'cancel'];
+        $this->assertFormElementActionButton($element);
+    }
 }
