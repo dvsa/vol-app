@@ -20,7 +20,7 @@ class CpmsReportTest extends AbstractFormValidationTestCase
 
     public function testReportOptionsCode()
     {
-        $element = ['reportOptions','reportCode'];
+        $element = ['reportOptions', 'reportCode'];
         $this->assertFormElementType($element, Select::class);
         $this->assertFormElementRequired($element, true);
     }
@@ -59,7 +59,7 @@ class CpmsReportTest extends AbstractFormValidationTestCase
 
         $this->assertFormElementNotValid(
             $element,
-            ['day' => '1', 'month' => '1', 'year' => $pastYear+2],
+            ['day' => '1', 'month' => '1', 'year' => $pastYear + 2],
             $errorMessages
         );
     }
