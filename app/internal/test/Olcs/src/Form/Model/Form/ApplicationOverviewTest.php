@@ -20,26 +20,28 @@ class ApplicationOverviewTest extends AbstractFormValidationTestCase
 
     public function testId()
     {
-        $element = ['details', 'id'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['details', 'id']);
     }
 
     public function testVersion()
     {
-        $element = ['details', 'version'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(
+            ['details', 'version']
+        );
     }
 
     public function testTrackingId()
     {
-        $element = ['tracking', 'id'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(
+            ['tracking', 'id']
+        );
     }
 
     public function testTrackingVersion()
     {
-        $element = ['tracking', 'version'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(
+            ['tracking', 'version']
+        );
     }
 
     public function testLeadTcArea()
@@ -81,19 +83,22 @@ class ApplicationOverviewTest extends AbstractFormValidationTestCase
 
     public function testSave()
     {
-        $element = ['form-actions', 'save'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'save']
+        );
     }
 
     public function testSaveAndContinue()
     {
-        $element = ['form-actions', 'saveAndContinue'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'saveAndContinue']
+        );
     }
 
     public function testCancel()
     {
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 }

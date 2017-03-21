@@ -18,26 +18,26 @@ class TeamTest extends AbstractFormValidationTestCase
 
     public function testId()
     {
-        $element = ['id'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['id']);
     }
 
     public function testVersion()
     {
-        $element = ['version'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['version']);
     }
 
     public function testDetailsFormId()
     {
-        $element = ['team-details', 'id'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(
+            ['team-details', 'id']
+        );
     }
 
     public function testDetailsFormVersion()
     {
-        $element = ['team-details', 'version'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(
+            ['team-details', 'version']
+        );
     }
 
     public function testTableTable()
@@ -50,20 +50,23 @@ class TeamTest extends AbstractFormValidationTestCase
 
     public function testTableAction()
     {
-        $element = ['team-details', 'printerExceptions', 'action'];
-        $this->assertFormElementNoRender($element);
+        $this->assertFormElementNoRender(
+            ['team-details', 'printerExceptions', 'action']
+        );
     }
 
     public function testTableRows()
     {
-        $element = ['team-details', 'printerExceptions', 'rows'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(
+            ['team-details', 'printerExceptions', 'rows']
+        );
     }
 
     public function testTableId()
     {
-        $element = ['team-details', 'printerExceptions', 'id'];
-        $this->assertFormElementNoRender($element);
+        $this->assertFormElementNoRender(
+            ['team-details', 'printerExceptions', 'id']
+        );
     }
 
     public function testName()
@@ -82,25 +85,31 @@ class TeamTest extends AbstractFormValidationTestCase
 
     public function testTrafficArea()
     {
-        $element = ['team-details', 'trafficArea'];
-        $this->assertFormElementDynamicSelect($element, true);
+        $this->assertFormElementDynamicSelect(
+            ['team-details', 'trafficArea'],
+            true
+        );
     }
 
     public function testDefaultPrinter()
     {
-        $element = ['team-details', 'defaultPrinter'];
-        $this->assertFormElementDynamicSelect($element, false);
+        $this->assertFormElementDynamicSelect(
+            ['team-details', 'defaultPrinter'],
+            false
+        );
     }
 
     public function testSubmit()
     {
-        $element = ['form-actions', 'submit'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'submit']
+        );
     }
 
     public function testCancel()
     {
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 }

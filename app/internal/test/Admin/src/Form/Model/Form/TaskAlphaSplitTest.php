@@ -19,32 +19,36 @@ class TaskAlphaSplitTest extends AbstractFormValidationTestCase
 
     public function testSubmit()
     {
-        $element = ['form-actions', 'submit'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'submit']
+        );
     }
 
     public function testId()
     {
-        $element = ['id'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['id']);
     }
 
     public function testTaskAlphaSplitVersion()
     {
-        $element = ['taskAlphaSplit', 'version'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['taskAlphaSplit', 'version']
+        );
     }
 
     public function testTaskAlphaSplitId()
     {
-        $element = ['taskAlphaSplit', 'id'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['taskAlphaSplit', 'id']
+        );
     }
 
     public function testTaskAlphaUser()
     {
-        $element = ['taskAlphaSplit', 'user'];
-        $this->assertFormElementDynamicSelect($element, true);
+        $this->assertFormElementDynamicSelect(
+            ['taskAlphaSplit', 'user'],
+            true
+        );
     }
 
     public function testTaskAlphaLetters()
@@ -56,12 +60,12 @@ class TaskAlphaSplitTest extends AbstractFormValidationTestCase
         $this->assertFormElementNotValid(
             $element,
             '1234',
-            [ Regex::NOT_MATCH ]
+            [Regex::NOT_MATCH]
         );
         $this->assertFormElementNotValid(
             $element,
             'ABC!!!£££',
-            [ Regex::NOT_MATCH ]
+            [Regex::NOT_MATCH]
         );
 
         $this->assertFormElementValid($element, 'abcdefgh');
@@ -69,19 +73,20 @@ class TaskAlphaSplitTest extends AbstractFormValidationTestCase
 
     public function testVersion()
     {
-        $element = ['version'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['version']);
     }
 
     public function testCancel()
     {
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 
     public function testAddAnother()
     {
-        $element = ['form-actions', 'addAnother'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'addAnother']
+        );
     }
 }

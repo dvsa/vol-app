@@ -18,31 +18,38 @@ class ApplicationChangeOfEntityTest extends AbstractFormValidationTestCase
 
     public function testOldLicenceNumber()
     {
-        $element = ['change-details', 'oldLicenceNo'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementRequired(
+            ['change-details', 'oldLicenceNo'],
+            true
+        );
     }
 
     public function testRemove()
     {
-        $element = ['change-details', 'oldOrganisationName'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementRequired(
+            ['change-details', 'oldOrganisationName'],
+            true
+        );
     }
 
     public function testSubmit()
     {
-        $element = ['form-actions', 'submit'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'submit']
+        );
     }
 
     public function testRemoveButton()
     {
-        $element = ['form-actions', 'remove'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'remove']
+        );
     }
 
     public function testCancel()
     {
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 }

@@ -18,14 +18,12 @@ class AnnualTestHistoryTest extends AbstractFormValidationTestCase
 
     public function testId()
     {
-        $element = ['fields', 'id'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['fields', 'id']);
     }
 
     public function testVersion()
     {
-        $element = ['fields', 'version'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['fields', 'version']);
     }
 
     public function testAnnualTestHistory()
@@ -37,13 +35,15 @@ class AnnualTestHistoryTest extends AbstractFormValidationTestCase
 
     public function testSubmit()
     {
-        $element = ['form-actions', 'submit'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'submit']
+        );
     }
 
     public function testCancel()
     {
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 }

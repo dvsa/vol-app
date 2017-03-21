@@ -28,45 +28,50 @@ class UserTest extends AbstractFormValidationTestCase
 
     public function testId()
     {
-        $element = [ 'id' ];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['id']);
     }
 
     public function testVersion()
     {
-        $element = [ 'version' ];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['version']);
     }
 
     public function testUserType()
     {
-        $element = ['userType', 'userType'];
-        $this->assertFormElementDynamicSelect($element, true);
+        $this->assertFormElementDynamicSelect(
+            ['userType', 'userType'],
+            true
+        );
     }
 
     public function testUserTypeTeam()
     {
-        $element = ['userType', 'team'];
-        $this->assertFormElementDynamicSelect($element, false);
+        $this->assertFormElementDynamicSelect(
+            ['userType', 'team'],
+            false
+        );
     }
 
     public function testUserTypeCurrentTransportManagerHtml()
     {
         $element = ['userType', 'currentTransportManagerHtml'];
+
         $this->assertFormElementRequired($element, false);
         $this->assertFormElementType($element, Html::class);
     }
 
     public function testUserTypeCurrentTransportManager()
     {
-        $element = ['userType', 'currentTransportManager'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(
+            ['userType', 'currentTransportManager']
+        );
     }
 
     public function testUserTypeCurrentTransportManagerName()
     {
-        $element = ['userType', 'currentTransportManagerName'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(
+            ['userType', 'currentTransportManagerName']
+        );
     }
 
     public function testTransportManager()
@@ -78,43 +83,57 @@ class UserTest extends AbstractFormValidationTestCase
 
     public function testLocalAuthority()
     {
-        $element = ['userType', 'localAuthority'];
-        $this->assertFormElementDynamicSelect($element, true);
+        $this->assertFormElementDynamicSelect(
+            ['userType', 'localAuthority'],
+            true
+        );
     }
 
     public function testPartnerContactDetails()
     {
-        $element = ['userType', 'partnerContactDetails'];
-        $this->assertFormElementDynamicSelect($element, true);
+        $this->assertFormElementDynamicSelect(
+            ['userType', 'partnerContactDetails'],
+            true
+        );
     }
 
     public function testUserTypeId()
     {
-        $element = ['userType', 'id'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(
+            ['userType', 'id']
+        );
     }
 
     public function testLicenceNumberText()
     {
-        $element = ['userType', 'licenceNumber'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementRequired(
+            ['userType', 'licenceNumber'],
+            false
+        );
     }
 
     public function testForename()
     {
-        $element = [ 'userPersonal', 'forename' ];
-        $this->assertFormElementText($element, 1, 35);
+        $this->assertFormElementText(
+            ['userPersonal', 'forename'],
+            1,
+            35
+        );
     }
 
     public function testFamilyName()
     {
-        $element = [ 'userPersonal', 'familyName' ];
-        $this->assertFormElementText($element, 1, 35);
+        $this->assertFormElementText(
+            ['userPersonal', 'familyName'],
+            1,
+            35
+        );
     }
 
     public function testDateOfBirth()
     {
         $element = ['userPersonal', 'birthDate'];
+
         $this->assertFormElementValid(
             $element,
             [
@@ -123,6 +142,7 @@ class UserTest extends AbstractFormValidationTestCase
                 'year'  => '1987',
             ]
         );
+
         $this->assertFormElementNotValid(
             $element,
             [
@@ -131,15 +151,16 @@ class UserTest extends AbstractFormValidationTestCase
                 'year'  => '1987',
             ],
             [
-                Date::INVALID_DATE
+                Date::INVALID_DATE,
             ]
         );
+
         $this->assertFormElementNotValid(
             $element,
             [
                 'day'   => '15',
                 'month' => '06',
-                'year'  => date('Y')+10,
+                'year'  => date('Y') + 10,
             ],
             [
                 DateNotInFuture::IN_FUTURE,
@@ -151,33 +172,33 @@ class UserTest extends AbstractFormValidationTestCase
 
     public function testUserAddress()
     {
-        $element = [ 'address', 'id' ];
+        $element = ['address', 'id'];
         $this->assertFormElementRequired($element, false);
 
-        $element = [ 'address', 'version'];
+        $element = ['address', 'version'];
         $this->assertFormElementRequired($element, false);
 
-        $element = [ 'address', 'addressLine1' ];
-        $this->assertFormElementRequired($element, false);
-        $this->assertFormElementText($element, 1);
-
-        $element = [ 'address', 'addressLine2' ];
+        $element = ['address', 'addressLine1'];
         $this->assertFormElementRequired($element, false);
         $this->assertFormElementText($element, 1);
 
-        $element = [ 'address', 'addressLine3' ];
+        $element = ['address', 'addressLine2'];
         $this->assertFormElementRequired($element, false);
         $this->assertFormElementText($element, 1);
 
-        $element = [ 'address', 'addressLine4' ];
+        $element = ['address', 'addressLine3'];
         $this->assertFormElementRequired($element, false);
         $this->assertFormElementText($element, 1);
 
-        $element = [ 'address', 'town' ];
+        $element = ['address', 'addressLine4'];
         $this->assertFormElementRequired($element, false);
         $this->assertFormElementText($element, 1);
 
-        $element = [ 'address', 'postcode' ];
+        $element = ['address', 'town'];
+        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementText($element, 1);
+
+        $element = ['address', 'postcode'];
         $this->assertFormElementRequired($element, false);
         $this->assertFormElementPostcode($element);
 
@@ -202,8 +223,8 @@ class UserTest extends AbstractFormValidationTestCase
             'gaurav@valtech.co.uk',
             [
                 'userContactDetails' => [
-                    'emailConfirm' => 'gaurav@valtech.co.uk'
-                ]
+                    'emailConfirm' => 'gaurav@valtech.co.uk',
+                ],
             ]
         );
 
@@ -213,8 +234,8 @@ class UserTest extends AbstractFormValidationTestCase
             [Identical::NOT_SAME],
             [
                 'userContactDetails' => [
-                    'emailConfirm' => 'gaurav@valtech111.co.uk'
-                ]
+                    'emailConfirm' => 'gaurav@valtech111.co.uk',
+                ],
             ]
         );
 
@@ -264,8 +285,10 @@ class UserTest extends AbstractFormValidationTestCase
 
     public function testUserTypeRole()
     {
-        $element = ['userType', 'role'];
-        $this->assertFormElementDynamicSelect($element, true);
+        $this->assertFormElementDynamicSelect(
+            ['userType', 'role'],
+            true
+        );
     }
 
     public function testTranslateToWelsh()
@@ -277,8 +300,10 @@ class UserTest extends AbstractFormValidationTestCase
 
     public function testUserLoginId()
     {
-        $element = ['userLoginSecurity', 'loginId'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementRequired(
+            ['userLoginSecurity', 'loginId'],
+            true
+        );
     }
 
     public function testUserLoginCreatedOn()
@@ -332,13 +357,15 @@ class UserTest extends AbstractFormValidationTestCase
 
     public function testSubmit()
     {
-        $element = ['form-actions', 'submit'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'submit']
+        );
     }
 
     public function testCancel()
     {
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 }

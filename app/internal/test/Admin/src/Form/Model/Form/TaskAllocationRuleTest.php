@@ -19,14 +19,12 @@ class TaskAllocationRuleTest extends AbstractFormValidationTestCase
 
     public function testId()
     {
-        $element = ['id'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['id']);
     }
 
     public function testVersion()
     {
-        $element = ['version'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['version']);
     }
 
     public function testTableTable()
@@ -39,26 +37,31 @@ class TaskAllocationRuleTest extends AbstractFormValidationTestCase
 
     public function testTableAction()
     {
-        $element = ['details', 'taskAlphaSplit', 'action'];
-        $this->assertFormElementNoRender($element);
+        $this->assertFormElementNoRender(
+            ['details', 'taskAlphaSplit', 'action']
+        );
     }
 
     public function testTableRows()
     {
-        $element = ['details', 'taskAlphaSplit', 'rows'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(
+            ['details', 'taskAlphaSplit', 'rows']
+        );
     }
 
     public function testTableId()
     {
-        $element = ['details', 'taskAlphaSplit', 'id'];
-        $this->assertFormElementNoRender($element);
+        $this->assertFormElementNoRender(
+            ['details', 'taskAlphaSplit', 'id']
+        );
     }
 
     public function testCategory()
     {
-        $element = ['details', 'category'];
-        $this->assertFormElementDynamicSelect($element, true);
+        $this->assertFormElementDynamicSelect(
+            ['details', 'category'],
+            true
+        );
     }
 
     public function testGoodsOrPsv()
@@ -88,49 +91,56 @@ class TaskAllocationRuleTest extends AbstractFormValidationTestCase
 
     public function testTrafficArea()
     {
-        $element = ['details', 'trafficArea'];
-        $this->assertFormElementDynamicSelect($element, false);
+        $this->assertFormElementDynamicSelect(
+            ['details', 'trafficArea'],
+            false
+        );
     }
 
     public function testTeamId()
     {
-        $element = ['details', 'teamId'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(
+            ['details', 'teamId']
+        );
     }
 
     public function testTeamSelect()
     {
-        $element = ['details', 'team'];
-        $this->assertFormElementDynamicSelect($element, false);
+        $this->assertFormElementDynamicSelect(
+            ['details', 'team'],
+            false
+        );
     }
 
     public function testUserSelect()
     {
-        $element = ['details', 'user'];
-        $this->assertFormElementDynamicSelect($element, false);
+        $this->assertFormElementDynamicSelect(
+            ['details', 'user'],
+            false
+        );
     }
 
     public function testDetailsFormId()
     {
-        $element = ['details', 'id'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['details', 'id']);
     }
 
     public function testDetailsFormVersion()
     {
-        $element = ['details', 'version'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['details', 'version']);
     }
 
     public function testSubmit()
     {
-        $element = ['form-actions', 'submit'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'submit']
+        );
     }
 
     public function testCancel()
     {
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 }

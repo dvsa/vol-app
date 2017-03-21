@@ -18,20 +18,17 @@ class AddUnlicensedPsvVehicleTest extends AbstractFormValidationTestCase
 
     public function testOrganisation()
     {
-        $element = ['organisation'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['organisation']);
     }
 
     public function testDataId()
     {
-        $element = ['data', 'id'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['data', 'id']);
     }
 
     public function testDataVersion()
     {
-        $element = ['data', 'version'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['data', 'version']);
     }
 
     public function testDataVrm()
@@ -44,19 +41,22 @@ class AddUnlicensedPsvVehicleTest extends AbstractFormValidationTestCase
 
     public function testAddAnother()
     {
-        $element = ['form-actions', 'addAnother'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'addAnother']
+        );
     }
 
     public function testSubmit()
     {
-        $element = ['form-actions', 'submit'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'submit']
+        );
     }
 
     public function testCancel()
     {
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 }
