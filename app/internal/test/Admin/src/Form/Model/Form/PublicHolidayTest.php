@@ -20,8 +20,7 @@ class PublicHolidayTest extends AbstractFormValidationTestCase
 
     public function testFieldsId()
     {
-        $element = ['fields', 'id'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['fields', 'id']);
     }
 
     public function testFieldsAreas()
@@ -37,37 +36,45 @@ class PublicHolidayTest extends AbstractFormValidationTestCase
     {
         $element = ['fields', 'holidayDate'];
 
-        $futureYear = date('Y')+1;
+        $futureYear = date('Y') + 1;
 
         $errorMessages = [
             Date::INVALID_DATE,
         ];
 
-        $this->assertFormElementValid($element, ['day' => 1, 'month' => '2', 'year' => $futureYear]);
-        $this->assertFormElementNotValid($element, ['day' => 'X', 'month' => '1', 'year' => 1999], $errorMessages);
+        $this->assertFormElementValid(
+            $element,
+            [
+                'day' => 1,
+                'month' => '2',
+                'year' => $futureYear
+            ]
+        );
+
+        $this->assertFormElementNotValid(
+            $element,
+            ['day' => 'X', 'month' => '1', 'year' => 1999],
+            $errorMessages
+        );
     }
 
     public function testId()
     {
-        $element = ['id'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['id']);
     }
 
     public function testVersion()
     {
-        $element = ['version'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['version']);
     }
 
     public function testSubmit()
     {
-        $element = ['form-actions', 'submit'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['form-actions', 'submit']);
     }
 
     public function testCancelButton()
     {
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['form-actions', 'cancel']);
     }
 }

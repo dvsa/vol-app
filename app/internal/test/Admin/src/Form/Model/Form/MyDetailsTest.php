@@ -3,6 +3,9 @@
 namespace AdminTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Common\Form\Elements\Validators\DateNotInFuture;
+use Zend\Validator\EmailAddress;
+use Common\Form\Elements\Validators\EmailConfirm;
 
 /**
  * Class MyDetailsTest
@@ -26,14 +29,12 @@ class MyDetailsTest extends AbstractFormValidationTestCase
 
     public function testTeam()
     {
-        $element = ['userDetails', 'team'];
-        $this->assertFormElementDynamicSelect($element);
+        $this->assertFormElementDynamicSelect(['userDetails', 'team']);
     }
 
     public function testTitle()
     {
-        $element = ['person', 'title'];
-        $this->assertFormElementDynamicSelect($element);
+        $this->assertFormElementDynamicSelect(['person', 'title']);
     }
 
     public function testForename()
@@ -62,7 +63,7 @@ class MyDetailsTest extends AbstractFormValidationTestCase
                 'month' => '06',
                 'year' => '2060',
             ],
-            [ \Common\Form\Elements\Validators\DateNotInFuture::IN_FUTURE ]
+            [DateNotInFuture::IN_FUTURE]
         );
         $this->assertFormElementAllowEmpty($element, true);
     }
@@ -82,7 +83,7 @@ class MyDetailsTest extends AbstractFormValidationTestCase
         $this->assertFormElementNotValid(
             $element,
             'valid@email.com',
-            \Common\Form\Elements\Validators\EmailConfirm::NOT_SAME,
+            EmailConfirm::NOT_SAME,
             ['userContact' => ['emailConfirm' => 'other@email.com']]
         );
 
@@ -90,8 +91,8 @@ class MyDetailsTest extends AbstractFormValidationTestCase
             $element,
             'invalid',
             [
-                \Dvsa\Olcs\Transfer\Validators\EmailAddress::INVALID_FORMAT,
-                \Common\Form\Elements\Validators\EmailConfirm::NOT_SAME,
+                EmailAddress::INVALID_FORMAT,
+                EmailConfirm::NOT_SAME,
             ],
             ['userContact' => ['emailConfirm' => 'other@email.com']]
         );

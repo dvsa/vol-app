@@ -18,9 +18,9 @@ class PiReportFilterTest extends AbstractFormValidationTestCase
 
     public function testStartDate()
     {
-        $element = [ 'startDate' ];
+        $element = ['startDate'];
 
-        $pastYear = date('Y')-1;
+        $pastYear = date('Y') - 1;
 
         $errorMessages = [
             'dateInvalidDate',
@@ -33,37 +33,37 @@ class PiReportFilterTest extends AbstractFormValidationTestCase
 
         $this->assertFormElementNotValid(
             $element,
-            ['day' => 'ABC', 'month' => '1', 'year' => $pastYear+2],
+            ['day' => 'ABC', 'month' => '1', 'year' => $pastYear + 2],
             $errorMessages
         );
     }
 
     public function testEndDate()
     {
-        $pastYear = date('Y')-2;
-
-        $element = [ 'endDate' ];
+        $pastYear = date('Y') - 2;
 
         $errorMessages = [
             'invalidField',
         ];
 
         $this->assertFormElementNotValid(
-            $element,
-            ['day' => '1', 'month' => '1', 'year' => $pastYear+2],
+            ['endDate'],
+            [
+                'day' => '1',
+                'month' => '1',
+                'year' => $pastYear + 2
+            ],
             $errorMessages
         );
     }
 
     public function testTrafficAreas()
     {
-        $element = ['trafficAreas'];
-        $this->assertFormElementDynamicMultiCheckbox($element);
+        $this->assertFormElementDynamicMultiCheckbox(['trafficAreas']);
     }
 
     public function testGenerate()
     {
-        $element = ['filter'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['filter']);
     }
 }
