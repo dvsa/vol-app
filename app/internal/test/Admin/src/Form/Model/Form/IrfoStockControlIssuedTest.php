@@ -21,16 +21,29 @@ class IrfoStockControlIssuedTest extends AbstractFormValidationTestCase
     public function testIrfogvPermitId()
     {
         $element = ['fields', 'irfoGvPermitId'];
-        $this->assertFormElementNotValid($element, 'ABC', [ Digits::NOT_DIGITS ]);
-        $this->assertFormElementNumber($element, 1, null, [ GreaterThan::NOT_GREATER ]);
+
+        $this->assertFormElementNotValid(
+            $element,
+            'ABC',
+            [Digits::NOT_DIGITS]
+        );
+
+        $this->assertFormElementNumber(
+            $element,
+            1,
+            null,
+            [GreaterThan::NOT_GREATER]
+        );
     }
 
     public function testSubmitAndCancelButtons()
     {
-        $element = ['form-actions', 'submit'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'submit']
+        );
 
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 }

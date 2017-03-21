@@ -26,13 +26,13 @@ class IrfoStockControlTest extends AbstractFormValidationTestCase
     public function testValidForYear()
     {
         $element = ['fields', 'validForYear'];
-        $this->assertFormElementValid($element, date('Y')-20);
+        $this->assertFormElementValid($element, date('Y') - 20);
 
         $errorMessages = [
             'notInArray'
         ];
 
-        $this->assertFormElementNotValid($element, date('Y')-101, $errorMessages);
+        $this->assertFormElementNotValid($element, date('Y') - 101, $errorMessages);
     }
 
     public function testStatus()

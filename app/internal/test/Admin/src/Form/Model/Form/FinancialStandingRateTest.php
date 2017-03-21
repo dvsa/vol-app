@@ -21,71 +21,103 @@ class FinancialStandingRateTest extends AbstractFormValidationTestCase
 
     public function testSubmitAndCancelButton()
     {
-        $element = ['form-actions', 'submit'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'submit']
+        );
 
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 
     public function testFinancialStandingRateType()
     {
         $element = ['details', 'goodsOrPsv'];
+
         $this->assertFormElementType($element, Radio::class);
         $this->assertFormElementValid($element, 'lcat_gv');
         $this->assertFormElementValid($element, 'lcat_psv');
-        $this->assertFormElementNotValid($element, 'X', [InArray::NOT_IN_ARRAY]);
+
+        $this->assertFormElementNotValid(
+            $element,
+            'X',
+            [InArray::NOT_IN_ARRAY]
+        );
     }
 
     public function testLicenceType()
     {
         $element = ['details', 'licenceType'];
+
         $this->assertFormElementType($element, Radio::class);
         $this->assertFormElementValid($element, 'ltyp_r');
         $this->assertFormElementValid($element, 'ltyp_sn');
         $this->assertFormElementValid($element, 'ltyp_si');
-        $this->assertFormElementNotValid($element, 'X', [InArray::NOT_IN_ARRAY]);
+
+        $this->assertFormElementNotValid(
+            $element,
+            'X',
+            [InArray::NOT_IN_ARRAY]
+        );
     }
 
     public function testFirstVehicleRate()
     {
         $element = ['details', 'firstVehicleRate'];
+
         $this->assertFormElementValid($element, 1.10);
         $this->assertFormElementValid($element, 10.30);
-        $this->assertFormElementNotValid($element, 'abc', [ 'invalid' ]);
+
+        $this->assertFormElementNotValid(
+            $element,
+            'abc',
+            ['invalid']
+        );
     }
 
     public function testAdditionalVehicleRate()
     {
         $element = ['details', 'additionalVehicleRate'];
+
         $this->assertFormElementValid($element, 1.10);
         $this->assertFormElementValid($element, 10.30);
-        $this->assertFormElementNotValid($element, 'abc', [ 'invalid' ]);
+
+        $this->assertFormElementNotValid(
+            $element,
+            'abc',
+            ['invalid']
+        );
     }
 
     public function testEffectiveFrom()
     {
-        $element = [ 'details', 'effectiveFrom' ];
+        $element = ['details', 'effectiveFrom'];
 
-        $pastYear = date('Y')-1;
+        $pastYear = date('Y') - 1;
 
         $errorMessages = [
             'dateInvalidDate',
         ];
 
-        $this->assertFormElementValid($element, ['day' => 1, 'month' => '2', 'year' => $pastYear]);
-        $this->assertFormElementNotValid($element, ['day' => '1', 'month' => '1', 'year' => 'ABC'], $errorMessages);
+        $this->assertFormElementValid(
+            $element,
+            ['day' => 1, 'month' => '2', 'year' => $pastYear]
+        );
+
+        $this->assertFormElementNotValid(
+            $element,
+            ['day' => '1', 'month' => '1', 'year' => 'ABC'],
+            $errorMessages
+        );
     }
 
     public function testId()
     {
-        $element = ['details', 'id'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['details', 'id']);
     }
 
     public function testVersion()
     {
-        $element = ['details', 'version'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['details', 'version']);
     }
 }

@@ -25,24 +25,26 @@ class IrfoStockControlFilterTest extends AbstractFormValidationTestCase
     public function testValidForYear()
     {
         $element = ['validForYear'];
-        $this->assertFormElementValid($element, date('Y')-20);
+        $this->assertFormElementValid($element, date('Y') - 20);
 
         $errorMessages = [
             'notInArray'
         ];
 
-        $this->assertFormElementNotValid($element, date('Y')-101, $errorMessages);
+        $this->assertFormElementNotValid(
+            $element,
+            date('Y') - 101,
+            $errorMessages
+        );
     }
 
     public function testStatus()
     {
-        $element = ['status'];
-        $this->assertFormElementDynamicSelect($element, true);
+        $this->assertFormElementDynamicSelect(['status'], true);
     }
 
     public function testFilterButton()
     {
-        $element = ['filter'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['filter']);
     }
 }
