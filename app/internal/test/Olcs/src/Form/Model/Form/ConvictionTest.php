@@ -25,20 +25,20 @@ class ConvictionTest extends AbstractFormValidationTestCase
 
     public function testDefendantType()
     {
-        $element = ['fields', 'defendantType'];
-        $this->assertFormElementDynamicSelect($element, true);
+        $this->assertFormElementDynamicSelect(
+            ['fields', 'defendantType'],
+            true
+        );
     }
 
     public function testPersonFirstname()
     {
-        $element = ['fields', 'personFirstname'];
-        $this->assertFormElementText($element);
+        $this->assertFormElementText(['fields', 'personFirstname']);
     }
 
     public function testPersonLastname()
     {
-        $element = ['fields', 'personLastname'];
-        $this->assertFormElementText($element);
+        $this->assertFormElementText(['fields', 'personLastname']);
     }
 
     public function testDateOfBirth()
@@ -97,8 +97,10 @@ class ConvictionTest extends AbstractFormValidationTestCase
 
     public function testConvictionCategory()
     {
-        $element = ['fields', 'convictionCategory'];
-        $this->assertFormElementDynamicSelect($element, false);
+        $this->assertFormElementDynamicSelect(
+            ['fields', 'convictionCategory'],
+            false
+        );
     }
 
     public function testCategoryText()
@@ -211,8 +213,7 @@ class ConvictionTest extends AbstractFormValidationTestCase
 
     public function testConvictionDate()
     {
-        $element = ['fields', 'convictionDate'];
-        $this->assertFormElementDate($element);
+        $this->assertFormElementDate(['fields', 'convictionDate']);
     }
 
     public function testMsi()
@@ -273,25 +274,21 @@ class ConvictionTest extends AbstractFormValidationTestCase
 
     public function testId()
     {
-        $element = ['fields', 'id'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['fields', 'id']);
     }
 
     public function testVersion()
     {
-        $element = ['fields', 'version'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['fields', 'version']);
     }
 
     public function testSubmit()
     {
-        $element = ['form-actions', 'submit'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['form-actions', 'submit']);
     }
 
     public function testCancel()
     {
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['form-actions', 'cancel']);
     }
 }

@@ -19,44 +19,46 @@ class DecisionTest extends AbstractFormValidationTestCase
 
     public function testSubmissionActionType()
     {
-        $element = ['submissionActionType'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['submissionActionType']);
     }
 
     public function testSenderUser()
     {
-        $element = ['senderUser'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['senderUser']);
     }
 
     public function testSubmission()
     {
-        $element = ['submission'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['submission']);
     }
 
     public function testVersion()
     {
-        $element = ['version'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['version']);
     }
 
     public function testActionTypes()
     {
-        $element = ['main', 'actionTypes'];
-        $this->assertFormElementDynamicSelect($element, true);
+        $this->assertFormElementDynamicSelect(
+            ['main', 'actionTypes'],
+            true
+        );
     }
 
     public function testPiReasons()
     {
-        $element = ['main', 'piReasons'];
-        $this->assertFormElementDynamicSelect($element, true);
+        $this->assertFormElementDynamicSelect(
+            ['main', 'piReasons'],
+            true
+        );
     }
 
     public function testRecipientUser()
     {
-        $element = ['main', 'recipientUser'];
-        $this->assertFormElementDynamicSelect($element, true);
+        $this->assertFormElementDynamicSelect(
+            ['main', 'recipientUser'],
+            true
+        );
     }
 
     public function testComment()
@@ -75,13 +77,11 @@ class DecisionTest extends AbstractFormValidationTestCase
 
     public function testSubmit()
     {
-        $element = ['form-actions', 'submit'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['form-actions', 'submit']);
     }
 
     public function testCancel()
     {
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['form-actions', 'cancel']);
     }
 }

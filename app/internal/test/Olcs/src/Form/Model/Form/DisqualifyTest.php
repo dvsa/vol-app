@@ -19,14 +19,12 @@ class DisqualifyTest extends AbstractFormValidationTestCase
 
     public function testId()
     {
-        $element = ['id'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['id']);
     }
 
     public function testVersion()
     {
-        $element = ['version'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['version']);
     }
 
     public function testStartDate()
@@ -66,13 +64,11 @@ class DisqualifyTest extends AbstractFormValidationTestCase
 
     public function testSubmit()
     {
-        $element = ['form-actions', 'submit'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['form-actions', 'submit']);
     }
 
     public function testCancel()
     {
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['form-actions', 'cancel']);
     }
 }

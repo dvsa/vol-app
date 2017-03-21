@@ -20,14 +20,12 @@ class CreateFeeTest extends AbstractFormValidationTestCase
 
     public function testId()
     {
-        $element = ['fee-details', 'id'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['fee-details', 'id']);
     }
 
     public function testVersion()
     {
-        $element = ['fee-details', 'version'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['fee-details', 'version']);
     }
 
     public function testCreatedDate()
@@ -46,14 +44,18 @@ class CreateFeeTest extends AbstractFormValidationTestCase
 
     public function testIrfoGvPermit()
     {
-        $element = ['fee-details', 'irfoGvPermit'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementRequired(
+            ['fee-details', 'irfoGvPermit'],
+            true
+        );
     }
 
     public function testIrfoPsvAuth()
     {
-        $element = ['fee-details', 'irfoPsvAuth'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementRequired(
+            ['fee-details', 'irfoPsvAuth'],
+            true
+        );
     }
 
     public function testAmount()
@@ -91,19 +93,19 @@ class CreateFeeTest extends AbstractFormValidationTestCase
 
     public function testVatRate()
     {
-        $element = ['fee-details', 'vatRate'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementRequired(
+            ['fee-details', 'vatRate'],
+            false
+        );
     }
 
     public function testSubmit()
     {
-        $element = ['form-actions', 'submit'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['form-actions', 'submit']);
     }
 
     public function testCancel()
     {
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['form-actions', 'cancel']);
     }
 }

@@ -20,14 +20,12 @@ class DocumentRelinkTest extends AbstractFormValidationTestCase
 
     public function testIds()
     {
-        $element = ['document-relink-details', 'ids'];
-        $this->assertFormElementHidden($element);
+        $this->assertFormElementHidden(['document-relink-details', 'ids']);
     }
 
     public function testRelinkTo()
     {
-        $element = ['document-relink-details', 'relinkTo'];
-        $this->assertFormElementHtml($element);
+        $this->assertFormElementHtml(['document-relink-details', 'relinkTo']);
     }
 
     public function testType()
@@ -58,19 +56,16 @@ class DocumentRelinkTest extends AbstractFormValidationTestCase
 
     public function testCopyButton()
     {
-        $element = ['form-actions', 'copy'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['form-actions', 'copy']);
     }
 
     public function testMoveButton()
     {
-        $element = ['form-actions', 'move'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['form-actions', 'move']);
     }
 
     public function testCancelButton()
     {
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['form-actions', 'cancel']);
     }
 }

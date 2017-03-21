@@ -19,14 +19,12 @@ class CreateVariationTest extends AbstractFormValidationTestCase
 
     public function testMessages()
     {
-        $element = ['messages', 'message'];
-        $this->assertFormElementHtml($element);
+        $this->assertFormElementHtml(['messages', 'message']);
     }
 
     public function testReceivedDate()
     {
-        $element = ['data', 'receivedDate'];
-        $this->assertFormElementDate($element);
+        $this->assertFormElementDate(['data', 'receivedDate']);
     }
 
     public function testFeeRequired()
@@ -57,13 +55,11 @@ class CreateVariationTest extends AbstractFormValidationTestCase
 
     public function testSubmit()
     {
-        $element = ['form-actions', 'submit'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['form-actions', 'submit']);
     }
 
     public function testCancel()
     {
-        $element = ['form-actions', 'cancel'];
-        $this->assertFormElementActionButton($element);
+        $this->assertFormElementActionButton(['form-actions', 'cancel']);
     }
 }
