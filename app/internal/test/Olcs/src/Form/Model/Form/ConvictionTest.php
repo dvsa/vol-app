@@ -50,14 +50,14 @@ class ConvictionTest extends AbstractFormValidationTestCase
         $this->assertFormElementNotValid(
             $element,
             [
-                'year' => '2017',
+                'year'  => '2017',
                 'month' => '10',
-                'day' => '10',
+                'day'   => '10',
             ],
             [DateNotInFuture::IN_FUTURE],
             [
                 'fields' => [
-                    'defendantType' => [ 'def_t_op' => true ],
+                    'defendantType' => ['def_t_op' => true],
                 ],
             ]
         );
@@ -65,17 +65,17 @@ class ConvictionTest extends AbstractFormValidationTestCase
         $this->assertFormElementNotValid(
             $element,
             [
-                'year' => '2017',
+                'year'  => '2017',
                 'month' => '10',
-                'day' => 'XXX',
+                'day'   => 'XXX',
             ],
             [
                 DateValidator::DATE_ERR_CONTAINS_STRING,
-                Date::INVALID_DATE
+                Date::INVALID_DATE,
             ],
             [
                 'fields' => [
-                    'defendantType' => [ 'def_t_op' => true ],
+                    'defendantType' => ['def_t_op' => true],
                 ],
             ]
         );
@@ -83,13 +83,13 @@ class ConvictionTest extends AbstractFormValidationTestCase
         $this->assertFormElementValid(
             $element,
             [
-                'year' => '1987',
+                'year'  => '1987',
                 'month' => '06',
-                'day' => '15',
+                'day'   => '15',
             ],
             [
                 'fields' => [
-                    'defendantType' => [ 'def_t_op' => true ],
+                    'defendantType' => ['def_t_op' => true],
                 ],
             ]
         );
@@ -148,9 +148,9 @@ class ConvictionTest extends AbstractFormValidationTestCase
         $this->assertFormElementNotValid(
             $element,
             [
-                'year' => 'XXXX',
+                'year'  => 'XXXX',
                 'month' => '10',
-                'day' => '10',
+                'day'   => '10',
             ],
             [
                 DateValidator::DATE_ERR_CONTAINS_STRING,
@@ -161,9 +161,9 @@ class ConvictionTest extends AbstractFormValidationTestCase
             [
                 'fields' => [
                     'convictionDate' => [
-                        'year' => '2017',
+                        'year'  => '2017',
                         'month' => '10',
-                        'day' => '5',
+                        'day'   => '5',
                     ],
                 ],
             ]
@@ -172,21 +172,21 @@ class ConvictionTest extends AbstractFormValidationTestCase
         $this->assertFormElementNotValid(
             $element,
             [
-                'year' => '2017',
+                'year'  => '2017',
                 'month' => '10',
-                'day' => '10',
+                'day'   => '10',
             ],
             [
                 DateNotInFuture::IN_FUTURE,
                 DateCompare::NO_COMPARE,
-                DateCompare::NOT_LTE
+                DateCompare::NOT_LTE,
             ],
             [
                 'fields' => [
                     'convictionDate' => [
-                        'year' => '2017',
+                        'year'  => '2017',
                         'month' => '10',
-                        'day' => '5',
+                        'day'   => '5',
                     ],
                 ],
             ]
@@ -195,16 +195,16 @@ class ConvictionTest extends AbstractFormValidationTestCase
         $this->assertFormElementValid(
             $element,
             [
-                'year' => '2016',
+                'year'  => '2016',
                 'month' => '10',
-                'day' => '10',
+                'day'   => '10',
             ],
             [
                 'fields' => [
                     'convictionDate' => [
-                        'year' => '2016',
+                        'year'  => '2016',
                         'month' => '10',
-                        'day' => '10',
+                        'day'   => '10',
                     ],
                 ],
             ]
