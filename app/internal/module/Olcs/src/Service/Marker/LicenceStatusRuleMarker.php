@@ -66,6 +66,10 @@ class LicenceStatusRuleMarker extends AbstractMarker
             if (!empty($rule['endProcessedDate'])) {
                 continue;
             }
+            // if already processed
+            if (!empty($rule['startProcessedDate']) && empty($rule['endProcessedDate'])) {
+                continue;
+            }
             // if its not one of the statuses then weere not interested in it
             if (!in_array($rule['licenceStatus']['id'], $statuses)) {
                 continue;

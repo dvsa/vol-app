@@ -190,4 +190,27 @@ class LicenceStatusRuleMarkerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame('HTML1', $this->sut->render());
     }
+
+    public function testRenderRevokedWithStartProcessedDate()
+    {
+        $data = [
+            'licence' => [
+                'id' => 345,
+                'status' => ['id' => 'lsts_valid'],
+                'licenceStatusRules' => [
+                    [
+                        'id' => 234,
+                        'startProcessedDate' => 'FOO',
+                        'licenceStatus' => ['id' => 'lsts_revoked'],
+                        'startDate' => '2014-02-25',
+                        'endDate' => null,
+                        'endProcessedDate' => null,
+                    ],
+                ]
+            ],
+        ];
+
+        $this->sut->setData($data);
+        $this->assertFalse($this->sut->canRender());
+    }
 }
