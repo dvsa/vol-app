@@ -33,13 +33,18 @@ class InspectionRequestTest extends AbstractFormValidationTestCase
 
     public function testOperatingCentre()
     {
-        $this->assertFormElementDynamicSelect(['data', 'operatingCentre'],
-            false);
+        $this->assertFormElementDynamicSelect(
+            ['data', 'operatingCentre'],
+            false
+        );
     }
 
     public function testInspectorName()
     {
-        $this->assertFormElementRequired(['data', 'inspectorName'], false);
+        $this->assertFormElementRequired(
+            ['data', 'inspectorName'],
+            false
+        );
     }
 
     public function testRequestType()

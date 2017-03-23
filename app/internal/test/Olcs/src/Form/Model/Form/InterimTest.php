@@ -108,8 +108,10 @@ class InterimTest extends AbstractFormValidationTestCase
 
     public function testInterimStatus()
     {
-        $this->assertFormElementDynamicSelect(['interimStatus', 'status'],
-            true);
+        $this->assertFormElementDynamicSelect(
+            ['interimStatus', 'status'],
+            true
+        );
     }
 
     public function testSave()

@@ -91,10 +91,20 @@ class IrfoGvPermitTest extends AbstractFormValidationTestCase
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element);
 
-        $this->assertFormElementAllowEmpty($element, false,
-            ['fields' => ['isFeeExempt' => 'Y']]);
-        $this->assertFormElementText($element, 0, 255,
-            ['fields' => ['isFeeExempt' => 'Y']]);
+        $this->assertFormElementAllowEmpty(
+            $element,
+            false,
+            ['fields' => ['isFeeExempt' => 'Y']]
+        );
+
+        $this->assertFormElementText(
+            $element,
+            0,
+            255,
+            ['fields' =>
+                 ['isFeeExempt' => 'Y']
+            ]
+        );
     }
 
     public function testNoOfCopies()
