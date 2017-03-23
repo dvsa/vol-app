@@ -50,13 +50,29 @@ class IrfoGvPermitTest extends AbstractFormValidationTestCase
         $this->assertFormElementValid(
             $element,
             ['day' => 2, 'month' => '2', 'year' => 2010],
-            ['fields' => ['inForceDate' => ['day' => 1, 'month' => '2', 'year' => 2010]]]
+            [
+                'fields' => [
+                    'inForceDate' => [
+                        'day'   => 1,
+                        'month' => '2',
+                        'year'  => 2010,
+                    ],
+                ],
+            ]
         );
         $this->assertFormElementNotValid(
             $element,
             ['day' => 1, 'month' => '2', 'year' => 2010],
             \Common\Validator\AbstractCompare::NOT_GTE,
-            ['fields' => ['inForceDate' => ['day' => 2, 'month' => '2', 'year' => 2010]]]
+            [
+                'fields' => [
+                    'inForceDate' => [
+                        'day'   => 2,
+                        'month' => '2',
+                        'year'  => 2010,
+                    ],
+                ],
+            ]
         );
     }
 
@@ -75,8 +91,10 @@ class IrfoGvPermitTest extends AbstractFormValidationTestCase
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element);
 
-        $this->assertFormElementAllowEmpty($element, false, ['fields' => ['isFeeExempt' => 'Y']]);
-        $this->assertFormElementText($element, 0, 255, ['fields' => ['isFeeExempt' => 'Y']]);
+        $this->assertFormElementAllowEmpty($element, false,
+            ['fields' => ['isFeeExempt' => 'Y']]);
+        $this->assertFormElementText($element, 0, 255,
+            ['fields' => ['isFeeExempt' => 'Y']]);
     }
 
     public function testNoOfCopies()

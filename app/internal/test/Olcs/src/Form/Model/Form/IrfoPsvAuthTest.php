@@ -72,13 +72,29 @@ class IrfoPsvAuthTest extends AbstractFormValidationTestCase
         $this->assertFormElementValid(
             $element,
             ['day' => 2, 'month' => '2', 'year' => 2010],
-            ['fields' => ['inForceDate' => ['day' => 1, 'month' => '2', 'year' => 2010]]]
+            [
+                'fields' => [
+                    'inForceDate' => [
+                        'day'   => 1,
+                        'month' => '2',
+                        'year'  => 2010,
+                    ],
+                ],
+            ]
         );
         $this->assertFormElementNotValid(
             $element,
             ['day' => 1, 'month' => '2', 'year' => 2010],
             \Common\Validator\AbstractCompare::NOT_GTE,
-            ['fields' => ['inForceDate' => ['day' => 2, 'month' => '2', 'year' => 2010]]]
+            [
+                'fields' => [
+                    'inForceDate' => [
+                        'day'   => 2,
+                        'month' => '2',
+                        'year'  => 2010,
+                    ],
+                ],
+            ]
         );
     }
 
