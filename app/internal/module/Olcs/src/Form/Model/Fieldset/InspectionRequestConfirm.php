@@ -26,6 +26,9 @@ class InspectionRequestConfirm
      *          "class":"inline"
      *      }
      * })
+     * @Form\Attributes({
+     *      "value": "Y",
+     * })
      */
     public $createInspectionRequest;
 }
