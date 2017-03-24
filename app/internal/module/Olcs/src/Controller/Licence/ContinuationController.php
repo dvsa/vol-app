@@ -6,7 +6,6 @@ use Common\Service\Entity\ContinuationDetailEntityService;
 use Common\Service\Entity\LicenceEntityService;
 use Olcs\Controller\AbstractController;
 use Olcs\Data\Mapper\Continuation as ContinuationMapper;
-use Olcs\Form\Model\Form;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -16,6 +15,11 @@ use Zend\View\Model\ViewModel;
  */
 class ContinuationController extends AbstractController
 {
+    /**
+     * Process action - updateContinuation
+     *
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function updateContinuationAction()
     {
         $licenceId = (int) $this->params()->fromRoute('licence', null);
@@ -38,7 +42,7 @@ class ContinuationController extends AbstractController
             if ($this->isButtonPressed('printSeperator')) {
                 $this->createSeparatorSheet($continuationDetail['licence']['licNo']);
 
-                return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                return $this->redirectToRoute('licence/update-continuation', [], [], true);
             }
 
             $this->formPost($form);
@@ -72,7 +76,7 @@ class ContinuationController extends AbstractController
      * Additional action with form after post.
      * - for UpdateContinuation:  add 'checklistStatus' field if it disabled in form
      *
-     * @param \Common\Form\Form $form
+     * @param \Common\Form\Form $form Form
      *
      * @return \Common\Form\Form
      */
@@ -96,6 +100,8 @@ class ContinuationController extends AbstractController
      * Create a Continuation Separator Sheet
      *
      * @param int $licNo Licence number
+     *
+     * @return void
      */
     private function createSeparatorSheet($licNo)
     {

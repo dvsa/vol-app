@@ -327,7 +327,8 @@ return array(
             'ApplicationReadHistoryController' => 'Olcs\Controller\Application\Processing\ReadHistoryController',
             'OperatorHistoryController' => 'Olcs\Controller\Operator\HistoryController',
             'OperatorReadHistoryController' => 'Olcs\Controller\Operator\Processing\ReadHistoryController',
-            'ContinuationController' => 'Olcs\Controller\Licence\ContinuationController',
+            \Olcs\Controller\Licence\ContinuationController::class =>
+                \Olcs\Controller\Licence\ContinuationController::class,
             Olcs\Controller\DisqualifyController::class => Olcs\Controller\DisqualifyController::class,
             'CaseDocumentSlaTargetDateController' => 'Olcs\Controller\Sla\CaseDocumentSlaTargetDateController',
             'LicenceDocumentSlaTargetDateController' => 'Olcs\Controller\Sla\LicenceDocumentSlaTargetDateController'

@@ -1623,7 +1623,7 @@ $routes = [
                 'options' => [
                     'route' => 'update-continuation[/]',
                     'defaults' => [
-                        'controller' => 'ContinuationController',
+                        'controller' => \Olcs\Controller\Licence\ContinuationController::class,
                         'action' => 'update-continuation',
                         'title' => 'licence-status.undo-terminate.title @todo',
                     ]
