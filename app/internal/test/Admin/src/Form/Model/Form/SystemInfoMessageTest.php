@@ -39,18 +39,33 @@ class SystemInfoMessageTest extends AbstractFormValidationTestCase
         $this->assertFormElementRequired($element, true);
     }
 
-    // @note see assertFormElementDateTime in Abstract class.
     public function testStartDate()
     {
         $element = [ 'details', 'startDate' ];
-        $this->assertFormElementDateTime($element);
+        $this->assertFormElementDateTime($element, true);
     }
 
-    // @note see assertFormElementDateTime in Abstract class.
     public function testEndDate()
     {
         $element = [ 'details', 'endDate' ];
-        $this->assertFormElementDateTime($element);
+
+        $this->assertFormElementDateTimeNotValidCheck($element);
+        $this->assertFormElementDateTimeValidCheck(
+            $element,
+            null,
+            [
+                'details' => [
+                    'startDate' => [
+                        'year' => date('y') + 1,
+                        'month' => '10',
+                        'day' => '01',
+                        'hour' => '21',
+                        'minute' => '30',
+                        'seconds' => '10',
+                    ]
+                ]
+            ]
+        );
     }
 
     public function testId()
