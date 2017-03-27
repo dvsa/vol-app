@@ -72,18 +72,16 @@ class EditGoodsVehicleLicenceTest extends AbstractFormValidationTestCase
 
     public function testWarningLetterSeedDate()
     {
-        $this->assertFormElementDate([
-            'licence-vehicle',
-            'warningLetterSeedDate',
-        ]);
+        $this->assertFormElementDate(
+            ['licence-vehicle', 'warningLetterSeedDate']
+        );
     }
 
     public function testWarningLetterSentDate()
     {
-        $this->assertFormElementDate([
-            'licence-vehicle',
-            'warningLetterSentDate',
-        ]);
+        $this->assertFormElementDate(
+            ['licence-vehicle', 'warningLetterSentDate']
+        );
     }
 
     public function testDiscNumber()

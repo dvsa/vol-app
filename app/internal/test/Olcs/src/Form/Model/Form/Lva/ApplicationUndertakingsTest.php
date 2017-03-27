@@ -69,5 +69,4 @@ class ApplicationUndertakingsTest extends AbstractFormValidationTestCase
     {
         $this->assertFormElementHidden(['version']);
     }
-
 }
