@@ -137,6 +137,12 @@ class LicenceStatusMarkerTest extends \PHPUnit_Framework_TestCase
                         'licenceStatus' => 'XXXX',
                     ],
                     [
+                        'startDate' => '2013-04-16',
+                        'endDate' => '',
+                        'endProcessedDate' => '',
+                        'licenceStatus' => ['id' => 'lsts_curtailed'],
+                    ],
+                    [
                         'startDate' => '2014-04-16',
                         'endDate' => '',
                         'endProcessedDate' => '',
