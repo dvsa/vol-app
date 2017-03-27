@@ -29,16 +29,16 @@
             } elseif ($currentUser->isOperator()) {
                 $userType = 'Operator';
             }
-    ?>
-    <script type="text/javascript">
+      ?>
+      <script type="text/javascript">
         var dataLayer = window.dataLayer = window.dataLayer || [];
         dataLayer.push({
             'userID' : '<?php echo $userId; ?>',
             'userType' : '<?php echo $userType; ?>',
             'noOfVehicles': <?php echo $numberOfVehicles; ?>
         });
-        <?php } ?>
-    </script>
+      </script>
+    <?php } ?>
     <?php echo $this->partial('partials/google-tag-manager'); ?>
     <?php echo $this->version(); ?>
     
