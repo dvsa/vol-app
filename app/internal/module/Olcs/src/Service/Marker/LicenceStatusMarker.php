@@ -72,10 +72,11 @@ class LicenceStatusMarker extends AbstractMarker
      *
      * @param array $licence
      *
-     * @return boolean
+     * @return array|boolean
      */
     private function getActiveRule(array $licence)
     {
+        $rules = [];
         foreach ($licence['licenceStatusRules'] as $rule) {
             // if already expired
             if (!empty($rule['endProcessedDate'])) {
@@ -86,7 +87,16 @@ class LicenceStatusMarker extends AbstractMarker
                 continue;
             }
 
-            return $rule;
+            $rules[] = $rule;
+        }
+        if (count($rules) > 0) {
+            usort(
+                $rules,
+                function ($a, $b) {
+                    return strtotime($b['startDate']) - strtotime($a['startDate']);
+                }
+            );
+            return $rules[0];
         }
 
         return false;
