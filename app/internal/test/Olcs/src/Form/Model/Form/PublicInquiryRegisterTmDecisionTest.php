@@ -23,8 +23,10 @@ class PublicInquiryRegisterTmDecisionTest extends AbstractFormValidationTestCase
 
     public function testDecidedByTcRole()
     {
-        $this->assertFormElementDynamicSelect(['fields', 'decidedByTcRole'],
-            true);
+        $this->assertFormElementDynamicSelect(
+            ['fields', 'decidedByTcRole'],
+            true
+        );
     }
 
     public function testDecisionDate()
