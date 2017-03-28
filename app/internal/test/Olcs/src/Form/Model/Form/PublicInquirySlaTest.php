@@ -98,10 +98,6 @@ class PublicInquirySlaTest extends AbstractFormValidationTestCase
     }
 
     /**
-     * We have a data provider here because some of the elements
-     * in the form have the exact complex validation.  This is to
-     * avoid duplication.
-     *
      * @return array
      */
     public function dpTestDateFieldsWithComplexValidation()
