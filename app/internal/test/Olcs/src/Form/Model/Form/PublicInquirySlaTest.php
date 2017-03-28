@@ -41,7 +41,7 @@ class PublicInquirySlaTest extends AbstractFormValidationTestCase
     }
 
     /**
-     * @dataProvider fieldsWithDateSelectElementsProvider
+     * @dataProvider dpTestDateFieldsWithComplexValidation
      */
     public function testDateFieldsWithComplexValidation(
         $elementName,
@@ -104,7 +104,7 @@ class PublicInquirySlaTest extends AbstractFormValidationTestCase
      *
      * @return array
      */
-    public function fieldsWithDateSelectElementsProvider()
+    public function dpTestDateFieldsWithComplexValidation()
     {
         return [
             ['tcWrittenDecisionDate', 'piwo_decision'],
