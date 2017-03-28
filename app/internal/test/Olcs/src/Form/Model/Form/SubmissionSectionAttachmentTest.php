@@ -19,7 +19,7 @@ class SubmissionSectionAttachmentTest extends AbstractFormValidationTestCase
 
     public function testFileUpload()
     {
-        $element = ['attachments','file'];
+        $element = ['attachments', 'file'];
         $this->assertFormElementType($element, AttachFilesButton::class);
         $this->assertFormElementRequired($element, false);
     }
