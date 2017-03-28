@@ -6,7 +6,6 @@ use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Zend\Validator\Date;
 use Common\Validator\Date as CommonDateValidator;
 
-
 /**
  * Class StatementTest
  *
@@ -156,10 +155,9 @@ class StatementTest extends AbstractFormValidationTestCase
 
     public function testSearchPostcode()
     {
-        $this->assertFormElementPostcodeSearch([
-            'requestorsAddress',
-            'searchPostcode',
-        ]);
+        $this->assertFormElementPostcodeSearch(
+            ['requestorsAddress', 'searchPostcode']
+        );
     }
 
     public function testAddressId()
