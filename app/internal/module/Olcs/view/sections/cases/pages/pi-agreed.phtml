@@ -32,7 +32,7 @@ echo $this->render('partials/read-only/main',
                 ['label' => 'Agreed by', 'value' => $pi['agreedByTc']['name']],
                 [
                     'label' => 'Agreed date',
-                    'date' => (isset($pi['agreedDate']) ? $pi['agreedDate'] : '<empty>'),
+                    'date' => (isset($pi['agreedDate']) ? $pi['agreedDate'] : ''),
                     'dateFormat' => 'Y-m-d'
                 ],
                 ['label' => 'Agreed by role', 'value' => $pi['agreedByTcRole']['description']]

@@ -27,7 +27,7 @@ echo $this->render('partials/read-only/main',
                 ['label' => 'Licence number', 'value' => $licenceNumber],
                 [
                     'label' => 'Licence start date',
-                    'date' => (!empty($licenceStartDate) ? $licenceStartDate : '<empty>'),
+                    'date' => (string)$this->licenceStartDate,
                     'dateFormat' => 'Y-m-d',
                 ],
                 ['label' => 'Licence type', 'value' => $this->translate($licenceType)],
