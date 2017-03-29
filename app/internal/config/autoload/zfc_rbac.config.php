@@ -73,6 +73,75 @@ return [
                 RefData::PERMISSION_INTERNAL_EDIT,
             ],
 
+            // Application / Variation
+            'lva-application/submit' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-variation/submit' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-application/publish' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-variation/publish' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-application/grant' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-variation/grant' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-application/undo-grant' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-application/not-taken-up' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-application/review' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-variation/review' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-application/withdraw' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-variation/withdraw' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-application/refuse' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-variation/refuse' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-application/revive-application' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-variation/revive-application' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-application/approve-schedule-41' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-variation/approve-schedule-41' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-application/reset-schedule-41' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-variation/reset-schedule-41' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-application/refuse-schedule-41' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'lva-variation/refuse-schedule-41' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+
+
             // Global route rule needs to be last
             '*' => [
                 RefData::PERMISSION_INTERNAL_VIEW,
