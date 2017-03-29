@@ -238,10 +238,9 @@ class TransportManagerTest extends AbstractFormValidationTestCase
 
     public function testWorkSearchPostcode()
     {
-        $this->assertFormElementPostcodeSearch([
-            'work-address',
-            'searchPostcode',
-        ]);
+        $this->assertFormElementPostcodeSearch(
+            ['work-address', 'searchPostcode']
+        );
     }
 
     public function testWorkAddressId()

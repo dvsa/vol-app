@@ -49,10 +49,9 @@ class UnlicensedOperatorTest extends AbstractFormValidationTestCase
 
     public function testOperatorContactDetailsId()
     {
-        $this->assertFormElementHidden([
-            'operator-details',
-            'contactDetailsId',
-        ]);
+        $this->assertFormElementHidden(
+            ['operator-details', 'contactDetailsId']
+        );
     }
 
     public function testOperatorContactDetailsVersion()
