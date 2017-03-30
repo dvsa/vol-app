@@ -1,10 +1,7 @@
 <?php
 
-use Olcs\Controller\Cases\Hearing\HearingAppealController as CaseHearingAppealController;
-use Olcs\Controller\Cases\Hearing\AppealController as CaseAppealController;
-use Olcs\Controller\Cases\Hearing\StayController as CaseStayController;
+use Olcs\Controller\Cases;
 
-use Olcs\Controller\Cases\Processing\NoteController as CaseNoteController;
 use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController as ApplicationProcessingNoteController;
 use Olcs\Controller\Bus\Processing\BusProcessingNoteController as BusProcessingNoteController;
 use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController as LicenceProcessingNoteController;
@@ -137,30 +134,28 @@ return array(
             'LvaVariation/Publish' => 'Olcs\Controller\Lva\Variation\PublishController',
         ),
         'invokables' => array(
-            \Olcs\Controller\Cases\PublicInquiry\PiController::class
-                => \Olcs\Controller\Cases\PublicInquiry\PiController::class,
-            \Olcs\Controller\Cases\Overview\OverviewController::class
-                => \Olcs\Controller\Cases\Overview\OverviewController::class,
+            Cases\Submission\ProcessSubmissionController::class => Cases\Submission\ProcessSubmissionController::class,
+            Cases\Submission\RecommendationController::class => Cases\Submission\RecommendationController::class,
+            Cases\Opposition\OppositionController::class => Cases\Opposition\OppositionController::class,
+            Cases\Hearing\HearingAppealController::class => Cases\Hearing\HearingAppealController::class,
+            Cases\Conviction\ConvictionController::class => Cases\Conviction\ConvictionController::class,
+            Cases\Submission\SubmissionController::class => Cases\Submission\SubmissionController::class,
+            Cases\Statement\StatementController::class => Cases\Statement\StatementController::class,
+            Cases\Overview\OverviewController::class => Cases\Overview\OverviewController::class,
+            Cases\PublicInquiry\PiController::class => Cases\PublicInquiry\PiController::class,
+            Cases\Processing\NoteController::class => Cases\Processing\NoteController::class,
+            Cases\Processing\TaskController::class => Cases\Processing\TaskController::class,
+            Cases\Hearing\AppealController::class => Cases\Hearing\AppealController::class,
+            Cases\Hearing\StayController::class => Cases\Hearing\StayController::class,
+
             'CaseDocsController' => 'Olcs\Controller\Cases\Docs\CaseDocsController',
-            'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
-            'CaseStatementController' => 'Olcs\Controller\Cases\Statement\StatementController',
-            CaseHearingAppealController::class => CaseHearingAppealController::class,
-            CaseAppealController::class => CaseAppealController::class,
-            CaseStayController::class => CaseStayController::class,
             'CaseComplaintController' => 'Olcs\Controller\Cases\Complaint\ComplaintController',
             'CaseEnvironmentalComplaintController'
                 => 'Olcs\Controller\Cases\Complaint\EnvironmentalComplaintController',
-            'CaseConvictionController' => 'Olcs\Controller\Cases\Conviction\ConvictionController',
             'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
             'CaseLegacyOffenceController' => 'Olcs\Controller\Cases\Conviction\LegacyOffenceController',
-            Olcs\Controller\Cases\Submission\SubmissionController::class =>
-                Olcs\Controller\Cases\Submission\SubmissionController::class,
-            Olcs\Controller\Cases\Submission\ProcessSubmissionController::class =>
-                Olcs\Controller\Cases\Submission\ProcessSubmissionController::class,
             'CaseSubmissionSectionCommentController'
                 => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
-            Olcs\Controller\Cases\Submission\RecommendationController::class =>
-                Olcs\Controller\Cases\Submission\RecommendationController::class,
             'CaseSubmissionDecisionController'
                 => 'Olcs\Controller\Cases\Submission\DecisionController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
@@ -179,9 +174,6 @@ return array(
                 => 'Olcs\Controller\Cases\PublicInquiry\AgreedAndLegislationController',
             'PublicInquiry\RegisterDecisionController'
                 => 'Olcs\Controller\Cases\PublicInquiry\RegisterDecisionController',
-            CaseNoteController::class => CaseNoteController::class,
-            Olcs\Controller\Cases\Processing\TaskController::class =>
-                Olcs\Controller\Cases\Processing\TaskController::class,
             'CaseDecisionsController' => 'Olcs\Controller\Cases\Processing\DecisionsController',
             'CaseDecisionsReputeNotLostController'
                 => 'Olcs\Controller\Cases\Processing\DecisionsReputeNotLostController',
