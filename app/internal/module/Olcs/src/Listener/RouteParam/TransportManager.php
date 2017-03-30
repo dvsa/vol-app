@@ -38,6 +38,19 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
     protected $sidebarNavigation;
 
     /**
+     * @var \ZfcRbac\Service\AuthorizationService
+     */
+    protected $authService;
+
+    /**
+     * @return \ZfcRbac\Service\AuthorizationService
+     */
+    public function getAuthService()
+    {
+        return $this->authService;
+    }
+
+    /**
      * @return \Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder
      */
     public function getAnnotationBuilder()
@@ -77,6 +90,16 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
     public function setSidebarNavigation($sidebarNavigation)
     {
         $this->sidebarNavigation = $sidebarNavigation;
+    }
+
+    /**
+     * Set auth service
+     *
+     * @param \ZfcRbac\Service\AuthorizationService $authorisationService
+     */
+    public function setAuthService($authService)
+    {
+        $this->authService = $authService;
     }
 
     /**
@@ -122,7 +145,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
 
         $reputeUrl = $this->getReputeUrl($id);
 
-        if ($reputeUrl !== null) {
+        if ($reputeUrl !== null && $this->getAuthService()->isGranted(RefData::PERMISSION_INTERNAL_EDIT)) {
             $this->getSidebarNavigation()
                  ->findById('transport-manager-quick-actions-check-repute')
                  ->setVisible(true)
@@ -176,6 +199,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         $this->setQueryService($serviceLocator->get('QueryService'));
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setSidebarNavigation($serviceLocator->get('right-sidebar'));
+        $this->setAuthService($serviceLocator->get('ZfcRbac\Service\AuthorizationService'));
 
         return $this;
     }

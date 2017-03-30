@@ -292,6 +292,15 @@ class TransportManagerTest extends MockeryTestCase
         $mockQueryService = m::mock();
         $mockTmResponse = m::mock();
         $mockNrResponse = m::mock();
+        $mockAuthService = m::mock();
+        if ($reputeUrl) {
+            $mockAuthService
+                ->shouldReceive('isGranted')
+                ->with(RefData::PERMISSION_INTERNAL_EDIT)
+                ->andReturn(true)
+                ->once()
+                ->getMock();
+        }
 
         $mockAnnotationBuilder->shouldReceive('createQuery')->with(m::type(TmQry::class))->once()->andReturnUsing(
             function ($dto) {
@@ -319,6 +328,7 @@ class TransportManagerTest extends MockeryTestCase
 
         $sut->setAnnotationBuilder($mockAnnotationBuilder);
         $sut->setQueryService($mockQueryService);
+        $sut->setAuthService($mockAuthService);
     }
 
     /**
@@ -339,6 +349,7 @@ class TransportManagerTest extends MockeryTestCase
     {
         $mockAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
+        $mockAuthService= m::mock();
 
         $sidebarNav = m::mock(Navigation::class);
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
@@ -348,6 +359,7 @@ class TransportManagerTest extends MockeryTestCase
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($sidebarNav);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockAnnotationBuilder);
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
+        $mockSl->shouldReceive('get')->with('ZfcRbac\Service\AuthorizationService')->andReturn($mockAuthService);
 
         $sut = new SystemUnderTest();
         $service = $sut->createService($mockSl);
@@ -357,5 +369,6 @@ class TransportManagerTest extends MockeryTestCase
         $this->assertSame($sidebarNav, $sut->getSidebarNavigation());
         $this->assertSame($mockAnnotationBuilder, $sut->getAnnotationBuilder());
         $this->assertSame($mockQueryService, $sut->getQueryService());
+        $this->assertSame($mockAuthService, $sut->getAuthService());
     }
 }

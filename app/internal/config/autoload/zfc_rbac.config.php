@@ -141,6 +141,19 @@ return [
                 RefData::PERMISSION_INTERNAL_EDIT,
             ],
 
+            // Transport Manager
+            'transport-manager/can-remove' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'transport-manager/merge' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'transport-manager/unmerge' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
+            'transport-manager/undo-disqualification' => [
+                RefData::PERMISSION_INTERNAL_EDIT,
+            ],
 
             // Global route rule needs to be last
             '*' => [
