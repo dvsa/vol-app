@@ -72,6 +72,8 @@ return [
             'licence/undo-terminate' => [
                 RefData::PERMISSION_INTERNAL_EDIT,
             ],
+
+            //  Operator
             'operator/new-application' => [RefData::PERMISSION_INTERNAL_EDIT],
             'operator/disqualify' => [RefData::PERMISSION_INTERNAL_EDIT],
             'operator/merge' => [RefData::PERMISSION_INTERNAL_EDIT],
