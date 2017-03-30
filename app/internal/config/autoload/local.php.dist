@@ -83,15 +83,6 @@ return array(
                 ]
             ]
         ],
-        'ExceptionLogger' => [
-            'writers' => [
-                'full' => [
-                    'options' => [
-                        'stream' => '/var/tmp/internal.log'
-                    ],
-                ]
-            ]
-        ]
     ],
 
     // enable the virus scanning of uploaded files
