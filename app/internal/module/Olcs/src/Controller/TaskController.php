@@ -251,6 +251,14 @@ class TaskController extends AbstractController
             $form->remove('lastModifiedBy');
         }
 
+        if (is_array($data['taskHistory']) && count($data['taskHistory'])) {
+            $form->get('taskHistory')->get('table')->setTable(
+                $this->getTaskHistoryTable($data['taskHistory'])
+            );
+        } else {
+            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'taskHistory->table');
+        }
+
         /** @var \Zend\Form\Fieldset $details */
         $details = $form->get('details');
         $details->get('link')->setValue($this->getLinkForTaskForm());
@@ -279,6 +287,20 @@ class TaskController extends AbstractController
     }
 
     /**
+     * Get task history table
+     *
+     * @param array $details Details
+     *
+     * @return \Common\Service\Table\TableBuilder
+     */
+    protected function getTaskHistoryTable($details)
+    {
+        return $this->getServiceLocator()
+            ->get('Table')
+            ->prepareTable('task-history', $details);
+    }
+
+    /**
      * Prepare info columns
      *
      * @param array $data data
@@ -287,20 +309,6 @@ class TaskController extends AbstractController
      */
     protected function prepareInfoColumns($data)
     {
-        if (isset($data['assignedByUser']['contactDetails']['person']['familyName'])) {
-            $person = $data['assignedByUser']['contactDetails']['person'];
-            $data['assignedByUserName'] = $person['forename'] . ' ' . $person['familyName'];
-        } else {
-            $data['assignedByUserName'] = 'Not set';
-        }
-
-        if (isset($data['lastModifiedBy']['contactDetails']['person']['familyName'])) {
-            $person = $data['lastModifiedBy']['contactDetails']['person'];
-            $data['lastModifiedByDetails'] = $person['forename'] . ' ' . $person['familyName'];
-        } else {
-            $data['lastModifiedByDetails'] = 'Not set';
-        }
-
         if (isset($data['lastModifiedOn'])) {
             $data['lastModifiedByDetails'] .=
                 ' (' . (new \DateTime($data['lastModifiedOn']))->format(\DATETIMESEC_FORMAT) . ')';

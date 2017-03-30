@@ -50,16 +50,10 @@ class Task
     public $assignment = null;
 
     /**
-     * @Form\Name("assignedBy")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TaskAssignedBy")
+     * @Form\Name("taskHistory")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\Table")
      */
-    public $assignedBy = null;
-
-    /**
-     * @Form\Name("lastModifiedBy")
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\TaskLastModifiedBy")
-     */
-    public $lastModifiedBy = null;
+    public $taskHistory = null;
 
     /**
      * @Form\Name("form-actions")
