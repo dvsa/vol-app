@@ -1,17 +1,5 @@
 <?php
-use Olcs\Controller\Cases\Processing\NoteController as CaseNoteController;
-use Olcs\Controller\Cases\Hearing\AppealController as CaseAppealController;
-use Olcs\Controller\Cases\Hearing\StayController as CaseStayController;
-use Olcs\Controller\Cases\Submission\ProcessSubmissionController;
-use Olcs\Controller\Cases\Submission\RecommendationController;
-use Olcs\Controller\Cases\Submission\SubmissionController;
-use Olcs\Controller\Cases\PublicInquiry\HearingController;
-use Olcs\Controller\Cases\Hearing\HearingAppealController;
-use Olcs\Controller\Cases\Opposition\OppositionController;
-use Olcs\Controller\Cases\Conviction\ConvictionController;
-use Olcs\Controller\Cases\Statement\StatementController;
-use Olcs\Controller\Cases\Overview\OverviewController;
-use Olcs\Controller\Cases\PublicInquiry\PiController;
+use Olcs\Controller\Cases;
 
 /**
  * @internal as we work on each controller, replace string with controller class
@@ -32,7 +20,7 @@ return [
                 'application' => '|[0-9]+'
             ],
             'defaults' => [
-                'controller' => OverviewController::class,
+                'controller' => Cases\Overview\OverviewController::class,
                 'action' => 'details'
             ],
         ],
@@ -46,7 +34,7 @@ return [
                 'licence' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => OverviewController::class,
+                'controller' => Cases\Overview\OverviewController::class,
                 'action' => 'add'
             ]
         ]
@@ -62,7 +50,7 @@ return [
                 'opposition' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => OppositionController::class,
+                'controller' => Cases\Opposition\OppositionController::class,
                 'action' => 'index',
             ]
         ]
@@ -77,7 +65,7 @@ return [
                 'statement' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => StatementController::class,
+                'controller' => Cases\Statement\StatementController::class,
                 'action' => 'index',
             ]
         ]
@@ -87,7 +75,7 @@ return [
         'options' => [
             'route' => '/ajax/convictions/categories[/]',
             'defaults' => [
-                'controller' => ConvictionController::class,
+                'controller' => Cases\Conviction\ConvictionController::class,
                 'action' => 'categories',
             ]
         ]
@@ -101,7 +89,7 @@ return [
                 'action' => 'index',
             ],
             'defaults' => [
-                'controller' => HearingAppealController::class,
+                'controller' => Cases\Hearing\HearingAppealController::class,
                 'action' => 'details'
             ]
         ]
@@ -116,7 +104,7 @@ return [
                 'appeal' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => CaseAppealController::class,
+                'controller' => Cases\Hearing\AppealController::class,
                 'action' => 'index'
             ]
         ]
@@ -132,7 +120,7 @@ return [
                 'stay' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => CaseStayController::class,
+                'controller' => Cases\Hearing\StayController::class,
                 'action' => 'index'
             ]
         ]
@@ -188,7 +176,7 @@ return [
                 'conviction' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseConvictionController',
+                'controller' => Cases\Conviction\ConvictionController::class,
                 'action' => 'index',
             ]
         ],
@@ -293,7 +281,7 @@ return [
                 'action' => '(close|reopen|index|details)',
             ],
             'defaults' => [
-                'controller' => PiController::class,
+                'controller' => Cases\PublicInquiry\PiController::class,
                 'action' => 'index'
             ]
         ]
@@ -307,7 +295,7 @@ return [
                 'action' => '(add|edit)'
             ],
             'defaults' => [
-                'controller' => PiController::class
+                'controller' => Cases\PublicInquiry\PiController::class
             ]
         ]
     ],
@@ -322,7 +310,7 @@ return [
                 'id' => '[0-9]+',
             ],
             'defaults' => [
-                'controller' => HearingController::class,
+                'controller' => Cases\PublicInquiry\HearingController::class,
                 'action' => 'index'
             ]
         ]
@@ -335,7 +323,7 @@ return [
                 'case' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => PiController::class,
+                'controller' => Cases\PublicInquiry\PiController::class,
                 'action' => 'decision'
             ]
         ]
@@ -348,7 +336,7 @@ return [
                 'case' => '[0-9]+',
             ],
             'defaults' => [
-                'controller' => PiController::class,
+                'controller' => Cases\PublicInquiry\PiController::class,
                 'action' => 'sla'
             ]
         ]
@@ -364,7 +352,7 @@ return [
                 'id' => '[0-9]+',
             ],
             'defaults' => [
-                'controller' => RecommendationController::class,
+                'controller' => Cases\Submission\RecommendationController::class,
                 'action' => 'add'
             ]
         ]
@@ -395,7 +383,7 @@ return [
                 'action' => '(index|add|edit|details|close|reopen|delete|print)'
             ],
             'defaults' => [
-                'controller' => SubmissionController::class,
+                'controller' => Cases\Submission\SubmissionController::class,
                 'action' => 'index'
             ]
         ]
@@ -410,7 +398,7 @@ return [
                 'action' => '(index|add|edit|details|update-table)'
             ],
             'defaults' => [
-                'controller' => SubmissionController::class,
+                'controller' => Cases\Submission\SubmissionController::class,
                 'action' => 'update-table'
             ]
         ]
@@ -426,7 +414,7 @@ return [
                 'action' => '(assign|attach|information-complete)'
             ],
             'defaults' => [
-                'controller' => ProcessSubmissionController::class,
+                'controller' => Cases\Submission\ProcessSubmissionController::class,
             ]
         ]
     ],
@@ -556,7 +544,7 @@ return [
                 'action' => '(index|add|edit|details|overview)'
             ],
             'defaults' => [
-                'controller' => Olcs\Controller\Cases\Processing\TaskController::class,
+                'controller' => Cases\Processing\TaskController::class,
                 'action' => 'index'
             ]
         ]
@@ -570,7 +558,7 @@ return [
                 'action' => 'index|details|add|edit|delete',
             ],
             'defaults' => [
-                'controller' => CaseNoteController::class,
+                'controller' => Cases\Processing\NoteController::class,
                 'action' => 'index'
             ]
         ],

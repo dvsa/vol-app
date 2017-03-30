@@ -136,6 +136,7 @@ return array(
         'invokables' => array(
             Cases\Submission\ProcessSubmissionController::class => Cases\Submission\ProcessSubmissionController::class,
             Cases\Submission\RecommendationController::class => Cases\Submission\RecommendationController::class,
+            Cases\Opposition\OppositionController::class => Cases\Opposition\OppositionController::class,
             Cases\Hearing\HearingAppealController::class => Cases\Hearing\HearingAppealController::class,
             Cases\Conviction\ConvictionController::class => Cases\Conviction\ConvictionController::class,
             Cases\Submission\SubmissionController::class => Cases\Submission\SubmissionController::class,
@@ -148,8 +149,6 @@ return array(
             Cases\Hearing\StayController::class => Cases\Hearing\StayController::class,
 
             'CaseDocsController' => 'Olcs\Controller\Cases\Docs\CaseDocsController',
-            'CaseOppositionController' => 'Olcs\Controller\Cases\Opposition\OppositionController',
-
             'CaseComplaintController' => 'Olcs\Controller\Cases\Complaint\ComplaintController',
             'CaseEnvironmentalComplaintController'
                 => 'Olcs\Controller\Cases\Complaint\EnvironmentalComplaintController',
