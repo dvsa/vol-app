@@ -109,8 +109,16 @@
                 8 => $localAuthoritiesList,
                 9 => $trafficAreasList,
                 10 => [
-                    ['label' => 'N&P reference', 'value' => $this->registrationDetails['npPublicationNo']]
-                ]
+                    [
+                        'label' => 'N&P reference',
+                        'value' => (
+                            isset($this->registrationDetails['npPublicationNo'])
+                            ? $this->registrationDetails['npPublicationNo']
+                            : null
+                        ),
+                        'hideIfEmpty' => true,
+                    ],
+                ],
             ]
         ]
     );
