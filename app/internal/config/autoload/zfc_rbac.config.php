@@ -72,6 +72,15 @@ return [
             'licence/undo-terminate' => [
                 RefData::PERMISSION_INTERNAL_EDIT,
             ],
+            'operator/new-application' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'operator/disqualify' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'operator/merge' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'operator/irfo/gv-permits/*' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'operator/irfo/psv-authorisations/*' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'operator/documents/upload' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'operator/documents/delete' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'operator/documents/relink' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'operator/documents/finalise' => [RefData::PERMISSION_INTERNAL_EDIT],
 
             // Application / Variation
             'lva-application/submit' => [

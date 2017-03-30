@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Lva\Application;
 
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Zend\Form\Form;
 
 /**
 * Internal Application Undertakings Controller
@@ -24,7 +25,7 @@ class DeclarationsInternalController extends \Olcs\Controller\Lva\AbstractDeclar
      *
      * @return null
      */
-    protected function alterFormForLva(\Common\Form\Form $form, $data = null)
+    protected function alterFormForLva(Form $form, $data = null)
     {
         // Get signature data from application declaration DTO
         $response = $this->handleQuery(
