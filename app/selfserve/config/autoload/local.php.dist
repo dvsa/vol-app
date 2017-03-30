@@ -77,15 +77,6 @@ return [
                 ]
             ]
         ],
-        'ExceptionLogger' => [
-            'writers' => [
-                'full' => [
-                    'options' => [
-                        'stream' => '/var/tmp/selfserve.log'
-                    ],
-                ]
-            ]
-        ]
     ],
 
     // enable the virus scanning of uploaded files
