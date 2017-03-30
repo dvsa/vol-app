@@ -18,11 +18,11 @@ echo $this->render(
     <div id="top" class="full-width">
         <?php echo $this->content; ?>
         <div class="actions-container">
-            <a class="action--tertiary large" href="#top"
+            <a class="action--tertiary large js-disable-crud" href="#top"
                 ><?php echo $this->translate('search-result-nav-back-to-top');?></a>
-            <a class="action--tertiary large" href="<?php echo $this->urlBackToSearch; ?>"
+            <a class="action--tertiary large js-disable-crud" href="<?php echo $this->urlBackToSearch; ?>"
                 ><?php echo $this->translate('search-result-nav-back-to-operator-search');?></a>
         </div>
-    </div><!-- .three-quarters -->
+    </div><!-- .three-quarters .js-disable-crud -->
 
 </div>
