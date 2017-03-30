@@ -145,8 +145,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
 
         $reputeUrl = $this->getReputeUrl($id);
 
-        $authService = $this->getAuthService();
-        if ($reputeUrl !== null && $authService->isGranted(RefData::PERMISSION_INTERNAL_EDIT)) {
+        if ($reputeUrl !== null && $this->getAuthService()->isGranted(RefData::PERMISSION_INTERNAL_EDIT)) {
             $this->getSidebarNavigation()
                  ->findById('transport-manager-quick-actions-check-repute')
                  ->setVisible(true)
