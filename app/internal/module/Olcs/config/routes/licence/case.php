@@ -9,6 +9,7 @@ use Olcs\Controller\Cases\Submission\SubmissionController;
 use Olcs\Controller\Cases\PublicInquiry\HearingController;
 use Olcs\Controller\Cases\Hearing\HearingAppealController;
 use Olcs\Controller\Cases\Opposition\OppositionController;
+use Olcs\Controller\Cases\Conviction\ConvictionController;
 use Olcs\Controller\Cases\Statement\StatementController;
 use Olcs\Controller\Cases\Overview\OverviewController;
 use Olcs\Controller\Cases\PublicInquiry\PiController;
@@ -87,7 +88,7 @@ return [
         'options' => [
             'route' => '/ajax/convictions/categories[/]',
             'defaults' => [
-                'controller' => 'CaseConvictionController',
+                'controller' => ConvictionController::class,
                 'action' => 'categories',
             ]
         ]

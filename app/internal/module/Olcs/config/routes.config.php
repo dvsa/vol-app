@@ -2180,11 +2180,14 @@ $routes['lva-application']['child_routes'] = array_merge(
 );
 
 /**
- * To find it easier to find resources/controllers,
+ * To find it easier to locate resources/controllers,
  * it would be convenient to start moving each section
  * of the application into individual route configs.
- * Move the appropriate config into it's file and add the
- * file to the $routeConfigs[] below.
+ * Move the appropriate section of the array into a
+ * seperate and meaningful directory.  After doing so
+ * add the file to the $routeConfigs[] below.  This will
+ * be merged using ArrayUtils.
+ * Do not forget to test!!
  */
 $routeConfigs = [
     __DIR__  . '/routes/licence/case.php',
