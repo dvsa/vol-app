@@ -4,7 +4,6 @@ use Olcs\Controller\Cases\Hearing\AppealController as CaseAppealController;
 use Olcs\Controller\Cases\Hearing\StayController as CaseStayController;
 use Olcs\Controller\Cases\Submission\ProcessSubmissionController;
 use Olcs\Controller\Cases\Submission\RecommendationController;
-
 use Olcs\Controller\Cases\Submission\SubmissionController;
 use Olcs\Controller\Cases\PublicInquiry\HearingController;
 use Olcs\Controller\Cases\Hearing\HearingAppealController;
