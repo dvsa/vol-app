@@ -2180,7 +2180,7 @@ $routes['lva-application']['child_routes'] = array_merge(
 );
 
 /**
- * To find it easier to locate resources/controllers,
+ * To make it easier to locate resources/controllers,
  * it would be convenient to start moving each section
  * of the application into individual route configs.
  * Move the appropriate section of the array into a
@@ -2194,7 +2194,7 @@ $routeConfigs = [
 ];
 
 // Merge all module config options
-foreach($routeConfigs as $routeConfig) {
+foreach ($routeConfigs as $routeConfig) {
     $routes = \Zend\Stdlib\ArrayUtils::merge($routes, include $routeConfig);
 }
 
