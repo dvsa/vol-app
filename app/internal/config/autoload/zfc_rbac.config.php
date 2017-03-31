@@ -44,34 +44,18 @@ return [
             'admin-dashboard/task-allocation-rules*' => [RefData::PERMISSION_INTERNAL_ADMIN],
 
             // All Internal users can see your account, to change their details, password etc
-            'admin-dashboard/admin-your-account*' => [
-                RefData::PERMISSION_INTERNAL_VIEW,
-            ],
+            'admin-dashboard/admin-your-account*' => [RefData::PERMISSION_INTERNAL_VIEW],
 
             // Other admin pages require mininmum internal-edit permission
-            'admin-dashboard*' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
+            'admin-dashboard*' => [RefData::PERMISSION_INTERNAL_EDIT],
 
             // Quick action routes
-            'print_licence' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-licence/variation' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'licence/active-licence-check' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'licence/reset-to-valid' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'licence/undo-surrender' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'licence/undo-terminate' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
+            'print_licence' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-licence/variation' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'licence/active-licence-check' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'licence/reset-to-valid' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'licence/undo-surrender' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'licence/undo-terminate' => [RefData::PERMISSION_INTERNAL_EDIT],
 
             //  Operator
             'operator/new-application' => [RefData::PERMISSION_INTERNAL_EDIT],
@@ -85,91 +69,44 @@ return [
             'operator/documents/finalise' => [RefData::PERMISSION_INTERNAL_EDIT],
 
             // Application / Variation
-            'lva-application/submit' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-variation/submit' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-application/publish' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-variation/publish' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-application/grant' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-variation/grant' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-application/undo-grant' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-application/not-taken-up' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-application/review' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-variation/review' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-application/withdraw' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-variation/withdraw' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-application/refuse' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-variation/refuse' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-application/revive-application' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-variation/revive-application' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-application/approve-schedule-41' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-variation/approve-schedule-41' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-application/reset-schedule-41' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-variation/reset-schedule-41' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-application/refuse-schedule-41' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'lva-variation/refuse-schedule-41' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
+            'lva-application/submit' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-variation/submit' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-application/publish' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-variation/publish' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-application/grant' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-variation/grant' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-application/undo-grant' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-application/not-taken-up' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-application/review' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-variation/review' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-application/withdraw' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-variation/withdraw' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-application/refuse' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-variation/refuse' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-application/revive-application' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-variation/revive-application' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-application/approve-schedule-41' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-variation/approve-schedule-41' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-application/reset-schedule-41' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-variation/reset-schedule-41' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-application/refuse-schedule-41' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'lva-variation/refuse-schedule-41' => [RefData::PERMISSION_INTERNAL_EDIT],
 
             // Transport Manager
-            'transport-manager/can-remove' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'transport-manager/merge' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'transport-manager/unmerge' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
-            'transport-manager/undo-disqualification' => [
-                RefData::PERMISSION_INTERNAL_EDIT,
-            ],
+            'transport-manager/can-remove' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'transport-manager/merge' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'transport-manager/unmerge' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'transport-manager/undo-disqualification' => [RefData::PERMISSION_INTERNAL_EDIT],
+
+            // Bus reg
+            'licence/bus/create_variation' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'licence/bus/create_cancellation' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'licence/bus/print/reg-letter' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'licence/bus/request_map' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'licence/bus-processing/decisions' => [RefData::PERMISSION_INTERNAL_EDIT],
 
             // Global route rule needs to be last
-            '*' => [
-                RefData::PERMISSION_INTERNAL_VIEW,
-            ],
+            '*' => [RefData::PERMISSION_INTERNAL_VIEW],
         ]
     ]
 ];
