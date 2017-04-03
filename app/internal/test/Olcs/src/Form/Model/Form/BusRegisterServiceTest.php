@@ -2,7 +2,8 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Olcs\TestHelpers\FormTester\Data\Object as F;
+use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Zend\Form\Element\Radio;
 
 /**
  * Class BusRegisterServiceTest
@@ -10,83 +11,121 @@ use Olcs\TestHelpers\FormTester\Data\Object as F;
  * @group ComponentTests
  * @group FormTests
  */
-class BusRegisterServiceTest extends AbstractFormTest
+class BusRegisterServiceTest extends AbstractFormValidationTestCase
 {
-    protected $formName = '\Olcs\Form\Model\Form\BusRegisterService';
+    protected $formName = \Olcs\Form\Model\Form\BusRegisterService::class;
 
-    protected function getFormData()
+    public function testGrantValidation()
     {
-        return [
-            new F\Test(
-                new F\Stack(['timetable', 'timetableAcceptable']),
-                new F\Value(F\Value::VALID, 'Y'),
-                new F\Value(F\Value::VALID, 'N'),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::INVALID, 'A'),
-                new F\Value(F\Value::INVALID, ['ABCDE'])
-            ),
-            new F\Test(
-                new F\Stack(['timetable', 'mapSupplied']),
-                new F\Value(F\Value::VALID, 'Y'),
-                new F\Value(F\Value::VALID, 'N'),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::INVALID, 'A'),
-                new F\Value(F\Value::INVALID, ['ABCDE'])
-            ),
-            new F\Test(
-                new F\Stack(['timetable', 'routeDescription']),
-                new F\Value(F\Value::VALID, ''),
-                new F\Value(F\Value::VALID, 'abcdefgh'),
-                new F\Value(F\Value::VALID, str_pad('', 1000, '+')),
-                new F\Value(F\Value::INVALID, str_pad('', 1001, '+'))
-            ),
-            new F\Test(
-                new F\Stack(['conditions', 'trcConditionChecked']),
-                new F\Value(F\Value::VALID, 'Y'),
-                new F\Value(F\Value::VALID, 'N'),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::INVALID, 'A'),
-                new F\Value(F\Value::INVALID, ['ABCDE'])
-            ),
-            new F\Test(
-                new F\Stack(['conditions', 'trcNotes']),
-                new F\Value(F\Value::VALID, ''),
-                new F\Value(F\Value::VALID, 'abcdefgh'),
-                new F\Value(F\Value::VALID, str_pad('', 255, '+')),
-                new F\Value(F\Value::INVALID, str_pad('', 256, '+'))
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'copiedToLaPte']),
-                new F\Value(F\Value::VALID, 'Y'),
-                new F\Value(F\Value::VALID, 'N'),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::INVALID, 'A'),
-                new F\Value(F\Value::INVALID, ['ABCDE'])
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'laShortNote']),
-                new F\Value(F\Value::VALID, 'Y'),
-                new F\Value(F\Value::VALID, 'N'),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::INVALID, 'A'),
-                new F\Value(F\Value::INVALID, ['ABCDE'])
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'applicationSigned']),
-                new F\Value(F\Value::VALID, 'Y'),
-                new F\Value(F\Value::VALID, 'N'),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::INVALID, 'A'),
-                new F\Value(F\Value::INVALID, ['ABCDE'])
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'opNotifiedLaPte']),
-                new F\Value(F\Value::VALID, 'Y'),
-                new F\Value(F\Value::VALID, 'N'),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::INVALID, 'A'),
-                new F\Value(F\Value::INVALID, ['ABCDE'])
-            )
-        ];
+        $this->assertFormElementHtml(['grant', 'grantValidation']);
+    }
+
+    public function testTimetableAcceptable()
+    {
+        $element = ['timetable', 'timetableAcceptable'];
+        $this->assertFormElementType($element, Radio::class);
+        $this->assertFormElementRequired($element, true);
+    }
+
+    public function testTimetableMapSupplied()
+    {
+        $element = ['timetable', 'mapSupplied'];
+        $this->assertFormElementType($element, Radio::class);
+        $this->assertFormElementRequired($element, true);
+    }
+
+    public function testTimetableRouteDescription()
+    {
+        $element = ['timetable', 'routeDescription'];
+        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementText($element, 0, 1000);
+    }
+
+    public function testConditionsTable()
+    {
+        $element = ['conditions', 'table', 'table'];
+        $this->assertFormElementTable($element);
+        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, true);
+
+        $element = ['conditions', 'table', 'action'];
+        $this->assertFormElementHidden($element);
+
+        $element = ['conditions', 'table', 'rows'];
+        $this->assertFormElementHidden($element);
+
+        $element = ['conditions', 'table', 'id'];
+        $this->assertFormElementHidden($element);
+    }
+
+    public function testConditionsTrcChecked()
+    {
+        $element = ['conditions', 'trcConditionChecked'];
+        $this->assertFormElementType($element, Radio::class);
+        $this->assertFormElementRequired($element, true);
+    }
+
+    public function testConditionsTrcNotes()
+    {
+        $element = ['conditions', 'trcNotes'];
+        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementText($element, 0, 255);
+    }
+
+    public function testCopiedToLaPte()
+    {
+        $element = ['fields', 'copiedToLaPte'];
+        $this->assertFormElementType($element, Radio::class);
+        $this->assertFormElementRequired($element, true);
+    }
+
+    public function testLaShortNote()
+    {
+        $element = ['fields', 'laShortNote'];
+        $this->assertFormElementType($element, Radio::class);
+        $this->assertFormElementRequired($element, true);
+    }
+
+    public function testOpNotifiedLaPte()
+    {
+        $element = ['fields', 'opNotifiedLaPte'];
+        $this->assertFormElementType($element, Radio::class);
+        $this->assertFormElementRequired($element, true);
+    }
+
+    public function testApplicationSigned()
+    {
+        $element = ['fields', 'applicationSigned'];
+        $this->assertFormElementType($element, Radio::class);
+        $this->assertFormElementRequired($element, true);
+    }
+
+    public function testVariationsReasonHtml()
+    {
+        $this->assertFormElementHtml(['fields', 'variationReasonsHtml']);
+    }
+
+    public function testId()
+    {
+        $this->assertFormElementHidden(['fields', 'id']);
+    }
+
+    public function testVersion()
+    {
+        $this->assertFormElementHidden(['fields', 'version']);
+    }
+
+    public function testSubmit()
+    {
+        $this->assertFormElementActionButton(
+            ['form-actions', 'submit']
+        );
+    }
+
+    public function testCancel()
+    {
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 }

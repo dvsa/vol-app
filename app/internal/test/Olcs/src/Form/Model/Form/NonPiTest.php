@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Olcs\TestHelpers\FormTester\Data\Object as F;
+use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 
 /**
  * Class TaskTest
@@ -10,94 +10,96 @@ use Olcs\TestHelpers\FormTester\Data\Object as F;
  * @group ComponentTests
  * @group FormTests
  */
-class NonPiTest extends AbstractFormTest
+class NonPiTest extends AbstractFormValidationTestCase
 {
-    protected $formName = '\Olcs\Form\Model\Form\NonPi';
+    protected $formName = \Olcs\Form\Model\Form\NonPi::class;
 
-    protected function getDynamicSelectData()
+    public function testAgreedByTcDate()
     {
-        return [
-            [
-                ['fields', 'hearingType'],
-                ['1' => 'HT 1', '2' => 'HT 2']
-            ],
-            [
-                ['fields', 'venue'],
-                ['23' => 'VENUE 1', '24' => 'VENUE 2']
-            ]
-        ];
+        $this->assertFormElementDate(['fields', 'agreedByTcDate']);
     }
 
-    protected function getFormData()
+    public function testHearingType()
     {
-        return [
-            new F\Test(
-                new F\Stack(['fields', 'hearingType']),
-                new F\Value(F\Value::VALID, '1'),
-                new F\Value(F\Value::VALID, '2'),
-                new F\Value(F\Value::INVALID, null)
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'hearingDate']),
-                new F\Value(F\Value::VALID, '2014-01-01'),
-                new F\Value(F\Value::VALID, '2014-01-01 11:00:00'),
-                new F\Value(F\Value::VALID, null)
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'venue']),
-                new F\Value(F\Value::VALID, '23'),
-                new F\Value(F\Value::VALID, '24'),
-                new F\Value(F\Value::VALID, null)
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'venueOther']),
-                new F\Value(F\Value::VALID, '', new F\Context(new F\Stack(['fields', 'venue']), 'other')),
-                new F\Value(
-                    F\Value::VALID,
-                    str_pad('1', 250, '_'),
-                    new F\Context(new F\Stack(['fields', 'venue']), 'other')
-                ),
-                new F\Value(
-                    F\Value::INVALID,
-                    str_pad('1', 300, '_'),
-                    new F\Context(new F\Stack(['fields', 'venue']), 'other')
-                ),
-                new F\Value(F\Value::VALID, null, new F\Context(new F\Stack(['fields', 'venue']), 'other'))
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'witnessCount']),
-                new F\Value(F\Value::VALID, '20'),
-                new F\Value(F\Value::VALID, null),
-                new F\Value(F\Value::VALID, ""),
-                new F\Value(F\Value::INVALID, 'ABC')
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'agreedByTcDate']),
-                new F\Value(F\Value::VALID, ['day'=>'28', 'month'=>'02', 'year'=>'2014']),
-                new F\Value(F\Value::VALID, ['day'=>'28', 'month'=>'02', 'year'=>'2014']),
-                new F\Value(F\Value::INVALID, ['day'=>'29', 'month'=>'02', 'year'=>'2014']),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(
-                    F\Value::VALID,
-                    ['day'=>'29', 'month'=>'02', 'year'=>'2016']
-                ),
-                new F\Value(
-                    F\Value::INVALID,
-                    ['day'=>'30', 'month'=>'02', 'year'=>'2014']
-                ),
-                new F\Value(
-                    F\Value::INVALID,
-                    ['day'=>'28', 'month'=>'13', 'year'=>'2014']
-                )
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'presidingStaffName']),
-                new F\Value(F\Value::VALID, ''),
-                new F\Value(F\Value::VALID, null),
-                new F\Value(F\Value::VALID, "John smith"),
-                new F\Value(F\Value::VALID, str_pad('1', 255, '_')),
-                new F\Value(F\Value::INVALID, str_pad('1', 256, '_'))
-            )
-        ];
+        $this->assertFormElementDynamicSelect(['fields', 'hearingType'], true);
+    }
+
+    public function testHearingDate()
+    {
+        $element = ['fields', 'hearingDate'];
+
+        $yesterday = new \DateTimeImmutable('+1 day');
+
+        $this->assertFormElementDateTimeValidCheck(
+            $element,
+            [
+                'year'   => $yesterday->format('Y'),
+                'month'  => $yesterday->format('m'),
+                'day'    => $yesterday->format('j'),
+                'hour'   => 12,
+                'minute' => 12,
+                'second' => 12,
+            ]
+        );
+    }
+
+    public function testVenue()
+    {
+        $this->assertFormElementDynamicSelect(['fields', 'venue'], false);
+    }
+
+    public function testVenueOther()
+    {
+        $this->assertFormElementRequired(['fields', 'venueOther'], false);
+    }
+
+    public function testWitnessCount()
+    {
+        $this->assertFormElementRequired(['fields', 'witnessCount'], false);
+    }
+
+    public function testPresidingStaffName()
+    {
+        $this->assertFormElementRequired(
+            ['fields', 'presidingStaffName'],
+            false
+        );
+    }
+
+    public function testOutcome()
+    {
+        $this->assertFormElementDynamicSelect(
+            ['fields', 'outcome'],
+            true
+        );
+    }
+
+    public function testId()
+    {
+        $this->assertFormElementHidden(['fields', 'id']);
+    }
+
+    public function testVersion()
+    {
+        $this->assertFormElementHidden(['fields', 'version']);
+    }
+
+    public function testCase()
+    {
+        $this->assertFormElementHidden(['fields', 'case']);
+    }
+
+    public function testSubmit()
+    {
+        $this->assertFormElementActionButton(
+            ['form-actions', 'submit']
+        );
+    }
+
+    public function testCancel()
+    {
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 }

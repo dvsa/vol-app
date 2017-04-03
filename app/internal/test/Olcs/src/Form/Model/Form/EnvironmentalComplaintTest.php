@@ -3,6 +3,8 @@
 namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Common\Validator\Date as CommonDateValidation;
+use Zend\Validator\Date as ZendDateValidation;
 
 /**
  * Class EnvironmentalComplaintTest
@@ -18,8 +20,30 @@ class EnvironmentalComplaintTest extends AbstractFormValidationTestCase
 
     public function testComplaintDate()
     {
-        $element = ['fields', 'complaintDate'];
-        $this->assertFormElementDate($element);
+        $date = new \DateTimeImmutable('now');
+
+        $this->assertFormElementNotValid(
+            ['fields', 'complaintDate'],
+            [
+                'year'  => 'XXXX',
+                'month' => $date->format('m'),
+                'day'   => $date->format('j'),
+            ],
+            [
+                CommonDateValidation::DATE_ERR_CONTAINS_STRING,
+                CommonDateValidation::DATE_ERR_YEAR_LENGTH,
+                ZendDateValidation::INVALID_DATE,
+            ]
+        );
+
+        $this->assertFormElementValid(
+            ['fields', 'complaintDate'],
+            [
+                'year'  => $date->format('Y'),
+                'month' => $date->format('m'),
+                'day'   => $date->format('j'),
+            ]
+        );
     }
 
     public function testComplainantForename()
