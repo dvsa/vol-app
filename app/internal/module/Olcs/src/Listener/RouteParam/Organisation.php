@@ -58,7 +58,6 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
     public function onOrganisation(RouteParam $e)
     {
         $organisation = $this->getOrganisation($e->getValue());
-        $sidebarNav = $this->sidebarNavigationService;
 
         /** @var AbstractContainer $navigationPlugin */
         $navigationPlugin = $this->navigationPlugin->__invoke('navigation');
@@ -70,7 +69,7 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
         }
 
         if ($organisation['isDisqualified'] || $organisation['isUnlicensed']) {
-            $sidebarNav->findById('operator-decisions-disqualify')->setVisible(false);
+            $this->sidebarNavigationService->findById('operator-decisions-disqualify')->setVisible(false);
         }
 
         if ($organisation['isUnlicensed']) {
