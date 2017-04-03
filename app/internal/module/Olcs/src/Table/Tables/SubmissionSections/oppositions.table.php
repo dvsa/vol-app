@@ -73,10 +73,6 @@ return array(
             'name' => 'isWillingToAttendPi',
         ),
         array(
-            'title' => 'Public Inquiry',
-            'name' => 'isPublicInquiry'
-        ),
-        array(
             'title' => 'Withdrawn',
             'name' => 'isWithdrawn'
         ),

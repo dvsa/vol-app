@@ -84,11 +84,6 @@ return array(
             'sort' => 'isWillingToAttendPi'
         ),
         array(
-            'title' => 'Public Inquiry',
-            'name' => 'isPublicInquiry',
-            'sort' => 'isPublicInquiry'
-        ),
-        array(
             'title' => 'Withdrawn',
             'name' => 'isWithdrawn',
             'sort' => 'isWithdrawn'
