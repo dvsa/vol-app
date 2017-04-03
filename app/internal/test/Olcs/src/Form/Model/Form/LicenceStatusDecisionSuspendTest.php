@@ -3,6 +3,7 @@
 namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Zend\Form\Element\Radio;
 
 /**
  * Class LicenceStatusDecisionSuspendTest
@@ -16,47 +17,38 @@ class LicenceStatusDecisionSuspendTest extends AbstractFormValidationTestCase
      */
     protected $formName = \Olcs\Form\Model\Form\LicenceStatusDecisionSuspend::class;
 
-    public function testImmediateAffect()
+    public function testImmediateAffectRadioButton()
     {
-        $this->assertFormElementRequired(
-            ['licence-decision-affect-immediate', 'immediateAffect'],
-            true
-        );
+        $element = ['licence-decision-affect-immediate', 'immediateAffect'];
+        $this->assertFormElementType($element, Radio::class);
+        $this->assertFormElementValid($element, 'Y');
+        $this->assertFormElementValid($element, 'N');
     }
 
     public function testSuspendFrom()
     {
-        $element = ['licence-decision', 'suspendFrom'];
-        $this->assertFormElementRequired($element, true);
-        $this->assertFormElementDateTime($element);
+        $this->assertFormElementDateTime(
+            ['licence-decision', 'suspendFrom'],
+            true
+        );
     }
 
     public function testSuspendTo()
     {
         $element = ['licence-decision', 'suspendTo'];
-
-        $yesterdayDate = new \DateTimeImmutable('yesterday');
-        $tomorrowDate = new \DateTimeImmutable('tomorrow');
-
+        $this->assertFormElementDateTimeNotValidCheck($element);
         $this->assertFormElementDateTimeValidCheck(
             $element,
-            [
-                'year'   => $yesterdayDate->format('Y'),
-                'month'  => $yesterdayDate->format('m'),
-                'day'    => $yesterdayDate->format('h'),
-                'hour'   => 12,
-                'minute' => 12,
-                'second' => 12,
-            ],
+            null,
             [
                 'licence-decision' => [
                     'suspendFrom' => [
-                        'year'   => $tomorrowDate->format('Y'),
-                        'month'  => $tomorrowDate->format('m'),
-                        'day'    => $tomorrowDate->format('j'),
-                        'hour'   => 12,
-                        'minute' => 12,
-                        'second' => 12,
+                        'year'    => date('y') + 1,
+                        'month'   => '10',
+                        'day'     => '01',
+                        'hour'    => '21',
+                        'minute'  => '30',
+                        'seconds' => '10',
                     ],
                 ],
             ]
@@ -66,7 +58,8 @@ class LicenceStatusDecisionSuspendTest extends AbstractFormValidationTestCase
     public function testDecisions()
     {
         $this->assertFormElementDynamicSelect(
-            ['licence-decision-legislation', 'decisions']
+            ['licence-decision-legislation', 'decisions'],
+            true
         );
     }
 
@@ -79,16 +72,22 @@ class LicenceStatusDecisionSuspendTest extends AbstractFormValidationTestCase
 
     public function testSubmit()
     {
-        $this->assertFormElementActionButton(['form-actions', 'submit']);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'submit']
+        );
     }
 
     public function testCancel()
     {
-        $this->assertFormElementActionButton(['form-actions', 'cancel']);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 
     public function testRemove()
     {
-        $this->assertFormElementActionButton(['form-actions', 'remove']);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'remove']
+        );
     }
 }

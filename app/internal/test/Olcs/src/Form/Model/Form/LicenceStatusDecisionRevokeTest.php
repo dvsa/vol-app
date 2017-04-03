@@ -3,6 +3,7 @@
 namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Zend\Form\Element\Radio;
 
 /**
  * Class LicenceStatusDecisionRevokeTest
@@ -16,31 +17,33 @@ class LicenceStatusDecisionRevokeTest extends AbstractFormValidationTestCase
      */
     protected $formName = \Olcs\Form\Model\Form\LicenceStatusDecisionRevoke::class;
 
-    public function testImmediateAffect()
+    public function testImmediateAffectRadioButton()
     {
-        $this->assertFormElementRequired(
-            ['licence-decision-affect-immediate', 'immediateAffect'],
-            true
-        );
+        $element = ['licence-decision-affect-immediate', 'immediateAffect'];
+        $this->assertFormElementType($element, Radio::class);
+        $this->assertFormElementValid($element, 'Y');
+        $this->assertFormElementValid($element, 'N');
     }
 
     public function testRevokeFrom()
     {
-        $element = ['licence-decision', 'revokeFrom'];
-        $this->assertFormElementRequired($element, true);
-        $this->assertFormElementDateTime($element);
+        $this->assertFormElementDateTime(
+            ['licence-decision', 'revokeFrom'],
+            true
+        );
     }
 
     public function testDecisions()
     {
         $this->assertFormElementDynamicSelect(
-            ['licence-decision-legislation', 'decisions']
+            ['licence-decision-legislation', 'decisions'],
+            true
         );
     }
 
     public function testAffectImmediate()
     {
-        $this->assertFormElementDynamicSelect(
+        $this->assertFormElementActionButton(
             ['form-actions', 'affectImmediate']
         );
     }
@@ -52,17 +55,17 @@ class LicenceStatusDecisionRevokeTest extends AbstractFormValidationTestCase
         );
     }
 
-    public function testRemoveButton()
-    {
-        $this->assertFormElementActionButton(
-            ['form-actions', 'remove']
-        );
-    }
-
     public function testCancel()
     {
         $this->assertFormElementActionButton(
             ['form-actions', 'cancel']
+        );
+    }
+
+    public function testRemove()
+    {
+        $this->assertFormElementActionButton(
+            ['form-actions', 'remove']
         );
     }
 }

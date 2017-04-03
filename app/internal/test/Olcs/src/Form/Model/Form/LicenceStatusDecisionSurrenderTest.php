@@ -18,36 +18,28 @@ class LicenceStatusDecisionSurrenderTest extends AbstractFormValidationTestCase
 
     public function testSurrenderDate()
     {
-        $element = ['licence-decision', 'surrenderDate'];
-
-        $yesterday = new \DateTimeImmutable('-1 day');
-
-        $this->assertFormElementRequired($element, true);
-        $this->assertFormElementDateTime(
-            $element,
-            true,
-            [
-                'year'  => $yesterday->format('Y'),
-                'month' => $yesterday->format('m'),
-                'day'   => $yesterday->format('j'),
-            ]
-        );
+        $this->assertFormElementDate(['licence-decision', 'surrenderDate']);
     }
 
     public function testDecisions()
     {
         $this->assertFormElementDynamicSelect(
-            ['licence-decision-legislation', 'decisions']
+            ['licence-decision-legislation', 'decisions'],
+            true
         );
     }
 
     public function testConfirm()
     {
-        $this->assertFormElementActionButton(['form-actions', 'confirm']);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'confirm']
+        );
     }
 
     public function testCancel()
     {
-        $this->assertFormElementActionButton(['form-actions', 'cancel']);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 }

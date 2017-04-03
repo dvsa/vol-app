@@ -28,31 +28,18 @@ class LicenceOverviewTest extends AbstractFormValidationTestCase
         $this->assertFormElementDate(['details', 'reviewDate']);
     }
 
-    public function testTranslateToWelsh()
-    {
-        $element = ['details', 'translateToWelsh'];
-        $this->assertFormElementRequired($element, true);
-        $this->assertFormElementType($element, OlcsCheckbox::class);
-    }
-
     public function testLeadTcArea()
     {
         $element = ['details', 'leadTcArea'];
         $this->assertFormElementType($element, Select::class);
         $this->assertFormElementRequired($element, false);
     }
-    public function testSubmit()
-    {
-        $this->assertFormElementActionButton(
-            ['form-actions', 'submit']
-        );
-    }
 
-    public function testCancel()
+    public function testTranslateToWelsh()
     {
-        $this->assertFormElementActionButton(
-            ['form-actions', 'cancel']
-        );
+        $element = ['details', 'translateToWelsh'];
+        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementType($element, OlcsCheckbox::class);
     }
 
     public function testId()
@@ -63,5 +50,15 @@ class LicenceOverviewTest extends AbstractFormValidationTestCase
     public function testVersion()
     {
         $this->assertFormElementHidden(['version']);
+    }
+
+    public function testSubmit()
+    {
+        $this->assertFormElementActionButton(['form-actions', 'submit']);
+    }
+
+    public function testCancel()
+    {
+        $this->assertFormElementActionButton(['form-actions', 'cancel']);
     }
 }

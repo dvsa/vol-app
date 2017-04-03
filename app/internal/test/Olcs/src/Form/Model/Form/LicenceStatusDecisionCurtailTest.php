@@ -3,6 +3,7 @@
 namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Zend\Form\Element\Radio;
 
 /**
  * Class LicenceStatusDecisionCurtailTest
@@ -16,47 +17,38 @@ class LicenceStatusDecisionCurtailTest extends AbstractFormValidationTestCase
      */
     protected $formName = \Olcs\Form\Model\Form\LicenceStatusDecisionCurtail::class;
 
-    public function testImmediateAffect()
+    public function testImmediateAffectRadioButton()
     {
-        $this->assertFormElementRequired(
-            ['licence-decision-affect-immediate', 'immediateAffect'],
+        $element = ['licence-decision-affect-immediate', 'immediateAffect'];
+        $this->assertFormElementType($element, Radio::class);
+        $this->assertFormElementValid($element, 'Y');
+        $this->assertFormElementValid($element, 'N');
+    }
+
+    public function testCurtailFrom()
+    {
+        $this->assertFormElementDateTime(
+            ['licence-decision', 'curtailFrom'],
             true
         );
     }
 
-    public function testFromDate()
-    {
-        $element = ['licence-decision', 'curtailFrom'];
-        $this->assertFormElementRequired($element, true);
-        $this->assertFormElementDateTime($element);
-    }
-
-    public function testToDate()
+    public function testCurtailTo()
     {
         $element = ['licence-decision', 'curtailTo'];
-
-        $yesterdayDate = new \DateTimeImmutable('yesterday');
-        $tomorrowDate = new \DateTimeImmutable('tomorrow');
-
+        $this->assertFormElementDateTimeNotValidCheck($element);
         $this->assertFormElementDateTimeValidCheck(
             $element,
-            [
-                'year'   => $yesterdayDate->format('Y'),
-                'month'  => $yesterdayDate->format('m'),
-                'day'    => $yesterdayDate->format('h'),
-                'hour'   => 12,
-                'minute' => 12,
-                'second' => 12,
-            ],
+            null,
             [
                 'licence-decision' => [
                     'curtailFrom' => [
-                        'year'   => $tomorrowDate->format('Y'),
-                        'month'  => $tomorrowDate->format('m'),
-                        'day'    => $tomorrowDate->format('j'),
-                        'hour'   => 12,
-                        'minute' => 12,
-                        'second' => 12,
+                        'year'    => date('y') + 1,
+                        'month'   => '10',
+                        'day'     => '01',
+                        'hour'    => '21',
+                        'minute'  => '30',
+                        'seconds' => '10',
                     ],
                 ],
             ]
@@ -66,13 +58,14 @@ class LicenceStatusDecisionCurtailTest extends AbstractFormValidationTestCase
     public function testDecisions()
     {
         $this->assertFormElementDynamicSelect(
-            ['licence-decision-legislation', 'decisions']
+            ['licence-decision-legislation', 'decisions'],
+            true
         );
     }
 
     public function testAffectImmediate()
     {
-        $this->assertFormElementDynamicSelect(
+        $this->assertFormElementActionButton(
             ['form-actions', 'affectImmediate']
         );
     }

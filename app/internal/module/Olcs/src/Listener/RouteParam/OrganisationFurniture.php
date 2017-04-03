@@ -72,14 +72,13 @@ class OrganisationFurniture implements
         $placeholder->getContainer('organisationIsMlh')->set($organisation['organisationIsMlh']);
         $placeholder->getContainer('isMlh')->set('');
 
-        if (!$organisation['isUnlicensed']) {
-            $right = new ViewModel();
-            $right->setTemplate('sections/operator/partials/right');
+        $right = new ViewModel();
+        $right->setTemplate('sections/operator/partials/right');
+        $placeholder->getContainer('right')->set($right);
 
-            $placeholder->getContainer('right')->set($right);
-
-        } else {
+        if ($organisation['isUnlicensed']) {
             $placeholder->getContainer('pageSubtitle')->set($organisation['licence']['licNo']);
+            $right->setVariable('hideQuickActions', true);
         }
 
         $pageTitle = !empty($organisation['name']) ? $organisation['name'] : '';

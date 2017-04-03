@@ -18,29 +18,20 @@ class LicenceStatusDecisionTerminateTest extends AbstractFormValidationTestCase
 
     public function testTerminateDate()
     {
-        $element = ['licence-decision', 'terminateDate'];
-
-        $yesterday = new \DateTimeImmutable('-1 day');
-
-        $this->assertFormElementRequired($element, true);
-        $this->assertFormElementDateTime(
-            $element,
-            true,
-            [
-                'year'  => $yesterday->format('Y'),
-                'month' => $yesterday->format('m'),
-                'day'   => $yesterday->format('j'),
-            ]
-        );
+        $this->assertFormElementDate(['licence-decision', 'terminateDate']);
     }
 
     public function testConfirm()
     {
-        $this->assertFormElementActionButton(['form-actions', 'confirm']);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'confirm']
+        );
     }
 
     public function testCancel()
     {
-        $this->assertFormElementActionButton(['form-actions', 'cancel']);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 }
