@@ -257,6 +257,7 @@ class IrfoPsvAuth extends OrganisationBase
      * @Form\Options({"label": "Chargeable copies required"})
      * @Form\Type("Text")
      * @Form\Validator({"name":"Digits"})
+     * @Form\Validator({"name":"Between", "options":{"max":500}})
      */
     public $copiesRequired = null;
 
@@ -265,6 +266,7 @@ class IrfoPsvAuth extends OrganisationBase
      * @Form\Options({"label": "Non-Chargeable copies required"})
      * @Form\Type("Text")
      * @Form\Validator({"name":"Digits"})
+     * @Form\Validator({"name":"Between", "options":{"max":500}})
      */
     public $copiesRequiredNonChargeable = null;
 
@@ -273,6 +275,7 @@ class IrfoPsvAuth extends OrganisationBase
      * @Form\Options({"label": "Total copies required"})
      * @Form\Type("Text")
      * @Form\Validator({"name":"Digits"})
+     * @Form\Validator({"name":"Between", "options":{"max":1000}})
      */
     public $copiesRequiredTotal = null;
 

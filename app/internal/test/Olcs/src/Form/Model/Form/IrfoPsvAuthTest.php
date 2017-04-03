@@ -170,6 +170,8 @@ class IrfoPsvAuthTest extends AbstractFormValidationTestCase
             ['fields', 'copiesRequired'],
             true
         );
+
+        $this->assertFormElementNumber(['fields', 'copiesRequired'], 0, 500);
     }
 
     public function testCopiesRequiredNonChargeable()
@@ -178,6 +180,8 @@ class IrfoPsvAuthTest extends AbstractFormValidationTestCase
             ['fields', 'copiesRequiredNonChargeable'],
             true
         );
+
+        $this->assertFormElementNumber(['fields', 'copiesRequiredNonChargeable'], 0, 500);
     }
 
     public function testCopiesRequiredTotal()
@@ -186,6 +190,8 @@ class IrfoPsvAuthTest extends AbstractFormValidationTestCase
             ['fields', 'copiesRequiredTotal'],
             true
         );
+
+        $this->assertFormElementNumber(['fields', 'copiesRequiredTotal'], 0, 1000);
     }
 
     public function testIsGrantable()
