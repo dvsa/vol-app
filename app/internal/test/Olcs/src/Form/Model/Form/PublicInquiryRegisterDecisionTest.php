@@ -57,7 +57,7 @@ class PublicInquiryRegisterDecisionTest extends AbstractFormValidationTestCase
         );
     }
 
-    public function testTmCAlledWithOperator()
+    public function testTmCalledWithOperator()
     {
         $this->assertFormElementRequired(
             ['fields', 'tmCalledWithOperator'],

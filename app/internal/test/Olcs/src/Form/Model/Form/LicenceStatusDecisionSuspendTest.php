@@ -72,10 +72,9 @@ class LicenceStatusDecisionSuspendTest extends AbstractFormValidationTestCase
 
     public function testAffectImmediate()
     {
-        $this->assertFormElementActionButton([
-            'form-actions',
-            'affectImmediate',
-        ]);
+        $this->assertFormElementActionButton(
+            ['form-actions', 'affectImmediate']
+        );
     }
 
     public function testSubmit()
