@@ -1,10 +1,8 @@
 <?php echo $this->showMarkers();?>
 <div class="record-actions">
     <?php
-    if (
-        (bool)$this->hideQuickActions === false
-        && $this->isGranted(Common\RefData::PERMISSION_INTERNAL_EDIT)
-    ) {
+    $hideQuickActions = (bool) $this->hideQuickActions || (bool) $this->placeholder('hideQuickActions')->getValue();
+    if (!$hideQuickActions && $this->isGranted(Common\RefData::PERMISSION_INTERNAL_EDIT)) {
         ?>
         <h4 class="title"><?php echo $this->translate('internal-operator-quick-actions'); ?></h4>
         <ul class="record-actions__group">
