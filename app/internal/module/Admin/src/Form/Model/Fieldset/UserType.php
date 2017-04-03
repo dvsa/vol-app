@@ -152,14 +152,15 @@ class UserType
      *      "disable_inarray_validator": false,
      *      "empty_option": "Please Select",
      *      "service_name": "Common\Service\Data\ContactDetails",
-     *      "category": "ct_partner",
-     *      "use_groups": "false"
+     *      "context": Common\RefData::CONTACT_TYPE_PARTNER,
+     *      "use_groups": false,
      * })
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DynamicSelect")
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
+     * @Form\Validator({
+     *     "name": "ValidateIf",
+     *     "options":{
      *          "context_field": "userType",
      *          "context_values": {"partner"},
      *          "allow_empty": false,
