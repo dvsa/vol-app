@@ -169,6 +169,19 @@ class OrganisationFurnitureTest extends MockeryTestCase
                     ->with('org name')
                     ->getMock()
             )
+            ->shouldReceive('getContainer')
+            ->with('right')
+            ->andReturn(
+                m::mock()->shouldReceive('set')->once()
+                    ->with(m::type(ViewModel::class))
+                    ->andReturnUsing(
+                        function ($view) {
+                            $this->assertEquals('sections/operator/partials/right', $view->getTemplate());
+                        }
+                    )
+                    ->getMock()
+            )
+            ->once()
             ->shouldReceive('getContainer')->once()->with('organisationIsMlh')
             ->andReturn(
                 m::mock()

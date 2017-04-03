@@ -68,9 +68,8 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
             $navigationPlugin->findById('operator_fees')->setVisible(false);
         }
 
-        if ($organisation['isDisqualified']) {
-            $sidebarNav = $this->sidebarNavigationService;
-            $sidebarNav->findById('operator-decisions-disqualify')->setVisible(false);
+        if ($organisation['isDisqualified'] || $organisation['isUnlicensed']) {
+            $this->sidebarNavigationService->findById('operator-decisions-disqualify')->setVisible(false);
         }
 
         if ($organisation['isUnlicensed']) {
