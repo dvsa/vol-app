@@ -78,7 +78,7 @@ class OrganisationFurniture implements
 
         if ($organisation['isUnlicensed']) {
             $placeholder->getContainer('pageSubtitle')->set($organisation['licence']['licNo']);
-            $placeholder->getContainer('hideQuickActions')->set(true);
+            $right->setVariable('hideQuickActions', true);
         }
 
         $pageTitle = !empty($organisation['name']) ? $organisation['name'] : '';

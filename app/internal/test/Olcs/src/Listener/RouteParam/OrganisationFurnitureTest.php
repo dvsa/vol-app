@@ -182,16 +182,6 @@ class OrganisationFurnitureTest extends MockeryTestCase
                     ->getMock()
             )
             ->once()
-            ->shouldReceive('getContainer')
-            ->with('hideQuickActions')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('set')
-                ->with(true)
-                ->once()
-                ->getMock()
-            )
-            ->once()
             ->shouldReceive('getContainer')->once()->with('organisationIsMlh')
             ->andReturn(
                 m::mock()
