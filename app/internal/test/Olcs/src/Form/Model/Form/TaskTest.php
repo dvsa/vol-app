@@ -28,14 +28,14 @@ class TaskTest extends AbstractFormValidationTestCase
     {
         $element = ['details', 'actionDate'];
 
-        $yesterday = new \DateTimeImmutable('+1 day');
+        $tomorrow = new \DateTimeImmutable('+1 day');
 
         $this->assertFormElementDateTimeValidCheck(
             $element,
             [
-                'year'   => $yesterday->format('Y'),
-                'month'  => $yesterday->format('m'),
-                'day'    => $yesterday->format('j'),
+                'year'   => $tomorrow->format('Y'),
+                'month'  => $tomorrow->format('m'),
+                'day'    => $tomorrow->format('j'),
                 'hour'   => 12,
                 'minute' => 12,
                 'second' => 12,

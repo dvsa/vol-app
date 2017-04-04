@@ -28,14 +28,14 @@ class PublicInquiryHearingTest extends AbstractFormValidationTestCase
     {
         $element = ['fields', 'hearingDate'];
 
-        $yesterday = new \DateTimeImmutable('+1 day');
+        $tomorrow = new \DateTimeImmutable('+1 day');
 
         $this->assertFormElementDateTimeValidCheck(
             $element,
             [
-                'year'   => $yesterday->format('Y'),
-                'month'  => $yesterday->format('m'),
-                'day'    => $yesterday->format('j'),
+                'year'   => $tomorrow->format('Y'),
+                'month'  => $tomorrow->format('m'),
+                'day'    => $tomorrow->format('j'),
                 'hour'   => 12,
                 'minute' => 12,
                 'second' => 12,
@@ -77,14 +77,14 @@ class PublicInquiryHearingTest extends AbstractFormValidationTestCase
     {
         $element = ['fields', 'cancelledDate'];
 
-        $yesterday = new \DateTimeImmutable('+1 day');
+        $tomorrow = new \DateTimeImmutable('+1 day');
 
         $this->assertFormElementDateTimeValidCheck(
             $element,
             [
-                'year'   => $yesterday->format('Y'),
-                'month'  => $yesterday->format('m'),
-                'day'    => $yesterday->format('j'),
+                'year'   => $tomorrow->format('Y'),
+                'month'  => $tomorrow->format('m'),
+                'day'    => $tomorrow->format('j'),
                 'hour'   => 12,
                 'minute' => 12,
                 'second' => 12,
@@ -101,14 +101,14 @@ class PublicInquiryHearingTest extends AbstractFormValidationTestCase
     {
         $element = ['fields', 'adjournedDate'];
 
-        $yesterday = new \DateTimeImmutable('+1 day');
+        $tomorrow = new \DateTimeImmutable('+1 day');
 
         $this->assertFormElementDateTimeValidCheck(
             $element,
             [
-                'year'   => $yesterday->format('Y'),
-                'month'  => $yesterday->format('m'),
-                'day'    => $yesterday->format('j'),
+                'year'   => $tomorrow->format('Y'),
+                'month'  => $tomorrow->format('m'),
+                'day'    => $tomorrow->format('j'),
                 'hour'   => 12,
                 'minute' => 12,
                 'second' => 12,
