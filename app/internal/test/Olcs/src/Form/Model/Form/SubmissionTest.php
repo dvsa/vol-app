@@ -9,15 +9,41 @@ use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
  *
  * @group FormTests
  */
-class SubmissionTest
+class SubmissionTest extends AbstractFormValidationTestCase
 {
     /**
      * @var string The class name of the form being tested
      */
     protected $formName = \Olcs\Form\Model\Form\Submission::class;
 
-    protected function setUp()
+    public function testSubmissionSections()
     {
-        $this->markTestIncomplete(sprintf('"%s" form not tested', $this->formName));
+        $element = ['fields', 'submissionSections'];
+        self::$testedElements[implode($element, '.')] = true;
+    }
+
+    public function testId()
+    {
+        $this->assertFormElementHidden(['fields', 'id']);
+    }
+
+    public function testVersion()
+    {
+        $this->assertFormElementHidden(['fields', 'version']);
+    }
+
+    public function testCase()
+    {
+        $this->assertFormElementHidden(['fields', 'case']);
+    }
+
+    public function testSubmit()
+    {
+        $this->assertFormElementActionButton(['form-actions', 'submit']);
+    }
+
+    public function testCancel()
+    {
+        $this->assertFormElementActionButton(['form-actions', 'cancel']);
     }
 }

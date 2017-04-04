@@ -482,7 +482,6 @@ return array(
             Olcs\Form\Element\SearchOrderFieldset::class => Olcs\Form\Element\SearchOrderFieldsetFactory::class,
         ],
         'aliases' => [
-
             'SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelect',
             'SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelect',
             'SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldset',
