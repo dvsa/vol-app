@@ -2,48 +2,120 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Olcs\TestHelpers\FormTester\Data\Object as F;
+use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Zend\Form\Element\Select;
 
 /**
  * @covers \Olcs\Form\Model\Form\Task
- * @group ComponentTests
  * @group FormTests
  */
-class TaskReassignTest extends AbstractFormTest
+class TaskReassignTest extends AbstractFormValidationTestCase
 {
     protected $formName = \Olcs\Form\Model\Form\Task::class;
 
-    protected function getDynamicSelectData()
+    public function testLink()
     {
-        return [
-            [
-                ['assignment', 'assignedToTeam'],
-                ['t1' => 'Team 1', 't2' => 'Team2']
-            ],
-            [
-                ['assignment', 'assignedToUser'],
-                ['u1' => 'User 1', 'u2' => 'User 2']
-            ]
-        ];
+        $this->assertFormElementHtml(['details', 'link']);
     }
 
-    protected function getFormData()
+    public function testStatus()
     {
-        return [
-            new F\Test(
-                new F\Stack(['assignment', 'assignedToTeam']),
-                new F\Value(F\Value::VALID, 't1'),
-                new F\Value(F\Value::VALID, 't2'),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::VALID, null, new F\Context(new F\Stack(['assignment', 'assignedToTeam']), 'u1')),
-                new F\Value(F\Value::INVALID, null, new F\Context(new F\Stack(['assignment', 'assignedToTeam']), null))
-            ),
-            new F\Test(
-                new F\Stack(['assignment', 'assignedToUser']),
-                new F\Value(F\Value::VALID, 'u1'),
-                new F\Value(F\Value::VALID, 'u2'),
-                new F\Value(F\Value::VALID, null)
-            ),
-        ];
+        $this->assertFormElementHtml(['details', 'status']);
+    }
+
+    public function testActionDate()
+    {
+        $this->assertFormElementDate(['details', 'actionDate']);
+    }
+
+    public function testUrgent()
+    {
+        $this->assertFormElementRequired(['details', 'urgent'], true);
+    }
+
+    public function testCategory()
+    {
+        $this->assertFormElementDynamicSelect(['details', 'category'], true);
+    }
+
+    public function testTaskSubCategory()
+    {
+        $this->assertFormElementDynamicSelect(['details', 'subCategory'], true);
+    }
+
+    public function testDescription()
+    {
+        $this->assertFormElementText(['details', 'description'], 2, 255);
+    }
+
+    public function testAssignedToTeam()
+    {
+        $element = ['assignment', 'assignedToTeam'];
+        $this->assertFormElementType($element, Select::class);
+        $this->assertFormElementRequired($element, true);
+    }
+
+    public function testAssignedToUser()
+    {
+        $element = ['assignment', 'assignedToUser'];
+        $this->assertFormElementType($element, Select::class);
+        $this->assertFormElementRequired($element, false);
+    }
+
+    public function testTableTable()
+    {
+        $element = ['taskHistory', 'table'];
+        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementTable($element);
+    }
+
+    public function testTableAction()
+    {
+        $this->assertFormElementNoRender(['taskHistory', 'action']);
+    }
+
+    public function testTableRows()
+    {
+        $this->assertFormElementHidden(['taskHistory', 'rows']);
+    }
+
+    public function testTableId()
+    {
+        $this->assertFormElementNoRender(['taskHistory', 'id']);
+    }
+
+    public function testSubmit()
+    {
+        $this->assertFormElementActionButton(
+            ['form-actions', 'submit']
+        );
+    }
+
+    public function testCancel()
+    {
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
+    }
+
+    public function testId()
+    {
+        $this->assertFormElementHidden(['id']);
+    }
+
+    public function testVersion()
+    {
+        $this->assertFormElementHidden(['version']);
+    }
+
+    public function testLinkType()
+    {
+        $this->assertFormElementHidden(['linkType']);
+    }
+
+    public function testLinkId()
+    {
+        $this->assertFormElementHidden(['linkId']);
     }
 }

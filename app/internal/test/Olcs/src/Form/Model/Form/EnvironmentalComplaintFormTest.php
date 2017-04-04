@@ -2,116 +2,160 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Olcs\TestHelpers\FormTester\Data\Object as F;
+use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 
 /**
  * Class EnvironmentalComplaintFormTest
  * @package OlcsTest\FormTest
- * @group ComponentTests
  * @group FormTests
  */
-class EnvironmentalComplaintFormTest extends AbstractFormTest
+class EnvironmentalComplaintFormTest extends AbstractFormValidationTestCase
 {
-    protected $formName = '\Olcs\Form\Model\Form\EnvironmentalComplaint';
+    protected $formName = \Olcs\Form\Model\Form\EnvironmentalComplaint::class;
 
-    protected function getDynamicSelectData()
+    public function testComplaintDate()
     {
-        return [
-            [
-                ['fields', 'status'],
-                ['ecst_open' => 'Open', 'ecst_closed' => 'Closed']
-            ],
-            [
-                ['fields', 'operatingCentres'],
-                ['1' => 'OC 1', '2' => 'OC 2']
-            ],
-            [
-                ['address', 'countryCode'],
-                ['uk' => 'United Kingdom']
-            ]
-        ];
+        $this->assertFormElementDate(['fields', 'complaintDate']);
     }
 
-    protected function getFormData()
+    public function testDescription()
     {
-        return [
-            new F\Test(
-                new F\Stack(['fields', 'complaintDate']),
-                new F\Value(F\Value::VALID, ['day'=>'26', 'month'=>'09', 'year'=>'2013']),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::INVALID, ['day'=>'26', 'month'=>'09', 'year'=>'2500']),
-                new F\Value(F\Value::INVALID, ['day'=>'31', 'month'=>'02', 'year'=>'2015'])
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'complainantForename']),
-                new F\Value(F\Value::VALID, 'John'),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::INVALID, 'a'),
-                new F\Value(F\Value::INVALID, 'This is longer than the max123456789')
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'complainantFamilyName']),
-                new F\Value(F\Value::VALID, 'Smith'),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::INVALID, 'a'),
-                new F\Value(F\Value::INVALID, 'This is longer than the max123456789')
-            ),
-            new F\Test(
-                new F\Stack(['address', 'addressLine1']),
-                new F\Value(F\Value::VALID, 'anystreet'),
-                new F\Value(F\Value::INVALID, null)
-            ),
-            new F\Test(
-                new F\Stack(['address', 'addressLine2']),
-                new F\Value(F\Value::VALID, 'anystreet'),
-                new F\Value(F\Value::VALID, null)
-            ),
-            new F\Test(
-                new F\Stack(['address', 'addressLine3']),
-                new F\Value(F\Value::VALID, 'anystreet'),
-                new F\Value(F\Value::VALID, null)
-            ),
-            new F\Test(
-                new F\Stack(['address', 'addressLine4']),
-                new F\Value(F\Value::VALID, 'anystreet'),
-                new F\Value(F\Value::VALID, null)
-            ),
-            new F\Test(
-                new F\Stack(['address', 'town']),
-                new F\Value(F\Value::VALID, 'Leeds'),
-                new F\Value(F\Value::INVALID, [])
-            ),
-            new F\Test(
-                new F\Stack(['address', 'countryCode']),
-                new F\Value(F\Value::VALID, 'uk'),
-                new F\Value(F\Value::INVALID, 'as')
-            ),
-            new F\Test(
-                new F\Stack(['address', 'postcode']),
-                new F\Value(F\Value::VALID, 'AB1 2CD'),
-                new F\Value(F\Value::VALID, null)
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'description']),
-                new F\Value(F\Value::VALID, 'A description between 5-4000 chars'),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::VALID, str_pad('', 4000, '+')),
-                new F\Value(F\Value::INVALID, str_pad('', 4001, '+'))
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'status']),
-                new F\Value(F\Value::VALID, 'ecst_open'),
-                new F\Value(F\Value::VALID, 'ecst_closed'),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::INVALID, '')
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'operatingCentres']),
-                new F\Value(F\Value::VALID, [1]),
-                new F\Value(F\Value::VALID, [1,2]),
-                new F\Value(F\Value::VALID, null),
-                new F\Value(F\Value::VALID, '')
-            )
-        ];
+        $element = ['fields', 'description'];
+        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementText($element, 5, 4000);
+    }
+
+    public function testStatus()
+    {
+        $this->assertFormElementDynamicSelect(['fields', 'status'], true);
+    }
+
+    public function testOperatingCentres()
+    {
+        $this->assertFormElementDynamicSelect(
+            ['fields', 'operatingCentres'],
+            true
+        );
+    }
+
+    public function testComplainantForename()
+    {
+        $element = ['fields', 'complainantForename'];
+        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementText($element, 2, 35);
+    }
+
+    public function testComplainantFamilyName()
+    {
+        $element = ['fields', 'complainantFamilyName'];
+        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementText($element, 2, 35);
+    }
+
+    public function testAddressId()
+    {
+        $this->assertFormElementHidden(
+            ['address', 'id']
+        );
+    }
+
+    public function testAddressVersion()
+    {
+        $this->assertFormElementHidden(
+            ['address', 'version']
+        );
+    }
+
+    public function testAddressSearchPostcode()
+    {
+        $element = ['address', 'searchPostcode'];
+        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementPostcodeSearch($element);
+    }
+
+    public function testAddressLine1()
+    {
+        $element = ['address', 'addressLine1'];
+        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementText($element, 0, 90);
+    }
+
+    public function testAddressLine2()
+    {
+        $element = ['address', 'addressLine2'];
+        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementText($element, 0, 90);
+    }
+
+    public function testAddressLine3()
+    {
+        $element = ['address', 'addressLine3'];
+        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementText($element, 0, 100);
+    }
+
+    public function testAddressLine4()
+    {
+        $element = ['address', 'addressLine4'];
+        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementText($element, 0, 35);
+    }
+
+    public function testAddressTown()
+    {
+        $element = ['address', 'town'];
+        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementText($element, 0, 30);
+    }
+
+    public function testAddressPostcode()
+    {
+        $element = ['address', 'postcode'];
+        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementPostcode($element);
+    }
+
+    public function testAddressCountryCode()
+    {
+        $element = ['address', 'countryCode'];
+        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementDynamicSelect($element);
+    }
+
+    public function testId()
+    {
+        $this->assertFormElementHidden(['fields', 'id']);
+    }
+
+    public function testVersion()
+    {
+        $this->assertFormElementHidden(['fields', 'version']);
+    }
+
+    public function testCase()
+    {
+        $this->assertFormElementHidden(['fields', 'case']);
+    }
+
+    public function testSubmit()
+    {
+        $this->assertFormElementActionButton(
+            ['form-actions', 'submit']
+        );
+    }
+
+    public function testCancel()
+    {
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 }

@@ -100,7 +100,6 @@ class IrfoDetailsTest extends AbstractFormValidationTestCase
         );
     }
 
-
     public function testContactPhoneBusiness()
     {
         $element = ['contact', 'phone_business'];

@@ -36,6 +36,29 @@ class UserTest extends AbstractFormValidationTestCase
         $this->assertFormElementHidden(['version']);
     }
 
+    // This is a similar scenario to search postcode elements.  These are
+    // skipped deliberately.  They do not implement any InputFilters and
+    // validated by JS.
+    public function testApplicationTransportManagersApplication()
+    {
+        $elementHierarchy = ['userType', 'applicationTransportManagers'];
+
+        $applicationTransportManagerElements = [
+            'application',
+            'search',
+        ];
+
+        foreach ($applicationTransportManagerElements as $element) {
+            $elementToSkip = array_merge(
+                $elementHierarchy, [
+                    $element,
+                ]
+            );
+
+            self::$testedElements[implode($elementToSkip, '.')] = true;
+        }
+    }
+
     public function testUserType()
     {
         $this->assertFormElementDynamicSelect(

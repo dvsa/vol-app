@@ -2,42 +2,86 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Olcs\TestHelpers\FormTester\Data\Object as F;
+use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 
 /**
  * Class PublicationTest
  * @package OlcsTest\FormTest
- * @group ComponentTests
  * @group FormTests
  */
-class PublicationTest extends AbstractFormTest
+class PublicationTest extends AbstractFormValidationTestCase
 {
-    protected $formName = '\Olcs\Form\Model\Form\Publication';
+    protected $formName = \Olcs\Form\Model\Form\Publication::class;
 
-    protected function getFormData()
+    public function testPublicationNumber()
     {
-        return [
-            new F\Test(
-                new F\Stack(['fields', 'text1']),
-                new F\Value(F\Value::VALID, ''),
-                new F\Value(F\Value::VALID, 'abcdefgh'),
-                new F\Value(F\Value::VALID, str_pad('', 4000, '+')),
-                new F\Value(F\Value::INVALID, str_pad('', 4001, '+'))
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'text2']),
-                new F\Value(F\Value::VALID, ''),
-                new F\Value(F\Value::VALID, 'abcdefgh'),
-                new F\Value(F\Value::VALID, str_pad('', 4000, '+')),
-                new F\Value(F\Value::INVALID, str_pad('', 4001, '+'))
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'text3']),
-                new F\Value(F\Value::VALID, ''),
-                new F\Value(F\Value::VALID, 'abcdefgh'),
-                new F\Value(F\Value::VALID, str_pad('', 4000, '+')),
-                new F\Value(F\Value::INVALID, str_pad('', 4001, '+'))
-            )
-        ];
+        $this->assertFormElementRequired(['readOnly', 'publicationNo'], false);
+    }
+
+    public function testStatus()
+    {
+        $this->assertFormElementRequired(['readOnly', 'status'], false);
+    }
+
+    public function testTypeArea()
+    {
+        $this->assertFormElementRequired(['readOnly', 'typeArea'], false);
+    }
+
+    public function testPublicationDate()
+    {
+        $this->assertFormElementRequired(
+            ['readOnly', 'publicationDate'],
+            false
+        );
+    }
+
+    public function testSection()
+    {
+        $this->assertFormElementRequired(['readOnly', 'section'], false);
+    }
+
+    public function testTrafficArea()
+    {
+        $this->assertFormElementRequired(['readOnly', 'trafficArea'], false);
+    }
+
+    public function testText1()
+    {
+        $this->assertFormElementRequired(['fields', 'text1'], false);
+    }
+
+    public function testText2()
+    {
+        $this->assertFormElementRequired(['fields', 'text2'], false);
+    }
+
+    public function testText3()
+    {
+        $this->assertFormElementRequired(['fields', 'text3'], false);
+    }
+
+    public function testId()
+    {
+        $this->assertFormElementHidden(['fields', 'id']);
+    }
+
+    public function testVersion()
+    {
+        $this->assertFormElementHidden(['fields', 'version']);
+    }
+
+    public function testSubmit()
+    {
+        $this->assertFormElementActionButton(
+            ['form-actions', 'submit']
+        );
+    }
+
+    public function testCancel()
+    {
+        $this->assertFormElementActionButton(
+            ['form-actions', 'cancel']
+        );
     }
 }

@@ -2,171 +2,151 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Olcs\TestHelpers\FormTester\Data\Object as F;
+use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Common\Validator\DateCompare;
+use Zend\Form\Element\Radio;
 
 /**
  * Class TmCaseUnfitTest
  * @package OlcsTest\FormTest
- * @group ComponentTests
  * @group FormTests
  */
-class TmCaseUnfitTest extends AbstractFormTest
+class TmCaseUnfitTest extends AbstractFormValidationTestCase
 {
-    protected $formName = '\Olcs\Form\Model\Form\TmCaseUnfit';
+    protected $formName = \Olcs\Form\Model\Form\TmCaseUnfit::class;
 
-    protected function getDynamicSelectData()
+    public function testIsMsi()
     {
-        return [
-            [
-                ['fields', 'unfitnessReasons'],
-                ['tm_unfit_inc' => 'Reason 1']
-            ],
-            [
-                ['fields', 'rehabMeasures'],
-                ['tm_rehab_adc' => 'Measure 1']
-            ],
-        ];
+        $element = ['fields', 'isMsi'];
+        $this->assertFormElementType($element, Radio::class);
+        $this->assertFormElementRequired($element, true);
     }
 
-    protected function getFormData()
+    public function testDecisionDate()
     {
-        return [
-            new F\Test(
-                new F\Stack(['fields', 'isMsi']),
-                new F\Value(F\Value::VALID, 'Y'),
-                new F\Value(F\Value::VALID, 'N'),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::INVALID, 'A'),
-                new F\Value(F\Value::INVALID, ['ABCDE'])
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'decisionDate']),
-                new F\Value(F\Value::VALID, ['day'=>'26', 'month'=>'09', 'year'=>'2013']),
-                new F\Value(F\Value::INVALID, ['day'=>'26', 'month'=>'13', 'year'=>'2013']),
-                new F\Value(F\Value::INVALID, ['day'=>'26', 'month'=>'09', 'year'=>'aaa']),
-                new F\Value(F\Value::INVALID, ['day'=>'32', 'month'=>'09', 'year'=>'2013'])
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'notifiedDate']),
-                new F\Value(
-                    F\Value::VALID,
-                    '',
-                    new F\Context(
-                        new F\Stack(['fields', 'decisionDate']),
-                        ['day'=>'26', 'month'=>'02', 'year'=>'2013']
-                    )
-                ),
-                new F\Value(
-                    F\Value::VALID,
-                    ['day'=>'26', 'month'=>'02', 'year'=>'2013'],
-                    new F\Context(
-                        new F\Stack(['fields', 'decisionDate']),
-                        ['day'=>'26', 'month'=>'02', 'year'=>'2013']
-                    )
-                ),
-                new F\Value(
-                    F\Value::VALID,
-                    ['day'=>'27', 'month'=>'02', 'year'=>'2013'],
-                    new F\Context(
-                        new F\Stack(['fields', 'decisionDate']),
-                        ['day'=>'26', 'month'=>'02', 'year'=>'2013']
-                    )
-                ),
-                new F\Value(
-                    F\Value::INVALID,
-                    ['day'=>'25', 'month'=>'02', 'year'=>'2013'],
-                    new F\Context(
-                        new F\Stack(['fields', 'decisionDate']),
-                        ['day'=>'26', 'month'=>'02', 'year'=>'2013']
-                    )
-                ),
-                new F\Value(
-                    F\Value::INVALID,
-                    ['day'=>'26', 'month'=>'02', 'year'=>'aaa'],
-                    new F\Context(
-                        new F\Stack(['fields', 'decisionDate']),
-                        ['day'=>'25', 'month'=>'02', 'year'=>'2013']
-                    )
-                ),
-                new F\Value(
-                    F\Value::INVALID,
-                    ['day'=>'26', 'month'=>'13', 'year'=>'2013'],
-                    new F\Context(
-                        new F\Stack(['fields', 'decisionDate']),
-                        ['day'=>'25', 'month'=>'02', 'year'=>'2013']
-                    )
-                ),
-                new F\Value(
-                    F\Value::INVALID,
-                    ['day'=>'32', 'month'=>'02', 'year'=>'2013'],
-                    new F\Context(
-                        new F\Stack(['fields', 'decisionDate']),
-                        ['day'=>'25', 'month'=>'02', 'year'=>'2013']
-                    )
-                )
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'unfitnessStartDate']),
-                new F\Value(F\Value::VALID, ['day'=>'26', 'month'=>'09', 'year'=>'2013']),
-                new F\Value(F\Value::INVALID, ['day'=>'26', 'month'=>'13', 'year'=>'2013']),
-                new F\Value(F\Value::INVALID, ['day'=>'26', 'month'=>'09', 'year'=>'aaa']),
-                new F\Value(F\Value::INVALID, ['day'=>'32', 'month'=>'09', 'year'=>'2013'])
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'unfitnessEndDate']),
-                new F\Value(
-                    F\Value::VALID,
-                    null
-                ),
-                new F\Value(
-                    F\Value::VALID,
-                    ['day'=>'', 'month'=>'', 'year'=>'']
-                ),
-                new F\Value(
-                    F\Value::VALID,
-                    ['day'=>'26', 'month'=>'02', 'year'=>'2013'],
-                    new F\Context(
-                        new F\Stack(['fields', 'unfitnessStartDate']),
-                        ['day'=>'25', 'month'=>'02', 'year'=>'2013']
-                    )
-                ),
-                new F\Value(
-                    F\Value::VALID,
-                    ['day'=>'25', 'month'=>'02', 'year'=>'2013'],
-                    new F\Context(
-                        new F\Stack(['fields', 'unfitnessStartDate']),
-                        ['day'=>'25', 'month'=>'02', 'year'=>'2013']
-                    )
-                ),
-                new F\Value(
-                    F\Value::INVALID,
-                    ['day'=>'24', 'month'=>'02', 'year'=>'2013'],
-                    new F\Context(
-                        new F\Stack(['fields', 'unfitnessStartDate']),
-                        ['day'=>'25', 'month'=>'02', 'year'=>'2013']
-                    )
-                ),
-                new F\Value(
-                    F\Value::INVALID,
-                    ['day'=>'32', 'month'=>'02', 'year'=>'2013'],
-                    new F\Context(
-                        new F\Stack(['fields', 'unfitnessStartDate']),
-                        ['day'=>'25', 'month'=>'02', 'year'=>'2013']
-                    )
-                )
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'unfitnessReasons']),
-                new F\Value(F\Value::VALID, 'tm_unfit_inc'),
-                new F\Value(F\Value::INVALID, ''),
-                new F\Value(F\Value::INVALID, 'aaa')
-            ),
-            new F\Test(
-                //unable to generate invalid test currently
-                new F\Stack(['fields', 'rehabMeasures']),
-                new F\Value(F\Value::VALID, 'tm_rehab_adc'),
-                new F\Value(F\Value::VALID, '')
-            )
-        ];
+        $this->assertFormElementDate(['fields', 'decisionDate']);
+    }
+
+    public function testNotifiedDate()
+    {
+        $element = ['fields', 'notifiedDate'];
+
+        $this->assertFormElementValid(
+            $element,
+            ['day' => 10, 'month' => 2, 'year' => 2016],
+            [
+                'fields' =>
+                    [
+                        'decisionDate' => [
+                            'day'   => 5,
+                            'month' => 1,
+                            'year'  => 2016,
+                        ],
+                    ],
+            ]
+        );
+
+        $this->assertFormElementNotValid(
+            $element,
+            ['day' => 1, 'month' => 2, 'year' => 2015],
+            [DateCompare::NOT_GTE],
+            [
+                'fields' =>
+                    [
+                        'decisionDate' => [
+                            'day'   => 5,
+                            'month' => 1,
+                            'year'  => 2016,
+                        ],
+                    ],
+            ]
+        );
+    }
+
+    public function testUnfitnessStartDate()
+    {
+        $this->assertFormElementDate(['fields', 'unfitnessStartDate']);
+    }
+
+    public function testUnfitnessEndDate()
+    {
+        $element = ['fields', 'unfitnessEndDate'];
+
+        $this->assertFormElementValid(
+            $element,
+            ['day' => 10, 'month' => 2, 'year' => 2016],
+            [
+                'fields' =>
+                    [
+                        'unfitnessStartDate' => [
+                            'day'   => 5,
+                            'month' => 1,
+                            'year'  => 2016,
+                        ],
+                    ],
+            ]
+        );
+
+        $this->assertFormElementNotValid(
+            $element,
+            ['day' => 1, 'month' => 2, 'year' => 2015],
+            [DateCompare::NOT_GTE],
+            [
+                'fields' =>
+                    [
+                        'unfitnessStartDate' => [
+                            'day'   => 5,
+                            'month' => 1,
+                            'year'  => 2016,
+                        ],
+                    ],
+            ]
+        );
+    }
+
+    public function testUnfitnessReasons()
+    {
+        $this->assertFormElementDynamicSelect(
+            ['fields', 'unfitnessReasons'],
+            true
+        );
+    }
+
+    public function testRehabMeasures()
+    {
+        $this->assertFormElementDynamicSelect(
+            ['fields', 'rehabMeasures'],
+            true
+        );
+    }
+
+    public function testDecision()
+    {
+        $this->assertFormElementHidden(['fields', 'decision']);
+    }
+
+    public function testCase()
+    {
+        $this->assertFormElementHidden(['fields', 'case']);
+    }
+
+    public function testId()
+    {
+        $this->assertFormElementHidden(['fields', 'id']);
+    }
+
+    public function testVersion()
+    {
+        $this->assertFormElementHidden(['fields', 'version']);
+    }
+
+    public function testSubmit()
+    {
+        $this->assertFormElementActionButton(['form-actions', 'submit']);
+    }
+
+    public function testCancel()
+    {
+        $this->assertFormElementActionButton(['form-actions', 'cancel']);
     }
 }
