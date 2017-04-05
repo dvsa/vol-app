@@ -30,8 +30,9 @@ class AbstractController extends ZendAbstractActionController
     /**
      * Gets a variable from the route
      *
-     * @param string $param
-     * @param mixed $default
+     * @param string $param   route parameter name
+     * @param mixed  $default default value if null
+     *
      * @return mixed
      */
     public function fromRoute($param, $default = null)
@@ -42,8 +43,9 @@ class AbstractController extends ZendAbstractActionController
     /**
      * Gets a variable from postdata
      *
-     * @param string $param
-     * @param mixed $default
+     * @param string $param   post parameter name
+     * @param mixed  $default default value if null
+     *
      * @return mixed
      */
     public function fromPost($param, $default = null)
@@ -54,8 +56,9 @@ class AbstractController extends ZendAbstractActionController
     /**
      * Proxies to the get query or get param.
      *
-     * @param mixed $name
-     * @param mixed $default
+     * @param mixed $name    parameter name
+     * @param mixed $default default value if null
+     *
      * @return mixed
      */
     public function getQueryOrRouteParam($name, $default = null)
@@ -74,7 +77,9 @@ class AbstractController extends ZendAbstractActionController
     /**
      * Sets the table filters.
      *
-     * @param mixed $filters
+     * @param mixed $filters parameter name
+     *
+     * @return void
      */
     public function setTableFilters($filters)
     {

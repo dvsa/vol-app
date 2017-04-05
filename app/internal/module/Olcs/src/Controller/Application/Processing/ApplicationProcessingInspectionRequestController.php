@@ -91,6 +91,11 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
      */
     protected $section = 'inspection-request';
 
+    /**
+     * get method LeftView
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -141,6 +146,8 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
 
     /**
      * Setup operating centres listbox
+     *
+     * @return void
      */
     protected function setUpOcListbox()
     {

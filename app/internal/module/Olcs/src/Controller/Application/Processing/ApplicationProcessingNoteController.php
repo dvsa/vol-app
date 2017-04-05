@@ -49,6 +49,11 @@ class ApplicationProcessingNoteController extends AbstractInternalController imp
     protected $listVars = ['application'];
     protected $filterForm = FilterForm::class;
 
+    /**
+     * Get method Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();

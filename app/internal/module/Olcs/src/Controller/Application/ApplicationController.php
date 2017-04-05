@@ -72,7 +72,6 @@ class ApplicationController extends AbstractController implements ApplicationCon
         $response = $this->handleQuery($dtoData);
 
         $results = [];
-        
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
@@ -89,6 +88,13 @@ class ApplicationController extends AbstractController implements ApplicationCon
         return $this->render($view);
     }
 
+    /**
+     * Set method for request
+     *
+     * @param \Zend\Http\Request $request Zend
+     *
+     * @return void
+     */
     public function setRequest(\Zend\Http\Request $request)
     {
         $this->request = $request;
@@ -97,6 +103,8 @@ class ApplicationController extends AbstractController implements ApplicationCon
 
     /**
      * Opposition page
+     *
+     * @return ViewModel
      */
     public function oppositionAction()
     {
@@ -155,6 +163,11 @@ class ApplicationController extends AbstractController implements ApplicationCon
         return $this->renderView($view);
     }
 
+    /**
+     * undo grant action
+     *
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function undoGrantAction()
     {
         $request = $this->getRequest();
@@ -190,6 +203,13 @@ class ApplicationController extends AbstractController implements ApplicationCon
         return $this->renderView($view, 'Undo grant application');
     }
 
+    /**
+     * Get the Licence Id for Application
+     *
+     * @param int $applicationId applicationId
+     *
+     * @return mixed
+     */
     protected function getLicenceIdForApplication($applicationId = null)
     {
         if (is_null($applicationId)) {
