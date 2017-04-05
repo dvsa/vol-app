@@ -14,6 +14,11 @@ class ApplicationProcessingOverviewController extends AbstractApplicationProcess
 {
     protected $section = 'overview';
 
+    /**
+     * index Action
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
         $options = [

@@ -38,6 +38,11 @@ class ApplicationProcessingPublicationsController extends AbstractInternalContro
     protected $addContentTitle = 'Add publication';
     protected $editContentTitle = 'Edit publication';
 
+    /**
+     * get Method Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -47,6 +52,8 @@ class ApplicationProcessingPublicationsController extends AbstractInternalContro
     }
 
     /**
+     * Edit Action
+     *
      * @return array|\Zend\View\Model\ViewModel
      */
     public function editAction()
@@ -86,8 +93,9 @@ class ApplicationProcessingPublicationsController extends AbstractInternalContro
      * Override in derived classes to alter table *presentation* based on the
      * list data
      *
-     * @param Table $table
-     * @param array $data
+     * @param Table $table table
+     * @param array $data  table
+     *
      * @return Table
      */
     protected function alterTable($table, $data)

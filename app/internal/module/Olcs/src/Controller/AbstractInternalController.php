@@ -265,7 +265,11 @@ abstract class AbstractInternalController extends AbstractActionController
 
         return $commentBox;
     }
-
+       /**
+       * Index Action
+       *
+       * @return HttpResponse| ViewModel
+       */
     public function indexAction()
     {
         if (null !== $this->commentItemDto) {
@@ -286,6 +290,11 @@ abstract class AbstractInternalController extends AbstractActionController
         );
     }
 
+    /**
+     * details
+     *
+     * @return array|ViewModel
+     */
     public function detailsAction()
     {
         return $this->details(
@@ -297,6 +306,11 @@ abstract class AbstractInternalController extends AbstractActionController
         );
     }
 
+    /**
+     * Add's an entity
+     *
+     * @return mixed|ViewModel
+     */
     public function addAction()
     {
         return $this->add(
@@ -309,7 +323,11 @@ abstract class AbstractInternalController extends AbstractActionController
             $this->addContentTitle
         );
     }
-
+    /**
+     * edit's an entity
+     *
+     * @return array|ViewModel
+     */
     public function editAction()
     {
         return $this->edit(
@@ -324,6 +342,12 @@ abstract class AbstractInternalController extends AbstractActionController
         );
     }
 
+
+    /**
+     * Delete's an entity
+     *
+     * @return array|mixed|ViewModel
+     */
     public function deleteAction()
     {
         return $this->confirmCommand(
@@ -368,12 +392,14 @@ abstract class AbstractInternalController extends AbstractActionController
     }
 
     /**
-     * @param string|QueryInterface      $listDto
-     * @param ParameterProviderInterface $paramProvider
-     * @param string                     $tableViewPlaceholderName
-     * @param string                     $tableName
-     * @param string                     $tableViewTemplate
-     * @param string                     $filterForm
+     * index method
+     *
+     * @param string|QueryInterface      $listDto                  listDto
+     * @param ParameterProviderInterface $paramProvider            paramProvider
+     * @param string                     $tableViewPlaceholderName tableViewPlaceholderName
+     * @param string                     $tableName                tableName
+     * @param string                     $tableViewTemplate        tableViewTemplate
+     * @param string                     $filterForm               filterForm
      *
      * @return array|ViewModel
      */
@@ -428,13 +454,14 @@ abstract class AbstractInternalController extends AbstractActionController
 
         return $this->viewBuilder()->buildViewFromTemplate($tableViewTemplate);
     }
-
     /**
-     * @param string|QueryInterface      $itemDto
-     * @param ParameterProviderInterface $paramProvider
-     * @param string                     $detailsViewPlaceHolderName
-     * @param string                     $detailsViewTemplate
-     * @param string|null                $contentTitle
+     * desc
+     *
+     * @param string|QueryInterface      $itemDto                    itemDto
+     * @param ParameterProviderInterface $paramProvider              paramProvider
+     * @param string                     $detailsViewPlaceHolderName detailsViewPlaceHolderName
+     * @param string                     $detailsViewTemplate        detailsViewTemplate
+     * @param string|null                $contentTitle               contentTitle
      *
      * @return array|ViewModel
      */
@@ -490,13 +517,13 @@ abstract class AbstractInternalController extends AbstractActionController
      * 4. Map data into command
      * 5. Send command + handle result
      *
-     * @param string                     $formClass
-     * @param ParameterProviderInterface $defaultDataProvider
-     * @param string|CommandInterface    $createCommand
-     * @param string|MapperInterface     $mapperClass
-     * @param string                     $editViewTemplate
-     * @param string                     $successMessage
-     * @param string|null                $contentTitle
+     * @param string                     $formClass           fromClass
+     * @param ParameterProviderInterface $defaultDataProvider defaultDataProvider
+     * @param string|CommandInterface    $createCommand       createCommand
+     * @param string                     $mapperClass         mapperClass
+     * @param string                     $editViewTemplate    editViewTemplate
+     * @param string                     $successMessage      successMessage
+     * @param string|null                $contentTitle        contentTitle
      *
      * @return mixed|ViewModel
      */
@@ -569,14 +596,16 @@ abstract class AbstractInternalController extends AbstractActionController
     }
 
     /**
-     * @param string                     $formClass
-     * @param string|QueryInterface      $itemDto
-     * @param ParameterProviderInterface $paramProvider
-     * @param string|CommandInterface    $updateCommand
-     * @param string|MapperInterface     $mapperClass
-     * @param string                     $editViewTemplate
-     * @param string                     $successMessage
-     * @param null                       $contentTitle
+     * Editing Method
+     *
+     * @param string                     $formClass        fromClass
+     * @param string|QueryInterface      $itemDto          itemDto
+     * @param ParameterProviderInterface $paramProvider    paramProvider
+     * @param string|CommandInterface    $updateCommand    updateCommand
+     * @param string|MapperInterface     $mapperClass      mapperClass
+     * @param string                     $editViewTemplate editViewTemplate
+     * @param string                     $successMessage   successMessage
+     * @param null                       $contentTitle     contentTitle
      *
      * @return array|ViewModel
      * @internal param $paramNames
@@ -663,11 +692,11 @@ abstract class AbstractInternalController extends AbstractActionController
     /**
      * Handle single delete and multiple delete as well
      *
-     * @param ParameterProviderInterface $paramProvider
-     * @param string|CommandInterface    $confirmCommand
-     * @param string                     $modalTitle
-     * @param string                     $confirmMessage
-     * @param string                     $successMessage
+     * @param ParameterProviderInterface $paramProvider  paramProvider
+     * @param string|CommandInterface    $confirmCommand confirmCommand
+     * @param string                     $modalTitle     modalTile
+     * @param string                     $confirmMessage confirmMessage
+     * @param string                     $successMessage successMessage
      *
      * @return array|mixed|ViewModel
      */
@@ -710,7 +739,8 @@ abstract class AbstractInternalController extends AbstractActionController
     /**
      * Handles errors and displays all messages with translation
      *
-     * @param array $restResponse
+     * @param array $restResponse array parameter name
+     *
      * @return void
      */
     public function handleErrors(array $restResponse)
@@ -745,9 +775,9 @@ abstract class AbstractInternalController extends AbstractActionController
     /**
      * Processes a command, and populates flash messages for the user
      *
-     * @param ParameterProviderInterface $paramProvider
-     * @param string|CommandInterface    $command
-     * @param string                     $successMessage
+     * @param ParameterProviderInterface $paramProvider  paramProvider
+     * @param string|CommandInterface    $command        command
+     * @param string                     $successMessage successMessage
      *
      * @return array|mixed
      */
@@ -779,7 +809,10 @@ abstract class AbstractInternalController extends AbstractActionController
     }
 
     /**
-     * @param array $restResponse
+     * Redirects config for cancelling form
+     *
+     * @param array $restResponse restResponse
+     *
      * @return array
      */
     public function redirectConfig(array $restResponse)
@@ -846,7 +879,10 @@ abstract class AbstractInternalController extends AbstractActionController
     }
 
     /**
-     * @param array $restResponse
+     * redirects to index
+     *
+     * @param array $restResponse restResponse
+     *
      * @return mixed
      */
     public function redirectTo(array $restResponse)
@@ -887,7 +923,11 @@ abstract class AbstractInternalController extends AbstractActionController
     }
 
     /**
+     * Attach Default Listeners
+     *
      * @codeCoverageIgnore this is part of the event system.
+     *
+     * @return void
      */
     protected function attachDefaultListeners()
     {
@@ -902,7 +942,13 @@ abstract class AbstractInternalController extends AbstractActionController
 
         $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'attachScripts'), -100);
     }
-
+    /**
+     * attach Scripts
+     *
+     * @param MvcEvent $event MvcEvent
+     *
+     * @return void
+     */
     final public function attachScripts(MvcEvent $event)
     {
         $action = static::getMethodFromAction($event->getRouteMatch()->getParam('action', 'not-found'));
@@ -916,6 +962,13 @@ abstract class AbstractInternalController extends AbstractActionController
 
     }
 
+    /**
+     * Inline Scripts
+     *
+     * @param string $action action
+     *
+     * @return array
+     */
     private function getInlineScripts($action)
     {
         $scripts = [];
@@ -954,7 +1007,8 @@ abstract class AbstractInternalController extends AbstractActionController
      * Returns an array of script files to add to the page (not inline)
      * either specific to the action being dispatched, or all actions
      *
-     * @param $action
+     * @param string $action action
+     *
      * @return array
      */
     private function getScriptFiles($action)
@@ -991,7 +1045,10 @@ abstract class AbstractInternalController extends AbstractActionController
     }
 
     /**
-     * @param $name
+     * get form
+     *
+     * @param string $name name
+     *
      * @return mixed
      */
     public function getForm($name)
@@ -1005,8 +1062,9 @@ abstract class AbstractInternalController extends AbstractActionController
      * Override in derived classes to alter table *presentation* based on the
      * list data
      *
-     * @param TableBuilder $table
-     * @param array $data
+     * @param TableBuilder $table table
+     * @param array        $data  data
+     *
      * @return TableBuilder
      */
     protected function alterTable($table, $data)
@@ -1017,8 +1075,9 @@ abstract class AbstractInternalController extends AbstractActionController
     /**
      * Check if a button was pressed. Part of original AbstractActionController
      *
-     * @param string $button
-     * @param array $data
+     * @param string $button button
+     * @param array  $data   data
+     *
      * @return bool
      */
     public function isButtonPressed($button, $data = null)
@@ -1036,7 +1095,9 @@ abstract class AbstractInternalController extends AbstractActionController
     /**
      * Update table action with query
      *
-     * @param TableBuilder $table
+     * @param TableBuilder $table table
+     *
+     * @return void
      */
     protected function updateTableActionWithQuery($table)
     {

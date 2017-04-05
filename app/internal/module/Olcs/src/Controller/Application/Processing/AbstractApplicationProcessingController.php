@@ -20,6 +20,11 @@ abstract class AbstractApplicationProcessingController extends ApplicationContro
 
     protected $helperClass = '\Olcs\Helper\ApplicationProcessingHelper';
 
+    /**
+     * get method for Navigation config
+     *
+     * @return array
+     */
     protected function getNavigationConfig()
     {
         $application = $this->getApplication();

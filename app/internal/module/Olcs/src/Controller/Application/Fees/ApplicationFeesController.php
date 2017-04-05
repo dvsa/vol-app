@@ -23,6 +23,14 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
     use FeesActionTrait,
         GenericReceipt;
 
+    /**
+     * render Layout
+     *
+     * @param string $view      view
+     * @param null   $pageTitle pageTitle
+     *
+     * @return mixed
+     */
     protected function renderLayout($view, $pageTitle = null)
     {
         return $this->render($view, $pageTitle);
@@ -30,7 +38,9 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
 
     /**
      * Route (prefix) for fees action redirects
+     *
      * @see Olcs\Controller\Traits\FeesActionTrait
+     *
      * @return string
      */
     protected function getFeesRoute()
@@ -40,7 +50,9 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
 
     /**
      * The fees route redirect params
+     *
      * @see Olcs\Controller\Traits\FeesActionTrait
+     *
      * @return array
      */
     protected function getFeesRouteParams()
@@ -52,7 +64,9 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
 
     /**
      * The controller specific fees table params
+     *
      * @see Olcs\Controller\Traits\FeesActionTrait
+     *
      * @return array
      */
     protected function getFeesTableParams()
@@ -63,11 +77,23 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
         ];
     }
 
+    /**
+     * fee type D to data get Method
+     *
+     * @return array
+     */
     protected function getFeeTypeDtoData()
     {
         return ['application' => $this->params()->fromRoute('application')];
     }
 
+    /**
+     * Create Fee D to Data get method
+     *
+     * @param string $formData formdata
+     *
+     * @return array
+     */
     protected function getCreateFeeDtoData($formData)
     {
         return [
