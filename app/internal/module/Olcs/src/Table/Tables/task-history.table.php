@@ -1,7 +1,9 @@
 <?php
 
 return [
-    'variables' => [],
+    'variables' => [
+        'title' => 'History'
+    ],
     'settings' => [],
     'attributes' => [],
     'columns' => [
@@ -21,7 +23,7 @@ return [
         ],
         [
             'title' => 'By',
-            'formatter' => 'eventHistoryUser',
+            'formatter' => 'EventHistoryUser',
         ],
     ]
 ];
