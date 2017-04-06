@@ -65,6 +65,11 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
 
+    /**
+     * get method for left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -133,9 +138,10 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     /**
      * Alter Form for add
      *
-     * @param \Common\Controller\Form $form
-     * @param array $initialData
-     * @return \Common\Controller\Form
+     * @param \Common\Controller\Form $form        form
+     * @param array                   $initialData initialData
+     *
+     * @return ViewModel
      */
     public function alterFormForAdd($form, $initialData)
     {
@@ -145,8 +151,9 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     /**
      * Alter Form for edit
      *
-     * @param \Common\Controller\Form $form
-     * @param array $initialData
+     * @param \Common\Controller\Form $form        form
+     * @param array                   $initialData initialData
+     *
      * @return \Common\Controller\Form
      */
     public function alterFormForEdit($form, $initialData)
@@ -157,8 +164,9 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     /**
      * Alter Form based on Case details
      *
-     * @param \Common\Controller\Form $form
-     * @param array $initialData
+     * @param \Common\Controller\Form $form        form
+     * @param array                   $initialData initialData
+     *
      * @return \Common\Controller\Form
      */
     private function alterFormForCase($form, $initialData)
@@ -185,6 +193,7 @@ class ConditionUndertakingController extends AbstractInternalController implemen
 
     /**
      * Returns the case data with attached licence, OC and address info
+     *
      * @return mixed
      * @throws DataServiceException
      */
@@ -208,7 +217,8 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     /**
      * Extracts the addresses for each operating centre and formats them using the address view helper (not ideal)
      *
-     * @param $caseData
+     * @param array $caseData caseData
+     *
      * @return array
      */
     private function getOperatingCentreListOptions($caseData)

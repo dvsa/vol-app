@@ -34,7 +34,11 @@ class AppealController extends AbstractInternalController implements CaseControl
     protected $navigationId = 'case_hearings_appeals_stays';
 
     protected $routeIdentifier = 'appeal';
-
+    /**
+     * get method for LeftView
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();

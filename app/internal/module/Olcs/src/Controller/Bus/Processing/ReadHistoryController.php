@@ -31,6 +31,11 @@ class ReadHistoryController extends AbstractInternalController implements BusReg
     protected $tableName = 'read-history';
     protected $listDto = ReadBusReg::class;
 
+    /**
+     * get Left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();

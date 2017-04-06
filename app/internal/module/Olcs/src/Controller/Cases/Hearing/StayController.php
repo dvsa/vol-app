@@ -35,6 +35,11 @@ class StayController extends AbstractInternalController implements CaseControlle
 
     protected $routeIdentifier = 'stay';
 
+    /**
+     * get method for Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();

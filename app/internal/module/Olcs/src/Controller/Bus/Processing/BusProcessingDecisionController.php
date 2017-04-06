@@ -24,6 +24,7 @@ use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Common\RefData;
 use Zend\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use \Zend\Http\Response;
 
 /**
  * Bus Processing Decision Controller
@@ -74,6 +75,11 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
         ]
     ];
 
+    /**
+     * get method Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -82,26 +88,50 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
         return $view;
     }
 
+    /**
+     * index action
+     *
+     * @return Response
+     */
     public function indexAction()
     {
         return $this->redirectTo([]);
     }
 
+    /**
+     * adding an entity
+     *
+     * @return Response
+     */
     public function addAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * Edit an entity
+     *
+     * @return Response
+     */
     public function editAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * delete an entity
+     *
+     * @return Response
+     */
     public function deleteAction()
     {
         return $this->notFoundAction();
     }
-
+    /**
+     * cancel action
+     *
+     * @return Response
+     **/
     public function cancelAction()
     {
         return $this->add(
@@ -115,6 +145,11 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
         );
     }
 
+    /**
+     * grantAction
+     *
+     * @return Response
+     */
     public function grantAction()
     {
         $query = ItemDto::create($this->getDefaultData());
@@ -145,6 +180,11 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
         return $this->redirectTo([]);
     }
 
+    /**
+     * refuse action
+     *
+     * @return ViewModel
+     */
     public function refuseAction()
     {
         return $this->add(
@@ -158,6 +198,11 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
         );
     }
 
+    /**
+     * refuseByShortNoticeAction
+     *
+     * @return ViewModel
+     */
     public function refuseByShortNoticeAction()
     {
         return $this->add(
@@ -171,16 +216,31 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
         );
     }
 
+    /**
+     * republish action
+     *
+     * @return Response
+     */
     public function republishAction()
     {
         return $this->processCommand(new GenericItem($this->itemParams), PublishDto::class);
     }
 
+    /**
+     * reset action
+     *
+     * @return Response
+     */
     public function resetAction()
     {
         return $this->processCommand(new GenericItem($this->itemParams), ResetDto::class);
     }
 
+    /**
+     * withdraw action
+     *
+     * @return ViewModel
+     */
     public function withdrawAction()
     {
         return $this->add(
@@ -194,11 +254,21 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
         );
     }
 
+    /**
+     * getDefault Data
+     *
+     * @return array
+     */
     private function getDefaultData()
     {
         return ['id' => $this->params()->fromRoute('busRegId')];
     }
 
+    /**
+     * process grant variation
+     *
+     * @return ViewModel
+     */
     protected function processGrantVariation()
     {
         return $this->add(
