@@ -5,7 +5,6 @@
  */
 namespace Olcs\Controller\Bus\Processing;
 
-
 use Dvsa\Olcs\Transfer\Command\Bus\AdminCancelBusReg as AdminCancelDto;
 use Dvsa\Olcs\Transfer\Command\Bus\GrantBusReg as GrantDto;
 use Dvsa\Olcs\Transfer\Command\Bus\RefuseBusReg as RefuseDto;
@@ -75,6 +74,7 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
             'action' => 'details'
         ]
     ];
+
     /**
      * get method Left View
      *
