@@ -4,6 +4,8 @@ namespace Olcs\Controller\Bus\Registration;
 
 use Common\Service\Helper\FlashMessengerHelperService;
 use Dvsa\Olcs\Transfer\Command as TransferCmd;
+use Olcs\View\Model\ViewModel;
+use Zend\Console\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Zend\Mvc\MvcEvent;
@@ -22,6 +24,13 @@ class BusRegistrationController extends AbstractActionController implements BusR
     /** @var  int */
     private $busRegId;
 
+    /**
+     * On Dispatch
+     *
+     * @param MvcEvent $e MvcEvent
+     *
+     * @return void
+     */
     public function onDispatch(MvcEvent $e)
     {
         $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
@@ -31,13 +40,20 @@ class BusRegistrationController extends AbstractActionController implements BusR
         parent::onDispatch($e);
     }
 
+    /**
+     * index action
+     *
+     * @return \Zend\View\Model\ConsoleModel|ViewModel
+     */
     public function indexAction()
     {
         return $this->notFoundAction();
     }
 
     /**
-     * Create Bus Reg
+     *Create Bus Reg
+     *
+     * @return ViewModel
      */
     public function addAction()
     {
@@ -48,6 +64,8 @@ class BusRegistrationController extends AbstractActionController implements BusR
 
     /**
      * Edit Bus Reg
+     *
+     * @return Response|ViewModel
      */
     public function editAction()
     {
@@ -56,6 +74,8 @@ class BusRegistrationController extends AbstractActionController implements BusR
 
     /**
      * Create Bus Reg Variation
+     *
+     * @return Response
      */
     public function createVariationAction()
     {
@@ -66,6 +86,8 @@ class BusRegistrationController extends AbstractActionController implements BusR
 
     /**
      * Create Bus Reg Cancellation
+     *
+     * @return Response
      */
     public function createCancellationAction()
     {
@@ -74,6 +96,13 @@ class BusRegistrationController extends AbstractActionController implements BusR
         );
     }
 
+    /**
+     * redirect to details
+     *
+     * @param string $id $id
+     *
+     * @return \Zend\Http\Response
+     */
     private function redirectToDetails($id)
     {
         return $this->redirect()->toRouteAjax('licence/bus-details/service', ['busRegId' => $id], [], true);
@@ -82,7 +111,7 @@ class BusRegistrationController extends AbstractActionController implements BusR
     /**
      * Process command
      *
-     * @param TransferCmd\CommandInterface $command
+     * @param TransferCmd\CommandInterface $command commmand
      *
      * @return \Zend\Http\Response
      */
@@ -99,6 +128,11 @@ class BusRegistrationController extends AbstractActionController implements BusR
         return $this->redirectToDetails($response->getResult()['id']['bus']);
     }
 
+    /**
+     * print letter action
+     *
+     * @return \Zend\Http\Response
+     */
     public function printLetterAction()
     {
         $response = $this->handleCommand(

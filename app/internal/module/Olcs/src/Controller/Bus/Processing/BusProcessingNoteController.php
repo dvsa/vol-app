@@ -113,6 +113,11 @@ class BusProcessingNoteController extends AbstractInternalController implements
     protected $addContentTitle = 'Add note';
     protected $editContentTitle = 'Edit note';
 
+    /**
+     * get left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();

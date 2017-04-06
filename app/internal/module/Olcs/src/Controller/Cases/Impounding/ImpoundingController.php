@@ -50,6 +50,11 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
 
+    /**
+     * get method for View Model
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -131,8 +136,9 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
     /**
      * Alter form for TM cases, set pubType and trafficAreas to be visible for publishing
      *
-     * @param \Common\Controller\Form $form
-     * @param $initialData
+     * @param \Common\Controller\Form $form        form
+     * @param array                   $initialData initialData
+     *
      * @return \Common\Controller\Form
      */
     public function alterFormForEdit($form, $initialData)
@@ -157,7 +163,9 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
 
     /**
      * Route for document generate action redirects
+     *
      * @see Olcs\Controller\Traits\GenerateActionTrait
+     *
      * @return string
      */
     protected function getDocumentGenerateRoute()
@@ -167,7 +175,9 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
 
     /**
      * Route params for document generate action redirects
+     *
      * @see Olcs\Controller\Traits\GenerateActionTrait
+     *
      * @return array
      */
     protected function getDocumentGenerateRouteParams()

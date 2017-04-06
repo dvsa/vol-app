@@ -40,6 +40,11 @@ class AnnualTestHistoryController extends AbstractInternalController implements
     protected $formClass = AnnualTestHistoryForm::class;
     protected $editContentTitle = 'Annual test history';
 
+    /**
+     * get Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();

@@ -43,6 +43,11 @@ class BusRequestMapController extends AbstractInternalController implements
         'busRegId' => 'route'
     ];
 
+    /**
+     * function returns null
+     *
+     * @return null
+     */
     public function getLeftView()
     {
         return null;
