@@ -11,6 +11,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Common\Exception\ResourceNotFoundException;
+use Zend\View\Model\ConsoleModel;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -25,6 +26,11 @@ class DecisionsController extends AbstractInternalController implements CaseCont
      */
     protected $navigationId = 'case_processing_decisions';
 
+    /**
+     * get method LeftView
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -42,6 +48,11 @@ class DecisionsController extends AbstractInternalController implements CaseCont
     // 'id' => 'conviction', to => from
     protected $itemParams = ['case'];
 
+    /**
+     * index Action
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
         $case = $this->getCase($this->params()->fromRoute('case'));
@@ -59,21 +70,41 @@ class DecisionsController extends AbstractInternalController implements CaseCont
         );
     }
 
+    /**
+     * Add Action
+     *
+     * @return Zend  \Zend\Http\Response
+     */
     public function addAction()
     {
         return $this->redirectToDetails();
     }
 
+    /**
+     * edit action
+     *
+     * @return Zend  \Zend\Http\Response
+     */
     public function editAction()
     {
         return $this->redirectToDetails();
     }
 
+    /**
+     * delete Action
+     *
+     * @return Zend  \Zend\Http\Response
+     */
     public function deleteAction()
     {
         return $this->redirectToDetails();
     }
 
+    /**
+     *  Redirect
+     *
+     * @return array|null
+     */
     public function redirectToDetails()
     {
         return $this->redirect()->toRouteAjax(
@@ -86,6 +117,8 @@ class DecisionsController extends AbstractInternalController implements CaseCont
 
     /**
      * Not found is a valid response for this particular controller
+     *
+     * @return ViewModel|ConsoleModel
      */
     public function notFoundAction()
     {
@@ -95,7 +128,8 @@ class DecisionsController extends AbstractInternalController implements CaseCont
     /**
      * Get the Case data
      *
-     * @param id $id
+     * @param int $id id
+     *
      * @return array
      * @throws ResourceNotFoundException
      */

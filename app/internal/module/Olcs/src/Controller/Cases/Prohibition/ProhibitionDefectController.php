@@ -49,6 +49,11 @@ class ProhibitionDefectController extends AbstractInternalController implements
     protected $listDto = ListDto::class;
     protected $listVars = ['prohibition'];
 
+    /**
+     * get method left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -112,6 +117,11 @@ class ProhibitionDefectController extends AbstractInternalController implements
         'editAction' => ['table-actions']
     ];
 
+    /**
+     * index Action
+     *
+     * @return array
+     */
     public function indexAction()
     {
         $prohibition = $this->params()->fromRoute('prohibition');

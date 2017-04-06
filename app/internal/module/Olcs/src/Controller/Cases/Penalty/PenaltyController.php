@@ -62,6 +62,8 @@ class PenaltyController extends AbstractInternalController implements CaseContro
     );
 
     /**
+     * Get method LeftView
+     *
      * @return ViewModel
      */
     public function getLeftView()
@@ -92,9 +94,11 @@ class PenaltyController extends AbstractInternalController implements CaseContro
     /**
      * There is more than one table on the page so we can't use the usual method in abstractInternalController
      *
-     * @param string $tableName
-     * @param string $dataKey
+     * @param string $tableName tableName
+     * @param string $dataKey   DataKey
      * @param array  $data      Penalty data
+     *
+     * @return void
      */
     private function getErruTable($tableName, $dataKey, $data)
     {

@@ -49,6 +49,11 @@ class ProhibitionController extends AbstractInternalController implements CaseCo
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
 
+     /**
+     * get method left view
+     *
+     * @return ViewModel
+     **/
     public function getLeftView()
     {
         $view = new ViewModel();

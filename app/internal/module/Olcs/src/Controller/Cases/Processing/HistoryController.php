@@ -24,7 +24,7 @@ class HistoryController extends AbstractHistoryController implements CaseControl
      * Alter table
      *
      * @param \Common\Service\Table\TableBuilder $table table
-     * @param array                              $data data
+     * @param array                              $data  data
      *
      * @return \Common\Service\Table\TableBuilder
      */

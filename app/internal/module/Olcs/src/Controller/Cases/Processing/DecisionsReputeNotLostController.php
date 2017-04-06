@@ -42,6 +42,11 @@ class DecisionsReputeNotLostController extends AbstractInternalController implem
         ],
     ];
 
+    /**
+     * get method Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -95,16 +100,31 @@ class DecisionsReputeNotLostController extends AbstractInternalController implem
      */
     protected $deleteCommand = DeleteDto::class;
 
+    /**
+     * index action
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
         return $this->redirectToDetails();
     }
 
+    /**
+     * details Action
+     *
+     * @return \Zend\Http\Response
+     */
     public function detailsAction()
     {
         return $this->redirectToDetails();
     }
 
+    /**
+     * redirct to details
+     *
+     * @return \Zend\Http\Response
+     */
     public function redirectToDetails()
     {
         return $this->redirect()->toRouteAjax(

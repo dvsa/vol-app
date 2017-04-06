@@ -42,6 +42,11 @@ class DecisionsDeclareUnfitController extends AbstractInternalController impleme
         ],
     ];
 
+    /**
+     * Get method LeftView
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -95,16 +100,31 @@ class DecisionsDeclareUnfitController extends AbstractInternalController impleme
      */
     protected $deleteCommand = DeleteDto::class;
 
+    /**
+     * indexAction
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
         return $this->redirectToDetails();
     }
 
+    /**
+     * details Action
+     *
+     * @return null|array
+     */
     public function detailsAction()
     {
         return $this->redirectToDetails();
     }
 
+    /**
+     *redirect to details
+     *
+     * @return \Zend\Http\Response
+     */
     public function redirectToDetails()
     {
         return $this->redirect()->toRouteAjax(
