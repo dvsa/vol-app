@@ -48,6 +48,11 @@ class NoteController extends AbstractInternalController implements CaseControlle
     protected $listVars = ['case'];
     protected $filterForm = FilterForm::class;
 
+    /**
+     * get method Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();

@@ -81,6 +81,11 @@ class OverviewController extends AbstractInternalController implements
         ]
     ];
 
+    /**
+     * Get Method for Navigation
+     *
+     * @return null|string
+     */
     public function getNavigationId()
     {
         $action = $this->params()->fromRoute('action');
@@ -108,6 +113,11 @@ class OverviewController extends AbstractInternalController implements
         }
     }
 
+    /**
+     * get method for Right View
+     *
+     * @return null|ViewModel
+     */
     public function getRightView()
     {
         $action = $this->params()->fromRoute('action');
@@ -142,6 +152,11 @@ class OverviewController extends AbstractInternalController implements
         }
     }
 
+    /**
+     * get method for Left View
+     *
+     * @return null|ViewModel
+     */
     public function getLeftView()
     {
         $action = $this->params()->fromRoute('action');
@@ -176,7 +191,8 @@ class OverviewController extends AbstractInternalController implements
     /**
      * If we're deleting then we need to set redirect config dynamically
      *
-     * @param array $restResponse
+     * @param array $restResponse rest response
+     *
      * @return string
      */
     public function redirectConfig(array $restResponse)
@@ -214,6 +230,11 @@ class OverviewController extends AbstractInternalController implements
      */
     protected $licenceId;
 
+    /**
+     * redirectAction
+     *
+     * @return \Zend\Http\Response
+     */
     public function redirectAction()
     {
         return $this->redirect()->toRouteAjax('case', ['action' => 'details'], [], true);
@@ -222,8 +243,9 @@ class OverviewController extends AbstractInternalController implements
     /**
      * Alter Form to remove case type options depending on where the case was added from.
      *
-     * @param \Common\Controller\Form $form
-     * @param array $initialData
+     * @param \Common\Controller\Form $form        form
+     * @param array                   $initialData initialData
+     *
      * @return \Common\Controller\Form
      */
     public function alterFormForAdd($form, $initialData)
@@ -239,8 +261,9 @@ class OverviewController extends AbstractInternalController implements
     /**
      * Alter Form to remove case type options depending on where the case was added from.
      *
-     * @param \Common\Controller\Form $form
-     * @param array $initialData
+     * @param \Common\Controller\Form $form        form
+     * @param array                   $initialData initialData
+     *
      * @return \Common\Controller\Form
      */
     public function alterFormForEdit($form, $initialData)
@@ -275,10 +298,11 @@ class OverviewController extends AbstractInternalController implements
     /**
      * Works out the case types
      *
-     * @param \Common\Controller\Form $form
-     * @param $application
-     * @param $transportManager
-     * @param $licence
+     * @param \Common\Controller\Form $form             form
+     * @param int                     $application      application
+     * @param int                     $transportManager transportManager
+     * @param int                     $licence          licence
+     *
      * @return \Common\Controller\Form
      */
     private function getFormCaseTypes($form, $application, $transportManager, $licence)

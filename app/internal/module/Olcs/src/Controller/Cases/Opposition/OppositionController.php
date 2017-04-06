@@ -15,6 +15,8 @@ use Olcs\Data\Mapper\Opposition as Mapper;
 use Olcs\Form\Model\Form\Opposition as Form;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
+use Zend\View\Model\ConsoleModel;
+use Zend\View\Model\ViewModel;
 
 /**
  * Case Opposition Controller
@@ -94,6 +96,11 @@ class OppositionController extends AbstractInternalController implements CaseCon
         'editAction' => ['forms/opposition'],
     );
 
+    /**
+     * index Action
+     *
+     * @return array|\Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $this->setupOppositionsTable();
@@ -109,6 +116,11 @@ class OppositionController extends AbstractInternalController implements CaseCon
         );
     }
 
+    /**
+     * Setup Oppositions table
+     *
+     * @return void
+     */
     private function setupOppositionsTable()
     {
         $this->index(
@@ -120,6 +132,11 @@ class OppositionController extends AbstractInternalController implements CaseCon
         );
     }
 
+    /**
+     * Setup Environment Complaints table
+     *
+     *@return void
+     */
     private function setupEnvironmentComplaintsTable()
     {
         $this->index(
@@ -131,6 +148,11 @@ class OppositionController extends AbstractInternalController implements CaseCon
         );
     }
 
+    /**
+     * details action
+     *
+     * @return ViewModel|ConsoleModel
+     */
     public function detailsAction()
     {
         return $this->notFoundAction();
@@ -138,6 +160,8 @@ class OppositionController extends AbstractInternalController implements CaseCon
 
     /**
      * Generate action.
+     *
+     * @return ViewModel|ConsoleModel
      */
     public function generateAction()
     {
@@ -154,8 +178,9 @@ class OppositionController extends AbstractInternalController implements CaseCon
     /**
      * Alter Form for add
      *
-     * @param \Common\Form\Form $form
-     * @param array $initialData
+     * @param \Common\Form\Form $form        form
+     * @param array             $initialData initialData
+     *
      * @return \Common\Form\Form
      */
     public function alterFormForAdd($form, $initialData)
@@ -166,8 +191,9 @@ class OppositionController extends AbstractInternalController implements CaseCon
     /**
      * Alter Form for edit
      *
-     * @param \Common\Form\Form $form
-     * @param array $initialData
+     * @param \Common\Form\Form $form        form
+     * @param array             $initialData initialData
+     *
      * @return \Common\Form\Form
      */
     public function alterFormForEdit($form, $initialData)
@@ -178,8 +204,9 @@ class OppositionController extends AbstractInternalController implements CaseCon
     /**
      * Alter Form based on Case details
      *
-     * @param \Common\Form\Form $form
-     * @param array $initialData
+     * @param \Common\Form\Form $form        form
+     * @param array             $initialData initialData
+     *
      * @return \Common\Form\Form
      */
     private function alterFormForCase($form, $initialData)
@@ -233,6 +260,11 @@ class OppositionController extends AbstractInternalController implements CaseCon
         return $form;
     }
 
+    /**
+     * Get method Case with Opposition Dates
+     *
+     * @return array
+     */
     protected function getCaseWithOppositionDates()
     {
         // get the case with opposition dates

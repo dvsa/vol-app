@@ -45,6 +45,11 @@ class NonPublicInquiryController extends AbstractInternalController implements C
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
 
+    /**
+     * get method Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();

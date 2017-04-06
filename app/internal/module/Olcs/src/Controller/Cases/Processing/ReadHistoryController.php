@@ -33,6 +33,11 @@ class ReadHistoryController extends AbstractInternalController implements CaseCo
     protected $tableName = 'read-history';
     protected $listDto = ReadCase::class;
 
+    /**
+     * get method for Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();

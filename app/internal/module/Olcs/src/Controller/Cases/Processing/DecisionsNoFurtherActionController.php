@@ -42,6 +42,11 @@ class DecisionsNoFurtherActionController extends AbstractInternalController impl
         ],
     ];
 
+    /**
+     * get method left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -95,16 +100,31 @@ class DecisionsNoFurtherActionController extends AbstractInternalController impl
      */
     protected $deleteCommand = DeleteDto::class;
 
+    /**
+     * index Action
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
         return $this->redirectToDetails();
     }
 
+    /**
+     * details Action
+     *
+     * @return \Zend\Http\Response
+     */
     public function detailsAction()
     {
         return $this->redirectToDetails();
     }
 
+    /**
+     * redirect to Details
+     *
+     * @return \Zend\Http\Response
+     */
     public function redirectToDetails()
     {
         return $this->redirect()->toRouteAjax(
