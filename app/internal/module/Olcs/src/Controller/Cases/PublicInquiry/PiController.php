@@ -162,7 +162,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
 
         //if we've got this far then we're loading the Pi details page
         $this->forward()->dispatch(
-            'PublicInquiry\HearingController',
+            \Olcs\Controller\Cases\PublicInquiry\HearingController::class,
             array(
                 'action' => 'index',
                 'case' => $pi['case']['id'],
@@ -231,15 +231,19 @@ class PiController extends AbstractInternalController implements CaseControllerI
     /**
      * Alter form for edit set SLAs
      *
-     * @param \Common\Controller\Form $form
-     * @return \Common\Controller\Form
+     * @param \Zend\Form\FormInterface $form Form
+     *
+     * @return \Zend\Form\FormInterface
      */
     public function alterFormForSla($form)
     {
         $data = $this->getPi();
 
         // set SLAs
+        /** @var \Zend\Form\Fieldset $fields */
         $fields = $form->get('fields');
+
+        /** @var \Zend\Form\ElementInterface $element */
         foreach ($fields as $element) {
             if (in_array($element->getName(), $this->slaFields)) {
                 $form = $this->setSlaTargetHint($form, $element, $data);
@@ -252,10 +256,11 @@ class PiController extends AbstractInternalController implements CaseControllerI
     /**
      * Sets the target date hint on an element from data provided by the query handler
      *
-     * @param $form
-     * @param $element
-     * @param $data
-     * @return mixed
+     * @param \Zend\Form\FormInterface    $form    Form
+     * @param \Zend\Form\ElementInterface $element Element
+     * @param array                       $data    Data
+     *
+     * @return \Zend\Form\FormInterface
      */
     private function setSlaTargetHint($form, $element, $data)
     {
