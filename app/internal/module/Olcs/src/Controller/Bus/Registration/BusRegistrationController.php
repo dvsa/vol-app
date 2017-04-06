@@ -5,7 +5,7 @@ namespace Olcs\Controller\Bus\Registration;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Olcs\View\Model\ViewModel;
-use Zend\Console\Response;
+use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Zend\Mvc\MvcEvent;

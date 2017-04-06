@@ -8,7 +8,6 @@
 
 namespace Olcs\Controller\Cases\Complaint;
 
-
 use Dvsa\Olcs\Transfer\Command\EnvironmentalComplaint\CreateEnvironmentalComplaint as CreateDto;
 use Dvsa\Olcs\Transfer\Command\EnvironmentalComplaint\UpdateEnvironmentalComplaint as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\EnvironmentalComplaint\DeleteEnvironmentalComplaint as DeleteDto;

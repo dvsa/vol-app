@@ -75,7 +75,6 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
             'action' => 'details'
         ]
     ];
-
     /**
      * get method Left View
      *
