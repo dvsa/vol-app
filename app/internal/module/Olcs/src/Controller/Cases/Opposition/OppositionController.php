@@ -99,7 +99,7 @@ class OppositionController extends AbstractInternalController implements CaseCon
     /**
      * index Action
      *
-     * @return array|\Zend\View\Model\ViewModel
+     * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
     {

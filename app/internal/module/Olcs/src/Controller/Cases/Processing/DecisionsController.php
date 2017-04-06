@@ -11,6 +11,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Common\Exception\ResourceNotFoundException;
+use Zend\View\Model\ConsoleModel;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -117,7 +118,7 @@ class DecisionsController extends AbstractInternalController implements CaseCont
     /**
      * Not found is a valid response for this particular controller
      *
-     * @return ViewModel
+     * @return ViewModel|ConsoleModel
      */
     public function notFoundAction()
     {
@@ -127,7 +128,7 @@ class DecisionsController extends AbstractInternalController implements CaseCont
     /**
      * Get the Case data
      *
-     * @param id $id id
+     * @param int $id id
      *
      * @return array
      * @throws ResourceNotFoundException
