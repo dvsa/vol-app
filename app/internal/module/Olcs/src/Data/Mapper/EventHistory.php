@@ -40,7 +40,7 @@ class EventHistory
                 }
 
                 foreach (['newValue', 'oldValue'] as $key) {
-                    if ($item[$key] !== null) {
+                    if (!empty($item[$key])) {
                         $item[$key] = date(\DATETIME_FORMAT, strtotime($item[$key] . ' UTC'));
                     }
                 }

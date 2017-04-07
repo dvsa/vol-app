@@ -34,11 +34,11 @@ class EventHistoryTest extends MockeryTestCase
                 ],
                 [
                     'newValue' => '2017-06-05 04:03:00',
-                    'oldValue' => '2016-05-04 03:02:00',
+                    'oldValue' => '',
                     'name' => 'closed_date',
                 ],
                 [
-                    'newValue' => '2017-06-05 04:03:00',
+                    'newValue' => null,
                     'oldValue' => '2016-05-04 03:02:00',
                     'name' => 'deleted_date',
                 ],
@@ -65,11 +65,11 @@ class EventHistoryTest extends MockeryTestCase
                 ],
                 [
                     'newValue' => '05/06/2017 05:03',
-                    'oldValue' => '04/05/2016 04:02',
+                    'oldValue' => '',
                     'name' => 'closed_date',
                 ],
                 [
-                    'newValue' => '05/06/2017 05:03',
+                    'newValue' => null,
                     'oldValue' => '04/05/2016 04:02',
                     'name' => 'deleted_date',
                 ],
