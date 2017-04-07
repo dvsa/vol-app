@@ -175,7 +175,8 @@ class SubmissionController extends AbstractInternalController implements Submiss
 
     /**
      * Add Action
-     * @return mixed|\Zend\View\Model\ViewModel
+     *
+     * @return \Zend\View\Model\ViewModel
      */
     public function addAction()
     {
@@ -224,6 +225,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
 
     /**
      * Edit action
+     *
      * @return array|\Zend\View\Model\ViewModel
      */
     public function editAction()
@@ -344,6 +346,9 @@ class SubmissionController extends AbstractInternalController implements Submiss
     /**
      * sets up the view details
      *
+     * @param string $params    params
+     * @param bool   $printView printview
+     *
      * @return ViewModel
      */
     private function generateSubmissionView($params, $printView = false)
@@ -423,8 +428,9 @@ class SubmissionController extends AbstractInternalController implements Submiss
     }
 
     /**
-     * Refreshes a single section within the dataSnapshot field of a submission with the latest data
+     * Refreshes a single section within the dataSnapshot field of a submission with the latest data*
      * from the rest of the database. Redirects back to details page.
+     *
      * @return \Common\Service\Cqrs\Response
      */
     public function refreshTable()
@@ -460,6 +466,15 @@ class SubmissionController extends AbstractInternalController implements Submiss
         return $response;
     }
 
+    /**
+     * generate Selected Sections Array
+     *
+     * @param string $submission         submission
+     * @param string $allSectionsRefData all section ref data
+     * @param string $submissionConfig   summissionConfig
+     *
+     * @return array
+     */
     private function generateSelectedSectionsArray($submission, $allSectionsRefData, $submissionConfig)
     {
         $submissionService = $this->getServiceLocator()
@@ -478,8 +493,8 @@ class SubmissionController extends AbstractInternalController implements Submiss
     }
 
     /**
-     * Calls Submission Data service. Makes single rest call to ref data table to extract all sections
-     * @to-do remove or cache this back end call?
+     * Calls Submission Data service. Makes single rest call to ref data table to extract all sections,
+     * to-do remove or cache this back end call?
      *
      * @return array
      */
@@ -492,6 +507,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
 
     /**
      * Returns config array for all sections
+     *
      * @return mixed
      */
     private function getSubmissionConfig()
@@ -503,8 +519,9 @@ class SubmissionController extends AbstractInternalController implements Submiss
     /**
      * Alter Form based on Submission details
      *
-     * @param \Common\Controller\Form $form
-     * @param array $initialData
+     * @param \Common\Controller\Form $form        form
+     * @param array                   $initialData initialData
+     *
      * @return \Common\Controller\Form
      */
     private function alterFormForSubmission($form, $initialData)
@@ -526,7 +543,8 @@ class SubmissionController extends AbstractInternalController implements Submiss
     /**
      * Method to generate and add the section forms for each section to the selectedSectionArray
      *
-     * @param array $selectedSectionsArray
+     * @param array $selectedSectionsArray selectedSectionsArray
+     *
      * @return array $selectedSectionsArray
      */
     private function generateSectionForms($selectedSectionsArray)
@@ -567,7 +585,9 @@ class SubmissionController extends AbstractInternalController implements Submiss
 
     /**
      * Generates and returns the form object for a given section, changing id and name to ensure no duplicates
-     * @param $sectionId
+     *
+     * @param int $sectionId sectionId
+     *
      * @return mixed
      */
     private function getSectionForm($sectionId)
@@ -587,7 +607,8 @@ class SubmissionController extends AbstractInternalController implements Submiss
     /**
      * Callback to handle the file upload
      *
-     * @param array $file
+     * @param array $file file
+     *
      * @return int $id of file
      */
     public function processSectionFileUpload($file)
@@ -639,6 +660,8 @@ class SubmissionController extends AbstractInternalController implements Submiss
 
     /**
      * Queries backend (not cached) and refresh document list for the submission
+     *
+     * @return null|array
      */
     private function extractSubmissionData()
     {
@@ -674,7 +697,8 @@ class SubmissionController extends AbstractInternalController implements Submiss
     /**
      * Calls genericUpload::deleteFile() and refreshes the submission data
      *
-     * @param $documentId
+     * @param int $documentId documentid
+     *
      * @return bool
      */
     public function deleteSubmissionAttachment($documentId)
@@ -686,7 +710,11 @@ class SubmissionController extends AbstractInternalController implements Submiss
     }
 
     /**
-     * @param array $submissionData
+     * set Submission Data
+     *
+     * @param array $submissionData submission data
+     *
+     * @return void
      */
     public function setSubmissionData($submissionData)
     {
@@ -694,6 +722,8 @@ class SubmissionController extends AbstractInternalController implements Submiss
     }
 
     /**
+     * get Submission Data
+     *
      * @return array
      */
     public function getSubmissionData()

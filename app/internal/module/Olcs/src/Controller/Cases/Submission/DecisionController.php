@@ -91,25 +91,43 @@ class DecisionController extends AbstractInternalController implements CaseContr
         'isDecision' => 'Y',
     ];
 
+    /**
+     * index Action
+     *
+     * @return array
+     */
     public function indexAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * details action
+     *
+     * @return array
+     */
     public function detailsAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * delete Action
+     *
+     * @return array
+     */
     public function deleteAction()
     {
         return $this->notFoundAction();
     }
 
     /**
-     * @param ZendForm $form
-     * @param $formData
-     * @return ZendForm
+     * Alter form for Add
+     *
+     * @param ZendForm $form     form
+     * @param int      $formData formData
+     *
+     * @return ZendForm|array
      */
     protected function alterFormForAdd(ZendForm $form, $formData)
     {
@@ -117,9 +135,12 @@ class DecisionController extends AbstractInternalController implements CaseContr
     }
 
     /**
-     * @param ZendForm $form
-     * @param $formData
-     * @return ZendForm
+     *alter Form for Edit
+     *
+     * @param ZendForm $form     form
+     * @param int      $formData formData
+     *
+     * @return ZendForm|array
      */
     protected function alterFormForEdit(ZendForm $form, $formData)
     {
@@ -129,8 +150,9 @@ class DecisionController extends AbstractInternalController implements CaseContr
     /**
      * Change the id of the text area to be unique (avoid DOM clashes with multiple TinyMCE instances)
      *
-     * @param ZendForm $form
-     * @param $id
+     * @param ZendForm $form form
+     * @param int      $id   id
+     *
      * @return ZendForm
      */
     private function alterForm(ZendForm $form, $id)

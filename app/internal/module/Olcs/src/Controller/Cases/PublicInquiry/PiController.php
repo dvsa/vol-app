@@ -94,6 +94,11 @@ class PiController extends AbstractInternalController implements CaseControllerI
         ]
     ];
 
+    /**
+     * get method View Model
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -277,9 +282,10 @@ class PiController extends AbstractInternalController implements CaseControllerI
     /**
      * Parameters for redirect to the hearing controller
      *
-     * @param string $action
-     * @param int|null $id
-     * @param int $pi
+     * @param string   $action action
+     * @param int|null $id     id
+     * @param int      $pi     pi
+     *
      * @return array
      */
     private function getHearingRedirectParams($action, $id, $pi)
@@ -287,6 +293,13 @@ class PiController extends AbstractInternalController implements CaseControllerI
         return ['action' => $action, 'id' => $id, 'pi' => $pi];
     }
 
+    /**
+     * check Valid Hearing ID
+     *
+     * @param int $id id
+     *
+     * @return bool
+     */
     private function checkValidHearingId($id)
     {
         if (!(int)$id) {
