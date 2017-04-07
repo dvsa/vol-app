@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Event History
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Data\Mapper;
 
 /**
@@ -14,6 +9,13 @@ namespace Olcs\Data\Mapper;
  */
 class EventHistory
 {
+    /**
+     * Map From Result
+     *
+     * @param array $data Api Data
+     *
+     * @return array
+     */
     public static function mapFromResult(array $data)
     {
         $result['details'] = $data['eventHistoryType']['description'];
@@ -32,14 +34,14 @@ class EventHistory
         $dateFields = ['open_date', 'closed_date', 'deleted_date'];
         array_walk(
             $details,
-            function(&$item) use ($dateFields) {
+            function (&$item) use ($dateFields) {
                 if (!in_array($item['name'], $dateFields)) {
                     return;
                 }
 
                 foreach (['newValue', 'oldValue'] as $key) {
                     if ($item[$key] !== null) {
-                        $item[$key] = date(\DATETIME_FORMAT, strtotime($item['newValue'] . ' UTC'));
+                        $item[$key] = date(\DATETIME_FORMAT, strtotime($item[$key] . ' UTC'));
                     }
                 }
             }

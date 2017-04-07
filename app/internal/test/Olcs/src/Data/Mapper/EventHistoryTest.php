@@ -1,21 +1,12 @@
 <?php
 
-/**
- * Event history mapper test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace OlcsTest\Data\Mapper;
 
-use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\Data\Mapper\EventHistory as Sut;
-use Zend\Form\FormInterface;
+use Olcs\Data\Mapper\EventHistory;
 
 /**
- * Event history mapper test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ * @covert \Olcs\Data\Mapper\EventHistory
  */
 class EventHistoryTest extends MockeryTestCase
 {
@@ -28,24 +19,62 @@ class EventHistoryTest extends MockeryTestCase
                 'contactDetails' => [
                     'person' => [
                         'forename' => 'cake',
-                        'familyName' => 'baz'
-                    ]
-                ]
+                        'familyName' => 'baz',
+                    ],
+                ],
             ],
-            'eventHistoryDetails' => 'qux',
+            'eventHistoryDetails' => [
+                [
+                    'newValue' => '2017-06-05 04:03:00',
+                    'oldValue' => '2016-05-04 03:02:00',
+                    'name' => 'open_date',
+                ],
+                [
+                    'name' => 'unit_NOT_DATE',
+                ],
+                [
+                    'newValue' => '2017-06-05 04:03:00',
+                    'oldValue' => '2016-05-04 03:02:00',
+                    'name' => 'closed_date',
+                ],
+                [
+                    'newValue' => '2017-06-05 04:03:00',
+                    'oldValue' => '2016-05-04 03:02:00',
+                    'name' => 'deleted_date',
+                ],
+            ],
             'eventHistoryType' => [
-                'description' => 'foo'
-            ]
+                'description' => 'foo',
+            ],
         ];
         $expected = [
             'readOnlyData' => [
                 'details' => 'foo',
                 'info' => 'bar',
-                'date' => '13:37, 19/03/15',
-                'by' => 'cake baz'
+                'date' => '19/03/2015 13:37',
+                'by' => 'cake baz',
             ],
-            'eventHistoryDetails' => 'qux'
+            'eventHistoryDetails' => [
+                [
+                    'newValue' => '05/06/2017 05:03',
+                    'oldValue' => '04/05/2016 04:02',
+                    'name' => 'open_date',
+                ],
+                [
+                    'name' => 'unit_NOT_DATE',
+                ],
+                [
+                    'newValue' => '05/06/2017 05:03',
+                    'oldValue' => '04/05/2016 04:02',
+                    'name' => 'closed_date',
+                ],
+                [
+                    'newValue' => '05/06/2017 05:03',
+                    'oldValue' => '04/05/2016 04:02',
+                    'name' => 'deleted_date',
+                ],
+            ],
         ];
-        $this->assertEquals($expected, Sut::mapFromResult($data));
+        $this->assertEquals($expected, EventHistory::mapFromResult($data));
     }
 }
