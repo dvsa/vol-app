@@ -14,5 +14,10 @@ namespace Olcs\Controller\Interfaces;
  */
 interface RightViewProvider
 {
+    /**
+     * get method right view
+     *
+     * @return void
+     */
     public function getRightView();
 }

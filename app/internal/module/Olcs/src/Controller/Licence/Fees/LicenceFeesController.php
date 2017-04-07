@@ -11,6 +11,7 @@ use Common\Controller\Traits\GenericReceipt;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Licence\LicenceController;
 use Olcs\Controller\Traits\FeesActionTrait;
+use \Zend\View\Model\ViewModel;
 
 /**
  * Licence Fees Controller
@@ -22,6 +23,13 @@ class LicenceFeesController extends LicenceController implements LeftViewProvide
     use FeesActionTrait,
         GenericReceipt;
 
+    /**
+     * render layout
+     *
+     * @param \Zend\View\Model\ViewModel $view view
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
     protected function renderLayout($view)
     {
         $tmp = $this->getViewWithLicence($view->getVariables());
@@ -31,8 +39,10 @@ class LicenceFeesController extends LicenceController implements LeftViewProvide
     }
 
     /**
+     * getFeesRoute
      * Route (prefix) for fees action redirects
-     * @see Olcs\Controller\Traits\FeesActionTrait
+     * see Olcs\Controller\Traits\FeesActionTrait
+     *
      * @return string
      */
     protected function getFeesRoute()
@@ -42,7 +52,9 @@ class LicenceFeesController extends LicenceController implements LeftViewProvide
 
     /**
      * The fees route redirect params
-     * @see Olcs\Controller\Traits\FeesActionTrait
+     *
+     * see Olcs\Controller\Traits\FeesActionTrait
+     *
      * @return array
      */
     protected function getFeesRouteParams()
@@ -54,7 +66,9 @@ class LicenceFeesController extends LicenceController implements LeftViewProvide
 
     /**
      * The controller specific fees table params
-     * @see Olcs\Controller\Traits\FeesActionTrait
+     *
+     * see Olcs\Controller\Traits\FeesActionTrait
+     *
      * @return array
      */
     protected function getFeesTableParams()
@@ -65,11 +79,23 @@ class LicenceFeesController extends LicenceController implements LeftViewProvide
         ];
     }
 
+    /**
+     * getFeetypeDtoData
+     *
+     * @return array
+     */
     protected function getFeeTypeDtoData()
     {
         return ['licence' => $this->params()->fromRoute('licence')];
     }
 
+    /**
+     * getCreateFeeDtoData
+     *
+     * @param array $formData formData
+     *
+     * @return array
+     */
     protected function getCreateFeeDtoData($formData)
     {
         return [

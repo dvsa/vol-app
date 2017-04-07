@@ -200,6 +200,11 @@ abstract class AbstractDocumentController extends AbstractController
         return $this->caseData;
     }
 
+    /**
+     * get method for Case Data
+     *
+     * @return array
+     */
     protected function getCaseData()
     {
         $case = $this->getCase();

@@ -14,5 +14,10 @@ namespace Olcs\Controller\Interfaces;
  */
 interface NavigationIdProvider
 {
+    /**
+     * get method Navigation Id
+     *
+     * @return void
+     */
     public function getNavigationId();
 }

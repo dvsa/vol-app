@@ -22,6 +22,11 @@ abstract class AbstractLicenceProcessingController extends LicenceController imp
 
     protected $helperClass = '\Olcs\Helper\LicenceProcessingHelper';
 
+    /**
+     * get method Navigation Config
+     *
+     * @return array
+     */
     protected function getNavigationConfig()
     {
         $licence = $this->getLicence();
@@ -32,6 +37,11 @@ abstract class AbstractLicenceProcessingController extends LicenceController imp
         );
     }
 
+    /**
+     * get method Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();

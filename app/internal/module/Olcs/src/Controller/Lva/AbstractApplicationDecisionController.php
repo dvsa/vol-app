@@ -18,6 +18,11 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
     protected $successMessageKey;
     protected $titleKey;
 
+    /**
+     * indexAction
+     *
+     * @return \Common\View\Model\Section|\Zend\Http\Response
+     */
     public function indexAction()
     {
         $helperFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
@@ -64,12 +69,29 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
     }
 
     /**
+     * Process Decision
+     *
+     * @param int   $id   id
+     * @param array $data data
+     *
      * @return \Common\Service\Cqrs\Response
      */
     abstract protected function processDecision($id, $data);
 
+    /**
+     * getForm
+     *
+     * @return \Zend\Form\FormInterface
+     */
     abstract protected function getForm();
 
+    /**
+     * redirectToOverview
+     *
+     * @param string $applicationId applicationId
+     *
+     * @return \Zend\Http\Response
+     */
     protected function redirectToOverview($applicationId)
     {
         return $this->redirect()->toRouteAjax(
@@ -81,7 +103,8 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
     /**
      * Check for redirect
      *
-     * @param int $lvaId
+     * @param int $lvaId lvaid
+     *
      * @return null
      */
     protected function checkForRedirect($lvaId)

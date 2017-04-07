@@ -18,6 +18,7 @@ use Dvsa\Olcs\Transfer\Command\GracePeriod\UpdateGracePeriod;
 use Dvsa\Olcs\Transfer\Command\GracePeriod\DeleteGracePeriod;
 
 use Zend\Form\FormInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class LicenceGracePeriodController
@@ -194,6 +195,8 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
 
     /**
      * Method to call on the delete action.
+     *
+     * @return bool
      */
     public function delete()
     {
@@ -218,9 +221,9 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
     /**
      * Get the form and table.
      *
-     * @param array $gracePeriods
+     * @param array $gracePeriods gracePeriods
      *
-     * @return mixed
+     * @return ServiceLocatorInterface
      */
     protected function getForm(array $gracePeriods)
     {
@@ -239,8 +242,10 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
     /**
      * Alter the form to set the table and remove un-needed buttons.
      *
-     * @param FormInterface $form
-     * @param array $gracePeriods
+     * @param FormInterface $form         form
+     * @param array         $gracePeriods gracePeriods
+     *
+     * @return void
      */
     protected function alterForm(FormInterface $form, array $gracePeriods)
     {
@@ -264,7 +269,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
     /**
      * Get the table.
      *
-     * @param array $gracePeriods
+     * @param array $gracePeriods grace periods
      *
      * @return mixed
      */
@@ -278,7 +283,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
     /**
      * Format data for the table.
      *
-     * @param array $gracePeriods
+     * @param array $gracePeriods grace periods
      *
      * @return array
      */

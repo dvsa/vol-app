@@ -14,6 +14,11 @@ use Dvsa\Olcs\Transfer\Command\Application\UpdateAuthSignature;
 abstract class AbstractDeclarationsInternalController extends AbstractController implements
     ApplicationControllerInterface
 {
+    /**
+     * indexAction
+     *
+     * @return \Common\View\Model\Section|\Zend\Http\Response
+     */
     public function indexAction()
     {
         $request = $this->getRequest();

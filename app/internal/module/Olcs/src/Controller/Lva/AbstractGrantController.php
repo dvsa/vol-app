@@ -28,6 +28,11 @@ abstract class AbstractGrantController extends AbstractController
         'variation' => VarGrantCmd::class
     ];
 
+    /**
+     * grantAction
+     *
+     * @return \Common\View\Model\Section|\Zend\Http\Response
+     */
     public function grantAction()
     {
         $id = $this->params('application');
@@ -100,6 +105,14 @@ abstract class AbstractGrantController extends AbstractController
         return $this->renderForm($form);
     }
 
+    /**
+     * mapErrors
+     *
+     * @param Form  $form   form
+     * @param array $errors errors
+     *
+     * @return void
+     */
     protected function mapErrors(Form $form, array $errors)
     {
         $formMessages = [];
@@ -146,6 +159,13 @@ abstract class AbstractGrantController extends AbstractController
         $form->setMessages($formMessages);
     }
 
+    /**
+     * renderForm
+     *
+     * @param Form $form form
+     *
+     * @return \Common\View\Model\Section
+     */
     protected function renderForm($form)
     {
         $id = $this->params('application');
@@ -174,11 +194,12 @@ abstract class AbstractGrantController extends AbstractController
 
     /**
      * Add feedback messages as to why validation failed
+     *@todo improve the appearance of these messages
      *
-     * @todo improve the appearance of these messages
+     * @param \Common\Form\Form $form    form
+     * @param array             $reasons reasons
      *
-     * @param \Common\Form\Form $form
-     * @param array $reasons
+     * @return void
      */
     protected function addMessages($form, $reasons)
     {
@@ -206,7 +227,8 @@ abstract class AbstractGrantController extends AbstractController
     /**
      * Check for redirect
      *
-     * @param int $lvaId
+     * @param int $lvaId lvaId
+     *
      * @return null|\Zend\Http\Response
      */
     protected function checkForRedirect($lvaId)
@@ -216,6 +238,8 @@ abstract class AbstractGrantController extends AbstractController
 
     /**
      * Redirect to overview
+     *
+     * @param int $id id
      *
      * @return \Zend\Http\Response
      */
