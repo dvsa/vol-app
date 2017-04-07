@@ -346,8 +346,8 @@ class SubmissionController extends AbstractInternalController implements Submiss
     /**
      * sets up the view details
      *
-     * @param string $params    params
-     * @param bool   $printView printview
+     * @param array $params    params
+     * @param bool  $printView printview
      *
      * @return ViewModel
      */
@@ -428,7 +428,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
     }
 
     /**
-     * Refreshes a single section within the dataSnapshot field of a submission with the latest data*
+     * Refreshes a single section within the dataSnapshot field of a submission with the latest data
      * from the rest of the database. Redirects back to details page.
      *
      * @return \Common\Service\Cqrs\Response
@@ -469,9 +469,9 @@ class SubmissionController extends AbstractInternalController implements Submiss
     /**
      * generate Selected Sections Array
      *
-     * @param string $submission         submission
-     * @param string $allSectionsRefData all section ref data
-     * @param string $submissionConfig   summissionConfig
+     * @param array $submission         submission
+     * @param array $allSectionsRefData all section ref data
+     * @param array $submissionConfig   submissionConfig
      *
      * @return array
      */

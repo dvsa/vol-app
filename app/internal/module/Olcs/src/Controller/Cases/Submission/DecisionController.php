@@ -11,6 +11,7 @@ use Olcs\Data\Mapper\SubmissionAction as Mapper;
 use Olcs\Form\Model\Form\SubmissionDecision as Form;
 use Zend\Form\Form as ZendForm;
 
+
 /**
  * Submission Decision Controller
  */
@@ -94,7 +95,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
     /**
      * index Action
      *
-     * @return array
+     * @return Zend/Http/Response
      */
     public function indexAction()
     {
@@ -104,7 +105,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
     /**
      * details action
      *
-     * @return array
+     * @return Zend/Http/Response
      */
     public function detailsAction()
     {
@@ -114,7 +115,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
     /**
      * delete Action
      *
-     * @return array
+     * @return Zend/Http/Response
      */
     public function deleteAction()
     {
@@ -125,7 +126,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
      * Alter form for Add
      *
      * @param ZendForm $form     form
-     * @param int      $formData formData
+     * @param array    $formData formData
      *
      * @return ZendForm|array
      */
@@ -138,7 +139,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
      *alter Form for Edit
      *
      * @param ZendForm $form     form
-     * @param int      $formData formData
+     * @param array    $formData formData
      *
      * @return ZendForm|array
      */
