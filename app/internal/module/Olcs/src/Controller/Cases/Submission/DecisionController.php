@@ -11,6 +11,7 @@ use Olcs\Data\Mapper\SubmissionAction as Mapper;
 use Olcs\Form\Model\Form\SubmissionDecision as Form;
 use Zend\Form\Form as ZendForm;
 
+
 /**
  * Submission Decision Controller
  */
@@ -91,25 +92,43 @@ class DecisionController extends AbstractInternalController implements CaseContr
         'isDecision' => 'Y',
     ];
 
+    /**
+     * index Action
+     *
+     * @return Zend/Http/Response
+     */
     public function indexAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * details action
+     *
+     * @return Zend/Http/Response
+     */
     public function detailsAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * delete Action
+     *
+     * @return Zend/Http/Response
+     */
     public function deleteAction()
     {
         return $this->notFoundAction();
     }
 
     /**
-     * @param ZendForm $form
-     * @param $formData
-     * @return ZendForm
+     * Alter form for Add
+     *
+     * @param ZendForm $form     form
+     * @param array    $formData formData
+     *
+     * @return ZendForm|array
      */
     protected function alterFormForAdd(ZendForm $form, $formData)
     {
@@ -117,9 +136,12 @@ class DecisionController extends AbstractInternalController implements CaseContr
     }
 
     /**
-     * @param ZendForm $form
-     * @param $formData
-     * @return ZendForm
+     *alter Form for Edit
+     *
+     * @param ZendForm $form     form
+     * @param array    $formData formData
+     *
+     * @return ZendForm|array
      */
     protected function alterFormForEdit(ZendForm $form, $formData)
     {
@@ -129,8 +151,9 @@ class DecisionController extends AbstractInternalController implements CaseContr
     /**
      * Change the id of the text area to be unique (avoid DOM clashes with multiple TinyMCE instances)
      *
-     * @param ZendForm $form
-     * @param $id
+     * @param ZendForm $form form
+     * @param int      $id   id
+     *
      * @return ZendForm
      */
     private function alterForm(ZendForm $form, $id)

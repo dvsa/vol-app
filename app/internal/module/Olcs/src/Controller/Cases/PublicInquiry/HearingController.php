@@ -59,6 +59,11 @@ class HearingController extends AbstractInternalController implements CaseContro
         'indexAction' => ['table-actions']
     ];
 
+    /**
+     * get Method Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -68,6 +73,8 @@ class HearingController extends AbstractInternalController implements CaseContro
     }
 
     /**
+     * index Action
+     *
      * @return ViewModel
      */
     public function indexAction()
@@ -184,7 +191,8 @@ class HearingController extends AbstractInternalController implements CaseContro
     /**
      * Alter form for TM cases, set pubType and trafficAreas to be visible for publishing
      *
-     * @param \Common\Controller\Form $form
+     * @param \Common\Controller\Form $form form
+     *
      * @return \Common\Controller\Form
      */
     public function alterFormForAdd($form)
@@ -206,7 +214,8 @@ class HearingController extends AbstractInternalController implements CaseContro
     /**
      * Alter form for TM cases, set pubType and trafficAreas to be visible for publishing
      *
-     * @param \Common\Controller\Form $form
+     * @param \Common\Controller\Form $form form
+     *
      * @return \Common\Controller\Form
      */
     public function alterFormForEdit($form)
@@ -258,8 +267,9 @@ class HearingController extends AbstractInternalController implements CaseContro
     /**
      * Sets the SLA target date as a hint on the form elements
      *
-     * @param ZendForm $form
-     * @param $data
+     * @param ZendForm $form from
+     * @param String   $data data
+     *
      * @return ZendForm
      */
     private function setSlaTargetHint(ZendForm $form, $data)

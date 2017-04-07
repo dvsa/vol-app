@@ -49,6 +49,11 @@ class StatementController extends AbstractInternalController implements CaseCont
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
 
+    /**
+     * get method left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -119,7 +124,9 @@ class StatementController extends AbstractInternalController implements CaseCont
 
     /**
      * Route for document generate action redirects
+     *
      * @see Olcs\Controller\Traits\GenerateActionTrait
+     *
      * @return string
      */
     protected function getDocumentGenerateRoute()
@@ -129,7 +136,9 @@ class StatementController extends AbstractInternalController implements CaseCont
 
     /**
      * Route params for document generate action redirects
+     *
      * @see Olcs\Controller\Traits\GenerateActionTrait
+     *
      * @return array
      */
     protected function getDocumentGenerateRouteParams()
