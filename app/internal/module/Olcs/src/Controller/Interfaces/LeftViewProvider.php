@@ -17,7 +17,7 @@ interface LeftViewProvider
     /**
      * get method get left View
      *
-     * @return void
+     * @return \Zend\View\Model\ViewModel|null
      */
     public function getLeftView();
 }

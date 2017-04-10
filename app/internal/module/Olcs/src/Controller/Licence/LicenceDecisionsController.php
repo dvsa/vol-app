@@ -455,7 +455,7 @@ class LicenceDecisionsController extends AbstractController implements
     /**
      * If a xNow e.g. curtailNow method has been pressed then redirect.
      *
-     * @param null|int    $data    The licence id.
+     * @param array       $data    The licence id.
      * @param null|string $command The command to use.
      * @param null|string $message The message to display
      *
@@ -651,7 +651,7 @@ class LicenceDecisionsController extends AbstractController implements
      * @param array $licenceDecision The licence decision data.
      * @param array $decisions       decisions
      *
-     * @return array The formatted da
+     * @return array The formatted data
      */
     private function formatDataForFormUpdate(
         array $licenceDecision = array(),

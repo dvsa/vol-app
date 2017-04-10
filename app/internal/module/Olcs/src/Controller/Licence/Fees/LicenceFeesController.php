@@ -26,9 +26,9 @@ class LicenceFeesController extends LicenceController implements LeftViewProvide
     /**
      * render layout
      *
-     * @param \Zend\View\Model\ViewModel $view view
+     * @param ViewModel $view view
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
     protected function renderLayout($view)
     {
@@ -41,7 +41,7 @@ class LicenceFeesController extends LicenceController implements LeftViewProvide
     /**
      * getFeesRoute
      * Route (prefix) for fees action redirects
-     * see Olcs\Controller\Traits\FeesActionTrait
+     * @see Olcs\Controller\Traits\FeesActionTrait
      *
      * @return string
      */
@@ -67,7 +67,7 @@ class LicenceFeesController extends LicenceController implements LeftViewProvide
     /**
      * The controller specific fees table params
      *
-     * see Olcs\Controller\Traits\FeesActionTrait
+     * @see Olcs\Controller\Traits\FeesActionTrait
      *
      * @return array
      */

@@ -27,7 +27,7 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
     /**
      * Print vehicles action
      *
-     * @return array
+     * @return \Zend\Http\Response
      */
     public function printVehiclesAction()
     {

@@ -17,7 +17,7 @@ interface RightViewProvider
     /**
      * get method right view
      *
-     * @return void
+     * @return \Zend\View\Model\ViewModel|null
      */
     public function getRightView();
 }

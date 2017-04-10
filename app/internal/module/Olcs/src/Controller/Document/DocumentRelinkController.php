@@ -7,7 +7,6 @@
  */
 namespace Olcs\Controller\Document;
 
-use Zend\Di\ServiceLocatorInterface;
 use Zend\View\Model\ViewModel;
 use Zend\Http\Response;
 use Dvsa\Olcs\Transfer\Command\Document\CopyDocument;
@@ -84,7 +83,7 @@ class DocumentRelinkController extends AbstractDocumentController
      * @param string $type type
      * @param int    $ids  ids
      *
-     * @return ServiceLocatorInterface
+     * @return \Zend\Form\Form
      */
     protected function getRelinkForm($type, $ids)
     {
@@ -100,8 +99,8 @@ class DocumentRelinkController extends AbstractDocumentController
     /**
      * process relink
      *
-     * @param array $post post
-     * @param array $form form
+     * @param array           $post post
+     * @param \Zend\Form\Form $form form
      *
      * @return Response
      */
@@ -144,7 +143,7 @@ class DocumentRelinkController extends AbstractDocumentController
     /**
      * alterForm
      *
-     * @param string $form form
+     * @param \Zend\Form\Form $form form
      *
      * @return void
      */

@@ -204,7 +204,7 @@ class ContinuationController extends AbstractController
      *
      * @param \Zend\Form\Form $form               form
      * @param array           $continuationDetail Entity data
-     * @param array           $numNotCeasedDiscs  numNotCeasedDiscs
+     * @param int             $numNotCeasedDiscs  numNotCeasedDiscs
      *
      * @return void
      */
@@ -241,7 +241,7 @@ class ContinuationController extends AbstractController
      *
      * @param \Zend\Form\Form $form                          form
      * @param array           $continuationDetail            Entity data
-     * @param array           $hasOutstandingContinuationFee hasOutstandingContinuationFee
+     * @param bool            $hasOutstandingContinuationFee hasOutstandingContinuationFee
      *
      * @return void
      */
@@ -321,7 +321,7 @@ class ContinuationController extends AbstractController
      *
      * @param string $status status
      *
-     * @return bool|array
+     * @return bool
      */
     protected function isAllowedContinuationStatuses($status)
     {

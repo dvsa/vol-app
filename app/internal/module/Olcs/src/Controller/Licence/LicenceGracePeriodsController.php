@@ -18,7 +18,7 @@ use Dvsa\Olcs\Transfer\Command\GracePeriod\UpdateGracePeriod;
 use Dvsa\Olcs\Transfer\Command\GracePeriod\DeleteGracePeriod;
 
 use Zend\Form\FormInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+
 
 /**
  * Class LicenceGracePeriodController
@@ -223,7 +223,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
      *
      * @param array $gracePeriods gracePeriods
      *
-     * @return ServiceLocatorInterface
+     * @return \Zend\Form\Form
      */
     protected function getForm(array $gracePeriods)
     {
