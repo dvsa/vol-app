@@ -54,7 +54,7 @@ class LicenceProcessingPublicationsController extends AbstractInternalController
     /**
      * edit action
      *
-     * @return array|\Zend\View\Model\ViewModel
+     * @return ViewModel
      */
     public function editAction()
     {
