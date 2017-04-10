@@ -9,6 +9,7 @@ namespace Olcs\Controller\Document;
 
 use Dvsa\Olcs\Transfer\Command\Document\PrintLetter;
 use Dvsa\Olcs\Transfer\Command\Document\UpdateDocumentLinks;
+use Zend\Di\ServiceLocatorInterface;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -20,6 +21,11 @@ class DocumentFinaliseController extends AbstractDocumentController
 {
     private $redirect;
 
+    /**
+     * finalise Action
+     *
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function finaliseAction()
     {
         $routeParams = $this->params()->fromRoute();
@@ -66,9 +72,14 @@ class DocumentFinaliseController extends AbstractDocumentController
     }
 
     /**
-     * @NOTE Slightly extends the AbstractActionController version of this method, so that we can disable the security
+     * get method form class
+     * NOTE Slightly extends the AbstractActionController version of this method, so that we can disable the security
      * element. Updating this in the AbstractActionController causes lots of tests to fail, but shouldn't technically
      * break anything.
+     *
+     * @param bool $type type
+     *
+     * @return ServiceLocatorInterface
      */
     protected function getFormClass($type)
     {
@@ -78,6 +89,11 @@ class DocumentFinaliseController extends AbstractDocumentController
         );
     }
 
+    /**
+     * print Action
+     *
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function printAction()
     {
         $id = $this->params('doc');
@@ -116,6 +132,11 @@ class DocumentFinaliseController extends AbstractDocumentController
         );
     }
 
+    /**
+     * Cancel Action
+     *
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function cancelAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -143,6 +164,13 @@ class DocumentFinaliseController extends AbstractDocumentController
         return $this->renderView($view, 'Abort letter generation');
     }
 
+    /**
+     * Process Save Letter
+     *
+     * @param array $data data
+     *
+     * @return void|\Zend\Http\Response
+     */
     public function processSaveLetter($data)
     {
         $routeParams = $this->params()->fromRoute();
@@ -193,6 +221,13 @@ class DocumentFinaliseController extends AbstractDocumentController
         );
     }
 
+    /**
+     * handle Redirect To Document Route
+     *
+     * @param bool $ajax ajax
+     *
+     * @return \Zend\Http\Response
+     */
     protected function handleRedirectToDocumentRoute($ajax = false)
     {
         $routeParams = $this->params()->fromRoute();

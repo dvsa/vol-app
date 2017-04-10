@@ -16,6 +16,11 @@ class LicenceProcessingOverviewController extends AbstractLicenceProcessingContr
 {
     protected $section = 'overview';
 
+    /**
+     * index Action
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
         $options = [

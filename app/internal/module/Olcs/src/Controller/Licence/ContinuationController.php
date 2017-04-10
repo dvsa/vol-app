@@ -118,7 +118,7 @@ class ContinuationController extends AbstractController
     /**
      * Get the ContinuationDetail data
      *
-     * @param int $licenceId
+     * @param int $licenceId licenceId
      *
      * @return array
      * @throws \RuntimeException
@@ -138,8 +138,10 @@ class ContinuationController extends AbstractController
     /**
      * Callback function from form submitted
      *
-     * @param array $continuationDetail
-     * @param array $formData
+     * @param array $continuationDetail continuationDetail
+     * @param array $formData           formData
+     *
+     * @return void
      */
     protected function updateContinuation($continuationDetail, $formData)
     {
@@ -171,8 +173,9 @@ class ContinuationController extends AbstractController
     /**
      * Continue a Licence
      *
-     * @param array $licence Licence data
-     * @param \Common\Form\Form $form
+     * @param array             $licence Licence data
+     * @param \Common\Form\Form $form    form
+     *
      * @return bool
      */
     protected function continueLicence(array $licence, $form)
@@ -199,8 +202,11 @@ class ContinuationController extends AbstractController
     /**
      * Populate the values of the form
      *
-     * @param \Zend\Form\Form $form
+     * @param \Zend\Form\Form $form               form
      * @param array           $continuationDetail Entity data
+     * @param array           $numNotCeasedDiscs  numNotCeasedDiscs
+     *
+     * @return void
      */
     protected function populateFormDefaultValues($form, $continuationDetail, $numNotCeasedDiscs)
     {
@@ -233,8 +239,11 @@ class ContinuationController extends AbstractController
     /**
      * Alter the update continuation form dependant on licence and continuation details
      *
-     * @param \Zend\Form\Form $form
-     * @param array           $continuationDetail Entity data
+     * @param \Zend\Form\Form $form                          form
+     * @param array           $continuationDetail            Entity data
+     * @param array           $hasOutstandingContinuationFee hasOutstandingContinuationFee
+     *
+     * @return void
      */
     protected function alterForm($form, $continuationDetail, $hasOutstandingContinuationFee)
     {
@@ -259,9 +268,11 @@ class ContinuationController extends AbstractController
     /**
      * Alter form action buttons
      *
-     * @param \Zend\Form\Form $form
-     * @param bool            $hasOutstandingContinuationFee
-     * @param array           $continuationDetail Entity data
+     * @param \Zend\Form\Form $form                          form
+     * @param bool            $hasOutstandingContinuationFee hasoutstandingContinuationFee
+     * @param array           $continuationDetail            Entity data
+     *
+     *@return void
      */
     public function alterFormActions($form, $hasOutstandingContinuationFee, $continuationDetail)
     {
@@ -275,8 +286,10 @@ class ContinuationController extends AbstractController
     /**
      * Only enable the Received element for certain continuation statuses
      *
-     * @param \Zend\Form\Form $form
-     * @param array           $continuationDetail
+     * @param \Zend\Form\Form $form               form
+     * @param array           $continuationDetail continuationDetail
+     *
+     * @return void
      */
     protected function alterFormReceived($form, $continuationDetail)
     {
@@ -306,9 +319,9 @@ class ContinuationController extends AbstractController
     /**
      * Is status one of the allowed/enabled/active continuation detail statuses
      *
-     * @param string $status
+     * @param string $status status
      *
-     * @return bool
+     * @return bool|array
      */
     protected function isAllowedContinuationStatuses($status)
     {
@@ -318,8 +331,10 @@ class ContinuationController extends AbstractController
     /**
      * Only enable the ChecklistStatus element for certain continuation statuses
      *
-     * @param \Zend\Form\Form $form
-     * @param array           $continuationDetail
+     * @param \Zend\Form\Form $form               form
+     * @param array           $continuationDetail continuationDetail
+     *
+     * @return void
      */
     protected function alterFormChecklistStatus($form, $continuationDetail)
     {
@@ -353,8 +368,10 @@ class ContinuationController extends AbstractController
     /**
      * Only show the TotalVehicleAuthorisation element for certain licence types
      *
-     * @param \Zend\Form\Form $form
-     * @param array           $continuationDetail
+     * @param \Zend\Form\Form $form               form
+     * @param array           $continuationDetail continuationDetail
+     *
+     * @return void
      */
     protected function alterFormTotalVehicleAuthorisation($form, $continuationDetail)
     {
@@ -376,9 +393,11 @@ class ContinuationController extends AbstractController
     /**
      * Only show the NumberOfDiscs element for certain licence types
      *
-     * @param \Zend\Form\Form $form
-     * @param array           $continuationDetail
-     * @param array           $postData
+     * @param \Zend\Form\Form $form               form
+     * @param array           $continuationDetail continuationDetail
+     * @param array           $postData           postData
+     *
+     * @return void
      */
     protected function alterFormNumberOfDiscs($form, $continuationDetail, $postData)
     {
@@ -437,9 +456,11 @@ class ContinuationController extends AbstractController
     /**
      * Only show the NumberOfCommunityLicences element for certain licence types
      *
-     * @param \Zend\Form\Form $form
-     * @param array           $continuationDetail
-     * @param array           $postData
+     * @param \Zend\Form\Form $form               form
+     * @param array           $continuationDetail continationDetail
+     * @param array           $postData           postData
+     *
+     * @return void
      */
     protected function alterFormNumberOfCommunityLicences($form, $continuationDetail, $postData)
     {

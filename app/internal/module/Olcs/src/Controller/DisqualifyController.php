@@ -11,6 +11,11 @@ use Zend\View\Model\ViewModel;
  */
 class DisqualifyController extends AbstractController
 {
+    /**
+     * index action
+     *
+     * @return ViewModel
+     */
     public function indexAction()
     {
         $organisationId = (int) $this->params()->fromRoute('organisation');
@@ -95,10 +100,10 @@ class DisqualifyController extends AbstractController
     /**
      * Save the disqualification
      *
-     * @param array $formData
-     * @param int   $disqualificationId
-     * @param int   $personId
-     * @param int   $organisationId
+     * @param array $formData           formData
+     * @param int   $disqualificationId disqualificationId
+     * @param int   $personId           personId
+     * @param int   $organisationId     organisationId
      *
      * @return bool Success
      */

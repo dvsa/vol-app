@@ -38,6 +38,11 @@ class LicenceProcessingPublicationsController extends AbstractInternalController
     protected $addContentTitle = 'Add publication';
     protected $editContentTitle = 'Edit publication';
 
+    /**
+     * get mothod left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -47,6 +52,8 @@ class LicenceProcessingPublicationsController extends AbstractInternalController
     }
 
     /**
+     * edit action
+     *
      * @return array|\Zend\View\Model\ViewModel
      */
     public function editAction()

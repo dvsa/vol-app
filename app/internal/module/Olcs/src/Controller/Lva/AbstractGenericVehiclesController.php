@@ -26,6 +26,8 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
 
     /**
      * Print vehicles action
+     *
+     * @return array
      */
     public function printVehiclesAction()
     {

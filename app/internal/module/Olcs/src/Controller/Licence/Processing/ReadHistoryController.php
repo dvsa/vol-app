@@ -33,6 +33,11 @@ class ReadHistoryController extends AbstractInternalController implements Licenc
     protected $tableName = 'read-history';
     protected $listDto = ReadLicence::class;
 
+    /**
+     * get method for left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();

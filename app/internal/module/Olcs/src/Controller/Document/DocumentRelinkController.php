@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Document;
 
+use Zend\Di\ServiceLocatorInterface;
 use Zend\View\Model\ViewModel;
 use Zend\Http\Response;
 use Dvsa\Olcs\Transfer\Command\Document\CopyDocument;
@@ -31,6 +32,8 @@ class DocumentRelinkController extends AbstractDocumentController
 
     /**
      * Performs a copy or move document(s) and redirect back to index
+     *
+     * @return ViewModel
      */
     public function relinkAction()
     {
@@ -58,6 +61,13 @@ class DocumentRelinkController extends AbstractDocumentController
         return $this->getRelinkView($form);
     }
 
+    /**
+     * get method Relink View
+     *
+     * @param string $form form
+     *
+     * @return ViewModel
+     */
     protected function getRelinkView($form)
     {
         $translator = $this->getServiceLocator()->get('translator');
@@ -68,6 +78,14 @@ class DocumentRelinkController extends AbstractDocumentController
         return $this->renderView($view, $translator->translate('internal.documents.relink_documents'));
     }
 
+    /**
+     * get method relink form
+     *
+     * @param string $type type
+     * @param int    $ids  ids
+     *
+     * @return ServiceLocatorInterface
+     */
     protected function getRelinkForm($type, $ids)
     {
         $form = $this->getServiceLocator()->get('Helper\Form')
@@ -79,6 +97,14 @@ class DocumentRelinkController extends AbstractDocumentController
         return $form;
     }
 
+    /**
+     * process relink
+     *
+     * @param array $post post
+     * @param array $form form
+     *
+     * @return Response
+     */
     protected function processRelink($post, $form)
     {
         $routeParams = $this->params()->fromRoute();
@@ -115,6 +141,13 @@ class DocumentRelinkController extends AbstractDocumentController
         }
     }
 
+    /**
+     * alterForm
+     *
+     * @param string $form form
+     *
+     * @return void
+     */
     protected function alterForm($form)
     {
         $type = $form->get('document-relink-details')->get('type')->getValue();

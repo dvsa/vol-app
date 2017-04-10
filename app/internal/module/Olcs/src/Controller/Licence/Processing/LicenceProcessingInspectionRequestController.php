@@ -93,6 +93,11 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
      */
     protected $section = 'inspection-request';
 
+    /**
+     * get method Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -142,6 +147,8 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
 
     /**
      * Setup operating centres listbox
+     *
+     * @return void
      */
     protected function setUpOcListbox()
     {

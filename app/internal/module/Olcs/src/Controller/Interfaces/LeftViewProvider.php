@@ -14,5 +14,10 @@ namespace Olcs\Controller\Interfaces;
  */
 interface LeftViewProvider
 {
+    /**
+     * get method get left View
+     *
+     * @return void
+     */
     public function getLeftView();
 }

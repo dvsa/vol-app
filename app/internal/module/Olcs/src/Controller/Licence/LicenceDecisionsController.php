@@ -455,7 +455,7 @@ class LicenceDecisionsController extends AbstractController implements
     /**
      * If a xNow e.g. curtailNow method has been pressed then redirect.
      *
-     * @param null|int $licenceId The licence id.
+     * @param null|int    $data    The licence id.
      * @param null|string $command The command to use.
      * @param null|string $message The message to display
      *
@@ -487,9 +487,9 @@ class LicenceDecisionsController extends AbstractController implements
     /**
      * Get the decision form.
      *
-     * @param null|string $name The form name to try and get.
-     * @param null|array $status Licence status rule.
-     * @param null|array $keys Keys to map.
+     * @param null|string $name   The form name to try and get.
+     * @param null|array  $status Licence status rule.
+     * @param null|array  $keys   Keys to map.
      *
      * @return mixed The form.
      */
@@ -519,9 +519,11 @@ class LicenceDecisionsController extends AbstractController implements
     /**
      * Save/update a decision against a licence.
      *
-     * @param null|int $licenceId The licence id.
-     * @param array $data The data to save.
+     * @param null|int   $licenceId  The licence id.
+     * @param array      $data       The data to save.
      * @param array|null $statusRule The licence status record.
+     *
+     * @return LicenceControllerInterface
      */
     private function saveDecisionForLicence($licenceId = null, array $data = array(), $statusRule = null)
     {
@@ -550,8 +552,8 @@ class LicenceDecisionsController extends AbstractController implements
     /**
      * Render the view with the form.
      *
-     * @param null|\Common\Form\Form The form to render.
-     * @param bool Whether tp load the script files.
+     * @param null|\Common\Form\Form $form      The form to render.
+     * @param bool                   $pageTitle Whether tp load the script files.
      *
      * @return string|\Zend\View\Model\ViewModel
      */
@@ -570,7 +572,7 @@ class LicenceDecisionsController extends AbstractController implements
      * Redirect the request to a specific decision.
      *
      * @param null|string $decision The decision.
-     * @param null|int $licence The licence id.
+     * @param null|int    $licence  The licence id.
      *
      * @return \Zend\Http\Response The redirection
      */
@@ -614,9 +616,9 @@ class LicenceDecisionsController extends AbstractController implements
     /**
      * Remove the licence status rule record.
      *
-     * @param $licence The licence id.
-     * @param $licenceStatusId The licence status id.
-     * @param $message The message to display.
+     * @param string $licence         The licence id.
+     * @param int    $licenceStatusId The licence status id.
+     * @param string $message         The message to display.
      *
      * @return mixed
      */
@@ -647,8 +649,9 @@ class LicenceDecisionsController extends AbstractController implements
      * Return an array that can be set on the form.
      *
      * @param array $licenceDecision The licence decision data.
+     * @param array $decisions       decisions
      *
-     * @return array The formatted data
+     * @return array The formatted da
      */
     private function formatDataForFormUpdate(
         array $licenceDecision = array(),
