@@ -74,6 +74,11 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         'reset' => ['requireRows' => true]
     ];
 
+    /**
+     * get method Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -123,7 +128,6 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     /**
      * Determines the command needed being performed based on posted data
      *
-     * @param $data
      * @return null
      */
     protected function determineCommand()
@@ -153,6 +157,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
 
     /**
      * Edit action - determines a varying command prior to execution of parent
+     *
      * @return array|ViewModel
      */
     public function editAction()
@@ -171,6 +176,11 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         );
     }
 
+    /**
+     * reset Model
+     *
+     * @return array|ViewModel
+     */
     public function resetAction()
     {
         return $this->confirmCommand(
@@ -184,6 +194,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
 
     /**
      * Details action not used
+     *
      * @return array
      */
     public function detailsAction()
@@ -193,6 +204,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
 
     /**
      * Delete action not used
+     *
      * @return array
      */
     public function deleteAction()
@@ -203,9 +215,10 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     /**
      * Method to alter the form based on status
      *
-     * @param $form
-     * @param $formData
-     * @return mixed
+     * @param ZendForm $form     form
+     * @param array    $formData formData
+     *
+     * @return  \Common\Form\Form
      */
     protected function alterFormForEdit($form, $formData)
     {
@@ -221,9 +234,10 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     /**
      * Method to alter the form based on status
      *
-     * @param $form
-     * @param $formData
-     * @return mixed
+     * @param ZendForm $form     form
+     * @param array    $formData formData
+     *
+     * @return  \Common\Form\Form
      */
     protected function alterFormForAdd($form, $formData)
     {
@@ -237,8 +251,9 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     /**
      * Removes action buttons not possible from the form on GET only
      *
-     * @param ZendForm $form
-     * @param $formData
+     * @param ZendForm $form     form
+     * @param array    $formData formData
+     *
      * @return ZendForm
      */
     private function setActionButtons(ZendForm $form, $formData)
@@ -255,9 +270,10 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     /**
      * Removes buttons if action cannot be performed on the entity
      *
-     * @param ZendForm $form
-     * @param $formData
-     * @param $action
+     * @param ZendForm  $form     form
+     * @param arrsy     $formData formData
+     * @param ViewModel $action   action
+     *
      * @return ZendForm
      */
     private function determineFormButton(ZendForm $form, $formData, $action)
@@ -285,8 +301,9 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      * Depending on the status, we disable certain fields from editing, add a hidden field with the same value to
      * ensure data is not lost during validation.
      *
-     * @param ZendForm $form
-     * @param $formData
+     * @param ZendForm $form     form
+     * @param array    $formData formData
+     *
      * @return ZendForm
      */
     private function setReadonlyFields(ZendForm $form, $formData)

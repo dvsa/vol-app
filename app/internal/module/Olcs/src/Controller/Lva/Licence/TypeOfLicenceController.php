@@ -23,6 +23,11 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController implements
     protected $location = 'internal';
     protected $lva = 'licence';
 
+    /**
+     * indexAction
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
         $this->getServiceLocator()->get('Helper\Guidance')->append('licence_type_of_licence_change');

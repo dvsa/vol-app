@@ -5,6 +5,7 @@
  */
 namespace Olcs\Controller\Operator;
 
+use Doctrine\DBAL\Schema\View;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoDetails as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoDetails as ItemDto;
 use Olcs\Controller\AbstractInternalController;
@@ -44,6 +45,11 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
         ]
     ];
 
+    /**
+     * get left view model
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -69,21 +75,41 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
     protected $mapperClass = Mapper::class;
     protected $editContentTitle = 'IRFO Details';
 
+    /**
+     * indexAction
+     *
+     * @return array
+     */
     public function indexAction()
     {
         return $this->redirectTo([]);
     }
 
+    /**
+     * detailsAction
+     *
+     * @return array
+     */
     public function detailsAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * add action
+     *
+     * @return array
+     */
     public function addAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * delete Action
+     *
+     * @return array
+     */
     public function deleteAction()
     {
         return $this->notFoundAction();

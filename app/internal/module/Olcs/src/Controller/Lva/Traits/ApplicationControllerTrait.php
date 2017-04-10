@@ -28,6 +28,8 @@ trait ApplicationControllerTrait
 
     /**
      * Hook into the dispatch before the controller action is executed
+     *
+     * @return array|bool
      */
     protected function preDispatch()
     {
@@ -44,9 +46,10 @@ trait ApplicationControllerTrait
     /**
      * Render the section
      *
-     * @param string|ViewModel $content
-     * @param \Zend\Form\Form $form
-     * @param array $variables
+     * @param string|ViewModel $content   content
+     * @param \Zend\Form\Form  $form      form
+     * @param array            $variables variables
+     *
      * @return \Zend\View\Model\ViewModel
      */
     protected function render($content, Form $form = null, $variables = array())
@@ -74,6 +77,13 @@ trait ApplicationControllerTrait
         return $this->genericRender($content, $content->getVariable('title'), $variables);
     }
 
+    /**
+     * get method left
+     *
+     * @param array $variables variables
+     *
+     * @return ViewModel
+     */
     protected function getLeft(array $variables = [])
     {
         $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
@@ -145,7 +155,7 @@ trait ApplicationControllerTrait
     /**
      * Get application data
      *
-     * @param int $applicationId
+     * @param int $applicationId applicationId
      *
      * @return null|array
      * @throws \RuntimeException
