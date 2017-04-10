@@ -21,6 +21,11 @@ class NotTakenUpController extends AbstractApplicationDecisionController
     protected $successMessageKey = 'application-ntu-successfully';
     protected $titleKey          = 'internal-application-ntu-title';
 
+    /**
+     * get from
+     *
+     * @return \Zend\Form\FormInterface
+     */
     protected function getForm()
     {
         $request  = $this->getRequest();
@@ -35,6 +40,14 @@ class NotTakenUpController extends AbstractApplicationDecisionController
         return $form;
     }
 
+    /**
+     * process Decision
+     *
+     * @param int   $id   id
+     * @param array $data data
+     *
+     * @return \Common\Service\Cqrs\Response
+     */
     protected function processDecision($id, $data)
     {
         return $this->handleCommand(

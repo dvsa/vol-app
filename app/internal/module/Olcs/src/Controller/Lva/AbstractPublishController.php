@@ -9,6 +9,11 @@ namespace Olcs\Controller\Lva;
  */
 abstract class AbstractPublishController extends \Common\Controller\Lva\AbstractController
 {
+    /**
+     * indexAction
+     *
+     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $applicationPublish = $this->getApplicationPublish($this->getIdentifier());
@@ -34,7 +39,7 @@ abstract class AbstractPublishController extends \Common\Controller\Lva\Abstract
     /**
      * Render the publish errors page
      *
-     * @param array $errors
+     * @param array $errors errors
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -52,6 +57,8 @@ abstract class AbstractPublishController extends \Common\Controller\Lva\Abstract
 
     /**
      * Render the publish page
+     *
+     * @param string $hasActiveS4 hasActiveS4
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -71,6 +78,8 @@ abstract class AbstractPublishController extends \Common\Controller\Lva\Abstract
 
     /**
      * Render the republish page
+     *
+     * @param string $hasActiveS4 hasActiveS4
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -102,7 +111,7 @@ abstract class AbstractPublishController extends \Common\Controller\Lva\Abstract
     /**
      * Get Application Publish data
      *
-     * @param int $applicationId
+     * @param int $applicationId applicationId
      *
      * @return array application entity data + publish data
      */
@@ -118,7 +127,7 @@ abstract class AbstractPublishController extends \Common\Controller\Lva\Abstract
     /**
      * Publish the applciation
      *
-     * @param int $applicationId
+     * @param int $applicationId applicationId
      *
      * @return true
      */

@@ -15,6 +15,11 @@ abstract class AbstractWithdrawController extends AbstractApplicationDecisionCon
     protected $successMessageKey =  'application-withdrawn-successfully';
     protected $titleKey          =  'internal-application-withdraw-title';
 
+    /**
+     * get from
+     *
+     * @return \Common\Form\Form
+     */
     protected function getForm()
     {
         $request  = $this->getRequest();
@@ -27,6 +32,14 @@ abstract class AbstractWithdrawController extends AbstractApplicationDecisionCon
         return $form;
     }
 
+    /**
+     * process decision
+     *
+     * @param int   $id   id
+     * @param array $data data
+     *
+     * @return \Common\Service\Cqrs\Response
+     */
     protected function processDecision($id, $data)
     {
         return $this->handleCommand(
