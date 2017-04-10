@@ -17,7 +17,7 @@ interface NavigationIdProvider
     /**
      * get method Navigation Id
      *
-     * @return void
+     * @return string
      */
     public function getNavigationId();
 }

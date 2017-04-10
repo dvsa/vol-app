@@ -9,7 +9,6 @@ namespace Olcs\Controller\Document;
 
 use Dvsa\Olcs\Transfer\Command\Document\PrintLetter;
 use Dvsa\Olcs\Transfer\Command\Document\UpdateDocumentLinks;
-use Zend\Di\ServiceLocatorInterface;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -73,13 +72,13 @@ class DocumentFinaliseController extends AbstractDocumentController
 
     /**
      * get method form class
-     * NOTE Slightly extends the AbstractActionController version of this method, so that we can disable the security
+     * @NOTE Slightly extends the AbstractActionController version of this method, so that we can disable the security
      * element. Updating this in the AbstractActionController causes lots of tests to fail, but shouldn't technically
      * break anything.
      *
-     * @param bool $type type
+     * @param string $type type
      *
-     * @return ServiceLocatorInterface
+     * @return \Zend\Form\Form
      */
     protected function getFormClass($type)
     {

@@ -651,7 +651,7 @@ class LicenceDecisionsController extends AbstractController implements
      * @param array $licenceDecision The licence decision data.
      * @param array $decisions       decisions
      *
-     * @return array The formatted da
+     * @return array The formatted data
      */
     private function formatDataForFormUpdate(
         array $licenceDecision = array(),
