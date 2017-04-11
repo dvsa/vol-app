@@ -3,7 +3,7 @@
 namespace Olcs\Controller\Lva;
 
 use Dvsa\Olcs\Transfer\Command\Application\SubmitApplication;
-use Zend\Stdlib\RequestInterface;
+
 
 /**
  * Abstract Internal Submit Controller

@@ -28,7 +28,7 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController implements
     /**
      * get method Section for View
      *
-     * @return \Common\Form\Form
+     * @return array
      */
     protected function getSectionsForView()
     {

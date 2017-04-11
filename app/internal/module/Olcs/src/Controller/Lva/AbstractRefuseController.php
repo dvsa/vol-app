@@ -3,7 +3,7 @@
 namespace Olcs\Controller\Lva;
 
 use Dvsa\Olcs\Transfer\Command\Application\RefuseApplication;
-use Zend\Stdlib\RequestInterface;
+
 
 /**
  * Abstract Internal Refuse Controller
@@ -19,7 +19,7 @@ abstract class AbstractRefuseController extends AbstractApplicationDecisionContr
     /**
      * get method form
      *
-     * @return array|RequestInterface
+     * @return \Zend\Form\Form
      */
     protected function getForm()
     {
