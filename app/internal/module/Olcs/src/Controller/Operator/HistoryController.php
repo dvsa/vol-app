@@ -119,10 +119,10 @@ class HistoryController extends OperatorController
     /**
      * Proxies to the get query or get param.
      *
-     * @param null|array $name    name
-     * @param null|array $default default
+     * @param string      $name    name
+     * @param null|String $default default
      *
-     * @return null|array
+     * @return null|String
      */
     public function getQueryOrRouteParam($name, $default = null)
     {

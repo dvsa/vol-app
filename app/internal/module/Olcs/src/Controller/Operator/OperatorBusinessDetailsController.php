@@ -154,7 +154,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
      * render Form
      *
      * @param \Common\Form\Form $form      form
-     * @param null              $pageTitle pageTitle
+     * @param null|string      $pageTitle pageTitle
      *
      * @return ViewModel
      */

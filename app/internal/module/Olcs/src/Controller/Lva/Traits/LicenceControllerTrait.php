@@ -8,7 +8,6 @@
  */
 namespace Olcs\Controller\Lva\Traits;
 
-use Doctrine\DBAL\Schema\View;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;

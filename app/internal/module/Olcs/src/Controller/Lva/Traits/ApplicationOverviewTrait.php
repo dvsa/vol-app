@@ -17,7 +17,7 @@ trait ApplicationOverviewTrait
     /**
      * Application overview
      *
-     * @return \Zend\Http\Response
+     * @return ViewModel
      */
     public function indexAction()
     {

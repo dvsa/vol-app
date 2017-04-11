@@ -31,7 +31,7 @@ class OverviewController extends AbstractController implements LicenceController
     /**
      * Licence overview
      *
-     * @return array|Zend/Http/Response
+     * @return ViewModel
      */
     public function indexAction()
     {
@@ -156,7 +156,7 @@ class OverviewController extends AbstractController implements LicenceController
     }
 
     /**
-     * formate data form
+     * format data form
      *
      * @param array $data data
      *

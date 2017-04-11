@@ -50,7 +50,7 @@ trait ApplicationControllerTrait
      * @param \Zend\Form\Form  $form      form
      * @param array            $variables variables
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\View\Model\ViewModel|null
      */
     protected function render($content, Form $form = null, $variables = array())
     {

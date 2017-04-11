@@ -19,7 +19,7 @@ trait InternalControllerTrait
      *
      * @param int $lvaId lvaId
      *
-     * @return  InternalControllerTrait
+     * @return \Zend\Http\Response
      */
     protected function handleCancelRedirect($lvaId)
     {

@@ -5,7 +5,6 @@
  */
 namespace Olcs\Controller\Operator;
 
-use Doctrine\DBAL\Schema\View;
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoDetails as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoDetails as ItemDto;
 use Olcs\Controller\AbstractInternalController;
@@ -13,6 +12,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Data\Mapper\IrfoDetails as Mapper;
 use Olcs\Form\Model\Form\IrfoDetails as Form;
+use Zend\Http\Response;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -78,7 +78,7 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
     /**
      * indexAction
      *
-     * @return array
+     * @return \Zend\Http\Response
      */
     public function indexAction()
     {
@@ -86,7 +86,7 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
     }
 
     /**
-     * detailsAction
+     * not found action
      *
      * @return array
      */
@@ -96,9 +96,9 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
     }
 
     /**
-     * add action
+     * not found action
      *
-     * @return array
+     * @return Response
      */
     public function addAction()
     {
@@ -106,9 +106,9 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
     }
 
     /**
-     * delete Action
+     * not found action
      *
-     * @return array
+     * @return Response
      */
     public function deleteAction()
     {
