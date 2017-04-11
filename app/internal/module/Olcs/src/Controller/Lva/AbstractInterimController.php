@@ -31,6 +31,11 @@ abstract class AbstractInterimController extends AbstractController
     const ACTION_IN_FORCE = 'in_force';
     const ACTION_FEE_REQUEST = 'fee_request';
 
+    /**
+     * Index Action
+     *
+     * @return \Common\View\Model\Section|\Zend\Http\Response
+     */
     public function indexAction()
     {
         if ($this->isButtonPressed('cancel')) {
@@ -95,6 +100,11 @@ abstract class AbstractInterimController extends AbstractController
         }
     }
 
+    /**
+     * grantAction
+     *
+     * @return \Common\View\Model\Section|\Zend\Http\Response
+     */
     public function grantAction()
     {
         if ($this->isButtonPressed('cancel')) {
@@ -174,8 +184,9 @@ abstract class AbstractInterimController extends AbstractController
     /**
      * Get table
      *
-     * @param string $tableName
-     * @param array $data
+     * @param string $tableName tableName
+     * @param array  $data      data
+     *
      * @return TableBuilder
      */
     protected function getTable($tableName, $data)
@@ -185,6 +196,8 @@ abstract class AbstractInterimController extends AbstractController
 
     /**
      * Get interim form
+     *
+     * @param array $interimData interimData
      *
      * @return \Zend\Form\Form
      */
@@ -223,7 +236,9 @@ abstract class AbstractInterimController extends AbstractController
     /**
      * Alter form
      *
-     * @param \Zend\Form\Form $form
+     * @param \Zend\Form\Form $form        form
+     * @param array           $application application
+     *
      * @return \Zend\Form\Form
      */
     protected function alterInterimForm($form, $application)
@@ -263,6 +278,11 @@ abstract class AbstractInterimController extends AbstractController
         return $form;
     }
 
+    /**
+     * determinePostSaveAction
+     *
+     * @return null|string
+     */
     protected function determinePostSaveAction()
     {
         if ($this->isButtonPressed('grant')) {
@@ -276,6 +296,11 @@ abstract class AbstractInterimController extends AbstractController
         return null;
     }
 
+    /**
+     * Redirect To Overview
+     *
+     * @return \Zend\Http\Response
+     */
     protected function redirectToOverview()
     {
         $routeParams = ['application' => $this->getIdentifier(), 'action' => null];
@@ -283,11 +308,21 @@ abstract class AbstractInterimController extends AbstractController
         return $this->redirect()->toRouteAjax('lva-' . $this->lva, $routeParams);
     }
 
+    /**
+     * redirect To index
+     *
+     * @return \Zend\Http\Response
+     */
     protected function redirectToIndex()
     {
         return $this->redirect()->toRouteAjax(null, ['action' => null], [], true);
     }
 
+    /**
+     * post Save Redirect
+     *
+     * @return \Zend\Http\Response
+     */
     protected function postSaveRedirect()
     {
         if ($this->isButtonPressed('grant')) {
@@ -304,6 +339,11 @@ abstract class AbstractInterimController extends AbstractController
         return $this->redirectToOverview();
     }
 
+    /**
+     * printInterim
+     *
+     * @return \Zend\Http\Response
+     */
     protected function printInterim()
     {
         $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');

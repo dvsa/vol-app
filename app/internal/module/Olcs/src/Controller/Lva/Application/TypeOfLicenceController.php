@@ -25,6 +25,11 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController implements
     protected $location = 'internal';
     protected $lva = 'application';
 
+    /**
+     * get method Section for View
+     *
+     * @return array
+     */
     protected function getSectionsForView()
     {
         $data = $this->getServiceLocator()->get('Entity\Application')

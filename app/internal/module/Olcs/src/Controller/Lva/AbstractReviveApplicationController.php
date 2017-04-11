@@ -19,6 +19,11 @@ abstract class AbstractReviveApplicationController extends AbstractApplicationDe
     protected $successMessageKey = 'application-revive-application-successfully';
     protected $titleKey          = 'internal-application-revive-application-title';
 
+    /**
+     * get Form
+     *
+     * @return \Common\Form\Form
+     */
     protected function getForm()
     {
         $request  = $this->getRequest();
@@ -31,6 +36,14 @@ abstract class AbstractReviveApplicationController extends AbstractApplicationDe
         return $form;
     }
 
+    /**
+     * process Decision
+     *
+     * @param int   $id   id
+     * @param array $data data
+     *
+     * @return \Common\Service\Cqrs\Response
+     */
     protected function processDecision($id, $data)
     {
         return $this->handleCommand(
