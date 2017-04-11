@@ -439,6 +439,7 @@ return array(
             'Olcs\Service\Data\OperatingCentresForInspectionRequest'
             => 'Olcs\Service\Data\OperatingCentresForInspectionRequest',
             \Olcs\Service\Data\Cases::class => \Olcs\Service\Data\Cases::class,
+            Olcs\Service\Data\Licence::class => Olcs\Service\Data\Licence::class,
         ],
         'factories' => array(
             \Olcs\Service\Marker\MarkerService::class => \Olcs\Service\Marker\MarkerService::class,

@@ -8,6 +8,7 @@ use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Controller\Traits;
+use Olcs\Data\Mapper\OperatorTransfer as OperatorTransferMapper;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -182,6 +183,9 @@ class OperatorController extends AbstractController implements OperatorControlle
     {
         $organisationId = (int) $this->params()->fromRoute('organisation');
 
+        $sl = $this->getServiceLocator();
+        $sl->get(\Olcs\Service\Data\Licence::class)->setOrganisationId($organisationId);
+
         /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
@@ -195,7 +199,7 @@ class OperatorController extends AbstractController implements OperatorControlle
             $data = ['fromOperatorName' => $organisationData['name']];
         }
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $sl->get('Helper\Form');
 
         /* @var $form \Common\Form\Form */
         $form = $formHelper->createForm('OperatorMerge');
@@ -205,25 +209,29 @@ class OperatorController extends AbstractController implements OperatorControlle
         $form->get('toOperatorId')->setAttribute('data-lookup-url', $this->url()->fromRoute('operator-lookup'));
 
         if ($request->isPost() && $form->isValid()) {
-            $toOperatorId = (int) $form->getData()['toOperatorId'];
+            $formData = $form->getData();
+            $toOperatorId = (int) $formData['toOperatorId'];
+            $licenceIds   = $formData['licenceIds'];
             $response = $this->handleCommand(
                 \Dvsa\Olcs\Transfer\Command\Organisation\TransferTo::create(
-                    ['id' => $organisationId, 'receivingOrganisation' => $toOperatorId]
+                    [
+                        'id' => $organisationId,
+                        'receivingOrganisation' => $toOperatorId,
+                        'licenceIds' => $licenceIds,
+                    ]
                 )
             );
 
+            $messages = $response->getResult()['messages'];
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')
-                    ->addSuccessMessage('form.operator-merge.success');
-
+                $sl->get('Helper\FlashMessenger')->addSuccessMessage($messages[count($messages) - 1]);
                 return $this->redirect()->toRouteAjax('operator/business-details', ['organisation' => $toOperatorId]);
             } else {
-                $formMessages['toOperatorId'][] = 'form.operator-merge.to-operator-id.validation';
-                $form->setMessages($formMessages);
+                OperatorTransferMapper::mapFromErrors($form, $messages);
             }
         }
 
-        $this->getServiceLocator()->get('Script')->loadFile('operator-merge');
+        $sl->get('Script')->loadFile('operator-merge');
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
