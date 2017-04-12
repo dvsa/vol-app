@@ -69,5 +69,12 @@
     "config": {
         "preferred-install": "dist",
         "secure-http" : false
+    },
+    "scripts": {
+        "ut": "vendor/bin/phpunit -c test/phpunit.xml --stop-on-failure",
+        "review": "${dev_workspace}/olcs-devtools/Review.sh",
+        "cs": "${dev_workspace}/olcs-devtools/vendor/bin/phpcs --severity=1 --standard=${dev_workspace}/sonar-configuration/Profiles/DVSA/CS/ruleset.xml",
+        "cov": "vendor/bin/phpunit -c test/phpunit-coverage.xml",
+        "update-syms": "${dev_workspace}/olcs-devtools/composer-update-syms.sh"
     }
 }
