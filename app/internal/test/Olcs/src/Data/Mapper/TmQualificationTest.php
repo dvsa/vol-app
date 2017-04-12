@@ -13,16 +13,17 @@ class TmQualificationTest extends MockeryTestCase
 {
     public function testMapFromErrors()
     {
-        $mockForm = m::mock(Form::class)->makePartial();
+        $mockForm = new Form();
+
         $errors['messages'] = [
-            'issuedDate' => ['error1'],
-            'serialNo' => ['error2'],
+            'issuedDate'        => ['error1'],
+            'serialNo'          => ['error2'],
             'qualificationType' => ['error3'],
-            'general' => ['error4'],
+            'general'           => ['error4'],
         ];
-        $expected = [
-            'general' => ['error4']
-        ];
+
+        $expected = ['general' => ['error4']];
+
         $this->assertEquals($expected, Sut::mapFromErrors($mockForm, $errors));
     }
 
@@ -30,12 +31,12 @@ class TmQualificationTest extends MockeryTestCase
     {
         $data = [
             'qualification-details' => ['foo' => 'bar'],
-            'transportManager' => 1
+            'transportManager'      => 1,
         ];
 
         $expected = [
-            'foo'                => 'bar',
-            'transportManager'  => 1
+            'foo'              => 'bar',
+            'transportManager' => 1,
         ];
 
         $this->assertEquals($expected, Sut::mapFromForm($data));
@@ -54,46 +55,49 @@ class TmQualificationTest extends MockeryTestCase
         return [
             [
                 [
-                    'id' => 1,
-                    'version' => 2,
-                    'issuedDate' => '2015-01-01',
-                    'serialNo' => 123,
+                    'id'                => 1,
+                    'version'           => 2,
+                    'issuedDate'        => '2015-01-01',
+                    'serialNo'          => 123,
                     'qualificationType' => [
-                        'id' => 3
+                        'id' => 3,
                     ],
-                    'countryCode' => [
-                        'id' => 'GB'
+                    'countryCode'       => [
+                        'id' => 'GB',
                     ],
-                    'transportManager' => 1
+                    'transportManager'  => 1,
                 ],
                 [
                     'qualification-details' => [
-                        'id' => 1,
-                        'version' => 2,
-                        'issuedDate' => '2015-01-01',
-                        'serialNo' => 123,
+                        'id'                => 1,
+                        'version'           => 2,
+                        'issuedDate'        => '2015-01-01',
+                        'serialNo'          => 123,
                         'qualificationType' => 3,
-                        'countryCode' => 'GB',
+                        'countryCode'       => 'GB',
                     ],
-                    'transportManager' => 1
-                ]
+                    'transportManager'      => 1,
+                ],
             ],
             [
                 [
-                    'transportManager' => 1
+                    'transportManager' => 1,
                 ],
                 [
                     'qualification-details' => [
                         'countryCode' => 'GB',
                     ],
-                    'transportManager' => 1
-                ]
-            ]
+                    'transportManager'      => 1,
+                ],
+            ],
         ];
     }
 
     public function testMapFromDocumentsResult()
     {
-        $this->assertEquals('foo', Sut::mapFromDocumentsResult(['result' => 'foo']));
+        $this->assertEquals(
+            'foo',
+            Sut::mapFromDocumentsResult(['result' => 'foo'])
+        );
     }
 }
