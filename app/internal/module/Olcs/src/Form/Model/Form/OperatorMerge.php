@@ -31,6 +31,20 @@ class OperatorMerge
     public $toOperatorId = null;
 
     /**
+     * @Form\Attributes({"id":"licences","placeholder":"","multiple":"multiple", "class":"chosen-select-large"})
+     * @Form\Options({
+     *     "label": "Licences",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Olcs\Service\Data\Licence",
+     *     "context": "fromOperatorName",
+     *     "use_groups": "false",
+     * })
+     * @Form\Type("DynamicSelect")
+     * @Form\Required(false)
+     */
+    public $licenceIds = null;
+
+    /**
      * @Form\Attributes({"id":"confirm"})
      * @Form\Options({
      *     "checked_value":"Y",
