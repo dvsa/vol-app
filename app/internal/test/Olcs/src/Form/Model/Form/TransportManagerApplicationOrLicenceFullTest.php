@@ -32,7 +32,7 @@ class TransportManagerApplicationOrLicenceFullTest extends AbstractFormValidatio
             $element,
             'abc',
             [
-                \Zend\I18n\Validator\Float::NOT_FLOAT,
+                \Zend\I18n\Validator\IsFloat::NOT_FLOAT,
             ]
         );
 
@@ -50,7 +50,7 @@ class TransportManagerApplicationOrLicenceFullTest extends AbstractFormValidatio
             $element,
             'abc',
             [
-                \Zend\I18n\Validator\Float::NOT_FLOAT,
+                \Zend\I18n\Validator\IsFloat::NOT_FLOAT,
             ]
         );
 
@@ -68,7 +68,7 @@ class TransportManagerApplicationOrLicenceFullTest extends AbstractFormValidatio
             $element,
             'abc',
             [
-                \Zend\I18n\Validator\Float::NOT_FLOAT,
+                \Zend\I18n\Validator\IsFloat::NOT_FLOAT,
             ]
         );
 
@@ -86,7 +86,7 @@ class TransportManagerApplicationOrLicenceFullTest extends AbstractFormValidatio
             $element,
             'abc',
             [
-                \Zend\I18n\Validator\Float::NOT_FLOAT,
+                \Zend\I18n\Validator\IsFloat::NOT_FLOAT,
             ]
         );
 
@@ -104,7 +104,7 @@ class TransportManagerApplicationOrLicenceFullTest extends AbstractFormValidatio
             $element,
             'abc',
             [
-                \Zend\I18n\Validator\Float::NOT_FLOAT,
+                \Zend\I18n\Validator\IsFloat::NOT_FLOAT,
             ]
         );
 
@@ -122,7 +122,7 @@ class TransportManagerApplicationOrLicenceFullTest extends AbstractFormValidatio
             $element,
             'abc',
             [
-                \Zend\I18n\Validator\Float::NOT_FLOAT,
+                \Zend\I18n\Validator\IsFloat::NOT_FLOAT,
             ]
         );
 
@@ -140,7 +140,7 @@ class TransportManagerApplicationOrLicenceFullTest extends AbstractFormValidatio
             $element,
             'abc',
             [
-                \Zend\I18n\Validator\Float::NOT_FLOAT,
+                \Zend\I18n\Validator\IsFloat::NOT_FLOAT,
             ]
         );
 
