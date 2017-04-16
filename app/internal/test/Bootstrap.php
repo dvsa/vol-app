@@ -21,7 +21,7 @@ class Bootstrap
         date_default_timezone_set('UTC');
 
         // Only really using less than 300mb now....
-        ini_set('memory_limit', '1G');
+        ini_set('memory_limit', '300M');
 
         $zf2ModulePaths = array(dirname(dirname(__DIR__)));
         if (($path = static::findParentPath('vendor'))) {
