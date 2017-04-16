@@ -1,5 +1,4 @@
 <?php
-
 namespace OlcsTest;
 
 use Zend\Mvc\Service\ServiceManagerConfig;
@@ -77,18 +76,20 @@ class Bootstrap
             );
         }
 
-        AutoloaderFactory::factory(array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'autoregister_zf' => true,
-                'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/' . __NAMESPACE__,
-                    'OlcsTest\\' => __DIR__ . '/Olcs/src',
-                    'AdminTest\\' => __DIR__ . '/Admin/src',
-                    'CommonTest\\' => __DIR__ . '/../vendor/olcs/OlcsCommon/test/Common/src/Common',
-                    'OlcsComponentTest\\' => __DIR__ . '/Component'
-                ),
-            ),
-        ));
+        AutoloaderFactory::factory(
+            [
+                'Zend\Loader\StandardAutoloader' => [
+                    'autoregister_zf' => true,
+                    'namespaces' => [
+                        __NAMESPACE__ => __DIR__ . '/' . __NAMESPACE__,
+                        'OlcsTest\\' => __DIR__ . '/Olcs/src',
+                        'AdminTest\\' => __DIR__ . '/Admin/src',
+                        'CommonTest\\' => __DIR__ . '/../vendor/olcs/OlcsCommon/test/Common/src/Common',
+                        'OlcsComponentTest\\' => __DIR__ . '/Component'
+                    ],
+                ],
+            ]
+        );
     }
 
     protected static function findParentPath($path)
