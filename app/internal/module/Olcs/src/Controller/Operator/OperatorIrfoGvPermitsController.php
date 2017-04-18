@@ -106,9 +106,9 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     ];
 
     /**
-     * edit action
+     * not found action
      *
-     * @return array
+     * @return Zend/Http/Response
      */
     public function editAction()
     {
@@ -116,9 +116,9 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     }
 
     /**
-     * delete action
+     * not found action
      *
-     * @return array
+     * @return Zend/Http/Response
      */
     public function deleteAction()
     {
@@ -128,7 +128,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * reset action
      *
-     * @return array
+     * @return Zend/Http/Response
      */
     public function resetAction()
     {
@@ -138,7 +138,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * approve action
      *
-     * @return array
+     * @return Zend/Http/Response
      */
     public function approveAction()
     {
@@ -148,7 +148,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * withdraw action
      *
-     * @return array
+     * @return Zend/Http/Response
      */
     public function withdrawAction()
     {
@@ -158,7 +158,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * refuse action
      *
-     * @return array
+     * @return Zend/Http/Response
      */
     public function refuseAction()
     {
@@ -168,7 +168,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * generate action
      *
-     * @return array
+     * @return Zend/Http/Response
      */
     public function generateAction()
     {

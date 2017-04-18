@@ -88,7 +88,7 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
     /**
      * not found action
      *
-     * @return array
+     * @return Response
      */
     public function detailsAction()
     {

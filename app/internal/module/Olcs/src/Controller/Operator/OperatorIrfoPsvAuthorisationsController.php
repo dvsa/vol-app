@@ -158,7 +158,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     /**
      * Edit action - determines a varying command prior to execution of parent
      *
-     * @return array|ViewModel
+     * @return ViewModel|Zend/Http/Response
      */
     public function editAction()
     {
@@ -270,9 +270,9 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     /**
      * Removes buttons if action cannot be performed on the entity
      *
-     * @param ZendForm  $form     form
-     * @param arrsy     $formData formData
-     * @param ViewModel $action   action
+     * @param ZendForm $form     form
+     * @param array    $formData formData
+     * @param array    $action   action
      *
      * @return ZendForm
      */
