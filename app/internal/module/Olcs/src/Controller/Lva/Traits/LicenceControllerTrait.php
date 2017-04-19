@@ -14,6 +14,7 @@ use Zend\View\Model\ViewModel;
 use Common\RefData;
 use Olcs\Controller\Traits;
 use Zend\Session\Container;
+use Zend\Http\Response;
 
 /**
  * Internal Abstract Licence Controller
@@ -31,6 +32,8 @@ trait LicenceControllerTrait
 
     /**
      * Hook into the dispatch before the controller action is executed
+     *
+     * @return null|Zend\Http\Response
      */
     protected function preDispatch()
     {
@@ -42,6 +45,8 @@ trait LicenceControllerTrait
     /**
      * Get licence id
      *
+     * @param int $applicationId applicationId
+     *
      * @return int
      */
     protected function getLicenceId($applicationId = null)
@@ -49,6 +54,15 @@ trait LicenceControllerTrait
         return $this->getIdentifier();
     }
 
+    /**
+     * render Page
+     *
+     * @param ViewModel $content   content
+     * @param string    $title     title
+     * @param array     $variables variables
+     *
+     * @return ViewModel
+     */
     protected function renderPage($content, $title = '', array $variables = [])
     {
         if ($title) {
@@ -68,6 +82,13 @@ trait LicenceControllerTrait
         return $layout;
     }
 
+    /**
+     * get Method Left
+     *
+     * @param array $variables variables
+     *
+     * @return ViewModel
+     */
     protected function getLeft(array $variables = [])
     {
         $routeName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
@@ -90,9 +111,9 @@ trait LicenceControllerTrait
     /**
      * Render the section
      *
-     * @param string|ViewModel $content
-     * @param \Zend\Form\Form  $form
-     * @param array            $variables
+     * @param string|ViewModel $content   content
+     * @param \Zend\Form\Form  $form      form
+     * @param array            $variables variables
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -131,6 +152,8 @@ trait LicenceControllerTrait
 
     /**
      * Gets the search form for the header, it is cached on the object so that the search query is maintained
+     *
+     * @return Zend\Session\Container
      */
     public function getSearchForm()
     {
@@ -168,6 +191,8 @@ trait LicenceControllerTrait
     /**
      * Complete a section and potentially redirect to the next
      * one depending on the user's choice
+     *
+     * @param string $section section
      *
      * @return \Zend\Http\Response
      */

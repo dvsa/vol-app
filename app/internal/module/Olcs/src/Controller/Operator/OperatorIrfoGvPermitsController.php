@@ -54,6 +54,11 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     protected $listDto = ListDto::class;
     protected $listVars = ['organisation'];
 
+    /**
+     * get Method leftView
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -100,36 +105,71 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
         'irfoPermitStatus' => 'irfo_perm_s_pending'
     ];
 
+    /**
+     * not found action
+     *
+     * @return Zend/Http/Response
+     */
     public function editAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * not found action
+     *
+     * @return Zend/Http/Response
+     */
     public function deleteAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * reset action
+     *
+     * @return Zend/Http/Response
+     */
     public function resetAction()
     {
         return $this->processCommand(new GenericItem(['id' => 'id']), ResetDto::class);
     }
 
+    /**
+     * approve action
+     *
+     * @return Zend/Http/Response
+     */
     public function approveAction()
     {
         return $this->processCommand(new GenericItem(['id' => 'id']), ApproveDto::class);
     }
 
+    /**
+     * withdraw action
+     *
+     * @return Zend/Http/Response
+     */
     public function withdrawAction()
     {
         return $this->processCommand(new GenericItem(['id' => 'id']), WithdrawDto::class);
     }
 
+    /**
+     * refuse action
+     *
+     * @return Zend/Http/Response
+     */
     public function refuseAction()
     {
         return $this->processCommand(new GenericItem(['id' => 'id']), RefuseDto::class);
     }
 
+    /**
+     * generate action
+     *
+     * @return Zend/Http/Response
+     */
     public function generateAction()
     {
         return $this->processCommand(

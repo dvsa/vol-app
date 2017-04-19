@@ -21,11 +21,21 @@ class UnlicensedCasesOperatorController extends OperatorController
 {
     use CheckForCrudAction;
 
+    /**
+     * getLeftView
+     *
+     * @return null
+     */
     public function getLeftView()
     {
         return null;
     }
 
+    /**
+     * casesAction
+     *
+     * @return ViewModel
+     */
     public function casesAction()
     {
         $params = [

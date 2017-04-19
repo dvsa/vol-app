@@ -137,6 +137,11 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         return $this->renderForm($form);
     }
 
+    /**
+     * get Left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -145,6 +150,14 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         return $view;
     }
 
+    /**
+     * render Form
+     *
+     * @param \Common\Form\Form $form      form
+     * @param null|string       $pageTitle pageTitle
+     *
+     * @return ViewModel
+     */
     protected function renderForm($form, $pageTitle = null)
     {
         $view = $this->getView(['form' => $form]);
@@ -154,6 +167,11 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         return $this->renderView($view, $pageTitle);
     }
 
+    /**
+     * saveConfirmForm
+     *
+     * @return \Zend\Http\Response
+     */
     protected function saveConfirmForm()
     {
         $operator = $this->params()->fromRoute('organisation');
@@ -180,9 +198,11 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
     /**
      * Save form
      *
-     * @param \Zend\Form\Form $form
-     * @param string $action
-     * @return mixed
+     * @param \Zend\Form\Form $form        form
+     * @param string          $action      action
+     * @param string          $routePrefix routePrefix
+     *
+     * @return ViewModel
      */
     protected function saveForm($form, $action, $routePrefix = 'operator')
     {
@@ -257,6 +277,14 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         }
     }
 
+    /**
+     * mapErrors
+     *
+     * @param array $form   form
+     * @param array $errors errors
+     *
+     * @return void
+     */
     protected function mapErrors($form, array $errors)
     {
         $mapper = $this->mapperClass;
@@ -272,9 +300,10 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
     /**
      * Make form alterations
      *
-     * @param string $businessType
-     * @param \Zend\Form\Form $form
-     * @param int $operatorId
+     * @param string          $businessType businessType
+     * @param \Zend\Form\Form $form         form
+     * @param int             $operatorId   operatorId
+     *
      * @return \Zend\Form\Form
      */
     private function makeFormAlterations($businessType, $form, $operatorId)
@@ -320,6 +349,13 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         return $form;
     }
 
+    /**
+     * get method Organisation
+     *
+     * @param int $organisationId organisationId
+     *
+     * @return array| null
+     */
     protected function getOrganisation($organisationId)
     {
         if (!$this->organisation) {
@@ -335,6 +371,14 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         return $this->organisation;
     }
 
+    /**
+     * redirectToBusinessDetails
+     *
+     * @param int    $orgId       orgId
+     * @param string $routePrefix routePrefix
+     *
+     * @return \Zend\Http\Response
+     */
     protected function redirectToBusinessDetails($orgId, $routePrefix = 'operator')
     {
         return $this->redirect()->toRouteAjax($routePrefix . '/business-details', ['organisation' => $orgId]);

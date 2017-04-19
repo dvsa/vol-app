@@ -30,6 +30,8 @@ class OverviewController extends AbstractController implements LicenceController
 
     /**
      * Licence overview
+     *
+     * @return ViewModel
      */
     public function indexAction()
     {
@@ -97,6 +99,13 @@ class OverviewController extends AbstractController implements LicenceController
         return $this->render($content);
     }
 
+    /**
+     * get method OverviewData
+     *
+     * @param int $licenceId licenceID
+     *
+     * @return array|Zend/Http/Response
+     */
     protected function getOverviewData($licenceId)
     {
         $query = LicenceQry::create(['id' => $licenceId]);
@@ -105,6 +114,8 @@ class OverviewController extends AbstractController implements LicenceController
     }
 
     /**
+     * get method overview form
+     *
      * @return Common\Form\Form
      */
     protected function getOverviewForm()
@@ -116,7 +127,9 @@ class OverviewController extends AbstractController implements LicenceController
     /**
      * Form presentation logic
      *
-     * @param Common\Form\Form $form
+     * @param Common\Form\Form $form    form
+     * @param array            $licence licence
+     *
      * @return Common\Form\Form
      */
     protected function alterForm($form, $licence)
@@ -143,7 +156,10 @@ class OverviewController extends AbstractController implements LicenceController
     }
 
     /**
-     * @param array $data
+     * format data form
+     *
+     * @param array $data data
+     *
      * @return array
      */
     protected function formatDataForForm($data)
@@ -160,6 +176,11 @@ class OverviewController extends AbstractController implements LicenceController
         ];
     }
 
+    /**
+     * print action
+     *
+     * @return \Zend\Http\Response
+     */
     public function printAction()
     {
         $response = $this->handleCommand(PrintLicence::create(['id' => $this->getLicenceId()]));
@@ -173,6 +194,13 @@ class OverviewController extends AbstractController implements LicenceController
         return $this->redirect()->toRoute('lva-licence/overview', [], [], true);
     }
 
+    /**
+     * mapData
+     *
+     * @param array $formData formData
+     *
+     * @return array
+     */
     protected function mapData($formData)
     {
         $data = [

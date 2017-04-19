@@ -25,6 +25,11 @@ class HistoryController extends OperatorController
      */
     protected $subNavRoute = 'operator_processing';
 
+    /**
+     * indexAction
+     *
+     * @return array|ViewModel
+     */
     public function indexAction()
     {
         $view = $this->getView();
@@ -62,6 +67,8 @@ class HistoryController extends OperatorController
     }
 
     /**
+     * get method list data
+     *
      * @return Response
      */
     public function getListData()
@@ -77,6 +84,11 @@ class HistoryController extends OperatorController
         return $this->getServiceLocator()->get('QueryService')->send($query);
     }
 
+    /**
+     * get method List Params
+     *
+     * @return array
+     */
     public function getListParams()
     {
         $params = [
@@ -90,6 +102,11 @@ class HistoryController extends OperatorController
         return $params;
     }
 
+    /**
+     * get method  List Params for table
+     *
+     * @return array
+     */
     public function getListParamsForTable()
     {
         $params = $this->getListParams();
@@ -102,9 +119,10 @@ class HistoryController extends OperatorController
     /**
      * Proxies to the get query or get param.
      *
-     * @param mixed $name
-     * @param mixed $default
-     * @return mixed
+     * @param string      $name    name
+     * @param null|String $default default
+     *
+     * @return null|String
      */
     public function getQueryOrRouteParam($name, $default = null)
     {
@@ -121,6 +139,8 @@ class HistoryController extends OperatorController
 
     /**
      * Edit action
+     *
+     * @return array
      */
     public function editAction()
     {
@@ -138,7 +158,8 @@ class HistoryController extends OperatorController
     /**
      * Get event history details form
      *
-     * @param array $data
+     * @param array $data data
+     *
      * @return Form
      */
     protected function getEventHistoryDetailsForm($data)
@@ -163,7 +184,8 @@ class HistoryController extends OperatorController
     /**
      * Get event details table
      *
-     * @param array $details
+     * @param array $details details
+     *
      * @return Table
      */
     protected function getDetailsTable($details)

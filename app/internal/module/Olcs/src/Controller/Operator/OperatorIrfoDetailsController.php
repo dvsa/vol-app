@@ -12,6 +12,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Data\Mapper\IrfoDetails as Mapper;
 use Olcs\Form\Model\Form\IrfoDetails as Form;
+use Zend\Http\Response;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -44,6 +45,11 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
         ]
     ];
 
+    /**
+     * get left view model
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -69,21 +75,41 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
     protected $mapperClass = Mapper::class;
     protected $editContentTitle = 'IRFO Details';
 
+    /**
+     * indexAction
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
         return $this->redirectTo([]);
     }
 
+    /**
+     * not found action
+     *
+     * @return Response
+     */
     public function detailsAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * not found action
+     *
+     * @return Response
+     */
     public function addAction()
     {
         return $this->notFoundAction();
     }
 
+    /**
+     * not found action
+     *
+     * @return Response
+     */
     public function deleteAction()
     {
         return $this->notFoundAction();

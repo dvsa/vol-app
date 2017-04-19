@@ -16,6 +16,10 @@ trait InternalControllerTrait
 {
     /**
      * Discard changes and redirect back to the current route
+     *
+     * @param int $lvaId lvaId
+     *
+     * @return \Zend\Http\Response
      */
     protected function handleCancelRedirect($lvaId)
     {
@@ -36,6 +40,8 @@ trait InternalControllerTrait
 
     /**
      * Wrapper method so we can extend this behaviour
+     *
+     * @param int $lvaId lvaId
      *
      * @return \Zend\Http\Response
      */
