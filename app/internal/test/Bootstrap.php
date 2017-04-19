@@ -6,6 +6,7 @@ use Zend\ServiceManager\ServiceManager;
 use Zend\Loader\AutoloaderFactory;
 use RuntimeException;
 
+date_default_timezone_set('Europe/London');
 error_reporting(E_ALL | E_STRICT);
 chdir(__DIR__);
 
@@ -18,8 +19,6 @@ class Bootstrap
 
     public static function init()
     {
-        date_default_timezone_set('UTC');
-
         // Only really using less than 300mb now....
         ini_set('memory_limit', '300M');
 

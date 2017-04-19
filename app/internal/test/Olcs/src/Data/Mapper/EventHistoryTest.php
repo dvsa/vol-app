@@ -12,8 +12,6 @@ class EventHistoryTest extends MockeryTestCase
 {
     public function testMapFromResult()
     {
-        $this->markTestSkipped('Why are we expecting times to be one hour less?');
-
         $data = [
             'eventData' => 'bar',
             'eventDatetime' => '2015-03-19T13:37:36+0000',
