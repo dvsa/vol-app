@@ -255,9 +255,8 @@ class OppositionTest extends AbstractFormValidationTestCase
 
     public function testPostcode()
     {
-        $this->markTestSkipped('Need investation for this field.  Validations are contradictory');
         $element = ['address', 'postcode'];
-        $this->assertFormElementIsRequired($element, true);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
     }
 
