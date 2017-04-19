@@ -63,4 +63,3 @@ class LicenceProcessingOverviewControllerTest extends \PHPUnit_Framework_TestCas
         return $controller;
     }
 }
-
