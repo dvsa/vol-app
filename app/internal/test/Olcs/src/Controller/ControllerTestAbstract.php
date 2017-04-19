@@ -22,7 +22,7 @@ abstract class ControllerTestAbstract extends AbstractHttpControllerTestCase
      */
     public function testProxyMethodsAreCalled()
     {
-        $this->markTestSkipped('Logger service not found to be fixed');
+        //$this->markTestSkipped('Logger service not found to be fixed');
 
         // if there are none, return - no test required.
         if (empty($this->proxyMethdods)) {

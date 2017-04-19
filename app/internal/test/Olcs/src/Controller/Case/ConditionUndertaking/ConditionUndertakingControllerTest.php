@@ -1,18 +1,12 @@
 <?php
 
-/**
- * ConditionUndertaking Test Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
+namespace OlcsTest\Controller\ConditionUndertaking;
 
-namespace OlcsTest\Controller;
-
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Controller\ControllerTestAbstract;
 
 /**
  * ConditionUndertaking Test Controller
+ * @covers Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingController
  */
 class ConditionUndertakingControllerTest extends ControllerTestAbstract
 {

@@ -1,19 +1,11 @@
 <?php
+namespace OlcsTest\Controller\Hearing;
 
-/**
- * Stay Test Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
-
-namespace OlcsTest\Controller;
-
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-use Olcs\Controller\Cases\Hearing\StayController;
 use OlcsTest\Controller\ControllerTestAbstract;
 
 /**
  * Stay Test Controller
+ * @covers Olcs\Controller\Cases\Hearing\StayController
  */
 class StayControllerTest extends ControllerTestAbstract
 {

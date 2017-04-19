@@ -1,18 +1,12 @@
 <?php
 
-/**
- * SubmissionSectionCommentController Test Controller
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
+namespace OlcsTest\Controller\Submission;
 
-namespace OlcsTest\Controller;
-
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Controller\ControllerTestAbstract;
 
 /**
  * SubmissionSectionCommentController Test Controller
+ * @covers Olcs\Controller\Cases\Submission\SubmissionSectionCommentController
  */
 class SubmissionSectionCommentControllerTest extends ControllerTestAbstract
 {

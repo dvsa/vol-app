@@ -7,7 +7,6 @@
  */
 namespace OlcsTest\Controller\Bus\Processing;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;

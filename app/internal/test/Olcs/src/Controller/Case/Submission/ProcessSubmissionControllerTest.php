@@ -1,19 +1,13 @@
 <?php
 
-/**
- * ProcessSubmissionController Test Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
- */
+namespace OlcsTest\Controller\Submission;
 
-namespace OlcsTest\Controller;
-
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use OlcsTest\Controller\ControllerTestAbstract;
 use Mockery as m;
 
 /**
  * ConditionUndertaking Test Controller
+ * @covers Olcs\Controller\Cases\Submission\ProcessSubmissionController
  */
 class ProcessSubmissionControllerTest extends ControllerTestAbstract
 {
@@ -21,8 +15,6 @@ class ProcessSubmissionControllerTest extends ControllerTestAbstract
 
     public function testAssignAction()
     {
-        $this->markTestSkipped('Logger service not found to be fixed');
-
         $class = m::mock($this->testClass);
         $class->shouldReceive('editAction');
     }

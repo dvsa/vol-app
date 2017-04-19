@@ -1,19 +1,11 @@
 <?php
+namespace OlcsTest\Controller\Hearing;
 
-/**
- * Appeal Test Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
-
-namespace OlcsTest\Controller;
-
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
-use Olcs\Controller\Cases\Hearing\StayController;
 use OlcsTest\Controller\ControllerTestAbstract;
 
 /**
  * Appeal Test Controller
+ * @covers Olcs\Controller\Cases\Hearing\AppealController
  */
 class AppealControllerTest extends ControllerTestAbstract
 {
