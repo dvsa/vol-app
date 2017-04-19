@@ -147,15 +147,25 @@ class BusServiceControllerTest extends MockeryTestCase
             ->times($laShortNoteRemoved ? 1 : 0)
             ->with('laShortNote');
 
+        $mockTimetableFieldset = m::mock(\Zend\Form\Fieldset::class);
+        $mockTimetableFieldset->shouldReceive('remove')
+            ->with('timetableAcceptable')
+            ->times($timetableRemoved ? 1 : 0)
+            ->andReturnSelf();
+        $mockTimetableFieldset->shouldReceive('remove')
+            ->with('mapSupplied')
+            ->times($timetableRemoved ? 1 : 0)
+            ->andReturnSelf();
+
         $mockForm = m::mock('\Zend\Form\Form');
         $mockForm->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
+        $mockForm->shouldReceive('get')
+            ->with('timetable')
+            ->times($timetableRemoved ? 1 : 0)
+            ->andReturn($mockTimetableFieldset);
         $mockForm->shouldReceive('setOption')
             ->times($readonly ? 1 : 0)
             ->with('readonly', true);
-
-        $mockForm->shouldReceive('remove')
-            ->times($timetableRemoved ? 1 : 0)
-            ->with('timetable');
 
         $result = $this->sut->alterFormForEdit($mockForm, []);
 
@@ -170,9 +180,8 @@ class BusServiceControllerTest extends MockeryTestCase
                     'isReadOnly' => true,
                     'isScottishRules' => true,
                     'isShortNotice' => 'Y',
-                    'status' => [
-                        'id' => RefData::BUSREG_STATUS_CANCELLED
-                    ],
+                    'isCancelled' => 1,
+                    'isCancellation' => 0,
                 ],
                 // $readonly
                 true,
@@ -185,12 +194,45 @@ class BusServiceControllerTest extends MockeryTestCase
             ],
             [
                 [
+                    'isReadOnly' => true,
+                    'isScottishRules' => true,
+                    'isShortNotice' => 'Y',
+                    'isCancelled' => 0,
+                    'isCancellation' => 1,
+                ],
+                // $readonly
+                true,
+                // $timetableRemoved
+                true,
+                // $opNotifiedLaPteRemoved
+                false,
+                // $laShortNoteRemoved
+                false
+            ],
+            [
+                [
+                    'isReadOnly' => true,
+                    'isScottishRules' => true,
+                    'isShortNotice' => 'Y',
+                    'isCancelled' => 0,
+                    'isCancellation' => 0,
+                ],
+                // $readonly
+                true,
+                // $timetableRemoved
+                false,
+                // $opNotifiedLaPteRemoved
+                false,
+                // $laShortNoteRemoved
+                false
+            ],
+            [
+                [
                     'isReadOnly' => false,
                     'isScottishRules' => false,
                     'isShortNotice' => 'Y',
-                    'status' => [
-                        'id' => RefData::BUSREG_STATUS_REGISTERED
-                    ],
+                    'isCancelled' => 0,
+                    'isCancellation' => 0,
                 ],
                 // $readonly
                 false,
@@ -206,9 +248,8 @@ class BusServiceControllerTest extends MockeryTestCase
                     'isReadOnly' => false,
                     'isScottishRules' => true,
                     'isShortNotice' => 'N',
-                    'status' => [
-                        'id' => RefData::BUSREG_STATUS_CANCELLATION
-                    ],
+                    'isCancelled' => 0,
+                    'isCancellation' => 0,
                 ],
                 // $readonly
                 false,
@@ -224,9 +265,8 @@ class BusServiceControllerTest extends MockeryTestCase
                     'isReadOnly' => false,
                     'isScottishRules' => false,
                     'isShortNotice' => 'N',
-                    'status' => [
-                        'id' => RefData::BUSREG_STATUS_VARIATION
-                    ],
+                    'isCancelled' => 0,
+                    'isCancellation' => 0,
                 ],
                 // $readonly
                 false,
