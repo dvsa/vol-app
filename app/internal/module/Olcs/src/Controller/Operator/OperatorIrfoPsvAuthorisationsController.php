@@ -179,7 +179,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     /**
      * reset Model
      *
-     * @return array|ViewModel
+     * @return Zend/Http/Response|ViewModel
      */
     public function resetAction()
     {
