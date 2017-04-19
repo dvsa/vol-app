@@ -5,6 +5,7 @@ use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Loader\AutoloaderFactory;
 use RuntimeException;
+use Olcs\Logging\Log\Logger;
 
 error_reporting(E_ALL | E_STRICT);
 chdir(__DIR__);
@@ -44,6 +45,17 @@ class Bootstrap
         $serviceManager->setAllowOverride(true);
 
         static::$serviceManager = $serviceManager;
+
+        self::setupLogger();
+    }
+
+    public static function setupLogger()
+    {
+        $logWriter = new \Zend\Log\Writer\Mock();
+        $logger = new \Zend\Log\Logger();
+        $logger->addWriter($logWriter);
+
+        Logger::setLogger($logger);
     }
 
     public static function chroot()

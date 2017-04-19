@@ -28,6 +28,7 @@ use Zend\View\Model\ViewModel;
  * @TODO Find another method for ALTER FORM... this method is crazy!
  * @TODO define post add/edit/delete redirect location as a parameter?
  * @TODO review navigation stuff...
+ * @TODO move Logger into service manager and/or use a listener to avoid duplications
  *
  * @method ViewBuilderInterface viewBuilder()
  * @method Plugin\Script script()

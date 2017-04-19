@@ -1,41 +1,65 @@
 <?php
 
-/**
- * Application Processing controller tests
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace OlcsTest\Controller\Application\Processing;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController;
+use Zend\Mvc\Controller\Plugin\FlashMessenger;
+use Zend\Mvc\Controller\Plugin\PluginInterface;
+use Zend\Mvc\Controller\Plugin\Redirect;
+use Zend\Mvc\Controller\PluginManager;
+use Zend\Mvc\Controller\Plugin\Params;
+use Zend\Mvc\Router\RouteMatch;
+use Zend\View\Model\ViewModel;
+use OlcsTest\Bootstrap;
+use Zend\Http\Response;
+use Zend\Mvc\MvcEvent;
 
 /**
- * Application Processing controller tests
- *
- * @author Dan Eggleston <dan@stolenegg.com>
+ * Class ApplicationProcessingOverviewControllerTest
+ * @package OlcsTest\Controller\Application\Processing
+ * @covers Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController
  */
-class ApplicationProcessingOverviewControllerTest extends AbstractHttpControllerTestCase
+class ApplicationProcessingOverviewControllerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testIndexAction()
+    public function testIndexActionRedirects()
     {
-        $this->markTestSkipped('Logger service not found to be fixed');
+        $controller = $this->getController('index');
 
-        $this->setApplicationConfig(
-            include __DIR__.'/../../../../../config/application.config.php'
+        $redirect = $this->getMock(Redirect::class, [], [], '');
+        $redirect->expects(self::once())->method('toRoute');
+
+        $controller->getPluginManager()
+            ->setService('redirect', $redirect);
+
+        $controller->indexAction();
+    }
+
+    private function getController($action)
+    {
+        $controller = new ApplicationProcessingOverviewController();
+
+        $serviceManager = Bootstrap::getServiceManager();
+
+        /** @var \Zend\Mvc\Router\Http\TreeRouteStack $router */
+        $router = $serviceManager->get('HttpRouter');
+        $routeMatch = new RouteMatch(
+            [
+                'application' => 'internal',
+                'controller' => ApplicationProcessingOverviewController::class,
+                'action' => $action
+            ]
         );
 
-        $this->controller = $this->getMock(
-            '\Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController',
-            ['redirectToRoute']
-        );
+        $event = new MvcEvent();
+        $event->setRouter($router);
+        $event->setRouteMatch($routeMatch);
 
-        $expectedRoute = 'lva-application/processing/tasks';
+        $pluginManager = new PluginManager();
 
-        // assert index action redirects to tasks (for now)
-        $this->controller->expects($this->once())
-            ->method('redirectToRoute')
-            ->with($expectedRoute, [], ['query' => []], true);
+        $controller->setEvent($event);
+        $controller->setPluginManager($pluginManager);
+        $controller->setServiceLocator($serviceManager);
 
-        $this->controller->indexAction();
+        return $controller;
     }
 }
