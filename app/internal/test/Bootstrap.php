@@ -45,17 +45,6 @@ class Bootstrap
         $serviceManager->setAllowOverride(true);
 
         static::$serviceManager = $serviceManager;
-
-        self::setupLogger();
-    }
-
-    public static function setupLogger()
-    {
-        $logWriter = new \Zend\Log\Writer\Mock();
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($logWriter);
-
-        Logger::setLogger($logger);
     }
 
     public static function chroot()
