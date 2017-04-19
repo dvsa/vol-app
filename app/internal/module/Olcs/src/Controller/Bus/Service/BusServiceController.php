@@ -2,7 +2,6 @@
 
 namespace Olcs\Controller\Bus\Service;
 
-use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateServiceRegister as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Dvsa\Olcs\Transfer\Query\ConditionUndertaking\GetList as ConditionUndertakingListDto;
@@ -106,10 +105,10 @@ class BusServiceController extends AbstractInternalController implements BusRegC
     /**
      * Alter Form for edit
      *
-     * @param \Common\Controller\Form $form     Form
-     * @param array                   $formData Form data
+     * @param \Common\Form\Form $form     Form
+     * @param array             $formData Form data
      *
-     * @return \Common\Controller\Form
+     * @return \Common\Form\Form
      */
     public function alterFormForEdit($form, $formData)
     {
@@ -119,8 +118,11 @@ class BusServiceController extends AbstractInternalController implements BusRegC
             $form->setOption('readonly', true);
         }
 
-        if ($busReg['status']['id'] == RefData::BUSREG_STATUS_CANCELLED) {
-            $form->remove('timetable');
+        if ($busReg['isCancelled'] || $busReg['isCancellation']) {
+            /** @var \Zend\Form\Fieldset $timetable */
+            $timetable = $form->get('timetable');
+            $timetable->remove('timetableAcceptable');
+            $timetable->remove('mapSupplied');
         }
 
         if ($busReg['isShortNotice'] === 'N') {
