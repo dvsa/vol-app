@@ -5,7 +5,6 @@ use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Loader\AutoloaderFactory;
 use RuntimeException;
-use Olcs\Logging\Log\Logger;
 
 error_reporting(E_ALL | E_STRICT);
 chdir(__DIR__);
