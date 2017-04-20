@@ -44,12 +44,12 @@
         "doctrine/annotations": "^1.2.3",
         "symfony/Filesystem": "~2.6.0",
         "zf-commons/zfc-rbac": "~2.4.0",
-        "olcs/autoload": "dev-develop",
-        "olcs/OlcsCommon": "dev-develop",
-        "olcs/olcs-transfer": "dev-develop",
-        "olcs/olcs-utils": "dev-develop",
-        "olcs/olcs-auth": "dev-develop",
-        "olcs/olcs-logging": "dev-develop"
+        "olcs/autoload": "dev-release/4.12",
+        "olcs/OlcsCommon": "dev-release/4.12",
+        "olcs/olcs-transfer": "dev-release/4.12",
+        "olcs/olcs-utils": "dev-release/4.12",
+        "olcs/olcs-auth": "dev-release/4.12",
+        "olcs/olcs-logging": "dev-release/4.12"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.0.0",
