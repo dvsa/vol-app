@@ -30,6 +30,11 @@ class OverviewController extends AbstractController
     public function indexAction()
     {
         $data = $this->getOverviewData($this->getLicenceId());
+
+        if (empty($data)) {
+            return $this->notFoundAction();
+        }
+
         $data['idIndex'] = $this->getIdentifierIndex();
         $sections = array_keys($data['sections']);
 
