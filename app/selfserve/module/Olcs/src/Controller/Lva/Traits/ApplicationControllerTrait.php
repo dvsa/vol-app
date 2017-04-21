@@ -32,6 +32,12 @@ trait ApplicationControllerTrait
      */
     protected function preDispatch()
     {
+        $appData = $this->getApplicationData($this->getApplicationId());
+
+        if (empty($appData)) {
+            return $this->notFoundAction();
+        }
+
         if ($this->isApplicationVariation()) {
             return $this->notFoundAction();
         }
