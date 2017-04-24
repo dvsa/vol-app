@@ -28,8 +28,6 @@ class Addresses extends CommonAddresses
         //  change email settings
         /** @var \Zend\InputFilter\Input $emailElm */
         $emailElm = $form->getInputFilter()->get('contact')->get('email');
-        $emailElm
-            ->setRequired(false)
-            ->setAllowEmpty(true);
+        $emailElm->setRequired(false);
     }
 }
