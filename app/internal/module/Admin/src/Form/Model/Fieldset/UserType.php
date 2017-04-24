@@ -36,8 +36,6 @@ class UserType
      *     "use_groups": "false"
      * })
      * @Form\Attributes({"id":"team","placeholder":"", "required":false})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DynamicSelect")
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
@@ -91,9 +89,8 @@ class UserType
      *      "empty_option": "Please Select",
      *      "use_groups": "false"
      * })
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Select")
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "userType",
@@ -128,9 +125,8 @@ class UserType
      *      "service_name": "Common\Service\Data\LocalAuthority",
      *      "use_groups": "false"
      * })
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DynamicSelect")
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "userType",
@@ -155,9 +151,8 @@ class UserType
      *      "context": Common\RefData::CONTACT_TYPE_PARTNER,
      *      "use_groups": false,
      * })
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DynamicSelect")
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({
      *     "name": "ValidateIf",
      *     "options":{
@@ -182,9 +177,8 @@ class UserType
      * @Form\Required(true)
      * @Form\Attributes({"class":"medium","id":"licenceNumber","required":false})
      * @Form\Options({"label":"Licence number"})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Text")
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "userType",

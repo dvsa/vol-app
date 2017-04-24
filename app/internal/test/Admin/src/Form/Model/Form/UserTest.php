@@ -100,7 +100,7 @@ class UserTest extends AbstractFormValidationTestCase
     public function testTransportManager()
     {
         $element = ['userType', 'transportManager'];
-        $this->assertFormElementIsRequired($element, false);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementType($element, Select::class);
     }
 
@@ -129,10 +129,9 @@ class UserTest extends AbstractFormValidationTestCase
 
     public function testLicenceNumberText()
     {
-        $this->assertFormElementIsRequired(
-            ['userType', 'licenceNumber'],
-            false
-        );
+        $element = ['userType', 'licenceNumber'];
+        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementIsRequired($element, true);
     }
 
     public function testForename()
