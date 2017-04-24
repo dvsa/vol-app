@@ -25,14 +25,14 @@ class CreateFeeDetails
     /**
      * Created date
      *
-     * @Form\Required(true)
-     * @Form\Type("DateSelect")
      * @Form\Options({
      *      "short-label":"fees.created_date",
      *      "label":"fees.created_date",
      *      "label_attributes": {"id": "label-createdDate"}
      * })
+     * @Form\Required(true)
      * @Form\Attributes({"required":false, "id":"createdDate"})
+     * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
@@ -41,8 +41,6 @@ class CreateFeeDetails
     public $createdDate = null;
 
     /**
-     * @Form\Required(true)
-     * @Form\Type("Select")
      * @Form\Attributes({"id":"feeType"})
      * @Form\Options({
      *     "label": "fees.type",
@@ -50,12 +48,13 @@ class CreateFeeDetails
      *     "label_attributes": {"id": "label-type"},
      *     "empty_option": "Please select"
      * })
+     * @Form\Type("Select")
+     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      */
     public $feeType = null;
 
     /**
      * @Form\Required(true)
-     * @Form\Type("Select")
      * @Form\Attributes({"id":"irfoGvPermit","required":false})
      * @Form\Options({
      *     "label": "fees.irfoGvPermit",
@@ -63,6 +62,8 @@ class CreateFeeDetails
      *     "label_attributes": {"id": "label-type"},
      *     "empty_option": "Please select"
      * })
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
+     * @Form\Type("Select")
      * @Form\Validator({
      *      "name": "ValidateIf",
      *      "options": {
@@ -83,7 +84,6 @@ class CreateFeeDetails
 
     /**
      * @Form\Required(true)
-     * @Form\Type("Select")
      * @Form\Attributes({"id":"irfoPsvAuth","required":false})
      * @Form\Options({
      *     "label": "fees.irfoPsvAuth",
@@ -91,6 +91,8 @@ class CreateFeeDetails
      *     "label_attributes": {"id": "label-type"},
      *     "empty_option": "Please select"
      * })
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
+     * @Form\Type("Select")
      * @Form\Validator({
      *      "name": "ValidateIf",
      *      "options": {
@@ -110,8 +112,8 @@ class CreateFeeDetails
     public $irfoPsvAuth = null;
 
     /**
-     * @Form\Type("Text")
      * @Form\Options({"label":"Quantity"})
+     * @Form\Type("Text")
      * @Form\Attributes({"id":"quantity"})
      * @Form\Validator(
      *  {
@@ -127,26 +129,26 @@ class CreateFeeDetails
     public $quantity = null;
 
     /**
-     * @Form\Required(true)
-     * @Form\Type("Text")
      * @Form\Options({
      *      "short-label":"fees.amount",
      *      "label":"fees.amount",
      *      "label_attributes": {"id": "label-amount"}
      * })
+     * @Form\Type("Text")
+     * @Form\Required(true)
      * @Form\Attributes({"required":false, "id":"amount"})
      * @Form\Validator({"name": "Dvsa\Olcs\Transfer\Validators\Money"})
      */
     public $amount = null;
 
     /**
-     * @Form\Required(false)
-     * @Form\Type("Text")
      * @Form\Options({
      *      "short-label":"fees.vat_rate",
      *      "label":"fees.vat_rate",
      *      "label_attributes": {"id": "label-vat_rate"}
      * })
+     * @Form\Type("Text")
+     * @Form\Required(false)
      * @Form\Attributes({"disabled":"disabled", "id":"vat-rate"})
      */
     public $vatRate = null;

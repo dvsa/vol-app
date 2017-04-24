@@ -41,7 +41,7 @@ class FeePaymentTest extends AbstractFormValidationTestCase
 
     public function testReceived()
     {
-        $this->assertFormElementRequired(['details', 'received'], true);
+        $this->assertFormElementIsRequired(['details', 'received'], true);
     }
 
     public function testReceiptDate()
@@ -51,12 +51,12 @@ class FeePaymentTest extends AbstractFormValidationTestCase
 
     public function testPayer()
     {
-        $this->assertFormElementRequired(['details', 'payer'], true);
+        $this->assertFormElementIsRequired(['details', 'payer'], true);
     }
 
     public function testSlipNo()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['details', 'slipNo'],
             true,
             [Digits::INVALID]
@@ -65,7 +65,7 @@ class FeePaymentTest extends AbstractFormValidationTestCase
 
     public function testChequeNo()
     {
-        $this->assertFormElementRequired(['details', 'chequeNo'], false);
+        $this->assertFormElementIsRequired(['details', 'chequeNo'], false);
     }
 
     public function testChequeDate()
@@ -83,7 +83,7 @@ class FeePaymentTest extends AbstractFormValidationTestCase
             ]
         );
 
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
     }
 
     public function testPoNo()
@@ -93,12 +93,12 @@ class FeePaymentTest extends AbstractFormValidationTestCase
 
     public function testCustomerReference()
     {
-        $this->assertFormElementRequired(['details', 'customerReference'], true);
+        $this->assertFormElementIsRequired(['details', 'customerReference'], true);
     }
 
     public function testCustomerName()
     {
-        $this->assertFormElementRequired(['details', 'customerName'], true);
+        $this->assertFormElementIsRequired(['details', 'customerName'], true);
     }
 
     public function testAddressId()
@@ -118,7 +118,7 @@ class FeePaymentTest extends AbstractFormValidationTestCase
     public function testAddressSearchPostcode()
     {
         $element = ['address', 'searchPostcode'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementPostcodeSearch($element);
     }
@@ -126,7 +126,7 @@ class FeePaymentTest extends AbstractFormValidationTestCase
     public function testAddressLine1()
     {
         $element = ['address', 'addressLine1'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementText($element, 0, 90);
     }
@@ -134,7 +134,7 @@ class FeePaymentTest extends AbstractFormValidationTestCase
     public function testAddressLine2()
     {
         $element = ['address', 'addressLine2'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element, 0, 90);
     }
@@ -142,7 +142,7 @@ class FeePaymentTest extends AbstractFormValidationTestCase
     public function testAddressLine3()
     {
         $element = ['address', 'addressLine3'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element, 0, 100);
     }
@@ -150,7 +150,7 @@ class FeePaymentTest extends AbstractFormValidationTestCase
     public function testAddressLine4()
     {
         $element = ['address', 'addressLine4'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element, 0, 35);
     }
@@ -158,7 +158,7 @@ class FeePaymentTest extends AbstractFormValidationTestCase
     public function testAddressTown()
     {
         $element = ['address', 'town'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementText($element, 0, 30);
     }
@@ -166,15 +166,14 @@ class FeePaymentTest extends AbstractFormValidationTestCase
     public function testAddressPostcode()
     {
         $element = ['address', 'postcode'];
-        $this->assertFormElementRequired($element, false);
-        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementPostcode($element);
     }
 
     public function testAddressCountryCode()
     {
         $element = ['address', 'countryCode'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementDynamicSelect($element);
     }
