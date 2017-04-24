@@ -22,6 +22,18 @@ class ConditionUndertaking extends CaseBase
     public $type = null;
 
     /**
+     * @Form\Attributes({"id":""})
+     * @Form\Options({
+     *     "label": "Condition / Undertaking category",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "category": "cu_category"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $conditionCategory = null;
+
+    /**
      * @Form\Attributes({"value":0})
      * @Form\Type("Hidden")
      */
