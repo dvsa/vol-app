@@ -31,7 +31,7 @@ class ScanningTest extends AbstractFormValidationTestCase
     public function testScanningDetailsDescription()
     {
         $element = ['details', 'description'];
-        $this->assertFormElementDynamicSelect($element);
+        $this->assertFormElementDynamicSelect($element, false);
     }
 
     public function testScanningDetailsOtherDescription()

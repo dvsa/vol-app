@@ -37,7 +37,6 @@ class ScanningDetails
      *     "context": {}
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\AllowEmpty(true)
      */
     public $description = null;
 
