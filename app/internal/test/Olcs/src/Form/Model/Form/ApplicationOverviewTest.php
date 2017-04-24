@@ -25,36 +25,30 @@ class ApplicationOverviewTest extends AbstractFormValidationTestCase
 
     public function testVersion()
     {
-        $this->assertFormElementHidden(
-            ['details', 'version']
-        );
+        $this->assertFormElementHidden(['details', 'version']);
     }
 
     public function testTrackingId()
     {
-        $this->assertFormElementHidden(
-            ['tracking', 'id']
-        );
+        $this->assertFormElementHidden(['tracking', 'id']);
     }
 
     public function testTrackingVersion()
     {
-        $this->assertFormElementHidden(
-            ['tracking', 'version']
-        );
+        $this->assertFormElementHidden(['tracking', 'version']);
     }
 
     public function testLeadTcArea()
     {
         $element = ['details', 'leadTcArea'];
         $this->assertFormElementType($element, Select::class);
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
     }
 
     public function testReceivedDate()
     {
         $element = ['details', 'receivedDate'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementDate($element);
     }
@@ -62,7 +56,7 @@ class ApplicationOverviewTest extends AbstractFormValidationTestCase
     public function testCompletionDate()
     {
         $element = ['details', 'targetCompletionDate'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementDate($element);
     }
@@ -70,22 +64,20 @@ class ApplicationOverviewTest extends AbstractFormValidationTestCase
     public function testTranslateToWelsh()
     {
         $element = ['details', 'translateToWelsh'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementType($element, OlcsCheckbox::class);
     }
 
     public function testOverrideOppositionDate()
     {
         $element = ['details', 'overrideOppositionDate'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementType($element, OlcsCheckbox::class);
     }
 
     public function testSave()
     {
-        $this->assertFormElementActionButton(
-            ['form-actions', 'save']
-        );
+        $this->assertFormElementActionButton(['form-actions', 'save']);
     }
 
     public function testSaveAndContinue()
@@ -97,8 +89,6 @@ class ApplicationOverviewTest extends AbstractFormValidationTestCase
 
     public function testCancel()
     {
-        $this->assertFormElementActionButton(
-            ['form-actions', 'cancel']
-        );
+        $this->assertFormElementActionButton(['form-actions', 'cancel']);
     }
 }
