@@ -43,7 +43,6 @@ class Appeal extends CaseBase
      * @Form\Attributes({"class":"","id":""})
      * @Form\Options({"label":"Appeal number"})
      * @Form\Required(false)
-     * @Form\AllowEmpty(true)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":20}})
@@ -199,9 +198,7 @@ class Appeal extends CaseBase
     public $isWithdrawn = null;
 
     /**
-     * @Form\Required(true)
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Required(false)
      * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Withdrawn date",
@@ -211,7 +208,6 @@ class Appeal extends CaseBase
      *     "required": false
      * })
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isWithdrawn",
@@ -219,7 +215,8 @@ class Appeal extends CaseBase
      *          "validators": {
      *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
-     *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
+     *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"},
+     *              {"name":"Zend\Validator\NotEmpty"}
      *          }
      *      }
      * })
