@@ -5,6 +5,7 @@ namespace OlcsTest\Form\Model\Form;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Zend\Form\Element\Select;
 use Zend\Validator\GreaterThan;
+use Zend\Validator\NotEmpty;
 
 /**
  * Class CreateFeeTest
@@ -31,20 +32,20 @@ class CreateFeeTest extends AbstractFormValidationTestCase
     public function testCreatedDate()
     {
         $element = ['fee-details', 'createdDate'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementDate($element);
     }
 
     public function testFeeType()
     {
         $element = ['fee-details', 'feeType'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementType($element, Select::class);
     }
 
     public function testIrfoGvPermit()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['fee-details', 'irfoGvPermit'],
             true
         );
@@ -52,7 +53,7 @@ class CreateFeeTest extends AbstractFormValidationTestCase
 
     public function testIrfoPsvAuth()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['fee-details', 'irfoPsvAuth'],
             true
         );
@@ -70,7 +71,7 @@ class CreateFeeTest extends AbstractFormValidationTestCase
         $this->assertFormElementNotValid(
             $element,
             '',
-            ['invalid']
+            [NotEmpty::IS_EMPTY]
         );
 
         $this->assertFormElementNotValid(
@@ -93,7 +94,7 @@ class CreateFeeTest extends AbstractFormValidationTestCase
 
     public function testVatRate()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['fee-details', 'vatRate'],
             false
         );
