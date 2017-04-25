@@ -28,27 +28,27 @@ class StatementTest extends AbstractFormValidationTestCase
 
     public function testVrm()
     {
-        $this->assertFormElementRequired(['fields', 'vrm'], true);
+        $this->assertFormElementIsRequired(['fields', 'vrm'], true);
     }
 
     public function testRequestorsForename()
     {
         $element = ['fields', 'requestorsForename'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementText($element, 2, 35);
     }
 
     public function testRequestorsFamilyName()
     {
         $element = ['fields', 'requestorsFamilyName'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementText($element, 2, 35);
     }
 
     public function testRequestorsBody()
     {
         $element = ['fields', 'requestorsBody'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementText($element, 2, 40);
     }
 
@@ -134,7 +134,7 @@ class StatementTest extends AbstractFormValidationTestCase
     public function testAuthorisersDecision()
     {
         $element = ['fields', 'authorisersDecision'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementText($element, 5, 4000);
     }
 
@@ -172,7 +172,7 @@ class StatementTest extends AbstractFormValidationTestCase
 
     public function testAddressLine1()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['requestorsAddress', 'addressLine1'],
             true
         );
@@ -180,7 +180,7 @@ class StatementTest extends AbstractFormValidationTestCase
 
     public function testAddressLine2()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['requestorsAddress', 'addressLine2'],
             false
         );
@@ -188,7 +188,7 @@ class StatementTest extends AbstractFormValidationTestCase
 
     public function testAddressLine3()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['requestorsAddress', 'addressLine3'],
             false
         );
@@ -196,7 +196,7 @@ class StatementTest extends AbstractFormValidationTestCase
 
     public function testAddressLine4()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['requestorsAddress', 'addressLine4'],
             false
         );
@@ -204,7 +204,7 @@ class StatementTest extends AbstractFormValidationTestCase
 
     public function testTown()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['requestorsAddress', 'town'],
             true
         );
@@ -212,9 +212,9 @@ class StatementTest extends AbstractFormValidationTestCase
 
     public function testPostcode()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['requestorsAddress', 'postcode'],
-            false
+            true
         );
     }
 

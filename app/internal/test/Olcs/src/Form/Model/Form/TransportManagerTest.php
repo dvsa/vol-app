@@ -78,7 +78,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
     public function testTransportManagerDateOfBirth()
     {
         $element = ['transport-manager-details', 'birthDate'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
 
         $this->assertFormElementNotValid(
             $element,
@@ -154,7 +154,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
 
     public function testTraansportManagerBirthPlace()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['transport-manager-details', 'birthPlace'],
             true
         );
@@ -182,7 +182,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
 
     public function testHomeAddressLine1()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['home-address', 'addressLine1'],
             true
         );
@@ -190,7 +190,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
 
     public function testHomeAddressLine2()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['home-address', 'addressLine2'],
             false
         );
@@ -198,7 +198,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
 
     public function testHomeAddressLine3()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['home-address', 'addressLine3'],
             false
         );
@@ -206,7 +206,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
 
     public function testHomeAddressLine4()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['home-address', 'addressLine4'],
             false
         );
@@ -214,7 +214,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
 
     public function testHomeTown()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['home-address', 'town'],
             true
         );
@@ -222,9 +222,9 @@ class TransportManagerTest extends AbstractFormValidationTestCase
 
     public function testHomePostcode()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['home-address', 'postcode'],
-            false
+            true
         );
     }
 
@@ -255,7 +255,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
 
     public function testWorkAddressLine1()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['work-address', 'addressLine1'],
             false
         );
@@ -263,7 +263,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
 
     public function testWorkAddressLine2()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['work-address', 'addressLine2'],
             false
         );
@@ -271,7 +271,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
 
     public function testWorkAddressLine3()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['work-address', 'addressLine3'],
             false
         );
@@ -279,7 +279,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
 
     public function testWorkAddressLine4()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['work-address', 'addressLine4'],
             false
         );
@@ -287,7 +287,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
 
     public function testWorkTown()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['work-address', 'town'],
             false
         );
@@ -295,7 +295,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
 
     public function testWorkPostcode()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['work-address', 'postcode'],
             false
         );

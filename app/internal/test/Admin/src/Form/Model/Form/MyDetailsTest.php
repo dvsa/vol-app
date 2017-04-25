@@ -22,7 +22,7 @@ class MyDetailsTest extends AbstractFormValidationTestCase
     public function testLoginId()
     {
         $element = ['userDetails', 'loginId'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementUsername($element);
     }
@@ -40,7 +40,7 @@ class MyDetailsTest extends AbstractFormValidationTestCase
     public function testForename()
     {
         $element = ['person', 'forename'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementText($element, 2, 35);
     }
@@ -48,7 +48,7 @@ class MyDetailsTest extends AbstractFormValidationTestCase
     public function testFamilyName()
     {
         $element = ['person', 'familyName'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementText($element, 2, 35);
     }
@@ -71,7 +71,7 @@ class MyDetailsTest extends AbstractFormValidationTestCase
     public function testEmailAddress()
     {
         $element = ['userContact', 'emailAddress'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
 
         $this->assertFormElementValid(
@@ -101,7 +101,7 @@ class MyDetailsTest extends AbstractFormValidationTestCase
     public function testEmailConfirm()
     {
         $element = ['userContact', 'emailConfirm'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementText($element);
     }
@@ -129,7 +129,7 @@ class MyDetailsTest extends AbstractFormValidationTestCase
     public function testContactPhoneSecondary()
     {
         $element = ['userContact', 'phone_secondary'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
     }
 
     public function testContactPhoneSecondaryId()
@@ -159,7 +159,7 @@ class MyDetailsTest extends AbstractFormValidationTestCase
     public function testOfficeAddressSearchPostcode()
     {
         $element = ['officeAddress', 'searchPostcode'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementPostcodeSearch($element);
     }
@@ -167,7 +167,7 @@ class MyDetailsTest extends AbstractFormValidationTestCase
     public function testOfficeAddressLine1()
     {
         $element = ['officeAddress', 'addressLine1'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementText($element, 0, 90);
     }
@@ -175,7 +175,7 @@ class MyDetailsTest extends AbstractFormValidationTestCase
     public function testOfficeAddressLine2()
     {
         $element = ['officeAddress', 'addressLine2'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element, 0, 90);
     }
@@ -183,7 +183,7 @@ class MyDetailsTest extends AbstractFormValidationTestCase
     public function testOfficeAddressLine3()
     {
         $element = ['officeAddress', 'addressLine3'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element, 0, 100);
     }
@@ -191,7 +191,7 @@ class MyDetailsTest extends AbstractFormValidationTestCase
     public function testOfficeAddressLine4()
     {
         $element = ['officeAddress', 'addressLine4'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element, 0, 35);
     }
@@ -199,7 +199,7 @@ class MyDetailsTest extends AbstractFormValidationTestCase
     public function testOfficeAddressTown()
     {
         $element = ['officeAddress', 'town'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementText($element, 0, 30);
     }
@@ -207,15 +207,14 @@ class MyDetailsTest extends AbstractFormValidationTestCase
     public function testOfficeAddressPostcode()
     {
         $element = ['officeAddress', 'postcode'];
-        $this->assertFormElementRequired($element, false);
-        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementPostcode($element);
     }
 
     public function testOfficeAddressCountryCode()
     {
         $element = ['officeAddress', 'countryCode'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementDynamicSelect($element);
     }
@@ -223,7 +222,7 @@ class MyDetailsTest extends AbstractFormValidationTestCase
     public function testTranslateToWelsh()
     {
         $element = ['userSettings', 'translateToWelsh'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementCheckbox($element);
     }

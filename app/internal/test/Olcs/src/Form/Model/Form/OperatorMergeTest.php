@@ -18,19 +18,24 @@ class OperatorMergeTest extends AbstractFormValidationTestCase
      */
     protected $formName = \Olcs\Form\Model\Form\OperatorMerge::class;
 
+    public function testLicenceIds()
+    {
+        $this->assertFormElementDynamicSelect(['licenceIds'], false);
+    }
+
     public function testOperatorName()
     {
-        $this->assertFormElementRequired(['fromOperatorName'], false);
+        $this->assertFormElementIsRequired(['fromOperatorName'], false);
     }
 
     public function testToOperatorId()
     {
-        $this->assertFormElementRequired(['toOperatorId'], true);
+        $this->assertFormElementIsRequired(['toOperatorId'], true);
     }
 
     public function testConfirm()
     {
-        $this->assertFormElementRequired(['confirm'], true);
+        $this->assertFormElementIsRequired(['confirm'], true);
     }
 
     public function testSubmit()

@@ -23,7 +23,7 @@ class RefundFeeTest extends AbstractFormValidationTestCase
 
     public function testCustomerReference()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['details', 'customerReference'],
             true
         );
@@ -31,7 +31,7 @@ class RefundFeeTest extends AbstractFormValidationTestCase
 
     public function testCustomerName()
     {
-        $this->assertFormElementRequired(['details', 'customerName'], true);
+        $this->assertFormElementIsRequired(['details', 'customerName'], true);
     }
 
     public function testSearchPostcode()
@@ -51,7 +51,7 @@ class RefundFeeTest extends AbstractFormValidationTestCase
 
     public function testAddressLine1()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['address', 'addressLine1'],
             true
         );
@@ -59,7 +59,7 @@ class RefundFeeTest extends AbstractFormValidationTestCase
 
     public function testAddressLine2()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['address', 'addressLine2'],
             false
         );
@@ -67,7 +67,7 @@ class RefundFeeTest extends AbstractFormValidationTestCase
 
     public function testAddressLine3()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['address', 'addressLine3'],
             false
         );
@@ -75,7 +75,7 @@ class RefundFeeTest extends AbstractFormValidationTestCase
 
     public function testAddressLine4()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['address', 'addressLine4'],
             false
         );
@@ -83,7 +83,7 @@ class RefundFeeTest extends AbstractFormValidationTestCase
 
     public function testTown()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['address', 'town'],
             true
         );
@@ -91,9 +91,9 @@ class RefundFeeTest extends AbstractFormValidationTestCase
 
     public function testPostcode()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['address', 'postcode'],
-            false
+            true
         );
     }
 

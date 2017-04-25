@@ -75,35 +75,35 @@ class OppositionTest extends AbstractFormValidationTestCase
 
     public function testValidNotes()
     {
-        $this->assertFormElementRequired(['fields', 'validNotes'], false);
+        $this->assertFormElementIsRequired(['fields', 'validNotes'], false);
     }
 
     public function testIsCopied()
     {
         $element = ['fields', 'isCopied'];
         $this->assertFormElementType($element, OlcsCheckbox::class);
-        $this->assertFormElementIsRequired($element, false);
+        $this->assertFormElementIsRequired($element, true);
     }
 
     public function testIsWillingToAttendPi()
     {
         $element = ['fields', 'isWillingToAttendPi'];
         $this->assertFormElementType($element, OlcsCheckbox::class);
-        $this->assertFormElementIsRequired($element, false);
+        $this->assertFormElementIsRequired($element, true);
     }
 
     public function testIsInTime()
     {
         $element = ['fields', 'isInTime'];
         $this->assertFormElementType($element, OlcsCheckbox::class);
-        $this->assertFormElementIsRequired($element, false);
+        $this->assertFormElementIsRequired($element, true);
     }
 
     public function testIsWithdrawn()
     {
         $element = ['fields', 'isWithdrawn'];
         $this->assertFormElementType($element, OlcsCheckbox::class);
-        $this->assertFormElementIsRequired($element, false);
+        $this->assertFormElementIsRequired($element, true);
     }
 
     public function testStatus()
