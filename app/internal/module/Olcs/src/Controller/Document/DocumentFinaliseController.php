@@ -1,14 +1,11 @@
 <?php
 
-/**
- * Document Upload Controller
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- */
 namespace Olcs\Controller\Document;
 
-use Dvsa\Olcs\Transfer\Command\Document\PrintLetter;
-use Dvsa\Olcs\Transfer\Command\Document\UpdateDocumentLinks;
+use Dvsa\Olcs\Transfer\Command as TransferCmd;
+use Dvsa\Olcs\Transfer\Command\Document\PrintLetter as PrintLetterCmd;
+use Dvsa\Olcs\Transfer\Query as TransferQry;
+use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -18,7 +15,32 @@ use Zend\View\Model\ViewModel;
  */
 class DocumentFinaliseController extends AbstractDocumentController
 {
+    const PRINT_MSGS_SUCCESS = [
+        PrintLetterCmd::METHOD_EMAIL => 'Letter was successfully created  and sent by email',
+        PrintLetterCmd::METHOD_PRINT_AND_POST => 'Letter was successfully created, printed and sent by post',
+    ];
+
     private $redirect;
+
+    /** @var  \Common\Service\Helper\FlashMessengerHelperService */
+    private $hlpFlashMsgr;
+    /** @var  \Common\Service\Helper\FormHelperService */
+    private $hlpForm;
+
+    /**
+     * Execute the request
+     *
+     * @param MvcEvent $e Event
+     *
+     * @return mixed
+     */
+    public function onDispatch(MvcEvent $e)
+    {
+        $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        $this->hlpForm = $this->getServiceLocator()->get('Helper\Form');
+
+        return parent::onDispatch($e);
+    }
 
     /**
      * finalise Action
@@ -71,64 +93,95 @@ class DocumentFinaliseController extends AbstractDocumentController
     }
 
     /**
-     * get method form class
-     * @NOTE Slightly extends the AbstractActionController version of this method, so that we can disable the security
-     * element. Updating this in the AbstractActionController causes lots of tests to fail, but shouldn't technically
-     * break anything.
-     *
-     * @param string $type type
-     *
-     * @return \Zend\Form\Form
-     */
-    protected function getFormClass($type)
-    {
-        return $this->getServiceLocator()->get('Helper\Form')->createForm(
-            $this->normaliseFormName($type, true),
-            $this->getEnabledCsrf()
-        );
-    }
-
-    /**
      * print Action
      *
      * @return \Zend\Http\Response|ViewModel
      */
     public function printAction()
     {
-        $id = $this->params('doc');
+        $docId = $this->params('doc');
 
-        $data = [
-            'id' => $id
-        ];
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
 
-        if ($this->getRequest()->isPost()) {
-            $data['shouldEmail'] = $this->isButtonPressed('yes') ? 'Y' : 'N';
+        //  POST: process form
+        $respPost = null;
+
+        if ($request->isPost()) {
+            $method = null;
+            if ($this->isButtonPressed('email')) {
+                $method = PrintLetterCmd::METHOD_EMAIL;
+            } elseif ($this->isButtonPressed('printAndPost')) {
+                $method = PrintLetterCmd::METHOD_PRINT_AND_POST;
+            } else {
+                return $this->redirect()->toRoute(
+                    null, ['action' => 'cancel'], ['query' => $request->getQuery()->toArray()], true
+                );
+            }
+
+            $respPost = $this->handleCommand(
+                PrintLetterCmd::create(
+                    [
+                        'id' => $docId,
+                        'method' => $method,
+                    ]
+                )
+            );
+
+            if ($respPost->isOk()) {
+                $this->hlpFlashMsgr->addSuccessMessage(self::PRINT_MSGS_SUCCESS[$method]);
+
+                return $this->handleRedirectToDocumentRoute($request->isXmlHttpRequest());
+            }
         }
 
-        $response = $this->handleCommand(PrintLetter::create($data));
-
-        if ($response->isOk()) {
-            return $this->handleRedirectToDocumentRoute($this->getRequest()->isXmlHttpRequest());
-        }
-
-        if ($response->isClientError() && isset($response->getResult()['messages']['should_email'])) {
-            $form = $this->getServiceLocator()->get('Helper\Form')
-                ->createFormWithRequest('ConfirmYesNo', $this->getRequest());
-
-            $view = new ViewModel();
-
-            $view->setVariable('form', $form);
-            $view->setVariable('label', 'Would you like to email the document to the operator?');
-            $view->setTemplate('pages/confirm');
-
-            return $this->renderView($view, 'Send letter by email');
-        }
-
-        $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnknownError();
-
-        return $this->redirect()->toRoute(
-            null, ['action' => 'finalise'], ['query' => $this->getRequest()->getQuery()->toArray()], true
+        //  GET: build form
+        $respGet = $this->handleQuery(
+            TransferQry\Document\PrintLetter::create(['id' => $docId])
         );
+
+        $result = $respGet->getResult();
+
+        //  POST & GET: process API error
+        foreach ([$respGet, $respPost] as $resp) {
+            if ($resp === null) {
+                continue;
+            }
+
+            if ($resp->isServerError()) {
+                $this->hlpFlashMsgr->addUnknownError();
+
+            } elseif ($resp->isClientError()) {
+                $respResult = $resp->getResult();
+                $errMsgs = (isset($respResult['messages']) ? $respResult['messages'] : []);
+                foreach ($errMsgs as $err) {
+                    $this->hlpFlashMsgr->addCurrentErrorMessage($err);
+                }
+            }
+        }
+
+        //  prepare form
+        $form = $this->hlpForm->createForm('DocumentSend', true);
+
+        //  define visibility of buttons
+        $flags = $result['flags'];
+        if (!$flags[PrintLetterCmd::METHOD_EMAIL]) {
+            $this->hlpForm->disableElement($form, 'form-actions->email');
+        }
+
+        if (!$flags[PrintLetterCmd::METHOD_PRINT_AND_POST]) {
+            $this->hlpForm->disableElement($form, 'form-actions->printAndPost');
+        }
+
+        $view = new ViewModel(
+            [
+                'form' => $form,
+                'label' => 'Would you like to send this letter?',
+            ]
+        );
+        $view->setTemplate('pages/confirm');
+
+        return $this->renderView($view, 'Send letter');
     }
 
     /**
@@ -168,7 +221,7 @@ class DocumentFinaliseController extends AbstractDocumentController
      *
      * @param array $data data
      *
-     * @return void|\Zend\Http\Response
+     * @return \Zend\Http\Response | null
      */
     public function processSaveLetter($data)
     {
@@ -206,7 +259,7 @@ class DocumentFinaliseController extends AbstractDocumentController
         }
 
         // Update Document Record
-        $dto = UpdateDocumentLinks::create($data);
+        $dto = TransferCmd\Document\UpdateDocumentLinks::create($data);
         $response = $this->handleCommand($dto);
 
         if (!$response->isOk()) {
