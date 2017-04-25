@@ -508,6 +508,16 @@ $configRoutes['lva-application']['child_routes'] = array_merge(
                 )
             )
         ),
+        'upload-evidence' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'upload-evidence[/]',
+                'defaults' => array(
+                    'controller' => 'LvaApplication/UploadEvidence',
+                    'action' => 'index'
+                )
+            )
+        ),
         'summary' => array(
             'type' => 'segment',
             'options' => array(
@@ -575,6 +585,16 @@ $configRoutes['lva-variation']['child_routes'] = array_merge(
                 'defaults' => array(
                     'controller' => 'LvaVariation/Summary',
                     'action' => 'postSubmitSummary'
+                )
+            )
+        ),
+        'upload-evidence' => array(
+            'type' => 'segment',
+            'options' => array(
+                'route' => 'upload-evidence[/]',
+                'defaults' => array(
+                    'controller' => 'LvaVariation/UploadEvidence',
+                    'action' => 'index'
                 )
             )
         ),
@@ -766,7 +786,21 @@ $applicationNavigation = array(
             'id' => 'application-submission-summary',
             'label' => 'Application summary',
             'route' => 'lva-application/submission-summary',
-            'use_route_match' => true
+            'use_route_match' => true,
+            'pages' => array(
+                array(
+                    'id' => 'application-upload-evidence',
+                    'label' => 'Upload evidence',
+                    'route' => 'lva-application/upload-evidence',
+                    'use_route_match' => true
+                ),
+                array(
+                    'id' => 'variation-upload-evidence',
+                    'label' => 'Upload evidence',
+                    'route' => 'lva-variation/upload-evidence',
+                    'use_route_match' => true
+                ),
+            ),
         ),
         array(
             'id' => 'application',
@@ -995,6 +1029,7 @@ return array(
             'LvaApplication/VehiclesDeclarations'   => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
             'LvaApplication/PaymentSubmission'      => 'Olcs\Controller\Lva\Application\PaymentSubmissionController',
             'LvaApplication/Summary'                => 'Olcs\Controller\Lva\Application\SummaryController',
+            'LvaApplication/UploadEvidence'         => \Olcs\Controller\Lva\Application\UploadEvidenceController::class,
             'LvaApplication/Review'                 => \Common\Controller\Lva\ReviewController::class,
             'LvaLicence'                            => Olcs\Controller\Lva\Licence\OverviewController::class,
             'LvaLicence/Variation'                  => 'Olcs\Controller\Lva\Licence\VariationController',
@@ -1031,6 +1066,7 @@ return array(
             'LvaVariation/FinancialHistory'         => 'Olcs\Controller\Lva\Variation\FinancialHistoryController',
             'LvaVariation/ConvictionsPenalties'     => 'Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController',
             'LvaVariation/Summary'                  => 'Olcs\Controller\Lva\Variation\SummaryController',
+            'LvaVariation/UploadEvidence'           => \Olcs\Controller\Lva\Variation\UploadEvidenceController::class,
             'LvaVariation/PaymentSubmission'        => 'Olcs\Controller\Lva\Variation\PaymentSubmissionController',
             'LvaVariation/Review'                   => \Common\Controller\Lva\ReviewController::class,
         ),
