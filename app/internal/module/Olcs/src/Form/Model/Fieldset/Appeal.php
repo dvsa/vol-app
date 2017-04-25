@@ -199,6 +199,7 @@ class Appeal extends CaseBase
 
     /**
      * @Form\Required(false)
+     * @Form\Type("DateSelect")
      * @Form\Attributes({"id":""})
      * @Form\Options({
      *     "label": "Withdrawn date",
@@ -207,7 +208,6 @@ class Appeal extends CaseBase
      *     "hint": "Please note, all associated stay information on this case will also be withdrawn",
      *     "required": false
      * })
-     * @Form\Type("DateSelect")
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isWithdrawn",
