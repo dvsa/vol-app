@@ -97,7 +97,8 @@ trait ExternalControllerTrait
                 $submissionRouteName,
                 'lva-' . $this->lva . '/transport_manager_details',
                 'lva-' . $this->lva . '/transport_manager_details/action',
-                'lva-' . $this->lva . '/withdraw'
+                'lva-' . $this->lva . '/withdraw',
+                'lva-' . $this->lva . '/upload-evidence',
             ];
             $matchedRouteName = $this->getEvent()->getRouteMatch()->getMatchedRouteName();
 
