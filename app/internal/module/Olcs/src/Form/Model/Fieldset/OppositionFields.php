@@ -17,12 +17,13 @@ class OppositionFields extends CaseBase
     public $id = null;
 
     /**
-     * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
+     * @Form\Attributes({"value":""})
      */
     public $version = null;
 
     /**
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"oppositionType","placeholder":""})
      * @Form\Options({
      *     "label": "Opposition type",
@@ -30,29 +31,28 @@ class OppositionFields extends CaseBase
      *     "disable_inarray_validator": false,
      *     "category": "obj_type"
      * })
-     * @Form\Type("DynamicSelect")
      */
     public $oppositionType;
 
     /**
      * @Form\Required(false)
+     * @Form\Type("Text")
      * @Form\Attributes({"id":"contactDetailsDescription","placeholder":"","class":"extra-long"})
      * @Form\Options({"label":"Objector body"})
-     * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
      */
     public $contactDetailsDescription = null;
 
     /**
+     * @Form\Required(false)
+     * @Form\Type("DateSelect")
      * @Form\Attributes({"id":"raisedDate"})
      * @Form\Options({
      *     "label": "Date received",
      *     "create_empty_option": true,
      *     "render_delimiters": "d m y"
      * })
-     * @Form\Required(false)
-     * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
@@ -62,31 +62,29 @@ class OppositionFields extends CaseBase
 
     /**
      * @Form\Required(false)
-     * @Form\Attributes({"id":"outOfRepresentationDate", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")
+     * @Form\Attributes({"id":"outOfRepresentationDate", "required": false})
      */
     public $outOfRepresentationDate = null;
 
     /**
      * @Form\Required(false)
-     * @Form\Attributes({"id":"outOfObjectionDate", "required": false})
      * @Form\Type("Common\Form\Elements\Types\Html")
+     * @Form\Attributes({"id":"outOfObjectionDate", "required": false})
      */
     public $outOfObjectionDate = null;
 
     /**
-     * @Form\AllowEmpty(true)
      * @Form\Required(true)
-     * @Form\Attributes({"id":"opposerType","placeholder":"", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Type("DynamicSelect")
      * @Form\Options({
      *     "label": "Objector type",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      *     "category": "opposer_type",
      * })
-     * @Form\Type("DynamicSelect")
-     *
+     * @Form\Attributes({"id":"opposerType","placeholder":"", "required":false})
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "oppositionType",
@@ -100,65 +98,66 @@ class OppositionFields extends CaseBase
     public $opposerType = null;
 
     /**
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"isValid","placeholder":""})
      * @Form\Options({
      *     "label": "Valid",
      *     "disable_inarray_validator": false,
      *     "category": "opposition_valid",
      * })
-     * @Form\Type("DynamicSelect")
      */
     public $isValid;
 
     /**
-     * @Form\Attributes({"class":"extra-long","id":"validNotes"})
-     * @Form\Options({"label":"Valid details"})
      * @Form\Required(false)
      * @Form\Type("TextArea")
+     * @Form\Attributes({"class":"extra-long","id":"validNotes"})
+     * @Form\Options({"label":"Valid details"})
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":4000}})
      */
     public $validNotes;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Copied"})
      * @Form\Type("OlcsCheckbox")
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Copied"})
      */
     public $isCopied;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Willing to attend PI"})
      * @Form\Type("OlcsCheckbox")
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Willing to attend PI"})
      */
     public $isWillingToAttendPi;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"In time"})
      * @Form\Type("OlcsCheckbox")
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"In time"})
      */
     public $isInTime;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Withdrawn"})
      * @Form\Type("OlcsCheckbox")
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Withdrawn"})
      */
     public $isWithdrawn;
 
     /**
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"status","placeholder":""})
      * @Form\Options({
      *     "label": "Status",
      *     "disable_inarray_validator": false,
      *     "category": "opposition_status"
      * })
-     * @Form\Type("DynamicSelect")
      */
     public $status = null;
 
     /**
+     * @Form\Required(false)
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"licenceOperatingCentres","placeholder":"", "class":"chosen-select-medium",
      * "multiple":"multiple"})
-     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Affected centre",
      *     "context":"licence",
@@ -166,14 +165,14 @@ class OppositionFields extends CaseBase
      *     "service_name": "Common/Service/Data/OcContextListDataService",
      *     "use_groups": "false"
      * })
-     * @Form\Type("DynamicSelect")
      */
     public $licenceOperatingCentres;
 
     /**
+     * @Form\Required(false)
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"applicationOperatingCentres","placeholder":"", "class":"chosen-select-medium",
      * "multiple":"multiple"})
-     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Affected centre",
      *     "context":"application",
@@ -181,30 +180,27 @@ class OppositionFields extends CaseBase
      *     "service_name": "Common/Service/Data/OcContextListDataService",
      *     "use_groups": "false"
      * })
-     * @Form\Type("DynamicSelect")
      */
     public $applicationOperatingCentres;
 
     /**
      * @Form\Required(false)
-     * @Form\AllowEmpty(true)
-     * @Form\Attributes({"id":"grounds","placeholder":"","class":"chosen-select-medium","required":false,
-     *      "multiple":"multiple"})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Type("DynamicSelect")
      * @Form\Options({
      *     "label": "Grounds",
      *     "disable_inarray_validator": false,
      *     "category": "obj_grounds"
      * })
-     * @Form\Type("DynamicSelect")
+     * @Form\Attributes({"id":"grounds","placeholder":"","class":"chosen-select-medium","required":false,
+     *      "multiple":"multiple"})
      */
     public $grounds = null;
 
     /**
-     * @Form\Attributes({"class":"extra-long","id":""})
-     * @Form\Options({"label":"Notes"})
      * @Form\Required(false)
      * @Form\Type("TextArea")
+     * @Form\Attributes({"class":"extra-long","id":""})
+     * @Form\Options({"label":"Notes"})
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":4000}})
      */
