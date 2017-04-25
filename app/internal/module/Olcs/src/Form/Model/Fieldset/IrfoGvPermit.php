@@ -94,12 +94,11 @@ class IrfoGvPermit extends OrganisationBase
 
     /**
      * @Form\Required(true)
-     * @Form\Attributes({"class":"extra-long","id":"exemptionDetails", "required":false})
-     * @Form\Options({"label":"Exemption reason"})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("TextArea")
+     * @Form\Options({"label":"Exemption reason"})
+     * @Form\Attributes({"class":"extra-long","id":"exemptionDetails", "required":false})
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isFeeExempt",
