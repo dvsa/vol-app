@@ -76,14 +76,14 @@ class FeePaymentDetails
     /**
      * Receipt date, required for non-card payments
      *
+     * @Form\Required(true)
+     * @Form\Type("DateSelect")
      * @Form\Options({
      *      "short-label":"fees.receipt_date",
      *      "label":"fees.receipt_date",
      *      "label_attributes": {"id": "label-receiptDate"}
      * })
-     * @Form\Required(true)
      * @Form\Attributes({"required":false})
-     * @Form\Type("DateSelect")
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "paymentType",
@@ -104,14 +104,15 @@ class FeePaymentDetails
     /**
      * Payer name, required for non-card payments
      *
+     * @Form\Required(true)
+     * @Form\Type("Text")
      * @Form\Options({
      *      "short-label":"fees.payer",
      *      "label":"fees.payer",
      *      "label_attributes": {"id": "label-payer"}
      * })
-     * @Form\Required(true)
      * @Form\Attributes({"required":false})
-     * @Form\Type("Text")
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "paymentType",
@@ -135,6 +136,7 @@ class FeePaymentDetails
      *      "label_attributes": {"id": "label-slipNo"}
      * })
      * @Form\Required(true)
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Attributes({"required":false})
      * @Form\Type("Text")
      * @Form\Validator({"name": "ValidateIf",
