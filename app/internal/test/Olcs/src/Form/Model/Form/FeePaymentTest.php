@@ -46,7 +46,15 @@ class FeePaymentTest extends AbstractFormValidationTestCase
 
     public function testReceiptDate()
     {
-        $this->assertFormElementDate(['details', 'receiptDate']);
+        $element = ['details', 'receiptDate'];
+
+        $now = new \DateTimeImmutable('now');
+        $date = $now->format('Y') . '-' . $now->format('m') . '-' . $now->format('d');
+
+        $this->assertFormElementValid($element, $date);
+
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementIsRequired($element, true);
     }
 
     public function testPayer()
@@ -56,44 +64,37 @@ class FeePaymentTest extends AbstractFormValidationTestCase
 
     public function testSlipNo()
     {
-        $this->assertFormElementIsRequired(
-            ['details', 'slipNo'],
-            true,
-            [Digits::INVALID]
-        );
+        $this->assertFormElementIsRequired(['details', 'slipNo'], true);
     }
 
     public function testChequeNo()
     {
-        $this->assertFormElementIsRequired(['details', 'chequeNo'], false);
+        $this->assertFormElementAllowEmpty(['details', 'chequeNo'], true);
     }
 
     public function testChequeDate()
     {
         $element = ['details', 'chequeDate'];
 
-        $dateNow = new \DateTimeImmutable('now');
+        $previousYear = new \DateTimeImmutable('-1 year');
+        $date = $previousYear->format('Y') . '-' . $previousYear->format('m') . '-' . $previousYear->format('d');
 
-        $this->assertFormElementDateTimeValidCheck(
-            $element,
-            [
-                'year' => $dateNow->format('Y'),
-                'month' => $dateNow->format('m'),
-                'day' => $dateNow->format('j')
-            ]
-        );
+        $this->assertFormElementValid($element, $date);
 
-        $this->assertFormElementIsRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, true);
     }
 
     public function testPoNo()
     {
-        $this->assertFormElementAllowEmpty(['details', 'poNo'], true);
+        $this->assertFormElementIsRequired(['details', 'poNo'], true);
     }
 
     public function testCustomerReference()
     {
-        $this->assertFormElementIsRequired(['details', 'customerReference'], true);
+        $this->assertFormElementIsRequired(
+            ['details', 'customerReference'],
+            true
+        );
     }
 
     public function testCustomerName()
@@ -103,16 +104,12 @@ class FeePaymentTest extends AbstractFormValidationTestCase
 
     public function testAddressId()
     {
-        $this->assertFormElementHidden(
-            ['address', 'id']
-        );
+        $this->assertFormElementHidden(['address', 'id']);
     }
 
     public function testAddressVersion()
     {
-        $this->assertFormElementHidden(
-            ['address', 'version']
-        );
+        $this->assertFormElementHidden(['address', 'version']);
     }
 
     public function testAddressSearchPostcode()
