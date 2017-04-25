@@ -61,13 +61,13 @@ abstract class AbstractUploadEvidenceController extends AbstractController
         /** @var \Common\Service\Helper\FormHelperService $formHelper */
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
-        if ($this->showFinancialEvidence()) {
+        if ($this->shouldShowFinancialEvidence()) {
             $this->processFiles(
                 $form,
                 'financialEvidence->files',
-                array($this, 'processFileUpload'),
-                array($this, 'deleteFile'),
-                array($this, 'loadFileUpload')
+                [$this, 'processFileUpload'],
+                [$this, 'deleteFile'],
+                [$this, 'loadFileUpload']
             );
         } else {
             $formHelper->remove($form, 'financialEvidence');
@@ -103,7 +103,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      *
      * @return bool
      */
-    private function showFinancialEvidence()
+    private function shouldShowFinancialEvidence()
     {
         $financialEvidenceData = $this->getFinancialEvidenceData();
         return $financialEvidenceData['financialEvidence']['canAdd'] === true;
