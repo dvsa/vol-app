@@ -53,17 +53,6 @@
             'value' => ''
         ];
     }
-    if ($this->registrationDetails['receivedDate']) {
-        $receivedDate = (new \DateTime($this->registrationDetails['receivedDate']))->format(\DATE_FORMAT);
-    } else {
-        $receivedDate = '';
-    }
-
-    if ($this->registrationDetails['effectiveDate']) {
-        $effectiveDate = (new \DateTime($this->registrationDetails['effectiveDate']))->format(\DATE_FORMAT);
-    } else {
-        $effectiveDate = '';
-    }
 
     $licence = $this->registrationDetails['licence'];
 
@@ -95,9 +84,18 @@
                     ['label' => 'Via', 'value' => $this->registrationDetails['via']]
                 ],
                 6 => [
-                    ['label' => 'Date received', 'value' => $receivedDate],
-                    ['label' => 'Effective date', 'value' => $effectiveDate],
-                    ['label' => 'End date', 'value' => $this->registrationDetails['endDate']]
+                    [
+                        'label' => 'Date received',
+                        'date' => $this->registrationDetails['receivedDate'],
+                    ],
+                    [
+                        'label' => 'Effective date',
+                        'date' => $this->registrationDetails['effectiveDate'],
+                    ],
+                    [
+                        'label' => 'End date',
+                        'date' => $this->registrationDetails['endDate'],
+                    ],
                 ],
                 7 => [
                     [
