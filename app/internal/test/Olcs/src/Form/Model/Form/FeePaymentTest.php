@@ -4,6 +4,7 @@ namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Zend\Validator\Digits;
+use Zend\Validator\NotEmpty;
 
 /**
  * Class FeePaymentTest
@@ -64,7 +65,11 @@ class FeePaymentTest extends AbstractFormValidationTestCase
 
     public function testSlipNo()
     {
-        $this->assertFormElementIsRequired(['details', 'slipNo'], true);
+        $this->assertFormElementIsRequired(
+            ['details', 'slipNo'],
+            true,
+            [NotEmpty::IS_EMPTY,Digits::INVALID]
+        );
     }
 
     public function testChequeNo()
