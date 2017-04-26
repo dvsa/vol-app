@@ -21,7 +21,7 @@ class PublicInquiryHearingTest extends AbstractFormValidationTestCase
 
     public function testVenueOther()
     {
-        $this->assertFormElementRequired(['fields', 'venueOther'], false);
+        $this->assertFormElementIsRequired(['fields', 'venueOther'], false);
     }
 
     public function testHearingDate()
@@ -30,6 +30,7 @@ class PublicInquiryHearingTest extends AbstractFormValidationTestCase
 
         $tomorrow = new \DateTimeImmutable('+1 day');
 
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementDateTimeValidCheck(
             $element,
             [
@@ -47,7 +48,7 @@ class PublicInquiryHearingTest extends AbstractFormValidationTestCase
     {
         $element = ['fields', 'isFullDay'];
         $this->assertFormElementType($element, Radio::class);
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
     }
 
     public function testPresidingTc()
@@ -65,12 +66,12 @@ class PublicInquiryHearingTest extends AbstractFormValidationTestCase
 
     public function testWitnesses()
     {
-        $this->assertFormElementRequired(['fields', 'witnesses'], true);
+        $this->assertFormElementIsRequired(['fields', 'witnesses'], true);
     }
 
     public function testIsCancelled()
     {
-        $this->assertFormElementRequired(['fields', 'isCancelled'], true);
+        $this->assertFormElementIsRequired(['fields', 'isCancelled'], true);
     }
 
     public function testCancelledDate()
@@ -94,7 +95,7 @@ class PublicInquiryHearingTest extends AbstractFormValidationTestCase
 
     public function testCancelledReason()
     {
-        $this->assertFormElementRequired(['fields', 'cancelledReason'], false);
+        $this->assertFormElementIsRequired(['fields', 'cancelledReason'], false);
     }
 
     public function testAdjournedDate()
@@ -118,12 +119,12 @@ class PublicInquiryHearingTest extends AbstractFormValidationTestCase
 
     public function testIsAdjourned()
     {
-        $this->assertFormElementRequired(['fields', 'isAdjourned'], true);
+        $this->assertFormElementIsRequired(['fields', 'isAdjourned'], true);
     }
 
     public function testAdjournedReason()
     {
-        $this->assertFormElementRequired(['fields', 'adjournedReason'], false);
+        $this->assertFormElementIsRequired(['fields', 'adjournedReason'], false);
     }
 
     public function testDefinition()
@@ -134,7 +135,7 @@ class PublicInquiryHearingTest extends AbstractFormValidationTestCase
     public function testDetails()
     {
         $element = ['fields', 'details'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementText($element, 5, 4000);
     }
 
@@ -150,12 +151,12 @@ class PublicInquiryHearingTest extends AbstractFormValidationTestCase
 
     public function testPubType()
     {
-        $this->assertFormElementRequired(['fields', 'pubType'], true);
+        $this->assertFormElementIsRequired(['fields', 'pubType'], true);
     }
 
     public function testTrafficAreas()
     {
-        $this->assertFormElementRequired(['fields', 'trafficAreas'], true);
+        $this->assertFormElementIsRequired(['fields', 'trafficAreas'], true);
     }
 
     public function testPi()

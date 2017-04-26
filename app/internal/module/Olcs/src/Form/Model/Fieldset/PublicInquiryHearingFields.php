@@ -11,6 +11,7 @@ use Zend\Form\Annotation as Form;
 class PublicInquiryHearingFields extends Base
 {
     /**
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"venue","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Venue",
@@ -19,25 +20,22 @@ class PublicInquiryHearingFields extends Base
      *     "disable_inarray_validator": false,
      *     "other_option" : true
      * })
-     *
-     * @Form\Type("DynamicSelect")
      */
     public $venue;
 
     /**
      * @Form\Required(true)
+     * @Form\Type("Text")
      * @Form\Attributes({"class":"medium","id":"venueOther", "required":false})
      * @Form\Options({"label":"Other venue"})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("Text")
+     * @Form\Validator({"name": "NotEmpty", "options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "venue",
      *          "context_values": {"other"},
      *          "allow_empty": false,
      *          "validators": {
-     *              {"name": "\Zend\Validator\NotEmpty"},
+     *              {"name": "NotEmpty"},
      *              {"name":"Zend\Validator\StringLength","options":{"max":255}}
      *          }
      *      }
@@ -46,6 +44,8 @@ class PublicInquiryHearingFields extends Base
     public $venueOther;
 
     /**
+     * @Form\Required(true)
+     * @Form\Type("DateTimeSelect")
      * @Form\Attributes({"id":"hearingDate"})
      * @Form\Options({
      *     "label": "Date of PI",
@@ -55,8 +55,7 @@ class PublicInquiryHearingFields extends Base
      *     "category": "pi_hearing",
      *     "field": "hearingDate"
      * })
-     * @Form\Type("DateTimeSelect")
-     * @Form\Filter({"name": "DateTimeSelectNullifier"})
+     * @Form\Filter({"name":"DateTimeSelect", "options":{"null_on_empty":true}})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d H:i:s"}})
      */
@@ -80,6 +79,7 @@ class PublicInquiryHearingFields extends Base
     public $isFullDay;
 
     /**
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"presidingTc","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Presiding TC/DTC/HTRU/DHTRU",
@@ -87,11 +87,11 @@ class PublicInquiryHearingFields extends Base
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
      * })
-     * @Form\Type("DynamicSelect")
      */
     public $presidingTc;
 
     /**
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"presidedByRole","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Presiding TC/DTC/HTRU/DHTRU role",
@@ -99,42 +99,40 @@ class PublicInquiryHearingFields extends Base
      *     "disable_inarray_validator": false,
      *     "category": "tc_role"
      * })
-     * @Form\Type("DynamicSelect")
      */
     public $presidedByRole;
 
     /**
+     * @Form\Type("Text")
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
      * @Form\Options({"label": "Number of witnesses"})
-     * @Form\Type("Text")
      * @Form\Validator({"name":"Digits"})
      */
     public $witnesses;
 
     /**
-     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled / Withdrawn"})
      * @Form\Type("OlcsCheckbox")
+     * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled / Withdrawn"})
      */
     public $isCancelled;
 
     /**
      * @Form\Required(true)
+     * @Form\Type("DateSelect")
      * @Form\Attributes({"id":"cancelledDate", "required":false})
      * @Form\Options({
      *     "label": "Cancelled date",
      *     "create_empty_option": true,
      * })
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Filter({"name":"DateSelect", "options":{"null_on_empty":true}})
+     * @Form\Validator({"name": "NotEmpty", "options":{"array"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isCancelled",
      *          "context_values": {"Y"},
      *          "allow_empty": false,
      *          "validators": {
-     *              {"name":"Zend\Validator\NotEmpty"},
+     *              {"name":"NotEmpty"},
      *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}}
      *          }
@@ -145,19 +143,18 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Required(true)
+     * @Form\Type("TextArea")
      * @Form\Attributes({"class":"extra-long","id":"cancelledReason", "required":false})
      * @Form\Options({"label":"Cancelled reason"})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name": "NotEmpty", "options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isCancelled",
      *          "context_values": {"Y"},
      *          "allow_empty": false,
      *          "validators": {
-     *              {"name":"Zend\Validator\NotEmpty"},
+     *              {"name":"NotEmpty"},
      *              {"name":"Zend\Validator\StringLength","options":{"max":1000}}
      *          }
      *      }
@@ -202,11 +199,11 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Required(true)
+     * @Form\Type("TextArea")
      * @Form\Attributes({"class":"extra-long","id":"", "required":false})
      * @Form\Options({"label":"Adjourned reason"})
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
@@ -224,6 +221,7 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Required(false)
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-large js-definition-source"})
      * @Form\Options({
      *     "label": "Definition",
@@ -232,15 +230,14 @@ class PublicInquiryHearingFields extends Base
      *     "use_groups": true,
      *     "empty_option": "Add definition option"
      * })
-     * @Form\Type("DynamicSelect")
      */
     public $definition = null;
 
     /**
-     * @Form\Attributes({"class":"extra-long    js-definition-target","id":""})
-     * @Form\Options({"label":"Details to be published"})
      * @Form\Required(false)
      * @Form\Type("TextArea")
+     * @Form\Attributes({"class":"extra-long    js-definition-target","id":""})
+     * @Form\Options({"label":"Details to be published"})
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5, "max":4000}})
      */
@@ -248,6 +245,10 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Type("Select")
+     * @Form\Attributes({
+     *      "id":"pubType",
+     *      "value":"All"
+     * })
      * @Form\Options({
      *      "label": "Publication type",
      *      "value_options":{
@@ -255,10 +256,6 @@ class PublicInquiryHearingFields extends Base
      *          "A&D":"A&D",
      *          "N&P":"N&P"
      *      }
-     * })
-     * @Form\Attributes({
-     *      "id":"pubType",
-     *      "value":"All"
      * })
      */
     public $pubType;
@@ -294,8 +291,8 @@ class PublicInquiryHearingFields extends Base
     public $trafficAreas;
 
     /**
-     * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
+     * @Form\Attributes({"value":""})
      */
     public $pi;
 }
