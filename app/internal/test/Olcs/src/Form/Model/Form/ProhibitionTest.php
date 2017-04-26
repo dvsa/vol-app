@@ -27,14 +27,14 @@ class ProhibitionTest extends AbstractFormValidationTestCase
     public function testVrm()
     {
         $element = ['fields', 'vrm'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
     }
 
     public function testIsTrailer()
     {
         $element = ['fields', 'isTrailer'];
         $this->assertFormElementType($element, OlcsCheckbox::class);
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
     }
 
     public function testProhibitionType()
@@ -48,6 +48,12 @@ class ProhibitionTest extends AbstractFormValidationTestCase
     public function testClearedDate()
     {
         $element = ['fields', 'clearedDate'];
+
+        // Element is not required
+        $this->assertFormElementIsRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, true);
+
+        // Cannot be todays date
         $this->assertFormElementNotValid(
             $element,
             [
@@ -58,7 +64,7 @@ class ProhibitionTest extends AbstractFormValidationTestCase
             ['invalidField']
         );
 
-        // This date cannot be
+        // This date cannot be in the future
         $this->assertFormElementNotValid(
             $element,
             [
@@ -84,7 +90,7 @@ class ProhibitionTest extends AbstractFormValidationTestCase
 
     public function testImposedAt()
     {
-        $this->assertFormElementRequired(['fields', 'imposedAt'], false);
+        $this->assertFormElementIsRequired(['fields', 'imposedAt'], false);
     }
 
     public function testId()
