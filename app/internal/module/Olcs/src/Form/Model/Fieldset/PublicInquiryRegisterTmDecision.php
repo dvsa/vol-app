@@ -12,6 +12,7 @@ use Zend\Form\Annotation as Form;
 class PublicInquiryRegisterTmDecision extends CaseBase
 {
     /**
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Presiding TC/DTC/HTRU/DHTRU",
@@ -19,11 +20,11 @@ class PublicInquiryRegisterTmDecision extends CaseBase
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false
      * })
-     * @Form\Type("DynamicSelect")
      */
     public $decidedByTc = null;
 
     /**
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Presiding TC/DTC/HTRU/DHTRU role",
@@ -31,19 +32,18 @@ class PublicInquiryRegisterTmDecision extends CaseBase
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false
      * })
-     * @Form\Type("DynamicSelect")
      */
     public $decidedByTcRole = null;
 
     /**
+     * @Form\Required(false)
+     * @Form\Type("DateSelect")
      * @Form\Attributes({"id":"decisionDate"})
      * @Form\Options({
      *     "label": "Date of decision",
      *     "create_empty_option": true,
      *     "render_delimiters": "d m y"
      * })
-     * @Form\Required(false)
-     * @Form\Type("DateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
@@ -66,22 +66,22 @@ class PublicInquiryRegisterTmDecision extends CaseBase
     public $decisions = null;
 
     /**
+     * @Form\Type("Text")
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
      * @Form\Options({"label": "Number of witnesses"})
-     * @Form\Type("Text")
      * @Form\Validator({"name":"Digits"})
      */
     public $witnesses = null;
 
     /**
+     * @Form\Required(false)
+     * @Form\Type("DateSelect")
      * @Form\Attributes({"id":"notificationDate"})
      * @Form\Options({
      *     "label": "Date of notification",
      *     "create_empty_option": true,
      *     "render_delimiters": "d m y"
      * })
-     * @Form\Required(false)
-     * @Form\Type("DateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
@@ -90,6 +90,8 @@ class PublicInquiryRegisterTmDecision extends CaseBase
     public $notificationDate = null;
 
     /**
+     * @Form\Required(false)
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"definition","placeholder":"","class":"chosen-select-large js-definition-source"})
      * @Form\Options({
      *     "label": "Definition",
@@ -98,18 +100,16 @@ class PublicInquiryRegisterTmDecision extends CaseBase
      *     "use_groups": true,
      *     "empty_option": "Add definition option"
      * })
-     * @Form\Type("DynamicSelect")
-     * @Form\Required(false)
      */
     public $definition = null;
 
     /**
+     * @Form\Required(false)
+     * @Form\Type("TextArea")
      * @Form\Attributes({"id":"decisionNotes","class":"extra-long js-definition-target"})
      * @Form\Options({
      *     "label": "Details to be published"
      * })
-     * @Form\Required(false)
-     * @Form\Type("TextArea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
      */
