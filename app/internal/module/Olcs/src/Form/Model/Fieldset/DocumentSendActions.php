@@ -35,11 +35,11 @@ class DocumentSendActions
     public $printAndPost = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"cancel"})
+     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"close"})
      * @Form\Options({
-     *     "label": "Cancel",
+     *     "label": "Close",
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
-    public $cancel = null;
+    public $close = null;
 }

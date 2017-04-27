@@ -16,8 +16,9 @@ use Zend\View\Model\ViewModel;
 class DocumentFinaliseController extends AbstractDocumentController
 {
     const PRINT_MSGS_SUCCESS = [
-        PrintLetterCmd::METHOD_EMAIL => 'Letter was successfully created  and sent by email',
-        PrintLetterCmd::METHOD_PRINT_AND_POST => 'Letter was successfully created, printed and sent by post',
+        'close' => 'The document has been saved',
+        PrintLetterCmd::METHOD_EMAIL => 'The document has been saved and sent by email',
+        PrintLetterCmd::METHOD_PRINT_AND_POST => 'The document has been saved, printed and sent by post',
     ];
 
     private $redirect;
@@ -114,9 +115,9 @@ class DocumentFinaliseController extends AbstractDocumentController
             } elseif ($this->isButtonPressed('printAndPost')) {
                 $method = PrintLetterCmd::METHOD_PRINT_AND_POST;
             } else {
-                return $this->redirect()->toRoute(
-                    null, ['action' => 'cancel'], ['query' => $request->getQuery()->toArray()], true
-                );
+                $this->hlpFlashMsgr->addSuccessMessage(self::PRINT_MSGS_SUCCESS['close']);
+
+                return $this->handleRedirectToDocumentRoute(true);
             }
 
             $respPost = $this->handleCommand(

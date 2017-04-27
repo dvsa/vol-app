@@ -7,7 +7,7 @@ use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 /**
  * @group FormTests
  */
-class DocumentFinaliseTest extends AbstractFormValidationTestCase
+class DocumentSendTest extends AbstractFormValidationTestCase
 {
     protected $formName = \Olcs\Form\Model\Form\DocumentSend::class;
 
@@ -21,8 +21,8 @@ class DocumentFinaliseTest extends AbstractFormValidationTestCase
         $this->assertFormElementActionButton(['form-actions', 'printAndPost']);
     }
 
-    public function testCancelButton()
+    public function testCloseButton()
     {
-        $this->assertFormElementActionButton(['form-actions', 'cancel']);
+        $this->assertFormElementActionButton(['form-actions', 'close']);
     }
 }
