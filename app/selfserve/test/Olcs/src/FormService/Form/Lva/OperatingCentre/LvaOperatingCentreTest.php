@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Lva Operating Centre Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva\OperatingCentre;
 
 use Common\FormService\FormServiceManager;
@@ -130,18 +125,30 @@ class LvaOperatingCentreTest extends MockeryTestCase
                 . '-advertising-your-operating-centre-ni-new'
             );
 
-        $adPlaced->shouldReceive('getValueOptions')->andReturn(['Y' => 'Yes', 'N' => 'No']);
+        $adPlaced->shouldReceive('getValueOptions')->andReturn(['1' => 'Yes', '0' => 'No']);
 
         $adPlaced->shouldReceive('setValueOptions')->once()->with(
             [
-                'Y' => 'lva-oc-adplaced-y-selfserve',
-                'N' => 'lva-oc-adplaced-n-selfserve'
+                '1' => 'lva-oc-adplaced-y-selfserve',
+                '0' => 'lva-oc-adplaced-n-selfserve',
+                '2' => 'lva-oc-adplaced-l-selfserve'
             ]
         );
 
         $advertisements = m::mock();
         $advertisements->shouldReceive('get')->with('adSendByPost')->andReturn($adSendByPost);
         $advertisements->shouldReceive('get')->with('adPlaced')->andReturn($adPlaced);
+        $advertisements->shouldReceive('get')
+            ->with('adUploadLater')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setValue')
+                    ->with('markup-lva-oc-ad-upload-later-text')
+                    ->once()
+                    ->getMock()
+            )
+            ->once()
+            ->getMock();
 
         $form->shouldReceive('get')
             ->with('advertisements')
@@ -217,18 +224,30 @@ class LvaOperatingCentreTest extends MockeryTestCase
                 . '-advertising-your-operating-centre-gb-new'
             );
 
-        $adPlaced->shouldReceive('getValueOptions')->andReturn(['Y' => 'Yes', 'N' => 'No']);
+        $adPlaced->shouldReceive('getValueOptions')->andReturn(['1' => 'Yes', '0' => 'No']);
 
         $adPlaced->shouldReceive('setValueOptions')->once()->with(
             [
-                'Y' => 'lva-oc-adplaced-y-selfserve',
-                'N' => 'lva-oc-adplaced-n-selfserve'
+                '1' => 'lva-oc-adplaced-y-selfserve',
+                '0' => 'lva-oc-adplaced-n-selfserve',
+                '2' => 'lva-oc-adplaced-l-selfserve'
             ]
         );
 
         $advertisements = m::mock();
         $advertisements->shouldReceive('get')->with('adSendByPost')->andReturn($adSendByPost);
         $advertisements->shouldReceive('get')->with('adPlaced')->andReturn($adPlaced);
+        $advertisements->shouldReceive('get')
+            ->with('adUploadLater')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setValue')
+                    ->with('markup-lva-oc-ad-upload-later-text')
+                    ->once()
+                    ->getMock()
+            )
+            ->once()
+            ->getMock();
 
         $form->shouldReceive('get')
             ->with('advertisements')
