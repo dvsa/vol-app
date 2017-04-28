@@ -89,7 +89,8 @@ class FeesController extends AbstractController
         $fees = $this->getFeesFromParams();
 
         if (empty($fees)) {
-            throw new ResourceNotFoundException('Fee not found');
+            $this->addErrorMessage('payment.error.feepaid');
+            return $this->redirectToIndex();
         }
 
         /* @var $form \Common\Form\Form */
