@@ -47,14 +47,6 @@ class Pi implements MapperInterface
     {
         $publish = 'N';
 
-        // ZF 2.4+ does not allow null value inputs for ArrayInputs.
-        // A form input of DynamicSelect should always return an array (even if empty)
-        // To validate an array using a null value will throw an error.
-        // Additional notes are here: https://github.com/zendframework/zend-inputfilter/pull/116
-        if (array_key_exists('tmDecisions', $data['fields']) && $data['fields']['tmDecisions'] === null) {
-            $data['fields']['tmDecisions'] = [];
-        }
-
         if (isset($data['form-actions']['publish']) && $data['form-actions']['publish'] !== null) {
             $publish = 'Y';
         }

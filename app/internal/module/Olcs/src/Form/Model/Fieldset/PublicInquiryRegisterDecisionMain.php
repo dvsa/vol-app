@@ -97,6 +97,7 @@ class PublicInquiryRegisterDecisionMain
      *     "disable_inarray_validator": false,
      *     "category":"pi_tm_decision"
      * })
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $tmDecisions = [];
 
