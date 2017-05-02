@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Lva Operating Centre Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva\OperatingCentre;
 
 use Mockery as m;
@@ -13,6 +8,7 @@ use Zend\Form\Fieldset;
 use Zend\Form\Form;
 use Olcs\FormService\Form\Lva\OperatingCentre\LvaOperatingCentre;
 use Zend\Validator\Identical as ValidatorIdentical;
+use Common\RefData;
 
 /**
  * Lva Operating Centre Test
@@ -33,8 +29,16 @@ class LvaOperatingCentreTest extends MockeryTestCase
         $this->sut->setFormHelper($this->formHelper);
     }
 
-    public function testAlterForm()
+    /**
+     * @dataProvider alterFormProvider
+     */
+    public function testAlterForm($appliedVia)
     {
+        $originalValueOptions = [
+            RefData::AD_UPLOAD_LATER => 'Upload later',
+            'Foo' => 'Bar'
+        ];
+        $alteredValueOptions = ['Foo' => 'Bar'];
         $form = m::mock(Form::class)
             ->shouldReceive('get')
             ->with('address')
@@ -86,14 +90,44 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     )
                     ->getMock()
             )
-            ->once();
+            ->once()
+            ->shouldReceive('get')
+            ->with('advertisements')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('adPlaced')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getValueOptions')
+                    ->andReturn($originalValueOptions)
+                    ->once()
+                    ->shouldReceive('setValueOptions')
+                    ->with($alteredValueOptions)
+                    ->once()
+                    ->getMock()
+                )
+                ->once()
+                ->getMock()
+            )
+            ->once()
+            ->getMock();
 
         $params = [
             'isPsv' => false,
             'canAddAnother' => true,
             'canUpdateAddress' => true,
-            'wouldIncreaseRequireAdditionalAdvertisement' => false
+            'wouldIncreaseRequireAdditionalAdvertisement' => false,
+            'appliedVia' => $appliedVia,
         ];
         $this->sut->alterForm($form, $params);
+    }
+
+    public function alterFormProvider()
+    {
+        return [
+            [RefData::APPLIED_VIA_POST],
+            [['id' => RefData::APPLIED_VIA_POST]]
+        ];
     }
 }
