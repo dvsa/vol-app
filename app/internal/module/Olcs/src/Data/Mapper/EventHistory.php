@@ -2,6 +2,8 @@
 
 namespace Olcs\Data\Mapper;
 
+use Dvsa\Olcs\Utils\Helper\DateTimeHelper;
+
 /**
  * Event History
  *
@@ -41,7 +43,7 @@ class EventHistory
 
                 foreach (['newValue', 'oldValue'] as $key) {
                     if (!empty($item[$key])) {
-                        $item[$key] = date(\DATETIME_FORMAT, strtotime($item[$key] . ' UTC'));
+                        $item[$key] = DateTimeHelper::format($item[$key], \DATETIME_FORMAT);
                     }
                 }
             }

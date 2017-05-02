@@ -3,6 +3,7 @@
 namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
+use Dvsa\Olcs\Utils\Helper\DateTimeHelper;
 use Olcs\Data\Mapper\Traits as MapperTraits;
 use Zend\Form\FormInterface;
 
@@ -59,7 +60,7 @@ class User implements MapperInterface
                 $formData['userLoginSecurity']['passwordLastReset'] = sprintf(
                     '%s on %s',
                     $data['latestPasswordResetEvent']['eventData'],
-                    (new \DateTime($data['latestPasswordResetEvent']['eventDatetime']))->format(\DATETIMESEC_FORMAT)
+                    DateTimeHelper::format($data['latestPasswordResetEvent']['eventDatetime'], \DATETIMESEC_FORMAT)
                 );
             }
 
