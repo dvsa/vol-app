@@ -107,17 +107,6 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Type("DynamicSelect")
      * @Form\AllowEmpty(true)
      * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Validator({
-     *      "name": "ValidateIf",
-     *      "options": {
-     *          "context_field": "decisionDate",
-     *          "contextValues": {null},
-     *          "context_truth": false,
-     *          "validators": {
-     *              {"name": "NotEmpty"}
-     *          }
-     *      }
-     * })
      */
     public $decisions = null;
 
