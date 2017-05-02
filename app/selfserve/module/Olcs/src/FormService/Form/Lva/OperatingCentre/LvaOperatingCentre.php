@@ -36,6 +36,8 @@ class LvaOperatingCentre extends CommonOperatingCentre
 
         $this->setAdPlacedLabels($form, $isNi, $params['isVariation']);
 
+        $this->setUploadLaterContent($form);
+
         parent::alterForm($form, $params);
     }
 
@@ -78,8 +80,9 @@ class LvaOperatingCentre extends CommonOperatingCentre
 
         $valuesOptions = $adPlaced->getValueOptions();
 
-        $valuesOptions['Y'] = 'lva-oc-adplaced-y-selfserve';
-        $valuesOptions['N'] = 'lva-oc-adplaced-n-selfserve';
+        $valuesOptions['1'] = 'lva-oc-adplaced-y-selfserve';
+        $valuesOptions['0'] = 'lva-oc-adplaced-n-selfserve';
+        $valuesOptions['2'] = 'lva-oc-adplaced-l-selfserve';
 
         $adPlaced->setValueOptions($valuesOptions);
     }
@@ -117,6 +120,18 @@ class LvaOperatingCentre extends CommonOperatingCentre
         );
 
         $adSendByPost->setValue($value);
+    }
+
+    /**
+     * Set Upload Later text for selfserve
+     *
+     * @param Form $form Form
+     *
+     * @return void
+     */
+    protected function setUploadLaterContent(Form $form)
+    {
+        $form->get('advertisements')->get('adUploadLater')->setValue('markup-lva-oc-ad-upload-later-text');
     }
 
     /**
