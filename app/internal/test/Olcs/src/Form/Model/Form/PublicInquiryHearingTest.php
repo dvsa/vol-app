@@ -111,6 +111,9 @@ class PublicInquiryHearingTest extends AbstractFormValidationTestCase
                 'year'   => $tomorrow->format('Y'),
                 'month'  => $tomorrow->format('m'),
                 'day'    => $tomorrow->format('j'),
+                'hour'   => 12,
+                'minute' => 12,
+                'second' => 12,
             ]
         );
     }
