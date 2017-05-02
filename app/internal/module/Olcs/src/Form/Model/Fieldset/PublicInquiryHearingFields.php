@@ -170,7 +170,7 @@ class PublicInquiryHearingFields extends Base
 
     /**
      * @Form\Required(true)
-     * @Form\Type("DateSelect")
+     * @Form\Type("DateTimeSelect")
      * @Form\Attributes({"id":"adjournedDate"})
      * @Form\Options({
      *     "label": "Date adjournment agreed",
@@ -179,7 +179,7 @@ class PublicInquiryHearingFields extends Base
      *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""adjournedDate"">Time adjournment agreed</label>'HH:mm:ss'</div>'",
      *     "field": "adjournedDate"
      * })
-     * @Form\Filter({"name":"DateSelect", "options":{"null_on_empty":true}})
+     * @Form\Filter({"name":"DateTimeSelect", "options":{"null_on_empty":true}})
      * @Form\Validator({"name": "NotEmpty", "options":{"array"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
@@ -189,7 +189,7 @@ class PublicInquiryHearingFields extends Base
      *          "validators": {
      *              {"name":"NotEmpty"},
      *              {"name": "\Common\Validator\Date"},
-     *              {"name": "Date", "options": {"format": "Y-m-d"}}
+     *              {"name": "Date", "options": {"format": "Y-m-d H:i:s"}}
      *          }
      *      }
      * })
