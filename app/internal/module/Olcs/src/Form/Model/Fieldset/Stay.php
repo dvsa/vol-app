@@ -39,10 +39,8 @@ class Stay extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Filter({"name":"DateSelect", "options": {"null_on_empty":true}})
-     * @Form\Validator({"name": "NotEmpty", "options": {"null"}})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name": "Date", "options": {"format":"Y-m-d"}})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "requestDate",
@@ -62,6 +60,8 @@ class Stay extends CaseBase
      *          }
      *      }
      * })
+     *
+     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $decisionDate = null;
 
