@@ -9,6 +9,7 @@ OLCS.ready(function() {
   function setupCascade() {
 
     var operatorType = F("type-of-licence", "operator-type");
+    var niFlag = OLCS.formHelper('type-of-licence', 'operator-location');
     var trafficArea  = F("details", "trafficArea");
 
     OLCS.cascadeForm({
@@ -18,6 +19,11 @@ OLCS.ready(function() {
         // operator type only shown when location has been completed and value is great britain
         "operator-type": function() {
           return trafficArea.val() !== "N";
+        },
+        'type-of-licence': {
+          'selector:.js-difference-guidance': function() {
+            return niFlag.filter(':checked').val() === 'N';
+          }
         },
 
         // licence type is nested; the first rule defines when to show the fieldset
@@ -32,6 +38,15 @@ OLCS.ready(function() {
           // this rule relates to an element within the fieldset
           "licence-type=ltyp_sr": function() {
             return operatorType.filter(":checked").val() === "lcat_psv";
+          },// these are the "Read more about" links
+          "#typeOfLicence-hint-goods": function() {
+            return (
+              niFlag.filter(':checked').val() === 'Y' ||
+              operatorType.filter(':checked').val() === 'lcat_gv'
+            );
+          },
+          "#typeOfLicence-hint-psv": function() {
+            return operatorType.filter(':checked').val() === 'lcat_psv';
           }
         }
       },
