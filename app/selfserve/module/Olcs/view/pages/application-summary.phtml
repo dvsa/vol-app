@@ -67,6 +67,11 @@
                       }
                       ?>
                   </ul>
+                  <p>
+                      <div class="actions-container">
+                          <a class="action--secondary large" href="<?php echo $this->url('lva-' . $lva . '/upload-evidence', [], [], true); ?>"><?php echo $this->translate('upload-evidence-button'); ?></a>
+                      </div>
+                  </p>
                   <p><?php echo $this->translate('supply-supporting-evidence-text-2' . ($isNi ? '-ni' : '')); ?> (<?php echo $this->escapeHtml($licence) . '/' . $this->escapeHtml($application); ?>).</p>
               </div>
           <?php endif; ?>
