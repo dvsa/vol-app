@@ -19,7 +19,7 @@ class TmCaseUnfitTest extends AbstractFormValidationTestCase
     {
         $element = ['fields', 'isMsi'];
         $this->assertFormElementType($element, Radio::class);
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
     }
 
     public function testDecisionDate()
