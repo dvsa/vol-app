@@ -14,7 +14,7 @@ class TaskAssignment
 {
     /**
      * @Form\Required(true)
-     * @Form\AllowEmpty(true)
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"assignedToTeam","placeholder":""})
      * @Form\Options({
      *     "label": "tasks.data.team",
@@ -22,8 +22,7 @@ class TaskAssignment
      *     "empty_option": "please-select",
      *     "error-message": "Team and/or owner must be selected",
      * })
-     * @Form\Type("DynamicSelect")
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Validator({"name": "NotEmpty", "options": {"null"}})
      * @Form\Validator({
      *     "name": "ValidateIf",
      *     "options":{
@@ -41,14 +40,14 @@ class TaskAssignment
 
     /**
      * @Form\Required(true)
-     * @Form\AllowEmpty(true)
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"assignedToUser","placeholder":""})
      * @Form\Options({
      *     "label": "tasks.data.owner",
      *     "service_name": "Olcs\Service\Data\UserListInternal",
      *     "empty_option": "Unassigned",
      * })
-     * @Form\Type("DynamicSelect")
+     * @Form\Validator({"name": "NotEmpty", "options": {"null"}})
      */
     public $assignedToUser = null;
 }
