@@ -39,16 +39,16 @@ class TmCaseRepute extends CaseBase
     public $decisionDate = null;
 
     /**
-     * @Form\Required(false)
+     * @Form\Required(true)
+     * @Form\Type("DateSelect")
      * @Form\Attributes({"required":false})
      * @Form\Options({
      *     "label": "Date of notification (to TM)",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Type("DateSelect")
-     * @Form\AllowEmpty(true)
-     *
+     * @Form\Filter({"name": "DateSelect", "options": {"null_on_empty": true}})
+     * @Form\Validator({"name": "NotEmpty", "options": {"array"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "decisionDate",
@@ -69,8 +69,6 @@ class TmCaseRepute extends CaseBase
      *          }
      *      }
      * })
-     *
-     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $notifiedDate = null;
 
