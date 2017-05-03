@@ -103,20 +103,20 @@ class Stay extends CaseBase
     /**
      * @Form\Required(true)
      * @Form\Type("DateSelect")
-     * @Form\Attributes({"required":false})
+     * @Form\Attributes({"id":"withdrawnDate", "required":false})
      * @Form\Options({
      *     "label": "Withdrawn date",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
      * @Form\Filter({"name":"DateSelect", "options":{"null_on_empty":true}})
-     * @Form\Validator({"name": "NotEmpty", "options": {"null"}})
+     * @Form\Validator({"name": "NotEmpty", "options": {"array"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isWithdrawn",
      *          "context_values": {"Y"},
      *          "validators": {
-     *              {"name": "Zend\Validator\NotEmpty"},
+     *              {"name": "NotEmpty"},
      *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
      *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}

@@ -76,7 +76,7 @@ class CaseStayTest extends AbstractFormValidationTestCase
     public function testWithdrawnDate()
     {
         $element = ['fields', 'withdrawnDate'];
-        $this->assertFormElementIsRequired($element, true);
+        $this->assertFormElementIsRequired($element, false);
 
         $this->assertFormElementValid(
             $element,
