@@ -31,7 +31,13 @@ class ReportController extends ZendAbstractActionController implements LeftViewP
         ViewHelperManagerAware;
 
     /**
-     * @inheritdoc
+     * render layout
+     *
+     * @param ViewModel   $view         view model
+     * @param string      $pageTitle    page title
+     * @param string|null $pageSubTitle page sub title
+     *
+     * @return ViewModel
      */
     protected function renderLayout($view, $pageTitle = 'Reports', $pageSubTitle = null)
     {
@@ -41,6 +47,11 @@ class ReportController extends ZendAbstractActionController implements LeftViewP
         return $this->renderView($view, $pageTitle, $pageSubTitle);
     }
 
+    /**
+     * get left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -54,6 +65,11 @@ class ReportController extends ZendAbstractActionController implements LeftViewP
         return $view;
     }
 
+    /**
+     * index action
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
         return $this->redirectToRoute('admin-dashboard/admin-report/ch-alerts', [], null, true);
@@ -131,6 +147,8 @@ class ReportController extends ZendAbstractActionController implements LeftViewP
     }
 
     /**
+     * exported reports action
+     *
      * @return ViewModel
      */
     public function exportedReportsAction()
@@ -149,6 +167,7 @@ class ReportController extends ZendAbstractActionController implements LeftViewP
                     Category::DOC_SUB_CATEGORY_CPID,
                     Category::DOC_SUB_CATEGORY_FINANCIAL_REPORTS,
                 ],
+                'onlyUnlinked' => 'Y',
                 'page' => $data['page'],
                 'limit' => $data['limit'],
             ]
@@ -169,9 +188,9 @@ class ReportController extends ZendAbstractActionController implements LeftViewP
     /**
      * Get the CPID filter form.
      *
-     * @param $status
+     * @param string $status status
      *
-     * @return \Common\Controller\type
+     * @return \Common\Form\Form
      */
     private function getCpidFilterForm($status)
     {
