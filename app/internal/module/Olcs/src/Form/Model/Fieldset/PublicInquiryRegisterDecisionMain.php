@@ -96,6 +96,7 @@ class PublicInquiryRegisterDecisionMain
 
     /**
      * @Form\Required(true)
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-large",  "multiple" : true,
      *     "required": false})
      * @Form\Options({
@@ -104,9 +105,6 @@ class PublicInquiryRegisterDecisionMain
      *     "disable_inarray_validator": false,
      *     "use_groups":true
      * })
-     * @Form\Type("DynamicSelect")
-     * @Form\AllowEmpty(true)
-     * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
      */
     public $decisions = null;
 
