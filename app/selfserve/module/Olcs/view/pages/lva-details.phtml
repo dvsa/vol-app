@@ -58,8 +58,8 @@ echo $this->partial(
           [
               $this->escapeHtml($this->licNo),
               $statusTranslated,
-              ($this->renewalDate ? strftime("%d %B %G",strtotime($this->renewalDate)) : ''),
-              ($this->startDate ? strftime("%d %B %G",strtotime($this->startDate)) : ''),
+              ($this->renewalDate ? date('d F Y', strtotime($this->renewalDate)) : ''),
+              ($this->startDate ? date('d F Y', strtotime($this->startDate)) : ''),
           ]
       );
     }
