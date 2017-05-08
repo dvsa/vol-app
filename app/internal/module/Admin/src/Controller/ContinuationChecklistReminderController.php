@@ -99,7 +99,8 @@ class ContinuationChecklistReminderController extends AbstractController
         $filters = array_merge($defaults, $queryData);
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $formHelper->createForm('ChecklistReminderFilter', false)->setData(['filters' => $filters]);
+        $form = $formHelper->createForm('ChecklistReminderFilter')
+            ->setData(['filters' => $filters]);
 
         if (empty($queryData)) {
             $formHelper->restoreFormState($form);

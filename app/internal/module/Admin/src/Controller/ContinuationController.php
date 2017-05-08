@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Continuation Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Admin\Controller;
 
 use Zend\View\Model\ViewModel;
@@ -38,8 +33,14 @@ class ContinuationController extends AbstractController
 
     protected $detailRoute = 'admin-dashboard/admin-continuation/detail';
 
+    /**
+     * Action: index
+     *
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function indexAction()
     {
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
         $form = $this->getContinuationForm();
 
@@ -101,8 +102,14 @@ class ContinuationController extends AbstractController
         return $this->renderView($view, 'admin-generate-continuations-title');
     }
 
+    /**
+     * Action: detail
+     *
+     * @return ViewModel | \Zend\Http\Response
+     */
     public function detailAction()
     {
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -152,8 +159,14 @@ class ContinuationController extends AbstractController
         return $this->renderView($view, 'admin-generate-continuation-details-title', $title);
     }
 
+    /**
+     * Action: generate
+     *
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function generateAction()
     {
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -199,6 +212,11 @@ class ContinuationController extends AbstractController
         return $this->renderView($view, 'Generate checklists');
     }
 
+    /**
+     * Get Detail Filter Form
+     *
+     * @return \Zend\Form\FormInterface
+     */
     protected function getDetailFilterForm()
     {
         $query = (array)$this->params()->fromQuery('filters');
@@ -206,16 +224,28 @@ class ContinuationController extends AbstractController
         $filters = array_merge($this->defaultFilters, $query);
 
         return $this->getServiceLocator()->get('Helper\Form')
-            ->createForm('ContinuationDetailFilter', false)
+            ->createForm('ContinuationDetailFilter')
             ->setData(['filters' => $filters]);
     }
 
+    /**
+     * Get Continuation Data
+     *
+     * @param string $id      Continuation Id
+     * @param array  $filters Filters
+     *
+     * @return array
+     */
     protected function getContinuationData($id, $filters)
     {
         $filters = array_merge($filters, ['continuationId' => $id]);
         if (!$filters['method']) {
             $filters['method'] = 'all';
         }
+
+        $result = [];
+        $header = [];
+
         $response = $this->handleQuery(GetListQry::create($filters));
         if ($response->isOk()) {
             $result = $response->getResult();
@@ -223,8 +253,6 @@ class ContinuationController extends AbstractController
         }
         if ($response->isServerError() || $response->isClientError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            $result = [];
-            $header = [];
         }
         return [
             $result,
@@ -232,6 +260,11 @@ class ContinuationController extends AbstractController
         ];
     }
 
+    /**
+     * Get Continuation Form
+     *
+     * @return \Zend\Form\FormInterface
+     */
     protected function getContinuationForm()
     {
         return $this->getServiceLocator()->get('Helper\Form')
