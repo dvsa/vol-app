@@ -42,9 +42,9 @@
 
         <dl class="meta">
             <dt><?php echo $this->translate('selfserve-dashboard-target-start-date'); ?></dt>
-            <dd><?php echo $startDate ? strftime("%d %B %G",strtotime($startDate)) : ''; ?></dd>
+            <dd><?php echo $this->startDate ? date('d F Y', strtotime($this->startDate)) : ''; ?></dd>
             <dt><?php echo $this->translate('selfserve-dashboard-target-renewal-date'); ?></dt>
-            <dd><?php echo $renewalDate ? strftime("%d %B %G",strtotime($renewalDate)) : ''; ?></dd>
+            <dd><?php echo $this->renewalDate ? date('d F Y', strtotime($this->renewalDate)) : ''; ?></dd>
             <dt><?php echo $this->translate('status'); ?></dt>
             <dd><?php echo $this->translate($status); ?></dd>
         </dl>

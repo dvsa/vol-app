@@ -59,13 +59,13 @@
       <dl class="meta">
         <dt><?php echo $this->translate('status'); ?></dt>
         <dd><?php echo $this->translate($status); ?></dd>
-        <?php if ($receivedDate): ?>
+        <?php if ($this->receivedDate): ?>
           <dt><?php echo $this->translate('selfserve-dashboard-submission-date'); ?></dt>
-          <dd><?php echo strftime("%d %B %G",strtotime($receivedDate)); ?></dd>
+          <dd><?php echo date('d F Y', strtotime($this->receivedDate)); ?></dd>
         <?php endif; ?>
-        <?php if ($completionDate): ?>
+        <?php if ($this->completionDate): ?>
           <dt><?php echo $this->translate('target-completion-date'); ?></dt>
-          <dd><?php echo strftime("%d %B %G",strtotime($completionDate)); ?></dd>
+          <dd><?php echo date('d F Y', strtotime($this->completionDate)); ?></dd>
         <?php endif; ?>
       </dl>
     </aside>
