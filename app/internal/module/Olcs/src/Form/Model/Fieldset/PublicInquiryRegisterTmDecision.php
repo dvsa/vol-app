@@ -53,6 +53,7 @@ class PublicInquiryRegisterTmDecision extends CaseBase
 
     /**
      * @Form\Required(true)
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"decisions","class":"chosen-select-large",
      *     "required": false, "multiple":true})
      * @Form\Options({
@@ -61,9 +62,6 @@ class PublicInquiryRegisterTmDecision extends CaseBase
      *     "disable_inarray_validator": false,
      *     "use_groups":true
      * })
-     * @Form\Type("DynamicSelect")
-     * @Form\AllowEmpty(true)
-     * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
      */
     public $decisions = null;
 
