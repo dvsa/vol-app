@@ -35,22 +35,26 @@ abstract class AbstractUploadEvidenceController extends AbstractController
 
         $request = $this->getRequest();
         if ($request->isPost() && $request->getPost('saveAndContinue') !== null) {
-            $form->setData($request->getPost());
+            $post = (array) $request->getPost();
+            $this->alterForm($form, $post);
+            $form->setData($post);
 
-            // @todo Form is not validating as the generated inputfilter doesn't include any of the
-            // operating centre fieldsets
             if ($form->isValid()) {
-                \Common\Data\Mapper\Lva\UploadEvidence::mapFromForm($form->getData());
-
-                // @todo This command needs updating to handle operating centres data also backend handler needs updating
-                $this->handleCommand(
-                    \Dvsa\Olcs\Transfer\Command\Application\UploadEvidence::create(['id' => $this->getIdentifier()])
+                $dtoData = array_merge(
+                    \Common\Data\Mapper\Lva\UploadEvidence::mapFromForm($form->getData()),
+                    ['id' => $this->getIdentifier()]
                 );
 
-                return $this->redirect()->toRoute(
-                    'lva-' . $this->lva . '/submission-summary',
-                    ['application' => $this->getIdentifier()]
+                $result = $this->handleCommand(
+                    \Dvsa\Olcs\Transfer\Command\Application\UploadEvidence::create($dtoData)
                 );
+                if ($result->isOk()) {
+                    return $this->redirect()->toRoute(
+                        'lva-' . $this->lva . '/submission-summary',
+                        ['application' => $this->getIdentifier()]
+                    );
+                }
+                $this->addErrorMessage('unknown-error');
             }
         }
 
@@ -66,8 +70,6 @@ abstract class AbstractUploadEvidenceController extends AbstractController
     {
         /** @var Form $form */
         $form = $this->getServiceLocator()->get('Helper\Form')->createForm('Lva\UploadEvidence');
-        /** @var \Common\Service\Helper\FormHelperService $formHelper */
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         if ($this->shouldShowFinancialEvidence()) {
             $this->processFiles(
@@ -78,7 +80,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
                 [$this, 'financialEvidenceLoadFileUpload']
             );
         } else {
-            $formHelper->remove($form, 'financialEvidence');
+            $form->remove('financialEvidence');
         }
 
         $data = $this->getData();
@@ -220,5 +222,34 @@ abstract class AbstractUploadEvidenceController extends AbstractController
     {
         $financialEvidenceData = $this->getFinancialEvidenceData();
         return $financialEvidenceData['documents'];
+    }
+
+    /**
+     * Alter upload evidence form
+     *
+     * @param \Zend\Form\Form $form form
+     * @param array           $post post parameters
+     *
+     * @return void
+     */
+    protected function alterForm($form, &$post)
+    {
+        for ($i = 0; $i < count($post['operatingCentres']); $i++) {
+            $oc = $post['operatingCentres'][$i];
+            $targetFieldset = $form->getInputFilter()->get('operatingCentres')->getInputs()[$i];
+            if (
+                !empty($oc['adPlacedIn'])
+                || !empty($oc['adPlacedDate']['day'])
+                || !empty($oc['adPlacedDate']['month'])
+                || !empty($oc['adPlacedDate']['year'])
+                || array_key_exists('list', $oc['file'])
+            ) {
+                $targetFieldset->get('adPlacedIn')->setRequired(true);
+                $targetFieldset->get('adPlacedDate')->setRequired(true);
+                $post['operatingCentres'][$i]['uploadFileCount'] = count($post['operatingCentres'][$i]['file']['list']);
+            } else {
+                $targetFieldset->remove('uploadFileCount');
+            }
+        }
     }
 }
