@@ -45,7 +45,7 @@
         "symfony/Filesystem": "~2.6.0",
         "zf-commons/zfc-rbac": "~2.4.0",
         "olcs/autoload": "dev-develop",
-        "olcs/OlcsCommon": "dev-localdev/zend2-4",
+        "olcs/OlcsCommon": "dev-zend-upgrade/common-develop",
         "olcs/olcs-transfer": "dev-feature/OLCS-16303-transfer-upgrade-zend",
         "olcs/olcs-utils": "dev-feature/OLCS-16303-utils-upgrade-zend",
         "olcs/olcs-auth": "dev-feature/OLCS-16303-auth-upgrade-zend",
