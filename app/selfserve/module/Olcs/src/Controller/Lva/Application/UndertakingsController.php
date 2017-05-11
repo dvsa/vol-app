@@ -102,6 +102,7 @@ class UndertakingsController extends AbstractUndertakingsController
         $this->updateInterimFieldset($form, $applicationData);
         $this->updateSubmitButtons($form, $applicationData);
         $this->updateFormBasedOnDisableSignatureSetting($form);
+        $this->updateInterimFee($form, $applicationData, $translator, $translator);
 
         return $form;
     }
@@ -186,6 +187,22 @@ class UndertakingsController extends AbstractUndertakingsController
         if ($goodsOrPsv !== Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'interim');
         }
+    }
+
+    /**
+     * Update interim fee value
+     *
+     * @param Form  $form            form
+     * @param array $applicationData application data
+     * @param \Common\Service\Helper\TranslationHelperService $translator translator
+     *
+     * @return void
+     */
+    protected function updateInterimFee($form, $applicationData, $translator)
+    {
+        $form->get('interim')->get('interimFee')->setValue(
+            $translator->translateReplace('selfserve.declaration.interim_fee', $applicationData['interimFee'])
+        );
     }
 
     /**
