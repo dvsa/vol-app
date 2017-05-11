@@ -2,14 +2,15 @@
 
 namespace Olcs\Controller\Operator;
 
+use Common\RefData;
+use Dvsa\Olcs\Transfer\Command\OrganisationPerson\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\OrganisationPerson\DeleteList as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\OrganisationPerson\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\OrganisationPerson\GetSingle as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Data\Mapper\OperatorPeople as Mapper;
-use Dvsa\Olcs\Transfer\Query\OrganisationPerson\GetSingle as ItemDto;
-use Dvsa\Olcs\Transfer\Command\OrganisationPerson\Create as CreateDto;
-use Dvsa\Olcs\Transfer\Command\OrganisationPerson\Update as UpdateDto;
-use Dvsa\Olcs\Transfer\Command\OrganisationPerson\DeleteList as DeleteDto;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -50,6 +51,11 @@ class OperatorPeopleController extends AbstractInternalController implements
     protected $deleteCommand = DeleteDto::class;
     protected $hasMultiDelete = true;
 
+    /**
+     * Get Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -58,21 +64,26 @@ class OperatorPeopleController extends AbstractInternalController implements
         return $view;
     }
 
+    /**
+     * Handle action: Index
+     *
+     * @return ViewModel
+     */
     public function indexAction()
     {
         $data = $this->loadOrganisationData();
 
         if ($data['isSoleTrader'] === true) {
             return $this->soleTrader($data);
-        } else {
-            return $this->notSoleTrader($data);
         }
+
+        return $this->notSoleTrader($data);
     }
 
     /**
      * Handle sole trader view of index
      *
-     * @param array $data
+     * @param array $data Organisation Data
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -82,39 +93,71 @@ class OperatorPeopleController extends AbstractInternalController implements
             $this->getEvent()->getRouteMatch()->setParam('id', $data['organisationPersons'][0]['id']);
 
             return $this->editAction();
-        } else {
-            return $this->addAction();
         }
+
+        return $this->addAction();
     }
 
     /**
      * Handle all Organisation types except sole trader view of index
      *
-     * @param array $data
+     * @param array $data Organisation Data
      *
      * @return \Zend\View\Model\ViewModel
      */
     private function notSoleTrader($data)
     {
-        $tableData = [];
+        $this->placeholder()->setPlaceholder(
+            'table',
+            $this->getNotSoleTraderTable($data)
+                ->render()
+        );
+
+        return $this->viewBuilder()->buildViewFromTemplate('pages/table');
+    }
+
+    /**
+     * Build and alter table for Not SoleTraders organisations
+     *
+     * @param array $data Organisation Data
+     *
+     * @return \Common\Service\Table\TableBuilder
+     */
+    private function getNotSoleTraderTable(array $data)
+    {
+        //  prepare table data
+        $rows = [];
         foreach ($data['organisationPersons'] as $op) {
-            // set the row as the person data
-            $row = $op['person'];
-            // but set the id to be the OrganisationPerson ID as that is what we are editing
-            $row['personId'] = $row['id'];
-            $row['id'] = $op['id'];
-            $row['position'] = $op['position'];
-            $tableData['results'][] = $row;
+            $rows[] =
+                [
+                    // but set the id to be the OrganisationPerson ID as that is what we are editing
+                    'personId' => $op['person']['id'],
+                    'id' => $op['id'],
+                    'position' => $op['position'],
+                ] +
+                $op['person'];
         }
+
+        $tableData = [
+            'results' => $rows,
+        ];
+
+        //  alter table
+        $type = isset($data['type']['id']) ? $data['type']['id'] : null;
+
         $table = $this->table()->buildTable('operator-people', $tableData, []);
+
         // remove column for all except organisation type : other
-        if ($data['type']['id'] !== 'org_t_pa') {
+        if ($type !== RefData::ORG_TYPE_OTHER) {
             $table->removeColumn('position');
         }
 
-        $this->placeholder()->setPlaceholder('table', $table->render());
+        //  set empty message in depend of Organisation type
+        if ($type === RefData::ORG_TYPE_REGISTERED_COMPANY) {
+            $table->setEmptyMessage('selfserve-app-subSection-your-business-people-ltd.table.empty-message');
+        }
 
-        return $this->viewBuilder()->buildViewFromTemplate('pages/table');
+        return $table;
     }
 
     /**
@@ -141,7 +184,7 @@ class OperatorPeopleController extends AbstractInternalController implements
     /**
      * Alter the Add form
      *
-     * @param \Zend\Form\Form $form
+     * @param \Zend\Form\Form $form Form
      *
      * @return \Zend\Form\Form
      */
@@ -153,7 +196,7 @@ class OperatorPeopleController extends AbstractInternalController implements
     /**
      * Alter the Edit form
      *
-     * @param \Zend\Form\Form $form
+     * @param \Zend\Form\Form $form Form
      *
      * @return \Zend\Form\Form
      */
@@ -165,7 +208,7 @@ class OperatorPeopleController extends AbstractInternalController implements
     /**
      * Alter the Edit form, when called from IndexAction ie if org is a sole trader
      *
-     * @param \Zend\Form\Form $form
+     * @param \Zend\Form\Form $form Form
      *
      * @return \Zend\Form\Form
      */
@@ -177,8 +220,8 @@ class OperatorPeopleController extends AbstractInternalController implements
     /**
      * Alter the add/edit form
      *
-     * @param \Zend\Form\Form $form
-     * @param bool            $showAddAnotherButton
+     * @param \Zend\Form\Form $form                 Form
+     * @param bool            $showAddAnotherButton is Show Add Another button
      *
      * @return \Zend\Form\Form
      */
