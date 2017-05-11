@@ -57,6 +57,10 @@ class UndertakingsController extends AbstractUndertakingsController
         $fieldset->get('summaryDownload')->setAttribute('value', $summaryDownload);
         if (!$applicationData['canHaveInterimLicence']) {
             $formHelper->remove($form, 'interim');
+        } else {
+            $form->get('interim')->get('interimFee')->setValue(
+                $translator->translateReplace('selfserve.declaration.interim_fee', $applicationData['interimFee'])
+            );
         }
 
         $formHelper->remove($form, 'form-actions->sign');
