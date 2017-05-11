@@ -86,7 +86,7 @@ class OppositionFields extends CaseBase
      * })
      * @Form\Attributes({"id":"opposerType","placeholder":"", "required":false})
      * @Form\Filter({"name":"Common\Filter\NullToArray"})
-     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"array"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "oppositionType",
