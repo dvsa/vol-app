@@ -102,7 +102,9 @@ class UndertakingsController extends AbstractUndertakingsController
         $this->updateInterimFieldset($form, $applicationData);
         $this->updateSubmitButtons($form, $applicationData);
         $this->updateFormBasedOnDisableSignatureSetting($form);
-        $this->updateInterimFee($form, $applicationData, $translator, $translator);
+        if ($applicationData['canHaveInterimFee']) {
+            $this->updateInterimFee($form, $applicationData, $translator, $translator);
+        }
 
         return $form;
     }
