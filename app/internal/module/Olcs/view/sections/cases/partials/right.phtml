@@ -57,12 +57,8 @@ if ($transportManager) :
     <?php if (isset($transportManager['homeCd']['address'])): ?>
         <p><?php echo $this->addressFormat($transportManager['homeCd']['address']); ?></p>
     <?php endif; ?>
-
-    <?php $tmStatus = $transportManager['tmStatus']['description']; ?>
     <p>
-        <span class="status <?php echo strtolower($tmStatus) == 'active' ? 'green' : 'grey'; ?>">
-            <?php echo $tmStatus; ?>
-        </span>
+        <?php echo $this->status($transportManager['tmStatus']) ?>
     </p>
 </div>
 <?php endif; ?>
