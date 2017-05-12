@@ -203,7 +203,7 @@ class UndertakingsController extends AbstractUndertakingsController
     protected function updateInterimFee($form, $applicationData, $translator)
     {
         $form->get('interim')->get('interimFee')->setValue(
-            $translator->translateReplace('selfserve.declaration.interim_fee', $applicationData['interimFee'])
+            $translator->translateReplace('selfserve.declaration.interim_fee', [$applicationData['interimFee']])
         );
     }
 
