@@ -94,6 +94,8 @@ class Offence extends Base
      *     "category": "conv_category",
      *     "use_groups": true
      * })
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Validation({"name":"NotEmpty", "options": {"array"}})
      */
     public $convictionCategory = null;
 
@@ -123,7 +125,7 @@ class Offence extends Base
     public $categoryText = null;
 
     /**
-     * @Form\Required(false)
+     * @Form\Required(true)
      * @Form\Type("DateSelect")
      * @Form\Attributes({"id":""})
      * @Form\Options({
@@ -131,7 +133,8 @@ class Offence extends Base
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Filter({"name": "Zend\Filter\DateSelect", "options": {"null_on_empty": true}})
+     * @Form\Validator({"name": "NotEmpty", "options": {"array"}})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})

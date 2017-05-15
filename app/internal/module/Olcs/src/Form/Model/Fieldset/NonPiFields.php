@@ -65,6 +65,7 @@ class NonPiFields extends CaseBase
      *     "disable_inarray_validator": false,
      *     "other_option" : true
      * })
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $venue;
 
@@ -118,6 +119,7 @@ class NonPiFields extends CaseBase
      *     "category": "non_pi_type_outcome",
      *     "disable_inarray_validator": false
      * })
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $outcome = null;
 }

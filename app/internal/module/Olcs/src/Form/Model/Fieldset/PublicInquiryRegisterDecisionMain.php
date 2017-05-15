@@ -211,6 +211,7 @@ class PublicInquiryRegisterDecisionMain
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(false)
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $definition = null;
 

@@ -227,6 +227,7 @@ class PublicInquiryHearingFields extends Base
      *     "use_groups": true,
      *     "empty_option": "Add definition option"
      * })
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $definition = null;
 

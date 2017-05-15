@@ -207,6 +207,7 @@ class IrfoPsvAuth extends OrganisationBase
      *     "use_groups": false
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $countrys = null;
 
