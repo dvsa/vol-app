@@ -32,6 +32,7 @@ class TransportManagerDetails
 
     /**
      * @Form\Required(false)
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "empty_option": "Please Select",
@@ -39,7 +40,7 @@ class TransportManagerDetails
      *     "category":"person_title",
      *     "disable_inarray_validator": true,
      * })
-     * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $title = null;
 

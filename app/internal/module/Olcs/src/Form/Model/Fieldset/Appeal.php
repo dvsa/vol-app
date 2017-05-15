@@ -65,6 +65,7 @@ class Appeal extends CaseBase
      * @Form\Required(true)
      * @Form\Attributes({"id":"","placeholder":"", "required":false})
      * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $reason = null;
 
@@ -178,6 +179,7 @@ class Appeal extends CaseBase
      *     "category": "appeal_outcome"
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $outcome = null;
 

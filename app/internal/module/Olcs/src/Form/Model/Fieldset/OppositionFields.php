@@ -31,6 +31,7 @@ class OppositionFields extends CaseBase
      *     "disable_inarray_validator": false,
      *     "category": "obj_type"
      * })
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $oppositionType;
 
@@ -84,6 +85,7 @@ class OppositionFields extends CaseBase
      *     "category": "opposer_type",
      * })
      * @Form\Attributes({"id":"opposerType","placeholder":"", "required":false})
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
@@ -105,6 +107,7 @@ class OppositionFields extends CaseBase
      *     "disable_inarray_validator": false,
      *     "category": "opposition_valid",
      * })
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $isValid;
 
@@ -150,6 +153,7 @@ class OppositionFields extends CaseBase
      *     "disable_inarray_validator": false,
      *     "category": "opposition_status"
      * })
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $status = null;
 
@@ -165,6 +169,7 @@ class OppositionFields extends CaseBase
      *     "service_name": "Common/Service/Data/OcContextListDataService",
      *     "use_groups": "false"
      * })
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $licenceOperatingCentres;
 
@@ -180,6 +185,7 @@ class OppositionFields extends CaseBase
      *     "service_name": "Common/Service/Data/OcContextListDataService",
      *     "use_groups": "false"
      * })
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $applicationOperatingCentres;
 
@@ -193,6 +199,7 @@ class OppositionFields extends CaseBase
      * })
      * @Form\Attributes({"id":"grounds","placeholder":"","class":"chosen-select-medium","required":false,
      *      "multiple":"multiple"})
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $grounds = null;
 
