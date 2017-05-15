@@ -107,6 +107,7 @@ class ImpoundingFields
      *     "disable_inarray_validator": false,
      *     "other_option" : true
      * })
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $venue = null;
 
@@ -139,6 +140,7 @@ class ImpoundingFields
      *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $presidingTc = null;
 
@@ -152,6 +154,7 @@ class ImpoundingFields
      *     "category": "impound_outcome"
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $outcome = null;
 
