@@ -32,6 +32,11 @@ class LvaOperatingCentre extends CommonOperatingCentre
     {
         $isNi = $this->isNi($params);
 
+        // Unable to change annotation directly in form, because fieldset added to every next element with a same name
+        $advFieldset = $form->get('advertisements');
+        $advFieldset->get('adPlacedPost')->setName('adPlaced');
+        $advFieldset->get('adPlacedLater')->setName('adPlaced');
+
         $this->setSendByPostContent($form, $isNi, $params);
 
         $this->setAdPlacedLabels($form, $isNi, $params['isVariation']);
@@ -54,6 +59,10 @@ class LvaOperatingCentre extends CommonOperatingCentre
     {
         /** @var \Zend\Form\Element\Radio $adPlaced */
         $adPlaced = $form->get('advertisements')->get('adPlaced');
+        /** @var \Zend\Form\Element\Radio $adPlacedPost */
+        $adPlacedPost = $form->get('advertisements')->get('adPlacedPost');
+        /** @var \Zend\Form\Element\Radio $adPlacedLater */
+        $adPlacedLater = $form->get('advertisements')->get('adPlacedLater');
 
         $guideName = 'advertising-your-operating-centre';
 
@@ -81,10 +90,12 @@ class LvaOperatingCentre extends CommonOperatingCentre
         $valuesOptions = $adPlaced->getValueOptions();
 
         $valuesOptions['1'] = 'lva-oc-adplaced-y-selfserve';
-        $valuesOptions['0'] = 'lva-oc-adplaced-n-selfserve';
-        $valuesOptions['2'] = 'lva-oc-adplaced-l-selfserve';
+        $valuesOptionsPost['0'] = 'lva-oc-adplaced-n-selfserve';
+        $valuesOptionsLater['2'] = 'lva-oc-adplaced-l-selfserve';
 
         $adPlaced->setValueOptions($valuesOptions);
+        $adPlacedPost->setValueOptions($valuesOptionsPost);
+        $adPlacedLater->setValueOptions($valuesOptionsLater);
     }
 
     /**
