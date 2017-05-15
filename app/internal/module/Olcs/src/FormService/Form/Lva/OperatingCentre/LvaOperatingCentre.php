@@ -41,11 +41,14 @@ class LvaOperatingCentre extends CommonOperatingCentre
         } elseif (isset($params['appliedVia'])) {
             $appliedVia = $params['appliedVia'];
         }
+
+        // Unable to change annotation directly in form, because fieldset added to every next element with a same name
+        $advFieldset = $form->get('advertisements');
+        $advFieldset->get('adPlacedPost')->setName('adPlaced');
+        $advFieldset->get('adPlacedLater')->setName('adPlaced');
+
         if ($appliedVia === null || $appliedVia !== RefData::APPLIED_VIA_SELFSERVE) {
-            $adPlaced = $form->get('advertisements')->get('adPlaced');
-            $valuesOptions = $adPlaced->getValueOptions();
-            unset($valuesOptions[RefData::AD_UPLOAD_LATER]);
-            $adPlaced->setValueOptions($valuesOptions);
+            $this->getFormHelper()->remove($form, 'advertisements->adPlacedLater');
         }
 
         parent::alterForm($form, $params);
