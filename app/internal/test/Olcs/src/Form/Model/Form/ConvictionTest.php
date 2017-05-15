@@ -44,7 +44,7 @@ class ConvictionTest extends AbstractFormValidationTestCase
     public function testDateOfBirth()
     {
         $element = ['fields', 'birthDate'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
 
         $this->assertFormElementNotValid(
@@ -143,7 +143,11 @@ class ConvictionTest extends AbstractFormValidationTestCase
     public function testOffenceDate()
     {
         $element = ['fields', 'offenceDate'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired(
+            $element,
+            true,
+            [DateCompare::INVALID_FIELD]
+        );
 
         $this->assertFormElementNotValid(
             $element,
@@ -156,6 +160,7 @@ class ConvictionTest extends AbstractFormValidationTestCase
                 DateValidator::DATE_ERR_CONTAINS_STRING,
                 DateValidator::DATE_ERR_YEAR_LENGTH,
                 Date::INVALID_DATE,
+                DateCompare::INVALID_FIELD,
                 DateCompare::NO_COMPARE,
             ],
             [
@@ -178,6 +183,7 @@ class ConvictionTest extends AbstractFormValidationTestCase
             ],
             [
                 DateNotInFuture::IN_FUTURE,
+                DateCompare::INVALID_FIELD,
                 DateCompare::NO_COMPARE,
                 DateCompare::NOT_LTE,
             ],
@@ -219,56 +225,56 @@ class ConvictionTest extends AbstractFormValidationTestCase
     public function testMsi()
     {
         $element = ['fields', 'msi'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementType($element, Select::class);
     }
 
     public function testCourt()
     {
         $element = ['fields', 'court'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementText($element, 2, 70);
     }
 
     public function testPenalty()
     {
         $element = ['fields', 'penalty'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementText($element, 0, 255);
     }
 
     public function testCosts()
     {
         $element = ['fields', 'costs'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementText($element, 2, 255);
     }
 
     public function testNotes()
     {
         $element = ['fields', 'notes'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementText($element, 5, 4000);
     }
 
     public function testTakenIntoConsideration()
     {
         $element = ['fields', 'takenIntoConsideration'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementText($element, 5, 4000);
     }
 
     public function testIsDeclared()
     {
         $element = ['fields', 'isDeclared'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementType($element, Select::class);
     }
 
     public function testIsDealtWith()
     {
         $element = ['fields', 'isDealtWith'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementType($element, OlcsCheckbox::class);
     }
 
