@@ -29,6 +29,7 @@ class TmResponsibilities
      *     "label": "transport-manager.responsibilities.tm-application-oc"
      * })
      * @Form\Type("Select")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $operatingCentres = null;
 
