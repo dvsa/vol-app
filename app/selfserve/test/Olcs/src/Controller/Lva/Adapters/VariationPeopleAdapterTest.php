@@ -11,6 +11,7 @@ use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;
 
 /**
  * @covers \Olcs\Controller\Lva\Adapters\VariationPeopleAdapter
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 class VariationPeopleAdapterTest extends MockeryTestCase
 {
@@ -108,9 +109,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
 
     public function testAlterFormForOrganisationCantModify()
     {
-        $this->sut
-            ->shouldReceive('canModify')->andReturn(false)
-            ->shouldReceive('getOrganisationType')->andReturn(RefData::ORG_TYPE_REGISTERED_COMPANY);
+        $this->sut->shouldReceive('canModify')->andReturn(false);
 
         $this->mockPplSrv->shouldReceive('lockOrganisationForm')
             ->once()
@@ -154,7 +153,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
     {
         $this->mockPplSrv->shouldReceive('lockPersonForm')->never();
 
-        $this->sut->shouldReceive('canModify')->andReturn(true);
+        $this->sut->shouldReceive('canModify')->once()->andReturn(true);
         $this->sut->alterAddOrEditFormForOrganisation($this->mockForm);
     }
 
@@ -216,9 +215,6 @@ class VariationPeopleAdapterTest extends MockeryTestCase
                 }
             );
 
-        $data = [
-            'id' => 8001,
-        ];
         $this->sut->delete(['unit_personIds']);
     }
 }

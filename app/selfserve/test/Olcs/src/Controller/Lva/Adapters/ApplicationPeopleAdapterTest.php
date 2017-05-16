@@ -6,9 +6,9 @@ use Common\Controller\Lva\AbstractController;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter;
-use Common\Service\Entity\OrganisationEntityService;
 
 /**
+ * @author Nick Payne <nick.payne@valtech.co.uk>
  * @covers \Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter
  */
 class ApplicationPeopleAdapterTest extends MockeryTestCase
@@ -16,17 +16,11 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
     /**
      * @dataProvider dpTestCanModify
      */
-    public function testCanModify($type, $isInForce, $expect)
+    public function testCanModify($isExcOrg, $isInForce, $expect)
     {
         $data = [
-            'licence' => [
-                'organisation' => [
-                    'hasInforceLicences' => $isInForce,
-                    'type' => [
-                        'id' => $type,
-                    ],
-                ],
-            ],
+            'hasInforceLicences' => $isInForce,
+            'isExceptionalType' => $isExcOrg,
         ];
 
         $mockResp = m::mock(\Zend\Http\Response::class);
@@ -40,7 +34,7 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
             ->shouldAllowMockingProtectedMethods();
         $sut->shouldReceive('handleQuery')->andReturn($mockResp);
 
-        $sut->loadPeopleData(AbstractController::LVA_APP, 999);
+        $sut->loadPeopleData(AbstractController::LVA_LIC, 999);
 
         static::assertEquals($expect, $sut->canModify());
     }
@@ -48,34 +42,24 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
     public function dpTestCanModify()
     {
         return [
-            'ltd & Not InForce' => [
-                'type' => OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY,
+            [
+                'isExcOrg' => true,
+                'inForce' => false,
+                'expect' => false,
+            ],
+            [
+                'isExcOrg' => false,
                 'inForce' => false,
                 'expect' => true,
             ],
-            'llp & Not InForce' => [
-                'type' => OrganisationEntityService::ORG_TYPE_LLP,
-                'inForce' => false,
-                'expect' => true,
-            ],
-            'other & Not InForce' => [
-                'type' => OrganisationEntityService::ORG_TYPE_OTHER,
-                'inForce' => false,
-                'expect' => true,
-            ],
-            'ltd & InForce' => [
-                'type' => OrganisationEntityService::ORG_TYPE_REGISTERED_COMPANY,
+            [
+                'isExcOrg' => false,
                 'inForce' => true,
                 'expect' => false,
             ],
-            'SoleTraider & Not InForce' => [
-                'type' => OrganisationEntityService::ORG_TYPE_SOLE_TRADER,
-                'inForce' => false,
-                'expect' => false,
-            ],
-            ' & Not InForce' => [
-                'type' => OrganisationEntityService::ORG_TYPE_PARTNERSHIP,
-                'inForce' => false,
+            [
+                'isExcOrg' => true,
+                'inForce' => true,
                 'expect' => false,
             ],
         ];

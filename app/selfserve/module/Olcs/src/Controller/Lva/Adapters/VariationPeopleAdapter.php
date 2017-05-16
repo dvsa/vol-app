@@ -19,6 +19,8 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
      */
     public function canModify()
     {
+        // i.e. they *can't* modify exceptional org types
+        // but can modify all others
         return $this->isExceptionalOrganisation() === false;
     }
 
