@@ -29,11 +29,12 @@ trait VariationControllerTrait
      * @todo this logic is the same as CommonApplicationControllerTrait, this could potentially be re-used however I am
      *   not sure whether there would be any complications
      *
-     * @param  string $section section
+     * @param string $section section
+     * @param array  $prg     prg
      *
      * @return \Zend\Http\Response
      */
-    protected function completeSection($section)
+    protected function completeSection($section, $prg = [])
     {
         if ($this->isButtonPressed('saveAndContinue')) {
             return $this->goToNextSection($section);

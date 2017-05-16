@@ -8,6 +8,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Zend\Form\Form;
 use Olcs\FormService\Form\Lva\OperatingCentre\LvaOperatingCentre;
 use Zend\ServiceManager\ServiceManager;
+use Common\Service\Helper\FormHelperService;
 
 /**
  * Lva Operating Centre Test
@@ -22,7 +23,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
 
     public function setUp()
     {
-        $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
+        $this->formHelper = m::mock(FormHelperService::class);
 
         $mockTranslator = m::mock();
         $mockTranslator->shouldReceive('translate')
@@ -114,31 +115,35 @@ class LvaOperatingCentreTest extends MockeryTestCase
                 . '-Department for Infrastructure<br />The Central Licensing Office<br />PO Box 180'
                 . '<br />Leeds<br />LS9 1BU'
                 . '-: <b>AB12345/111</b>'
-            );
+            )
+            ->getMock();
 
-        $adPlaced = m::mock();
-        $adPlaced->shouldReceive('setLabel')
-            ->once()
+        $adPlaced = m::mock()
+            ->shouldReceive('setLabel')
             ->with(
                 'translated-markup-lva-oc-ad-placed-label-selfserve'
                 . '-guides/guide'
                 . '-advertising-your-operating-centre-ni-new'
-            );
+            )
+            ->once()
+            ->shouldReceive('getValueOptions')
+            ->andReturn(['1' => 'Yes'])
+            ->once()
+            ->shouldReceive('setValueOptions')
+            ->with(['1' => 'lva-oc-adplaced-y-selfserve'])
+            ->once()
+            ->getMock();
 
-        $adPlaced->shouldReceive('getValueOptions')->andReturn(['1' => 'Yes', '0' => 'No']);
-
-        $adPlaced->shouldReceive('setValueOptions')->once()->with(
-            [
-                '1' => 'lva-oc-adplaced-y-selfserve',
-                '0' => 'lva-oc-adplaced-n-selfserve',
-                '2' => 'lva-oc-adplaced-l-selfserve'
-            ]
-        );
-
-        $advertisements = m::mock();
-        $advertisements->shouldReceive('get')->with('adSendByPost')->andReturn($adSendByPost);
-        $advertisements->shouldReceive('get')->with('adPlaced')->andReturn($adPlaced);
-        $advertisements->shouldReceive('get')
+        $advertisements = m::mock()
+            ->shouldReceive('get')
+            ->with('adSendByPost')
+            ->andReturn($adSendByPost)
+            ->once()
+            ->shouldReceive('get')
+            ->with('adPlaced')
+            ->andReturn($adPlaced)
+            ->once()
+            ->shouldReceive('get')
             ->with('adUploadLater')
             ->andReturn(
                 m::mock()
@@ -148,6 +153,32 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     ->getMock()
             )
             ->once()
+            ->shouldReceive('get')
+            ->with('adPlacedPost')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setName')
+                    ->with('adPlaced')
+                    ->once()
+                    ->shouldReceive('setValueOptions')
+                    ->with(['lva-oc-adplaced-n-selfserve'])
+                    ->once()
+                    ->getMock()
+            )
+            ->twice()
+            ->shouldReceive('get')
+            ->with('adPlacedLater')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setName')
+                    ->with('adPlaced')
+                    ->once()
+                    ->shouldReceive('setValueOptions')
+                    ->with(['2' => 'lva-oc-adplaced-l-selfserve'])
+                    ->once()
+                    ->getMock()
+            )
+            ->twice()
             ->getMock();
 
         $form->shouldReceive('get')
@@ -215,29 +246,32 @@ class LvaOperatingCentreTest extends MockeryTestCase
                 . '-: <b>AB12345/111</b>'
             );
 
-        $adPlaced = m::mock();
-        $adPlaced->shouldReceive('setLabel')
-            ->once()
+        $adPlaced = m::mock()
+            ->shouldReceive('setLabel')
             ->with(
                 'translated-markup-lva-oc-ad-placed-label-selfserve'
                 . '-guides/guide'
                 . '-advertising-your-operating-centre-gb-new'
-            );
+            )
+            ->once()
+            ->shouldReceive('getValueOptions')
+            ->andReturn(['1' => 'Yes'])
+            ->once()
+            ->shouldReceive('setValueOptions')
+            ->with(['1' => 'lva-oc-adplaced-y-selfserve'])
+            ->once()
+            ->getMock();
 
-        $adPlaced->shouldReceive('getValueOptions')->andReturn(['1' => 'Yes', '0' => 'No']);
-
-        $adPlaced->shouldReceive('setValueOptions')->once()->with(
-            [
-                '1' => 'lva-oc-adplaced-y-selfserve',
-                '0' => 'lva-oc-adplaced-n-selfserve',
-                '2' => 'lva-oc-adplaced-l-selfserve'
-            ]
-        );
-
-        $advertisements = m::mock();
-        $advertisements->shouldReceive('get')->with('adSendByPost')->andReturn($adSendByPost);
-        $advertisements->shouldReceive('get')->with('adPlaced')->andReturn($adPlaced);
-        $advertisements->shouldReceive('get')
+        $advertisements = m::mock()
+            ->shouldReceive('get')
+            ->with('adSendByPost')
+            ->andReturn($adSendByPost)
+            ->once()
+            ->shouldReceive('get')
+            ->with('adPlaced')
+            ->andReturn($adPlaced)
+            ->once()
+            ->shouldReceive('get')
             ->with('adUploadLater')
             ->andReturn(
                 m::mock()
@@ -247,6 +281,32 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     ->getMock()
             )
             ->once()
+            ->shouldReceive('get')
+            ->with('adPlacedPost')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setName')
+                    ->with('adPlaced')
+                    ->once()
+                    ->shouldReceive('setValueOptions')
+                    ->with(['lva-oc-adplaced-n-selfserve'])
+                    ->once()
+                    ->getMock()
+            )
+            ->twice()
+            ->shouldReceive('get')
+            ->with('adPlacedLater')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setName')
+                    ->with('adPlaced')
+                    ->once()
+                    ->shouldReceive('setValueOptions')
+                    ->with(['2' => 'lva-oc-adplaced-l-selfserve'])
+                    ->once()
+                    ->getMock()
+            )
+            ->twice()
             ->getMock();
 
         $form->shouldReceive('get')
