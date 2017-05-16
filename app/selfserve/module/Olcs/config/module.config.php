@@ -794,12 +794,6 @@ $applicationNavigation = array(
                     'route' => 'lva-application/upload-evidence',
                     'use_route_match' => true
                 ),
-                array(
-                    'id' => 'variation-upload-evidence',
-                    'label' => 'Upload evidence',
-                    'route' => 'lva-variation/upload-evidence',
-                    'use_route_match' => true
-                ),
             ),
         ),
         array(
@@ -826,7 +820,15 @@ $applicationNavigation = array(
             'id' => 'variation-submission-summary',
             'label' => 'Application summary',
             'route' => 'lva-variation/submission-summary',
-            'use_route_match' => true
+            'use_route_match' => true,
+            'pages' => array(
+                array(
+                    'id' => 'variation-upload-evidence',
+                    'label' => 'Upload evidence',
+                    'route' => 'lva-variation/upload-evidence',
+                    'use_route_match' => true
+                ),
+            ),
         ),
         array(
             'id' => 'variation',
