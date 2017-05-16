@@ -17,7 +17,9 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
     /**
      * Should map data from a result array into an array suitable for a form
      *
-     * @param array $data
+     * @param array $data From API
+     *
+     * @return array Form data
      */
     public static function mapFromResult(array $data)
     {
@@ -56,8 +58,9 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
     /**
      * Should map form data back into a command data structure
      *
-     * @param array $data
-     * @return array
+     * @param array $data From form
+     *
+     * @return array API data
      */
     public static function mapFromForm(array $data)
     {
@@ -81,10 +84,7 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
             $mapped['contactDetails']['emailAddress'] = $data['contact']['email'];
         }
 
-        $mapped['contactDetails'] = array_merge(
-            $mapped['contactDetails'],
-            self::mapPhoneContactsFromForm($data)
-        );
+        $mapped['contactDetails']['phoneContacts'] = self::mapPhoneContactsFromForm($data['contact']);
 
         return $mapped;
     }
@@ -92,22 +92,6 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
     private static function getFromDataIfSet($data, $field)
     {
         return isset($data[$field]) ? $data[$field] : null;
-    }
-
-    private static function mapPhoneContactsFromForm($data)
-    {
-        $mapped = [];
-        foreach (self::$phoneTypes as $key => $type) {
-            if (isset($data['contact']['phone_'.$key]) && !empty($data['contact']['phone_'.$key])) {
-                $mapped[$key.'PhoneContact'] = [
-                    'id' => $data['contact']['phone_'.$key.'_id'],
-                    'version' => $data['contact']['phone_'.$key.'_version'],
-                    'phoneContactType' => $type,
-                    'phoneNumber' => $data['contact']['phone_'.$key],
-                ];
-            }
-        }
-        return $mapped;
     }
 
     /**

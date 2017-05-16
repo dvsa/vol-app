@@ -3,7 +3,7 @@
 namespace Olcs\Controller\Lva\Licence;
 
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
-use Olcs\Controller\Lva\AbstractAddressesController;
+use Common\Controller\Lva\AbstractAddressesController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 
 /**

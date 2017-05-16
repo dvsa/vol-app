@@ -3,7 +3,7 @@
 namespace Olcs\Controller\Lva\Variation;
 
 use Olcs\Controller\Interfaces\VariationControllerInterface;
-use Olcs\Controller\Lva\AbstractAddressesController;
+use Common\Controller\Lva\AbstractAddressesController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 
 /**

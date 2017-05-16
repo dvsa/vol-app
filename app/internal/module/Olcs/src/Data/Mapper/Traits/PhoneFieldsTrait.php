@@ -2,6 +2,8 @@
 
 namespace Olcs\Data\Mapper\Traits;
 
+use Common\RefData;
+
 /**
  * Class PhoneFieldsTrait
  * @package Olcs\Data\Mapper
@@ -14,10 +16,8 @@ trait PhoneFieldsTrait
      * @var array
      */
     protected static $phoneTypes = array(
-        'business' => 'phone_t_tel',
-        'home' => 'phone_t_home',
-        'mobile' => 'phone_t_mobile',
-        'fax' => 'phone_t_fax'
+        'primary' => RefData::PHONE_TYPE_PRIMARY,
+        'secondary' => RefData::PHONE_TYPE_SECONDARY,
     );
 
     /**

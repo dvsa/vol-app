@@ -32,46 +32,38 @@ class UserContact
 
     /**
      * @Form\Attributes({"class":"medium"})
-     * @Form\Options({"label":"Phone"})
      * @Form\Type("\Common\Form\Elements\InputFilters\Phone")
-     * @Form\Name("phone_business")
      */
-    public $phoneBusiness = null;
+    public $phone_primary = null;
 
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
-     * @Form\Name("phone_business_id")
      */
-    public $phoneBusinessId = null;
+    public $phone_primary_id = null;
 
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
-     * @Form\Name("phone_business_version")
      */
-    public $phoneBusinessVersion = null;
+    public $phone_primary_version = null;
 
     /**
      * @Form\Attributes({"class":"medium"})
-     * @Form\Options({"label":"Fax"})
-     * @Form\Required(false)
+     * @Form\Options({"label": "secondary-contact-number-optional"})
      * @Form\Type("\Common\Form\Elements\InputFilters\Phone")
-     * @Form\Name("phone_fax")
      */
-    public $phoneFax = null;
+    public $phone_secondary = null;
 
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
-     * @Form\Name("phone_fax_id")
-     */
-    public $phoneFaxId = null;
+    */
+    public $phone_secondary_id = null;
 
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
-     * @Form\Name("phone_fax_version")
      */
-    public $phoneFaxVersion = null;
+    public $phone_secondary_version = null;
 }

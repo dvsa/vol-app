@@ -119,87 +119,45 @@ class UnlicensedOperatorTest extends AbstractFormValidationTestCase
         );
     }
 
-    public function testContactPhoneBusiness()
+    public function testContactPhonePrimary()
     {
-        $element = ['contact', 'phone_business'];
+        $element = ['contact', 'phone_primary'];
         $this->assertFormElementRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
     }
 
-    public function testContactPhoneBusinessId()
+    public function testContactPhonePrimaryId()
     {
         $this->assertFormElementHidden(
-            ['contact', 'phone_business_id']
+            ['contact', 'phone_primary_id']
         );
     }
 
-    public function testContactPhoneBusinessVersion()
+    public function testContactPhonePrimaryVersion()
     {
         $this->assertFormElementHidden(
-            ['contact', 'phone_business_version']
+            ['contact', 'phone_primary_version']
         );
     }
 
-    public function testContactHome()
+    public function testContactSecondary()
     {
-        $element = ['contact', 'phone_home'];
+        $element = ['contact', 'phone_secondary'];
         $this->assertFormElementRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
     }
 
-    public function testContactHomeId()
+    public function testContactSecondaryId()
     {
         $this->assertFormElementHidden(
-            ['contact', 'phone_home_id']
+            ['contact', 'phone_secondary_id']
         );
     }
 
-    public function testContactPhoneHomeVersion()
+    public function testContactPhoneSecondaryVersion()
     {
         $this->assertFormElementHidden(
-            ['contact', 'phone_home_version']
-        );
-    }
-
-    public function testContactMobile()
-    {
-        $element = ['contact', 'phone_mobile'];
-        $this->assertFormElementRequired($element, false);
-        $this->assertFormElementAllowEmpty($element, true);
-    }
-
-    public function testContactMobileId()
-    {
-        $this->assertFormElementHidden(
-            ['contact', 'phone_mobile_id']
-        );
-    }
-
-    public function testContactPhoneMobileVersion()
-    {
-        $this->assertFormElementHidden(
-            ['contact', 'phone_mobile_version']
-        );
-    }
-
-    public function testContactFax()
-    {
-        $element = ['contact', 'phone_fax'];
-        $this->assertFormElementRequired($element, false);
-        $this->assertFormElementAllowEmpty($element, true);
-    }
-
-    public function testContactFaxId()
-    {
-        $this->assertFormElementHidden(
-            ['contact', 'phone_fax_id']
-        );
-    }
-
-    public function testContactPhoneFaxVersion()
-    {
-        $this->assertFormElementHidden(
-            ['contact', 'phone_fax_version']
+            ['contact', 'phone_secondary_version']
         );
     }
 

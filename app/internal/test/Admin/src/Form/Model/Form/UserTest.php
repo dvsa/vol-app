@@ -266,43 +266,43 @@ class UserTest extends AbstractFormValidationTestCase
         $this->assertFormElementRequired($element, true);
     }
 
-    public function testContactPhoneBusiness()
+    public function testContactPhonePrimary()
     {
-        $element = ['userContactDetails', 'phone_business'];
+        $element = ['userContactDetails', 'phone_primary'];
         $this->assertFormElementRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementPhone($element);
     }
 
-    public function testContactPhoneBusinessId()
+    public function testContactPhonePrimaryId()
     {
-        $element = ['userContactDetails', 'phone_business_id'];
+        $element = ['userContactDetails', 'phone_primary_id'];
         $this->assertFormElementHidden($element);
     }
 
-    public function testContactPhoneBusinessVersion()
+    public function testContactPhonePrimaryVersion()
     {
-        $element = ['userContactDetails', 'phone_business_version'];
+        $element = ['userContactDetails', 'phone_primary_version'];
         $this->assertFormElementHidden($element);
     }
 
-    public function testContactFaxBusiness()
+    public function testContactSecondaryBusiness()
     {
-        $element = ['userContactDetails', 'phone_fax'];
+        $element = ['userContactDetails', 'phone_secondary'];
         $this->assertFormElementRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementPhone($element);
     }
 
-    public function testContactFaxBusinessId()
+    public function testContactSecondaryBusinessId()
     {
-        $element = ['userContactDetails', 'phone_fax_id'];
+        $element = ['userContactDetails', 'phone_secondary_id'];
         $this->assertFormElementHidden($element);
     }
 
-    public function testContactFaxBusinessVersion()
+    public function testContactSecondaryBusinessVersion()
     {
-        $element = ['userContactDetails', 'phone_fax_version'];
+        $element = ['userContactDetails', 'phone_secondary_version'];
         $this->assertFormElementHidden($element);
     }
 
