@@ -200,16 +200,17 @@ class Appeal extends CaseBase
     public $isWithdrawn = null;
 
     /**
-     * @Form\Required(false)
+     * @Form\Required(true)
      * @Form\Type("DateSelect")
-     * @Form\Attributes({"id":""})
+     * @Form\Attributes({"id":"withdrawnDate"})
      * @Form\Options({
      *     "label": "Withdrawn date",
      *     "create_empty_option": true,
      *     "render_delimiters": false,
      *     "hint": "Please note, all associated stay information on this case will also be withdrawn",
-     *     "required": false
      * })
+     * @Form\Filter({"name":"DateSelect", "options":{"null_on_empty":true}})
+     * @Form\Validator({"name": "NotEmpty", "options": {"array"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isWithdrawn",
@@ -218,7 +219,7 @@ class Appeal extends CaseBase
      *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
      *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"},
-     *              {"name":"Zend\Validator\NotEmpty"}
+     *              {"name":"NotEmpty"}
      *          }
      *      }
      * })

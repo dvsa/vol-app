@@ -141,6 +141,7 @@ class AppealTest extends AbstractFormValidationTestCase
         $element = ['fields', 'withdrawnDate'];
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementValid($element, '2017-01-01');
     }
 
     public function testCase()
