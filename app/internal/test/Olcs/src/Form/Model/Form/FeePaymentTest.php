@@ -2,6 +2,8 @@
 
 namespace OlcsTest\Form\Model\Form;
 
+use Zend\Validator\Date;
+use Dvsa\Olcs\Transfer\Validators\DateCompare;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Zend\Validator\Digits;
 use Zend\Validator\NotEmpty;
@@ -54,7 +56,13 @@ class FeePaymentTest extends AbstractFormValidationTestCase
 
         $this->assertFormElementValid($element, $date);
 
-        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementAllowEmpty(
+            $element,
+            false,
+            [],
+            [NotEmpty::IS_EMPTY, Date::INVALID]
+        );
+
         $this->assertFormElementIsRequired($element, true);
     }
 
@@ -68,7 +76,7 @@ class FeePaymentTest extends AbstractFormValidationTestCase
         $this->assertFormElementIsRequired(
             ['details', 'slipNo'],
             true,
-            [NotEmpty::IS_EMPTY,Digits::INVALID]
+            [NotEmpty::IS_EMPTY, Digits::INVALID]
         );
     }
 
