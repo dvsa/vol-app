@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Abstract Variation Controller
- *
- * @author Rob Caiger <rob.caiger@clocal.co.uk>
- */
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
@@ -26,14 +21,15 @@ trait VariationControllerTrait
     /**
      * Complete section
      *
+     * @param string $section Section
+     * @param array  $prg     Prg
+     *
      * @todo this logic is the same as CommonApplicationControllerTrait, this could potentially be re-used however I am
      *   not sure whether there would be any complications
      *
-     * @param  string $section section
-     *
      * @return \Zend\Http\Response
      */
-    protected function completeSection($section)
+    protected function completeSection($section, $prg = [])
     {
         if ($this->isButtonPressed('saveAndContinue')) {
             return $this->goToNextSection($section);
