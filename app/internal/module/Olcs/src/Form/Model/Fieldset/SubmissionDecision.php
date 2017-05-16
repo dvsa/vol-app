@@ -33,6 +33,7 @@ class SubmissionDecision extends Base
      *     "use_groups":true
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $reasons = null;
 

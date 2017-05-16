@@ -33,6 +33,7 @@ class SubmissionRecommendation extends Base
      *     "disable_inarray_validator": false,
      *     "use_groups":true
      * })
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      * @Form\Validator({"name": "NotEmpty", "options": {"array"}})
      * @Form\Validator({"name": "ValidateIfMultiple",
      *      "options":{
