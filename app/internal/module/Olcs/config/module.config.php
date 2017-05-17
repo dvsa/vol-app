@@ -154,8 +154,8 @@ return array(
                 => 'Olcs\Controller\Cases\Complaint\EnvironmentalComplaintController',
             'CaseOffenceController' => 'Olcs\Controller\Cases\Conviction\OffenceController',
             'CaseLegacyOffenceController' => 'Olcs\Controller\Cases\Conviction\LegacyOffenceController',
-            Cases\Submission\SubmissionSectionCommentController::class =>
-                Cases\Submission\SubmissionSectionCommentController::class,
+            'CaseSubmissionSectionCommentController'
+                => 'Olcs\Controller\Cases\Submission\SubmissionSectionCommentController',
             'CaseSubmissionDecisionController'
                 => 'Olcs\Controller\Cases\Submission\DecisionController',
             'CasePenaltyController' => 'Olcs\Controller\Cases\Penalty\PenaltyController',
