@@ -43,19 +43,14 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
     {
         return [
             [
+                'inForce' => false,
                 'isExcOrg' => true,
-                'inForce' => false,
-                'expect' => false,
-            ],
-            [
-                'isExcOrg' => false,
-                'inForce' => false,
                 'expect' => true,
             ],
             [
-                'isExcOrg' => false,
                 'inForce' => true,
-                'expect' => false,
+                'isExcOrg' => false,
+                'expect' => true,
             ],
             [
                 'isExcOrg' => true,
