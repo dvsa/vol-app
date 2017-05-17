@@ -1,5 +1,4 @@
 <?php
-
 use Olcs\Controller\Cases;
 
 /**
@@ -431,7 +430,7 @@ return [
                 'id' => '[0-9]+',
             ],
             'defaults' => [
-                'controller' => Cases\Submission\SubmissionSectionCommentController::class,
+                'controller' => 'CaseSubmissionSectionCommentController',
             ]
         ]
     ],
