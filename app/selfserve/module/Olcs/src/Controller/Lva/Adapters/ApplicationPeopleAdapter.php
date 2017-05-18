@@ -16,7 +16,10 @@ class ApplicationPeopleAdapter extends VariationPeopleAdapter
      */
     public function canModify()
     {
-        return parent::canModify()
-            && !$this->hasInforceLicences();
+        if ($this->hasInforceLicences() === false) {
+            return true;
+        }
+
+        return parent::canModify();
     }
 }
