@@ -68,7 +68,12 @@ class LvaOperatingCentreTest extends MockeryTestCase
             ->once()
             ->shouldReceive('removeValidator')
             ->with($form, 'advertisements->uploadedFileCount', \Common\Validator\ValidateIf::class)
-            ->once();
+            ->once()
+            ->shouldReceive('remove')
+            ->with($form, 'advertisements->adPlacedLater')
+            ->once()
+            ->getMock();
+
         $form->shouldReceive('getInputFilter')
             ->andReturn(
                 m::mock()
@@ -96,16 +101,23 @@ class LvaOperatingCentreTest extends MockeryTestCase
             ->andReturn(
                 m::mock()
                 ->shouldReceive('get')
-                ->with('adPlaced')
+                ->with('adPlacedPost')
                 ->andReturn(
                     m::mock()
-                    ->shouldReceive('getValueOptions')
-                    ->andReturn($originalValueOptions)
-                    ->once()
-                    ->shouldReceive('setValueOptions')
-                    ->with($alteredValueOptions)
+                    ->shouldReceive('setName')
+                    ->with('adPlaced')
                     ->once()
                     ->getMock()
+                )
+                ->once()
+                ->shouldReceive('get')
+                ->with('adPlacedLater')
+                ->andReturn(
+                    m::mock()
+                        ->shouldReceive('setName')
+                        ->with('adPlaced')
+                        ->once()
+                        ->getMock()
                 )
                 ->once()
                 ->getMock()
