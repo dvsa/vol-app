@@ -1,10 +1,5 @@
 <?php
 
-/**
- * External Variation People Adapter
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- */
 namespace Olcs\Controller\Lva\Adapters;
 
 use Zend\Form\Form;
@@ -17,6 +12,11 @@ use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
  */
 class VariationPeopleAdapter extends AbstractPeopleAdapter
 {
+    /**
+     * Can Modify
+     *
+     * @return bool
+     */
     public function canModify()
     {
         // i.e. they *can't* modify exceptional org types
@@ -24,6 +24,11 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
         return $this->isExceptionalOrganisation() === false;
     }
 
+    /**
+     * Get Table Config
+     *
+     * @return string
+     */
     protected function getTableConfig()
     {
         if (!$this->useDeltas()) {
@@ -32,6 +37,14 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
         return 'lva-variation-people';
     }
 
+    /**
+     * Alter Form For Organisation
+     *
+     * @param \Zend\Form\FormInterface           $form  Form
+     * @param \Common\Service\Table\TableBuilder $table Table
+     *
+     * @return void
+     */
     public function alterFormForOrganisation(Form $form, $table)
     {
         if ($this->canModify()) {
@@ -39,22 +52,29 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
             return;
         }
 
-        return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table);
+        $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table);
     }
 
+    /**
+     * Alter Add Or Edit Form For Organisation
+     *
+     * @param Form $form Form
+     *
+     * @return void
+     */
     public function alterAddOrEditFormForOrganisation(Form $form)
     {
         if ($this->canModify()) {
             return;
         }
 
-        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $this->getOrganisationType());
+        $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $this->getOrganisationType());
     }
 
     /**
      * Get the backend command to create a Person
      *
-     * @param array $params
+     * @param array $params Params
      *
      * @return \Dvsa\Olcs\Transfer\Command\AbstractCommand
      */
@@ -67,7 +87,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
     /**
      * Get the backend command to update a Person
      *
-     * @param array $params
+     * @param array $params Params
      *
      * @return \Dvsa\Olcs\Transfer\Command\AbstractCommand
      */
@@ -81,7 +101,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
     /**
      * Get the backend command to delete a Person
      *
-     * @param array $params
+     * @param array $params Params
      *
      * @return \Dvsa\Olcs\Transfer\Command\AbstractCommand
      */
