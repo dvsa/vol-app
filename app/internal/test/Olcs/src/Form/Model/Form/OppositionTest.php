@@ -154,24 +154,45 @@ class OppositionTest extends AbstractFormValidationTestCase
         $this->assertFormElementAllowEmpty(['person', 'familyName'], true);
     }
 
-    public function testContactPhoneBusiness()
+    public function testContactPhonePrimary()
     {
-        $element = ['contact', 'phone_business'];
+        $element = ['contact', 'phone_primary'];
         $this->assertFormElementRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
     }
 
-    public function testContactPhoneBusinessId()
+    public function testContactPhonePrimaryId()
     {
         $this->assertFormElementHidden(
-            ['contact', 'phone_business_id']
+            ['contact', 'phone_primary_id']
         );
     }
 
-    public function testContactPhoneBusinessVersion()
+    public function testContactPhonePrimaryVersion()
     {
         $this->assertFormElementHidden(
-            ['contact', 'phone_business_version']
+            ['contact', 'phone_primary_version']
+        );
+    }
+
+    public function testContactPhoneSecondary()
+    {
+        $element = ['contact', 'phone_secondary'];
+        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, true);
+    }
+
+    public function testContactPhoneSecondaryId()
+    {
+        $this->assertFormElementHidden(
+            ['contact', 'phone_secondary_id']
+        );
+    }
+
+    public function testContactPhoneSecondaryVersion()
+    {
+        $this->assertFormElementHidden(
+            ['contact', 'phone_secondary_version']
         );
     }
 

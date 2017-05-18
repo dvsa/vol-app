@@ -3,7 +3,7 @@
 namespace Olcs\Controller\Lva\Application;
 
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
-use Olcs\Controller\Lva\AbstractAddressesController;
+use Common\Controller\Lva\AbstractAddressesController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
 /**

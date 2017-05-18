@@ -51,8 +51,14 @@ class OppositionTest extends MockeryTestCase
                                 [
                                     'id' => 301,
                                     'version' => 1,
-                                    'phoneContactType' => ['id' => 'phone_t_tel'],
+                                    'phoneContactType' => ['id' => 'phone_t_primary'],
                                     'phoneNumber' => 'pn1',
+                                ],
+                                [
+                                    'id' => 302,
+                                    'version' => 4,
+                                    'phoneContactType' => ['id' => 'phone_t_secondary'],
+                                    'phoneNumber' => 'pn2',
                                 ],
                             ],
                             'person' => [
@@ -82,9 +88,12 @@ class OppositionTest extends MockeryTestCase
                     ],
                     'contact' => [
                         'emailAddress' => 'test@test.me',
-                        'phone_business' => 'pn1',
-                        'phone_business_id' => 301,
-                        'phone_business_version' => 1,
+                        'phone_primary' => 'pn1',
+                        'phone_primary_id' => 301,
+                        'phone_primary_version' => 1,
+                        'phone_secondary' => 'pn2',
+                        'phone_secondary_id' => 302,
+                        'phone_secondary_version' => 4,
                     ],
                     'person' => [
                         'id' => 400,
@@ -126,9 +135,12 @@ class OppositionTest extends MockeryTestCase
                     ],
                     'contact' => [
                         'emailAddress' => 'test@test.me',
-                        'phone_business' => 'pn1',
-                        'phone_business_id' => 301,
-                        'phone_business_version' => 1,
+                        'phone_primary' => 'pn1',
+                        'phone_primary_id' => 301,
+                        'phone_primary_version' => 1,
+                        'phone_secondary' => 'pn2',
+                        'phone_secondary_id' => 303,
+                        'phone_secondary_version' => 3,
                     ],
                     'person' => [
                         'forename' => 'forename'
@@ -153,8 +165,14 @@ class OppositionTest extends MockeryTestCase
                             [
                                 'id' => 301,
                                 'version' => 1,
-                                'phoneContactType' => 'phone_t_tel',
+                                'phoneContactType' => 'phone_t_primary',
                                 'phoneNumber' => 'pn1',
+                            ],
+                            [
+                                'id' => 303,
+                                'version' => 3,
+                                'phoneContactType' => 'phone_t_secondary',
+                                'phoneNumber' => 'pn2',
                             ],
                         ],
                         'person' => [

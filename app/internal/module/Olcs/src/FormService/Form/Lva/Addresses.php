@@ -11,8 +11,6 @@ use Common\FormService\Form\Lva\Addresses as CommonAddresses;
  */
 class Addresses extends CommonAddresses
 {
-    private static $tableConfigName = 'lva-phone-contacts';
-
     /**
      * Alter Form
      *
@@ -26,26 +24,6 @@ class Addresses extends CommonAddresses
         $form->get('form-actions')->get('save')->setLabel('internal.save.button');
 
         $this->removeEstablishment($form, $params['typeOfLicence']['licenceType']);
-
-        //  fill table
-        $table = $this->getFormServiceLocator()->getServiceLocator()->get('Table')
-            ->prepareTable(self::$tableConfigName, ($params['corrPhoneContacts'] ?: []));
-
-        $this->getFormHelper()->populateFormTable($form->get('phoneContactsTable'), $table);
-
-        //  remove phones fields
-        /** @var \Zend\Form\Element $field */
-        /** @var \Zend\Form\Fieldset $contactFieldset */
-        $contactFieldset = $form->get('contact');
-        foreach ($contactFieldset as $field) {
-            $fldName = $field->getName();
-            if ($fldName !== 'email') {
-                $this->getFormHelper()->remove($form, 'contact->' . $fldName);
-            }
-        }
-
-        $contactFieldset->setOptions([]);
-        $contactFieldset->setLabel('');
 
         //  change email settings
         /** @var \Zend\InputFilter\Input $emailElm */
