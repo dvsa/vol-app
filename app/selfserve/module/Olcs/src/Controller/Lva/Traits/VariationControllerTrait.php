@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Abstract Variation Controller
+ *
+ * @author Rob Caiger <rob.caiger@clocal.co.uk>
+ */
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
