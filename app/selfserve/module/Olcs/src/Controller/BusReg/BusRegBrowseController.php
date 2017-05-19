@@ -182,7 +182,6 @@ class BusRegBrowseController extends AbstractController
     {
         /** @var \Common\Form\Form $form */
         $form = $this->getServiceLocator()->get('Helper\Form')->createForm(Form::class);
-        $form->remove('csrf');
 
         // make sure we always submit to the browse action
         $form->setAttribute('action', $this->url()->fromRoute('search-bus/browse'));

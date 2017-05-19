@@ -324,7 +324,6 @@ class SearchController extends AbstractController
     {
         /** @var \Common\Form\Form $form */
         $form = $this->getFilterForm(SearchFilterForm::class);
-        $form->remove('csrf');
 
         // Index is required for filter fields as they are index specific.
         $index = $this->params()->fromRoute('index');
