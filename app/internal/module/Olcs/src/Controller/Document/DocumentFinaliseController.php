@@ -162,7 +162,7 @@ class DocumentFinaliseController extends AbstractDocumentController
         }
 
         //  prepare form
-        $form = $this->hlpForm->createForm('DocumentSend', true);
+        $form = $this->hlpForm->createForm('DocumentSend');
 
         //  define visibility of buttons
         $flags = $result['flags'];
