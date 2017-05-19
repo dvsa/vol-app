@@ -4,6 +4,7 @@ namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Common\Form\Elements\Custom\OlcsCheckbox;
+use Zend\Form\Element\Select;
 
 /**
  * Class OperatorMergeTest
@@ -44,5 +45,12 @@ class OperatorMergeTest extends AbstractFormValidationTestCase
         $this->assertFormElementActionButton(
             ['form-actions', 'cancel']
         );
+    }
+
+    public function testLicenceIds()
+    {
+        $element = ['licenceIds'];
+        $this->assertFormElementType($element, Select::class);
+        $this->assertFormElementIsRequired($element, false);
     }
 }
