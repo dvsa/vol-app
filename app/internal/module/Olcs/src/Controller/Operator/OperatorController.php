@@ -104,7 +104,7 @@ class OperatorController extends AbstractController implements OperatorControlle
 
             if ($response->isOk()) {
                 return $this->redirect()->toRouteAjax(
-                    'lva-application/type_of_licence',
+                    'lva-application/overview',
                     ['application' => $response->getResult()['id']['application']]
                 );
             }
