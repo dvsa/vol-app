@@ -5,6 +5,7 @@ namespace OlcsTest\Form\Model\Form;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Common\Form\Elements\Custom\OlcsCheckbox;
 use Zend\Form\Element\Select;
+use Zend\Validator\NotEmpty;
 
 /**
  * Class ConditionUndertakingTest
@@ -79,5 +80,12 @@ class ConditionUndertakingTest extends AbstractFormValidationTestCase
     {
         $element = ['form-actions', 'cancel'];
         $this->assertFormElementActionButton($element);
+    }
+
+    public function testFieldsConditionCategory()
+    {
+        $element = ['fields', 'conditionCategory'];
+        $this->assertFormElementType($element, Select::class);
+        $this->assertFormElementIsRequired($element, true);
     }
 }
