@@ -109,4 +109,11 @@ class VariationUndertakingsTest extends AbstractFormValidationTestCase
         $element = ['form-actions', 'cancel'];
         $this->assertFormElementActionButton($element);
     }
+
+    public function testInterimFee()
+    {
+        $element = ['interim', 'interimFee'];
+        $this->assertFormElementIsRequired($element, false);
+        $this->assertFormElementHtml($element);
+    }
 }
