@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8075dd45160c7dc49444cd211210ffb2",
-    "content-hash": "c9ddfecfe780a2ae48053e3274bc79c6",
+    "content-hash": "6c06fe71bbe5a2a4f05aed6ac2ebd366",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -73,7 +72,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2017-02-24 16:22:25"
+            "time": "2017-02-24T16:22:25+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -143,7 +142,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2016-10-29 11:16:17"
+            "time": "2016-10-29T11:16:17+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -210,7 +209,7 @@
                 "collections",
                 "iterator"
             ],
-            "time": "2017-01-03 10:49:41"
+            "time": "2017-01-03T10:49:41+00:00"
         },
         {
             "name": "doctrine/common",
@@ -283,7 +282,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2017-01-13 14:02:13"
+            "time": "2017-01-13T14:02:13+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -354,7 +353,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-02-08 12:53:47"
+            "time": "2017-02-08T12:53:47+00:00"
         },
         {
             "name": "doctrine/doctrine-module",
@@ -432,7 +431,7 @@
                 "module",
                 "zf2"
             ],
-            "time": "2016-03-21 23:55:21"
+            "time": "2016-03-21T23:55:21+00:00"
         },
         {
             "name": "doctrine/doctrine-orm-module",
@@ -510,7 +509,7 @@
                 "orm",
                 "zf2"
             ],
-            "time": "2015-10-05 23:06:08"
+            "time": "2015-10-05T23:06:08+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -577,7 +576,7 @@
                 "singularize",
                 "string"
             ],
-            "time": "2015-11-06 14:35:42"
+            "time": "2015-11-06T14:35:42+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -631,7 +630,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2015-06-14 21:17:01"
+            "time": "2015-06-14T21:17:01+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -685,7 +684,7 @@
                 "lexer",
                 "parser"
             ],
-            "time": "2014-09-09 13:34:57"
+            "time": "2014-09-09T13:34:57+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -761,7 +760,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2016-12-18 15:42:34"
+            "time": "2016-12-18T15:42:34+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -808,15 +807,15 @@
             "keywords": [
                 "html"
             ],
-            "time": "2017-03-13 06:30:53"
+            "time": "2017-03-13T06:30:53+00:00"
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-develop",
+            "version": "dev-release/4.14",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "911c3bf7c1b8ff56887884bb7b4c6e96eefae852"
+                "reference": "fe47ab5c0084a559b3e037bb933264239dcc950a"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -831,8 +830,8 @@
                 "mikey179/vfsstream": "~1.4.0",
                 "mockery/mockery": "~0.9.3",
                 "olcs/olcs-testhelpers": "dev-develop",
-                "olcs/olcs-transfer": "dev-develop",
-                "olcs/olcs-utils": "dev-develop",
+                "olcs/olcs-transfer": "dev-release/4.14",
+                "olcs/olcs-utils": "dev-release/4.14",
                 "phpunit/phpunit": "^4.4.0",
                 "soflomo/purifier": "~0.1.0",
                 "squizlabs/php_codesniffer": "~1.5.3"
@@ -864,11 +863,11 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2017-05-18 09:34:52"
+            "time": "2017-05-18 11:10:23"
         },
         {
             "name": "olcs/autoload",
-            "version": "dev-develop",
+            "version": "dev-release/4.14",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-autoload.git",
@@ -883,11 +882,11 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "dev-develop",
+            "version": "dev-release/4.14",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "b4fe22f8b5f7aa7000291aa019b671a4dc724600"
+                "reference": "e97ef437d3a20aa852a2ef51f46a44cdd9a37d00"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -906,15 +905,15 @@
                 }
             },
             "description": "OLCS Authentication",
-            "time": "2017-05-17 14:38:06"
+            "time": "2017-05-23 16:40:26"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "dev-develop",
+            "version": "dev-release/4.14",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git",
-                "reference": "bc275d30886c8fd6c93d899013358386c6c1d38c"
+                "reference": "6959b023ccbe32b4db61a74a54068fe8e4f19085"
             },
             "require": {
                 "php": ">=5.4",
@@ -940,15 +939,15 @@
                 }
             },
             "description": "Logging Module for Olcs",
-            "time": "2017-05-09 14:54:10"
+            "time": "2017-05-18 11:12:57"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "dev-develop",
+            "version": "dev-release/4.14",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
-                "reference": "1e55161c0d6cc4399281b2f085113eb1833c0319"
+                "reference": "2fdf5d9962ee385cfe216c02b98e795bb35d7415"
             },
             "require": {
                 "php": ">=5.4",
@@ -966,15 +965,15 @@
                 }
             },
             "description": "OLCS Transfer",
-            "time": "2017-05-11 16:17:58"
+            "time": "2017-05-18 11:04:58"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "dev-develop",
+            "version": "dev-release/4.14",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-utils.git",
-                "reference": "bb3001d6a0e00ae5472b2d5a58ab09e969466942"
+                "reference": "bf6ca316942b6df7a04b08f2ce87dbec70ad020e"
             },
             "require": {
                 "php": ">=5.4",
@@ -982,7 +981,7 @@
             },
             "require-dev": {
                 "mockery/mockery": "~0.9.3",
-                "olcs/olcs-logging": "dev-develop",
+                "olcs/olcs-logging": "dev-release/4.14",
                 "phpunit/phpunit": "^4.0.0"
             },
             "type": "library",
@@ -992,7 +991,7 @@
                 }
             },
             "description": "OLCS Utils",
-            "time": "2017-05-09 14:54:06"
+            "time": "2017-05-18 11:11:48"
         },
         {
             "name": "psr/log",
@@ -1039,7 +1038,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10 12:19:37"
+            "time": "2016-10-10T12:19:37+00:00"
         },
         {
             "name": "soflomo/purifier",
@@ -1092,7 +1091,7 @@
                 "purify",
                 "zf2"
             ],
-            "time": "2013-04-23 10:33:41"
+            "time": "2013-04-23T10:33:41+00:00"
         },
         {
             "name": "symfony/console",
@@ -1155,7 +1154,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-04-26 01:39:17"
+            "time": "2017-04-26T01:39:17+00:00"
         },
         {
             "name": "symfony/debug",
@@ -1212,7 +1211,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-04-19 20:17:50"
+            "time": "2017-04-19T20:17:50+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -1262,7 +1261,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2015-07-08 05:59:48"
+            "time": "2015-07-08T05:59:48+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1321,7 +1320,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-11-14 01:06:16"
+            "time": "2016-11-14T01:06:16+00:00"
         },
         {
             "name": "zendframework/zendframework",
@@ -1439,7 +1438,7 @@
                 "framework",
                 "zf2"
             ],
-            "time": "2015-05-11 16:03:51"
+            "time": "2015-05-11T16:03:51+00:00"
         },
         {
             "name": "zendframework/zendxml",
@@ -1484,7 +1483,7 @@
                 "xml",
                 "zf2"
             ],
-            "time": "2016-02-04 21:02:08"
+            "time": "2016-02-04T21:02:08+00:00"
         },
         {
             "name": "zf-commons/zfc-rbac",
@@ -1560,7 +1559,7 @@
                 "rbac",
                 "zf2"
             ],
-            "time": "2015-01-26 11:29:23"
+            "time": "2015-01-26T11:29:23+00:00"
         },
         {
             "name": "zfr/rbac",
@@ -1610,7 +1609,7 @@
                 "zf2",
                 "zf3"
             ],
-            "time": "2014-02-06 14:18:34"
+            "time": "2014-02-06T14:18:34+00:00"
         }
     ],
     "packages-dev": [
@@ -1657,7 +1656,7 @@
             "keywords": [
                 "test"
             ],
-            "time": "2015-05-11 14:41:42"
+            "time": "2015-05-11T14:41:42+00:00"
         },
         {
             "name": "mockery/mockery",
@@ -1722,7 +1721,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2017-02-28 12:52:32"
+            "time": "2017-02-28T12:52:32+00:00"
         },
         {
             "name": "olcs/olcs-testhelpers",
@@ -1730,7 +1729,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-testhelpers.git",
-                "reference": "a57111e7d441de745b929dade6dd9be9840f8f86"
+                "reference": "f5819c6067060c259e9e100c44bffd0ce36bcd05"
             },
             "require": {
                 "php": ">=5.4"
@@ -1747,7 +1746,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2017-05-09 14:54:16"
+            "time": "2017-05-23T14:05:28+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -1801,7 +1800,7 @@
                 "reflection",
                 "static analysis"
             ],
-            "time": "2015-12-27 11:43:31"
+            "time": "2015-12-27T11:43:31+00:00"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -1846,7 +1845,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2016-09-30 07:12:33"
+            "time": "2016-09-30T07:12:33+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -1893,7 +1892,7 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
-            "time": "2016-11-25 06:54:22"
+            "time": "2016-11-25T06:54:22+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -1956,7 +1955,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2017-03-02 20:05:34"
+            "time": "2017-03-02T20:05:34+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2018,7 +2017,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-10-06 15:47:00"
+            "time": "2015-10-06T15:47:00+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2065,7 +2064,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2016-10-03 07:40:28"
+            "time": "2016-10-03T07:40:28+00:00"
         },
         {
             "name": "phpunit/php-text-template",
@@ -2106,7 +2105,7 @@
             "keywords": [
                 "template"
             ],
-            "time": "2015-06-21 13:50:34"
+            "time": "2015-06-21T13:50:34+00:00"
         },
         {
             "name": "phpunit/php-timer",
@@ -2155,7 +2154,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2017-02-26 11:10:40"
+            "time": "2017-02-26T11:10:40+00:00"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -2204,7 +2203,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2017-02-27 10:12:30"
+            "time": "2017-02-27T10:12:30+00:00"
         },
         {
             "name": "phpunit/phpunit",
@@ -2276,7 +2275,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-02-06 05:18:07"
+            "time": "2017-02-06T05:18:07+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -2332,7 +2331,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2015-10-02 06:51:40"
+            "time": "2015-10-02T06:51:40+00:00"
         },
         {
             "name": "sebastian/comparator",
@@ -2396,7 +2395,7 @@
                 "compare",
                 "equality"
             ],
-            "time": "2017-01-29 09:50:25"
+            "time": "2017-01-29T09:50:25+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -2448,7 +2447,7 @@
             "keywords": [
                 "diff"
             ],
-            "time": "2015-12-08 07:14:41"
+            "time": "2015-12-08T07:14:41+00:00"
         },
         {
             "name": "sebastian/environment",
@@ -2498,7 +2497,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2016-08-18 05:49:44"
+            "time": "2016-08-18T05:49:44+00:00"
         },
         {
             "name": "sebastian/exporter",
@@ -2565,7 +2564,7 @@
                 "export",
                 "exporter"
             ],
-            "time": "2016-06-17 09:04:28"
+            "time": "2016-06-17T09:04:28+00:00"
         },
         {
             "name": "sebastian/global-state",
@@ -2616,7 +2615,7 @@
             "keywords": [
                 "global state"
             ],
-            "time": "2015-10-12 03:26:01"
+            "time": "2015-10-12T03:26:01+00:00"
         },
         {
             "name": "sebastian/recursion-context",
@@ -2669,7 +2668,7 @@
             ],
             "description": "Provides functionality to recursively process PHP variables",
             "homepage": "http://www.github.com/sebastianbergmann/recursion-context",
-            "time": "2016-10-03 07:41:43"
+            "time": "2016-10-03T07:41:43+00:00"
         },
         {
             "name": "sebastian/version",
@@ -2704,7 +2703,7 @@
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
-            "time": "2015-06-21 13:59:46"
+            "time": "2015-06-21T13:59:46+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -2759,7 +2758,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-01 14:55:58"
+            "time": "2017-05-01T14:55:58+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -2809,7 +2808,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2016-11-23 20:04:58"
+            "time": "2016-11-23T20:04:58+00:00"
         }
     ],
     "aliases": [],
