@@ -9,6 +9,10 @@ return array(
     'attributes' => array(),
     'columns' => array(
         array(
+            'title' => 'dashboard.tm-applications.table.column.operator.title',
+            'name' => 'operatorName'
+        ),
+        array(
             'title' => 'dashboard.tm-applications.table.column.app-no.title',
             'formatter' => 'DashboardTmApplicationId'
         ),
