@@ -304,19 +304,11 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 $sections = [
                     'case-outline',
                     'people',
-                    'previous-history',
-                    'other-issues',
                     'annex',
-                    'operating-centres',
-                    'auth-requested-applied-for',
-                    'transport-managers',
-                    'fitness-and-repute',
                     'bus-reg-app-details',
                     'transport-authority-comments',
                     'total-bus-registrations',
-                    'local-licence-history',
                     'registration-details',
-                    'maintenance-tachographs-hours'
                 ];
                 break;
             case 'submission_type_o_clo_fep':
