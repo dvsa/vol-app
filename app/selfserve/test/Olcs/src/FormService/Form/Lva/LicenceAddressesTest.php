@@ -59,9 +59,6 @@ class LicenceAddressesTest extends MockeryTestCase
             ->andReturn($mockForm)
             ->once()
             ->shouldReceive('remove')
-            ->with($mockForm, 'phoneContactsTable')
-            ->once()
-            ->shouldReceive('remove')
             ->with($mockForm, 'form-actions->cancel')
             ->once()
             ->getMock();

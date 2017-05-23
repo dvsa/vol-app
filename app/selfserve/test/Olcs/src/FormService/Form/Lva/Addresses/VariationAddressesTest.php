@@ -49,10 +49,6 @@ class VariationAddressesTest extends MockeryTestCase
             ->andReturnSelf()
             ->once()
             ->shouldReceive('remove')
-            ->with($mockForm, 'phoneContactsTable')
-            ->andReturnSelf()
-            ->once()
-            ->shouldReceive('remove')
             ->with($mockForm, 'form-actions->cancel')
             ->andReturnSelf()
             ->once()
@@ -63,4 +59,3 @@ class VariationAddressesTest extends MockeryTestCase
         $this->assertSame($mockForm, $form);
     }
 }
-

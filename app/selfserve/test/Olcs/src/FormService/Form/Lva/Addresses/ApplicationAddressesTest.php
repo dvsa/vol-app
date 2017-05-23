@@ -49,16 +49,10 @@ class ApplicationAddressesTest extends MockeryTestCase
             ->with($mockForm, 'establishment_address')
             ->andReturnSelf()
             ->once()
-            ->shouldReceive('remove')
-            ->with($mockForm, 'phoneContactsTable')
-            ->andReturnSelf()
-            ->once()
             ->getMock();
-
 
         $form = $this->sut->getForm(['typeOfLicence' => ['licenceType' => 'foo']]);
 
         $this->assertSame($mockForm, $form);
     }
 }
-
