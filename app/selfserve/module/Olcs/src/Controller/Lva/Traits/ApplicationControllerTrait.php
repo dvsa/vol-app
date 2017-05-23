@@ -1,10 +1,5 @@
 <?php
 
-/**
- * EXTERNAL Abstract Application Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
@@ -190,6 +185,10 @@ trait ApplicationControllerTrait
         // query is already cached
         $dto = ApplicationQry::create(['id' => $applicationId]);
         $response = $this->handleQuery($dto);
+        if ($response->isForbidden()) {
+            return null;
+        }
+
         return $response->getResult();
     }
 }

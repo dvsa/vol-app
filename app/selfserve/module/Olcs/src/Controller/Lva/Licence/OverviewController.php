@@ -88,6 +88,9 @@ class OverviewController extends AbstractController
     {
         $dto = LicenceQry::create(['id' => $licenceId]);
         $response = $this->handleQuery($dto);
+        if ($response->isForbidden()) {
+            return null;
+        }
 
         return $response->getResult();
     }

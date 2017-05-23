@@ -28,6 +28,9 @@ class ConditionsUndertakingsController extends Lva\AbstractController
         $response = $this->handleQuery(
             \Dvsa\Olcs\Transfer\Query\Licence\ConditionUndertaking::create(['id' => $this->getIdentifier()])
         );
+        if ($response->isForbidden()) {
+            return $this->notFoundAction();
+        }
         if (!$response->isOk()) {
             throw new \RuntimeException('Error get conditionUndertaking');
         }
