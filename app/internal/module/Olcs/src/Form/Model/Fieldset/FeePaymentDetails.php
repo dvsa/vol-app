@@ -203,7 +203,8 @@ class FeePaymentDetails
      *      "min_year_delta": "-1"
      * })
      * @Form\Attributes({"required":false})
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name":"DateSelect", "options":{"null_on_empty":true}})
      * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
