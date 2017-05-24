@@ -51,11 +51,4 @@ class OperatorMergeTest extends AbstractFormValidationTestCase
             ['form-actions', 'cancel']
         );
     }
-
-    public function testLicenceIds()
-    {
-        $element = ['licenceIds'];
-        $this->assertFormElementType($element, Select::class);
-        $this->assertFormElementIsRequired($element, false);
-    }
 }
