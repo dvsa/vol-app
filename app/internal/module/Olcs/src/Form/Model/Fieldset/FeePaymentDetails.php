@@ -205,7 +205,7 @@ class FeePaymentDetails
      * @Form\Attributes({"required":false})
      * @Form\Type("DateSelect")
      * @Form\Filter({"name":"DateSelect", "options":{"null_on_empty":true}})
-     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"array"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "paymentType",
