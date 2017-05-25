@@ -759,6 +759,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $data = $this->getServiceLocator()->get('Helper\TransportManager')
             ->getCertificateFileData($this->tma['transportManager']['id'], $file);
 
+        $additionalData = [
+            'additionalCopy' => true,
+            'additionalEntities' => ['application', 'licence'],
+            'application' => $this->getIdentifier(),
+            'licence' => $this->getLicenceId()
+        ];
+        $data = array_merge($data, $additionalData);
         $isOk = $this->uploadFile($file, $data);
         // reload TMA data with new uploaded document in it
         if ($isOk) {
@@ -781,7 +788,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             ->getResponsibilityFileData($this->tma['transportManager']['id'], $file);
 
         $data['application'] = $this->getIdentifier();
-        $data['licence'] = $this->getLicenceId();
+        $additionalData = [
+            'additionalCopy' => true,
+            'additionalEntities' => ['licence'],
+            'licence' => $this->getLicenceId()
+        ];
+        $data = array_merge($data, $additionalData);
 
         $isOk = $this->uploadFile($file, $data);
         // reload TMA data with new uploaded document in it
