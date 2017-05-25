@@ -2,11 +2,11 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Zend\Validator\Date;
-use Dvsa\Olcs\Transfer\Validators\DateCompare;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Validator\Digits;
+use Common\Form\Elements\Validators\DateNotInFuture;
 use Zend\Validator\NotEmpty;
+use Zend\Validator\Digits;
+use Zend\Validator\Date;
 
 /**
  * Class FeePaymentTest
@@ -89,12 +89,28 @@ class FeePaymentTest extends AbstractFormValidationTestCase
     {
         $element = ['details', 'chequeDate'];
 
-        $previousYear = new \DateTimeImmutable('-1 year');
+        $previousYear = new \DateTime('-1 year');
         $date = $previousYear->format('Y') . '-' . $previousYear->format('m') . '-' . $previousYear->format('d');
 
         $this->assertFormElementValid($element, $date);
-
         $this->assertFormElementAllowEmpty($element, true);
+
+        $nextYear = new \DateTime('+1 year');
+        $date = $nextYear->format('Y') . '-' . $nextYear->format('m') . '-' . $nextYear->format('d');
+
+        $this->assertFormElementNotValid(
+            $element,
+            $date,
+            [ DateNotInFuture::IN_FUTURE ],
+            ['details' => ['paymentType' => 'fpm_cheque']]
+        );
+
+        $this->assertFormElementNotValid(
+            $element,
+            null,
+            [ NotEmpty::IS_EMPTY ],
+            ['details' => ['paymentType' => 'fpm_cheque']]
+        );
     }
 
     public function testPoNo()
