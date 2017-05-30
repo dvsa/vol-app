@@ -182,8 +182,19 @@ class PiHearingTest extends MockeryTestCase
     public function testMapFromErrors()
     {
         $mockForm = m::mock(FormInterface::class);
-        $errors = ['field' => 'data'];
+        $errors = ['field' => 'data', 'messages' => []];
 
         $this->assertEquals($errors, Sut::mapFromErrors($mockForm, $errors));
+    }
+
+    public function testMapFromErrorsHearDateBeforePi()
+    {
+        $mockForm = m::mock(FormInterface::class);
+        $mockForm->shouldReceive('get->get->setMessages')
+            ->with(['Hearing date must be after PI agreed date 26/05/2017'])
+            ->once();
+        $errors = ['messages' => ['HEARING_DATE_BEFORE_PI' => '2017-05-26']];
+
+        $this->assertEquals(['messages' => []], Sut::mapFromErrors($mockForm, $errors));
     }
 }

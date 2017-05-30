@@ -3,6 +3,8 @@
 namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
+use Common\Form\Elements\Custom\DateTimeSelect;
+use Dvsa\Olcs\Utils\Helper\DateTimeHelper;
 use Zend\Form\FormInterface;
 
 /**
@@ -14,7 +16,8 @@ class PiHearing implements MapperInterface
     /**
      * Should map data from a result array into an array suitable for a form
      *
-     * @param array $data
+     * @param array $data API data
+     *
      * @return array
      */
     public static function mapFromResult(array $data)
@@ -47,7 +50,8 @@ class PiHearing implements MapperInterface
     /**
      * Should map form data back into a command data structure
      *
-     * @param array $data
+     * @param array $data Form data
+     *
      * @return array
      */
     public static function mapFromForm(array $data)
@@ -85,12 +89,26 @@ class PiHearing implements MapperInterface
      * Should map errors onto the form, any global errors should be returned so they can be added
      * to the flash messenger
      *
-     * @param FormInterface $form
-     * @param array $errors
+     * @param FormInterface $form   Form
+     * @param array         $errors API errors
+     *
      * @return array
      */
     public static function mapFromErrors(FormInterface $form, array $errors)
     {
+        if (!empty($errors['messages'])) {
+            foreach ($errors['messages'] as $key => $value) {
+                if ($key === 'HEARING_DATE_BEFORE_PI') {
+                    /** @var DateTimeSelect $e */
+                    $piDate = DateTimeHelper::format($value, DATE_FORMAT);
+                    $form->get('fields')->get('hearingDate')->setMessages(
+                        ['Hearing date must be after PI agreed date '. $piDate]
+                    );
+                    unset($errors['messages'][$key]);
+                }
+            }
+        }
+
         return $errors;
     }
 }
