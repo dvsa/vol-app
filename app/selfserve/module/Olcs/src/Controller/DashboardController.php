@@ -96,7 +96,8 @@ class DashboardController extends AbstractController
                     'appStatuses' => [
                         RefData::APPLICATION_STATUS_UNDER_CONSIDERATION,
                         RefData::APPLICATION_STATUS_NOT_SUBMITTED
-                    ]
+                    ],
+                    'filterByOrgUser' => true
                 ]
             )
         );
