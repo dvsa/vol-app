@@ -382,6 +382,7 @@ return array(
             'SubmissionSectionMultipleTables' => 'Olcs\View\Helper\SubmissionSectionMultipleTablesFactory',
             'Olcs\View\Helper\SlaIndicator' => 'Olcs\View\Helper\SlaIndicator',
             'showMarkers' => Olcs\View\Helper\MarkersFactory::class,
+            'showVersion' => Olcs\View\Helper\Factory\VersionFactory::class,
         ),
         'aliases' => [
             'slaIndicator' => 'Olcs\View\Helper\SlaIndicator'
