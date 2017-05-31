@@ -313,7 +313,6 @@ class TransportManagerMarkerTest extends MockeryTestCase
                 'transportManager' => null,
                 'appStatuses' => [],
                 'filterByOrgUser' => null,
-                'filterByOrgUser' => null,
             ],
             'TMAs'
         );
