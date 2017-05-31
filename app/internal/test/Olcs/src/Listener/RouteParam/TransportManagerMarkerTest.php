@@ -142,6 +142,7 @@ class TransportManagerMarkerTest extends MockeryTestCase
                 'application' => null,
                 'transportManager' => 12,
                 'appStatuses' => [],
+                'filterByOrgUser' => null,
             ],
             'TMAs'
         );
@@ -220,6 +221,7 @@ class TransportManagerMarkerTest extends MockeryTestCase
                 'application' => 534,
                 'transportManager' => null,
                 'appStatuses' => [],
+                'filterByOrgUser' => null,
             ],
             'TMAs'
         );
@@ -265,6 +267,7 @@ class TransportManagerMarkerTest extends MockeryTestCase
                 'application' => 534,
                 'transportManager' => null,
                 'appStatuses' => [],
+                'filterByOrgUser' => null,
             ],
             'TMAs'
         );
@@ -309,6 +312,8 @@ class TransportManagerMarkerTest extends MockeryTestCase
                 'application' => 534,
                 'transportManager' => null,
                 'appStatuses' => [],
+                'filterByOrgUser' => null,
+                'filterByOrgUser' => null,
             ],
             'TMAs'
         );
@@ -335,6 +340,7 @@ class TransportManagerMarkerTest extends MockeryTestCase
                 'application' => 534,
                 'transportManager' => null,
                 'appStatuses' => [],
+                'filterByOrgUser' => null,
             ],
             false
         );
@@ -378,6 +384,7 @@ class TransportManagerMarkerTest extends MockeryTestCase
                 'application' => 534,
                 'transportManager' => null,
                 'appStatuses' => [],
+                'filterByOrgUser' => null,
             ],
             'TMAs'
         );
