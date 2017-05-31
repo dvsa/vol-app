@@ -2,6 +2,7 @@
 
 return array(
     'application-name' => 'internal',
+    'application_version' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : ''),
     'cqrs_client' => [
         'adapter' => \Common\Service\Cqrs\Adapter\Curl::class,
         'timeout' => 60,
