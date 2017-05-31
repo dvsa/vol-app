@@ -211,6 +211,15 @@ class UserController extends AbstractController
     }
 
     /**
+     * Get delete modal title
+     *
+     * @return string
+     */
+    protected function getDeleteTitle()
+    {
+        return 'delete-user';
+    }
+    /**
      * Formats the data from what the service gives us, to what the form needs.
      * This is mapping, not business logic.
      *
