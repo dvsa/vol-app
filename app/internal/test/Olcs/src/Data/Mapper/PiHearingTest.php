@@ -191,7 +191,7 @@ class PiHearingTest extends MockeryTestCase
     {
         $mockForm = m::mock(FormInterface::class);
         $mockForm->shouldReceive('get->get->setMessages')
-            ->with(['Hearing date must be after PI agreed date 26/05/2017'])
+            ->with(['Hearing date must be after or the same as the PI agreed date 26/05/2017'])
             ->once();
         $errors = ['messages' => ['HEARING_DATE_BEFORE_PI' => '2017-05-26']];
 

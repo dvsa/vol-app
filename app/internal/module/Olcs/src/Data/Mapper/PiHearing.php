@@ -102,7 +102,7 @@ class PiHearing implements MapperInterface
                     /** @var DateTimeSelect $e */
                     $piDate = DateTimeHelper::format($value, DATE_FORMAT);
                     $form->get('fields')->get('hearingDate')->setMessages(
-                        ['Hearing date must be after PI agreed date '. $piDate]
+                        ['Hearing date must be after or the same as the PI agreed date '. $piDate]
                     );
                     unset($errors['messages'][$key]);
                 }
