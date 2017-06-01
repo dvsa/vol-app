@@ -21,10 +21,11 @@
 <?php
 
   if (!isset($stopRedirect)) {
+      $url = $this->url('server-error') . (!empty($id) ? "?id=$id" : '');
       $this->inlineScript()->appendScript(
           '
           OLCS.ready(function() {
-              window.location.href = "' . $this->url('server-error') . '";
+              window.location.href = "' . $url . '";
           });
           '
       );
