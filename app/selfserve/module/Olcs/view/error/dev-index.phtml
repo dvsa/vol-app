@@ -9,12 +9,16 @@ echo $this->render(
 );
 ?>
 
-<div class="full-width">
+<?php if (!empty($id)): ?>
+    <p>An unexpected error occured. Correlation id <em><?php echo $this->escapeHtml($id); ?></em>.</p>
+<?php endif ?>
+
+<div class="row ">
+    <div class="full-width">
 <?php if (isset($this->display_exceptions) && $this->display_exceptions): ?>
 <?php if(isset($this->exception) && $this->exception instanceof Exception): ?>
 <hr/>
-<h2><?php echo $this->translate('Additional information') ?>:</h2>
-
+<h2><?php echo get_class($this->exception) ?></h2>
 <!-- Add some inline styles to fix the page layout, This is only a dev page so I'm forgiving doing it like this! -->
 <style>
     dd {
@@ -81,4 +85,5 @@ Method: <?= isset($t['class']) ? $t['class'] . '::' : ''  ?><?= isset($t['functi
 
 <?php endif ?>
 
+    </div>
 </div><!-- end .full-width -->
