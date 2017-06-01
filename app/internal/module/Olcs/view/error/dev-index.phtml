@@ -1,18 +1,21 @@
 <?php
-echo $this->render(
-    'partials/page-header.phtml',
-    array(
-        'pageTitle' => 'Something&#39s gone wrong',
-        'pageSubTitle'=> $this->message
-    )
-);
+/** @var Zend\View\Renderer\PhpRenderer $this */
+$this->placeholder('pageTitle')->set('500-title');
 ?>
+<hr/>
+<?php if (!empty($id)): ?>
+    <p>An unexpected error occured. Correlation id <em><?php echo $this->escapeHtml($id); ?></em>.</p>
+<?php endif ?>
 
-<div class="full-width">
 <?php if (isset($this->display_exceptions) && $this->display_exceptions): ?>
 <?php if(isset($this->exception) && $this->exception instanceof Exception): ?>
-<hr/>
-<h2><?php echo $this->translate('Additional information') ?>:</h2>
+<!-- Add some inline styles to fix the page layout, This is only a dev page so I'm forgiving doing it like this! -->
+<style>
+    dd {
+        width: 100%;
+    }
+</style>
+<h2><?php echo get_class($this->exception) ?></h2>
 <dl>
     <dt><?php echo $this->translate('File') ?>:</dt>
     <dd>
@@ -72,5 +75,3 @@ Method: <?= isset($t['class']) ? $t['class'] . '::' : ''  ?><?= isset($t['functi
 <?php endif ?>
 
 <?php endif ?>
-
-</div><!-- end .full-width -->
