@@ -1,9 +1,4 @@
 <?php
-/**
- * OperatingCentresForInspectionRequest Service test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 
 namespace OlcsTest\Service\Data;
 
@@ -26,7 +21,7 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
     /**
      * Set up
      */
-    protected function setUp()
+    public function setUp()
     {
         $this->sut = new OperatingCentresForInspectionRequest();
     }

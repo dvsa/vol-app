@@ -5,6 +5,7 @@ namespace Olcs\Controller\Operator;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
+use Olcs\Form\Model\Form;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -16,6 +17,11 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
     OperatorControllerInterface,
     LeftViewProvider
 {
+    /**
+     * Get Left View
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel();
@@ -24,12 +30,22 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
         return $view;
     }
 
+    /**
+     * Process action: Licenes
+     *
+     * @return ViewModel
+     */
     public function licencesAction()
     {
         $this->setupLicencesTable();
         return $this->viewBuilder()->buildViewFromTemplate('sections/operator/pages/licences-and-applications');
     }
 
+    /**
+     * Process actions: Applications
+     *
+     * @return ViewModel
+     */
     public function applicationsAction()
     {
         $this->setupApplicationsTable();
@@ -71,6 +87,7 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
     {
         /* @var $request \Zend\Http\Request */
         $request = $this->getRequest();
+
         // order by created date
         $request->getQuery()->set('sort', 'createdOn');
 
@@ -78,12 +95,33 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
             $request->getQuery()->set('limit', 25);
         }
 
+        $this->setFilterDefaults();
+
         return $this->index(
             \Dvsa\Olcs\Transfer\Query\Application\GetList::class,
             new \Olcs\Mvc\Controller\ParameterProvider\GenericList(['organisation']),
             'table',
             'operator-applications',
-            $this->tableViewTemplate
+            $this->tableViewTemplate,
+            Form\Filter\OperatorApplication::class
+        );
+    }
+
+    /**
+     * Sets filter defaults
+     *
+     * @return void
+     */
+    private function setFilterDefaults()
+    {
+        $this->inlineScripts = ['forms/filter'];
+
+        /** @var \Olcs\Service\Data\ApplicationStatus $operAppStatusSrv */
+        $operAppStatusSrv = $this->getServiceLocator()
+                ->get(\Olcs\Service\Data\ApplicationStatus::class);
+
+        $operAppStatusSrv->setOrgId(
+            $this->params()->fromRoute('organisation')
         );
     }
 }
