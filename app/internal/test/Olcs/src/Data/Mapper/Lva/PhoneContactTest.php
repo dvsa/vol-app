@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Data\Mapper\Lva;
 
+use Common\RefData;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\Lva\PhoneContact;
@@ -22,7 +23,7 @@ class PhoneContactTest extends MockeryTestCase
                 'id' => 'unit_Id',
                 'phoneNumber' => 'unit_PhoneNr',
                 'version' => 'unit_Ver',
-                'phoneContactType' => 'phone_t_tel',
+                'phoneContactType' => RefData::PHONE_TYPE_PRIMARY,
                 'contactDetailsId' => 'unit_CdId',
             ],
         ];
@@ -34,7 +35,7 @@ class PhoneContactTest extends MockeryTestCase
             'id' => 'unit_Id',
             'phoneNumber' => 'unit_PhoneNr',
             'version' => 'unit_Ver',
-            'phoneContactType' => 'phone_t_tel',
+            'phoneContactType' => RefData::PHONE_TYPE_PRIMARY,
             'contactDetails' => [
                 'id' => 'unit_CdId',
             ],
@@ -50,7 +51,7 @@ class PhoneContactTest extends MockeryTestCase
                 'id' => 'unit_Id',
                 'phoneNumber' => 'unit_PhoneNr',
                 'version' => 'unit_Ver',
-                'phoneContactType' => 'phone_t_tel',
+                'phoneContactType' => RefData::PHONE_TYPE_PRIMARY,
                 'contactDetailsId' => 'unit_CdId',
             ],
             PhoneContact::mapFromForm($this->formData)

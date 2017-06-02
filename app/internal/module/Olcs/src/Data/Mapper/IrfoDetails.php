@@ -17,7 +17,9 @@ class IrfoDetails implements MapperInterface
     /**
      * Should map data from a result array into an array suitable for a form
      *
-     * @param array $data
+     * @param array $data Data from API
+     *
+     * @return array Form data
      */
     public static function mapFromResult(array $data)
     {

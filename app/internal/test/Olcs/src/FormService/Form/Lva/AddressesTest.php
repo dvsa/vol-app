@@ -35,53 +35,6 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
 
         $mockForm->shouldReceive('get')->with('form-actions')->once()->andReturn($mockFsActions);
 
-        //  check fill table
-        $mockTbl = m::mock(TableBuilder::class);
-
-        $mockTableBuilder = m::mock(TableBuilder::class)
-            ->shouldReceive('prepareTable')
-            ->with('lva-phone-contacts', ['unit_PhoneContacts'])
-            ->andReturn($mockTbl)
-            ->getMock();
-
-        $mockSm = m::mock(ServiceLocatorInterface::class)
-            ->shouldReceive('get')->with('Table')->once()->andReturn($mockTableBuilder)
-            ->getMock();
-
-        $this->fsm->shouldReceive('getServiceLocator')->once()->andReturn($mockSm);
-
-        $mockElmPhoneContactsTbl = m::mock(\Zend\Form\Fieldset::class);
-        $mockForm->shouldReceive('get')
-            ->with('phoneContactsTable')
-            ->once()
-            ->andReturn($mockElmPhoneContactsTbl);
-
-        $this->formHelper->shouldReceive('populateFormTable')
-            ->with($mockElmPhoneContactsTbl, $mockTbl)
-            ->once();
-
-        //  check remove elements
-        $mockFieldEmail = m::mock(\Zend\Form\ElementInterface::class)
-            ->shouldReceive('getName')->once()->andReturn('email')
-            ->getMock();
-        $mockFieldOther = m::mock(\Zend\Form\ElementInterface::class)
-            ->shouldReceive('getName')->once()->andReturn('unit_not_email_field')
-            ->getMock();
-
-        $mockFieldset = m::mock(\Zend\Form\FieldsetInterface::class)
-            ->shouldReceive('getIterator')->once()->andReturn(
-                new \ArrayIterator([$mockFieldOther, $mockFieldEmail])
-            )
-            ->shouldReceive('setOptions')->once()->with([])->andReturnSelf()
-            ->shouldReceive('setLabel')->once()->with('')
-            ->getMock();
-
-        $mockForm
-            ->shouldReceive('get')->with('contact')->once()->andReturn($mockFieldset);
-
-        $this->formHelper
-            ->shouldReceive('remove')->with($mockForm, 'contact->unit_not_email_field')->once();
-
         //  check change email setting
         $mockInputFilter = m::mock(InputFilter::class)
             ->shouldReceive('get')
