@@ -403,7 +403,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $params = ['sectionText' => 'delete.confirmation.text'];
 
-        return $this->render('delete', $form, $params);
+        return $this->render('delete-'. $type, $form, $params);
     }
 
     /**
