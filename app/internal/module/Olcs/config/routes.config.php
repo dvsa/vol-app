@@ -903,7 +903,7 @@ $routes = [
                 'options' => [
                     'route' => 'licences[/]',
                     'defaults' => [
-                        'controller' => 'OperatorLicencesApplicationsController',
+                        'controller' => Olcs\Controller\Operator\OperatorLicencesApplicationsController::class,
                         'action' => 'licences',
                     ]
                 ]
@@ -913,7 +913,7 @@ $routes = [
                 'options' => [
                     'route' => 'applications[/]',
                     'defaults' => [
-                        'controller' => 'OperatorLicencesApplicationsController',
+                        'controller' => Olcs\Controller\Operator\OperatorLicencesApplicationsController::class,
                         'action' => 'applications',
                     ]
                 ]

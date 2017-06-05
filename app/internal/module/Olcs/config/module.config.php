@@ -2,10 +2,10 @@
 
 use Olcs\Controller\Cases;
 
-use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController as ApplicationProcessingNoteController;
-use Olcs\Controller\Bus\Processing\BusProcessingNoteController as BusProcessingNoteController;
-use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController as LicenceProcessingNoteController;
-use Olcs\Controller\Operator\OperatorProcessingNoteController as OperatorProcessingNoteController;
+use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController;
+use Olcs\Controller\Bus\Processing\BusProcessingNoteController;
+use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController;
+use Olcs\Controller\Operator\OperatorProcessingNoteController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 
 use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
@@ -13,7 +13,7 @@ use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
 use Olcs\Controller\TransportManager\TransportManagerController;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController;
 
-use Olcs\Controller\SearchController as SearchController;
+use Olcs\Controller\SearchController;
 
 use Olcs\Listener\RouteParam\Application as ApplicationListener;
 use Olcs\Listener\RouteParam\ApplicationFurniture;
@@ -266,8 +266,8 @@ return array(
             'UnlicensedCasesOperatorController' => 'Olcs\Controller\Operator\Cases\UnlicensedCasesOperatorController',
             'UnlicensedOperatorVehiclesController' => 'Olcs\Controller\Operator\UnlicensedOperatorVehiclesController',
             'OperatorPeopleController' => 'Olcs\Controller\Operator\OperatorPeopleController',
-            'OperatorLicencesApplicationsController'
-                => 'Olcs\Controller\Operator\OperatorLicencesApplicationsController',
+            Olcs\Controller\Operator\OperatorLicencesApplicationsController::class =>
+                Olcs\Controller\Operator\OperatorLicencesApplicationsController::class,
             'OperatorIrfoDetailsController'
                 => 'Olcs\Controller\Operator\OperatorIrfoDetailsController',
             'OperatorIrfoGvPermitsController'
@@ -441,6 +441,7 @@ return array(
             => 'Olcs\Service\Data\OperatingCentresForInspectionRequest',
             \Olcs\Service\Data\Cases::class => \Olcs\Service\Data\Cases::class,
             Olcs\Service\Data\Licence::class => Olcs\Service\Data\Licence::class,
+            Olcs\Service\Data\ApplicationStatus::class => \Olcs\Service\Data\ApplicationStatus::class,
         ],
         'factories' => array(
             \Olcs\Service\Marker\MarkerService::class => \Olcs\Service\Marker\MarkerService::class,
@@ -576,7 +577,6 @@ return array(
     ],
     'data_services' => [
         'invokables' => [
-            \Olcs\Service\Data\RequestMap::class => \Olcs\Service\Data\RequestMap::class,
         ],
         'factories' => [
             'Olcs\Service\Data\SubmissionLegislation' => 'Olcs\Service\Data\SubmissionLegislation',
