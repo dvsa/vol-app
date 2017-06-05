@@ -29,6 +29,9 @@ class VariationFinancialEvidenceTest extends MockeryTestCase
         $this->sut->setFormServiceLocator($this->fsm);
     }
 
+    /**
+     * @group test123
+     */
     public function testGetForm()
     {
         /** @var \Zend\Http\Request $request */
@@ -44,10 +47,50 @@ class VariationFinancialEvidenceTest extends MockeryTestCase
 
         $mockForm->shouldReceive('has')->with('form-actions')->andReturn(true);
         $mockForm->shouldReceive('get')->with('form-actions')->andReturn($formActions);
+        $mockForm->shouldReceive('get')
+            ->with('evidence')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('uploadNowRadio')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setName')
+                            ->with('uploadNow')
+                            ->once()
+                            ->getMock()
+                    )
+                    ->once()
+                    ->shouldReceive('get')
+                    ->with('uploadLaterRadio')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setName')
+                            ->with('uploadNow')
+                            ->once()
+                            ->getMock()
+                    )
+                    ->once()
+                    ->shouldReceive('get')
+                    ->with('sendByPostRadio')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setName')
+                            ->with('uploadNow')
+                            ->once()
+                            ->getMock()
+                    )
+                    ->once()
+                    ->getMock()
+            )
+            ->times(3);
 
         $this->formHelper->shouldReceive('createFormWithRequest')
             ->with('Lva\FinancialEvidence', $request)
-            ->andReturn($mockForm);
+            ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'evidence->uploadNow')
+            ->once();
 
         $form = $this->sut->getForm($request);
 
