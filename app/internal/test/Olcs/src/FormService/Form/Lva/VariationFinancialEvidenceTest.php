@@ -29,9 +29,6 @@ class VariationFinancialEvidenceTest extends MockeryTestCase
         $this->sut->setFormServiceLocator($this->fsm);
     }
 
-    /**
-     * @group test123
-     */
     public function testGetForm()
     {
         /** @var \Zend\Http\Request $request */
