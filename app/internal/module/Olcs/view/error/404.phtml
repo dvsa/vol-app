@@ -3,28 +3,15 @@ $this->placeholder('pageTitle')->set('404-title');
 ?>
 
 <div class="article">
-  
-  <p><?php echo $this->translate('404-lede'); ?></p>
-  
-  <p><?php echo $this->translate('404-report-broken-link'); ?></p>
-  
-  <ul class="list--bullet">
-    <li><?php echo $this->translate('404-report-include-1'); ?></li>
-    <li><?php echo $this->translate('404-report-include-2'); ?></li>
-  </ul>
-  
-  <p><a href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('back-to-home'); ?></a></p>
-
+    <?php echo $this->translate('markup-404-text'); ?>
+    <hr>
+    <p><a href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('back-to-home'); ?></a></p>
 </div>
 
 <?php
-
-if (!isset($stopRedirect)) {
-    $this->inlineScript()->appendScript(
-        '
-        OLCS.ready(function() {
-            window.location.href = "' . $this->url('not-found') . '";
-        });
-        '
-    );
-}
+$this->inlineScript()->appendScript('
+    dataLayer.push({
+        \'error\' : \'404\',
+        \'correlationId\' : \''. $this->id .'\',
+    });
+');
