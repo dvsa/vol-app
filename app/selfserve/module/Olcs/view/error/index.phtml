@@ -19,14 +19,9 @@
 </div>
 
 <?php
-
-  if (!isset($stopRedirect)) {
-      $url = $this->url('server-error') . (!empty($id) ? "?id=$id" : '');
-      $this->inlineScript()->appendScript(
-          '
-          OLCS.ready(function() {
-              window.location.href = "' . $url . '";
-          });
-          '
-      );
-  }
+$this->inlineScript()->appendScript('
+    dataLayer.push({
+        \'error\' : \'index\',
+        \'correlationId\' : \''. $this->id .'\',
+    });
+');
