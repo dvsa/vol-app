@@ -19,13 +19,9 @@
 </div>
 
 <?php
-
-  if (!isset($stopRedirect)) {
-    $this->inlineScript()->appendScript(
-      '
-      OLCS.ready(function() {
-        window.location.href = "' . $this->url('not-found') . '";
-      });
-      '
-    );
-  }
+$this->inlineScript()->appendScript('
+    dataLayer.push({
+        \'error\' : \'404\',
+        \'correlationId\' : \''. $this->id .'\',
+    });
+');
