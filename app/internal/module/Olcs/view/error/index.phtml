@@ -8,15 +8,11 @@ $this->placeholder('pageTitle')->set('500-title');
         <p><a href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('back-to-home'); ?></a></p>
     </div>
 </div>
-<?php
 
-if (!isset($stopRedirect)) {
-    $url = $this->url('server-error') . (!empty($id) ? "?id=$id" : '');
-    $this->inlineScript()->appendScript(
-        '
-        OLCS.ready(function() {
-            window.location.href = "' . $url . '";
-        });
-        '
-    );
-}
+<?php
+$this->inlineScript()->appendScript('
+    dataLayer.push({
+        \'error\' : \'index\',
+        \'correlationId\' : \''. $this->id .'\',
+    });
+');
