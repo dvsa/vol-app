@@ -72,6 +72,43 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
             ->with('form-actions')
             ->andReturn($mockFormActions)
             ->once()
+            ->shouldReceive('get')
+            ->with('evidence')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('uploadNowRadio')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setName')
+                            ->with('uploadNow')
+                            ->once()
+                            ->getMock()
+                    )
+                    ->once()
+                    ->shouldReceive('get')
+                    ->with('uploadLaterRadio')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setName')
+                            ->with('uploadNow')
+                            ->once()
+                            ->getMock()
+                    )
+                    ->once()
+                    ->shouldReceive('get')
+                    ->with('sendByPostRadio')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setName')
+                            ->with('uploadNow')
+                            ->once()
+                            ->getMock()
+                    )
+                    ->once()
+                    ->getMock()
+            )
+            ->times(3)
             ->getMock();
 
         $mockRequest = m::mock(Request::class);
@@ -80,6 +117,9 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
             ->once()
             ->with('Lva\FinancialEvidence', $mockRequest)
             ->andReturn($mockForm)
+            ->shouldReceive('remove')
+            ->with($mockForm, 'evidence->uploadNow')
+            ->once()
             ->getMock();
 
         $form = $this->sut->getForm($mockRequest);
