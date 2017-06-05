@@ -2,28 +2,26 @@
 
 namespace Olcs\Controller\Cases\Submission;
 
+use Common\Controller\Traits\GenericUpload;
 use Common\Service\Data\CategoryDataService;
-
+use Dvsa\Olcs\Transfer\Command\Submission\CloseSubmission as CloseCmd;
 use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmission as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Submission\DeleteSubmission as DeleteDto;
-use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmission as UpdateDto;
-use Dvsa\Olcs\Transfer\Command\Submission\RefreshSubmissionSections as RefreshDto;
 use Dvsa\Olcs\Transfer\Command\Submission\FilterSubmissionSections as FilterDto;
+use Dvsa\Olcs\Transfer\Command\Submission\RefreshSubmissionSections as RefreshDto;
+use Dvsa\Olcs\Transfer\Command\Submission\ReopenSubmission as ReopenCmd;
+use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmission as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Submission\SubmissionList as ListDto;
-use Olcs\Form\Model\Form\Submission as SubmissionForm;
-use Olcs\Data\Mapper\Submission as SubmissionMapper;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\SubmissionControllerInterface;
-use Zend\Mvc\View\Http\ViewManager;
-use Zend\Stdlib\ArrayUtils;
+use Olcs\Data\Mapper\Submission as SubmissionMapper;
+use Olcs\Form\Model\Form\Submission as SubmissionForm;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use Common\Controller\Traits\GenericUpload;
-use Dvsa\Olcs\Transfer\Command\Submission\CloseSubmission as CloseCmd;
-use Dvsa\Olcs\Transfer\Command\Submission\ReopenSubmission as ReopenCmd;
+use Zend\Mvc\MvcEvent;
+use Zend\Stdlib\ArrayUtils;
 use Zend\View\Model\ViewModel;
-use Zend\View\Renderer\PhpRenderer;
 
 /**
  * Cases Submission Controller
@@ -172,6 +170,23 @@ class SubmissionController extends AbstractInternalController implements Submiss
      * @var int
      */
     private $sectionSubcategory;
+
+    /** @var \Common\Service\Helper\FlashMessengerHelperService */
+    private $hlpFlash;
+
+    /**
+     * On Dispatch
+     *
+     * @param MvcEvent $e Event
+     *
+     * @return \Zend\Http\Response
+     */
+    public function onDispatch(MvcEvent $e)
+    {
+        $this->hlpFlash = $this->getServiceLocator()->get('Helper\FlashMessenger');
+
+        return parent::onDispatch($e);
+    }
 
     /**
      * Add Action
@@ -349,7 +364,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
      * @param array $params    params
      * @param bool  $printView printview
      *
-     * @return ViewModel
+     * @return array
      */
     private function generateSubmissionView($params, $printView = false)
     {
@@ -390,12 +405,27 @@ class SubmissionController extends AbstractInternalController implements Submiss
     /**
      * Updates a section table, to either refresh the data or delete rows
      *
-     * @return \Zend\Http\Response
+     * @return array|\Zend\Http\Response
      */
     public function updateTableAction()
     {
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
+
         $params['submission'] = $this->params()->fromRoute('submission');
         $formAction = strtolower($this->params()->fromPost('formAction'));
+
+        if (!$request->isPost()) {
+            return $this->redirect()->toRoute(
+                'submission',
+                [
+                    'action' => 'details',
+                    'submission' => $params['submission'],
+                ],
+                [],
+                true
+            );
+        }
 
         $this->extractSubmissionData();
 
@@ -412,11 +442,9 @@ class SubmissionController extends AbstractInternalController implements Submiss
         }
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
-
-        if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Submission updated');
+            $this->hlpFlash->addUnknownError();
+        } elseif ($response->isOk()) {
+            $this->hlpFlash->addSuccessMessage('Submission updated');
         }
 
         return $this->redirect()->toRoute(
@@ -449,7 +477,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
      * Deletes a single row from a section's list data, reassigns and persists the new data back to dataSnapshot field
      * from the rest of the database. Redirects back to details page.
      *
-     * @return \Zend\Http\Response
+     * @return \Common\Service\Cqrs\Response
      */
     public function deleteTableRows()
     {
@@ -461,9 +489,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
             'rowsToFilter' => $this->params()->fromPost('id')
         ];
 
-        $response = $this->handleCommand(FilterDto::create($commandData));
-
-        return $response;
+        return $this->handleCommand(FilterDto::create($commandData));
     }
 
     /**
@@ -519,10 +545,10 @@ class SubmissionController extends AbstractInternalController implements Submiss
     /**
      * Alter Form based on Submission details
      *
-     * @param \Common\Controller\Form $form        form
-     * @param array                   $initialData initialData
+     * @param \Common\Form\Form $form        form
+     * @param array             $initialData initialData
      *
-     * @return \Common\Controller\Form
+     * @return \Common\Form\Form
      */
     private function alterFormForSubmission($form, $initialData)
     {

@@ -11,6 +11,8 @@ use Zend\View\Model\ViewModel;
  * @author Mike Cooper <michael.cooper@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
+ *
+ * @method \Common\Controller\Plugin\ElasticSearch elasticSearch()
  */
 class SearchController extends AbstractController implements LeftViewProvider
 {
@@ -145,7 +147,7 @@ class SearchController extends AbstractController implements LeftViewProvider
     /**
      * Get left view
      *
-     * @return \Olcs\View\Model\ViewModel
+     * @return ViewModel
      */
     public function getLeftView()
     {

@@ -2,17 +2,16 @@
 
 namespace Olcs\Listener;
 
+use Common\Service\Data\Search\Search as SearchService;
+use Olcs\Form\Element\SearchOrderFieldset;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
+use Zend\Form\FormElementManager;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use \Common\Form\Annotation\CustomAnnotationBuilder;
 use Zend\Session\Container;
-use Common\Service\Data\Search\Search as SearchService;
-use Zend\Form\FormElementManager as FormElementManager;
-use Olcs\Form\Element\SearchOrderFieldset;
 
 /**
  * Class HeaderSearch
@@ -21,12 +20,6 @@ use Olcs\Form\Element\SearchOrderFieldset;
 class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
-
-    /**
-     * Form annotation builder service
-     * @var
-     */
-    protected $formAnnotationBuilder;
 
     /**
      * ViewHelperManager
@@ -43,6 +36,9 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
      * @var FormElementManager
      */
     protected $formElementManager;
+
+    /** @var \Common\Service\Helper\FormHelperService */
+    private $hlpForm;
 
     /**
      * Attach one or more listeners
@@ -68,13 +64,8 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
      */
     public function onDispatch(MvcEvent $e)
     {
-        $class = 'Olcs\\Form\\Model\\Form\\HeaderSearch';
-        $headerSearch = $this->getFormAnnotationBuilder()->createForm($class);
-
-        $searchFilterFormName = 'Olcs\\Form\\Model\\Form\\SearchFilter';
-        /** @var \Common\Form\Form $searchFilterForm */
-        $searchFilterForm = $this->getFormAnnotationBuilder()->createForm($searchFilterFormName);
-        $searchFilterForm->remove('csrf');
+        $headerSearch = $this->hlpForm->createForm(\Olcs\Form\Model\Form\HeaderSearch::class, false);
+        $searchFilterForm = $this->hlpForm->createForm(\Olcs\Form\Model\Form\SearchFilter::class, false);
 
         // Index is required for filter fields as they are index specific.
         $index = $e->getRouteMatch()->getParam('index');
@@ -122,10 +113,10 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $this->setFormAnnotationBuilder($serviceLocator->get('FormAnnotationBuilder'));
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setSearchService($serviceLocator->get('DataServiceManager')->get(SearchService::class));
         $this->setFormElementManager($serviceLocator->get('FormElementManager'));
+        $this->hlpForm = $serviceLocator->get('Helper\Form');
 
         return $this;
     }
@@ -151,29 +142,6 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     public function getViewHelperManager()
     {
         return $this->viewHelperManager;
-    }
-
-    /**
-     * Set FormAnnotationBuilder
-     *
-     * @param \Common\Form\Annotation\CustomAnnotationBuilder $formAnnotationBuilder Form annotation builder
-     *
-     * @return HeaderSearch
-     */
-    public function setFormAnnotationBuilder(CustomAnnotationBuilder $formAnnotationBuilder)
-    {
-        $this->formAnnotationBuilder = $formAnnotationBuilder;
-        return $this;
-    }
-
-    /**
-     * Get FormAnnotationBuilder
-     *
-     * @return \Common\Service\FormAnnotationBuilderFactory
-     */
-    public function getFormAnnotationBuilder()
-    {
-        return $this->formAnnotationBuilder;
     }
 
     /**
