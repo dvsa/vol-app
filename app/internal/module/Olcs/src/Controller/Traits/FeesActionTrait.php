@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Fees action trait
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\Controller\Traits;
 
 use Common\RefData;
@@ -171,14 +165,18 @@ trait FeesActionTrait
     /**
      * Get fee filter form
      *
-     * @param array $filters
-     * @return \Zend\Form\Form
+     * @param array $filters Form Data
+     *
+     * @return \Common\Form\Form
      */
     protected function getFeeFilterForm($filters = [])
     {
-        $form = $this->getForm('FeeFilter');
-        $form->remove('csrf');
+        /** @var \Common\Service\Helper\FormHelperService $formHelper */
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $form = $formHelper->createForm('FeeFilter', false);
         $form->setData($filters);
+
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
 
         return $form;
     }
@@ -818,8 +816,9 @@ trait FeesActionTrait
     /**
      * Alter create fee form
      *
-     * @param \Zend\Form\Form $form
-     * @return \Zend\Form\Form
+     * @param \Common\Form\Form $form Form
+     *
+     * @return \Common\Form\Form
      */
     protected function alterCreateFeeForm($form)
     {
@@ -895,9 +894,12 @@ trait FeesActionTrait
     }
 
     /**
-     * @param Table $table
-     * @param array $results
-     * @return Table
+     * Alter Fee Table
+     *
+     * @param \Common\Service\Table\TableBuilder $table   Table object
+     * @param array                              $results Data
+     *
+     * @return \Common\Service\Table\TableBuilder
      */
     protected function alterFeeTable($table, $results)
     {
@@ -913,7 +915,9 @@ trait FeesActionTrait
     /**
      * Process form
      *
-     * @param \Zend\Form\Form $form
+     * @param \Common\Form\Form $form Form
+     *
+     * @return void
      */
     protected function processForm($form)
     {
@@ -987,9 +991,9 @@ trait FeesActionTrait
     /**
      * Update fee and redirect to list (optional)
      *
-     * @param CommandInterface $command        command
-     * @param string           $message        message
-     * @param bool             $redirectToList redirect to list
+     * @param \Dvsa\Olcs\Transfer\Command\CommandInterface $command        command
+     * @param string                                       $message        message
+     * @param bool                                         $redirectToList redirect to list
      *
      * @return \Zend\Http\Response
      */
@@ -1058,9 +1062,9 @@ trait FeesActionTrait
      * @param array   $feeIds    fee ids
      * @param array   $details   details
      * @param boolean $backToFee back to fee
-     * @param address $address   address
+     * @param array   $address   address
      *
-     * @return Redirect
+     * @return \Zend\Http\Response | ViewModel
      */
     private function initiatePaymentRequest($feeIds, $details, $backToFee, $address = null)
     {
@@ -1377,7 +1381,9 @@ trait FeesActionTrait
     /**
      * Update table action with query
      *
-     * @param Table $table
+     * @param \Common\Service\Table\TableBuilder $table Table
+     *
+     * @return void
      */
     protected function updateTableActionWithQuery($table)
     {

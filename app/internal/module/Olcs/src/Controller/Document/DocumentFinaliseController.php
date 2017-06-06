@@ -80,7 +80,7 @@ class DocumentFinaliseController extends AbstractDocumentController
             'template'    => $link
         ];
 
-        $form = $this->generateFormWithData('FinaliseDocument', 'processSaveLetter', $data, false, false);
+        $form = $this->generateFormWithData('FinaliseDocument', 'processSaveLetter', $data, false);
 
         if ($this->redirect !== null) {
             return $this->redirect;

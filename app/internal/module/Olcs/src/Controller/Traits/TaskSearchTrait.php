@@ -59,15 +59,22 @@ trait TaskSearchTrait
      */
     protected function getTaskForm(array $filters = [])
     {
-        /** @var \Zend\Form\FormInterface $form */
-        $form = $this->getForm('TasksHome');
+        /** @var \Zend\Di\ServiceLocator $sm */
+        $sm = $this->getServiceLocator();
 
+        /** @var \Common\Service\Helper\FormHelperService $formHelper */
+        $formHelper = $sm->get('Helper\Form');
+
+        $form = $formHelper->createForm('TasksHome', false);
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
+
+        //  set default values for dropdowns
         $team = (isset($filters['assignedToTeam'])) ? (int) $filters['assignedToTeam'] : null;
         $category = (isset($filters['category'])) ? (int) $filters['category'] : null;
 
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
-        $this->getServiceLocator()->get(\Olcs\Service\Data\SubCategory::class)
+        $sm->get(\Olcs\Service\Data\SubCategory::class)
             ->setCategory($category);
 
         $selects = [
@@ -88,9 +95,6 @@ trait TaskSearchTrait
                 FilterOptions::SHOW_ALL => 'documents.filter.option.all-tasks',
             ]
         );
-
-        //  remove fields
-        $form->remove('csrf');
 
         $form->setData($filters);
 
