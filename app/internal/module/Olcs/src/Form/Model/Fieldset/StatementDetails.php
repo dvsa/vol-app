@@ -116,7 +116,7 @@ class StatementDetails extends CaseBase
      *     "category": "contact_method"
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\AllowEmpty(true)
+     * @Form\Validator({"name": "NotEmpty", "options": {"null"}})
      */
     public $contactType = null;
 

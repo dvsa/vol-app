@@ -13,16 +13,17 @@ class TransportManagerTest extends MockeryTestCase
 {
     public function testMapFromErrors()
     {
-        $mockForm = m::mock(Form::class)->makePartial();
+        $mockForm = new Form();
+
         $errors['messages'] = [
             'homeAddressLine1' => ['error1'],
             'workAddressLine1' => ['error2'],
-            'firstName' => ['error3'],
-            'general' => ['error4'],
+            'firstName'        => ['error3'],
+            'general'          => ['error4'],
         ];
-        $expected = [
-            'general' => ['error4']
-        ];
+
+        $expected = ['general' => ['error4']];
+
         $this->assertEquals($expected, Sut::mapFromErrors($mockForm, $errors));
     }
 
@@ -30,7 +31,7 @@ class TransportManagerTest extends MockeryTestCase
     {
         $data = [
             'transport-manager-details' => ['foo' => 'bar'],
-            'home-address' => [
+            'home-address'              => [
                 'addressLine1' => 'line1',
                 'addressLine2' => 'line2',
                 'addressLine3' => 'line3',
@@ -39,9 +40,9 @@ class TransportManagerTest extends MockeryTestCase
                 'postcode'     => 'postcode',
                 'countryCode'  => 'GB',
                 'id'           => 1,
-                'version'      => 2
+                'version'      => 2,
             ],
-            'work-address' => [
+            'work-address'              => [
                 'addressLine1' => 'line1',
                 'addressLine2' => 'line2',
                 'addressLine3' => 'line3',
@@ -50,7 +51,7 @@ class TransportManagerTest extends MockeryTestCase
                 'postcode'     => 'postcode',
                 'countryCode'  => 'GB',
                 'id'           => 1,
-                'version'      => 2
+                'version'      => 2,
             ],
         ];
 
@@ -73,7 +74,7 @@ class TransportManagerTest extends MockeryTestCase
             'homeAddressId'      => 1,
             'homeAddressVersion' => 2,
             'workAddressId'      => 1,
-            'workAddressVersion' => 2
+            'workAddressVersion' => 2,
         ];
 
         $this->assertEquals($expected, Sut::mapFromForm($data));
@@ -82,8 +83,8 @@ class TransportManagerTest extends MockeryTestCase
     public function testMapFromResult()
     {
         $data = [
-            'homeCd' => [
-                'address' => [
+            'homeCd'      => [
+                'address'      => [
                     'id'           => 1,
                     'version'      => 2,
                     'addressLine1' => 'hal1',
@@ -93,25 +94,25 @@ class TransportManagerTest extends MockeryTestCase
                     'town'         => 'ht',
                     'postcode'     => 'hpc',
                     'countryCode'  => [
-                        'id' => 'hcc'
-                    ]
-                ],
-                'person' => [
-                    'id' => 3,
-                    'version' => 4,
-                    'forename' => 'forename',
-                    'familyName' => 'familyName',
-                    'title' => [
-                        'id' => 'title'
+                        'id' => 'hcc',
                     ],
-                    'birthDate' => '2015-01-01',
-                    'birthPlace' => 'bp'
+                ],
+                'person'       => [
+                    'id'         => 3,
+                    'version'    => 4,
+                    'forename'   => 'forename',
+                    'familyName' => 'familyName',
+                    'title'      => [
+                        'id' => 'title',
+                    ],
+                    'birthDate'  => '2015-01-01',
+                    'birthPlace' => 'bp',
                 ],
                 'emailAddress' => 'email@address.com',
-                'id' => 5,
-                'version' => 6
+                'id'           => 5,
+                'version'      => 6,
             ],
-            'workCd' => [
+            'workCd'      => [
                 'address' => [
                     'id'           => 7,
                     'version'      => 8,
@@ -122,19 +123,19 @@ class TransportManagerTest extends MockeryTestCase
                     'town'         => 'wt',
                     'postcode'     => 'wpc',
                     'countryCode'  => [
-                        'id' => 'wcc'
-                    ]
+                        'id' => 'wcc',
+                    ],
                 ],
             ],
-            'id' => 11,
-            'version' => 12,
-            'tmType' => [
-                'id' => 'type'
+            'id'          => 11,
+            'version'     => 12,
+            'tmType'      => [
+                'id' => 'type',
             ],
-            'tmStatus' => [
-                'id' => 'status'
+            'tmStatus'    => [
+                'id' => 'status',
             ],
-            'removedDate' => 'REMOVED_DATE'
+            'removedDate' => 'REMOVED_DATE',
         ];
         $expected = [
             'transport-manager-details' => [
@@ -152,9 +153,9 @@ class TransportManagerTest extends MockeryTestCase
                 'birthPlace'    => 'bp',
                 'title'         => 'title',
                 'emailAddress'  => 'email@address.com',
-                'removedDate' => 'REMOVED_DATE'
+                'removedDate'   => 'REMOVED_DATE',
             ],
-            'home-address' => [
+            'home-address'              => [
                 'id'           => 1,
                 'version'      => 2,
                 'addressLine1' => 'hal1',
@@ -163,9 +164,9 @@ class TransportManagerTest extends MockeryTestCase
                 'addressLine4' => 'hal4',
                 'town'         => 'ht',
                 'postcode'     => 'hpc',
-                'countryCode'  => 'hcc'
+                'countryCode'  => 'hcc',
             ],
-            'work-address' => [
+            'work-address'              => [
                 'id'           => 7,
                 'version'      => 8,
                 'addressLine1' => 'wal1',
@@ -174,9 +175,10 @@ class TransportManagerTest extends MockeryTestCase
                 'addressLine4' => 'wal4',
                 'town'         => 'wt',
                 'postcode'     => 'wpc',
-                'countryCode'  => 'wcc'
-            ]
+                'countryCode'  => 'wcc',
+            ],
         ];
+
         $this->assertEquals($expected, Sut::mapFromResult($data));
     }
 }

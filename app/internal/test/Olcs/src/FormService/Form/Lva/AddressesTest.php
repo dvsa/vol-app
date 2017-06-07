@@ -47,7 +47,6 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
                     ->andReturn(
                         m::mock(\Zend\InputFilter\Input::class)
                             ->shouldReceive('setRequired')->once()->with(false)->andReturnSelf()
-                            ->shouldReceive('setAllowEmpty')->once()->with(true)
                             ->getMock()
                     )
                     ->getMock()

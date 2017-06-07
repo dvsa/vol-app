@@ -50,9 +50,6 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
             ->andReturn(true)
             ->once()
             ->getMock();
-        $urlHelperMock = m::mock();
-        $this->sm->shouldReceive('get')->with('Helper\LicenceOverview')->andReturn($licenceOverviewHelperMock);
-        $this->sm->shouldReceive('get')->with('Helper\Url')->andReturn($urlHelperMock);
 
         // expectations
         $licenceOverviewHelperMock
@@ -73,6 +70,9 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
             ->once()
             ->andReturn($gracePeriodStr);
 
+        $this->sm->setService('Helper\LicenceOverview', $licenceOverviewHelperMock);
+
+        $urlHelperMock = m::mock();
         $urlHelperMock
             ->shouldReceive('fromRoute')
             ->with('lva-'.$lva.'/interim', [], [], true)
@@ -84,6 +84,8 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
             ->with('licence/grace-periods', ['licence' => 123])
             ->andReturn('GRACE_PERIOD_URL')
             ->getMock();
+
+        $this->sm->setService('Helper\Url', $urlHelperMock);
 
         $this->assertEquals(
             $expectedViewData,
@@ -288,12 +290,12 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
     {
         $urlHelperMock = m::mock();
 
-        $this->sm->shouldReceive('get')->with('Helper\Url')->andReturn($urlHelperMock);
-
-         $urlHelperMock
+        $urlHelperMock
             ->shouldReceive('fromRoute')
             ->with('lva-application/interim', [], [], true)
             ->andReturn('INTERIM_URL');
+
+        $this->sm->setService('Helper\Url', $urlHelperMock);
 
         $this->assertEquals($expected, $this->sut->getInterimStatus($applicationData, 'application'));
     }

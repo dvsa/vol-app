@@ -28,7 +28,7 @@ class SubmissionRecommendationTest extends AbstractFormValidationTestCase
 
     public function testComment()
     {
-        $this->assertFormElementRequired(['fields', 'comment'], true);
+        $this->assertFormElementIsRequired(['fields', 'comment'], true);
     }
 
     public function testIsDecision()

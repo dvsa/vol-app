@@ -67,6 +67,7 @@ class Cases extends Base
      *     "category": "case_outcome"
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $outcomes = null;
 }

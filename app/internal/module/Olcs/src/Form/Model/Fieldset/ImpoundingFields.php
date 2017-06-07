@@ -42,7 +42,7 @@ class ImpoundingFields
      * @Form\Options({
      *     "label": "Vehicle registration mark"
      * })
-     * 
+     *
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":20}})
@@ -63,6 +63,8 @@ class ImpoundingFields
     public $impoundingLegislationTypes = null;
 
     /**
+     * @Form\Required(false)
+     * @Form\Type("DateTimeSelect")
      * @Form\Attributes({"id":"hearingDate"})
      * @Form\Options({
      *     "label": "Hearing date",
@@ -70,10 +72,7 @@ class ImpoundingFields
      *     "render_delimiters": true,
      *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=hearingDate>Hearing time</label>'HH:mm:ss'</div>'"
      * })
-     * @Form\Required(false)
-     * @Form\Type("DateTimeSelect")
-     * @Form\AllowEmpty(true)
-     * @Form\Filter({"name": "DateTimeSelectNullifier"})
+     * @Form\Filter({"name":"Zend\Filter\DateTimeSelect", "options":{"null_on_empty":true}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "impoundingType",
@@ -98,6 +97,8 @@ class ImpoundingFields
     public $hearingDate = null;
 
     /**
+     * @Form\Type("DynamicSelect")
+     * @Form\Required(false)
      * @Form\Attributes({"id":"venue","placeholder":"","class":"medium", "required":false})
      * @Form\Options({
      *     "label": "Hearing location",
@@ -106,18 +107,15 @@ class ImpoundingFields
      *     "disable_inarray_validator": false,
      *     "other_option" : true
      * })
-     *
-     * @Form\AllowEmpty(true)
-     * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $venue = null;
 
     /**
      * @Form\Required(false)
-     * @Form\Attributes({"class":"medium","id":"venueOther", "required":false})
-     * @Form\Options({"label":"Other hearing location"})
-     * @Form\AllowEmpty(true)
      * @Form\Type("Text")
+     * @Form\Options({"label":"Other hearing location"})
+     * @Form\Attributes({"class":"medium","id":"venueOther", "required":false})
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
@@ -142,6 +140,7 @@ class ImpoundingFields
      *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $presidingTc = null;
 
@@ -155,6 +154,7 @@ class ImpoundingFields
      *     "category": "impound_outcome"
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $outcome = null;
 

@@ -32,16 +32,14 @@ class Stay extends CaseBase
 
     /**
      * @Form\Required(false)
+     * @Form\Type("DateSelect")
      * @Form\Attributes({"id":"decisionDate","class":"extra-long"})
      * @Form\Options({
      *     "label": "Date of decision",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Type("DateSelect")
-     * @Form\AllowEmpty(true)
-     *
-     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
@@ -62,8 +60,6 @@ class Stay extends CaseBase
      *          }
      *      }
      * })
-     *
-     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $decisionDate = null;
 
@@ -105,22 +101,22 @@ class Stay extends CaseBase
     public $isWithdrawn = null;
 
     /**
+     * @Form\Required(true)
+     * @Form\Type("DateSelect")
+     * @Form\Attributes({"id":"withdrawnDate", "required":false})
      * @Form\Options({
      *     "label": "Withdrawn date",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Required(true)
-     * @Form\Type("DateSelect")
-     * @Form\Attributes({"required":false})
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Filter({"name":"DateSelect", "options":{"null_on_empty":true}})
+     * @Form\Validator({"name": "NotEmpty", "options": {"array"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isWithdrawn",
      *          "context_values": {"Y"},
      *          "validators": {
+     *              {"name": "NotEmpty"},
      *              {"name": "\Common\Validator\Date"},
      *              {"name": "Date", "options": {"format": "Y-m-d"}},
      *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}

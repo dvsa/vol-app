@@ -105,6 +105,17 @@ class PublicInquiryRegisterDecisionMain
      *     "disable_inarray_validator": false,
      *     "use_groups":true
      * })
+     * @Form\Validator({
+     *      "name": "ValidateIf",
+     *      "options": {
+     *          "context_field": "decisionDate",
+     *          "contextValues": {null},
+     *          "context_truth": false,
+     *          "validators": {
+     *              {"name": "NotEmpty"}
+     *          }
+     *      }
+     * })
      */
     public $decisions = null;
 
@@ -133,6 +144,8 @@ class PublicInquiryRegisterDecisionMain
     public $tmCalledWithOperator;
 
     /**
+     * @Form\Required(false)
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-large",  "multiple" : true,
      *     "required": false})
      * @Form\AllowEmpty(true)
@@ -143,10 +156,9 @@ class PublicInquiryRegisterDecisionMain
      *     "disable_inarray_validator": false,
      *     "category":"pi_tm_decision"
      * })
-     *
-     * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
-    public $tmDecisions = null;
+    public $tmDecisions = [];
 
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
@@ -199,6 +211,7 @@ class PublicInquiryRegisterDecisionMain
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(false)
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $definition = null;
 

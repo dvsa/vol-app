@@ -62,7 +62,6 @@ class ProhibitionFields extends Base
      *     "render_delimiters": "d m y"
      * })
      * @Form\Type("DateSelect")
-     * @Form\AllowEmpty(true)
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})

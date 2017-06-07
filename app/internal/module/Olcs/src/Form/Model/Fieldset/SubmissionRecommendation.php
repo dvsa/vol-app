@@ -24,6 +24,7 @@ class SubmissionRecommendation extends Base
 
     /**
      * @Form\Required(true)
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"","placeholder":"","class":"chosen-select-medium js-sub-legislation",
      * "multiple" : true, "required":false})
      * @Form\Options({
@@ -32,9 +33,8 @@ class SubmissionRecommendation extends Base
      *     "disable_inarray_validator": false,
      *     "use_groups":true
      * })
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Validator({"name": "NotEmpty", "options": {"array"}})
      * @Form\Validator({"name": "ValidateIfMultiple",
      *      "options":{
      *          "context_field": "actionTypes",

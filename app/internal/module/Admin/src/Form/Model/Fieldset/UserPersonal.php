@@ -31,14 +31,12 @@ class UserPersonal
 
     /**
      * @Form\Attributes({"id":"dob"})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({
      *     "label": "Birth date",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
      * @Form\Type("DateSelect")
-     * @Form\AllowEmpty(true)
      * @Form\Required(false)
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})

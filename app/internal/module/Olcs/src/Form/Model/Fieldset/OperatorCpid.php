@@ -21,6 +21,7 @@ class OperatorCpid
      * })
      * @Form\Required(false)
      * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $type = null;
 }

@@ -62,8 +62,7 @@ class CreateFeeDetails
      *     "label_attributes": {"id": "label-type"},
      *     "empty_option": "Please select"
      * })
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Type("Select")
      * @Form\Validator({
      *      "name": "ValidateIf",
@@ -92,8 +91,7 @@ class CreateFeeDetails
      *     "label_attributes": {"id": "label-type"},
      *     "empty_option": "Please select"
      * })
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Type("Select")
      * @Form\Validator({
      *      "name": "ValidateIf",
@@ -139,8 +137,6 @@ class CreateFeeDetails
      * @Form\Type("Text")
      * @Form\Required(true)
      * @Form\Attributes({"required":false, "id":"amount"})
-     * @Form\AllowEmpty(false)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Validator({"name": "Dvsa\Olcs\Transfer\Validators\Money"})
      */
     public $amount = null;

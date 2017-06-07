@@ -26,29 +26,30 @@ class TmCaseNoFurtherAction extends CaseBase
     public $isMsi;
 
     /**
+     * @Form\Required(true)
+     * @Form\Type("DateSelect")
      * @Form\Options({
      *     "label": "Date of decision",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelect", "options": {"null_on_empty": true}})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
-     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $decisionDate = null;
 
     /**
-     * @Form\Required(false)
+     * @Form\Required(true)
+     * @Form\Type("DateSelect")
      * @Form\Attributes({"required":false})
      * @Form\Options({
      *     "label": "Date of notification (to TM)",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Type("DateSelect")
-     * @Form\AllowEmpty(true)
-     *
+     * @Form\Filter({"name": "DateSelect", "options": {"null_on_empty": true}})
+     * @Form\Validator({"name": "NotEmpty", "options": {"array"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "decisionDate",
@@ -69,24 +70,22 @@ class TmCaseNoFurtherAction extends CaseBase
      *          }
      *      }
      * })
-     *
-     * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $notifiedDate = null;
 
     /**
      * @Form\Required(false)
+     * @Form\Type("Textarea")
      * @Form\Attributes({"class":"extra-long"})
      * @Form\Options({"label":"Reason why no further action"})
-     * @Form\Type("Textarea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":500}})
      */
     public $noFurtherActionReason = null;
 
     /**
-     * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
+     * @Form\Attributes({"value":""})
      */
     public $decision = null;
 }

@@ -20,131 +20,28 @@ class TransportManagerApplicationOrLicenceFullTest extends AbstractFormValidatio
 
     public function testResponsibilityHoursOfWeek()
     {
-        // Monday
-        $element = [
+        $weekdaysElements = ['hoursMon', 'hoursTue', 'hoursWed', 'hoursThu', 'hoursFri', 'hoursSat', 'hoursSun'];
+
+        $weekdaysElmsPath = [
             'details',
             'hoursOfWeek',
             'hoursPerWeekContent',
-            'hoursMon',
         ];
+        foreach ($weekdaysElements as $day) {
+            $element = $weekdaysElmsPath;
+            array_push($element, $day);
 
-        $this->assertFormElementNotValid(
-            $element,
-            'abc',
-            [
-                \Zend\I18n\Validator\Float::NOT_FLOAT,
-            ]
-        );
+            $this->assertFormElementAllowEmpty($element, true);
+            $this->assertFormElementNotValid(
+                $element,
+                'abc',
+                [
+                    \Zend\I18n\Validator\IsFloat::NOT_FLOAT,
+                ]
+            );
 
-        $this->assertFormElementValid($element, 1.1);
-
-        // Tuesday
-        $element = [
-            'details',
-            'hoursOfWeek',
-            'hoursPerWeekContent',
-            'hoursTue',
-        ];
-
-        $this->assertFormElementNotValid(
-            $element,
-            'abc',
-            [
-                \Zend\I18n\Validator\Float::NOT_FLOAT,
-            ]
-        );
-
-        $this->assertFormElementValid($element, 1.1);
-
-        // Wednesday
-        $element = [
-            'details',
-            'hoursOfWeek',
-            'hoursPerWeekContent',
-            'hoursWed',
-        ];
-
-        $this->assertFormElementNotValid(
-            $element,
-            'abc',
-            [
-                \Zend\I18n\Validator\Float::NOT_FLOAT,
-            ]
-        );
-
-        $this->assertFormElementValid($element, 1.1);
-
-        // Thursday
-        $element = [
-            'details',
-            'hoursOfWeek',
-            'hoursPerWeekContent',
-            'hoursThu',
-        ];
-
-        $this->assertFormElementNotValid(
-            $element,
-            'abc',
-            [
-                \Zend\I18n\Validator\Float::NOT_FLOAT,
-            ]
-        );
-
-        $this->assertFormElementValid($element, 1.1);
-
-        // Friday
-        $element = [
-            'details',
-            'hoursOfWeek',
-            'hoursPerWeekContent',
-            'hoursFri',
-        ];
-
-        $this->assertFormElementNotValid(
-            $element,
-            'abc',
-            [
-                \Zend\I18n\Validator\Float::NOT_FLOAT,
-            ]
-        );
-
-        $this->assertFormElementValid($element, 1.1);
-
-        // Saturday
-        $element = [
-            'details',
-            'hoursOfWeek',
-            'hoursPerWeekContent',
-            'hoursSat',
-        ];
-
-        $this->assertFormElementNotValid(
-            $element,
-            'abc',
-            [
-                \Zend\I18n\Validator\Float::NOT_FLOAT,
-            ]
-        );
-
-        $this->assertFormElementValid($element, 1.1);
-
-        // Sunday
-        $element = [
-            'details',
-            'hoursOfWeek',
-            'hoursPerWeekContent',
-            'hoursSun',
-        ];
-
-        $this->assertFormElementNotValid(
-            $element,
-            'abc',
-            [
-                \Zend\I18n\Validator\Float::NOT_FLOAT,
-            ]
-        );
-
-        $this->assertFormElementValid($element, 1.1);
+            $this->assertFormElementValid($element, 1.1);
+        }
     }
 
     public function testOtherLicencesTable()

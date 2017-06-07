@@ -13,15 +13,18 @@ class InspectionRequestTest extends MockeryTestCase
 {
     public function testMapFromErrors()
     {
-        $mockForm = m::mock(Form::class)->makePartial();
+        $mockForm = new Form();
+
         $errors = [
             'reportType' => ['error1'],
             'inspectorName' => ['error2'],
             'general' => ['error3']
         ];
+
         $expected = [
             'general' => ['error3']
         ];
+
         $this->assertEquals($expected, Sut::mapFromErrors($mockForm, $errors));
     }
 

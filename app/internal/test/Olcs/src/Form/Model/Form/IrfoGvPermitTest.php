@@ -20,7 +20,7 @@ class IrfoGvPermitTest extends AbstractFormValidationTestCase
     public function testIrfoGvPermitType()
     {
         $element = ['fields', 'irfoGvPermitType'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementDynamicSelect($element);
     }
@@ -28,7 +28,7 @@ class IrfoGvPermitTest extends AbstractFormValidationTestCase
     public function testYearRequired()
     {
         $element = ['fields', 'yearRequired'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementNumber($element);
     }
@@ -36,7 +36,7 @@ class IrfoGvPermitTest extends AbstractFormValidationTestCase
     public function testInForceDate()
     {
         $element = ['fields', 'inForceDate'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementDate($element);
     }
@@ -44,7 +44,7 @@ class IrfoGvPermitTest extends AbstractFormValidationTestCase
     public function testExpiryDate()
     {
         $element = ['fields', 'expiryDate'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
 
         $this->assertFormElementValid(
@@ -79,7 +79,7 @@ class IrfoGvPermitTest extends AbstractFormValidationTestCase
     public function testIsFeeExempt()
     {
         $element = ['fields', 'isFeeExempt'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementCheckbox($element);
     }
@@ -87,7 +87,7 @@ class IrfoGvPermitTest extends AbstractFormValidationTestCase
     public function testExemptionDetails()
     {
         $element = ['fields', 'exemptionDetails'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element);
 
@@ -110,7 +110,7 @@ class IrfoGvPermitTest extends AbstractFormValidationTestCase
     public function testNoOfCopies()
     {
         $element = ['fields', 'noOfCopies'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementNumber($element);
     }

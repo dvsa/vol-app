@@ -45,7 +45,7 @@ class TaskTest extends AbstractFormValidationTestCase
 
     public function testUrgent()
     {
-        $this->assertFormElementRequired(['details', 'urgent'], true);
+        $this->assertFormElementIsRequired(['details', 'urgent'], true);
     }
 
     public function testCategory()
@@ -67,20 +67,20 @@ class TaskTest extends AbstractFormValidationTestCase
     {
         $element = ['assignment', 'assignedToTeam'];
         $this->assertFormElementType($element, Select::class);
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
     }
 
     public function testAssignedToUser()
     {
         $element = ['assignment', 'assignedToUser'];
         $this->assertFormElementType($element, Select::class);
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, true);
     }
 
     public function testTableTable()
     {
         $element = ['taskHistory', 'table'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementTable($element);
     }

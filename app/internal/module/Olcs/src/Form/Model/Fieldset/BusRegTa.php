@@ -20,6 +20,7 @@ class BusRegTa extends BusRegDetails
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(false)
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $trafficAreas = null;
 
@@ -33,6 +34,7 @@ class BusRegTa extends BusRegDetails
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(false)
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $localAuthoritys = null;
 

@@ -15,8 +15,7 @@ use OlcsTest\Bootstrap;
 
 /**
  * Licence Overview Helper Service Test
- *
- * @author Dan Eggleston <dan@stolenegg.com>
+ * @covers Olcs\Service\Helper\LicenceOverviewHelperService
  */
 class LicenceOverviewHelperServiceTest extends MockeryTestCase
 {
@@ -29,7 +28,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
         parent::setUp();
 
         $this->sut = new Sut();
-        $this->sm = Bootstrap::getServiceManager();
+        $this->sm = m::mock(Bootstrap::getServiceManager())->makePartial();
         $this->sut->setServiceLocator($this->sm);
     }
 

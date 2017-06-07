@@ -46,6 +46,7 @@ class IrfoDetails extends Base
      *     "use_groups": false
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $irfoNationality = null;
 

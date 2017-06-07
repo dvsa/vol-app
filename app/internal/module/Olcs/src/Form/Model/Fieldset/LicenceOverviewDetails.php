@@ -10,6 +10,8 @@ use Zend\Form\Annotation as Form;
 class LicenceOverviewDetails
 {
     /**
+     * @Form\Required(false)
+     * @Form\Type("DateSelect")
      * @Form\Options({
      *     "label": "Continuation date",
      *     "create_empty_option": true,
@@ -17,11 +19,7 @@ class LicenceOverviewDetails
      *     "required": false,
      *     "max_year_delta": "+10"
      * })
-     * @Form\Required(true)
      * @Form\Attributes({"required":false})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
@@ -29,6 +27,8 @@ class LicenceOverviewDetails
     public $continuationDate = null;
 
     /**
+     * @Form\Type("DateSelect")
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Review Date",
      *     "create_empty_option": true,
@@ -36,11 +36,7 @@ class LicenceOverviewDetails
      *     "required": false,
      *     "max_year_delta": "+10"
      * })
-     * @Form\Required(true)
      * @Form\Attributes({"required":false})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})

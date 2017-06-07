@@ -31,6 +31,8 @@ class OperatorMerge
     public $toOperatorId = null;
 
     /**
+     * @Form\Required(false)
+     * @Form\Type("DynamicSelect")
      * @Form\Attributes({"id":"licences","placeholder":"","multiple":"multiple", "class":"chosen-select-large"})
      * @Form\Options({
      *     "label": "Licences",
@@ -39,8 +41,7 @@ class OperatorMerge
      *     "context": "fromOperatorName",
      *     "use_groups": "false",
      * })
-     * @Form\Type("DynamicSelect")
-     * @Form\Required(false)
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $licenceIds = null;
 

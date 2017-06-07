@@ -22,7 +22,7 @@ class TmCaseNoFurtherActionTest extends AbstractFormValidationTestCase
     {
         $element = ['fields', 'isMsi'];
         $this->assertFormElementType($element, Radio::class);
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
     }
 
     public function testDecisionDate()
@@ -70,7 +70,7 @@ class TmCaseNoFurtherActionTest extends AbstractFormValidationTestCase
     public function testNoFurtherActionReason()
     {
         $element = ['fields', 'noFurtherActionReason'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementText($element, 0, 500);
     }
 

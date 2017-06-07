@@ -76,17 +76,16 @@ class FeePaymentDetails
     /**
      * Receipt date, required for non-card payments
      *
+     * @Form\Required(true)
+     * @Form\Type("DateSelect")
      * @Form\Options({
      *      "short-label":"fees.receipt_date",
      *      "label":"fees.receipt_date",
      *      "label_attributes": {"id": "label-receiptDate"}
      * })
-     * @Form\Required(true)
      * @Form\Attributes({"required":false})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Filter({"name": "DateSelect", "options": {"null_on_empty": true}})
+     * @Form\Validator({"name": "NotEmpty", "options": {"array"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "paymentType",
@@ -107,16 +106,15 @@ class FeePaymentDetails
     /**
      * Payer name, required for non-card payments
      *
+     * @Form\Required(true)
+     * @Form\Type("Text")
      * @Form\Options({
      *      "short-label":"fees.payer",
      *      "label":"fees.payer",
      *      "label_attributes": {"id": "label-payer"}
      * })
-     * @Form\Required(true)
      * @Form\Attributes({"required":false})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("Text")
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "paymentType",
@@ -140,9 +138,8 @@ class FeePaymentDetails
      *      "label_attributes": {"id": "label-slipNo"}
      * })
      * @Form\Required(true)
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Attributes({"required":false})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Text")
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
@@ -168,16 +165,15 @@ class FeePaymentDetails
     /**
      * Cheque number, required for cheque payments only
      *
+     * @Form\Required(true)
      * @Form\Options({
      *      "short-label":"fees.cheque",
      *      "label":"fees.cheque",
      *      "label_attributes": {"id": "label-chequeNo"}
      * })
-     * @Form\Required(true)
      * @Form\Attributes({"required":false})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Text")
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "paymentType",
@@ -194,6 +190,7 @@ class FeePaymentDetails
     /**
      * Cheque date, required for cheque payments
      *
+     * @Form\Required(true)
      * @Form\Name("chequeDate")
      * @Form\Options({
      *      "short-label": "fees.cheque_date",
@@ -205,12 +202,10 @@ class FeePaymentDetails
      *      "max_year_delta": "+1",
      *      "min_year_delta": "-1"
      * })
-     * @Form\Required(true)
      * @Form\Attributes({"required":false})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("Common\Form\Elements\Custom\DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name":"DateSelect", "options":{"null_on_empty":true}})
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"array"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "paymentType",
@@ -241,9 +236,8 @@ class FeePaymentDetails
      * })
      * @Form\Required(true)
      * @Form\Attributes({"required":false})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("Text")
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "paymentType",

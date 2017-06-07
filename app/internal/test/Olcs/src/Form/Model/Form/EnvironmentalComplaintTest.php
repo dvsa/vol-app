@@ -49,21 +49,21 @@ class EnvironmentalComplaintTest extends AbstractFormValidationTestCase
     public function testComplainantForename()
     {
         $element = ['fields', 'complainantForename'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementText($element, 2, 35);
     }
 
     public function testComplainantFamilyName()
     {
         $element = ['fields', 'complainantFamilyName'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementText($element, 2, 35);
     }
 
     public function testDescription()
     {
         $element = ['fields', 'description'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementText($element, 5, 4000);
     }
 
@@ -100,7 +100,7 @@ class EnvironmentalComplaintTest extends AbstractFormValidationTestCase
     public function testAddressSearchPostcode()
     {
         $element = ['address', 'searchPostcode'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementPostcodeSearch($element);
     }
@@ -108,7 +108,7 @@ class EnvironmentalComplaintTest extends AbstractFormValidationTestCase
     public function testAddressLine1()
     {
         $element = ['address', 'addressLine1'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementText($element, 0, 90);
     }
@@ -116,7 +116,7 @@ class EnvironmentalComplaintTest extends AbstractFormValidationTestCase
     public function testAddressLine2()
     {
         $element = ['address', 'addressLine2'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element, 0, 90);
     }
@@ -124,7 +124,7 @@ class EnvironmentalComplaintTest extends AbstractFormValidationTestCase
     public function testAddressLine3()
     {
         $element = ['address', 'addressLine3'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element, 0, 100);
     }
@@ -132,7 +132,7 @@ class EnvironmentalComplaintTest extends AbstractFormValidationTestCase
     public function testAddressLine4()
     {
         $element = ['address', 'addressLine4'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element, 0, 35);
     }
@@ -140,7 +140,7 @@ class EnvironmentalComplaintTest extends AbstractFormValidationTestCase
     public function testAddressTown()
     {
         $element = ['address', 'town'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementText($element, 0, 30);
     }
@@ -148,15 +148,14 @@ class EnvironmentalComplaintTest extends AbstractFormValidationTestCase
     public function testAddressPostcode()
     {
         $element = ['address', 'postcode'];
-        $this->assertFormElementRequired($element, false);
-        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementPostcode($element);
     }
 
     public function testAddressCountryCode()
     {
         $element = ['address', 'countryCode'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementDynamicSelect($element);
     }
@@ -178,15 +177,11 @@ class EnvironmentalComplaintTest extends AbstractFormValidationTestCase
 
     public function testSubmit()
     {
-        $this->assertFormElementActionButton(
-            ['form-actions', 'submit']
-        );
+        $this->assertFormElementActionButton(['form-actions', 'submit']);
     }
 
     public function testCancel()
     {
-        $this->assertFormElementActionButton(
-            ['form-actions', 'cancel']
-        );
+        $this->assertFormElementActionButton(['form-actions', 'cancel']);
     }
 }

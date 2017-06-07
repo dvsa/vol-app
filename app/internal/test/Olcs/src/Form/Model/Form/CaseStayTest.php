@@ -26,7 +26,7 @@ class CaseStayTest extends AbstractFormValidationTestCase
     public function testRequestDate()
     {
         $element = ['fields', 'requestDate'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
 
         $this->assertFormElementValid(
             $element,
@@ -46,7 +46,7 @@ class CaseStayTest extends AbstractFormValidationTestCase
     public function testDecisionDate()
     {
         $element = ['fields', 'decisionDate'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
 
         $this->assertFormElementValid(
             $element,
@@ -62,21 +62,21 @@ class CaseStayTest extends AbstractFormValidationTestCase
     public function testDvsaNotified()
     {
         $element = ['fields', 'dvsaNotified'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementType($element, OlcsCheckbox::class);
     }
 
     public function testIsWithdrawn()
     {
         $element = ['fields', 'isWithdrawn'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementType($element, OlcsCheckbox::class);
     }
 
     public function testWithdrawnDate()
     {
         $element = ['fields', 'withdrawnDate'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
 
         $this->assertFormElementValid(
             $element,
@@ -92,7 +92,7 @@ class CaseStayTest extends AbstractFormValidationTestCase
     public function testNotes()
     {
         $element = ['fields', 'notes'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementText($element, 5, 4000);
     }
 

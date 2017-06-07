@@ -47,12 +47,10 @@ class OpposerContact
     public $phone_secondary_version = null;
 
     /**
-     * @Form\AllowEmpty(true)
      * @Form\Required(false)
-     * @Form\Attributes({"id":"email","placeholder":"","class":"medium", "required":false})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Options({"label":"Email"})
      * @Form\Type("Text")
+     * @Form\Attributes({"id":"email","placeholder":"","class":"medium", "required":false})
+     * @Form\Options({"label":"Email"})
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
      */

@@ -47,6 +47,7 @@ class InspectionRequestDetails
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $operatingCentre = null;
 

@@ -24,6 +24,8 @@ class ApplicationOverviewDetails
     public $leadTcArea = null;
 
     /**
+     * @Form\Required(false)
+     * @Form\Type("DateSelect")
      * @Form\Options({
      *     "label": "Application received date",
      *     "create_empty_option": true,
@@ -32,18 +34,17 @@ class ApplicationOverviewDetails
      *     "max_year_delta": "+5",
      *     "min_year_delta": "-5"
      * })
-     * @Form\Required(true)
      * @Form\Attributes({"required":false})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "\Common\Filter\DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options":{"format":"Y-m-d"}})
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      */
     public $receivedDate = null;
 
     /**
+     * @Form\Required(false)
+     * @Form\Type("DateSelect")
      * @Form\Options({
      *     "label": "Target completion",
      *     "create_empty_option": true,
@@ -52,14 +53,11 @@ class ApplicationOverviewDetails
      *     "max_year_delta": "+5",
      *     "min_year_delta": "-5"
      * })
-     * @Form\Required(true)
      * @Form\Attributes({"required":false})
-     * @Form\AllowEmpty(true)
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "\Common\Filter\DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options":{"format":"Y-m-d"}})
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      */
     public $targetCompletionDate = null;
 

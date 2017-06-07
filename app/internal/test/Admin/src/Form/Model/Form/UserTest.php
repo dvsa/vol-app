@@ -79,7 +79,7 @@ class UserTest extends AbstractFormValidationTestCase
     {
         $element = ['userType', 'currentTransportManagerHtml'];
 
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementType($element, Html::class);
     }
 
@@ -100,7 +100,7 @@ class UserTest extends AbstractFormValidationTestCase
     public function testTransportManager()
     {
         $element = ['userType', 'transportManager'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementType($element, Select::class);
     }
 
@@ -129,10 +129,9 @@ class UserTest extends AbstractFormValidationTestCase
 
     public function testLicenceNumberText()
     {
-        $this->assertFormElementRequired(
-            ['userType', 'licenceNumber'],
-            false
-        );
+        $element = ['userType', 'licenceNumber'];
+        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementIsRequired($element, true);
     }
 
     public function testForename()
@@ -196,41 +195,41 @@ class UserTest extends AbstractFormValidationTestCase
     public function testUserAddress()
     {
         $element = ['address', 'id'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
 
         $element = ['address', 'version'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
 
         $element = ['address', 'addressLine1'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementText($element, 1);
 
         $element = ['address', 'addressLine2'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementText($element, 1);
 
         $element = ['address', 'addressLine3'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementText($element, 1);
 
         $element = ['address', 'addressLine4'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementText($element, 1);
 
         $element = ['address', 'town'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementText($element, 1);
 
         $element = ['address', 'postcode'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementPostcode($element);
 
         $element = ['address', 'countryCode'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementDynamicSelect($element, false);
 
         $element = ['address', 'searchPostcode'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementPostcodeSearch($element);
     }
@@ -239,7 +238,7 @@ class UserTest extends AbstractFormValidationTestCase
     {
         $element = ['userContactDetails', 'emailAddress'];
 
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
 
         $this->assertFormElementValid(
             $element,
@@ -263,13 +262,13 @@ class UserTest extends AbstractFormValidationTestCase
         );
 
         $element = ['userContactDetails', 'emailConfirm'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
     }
 
     public function testContactPhonePrimary()
     {
         $element = ['userContactDetails', 'phone_primary'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementPhone($element);
     }
@@ -289,7 +288,7 @@ class UserTest extends AbstractFormValidationTestCase
     public function testContactSecondaryBusiness()
     {
         $element = ['userContactDetails', 'phone_secondary'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementPhone($element);
     }
@@ -317,13 +316,13 @@ class UserTest extends AbstractFormValidationTestCase
     public function testTranslateToWelsh()
     {
         $element = ['userSettings', 'translateToWelsh'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementType($element, OlcsCheckbox::class);
     }
 
     public function testUserLoginId()
     {
-        $this->assertFormElementRequired(
+        $this->assertFormElementIsRequired(
             ['userLoginSecurity', 'loginId'],
             true
         );
@@ -332,49 +331,49 @@ class UserTest extends AbstractFormValidationTestCase
     public function testUserLoginCreatedOn()
     {
         $element = ['userLoginSecurity', 'createdOn'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementType($element, Html::class);
     }
 
     public function testUserLoginLastLoggedIn()
     {
         $element = ['userLoginSecurity', 'lastLoggedInOn'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementType($element, HtmlDateTime::class);
     }
 
     public function testUserLoginLocked()
     {
         $element = ['userLoginSecurity', 'locked'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementType($element, Html::class);
     }
 
     public function testUserPasswordLastReset()
     {
         $element = ['userLoginSecurity', 'passwordLastReset'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementType($element, Html::class);
     }
 
     public function testUserLoginResetPassword()
     {
         $element = ['userLoginSecurity', 'resetPassword'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementType($element, Radio::class);
     }
 
     public function testAccountDisabled()
     {
         $element = ['userLoginSecurity', 'accountDisabled'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementType($element, OlcsCheckbox::class);
     }
 
     public function testAccountDisbaledDate()
     {
         $element = ['userLoginSecurity', 'disabledDate'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementType($element, Html::class);
     }
 
