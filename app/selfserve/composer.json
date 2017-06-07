@@ -45,11 +45,11 @@
         "symfony/Filesystem": "~2.6.0",
         "zf-commons/zfc-rbac": "~2.4.0",
         "olcs/autoload": "dev-develop",
-        "olcs/OlcsCommon": "dev-zend-upgrade/common-develop",
-        "olcs/olcs-transfer": "dev-feature/OLCS-16303-transfer-upgrade-zend",
-        "olcs/olcs-utils": "dev-feature/OLCS-16303-utils-upgrade-zend",
-        "olcs/olcs-auth": "dev-feature/OLCS-16303-auth-upgrade-zend",
-        "olcs/olcs-logging": "dev-feature/OLCS-16303-logging-upgrade-zend"
+        "olcs/OlcsCommon": "dev-develop",
+        "olcs/olcs-transfer": "dev-develop",
+        "olcs/olcs-utils": "dev-develop",
+        "olcs/olcs-auth": "dev-develop",
+        "olcs/olcs-logging": "dev-develop"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.0.0",
