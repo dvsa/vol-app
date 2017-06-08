@@ -1,13 +1,13 @@
-<span class="version">Version: <?php echo $this->showVersion(); ?></span>
+<div class="internal-footer">
+	<span class="version">Version: <?php echo $this->showVersion(); ?></span>
+</div>
 
 <!-- Start: Global and Inline Script -->
 <?php echo $this->inlineScript()->prependFile($this->assetPath('js/' . $this->applicationName() . '.js')); ?>
 <!-- End: Global and Inline Script -->
-
 <script>
     OLCS.ready(function() {
         OLCS.eventEmitter.emit("render");
     });
 </script>
-
 <?php echo $this->partial('partials/ga'); ?>
