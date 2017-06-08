@@ -2,7 +2,8 @@
 
 namespace OlcsTest\Listener\RouteParam;
 
-use Mockery\Adapter\Phpunit\MockeryTestCase as MockeryTestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\TransportManager as SystemUnderTest;
 use Mockery as m;
@@ -28,7 +29,7 @@ class TransportManagerTest extends MockeryTestCase
         $tmId = 1;
 
         $context = [
-            'controller' => 'TMDetailsResponsibilityController',
+            'controller' => TransportManagerDetailsResponsibilityController::class,
             'action' => 'edit-tm-application'
         ];
 

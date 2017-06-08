@@ -11,6 +11,7 @@ use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteCo
 use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
 
 use Olcs\Controller\TransportManager\TransportManagerController;
+use Olcs\Controller\TransportManager as TmCntr;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController;
 
 use Olcs\Controller\SearchController;
@@ -285,8 +286,6 @@ return array(
             'TMDetailsDetailController' => TransportManagerDetailsDetailController::class,
             'TMDetailsCompetenceController'
                 => 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsCompetenceController',
-            'TMDetailsResponsibilityController'
-                => 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController',
             'TMDetailsEmploymentController'
                 => 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsEmploymentController',
             'TMDetailsPreviousHistoryController'
@@ -325,6 +324,10 @@ return array(
             'CaseDocumentSlaTargetDateController' => 'Olcs\Controller\Sla\CaseDocumentSlaTargetDateController',
             'LicenceDocumentSlaTargetDateController' => 'Olcs\Controller\Sla\LicenceDocumentSlaTargetDateController'
         ),
+        'factories' => [
+            TmCntr\Details\TransportManagerDetailsResponsibilityController::class =>
+                TmCntr\Details\TransportManagerDetailsResponsibilityController::class,
+        ],
     ),
     'controller_plugins' => array(
         'invokables' => array(
