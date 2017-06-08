@@ -26,7 +26,6 @@ class LvaOperatingCentre extends CommonOperatingCentre
     public function alterForm(Form $form, array $params)
     {
         $this->getFormHelper()->removeValidator($form, 'data->permission', ValidatorIdentical::class);
-        $this->getFormHelper()->removeValidator($form, 'data->sufficientParking', ValidatorIdentical::class);
         // On Internal uploading the advert isn't mandatory
         $this->getFormHelper()->removeValidator($form, 'advertisements->uploadedFileCount', ValidateIf::class);
 
