@@ -64,7 +64,7 @@ class ApplicationControllerTraitTest extends MockeryTestCase
         $progress = $this->sut->getSectionStepProgress($sectionName);
         $this->assertEquals($expected, $progress);
 
-        $progress = $this->sut->getSectionStepProgress('something_elese');
+        $progress = $this->sut->getSectionStepProgress('something_else');
         $this->assertEquals([], $progress);
     }
 
