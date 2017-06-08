@@ -108,10 +108,11 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $transportManagerApplicationData TM application data
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Common\View\Model\Section|\Zend\Http\Response
      */
-    protected function page1Point1($transportManagerApplicationData)
+    protected function page1Point1(array $transportManagerApplicationData)
     {
+        /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
 
         $postData = (array)$request->getPost();
@@ -142,7 +143,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $hasProcessedFiles = ($hasProcessedCertificateFiles || $hasProcessedResponsibilitiesFiles);
 
         if (!$hasProcessedAddressLookup && !$hasProcessedFiles && $request->isPost()) {
-
             $submit = true;
 
             $crudAction = $this->getCrudAction($this->getFormTables($postData));
@@ -165,7 +165,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                             'placeOfBirth' => $data['details']['birthPlace'],
                             'homeAddress' => $data['homeAddress'],
                             'workAddress' => $data['workAddress'],
-                            'operatingCentres' => $data['responsibilities']['operatingCentres'],
                             'tmType' => $data['responsibilities']['tmType'],
                             'isOwner' => $data['responsibilities']['isOwner'],
                             'hoursMon' => (float) $hoursOfWeek['hoursPerWeekContent']['hoursMon'],
@@ -187,6 +186,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
                     return $this->redirect()->refresh();
                 }
+
                 if ($crudAction !== null) {
                     return $this->handleCrudAction(
                         $crudAction,
@@ -492,7 +492,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $data Data
      *
-     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     * @return \Dvsa\Olcs\Transfer\Command\CommandInterface
      */
     protected function getOtherLicencesCreateCommand($data)
     {
@@ -515,7 +515,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $data Data
      *
-     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     * @return \Dvsa\Olcs\Transfer\Command\CommandInterface
      */
     protected function getOtherLicencesUpdateCommand($data)
     {
@@ -539,7 +539,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $data Data
      *
-     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     * @return \Dvsa\Olcs\Transfer\Command\CommandInterface
      */
     protected function getOtherEmploymentsCreateCommand($data)
     {
@@ -569,7 +569,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $data Data
      *
-     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     * @return \Dvsa\Olcs\Transfer\Command\CommandInterface
      */
     protected function getOtherEmploymentsUpdateCommand($data)
     {
@@ -601,7 +601,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $data Data
      *
-     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     * @return \Dvsa\Olcs\Transfer\Command\CommandInterface
      */
     protected function getPreviousConvictionsCreateCommand($data)
     {
@@ -624,7 +624,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $data Data
      *
-     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     * @return \Dvsa\Olcs\Transfer\Command\CommandInterface
      */
     protected function getPreviousConvictionsUpdateCommand($data)
     {
@@ -648,7 +648,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $data Data
      *
-     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     * @return \Dvsa\Olcs\Transfer\Command\CommandInterface
      */
     protected function getPreviousLicencesCreateCommand($data)
     {
@@ -668,7 +668,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $data Data
      *
-     * @return Dvsa\Olcs\Transfer\Command\CommandInterface
+     * @return \Dvsa\Olcs\Transfer\Command\CommandInterface
      */
     protected function getPreviousLicencesUpdateCommand($data)
     {
@@ -855,12 +855,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         if (!empty($postData)) {
             $formData = $postData;
         } else {
-
-            $ocs = [];
-            foreach ($data['operatingCentres'] as $oc) {
-                $ocs[] = $oc['id'];
-            }
-
             $formData = [
                 'details' => [
                     'emailAddress' => $contactDetails['emailAddress'],
@@ -870,7 +864,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     'tmType' => $data['tmType']['id'],
                     'isOwner' => $data['isOwner'],
                     'additionalInformation' => $data['additionalInformation'],
-                    'operatingCentres' => $ocs,
                     'hoursOfWeek' => [
                         'hoursPerWeekContent' => [
                             'hoursMon' => $data['hoursMon'],
@@ -906,22 +899,18 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $tma TM application data
      *
-     * @return \Zend\Form\Form
+     * @return \Common\Form\Form
      */
-    protected function getDetailsForm($tma)
+    protected function getDetailsForm(array $tma)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $tmHelper = $this->getServiceLocator()->get('Helper\TransportManager');
+        $form = $this->hlpForm->createForm('Lva\TransportManagerDetails');
 
-        $form = $formHelper->createForm('Lva\TransportManagerDetails');
-
-        $tmHelper->alterResponsibilitiesFieldset(
+        $this->hlpTransMngr->alterResponsibilitiesFieldset(
             $form->get('responsibilities'),
-            $this->getOperatingCentreSelectOptions($tma),
             $this->getOtherLicencesTable($tma['otherLicences'])
         );
 
-        $tmHelper->alterPreviousHistoryFieldsetTm(
+        $this->hlpTransMngr->alterPreviousHistoryFieldsetTm(
             $form->get('previousHistory'),
             $tma['transportManager']
         );
@@ -929,54 +918,25 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         if ($tma['application']['niFlag'] === 'Y') {
             $form->get('previousHistory')->get('convictions')->get('table')->getTable()
                 ->setEmptyMessage('transport-manager.convictionsandpenalties.table.empty.ni');
-            $niOrGb = 'ni';
-        } else {
-            $niOrGb = 'gb';
         }
 
-        $tmHelper->prepareOtherEmploymentTableTm($form->get('otherEmployment'), $tma['transportManager']);
+        $this->hlpTransMngr->prepareOtherEmploymentTableTm($form->get('otherEmployment'), $tma['transportManager']);
 
-        $formHelper->remove($form, 'responsibilities->tmApplicationStatus');
+        $this->hlpForm->remove($form, 'responsibilities->tmApplicationStatus');
 
+        /** @var \Zend\Form\Fieldset $formActions */
         $formActions = $form->get('form-actions');
         $formActions->get('submit')->setLabel('lva.external.save_and_continue.button');
+
+        /** @var \Zend\Form\Element $saveButton */
         $saveButton = $formActions->get('save');
         $saveButton->setLabel('lva.external.save_and_return_to_tm.link');
         $saveButton->removeAttribute('class');
         $saveButton->setAttribute('class', 'action--tertiary large');
-        $formHelper->remove($form, 'form-actions->cancel');
+
+        $this->hlpForm->remove($form, 'form-actions->cancel');
 
         return $form;
-    }
-
-    /**
-     * Get the operating centre select options
-     *
-     * @param array $tma TM application data
-     *
-     * @return array
-     */
-    protected function getOperatingCentreSelectOptions($tma)
-    {
-        $options = [];
-        $formatOptions = ['name' => 'address', 'addressFields' => ['addressLine1', 'town']];
-
-        foreach ($tma['application']['licence']['operatingCentres'] as $loc) {
-            $options[$loc['operatingCentre']['id']] =
-                \Common\Service\Table\Formatter\Address::format($loc['operatingCentre'], $formatOptions);
-        }
-
-        foreach ($tma['application']['operatingCentres'] as $aoc) {
-            if ($aoc['action'] === 'D') {
-                unset($options[$aoc['operatingCentre']['id']]);
-                continue;
-            }
-            $options[$aoc['operatingCentre']['id']] =
-                \Common\Service\Table\Formatter\Address::format($aoc['operatingCentre'], $formatOptions);
-        }
-
-        asort($options);
-        return $options;
     }
 
     /**
@@ -996,7 +956,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param int $lvaId LVA id
      *
-     * @return \Zend\Http\Response
+     * @return \Common\Service\Cqrs\Response|\Zend\Http\Response
      */
     protected function checkForRedirect($lvaId)
     {
@@ -1431,7 +1391,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $tma TM application
      *
-     * @return book
+     * @return bool
      */
     private function isTmOperator(array $tma)
     {
