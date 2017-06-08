@@ -34,11 +34,6 @@ class LvaOperatingCentreTest extends MockeryTestCase
      */
     public function testAlterForm($appliedVia)
     {
-        $originalValueOptions = [
-            RefData::AD_UPLOAD_LATER => 'Upload later',
-            'Foo' => 'Bar'
-        ];
-        $alteredValueOptions = ['Foo' => 'Bar'];
         $form = m::mock(Form::class)
             ->shouldReceive('get')
             ->with('address')
