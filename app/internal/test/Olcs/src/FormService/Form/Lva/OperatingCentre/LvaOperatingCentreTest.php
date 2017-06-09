@@ -34,11 +34,6 @@ class LvaOperatingCentreTest extends MockeryTestCase
      */
     public function testAlterForm($appliedVia)
     {
-        $originalValueOptions = [
-            RefData::AD_UPLOAD_LATER => 'Upload later',
-            'Foo' => 'Bar'
-        ];
-        $alteredValueOptions = ['Foo' => 'Bar'];
         $form = m::mock(Form::class)
             ->shouldReceive('get')
             ->with('address')
@@ -62,9 +57,6 @@ class LvaOperatingCentreTest extends MockeryTestCase
         $this->formHelper
             ->shouldReceive('removeValidator')
             ->with($form, 'data->permission', ValidatorIdentical::class)
-            ->once()
-            ->shouldReceive('removeValidator')
-            ->with($form, 'data->sufficientParking', ValidatorIdentical::class)
             ->once()
             ->shouldReceive('removeValidator')
             ->with($form, 'advertisements->uploadedFileCount', \Common\Validator\ValidateIf::class)
