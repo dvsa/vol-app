@@ -124,7 +124,7 @@ class OppositionTest extends MockeryTestCase
     public function mapFromFormDataProvider()
     {
         return [
-            [
+            'Application operating centre' => [
                 [
                     'fields' => [
                         'id' => 987,
@@ -155,6 +155,64 @@ class OppositionTest extends MockeryTestCase
                     'opposerType' => 'otf_obj',
                     'contactDetailsDescription' => 'desc',
                     'applicationOperatingCentres' => [800, 801],
+                    'opposerContactDetails' => [
+                        'description' => 'desc',
+                        'address' => [
+                            'addressLine1' => 'a1'
+                        ],
+                        'emailAddress' => 'test@test.me',
+                        'phoneContacts' => [
+                            [
+                                'id' => 301,
+                                'version' => 1,
+                                'phoneContactType' => 'phone_t_primary',
+                                'phoneNumber' => 'pn1',
+                            ],
+                            [
+                                'id' => 303,
+                                'version' => 3,
+                                'phoneContactType' => 'phone_t_secondary',
+                                'phoneNumber' => 'pn2',
+                            ],
+                        ],
+                        'person' => [
+                            'forename' => 'forename'
+                        ],
+                    ],
+                    'operatingCentres' => [800, 801],
+                ]
+            ],
+            'Licensing operating centre' => [
+                [
+                    'fields' => [
+                        'id' => 987,
+                        'version' => 1,
+                        'opposerType' => 'otf_obj',
+                        'contactDetailsDescription' => 'desc',
+                        'licenceOperatingCentres' => [800, 801],
+                    ],
+                    'contact' => [
+                        'emailAddress' => 'test@test.me',
+                        'phone_primary' => 'pn1',
+                        'phone_primary_id' => 301,
+                        'phone_primary_version' => 1,
+                        'phone_secondary' => 'pn2',
+                        'phone_secondary_id' => 303,
+                        'phone_secondary_version' => 3,
+                    ],
+                    'person' => [
+                        'forename' => 'forename'
+                    ],
+                    'address' => [
+                        'addressLine1' => 'a1',
+                    ],
+                ],
+                [
+                    'id' => 987,
+                    'version' => 1,
+                    'opposerType' => 'otf_obj',
+                    'contactDetailsDescription' => 'desc',
+                    'licenceOperatingCentres' => [800, 801],
                     'opposerContactDetails' => [
                         'description' => 'desc',
                         'address' => [
