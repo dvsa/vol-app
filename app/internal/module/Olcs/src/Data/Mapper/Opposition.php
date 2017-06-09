@@ -104,17 +104,11 @@ class Opposition implements MapperInterface
         // set operatingCentres
         $commandData['operatingCentres'] = [];
 
-        if (
-            isset($commandData['applicationOperatingCentres']) &&
-            !empty($commandData['applicationOperatingCentres'])
-        ) {
+        if (!empty($commandData['applicationOperatingCentres'])) {
             $commandData['operatingCentres'] = $commandData['applicationOperatingCentres'];
         }
 
-        if (
-            isset($commandData['licenceOperatingCentres']) &&
-            !empty($commandData['licenceOperatingCentres'])
-        ) {
+        if (!empty($commandData['licenceOperatingCentres'])) {
             $commandData['operatingCentres'] = $commandData['licenceOperatingCentres'];
         }
 
