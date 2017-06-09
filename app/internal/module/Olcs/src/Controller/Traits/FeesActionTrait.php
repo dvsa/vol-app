@@ -1022,7 +1022,7 @@ trait FeesActionTrait
         if ($form) {
             $form->get('fee-details')->get('id')->setValue($fee['id']);
             $form->get('fee-details')->get('version')->setValue($fee['version']);
-            if (isset($fee['waiveReason'])) {
+            if (isset($fee['waiveReason']) && $form->get('fee-details')->has('waiveReason')) {
                 $form->get('fee-details')->get('waiveReason')->setValue($fee['waiveReason']);
             }
         }
