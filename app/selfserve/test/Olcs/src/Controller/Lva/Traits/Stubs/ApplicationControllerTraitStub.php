@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Application Controller Trait Stub
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace OlcsTest\Controller\Lva\Traits\Stubs;
 
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
