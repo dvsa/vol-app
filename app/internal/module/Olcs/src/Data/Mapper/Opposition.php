@@ -77,6 +77,7 @@ class Opposition implements MapperInterface
      * Should map form data back into a command data structure
      *
      * @param array $data
+     *
      * @return array
      */
     public static function mapFromForm(array $data)
@@ -99,9 +100,21 @@ class Opposition implements MapperInterface
         $commandData['opposerContactDetails'] = $opposerContactDetails;
 
         // set operatingCentres
-        $commandData['operatingCentres']
-            = isset($commandData['applicationOperatingCentres']) ?
-                $commandData['applicationOperatingCentres'] : $commandData['licenceOperatingCentres'];
+        $commandData['operatingCentres'] = [];
+
+        if (
+            isset($commandData['applicationOperatingCentres']) &&
+            !empty($commandData['applicationOperatingCentres'])
+        ) {
+            $commandData['operatingCentres'] = $commandData['applicationOperatingCentres'];
+        }
+
+        if (
+            isset($commandData['applicationOperatingCentres']) &&
+            !empty($commandData['licenceOperatingCentres'])
+        ) {
+            $commandData['operatingCentres'] = $commandData['licenceOperatingCentres'];
+        }
 
         return $commandData;
     }
@@ -112,6 +125,7 @@ class Opposition implements MapperInterface
      *
      * @param FormInterface $form
      * @param array $errors
+     *
      * @return array
      */
     public static function mapFromErrors(FormInterface $form, array $errors)
