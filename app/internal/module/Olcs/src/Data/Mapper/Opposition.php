@@ -17,7 +17,9 @@ class Opposition implements MapperInterface
     /**
      * Should map data from a result array into an array suitable for a form
      *
-     * @param array $data
+     * @param array $data Data from API
+     *
+     * @return array
      */
     public static function mapFromResult(array $data)
     {
@@ -76,7 +78,7 @@ class Opposition implements MapperInterface
     /**
      * Should map form data back into a command data structure
      *
-     * @param array $data
+     * @param array $data Data from api
      *
      * @return array
      */
@@ -110,7 +112,7 @@ class Opposition implements MapperInterface
         }
 
         if (
-            isset($commandData['applicationOperatingCentres']) &&
+            isset($commandData['licenceOperatingCentres']) &&
             !empty($commandData['licenceOperatingCentres'])
         ) {
             $commandData['operatingCentres'] = $commandData['licenceOperatingCentres'];
@@ -123,8 +125,8 @@ class Opposition implements MapperInterface
      * Should map errors onto the form, any global errors should be returned so they can be added
      * to the flash messenger
      *
-     * @param FormInterface $form
-     * @param array $errors
+     * @param FormInterface $form   Form
+     * @param array         $errors Errors from form validation
      *
      * @return array
      */
