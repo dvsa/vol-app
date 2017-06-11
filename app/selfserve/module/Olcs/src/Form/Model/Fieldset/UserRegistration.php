@@ -74,12 +74,13 @@ class UserRegistration
     public $isLicenceHolder;
 
     /**
+     * @Form\Required(true)
      * @Form\Type("Text")
      * @Form\Options({
      *     "label": "user-registration.field.licenceNumber.label",
      * })
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isLicenceHolder",
@@ -93,10 +94,11 @@ class UserRegistration
     public $licenceNumber = null;
 
     /**
+     * @Form\Required(true)
      * @Form\Type("Text")
      * @Form\Attributes({"class":"medium"})
      * @Form\Options({"label":"user-registration.field.organisationName.label"})
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
@@ -111,8 +113,8 @@ class UserRegistration
     public $organisationName = null;
 
     /**
+     * @Form\Required(true)
      * @Form\Type("DynamicRadio")
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Options({
      *     "fieldset-attributes": {"id": "businessType"},
      *     "label": "user-registration.field.businessType.label",
@@ -121,6 +123,7 @@ class UserRegistration
      *     "category": "org_type",
      *     "exclude": {"org_t_ir"}
      * })
+     * @Form\Validator({"name": "Zend\Validator\NotEmpty", "options": {"string"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isLicenceHolder",

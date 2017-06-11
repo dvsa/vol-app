@@ -20,11 +20,15 @@ class UserRegistrationController extends AbstractController
             ->createFormWithRequest('UserRegistration', $this->getRequest());
 
         if ($this->getRequest()->isPost()) {
+            $postData = $this->formatPostData(
+                $this->params()->fromPost()
+            );
+
             if ($this->isButtonPressed('cancel')) {
                 return $this->redirectToHome();
             }
 
-            $form->setData($this->params()->fromPost());
+            $form->setData($postData);
 
             if ($form->isValid()) {
                 return $this->processUserRegistration($form->getData());
@@ -245,6 +249,24 @@ class UserRegistrationController extends AbstractController
         }
 
         return $output;
+    }
+
+    /**
+     * A radio button is used and validated only if a checkbox is selected.
+     * As browsers by default do not post the value or default value of a radio
+     * button.  We specify an empty input for this field.
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    private function formatPostData(array $postData)
+    {
+        if (!isset($postData['fields']['businessType'])) {
+            $postData['fields']['businessType'] = null;
+        }
+
+        return $postData;
     }
 
     /**
