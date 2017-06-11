@@ -19,7 +19,7 @@ class UserRegistrationTest extends AbstractFormValidationTestCase
     public function testLoginId()
     {
         $element = ['fields', 'loginId'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementUsername($element);
     }
@@ -27,7 +27,7 @@ class UserRegistrationTest extends AbstractFormValidationTestCase
     public function testForename()
     {
         $element = ['fields', 'forename'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementText($element, 0, 35);
     }
@@ -35,7 +35,7 @@ class UserRegistrationTest extends AbstractFormValidationTestCase
     public function testFamilyName()
     {
         $element = ['fields', 'familyName'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementText($element, 0, 35);
     }
@@ -43,7 +43,7 @@ class UserRegistrationTest extends AbstractFormValidationTestCase
     public function testEmailAddress()
     {
         $element = ['fields', 'emailAddress'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
 
         $this->assertFormElementValid(
@@ -73,7 +73,7 @@ class UserRegistrationTest extends AbstractFormValidationTestCase
     public function testEmailConfirm()
     {
         $element = ['fields', 'emailConfirm'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementText($element);
     }
@@ -81,7 +81,7 @@ class UserRegistrationTest extends AbstractFormValidationTestCase
     public function testIsLicenceHolder()
     {
         $element = ['fields', 'isLicenceHolder'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementValid($element, 'N');
         $this->assertFormElementValid($element, 'Y');
@@ -90,7 +90,7 @@ class UserRegistrationTest extends AbstractFormValidationTestCase
     public function testLicenceNumber()
     {
         $element = ['fields', 'licenceNumber'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element);
 
@@ -100,7 +100,7 @@ class UserRegistrationTest extends AbstractFormValidationTestCase
     public function testOrganisationName()
     {
         $element = ['fields', 'organisationName'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element);
 
@@ -110,8 +110,8 @@ class UserRegistrationTest extends AbstractFormValidationTestCase
     public function testBusinessType()
     {
         $element = ['fields', 'businessType'];
-        $this->assertFormElementRequired($element, false);
-        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementIsRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementDynamicRadio($element, false);
 
         $this->assertFormElementAllowEmpty($element, false, ['fields' => ['isLicenceHolder' => 'N']]);
@@ -120,7 +120,7 @@ class UserRegistrationTest extends AbstractFormValidationTestCase
     public function testTranslateToWelsh()
     {
         $element = ['fields', 'translateToWelsh'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementCheckbox($element);
     }
@@ -128,7 +128,7 @@ class UserRegistrationTest extends AbstractFormValidationTestCase
     public function testTermsAgreed()
     {
         $element = ['fields', 'termsAgreed'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementValid($element, 'Y');
         $this->assertFormElementNotValid($element, 'N', \Zend\Validator\Identical::NOT_SAME);

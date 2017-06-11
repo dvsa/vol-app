@@ -266,17 +266,31 @@ class UserRegistrationControllerTest extends TestCase
             ]
         ];
 
+        $formattedPostData = [
+            'fields' => [
+                'loginId' => 'stevefox',
+                'emailAddress' => 'steve@example.com',
+                'emailConfirm' => 'steve@example.com',
+                'familyName' => 'Fox',
+                'forename' => 'Steve',
+                'isLicenceHolder' => 'Y',
+                'licenceNumber' => 'licNo',
+                'translateToWelsh' => 'Y',
+                'businessType' => null,
+            ]
+        ];
+
         $mockRequest = m::mock();
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
         $mockForm = m::mock('Common\Form\Form');
-        $mockForm->shouldReceive('setData')->once()->with($postData);
+        $mockForm->shouldReceive('setData')->once()->with($formattedPostData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
-        $mockForm->shouldReceive('getData')->once()->andReturn($postData);
+        $mockForm->shouldReceive('getData')->once()->andReturn($formattedPostData);
 
         $mockFormAddress = m::mock('Common\Form\Form');
-        $mockFormAddress->shouldReceive('setData')->once()->with($postData);
+        $mockFormAddress->shouldReceive('setData')->once()->with($formattedPostData);
 
         $mockFormHelper = m::mock();
         $mockFormHelper
@@ -338,6 +352,20 @@ class UserRegistrationControllerTest extends TestCase
             ]
         ];
 
+        $formattedPostData = [
+            'fields' => [
+                'loginId' => 'stevefox',
+                'emailAddress' => 'steve@example.com',
+                'emailConfirm' => 'steve@example.com',
+                'familyName' => 'Fox',
+                'forename' => 'Steve',
+                'isLicenceHolder' => 'Y',
+                'licenceNumber' => 'licNo',
+                'translateToWelsh' => 'Y',
+                'businessType' => null,
+            ]
+        ];
+
         $mockRequest = m::mock();
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
@@ -346,9 +374,9 @@ class UserRegistrationControllerTest extends TestCase
         $termsAgreedElement->setLabel('termsAgreedLabel');
 
         $mockForm = m::mock('Common\Form\Form');
-        $mockForm->shouldReceive('setData')->twice()->with($postData);
+        $mockForm->shouldReceive('setData')->twice()->with($formattedPostData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
-        $mockForm->shouldReceive('getData')->once()->andReturn($postData);
+        $mockForm->shouldReceive('getData')->once()->andReturn($formattedPostData);
         $mockForm->shouldReceive('setMessages')->once()->with(m::type('array'));
         $mockForm->shouldReceive('get')->once()->with('fields')->andReturnSelf();
         $mockForm->shouldReceive('get')->once()->with('termsAgreed')->andReturn($termsAgreedElement);
@@ -416,14 +444,28 @@ class UserRegistrationControllerTest extends TestCase
             ]
         ];
 
+        $formattedPostData = [
+            'fields' => [
+                'loginId' => 'stevefox',
+                'emailAddress' => 'steve@example.com',
+                'emailConfirm' => 'steve@example.com',
+                'familyName' => 'Fox',
+                'forename' => 'Steve',
+                'isLicenceHolder' => 'Y',
+                'licenceNumber' => 'licNo',
+                'translateToWelsh' => 'Y',
+                'businessType' => null,
+            ]
+        ];
+
         $mockRequest = m::mock();
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
         $mockForm = m::mock('Common\Form\Form');
-        $mockForm->shouldReceive('setData')->once()->with($postData);
+        $mockForm->shouldReceive('setData')->once()->with($formattedPostData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
-        $mockForm->shouldReceive('getData')->once()->andReturn($postData);
+        $mockForm->shouldReceive('getData')->once()->andReturn($formattedPostData);
 
         $mockFormHelper = m::mock();
         $mockFormHelper
@@ -471,6 +513,20 @@ class UserRegistrationControllerTest extends TestCase
             ]
         ];
 
+        $formattedPostData = [
+            'fields' => [
+                'loginId' => 'stevefox',
+                'emailAddress' => 'steve@example.com',
+                'emailConfirm' => 'steve@example.com',
+                'familyName' => 'Fox',
+                'forename' => 'Steve',
+                'isLicenceHolder' => 'Y',
+                'licenceNumber' => 'licNo',
+                'translateToWelsh' => 'Y',
+                'businessType' => null,
+            ]
+        ];
+
         $mockRequest = m::mock();
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
@@ -479,9 +535,9 @@ class UserRegistrationControllerTest extends TestCase
         $termsAgreedElement->setLabel('termsAgreedLabel');
 
         $mockForm = m::mock('Common\Form\Form');
-        $mockForm->shouldReceive('setData')->twice()->with($postData);
+        $mockForm->shouldReceive('setData')->twice()->with($formattedPostData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
-        $mockForm->shouldReceive('getData')->once()->andReturn($postData);
+        $mockForm->shouldReceive('getData')->once()->andReturn($formattedPostData);
         $mockForm->shouldReceive('setMessages')->once()->with(m::type('array'));
         $mockForm->shouldReceive('get')->once()->with('fields')->andReturnSelf();
         $mockForm->shouldReceive('get')->once()->with('termsAgreed')->andReturn($termsAgreedElement);
