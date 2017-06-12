@@ -43,6 +43,9 @@ $(function() {
       case 16: // Turkey Multi Journey x 4
       case 18: // Turkey Single Journey
       case 19: // Turkey 3rd Country Non-Transit
+      case 20: // Serbia
+      case 21: // Morocco Hors contingent
+      case 22: // Morocco empty entry
         if (!isNaN(yearRequired)) {
           // end of the required year
           calculated = '31/12/' + yearRequired;

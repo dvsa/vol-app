@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Operator Irfo Gv Permits Controller
- */
 namespace Olcs\Controller\Operator;
 
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoGvPermit as CreateDto;
@@ -108,7 +105,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * not found action
      *
-     * @return Zend/Http/Response
+     * @return array
      */
     public function editAction()
     {
@@ -118,7 +115,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * not found action
      *
-     * @return Zend/Http/Response
+     * @return array
      */
     public function deleteAction()
     {
@@ -128,7 +125,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * reset action
      *
-     * @return Zend/Http/Response
+     * @return \Zend\Http\Response
      */
     public function resetAction()
     {
@@ -138,7 +135,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * approve action
      *
-     * @return Zend/Http/Response
+     * @return \Zend\Http\Response
      */
     public function approveAction()
     {
@@ -148,7 +145,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * withdraw action
      *
-     * @return Zend/Http/Response
+     * @return \Zend\Http\Response
      */
     public function withdrawAction()
     {
@@ -158,7 +155,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * refuse action
      *
-     * @return Zend/Http/Response
+     * @return \Zend\Http\Response
      */
     public function refuseAction()
     {
@@ -168,7 +165,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * generate action
      *
-     * @return Zend/Http/Response
+     * @return \Zend\Http\Response
      */
     public function generateAction()
     {
