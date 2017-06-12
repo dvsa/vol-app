@@ -6,7 +6,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("search")
- * @Form\Attributes({"method":"post", "action": "/search"})
+ * @Form\Attributes({"method":"GET", "action": "/search"})
  * @Form\Hydrator("Zend\Stdlib\Hydrator\ArraySerializable")
  */
 class HeaderSearch

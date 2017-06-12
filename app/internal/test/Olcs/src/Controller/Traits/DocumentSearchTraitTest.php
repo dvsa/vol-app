@@ -147,13 +147,13 @@ class DocumentSearchTraitTest extends MockeryTestCase
         $mockFormatSelect->shouldReceive('setValueOptions')->with(['' => 'All', 'RTF' => 'RTF', 'D' => 'D'])->once();
 
         $mockForm = m::mock(\Zend\Form\FormInterface::class)->makePartial()
-            ->shouldReceive('remove')->once()->with('csrf')
             ->shouldReceive('setData')->once()->with($filters)
             ->shouldReceive('get')->once()->with('showDocs')->andReturn($mockField)
             ->shouldReceive('get')->once()->with('format')->andReturn($mockFormatSelect)
             ->getMock();
 
         $mockFormHelper = m::mock(\Common\Service\Helper\FormHelperService::class)->makePartial()
+            ->shouldReceive('createForm')->once()->with('DocumentsHome', false)->andReturn($mockForm)
             ->shouldReceive('setFormActionFromRequest')->once()->with($mockForm, $mockRequest)
             ->getMock();
 
@@ -176,8 +176,7 @@ class DocumentSearchTraitTest extends MockeryTestCase
         $this->sut
             ->shouldReceive('getRequest')->once()->andReturn($mockRequest)
             ->shouldReceive('getServiceLocator')->once()->andReturn($mockSm)
-            ->shouldReceive('handleQuery')->once()->andReturn($mockDocumentListResponse)
-            ->shouldReceive('getForm')->once()->andReturn($mockForm);
+            ->shouldReceive('handleQuery')->once()->andReturn($mockDocumentListResponse);
 
         $this->sut->traitGetDocumentForm($filters);
     }

@@ -1,11 +1,10 @@
 <div class="search">
     <div class="search__wrapper">
         <?php
-        {
             $searchForm = $this->placeholder('headerSearch')->getValue();
             if (!empty($searchForm)):
                 ?>
-                <form action="<?php echo $this->url('search')?>" method="POST">
+                <form action="<?php echo $this->url('search')?>" method="GET">
                     <div class="search__select">
                         <?php echo $this->formSelect($searchForm->get('index')); ?>
                     </div>
@@ -14,7 +13,6 @@
                 </form>
             <?php
             endif;
-        }
         ?>
     </div>
 </div><!--  search -->

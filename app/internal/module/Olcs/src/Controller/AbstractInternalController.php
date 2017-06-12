@@ -445,10 +445,10 @@ abstract class AbstractInternalController extends AbstractActionController
         }
 
         if ($filterForm !== '') {
-            /* @var \Zend\Form\Form $form */
-            $form = $this->getForm($filterForm);
-            $form->remove('csrf');
-            $form->remove('security');
+            /** @var \Common\Service\Helper\FormHelperService $formHelper */
+            $formHelper = $this->getServiceLocator()->get('Helper\Form');
+            $form = $formHelper->createForm($filterForm, false);
+
             $form->setData($this->params()->fromQuery());
             $this->placeholder()->setPlaceholder('tableFilters', $form);
         }

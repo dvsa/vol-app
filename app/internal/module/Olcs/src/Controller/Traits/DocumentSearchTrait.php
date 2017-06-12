@@ -72,9 +72,11 @@ trait DocumentSearchTrait
         /** @var \Zend\Di\ServiceLocator $sm */
         $sm = $this->getServiceLocator();
 
-        /** @var \Zend\Form\FormInterface $form */
-        $form = $this->getForm('DocumentsHome');
-        $sm->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
+        /** @var \Common\Service\Helper\FormHelperService $formHelper */
+        $formHelper = $sm->get('Helper\Form');
+
+        $form = $formHelper->createForm('DocumentsHome', false);
+        $formHelper->setFormActionFromRequest($form, $this->getRequest());
 
         $category = (isset($filters['category'])) ? (int) $filters['category'] : null;
 
@@ -97,9 +99,7 @@ trait DocumentSearchTrait
         $formatSelectElement = $form->get('format');
         $formatSelectElement->setValueOptions(array_merge(['' => 'All'], $this->getDocumentsExtensionList($filters)));
 
-        // setting $this->enableCsrf = false won't sort this; we never POST
-        $form->remove('csrf');
-
+        //  set data
         $form->setData($filters);
 
         return $form;

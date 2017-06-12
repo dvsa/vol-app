@@ -2,16 +2,15 @@
 
 namespace OlcsTest\Listener;
 
-use Common\Service\Data\Search\Search;
-use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Form\Element\SearchDateRangeFieldset;
+use Olcs\Form\Element\SearchFilterFieldset;
 use Olcs\Form\Element\SearchOrderFieldset;
+use Olcs\Form\Model\Form;
 use Olcs\Listener\HeaderSearch;
 use Zend\Mvc\MvcEvent;
-use \Common\Form\Annotation\CustomAnnotationBuilder;
 use Zend\View\Helper\Placeholder;
-use Olcs\Form\Element\SearchFilterFieldset;
 
 /**
  * Class HeaderSearchTest
@@ -19,19 +18,42 @@ use Olcs\Form\Element\SearchFilterFieldset;
  */
 class HeaderSearchTest extends TestCase
 {
-    /**
-     * @var \Olcs\Listener\HeaderSearch
-     */
+    /** @var \Olcs\Listener\HeaderSearch */
     protected $sut;
+
+    /** @var  m\MockInterface */
+    private $mockFormHlp;
+    /** @var  m\MockInterface | \Zend\ServiceManager\ServiceLocatorInterface */
+    private $mockSm;
+    /** @var  \Common\Service\Data\Search\Search | m\MockInterface  */
+    private $mockSearchSrv;
+    /** @var  \Zend\Form\FormElementManager | m\MockInterface  */
+    private $mockFormElmMngr;
+    /** @var  \Zend\View\HelperPluginManager | m\MockInterface  */
+    private $mockViewHlprMngr;
 
     public function setUp()
     {
+        $this->mockFormHlp = m::mock(\Common\Service\Helper\FormHelperService::class);
+        $this->mockSearchSrv = m::mock(\Common\Service\Data\Search\Search::class);
+        $this->mockFormElmMngr = m::mock(\Zend\Form\FormElementManager::class);
+        $this->mockViewHlprMngr = m::mock(\Zend\View\HelperPluginManager::class);
+
+        $this->mockSm = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $this->mockSm
+            ->shouldReceive('get')->with('DataServiceManager')->andReturnSelf()
+            ->shouldReceive('get')->with('Helper\Form')->andReturn($this->mockFormHlp)
+            ->shouldReceive('get')->with(\Common\Service\Data\Search\Search::class)->andReturn($this->mockSearchSrv)
+            ->shouldReceive('get')->with('FormElementManager')->andReturn($this->mockFormElmMngr)
+            ->shouldReceive('get')->with('ViewHelperManager')->andReturn($this->mockViewHlprMngr);
+
         $this->sut = new HeaderSearch();
     }
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
+        /** @var \Zend\EventManager\EventManagerInterface | m\MockInterface $mockEventManager */
+        $mockEventManager = m::mock(\Zend\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
             ->with(MvcEvent::EVENT_DISPATCH, [$this->sut, 'onDispatch'], 20);
 
@@ -43,79 +65,61 @@ class HeaderSearchTest extends TestCase
         $index = 'licence';
 
         $params = ['test' => 'value'];
-        $mockFab = m::mock('\Common\Form\Annotation\CustomAnnotationBuilder');
+
         $mockForm = new \Zend\Form\Form();
 
-        $mockSearchService = m::mock(Search::class);
-        $mockSearchService->shouldReceive('setIndex')->with($index);
-        $mockSearchService->shouldReceive('getFilters')->with([]);
-        $this->sut->setSearchService($mockSearchService);
-
-        $formElementManager = m::mock('\Zend\Form\FormElementManager');
+        $this->mockSearchSrv
+            ->shouldReceive('setIndex')->with($index)
+            ->shouldReceive('getFilters')->with([]);
 
         $sff = new SearchFilterFieldset;
         $sff->setName('filter');
-        $sff->setSearchService($mockSearchService);
-        $formElementManager->shouldReceive('get')
+        $sff->setSearchService($this->mockSearchSrv);
+        $this->mockFormElmMngr->shouldReceive('get')
             ->with('SearchFilterFieldset', ['index' => $index, 'name' => 'filter'])
             ->andReturn($sff);
 
         $srf = new SearchDateRangeFieldset;
         $srf->setName('dateRanges');
-        $srf->setSearchService($mockSearchService);
-        $formElementManager->shouldReceive('get')
+        $srf->setSearchService($this->mockSearchSrv);
+        $this->mockFormElmMngr->shouldReceive('get')
             ->with('SearchDateRangeFieldset', ['index' => $index, 'name' => 'dateRanges'])
             ->andReturn($srf);
 
         $sof = new SearchOrderFieldset;
         $sof->setName('sort');
-        $sof->setSearchService($mockSearchService);
-        $formElementManager->shouldReceive('get')
+        $sof->setSearchService($this->mockSearchSrv);
+        $this->mockFormElmMngr->shouldReceive('get')
             ->with(SearchOrderFieldset::class, ['index' => $index, 'name' => 'sort'])
             ->andReturn($sof);
 
-        $this->sut->setFormElementManager($formElementManager);
-
-        $mockFab->shouldReceive('createForm')->with('Olcs\\Form\\Model\\Form\\HeaderSearch')->andReturn($mockForm);
-        $this->sut->setFormAnnotationBuilder($mockFab);
-        $mockFab->shouldReceive('createForm')->with('Olcs\\Form\\Model\\Form\\SearchFilter')->andReturn($mockForm);
-        $this->sut->setFormAnnotationBuilder($mockFab);
+        $this->mockFormHlp
+            ->shouldReceive('createForm')->with(Form\HeaderSearch::class, false)->andReturn($mockForm)
+            ->shouldReceive('createForm')->with(Form\SearchFilter::class, false)->andReturn($mockForm);
 
         $placeholder = new Placeholder();
         $placeholder->getContainer('headerSearch')->set('foobar');
 
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
-        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($placeholder);
-        $this->sut->setViewHelperManager($mockViewHelperManager);
+        $this->mockViewHlprMngr->shouldReceive('get')->with('placeholder')->andReturn($placeholder);
 
-        $mockEvent = m::mock('Zend\Mvc\MvcEvent');
+        /** @var \Zend\Mvc\MvcEvent | m\MockInterface $mockEvent */
+        $mockEvent = m::mock(\Zend\Mvc\MvcEvent::class);
         $mockEvent->shouldReceive('getRouteMatch')->andReturnSelf();
         $mockEvent->shouldReceive('getParams')->andReturn($params);
         $mockEvent->shouldReceive('getParam')->with('index')->andReturn($index);
 
+        $this->sut->createService($this->mockSm);
         $this->sut->onDispatch($mockEvent);
     }
 
     public function testCreateService()
     {
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
-        $formAnnotationBuilder = new \Common\Form\Annotation\CustomAnnotationBuilder();
-        $mockSearchService = m::mock(Search::class);
-        $formElementManager = m::mock('\Zend\Form\FormElementManager');
-
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')->with(Search::class)->andReturn($mockSearchService);
-        $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
-        $mockSl->shouldReceive('get')->with('FormAnnotationBuilder')->andReturn($formAnnotationBuilder);
-        $mockSl->shouldReceive('get')->with('FormElementManager')->andReturn($formElementManager);
-
-        $service = $this->sut->createService($mockSl);
+        $service = $this->sut->createService($this->mockSm);
 
         $this->assertSame($this->sut, $service);
-        $this->assertSame($mockViewHelperManager, $this->sut->getViewHelperManager());
-        $this->assertSame($formAnnotationBuilder, $this->sut->getFormAnnotationBuilder());
-
+        $this->assertSame($this->mockViewHlprMngr, $this->sut->getViewHelperManager());
+        $this->assertSame($this->mockSearchSrv, $this->sut->getSearchService());
+        $this->assertSame($this->mockFormElmMngr, $this->sut->getFormElementManager());
     }
 
     public function testGetViewHelperManager()
@@ -128,19 +132,5 @@ class HeaderSearchTest extends TestCase
     {
         $this->assertSame($this->sut->setViewHelperManager('foo'), $this->sut);
         $this->assertEquals('foo', $this->sut->getViewHelperManager());
-    }
-
-    public function testGetFormAnnotationBuilder()
-    {
-        $fab = new CustomAnnotationBuilder();
-        $this->sut->setFormAnnotationBuilder($fab);
-        $this->assertEquals($fab, $this->sut->getFormAnnotationBuilder());
-    }
-
-    public function testSetFormAnnotationBuilder()
-    {
-        $fab = new CustomAnnotationBuilder();
-        $this->assertSame($this->sut->setFormAnnotationBuilder($fab), $this->sut);
-        $this->assertEquals($fab, $this->sut->getFormAnnotationBuilder());
     }
 }
