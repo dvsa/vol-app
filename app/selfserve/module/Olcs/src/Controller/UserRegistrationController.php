@@ -13,6 +13,11 @@ use Zend\View\Model\ViewModel;
  */
 class UserRegistrationController extends AbstractController
 {
+    /**
+     * Method used for the registration form page
+     *
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function addAction()
     {
         /** @var \Common\Form\Form $form */
@@ -24,7 +29,11 @@ class UserRegistrationController extends AbstractController
                 return $this->redirectToHome();
             }
 
-            $form->setData($this->params()->fromPost());
+            $postData = $this->formatPostData(
+                $this->params()->fromPost()
+            );
+
+            $form->setData($postData);
 
             if ($form->isValid()) {
                 return $this->processUserRegistration($form->getData());
@@ -44,6 +53,13 @@ class UserRegistrationController extends AbstractController
         return $view;
     }
 
+    /**
+     * Alter form
+     *
+     * @param Form $form Form from form helper
+     *
+     * @return Form
+     */
     protected function alterForm(Form $form)
     {
         // inject link into terms agreed label
@@ -61,6 +77,14 @@ class UserRegistrationController extends AbstractController
         return $form;
     }
 
+    /**
+     * Generate content for user registration
+     *
+     * @param array $formData Form data
+     * @param array $errors   Errors from ZF Validation Chain
+     *
+     * @return ViewModel
+     */
     private function generateContentForUserRegistration(array $formData = [], array $errors = [])
     {
         /** @var \Common\Form\Form $form */
@@ -92,6 +116,13 @@ class UserRegistrationController extends AbstractController
         return $view;
     }
 
+    /**
+     * Process user registration form data
+     *
+     * @param array $formData Posted form data
+     *
+     * @return null|ViewModel
+     */
     private function processUserRegistration($formData)
     {
         if ($this->isButtonPressed('postAccount')) {
@@ -106,6 +137,13 @@ class UserRegistrationController extends AbstractController
         }
     }
 
+    /**
+     * Show licence
+     *
+     * @param array $formData Posted form data
+     *
+     * @return ViewModel
+     */
     private function showLicence($formData)
     {
         $response = $this->handleQuery(
@@ -159,6 +197,13 @@ class UserRegistrationController extends AbstractController
         return $this->generateContentForUserRegistration($formData, $errors);
     }
 
+    /**
+     * Create user with licence
+     *
+     * @param array $formData Posted form data
+     *
+     * @return ViewModel
+     */
     private function createUserWithLic($formData)
     {
         $hasProcessed = $this->createUser($formData);
@@ -175,6 +220,13 @@ class UserRegistrationController extends AbstractController
         return $content;
     }
 
+    /**
+     * Create user with organisation
+     *
+     * @param array $formData Posted form data
+     *
+     * @return null|ViewModel
+     */
     private function createUserWithOrg($formData)
     {
         $hasProcessed = $this->createUser($formData);
@@ -195,6 +247,13 @@ class UserRegistrationController extends AbstractController
         return $content;
     }
 
+    /**
+     * Create user from registration form
+     *
+     * @param array $formData Posted form data
+     *
+     * @return null|ViewModel
+     */
     private function createUser($formData)
     {
         $data = $this->formatSaveData($formData);
@@ -225,7 +284,8 @@ class UserRegistrationController extends AbstractController
      * Formats the data from what's in the form to what the service needs.
      * This is mapping, not business logic.
      *
-     * @param $data
+     * @param array $data Posted form data
+     *
      * @return array
      */
     private function formatSaveData($data)
@@ -248,7 +308,27 @@ class UserRegistrationController extends AbstractController
     }
 
     /**
+     * A radio button is used and validated only if a checkbox is selected.
+     * As browsers by default do not post the value or default value of a radio
+     * button.  We specify an empty input for this field.
+     *
+     * @param array $postData Data from posted form
+     *
+     * @return array
+     */
+    private function formatPostData(array $postData)
+    {
+        if (!isset($postData['fields']['businessType'])) {
+            $postData['fields']['businessType'] = null;
+        }
+
+        return $postData;
+    }
+
+    /**
      * Redirects to home
+     *
+     * @return \Zend\Http\Response
      */
     private function redirectToHome()
     {
