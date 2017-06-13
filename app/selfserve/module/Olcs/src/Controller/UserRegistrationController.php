@@ -318,7 +318,7 @@ class UserRegistrationController extends AbstractController
      */
     private function formatPostData(array $postData)
     {
-        if (!isset($postData['fields']['businessType'])) {
+        if (empty($postData['fields']['businessType'])) {
             $postData['fields']['businessType'] = null;
         }
 
