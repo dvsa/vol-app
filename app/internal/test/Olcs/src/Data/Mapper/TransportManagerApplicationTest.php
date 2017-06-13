@@ -1,4 +1,5 @@
 <?php
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -6,7 +7,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\TransportManagerApplication as Sut;
 
 /**
- * Transport manager application mapper test
+ * @covers \Olcs\Data\Mapper\TransportManagerApplication
  */
 class TransportManagerApplicationTest extends MockeryTestCase
 {
@@ -24,10 +25,6 @@ class TransportManagerApplicationTest extends MockeryTestCase
     public function testMapFromResult()
     {
         $data = [
-            'operatingCentres' => [
-                ['id' => 1],
-                ['id' => 2]
-            ],
             'tmType' => ['id' => 3],
             'tmApplicationStatus' => ['id' => 4],
             'id' => 5,
@@ -46,7 +43,6 @@ class TransportManagerApplicationTest extends MockeryTestCase
         ];
         $expected = [
             'details' => [
-                'operatingCentres' => [1, 2],
                 'tmType' => ['id' => 3],
                 'tmApplicationStatus' => 4,
                 'id' => 5,
@@ -90,7 +86,6 @@ class TransportManagerApplicationTest extends MockeryTestCase
                         'hoursSun' => 7
                     ]
                 ],
-                'operatingCentres' => 'oc',
                 'tmApplicationStatus' => 'as',
                 'isOwner' => 1
             ]
@@ -107,7 +102,6 @@ class TransportManagerApplicationTest extends MockeryTestCase
             'hoursFri' => 5,
             'hoursSat' => 6,
             'hoursSun' => 7,
-            'operatingCentres' => 'oc',
             'tmApplicationStatus' => 'as',
             'isOwner' => 1
         ];
@@ -120,7 +114,6 @@ class TransportManagerApplicationTest extends MockeryTestCase
             'details' => [
                 'tmType' => [['isEmpty' => 'tmType']],
                 'additionalInformation' => [['isEmpty' => 'additionalInformation']],
-                'operatingCentres' => [['isEmpty' => 'operatingCentres']],
             ],
             'hoursOfWeek' => [
                 'hoursPerWeekContent' => [
@@ -135,7 +128,7 @@ class TransportManagerApplicationTest extends MockeryTestCase
             ]
         ];
 
-        $mockForm = m::mock()
+        $mockForm = m::mock(\Common\Form\Form::class)
             ->shouldReceive('setMessages')
             ->with($formMessages)
             ->once()
@@ -147,9 +140,6 @@ class TransportManagerApplicationTest extends MockeryTestCase
             ],
             'additionalInformation' => [
                 'isEmpty' => 'additionalInformation'
-            ],
-            'operatingCentres' => [
-                'isEmpty' => 'operatingCentres'
             ],
             'hoursMon' => [
                 'isEmpty' => 'hoursMon'

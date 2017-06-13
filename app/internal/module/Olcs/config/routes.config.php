@@ -11,6 +11,7 @@ use Olcs\Controller\Bus\Details\BusDetailsController;
 use Olcs\Controller\Bus\Service\BusServiceController;
 use Olcs\Controller\SearchController;
 use Zend\Mvc\Router\Http\Segment;
+use Olcs\Controller\TransportManager as TmCntr;
 
 $feeActionRoute = [
     // child route config that is used in multiple places
@@ -1307,7 +1308,7 @@ $routes = [
                         'options' => [
                             'route' => 'responsibilities[/:action[/:id][/title/:title]][/]',
                             'defaults' => [
-                                'controller' => 'TMDetailsResponsibilityController',
+                                'controller' => TmCntr\Details\TransportManagerDetailsResponsibilityController::class,
                                 'action' => 'index',
                                 'title' => 0
                             ]

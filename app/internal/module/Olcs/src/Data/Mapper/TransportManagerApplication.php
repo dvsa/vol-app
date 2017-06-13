@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Transport Manager Application mapper
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Data\Mapper;
 
 /**
@@ -14,18 +9,27 @@ namespace Olcs\Data\Mapper;
  */
 class TransportManagerApplication
 {
+    /**
+     * Map From Result For Table
+     *
+     * @param array $data Api data
+     *
+     * @return array
+     */
     public static function mapFromResultForTable(array $data)
     {
         return isset($data['extra']['tmApplications']) ? $data['extra']['tmApplications'] : [];
     }
 
+    /**
+     * Map From Result
+     *
+     * @param array $data Api data
+     *
+     * @return array
+     */
     public static function mapFromResult(array $data)
     {
-        $operatingCentres = [];
-        foreach ($data['operatingCentres'] as $oc) {
-            $operatingCentres[] = $oc['id'];
-        }
-        $details['operatingCentres'] = $operatingCentres;
         if (isset($data['tmType']['id'])) {
             $details['tmType'] = $data['tmType'];
         }
@@ -51,6 +55,13 @@ class TransportManagerApplication
         ];
     }
 
+    /**
+     * Map From Form
+     *
+     * @param array $data Form POST Data
+     *
+     * @return array
+     */
     public static function mapFromForm(array $data)
     {
         return [
@@ -65,18 +76,24 @@ class TransportManagerApplication
             'hoursFri' => ($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursFri']) ?: null,
             'hoursSat' => ($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursSat']) ?: null,
             'hoursSun' => ($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursSun']) ?: null,
-            'operatingCentres' => $data['details']['operatingCentres'],
             'tmApplicationStatus' => $data['details']['tmApplicationStatus'],
             'isOwner' => $data['details']['isOwner']
         ];
     }
 
-    public static function mapFromErrors($form, array $errors)
+    /**
+     * Mar errors from Api response data
+     *
+     * @param \Common\Form\Form $form   Form
+     * @param array             $errors Api data
+     *
+     * @return array
+     */
+    public static function mapFromErrors(\Common\Form\Form $form, array $errors)
     {
         $details = [
             'tmType',
             'additionalInformation',
-            'operatingCentres',
         ];
         $hours = [
             'hoursMon',

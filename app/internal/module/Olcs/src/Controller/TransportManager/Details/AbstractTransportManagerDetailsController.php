@@ -1,14 +1,11 @@
 <?php
 
-/**
- * Abstract Transport Manager Details Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Controller\TransportManager\Details;
 
 use Olcs\Controller\TransportManager\TransportManagerController;
 use Common\Controller\Traits\GenericUpload;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -16,14 +13,36 @@ use Zend\View\Model\ViewModel;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-abstract class AbstractTransportManagerDetailsController extends TransportManagerController
+abstract class AbstractTransportManagerDetailsController extends TransportManagerController implements FactoryInterface
 {
     use GenericUpload;
+
+    /** @var  \Common\Service\Helper\FormHelperService */
+    protected $formHelper;
+    /** @var  \Common\Service\Helper\TransportManagerHelperService */
+    protected $transportManagerHelper;
+
+    /**
+     * Create service
+     *
+     * @param \Zend\Mvc\Controller\ControllerManager $serviceLocator Service Manager
+     *
+     * @return $this
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $sm = $serviceLocator->getServiceLocator();
+
+        $this->formHelper = $sm->get('Helper\Form');
+        $this->transportManagerHelper = $sm->get('Helper\TransportManager');
+
+        return $this;
+    }
 
     /**
      * Redirect to index
      *
-     * @return Redirect
+     * @return \Zend\Http\Response
      */
     public function redirectToIndex()
     {

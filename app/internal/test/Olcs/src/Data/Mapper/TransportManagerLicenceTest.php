@@ -1,4 +1,5 @@
 <?php
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -6,7 +7,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\TransportManagerLicence as Sut;
 
 /**
- * Transport manager licence mapper test
+ * @covers \Olcs\Data\Mapper\TransportManagerLicence
  */
 class TransportManagerLicenceTest extends MockeryTestCase
 {
@@ -22,10 +23,6 @@ class TransportManagerLicenceTest extends MockeryTestCase
     public function testMapFromResult()
     {
         $data = [
-            'operatingCentres' => [
-                ['id' => 1],
-                ['id' => 2]
-            ],
             'tmType' => ['id' => 3],
             'id' => 5,
             'version' => 6,
@@ -43,7 +40,6 @@ class TransportManagerLicenceTest extends MockeryTestCase
         ];
         $expected = [
             'details' => [
-                'operatingCentres' => [1, 2],
                 'tmType' => ['id' => 3],
                 'id' => 5,
                 'version' => 6,
@@ -91,7 +87,6 @@ class TransportManagerLicenceTest extends MockeryTestCase
                         'hoursSun' => 7
                     ]
                 ],
-                'operatingCentres' => 'oc',
                 'isOwner' => 1
             ]
         ];
@@ -107,7 +102,6 @@ class TransportManagerLicenceTest extends MockeryTestCase
             'hoursFri' => 5,
             'hoursSat' => 6,
             'hoursSun' => 7,
-            'operatingCentres' => 'oc',
             'isOwner' => 1
         ];
         $this->assertEquals($expected, Sut::mapFromForm($data));
@@ -119,7 +113,6 @@ class TransportManagerLicenceTest extends MockeryTestCase
             'details' => [
                 'tmType' => [['isEmpty' => 'tmType']],
                 'additionalInformation' => [['isEmpty' => 'additionalInformation']],
-                'operatingCentres' => [['isEmpty' => 'operatingCentres']],
             ],
             'hoursOfWeek' => [
                 'hoursPerWeekContent' => [
@@ -146,9 +139,6 @@ class TransportManagerLicenceTest extends MockeryTestCase
             ],
             'additionalInformation' => [
                 'isEmpty' => 'additionalInformation'
-            ],
-            'operatingCentres' => [
-                'isEmpty' => 'operatingCentres'
             ],
             'hoursMon' => [
                 'isEmpty' => 'hoursMon'

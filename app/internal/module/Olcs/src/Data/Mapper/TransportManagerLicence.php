@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Transport Manager Licence mapper
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Data\Mapper;
 
 /**
@@ -27,13 +22,6 @@ class TransportManagerLicence
         $details = [];
 
         $result = $data;
-        $operatingCentres = [];
-        if (isset($result['operatingCentres'])) {
-            foreach ($result['operatingCentres'] as $oc) {
-                $operatingCentres[] = $oc['id'];
-            }
-        }
-        $details['operatingCentres'] = $operatingCentres;
         if (isset($result['tmType']['id'])) {
             $details['tmType'] = $result['tmType'];
         }
@@ -70,7 +58,6 @@ class TransportManagerLicence
             'hoursFri' => ($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursFri']) ?: null,
             'hoursSat' => ($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursSat']) ?: null,
             'hoursSun' => ($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursSun']) ?: null,
-            'operatingCentres' => $data['details']['operatingCentres'],
             'isOwner' => $data['details']['isOwner']
         ];
     }
@@ -80,7 +67,6 @@ class TransportManagerLicence
         $details = [
             'tmType',
             'additionalInformation',
-            'operatingCentres',
         ];
         $hours = [
             'hoursMon',

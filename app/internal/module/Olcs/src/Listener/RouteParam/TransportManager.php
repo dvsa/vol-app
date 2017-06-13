@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -135,7 +136,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         $placeholder->getContainer('note')->set($latestNote);
 
         //only show print form link for one controller and action
-        if ($context['controller'] == 'TMDetailsResponsibilityController'
+        if ($context['controller'] == TransportManagerDetailsResponsibilityController::class
              && $context['action'] == 'edit-tm-application'
         ) {
              $this->getSidebarNavigation()

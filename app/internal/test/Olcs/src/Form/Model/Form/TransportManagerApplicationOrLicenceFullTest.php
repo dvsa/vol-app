@@ -86,14 +86,6 @@ class TransportManagerApplicationOrLicenceFullTest extends AbstractFormValidatio
         $this->assertFormElementHidden(['details', 'version']);
     }
 
-    public function testOperatingCentres()
-    {
-        $this->assertFormElementDynamicSelect(
-            ['details', 'operatingCentres'],
-            true
-        );
-    }
-
     public function testTmType()
     {
         $this->assertFormElementDynamicRadio(['details', 'tmType'], false);

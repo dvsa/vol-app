@@ -13,14 +13,12 @@ use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\DeleteForResponsibili
 use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\UpdateForResponsibilities as UpdateTmaDto;
 use Dvsa\Olcs\Transfer\Command\TransportManagerLicence\DeleteForResponsibilities as DeleteTmlDto;
 use Dvsa\Olcs\Transfer\Command\TransportManagerLicence\UpdateForResponsibilities as UpdateTmlDto;
-use Dvsa\Olcs\Transfer\Query\InspectionRequest\OperatingCentres as OperatingCentresQry;
 use Dvsa\Olcs\Transfer\Query\OtherLicence\OtherLicence as OtherLicenceQry;
 use Dvsa\Olcs\Transfer\Query\TmResponsibilities\GetDocumentsForResponsibilities as DocumentsQry;
 use Dvsa\Olcs\Transfer\Query\TmResponsibilities\TmResponsibilitiesList;
 use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetForResponsibilities as GetForResponsibilitiesApp;
 use Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetForResponsibilities as GetForResponsibilitiesLic;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Data\Mapper\OperatingCentres as OperatingCentresMapper;
 use Olcs\Data\Mapper\OtherLicence as OtherLicenceMapper;
 use Olcs\Data\Mapper\TransportManagerApplication as TransportManagerApplicationMapper;
 use Olcs\Data\Mapper\TransportManagerLicence as TransportManagerLicenceMapper;
@@ -45,8 +43,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
     protected $licenceId = null;
 
-    protected $operatingCentres = null;
-
     protected $otherLicences = null;
 
     protected $tmResponsiblitiesDetails = null;
@@ -62,7 +58,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Get left view
      *
-     * @return \Olcs\View\Model\ViewModel
+     * @return ViewModel
      */
     public function getLeftView()
     {
@@ -75,7 +71,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Index action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return Response|TableBuilder|ViewModel
      */
     public function indexAction()
     {
@@ -117,7 +113,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Add TM application action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return Response|\Zend\Stdlib\ResponseInterface|ViewModel
      */
     public function addAction()
     {
@@ -186,7 +182,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      *
      * @param array $file File data
      *
-     * @return array
+     * @return bool
      */
     public function processAdditionalInformationFileUpload($file)
     {
@@ -234,7 +230,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Edit TM application action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return Response|\Zend\Stdlib\ResponseInterface|ViewModel
      */
     public function editTmApplicationAction()
     {
@@ -387,7 +383,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      *
      * @param int $tmLicenceId TM licence id
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return Response|ViewModel
      */
     protected function getTransportManagerLicence($tmLicenceId)
     {
@@ -466,7 +462,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      * @param string    $redirectToAction Redirect to action
      * @param int       $redirectToId     Redirect to id
      *
-     * @return \Zend\Http\Response
+     * @return Response|ViewModel
      */
     protected function deleteTmRecord($dtoClass, $idToDelete = null, $redirectToAction = '', $redirectToId = null)
     {
@@ -630,75 +626,23 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     /**
      * Alter edit form
      *
-     * @param \Zend\Form\FormInterface $form        Form
-     * @param array                    $application Array of application data
+     * @param \Common\Form\Form $form        Form
+     * @param array             $application Array of application data
      *
-     * @return \Zend\Form\Form
+     * @return \Common\Form\Form
      */
-    protected function alterEditForm(\Zend\Form\FormInterface $form, $application = [])
+    protected function alterEditForm(\Common\Form\Form $form, $application = [])
     {
-        $action = $this->getFromRoute('action');
-
         // Add in the NI translations. Eg for form element labels
         $niTranslation = $this->getServiceLocator()->get('Utils\NiTextTranslation');
         $niTranslation->setLocaleForNiFlag($application['niFlag']);
 
-        if ($action === 'edit-tm-licence') {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->tmApplicationStatus');
-            $params = [
-                'type'       => 'licence',
-                'identifier' => $this->licenceId
-            ];
-        } else {
-            $params = [
-                'type'       => 'application',
-                'identifier' => $application['id'],
-            ];
-        }
-
-        $ocOptions = $this->getOcForListBox($params);
-
         // @NOTE This logic has been moved to the helper service, so it can be re-used
-        $this->getServiceLocator()->get('Helper\TransportManager')
-            ->alterResponsibilitiesFieldset($form->get('details'), $ocOptions, $this->getOtherLicencesTable());
+        $this->transportManagerHelper->alterResponsibilitiesFieldset(
+            $form->get('details'), $this->getOtherLicencesTable()
+        );
 
         return $form;
-    }
-
-    /**
-     * Get OC for list box
-     *
-     * @param array $params Params
-     *
-     * @return array
-     */
-    protected function getOcForListBox($params)
-    {
-        if ($this->operatingCentres === null) {
-            $queryToSend = $this->getServiceLocator()
-                ->get('TransferAnnotationBuilder')
-                ->createQuery(
-                    OperatingCentresQry::create($params)
-                );
-
-            /** @var \Common\Service\Cqrs\Response $response */
-            $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
-
-            if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            }
-
-            $ocOptions = [];
-            if ($response->isOk()) {
-                $ocOptions = OperatingCentresMapper::mapFromResult(
-                    $response->getResult()
-                );
-            }
-
-            $this->operatingCentres = $ocOptions;
-        }
-
-        return $this->operatingCentres;
     }
 
     /**
