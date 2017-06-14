@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Disc Printing Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Admin\Controller;
 
 use Zend\View\Model\ViewModel;
@@ -27,6 +22,9 @@ use Common\Util\FlashMessengerTrait;
  * Disc Printing Controller
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
+ *
+ * @method \Common\Service\Cqrs\Response handleQuery(\Dvsa\Olcs\Transfer\Query\QueryInterface $query)
+ * @method \Common\Service\Cqrs\Response handleCommand(\Dvsa\Olcs\Transfer\Command\CommandInterface $query)
  */
 class DiscPrintingController extends ZendAbstractActionController implements LeftViewProvider
 {
@@ -66,11 +64,9 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
                 $inlineScripts[] = 'disc-printing-popup';
             }
         }
-        $successStatus = $this->params()->fromRoute('success', null);
-        $params = [
-            'form' => $form
-        ];
+
         if (!$this->getRequest()->isPost()) {
+            $successStatus = $this->params()->fromRoute('success', null);
             if ($successStatus !== null) {
                 if ($successStatus == 1) {
                     $this->getServiceLocator()->get('Helper\FlashMessenger')
@@ -81,7 +77,12 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
                 }
             }
         }
-        $view = new ViewModel($params);
+        $view = new ViewModel(
+            [
+                'form' => $form
+            ]
+        );
+
         $this->loadScripts($inlineScripts);
         $view->setTemplate('pages/disc-printing/disc-printing-form');
 
@@ -91,10 +92,11 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
     /**
      * Process form
      *
-     * @param array $data
-     * @return mixed
+     * @param \Common\Form\Form $form Form
+     *
+     * @return void
      */
-    protected function processForm($data, $form)
+    protected function processForm(array $data, \Common\Form\Form $form)
     {
         $params = $this->getFlattenParams($data);
 
@@ -137,8 +139,9 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
     /**
      * Alter form when we have all data set
      *
-     * @param Zend\Form\Form $form
-     * @return Zend\Form\Form
+     * @param \Common\Form\Form $form Form
+     *
+     * @return \Common\Form\Form
      */
     protected function alterFormBeforeValidation($form)
     {
@@ -159,8 +162,9 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
     /**
      * Alter form when we have all data set
      *
-     * @param Zend\Form\Form $form
-     * @return Zend\Form\Form
+     * @param \Common\Form\Form $form Form
+     *
+     * @return \Common\Form\Form
      */
     protected function postSetFormData($form)
     {
@@ -201,7 +205,7 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
     /**
      * Get disc numbering data
      *
-     * @return Zend\ViewModel\JsonModel
+     * @return JsonModel
      */
     public function discNumberingAction()
     {
@@ -261,7 +265,7 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
     /**
      * Get disc prefixes
      *
-     * @return Zend\ViewModel\JsonModel
+     * @return JsonModel
      */
     public function discPrefixesListAction()
     {
