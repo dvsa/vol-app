@@ -3,6 +3,7 @@
 namespace Olcs\Controller\BusReg;
 
 use Common\Controller\Lva\AbstractController;
+use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Query\Bus\BusRegBrowseList;
 use Dvsa\Olcs\Transfer\Query\Bus\BusRegBrowseExport;
 use Olcs\Form\Model\Form\BusRegBrowseForm as Form;
@@ -66,40 +67,40 @@ class BusRegBrowseController extends AbstractController
      */
     private function handleExport($criteria)
     {
-        $response = $this->handleQuery(
-            BusRegBrowseExport::create(
-                [
-                    'trafficAreas' => $criteria['trafficAreas'],
-                    'status' => $criteria['status'],
-                    'acceptedDate' => $criteria['acceptedDate'],
-                ]
-            )
-        );
+        try {
+            $response = $this->handleQuery(
+                BusRegBrowseExport::create(
+                    [
+                        'trafficAreas' => $criteria['trafficAreas'],
+                        'status' => $criteria['status'],
+                        'acceptedDate' => $criteria['acceptedDate'],
+                    ]
+                )
+            );
+            if ($response->isOk()) {
+                // return HTTP response from the api
+                $httpResponse = $response->getHttpResponse();
 
-        if ($response->isOk()) {
-            // return HTTP response from the api
-            $httpResponse = $response->getHttpResponse();
+                // but make sure we only return allowed headers
+                $headers = new \Zend\Http\Headers();
+                $allowedHeaders = ['Content-Disposition', 'Content-Encoding', 'Content-Type', 'Content-Length'];
 
-            // but make sure we only return allowed headers
-            $headers = new \Zend\Http\Headers();
-            $allowedHeaders = ['Content-Disposition', 'Content-Encoding', 'Content-Type', 'Content-Length'];
-
-            foreach ($httpResponse->getHeaders() as $header) {
-                if (in_array($header->getFieldName(), $allowedHeaders)) {
-                    $headers->addHeader($header);
+                foreach ($httpResponse->getHeaders() as $header) {
+                    if (in_array($header->getFieldName(), $allowedHeaders)) {
+                        $headers->addHeader($header);
+                    }
                 }
+                $httpResponse->setHeaders($headers);
+
+                return $httpResponse;
+
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
             }
-            $httpResponse->setHeaders($headers);
-
-            return $httpResponse;
-
-        } elseif ($response->isNotFound()) {
+        } catch (NotFoundException $e) {
             // no results found
             $this->getServiceLocator()->get('Helper\FlashMessenger')
                 ->addErrorMessage('selfserve.search.busreg.browse.no-results');
-
-        } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
         }
 
         return null;

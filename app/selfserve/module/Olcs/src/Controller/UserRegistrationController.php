@@ -3,6 +3,7 @@
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
+use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Command\User\RegisterUserSelfserve as RegisterDto;
 use Dvsa\Olcs\Transfer\Query\Licence\LicenceRegisteredAddress as LicenceByNumberDto;
 use Zend\Form\Form;
@@ -146,45 +147,40 @@ class UserRegistrationController extends AbstractController
      */
     private function showLicence($formData)
     {
-        $response = $this->handleQuery(
-            LicenceByNumberDto::create(
-                [
-                    'licenceNumber' => $formData['fields']['licenceNumber']
-                ]
-            )
-        );
-
-        if ($response->isOk()) {
-            // return check details page on success
-            $result = $response->getResult();
-
-            /** @var \Common\Form\Form $form */
-            $form = $this->getServiceLocator()->get('Helper\Form')
-                ->createFormWithRequest('UserRegistrationAddress', $this->getRequest());
-
-            $form->setData($formData);
-
-            $view = new ViewModel(
-                [
-                    'form' => $form,
-                    'address' => $result['correspondenceCd']['address'],
-                    'organisationName' => $result['organisation']['name'],
-                ]
-            );
-            $view->setTemplate('olcs/user-registration/check-details');
-            $this->placeholder()->setPlaceholder('pageTitle', 'user-registration.page.check-details.title');
-
-            return $view;
-        }
-
         // process errors and display the main page
         $errors = [];
+        try {
+            $response = $this->handleQuery(
+                LicenceByNumberDto::create(
+                    [
+                        'licenceNumber' => $formData['fields']['licenceNumber']
+                    ]
+                )
+            );
 
-        if ($response->isNotFound()) {
-            $errors = [
-                'licenceNumber' => ['record-not-found']
-            ];
-        } else {
+            if ($response->isOk()) {
+                // return check details page on success
+                $result = $response->getResult();
+
+                /** @var \Common\Form\Form $form */
+                $form = $this->getServiceLocator()->get('Helper\Form')
+                    ->createFormWithRequest('UserRegistrationAddress', $this->getRequest());
+
+                $form->setData($formData);
+
+                $view = new ViewModel(
+                    [
+                        'form' => $form,
+                        'address' => $result['correspondenceCd']['address'],
+                        'organisationName' => $result['organisation']['name'],
+                    ]
+                );
+                $view->setTemplate('olcs/user-registration/check-details');
+                $this->placeholder()->setPlaceholder('pageTitle', 'user-registration.page.check-details.title');
+
+                return $view;
+            }
+
             $result = $response->getResult();
 
             if (!empty($result['messages']['licenceNumber'])) {
@@ -192,6 +188,10 @@ class UserRegistrationController extends AbstractController
             } else {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }
+        } catch (NotFoundException $e) {
+            $errors = [
+                'licenceNumber' => ['record-not-found']
+            ];
         }
 
         return $this->generateContentForUserRegistration($formData, $errors);
