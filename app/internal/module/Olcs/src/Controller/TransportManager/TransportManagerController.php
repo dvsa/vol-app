@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\TransportManager;
 
+use Common\Service\Cqrs\Exception\NotFoundException;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 use Zend\Mvc\MvcEvent;
@@ -115,18 +116,24 @@ class TransportManagerController extends AbstractController implements Transport
             if (isset($data['changeUserConfirm'])) {
                 $params['confirm'] = true;
             }
-            /* @var $response \Common\Service\Cqrs\Response */
-            $response = $this->handleCommand(
-                \Dvsa\Olcs\Transfer\Command\Tm\Merge::create($params)
-            );
 
-            if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('form.tm-merge.success');
-                return $this->redirect()->toRouteAjax(
-                    'transport-manager/details', ['transportManager' => $transportManagerId]
+            try {
+                /* @var $response \Common\Service\Cqrs\Response */
+                $response = $this->handleCommand(
+                    \Dvsa\Olcs\Transfer\Command\Tm\Merge::create($params)
                 );
-            } else {
-                $form = $this->processMergeFormMessages($response, $form, $toTmId);
+                if ($response->isOk()) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                        ->addSuccessMessage('form.tm-merge.success');
+                    return $this->redirect()->toRouteAjax(
+                        'transport-manager/details', ['transportManager' => $transportManagerId]
+                    );
+                } else {
+                    $form = $this->processMergeFormMessages($response, $form, $toTmId);
+                }
+            } catch (NotFoundException $e) {
+                $formMessages['toTmId'][] = 'form.tm-merge.to-tm-id.validation.not-found';
+                $form->setMessages($formMessages);
             }
         }
 
@@ -150,12 +157,6 @@ class TransportManagerController extends AbstractController implements Transport
     protected function processMergeFormMessages($response, $form, $toTmId)
     {
         $formMessages = [];
-
-        if ($response->isNotFound()) {
-            $formMessages['toTmId'][] = 'form.tm-merge.to-tm-id.validation.not-found';
-            $form->setMessages($formMessages);
-            return $form;
-        }
         $result = $response->getResult();
 
         if (isset($result['messages']) && !isset($result['messages']['TM_MERGE_BOTH_HAVE_USER_ACCOUNTS'])) {
@@ -255,10 +256,6 @@ class TransportManagerController extends AbstractController implements Transport
         $response = $this->handleQuery(
             \Dvsa\Olcs\Transfer\Query\Tm\TransportManager::create(['id' => $id])
         );
-        if ($response->isNotFound()) {
-            return null;
-        }
-
         if (!$response->isOk()) {
             throw new \RuntimeException('Error getting TransportManager');
         }

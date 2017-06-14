@@ -284,10 +284,6 @@ class SubmissionController extends AbstractInternalController implements Submiss
             $itemParams = $paramProvider->provideParameters();
             $response = $this->handleQuery(ItemDto::create($itemParams));
 
-            if ($response->isNotFound()) {
-                return $this->notFoundAction();
-            }
-
             if ($response->isClientError() || $response->isServerError()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }
@@ -372,10 +368,6 @@ class SubmissionController extends AbstractInternalController implements Submiss
 
         $response = $this->handleQuery($query);
 
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
-
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
@@ -434,10 +426,6 @@ class SubmissionController extends AbstractInternalController implements Submiss
         } elseif ($formAction == 'delete-row') {
             $response = $this->deleteTableRows();
         } else {
-            return $this->notFoundAction();
-        }
-
-        if ($response->isNotFound()) {
             return $this->notFoundAction();
         }
 
@@ -699,10 +687,6 @@ class SubmissionController extends AbstractInternalController implements Submiss
         $query = ItemDto::create($params);
 
         $response = $this->handleQuery($query);
-
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
 
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');

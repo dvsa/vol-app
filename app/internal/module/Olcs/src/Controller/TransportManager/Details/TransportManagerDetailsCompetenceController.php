@@ -151,9 +151,6 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
 
             /** @var Response $response */
             $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
-            if ($response->isNotFound()) {
-                return $this->notFoundAction();
-            }
 
             if ($response->isClientError() || $response->isServerError()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');

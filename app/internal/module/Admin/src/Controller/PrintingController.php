@@ -113,9 +113,6 @@ class PrintingController extends AbstractInternalController implements LeftViewP
         $deleteCommand = $this->deleteCommand;
         $params = $this->prepareParams(['validate' => true]);
         $response = $this->handleCommand($deleteCommand::create($params));
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
         $result = $response->getResult();
         // can't remove the printer - display error messages
         if (isset($result['messages']) && $response->isClientError()) {

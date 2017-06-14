@@ -419,10 +419,6 @@ abstract class AbstractInternalController extends AbstractActionController
         $listParams = $paramProvider->provideParameters();
         $response = $this->handleQuery($listDto::create($listParams));
 
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
-
         if ($response->isOk()) {
             $data = $response->getResult();
             $this->listData = $data;
@@ -484,10 +480,6 @@ abstract class AbstractInternalController extends AbstractActionController
         $query = $itemDto::create($params);
 
         $response = $this->handleQuery($query);
-
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
 
         if ($response->isOk()) {
             $data = $response->getResult();
@@ -667,10 +659,6 @@ abstract class AbstractInternalController extends AbstractActionController
             $itemParams = $paramProvider->provideParameters();
             $response = $this->handleQuery($itemDto::create($itemParams));
 
-            if (!$response instanceof Response || $response->isNotFound()) {
-                return $this->notFoundAction();
-            }
-
             if ($response->isOk()) {
                 $result = $response->getResult();
 
@@ -722,10 +710,6 @@ abstract class AbstractInternalController extends AbstractActionController
         }
 
         $response = $this->handleCommand($confirmCommand::create($params));
-
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
 
         if ($response->isOk()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
@@ -794,10 +778,6 @@ abstract class AbstractInternalController extends AbstractActionController
         $params = $paramProvider->provideParameters();
 
         $response = $this->handleCommand($command::create($params));
-
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
 
         if ($response->isOk()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);

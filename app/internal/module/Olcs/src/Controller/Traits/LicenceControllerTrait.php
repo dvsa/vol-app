@@ -51,9 +51,6 @@ trait LicenceControllerTrait
             \Dvsa\Olcs\Transfer\Query\Licence\Licence::create(['id' => $id])
         );
 
-        if ($response->isNotFound()) {
-            return null;
-        }
         if (!$response->isOk()) {
             throw new \RuntimeException('Failed to get Licence data');
         }

@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Cases\Hearing;
 
+use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\AppealByCase as AppealDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\StayList as StayListDto;
 use Olcs\Controller\AbstractInternalController;
@@ -70,22 +71,19 @@ class HearingAppealController extends AbstractInternalController implements Case
      */
     public function detailsAction()
     {
-        Logger::debug(__FILE__);
-        Logger::debug(__METHOD__);
-
         $caseId = $this->params()->fromRoute('case');
 
         $this->placeholder()->setPlaceholder('caseId', $caseId);
 
-        $appeal = $this->handleQuery(
-            AppealDto::create(
-                [
-                    'case' => $caseId
-                ]
-            )
-        );
-
-        if ($appeal->isNotFound()) {
+        try {
+            $appeal = $this->handleQuery(
+                AppealDto::create(
+                    [
+                        'case' => $caseId
+                    ]
+                )
+            );
+        } catch (NotFoundException $e) {
             $this->placeholder()->setPlaceholder('no-appeal', true);
             return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
         }
@@ -99,11 +97,6 @@ class HearingAppealController extends AbstractInternalController implements Case
                 ]
             )
         );
-
-        if ($stay->isNotFound()) {
-            $this->placeholder()->setPlaceholder('no-stay', true);
-            return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
-        }
 
         $multipleStays = $stay->getResult();
 

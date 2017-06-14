@@ -167,9 +167,6 @@ trait ApplicationControllerTrait
             \Dvsa\Olcs\Transfer\Query\Application\Application::create(['id' => $applicationId])
         );
 
-        if ($response->isNotFound()) {
-            return null;
-        }
         if (!$response->isOk()) {
             throw new \RuntimeException('Failed to get Application data');
         }
