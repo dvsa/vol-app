@@ -35,9 +35,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
 
         $request = $this->getRequest();
         if ($request->isPost() && $request->getPost('saveAndContinue') !== null) {
-            $post = (array) $request->getPost();
-            $this->alterForm($form, $post);
-            $form->setData($post);
+            $form->setData((array) $request->getPost());
 
             if ($form->isValid()) {
                 $dtoData = array_merge(
@@ -222,34 +220,5 @@ abstract class AbstractUploadEvidenceController extends AbstractController
     {
         $financialEvidenceData = $this->getFinancialEvidenceData();
         return $financialEvidenceData['documents'];
-    }
-
-    /**
-     * Alter upload evidence form
-     *
-     * @param \Zend\Form\Form $form form
-     * @param array           $post post parameters
-     *
-     * @return void
-     */
-    protected function alterForm($form, &$post)
-    {
-        for ($i = 0; $i < count($post['operatingCentres']); $i++) {
-            $oc = $post['operatingCentres'][$i];
-            $targetFieldset = $form->getInputFilter()->get('operatingCentres')->getInputs()[$i];
-            if (
-                !empty($oc['adPlacedIn'])
-                || !empty($oc['adPlacedDate']['day'])
-                || !empty($oc['adPlacedDate']['month'])
-                || !empty($oc['adPlacedDate']['year'])
-                || array_key_exists('list', $oc['file'])
-            ) {
-                $targetFieldset->get('adPlacedIn')->setRequired(true);
-                $targetFieldset->get('adPlacedDate')->setRequired(true);
-                $post['operatingCentres'][$i]['uploadFileCount'] = count($post['operatingCentres'][$i]['file']['list']);
-            } else {
-                $targetFieldset->remove('uploadFileCount');
-            }
-        }
     }
 }
