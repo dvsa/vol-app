@@ -23,6 +23,7 @@ $(function() {
   var operatorTypeText = operatorType.filter(':checked').parent().text();
   var licenceTypeText = licenceType.filter(':checked').parent().text();
   var queueId = $('#queueId');
+  var securityToken = document.getElementById("security").value;
 
   // two variations for the message
   var discsVoided;
@@ -80,7 +81,8 @@ $(function() {
       'discSequence': discSequence.val(),
       'endNumber': endNumber.val(),
       'startNumberEntered': startNumber.val(),
-      'queueId': queueId.val()
+      'queueId': queueId.val(),
+      'security': securityToken
     };
     
     $('#confirmDiscWarning').remove();

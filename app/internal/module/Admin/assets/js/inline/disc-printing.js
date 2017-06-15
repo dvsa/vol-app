@@ -22,6 +22,7 @@ OLCS.ready(function() {
   var niFlag       = F("operator-location", "niFlag");
   var operatorType = F("operator-type", "goodsOrPsv");
   var licenceType  = F("licence-type", "licenceType");
+  var securityToken = document.getElementById("security").value;
 
   var discSequence = F("prefix", "discSequence");
 
@@ -39,7 +40,8 @@ OLCS.ready(function() {
     var data = {
       "niFlag": niFlag.filter(":checked").val(),
       "operatorType": operatorType.filter(":checked").val(),
-      "licenceType": licenceType.filter(":checked").val()
+      "licenceType": licenceType.filter(":checked").val(),
+      "security": securityToken
     };
     $.post(discPrefixesUrl, data, function(result) {
       var str = "<option value=''>Please Select</option>";
@@ -112,7 +114,8 @@ OLCS.ready(function() {
       "operatorType": operatorType.filter(":checked").val(),
       "licenceType": licenceType.filter(":checked").val(),
       "discSequence": $("#discSequence :selected").val(),
-      "discPrefix": $("#discSequence :selected").text()
+      "discPrefix": $("#discSequence :selected").text(),
+      "security": securityToken
     };
 
     if (startNo !== null) {
