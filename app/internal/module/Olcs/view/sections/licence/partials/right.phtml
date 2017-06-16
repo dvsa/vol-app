@@ -42,7 +42,7 @@ if ($nav->getContainer()->hasPages(true)): ?>
     </div>
 <?php endif; ?>
 
-<?php if ($note): ?>
+<?php if (!empty($note) && !$this->isGranted(Common\RefData::PERMISSION_INTERNAL_LIMITED_READ_ONLY)): ?>
     <div class="latest-note">
         <div class="latest-note__<?php echo ($isPriorityNote ? "priority" : "details"); ?>">
             <?php echo substr($note, 0, 100); ?>
