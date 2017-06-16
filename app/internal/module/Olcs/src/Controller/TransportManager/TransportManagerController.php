@@ -128,9 +128,9 @@ class TransportManagerController extends AbstractController implements Transport
                     return $this->redirect()->toRouteAjax(
                         'transport-manager/details', ['transportManager' => $transportManagerId]
                     );
-                } else {
-                    $form = $this->processMergeFormMessages($response, $form, $toTmId);
                 }
+
+                $form = $this->processMergeFormMessages($response, $form, $toTmId);
             } catch (NotFoundException $e) {
                 $formMessages['toTmId'][] = 'form.tm-merge.to-tm-id.validation.not-found';
                 $form->setMessages($formMessages);
