@@ -93,10 +93,9 @@ class BusRegBrowseController extends AbstractController
                 $httpResponse->setHeaders($headers);
 
                 return $httpResponse;
-
-            } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
             }
+
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
         } catch (NotFoundException $e) {
             // no results found
             $this->getServiceLocator()->get('Helper\FlashMessenger')

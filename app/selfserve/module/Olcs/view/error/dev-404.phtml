@@ -10,8 +10,8 @@
         <div class="full-width">
             <h2><?php echo $this->message ?></h2>
 
-            <?php if (!empty($id)): ?>
-                <p>Correlation id <em><?php echo $this->escapeHtml($id); ?></em>.</p>
+            <?php if (!empty($correlationId)): ?>
+                <p>Correlation id <em><?php echo $this->escapeHtml($correlationId); ?></em>.</p>
             <?php endif ?>
 
             <?php echo $this->partial('partials/error/notfound'); ?>
