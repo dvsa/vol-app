@@ -182,7 +182,12 @@
             a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', 'UA-56588861-1', 'auto', { anonymizeIp: true });
+        <?php
+        $urlParts = parse_url($this->url(null, [], ['force_canonical' => true]));
+        $gaDomain = isset($urlParts['host']) ? $urlParts['host'] : 'auto'
+        ?>
+
+        ga('create', 'UA-56588861-1', '<?php echo $gaDomain ?>', { anonymizeIp: true });
         ga('send', 'pageview');
 
     </script>
