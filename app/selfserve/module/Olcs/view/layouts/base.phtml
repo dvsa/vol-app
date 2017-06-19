@@ -183,7 +183,7 @@
         })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
         <?php
-        $urlParts = parse_url($this->url(null, [], ['force_canonical' => true]));
+        $urlParts = parse_url($this->url('index', [], ['force_canonical' => true]));
         $gaDomain = isset($urlParts['host']) ? $urlParts['host'] : 'auto'
         ?>
 
