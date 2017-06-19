@@ -8,15 +8,17 @@
     <?php
 
     $userId = $this->currentUser()->getUniqueId();
+    $urlParts = parse_url($this->url(null, [], ['force_canonical' => true]));
+    $gaDomain = isset($urlParts['host']) ? $urlParts['host'] : 'auto';
 
     if (!empty($userId)) {
     ?>
-      ga('create', 'UA-56585177-1', 'auto', {'userId': '<?php echo $userId; ?>'});
+      ga('create', 'UA-56585177-1', '<?php echo $gaDomain ?>', {'userId': '<?php echo $userId; ?>'});
       ga('set', 'dimension1', '<?php echo $userId; ?>');
       <?php
     } else {
       ?>
-    ga('create', 'UA-56585177-1', 'auto');
+    ga('create', 'UA-56585177-1', '<?php echo $gaDomain ?>');
     <?php
   }
   ?>
