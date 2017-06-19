@@ -9,5 +9,8 @@ return [
     //  CSFR Form settings
     'csrf' => [
         'timeout' => 5400,  //  90 min; should match to auth timeout
+        'whitelist' => [
+            '/verify/process-response',
+       ],
     ],
 ];
