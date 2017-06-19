@@ -34,7 +34,8 @@ OLCS.ready(function() {
     emptyLabel: "Please select",
     clearWhenEmpty: true,
     append: true,
-    disableDestination: false
+    disableDestination: false,
+    disableSubmit: "form-actions[submit]"
   });
 
 });
