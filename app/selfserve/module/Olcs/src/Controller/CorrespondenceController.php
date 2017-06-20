@@ -39,7 +39,7 @@ class CorrespondenceController extends AbstractController
         ];
 
         $response = $this->handleQuery(Correspondences::create($params));
-        if ($response === null || $response->isNotFound()) {
+        if ($response === null) {
             return $this->notFoundAction();
         }
 

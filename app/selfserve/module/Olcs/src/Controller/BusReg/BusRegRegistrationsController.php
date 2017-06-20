@@ -45,11 +45,6 @@ class BusRegRegistrationsController extends AbstractController
 
         $response = $this->handleQuery($query);
 
-        // handle response
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
-
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
         }

@@ -70,11 +70,6 @@ class BusRegApplicationsController extends AbstractController
 
         $response = $this->handleQuery($query);
 
-        // handle response
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
-
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
         }
@@ -156,11 +151,6 @@ class BusRegApplicationsController extends AbstractController
         );
 
         $response = $this->handleCommand($command);
-
-        // handle response
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
 
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
@@ -247,7 +237,7 @@ class BusRegApplicationsController extends AbstractController
     {
         $response = $this->handleQuery($query);
 
-        if (!$response instanceof \Common\Service\Cqrs\Response || $response->isNotFound()) {
+        if (!$response instanceof \Common\Service\Cqrs\Response) {
             return $this->notFoundAction();
         }
 
@@ -325,11 +315,6 @@ class BusRegApplicationsController extends AbstractController
         );
 
         $response = $this->handleQuery($query);
-
-        // handle response
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
 
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
