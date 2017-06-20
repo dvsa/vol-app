@@ -157,9 +157,6 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         $deleteCommand = $this->deleteCommand;
         $params = $this->prepareParams(['validate' => true]);
         $response = $this->handleCommand($deleteCommand::create($params));
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
 
         $result = $response->getResult();
         // can't remove the team - display error messages

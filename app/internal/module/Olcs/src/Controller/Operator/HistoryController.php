@@ -39,10 +39,6 @@ class HistoryController extends OperatorController
 
         $response = $this->getListData();
 
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
-
         if ($response->isClientError() || $response->isServerError()) {
 
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');

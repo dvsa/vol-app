@@ -1,6 +1,12 @@
 <?php
+$this->placeholder('right')->set(null);
+$this->placeholder('horizontalNavigationId')->set(null);
+$this->placeholder('horizontalNavigationContainer')->set(null);
+$this->placeholder('status')->set([]);
+
 $this->placeholder('pageTitle')->set('500-title');
 ?>
+
 <div class="two-thirds">
     <div class="article">
         <?php echo $this->translate('markup-500-text'); ?>
@@ -13,6 +19,6 @@ $this->placeholder('pageTitle')->set('500-title');
 $this->inlineScript()->appendScript('
     dataLayer.push({
         \'error\' : \'index\',
-        \'correlationId\' : \''. $this->id .'\',
+        \'correlationId\' : \''. $this->correlationId .'\',
     });
 ');

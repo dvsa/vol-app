@@ -156,10 +156,6 @@ class HearingController extends AbstractInternalController implements CaseContro
         $params = ['id' => $this->params()->fromRoute('id')];
         $response = $this->handleQuery(PiHearingDto::create($params));
 
-        if ($response->isNotFound()) {
-            $this->notFoundAction();
-        }
-
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
@@ -176,10 +172,6 @@ class HearingController extends AbstractInternalController implements CaseContro
     {
         $params = ['id' => $this->params()->fromRoute('case')];
         $response = $this->handleQuery(PiDto::create($params));
-
-        if ($response->isNotFound()) {
-            $this->notFoundAction();
-        }
 
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');

@@ -252,9 +252,6 @@ class OperatorController extends AbstractController implements OperatorControlle
         $response = $this->handleQuery(
             \Dvsa\Olcs\Transfer\Query\Organisation\Organisation::create(['id' => $id])
         );
-        if ($response->isNotFound()) {
-            return null;
-        }
         if (!$response->isOk()) {
             throw new \RuntimeException('Error getting organisation');
         }

@@ -61,10 +61,6 @@ class HistoricTmController extends AbstractInternalController
 
         $response = $this->handleQuery($query);
 
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
-
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }

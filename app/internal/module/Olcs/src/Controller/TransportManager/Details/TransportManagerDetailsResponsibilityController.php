@@ -162,9 +162,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
 
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
@@ -413,9 +410,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
 
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
@@ -494,9 +488,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
         /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->getServiceLocator()->get('CommandService')->send($command);
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
@@ -559,9 +550,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
             /** @var \Common\Service\Cqrs\Response $response */
             $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
-            if ($response->isNotFound()) {
-                return $this->notFoundAction();
-            }
 
             if ($response->isClientError() || $response->isServerError()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
@@ -811,9 +799,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
@@ -889,9 +874,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
             /** @var \Common\Service\Cqrs\Response $response */
             $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
-            if ($response->isNotFound()) {
-                return $this->notFoundAction();
-            }
             if ($response->isClientError() || $response->isServerError()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }

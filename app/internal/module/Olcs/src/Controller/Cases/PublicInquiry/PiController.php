@@ -324,10 +324,6 @@ class PiController extends AbstractInternalController implements CaseControllerI
         $params = ['id' => $this->params()->fromRoute('case')];
         $response = $this->handleQuery(PiDto::create($params));
 
-        if ($response->isNotFound()) {
-            $this->notFoundAction();
-        }
-
         if ($response->isClientError() || $response->isServerError()) {
             //don't display error for pi not found on index, as it shouldn't necessarily have one
             $action = $this->getEvent()->getRouteMatch()->getParam('action');

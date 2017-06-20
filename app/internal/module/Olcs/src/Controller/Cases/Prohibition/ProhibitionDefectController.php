@@ -129,10 +129,6 @@ class ProhibitionDefectController extends AbstractInternalController implements
 
         $response = $this->handleQuery($query);
 
-        if ($response->isNotFound()) {
-            return $this->notFoundAction();
-        }
-
         $this->placeholder()->setPlaceholder('prohibition', $response->getResult());
 
         return $this->index(

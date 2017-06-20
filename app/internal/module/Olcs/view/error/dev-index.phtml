@@ -1,77 +1,16 @@
 <?php
-/** @var Zend\View\Renderer\PhpRenderer $this */
+$this->placeholder('right')->set(null);
+$this->placeholder('horizontalNavigationId')->set(null);
+$this->placeholder('horizontalNavigationContainer')->set(null);
+$this->placeholder('status')->set([]);
+
 $this->placeholder('pageTitle')->set('500-title');
 ?>
-<hr/>
-<?php if (!empty($id)): ?>
-    <p>An unexpected error occured. Correlation id <em><?php echo $this->escapeHtml($id); ?></em>.</p>
-<?php endif ?>
 
-<?php if (isset($this->display_exceptions) && $this->display_exceptions): ?>
-<?php if(isset($this->exception) && $this->exception instanceof Exception): ?>
-<!-- Add some inline styles to fix the page layout, This is only a dev page so I'm forgiving doing it like this! -->
-<style>
-    dd {
-        width: 100%;
-    }
-</style>
-<h2><?php echo get_class($this->exception) ?></h2>
-<dl>
-    <dt><?php echo $this->translate('File') ?>:</dt>
-    <dd>
-        <pre class="prettyprint linenums"><?php echo $this->exception->getFile() ?>:<?php echo $this->exception->getLine() ?></pre>
-    </dd>
-    <dt><?php echo $this->translate('Message') ?>:</dt>
-    <dd>
-        <pre class="prettyprint linenums"><?php echo $this->escapeHtml($this->exception->getMessage()) ?></pre>
-    </dd>
-    <dt><?php echo $this->translate('Stack trace') ?>:</dt>
-    <dd>
-        <?php foreach($this->exception->getTrace() as $t): ?>
-            <pre>
-File:   <?= isset($t['file'])  ? $t['file']         : '?' ?><?= isset($t['line'])     ? ':' . $t['line'] : ''  ?>
+<div class="article">
+    <?php echo $this->translate('markup-500-text'); ?>
+    <hr>
+    <p><a href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('back-to-home'); ?></a></p>
 
-Method: <?= isset($t['class']) ? $t['class'] . '::' : ''  ?><?= isset($t['function']) ? $t['function']   : '' ?>
-            </pre>
-        <?php endforeach; ?>
-    </dd>
-</dl>
-<?php
-    $e = $this->exception->getPrevious();
-    if ($e) :
-?>
-<hr/>
-<h2><?php echo $this->translate('Previous exceptions') ?>:</h2>
-<ul class="unstyled">
-    <?php while($e) : ?>
-    <li>
-        <h3><?php echo get_class($e); ?></h3>
-        <dl>
-            <dt><?php echo $this->translate('File') ?>:</dt>
-            <dd>
-                <pre class="prettyprint linenums"><?php echo $e->getFile() ?>:<?php echo $e->getLine() ?></pre>
-            </dd>
-            <dt><?php echo $this->translate('Message') ?>:</dt>
-            <dd>
-                <pre class="prettyprint linenums"><?php echo $this->escapeHtml($e->getMessage()) ?></pre>
-            </dd>
-            <dt><?php echo $this->translate('Stack trace') ?>:</dt>
-            <dd>
-                <pre class="prettyprint linenums"><?php echo $this->escapeHtml($e->getTraceAsString()) ?></pre>
-            </dd>
-        </dl>
-    </li>
-    <?php
-        $e = $e->getPrevious();
-        endwhile;
-    ?>
-</ul>
-<?php endif; ?>
-
-<?php else: ?>
-
-<h3><?php echo $this->translate('No Exception available') ?></h3>
-
-<?php endif ?>
-
-<?php endif ?>
+    <?php echo $this->partial('partials/error/exception'); ?>
+</div>

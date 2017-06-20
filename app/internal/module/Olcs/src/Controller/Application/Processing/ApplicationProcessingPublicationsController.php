@@ -78,10 +78,6 @@ class ApplicationProcessingPublicationsController extends AbstractInternalContro
         $params = ['id' => $this->params()->fromRoute('id')];
         $response = $this->handleQuery(PublicationLinkDto::create($params));
 
-        if ($response->isNotFound()) {
-            $this->notFoundAction();
-        }
-
         if ($response->isServerError() || $response->isClientError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }

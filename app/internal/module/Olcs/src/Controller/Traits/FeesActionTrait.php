@@ -350,9 +350,6 @@ trait FeesActionTrait
         $response = $this->handleQuery($query);
 
         if (!$response->isOk()) {
-            if ($response->isNotFound()) {
-                return $this->notFoundAction();
-            }
             $this->addErrorMessage('unknown-error');
             return $this->redirectToFeeDetails();
         }
