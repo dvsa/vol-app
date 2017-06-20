@@ -17,7 +17,7 @@ if ($nav->getContainer()->hasPages()) {
 <?php
 }
 ?>
-<?php if (!empty($note)):?>
+<?php if (!empty($note) && !$this->isGranted(Common\RefData::PERMISSION_INTERNAL_LIMITED_READ_ONLY)):?>
     <div class="latest-note">
         <div class="latest-note__details"><?php echo substr($note, 0, 100); ?></div>
         <a
