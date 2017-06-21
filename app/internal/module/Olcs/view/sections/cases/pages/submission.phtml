@@ -172,16 +172,16 @@ echo $this->partial(
     ?>
 
 </div>
-    <?php
-    if (!empty($submission['informationCompleteDate'])) {
-    ?>
-<div>
-    <p><strong>Information complete : <?php echo date('d/m/Y', strtotime($submission['informationCompleteDate']));?>
-            </strong></p>
-</div>
-    <?php
-    }
-    ?>
-
 <?php endif; ?>
+
+<?php if (!empty($submission['informationCompleteDate'])):
+    $completeDate = \Dvsa\Olcs\Utils\Helper\DateTimeHelper::format($submission['informationCompleteDate'], 'd/m/Y');
+    ?>
+    <div id="submissionFooter" class="actions-container">
+        <div>
+            <p><strong>Information complete: <?php echo $completeDate; ?></strong></p>
+        </div>
+    </div>
+<?php endif; ?>
+
 </div>
