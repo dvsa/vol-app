@@ -215,6 +215,11 @@ return [
                             'label' => 'Public Inquiry listings',
                             'route' => 'admin-dashboard/admin-report/pi',
                         ],
+                        [
+                            'id' => 'admin-dashboard/admin-report/cases/open',
+                            'label' => 'Open cases',
+                            'route' => 'admin-dashboard/admin-report/cases/open',
+                        ],
                     ],
                 ],
                 [
