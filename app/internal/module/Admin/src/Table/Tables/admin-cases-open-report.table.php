@@ -3,6 +3,7 @@
 return [
     'variables' => [
         'title' => 'Open cases',
+        'empty_message' => 'Open cases are not found by specified filter criteria',
     ],
     'settings' => [
         'crud' => [
