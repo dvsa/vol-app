@@ -764,11 +764,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/4.16",
+            "version": "dev-release/4.16.1",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "6b54e1c477badc19903fc6c76a49530de0b65afe"
+                "reference": "387e0622471b57fe06a0ae605b6c5bb79061b84b"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
