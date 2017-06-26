@@ -42,7 +42,7 @@ OLCS.ready(function() {
       $.get(url + "/" + value, function(result) {
         if (result[0] && result[0].value === "") {
           // always shift off the first empty value
-          result.shift();
+          delete result[0];
         }
         callback(result);
       });
