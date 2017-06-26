@@ -265,6 +265,25 @@ return [
                                     ]
                                 ]
                             ],
+                            'cases' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => 'cases/',
+                                ],
+                                'may_terminate' => false,
+                                'child_routes' => [
+                                    'open' => [
+                                        'type' => Segment::class,
+                                        'options' => [
+                                            'route' => 'open[/]',
+                                            'defaults' => [
+                                                'controller' => Admin\Controller\ReportCasesOpenController::class,
+                                                'action' => 'index',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                     'admin-user-management' => [
@@ -529,6 +548,7 @@ return [
             'Admin\TaskAllocationRulesController' => \Admin\Controller\TaskAllocationRulesController::class,
             'Admin\PiReportController' => 'Admin\Controller\PiReportController',
             Admin\Controller\SystemInfoMessageController::class => Admin\Controller\SystemInfoMessageController::class,
+            Admin\Controller\ReportCasesOpenController::class => Admin\Controller\ReportCasesOpenController::class,
         ],
     ],
     'view_manager' => [
