@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use Admin\Form\Model\Form;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -29,6 +30,8 @@ class ReportCasesOpenController extends AbstractInternalController implements Le
     protected $tableName = 'admin-cases-open-report';
 
     protected $listDto = TransferQry\Cases\Report\OpenList::class;
+
+    protected $filterForm = Form\CasesOpenReportFilter::class;
 
     /**
      * Gets left view
