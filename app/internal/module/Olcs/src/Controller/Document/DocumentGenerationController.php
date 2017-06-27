@@ -123,13 +123,24 @@ class DocumentGenerationController extends AbstractDocumentController
                 break;
         }
 
-        $dtoData = [
-            'template' => $data['details']['documentTemplate'],
-            'data' => $queryData,
-            'meta' => json_encode(['details' => $data['details'], 'bookmarks' => $data['bookmarks']])
-        ];
+        //  get licence data
+        if (!empty($queryData['licence'])) {
+            $licence = $this->getLicence($queryData['licence']);
 
-        $dto = CreateLetter::create($dtoData);
+            $queryData += [
+                'goodsOrPsv' => $licence['goodsOrPsv']['id'],
+                'licenceType' => $licence['licenceType']['id'],
+                'organisation' => $licence['organisation']['id'],
+            ];
+        }
+
+        $dto = CreateLetter::create(
+            [
+                'template' => $data['details']['documentTemplate'],
+                'data' => $queryData,
+                'meta' => json_encode(['details' => $data['details'], 'bookmarks' => $data['bookmarks']]),
+            ]
+        );
         $response = $this->handleCommand($dto);
 
         if (!$response->isOk()) {

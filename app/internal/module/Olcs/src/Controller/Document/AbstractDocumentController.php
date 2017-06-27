@@ -1,10 +1,5 @@
 <?php
 
-/**
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\Controller\Document;
 
 use Common\Data\Mapper\LetterGenerationDocument;
@@ -13,19 +8,16 @@ use Dvsa\Olcs\Transfer\Command\Document\DeleteDocument;
 use Dvsa\Olcs\Transfer\Query\Application\Application;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 use Dvsa\Olcs\Transfer\Query\Document\Letter;
+use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Olcs\Controller\AbstractController;
 use Common\Category;
 
 /**
- *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 abstract class AbstractDocumentController extends AbstractController
 {
-    // AC specifies this timestamp format...
-    const DOCUMENT_TIMESTAMP_FORMAT = 'YmdHi';
-
     /**
      * For redirects
      */
@@ -164,6 +156,24 @@ abstract class AbstractDocumentController extends AbstractController
         $response = $this->handleQuery(Application::create(['id' => $applicationId]));
 
         return $response->getResult()['licence']['id'];
+    }
+
+    /**
+     * Returns licence
+     *
+     * @param int $licId $licId
+     *
+     * @return array
+     */
+    protected function getLicence($licId)
+    {
+        $response = $this->handleQuery(TransferQry\Licence\Licence::create(['id' => $licId]));
+
+        if ($response->isOk()) {
+            return $response->getResult();
+        }
+
+        return [];
     }
 
     /**
