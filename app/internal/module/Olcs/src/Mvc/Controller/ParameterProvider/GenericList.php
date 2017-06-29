@@ -1,8 +1,5 @@
 <?php
 
-/**
- * GenericList
- */
 namespace Olcs\Mvc\Controller\ParameterProvider;
 
 /**
@@ -13,13 +10,15 @@ class GenericList extends AbstractParameterProvider
     private $paramNames;
     private $defaultSort;
     private $defaultOrder;
+    private $defaultLimit = 10;
 
     /**
      * Constructor
      *
-     * @param array $paramNames
-     * @param string $defaultSort
-     * @param string $defaultOrder
+     * @param array  $paramNames   Param Names
+     * @param string $defaultSort  Default sort field
+     * @param string $defaultOrder Default order method
+     *
      * @return void
      */
     public function __construct($paramNames, $defaultSort = 'id', $defaultOrder = 'DESC')
@@ -27,6 +26,20 @@ class GenericList extends AbstractParameterProvider
         $this->paramNames = (array) $paramNames;
         $this->defaultSort = $defaultSort;
         $this->defaultOrder = $defaultOrder;
+    }
+
+    /**
+     * Set default limit (records per page)
+     *
+     * @param int $limit records per page
+     *
+     * @return $this
+     */
+    public function setDefaultLimit($limit)
+    {
+        $this->defaultLimit = (int)$limit;
+
+        return $this;
     }
 
     /**
@@ -50,7 +63,7 @@ class GenericList extends AbstractParameterProvider
         $params['page'] = $this->notEmptyOrDefault($this->params()->fromQuery('page'), 1);
         $params['sort'] = $this->notEmptyOrDefault($this->params()->fromQuery('sort'), $this->defaultSort);
         $params['order'] = $this->notEmptyOrDefault($this->params()->fromQuery('order'), $this->defaultOrder);
-        $params['limit'] = $this->notEmptyOrDefault($this->params()->fromQuery('limit'), 10);
+        $params['limit'] = $this->notEmptyOrDefault($this->params()->fromQuery('limit'), $this->defaultLimit);
 
         foreach ($this->paramNames as $key => $varName) {
             if (is_int($key)) {
