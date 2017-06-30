@@ -7,12 +7,9 @@ return [
     ],
     'settings' => [
         'crud' => [
-            'actions' => [
-            ],
         ],
         'paginate' => [
             'limit' => [
-                'default' => 25,
                 'options' => [10, 25, 50],
             ],
         ],

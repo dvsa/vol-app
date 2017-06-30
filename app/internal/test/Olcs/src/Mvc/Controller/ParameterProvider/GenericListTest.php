@@ -10,10 +10,19 @@ use Zend\Mvc\Controller\Plugin\Params;
 
 /**
  * Class GenericListTest
+ *
  * @package OlcsTest\Mvc\Controller\ParameterProvider
  */
 class GenericListTest extends TestCase
 {
+    /** @var  Params | m\MockInterface */
+    private $mockParams;
+
+    public function setUp()
+    {
+        $this->mockParams = m::mock(Params::class)->makePartial();
+    }
+
     public function testProvideParameters()
     {
         $expected = [
@@ -27,28 +36,47 @@ class GenericListTest extends TestCase
             'endDate' => '2016-4-30',
         ];
 
-        $mockParams = m::mock(Params::class);
-        $mockParams->shouldReceive('fromQuery')->with('page')->andReturn(7);
-        $mockParams->shouldReceive('fromQuery')->with('sort')->andReturn('');
-        $mockParams->shouldReceive('fromQuery')->with('order')->andReturn(null);
-        $mockParams->shouldReceive('fromQuery')->with('limit')->andReturn(50);
-
-        $mockParams->shouldReceive('fromQuery')->with()->andReturn(
-            [
-                'emptyOption' => '',
-                'otherOption' => 'other',
-                'startDate' => ['day' => 1, 'month' => 4, 'year' => 2016],
-                'endDate' => ['day' => 30, 'month' => 4, 'year' => 2016],
-            ]
-        );
-
-        $mockParams->shouldReceive('fromRoute')->with('case')->andReturn(null);
-        $mockParams->shouldReceive('fromRoute')->with('application')->andReturn(75);
+        $this->mockParams
+            ->shouldReceive('fromQuery')->with('page')->andReturn(7)
+            ->shouldReceive('fromQuery')->with('sort')->andReturn('')
+            ->shouldReceive('fromQuery')->with('order')->andReturn(null)
+            ->shouldReceive('fromQuery')->with('limit')->andReturn(50)
+            ->shouldReceive('fromQuery')->with()->andReturn(
+                [
+                    'emptyOption' => '',
+                    'otherOption' => 'other',
+                    'startDate' => ['day' => 1, 'month' => 4, 'year' => 2016],
+                    'endDate' => ['day' => 30, 'month' => 4, 'year' => 2016],
+                ]
+            )
+            ->shouldReceive('fromRoute')->with('case')->andReturn(null)
+            ->shouldReceive('fromRoute')->with('application')->andReturn(75);
 
         $sut = new GenericList(['case', 'id' => 'application'], 'test');
-        $sut->setParams($mockParams);
-        $data = $sut->provideParameters();
+        $sut->setParams($this->mockParams);
 
-        $this->assertEquals($expected, $data);
+        $this->assertEquals($expected, $sut->provideParameters());
+    }
+
+    public function testDefaults()
+    {
+        $sut = new GenericList(['case', 'id' => 'application'], 'unit_defSort', 'unit_DefOrder');
+        $sut->setDefaultLimit(9999);
+
+        $this->mockParams
+            ->shouldReceive('fromQuery')->andReturn([])
+            ->shouldReceive('fromRoute')->andReturnNull();
+
+        $sut->setParams($this->mockParams);
+
+        static::assertEquals(
+            [
+                'page' => 1,
+                'sort' => 'unit_defSort',
+                'order' => 'unit_DefOrder',
+                'limit' => 9999,
+            ],
+            $sut->provideParameters()
+        );
     }
 }

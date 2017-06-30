@@ -27,6 +27,7 @@ class ReportCasesOpenController extends AbstractInternalController implements Le
      */
     protected $defaultTableSortField = 'openDate';
     protected $defaultTableOrderField = 'ASC';
+    protected $defaultTableLimit = 25;
     protected $tableName = 'admin-cases-open-report';
 
     protected $listDto = TransferQry\Cases\Report\OpenList::class;
