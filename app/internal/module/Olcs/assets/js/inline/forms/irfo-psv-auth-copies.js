@@ -14,6 +14,6 @@ $(function() {
     OLCS.formHelper(fieldset, totalCopiesRequiredField).val(totalCopies);
   };
 
-  OLCS.formHelper(fieldset, chargeableCopiesRequiredField).on("change", recalculateTotal);
-  OLCS.formHelper(fieldset, nonChargeableCopiesRequiredField).on("change", recalculateTotal);
+  OLCS.formHelper(fieldset, chargeableCopiesRequiredField).on("keyup", recalculateTotal);
+  OLCS.formHelper(fieldset, nonChargeableCopiesRequiredField).on("keyup", recalculateTotal);
 });
