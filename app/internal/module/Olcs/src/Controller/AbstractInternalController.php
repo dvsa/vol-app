@@ -5,6 +5,7 @@ namespace Olcs\Controller;
 use Common\Data\Mapper\MapperInterface;
 use Common\Service\Cqrs\Response;
 use Common\Service\Table\TableBuilder;
+use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Olcs\Listener\CrudListener;
@@ -481,17 +482,22 @@ abstract class AbstractInternalController extends AbstractActionController
 
         $query = $itemDto::create($params);
 
-        $response = $this->handleQuery($query);
+        try {
+            $response = $this->handleQuery($query);
 
-        if ($response->isOk()) {
-            $data = $response->getResult();
+            if ($response->isOk()) {
+                $data = $response->getResult();
 
-            if (isset($data)) {
-                $this->placeholder()->setPlaceholder($detailsViewPlaceHolderName, $data);
+                if (isset($data)) {
+                    $this->placeholder()->setPlaceholder($detailsViewPlaceHolderName, $data);
+                }
+
+            } elseif ($response->isClientError() || $response->isServerError()) {
+                $this->handleErrors($response->getResult());
             }
-
-        } elseif ($response->isClientError() || $response->isServerError()) {
-            $this->handleErrors($response->getResult());
+        } catch (NotFoundException $e) {
+            // This is to force compatability with how this Abstract has been used
+            return $this->notFoundAction();
         }
 
         return $this->viewBuilder()->buildViewFromTemplate($detailsViewTemplate);
