@@ -2,11 +2,12 @@
 
 namespace OlcsTest\FormService\Form\Lva\People;
 
-use Common\Form\Elements\InputFilters\Lva\BackToApplicationActionLink;
+use Common\Form\Form;
 use Mockery as m;
+use Common\FormService\FormServiceManager;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Common\Service\Helper\FormHelperService;
 use Olcs\FormService\Form\Lva\People\ApplicationPeople as Sut;
-use Zend\Form\Form;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**
@@ -18,10 +19,19 @@ class ApplicationPeopleTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
+    /**
+     * @var Sut
+     */
     protected $sut;
 
+    /**
+     * @var FormHelperService|m\Mock
+     */
     protected $formHelper;
 
+    /**
+     * @var FormServiceManager|m\Mock
+     */
     protected $fsm;
 
     public function setUp()
@@ -36,11 +46,11 @@ class ApplicationPeopleTest extends MockeryTestCase
 
     public function testGetForm()
     {
-        $formActions = m::mock();
+        $formActions = m::mock(Form::class);
         $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('cancel');
 
-        $form = m::mock();
+        $form = m::mock(Form::class);
         $form->shouldReceive('has')->with('form-actions')->andReturn(true);
         $form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
@@ -50,6 +60,6 @@ class ApplicationPeopleTest extends MockeryTestCase
 
         $this->mockAlterButtons($form, $this->formHelper, $formActions);
 
-        $this->sut->getForm();
+        $this->sut->getForm(['canModify' => true]);
     }
 }
