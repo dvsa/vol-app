@@ -10,7 +10,7 @@ return array(
         'crud' => array(
             'actions' => array(
                 'generate' => array(
-                    'label' => 'Generate checklists',
+                    'label' => 'Generate',
                     'class' => 'action--primary js-require--multiple',
                     'requireRows' => true
                 ),
