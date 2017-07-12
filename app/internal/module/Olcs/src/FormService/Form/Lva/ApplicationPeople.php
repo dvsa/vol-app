@@ -20,7 +20,7 @@ class ApplicationPeople extends CommonApplicationPeople
      *
      * @return void
      */
-    public function alterForm($form, $params = [])
+    public function alterForm(Form $form, array $params = [])
     {
         parent::alterForm($form, $params);
         $this->removeFormAction($form, 'save');
