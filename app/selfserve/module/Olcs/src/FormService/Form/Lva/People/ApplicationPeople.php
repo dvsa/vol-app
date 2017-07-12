@@ -2,9 +2,9 @@
 
 namespace Olcs\FormService\Form\Lva\People;
 
-use Common\Form\Elements\InputFilters\Lva\BackToApplicationActionLink;
 use Common\FormService\Form\Lva\People\ApplicationPeople as CommonApplicationPeople;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
+use Common\Form\Form;
 
 /**
  * Application People
@@ -15,12 +15,24 @@ class ApplicationPeople extends CommonApplicationPeople
 {
     use ButtonsAlterations;
 
-    public function alterForm($form)
+    /**
+     * Alter form
+     *
+     * @param Form  $form   Form
+     * @param array $params Parameters for form
+     *
+     * @return Form
+     */
+    public function alterForm(Form $form, array $params = [])
     {
-        $form = parent::alterForm($form);
+        parent::alterForm($form, $params);
 
-        $this->alterButtons($form);
-
-        return $form;
+        if (isset($params['canModify']) && $params['canModify'] === false) {
+            $form->get('form-actions')->get('save')->setLabel('lva.external.return.link');
+            $form->get('form-actions')->get('save')->removeAttribute('class');
+            $form->get('form-actions')->get('save')->setAttribute('class', 'action--tertiary large');
+        } else {
+            $this->alterButtons($form);
+        }
     }
 }

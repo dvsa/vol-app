@@ -2,12 +2,13 @@
 
 namespace OlcsTest\FormService\Form\Lva\People;
 
-use Common\Form\Elements\InputFilters\Lva\BackToApplicationActionLink;
 use Mockery as m;
+use Common\Form\Form;
+use Common\FormService\FormServiceManager;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\FormService\Form\Lva\People\ApplicationPeople as Sut;
-use Zend\Form\Form;
+use Common\Service\Helper\FormHelperService;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
+use Olcs\FormService\Form\Lva\People\ApplicationPeople as Sut;
 
 /**
  * Application People Test
@@ -18,10 +19,19 @@ class ApplicationPeopleTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
+    /**
+     * @var Sut
+     */
     protected $sut;
 
+    /**
+     * @var FormHelperService|m\Mock
+     */
     protected $formHelper;
 
+    /**
+     * @var FormServiceManager|m\Mock
+     */
     protected $fsm;
 
     public function setUp()
@@ -34,13 +44,13 @@ class ApplicationPeopleTest extends MockeryTestCase
         $this->sut->setFormServiceLocator($this->fsm);
     }
 
-    public function testGetForm()
+    public function testGetFormAndCanModify()
     {
-        $formActions = m::mock();
+        $formActions = m::mock(Form::class);
         $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('cancel');
 
-        $form = m::mock();
+        $form = m::mock(Form::class);
         $form->shouldReceive('has')->with('form-actions')->andReturn(true);
         $form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
@@ -50,6 +60,43 @@ class ApplicationPeopleTest extends MockeryTestCase
 
         $this->mockAlterButtons($form, $this->formHelper, $formActions);
 
-        $this->sut->getForm();
+        $this->sut->getForm(['canModify' => true]);
+    }
+
+    public function testGetFormAndCannotModify()
+    {
+        $formActions = m::mock(Form::class);
+        $formActions->shouldReceive('has')->with('save')->andReturn(true);
+        $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
+
+        $formActions->shouldReceive('remove')->once()->with('cancel');
+
+        $formActions->shouldReceive('get')
+            ->with('save')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setLabel')
+                    ->with('lva.external.return.link')
+                    ->once()
+                    ->shouldReceive('removeAttribute')
+                    ->with('class')
+                    ->once()
+                    ->shouldReceive('setAttribute')
+                    ->with('class', 'action--tertiary large')
+                    ->once()
+                    ->getMock()
+            )
+            ->times(3)
+            ->getMock();
+
+        $form = m::mock(Form::class);
+        $form->shouldReceive('has')->with('form-actions')->andReturn(true);
+        $form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
+
+        $this->formHelper->shouldReceive('createForm')->once()
+            ->with('Lva\People')
+            ->andReturn($form);
+
+        $this->sut->getForm(['canModify' => false]);
     }
 }

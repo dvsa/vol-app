@@ -4,12 +4,15 @@ namespace OlcsTest\FormService\Form\Lva\People\SoleTrader;
 
 use Common\Form\Elements\InputFilters\Lva\BackToApplicationActionLink;
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FormHelperService;
+use Olcs\FormService\Form\Lva\People\SoleTrader\ApplicationSoleTrader;
 use OlcsTest\Bootstrap;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\People\SoleTrader\ApplicationSoleTrader as Sut;
 use Zend\Form\Form;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Application Sole Trader Test
@@ -20,12 +23,24 @@ class ApplicationSoleTraderTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
+    /**
+     * @var ApplicationSoleTrader
+     */
     protected $sut;
 
+    /**
+     * @var FormHelperService|m
+     */
     protected $formHelper;
 
+    /**
+     * @var FormServiceManager|m
+     */
     protected $fsm;
 
+    /**
+     * @var ServiceLocatorInterface
+     */
     protected $sm;
 
     public function setUp()
@@ -115,7 +130,7 @@ class ApplicationSoleTraderTest extends MockeryTestCase
             'orgType' => 'bar'
         ];
 
-        $formActions = m::mock()
+        $formActions = m::mock(\Common\Form\Form::class)
             ->shouldReceive('get')
             ->with('disqualify')
             ->andReturn(
@@ -148,7 +163,7 @@ class ApplicationSoleTraderTest extends MockeryTestCase
             ->times(3)
             ->getMock();
 
-        $form = m::mock();
+        $form = m::mock(\Common\Form\Form::class);
 
         $form->shouldReceive('has')->with('form-actions')->andReturn(true);
         $form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
