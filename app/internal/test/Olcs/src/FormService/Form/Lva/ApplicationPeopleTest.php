@@ -2,6 +2,7 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
+use Common\Form\Form;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationPeople;
@@ -28,13 +29,13 @@ class ApplicationPeopleTest extends MockeryTestCase
 
     public function testGetForm()
     {
-        $formActions = m::mock();
+        $formActions = m::mock(Form::class);
         $formActions->shouldReceive('has')->with('cancel')->andReturn(true)->once();
         $formActions->shouldReceive('remove')->once()->with('cancel')->once();
         $formActions->shouldReceive('has')->with('save')->andReturn(true)->once();
         $formActions->shouldReceive('remove')->with('save')->once();
 
-        $form = m::mock();
+        $form = m::mock(Form::class);
         $form->shouldReceive('has')->with('form-actions')->andReturn(true)->twice();
         $form->shouldReceive('get')->with('form-actions')->andReturn($formActions)->twice();
 
