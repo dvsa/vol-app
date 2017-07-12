@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Command\Application\SubmitApplication as SubmitApplicatio
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Dvsa\Olcs\Transfer\Query\Application\OutstandingFees;
 use Common\Controller\Traits\GenericReceipt;
-use Olcs\Controller\Lva\Traits\StoredCardsTrait;
+use Common\Controller\Traits\StoredCardsTrait;
 
 /**
  * External Abstract Payment Submission Controller

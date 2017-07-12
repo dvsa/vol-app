@@ -2,16 +2,27 @@
 /** @var \Zend\Navigation\Page\Mvc $backPage */
 $backPage = $this->navigationParentPage();
 
-echo $this->partial(
-    'partials/page-header-simple',
-    [
-        'pageTitle' => $this->fee['description'],
-        'pageSubTitle' => $this->translate('licence') . ' ' . $this->fee['licence']['licNo'],
-        'backUrl' => [
-            'url' => ($backPage !== null ? $backPage->getHref() : $this->url('fees')),
-        ],
-    ]
-);
+if ($hasContinuation) {
+    echo $this->partial(
+        'partials/page-header-simple',
+        [
+            'pageTitle' => $this->translate('continuation.payment.title.pay-fee'),
+            'pageSubTitle' => $this->translate('continuation.sub-title.continue-licence') . ' ' . $licNo,
+            'backUrl' => ['url' => $this->url('continuation/declaration', [], [], true)],
+        ]
+    );
+} else {
+    echo $this->partial(
+        'partials/page-header-simple',
+        [
+            'pageTitle' => $this->fee['description'],
+            'pageSubTitle' => $this->translate('licence') . ' ' . $this->fee['licence']['licNo'],
+            'backUrl' => [
+                'url' => ($backPage !== null ? $backPage->getHref() : $this->url('fees')),
+            ],
+        ]
+    );
+}
 ?>
 
 
