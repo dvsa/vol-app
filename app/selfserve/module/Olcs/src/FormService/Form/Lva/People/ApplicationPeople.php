@@ -28,7 +28,6 @@ class ApplicationPeople extends CommonApplicationPeople
         parent::alterForm($form, $params);
 
         if (isset($params['canModify']) && $params['canModify'] === false) {
-            $this->removeFormAction($form, 'cancel');
             $form->get('form-actions')->get('save')->setLabel('lva.external.return.link');
             $form->get('form-actions')->get('save')->removeAttribute('class');
             $form->get('form-actions')->get('save')->setAttribute('class', 'action--tertiary large');
