@@ -17,6 +17,7 @@ use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePayment;
 use Common\Controller\Traits\GenericReceipt;
 use Dvsa\Olcs\Transfer\Query\Fee\Fee;
+use Common\Controller\Traits\StoredCardsTrait;
 
 /**
  * Fees Controller
@@ -27,7 +28,7 @@ class FeesController extends AbstractController
 {
     use Lva\Traits\ExternalControllerTrait,
         Lva\Traits\DashboardNavigationTrait,
-        Lva\Traits\StoredCardsTrait,
+        StoredCardsTrait,
         GenericReceipt;
 
     const PAYMENT_METHOD = RefData::FEE_PAYMENT_METHOD_CARD_ONLINE;
