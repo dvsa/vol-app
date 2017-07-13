@@ -19,6 +19,16 @@ class LicenceTransportManagerAdapter extends CommonAdapter
     /** @var VariationLvaService */
     private $lvaVariationSrv;
 
+    /**
+     * LicenceTransportManagerAdapter constructor.
+     *
+     * @param TransferAnnotationBuilder $transferAnnotationBuilder annotation builder
+     * @param CachingQueryService       $querySrv                  caching query service
+     * @param CommandService            $commandSrv                command service
+     * @param VariationLvaService       $lvaVariationSrv           lva variation service
+     *
+     * @return void
+     */
     public function __construct(
         TransferAnnotationBuilder $transferAnnotationBuilder,
         CachingQueryService $querySrv,
@@ -32,10 +42,14 @@ class LicenceTransportManagerAdapter extends CommonAdapter
 
     /**
      * Add messages
+     *
+     * @param int $licenceId licence id
+     *
+     * @return void
      */
     public function addMessages($licenceId)
     {
         // add message saying to create a variation
-        $this->lvaVariationSrv->addVariationMessage($licenceId, 'transport_managers');
+        $this->lvaVariationSrv->addVariationMessage($licenceId, 'transport_managers', 'variation-message-add-tm');
     }
 }
