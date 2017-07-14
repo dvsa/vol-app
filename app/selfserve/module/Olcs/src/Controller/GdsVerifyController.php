@@ -18,10 +18,14 @@ class GdsVerifyController extends AbstractController
     public function initiateRequestAction()
     {
         $applicationId = $this->params()->fromRoute('application');
+        $continuationDetailId = $this->params()->fromRoute('continuationDetailId');
+        $session = new \Olcs\Session\DigitalSignature();
         if ($applicationId) {
             // Save the application identifier so that when we come back from verify we know where to go
-            $session = new \Olcs\Session\DigitalSignature();
             $session->setApplicationId($applicationId);
+        } elseif ($continuationDetailId) {
+            // Save the continuation detail identifier so that when we come back from verify we know where to go
+            $session->setContinuationDetailId($continuationDetailId);
         } else {
             throw new \RuntimeException(
                 'An entity identifier needs to be present, this is used to to calculate where'
@@ -55,6 +59,7 @@ class GdsVerifyController extends AbstractController
     {
         $session = new \Olcs\Session\DigitalSignature();
         $applicationId = $session->hasApplicationId() ? $session->getApplicationId() : false;
+        $continuationDetailId = $session->hasContinuationDetailId() ? $session->getContinuationDetailId() : false;
         $session->getManager()->getStorage()->clear(\Olcs\Session\DigitalSignature::SESSION_NAME);
 
         $dto = \Dvsa\Olcs\Transfer\Command\GdsVerify\ProcessSignatureResponse::create(
@@ -63,16 +68,25 @@ class GdsVerifyController extends AbstractController
         if ($applicationId) {
             $dto->setApplication($applicationId);
         }
+        if ($continuationDetailId) {
+            $dto->setContinuationDetail($continuationDetailId);
+        }
         $response = $this->handleCommand($dto);
+        if (!$response->isOk()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('undertakings_not_signed');
+        }
 
         if ($applicationId) {
-            if (!$response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('undertakings_not_signed');
-            }
-
             return $this->redirect()->toRoute(
                 'lva-application/undertakings',
                 ['application' => $applicationId]
+            );
+        }
+
+        if ($continuationDetailId) {
+            return $this->redirect()->toRoute(
+                'continuation/declaration',
+                ['continuationDetailId' => $continuationDetailId]
             );
         }
 

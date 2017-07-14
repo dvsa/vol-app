@@ -429,7 +429,8 @@ $routes = array(
             'initiate-request' => array(
                 'type' => Segment::class,
                 'options' => array(
-                    'route' => '/initiate-request[/application/:application][/]',
+                    'route' => '/initiate-request[/application/:application]'.
+                        '[/continuation-detail/:continuationDetailId][/]',
                     'defaults' => array(
                         'action' => 'initiate-request',
                     ),
