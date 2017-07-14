@@ -1229,6 +1229,8 @@ trait FeesActionTrait
             $this->addErrorMessage('The fee payment failed');
             return $this->redirectToList();
         }
+        $licenceContinued = isset($response->getResult()['flags'][RefData::RESULT_LICENCE_CONTINUED])
+            && (int) $response->getResult()['flags'][RefData::RESULT_LICENCE_CONTINUED] === 1;
 
         // check payment status and redirect accordingly
         $transactionId = $response->getResult()['id']['transaction'];
@@ -1238,6 +1240,9 @@ trait FeesActionTrait
         switch ($transaction['status']['id']) {
             case RefData::TRANSACTION_STATUS_COMPLETE:
                 $this->addSuccessMessage('The fee(s) have been paid successfully');
+                if ($licenceContinued) {
+                    $this->addSuccessMessage('Licence has been continued');
+                }
                 break;
             case RefData::TRANSACTION_STATUS_CANCELLED:
                 $this->addWarningMessage('The fee payment was cancelled');
