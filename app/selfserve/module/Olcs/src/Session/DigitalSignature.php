@@ -48,4 +48,36 @@ class DigitalSignature extends \Zend\Session\Container
     {
         return (int) $this->applicationId;
     }
+
+    /**
+     * Has ContinuationDetail ID been set
+     *
+     * @return bool
+     */
+    public function hasContinuationDetailId()
+    {
+        return $this->offsetExists('continuationDetailId');
+    }
+
+    /**
+     * Set ContinuationDetail ID
+     *
+     * @param int $continuationDetailId ContinuationDetail ID
+     *
+     * @return void
+     */
+    public function setContinuationDetailId($continuationDetailId)
+    {
+        $this->continuationDetailId = $continuationDetailId;
+    }
+
+    /**
+     * Get ContinuationDetail ID
+     *
+     * @return int
+     */
+    public function getContinuationDetailId()
+    {
+        return (int) $this->continuationDetailId;
+    }
 }
