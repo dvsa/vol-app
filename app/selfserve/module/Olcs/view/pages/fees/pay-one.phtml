@@ -2,7 +2,7 @@
 /** @var \Zend\Navigation\Page\Mvc $backPage */
 $backPage = $this->navigationParentPage();
 
-if ($hasContinuation) {
+if ($payingFromFlow) {
     echo $this->partial(
         'partials/page-header-simple',
         [
