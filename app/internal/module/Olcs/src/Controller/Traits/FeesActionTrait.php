@@ -1179,6 +1179,11 @@ trait FeesActionTrait
         } else {
             $this->addErrorMessage('The fee(s) have NOT been paid. Please try again');
         }
+        $licenceContinued = isset($response->getResult()['flags'][RefData::RESULT_LICENCE_CONTINUED])
+            && (int) $response->getResult()['flags'][RefData::RESULT_LICENCE_CONTINUED] === 1;
+        if ($licenceContinued) {
+            $this->addSuccessMessage('Licence has been continued');
+        }
 
         if (isset($details['backToFee']) && !empty($details['backToFee'])) {
             return $this->redirectToFeeDetails(true);
