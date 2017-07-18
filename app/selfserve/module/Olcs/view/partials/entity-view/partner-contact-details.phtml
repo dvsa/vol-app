@@ -19,50 +19,40 @@ $items[] = [
 ];
 
 $phoneContacts = $this->result['licenceContactDetails']['phoneContacts'];
+$primaryList = [];
+$secondaryList = [];
 if (!empty($phoneContacts)) {
     for ($i = 0, $n = count($phoneContacts); $i < $n; $i++) {
-        if ($phoneContacts[$i]['phoneContactType']['id'] === RefData::TYPE_FAX) {
-            $faxLabel = ($faxCount == 0) ? 'search-result-label-fax-numbers' : '';
-            $faxList[] = [
-                'label' => $faxLabel,
+        if ($phoneContacts[$i]['phoneContactType']['id'] === RefData::PHONE_TYPE_PRIMARY) {
+            $primaryList[] = [
+                'label' => 'search-result-label-primary-number',
                 'value' => $phoneContacts[$i]['phoneNumber']
             ];
-            $faxCount++;
-        } else {
-            $phoneLabel = ($phoneCount == 0) ? 'search-result-label-phone-numbers' : '';
-            $phoneList[] = [
-                'label' => $phoneLabel,
+        }
+        if ($phoneContacts[$i]['phoneContactType']['id'] === RefData::PHONE_TYPE_SECONDARY) {
+            $secondaryList[] = [
+                'label' => 'search-result-label-secondary-number',
                 'value' => $phoneContacts[$i]['phoneNumber']
             ];
-            $phoneCount++;
         }
     }
 } else {
-    $phoneList[] = [
-        'label' => 'search-result-label-phone-numbers',
-        'value' => ''
-    ];
-    $faxList[] = [
-        'label' => 'search-result-label-fax-numbers',
+    $primaryList[] = [
+        'label' => 'search-result-label-primary-number',
         'value' => ''
     ];
 }
 
-if (empty($phoneList)) {
-    $phoneList[] = [
+if (empty($primaryList)) {
+    $primaryList[] = [
         'label' => 'search-result-label-phone-numbers',
         'value' => ''
     ];
 }
-if (empty($faxList)) {
-    $faxList[] = [
-        'label' => 'search-result-label-fax-numbers',
-        'value' => ''
-    ];
+$items[] = $primaryList;
+if (!empty($secondaryList)) {
+    $items[] = $secondaryList;
 }
-
-$items[] = $phoneList;
-$items[] = $faxList;
 $items[] = [
     0 => [
         'label' => 'search-result-label-email',
