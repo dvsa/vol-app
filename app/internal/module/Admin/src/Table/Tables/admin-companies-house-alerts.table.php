@@ -24,11 +24,13 @@ return array(
     'columns' => array(
         array(
             'title' => 'Company No.',
+            'sort' => 'companyOrLlpNo',
             'name' => 'companyOrLlpNo',
         ),
         array(
             'title' => 'OLCS Company name.',
             'name' => 'organisation',
+            'sort' => 'organisation',
             'formatter' => 'OrganisationLink',
         ),
         array(

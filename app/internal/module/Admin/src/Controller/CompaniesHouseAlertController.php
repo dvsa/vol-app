@@ -44,6 +44,9 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
     protected $tableViewPlaceholderName = 'table';
     protected $tableViewTemplate = 'pages/table-comments';
     protected $tableName = 'admin-companies-house-alerts';
+    protected $defaultTableSortField = 'companyOrLlpNo';
+    protected $defaultTableOrderField = 'ASC';
+
     protected $listDto = ListDto::class;
     protected $filterForm = FilterForm::class;
     protected $itemParams = ['id'];
