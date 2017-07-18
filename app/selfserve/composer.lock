@@ -769,7 +769,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "15b2ddbcd7aa1665cffa5525c73bb74aefb84cb3"
+                "reference": "569a7fc6dc361f1cb2c659491ed95570b8d1a7d3"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
