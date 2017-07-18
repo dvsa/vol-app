@@ -66,9 +66,11 @@ class ScanningController extends ZendAbstractActionController
         //  is POST
         if ($prg !== false) {
             $details = $data['details'];
-
-            if (isset($details['description'])) {
-                /** @var  \Common\Service\Helper\FormHelperService */
+            // if no sub category descriptions, then remove the "description" select element
+            if (count($sm->get(\Olcs\Service\Data\SubCategoryDescription::class)->fetchListData()) === 0) {
+                $sm->get('Helper\Form')->remove($form, 'details->description');
+            } else {
+                // else remove the "otherDescription" text element
                 $sm->get('Helper\Form')->remove($form, 'details->otherDescription');
             }
 
@@ -138,7 +140,10 @@ class ScanningController extends ZendAbstractActionController
             $messages = $result['messages'];
 
             if (array_key_exists(self::ERR_NO_ENTITY_FOR_CATEGORY, $messages)
-                || array_key_exists(self::ERR_ENTITY_NAME_NOT_SETUP, $messages)) {
+                || array_key_exists(self::ERR_ENTITY_NAME_NOT_SETUP, $messages)
+                // Temporary fix, if the response was a client error, assume the entity was not found
+                || $response->isClientError()
+            ) {
                 $errors['details']['entityIdentifier'] = ['scanning.error.entity.' . $category];
             }
 
