@@ -46,7 +46,7 @@ class LicenceTransportManagerAdapterTest extends MockeryTestCase
     {
         $this->mockLvaVariationSrv
             ->shouldReceive('addVariationMessage')
-            ->with(self::LICENCE_ID, 'transport_managers')
+            ->with(self::LICENCE_ID, 'transport_managers', 'variation-message-add-tm')
             ->once();
 
         $this->sut->addMessages(self::LICENCE_ID);
