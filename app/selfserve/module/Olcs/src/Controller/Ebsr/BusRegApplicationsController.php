@@ -142,7 +142,7 @@ class BusRegApplicationsController extends AbstractController
         $userData = $this->currentUser()->getUserData();
 
         if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
-            $tableName = 'txc-inbox';
+            $tableName = self::TABLE_TXC_INBOX;
         } else {
             $tableName = 'ebsr-submissions';
         }
