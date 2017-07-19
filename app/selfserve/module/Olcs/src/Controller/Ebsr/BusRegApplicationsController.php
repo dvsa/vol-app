@@ -41,6 +41,8 @@ class BusRegApplicationsController extends AbstractController
 
                 //this is a redirect to the EBSR upload page
                 return $this->redirect()->toRoute('bus-registration/ebsr');
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('select-at-least-one-row');
             }
 
             return $this->processSearch($postData);
