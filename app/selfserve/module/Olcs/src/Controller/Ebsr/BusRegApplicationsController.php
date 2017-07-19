@@ -33,7 +33,7 @@ class BusRegApplicationsController extends AbstractController
         if ($request->isPost()) {
             $postData = $request->getPost();
 
-            if (isset($postData['action'], $postData['table'])) {
+            if (isset($postData['action'], $postData['table'], $postData['id'])) {
                 //this is a mark as read request
                 if ($postData['table'] === 'txc-inbox') {
                     return $this->processMarkAsRead($postData);
