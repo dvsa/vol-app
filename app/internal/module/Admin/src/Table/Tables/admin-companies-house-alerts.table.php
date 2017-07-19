@@ -30,7 +30,7 @@ return array(
         array(
             'title' => 'OLCS Company name.',
             'name' => 'organisation',
-            'sort' => 'organisation',
+            'sort' => 'o.name',
             'formatter' => 'OrganisationLink',
         ),
         array(
