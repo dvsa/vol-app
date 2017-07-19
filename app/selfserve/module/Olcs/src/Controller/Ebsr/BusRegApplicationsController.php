@@ -20,6 +20,35 @@ use Zend\View\Model\ViewModel;
  */
 class BusRegApplicationsController extends AbstractController
 {
+    const TABLE_TXC_INBOX = 'txc-inbox';
+
+    /**
+     * On bus registration page we use this to handle the posted data
+     *
+     * @param array $postData Post data
+     *
+     * @return null|Response
+     */
+    private function busRegPostedActionHandler(array $postData)
+    {
+        if (! isset($postData['action'], $postData['table'])) {
+            return null;
+        }
+
+        if ($postData['table'] !== self::TABLE_TXC_INBOX) {
+            //this is a redirect to the EBSR upload page
+            return $this->redirect()->toRoute('bus-registration/ebsr');
+        }
+
+        //this is a mark as read request
+        if (isset($postData['id'])) {
+            return $this->processMarkAsRead($postData);
+        }
+
+        $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('select-at-least-one-row');
+        return $this->processSearch($postData);
+    }
+
     /**
      * Lists all EBSR's with filter search form
      *
@@ -33,15 +62,7 @@ class BusRegApplicationsController extends AbstractController
         if ($request->isPost()) {
             $postData = $request->getPost();
 
-            if (isset($postData['action'], $postData['table'])) {
-                //this is a mark as read request
-                if ($postData['table'] === 'txc-inbox') {
-                    return $this->processMarkAsRead($postData);
-                }
-
-                //this is a redirect to the EBSR upload page
-                return $this->redirect()->toRoute('bus-registration/ebsr');
-            }
+            $this->busRegPostedActionHandler($postData);
 
             return $this->processSearch($postData);
         }
@@ -121,7 +142,7 @@ class BusRegApplicationsController extends AbstractController
         $userData = $this->currentUser()->getUserData();
 
         if ($userData['userType'] === User::USER_TYPE_LOCAL_AUTHORITY) {
-            $tableName = 'txc-inbox';
+            $tableName = self::TABLE_TXC_INBOX;
         } else {
             $tableName = 'ebsr-submissions';
         }

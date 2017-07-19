@@ -19,7 +19,7 @@ class BusRegApplicationsOperatorFilterFormTest extends AbstractFormValidationTes
     public function testStatus()
     {
         $element = ['fields', 'status'];
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementDynamicSelect($element);
     }
