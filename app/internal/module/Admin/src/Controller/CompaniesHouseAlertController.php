@@ -44,6 +44,9 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
     protected $tableViewPlaceholderName = 'table';
     protected $tableViewTemplate = 'pages/table-comments';
     protected $tableName = 'admin-companies-house-alerts';
+    protected $defaultTableSortField = 'companyOrLlpNo';
+    protected $defaultTableOrderField = 'ASC';
+
     protected $listDto = ListDto::class;
     protected $filterForm = FilterForm::class;
     protected $itemParams = ['id'];
@@ -53,6 +56,11 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
         ]
     ];
 
+    /**
+     * Get left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -66,6 +74,11 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
         return $view;
     }
 
+    /**
+     * Companies house alert list view
+     *
+     * @return \Zend\Http\Response|ViewModel
+     */
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Companies House alerts');
@@ -86,6 +99,11 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
         return $view;
     }
 
+    /**
+     * Close action
+     *
+     * @return ViewModel
+     */
     public function closeAction()
     {
         Logger::debug(__FILE__);

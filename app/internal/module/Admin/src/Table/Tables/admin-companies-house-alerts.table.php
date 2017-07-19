@@ -9,7 +9,7 @@ return array(
         'crud' => array(
             'actions' => array(
                 'close' => array(
-                    'class' => 'action--primary js-require--multiple', 
+                    'class' => 'action--primary js-require--multiple',
                     'requireRows' => false
                 ),
             )
@@ -24,11 +24,13 @@ return array(
     'columns' => array(
         array(
             'title' => 'Company No.',
+            'sort' => 'companyOrLlpNo',
             'name' => 'companyOrLlpNo',
         ),
         array(
             'title' => 'OLCS Company name.',
             'name' => 'organisation',
+            'sort' => 'o.name',
             'formatter' => 'OrganisationLink',
         ),
         array(
