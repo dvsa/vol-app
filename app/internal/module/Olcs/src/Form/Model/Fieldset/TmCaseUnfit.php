@@ -131,7 +131,7 @@ class TmCaseUnfit extends CaseBase
      *     "category": "tm_unfit_reason"
      * })
      */
-    public $unfitnessReasons = null;
+    public $unfitnessReasons = [];
 
     /**
      * @Form\Required(false)
@@ -142,8 +142,9 @@ class TmCaseUnfit extends CaseBase
      *     "disable_inarray_validator": false,
      *     "category": "tm_case_rehab"
      * })
+     * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
-    public $rehabMeasures = null;
+    public $rehabMeasures = [];
 
     /**
      * @Form\Type("Hidden")
