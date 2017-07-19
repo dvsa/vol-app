@@ -20,6 +20,8 @@ use Zend\View\Model\ViewModel;
  */
 class BusRegApplicationsController extends AbstractController
 {
+    const TABLE_TXC_INBOX = 'txc-inbox';
+
     /**
      * On bus registration page we use this to handle the posted data
      *
@@ -33,7 +35,7 @@ class BusRegApplicationsController extends AbstractController
             return null;
         }
 
-        if ($postData['table'] !== 'txc-inbox') {
+        if ($postData['table'] !== self::TABLE_TXC_INBOX) {
             //this is a redirect to the EBSR upload page
             return $this->redirect()->toRoute('bus-registration/ebsr');
         }
