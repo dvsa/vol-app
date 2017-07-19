@@ -21,6 +21,33 @@ use Zend\View\Model\ViewModel;
 class BusRegApplicationsController extends AbstractController
 {
     /**
+     * On bus registration page we use this to handle the posted data
+     *
+     * @param array $postData Post data
+     *
+     * @return null|Response
+     */
+    private function busRegPostedActionHandler(array $postData)
+    {
+        if (! isset($postData['action'], $postData['table'])) {
+            return null;
+        }
+
+        if ($postData['table'] !== 'txc-inbox') {
+            //this is a redirect to the EBSR upload page
+            return $this->redirect()->toRoute('bus-registration/ebsr');
+        }
+
+        //this is a mark as read request
+        if (isset($postData['id'])) {
+            return $this->processMarkAsRead($postData);
+        }
+
+        $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('select-at-least-one-row');
+        return $this->processSearch($postData);
+    }
+
+    /**
      * Lists all EBSR's with filter search form
      *
      * @return array|Response|ViewModel
@@ -33,17 +60,7 @@ class BusRegApplicationsController extends AbstractController
         if ($request->isPost()) {
             $postData = $request->getPost();
 
-            if (isset($postData['action'], $postData['table'], $postData['id'])) {
-                //this is a mark as read request
-                if ($postData['table'] === 'txc-inbox') {
-                    return $this->processMarkAsRead($postData);
-                }
-
-                //this is a redirect to the EBSR upload page
-                return $this->redirect()->toRoute('bus-registration/ebsr');
-            } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('select-at-least-one-row');
-            }
+            $this->busRegPostedActionHandler($postData);
 
             return $this->processSearch($postData);
         }
