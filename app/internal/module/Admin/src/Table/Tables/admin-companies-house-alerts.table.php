@@ -9,7 +9,7 @@ return array(
         'crud' => array(
             'actions' => array(
                 'close' => array(
-                    'class' => 'action--primary js-require--multiple', 
+                    'class' => 'action--primary js-require--multiple',
                     'requireRows' => false
                 ),
             )
