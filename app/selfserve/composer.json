@@ -41,7 +41,7 @@
     "require": {
         "php": ">=5.4",
         "zendframework/zendframework": "~2.4.0",
-        "doctrine/annotations": "^1.2.3",
+        "doctrine/annotations": "~1.4.0",
         "symfony/Filesystem": "~2.6.0",
         "zf-commons/zfc-rbac": "~2.4.0",
         "olcs/autoload": "dev-develop",
