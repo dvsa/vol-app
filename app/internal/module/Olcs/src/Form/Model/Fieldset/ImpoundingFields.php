@@ -112,18 +112,29 @@ class ImpoundingFields
     public $venue = null;
 
     /**
-     * @Form\Required(false)
+     * @Form\Required(true)
      * @Form\Type("Text")
      * @Form\Options({"label":"Other hearing location"})
-     * @Form\Attributes({"class":"medium","id":"venueOther", "required":false})
+     * @Form\Attributes({"class":"medium","id":"venueOther"})
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "impoundingType",
      *          "context_values": {"impt_hearing"},
-     *          "allow_empty": true,
      *          "validators": {
-     *              {"name":"Zend\Validator\StringLength","options":{"max":255}}
+     *              {
+     *                  "name":"ValidateIf",
+     *                  "options":
+     *                      {
+     *                          "context_field": "venue",
+     *                          "context_values": {"other"},
+     *                          "validators": {
+     *                              {"name":"Zend\Validator\StringLength","options":{"max":255}},
+     *                              {"name":"Zend\Validator\NotEmpty"}
+     *                          }
+     *                      }
+     *              }
      *          }
      *      }
      * })
