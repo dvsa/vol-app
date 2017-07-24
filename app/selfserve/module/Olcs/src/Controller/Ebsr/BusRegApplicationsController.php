@@ -31,21 +31,21 @@ class BusRegApplicationsController extends AbstractController
      */
     private function busRegPostedActionHandler(array $postData)
     {
-        if (! isset($postData['action'], $postData['table'])) {
+        if (isset($postData['action'], $postData['table'])) {
+            if ($postData['table'] !== self::TABLE_TXC_INBOX) {
+                //this is a redirect to the EBSR upload page
+                return $this->redirect()->toRoute('bus-registration/ebsr');
+            }
+
+            //this is a mark as read request
+            if (isset($postData['id'])) {
+                return $this->processMarkAsRead($postData);
+            }
+
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('select-at-least-one-row');
             return null;
         }
 
-        if ($postData['table'] !== self::TABLE_TXC_INBOX) {
-            //this is a redirect to the EBSR upload page
-            return $this->redirect()->toRoute('bus-registration/ebsr');
-        }
-
-        //this is a mark as read request
-        if (isset($postData['id'])) {
-            return $this->processMarkAsRead($postData);
-        }
-
-        $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('select-at-least-one-row');
         return $this->processSearch($postData);
     }
 
