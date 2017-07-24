@@ -6,7 +6,7 @@ use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationFinancialHistory;
-use Zend\Form\Form;
+use Common\Form\Form;
 use Zend\Http\Request;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 
@@ -51,4 +51,3 @@ class ApplicationFinancialHistoryTest extends MockeryTestCase
         $this->assertSame($mockForm, $form);
     }
 }
-
