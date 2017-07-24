@@ -2,6 +2,7 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
+use Common\Form\Form;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\FinancialHistory;
@@ -36,9 +37,9 @@ class FinancialHistoryTest extends MockeryTestCase
         $request = m::mock(\Zend\Http\Request::class);
 
         // Mocks
-        $mockForm = m::mock();
+        $mockForm = m::mock(Form::class);
 
-        $formActions = m::mock();
+        $formActions = m::mock(Form::class);
         $formActions->shouldReceive('get->setLabel')->once();
 
         $mockForm->shouldReceive('get')->with('form-actions')->andReturn($formActions);
@@ -47,7 +48,7 @@ class FinancialHistoryTest extends MockeryTestCase
             ->with('Lva\FinancialHistory', $request)
             ->andReturn($mockForm);
 
-        $form = $this->sut->getForm($request);
+        $form = $this->sut->getForm($request, []);
 
         $this->assertSame($mockForm, $form);
     }
