@@ -37,38 +37,44 @@
 
   <div class="one-third">
     <aside class="sidebar" role="complementary">
-      <div class="sidebar__panel">
-        <h4 class="sidebar__panel__title">Submit application</h4>
-
+      <div class="info-box info-box--grey">
+        <h3 class="info-box__heading"><?php echo $this->translate('progress'); ?></h3>
+        <h4 class="info-box__heading"><?php echo sprintf($this->translate('application.progress'), $progressX, $progressY); ?></h4>
         <?php if (isset($submissionForm)): ?>
           <?php echo $this->form($submissionForm); ?>
         <?php endif ?>
       </div>
 
-      <?php if ($canCancel): ?>
-        <ul class="sidebar__actions">
-          <li>
-              <a href="<?php echo $this->url('lva-application/cancel', [], [], true); ?>" class="js-modal-ajax">
-                  <?php echo $this->translate('application.cancel'); ?>
-              </a>
-          </li>
-        </ul>
-      <?php endif; ?>
+      <div class="info-box info-box--grey">
+        <h3 class="info-box__heading"><?php echo $this->translate('application.status'); ?></h3>
+        <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><?php echo $this->translate($status); ?></p>
+        <?php if ($canCancel): ?>
+          <ul class="info-box__links">
+            <li>
+                <a href="<?php echo $this->url('lva-application/cancel', [], [], true); ?>" class="js-modal-ajax">
+                    <?php echo $this->translate('application.cancel'); ?>
+                </a>
+            </li>
+          </ul>
+        <?php endif; ?>
+      </div>
 
-      <dl class="meta">
-        <dt><?php echo $this->translate('progress'); ?></dt>
-        <dd><?php echo sprintf($this->translate('application.progress'), $progressX, $progressY); ?></dd>
-        <dt><?php echo $this->translate('status'); ?></dt>
-        <dd><?php echo $this->translate($status); ?></dd>
-        <?php if ($this->receivedDate): ?>
-          <dt><?php echo $this->translate('selfserve-dashboard-submission-date'); ?></dt>
-          <dd><?php echo date('d F Y', strtotime($this->receivedDate)); ?></dd>
-        <?php endif; ?>
-        <?php if ($this->completionDate): ?>
-          <dt><?php echo $this->translate('target-completion-date'); ?></dt>
-          <dd><?php echo date('d F Y', strtotime($this->completionDate)); ?></dd>
-        <?php endif; ?>
-      </dl>
+      <?php if ($this->receivedDate || $this->completionDate): ?>
+        <div class="info-box info-box--blue">
+            <h3 class="info-box__heading"><?php echo $this->translate('summary'); ?></h3>
+            <dl class="meta">
+              <?php if ($this->receivedDate): ?>
+                <dt><?php echo $this->translate('selfserve-dashboard-submission-date'); ?></dt>
+                <dd><?php echo date('d F Y', strtotime($this->receivedDate)); ?></dd>
+              <?php endif; ?>
+              <?php if ($this->completionDate): ?>
+                <dt><?php echo $this->translate('target-completion-date'); ?></dt>
+                <dd><?php echo date('d F Y', strtotime($this->completionDate)); ?></dd>
+              <?php endif; ?>
+            </dl>
+        </div>
+      <?php endif; ?>
+  
     </aside>
   </div>
 </div>
