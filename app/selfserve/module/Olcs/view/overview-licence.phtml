@@ -32,21 +32,27 @@
 
     <div class="one-third">
         <aside class="sidebar" role="complementary">
-            <ul class="sidebar__actions">
-                <li>
-                    <a href="<?php echo $this->url('licence-print', [], [], true); ?>"
-                    ><?php echo $this->translate('licence.print'); ?></a>
-                </li>
-            </ul>
+            <div class="info-box info-box--grey">
+                <h3 class="info-box__heading"><?php echo $this->translate('licence-status'); ?></h3>
+                <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><?php echo $this->translate($status); ?></p>
+                <ul class="info-box__links">
+                    <li>
+                        <a href="<?php echo $this->url('licence-print', [], [], true); ?>"
+                        ><?php echo $this->translate('licence.print'); ?></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="info-box info-box--blue">
+                <h3 class="info-box__heading"><?php echo $this->translate('summary'); ?></h3>
+                <dl class="meta">
+                    <dt><?php echo $this->translate('selfserve-dashboard-target-start-date'); ?></dt>
+                    <dd><?php echo $this->startDate ? date('d F Y', strtotime($this->startDate)) : ''; ?></dd>
+                    <dt><?php echo $this->translate('selfserve-dashboard-target-renewal-date'); ?></dt>
+                    <dd><?php echo $this->renewalDate ? date('d F Y', strtotime($this->renewalDate)) : ''; ?></dd>
+                </dl>
+            </div>
         </aside>
 
-        <dl class="meta">
-            <dt><?php echo $this->translate('selfserve-dashboard-target-start-date'); ?></dt>
-            <dd><?php echo $this->startDate ? date('d F Y', strtotime($this->startDate)) : ''; ?></dd>
-            <dt><?php echo $this->translate('selfserve-dashboard-target-renewal-date'); ?></dt>
-            <dd><?php echo $this->renewalDate ? date('d F Y', strtotime($this->renewalDate)) : ''; ?></dd>
-            <dt><?php echo $this->translate('status'); ?></dt>
-            <dd><?php echo $this->translate($status); ?></dd>
-        </dl>
+        
     </div>
 </div>

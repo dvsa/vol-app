@@ -133,40 +133,51 @@
 
   <div class="one-third">
     <aside class="sidebar" role="complementary">
-      <ul class="sidebar__actions">
+
+      <div class="info-box info-box--grey">
+        <h3 class="info-box__heading"><?php echo $this->translate('application.status'); ?></h3>
+        <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><?php echo $this->translate($status); ?></p>
+
+          <ul class="info-box__links">
           <li>
               <a href="<?php echo $this->url('lva-' . $lva . '/review', [], [], true); ?>" target="_blank"
                   class=""><?php echo $this->translate('view-full-application') ?></a>
           </li>
-          <?php if ($canWithdraw): ?>
+            <?php if ($canCancel): ?>
+            <li>
+                <a href="<?php echo $this->url('lva-application/cancel', [], [], true); ?>" class="js-modal-ajax">
+                    <?php echo $this->translate('application.cancel'); ?>
+                </a>
+            </li>
+            <?php endif; ?>
+            <?php if ($canWithdraw): ?>
               <li>
                   <a href="<?php echo $this->url('lva-' . $lva . '/withdraw', [], [], true); ?>"
                       class="js-modal-ajax"><?php echo $this->translate('withdraw-application') ?></a>
               </li>
-          <?php endif; ?>
-      </ul>
-      <dl class="meta">
-        <?php if ($paymentRef): ?>
-          <dt><?php echo $this->translate('payment-reference-no.title'); ?></dt>
-          <dd><?php echo $paymentRef; ?>
-          <a target="_blank"
-            href="<?php echo $this->url('fees/receipt', ['action' => 'print', 'reference' => $paymentRef]);?>">
-            <?php echo $this->translate('pay-fees.success.print-receipt'); ?>
-          </a></dd>
-        <?php endif; ?>
-        <dt><?php echo $this->translate('submitted-date.title'); ?></dt>
-        <dd><?php echo $this->date(strtotime($submittedDate)); ?></dd>
-        <dt><?php echo $this->translate('completion-date.title'); ?></dt>
-        <dd><?php echo $this->date(strtotime($completionDate)); ?></dd>
-        <dt><?php echo $this->translate('status.title'); ?></dt>
-        <dd><?php echo $this->translate($status); ?></dd>
-        <?php if ($interimStatus !== null): ?>
-          <dt><?php echo $this->translate('interim.status.title'); ?></dt>
-          <dd><?php echo $this->translate($interimStatus); ?></dd>
-            <dt><?php echo $this->translate('interim.start.title'); ?></dt>
-          <dd><?php echo $this->date(strtotime($interimStart)); ?></dd>
-        <?php endif; ?>
-      </dl>
+            <?php endif; ?>
+            <?php if ($paymentRef): ?>
+              <li>
+                <a target="_blank"
+                href="<?php echo $this->url('fees/receipt', ['action' => 'print', 'reference' => $paymentRef]);?>"><?php echo $this->translate('pay-fees.success.print-receipt'); ?></a>
+              </li>
+            <?php endif; ?>
+          </ul>
+        
+      </div>
+
+      <div class="info-box info-box--blue">
+        <h3 class="info-box__heading"><?php echo $this->translate('summary'); ?></h3>
+        <dl class="meta">
+          <dt><?php echo $this->translate('submitted-date.title'); ?></dt>
+          <dd><?php echo date('d F Y', strtotime($submittedDate)); ?></dd>
+          <dt><?php echo $this->translate('completion-date.title'); ?></dt>
+          <dd><?php echo date('d F Y', strtotime($completionDate)); ?></dd>
+        </dl>
+      </div>
+
+
+      
     </aside>
   </div>
 

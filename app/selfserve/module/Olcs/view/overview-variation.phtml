@@ -36,26 +36,31 @@
   </div>
   <div class="one-third">
     <aside class="sidebar" role="complementary">
-      <div class="sidebar__panel">
-        <h4 class="sidebar__panel__title">Submit application</h4>
 
+      <div class="info-box info-box--grey">
+        <h3 class="info-box__heading"><?php echo $this->translate('progress'); ?></h3>
         <?php if (isset($submissionForm)): ?>
-            <?php echo $this->form($submissionForm); ?>
+          <?php echo $this->form($submissionForm); ?>
         <?php endif ?>
       </div>
 
-      <?php if ($canCancel): ?>
-        <ul class="sidebar__actions">
-          <li>
-            <a href="<?php echo $this->url('lva-variation/cancel', [], [], true); ?>"
-               class="js-modal-ajax"
-              >
-              <?php echo $this->translate('application.cancel'); ?>
-            </a>
-          </li>
-        </ul>
-      <?php endif; ?>
+      <div class="info-box info-box--grey">
+        <h3 class="info-box__heading"><?php echo $this->translate('application.status'); ?></h3>
+        <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><?php echo $this->translate($status); ?></p>
+        <?php if ($canCancel): ?>
+          <ul class="info-box__links">
+            <li>
+                <a href="<?php echo $this->url('lva-variation/cancel', [], [], true); ?>" class="js-modal-ajax">
+                    <?php echo $this->translate('application.cancel'); ?>
+                </a>
+            </li>
+          </ul>
+        <?php endif; ?>
+      </div>
 
+
+
+      <!--
       <dl class="meta">
         <dt><?php echo $this->translate('status'); ?></dt>
         <dd><?php echo $this->translate($status); ?></dd>
@@ -68,6 +73,7 @@
           <dd><?php echo date('d F Y', strtotime($this->completionDate)); ?></dd>
         <?php endif; ?>
       </dl>
+      -->
     </aside>
   </div>
 </div>
