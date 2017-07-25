@@ -35,4 +35,38 @@ class LicenceOverviewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($overview->renewalDate, '2015-01-01');
         $this->assertEquals($overview->status, 'status');
     }
+
+    public function testSetVariablesIsExpired()
+    {
+        $data = [
+            'licNo' => 1,
+            'inForceDate' => '2014-01-01',
+            'expiryDate' => '2015-01-01',
+            'status' => ['id' => 'status'],
+            'isExpired' => true,
+            'isExpiring' => true,
+        ];
+        $overview = new LicenceOverview($data);
+        $this->assertEquals($overview->licenceId, 1);
+        $this->assertEquals($overview->startDate, '2014-01-01');
+        $this->assertEquals($overview->renewalDate, '2015-01-01');
+        $this->assertEquals($overview->status, 'licence.status.expired');
+    }
+
+    public function testSetVariablesIsExpiring()
+    {
+        $data = [
+            'licNo' => 1,
+            'inForceDate' => '2014-01-01',
+            'expiryDate' => '2015-01-01',
+            'status' => ['id' => 'status'],
+            'isExpired' => false,
+            'isExpiring' => true,
+        ];
+        $overview = new LicenceOverview($data);
+        $this->assertEquals($overview->licenceId, 1);
+        $this->assertEquals($overview->startDate, '2014-01-01');
+        $this->assertEquals($overview->renewalDate, '2015-01-01');
+        $this->assertEquals($overview->status, 'licence.status.expiring');
+    }
 }
