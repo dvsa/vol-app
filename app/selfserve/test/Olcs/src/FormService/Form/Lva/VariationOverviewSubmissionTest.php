@@ -52,6 +52,11 @@ class VariationOverviewSubmissionTest extends MockeryTestCase
                     ->getMock()
             );
 
+        $this->mockFormHlp->shouldReceive('remove')
+            ->with($this->mockForm, 'submitPay')
+            ->once()
+            ->getMock();
+
         //  call
         $this->sut->getForm(
             [

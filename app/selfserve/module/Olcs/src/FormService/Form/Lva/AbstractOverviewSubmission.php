@@ -81,7 +81,7 @@ class AbstractOverviewSubmission extends AbstractFormService implements ServiceL
         if ($params['isReadyToSubmit']) {
             $form->setAttribute('action', $params['actionUrl']);
         } else {
-            $formHelper->disableElement($form, 'submitPay');
+            $formHelper->remove($form, 'submitPay');
         }
     }
 
