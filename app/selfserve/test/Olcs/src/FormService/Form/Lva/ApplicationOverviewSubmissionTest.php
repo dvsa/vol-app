@@ -44,10 +44,6 @@ class ApplicationOverviewSubmissionTest extends MockeryTestCase
         //  mock expected parent call
         $this->mockParentCall();
 
-        //  mock expected
-        $this->mockFormHlp
-            ->shouldReceive('remove')->with($this->mockForm, 'description')->once();
-
         //  call’
         $this->sut->alterForm($this->mockForm, $data, $params);
     }
@@ -91,7 +87,7 @@ class ApplicationOverviewSubmissionTest extends MockeryTestCase
 
         $this->mockFormHlp
             ->shouldReceive('remove')->with($this->mockForm, 'amount')->once()
-            ->shouldReceive('disableElement')->zeroOrMoreTimes();
+            ->shouldReceive('remove')->zeroOrMoreTimes();
 
     }
 }

@@ -113,7 +113,7 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
 
         $this->mockFormHlp
             ->shouldReceive('remove')->once()->with($this->mockForm, 'amount')
-            ->shouldReceive('disableElement')->once()->with($this->mockForm, 'submitPay');
+            ->shouldReceive('remove')->once()->with($this->mockForm, 'submitPay');
 
         //  call
         $this->sut->alterForm($this->mockForm, $data, $params);
