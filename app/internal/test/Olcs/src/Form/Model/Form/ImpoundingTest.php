@@ -4,6 +4,7 @@ namespace OlcsTest\Form\Model\Form;
 
 use Common\Form\Elements\Validators\DateNotInFuture;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Common\Validator\DateCompare;
 
 /**
  * Class ImpoundingTest
@@ -68,7 +69,65 @@ class ImpoundingTest extends AbstractFormValidationTestCase
 
     public function testHearingDate()
     {
-        $this->assertFormElementRequired(['fields', 'hearingDate'], false);
+        $element = ['fields', 'hearingDate'];
+
+        $this->assertFormElementIsRequired($element, false);
+
+        $year = date('Y');
+        $month = date('m');
+        $day = date('j');
+        $hour = date('H');
+        $minute = date('i');
+        $second = date('s');
+
+        //must be a later date than applicationReceiptDate, and isn't
+        $this->assertFormElementNotValid(
+            $element,
+            [
+                'year'  => $year,
+                'month' => $month,
+                'day'   => $day,
+                'hour'  => $hour,
+                'minute' => $minute,
+                'second'   => $second,
+            ],
+            [
+                DateCompare::NOT_GTE,
+            ],
+            [
+                'fields' => [
+                    'applicationReceiptDate' => [
+                        'year'  => $year,
+                        'month' => $month,
+                        'day'   => $day + 1,
+                    ],
+                    'impoundingType' => 'impt_hearing'
+                ],
+            ]
+        );
+
+        //must be a later date or the same as applicationReceiptDate, and is
+        $this->assertFormElementValid(
+            $element,
+            [
+                'year'  => $year,
+                'month' => $month,
+                'day'   => $day,
+                'hour'  => $hour,
+                'minute' => $minute,
+                'second'   => $second,
+            ],
+            [
+                'fields' => [
+                    'applicationReceiptDate' => [
+                        'year'  => $year,
+                        'month' => $month,
+                        'day'   => $day,
+                    ],
+                    'impoundingType' => 'impt_hearing'
+                ],
+            ]
+        );
     }
 
     public function testVenue()
@@ -78,7 +137,14 @@ class ImpoundingTest extends AbstractFormValidationTestCase
 
     public function testVenueOther()
     {
-        $this->assertFormElementDynamicSelect(['fields', 'venueOther'], false);
+        $context = [
+            'fields' => [
+                'impoundingType' => 'impt_hearing',
+                'venue' => 'other'
+            ],
+        ];
+
+        $this->assertFormElementText(['fields', 'venueOther'], 0, 255, $context);
     }
 
     public function testPresidingTc()
