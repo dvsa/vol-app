@@ -28,8 +28,9 @@ class LicenceOverview extends LvaOverview
     /**
      * Set the overview data
      *
-     * @param array $data
-     * @param array $sections
+     * @param array $data      Data for the view
+     * @param array $sections  Sections?
+     * @param array $variables Variables?
      */
     public function __construct($data, array $sections = array(), $variables = array())
     {
@@ -39,6 +40,14 @@ class LicenceOverview extends LvaOverview
         $this->setVariable('startDate', $data['inForceDate']);
         $this->setVariable('renewalDate', $data['expiryDate']);
         $this->setVariable('status', $data['status']['id']);
+
+        // If either isExpired or isExpiring flags are set then override the displayed status
+        if (isset($data['isExpiring']) && $data['isExpiring'] === true) {
+            $this->setVariable('status', 'licence.status.expiring');
+        }
+        if (isset($data['isExpired']) && $data['isExpired'] === true) {
+            $this->setVariable('status', 'licence.status.expired');
+        }
 
         parent::__construct($data, $sections);
     }
