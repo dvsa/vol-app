@@ -28,7 +28,8 @@ return array(
                             'id' => 'licence-quick-actions-print-licence',
                             'label' => 'Print licence',
                             'route' => 'print_licence',
-                            'use_route_match' => true
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax',
                         )
                     ),
                 ),

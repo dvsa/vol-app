@@ -191,7 +191,9 @@ class OverviewController extends AbstractController implements LicenceController
             $this->addErrorMessage('licence.print.failed');
         }
 
-        return $this->redirect()->toRoute('lva-licence/overview', [], [], true);
+        return $this->redirect()->toRouteAjax(
+            'licence', ['lva-licence/overview' => $this->getLicenceId()], [], true
+        );
     }
 
     /**
