@@ -31,7 +31,7 @@ return array(
             }
         ),
         array(
-            'title' => 'Opposition type',
+            'title' => 'Category',
             'formatter' => 'RefData',
             'name' => 'siCategoryType'
         ),
