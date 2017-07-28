@@ -19,7 +19,7 @@ return array(
             'formatter' => 'SeriousInfringementLink'
         ),
         array(
-            'title' => 'Opposition type',
+            'title' => 'Category',
             'formatter' => 'RefData',
             'name' => 'siCategoryType'
         ),
