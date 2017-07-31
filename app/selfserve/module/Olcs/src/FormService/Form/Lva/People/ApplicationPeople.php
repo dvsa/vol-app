@@ -5,6 +5,7 @@ namespace Olcs\FormService\Form\Lva\People;
 use Common\FormService\Form\Lva\People\ApplicationPeople as CommonApplicationPeople;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\Form\Form;
+use Common\Form\Elements\Validators\TableRequiredValidator;
 
 /**
  * Application People
@@ -33,6 +34,14 @@ class ApplicationPeople extends CommonApplicationPeople
             $form->get('form-actions')->get('save')->setAttribute('class', 'action--tertiary large');
         } else {
             $this->alterButtons($form);
+        }
+
+        if ($params['isPartnership']) {
+            $formHelper = $this->getFormHelper();
+            $formHelper->removeValidator($form, 'table->rows', TableRequiredValidator::class);
+            $validator = new TableRequiredValidator(['rowsRequired' => 2]);
+            $validator->setMessage('people.partnership.validation-message', 'required');
+            $formHelper->attachValidator($form, 'table->rows', $validator);
         }
     }
 }
