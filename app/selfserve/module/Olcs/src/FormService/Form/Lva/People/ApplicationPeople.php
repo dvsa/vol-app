@@ -41,7 +41,7 @@ class ApplicationPeople extends CommonApplicationPeople
             $formHelper->removeValidator($form, 'table->rows', TableRequiredValidator::class);
             $validator = new TableRequiredValidator(['rowsRequired' => 2]);
             $validator->setMessage('people.partnership.validation-message', 'required');
-            $formHelper->attachValidator($form , 'table->rows', $validator);
+            $formHelper->attachValidator($form, 'table->rows', $validator);
         }
     }
 }
