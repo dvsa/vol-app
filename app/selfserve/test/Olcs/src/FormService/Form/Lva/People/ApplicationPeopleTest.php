@@ -9,6 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Helper\FormHelperService;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Olcs\FormService\Form\Lva\People\ApplicationPeople as Sut;
+use Common\Form\Elements\Validators\TableRequiredValidator;
 
 /**
  * Application People Test
@@ -60,7 +61,7 @@ class ApplicationPeopleTest extends MockeryTestCase
 
         $this->mockAlterButtons($form, $this->formHelper, $formActions);
 
-        $this->sut->getForm(['canModify' => true]);
+        $this->sut->getForm(['canModify' => true, 'isPartnership' => false]);
     }
 
     public function testGetFormAndCannotModify()
@@ -97,6 +98,51 @@ class ApplicationPeopleTest extends MockeryTestCase
             ->with('Lva\People')
             ->andReturn($form);
 
-        $this->sut->getForm(['canModify' => false]);
+        $this->sut->getForm(['canModify' => false, 'isPartnership' => false]);
+    }
+
+    public function testGetFormPartnership()
+    {
+        $formActions = m::mock(Form::class);
+        $formActions->shouldReceive('has')->with('save')->andReturn(true);
+        $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
+
+        $formActions->shouldReceive('remove')->once()->with('cancel');
+
+        $formActions->shouldReceive('get')
+            ->with('save')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setLabel')
+                    ->with('lva.external.return.link')
+                    ->once()
+                    ->shouldReceive('removeAttribute')
+                    ->with('class')
+                    ->once()
+                    ->shouldReceive('setAttribute')
+                    ->with('class', 'action--tertiary large')
+                    ->once()
+                    ->getMock()
+            )
+            ->times(3)
+            ->getMock();
+
+        $form = m::mock(Form::class);
+        $form->shouldReceive('has')->with('form-actions')->andReturn(true);
+        $form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
+
+        $this->formHelper->shouldReceive('createForm')->once()
+            ->with('Lva\People')
+            ->andReturn($form)
+            ->once()
+            ->shouldReceive('removeValidator')
+            ->with($form, 'table->rows', TableRequiredValidator::class)
+            ->once()
+            ->shouldReceive('attachValidator')
+            ->with($form, 'table->rows', m::type(TableRequiredValidator::class))
+            ->once()
+            ->getMock();
+
+        $this->sut->getForm(['canModify' => false, 'isPartnership' => true]);
     }
 }
