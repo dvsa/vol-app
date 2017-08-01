@@ -64,16 +64,8 @@ return array(
         ),
         array(
             'title' => 'Status',
-            'formatter' => function ($data) {
-                $content = $data['status']['description'];
-
-                if ($data['status']['id'] === ContinuationDetailEntityService::STATUS_COMPLETE
-                    && $data['received'] === 'N') {
-                    $content .= ' (not received)';
-                }
-
-                return $content;
-            }
+            'formatter' => 'RefData',
+            'name' => 'status'
         ),
         array(
             'title' => '',
