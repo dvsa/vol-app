@@ -40,6 +40,7 @@ return [
             'admin-dashboard/admin-printer-management*' => [ RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-user-management*' => [RefData::PERMISSION_CAN_MANAGE_USER_INTERNAL],
             'admin-dashboard/admin-system-parameters*' => [RefData::PERMISSION_INTERNAL_ADMIN],
+            'admin-dashboard/admin-data-retention*' => [RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-system-info-message*' => [RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/task-allocation-rules*' => [RefData::PERMISSION_INTERNAL_ADMIN],
 

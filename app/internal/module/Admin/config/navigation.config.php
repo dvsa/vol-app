@@ -237,6 +237,23 @@ return [
                     'id' => 'admin-dashboard/task-allocation-rules',
                     'route' => 'admin-dashboard/task-allocation-rules',
                 ],
+                [
+                    'label' => 'Data retention',
+                    'id' => 'admin-dashboard/admin-data-retention',
+                    'route' => 'admin-dashboard/admin-data-retention',
+                    'pages' => [
+                        [
+                            'id' => 'admin-dashboard/admin-data-retention',
+                            'label' => 'Review',
+                            'route' => 'admin-dashboard/admin-data-retention'
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-data-retention/export',
+                            'label' => 'Export',
+                            'route' => 'admin-dashboard/admin-data-retention/export',
+                        ],
+                    ],
+                ],
             ]
         ]
     ]
