@@ -23,7 +23,7 @@ class DataRetentionController extends AbstractInternalController implements Left
      * required when an entire controller is
      * represented by a single navigation id.
      */
-    protected $navigationId = 'admin-dashboard/data-retention';
+    protected $navigationId = 'admin-dashboard/admin-data-retention';
 
     // list
     protected $tableName = 'admin-data-retention';
@@ -41,7 +41,7 @@ class DataRetentionController extends AbstractInternalController implements Left
     {
         $view = new ViewModel(
             [
-                'navigationId' => 'admin-dashboard/data-retention',
+                'navigationId' => 'admin-dashboard/admin-data-retention',
                 'navigationTitle' => 'Data retention'
             ]
         );
