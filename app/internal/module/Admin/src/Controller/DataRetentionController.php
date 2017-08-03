@@ -11,8 +11,6 @@ use Zend\View\Model\ViewModel;
 
 /**
  * Data retention controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 class DataRetentionController extends AbstractInternalController implements LeftViewProvider
 {
