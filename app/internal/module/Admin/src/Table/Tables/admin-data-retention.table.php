@@ -22,8 +22,8 @@ return array(
         ),
         array(
             'title' => 'Rule',
-            'name' => 'paramValue',
-            'sort' => 'paramValue',
+            'name' => 'description',
+            'sort' => 'description',
         ),
     )
 );
