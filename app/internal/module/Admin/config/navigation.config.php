@@ -241,6 +241,7 @@ return [
                     'label' => 'Data retention',
                     'id' => 'admin-dashboard/admin-data-retention',
                     'route' => 'admin-dashboard/admin-data-retention',
+                    'visible' => false,
                     'pages' => [
                         [
                             'id' => 'admin-dashboard/admin-data-retention',
