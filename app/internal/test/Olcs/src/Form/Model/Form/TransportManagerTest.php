@@ -184,7 +184,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
     {
         $this->assertFormElementIsRequired(
             ['home-address', 'addressLine1'],
-            true
+            false
         );
     }
 
@@ -216,7 +216,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
     {
         $this->assertFormElementIsRequired(
             ['home-address', 'town'],
-            true
+            false
         );
     }
 
@@ -224,7 +224,7 @@ class TransportManagerTest extends AbstractFormValidationTestCase
     {
         $this->assertFormElementIsRequired(
             ['home-address', 'postcode'],
-            true
+            false
         );
     }
 
