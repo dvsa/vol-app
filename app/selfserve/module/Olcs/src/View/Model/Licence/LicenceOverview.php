@@ -40,12 +40,17 @@ class LicenceOverview extends LvaOverview
         $this->setVariable('startDate', $data['inForceDate']);
         $this->setVariable('renewalDate', $data['expiryDate']);
         $this->setVariable('status', $data['status']['id']);
-
+        $this->setVariable('expiryDate', $data['expiryDate']);
+        $this->setVariable('showExpiryWarning', $data['showExpiryWarning']);
+        if (!empty($data['continuationMarker']['id'])) {
+            $this->setVariable('continuationDetailId', $data['continuationMarker']['id']);
+        }
         // If either isExpired or isExpiring flags are set then override the displayed status
         if (isset($data['isExpiring']) && $data['isExpiring'] === true) {
             $this->setVariable('status', 'licence.status.expiring');
         }
         if (isset($data['isExpired']) && $data['isExpired'] === true) {
+            $this->setVariable('isExpired', $data['isExpired']);
             $this->setVariable('status', 'licence.status.expired');
         }
 
