@@ -39,10 +39,8 @@ return array(
         ),
         array(
             'title' => 'Status',
-            'name' => 'status.description',
-            'formatter' => function ($row) {
-                return isset($row['status']['description']) ? $row['status']['description'] : null;
-            }
+            'name' => 'status',
+            'formatter' => 'RefData'
         ),
         [
             'width' => 'checkbox',
