@@ -43,7 +43,6 @@ class BusRegApplicationsController extends AbstractController
             }
 
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('select-at-least-one-row');
-            return null;
         }
 
         return $this->processSearch($postData);
