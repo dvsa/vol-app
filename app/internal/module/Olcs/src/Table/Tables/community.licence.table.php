@@ -1,14 +1,11 @@
 <?php
 
 return array(
-    'variables' => array(
-        'title' => 'Community Licence'
-    ),
     'settings' => array(
         'paginate' => array(
             'limit' => array(
-                'default' => 10,
-                'options' => array(10, 25, 50)
+                'default' => 50,
+                'options' => array(50)
             )
         ),
         'crud' => array(
@@ -17,6 +14,9 @@ return array(
                 'office-licence-add' => array('class' => 'action--secondary', 'value' => 'Add office licence')
             )
         ),
+        'row-disabled-callback' => function ($row) {
+            return ($row['status']['id'] !== 'cl_sts_active');
+        },
     ),
     'attributes' => array(
     ),
@@ -40,14 +40,13 @@ return array(
         array(
             'title' => 'Status',
             'name' => 'status',
-            'formatter' => 'RefData'
+            'formatter' => 'CommunityLicenceStatus'
         ),
-        [
-            'width' => 'checkbox',
+        array(
             'type' => 'Checkbox',
-            'data-attributes' => [
-                'filename'
-            ],
-        ],
+            'title' => '',
+            'width' => 'checkbox',
+            'disableIfRowIsDisabled' => true
+        ),
     )
 );
