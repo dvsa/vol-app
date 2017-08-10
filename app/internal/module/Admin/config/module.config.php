@@ -16,6 +16,29 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'admin-data-retention' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'data-retention',
+                            'defaults' => [
+                                'controller' => Admin\Controller\DataRetentionController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'export' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/export',
+                                    'defaults' => [
+                                        'controller' => Admin\Controller\DataRetentionController::class,
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ],
+                        ]
+                    ],
                     'task-allocation-rules' => [
                         'type' => 'Segment',
                         'options' => [
@@ -549,6 +572,7 @@ return [
             'Admin\PiReportController' => 'Admin\Controller\PiReportController',
             Admin\Controller\SystemInfoMessageController::class => Admin\Controller\SystemInfoMessageController::class,
             Admin\Controller\ReportCasesOpenController::class => Admin\Controller\ReportCasesOpenController::class,
+            Admin\Controller\DataRetentionController::class => Admin\Controller\DataRetentionController::class,
         ],
     ],
     'view_manager' => [
