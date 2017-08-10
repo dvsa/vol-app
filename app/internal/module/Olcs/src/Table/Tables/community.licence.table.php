@@ -36,6 +36,7 @@ return array(
             'title' => 'Issue number',
             'sort' => 'issueNo',
             'name' => 'issueNo',
+            'formatter' => 'CommunityLicenceIssueNo',
         ),
         array(
             'title' => 'Status',
