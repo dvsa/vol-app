@@ -309,7 +309,7 @@ class TaskController extends AbstractController
      */
     protected function prepareInfoColumns($data)
     {
-        if (isset($data['lastModifiedOn'])) {
+        if (isset($data['lastModifiedOn']) && isset($data['lastModifiedByDetails'])) {
             $data['lastModifiedByDetails'] .=
                 ' (' . (new \DateTime($data['lastModifiedOn']))->format(\DATETIMESEC_FORMAT) . ')';
         }
