@@ -1,6 +1,9 @@
 <?php
 
 return array(
+    'variables' => array(
+        'within_form' => true,
+    ),
     'settings' => array(
         'paginate' => array(
             'limit' => array(
