@@ -210,7 +210,8 @@ class BusRegApplicationsController extends AbstractController
             'layouts/entity-view',
             [
                 'urlBackToSearch' => $this->getUrlBackToSearchResult(),
-            ]
+            ],
+            true
         );
     }
 
@@ -244,13 +245,14 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Prepare view model for Details action with specified parameters
      *
-     * @param QueryInterface $query   the query
-     * @param string         $temlate the template
-     * @param array          $options array of options
+     * @param QueryInterface $query        the query
+     * @param string         $temlate      the template
+     * @param array          $options      array of options
+     * @param bool           $isSearchPage Is this for the search version of the page
      *
      * @return array|null|ViewModel
      */
-    private function details(QueryInterface $query, $temlate, $options = [])
+    private function details(QueryInterface $query, $temlate, $options = [], $isSearchPage = false)
     {
         $response = $this->handleQuery($query);
 
@@ -275,7 +277,7 @@ class BusRegApplicationsController extends AbstractController
 
         $layout
             ->setTemplate($temlate)
-            ->addChild($this->detailsContent($result), 'content');
+            ->addChild($this->detailsContent($result, $isSearchPage), 'content');
 
         return $layout;
     }
@@ -283,11 +285,12 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Prepare content of Details view
      *
-     * @param array $results array of results
+     * @param array $results      array of results
+     * @param bool  $isSearchPage Is this for the search version of the page
      *
      * @return ViewModel
      */
-    private function detailsContent(array $results)
+    private function detailsContent(array $results, $isSearchPage)
     {
         $documents = [];
 
@@ -306,7 +309,7 @@ class BusRegApplicationsController extends AbstractController
             [
                 'registrationDetails' => $results,
                 'documents' => $documents,
-                'variationHistoryTable' => $this->fetchVariationHistoryTable($results['id']),
+                'variationHistoryTable' => $this->fetchVariationHistoryTable($results['id'], $isSearchPage),
             ]
         );
     }
@@ -314,11 +317,12 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Method to generate the Variation History table
      *
-     * @param int $busRegId the bus reg id
+     * @param int  $busRegId     the bus reg id
+     * @param bool $isSearchPage Is this for the search version of the page
      *
      * @return array|string
      */
-    private function fetchVariationHistoryTable($busRegId)
+    private function fetchVariationHistoryTable($busRegId, $isSearchPage)
     {
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
         $tableBuilder = $this->getServiceLocator()->get('Table');
@@ -342,7 +346,7 @@ class BusRegApplicationsController extends AbstractController
             return $tableBuilder->buildTable(
                 'bus-reg-variation-history',
                 $result,
-                ['url' => $this->plugin('url')],
+                ['url' => $this->plugin('url'), 'isSearchPage' => $isSearchPage],
                 false
             );
         }

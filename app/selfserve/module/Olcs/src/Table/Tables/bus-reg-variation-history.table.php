@@ -11,11 +11,19 @@ return array(
             'title' => 'Reg No.',
             'formatter' => function ($data) {
                 if (isset($data['id'])) {
-                    return '<a href="' . $this->generateUrl(
-                        array('action' => 'details', 'busRegId' => $data['id']),
-                        'bus-registration/details',
-                        false
-                    ) . '">' . $data['regNo'] . '</a>';
+                    if ((bool)$this->getVariable('isSearchPage') === true) {
+                        return sprintf(
+                            '<a href="%s">%s</a>',
+                            $this->generateUrl(['busRegId' => $data['id']], 'search-bus/details', false),
+                            $data['regNo']
+                        );
+                    } else {
+                        return '<a href="' . $this->generateUrl(
+                            array('action' => 'details', 'busRegId' => $data['id']),
+                            'bus-registration/details',
+                            false
+                        ) . '">' . $data['regNo'] . '</a>';
+                    }
                 }
                 return '';
             }
