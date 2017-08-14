@@ -816,7 +816,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "3c8fe07ddfdd0b01ded012465d401fac755cfee3"
+                "reference": "82668b305abef80d24efb35ce1311a6da9ea08ae"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -864,7 +864,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2017-08-10 11:05:19"
+            "time": "2017-08-14 11:50:14"
         },
         {
             "name": "olcs/autoload",
@@ -1734,7 +1734,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-testhelpers.git",
-                "reference": "3a45815451bcb8ac578be2ff91184302fe40e754"
+                "reference": "0949f422000dcf078375ddd91f0e5a5cc95a0011"
             },
             "require": {
                 "php": ">=5.4"
@@ -1751,7 +1751,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2017-08-01 11:43:15"
+            "time": "2017-08-14 12:35:04"
         },
         {
             "name": "phpdocumentor/reflection-common",
