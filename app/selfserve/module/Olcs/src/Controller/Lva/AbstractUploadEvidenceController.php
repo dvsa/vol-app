@@ -42,6 +42,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
                     \Common\Data\Mapper\Lva\UploadEvidence::mapFromForm($form->getData()),
                     ['id' => $this->getIdentifier()]
                 );
+                $dtoData['financialEvidence'] = $this->shouldShowFinancialEvidence();
 
                 $result = $this->handleCommand(
                     \Dvsa\Olcs\Transfer\Command\Application\UploadEvidence::create($dtoData)
