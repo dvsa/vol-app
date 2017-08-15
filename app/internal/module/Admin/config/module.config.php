@@ -27,17 +27,30 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes' => [
-                            'export' => [
+                            'review' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/export',
+                                    'route' => '/review',
                                     'defaults' => [
                                         'controller' => Admin\Controller\DataRetentionController::class,
                                         'action' => 'index'
                                     ]
                                 ]
                             ],
-                        ]
+                            'records' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/records/:dataRetentionRuleId[/]',
+                                    'constraints' => [
+                                        'dataRetentionRuleId' => '[0-9\,]+',
+                                    ],
+                                    'defaults' => [
+                                        'controller' => Admin\Controller\DataRetentionController::class,
+                                        'action' => 'records'
+                                    ]
+                                ]
+                            ],
+                        ],
                     ],
                     'task-allocation-rules' => [
                         'type' => 'Segment',
