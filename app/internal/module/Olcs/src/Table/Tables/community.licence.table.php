@@ -1,6 +1,9 @@
 <?php
 
 return array(
+    'variables' => array(
+        'within_form' => true,
+    ),
     'settings' => array(
         'paginate' => array(
             'limit' => array(
@@ -36,6 +39,7 @@ return array(
             'title' => 'Issue number',
             'sort' => 'issueNo',
             'name' => 'issueNo',
+            'formatter' => 'CommunityLicenceIssueNo',
         ),
         array(
             'title' => 'Status',
