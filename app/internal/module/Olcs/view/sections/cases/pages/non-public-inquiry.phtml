@@ -56,6 +56,19 @@ if (count((array)$result) < 1) {
             'header' => 'Non-Public Inquiry',
             'actions' => [
                 [
+                    'label' => 'Generate letter',
+                    'url' => $this->url('case_licence_docs_attachments/entity/generate',
+                        [
+                            'entityType' => 'hearing',
+                            'entityId' => $data['id'],
+                            'case' => $data['case']['id']
+                        ],
+                        [],
+                        true
+                    ),
+                    'class' => 'action--secondary right-aligned js-modal-ajax'
+                ],
+                [
                     'label' => 'Edit',
                     'url' => $this->url('case_non_pi', ['action' => 'edit','id' => $data['id']], [], true),
                     'class' => 'action--primary right-aligned js-modal-ajax'
