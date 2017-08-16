@@ -198,6 +198,7 @@ trait ApplicationOverviewTrait
             'leadTcArea' => $details['leadTcArea'],
             'tracking' => $formData['tracking'],
             'overrideOppositionDate' => $details['overrideOppositionDate'],
+            'validateAppCompletion' => true,
         ];
 
         if (isset($details['receivedDate'])) {
