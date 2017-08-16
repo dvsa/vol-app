@@ -237,13 +237,10 @@ return [
                     'id' => 'admin-dashboard/task-allocation-rules',
                     'route' => 'admin-dashboard/task-allocation-rules',
                 ],
-                // OLCS-17144 and OLCS-17146 - [WIP]
-                // Data retention section is hidden until the work is complete
                 [
                     'label' => 'Data retention',
                     'id' => 'admin-dashboard/admin-data-retention',
                     'route' => 'admin-dashboard/admin-data-retention',
-                    'visible' => false,
                     'pages' => [
                         [
                             'id' => 'admin-dashboard/admin-data-retention',

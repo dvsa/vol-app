@@ -1,6 +1,8 @@
 <?php
 namespace Olcs\Controller;
 
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Zend\Mvc\Controller\AbstractActionController;
 use Zend\ServiceManager\InitializerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -13,8 +15,9 @@ class RouteParamInitializer implements InitializerInterface
     /**
      * Initialize
      *
-     * @param $instance
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param AbstractActionController $instance       Controller
+     * @param ServiceLocatorInterface  $serviceLocator Service locator
+     *
      * @return mixed
      */
     public function initialize($instance, ServiceLocatorInterface $serviceLocator)
@@ -24,11 +27,13 @@ class RouteParamInitializer implements InitializerInterface
         $config =  $serviceLocator->get('Config');
 
         $listener = $serviceLocator->get('RouteParamsListener');
-
         $instance->getEventManager()->attach($listener);
 
         $headerSearchListener = $serviceLocator->get('HeaderSearchListener');
         $instance->getEventManager()->attach($headerSearchListener);
+
+        $navigationToggleListener = $serviceLocator->get('NavigationToggleListener');
+        $instance->getEventManager()->attach($navigationToggleListener);
 
         foreach ($config['route_param_listeners'] as $interface => $listeners) {
             if ($instance instanceof $interface) {
