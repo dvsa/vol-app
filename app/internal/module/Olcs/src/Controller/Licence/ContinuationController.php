@@ -263,6 +263,12 @@ class ContinuationController extends AbstractController
         } else {
              $this->getServiceLocator()->get('Helper\Form')->remove($form, 'fields->messages');
         }
+
+        $form->get('form-actions')->get('viewContinuation')->setValue(
+            $this->url()->fromRoute(
+                'continuation/review', ['continuationDetailId' => $continuationDetail['id']], [], true
+            )
+        );
     }
 
     /**

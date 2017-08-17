@@ -45,4 +45,13 @@ class UpdateContinuationFormActions
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $printSeperator = null;
+
+    /**
+     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"view-continuation","target":"_blank"})
+     * @Form\Options({
+     *     "label": "View digital continuation"
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionLink")
+     */
+    public $viewContinuation = null;
 }
