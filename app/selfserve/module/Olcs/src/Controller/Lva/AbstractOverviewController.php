@@ -145,7 +145,7 @@ abstract class AbstractOverviewController extends AbstractController
      */
     protected function getOverviewData($applicationId)
     {
-        $dto = ApplicationQry::create(['id' => $applicationId]);
+        $dto = ApplicationQry::create(['id' => $applicationId, 'validateAppCompletion' => true]);
         $response = $this->handleQuery($dto);
 
         return $response->getResult();
