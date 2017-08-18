@@ -2,8 +2,9 @@
 
 return array(
     'variables' => array(
-        'title' => 'Data Retention Rules',
-        'titleSingular' => 'Data Retention'
+        'title' => 'Data Retention',
+        'titleSingular' => 'Data retention rule',
+        'titlePlural' => 'Data retention rules',
     ),
     'settings' => array(
         'paginate' => array(
@@ -15,15 +16,15 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => 'Key',
-            'name' => 'ID',
+            'title' => 'ID',
+            'name' => 'id',
             'sort' => 'id',
-            'formatter' => 'SystemParameterLink'
         ),
         array(
-            'title' => 'Rule',
+            'title' => 'Description',
             'name' => 'description',
             'sort' => 'description',
+            //'formatter' => 'DataRetentionRuleLink'
         ),
     )
 );

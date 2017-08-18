@@ -413,7 +413,8 @@ return array(
         'aliases' => [
             'RouteParamsListener' => 'Olcs\Listener\RouteParams',
             'right-sidebar' => 'Olcs\Navigation\RightHandNavigation',
-            'HeaderSearchListener' => 'Olcs\Listener\HeaderSearch'
+            'HeaderSearchListener' => 'Olcs\Listener\HeaderSearch',
+            'NavigationToggleListener' => 'Olcs\Listener\NavigationToggle',
         ],
         'invokables' => [
             'ApplicationUtility' => 'Olcs\Service\Utility\ApplicationUtility',
@@ -474,6 +475,7 @@ return array(
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Service\Utility\DateUtility' => 'Olcs\Service\Utility\DateUtilityFactory',
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
+            'Olcs\Listener\NavigationToggle' => 'Olcs\Listener\NavigationToggle',
             'Olcs\Service\Data\SubmissionActionTypes' => 'Olcs\Service\Data\SubmissionActionTypes',
         )
     ),

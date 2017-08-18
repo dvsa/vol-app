@@ -2,11 +2,10 @@
 
 namespace Admin\Controller;
 
-use Dvsa\Olcs\Transfer\Query\TeamPrinter\TeamPrinterExceptionsList as TeamPrinterExceptionsListDto;
 use Dvsa\Olcs\Transfer\Query\DataRetention\RuleList as ListDto;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Common\Controller\Traits\GenericRenderView;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -24,9 +23,9 @@ class DataRetentionController extends AbstractInternalController implements Left
     protected $navigationId = 'admin-dashboard/admin-data-retention';
 
     // list
-    protected $tableName = 'admin-data-retention';
+    protected $tableName = 'admin-data-retention-rules';
     protected $defaultTableSortField = 'id';
-    protected $defaultTableOrderField = 'ASC';
+    protected $defaultTableOrderField = 'DESC';
     protected $listDto = ListDto::class;
     protected $tableViewTemplate = 'pages/table';
 
@@ -51,74 +50,24 @@ class DataRetentionController extends AbstractInternalController implements Left
     /**
      * Index action
      *
-     * @return \Olcs\View\Model\ViewModel
+     * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $this->placeholder()->setPlaceholder('pageTitle', 'Data Retention');
+        $this->placeholder()->setPlaceholder('pageTitle', 'Data retention rules');
 
         return parent::indexAction();
     }
 
     /**
-     * Set navigation id
+     * Records action
      *
-     * @param int $id Id
-     *
-     * @return void
+     * @return \Zend\Http\Response|ViewModel
      */
-    protected function setNavigationId($id)
+    public function recordsAction()
     {
-        $this->getServiceLocator()->get('viewHelperManager')->get('placeholder')
-            ->getContainer('navigationId')->set($id);
-    }
+        $this->placeholder()->setPlaceholder('pageTitle', 'Data retention actions');
 
-    /**
-     * Render view
-     *
-     * @param \Zend\Form\Form $form      Form
-     * @param int             $noOfTasks No of tasks
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function renderView($form, $noOfTasks)
-    {
-        $view = new ViewModel();
-        $view->setVariable('form', $form);
-        $view->setVariable(
-            'label',
-            $this->getServiceLocator()->get('Helper\Translation')
-                ->translateReplace('internal.admin.remove-team-label', [$noOfTasks])
-        );
-        $view->setTemplate('pages/confirm');
-        $this->placeholder()->setPlaceholder('pageTitle', $this->deleteModalTitle);
-        return $this->viewBuilder()->buildView($view);
-    }
-
-    /**
-     * Get table data
-     *
-     * @return array
-     */
-    protected function getTableData()
-    {
-        if (empty($this->params()->fromRoute('team'))) {
-            return [];
-        }
-
-        $data = [
-            'team' => $this->params()->fromRoute('team'),
-        ];
-        $response = $this->handleQuery(TeamPrinterExceptionsListDto::create($data));
-
-        if ($response->isServerError() || $response->isClientError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
-
-        if ($response->isOk()) {
-            return $response->getResult();
-        }
-
-        return [];
+        return parent::indexAction();
     }
 }
