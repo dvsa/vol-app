@@ -30,7 +30,7 @@ return [
                             'review' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/review',
+                                    'route' => '/review[/]',
                                     'defaults' => [
                                         'controller' => Admin\Controller\DataRetentionController::class,
                                         'action' => 'index'
