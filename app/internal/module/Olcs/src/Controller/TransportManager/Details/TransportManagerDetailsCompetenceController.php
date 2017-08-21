@@ -191,7 +191,7 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
 
     protected function alterTable($table, $data)
     {
-        if (!is_null($data['extra']['transportManager']['removedDate'])) {
+        if (isset($data['extra']['transportManager']['removedDate'])) {
             /* @var $table \Common\Service\Table\TableBuilder */
             $table->setDisabled(true);
 
