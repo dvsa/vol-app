@@ -251,7 +251,7 @@ class TaskController extends AbstractController
             $form->remove('lastModifiedBy');
         }
 
-        if (is_array($data['taskHistory']) && count($data['taskHistory'])) {
+        if (isset($data['taskHistory']) && is_array($data['taskHistory']) && count($data['taskHistory'])) {
             $form->get('taskHistory')->get('table')->setTable(
                 $this->getTaskHistoryTable($data['taskHistory'])
             );
