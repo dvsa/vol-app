@@ -143,20 +143,20 @@
               <a href="<?php echo $this->url('lva-' . $lva . '/review', [], [], true); ?>" target="_blank"
                   class=""><?php echo $this->translate('view-full-application') ?></a>
           </li>
-            <?php if ($canCancel): ?>
+            <?php if (isset($canCancel) && $canCancel): ?>
             <li>
                 <a href="<?php echo $this->url('lva-application/cancel', [], [], true); ?>" class="js-modal-ajax">
                     <?php echo $this->translate('application.cancel'); ?>
                 </a>
             </li>
             <?php endif; ?>
-            <?php if ($canWithdraw): ?>
+            <?php if (isset($canWithdraw) && $canWithdraw): ?>
               <li>
                   <a href="<?php echo $this->url('lva-' . $lva . '/withdraw', [], [], true); ?>"
                       class="js-modal-ajax"><?php echo $this->translate('withdraw-application') ?></a>
               </li>
             <?php endif; ?>
-            <?php if ($paymentRef): ?>
+            <?php if (isset($paymentRef) && $paymentRef): ?>
               <li>
                 <a target="_blank"
                 href="<?php echo $this->url('fees/receipt', ['action' => 'print', 'reference' => $paymentRef]);?>"><?php echo $this->translate('pay-fees.success.print-receipt'); ?></a>
