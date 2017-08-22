@@ -24,7 +24,7 @@ return array(
             'title' => 'Description',
             'name' => 'description',
             'sort' => 'description',
-            //'formatter' => 'DataRetentionRuleLink'
+            'formatter' => 'DataRetentionRuleLink'
         ),
     )
 );

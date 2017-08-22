@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use Dvsa\Olcs\Transfer\Query\DataRetention\Records as RecordsListDto;
 use Dvsa\Olcs\Transfer\Query\DataRetention\RuleList as ListDto;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Common\Controller\Traits\GenericRenderView;
@@ -24,9 +25,14 @@ class DataRetentionController extends AbstractInternalController implements Left
 
     // list
     protected $tableName = 'admin-data-retention-rules';
+    protected $recordsTableName = 'admin-data-retention-records';
+
     protected $defaultTableSortField = 'id';
     protected $defaultTableOrderField = 'DESC';
+
     protected $listDto = ListDto::class;
+    protected $recordsListDto = RecordsListDto::class;
+
     protected $tableViewTemplate = 'pages/table';
 
     /**
@@ -67,6 +73,10 @@ class DataRetentionController extends AbstractInternalController implements Left
     public function recordsAction()
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Data retention actions');
+
+        $this->tableName = $this->recordsTableName;
+        $this->listDto = $this->recordsListDto;
+        $this->listVars = ['dataRetentionRuleId'];
 
         return parent::indexAction();
     }
