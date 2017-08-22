@@ -17,7 +17,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Description',
-            'name' => 'organisationName',
+            'formatter' => 'DataRetentionRecordLink',
         ),
         array(
             'title' => 'Added',

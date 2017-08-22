@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use Dvsa\Olcs\Transfer\Query\DataRetention\GetRule;
 use Dvsa\Olcs\Transfer\Query\DataRetention\Records as RecordsListDto;
 use Dvsa\Olcs\Transfer\Query\DataRetention\RuleList as ListDto;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -72,7 +73,13 @@ class DataRetentionController extends AbstractInternalController implements Left
      */
     public function recordsAction()
     {
-        $this->placeholder()->setPlaceholder('pageTitle', 'Data retention actions');
+        $ruleId = $this->params('dataRetentionRuleId');
+        $query = GetRule::create(['id' => $ruleId]);
+
+        $response = $this->handleQuery($query);
+        $dataRetentionRule = $response->getResult();
+
+        $this->placeholder()->setPlaceholder('pageTitle', 'Data retention: ' . $dataRetentionRule['description']);
 
         $this->tableName = $this->recordsTableName;
         $this->listDto = $this->recordsListDto;
