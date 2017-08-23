@@ -79,7 +79,10 @@ class DataRetentionController extends AbstractInternalController implements Left
         $response = $this->handleQuery($query);
         $dataRetentionRule = $response->getResult();
 
-        $this->placeholder()->setPlaceholder('pageTitle', 'Data retention: ' . $dataRetentionRule['description']);
+        $this->placeholder()->setPlaceholder(
+            'pageTitle',
+            ucwords($dataRetentionRule['description'])
+        );
 
         $this->tableName = $this->recordsTableName;
         $this->listDto = $this->recordsListDto;
