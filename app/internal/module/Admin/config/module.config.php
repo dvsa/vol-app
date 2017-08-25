@@ -47,8 +47,8 @@ return [
                                     'defaults' => [
                                         'controller' => Admin\Controller\DataRetentionController::class,
                                         'action' => 'records'
-                                    ]
-                                ]
+                                    ],
+                                ],
                             ],
                         ],
                     ],
