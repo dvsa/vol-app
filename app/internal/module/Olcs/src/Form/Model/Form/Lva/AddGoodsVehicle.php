@@ -20,7 +20,7 @@ class AddGoodsVehicle
 
     /**
      * @Form\Name("licence-vehicle")
-     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\LicenceVehicle")
+     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\LicenceVehicleAppVar")
      */
     public $licenceVehicle = null;
 
