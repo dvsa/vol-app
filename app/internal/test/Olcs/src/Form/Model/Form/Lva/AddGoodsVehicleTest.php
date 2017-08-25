@@ -53,11 +53,23 @@ class AddGoodsVehicleTest extends AbstractFormValidationTestCase
         $this->assertFormElementRequired($element, false);
     }
 
-    public function testLicenceVehicleSpecifiedDate()
+    public function testLicenceVehicleSpecifiedDateTime()
     {
         $element = ['licence-vehicle', 'specifiedDate'];
-        $this->assertFormElementDate($element);
-        $this->assertFormElementRequired($element, false);
+
+        $tomorrow = new \DateTimeImmutable('+1 day');
+
+        $this->assertFormElementDateTimeValidCheck(
+            $element,
+            [
+                'year'   => $tomorrow->format('Y'),
+                'month'  => $tomorrow->format('m'),
+                'day'    => $tomorrow->format('j'),
+                'hour'   => 12,
+                'minute' => 12,
+                'second' => 12,
+            ]
+        );
     }
 
     public function testLicenceVehicleRemovalDate()
