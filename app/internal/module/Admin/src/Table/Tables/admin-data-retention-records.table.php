@@ -7,6 +7,12 @@ return array(
         'titlePlural' => 'Data retention records',
     ),
     'settings' => array(
+        'crud' => array(
+            'actions' => array(
+                'Delay' => array('class' => 'action--secondary'),
+                'delete' => array('class' => 'action--delete')
+            )
+        ),
         'paginate' => array(
             'limit' => array(
                 'default' => 25,
@@ -28,6 +34,11 @@ return array(
             'title' => 'Next review date',
             'name' => 'nextReviewDate',
             'formatter' => 'Date',
+        ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'type' => 'Checkbox'
         ),
     )
 );
