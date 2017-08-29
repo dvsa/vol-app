@@ -25,7 +25,7 @@ echo $this->render('partials/read-only/main',
             2 => [
                 ['label' => 'Licence status', 'value' => $this->status($licenceStatus), 'noEscape' => true],
                 ['label' => 'Outstanding fees', 'numeric' => $outstandingFees],
-                ['label' => 'Application licence type', 'value' => $this->translate($appLicenceType)],
+                ['label' => 'Application licence type', 'value' => $this->translate((string)$appLicenceType)],
 
                 [
                     'label' => 'Continuation date',
@@ -40,7 +40,7 @@ echo $this->render('partials/read-only/main',
                     'hideIfEmpty' => true,
                 ],
                 ['label' => 'Grace period', 'value' => $licenceGracePeriods, 'noEscape' => true],
-                ['label' => 'Current licence type', 'value' => $this->translate($licenceType), 'hideIfEmpty' => true]
+                ['label' => 'Current licence type', 'value' => $this->translate((string)$licenceType), 'hideIfEmpty' => true]
             ],
             3 => [
                 [
