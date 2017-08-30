@@ -2,9 +2,9 @@
 /** @var \Zend\Navigation\Page\Mvc $backPage */
 $backPage = $this->navigationParentPage();
 
-if ($payingFromFlow) {
+if (isset($payingFromFlow) && $payingFromFlow) {
     echo $this->partial(
-        'partials/page-header-simple',
+        'partials/page-header-continuation',
         [
             'pageTitle' => $this->translate('continuation.payment.title.pay-fees'),
             'pageSubTitle' => $this->translate('continuation.sub-title.continue-licence') . ' ' . $licNo,

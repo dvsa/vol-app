@@ -4,7 +4,7 @@ $backPage = $this->navigationParentPage();
 
 if (isset($payingFromFlow) && $payingFromFlow) {
     echo $this->partial(
-        'partials/page-header-simple',
+        'partials/page-header-continuation',
         [
             'pageTitle' => $this->translate('continuation.payment.title.pay-fee'),
             'pageSubTitle' => $this->translate('continuation.sub-title.continue-licence') . ' ' . $licNo,
