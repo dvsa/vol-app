@@ -210,7 +210,7 @@ class ContinuationController extends AbstractController
         $view->setTemplate('pages/form');
         $this->setNavigationId('admin-dashboard/continuations');
 
-        return $this->renderView($view, 'Generate checklists');
+        return $this->renderView($view, 'Generate continuations');
     }
 
     /**
