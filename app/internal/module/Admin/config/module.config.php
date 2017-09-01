@@ -50,6 +50,16 @@ return [
                                     ],
                                 ],
                             ],
+                            'export' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/export[/]',
+                                    'defaults' => [
+                                        'controller' => Admin\Controller\DataRetention\ExportController::class,
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ],
                         ],
                     ],
                     'task-allocation-rules' => [
@@ -586,6 +596,8 @@ return [
             Admin\Controller\SystemInfoMessageController::class => Admin\Controller\SystemInfoMessageController::class,
             Admin\Controller\ReportCasesOpenController::class => Admin\Controller\ReportCasesOpenController::class,
             Admin\Controller\DataRetentionController::class => Admin\Controller\DataRetentionController::class,
+            Admin\Controller\DataRetention\ExportController::class =>
+                Admin\Controller\DataRetention\ExportController::class
         ],
     ],
     'view_manager' => [

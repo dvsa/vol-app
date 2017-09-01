@@ -247,6 +247,11 @@ return [
                             'label' => 'Review',
                             'route' => 'admin-dashboard/admin-data-retention'
                         ],
+                        [
+                            'id' => 'admin-dashboard/admin-data-retention/export',
+                            'label' => 'Export',
+                            'route' => 'admin-dashboard/admin-data-retention/export'
+                        ],
                     ],
                 ],
             ]
