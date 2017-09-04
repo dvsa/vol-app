@@ -56,6 +56,7 @@ return array(
                 return ($row['id'] !== $this->authService->getIdentity()->getUserData()['id']);
             },
             'deleteInputName' => 'action[delete][%d]',
+            'dontUseModal' => true,
         ],
     ]
 );
