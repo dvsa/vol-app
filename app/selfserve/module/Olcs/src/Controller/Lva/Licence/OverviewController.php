@@ -57,6 +57,7 @@ class OverviewController extends AbstractController
         $cmd =  PrintLicence::create(
             [
                 'id' => $this->getLicenceId(),
+                'dispatch' => false,
             ]
         );
 
