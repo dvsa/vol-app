@@ -10,7 +10,7 @@ use Zend\Form\Annotation as Form;
 class ConditionUndertaking extends CaseBase
 {
     /**
-     * @Form\Attributes({"id":""})
+     * @Form\Attributes({"id":"type"})
      * @Form\Options({
      *     "label": "Condition / Undertaking type",
      *     "empty_option": "Please Select",
@@ -22,7 +22,7 @@ class ConditionUndertaking extends CaseBase
     public $type = null;
 
     /**
-     * @Form\Attributes({"id":""})
+     * @Form\Attributes({"id":"conditionCategory"})
      * @Form\Options({
      *     "label": "Condition / Undertaking category",
      *     "empty_option": "Please Select",
@@ -40,7 +40,7 @@ class ConditionUndertaking extends CaseBase
     public $isDraft = null;
 
     /**
-     * @Form\Attributes({"id":"","class":"extra-long"})
+     * @Form\Attributes({"id":"notes","class":"extra-long"})
      * @Form\Options({
      *     "label": "Description"
      * })
@@ -63,7 +63,7 @@ class ConditionUndertaking extends CaseBase
 
     /**
      * value options are set in the controller under alter form methods
-     * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Attributes({"id":"attachedTo","placeholder":""})
      * @Form\Options({
      *     "label": "Attached to",
      *     "value_options": {
