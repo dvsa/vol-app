@@ -87,6 +87,7 @@ class DataRetentionController extends AbstractInternalController implements Left
         $this->tableName = $this->recordsTableName;
         $this->listDto = $this->recordsListDto;
         $this->listVars = ['dataRetentionRuleId'];
+        $this->defaultTableLimit = 25;
 
         return parent::indexAction();
     }

@@ -20,13 +20,13 @@ return array(
             'formatter' => 'DataRetentionRecordLink',
         ),
         array(
-            'title' => 'Added',
+            'title' => 'Date added',
             'name' => 'createdOn',
             'formatter' => 'Date'
         ),
         array(
-            'title' => 'Delay until',
-            'name' => 'deletedDate',
+            'title' => 'Next review date',
+            'name' => 'nextReviewDate',
             'formatter' => 'Date',
         ),
     )
