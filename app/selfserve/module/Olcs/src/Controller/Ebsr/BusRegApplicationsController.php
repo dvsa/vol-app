@@ -59,7 +59,7 @@ class BusRegApplicationsController extends AbstractController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $postData = $request->getPost();
+            $postData = $request->getPost()->toArray();
             return $this->busRegPostedActionHandler($postData);
         }
 
