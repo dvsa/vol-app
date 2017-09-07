@@ -1,7 +1,7 @@
 
 <div class="attach-comment">
     <?php if (isset($submissionConfig[$sectionId]['allow_attachments']) &&
-        $submissionConfig[$sectionId]['allow_attachments'] && !$readonly) {
+        $submissionConfig[$sectionId]['allow_attachments']) {
         echo $this->formErrors($form);
         echo $this->form($form);
     }

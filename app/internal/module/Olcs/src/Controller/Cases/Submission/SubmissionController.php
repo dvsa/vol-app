@@ -381,15 +381,16 @@ class SubmissionController extends AbstractInternalController implements Submiss
                 $allSectionsRefData = $this->getAllSectionsRefData();
                 $submissionConfig = $this->getSubmissionConfig();
 
+                $readOnly = (bool) ($printView || $data['isClosed']);
                 $this->placeholder()->setPlaceholder(
                     'selectedSectionsArray',
-                    $this->generateSelectedSectionsArray($data, $allSectionsRefData, $submissionConfig)
+                    $this->generateSelectedSectionsArray($data, $allSectionsRefData, $submissionConfig, $readOnly)
                 );
 
                 $this->placeholder()->setPlaceholder('allSections', $allSectionsRefData);
                 $this->placeholder()->setPlaceholder('submissionConfig', $submissionConfig['sections']);
                 $this->placeholder()->setPlaceholder('submission', $data);
-                $this->placeholder()->setPlaceholder('readonly', (bool) ($printView || $data['isClosed']));
+                $this->placeholder()->setPlaceholder('readonly', $readOnly);
             }
         }
     }
@@ -486,11 +487,16 @@ class SubmissionController extends AbstractInternalController implements Submiss
      * @param array $submission         submission
      * @param array $allSectionsRefData all section ref data
      * @param array $submissionConfig   submissionConfig
+     * @param bool  $readOnly           Should the section be rendered readonly
      *
      * @return array
      */
-    private function generateSelectedSectionsArray($submission, $allSectionsRefData, $submissionConfig)
-    {
+    private function generateSelectedSectionsArray(
+        $submission,
+        $allSectionsRefData,
+        $submissionConfig,
+        $readOnly = false
+    ) {
         $submissionService = $this->getServiceLocator()
             ->get('Olcs\Service\Data\Submission');
 
@@ -501,7 +507,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
                 $submissionConfig
             );
 
-        $selectedSectionsArray = $this->generateSectionForms($selectedSectionsArray);
+        $selectedSectionsArray = $this->generateSectionForms($selectedSectionsArray, $readOnly);
 
         return $selectedSectionsArray;
     }
@@ -558,10 +564,11 @@ class SubmissionController extends AbstractInternalController implements Submiss
      * Method to generate and add the section forms for each section to the selectedSectionArray
      *
      * @param array $selectedSectionsArray selectedSectionsArray
+     * @param bool  $readOnly              Should the form render as readonly
      *
      * @return array $selectedSectionsArray
      */
-    private function generateSectionForms($selectedSectionsArray)
+    private function generateSectionForms($selectedSectionsArray, $readOnly = false)
     {
 
         $configService = $this->getServiceLocator()->get('config');
@@ -579,7 +586,9 @@ class SubmissionController extends AbstractInternalController implements Submiss
 
                     // generate a unique attachment form for this section
                     $attachmentsForm = $this->getSectionForm($this->sectionId);
-
+                    if ($readOnly) {
+                        $attachmentsForm->setOption('readonly', true);
+                    }
                     $this->processFiles(
                         $attachmentsForm,
                         'attachments',
