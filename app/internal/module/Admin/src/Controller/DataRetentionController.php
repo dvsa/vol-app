@@ -91,4 +91,21 @@ class DataRetentionController extends AbstractInternalController implements Left
 
         return parent::indexAction();
     }
+
+    /**
+     * Delete action
+     *
+     * @return array|mixed|\Zend\Http\Response|ViewModel
+     */
+    public function deleteAction()
+    {
+        // display standard confirm delete modal, no tasks assigned
+        return $this->confirmCommand(
+            new ConfirmItem($this->deleteParams, $this->hasMultiDelete),
+            $this->deleteCommand,
+            $this->deleteModalTitle,
+            $this->deleteConfirmMessage,
+            $this->deleteSuccessMessage
+        );
+}
 }
