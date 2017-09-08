@@ -101,9 +101,8 @@ class TransportManagerDetailsEmploymentController extends AbstractInternalContro
      */
     protected function alterTable($table, $data)
     {
-        $disableTable = !is_null($data['extra']['transportManager']['removedDate']);
-
-        if ($disableTable == true) {
+        $disableTable = !empty($data['extra']['transportManager']['removedDate']);
+        if ($disableTable === true) {
             $table->setDisabled(true);
 
             $column = $table->getColumn('employerName');
