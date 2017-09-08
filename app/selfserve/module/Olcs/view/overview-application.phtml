@@ -26,13 +26,13 @@
     );
     ?>
     <p><?php echo $this->translate('application.apply-for-new-licence.guide.text'); ?></p>
-    <ul class="overview-navigation">
+    <ol class="overview__list">
         <?php
             foreach ($sections as $section) {
                 echo $this->render($section);
             }
         ?>
-    </ul>
+    </ol>
   </div>
 
   <div class="one-third">

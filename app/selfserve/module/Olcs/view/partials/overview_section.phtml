@@ -1,33 +1,30 @@
-<li class="overview-item <?php echo ($enabled ? '' : 'disabled'); ?>">
+<li class="overview__list-item <?php echo ($enabled ? '' : 'disabled'); ?>">
 
-  <h3>
   <?php if ($enabled) : ?>
   <a
-   class="overview-item__link"
+   class="overview__link overview__link--large"
    href="<?php echo $this->url($route, array($identifierIndex => $identifier)); ?>"
    <?php if (isset($anchorRef)): ?>
    id="overview-item__<?php echo $anchorRef; ?>"
    <?php endif; ?>
-  >
+  ><span>
   <?php else : ?>
-  <div class="overview-item__link">
+    <div class="overview__item">
   <?php endif; ?>
   <?php
-    if (isset($sectionNumber)){
-        echo $sectionNumber . '. ';
-    }
     echo $this->translate($name);
   ?>
-  <?php if ($enabled) : ?></a><?php else : ?></div><?php endif; ?>
-  </h3>
-
-
+  </span>
   <?php if ($enabled) : ?>
     <?php if (isset($status) && $status !== ''): ?>
-      <span class="status <?php echo $statusColour; ?>"><?php echo $this->translate($status); ?></span>
+      <span class="overview__status <?php echo $statusColour; ?>"><?php echo $this->translate($status); ?></span>
     <?php endif; ?>
   <?php else : ?>
-    <span class="status grey"><?php echo $this->translate('selfserve-app-overview-status-cant-start'); ?></span>
+    <span class="overview__status grey"><?php echo $this->translate('selfserve-app-overview-status-cant-start'); ?></span>
   <?php endif; ?>
+  <?php if ($enabled) : ?></a><?php else : ?></div><?php endif; ?>
+
+
+  
 
 </li>
