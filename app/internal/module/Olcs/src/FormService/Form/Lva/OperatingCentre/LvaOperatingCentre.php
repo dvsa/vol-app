@@ -36,11 +36,6 @@ class LvaOperatingCentre extends CommonOperatingCentre
             $appliedVia = $params['appliedVia'];
         }
 
-        // Unable to change annotation directly in form, because fieldset added to every next element with a same name
-        $advFieldset = $form->get('advertisements');
-        $advFieldset->get('adPlacedPost')->setName('adPlaced');
-        $advFieldset->get('adPlacedLater')->setName('adPlaced');
-
         if ($appliedVia === null || $appliedVia !== RefData::APPLIED_VIA_SELFSERVE) {
             $this->getFormHelper()->remove($form, 'advertisements->adPlacedLater');
         }

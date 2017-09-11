@@ -88,33 +88,6 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     ->getMock()
             )
             ->once()
-            ->shouldReceive('get')
-            ->with('advertisements')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('adPlacedPost')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('setName')
-                    ->with('adPlaced')
-                    ->once()
-                    ->getMock()
-                )
-                ->once()
-                ->shouldReceive('get')
-                ->with('adPlacedLater')
-                ->andReturn(
-                    m::mock()
-                        ->shouldReceive('setName')
-                        ->with('adPlaced')
-                        ->once()
-                        ->getMock()
-                )
-                ->once()
-                ->getMock()
-            )
-            ->once()
             ->getMock();
 
         $params = [
