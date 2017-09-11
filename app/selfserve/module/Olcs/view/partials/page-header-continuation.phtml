@@ -1,0 +1,26 @@
+<div class="page-header">
+
+    <?php echo $this->flashMessengerAll(); ?>
+
+    <?php
+    if ($this->backUrl === true) {
+        echo $this->linkBack();
+    } elseif (is_array($this->backUrl) && count($this->backUrl) > 0) {
+        echo $this->linkBack($this->backUrl);
+    }
+    ?>
+
+    <div class="page-header__wrapper">
+        <?php if (isset($this->stepHeader)) : ?>
+            <h3 class="page-header__subtitle"><?php echo $this->stepHeader; ?></h3>
+        <?php endif; ?>
+        <h1 class="js-title no-margin">
+            <?php echo $this->escapeHtml($this->pageTitle); ?>
+        </h1>
+        <?php if ($this->pageSubTitle !== '') : ?>
+            <h3 class="page-header__subtitle">
+                <?php echo $this->escapeHtml($this->pageSubTitle); ?>
+            </h3>
+        <?php endif; ?>
+    </div>
+</div><!-- page-header-->
