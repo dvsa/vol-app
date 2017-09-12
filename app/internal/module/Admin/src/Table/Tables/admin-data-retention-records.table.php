@@ -10,7 +10,7 @@ return array(
         'crud' => array(
             'actions' => array(
                 'Delay' => array('class' => 'action--secondary'),
-                'delete' => array('class' => 'action--delete')
+                'Mark as Delete' => array('class' => 'action--delete')
             )
         ),
         'paginate' => array(
