@@ -7,6 +7,7 @@ use Zend\Form\Form;
 use Zend\Validator\Identical as ValidatorIdentical;
 use Common\Validator\ValidateIf;
 use Common\RefData;
+use Common\Data\Mapper\Lva\OperatingCentre as OperatingCentreMapper;
 
 /**
  * Lva Internal Operating Centres
@@ -37,7 +38,10 @@ class LvaOperatingCentre extends CommonOperatingCentre
         }
 
         if ($appliedVia === null || $appliedVia !== RefData::APPLIED_VIA_SELFSERVE) {
-            $this->getFormHelper()->remove($form, 'advertisements->adPlacedLater');
+            $adPlaced = $form->get('advertisements')->get('radio');
+            $valuesOptions = $adPlaced->getValueOptions();
+            unset($valuesOptions[OperatingCentreMapper::VALUE_OPTION_AD_UPLOAD_LATER]);
+            $adPlaced->setValueOptions($valuesOptions);
         }
 
         parent::alterForm($form, $params);
