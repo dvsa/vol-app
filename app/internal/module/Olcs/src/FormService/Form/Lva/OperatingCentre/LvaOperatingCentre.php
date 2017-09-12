@@ -37,6 +37,8 @@ class LvaOperatingCentre extends CommonOperatingCentre
             $appliedVia = $params['appliedVia'];
         }
 
+        $this->getFormHelper()->remove($form, 'advertisements->adSendByPostContent');
+
         if ($appliedVia === null || $appliedVia !== RefData::APPLIED_VIA_SELFSERVE) {
             $adPlaced = $form->get('advertisements')->get('radio');
             $valuesOptions = $adPlaced->getValueOptions();

@@ -81,6 +81,9 @@ class LvaOperatingCentreTest extends MockeryTestCase
             ->shouldReceive('removeValidator')
             ->with($form, 'advertisements->uploadedFileCount', \Common\Validator\ValidateIf::class)
             ->once()
+            ->shouldReceive('remove')
+            ->with($form, 'advertisements->adSendByPostContent')
+            ->once()
             ->getMock();
 
         $form->shouldReceive('getInputFilter')
