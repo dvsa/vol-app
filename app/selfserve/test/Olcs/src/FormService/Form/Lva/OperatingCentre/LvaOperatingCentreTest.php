@@ -170,7 +170,6 @@ class LvaOperatingCentreTest extends MockeryTestCase
 
     /**
      * @dataProvider gbParamsProvider
-     * @group test123
      */
     public function testAlterFormGb($params)
     {
