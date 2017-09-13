@@ -9,6 +9,7 @@ use Zend\Form\Form;
 use Olcs\FormService\Form\Lva\OperatingCentre\LvaOperatingCentre;
 use Zend\Validator\Identical as ValidatorIdentical;
 use Common\RefData;
+use Common\Data\Mapper\Lva\OperatingCentre as OperatingCentreMapper;
 
 /**
  * Lva Operating Centre Test
@@ -52,6 +53,25 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     ->getMock()
             )
             ->once()
+            ->shouldReceive('get')
+            ->with('advertisements')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('get')
+                ->with('radio')
+                ->andReturn(
+                    m::mock()
+                    ->shouldReceive('getValueOptions')
+                    ->andReturn(['foo' => 'bar', OperatingCentreMapper::VALUE_OPTION_AD_UPLOAD_LATER => 'cake'])
+                    ->once()
+                    ->shouldReceive('setValueOptions')
+                    ->with(['foo' => 'bar'])
+                    ->once()
+                    ->getMock()
+                )
+                ->once()
+                ->getMock()
+            )
             ->getMock();
 
         $this->formHelper
@@ -62,7 +82,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
             ->with($form, 'advertisements->uploadedFileCount', \Common\Validator\ValidateIf::class)
             ->once()
             ->shouldReceive('remove')
-            ->with($form, 'advertisements->adPlacedLater')
+            ->with($form, 'advertisements->adSendByPostContent')
             ->once()
             ->getMock();
 
@@ -86,33 +106,6 @@ class LvaOperatingCentreTest extends MockeryTestCase
                             ->getMock()
                     )
                     ->getMock()
-            )
-            ->once()
-            ->shouldReceive('get')
-            ->with('advertisements')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('get')
-                ->with('adPlacedPost')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('setName')
-                    ->with('adPlaced')
-                    ->once()
-                    ->getMock()
-                )
-                ->once()
-                ->shouldReceive('get')
-                ->with('adPlacedLater')
-                ->andReturn(
-                    m::mock()
-                        ->shouldReceive('setName')
-                        ->with('adPlaced')
-                        ->once()
-                        ->getMock()
-                )
-                ->once()
-                ->getMock()
             )
             ->once()
             ->getMock();
