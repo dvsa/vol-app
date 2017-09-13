@@ -70,9 +70,8 @@ class DocumentUploadController extends AbstractDocumentController
         $type = $routeParams['type'];
 
         $files = $this->getRequest()->getFiles()->toArray();
-        $files = $files['details'];
 
-        $file = (isset($files['file']) ? $files['file'] : null);
+        $file = (isset($files['details']['file']) ? $files['details']['file'] : null);
 
         if ($file === null || $file['error'] !== UPLOAD_ERR_OK) {
             $errNr = (isset($file['error']) ? $file['error'] : self::ERR_UPLOAD_DEF);

@@ -49,7 +49,7 @@ class DiscPrinting
         $data['discPrefix'] = isset($params['discPrefix']) ? $params['discPrefix'] : '';
         $data['isSuccessfull'] = isset($params['isSuccessfull']) ? $params['isSuccessfull'] : '';
         $data['endNumber'] = isset($params['endNumber']) ? $params['endNumber'] : '';
-        $data['queueId'] = $params['queueId'];
+        $data['queueId'] = isset($params['queueId']) ? $params['queueId'] : '';
         return $data;
     }
 

@@ -48,7 +48,7 @@ class TaskAlphaSplit implements MapperInterface
             'version' => $formData['taskAlphaSplit']['version'],
             'letters' => $formData['taskAlphaSplit']['letters'],
             'user' => $formData['taskAlphaSplit']['user'],
-            'taskAllocationRule' => $formData['taskAllocationRule'],
+            'taskAllocationRule' => !empty($formData['taskAllocationRule']) ? $formData['taskAllocationRule'] : null,
         ];
 
         return $data;
