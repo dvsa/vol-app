@@ -32,11 +32,6 @@ class LvaOperatingCentre extends CommonOperatingCentre
     {
         $isNi = $this->isNi($params);
 
-        // Unable to change annotation directly in form, because fieldset added to every next element with a same name
-        $advFieldset = $form->get('advertisements');
-        $advFieldset->get('adPlacedPost')->setName('adPlaced');
-        $advFieldset->get('adPlacedLater')->setName('adPlaced');
-
         $this->setSendByPostContent($form, $isNi, $params);
 
         $this->setAdPlacedLabels($form, $isNi, $params['isVariation']);
@@ -57,12 +52,8 @@ class LvaOperatingCentre extends CommonOperatingCentre
      */
     protected function setAdPlacedLabels(Form $form, $isNi, $isVariation)
     {
-        /** @var \Zend\Form\Element\Radio $adPlaced */
-        $adPlaced = $form->get('advertisements')->get('adPlaced');
-        /** @var \Zend\Form\Element\Radio $adPlacedPost */
-        $adPlacedPost = $form->get('advertisements')->get('adPlacedPost');
-        /** @var \Zend\Form\Element\Radio $adPlacedLater */
-        $adPlacedLater = $form->get('advertisements')->get('adPlacedLater');
+        /** @var \Zend\Form\Element\Radio $radio */
+        $radio = $form->get('advertisements')->get('radio');
 
         $guideName = 'advertising-your-operating-centre';
 
@@ -85,17 +76,15 @@ class LvaOperatingCentre extends CommonOperatingCentre
             ]
         );
 
-        $adPlaced->setLabel($label);
+        $radio->setLabel($label);
 
-        $valuesOptions = $adPlaced->getValueOptions();
+        $valuesOptions = $radio->getValueOptions();
 
-        $valuesOptions['1'] = 'lva-oc-adplaced-y-selfserve';
-        $valuesOptionsPost['0'] = 'lva-oc-adplaced-n-selfserve';
-        $valuesOptionsLater['2'] = 'lva-oc-adplaced-l-selfserve';
+        $valuesOptions['adPlaced'] = 'lva-oc-adplaced-y-selfserve';
+        $valuesOptions['adSendByPost'] = 'lva-oc-adplaced-n-selfserve';
+        $valuesOptions['adPlacedLater'] = 'lva-oc-adplaced-l-selfserve';
 
-        $adPlaced->setValueOptions($valuesOptions);
-        $adPlacedPost->setValueOptions($valuesOptionsPost);
-        $adPlacedLater->setValueOptions($valuesOptionsLater);
+        $radio->setValueOptions($valuesOptions);
     }
 
     /**
@@ -110,7 +99,7 @@ class LvaOperatingCentre extends CommonOperatingCentre
     protected function setSendByPostContent(Form $form, $isNi, $params)
     {
         /** @var \Common\Form\Elements\Types\HtmlTranslated $adSendByPost */
-        $adSendByPost = $form->get('advertisements')->get('adSendByPost');
+        $adSendByPost = $form->get('advertisements')->get('adSendByPostContent');
 
         if (empty($params['licNo'])) {
             $reference = '';
@@ -142,7 +131,7 @@ class LvaOperatingCentre extends CommonOperatingCentre
      */
     protected function setUploadLaterContent(Form $form)
     {
-        $form->get('advertisements')->get('adUploadLater')->setValue('markup-lva-oc-ad-upload-later-text');
+        $form->get('advertisements')->get('adPlacedLaterContent')->setValue('markup-lva-oc-ad-upload-later-text');
     }
 
     /**
