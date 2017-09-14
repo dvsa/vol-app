@@ -238,7 +238,10 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         $fees = $this->getOutstandingFeeDataForApplication($applicationId);
         if (empty($fees) || $this->disableCardPayments) {
             $postData = (array) $this->getRequest()->getPost();
-            return $this->submitApplication($applicationId, $postData['version']);
+            return $this->submitApplication(
+                $applicationId,
+                !empty($postData['version']) ? $postData['version'] : null
+            );
         }
 
         if (isset($post['form-actions']['pay'])) {
