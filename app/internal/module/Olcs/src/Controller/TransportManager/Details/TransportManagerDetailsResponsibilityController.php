@@ -623,7 +623,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     {
         // Add in the NI translations. Eg for form element labels
         $niTranslation = $this->getServiceLocator()->get('Utils\NiTextTranslation');
-        $niTranslation->setLocaleForNiFlag($application['niFlag']);
+        if (!empty($application['niFlag'])) {
+            $niTranslation->setLocaleForNiFlag($application['niFlag']);
+        }
 
         // @NOTE This logic has been moved to the helper service, so it can be re-used
         $this->transportManagerHelper->alterResponsibilitiesFieldset(
