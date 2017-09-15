@@ -52,8 +52,10 @@ class LvaOperatingCentre extends CommonOperatingCentre
      */
     protected function setAdPlacedLabels(Form $form, $isNi, $isVariation)
     {
+        $advertisements = $form->get('advertisements');
+
         /** @var \Zend\Form\Element\Radio $radio */
-        $radio = $form->get('advertisements')->get('radio');
+        $radio = $advertisements->get('radio');
 
         $guideName = 'advertising-your-operating-centre';
 
@@ -69,14 +71,16 @@ class LvaOperatingCentre extends CommonOperatingCentre
             $guideName .= '-new';
         }
 
-        $label = $this->getTranslator()->translateReplace(
+        $advertisements->setLabel('lva-operating-centre-radio-label');
+        $advertisements->setOption('hint', 'lva-operating-centre-radio-hint');
+
+        $guidance = $this->getTranslator()->translateReplace(
             'markup-lva-oc-ad-placed-label-selfserve',
             [
                 $this->getUrl()->fromRoute('guides/guide', ['guide' => $guideName])
             ]
         );
-
-        $radio->setLabel($label);
+        $form->get('data')->get('guidance')->setValue($guidance);
 
         $valuesOptions = $radio->getValueOptions();
 

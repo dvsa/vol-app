@@ -113,6 +113,29 @@ class LvaOperatingCentreTest extends MockeryTestCase
             )
             ->once();
 
+        $form->shouldReceive('get')
+            ->with('data')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('guidance')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setValue')
+                            ->with(
+                                'translated-markup-lva-oc-ad-placed-label-selfserve'
+                                . '-guides/guide'
+                                . '-advertising-your-operating-centre-ni-new'
+                            )
+                            ->once()
+                            ->getMock()
+                    )
+                    ->once()
+                    ->getMock()
+            )
+            ->once()
+            ->getMock();
+
         $adSendByPost = m::mock();
         $adSendByPost->shouldReceive('setValue')
             ->once()
@@ -125,13 +148,6 @@ class LvaOperatingCentreTest extends MockeryTestCase
             ->getMock();
 
         $radio = m::mock()
-            ->shouldReceive('setLabel')
-            ->with(
-                'translated-markup-lva-oc-ad-placed-label-selfserve'
-                . '-guides/guide'
-                . '-advertising-your-operating-centre-ni-new'
-            )
-            ->once()
             ->shouldReceive('getValueOptions')
             ->andReturn([])
             ->once()
@@ -159,6 +175,12 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     ->getMock()
             )
             ->once()
+            ->shouldReceive('setLabel')
+            ->with('lva-operating-centre-radio-label')
+            ->once()
+            ->shouldReceive('setOption')
+            ->with('hint', 'lva-operating-centre-radio-hint')
+            ->once()
             ->getMock();
 
         $form->shouldReceive('get')
@@ -184,6 +206,29 @@ class LvaOperatingCentreTest extends MockeryTestCase
                         m::mock()
                             ->shouldReceive('setOption')
                             ->with('shouldEscapeMessages', false)
+                            ->once()
+                            ->getMock()
+                    )
+                    ->once()
+                    ->getMock()
+            )
+            ->once()
+            ->getMock();
+
+        $form->shouldReceive('get')
+            ->with('data')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('get')
+                    ->with('guidance')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setValue')
+                            ->with(
+                                'translated-markup-lva-oc-ad-placed-label-selfserve'
+                                . '-guides/guide'
+                                . '-advertising-your-operating-centre-gb-new'
+                            )
                             ->once()
                             ->getMock()
                     )
@@ -227,13 +272,6 @@ class LvaOperatingCentreTest extends MockeryTestCase
             );
 
         $radio = m::mock()
-            ->shouldReceive('setLabel')
-            ->with(
-                'translated-markup-lva-oc-ad-placed-label-selfserve'
-                . '-guides/guide'
-                . '-advertising-your-operating-centre-gb-new'
-            )
-            ->once()
             ->shouldReceive('getValueOptions')
             ->andReturn([])
             ->once()
@@ -260,6 +298,12 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     ->once()
                     ->getMock()
             )
+            ->once()
+            ->shouldReceive('setLabel')
+            ->with('lva-operating-centre-radio-label')
+            ->once()
+            ->shouldReceive('setOption')
+            ->with('hint', 'lva-operating-centre-radio-hint')
             ->once()
             ->getMock();
 
