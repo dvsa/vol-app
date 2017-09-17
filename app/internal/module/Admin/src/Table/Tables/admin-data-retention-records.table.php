@@ -9,8 +9,11 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'Delay' => array('class' => 'action--secondary'),
-                'Mark as Delete' => array('class' => 'action--delete')
+                'delete' => array(
+                    'label' => 'Mark as Delete',
+                    'requireRows' => true,
+                    'class' => 'action--delete js-require--multiple'
+                ),
             )
         ),
         'paginate' => array(

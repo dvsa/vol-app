@@ -40,9 +40,11 @@ return [
                             'records' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/records/:dataRetentionRuleId[/]',
+                                    'route' => '/records/:dataRetentionRuleId[/:action[/:id]][/]',
                                     'constraints' => [
                                         'dataRetentionRuleId' => '[0-9\,]+',
+                                        'id' => '[0-9\,]+',
+                                        'action' => '(records|delete)',
                                     ],
                                     'defaults' => [
                                         'controller' => Admin\Controller\DataRetentionController::class,

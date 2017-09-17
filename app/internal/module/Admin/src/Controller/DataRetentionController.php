@@ -2,11 +2,11 @@
 
 namespace Admin\Controller;
 
-use Dvsa\Olcs\Transfer\Query\DataRetention\GetRule;
+use Dvsa\Olcs\Transfer\Command\DataRetention\UpdateActionConfirmation;
 use Dvsa\Olcs\Transfer\Query\DataRetention\Records as RecordsListDto;
 use Dvsa\Olcs\Transfer\Query\DataRetention\RuleList as ListDto;
+use Dvsa\Olcs\Transfer\Query\DataRetention\GetRule;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Common\Controller\Traits\GenericRenderView;
 use Olcs\Controller\AbstractInternalController;
 use Zend\View\Model\ViewModel;
 
@@ -15,8 +15,6 @@ use Zend\View\Model\ViewModel;
  */
 class DataRetentionController extends AbstractInternalController implements LeftViewProvider
 {
-    use GenericRenderView;
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -36,6 +34,23 @@ class DataRetentionController extends AbstractInternalController implements Left
 
     protected $tableViewTemplate = 'pages/table';
 
+    // Update using delete command
+    protected $hasMultiDelete = true;
+    protected $deleteParams = ['ids' => 'id'];
+    protected $deleteCommand = UpdateActionConfirmation::class;
+    protected $deleteModalTitle = 'Mark as delete data retention record(s)';
+    protected $deleteConfirmMessage = 'Are you sure you want to mark the following for deletion(s)?';
+    protected $deleteSuccessMessage = 'Data retention record(s) deleted';
+
+    protected $redirectConfig = [
+        'delete' => [
+            'action' => 'records',
+            'routeMap' => [
+                'dataRetentionRuleId' => 'dataRetentionRuleId',
+            ],
+            'reUseParams' => true
+        ],
+    ];
     /**
      * Get left view
      *
@@ -91,21 +106,4 @@ class DataRetentionController extends AbstractInternalController implements Left
 
         return parent::indexAction();
     }
-
-    /**
-     * Delete action
-     *
-     * @return array|mixed|\Zend\Http\Response|ViewModel
-     */
-    public function deleteAction()
-    {
-        // display standard confirm delete modal, no tasks assigned
-        return $this->confirmCommand(
-            new ConfirmItem($this->deleteParams, $this->hasMultiDelete),
-            $this->deleteCommand,
-            $this->deleteModalTitle,
-            $this->deleteConfirmMessage,
-            $this->deleteSuccessMessage
-        );
-}
 }
