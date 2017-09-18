@@ -11,7 +11,6 @@ use Olcs\Data\Mapper\SubmissionAction as Mapper;
 use Olcs\Form\Model\Form\SubmissionDecision as Form;
 use Zend\Form\Form as ZendForm;
 
-
 /**
  * Submission Decision Controller
  */
@@ -132,7 +131,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
      */
     protected function alterFormForAdd(ZendForm $form, $formData)
     {
-        return $this->alterForm($form, $formData['id']);
+        return $this->alterForm($form, !empty($formData['id']) ? $formData['id'] : '');
     }
 
     /**
