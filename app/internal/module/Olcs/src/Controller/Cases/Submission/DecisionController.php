@@ -11,7 +11,6 @@ use Olcs\Data\Mapper\SubmissionAction as Mapper;
 use Olcs\Form\Model\Form\SubmissionDecision as Form;
 use Zend\Form\Form as ZendForm;
 
-
 /**
  * Submission Decision Controller
  */
