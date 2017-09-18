@@ -131,7 +131,7 @@ class RecommendationController extends AbstractInternalController implements Cas
      */
     protected function alterFormForAdd(FormInterface $form, $formData)
     {
-        return $this->alterForm($form, $formData['id']);
+        return $this->alterForm($form, !empty($formData['id']) ? $formData['id'] : '');
     }
 
     /**

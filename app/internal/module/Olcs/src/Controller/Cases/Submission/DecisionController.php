@@ -132,7 +132,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
      */
     protected function alterFormForAdd(ZendForm $form, $formData)
     {
-        return $this->alterForm($form, $formData['id']);
+        return $this->alterForm($form, !empty($formData['id']) ? $formData['id'] : '');
     }
 
     /**
@@ -156,7 +156,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
      *
      * @return ZendForm
      */
-    private function alterForm(ZendForm $form, $id)
+    private function alterForm(ZendForm $form)
     {
         $form->get('fields')->get('comment')->setAttribute('id', $id . time());
         return $form;

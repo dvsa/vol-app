@@ -100,19 +100,6 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
     }
 
     /**
-     * Alters the add form at runtime
-     *
-     * @param ZendForm $form     the form
-     * @param array    $formData form data
-     *
-     * @return ZendForm
-     */
-    protected function alterFormForAdd(ZendForm $form, $formData)
-    {
-        return $this->alterForm($form, $formData['id']);
-    }
-
-    /**
      * Alters the edit form at runtime
      *
      * @param ZendForm $form     the form
