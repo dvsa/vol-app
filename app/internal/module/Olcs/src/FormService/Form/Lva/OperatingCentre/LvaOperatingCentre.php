@@ -26,9 +26,10 @@ class LvaOperatingCentre extends CommonOperatingCentre
      */
     public function alterForm(Form $form, array $params)
     {
-        $this->getFormHelper()->removeValidator($form, 'data->permission', ValidatorIdentical::class);
+        $formHelper = $this->getFormHelper();
+        $formHelper->removeValidator($form, 'data->permission', ValidatorIdentical::class);
         // On Internal uploading the advert isn't mandatory
-        $this->getFormHelper()->removeValidator($form, 'advertisements->uploadedFileCount', ValidateIf::class);
+        $formHelper->removeValidator($form, 'advertisements->uploadedFileCount', ValidateIf::class);
 
         $appliedVia = null;
         if (isset($params['appliedVia']['id'])) {
@@ -37,10 +38,16 @@ class LvaOperatingCentre extends CommonOperatingCentre
             $appliedVia = $params['appliedVia'];
         }
 
-        $this->getFormHelper()->remove($form, 'advertisements->adSendByPostContent');
+        $formHelper->remove($form, 'advertisements->adSendByPostContent');
+        $formHelper->remove($form, 'advertisements->adPlacedLaterContent');
+
+        $advertisements = $form->get('advertisements');
+        $advertisements->setLabel('application_operating-centres_authorisation-sub-action.advertisements.adPlaced');
+
+        $form->get('data')->get('guidance')->setValue('lva-operating-centre-newspaper-advert');
 
         if ($appliedVia === null || $appliedVia !== RefData::APPLIED_VIA_SELFSERVE) {
-            $adPlaced = $form->get('advertisements')->get('radio');
+            $adPlaced = $advertisements->get('radio');
             $valuesOptions = $adPlaced->getValueOptions();
             unset($valuesOptions[OperatingCentreMapper::VALUE_OPTION_AD_UPLOAD_LATER]);
             $adPlaced->setValueOptions($valuesOptions);
