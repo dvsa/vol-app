@@ -11,6 +11,7 @@ use Olcs\View\Model\Dashboard;
 use Common\Controller\Lva\AbstractController;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
+use Zend\View\Model\ViewModel;
 
 /**
  * Dashboard Controller
@@ -24,6 +25,8 @@ class DashboardController extends AbstractController
 
     /**
      * Dashboard index action
+     *
+     * @return ViewModel
      */
     public function indexAction()
     {
@@ -40,11 +43,16 @@ class DashboardController extends AbstractController
     /**
      * Get the Standard Dashboard view
      *
-     * @return Dashboard
+     * @return ViewModel
      */
     protected function standardDashboardView()
     {
         $organisationId = $this->getCurrentOrganisationId();
+
+        if (empty($organisationId)) {
+            $this->flashMessenger()->addErrorMessage('auth.login.failed.reason.account-disabled');
+            return $this->redirect()->toRoute('auth/login');
+        }
 
         // retrieve data
         $query = DashboardQry::create(['id' => $organisationId]);
@@ -84,6 +92,8 @@ class DashboardController extends AbstractController
 
     /**
      * Get the Dashboard view for a Transport Manager
+     *
+     * @return ViewModel
      */
     protected function transportManagerDashboardView()
     {
