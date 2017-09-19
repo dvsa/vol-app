@@ -7,6 +7,7 @@ use Mockery as m;
 use Olcs\FormService\Form\Lva\Addresses;
 use Zend\InputFilter\InputFilter;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\InputFilter\Input;
 
 /**
  * @covers Olcs\FormService\Form\Lva\Addresses
@@ -45,7 +46,14 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
                     ->shouldReceive('get')
                     ->with('email')
                     ->andReturn(
-                        m::mock(\Zend\InputFilter\Input::class)
+                        m::mock(Input::class)
+                            ->shouldReceive('setRequired')->once()->with(false)->andReturnSelf()
+                            ->getMock()
+                    )
+                    ->shouldReceive('get')
+                    ->with('phone_primary')
+                    ->andReturn(
+                        m::mock(Input::class)
                             ->shouldReceive('setRequired')->once()->with(false)->andReturnSelf()
                             ->getMock()
                     )

@@ -25,9 +25,14 @@ class Addresses extends CommonAddresses
 
         $this->removeEstablishment($form, $params['typeOfLicence']['licenceType']);
 
+        $contact = $form->getInputFilter()->get('contact');
+
         //  change email settings
         /** @var \Zend\InputFilter\Input $emailElm */
-        $emailElm = $form->getInputFilter()->get('contact')->get('email');
+        $emailElm = $contact->get('email');
         $emailElm->setRequired(false);
+
+        $phonePrimary = $contact->get('phone_primary');
+        $phonePrimary->setRequired(false);
     }
 }
