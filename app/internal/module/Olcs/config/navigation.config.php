@@ -724,12 +724,6 @@ $nav = array(
                                     'use_route_match' => true,
                                 ),
                                 array(
-                                    'id' => 'transport_manager_processing_decisions',
-                                    'label' => 'internal-navigation-transport-manager-processing-decisions',
-                                    'route' => 'transport-manager/processing/decisions',
-                                    'use_route_match' => true,
-                                ),
-                                array(
                                     'id' => 'transport_manager_processing_event-history',
                                     'label' => 'internal-crud-event-history',
                                     'route' => 'transport-manager/processing/event-history',

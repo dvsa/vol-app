@@ -1347,16 +1347,6 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'decisions' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'decisions[/]',
-                            'defaults' => [
-                                'controller' => 'TMProcessingDecisionController',
-                                'action' => 'index',
-                            ]
-                        ]
-                    ],
                     'history' => [
                         'type' => 'segment',
                         'options' => [
