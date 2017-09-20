@@ -13,6 +13,7 @@ return array(
             'title' => 'application_operating-centres_authorisation.table.address',
             'name' => 'operatingCentre->address',
             'formatter' => 'Address',
+            'addressFields' => 'BRIEF',
             'sort' => 'adr'
         ),
         array(
