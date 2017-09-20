@@ -44,7 +44,7 @@ return [
                                     'constraints' => [
                                         'dataRetentionRuleId' => '[0-9\,]+',
                                         'id' => '[0-9\,]+',
-                                        'action' => '(records|delete)',
+                                        'action' => '(records|delete|review)',
                                     ],
                                     'defaults' => [
                                         'controller' => Admin\Controller\DataRetentionController::class,

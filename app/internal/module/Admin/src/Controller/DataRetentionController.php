@@ -34,9 +34,7 @@ class DataRetentionController extends AbstractInternalController implements Left
 
     protected $tableViewTemplate = 'pages/table';
 
-    // Update using delete command
-    protected $hasMultiDelete = true;
-    protected $deleteParams = ['ids' => 'id'];
+    protected $deleteParams = ['ids' => 'id', 'status' => 'action'];
     protected $deleteCommand = UpdateActionConfirmation::class;
     protected $deleteModalTitle = 'Mark as delete data retention record(s)';
     protected $deleteConfirmMessage = 'Are you sure you want to mark the following for deletion(s)?';
@@ -50,7 +48,20 @@ class DataRetentionController extends AbstractInternalController implements Left
             ],
             'reUseParams' => true
         ],
+        'review' => [
+            'action' => 'records',
+            'routeMap' => [
+                'dataRetentionRuleId' => 'dataRetentionRuleId',
+            ],
+            'reUseParams' => true
+        ],
     ];
+
+    protected $crudConfig = [
+        'review' => ['requireRows' => true],
+    ];
+
+
     /**
      * Get left view
      *
@@ -79,6 +90,20 @@ class DataRetentionController extends AbstractInternalController implements Left
         $this->placeholder()->setPlaceholder('pageTitle', 'Data retention rules');
 
         return parent::indexAction();
+    }
+
+    /**
+     * Review action
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function reviewAction()
+    {
+        $this->deleteModalTitle = 'Mark to review data retention record(s)';
+        $this->deleteConfirmMessage = 'Are you sure you want to mark the following for review?';
+        $this->deleteSuccessMessage = 'Data retention record(s) status set to review';
+
+        return parent::deleteAction();
     }
 
     /**

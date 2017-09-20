@@ -9,6 +9,11 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
+                'review' => array(
+                    'label' => 'Mark for Review',
+                    'requireRows' => true,
+                    'class' => 'action--primary js-require--multiple'
+                ),
                 'delete' => array(
                     'label' => 'Mark as Delete',
                     'requireRows' => true,
