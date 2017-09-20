@@ -290,8 +290,6 @@ return array(
                 => 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsEmploymentController',
             'TMDetailsPreviousHistoryController'
                 => 'Olcs\Controller\TransportManager\Details\TransportManagerDetailsPreviousHistoryController',
-            'TMProcessingDecisionController'
-                => \Olcs\Controller\TransportManager\Processing\TransportManagerProcessingDecisionController::class,
             'TMProcessingPublicationController'
                 => 'Olcs\Controller\TransportManager\Processing\PublicationController',
             TMProcessingNoteController::class => TMProcessingNoteController::class,
