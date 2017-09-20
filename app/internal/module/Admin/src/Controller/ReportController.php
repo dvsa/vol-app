@@ -155,7 +155,8 @@ class ReportController extends ZendAbstractActionController implements LeftViewP
     {
         $data = [
             'page' => $this->params()->fromQuery('page', 1),
-            'limit' => $this->params()->fromQuery('limit', 10)
+            'limit' => $this->params()->fromQuery('limit', 10),
+            'query' => $this->getRequest()->getQuery()->toArray(),
         ];
 
         $query = DocumentList::create(
