@@ -40,6 +40,7 @@ class OppositionTest extends AbstractFormValidationTestCase
         $element = ['fields', 'contactDetailsDescription'];
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementText($element, 5, 255);
     }
 
     public function testRaisedDate()
