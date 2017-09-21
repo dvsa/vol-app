@@ -2,7 +2,7 @@
 
 namespace Admin\Controller;
 
-use Dvsa\Olcs\Transfer\Command\DataRetention\UpdateActionConfirmation;
+use Dvsa\Olcs\Transfer\Command\DataRetention as DataRetentionActions;
 use Dvsa\Olcs\Transfer\Query\DataRetention\Records as RecordsListDto;
 use Dvsa\Olcs\Transfer\Query\DataRetention\RuleList as ListDto;
 use Dvsa\Olcs\Transfer\Query\DataRetention\GetRule;
@@ -22,8 +22,6 @@ class DataRetentionController extends AbstractInternalController implements Left
      */
     protected $navigationId = 'admin-dashboard/admin-data-retention';
 
-    // list
-    protected $tableName = 'admin-data-retention-rules';
     protected $recordsTableName = 'admin-data-retention-records';
 
     protected $defaultTableSortField = 'id';
@@ -32,13 +30,17 @@ class DataRetentionController extends AbstractInternalController implements Left
     protected $listDto = ListDto::class;
     protected $recordsListDto = RecordsListDto::class;
 
+    protected $tableName = 'admin-data-retention-rules';
+    protected $tableViewPlaceholderName = 'table';
     protected $tableViewTemplate = 'pages/table';
 
     protected $deleteParams = ['ids' => 'id', 'status' => 'action'];
-    protected $deleteCommand = UpdateActionConfirmation::class;
-    protected $deleteModalTitle = 'Mark as delete data retention record(s)';
+    protected $deleteCommand = DataRetentionActions\MarkForDelete::class;
+    protected $deleteModalTitle = 'Mark to delete data retention record(s)';
     protected $deleteConfirmMessage = 'Are you sure you want to mark the following for deletion(s)?';
     protected $deleteSuccessMessage = 'Data retention record(s) deleted';
+
+    protected $hasMultiDelete = true;
 
     protected $redirectConfig = [
         'delete' => [
@@ -61,6 +63,9 @@ class DataRetentionController extends AbstractInternalController implements Left
         'review' => ['requireRows' => true],
     ];
 
+    protected $inlineScripts = [
+        'recordsAction' => ['table-actions'],
+    ];
 
     /**
      * Get left view
@@ -102,6 +107,7 @@ class DataRetentionController extends AbstractInternalController implements Left
         $this->deleteModalTitle = 'Mark to review data retention record(s)';
         $this->deleteConfirmMessage = 'Are you sure you want to mark the following for review?';
         $this->deleteSuccessMessage = 'Data retention record(s) status set to review';
+        $this->deleteCommand = DataRetentionActions\MarkForReview::class;
 
         return parent::deleteAction();
     }
@@ -130,5 +136,27 @@ class DataRetentionController extends AbstractInternalController implements Left
         $this->defaultTableLimit = 25;
 
         return parent::indexAction();
+    }
+
+    /**
+     * Render view
+     *
+     * @param \Zend\Form\Form $form      Form
+     * @param int             $noOfTasks No of tasks
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    protected function renderView($form, $noOfTasks)
+    {
+        $view = new ViewModel();
+        $view->setVariable('form', $form);
+        $view->setVariable(
+            'label',
+            $this->getServiceLocator()->get('Helper\Translation')
+                ->translateReplace('internal.admin.remove-team-label', [$noOfTasks])
+        );
+        $view->setTemplate('pages/confirm');
+        $this->placeholder()->setPlaceholder('pageTitle', $this->deleteModalTitle);
+        return $this->viewBuilder()->buildView($view);
     }
 }
