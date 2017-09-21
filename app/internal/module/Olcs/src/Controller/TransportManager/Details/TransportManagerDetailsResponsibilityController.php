@@ -197,6 +197,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $key = 'licence';
         }
         $dataToSave[$key] = $data[$key]['id'];
+        $dataToSave['description'] = $file['name'];
 
         if ($action === 'edit-tm-application') {
             $dataToSave['licence'] = $data['application']['licence']['id'];
