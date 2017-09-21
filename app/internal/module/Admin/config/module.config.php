@@ -1,5 +1,6 @@
 <?php
 
+use Admin\Controller\PublishedPublicationController;
 use Zend\Mvc\Router\Http\Segment;
 
 return [
@@ -165,6 +166,16 @@ return [
                                     ],
                                     'defaults' => [
                                         'controller' => 'Admin\RecipientController',
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ],
+                            'published' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => 'published[/]',
+                                    'defaults' => [
+                                        'controller' => PublishedPublicationController::class,
                                         'action' => 'index'
                                     ]
                                 ]
@@ -573,6 +584,7 @@ return [
             'Admin\IrfoPsvAuthContinuationController' => 'Admin\Controller\IrfoPsvAuthContinuationController',
             Admin\Controller\ScanningController::class => Admin\Controller\ScanningController::class,
             'Admin\PublicationController' => 'Admin\Controller\PublicationController',
+            PublishedPublicationController::class => PublishedPublicationController::class,
             'Admin\RecipientController' => 'Admin\Controller\RecipientController',
             'Admin\ContinuationController' => 'Admin\Controller\ContinuationController',
             'Admin\ReportController' => 'Admin\Controller\ReportController',

@@ -72,6 +72,11 @@ return [
                             'route' => 'admin-dashboard/admin-publication/pending'
                         ],
                         [
+                            'id' => 'admin-dashboard/admin-publication/published',
+                            'label' => 'Published',
+                            'route' => 'admin-dashboard/admin-publication/published'
+                        ],
+                        [
                             'id' => 'admin-dashboard/admin-publication/recipient',
                             'label' => 'Recipients',
                             'route' => 'admin-dashboard/admin-publication/recipient',
