@@ -89,13 +89,23 @@ class LvaOperatingCentreTest extends MockeryTestCase
                             ->getMock()
                     )
                     ->once()
+                    ->shouldReceive('get')
+                    ->with('permission')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('setLabel')
+                            ->with('')
+                            ->once()
+                            ->getMock()
+                    )
+                    ->once()
                     ->getMock()
             )
             ->getMock();
 
         $this->formHelper
             ->shouldReceive('removeValidator')
-            ->with($form, 'data->permission', ValidatorIdentical::class)
+            ->with($form, 'data->permission->permission', ValidatorIdentical::class)
             ->once()
             ->shouldReceive('removeValidator')
             ->with($form, 'advertisements->uploadedFileCount', \Common\Validator\ValidateIf::class)

@@ -27,7 +27,7 @@ class LvaOperatingCentre extends CommonOperatingCentre
     public function alterForm(Form $form, array $params)
     {
         $formHelper = $this->getFormHelper();
-        $formHelper->removeValidator($form, 'data->permission', ValidatorIdentical::class);
+        $formHelper->removeValidator($form, 'data->permission->permission', ValidatorIdentical::class);
         // On Internal uploading the advert isn't mandatory
         $formHelper->removeValidator($form, 'advertisements->uploadedFileCount', ValidateIf::class);
 
@@ -45,6 +45,7 @@ class LvaOperatingCentre extends CommonOperatingCentre
         $advertisements->setLabel('application_operating-centres_authorisation-sub-action.advertisements.adPlaced');
 
         $form->get('data')->get('guidance')->setValue('lva-operating-centre-newspaper-advert');
+        $form->get('data')->get('permission')->setLabel('');
 
         if ($appliedVia === null || $appliedVia !== RefData::APPLIED_VIA_SELFSERVE) {
             $adPlaced = $advertisements->get('radio');
