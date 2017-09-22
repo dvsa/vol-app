@@ -789,6 +789,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $data['application'] = $this->getIdentifier();
         $data['licence'] = $this->getLicenceId();
+        $data['description'] = $file['name'];
 
         $isOk = $this->uploadFile($file, $data);
         // reload TMA data with new uploaded document in it
