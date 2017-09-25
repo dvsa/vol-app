@@ -7,6 +7,20 @@ return array(
         'titlePlural' => 'Data retention records',
     ),
     'settings' => array(
+        'crud' => array(
+            'actions' => array(
+                'review' => array(
+                    'label' => 'Mark for Review',
+                    'requireRows' => true,
+                    'class' => 'action--primary js-require--multiple'
+                ),
+                'delete' => array(
+                    'label' => 'Mark as Delete',
+                    'requireRows' => true,
+                    'class' => 'action--delete js-require--multiple'
+                ),
+            )
+        ),
         'paginate' => array(
             'limit' => array(
                 'default' => 25,
@@ -28,6 +42,11 @@ return array(
             'title' => 'Next review date',
             'name' => 'nextReviewDate',
             'formatter' => 'Date',
+        ),
+        array(
+            'title' => '',
+            'width' => 'checkbox',
+            'formatter' => 'DataRetentionRecordCheckbox',
         ),
     )
 );
