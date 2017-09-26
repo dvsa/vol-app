@@ -49,9 +49,9 @@ return array(
             'formatter' => 'Date',
         ),
         array(
-            'title' => '',
+            'title' => 'Select',
             'width' => 'checkbox',
-            'formatter' => 'DataRetentionRecordCheckbox',
+            'type' => 'Checkbox'
         ),
-    )
+    ),
 );
