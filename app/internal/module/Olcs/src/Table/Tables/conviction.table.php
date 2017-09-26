@@ -3,6 +3,7 @@
 return array(
     'variables' => array(
         'title' => 'Convictions',
+        'titleSingular' => 'Conviction',
         'empty_message' => 'There are no convicions'
     ),
     'settings' => array(
@@ -11,7 +12,6 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'action--primary', 'label' => 'Add conviction'),
                 'edit' => array('requireRows' => true, 'class' => 'action--secondary js-require--one'),
-                /* 'dealt' => array('class' => 'action--secondary', 'requireRows' => true, 'label' => 'Mark as Dealt With'), */
                 'delete' => array('requireRows' => true, 'class' => 'action--secondary js-require--one')
             )
         ),

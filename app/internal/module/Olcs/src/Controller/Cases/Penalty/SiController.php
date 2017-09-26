@@ -118,7 +118,6 @@ class SiController extends AbstractInternalController implements CaseControllerI
     protected $commentItemParams = ['id' => 'case'];
     protected $commentUpdateCommand = CommentUpdateDto::class;
     protected $commentMapperClass = CommentMapper::class;
-    protected $commentTitle = 'Serious Infringements';
 
     /**
      * Index action

@@ -3,6 +3,7 @@
 return array(
     'variables' => array(
         'title' => 'Prohibitions',
+        'titleSingular' => 'Prohibition',
         'empty_message' => 'There are no prohibitions'
     ),
     'settings' => array(

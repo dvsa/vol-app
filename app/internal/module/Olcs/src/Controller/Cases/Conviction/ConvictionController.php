@@ -121,5 +121,4 @@ class ConvictionController extends AbstractInternalController implements CaseCon
     protected $commentItemParams = ['id' => 'case', 'case' => 'case'];
     protected $commentUpdateCommand = CommentUpdateDto::class;
     protected $commentMapperClass = CommentMapper::class;
-    protected $commentTitle = 'Convictions';
 }
