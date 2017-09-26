@@ -2,7 +2,8 @@
 
 return array(
     'variables' => array(
-        'title' => 'Serious Infringements'
+        'title' => 'Serious Infringements',
+        'titleSingular' => 'Serious Infringement'
     ),
     'settings' => array(
         'crud' => array(

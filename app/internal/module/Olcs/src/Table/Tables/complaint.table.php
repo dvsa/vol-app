@@ -3,6 +3,7 @@
 return array(
     'variables' => array(
         'title' => 'Complaints',
+        'titleSingular' => 'Complaint',
         'empty_message' => 'There are no complaints'
     ),
     'settings' => array(
