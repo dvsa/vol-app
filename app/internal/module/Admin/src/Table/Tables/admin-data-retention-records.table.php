@@ -9,6 +9,11 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
+                'delay' => array(
+                    'label' => 'Delay',
+                    'requireRows' => true,
+                    'class' => 'action--primary js-require--multiple'
+                ),
                 'review' => array(
                     'label' => 'Mark for Review',
                     'requireRows' => true,
@@ -44,9 +49,9 @@ return array(
             'formatter' => 'Date',
         ),
         array(
-            'title' => '',
+            'title' => 'Select',
             'width' => 'checkbox',
-            'formatter' => 'DataRetentionRecordCheckbox',
+            'type' => 'Checkbox'
         ),
-    )
+    ),
 );

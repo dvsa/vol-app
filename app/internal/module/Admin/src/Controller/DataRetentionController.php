@@ -3,11 +3,14 @@
 namespace Admin\Controller;
 
 use Dvsa\Olcs\Transfer\Command\DataRetention as DataRetentionActions;
+use Dvsa\Olcs\Transfer\Query\DataRetention\GetRecord;
 use Dvsa\Olcs\Transfer\Query\DataRetention\Records as RecordsListDto;
 use Dvsa\Olcs\Transfer\Query\DataRetention\RuleList as ListDto;
+use Admin\Form\Model\Form\DelayItem as DelayItemForm;
 use Dvsa\Olcs\Transfer\Query\DataRetention\GetRule;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Data\Mapper\DelayItems;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -15,6 +18,8 @@ use Zend\View\Model\ViewModel;
  */
 class DataRetentionController extends AbstractInternalController implements LeftViewProvider
 {
+    protected $itemsDelayedSuccessMessage = 'Record(s) are now updated';
+
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -40,6 +45,8 @@ class DataRetentionController extends AbstractInternalController implements Left
     protected $deleteConfirmMessage = 'Are you sure you want to mark the following for deletion(s)?';
     protected $deleteSuccessMessage = 'Data retention record(s) deleted';
 
+    protected $itemParams = ['ids' => 'id'];
+
     protected $hasMultiDelete = true;
 
     protected $redirectConfig = [
@@ -57,10 +64,18 @@ class DataRetentionController extends AbstractInternalController implements Left
             ],
             'reUseParams' => true
         ],
+        'delay' => [
+            'action' => 'records',
+            'routeMap' => [
+                'dataRetentionRuleId' => 'dataRetentionRuleId',
+            ],
+            'reUseParams' => true
+        ],
     ];
 
     protected $crudConfig = [
         'review' => ['requireRows' => true],
+        'delay' => ['requireRows' => true],
     ];
 
     protected $inlineScripts = [
@@ -95,6 +110,61 @@ class DataRetentionController extends AbstractInternalController implements Left
         $this->placeholder()->setPlaceholder('pageTitle', 'Data retention rules');
 
         return parent::indexAction();
+    }
+
+    /**
+     * Delay update action
+     *
+     * @return ViewModel
+     */
+    public function delayAction()
+    {
+        $formClass = DelayItemForm::class;
+        $mapperClass = new DelayItems();
+        $updateCommand = new DataRetentionActions\DelayItems();
+
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
+        $action = ucfirst($this->params()->fromRoute('action'));
+        $form = $this->getForm($formClass);
+        $this->placeholder()->setPlaceholder('form', $form);
+        $this->placeholder()->setPlaceholder('contentTitle', 'Delay selected items');
+
+        if ($request->isPost()) {
+            $dataFromPost = (array)$this->params()->fromPost();
+            $form->setData($dataFromPost);
+
+            if (method_exists($this, 'alterFormFor' . $action)) {
+                $form = $this->{'alterFormFor' . $action}($form, $dataFromPost);
+            }
+        }
+
+        if ($request->isPost() && $form->isValid()) {
+            $commandData = $mapperClass::mapFromForm($form->getData());
+            $commandData['ids'] = explode(',', $this->params('id'));
+
+            $response = $this->handleCommand($updateCommand::create($commandData));
+
+            if ($response->isOk()) {
+                $this->getServiceLocator()
+                    ->get('Helper\FlashMessenger')
+                    ->addSuccessMessage($this->itemsDelayedSuccessMessage);
+
+                return $this->redirectTo($response->getResult());
+            } elseif ($response->isClientError()) {
+                $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
+
+                foreach ($flashErrors as $error) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
+                }
+
+            } elseif ($response->isServerError()) {
+                $this->handleErrors($response->getResult());
+            }
+
+        }
+
+        return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
     }
 
     /**
