@@ -10,7 +10,7 @@ use Admin\Form\Model\Form\DelayItem as DelayItemForm;
 use Dvsa\Olcs\Transfer\Query\DataRetention\GetRule;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Data\Mapper\GenericFields;
+use Olcs\Data\Mapper\DelayItems;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -18,6 +18,8 @@ use Zend\View\Model\ViewModel;
  */
 class DataRetentionController extends AbstractInternalController implements LeftViewProvider
 {
+    protected $itemsDelayedSuccessMessage = 'Record(s) are now updated';
+
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -63,7 +65,7 @@ class DataRetentionController extends AbstractInternalController implements Left
             'reUseParams' => true
         ],
         'delay' => [
-            'action' => 'delay',
+            'action' => 'records',
             'routeMap' => [
                 'dataRetentionRuleId' => 'dataRetentionRuleId',
             ],
@@ -118,7 +120,7 @@ class DataRetentionController extends AbstractInternalController implements Left
     public function delayAction()
     {
         $formClass = DelayItemForm::class;
-        $mapperClass = new GenericFields();
+        $mapperClass = new DelayItems();
         $updateCommand = new DataRetentionActions\DelayItems();
 
         /** @var \Zend\Http\Request $request */
@@ -139,10 +141,15 @@ class DataRetentionController extends AbstractInternalController implements Left
 
         if ($request->isPost() && $form->isValid()) {
             $commandData = $mapperClass::mapFromForm($form->getData());
+            $commandData['ids'] = explode(',', $this->params('id'));
+
             $response = $this->handleCommand($updateCommand::create($commandData));
 
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
+                $this->getServiceLocator()
+                    ->get('Helper\FlashMessenger')
+                    ->addSuccessMessage($this->itemsDelayedSuccessMessage);
+
                 return $this->redirectTo($response->getResult());
             } elseif ($response->isClientError()) {
                 $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
