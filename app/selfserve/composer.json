@@ -36,6 +36,10 @@
         {
             "type": "vcs",
             "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-testhelpers.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-devtools.git"
         }
     ],
     "require": {
@@ -52,7 +56,7 @@
         "olcs/olcs-logging": "dev-develop"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.0.0",
+        "olcs/olcs-devtools": "dev-master",
         "mockery/mockery": "~0.9.3",
         "mikey179/vfsstream": "^1.4.0",
         "olcs/olcs-testhelpers": "dev-develop"
@@ -72,9 +76,9 @@
     },
     "scripts": {
         "ut": "vendor/bin/phpunit -c test/phpunit.xml --stop-on-failure",
-        "review": "${dev_workspace}/olcs-devtools/Review.sh",
-        "cs": "${dev_workspace}/olcs-devtools/vendor/bin/phpcs --severity=1 --standard=${dev_workspace}/sonar-configuration/Profiles/DVSA/CS/ruleset.xml",
+        "review": "vendor/bin/review",
+        "cs": "vendor/bin/phpcs --severity=1 --standard=vendor/olcs/coding-standards/Profiles/DVSA/CS/ruleset.xml",
         "cov": "vendor/bin/phpunit -c test/phpunit-coverage.xml",
-        "update-syms": "${dev_workspace}/olcs-devtools/composer-update-syms.sh"
+        "update-syms": "vendor/bin/composer-update-syms"
     }
 }
