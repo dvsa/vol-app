@@ -20,9 +20,9 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateService()
     {
-        $mockRefDataService = $this->getMock('Common\Service\Data\RefData');
+        $mockRefDataService = $this->createMock('Common\Service\Data\RefData');
 
-        $mockSl = $this->getMock('\Zend\ServiceManager\ServiceManager');
+        $mockSl = $this->createMock('\Zend\ServiceManager\ServiceManager');
         $mockSl->expects($this->any())
             ->method('get')
             ->willReturnMap(
@@ -81,7 +81,7 @@ class SubmissionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAllSectionsRefData()
     {
-        $mockRefDataService = $this->getMock('Common\Service\Data\RefData');
+        $mockRefDataService = $this->createMock('Common\Service\Data\RefData');
 
         $mockSectionRefData = $this->getMockSectionRefData();
         $mockRefDataService->expects(

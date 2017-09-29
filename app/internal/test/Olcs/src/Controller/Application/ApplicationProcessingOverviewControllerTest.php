@@ -25,7 +25,7 @@ class ApplicationProcessingOverviewControllerTest extends \PHPUnit_Framework_Tes
     {
         $controller = $this->getController('index');
 
-        $redirect = $this->getMock(Redirect::class, [], [], '');
+        $redirect = $this->createMock(Redirect::class);
         $redirect->expects(self::once())->method('toRoute');
 
         $controller->getPluginManager()

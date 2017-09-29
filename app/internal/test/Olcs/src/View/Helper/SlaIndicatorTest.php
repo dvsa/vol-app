@@ -24,7 +24,7 @@ class SlaIndicatorTest extends \PHPUnit_Framework_TestCase
 
     public function testHasTargetBeenMet()
     {
-        $sut = $this->getMock('Olcs\View\Helper\SlaIndicator', ['doHasTargetBeenMet']);
+        $sut = $this->createPartialMock('Olcs\View\Helper\SlaIndicator', ['doHasTargetBeenMet']);
 
         $sut->expects($this->exactly(2))
             ->method('doHasTargetBeenMet')

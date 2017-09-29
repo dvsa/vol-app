@@ -25,7 +25,7 @@ class LicenceProcessingOverviewControllerTest extends \PHPUnit_Framework_TestCas
     {
         $controller = $this->getController('index');
 
-        $redirect = $this->getMock(Redirect::class, [], [], '');
+        $redirect = $this->createMock(Redirect::class);
         $redirect->expects(self::once())->method('toRoute');
 
         $controller->getPluginManager()
