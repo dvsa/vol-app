@@ -17,7 +17,7 @@ class PublicInquiryDefinitionTest extends \PHPUnit_Framework_TestCase
 
     public function testFetchListOptionsWithGroups()
     {
-        $mockLicenceService = $this->getMock('\Common\Service\Data\Licence');
+        $mockLicenceService = $this->createMock('\Common\Service\Data\Licence');
         $mockLicenceService->expects($this->once())
             ->method('fetchLicenceData')
             ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv'], 'trafficArea' => ['id' => 'B']]);
