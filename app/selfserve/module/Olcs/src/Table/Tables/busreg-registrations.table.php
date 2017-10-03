@@ -27,7 +27,7 @@ return array(
         ),
         array(
             'title' => 'Variation No.',
-            'name' => 'variationNo'
+            'formatter' => 'EbsrVariationNumber'
         ),
         array(
             'title' => 'Service No.',
