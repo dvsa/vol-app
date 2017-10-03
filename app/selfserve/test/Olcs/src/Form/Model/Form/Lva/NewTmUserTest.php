@@ -35,6 +35,17 @@ class NewTmUserTest extends AbstractFormValidationTestCase
     public function testBirthDate()
     {
         $element = ['data', 'birthDate'];
+
+        $this->assertFormElementNotValid(
+            $element,
+            [
+                'day' => '15',
+                'month' => '06',
+                'year' => '2060',
+            ],
+            [ \Common\Form\Elements\Validators\DateNotInFuture::IN_FUTURE ]
+        );
+
         $this->assertFormElementRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementDate($element);
