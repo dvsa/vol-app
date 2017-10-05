@@ -27,15 +27,20 @@ class PeopleController extends Lva\AbstractPeopleController
      *
      * @return void
      */
-    protected function alterFormForLva(Form $form, $data = null)
+    protected function alterFormForLva(Form $form, $data = null) //why is this data parameter here?
     {
         $table = $form->get('table')->get('table')->getTable();
         $table->removeColumn('actionLinks');
     }
 
 
+    /**
+     *  Add Action for self service licencer changes
+     *
+     */
     public function addAction()
     {
+
 
 
         //@todo get the variation type and check
