@@ -96,14 +96,17 @@ class UndertakingsController extends AbstractUndertakingsController
     {
         $fieldset = $form->get('declarationsAndUndertakings');
         $translator = $this->getServiceLocator()->get('Helper\Translation');
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         $this->updateReviewElement($applicationData, $fieldset, $translator);
         $this->updateDeclarationElement($fieldset, $translator);
         $this->updateInterimFieldset($form, $applicationData);
         $this->updateSubmitButtons($form, $applicationData);
         $this->updateFormBasedOnDisableSignatureSetting($form);
-        if ($applicationData['canHaveInterimLicence']) {
-            $this->updateInterimFee($form, $applicationData, $translator, $translator);
+        $this->updateInterimFee($form, $applicationData, $translator);
+        $this->updateGoodsApplicationInterim($form,$applicationData,$translator);
+        if (!$applicationData['canHaveInterimLicence']) {
+            $formHelper->remove($form, 'interim');
         }
 
         return $form;
@@ -205,6 +208,27 @@ class UndertakingsController extends AbstractUndertakingsController
         $form->get('interim')->get('interimFee')->setValue(
             $translator->translateReplace('selfserve.declaration.interim_fee', [$applicationData['interimFee']])
         );
+        if(!$applicationData['interimFee']) {
+            $form->get('interim')->remove('interimFee');
+        }
+    }
+
+    /**
+     * Update Goods Application Interim Label based on interim fee value
+     *
+     * @param Form  $form            form
+     * @param array $applicationData application data
+     * @param \Common\Service\Helper\TranslationHelperService $translator translator
+     *
+     * @return void
+     */
+    protected function updateGoodsApplicationInterim($form, $applicationData, $translator)
+    {
+        if(!$applicationData['interimFee']) {
+            $form->get('interim')->get('goodsApplicationInterim')->setLabel(
+                $translator->translate('interim.application.undertakings.form.checkbox.label.no-interim-fee')
+            );
+        }
     }
 
     /**
