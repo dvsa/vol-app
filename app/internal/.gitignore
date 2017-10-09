@@ -17,3 +17,5 @@ public/static
 *.sw?
 node_modules
 /.vscode
+test/coverage/
+.scannerwork/
