@@ -6,6 +6,7 @@ use Common\Form\Elements\Validators\Date;
 use Common\Form\Elements\Validators\DateNotInFuture;
 use Common\Validator\Date as DateValidator;
 use Common\Validator\DateCompare;
+use DateTime;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Zend\Validator\StringLength;
 use Zend\Form\Element\Select;
@@ -47,12 +48,14 @@ class ConvictionTest extends AbstractFormValidationTestCase
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
 
+        $futureDate = $this->createFutureDate();
+
         $this->assertFormElementNotValid(
             $element,
             [
-                'year'  => '2017',
-                'month' => '10',
-                'day'   => '10',
+                'year'  => $futureDate->format('Y'),
+                'month' => $futureDate->format('m'),
+                'day'   => $futureDate->format('d'),
             ],
             [DateNotInFuture::IN_FUTURE],
             [
@@ -174,12 +177,14 @@ class ConvictionTest extends AbstractFormValidationTestCase
             ]
         );
 
+        $futureDate = $this->createFutureDate();
+
         $this->assertFormElementNotValid(
             $element,
             [
-                'year'  => '2017',
-                'month' => '10',
-                'day'   => '10',
+                'year'  => $futureDate->format('Y'),
+                'month' => $futureDate->format('m'),
+                'day'   => $futureDate->format('d'),
             ],
             [
                 DateNotInFuture::IN_FUTURE,
@@ -296,5 +301,15 @@ class ConvictionTest extends AbstractFormValidationTestCase
     public function testCancel()
     {
         $this->assertFormElementActionButton(['form-actions', 'cancel']);
+    }
+
+    /**
+     * Create a date in the future
+     *
+     * @return DateTime 26 hours ahead of current time to allow for slow tests and DST
+     */
+    private function createFutureDate()
+    {
+        return new DateTime('+26 hours');
     }
 }
