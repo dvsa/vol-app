@@ -33,7 +33,6 @@ class PeopleController extends Lva\AbstractPeopleController
         $table->removeColumn('actionLinks');
     }
 
-
     /**
      *  Add Action for self service licencer changes
      *
@@ -55,6 +54,5 @@ class PeopleController extends Lva\AbstractPeopleController
 
             There are already DTO handlers for adding a person to a licence, this will be because some type of organisation will already similar functionality, so we need to either modify these or create new ones.
          */
-
     }
 }

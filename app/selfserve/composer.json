@@ -72,7 +72,10 @@
     },
     "config": {
         "preferred-install": "dist",
-        "secure-http" : false
+        "secure-http" : false,
+        "platform": {
+            "php": "5.6.31"
+        }
     },
     "scripts": {
         "ut": "vendor/bin/phpunit -c test/phpunit.xml --stop-on-failure",
