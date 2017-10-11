@@ -54,7 +54,7 @@ class PeopleController extends Lva\AbstractPeopleController
     public function addAction()
     {
 
-
+        exit('process form'); 
 
         //@todo get the variation type and check | REMOVE SDH
         /*
