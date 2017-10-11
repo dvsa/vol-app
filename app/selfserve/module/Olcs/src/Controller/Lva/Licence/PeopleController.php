@@ -30,7 +30,21 @@ class PeopleController extends Lva\AbstractPeopleController
     protected function alterFormForLva(Form $form, $data = null) //why is this data parameter here?
     {
         $table = $form->get('table')->get('table')->getTable();
+
         $table->removeColumn('actionLinks');
+    }
+
+
+    public function indexAction()
+    {
+
+
+        //
+        // $this->render();
+
+        // new view from existing.
+      return parent::indexAction();
+       // exit(var_dump(parent::indexAction()));
     }
 
     /**
@@ -42,7 +56,7 @@ class PeopleController extends Lva\AbstractPeopleController
 
 
 
-        //@todo get the variation type and check
+        //@todo get the variation type and check | REMOVE SDH
         /*
             Controller needs to check if the new type of variation already exists (i expect we will know this by using a new id parameter in the route)
 

@@ -36,6 +36,7 @@ trait VariationControllerTrait
      */
     protected function completeSection($section, $prg = [])
     {
+
         if ($this->isButtonPressed('saveAndContinue')) {
             return $this->goToNextSection($section);
         }

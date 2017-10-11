@@ -50,5 +50,6 @@ if ($profile) {
     fclose($fp);
 }
 
+
 $time = round(microtime(true) - $startTime, 5);
 \Olcs\Logging\Log\Logger::debug('Selfserve complete', ['time' => $time, 'url' => $_SERVER['REQUEST_URI']]);

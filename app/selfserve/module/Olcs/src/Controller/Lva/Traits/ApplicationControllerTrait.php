@@ -27,6 +27,7 @@ trait ApplicationControllerTrait
      */
     protected function preDispatch()
     {
+
         $appData = $this->getApplicationData($this->getApplicationId());
 
         if (empty($appData)) {
@@ -64,6 +65,7 @@ trait ApplicationControllerTrait
      */
     protected function render($titleSuffix, Form $form = null, $variables = array())
     {
+
         $this->attachCurrentMessages();
 
         if ($titleSuffix instanceof ViewModel) {
