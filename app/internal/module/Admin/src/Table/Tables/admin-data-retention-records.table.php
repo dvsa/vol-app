@@ -49,6 +49,10 @@ return array(
             'formatter' => 'Date',
         ),
         array(
+            'title' => 'Assigned to',
+            'formatter' => 'DataRetentionAssignedTo',
+        ),
+        array(
             'title' => 'Select',
             'width' => 'checkbox',
             'type' => 'Checkbox'
