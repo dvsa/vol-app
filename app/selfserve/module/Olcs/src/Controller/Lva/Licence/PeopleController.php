@@ -43,7 +43,7 @@ class PeopleController extends Lva\AbstractPeopleController
         // $this->render();
 
         // new view from existing.
-      return parent::indexAction();
+         return parent::indexAction();
        // exit(var_dump(parent::indexAction()));
     }
 
@@ -54,7 +54,7 @@ class PeopleController extends Lva\AbstractPeopleController
     public function addAction()
     {
 
-        exit('process form'); 
+          exit('process form');
 
         //@todo get the variation type and check | REMOVE SDH
         /*
