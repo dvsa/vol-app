@@ -17,7 +17,7 @@ return array(
         ),
         array(
             'title' => 'Date',
-            'name' => 'completedDate',
+            'name' => 'createdOn',
             'formatter' => 'Date',
         ),
         array(
