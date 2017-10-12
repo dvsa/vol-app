@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Lva\Adapters;
 
+use Common\Service\Table\TableBuilder;
 use Zend\Form\Form;
 use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
 
@@ -30,5 +31,20 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
     public function canModify()
     {
         return false;
+    }
+
+    public function createTable()
+    {
+        $table = parent::createTable();
+
+        $table->setSetting('crud', [
+            'actions' => [
+                'add' => [
+                    'label' => 'blah'
+                ]
+            ]
+        ]);
+
+        return $table;
     }
 }
