@@ -37,14 +37,17 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
     {
         $table = parent::createTable();
 
+
         $table->setSetting('crud', [
             'actions' => [
                 'add' => [
-                    'label' => 'blah'
+                    'label' => parent::getAddLabelTextForOrganisation()
                 ]
             ]
         ]);
 
+
         return $table;
     }
+
 }
