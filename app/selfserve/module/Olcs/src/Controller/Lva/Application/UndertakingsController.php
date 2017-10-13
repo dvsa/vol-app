@@ -105,7 +105,7 @@ class UndertakingsController extends AbstractUndertakingsController
         $this->updateFormBasedOnDisableSignatureSetting($form);
         $this->updateInterimFee($form, $applicationData, $translator);
         $this->updateGoodsApplicationInterim($form,$applicationData,$translator);
-        if (!$applicationData['canHaveInterimLicence']) {
+        if (!$applicationData['canHaveInterimLicence'] && $form->has('interim')) {
             $formHelper->remove($form, 'interim');
         }
 
@@ -187,6 +187,9 @@ class UndertakingsController extends AbstractUndertakingsController
      */
     protected function updateInterimFieldset($form, $applicationData)
     {
+        if(!$form->has('interim')) {
+            return;
+        }
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
 
         if ($goodsOrPsv !== Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
@@ -205,6 +208,9 @@ class UndertakingsController extends AbstractUndertakingsController
      */
     protected function updateInterimFee($form, $applicationData, $translator)
     {
+        if(!$form->has('interim')) {
+            return;
+        }
         $form->get('interim')->get('interimFee')->setValue(
             $translator->translateReplace('selfserve.declaration.interim_fee', [$applicationData['interimFee']])
         );
@@ -224,6 +230,9 @@ class UndertakingsController extends AbstractUndertakingsController
      */
     protected function updateGoodsApplicationInterim($form, $applicationData, $translator)
     {
+        if(!$form->has('interim')) {
+            return;
+        }
         if(!$applicationData['interimFee']) {
             $form->get('interim')->get('goodsApplicationInterim')->setLabel(
                 $translator->translate('interim.application.undertakings.form.checkbox.label.no-interim-fee')
