@@ -55,12 +55,26 @@ class UndertakingsController extends AbstractUndertakingsController
         );
 
         $fieldset->get('summaryDownload')->setAttribute('value', $summaryDownload);
-        if (!$applicationData['canHaveInterimLicence']) {
-            $formHelper->remove($form, 'interim');
-        } else {
-            $form->get('interim')->get('interimFee')->setValue(
-                $translator->translateReplace('selfserve.declaration.interim_fee', [$applicationData['interimFee']])
+
+        $form->get('interim')->get('interimFee')->setValue(
+            $translator->translateReplace('selfserve.declaration.interim_fee', [$applicationData['interimFee']])
+        );
+
+        // if interimFee is null
+        if(!$applicationData['interimFee']) {
+            // remove the block that displays it
+            if(!$applicationData['interimFee']) {
+                $form->get('interim')->remove('interimFee');
+            }
+            // change the option label
+            $form->get('interim')->get('goodsApplicationInterim')->setLabel(
+                $translator->translate('interim.application.undertakings.form.checkbox.label.no-interim-fee')
             );
+        }
+        // if this application can't have an interim license
+        if (!$applicationData['canHaveInterimLicence']) {
+            // completely remove the interim option
+            $formHelper->remove($form, 'interim');
         }
 
         $formHelper->remove($form, 'form-actions->sign');
