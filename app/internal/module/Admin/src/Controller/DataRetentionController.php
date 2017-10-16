@@ -143,6 +143,8 @@ class DataRetentionController extends AbstractInternalController implements Left
     /**
      * Delay update action
      *
+     * @todo this is a bit rubbish, should be able to work the same way as the assign action
+     *
      * @return ViewModel
      */
     public function delayAction()
