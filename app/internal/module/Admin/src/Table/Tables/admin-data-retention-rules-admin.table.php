@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => 'Data Retention rules admin',
+        'title' => 'Data Retention rules',
         'titleSingular' => 'Data retention rule',
         'titlePlural' => 'Data retention rules',
     ),
