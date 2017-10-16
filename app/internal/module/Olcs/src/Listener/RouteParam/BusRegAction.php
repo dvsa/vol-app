@@ -119,32 +119,32 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
 
         // quick actions
         $sidebarNav->findById('bus-registration-quick-actions-create-cancellation')
-            ->setVisible($this->shouldShowCreateCancellationButton($busReg));
+            ->setVisible($busReg['canCreateCancellation']);
         $sidebarNav->findById('bus-registration-quick-actions-create-variation')
             ->setVisible($this->shouldShowCreateVariationButton($busReg));
         $sidebarNav->findById('bus-registration-quick-actions-print-reg-letter')
-            ->setVisible($this->isVisiblePrintLetterButton($busReg));
+            ->setVisible($busReg['canPrintLetter']);
         $sidebarNav->findById('bus-registration-quick-actions-request-new-route-map')
-            ->setVisible($this->shouldShowRequestNewRouteMapButton($busReg));
+            ->setVisible($busReg['canRequestNewRouteMap']);
         $sidebarNav->findById('bus-registration-quick-actions-request-withdrawn')
-            ->setVisible($this->shouldShowRequestWithdrawnButton($busReg));
+            ->setVisible($busReg['canWithdraw']);
         $sidebarNav->findById('bus-registration-quick-actions-republish')
-            ->setVisible($this->shouldShowRepublishButton($busReg));
+            ->setVisible($busReg['canRepublish']);
 
         // decisions
         $sidebarNav->findById('bus-registration-decisions-admin-cancel')
-            ->setVisible($this->shouldShowAdminCancelButton($busReg));
+            ->setVisible($busReg['canCancelByAdmin']);
         $sidebarNav->findById('bus-registration-decisions-grant')
             ->setVisible($this->shouldShowGrantButton($busReg))
             ->setClass(
                 $this->shouldOpenGrantButtonInModal($busReg) ? 'action--secondary js-modal-ajax' : 'action--secondary'
             );
         $sidebarNav->findById('bus-registration-decisions-refuse')
-            ->setVisible($this->shouldShowRefuseButton($busReg));
+            ->setVisible($busReg['canRefuse']);
         $sidebarNav->findById('bus-registration-decisions-refuse-by-short-notice')
-            ->setVisible($this->shouldShowRefuseByShortNoticeButton($busReg));
+            ->setVisible($busReg['canRefuseByShortNotice']);
         $sidebarNav->findById('bus-registration-decisions-reset-registration')
-            ->setVisible($this->shouldShowResetRegistrationButton($busReg));
+            ->setVisible($busReg['canResetRegistration']);
     }
 
     /**
@@ -170,67 +170,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         return $response->getResult();
     }
 
-    private function shouldShowCreateCancellationButton($busReg)
-    {
-        return ($busReg['isLatestVariation'] && ($busReg['status']['id'] === RefData::BUSREG_STATUS_REGISTERED));
-    }
-
     private function shouldShowCreateVariationButton($busReg)
-    {
-        return ($busReg['isLatestVariation'] && ($busReg['status']['id'] === RefData::BUSREG_STATUS_REGISTERED));
-    }
-
-    /**
-     * Define is button Print letter should be visible
-     *
-     * @param array $busReg Bus Registration data
-     *
-     * @return bool
-     */
-    private function isVisiblePrintLetterButton($busReg)
-    {
-        return in_array(
-            $busReg['status']['id'],
-            [
-                RefData::BUSREG_STATUS_REGISTERED,
-                RefData::BUSREG_STATUS_CANCELLED,
-            ],
-            true
-        );
-    }
-
-    private function shouldShowRequestNewRouteMapButton($busReg)
-    {
-        return $busReg['isFromEbsr'];
-    }
-
-    private function shouldShowRequestWithdrawnButton($busReg)
-    {
-        return in_array(
-            $busReg['status']['id'],
-            [
-                RefData::BUSREG_STATUS_NEW,
-                RefData::BUSREG_STATUS_VARIATION,
-                RefData::BUSREG_STATUS_CANCELLATION
-            ]
-        );
-    }
-
-    private function shouldShowRepublishButton($busReg)
-    {
-        return (
-            $busReg['isLatestVariation']
-            && in_array(
-                $busReg['status']['id'],
-                [
-                    RefData::BUSREG_STATUS_REGISTERED,
-                    RefData::BUSREG_STATUS_CANCELLED
-                ]
-            )
-        );
-    }
-
-    private function shouldShowAdminCancelButton($busReg)
     {
         return ($busReg['isLatestVariation'] && ($busReg['status']['id'] === RefData::BUSREG_STATUS_REGISTERED));
     }
@@ -253,41 +193,5 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     private function shouldOpenGrantButtonInModal($busReg)
     {
         return ($busReg['status']['id'] === RefData::BUSREG_STATUS_VARIATION);
-    }
-
-    private function shouldShowRefuseButton($busReg)
-    {
-        return in_array(
-            $busReg['status']['id'],
-            [
-                RefData::BUSREG_STATUS_NEW,
-                RefData::BUSREG_STATUS_VARIATION,
-                RefData::BUSREG_STATUS_CANCELLATION
-            ]
-        );
-    }
-
-    private function shouldShowRefuseByShortNoticeButton($busReg)
-    {
-        return (
-            $this->shouldShowRefuseButton($busReg)
-            && ($busReg['isShortNotice'] === 'Y')
-            && ($busReg['shortNoticeRefused'] === 'N')
-        );
-    }
-
-    private function shouldShowResetRegistrationButton($busReg)
-    {
-        return (
-            $busReg['isLatestVariation']
-            && !in_array(
-                $busReg['status']['id'],
-                [
-                    RefData::BUSREG_STATUS_NEW,
-                    RefData::BUSREG_STATUS_VARIATION,
-                    RefData::BUSREG_STATUS_CANCELLATION
-                ]
-            )
-        );
     }
 }
