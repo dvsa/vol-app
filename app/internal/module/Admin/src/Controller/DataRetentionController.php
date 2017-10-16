@@ -235,26 +235,4 @@ class DataRetentionController extends AbstractInternalController implements Left
 
         return parent::indexAction();
     }
-
-    /**
-     * Render view
-     *
-     * @param \Zend\Form\Form $form      Form
-     * @param int             $noOfTasks No of tasks
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function renderView($form, $noOfTasks)
-    {
-        $view = new ViewModel();
-        $view->setVariable('form', $form);
-        $view->setVariable(
-            'label',
-            $this->getServiceLocator()->get('Helper\Translation')
-                ->translateReplace('internal.admin.remove-team-label', [$noOfTasks])
-        );
-        $view->setTemplate('pages/confirm');
-        $this->placeholder()->setPlaceholder('pageTitle', $this->deleteModalTitle);
-        return $this->viewBuilder()->buildView($view);
-    }
 }
