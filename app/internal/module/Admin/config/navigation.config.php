@@ -257,6 +257,11 @@ return [
                             'label' => 'Export',
                             'route' => 'admin-dashboard/admin-data-retention/export'
                         ],
+                        [
+                            'id' => 'admin-dashboard/admin-data-retention/rule-admin',
+                            'label' => 'Rule admin',
+                            'route' => 'admin-dashboard/admin-data-retention/rule-admin'
+                        ],
                     ],
                 ],
             ]
