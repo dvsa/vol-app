@@ -9,6 +9,11 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
+                'assign' => array(
+                    'label' => 'Assign',
+                    'requireRows' => true,
+                    'class' => 'action--primary js-require--multiple'
+                ),
                 'delay' => array(
                     'label' => 'Delay',
                     'requireRows' => true,

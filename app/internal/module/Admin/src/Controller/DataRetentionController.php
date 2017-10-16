@@ -3,15 +3,17 @@
 namespace Admin\Controller;
 
 use Dvsa\Olcs\Transfer\Command\DataRetention as DataRetentionActions;
-use Dvsa\Olcs\Transfer\Query\DataRetention\GetRecord;
 use Dvsa\Olcs\Transfer\Query\DataRetention\Records as RecordsListDto;
 use Dvsa\Olcs\Transfer\Query\DataRetention\RuleList as ListDto;
 use Admin\Form\Model\Form\DelayItem as DelayItemForm;
+use Admin\Form\Model\Form\DataRetentionAssign as AssignItemForm;
 use Dvsa\Olcs\Transfer\Query\DataRetention\GetRule;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Data\Mapper\DelayItems;
+use Admin\Data\Mapper\DataRetentionAssign as AssignItemMapper;
 use Zend\View\Model\ViewModel;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Data retention controller
@@ -71,11 +73,19 @@ class DataRetentionController extends AbstractInternalController implements Left
             ],
             'reUseParams' => true
         ],
+        'assign' => [
+            'action' => 'records',
+            'routeMap' => [
+                'dataRetentionRuleId' => 'dataRetentionRuleId',
+            ],
+            'reUseParams' => true
+        ],
     ];
 
     protected $crudConfig = [
         'review' => ['requireRows' => true],
         'delay' => ['requireRows' => true],
+        'assign' => ['requireRows' => true],
     ];
 
     protected $inlineScripts = [
@@ -110,6 +120,24 @@ class DataRetentionController extends AbstractInternalController implements Left
         $this->placeholder()->setPlaceholder('pageTitle', 'Data retention rules');
 
         return parent::indexAction();
+    }
+
+    /**
+     * assign action
+     *
+     * @return ViewModel
+     */
+    public function assignAction()
+    {
+        return $this->add(
+            AssignItemForm::class,
+            new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id'))]),
+            DataRetentionActions\AssignItems::class,
+            AssignItemMapper::class,
+            'pages/crud-form',
+            'Updated record(s)',
+            'Assign selected items'
+        );
     }
 
     /**
