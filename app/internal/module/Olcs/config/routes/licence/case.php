@@ -381,7 +381,7 @@ return [
             'constraints' => [
                 'case' => '[0-9]+',
                 'submission' => '[0-9]+',
-                'action' => '(index|add|edit|details|close|reopen|delete|print)'
+                'action' => '(index|add|edit|details|close|reopen|delete|print|snapshot)'
             ],
             'defaults' => [
                 'controller' => Cases\Submission\SubmissionController::class,

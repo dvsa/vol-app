@@ -10,6 +10,7 @@ use Dvsa\Olcs\Transfer\Command\Submission\DeleteSubmission as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Submission\FilterSubmissionSections as FilterDto;
 use Dvsa\Olcs\Transfer\Command\Submission\RefreshSubmissionSections as RefreshDto;
 use Dvsa\Olcs\Transfer\Command\Submission\ReopenSubmission as ReopenCmd;
+use Dvsa\Olcs\Transfer\Command\Submission\StoreSubmissionSnapshot;
 use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmission as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Submission\SubmissionList as ListDto;
@@ -352,6 +353,41 @@ class SubmissionController extends AbstractInternalController implements Submiss
         $layout->addChild($view, 'content');
 
         return $layout;
+    }
+
+    /**
+     * Store a snapshot of the submission print page
+     *
+     * @return \Zend\Http\Response
+     */
+    public function snapshotAction()
+    {
+        $paramProvider = new GenericItem($this->itemParams);
+        $paramProvider->setParams($this->plugin('params'));
+        $params = $paramProvider->provideParameters();
+
+        /** @var \Zend\View\Renderer\PhpRenderer $viewRenderer */
+        $viewRenderer = $this->getServiceLocator()->get('ViewRenderer');
+        $layout = $this->printAction();
+        $layout->setVariable('content', $viewRenderer->render($layout->getChildrenByCaptureTo('content')[0]));
+
+        $this->handleCommand(
+            StoreSubmissionSnapshot::create(
+                ['id' => $params['id'], 'html' => $viewRenderer->render($layout)]
+            )
+        );
+
+        $this->hlpFlash->addSuccessMessage('Submission snapshot created');
+
+        return $this->redirect()->toRoute(
+            'submission',
+            [
+                'action' => 'details',
+                'submission' => $params['id'],
+            ],
+            [],
+            true
+        );
     }
 
     /**
