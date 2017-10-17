@@ -78,6 +78,7 @@ class BusRegActionTest extends MockeryTestCase
             'bus-registration-decisions-refuse' => 'canRefuse',
             'bus-registration-decisions-refuse-by-short-notice' => 'canRefuseByShortNotice',
             'bus-registration-decisions-reset-registration' => 'canResetRegistration',
+            'bus-registration-decisions-grant' => 'isGrantable',
         ];
 
         $busReg = [
@@ -85,26 +86,29 @@ class BusRegActionTest extends MockeryTestCase
             'status' => [
                 'id' => 'test',
             ],
-            'isGrantable' => true,
         ];
 
         /** @var Navigation|m\Mock $mockSidebar */
         $mockSidebar = m::mock(Navigation::class);
         $this->sut->setSidebarNavigationService($mockSidebar);
 
+        /** @var m\Mock[] $buttonMocks */
+        $buttonMocks = [];
+
         foreach ($backendResponseKeysByButtonId as $buttonId => $backendResponseKey) {
             if (!array_key_exists($backendResponseKey, $busReg)) {
                 $busReg[$backendResponseKey] = new \stdClass();
             }
+            $buttonMock = m::mock(AbstractPage::class)
+                ->shouldReceive('setVisible')
+                ->once()
+                ->with($busReg[$backendResponseKey])
+                ->andReturnSelf()
+                ->getMock();
+            $buttonMocks[$buttonId] = $buttonMock;
             $mockSidebar->shouldReceive('findOneBy')
                 ->with('id', $buttonId)
-                ->andReturn(
-                    m::mock(AbstractPage::class)
-                        ->shouldReceive('setVisible')
-                        ->once()
-                        ->with($busReg[$backendResponseKey])
-                        ->getMock()
-                );
+                ->andReturn($buttonMock);
         }
 
         $mockSidebar->shouldReceive('findOneBy')
@@ -116,19 +120,10 @@ class BusRegActionTest extends MockeryTestCase
                     ->getMock()
             );
 
-        $mockSidebar->shouldReceive('findOneBy')
-            ->with('id', 'bus-registration-decisions-grant')
-            ->andReturn(
-                m::mock(AbstractPage::class)
-                    ->shouldReceive('setVisible')
-                    ->once()
-                    ->andReturnSelf()
-                    ->getMock()
-                    ->shouldReceive('setClass')
-                    ->once()
-                    ->with(new IsString())
-                    ->getMock()
-            );
+        $buttonMocks['bus-registration-decisions-grant']
+            ->shouldReceive('setClass')
+            ->once()
+            ->with(new IsString());
 
         $event = new RouteParam();
         $event->setValue($id);
@@ -189,76 +184,6 @@ class BusRegActionTest extends MockeryTestCase
         $this->sut->setQueryService($mockQueryService);
 
         $this->sut->onBusRegAction($event);
-    }
-
-    /**
-     * @dataProvider shouldShowGrantButtonProvider
-     *
-     * @param $data
-     * @param $expected
-     */
-    public function testShouldShowGrantButton($data, $expected)
-    {
-        $method = new \ReflectionMethod($this->sut, 'shouldShowGrantButton');
-        $method->setAccessible(true);
-
-        $this->assertEquals($expected, $method->invoke($this->sut, $data));
-    }
-
-    public function shouldShowGrantButtonProvider()
-    {
-        return [
-            // grantable - new
-            [
-                [
-                    'isGrantable' => true,
-                    'status' => [
-                        'id' => RefData::BUSREG_STATUS_NEW
-                    ],
-                ],
-                true
-            ],
-            // non-grantable - new
-            [
-                [
-                    'isGrantable' => false,
-                    'status' => [
-                        'id' => RefData::BUSREG_STATUS_NEW
-                    ],
-                ],
-                false
-            ],
-            // grantable - variation
-            [
-                [
-                    'isGrantable' => true,
-                    'status' => [
-                        'id' => RefData::BUSREG_STATUS_VARIATION
-                    ],
-                ],
-                true
-            ],
-            // grantable - cancellation
-            [
-                [
-                    'isGrantable' => true,
-                    'status' => [
-                        'id' => RefData::BUSREG_STATUS_CANCELLATION
-                    ],
-                ],
-                true
-            ],
-            // grantable - registered
-            [
-                [
-                    'isGrantable' => true,
-                    'status' => [
-                        'id' => RefData::BUSREG_STATUS_REGISTERED
-                    ],
-                ],
-                false
-            ],
-        ];
     }
 
     /**

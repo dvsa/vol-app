@@ -138,7 +138,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         $sidebarNav->findOneBy('id', 'bus-registration-decisions-admin-cancel')
             ->setVisible($busReg['canCancelByAdmin']);
         $sidebarNav->findOneBy('id', 'bus-registration-decisions-grant')
-            ->setVisible($this->shouldShowGrantButton($busReg))
+            ->setVisible($busReg['isGrantable'])
             ->setClass(
                 $this->shouldOpenGrantButtonInModal($busReg) ? 'action--secondary js-modal-ajax' : 'action--secondary'
             );
@@ -176,21 +176,6 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     private function shouldShowCreateVariationButton($busReg)
     {
         return ($busReg['isLatestVariation'] && ($busReg['status']['id'] === RefData::BUSREG_STATUS_REGISTERED));
-    }
-
-    private function shouldShowGrantButton($busReg)
-    {
-        return (
-            $busReg['isGrantable']
-            && in_array(
-                $busReg['status']['id'],
-                [
-                    RefData::BUSREG_STATUS_NEW,
-                    RefData::BUSREG_STATUS_VARIATION,
-                    RefData::BUSREG_STATUS_CANCELLATION
-                ]
-            )
-        );
     }
 
     private function shouldOpenGrantButtonInModal($busReg)
