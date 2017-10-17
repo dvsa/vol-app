@@ -10,7 +10,7 @@ return array(
         'paginate' => array(
             'limit' => array(
                 'default' => 25,
-                'options' => array(10, 25, 50)
+                'options' => array(25, 50, 100)
             ),
         )
     ),
