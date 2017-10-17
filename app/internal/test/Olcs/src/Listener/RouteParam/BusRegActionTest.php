@@ -3,14 +3,17 @@
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\RefData;
+use Dvsa\Olcs\Transfer\Query\Bus\BusRegDecision;
 use Hamcrest\Type\IsString;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Olcs\Listener\RouteParam\BusRegAction;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
+use Zend\EventManager\EventManagerInterface;
 use Zend\Navigation\Navigation;
 use Zend\Navigation\Page\AbstractPage;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class BusRegActionTest
@@ -35,7 +38,7 @@ class BusRegActionTest extends MockeryTestCase
         $mockQueryService = m::mock();
 
         $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
-            function ($dto) use ($id) {
+            function (BusRegDecision $dto) use ($id) {
                 $this->assertSame($id, $dto->getId());
                 return 'QUERY';
             }
@@ -53,7 +56,8 @@ class BusRegActionTest extends MockeryTestCase
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
+        /** @var EventManagerInterface|m\Mock $mockEventManager */
+        $mockEventManager = m::mock(EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
             ->with(RouteParams::EVENT_PARAM . 'busRegId', [$this->sut, 'onBusRegAction'], 1);
 
@@ -141,7 +145,8 @@ class BusRegActionTest extends MockeryTestCase
         $mockTransferAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
 
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        /** @var ServiceLocatorInterface|m\Mock $mockSl */
+        $mockSl = m::mock(ServiceLocatorInterface::class);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($mockSidebar);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockTransferAnnotationBuilder);
@@ -169,7 +174,7 @@ class BusRegActionTest extends MockeryTestCase
         $mockQueryService = m::mock();
 
         $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
-            function ($dto) use ($id) {
+            function (BusRegDecision $dto) use ($id) {
                 $this->assertSame($id, $dto->getId());
                 return 'QUERY';
             }
@@ -188,6 +193,9 @@ class BusRegActionTest extends MockeryTestCase
 
     /**
      * @dataProvider shouldShowGrantButtonProvider
+     *
+     * @param $data
+     * @param $expected
      */
     public function testShouldShowGrantButton($data, $expected)
     {
@@ -255,6 +263,9 @@ class BusRegActionTest extends MockeryTestCase
 
     /**
      * @dataProvider shouldOpenGrantButtonInModalProvider
+     *
+     * @param $data
+     * @param $expected
      */
     public function testShouldOpenGrantButtonInModal($data, $expected)
     {
