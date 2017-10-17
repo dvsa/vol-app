@@ -16,6 +16,7 @@ use Common\Exception\ResourceNotFoundException;
 
 /**
  * Class BusRegAction
+ *
  * @package Olcs\Listener\RouteParam
  */
 class BusRegAction implements ListenerAggregateInterface, FactoryInterface
@@ -68,6 +69,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param \Zend\Navigation\Navigation $sidebarNavigationService
+     *
      * @return $this
      */
     public function setSidebarNavigationService($sidebarNavigationService)
@@ -80,6 +82,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
+     *
      * @return mixed
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
@@ -118,32 +121,32 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         $sidebarNav = $this->getSidebarNavigationService();
 
         // quick actions
-        $sidebarNav->findById('bus-registration-quick-actions-create-cancellation')
+        $sidebarNav->findOneBy('id', 'bus-registration-quick-actions-create-cancellation')
             ->setVisible($busReg['canCreateCancellation']);
-        $sidebarNav->findById('bus-registration-quick-actions-create-variation')
+        $sidebarNav->findOneBy('id', 'bus-registration-quick-actions-create-variation')
             ->setVisible($this->shouldShowCreateVariationButton($busReg));
-        $sidebarNav->findById('bus-registration-quick-actions-print-reg-letter')
+        $sidebarNav->findOneBy('id', 'bus-registration-quick-actions-print-reg-letter')
             ->setVisible($busReg['canPrintLetter']);
-        $sidebarNav->findById('bus-registration-quick-actions-request-new-route-map')
+        $sidebarNav->findOneBy('id', 'bus-registration-quick-actions-request-new-route-map')
             ->setVisible($busReg['canRequestNewRouteMap']);
-        $sidebarNav->findById('bus-registration-quick-actions-request-withdrawn')
+        $sidebarNav->findOneBy('id', 'bus-registration-quick-actions-request-withdrawn')
             ->setVisible($busReg['canWithdraw']);
-        $sidebarNav->findById('bus-registration-quick-actions-republish')
+        $sidebarNav->findOneBy('id', 'bus-registration-quick-actions-republish')
             ->setVisible($busReg['canRepublish']);
 
-        // decisions
-        $sidebarNav->findById('bus-registration-decisions-admin-cancel')
+        #// decisions
+        $sidebarNav->findOneBy('id', 'bus-registration-decisions-admin-cancel')
             ->setVisible($busReg['canCancelByAdmin']);
-        $sidebarNav->findById('bus-registration-decisions-grant')
+        $sidebarNav->findOneBy('id', 'bus-registration-decisions-grant')
             ->setVisible($this->shouldShowGrantButton($busReg))
             ->setClass(
                 $this->shouldOpenGrantButtonInModal($busReg) ? 'action--secondary js-modal-ajax' : 'action--secondary'
             );
-        $sidebarNav->findById('bus-registration-decisions-refuse')
+        $sidebarNav->findOneBy('id', 'bus-registration-decisions-refuse')
             ->setVisible($busReg['canRefuse']);
-        $sidebarNav->findById('bus-registration-decisions-refuse-by-short-notice')
+        $sidebarNav->findOneBy('id', 'bus-registration-decisions-refuse-by-short-notice')
             ->setVisible($busReg['canRefuseByShortNotice']);
-        $sidebarNav->findById('bus-registration-decisions-reset-registration')
+        $sidebarNav->findOneBy('id', 'bus-registration-decisions-reset-registration')
             ->setVisible($busReg['canResetRegistration']);
     }
 

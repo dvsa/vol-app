@@ -3,14 +3,18 @@
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\RefData;
+use Hamcrest\Type\IsString;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Olcs\Listener\RouteParam\BusRegAction;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
+use Zend\Navigation\Navigation;
+use Zend\Navigation\Page\AbstractPage;
 
 /**
  * Class BusRegActionTest
+ *
  * @package OlcsTest\Listener\RouteParam
  */
 class BusRegActionTest extends MockeryTestCase
@@ -28,7 +32,7 @@ class BusRegActionTest extends MockeryTestCase
     public function setupMockBusReg($id, $data)
     {
         $mockAnnotationBuilder = m::mock();
-        $mockQueryService  = m::mock();
+        $mockQueryService = m::mock();
 
         $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
             function ($dto) use ($id) {
@@ -59,49 +63,73 @@ class BusRegActionTest extends MockeryTestCase
     public function testOnBusRegAction()
     {
         $id = 69;
-        $busReg = [
-            'id' => $id,
-            'status' => [
-                'id' => RefData::BUSREG_STATUS_REGISTERED
-            ],
-            'isLatestVariation' => true,
-            'isGrantable' => true,
-            'isShortNotice' => 'Y',
-            'shortNoticeRefused' => 'Y',
-            'isFromEbsr' => true,
-            'canCreateCancellation' => true,
-            'canPrintLetter' => true,
-            'canRequestNewRouteMap' => true,
-            'canWithdraw' => true,
-            'canRepublish' => true,
-            'canCancelByAdmin' => true,
-            'canRefuse' => true,
-            'canRefuseByShortNotice' => true,
-            'canResetRegistration' => true,
+
+        $backendResponseKeysByButtonId = [
+            'bus-registration-quick-actions-create-cancellation' => 'canCreateCancellation',
+            'bus-registration-quick-actions-print-reg-letter' => 'canPrintLetter',
+            'bus-registration-quick-actions-request-new-route-map' => 'canRequestNewRouteMap',
+            'bus-registration-quick-actions-request-withdrawn' => 'canWithdraw',
+            'bus-registration-quick-actions-republish' => 'canRepublish',
+            'bus-registration-decisions-admin-cancel' => 'canCancelByAdmin',
+            'bus-registration-decisions-refuse' => 'canRefuse',
+            'bus-registration-decisions-refuse-by-short-notice' => 'canRefuseByShortNotice',
+            'bus-registration-decisions-reset-registration' => 'canResetRegistration',
         ];
+
+        $busReg = [
+            'isLatestVariation' => true,
+            'status' => [
+                'id' => 'test',
+            ],
+            'isGrantable' => true,
+        ];
+
+        /** @var Navigation|m\Mock $mockSidebar */
+        $mockSidebar = m::mock(Navigation::class);
+        $this->sut->setSidebarNavigationService($mockSidebar);
+
+        foreach ($backendResponseKeysByButtonId as $buttonId => $backendResponseKey) {
+            if (!array_key_exists($backendResponseKey, $busReg)) {
+                $busReg[$backendResponseKey] = new \stdClass();
+            }
+            $mockSidebar->shouldReceive('findOneBy')
+                ->with('id', $buttonId)
+                ->andReturn(
+                    m::mock(AbstractPage::class)
+                        ->shouldReceive('setVisible')
+                        ->once()
+                        ->with($busReg[$backendResponseKey])
+                        ->getMock()
+                );
+        }
+
+        $mockSidebar->shouldReceive('findOneBy')
+            ->with('id', 'bus-registration-quick-actions-create-variation')
+            ->andReturn(
+                m::mock(AbstractPage::class)
+                    ->shouldReceive('setVisible')
+                    ->once()
+                    ->getMock()
+            );
+
+        $mockSidebar->shouldReceive('findOneBy')
+            ->with('id', 'bus-registration-decisions-grant')
+            ->andReturn(
+                m::mock(AbstractPage::class)
+                    ->shouldReceive('setVisible')
+                    ->once()
+                    ->andReturnSelf()
+                    ->getMock()
+                    ->shouldReceive('setClass')
+                    ->once()
+                    ->with(new IsString())
+                    ->getMock()
+            );
 
         $event = new RouteParam();
         $event->setValue($id);
 
         $this->setupMockBusReg($id, $busReg);
-
-        $mockSidebar = m::mock()
-            ->shouldReceive('findById')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('setVisible')
-                ->times(11)
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('setClass')
-                    ->once()
-                    ->getMock()
-                )
-                ->getMock()
-            )
-            ->getMock();
-
-        $this->sut->setSidebarNavigationService($mockSidebar);
 
         $this->sut->onBusRegAction($event);
     }
@@ -138,7 +166,7 @@ class BusRegActionTest extends MockeryTestCase
         $event->setValue($id);
 
         $mockAnnotationBuilder = m::mock();
-        $mockQueryService  = m::mock();
+        $mockQueryService = m::mock();
 
         $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
             function ($dto) use ($id) {
