@@ -6,6 +6,9 @@ use Dvsa\Olcs\Transfer\Query\DataRetention\RuleAdmin as ListDto;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\AbstractInternalController;
 use Zend\View\Model\ViewModel;
+use Admin\Form\Model\Form\DataRetentionAdmin;
+use Dvsa\Olcs\Transfer\Query\DataRetention\GetRule;
+
 
 /**
  * Rule admin controller
@@ -60,4 +63,30 @@ class RuleAdminController extends AbstractInternalController implements LeftView
         return parent::indexAction();
     }
 
+    /**
+     * Edit action
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function editAction()
+    {
+        $this->placeholder()->setPlaceholder('pageTitle', 'Rules admin');
+        $form = $this->getForm(DataRetentionAdmin::class);
+        $this->placeholder()->setPlaceholder('form', $form);
+
+        $ruleId = $this->params('dataRetentionRuleId');
+        $query = GetRule::create(['id' => $ruleId]);
+
+        $response = $this->handleQuery($query);
+        $dataRetentionRule = $response->getResult();
+
+        $form->get('ruleDetails')->get('ruleId')->setValue($dataRetentionRule['id']);
+        $form->get('ruleDetails')->get('description')->setValue($dataRetentionRule['description']);
+        $form->get('ruleDetails')->get('retentionPeriod')->setValue($dataRetentionRule['retentionPeriod']);
+        $form->get('ruleDetails')->get('maxDataSet')->setValue($dataRetentionRule['maxDataSet']);
+        $form->get('ruleDetails')->get('isEnabled')->setValue($dataRetentionRule['isEnabled'] ? 'Y' : 'N');
+        $form->get('ruleDetails')->get('actionType')->setValue($dataRetentionRule['actionType']['id']);
+
+        return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
+    }
 }

@@ -23,7 +23,8 @@ return array(
         array(
             'title' => 'Description',
             'name' => 'description',
-            'sort' => 'description'
+            'sort' => 'description',
+            'formatter' => 'DataRetentionRuleAdminLink'
         ),
         array(
             'title' => 'Retention period',
