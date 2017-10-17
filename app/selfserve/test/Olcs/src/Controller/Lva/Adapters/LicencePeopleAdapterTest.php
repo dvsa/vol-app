@@ -13,6 +13,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
 use Common\Service\Entity\OrganisationEntityService;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Internal / Common Licence People Adapter Test
@@ -59,6 +60,11 @@ class LicencePeopleAdapterTest extends MockeryTestCase
 
     public function testCreateTableAltersLabel()
     {
+
+        $mockTable = m::mock(TableBuilder::class);
+        $mockTable->shouldReceive('prepareTable')->withAnyArgs()->andReturnSelf();
+        $this->sm->shouldReceive('get')
+            ->andReturn($mockTable);
         $this->sut->createTable();
     }
 }
