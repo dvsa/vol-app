@@ -5,8 +5,10 @@
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
+
 namespace OlcsTest\Controller\Lva\Adapters;
 
+use Common\Service\Table\TableBuilder;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
@@ -19,14 +21,17 @@ use Common\Service\Entity\OrganisationEntityService;
  */
 class LicencePeopleAdapterTest extends MockeryTestCase
 {
+    /**
+     * @var LicencePeopleAdapter
+     */
     protected $sut;
     protected $sm;
 
     public function setUp()
     {
-        $this->sm = m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
+        $this->sm = m::mock('\Zend\ServiceManager\ServiceManager')->makePartial()
+            ->shouldAllowMockingProtectedMethods();
         $this->sm->setAllowOverride(true);
-
         $this->sut = new LicencePeopleAdapter();
         $this->sut->setServiceLocator($this->sm);
     }
@@ -39,9 +44,9 @@ class LicencePeopleAdapterTest extends MockeryTestCase
         $this->sm->setService(
             'Lva\People',
             m::mock()
-            ->shouldReceive('lockOrganisationForm')
-            ->with($form, $table)
-            ->getMock()
+                ->shouldReceive('lockOrganisationForm')
+                ->with($form, $table)
+                ->getMock()
         );
 
         $this->sut->alterFormForOrganisation($form, $table, 123);
@@ -50,5 +55,10 @@ class LicencePeopleAdapterTest extends MockeryTestCase
     public function testCanModify()
     {
         $this->assertFalse($this->sut->canModify(123));
+    }
+
+    public function testCreateTableAltersLabel()
+    {
+        $this->sut->createTable();
     }
 }

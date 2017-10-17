@@ -18,6 +18,7 @@ class PeopleController extends Lva\AbstractPeopleController
 
     protected $lva = 'licence';
     protected $location = 'external';
+    protected $section = 'people';
 
     /**
      * Alter form for LVA
@@ -27,46 +28,20 @@ class PeopleController extends Lva\AbstractPeopleController
      *
      * @return void
      */
-    protected function alterFormForLva(Form $form, $data = null) //why is this data parameter here?
+    protected function alterFormForLva(Form $form, $data = null)
     {
         $table = $form->get('table')->get('table')->getTable();
 
         $table->removeColumn('actionLinks');
     }
 
-
-    public function indexAction()
-    {
-
-
-        //
-        // $this->render();
-
-        // new view from existing.
-         return parent::indexAction();
-       // exit(var_dump(parent::indexAction()));
-    }
-
     /**
-     *  Add Action for self service licencer changes
+     * handle the add (Person|Director) button click
      *
+     * @return \Common\View\Model\Section|void|\Zend\Http\Response
      */
     public function addAction()
     {
-
-          exit('process form');
-
-        //@todo get the variation type and check | REMOVE SDH
-        /*
-            Controller needs to check if the new type of variation already exists (i expect we will know this by using a new id parameter in the route)
-
-            Create a new DTO in transfer eg Dvsa\Olcs\Transfer\Command\Licence\CreatePersonVariation
-            Create a new Command handler in backend Dvsa\Olcs\Api\Domain\CommandHandler\Licence\CreatePersonVariation
-            Link them up in Api/config
-
-            Create a form (probably very similar to the application one "olcs-common/Common/src/Common/Form/Model/Form/Lva/Person.php")
-
-            There are already DTO handlers for adding a person to a licence, this will be because some type of organisation will already similar functionality, so we need to either modify these or create new ones.
-         */
+        return $this->render('People', []);
     }
 }

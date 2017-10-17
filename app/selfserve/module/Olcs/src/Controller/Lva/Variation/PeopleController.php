@@ -23,13 +23,4 @@ class PeopleController extends Lva\AbstractPeopleController
 
     protected $lva = 'variation';
     protected $location = 'external';
-
-
-    public function addAction()
-    {
-
-       //var_dump('hitting variation controller');
-        //parent::addAction();
-
-    }
 }

@@ -39,12 +39,10 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
     }
 
     /**
-     * Alter Form For Organisation
+     *  Alter Form For Organisation
      *
-     * @param \Zend\Form\FormInterface           $form  Form
-     *
-     *
-     * @return void
+     * @param Form $form
+     * @param \Common\Service\Table\TableBuilder $table
      */
     public function alterFormForOrganisation(Form $form, $table)
     {
