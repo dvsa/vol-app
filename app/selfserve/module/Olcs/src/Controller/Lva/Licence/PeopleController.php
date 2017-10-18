@@ -42,6 +42,17 @@ class PeopleController extends Lva\AbstractPeopleController
      */
     public function addAction()
     {
-        return $this->render('People', []);
+        $adapter = $this->getAdapter();
+
+        $form = $this->getServiceLocator()
+            ->get('FormServiceManager')
+            ->get('lva-licence-addperson')
+            ->getForm(
+                ['canModify' => $adapter->canModify(), 'isPartnership' => $adapter->isPartnership()]
+            );
+
+        $variables = [];
+
+        return $this->render('people', $form, $variables);
     }
 }
