@@ -2,12 +2,15 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Common\Service\Cqrs\Query\QueryService;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use \Dvsa\Olcs\Transfer\Query\Bus\BusRegDecision as ItemDto;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
+use Zend\Navigation\Navigation;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\RefData;
@@ -25,7 +28,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     use ViewHelperManagerAwareTrait;
 
     /**
-     * @var \Zend\Navigation\Navigation
+     * @var Navigation
      */
     protected $sidebarNavigationService;
 
@@ -34,7 +37,9 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     protected $queryService;
 
     /**
-     * @return \Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder
+     * Get Annotation Builder
+     *
+     * @return AnnotationBuilder
      */
     public function getAnnotationBuilder()
     {
@@ -42,25 +47,43 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @return \Common\Service\Cqrs\Query\QueryService
+     * Get Query Service
+     *
+     * @return QueryService
      */
     public function getQueryService()
     {
         return $this->queryService;
     }
 
+    /**
+     * Set annotation builder
+     *
+     * @param AnnotationBuilder $annotationBuilder the new Annotation Builder
+     *
+     * @return void
+     */
     public function setAnnotationBuilder($annotationBuilder)
     {
         $this->annotationBuilder = $annotationBuilder;
     }
 
+    /**
+     * Set query service
+     *
+     * @param QueryService $queryService the new query service
+     *
+     * @return void
+     */
     public function setQueryService($queryService)
     {
         $this->queryService = $queryService;
     }
 
     /**
-     * @return \Zend\Navigation\Navigation
+     * Get Sidebar Navigation
+     *
+     * @return Navigation
      */
     public function getSidebarNavigationService()
     {
@@ -68,7 +91,9 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param \Zend\Navigation\Navigation $sidebarNavigationService
+     * Set Sidebar Navigation
+     *
+     * @param Navigation $sidebarNavigationService the new navigation service
      *
      * @return $this
      */
@@ -81,7 +106,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     /**
      * Create service
      *
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param ServiceLocatorInterface $serviceLocator the service locator
      *
      * @return mixed
      */
@@ -101,7 +126,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
      * Implementers may add an optional $priority argument; the EventManager
      * implementation will pass this to the aggregate.
      *
-     * @param EventManagerInterface $events
+     * @param EventManagerInterface $events the event manager
      *
      * @return void
      */
@@ -111,7 +136,11 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param RouteParam $e
+     * Modify buttons for bus registration page
+     *
+     * @param RouteParam $e The RouteParam event
+     *
+     * @return void
      */
     public function onBusRegAction(RouteParam $e)
     {
@@ -173,6 +202,13 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         return $response->getResult();
     }
 
+    /**
+     * Determine whether the grant button should open a modal
+     *
+     * @param array $busReg the bus reg data from the backend
+     *
+     * @return bool
+     */
     private function shouldOpenGrantButtonInModal($busReg)
     {
         return ($busReg['status']['id'] === RefData::BUSREG_STATUS_VARIATION);
