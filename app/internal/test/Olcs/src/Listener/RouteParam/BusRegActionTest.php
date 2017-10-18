@@ -70,6 +70,7 @@ class BusRegActionTest extends MockeryTestCase
 
         $backendResponseKeysByButtonId = [
             'bus-registration-quick-actions-create-cancellation' => 'canCreateCancellation',
+            'bus-registration-quick-actions-create-variation' => 'canCreateVariation',
             'bus-registration-quick-actions-print-reg-letter' => 'canPrintLetter',
             'bus-registration-quick-actions-request-new-route-map' => 'canRequestNewRouteMap',
             'bus-registration-quick-actions-request-withdrawn' => 'canWithdraw',
@@ -110,15 +111,6 @@ class BusRegActionTest extends MockeryTestCase
                 ->with('id', $buttonId)
                 ->andReturn($buttonMock);
         }
-
-        $mockSidebar->shouldReceive('findOneBy')
-            ->with('id', 'bus-registration-quick-actions-create-variation')
-            ->andReturn(
-                m::mock(AbstractPage::class)
-                    ->shouldReceive('setVisible')
-                    ->once()
-                    ->getMock()
-            );
 
         $buttonMocks['bus-registration-decisions-grant']
             ->shouldReceive('setClass')

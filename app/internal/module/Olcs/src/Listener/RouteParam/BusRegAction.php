@@ -124,7 +124,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         $sidebarNav->findOneBy('id', 'bus-registration-quick-actions-create-cancellation')
             ->setVisible($busReg['canCreateCancellation']);
         $sidebarNav->findOneBy('id', 'bus-registration-quick-actions-create-variation')
-            ->setVisible($this->shouldShowCreateVariationButton($busReg));
+            ->setVisible($busReg['canCreateVariation']);
         $sidebarNav->findOneBy('id', 'bus-registration-quick-actions-print-reg-letter')
             ->setVisible($busReg['canPrintLetter']);
         $sidebarNav->findOneBy('id', 'bus-registration-quick-actions-request-new-route-map')
@@ -171,11 +171,6 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         }
 
         return $response->getResult();
-    }
-
-    private function shouldShowCreateVariationButton($busReg)
-    {
-        return ($busReg['isLatestVariation'] && ($busReg['status']['id'] === RefData::BUSREG_STATUS_REGISTERED));
     }
 
     private function shouldOpenGrantButtonInModal($busReg)
