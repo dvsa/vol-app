@@ -9,6 +9,11 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
+                'assign' => array(
+                    'label' => 'Assign',
+                    'requireRows' => true,
+                    'class' => 'action--primary js-require--multiple'
+                ),
                 'delay' => array(
                     'label' => 'Delay',
                     'requireRows' => true,
@@ -47,6 +52,10 @@ return array(
             'title' => 'Next review date',
             'name' => 'nextReviewDate',
             'formatter' => 'Date',
+        ),
+        array(
+            'title' => 'Assigned to',
+            'formatter' => 'DataRetentionAssignedTo',
         ),
         array(
             'title' => 'Select',

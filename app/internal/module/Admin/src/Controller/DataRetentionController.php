@@ -3,15 +3,17 @@
 namespace Admin\Controller;
 
 use Dvsa\Olcs\Transfer\Command\DataRetention as DataRetentionActions;
-use Dvsa\Olcs\Transfer\Query\DataRetention\GetRecord;
 use Dvsa\Olcs\Transfer\Query\DataRetention\Records as RecordsListDto;
 use Dvsa\Olcs\Transfer\Query\DataRetention\RuleList as ListDto;
 use Admin\Form\Model\Form\DelayItem as DelayItemForm;
+use Admin\Form\Model\Form\DataRetentionAssign as AssignItemForm;
 use Dvsa\Olcs\Transfer\Query\DataRetention\GetRule;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Data\Mapper\DelayItems;
+use Admin\Data\Mapper\DataRetentionAssign as AssignItemMapper;
 use Zend\View\Model\ViewModel;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
  * Data retention controller
@@ -71,11 +73,19 @@ class DataRetentionController extends AbstractInternalController implements Left
             ],
             'reUseParams' => true
         ],
+        'assign' => [
+            'action' => 'records',
+            'routeMap' => [
+                'dataRetentionRuleId' => 'dataRetentionRuleId',
+            ],
+            'reUseParams' => true
+        ],
     ];
 
     protected $crudConfig = [
         'review' => ['requireRows' => true],
         'delay' => ['requireRows' => true],
+        'assign' => ['requireRows' => true],
     ];
 
     protected $inlineScripts = [
@@ -113,7 +123,27 @@ class DataRetentionController extends AbstractInternalController implements Left
     }
 
     /**
+     * assign action
+     *
+     * @return ViewModel
+     */
+    public function assignAction()
+    {
+        return $this->add(
+            AssignItemForm::class,
+            new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id'))]),
+            DataRetentionActions\AssignItems::class,
+            AssignItemMapper::class,
+            'pages/crud-form',
+            'Updated record(s)',
+            'Assign selected items'
+        );
+    }
+
+    /**
      * Delay update action
+     *
+     * @todo this is a bit rubbish, should be able to work the same way as the assign action
      *
      * @return ViewModel
      */
@@ -206,27 +236,5 @@ class DataRetentionController extends AbstractInternalController implements Left
         $this->defaultTableLimit = 25;
 
         return parent::indexAction();
-    }
-
-    /**
-     * Render view
-     *
-     * @param \Zend\Form\Form $form      Form
-     * @param int             $noOfTasks No of tasks
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    protected function renderView($form, $noOfTasks)
-    {
-        $view = new ViewModel();
-        $view->setVariable('form', $form);
-        $view->setVariable(
-            'label',
-            $this->getServiceLocator()->get('Helper\Translation')
-                ->translateReplace('internal.admin.remove-team-label', [$noOfTasks])
-        );
-        $view->setTemplate('pages/confirm');
-        $this->placeholder()->setPlaceholder('pageTitle', $this->deleteModalTitle);
-        return $this->viewBuilder()->buildView($view);
     }
 }
