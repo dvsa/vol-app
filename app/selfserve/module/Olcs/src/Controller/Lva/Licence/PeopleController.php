@@ -58,7 +58,7 @@ class PeopleController extends Lva\AbstractPeopleController
                 $form->setData($data);
 
             if ($form->isValid()) {
-                exit($data);
+                exit(var_dump($data));
             } else {
                 exit("form not valid");
             }
