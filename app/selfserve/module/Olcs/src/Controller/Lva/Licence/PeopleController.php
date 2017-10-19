@@ -55,13 +55,16 @@ class PeopleController extends Lva\AbstractPeopleController
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();
+            $id = $this->getEvent()->getRouteMatch()->getParam('id');
 
             $form->setData($data);
 
             if ($form->isValid()) {
+                $validData = $form->getData()['data'];
+                $validData['id'] = $id;
                 $return = $this->handleCommand(
                     CreatePersonVariation::create(
-                        $form->getData()['data']
+                        $validData
                     )
                 );
                 exit($return);
