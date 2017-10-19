@@ -55,7 +55,7 @@ class PeopleController extends Lva\AbstractPeopleController
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();
-            $id = $this->getEvent()->getRouteMatch()->getParam('id');
+            $id = $this->getEvent()->getRouteMatch()->getParam('licence');
 
             $form->setData($data);
 
@@ -67,7 +67,7 @@ class PeopleController extends Lva\AbstractPeopleController
                         $validData
                     )
                 );
-                exit($return);
+                exit("return from command" . $return);
             } else {
                 exit("form not valid");
             }
