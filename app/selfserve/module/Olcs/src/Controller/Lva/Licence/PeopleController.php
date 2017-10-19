@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva;
+use Dvsa\Olcs\Transfer\Command\Licence\CreatePersonVariation;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Zend\Form\Form;
 
@@ -53,21 +54,24 @@ class PeopleController extends Lva\AbstractPeopleController
             );
 
         if ($request->isPost()) {
-                $data = (array)$request->getPost();
+            $data = (array)$request->getPost();
 
-                $form->setData($data);
+            $form->setData($data);
 
             if ($form->isValid()) {
-                exit(var_dump($data));
+                $this->handleCommand(
+                    CreatePersonVariation::create(),
+                    $form->getData()
+                );
             } else {
                 exit("form not valid");
             }
-
         }
+
 
         $companyType = "test";
 
-        $variables = ['sectionText'=>'licence_add-Person-PersonType'.$companyType];
+        $variables = ['sectionText' => 'licence_add-Person-PersonType' . $companyType];
 
         return $this->render('people', $form, $variables);
     }
