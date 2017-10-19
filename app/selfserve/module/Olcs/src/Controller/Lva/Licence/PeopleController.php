@@ -65,7 +65,9 @@ class PeopleController extends Lva\AbstractPeopleController
 
         }
 
-        $variables = [];
+        $companyType = "test";
+
+        $variables = ['sectionText'=>'licence_add-Person-PersonType'.$companyType];
 
         return $this->render('people', $form, $variables);
     }
