@@ -43,6 +43,7 @@ class PeopleController extends Lva\AbstractPeopleController
     public function addAction()
     {
         $adapter = $this->getAdapter();
+        $request = $this->getRequest();
 
         $form = $this->getServiceLocator()
             ->get('FormServiceManager')
@@ -50,6 +51,19 @@ class PeopleController extends Lva\AbstractPeopleController
             ->getForm(
                 ['canModify' => $adapter->canModify(), 'isPartnership' => $adapter->isPartnership()]
             );
+
+        if ($request->isPost()) {
+                $data = (array)$request->getPost();
+
+                $form->setData($data);
+
+            if ($form->isValid()) {
+                exit($data);
+            } else {
+                exit("form not valid");
+            }
+
+        }
 
         $variables = [];
 
