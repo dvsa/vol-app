@@ -60,8 +60,8 @@ class PeopleController extends Lva\AbstractPeopleController
 
             if ($form->isValid()) {
                 $this->handleCommand(
-                    CreatePersonVariation::create(),
-                    $form->getData()
+                    CreatePersonVariation::create(
+                    $form->getData())
                 );
             } else {
                 exit("form not valid");
