@@ -51,7 +51,7 @@ class UndertakingsController extends AbstractUndertakingsController
         // If form submitted then go to payment page
         if ($this->getRequest()->isPost()) {
             return $this->redirect()->toRoute(
-                'lva-'.$this->lva . '/pay-and-submit',
+                'lva-' . $this->lva . '/pay-and-submit',
                 [$this->getIdentifierIndex() => $this->getIdentifier(), 'redirect-back' => 'undertakings'],
                 [],
                 true
@@ -104,7 +104,7 @@ class UndertakingsController extends AbstractUndertakingsController
         $this->updateSubmitButtons($form, $applicationData);
         $this->updateFormBasedOnDisableSignatureSetting($form);
         $this->updateInterimFee($form, $applicationData, $translator);
-        $this->updateGoodsApplicationInterim($form,$applicationData,$translator);
+        $this->updateGoodsApplicationInterim($form, $applicationData, $translator);
         if (!$applicationData['canHaveInterimLicence']) {
             $formHelper->remove($form, 'interim');
         }
@@ -187,7 +187,7 @@ class UndertakingsController extends AbstractUndertakingsController
      */
     protected function updateInterimFieldset($form, $applicationData)
     {
-        $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
+        $goodsOrPsv = $applicationData['goodsOrPsv']['id'];
 
         if ($goodsOrPsv !== Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'interim');
@@ -197,9 +197,9 @@ class UndertakingsController extends AbstractUndertakingsController
     /**
      * Update interim fee value
      *
-     * @param Form  $form            form
-     * @param array $applicationData application data
-     * @param \Common\Service\Helper\TranslationHelperService $translator translator
+     * @param Form                                            $form            form
+     * @param array                                           $applicationData application data
+     * @param \Common\Service\Helper\TranslationHelperService $translator      translator
      *
      * @return void
      */
@@ -208,7 +208,7 @@ class UndertakingsController extends AbstractUndertakingsController
         $form->get('interim')->get('interimFee')->setValue(
             $translator->translateReplace('selfserve.declaration.interim_fee', [$applicationData['interimFee']])
         );
-        if(!$applicationData['interimFee']) {
+        if (!$applicationData['interimFee']) {
             $form->get('interim')->remove('interimFee');
         }
     }
@@ -216,15 +216,15 @@ class UndertakingsController extends AbstractUndertakingsController
     /**
      * Update Goods Application Interim Label based on interim fee value
      *
-     * @param Form  $form            form
-     * @param array $applicationData application data
-     * @param \Common\Service\Helper\TranslationHelperService $translator translator
+     * @param Form                                            $form            form
+     * @param array                                           $applicationData application data
+     * @param \Common\Service\Helper\TranslationHelperService $translator      translator
      *
      * @return void
      */
     protected function updateGoodsApplicationInterim($form, $applicationData, $translator)
     {
-        if(!$applicationData['interimFee']) {
+        if (!$applicationData['interimFee']) {
             $form->get('interim')->get('goodsApplicationInterim')->setLabel(
                 $translator->translate('interim.application.undertakings.form.checkbox.label.no-interim-fee')
             );
@@ -248,7 +248,7 @@ class UndertakingsController extends AbstractUndertakingsController
             $formHelper->remove($form, 'form-actions->sign');
         } else {
             $formHelper->remove($form, 'declarationsAndUndertakings->disabledReview');
-            $data = (array) $this->getRequest()->getPost();
+            $data = (array)$this->getRequest()->getPost();
             if (
                 isset($data['declarationsAndUndertakings']['signatureOptions'])
                 && $data['declarationsAndUndertakings']['signatureOptions'] === 'N'

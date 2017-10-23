@@ -57,14 +57,4 @@ class LicencePeopleAdapterTest extends MockeryTestCase
     {
         $this->assertFalse($this->sut->canModify(123));
     }
-
-    public function testCreateTableAltersLabel()
-    {
-
-        $mockTable = m::mock(TableBuilder::class);
-        $mockTable->shouldReceive('prepareTable')->withAnyArgs()->andReturnSelf();
-        $this->sm->shouldReceive('get')
-            ->andReturn($mockTable);
-        $this->sut->createTable();
-    }
 }

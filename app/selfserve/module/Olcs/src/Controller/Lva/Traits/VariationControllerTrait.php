@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob.caiger@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
@@ -18,16 +19,16 @@ trait VariationControllerTrait
 {
     use ApplicationControllerTrait,
         CommonVariationControllerTrait {
-            CommonVariationControllerTrait::preDispatch insteadof ApplicationControllerTrait;
-            CommonVariationControllerTrait::postSave insteadof ApplicationControllerTrait;
-            CommonVariationControllerTrait::goToNextSection insteadof ApplicationControllerTrait;
-        }
+        CommonVariationControllerTrait::preDispatch insteadof ApplicationControllerTrait;
+        CommonVariationControllerTrait::postSave insteadof ApplicationControllerTrait;
+        CommonVariationControllerTrait::goToNextSection insteadof ApplicationControllerTrait;
+    }
 
     /**
      * Complete section
      *
      * @param string $section Section
-     * @param array  $prg    Prg
+     * @param array  $prg     Prg
      *
      * @return \Zend\Http\Response
      */

@@ -41,8 +41,10 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
     /**
      *  Alter Form For Organisation
      *
-     * @param Form $form
-     * @param \Common\Service\Table\TableBuilder $table
+     * @param Form                               $form  form
+     * @param \Common\Service\Table\TableBuilder $table table
+     *
+     * @return void
      */
     public function alterFormForOrganisation(Form $form, $table)
     {

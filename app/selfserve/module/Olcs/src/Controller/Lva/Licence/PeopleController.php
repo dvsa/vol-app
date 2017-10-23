@@ -44,6 +44,7 @@ class PeopleController extends Lva\AbstractPeopleController
     public function addAction()
     {
         $adapter = $this->getAdapter();
+
         $request = $this->getRequest();
 
         $form = $this->getServiceLocator()
@@ -68,16 +69,17 @@ class PeopleController extends Lva\AbstractPeopleController
                     )
                 );
                 exit("return from command" . $return);
-            } else {
-                exit("form not valid");
             }
         }
 
+        try {
+            $adapter->loadPeopleData($this->lva, $this->getIdentifier());
+        } catch (\RuntimeException $ex) {
+            return $this->notFoundAction();
+        }
+        $companyType=$adapter->getOrganisationType();
+        $variables = ['sectionText' => 'licence_add-Person-PersonType-' . $companyType ];
 
-        $companyType = "test";
-
-        $variables = ['sectionText' => 'licence_add-Person-PersonType' . $companyType];
-
-        return $this->render('people', $form, $variables);
+        return $this->render('add_person_'.$companyType, $form, $variables);
     }
 }
