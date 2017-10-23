@@ -63,6 +63,16 @@ return [
                                     ]
                                 ]
                             ],
+                            'rule-admin' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => '/rule-admin[/]',
+                                    'defaults' => [
+                                        'controller' => Admin\Controller\DataRetention\RuleAdminController::class,
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ],
                         ],
                     ],
                     'task-allocation-rules' => [
@@ -611,7 +621,9 @@ return [
             Admin\Controller\ReportCasesOpenController::class => Admin\Controller\ReportCasesOpenController::class,
             Admin\Controller\DataRetentionController::class => Admin\Controller\DataRetentionController::class,
             Admin\Controller\DataRetention\ExportController::class =>
-                Admin\Controller\DataRetention\ExportController::class
+                Admin\Controller\DataRetention\ExportController::class,
+            Admin\Controller\DataRetention\RuleAdminController::class =>
+                Admin\Controller\DataRetention\RuleAdminController::class
         ],
     ],
     'view_manager' => [
