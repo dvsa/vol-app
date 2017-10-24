@@ -3,7 +3,9 @@
 namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva;
-use Dvsa\Olcs\Transfer\Command\Licence\CreatePersonVariation;
+use Common\RefData;
+use Dvsa\Olcs\Transfer\Command\Application\CreatePeople;
+use Dvsa\Olcs\Transfer\Command\Licence\CreateVariation;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Zend\Form\Form;
 
@@ -62,13 +64,17 @@ class PeopleController extends Lva\AbstractPeopleController
 
             if ($form->isValid()) {
                 $validData = $form->getData()['data'];
-                $validData['id'] = $id;
-                $return = $this->handleCommand(
-                    CreatePersonVariation::create(
-                        $validData
-                    )
-                );
-                exit("return from command" . $return);
+
+                $variationResult = $this->handleCommand(CreateVariation::create([
+                    'id' => $id,
+                    'variationType' => RefData::VARIATION_TYPE_DIRECTOR_CHANGE
+                ]));
+
+                $validData['id'] = $variationResult->getResult()['id']['application'];
+
+                $createPeopleResult = $this->handleCommand(CreatePeople::create($validData));
+
+                exit("return from command" . $createPeopleResult);
             }
         }
 
