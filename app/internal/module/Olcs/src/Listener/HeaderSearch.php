@@ -3,6 +3,7 @@
 namespace Olcs\Listener;
 
 use Common\Service\Data\Search\Search as SearchService;
+use Olcs\Controller\SearchController;
 use Olcs\Form\Element\SearchOrderFieldset;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
@@ -87,9 +88,7 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
             $searchFilterForm->add($fs);
         }
 
-        $key = md5('global_search' . '_' . str_replace(' ', '', $index));
-
-        $container = new Container($key);
+        $container = new Container(SearchController::CONTAINER);
         $headerSearch->bind($container);
         $searchFilterForm->bind($container);
 

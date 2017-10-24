@@ -3,6 +3,7 @@
 namespace Olcs\Controller;
 
 use Olcs\Controller\Interfaces\LeftViewProvider;
+use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -20,6 +21,7 @@ class SearchController extends AbstractController implements LeftViewProvider
 
     protected $navigationId = 'mainsearch';
 
+    const CONTAINER = 'searchForm';
     /**
      * At first glance this seems a little unnecessary, but we need to intercept the post
      * and turn it into a get. This way the search URL contains the search params.
@@ -29,6 +31,10 @@ class SearchController extends AbstractController implements LeftViewProvider
     public function postAction()
     {
         $sd = $this->ElasticSearch()->getSearchData();
+
+        $container = new Container(self::CONTAINER);
+        $container->search = $sd['search'];
+        $container->index = $sd['index'];
 
         /**
          * Remove the "index" key from the incoming parameters.
