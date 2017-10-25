@@ -14,7 +14,9 @@ class DataRetentionRule implements MapperInterface
     /**
      * Should map data from a result array into an array suitable for a form
      *
-     * @param array $data
+     * @param array $data Data from API
+     *
+     * @return array
      */
     public static function mapFromResult(array $data)
     {
@@ -30,7 +32,8 @@ class DataRetentionRule implements MapperInterface
     /**
      * Should map form data back into a command data structure
      *
-     * @param array $data
+     * @param array $data Data from form
+     *
      * @return array
      */
     public static function mapFromForm(array $data)
@@ -48,8 +51,9 @@ class DataRetentionRule implements MapperInterface
      * Should map errors onto the form, any global errors should be returned so they can be added
      * to the flash messenger
      *
-     * @param FormInterface $form
-     * @param array $errors
+     * @param FormInterface $form   The form
+     * @param array         $errors Form errors
+     *
      * @return array
      * @inheritdoc
      */

@@ -78,5 +78,4 @@ class RuleAdminController extends AbstractInternalController implements LeftView
 
         return parent::indexAction();
     }
-
 }
