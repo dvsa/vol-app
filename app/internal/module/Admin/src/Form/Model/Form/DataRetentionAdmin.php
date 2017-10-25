@@ -6,6 +6,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Type("Common\Form\Form")
+ * @Form\Name("data-retention-admin")
  */
 class DataRetentionAdmin
 {

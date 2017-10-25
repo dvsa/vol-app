@@ -66,26 +66,15 @@ return [
                             'rule-admin' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/rule-admin[/]',
+                                    'route' => '/rule-admin[/:action][/:id][/]',
                                     'defaults' => [
                                         'controller' => Admin\Controller\DataRetention\RuleAdminController::class,
                                         'action' => 'index'
-                                    ]
-                                ]
-                            ],
-                            'rule-admin-form' => [
-                                'type' => 'segment',
-                                'options' => [
-                                    'route' => '/rule-admin/:dataRetentionRuleId[/:action[/:id]][/]',
-                                    'constraints' => [
-                                        'dataRetentionRuleId' => '[0-9\,]+',
-                                        'id' => '[0-9\,]+',
-                                        'action' => '(edit)',
                                     ],
-                                    'defaults' => [
-                                        'controller' => Admin\Controller\DataRetention\RuleAdminController::class,
-                                        'action' => 'edit'
-                                    ]
+                                    'constraints' => [
+                                        'id' => '[0-9\,]+',
+                                        'action' => '(index|edit)',
+                                    ],
                                 ]
                             ],
                         ],

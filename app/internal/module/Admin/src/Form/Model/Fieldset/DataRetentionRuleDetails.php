@@ -14,7 +14,7 @@ class DataRetentionRuleDetails
      * @Form\Options({"label":"Rule id","readonly":true})
      * @Form\Attributes({"readonly":"true"})
      */
-    public $ruleId = null;
+    public $id = null;
 
     /**
      * @Form\Options({"label": "Description"})

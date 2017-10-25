@@ -1,14 +1,18 @@
 <?php
 
+/**
+ * Rule Admin Controller
+ */
 namespace Admin\Controller\DataRetention;
 
 use Dvsa\Olcs\Transfer\Query\DataRetention\RuleAdmin as ListDto;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\AbstractInternalController;
+use Dvsa\Olcs\Transfer\Command\DataRetention\UpdateRule as UpdateDto;
+use Olcs\Data\Mapper\DataRetentionRule as Mapper;
 use Zend\View\Model\ViewModel;
-use Admin\Form\Model\Form\DataRetentionAdmin;
-use Dvsa\Olcs\Transfer\Query\DataRetention\GetRule;
-
+use Admin\Form\Model\Form\DataRetentionAdmin as FormClass;
+use Dvsa\Olcs\Transfer\Query\DataRetention\GetRule as ItemDto;
 
 /**
  * Rule admin controller
@@ -23,16 +27,27 @@ class RuleAdminController extends AbstractInternalController implements LeftView
      */
     protected $navigationId = 'admin-dashboard/admin-data-retention';
 
+    /**
+     * @var array
+     */
+    protected $inlineScripts = [
+        'indexAction' => ['table-actions'],
+    ];
+
+    // list
     protected $defaultTableSortField = 'id';
     protected $defaultTableOrderField = 'DESC';
-
     protected $listDto = ListDto::class;
-
     protected $tableName = 'admin-data-retention-rules-admin';
-    protected $tableViewPlaceholderName = 'table';
-    protected $tableViewTemplate = 'pages/table';
 
-    protected $itemParams = ['ids' => 'id'];
+    // edit
+    protected $itemDto = ItemDto::class;
+    protected $itemParams = ['id'];
+    protected $formClass = FormClass::class;
+    protected $mapperClass = Mapper::class;
+    protected $updateCommand = UpdateDto::class;
+
+    protected $editContentTitle = 'Edit Data retention rule';
 
     /**
      * Get left view
@@ -59,34 +74,9 @@ class RuleAdminController extends AbstractInternalController implements LeftView
      */
     public function indexAction()
     {
-        $this->placeholder()->setPlaceholder('pageTitle', 'Rules admin');
+        $this->placeholder()->setPlaceholder('pageTitle', 'Data retention rules');
+
         return parent::indexAction();
     }
 
-    /**
-     * Edit action
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    public function editAction()
-    {
-        $this->placeholder()->setPlaceholder('pageTitle', 'Rules admin');
-        $form = $this->getForm(DataRetentionAdmin::class);
-        $this->placeholder()->setPlaceholder('form', $form);
-
-        $ruleId = $this->params('dataRetentionRuleId');
-        $query = GetRule::create(['id' => $ruleId]);
-
-        $response = $this->handleQuery($query);
-        $dataRetentionRule = $response->getResult();
-
-        $form->get('ruleDetails')->get('ruleId')->setValue($dataRetentionRule['id']);
-        $form->get('ruleDetails')->get('description')->setValue($dataRetentionRule['description']);
-        $form->get('ruleDetails')->get('retentionPeriod')->setValue($dataRetentionRule['retentionPeriod']);
-        $form->get('ruleDetails')->get('maxDataSet')->setValue($dataRetentionRule['maxDataSet']);
-        $form->get('ruleDetails')->get('isEnabled')->setValue($dataRetentionRule['isEnabled'] ? 'Y' : 'N');
-        $form->get('ruleDetails')->get('actionType')->setValue($dataRetentionRule['actionType']['id']);
-
-        return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
-    }
 }
