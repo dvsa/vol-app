@@ -96,6 +96,17 @@ array_push($actions, [
         ]
     )
 ]);
+array_push($actions, [
+    'label' => 'Create snapshot',
+    'class' => 'action--secondary',
+    'url' => $this->url(
+        'submission', [
+            'case' => $case['id'],
+            'action' => 'snapshot',
+            'submission' => $submission['id']
+        ]
+    )
+]);
 
 //last submission
 echo $this->render('partials/read-only/header',
