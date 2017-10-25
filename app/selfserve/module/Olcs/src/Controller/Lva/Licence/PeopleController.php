@@ -5,9 +5,13 @@ namespace Olcs\Controller\Lva\Licence;
 use Common\Controller\Lva;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Application\CreatePeople;
+use Dvsa\Olcs\Transfer\Command\Application\UpdatePeople;
 use Dvsa\Olcs\Transfer\Command\Licence\CreateVariation;
+use Dvsa\Olcs\Transfer\Query\Application\People;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Zend\Form\Form;
+use Zend\Http\Request;
+use Zend\Http\Response;
 
 /**
  * External Licence People Controller
@@ -39,16 +43,51 @@ class PeopleController extends Lva\AbstractPeopleController
     }
 
     /**
-     * handle the add (Person|Director) button click
+     * Create (and redirect to) a director change variation for adding directors
      *
-     * @return \Common\View\Model\Section|void|\Zend\Http\Response
+     * @return Response
      */
     public function addAction()
     {
+        $variationResult = $this->handleCommand(
+            CreateVariation::create(
+                [
+                    'id' => $id = $this->getLicenceId(),
+                    'variationType' => RefData::VARIATION_TYPE_DIRECTOR_CHANGE
+                ]
+            )
+        );
+
+        $variationId = $variationResult->getResult()['id']['application'];
+
+        return $this->redirect()->toUrl(
+            $this->url()->fromRoute(
+                'lva-' . $this->lva . '/' . $this->section,
+                [$this->getIdentifierIndex() => $this->getLicenceId()]
+            ) . 'add-people?' . http_build_query(['variation' => $variationId])
+        );
+    }
+
+    /**
+     * Handle addition of People to a director change variation
+     *
+     * @return array|Response|\Zend\View\Model\ViewModel
+     */
+    public function addPeopleAction()
+    {
         $adapter = $this->getAdapter();
+        $adapter->loadPeopleData($this->lva, $this->getIdentifier());
+
+        /** @var Request $request */
+        $request = $this->request;
+        $variationId = $request->getQuery('variation');
+
+        $peopleResult = $this->handleQuery(People::create(['id' => $variationId]));
+        $people = $peopleResult->getResult()['application-people'];
 
         $request = $this->getRequest();
 
+        /** @var \Common\Form\Form $form */
         $form = $this->getServiceLocator()
             ->get('FormServiceManager')
             ->get('lva-licence-addperson')
@@ -56,36 +95,43 @@ class PeopleController extends Lva\AbstractPeopleController
                 ['canModify' => $adapter->canModify(), 'isPartnership' => $adapter->isPartnership()]
             );
 
+        $existingPersonId = null;
+        if ($people) {
+            $personData = $people[0]['person'];
+            $form->populateValues(['data' => $personData]);
+            $existingPersonId = $personData['id'];
+        }
+
         if ($request->isPost()) {
             $data = (array)$request->getPost();
-            $id = $this->getEvent()->getRouteMatch()->getParam('licence');
 
             $form->setData($data);
 
             if ($form->isValid()) {
                 $validData = $form->getData()['data'];
 
-                $variationResult = $this->handleCommand(CreateVariation::create([
-                    'id' => $id,
-                    'variationType' => RefData::VARIATION_TYPE_DIRECTOR_CHANGE
-                ]));
+                $validData['id'] = $variationId;
 
-                $validData['id'] = $variationResult->getResult()['id']['application'];
+                if ($existingPersonId) {
+                    $validData['person'] = $existingPersonId;
+                    $this->handleCommand(UpdatePeople::create($validData));
+                } else {
+                    $this->handleCommand(CreatePeople::create($validData));
+                }
 
-                $createPeopleResult = $this->handleCommand(CreatePeople::create($validData));
-
-                exit("return from command" . $createPeopleResult);
+                return $this->redirect()->toUrl(
+                    $this->url()->fromRoute(
+                        'lva-' . $this->lva . '/' . $this->section,
+                        [$this->getIdentifierIndex() => $this->getLicenceId()]
+                    ) . 'add-people?' . http_build_query(['variation' => $variationId])
+                );
             }
         }
 
-        try {
-            $adapter->loadPeopleData($this->lva, $this->getIdentifier());
-        } catch (\RuntimeException $ex) {
-            return $this->notFoundAction();
-        }
-        $companyType=$adapter->getOrganisationType();
-        $variables = ['sectionText' => 'licence_add-Person-PersonType-' . $companyType ];
-
-        return $this->render('add_person_'.$companyType, $form, $variables);
+        return $this->render(
+            'add_person_' . $adapter->getOrganisationType(),
+            $form,
+            ['sectionText' => 'licence_add-Person-PersonType-' . $adapter->getOrganisationType()]
+        );
     }
 }
