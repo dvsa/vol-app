@@ -70,7 +70,6 @@
         }
     },
     "config": {
-        "prefer-stable":true,
         "preferred-install": "dist",
         "secure-http" : false,
         "platform": {
