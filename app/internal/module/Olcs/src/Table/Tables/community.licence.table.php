@@ -14,11 +14,19 @@ return array(
         'crud' => array(
             'actions' => array(
                 'add' => array('class' => 'action--secondary', 'value' => 'Add'),
-                'office-licence-add' => array('class' => 'action--secondary', 'value' => 'Add office licence')
+                'office-licence-add' => array('class' => 'action--secondary', 'value' => 'Add office licence'),
+                'restore' => array('class' => 'action--secondary', 'value' => 'Restore')
             )
         ),
         'row-disabled-callback' => function ($row) {
-            return ($row['status']['id'] !== 'cl_sts_active');
+            return in_array(
+                $row['status']['id'],
+                [
+                    Common\Service\Entity\CommunityLicEntityService::STATUS_EXPIRED,
+                    Common\Service\Entity\CommunityLicEntityService::STATUS_VOID,
+                    Common\Service\Entity\CommunityLicEntityService::STATUS_RETURNDED
+                ]
+            );
         },
     ),
     'attributes' => array(
@@ -50,7 +58,8 @@ return array(
             'type' => 'Checkbox',
             'title' => '',
             'width' => 'checkbox',
-            'disableIfRowIsDisabled' => true
+            'disableIfRowIsDisabled' => true,
+            'data-attributes' => ['status']
         ),
     )
 );
