@@ -15,11 +15,16 @@
 
     foreach ($this->container as $key => $page) :
         if ($page->isVisible(true) && $this->navigation()->accept($page, false)) {
-            $leftOrRight = ($toggle%2==0) ? 'left' : 'right';
-                $$leftOrRight .= '<li class="admin__item ' . ($page->isActive(true) ? 'current' : '') .'">';
-                $$leftOrRight .= $this->navigation()->menu()->htmlify($page);
-                $$leftOrRight .= '</li>';
-                $toggle++;
+            $html = '<li class="admin__item ' . ($page->isActive(true) ? 'current' : '') .'">';
+            $html .= $this->navigation()->menu()->htmlify($page);
+            $html .= '</li>';
+
+            if ($toggle % 2 === 0) {
+                $left .= $html;
+            } else {
+                $right .= $html;
+            }
+            $toggle++;
         }
     endforeach;
 ?>
