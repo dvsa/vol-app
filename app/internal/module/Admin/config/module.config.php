@@ -66,11 +66,15 @@ return [
                             'rule-admin' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/rule-admin[/]',
+                                    'route' => '/rule-admin[/:action][/:id][/]',
                                     'defaults' => [
                                         'controller' => Admin\Controller\DataRetention\RuleAdminController::class,
                                         'action' => 'index'
-                                    ]
+                                    ],
+                                    'constraints' => [
+                                        'id' => '[0-9\,]+',
+                                        'action' => '(index|edit)',
+                                    ],
                                 ]
                             ],
                         ],
