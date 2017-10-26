@@ -61,9 +61,9 @@ class UndertakingsController extends AbstractUndertakingsController
         );
 
         // if interimFee is null
-        if (!$applicationData['interimFee']) {
+        if(!$applicationData['interimFee']) {
             // remove the block that displays it
-            if (!$applicationData['interimFee']) {
+            if(!$applicationData['interimFee']) {
                 $form->get('interim')->remove('interimFee');
             }
             // change the option label

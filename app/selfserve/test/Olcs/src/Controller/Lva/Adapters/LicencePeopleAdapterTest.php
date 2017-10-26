@@ -5,7 +5,6 @@
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-
 namespace OlcsTest\Controller\Lva\Adapters;
 
 use Common\Service\Table\TableBuilder;

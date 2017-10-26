@@ -2,7 +2,6 @@
 
 namespace OlcsTest\FormService\Form\Lva\People;
 
-use Common\Form\Model\Form\Lva\People;
 use Mockery as m;
 use Common\Form\Form;
 use Common\FormService\FormServiceManager;

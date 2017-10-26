@@ -73,9 +73,7 @@ echo $this->partial(
 
       <?php
       $guidanceMessage = $this->placeholder('guidance');
-
       if (!empty($guidanceMessage)) {
-
           foreach ($guidanceMessage as $message): ?>
               <div class="guidance">
                   <p><?php echo $this->translate($message); ?></p>
@@ -112,12 +110,8 @@ echo $this->partial(
         }
 
         if (isset($form)) {
-
           $form->prepare();
-
-
           echo $this->formErrors($form);
-
           echo $this->form($form);
         }
       ?>

@@ -5,7 +5,6 @@
  *
  * @author Rob Caiger <rob.caiger@clocal.co.uk>
  */
-
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
@@ -19,10 +18,10 @@ trait VariationControllerTrait
 {
     use ApplicationControllerTrait,
         CommonVariationControllerTrait {
-        CommonVariationControllerTrait::preDispatch insteadof ApplicationControllerTrait;
-        CommonVariationControllerTrait::postSave insteadof ApplicationControllerTrait;
-        CommonVariationControllerTrait::goToNextSection insteadof ApplicationControllerTrait;
-    }
+            CommonVariationControllerTrait::preDispatch insteadof ApplicationControllerTrait;
+            CommonVariationControllerTrait::postSave insteadof ApplicationControllerTrait;
+            CommonVariationControllerTrait::goToNextSection insteadof ApplicationControllerTrait;
+        }
 
     /**
      * Complete section
@@ -34,7 +33,6 @@ trait VariationControllerTrait
      */
     protected function completeSection($section, $prg = [])
     {
-
         if ($this->isButtonPressed('saveAndContinue')) {
             return $this->goToNextSection($section);
         }

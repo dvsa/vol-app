@@ -10,7 +10,7 @@ $config = array(
         'Olcs\Logging',
         'Common',
         'Olcs',
-        'ZfcRbac'
+        'ZfcRbac',
     ),
     'module_listener_options' => array(
         'module_paths' => array(
