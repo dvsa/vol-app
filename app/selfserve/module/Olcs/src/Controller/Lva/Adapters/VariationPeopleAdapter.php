@@ -38,7 +38,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
     }
 
     /**
-     *  Alter Form For Organisation
+     * Alter Form For Organisation
      *
      * @param Form                               $form  form
      * @param \Common\Service\Table\TableBuilder $table table
