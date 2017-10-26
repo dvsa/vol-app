@@ -248,9 +248,14 @@ return [
                     'route' => 'admin-dashboard/admin-data-retention',
                     'pages' => [
                         [
-                            'id' => 'admin-dashboard/admin-data-retention',
+                            'id' => 'admin-dashboard/admin-data-retention/review',
                             'label' => 'Review',
-                            'route' => 'admin-dashboard/admin-data-retention'
+                            'route' => 'admin-dashboard/admin-data-retention/review'
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-data-retention/records',
+                            'label' => 'Records',
+                            'route' => 'admin-dashboard/admin-data-retention/records'
                         ],
                         [
                             'id' => 'admin-dashboard/admin-data-retention/export',
