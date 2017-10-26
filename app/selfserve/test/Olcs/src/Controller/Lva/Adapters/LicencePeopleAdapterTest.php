@@ -30,8 +30,7 @@ class LicencePeopleAdapterTest extends MockeryTestCase
 
     public function setUp()
     {
-        $this->sm = m::mock('\Zend\ServiceManager\ServiceManager')->makePartial()
-            ->shouldAllowMockingProtectedMethods();
+        $this->sm = m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
         $this->sm->setAllowOverride(true);
         $this->sut = new LicencePeopleAdapter();
         $this->sut->setServiceLocator($this->sm);
