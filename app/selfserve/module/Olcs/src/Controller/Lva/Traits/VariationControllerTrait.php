@@ -29,6 +29,9 @@ trait VariationControllerTrait
      * @param string $section Section
      * @param array  $prg     Prg
      *
+     * @todo this logic is the same as CommonApplicationControllerTrait, this could potentially be re-used however I am
+     *   not sure whether there would be any complications
+     *
      * @return \Zend\Http\Response
      */
     protected function completeSection($section, $prg = [])
