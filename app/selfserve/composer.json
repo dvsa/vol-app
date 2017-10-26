@@ -74,9 +74,8 @@
         "minimum-stability": "dev",
         "prefer-stable":true,
         "preferred-install": "dist",
-        "secure-http": false,
-        "platform" : {
-
+        "secure-http" : false,
+        "platform": {
             "php": "5.6.31"
         }
     },
