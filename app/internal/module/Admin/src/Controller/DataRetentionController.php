@@ -96,8 +96,6 @@ class DataRetentionController extends AbstractInternalController implements Left
     /**
      * Delay update action
      *
-     * @todo this is a bit rubbish, should be able to work the same way as the assign action
-     *
      * @return ViewModel
      */
     public function delayAction()
@@ -111,53 +109,6 @@ class DataRetentionController extends AbstractInternalController implements Left
             'Updated record(s)',
             'Delay selected items'
         );
-
-        $formClass = DelayItemForm::class;
-        $mapperClass = new DelayItems();
-        $updateCommand = new DataRetentionActions\DelayItems();
-
-        /** @var \Zend\Http\Request $request */
-        $request = $this->getRequest();
-        $action = ucfirst($this->params()->fromRoute('action'));
-        $form = $this->getForm($formClass);
-        $this->placeholder()->setPlaceholder('form', $form);
-        $this->placeholder()->setPlaceholder('contentTitle', 'Delay selected items');
-
-        if ($request->isPost()) {
-            $dataFromPost = (array)$this->params()->fromPost();
-            $form->setData($dataFromPost);
-
-            if (method_exists($this, 'alterFormFor' . $action)) {
-                $form = $this->{'alterFormFor' . $action}($form, $dataFromPost);
-            }
-        }
-
-        if ($request->isPost() && $form->isValid()) {
-            $commandData = $mapperClass::mapFromForm($form->getData());
-            $commandData['ids'] = explode(',', $this->params('id'));
-
-            $response = $this->handleCommand($updateCommand::create($commandData));
-
-            if ($response->isOk()) {
-                $this->getServiceLocator()
-                    ->get('Helper\FlashMessenger')
-                    ->addSuccessMessage($this->itemsDelayedSuccessMessage);
-
-                return $this->redirectTo($response->getResult());
-            } elseif ($response->isClientError()) {
-                $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
-
-                foreach ($flashErrors as $error) {
-                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
-                }
-
-            } elseif ($response->isServerError()) {
-                $this->handleErrors($response->getResult());
-            }
-
-        }
-
-        return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
     }
 
     /**
