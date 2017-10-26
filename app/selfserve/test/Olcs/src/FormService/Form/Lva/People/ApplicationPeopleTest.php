@@ -2,6 +2,7 @@
 
 namespace OlcsTest\FormService\Form\Lva\People;
 
+use Common\Form\Model\Form\Lva\People;
 use Mockery as m;
 use Common\Form\Form;
 use Common\FormService\FormServiceManager;
@@ -37,8 +38,8 @@ class ApplicationPeopleTest extends MockeryTestCase
 
     public function setUp()
     {
-        $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
-        $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
+        $this->formHelper = m::mock(FormHelperService::class);
+        $this->fsm = m::mock(FormServiceManager::class)->makePartial();
 
         $this->sut = new Sut();
         $this->sut->setFormHelper($this->formHelper);
@@ -56,7 +57,7 @@ class ApplicationPeopleTest extends MockeryTestCase
         $form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
         $this->formHelper->shouldReceive('createForm')->once()
-            ->with("Common\Form\Model\Form\Lva\People")
+            ->with(People::class)
             ->andReturn($form);
 
         $this->mockAlterButtons($form, $this->formHelper, $formActions);
@@ -95,7 +96,7 @@ class ApplicationPeopleTest extends MockeryTestCase
         $form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
         $this->formHelper->shouldReceive('createForm')->once()
-            ->with("Common\Form\Model\Form\Lva\People")
+            ->with(People::class)
             ->andReturn($form);
 
         $this->sut->getForm(['canModify' => false, 'isPartnership' => false]);
@@ -132,7 +133,7 @@ class ApplicationPeopleTest extends MockeryTestCase
         $form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
         $this->formHelper->shouldReceive('createForm')->once()
-            ->with("Common\Form\Model\Form\Lva\People")
+            ->with(People::class)
             ->andReturn($form)
             ->once()
             ->shouldReceive('removeValidator')
