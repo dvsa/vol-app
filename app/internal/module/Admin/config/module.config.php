@@ -36,22 +36,25 @@ return [
                                         'controller' => Admin\Controller\DataRetentionReviewController::class,
                                         'action' => 'index'
                                     ],
-                                ]
-                            ],
-                            'records' => [
-                                'type' => 'segment',
-                                'options' => [
-                                    'route' => 'records/:dataRetentionRuleId[/:action[/:id]][/]',
-                                    'constraints' => [
-                                        'dataRetentionRuleId' => '[0-9]+',
-                                        'id' => '[0-9\,]+',
-                                        'action' => '(review|index|delete|delay|assign)',
-                                    ],
-                                    'defaults' => [
-                                        'controller' => Admin\Controller\DataRetentionController::class,
-                                        'action' => 'index'
-                                    ],
                                 ],
+                                'may_terminate' => true,
+                                'child_routes' => [
+                                    'records' => [
+                                        'type' => 'segment',
+                                        'options' => [
+                                            'route' => 'records/:dataRetentionRuleId[/:action[/:id]][/]',
+                                            'constraints' => [
+                                                'dataRetentionRuleId' => '[0-9]+',
+                                                'id' => '[0-9\,]+',
+                                                'action' => '(review|index|delete|delay|assign)',
+                                            ],
+                                            'defaults' => [
+                                                'controller' => Admin\Controller\DataRetentionController::class,
+                                                'action' => 'index'
+                                            ],
+                                        ],
+                                    ],
+                                ]
                             ],
                             'export' => [
                                 'type' => 'segment',
