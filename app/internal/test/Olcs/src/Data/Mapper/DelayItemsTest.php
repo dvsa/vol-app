@@ -25,11 +25,13 @@ class DelayItemsTest extends MockeryTestCase
     public function testMapFromForm()
     {
         $data = [
-            'fields' => ['nextReviewDate' => '2018-01-01']
+            'fields' => ['nextReviewDate' => '2018-01-01'],
+            'ids' => [1, 2]
         ];
 
         $expected = [
-            'nextReviewDate' => '2018-01-01'
+            'nextReviewDate' => '2018-01-01',
+            'ids' => [1, 2]
         ];
 
         $this->assertEquals($expected, Sut::mapFromForm($data));
@@ -37,21 +39,7 @@ class DelayItemsTest extends MockeryTestCase
 
     public function testMapFromResult()
     {
-        $data = [];
-        $data['fields'] = [
-            'ids' => '100,200,300',
-            'nextReviewDate' => '2018-01-01',
-        ];
-
-        $expected = [
-            'ids' => [
-                100,
-                200,
-                300
-            ],
-            'nextReviewDate' => '2018-01-01',
-        ];
-
-        $this->assertEquals($expected, Sut::mapFromResult($data));
+        $data = ['data'];
+        $this->assertEquals($data, Sut::mapFromResult($data));
     }
 }
