@@ -20,9 +20,9 @@ return [
                     'admin-data-retention' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => 'data-retention',
+                            'route' => 'data-retention[/]',
                             'defaults' => [
-                                'controller' => Admin\Controller\DataRetentionController::class,
+                                'controller' => Admin\Controller\DataRetentionReviewController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -31,32 +31,35 @@ return [
                             'review' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/review[/]',
+                                    'route' => 'review[/]',
                                     'defaults' => [
-                                        'controller' => Admin\Controller\DataRetentionController::class,
+                                        'controller' => Admin\Controller\DataRetentionReviewController::class,
                                         'action' => 'index'
-                                    ]
-                                ]
-                            ],
-                            'records' => [
-                                'type' => 'segment',
-                                'options' => [
-                                    'route' => '/records/:dataRetentionRuleId[/:action[/:id]][/]',
-                                    'constraints' => [
-                                        'dataRetentionRuleId' => '[0-9\,]+',
-                                        'id' => '[0-9\,]+',
-                                        'action' => '(records|delete|review|delay|assign)',
-                                    ],
-                                    'defaults' => [
-                                        'controller' => Admin\Controller\DataRetentionController::class,
-                                        'action' => 'records'
                                     ],
                                 ],
+                                'may_terminate' => true,
+                                'child_routes' => [
+                                    'records' => [
+                                        'type' => 'segment',
+                                        'options' => [
+                                            'route' => 'records/:dataRetentionRuleId[/:action[/:id]][/]',
+                                            'constraints' => [
+                                                'dataRetentionRuleId' => '[0-9]+',
+                                                'id' => '[0-9\,]+',
+                                                'action' => '(review|index|delete|delay|assign)',
+                                            ],
+                                            'defaults' => [
+                                                'controller' => Admin\Controller\DataRetentionController::class,
+                                                'action' => 'index'
+                                            ],
+                                        ],
+                                    ],
+                                ]
                             ],
                             'export' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/export[/]',
+                                    'route' => 'export[/]',
                                     'defaults' => [
                                         'controller' => Admin\Controller\DataRetention\ExportController::class,
                                         'action' => 'index'
@@ -66,7 +69,7 @@ return [
                             'rule-admin' => [
                                 'type' => 'segment',
                                 'options' => [
-                                    'route' => '/rule-admin[/:action][/:id][/]',
+                                    'route' => 'rule-admin[/:action][/:id][/]',
                                     'defaults' => [
                                         'controller' => Admin\Controller\DataRetention\RuleAdminController::class,
                                         'action' => 'index'
@@ -624,6 +627,8 @@ return [
             Admin\Controller\SystemInfoMessageController::class => Admin\Controller\SystemInfoMessageController::class,
             Admin\Controller\ReportCasesOpenController::class => Admin\Controller\ReportCasesOpenController::class,
             Admin\Controller\DataRetentionController::class => Admin\Controller\DataRetentionController::class,
+            Admin\Controller\DataRetentionReviewController::class =>
+                Admin\Controller\DataRetentionReviewController::class,
             Admin\Controller\DataRetention\ExportController::class =>
                 Admin\Controller\DataRetention\ExportController::class,
             Admin\Controller\DataRetention\RuleAdminController::class =>

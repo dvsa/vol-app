@@ -20,12 +20,7 @@ class DelayItems implements MapperInterface
      */
     public static function mapFromResult(array $data)
     {
-        $result = [
-            'nextReviewDate' => $data['fields']['nextReviewDate'],
-            'ids' => explode(',', $data['fields']['ids'])
-        ];
-
-        return $result;
+        return $data;
     }
 
     /**
@@ -38,7 +33,8 @@ class DelayItems implements MapperInterface
     public static function mapFromForm(array $data)
     {
         $result = [
-            'nextReviewDate' => $data['fields']['nextReviewDate']
+            'nextReviewDate' => $data['fields']['nextReviewDate'],
+            'ids' => $data['ids']
         ];
 
         return $result;
