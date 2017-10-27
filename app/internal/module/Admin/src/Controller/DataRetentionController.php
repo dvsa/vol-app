@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use Admin\Form\Model\Form\DataRetentionRecordFilter;
 use Dvsa\Olcs\Transfer\Command\DataRetention as DataRetentionActions;
 use Dvsa\Olcs\Transfer\Query\DataRetention\Records as RecordsListDto;
 use Admin\Form\Model\Form\DelayItem as DelayItemForm;
@@ -34,6 +35,7 @@ class DataRetentionController extends AbstractInternalController implements Left
     protected $listDto = RecordsListDto::class;
     protected $listVars = ['dataRetentionRuleId'];
     protected $defaultTableLimit = 25;
+    protected $filterForm = DataRetentionRecordFilter::class;
 
     protected $tableName = 'admin-data-retention-records';
 
