@@ -119,11 +119,9 @@ class PeopleController extends Lva\AbstractPeopleController
                     $this->handleCommand(CreatePeople::create($validData));
                 }
 
-                return $this->redirect()->toUrl(
-                    $this->url()->fromRoute(
-                        'lva-' . $this->lva . '/' . $this->section,
-                        [$this->getIdentifierIndex() => $this->getLicenceId()]
-                    ) . 'add-people?' . http_build_query(['variation' => $variationId])
+                return $this->redirect()->toRoute(
+                    'lva-director_change/financial_history',
+                    ['application' => $variationId]
                 );
             }
         }

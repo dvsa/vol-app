@@ -1072,6 +1072,7 @@ return array(
             'LvaVariation/UploadEvidence'           => \Olcs\Controller\Lva\Variation\UploadEvidenceController::class,
             'LvaVariation/PaymentSubmission'        => 'Olcs\Controller\Lva\Variation\PaymentSubmissionController',
             'LvaVariation/Review'                   => \Common\Controller\Lva\ReviewController::class,
+            'LvaDirectorChange/FinancialHistory'    => Olcs\Controller\Lva\DirectorChange\FinancialHistoryController::class,
         ),
         'invokables' => array(
             'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,
