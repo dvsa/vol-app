@@ -7,10 +7,12 @@
  */
 namespace OlcsTest\Controller\Lva\Adapters;
 
+use Common\Service\Table\TableBuilder;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
 use Common\Service\Entity\OrganisationEntityService;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Internal / Common Licence People Adapter Test
@@ -19,6 +21,9 @@ use Common\Service\Entity\OrganisationEntityService;
  */
 class LicencePeopleAdapterTest extends MockeryTestCase
 {
+    /**
+     * @var LicencePeopleAdapter
+     */
     protected $sut;
     protected $sm;
 
@@ -26,7 +31,6 @@ class LicencePeopleAdapterTest extends MockeryTestCase
     {
         $this->sm = m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
         $this->sm->setAllowOverride(true);
-
         $this->sut = new LicencePeopleAdapter();
         $this->sut->setServiceLocator($this->sm);
     }
@@ -39,9 +43,9 @@ class LicencePeopleAdapterTest extends MockeryTestCase
         $this->sm->setService(
             'Lva\People',
             m::mock()
-            ->shouldReceive('lockOrganisationForm')
-            ->with($form, $table)
-            ->getMock()
+                ->shouldReceive('lockOrganisationForm')
+                ->with($form, $table)
+                ->getMock()
         );
 
         $this->sut->alterFormForOrganisation($form, $table, 123);
