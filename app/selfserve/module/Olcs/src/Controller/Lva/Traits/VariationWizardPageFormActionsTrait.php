@@ -4,7 +4,7 @@ namespace Olcs\Controller\Lva\Traits;
 
 use Common\Form\Model\Form\Lva\Fieldset\FormActions;
 use Zend\Form\FieldsetInterface;
-use Zend\Form\FormInterface;
+use Zend\Form\Form;
 
 /**
  * Trait for use in an AbstractController that forms part of a variation wizard whose form uses a the standard set of
@@ -26,12 +26,12 @@ trait VariationWizardPageFormActionsTrait
      *
      * Typically this will override the function from AbstractController
      *
-     * @param FormInterface $form the form
-     * @param null          $data the form data
+     * @param Form $form the form
+     * @param null $data the form data
      *
      * @return void
      */
-    protected function alterFormForLva(FormInterface $form, $data = null)
+    protected function alterFormForLva(Form $form, $data = null)
     {
         /** @var FieldsetInterface $formActions */
         $formActions = $form->get('form-actions');
