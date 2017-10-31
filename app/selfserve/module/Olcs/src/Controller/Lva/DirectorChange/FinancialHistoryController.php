@@ -33,6 +33,7 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
     protected function getFinancialHistoryForm(array $data = [])
     {
         $data['variationType'] = $this->getVariationType();
+        $data['organisationType'] = $this->fetchDataForLva()['licence']['organisation']['type']['id'];
         return parent::getFinancialHistoryForm($data);
     }
 }
