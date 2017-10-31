@@ -15,11 +15,6 @@ trait VariationWizardPageWithSubsequentPageControllerTrait
 
     protected function completeSection($section, $prg = [])
     {
-        return $this->goToNextSection($section);
-    }
-
-    protected function goToNextSection($currentSection)
-    {
         return $this->redirect()->toRoute(
             $this->getNextPageRouteName(),
             ['application' => $this->getIdentifier()]
