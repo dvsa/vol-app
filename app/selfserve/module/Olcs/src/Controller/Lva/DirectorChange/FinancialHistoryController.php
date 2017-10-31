@@ -8,6 +8,7 @@ namespace Olcs\Controller\Lva\DirectorChange;
 
 use Common\Controller\Lva\AbstractFinancialHistoryController;
 use Common\RefData;
+use Olcs\Controller\Lva\Traits\VariationWizardPageFormActionsTrait;
 use Olcs\Controller\Lva\Traits\VariationWizardPageWithSubsequentPageControllerTrait;
 
 /**
@@ -16,6 +17,7 @@ use Olcs\Controller\Lva\Traits\VariationWizardPageWithSubsequentPageControllerTr
 class FinancialHistoryController extends AbstractFinancialHistoryController
 {
     use VariationWizardPageWithSubsequentPageControllerTrait;
+    use VariationWizardPageFormActionsTrait;
 
     protected $location = 'external';
     protected $lva = 'variation';
@@ -25,8 +27,14 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
         return RefData::VARIATION_TYPE_DIRECTOR_CHANGE;
     }
 
+    public function getSubmitActionText()
+    {
+        return 'Continue to licence history';
+    }
+
     protected function getNextPageRouteName()
     {
+        # This will need to change to something like 'lva-director_change/licence_history' once that controller exists
         return 'lva-director_change/financial_history';
     }
 
