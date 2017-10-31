@@ -3,11 +3,22 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\AbstractController;
+use Common\RefData;
 
+/**
+ * Trait for use in an AbstractController that forms part of a variation wizard
+ */
 trait VariationWizardPageControllerTrait
 {
     use ApplicationControllerTrait;
 
+    /**
+     * Get the variation type upon which controllers using this trait can operate
+     *
+     * @see RefData::VARIATION_TYPE_DIRECTOR_CHANGE for example
+     *
+     * @return string
+     */
     abstract protected function getVariationType();
 
     /**
@@ -19,6 +30,11 @@ trait VariationWizardPageControllerTrait
      */
     abstract protected function fetchDataForLva();
 
+    /**
+     * Ensure this controller is being called with a suitable variation
+     *
+     * @return null|mixed
+     */
     protected function preDispatch()
     {
         if ($this->isApplicationNew()) {
