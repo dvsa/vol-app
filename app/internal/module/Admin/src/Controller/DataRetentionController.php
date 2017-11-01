@@ -72,7 +72,7 @@ class DataRetentionController extends AbstractInternalController implements Left
                 'navigationTitle' => 'Data retention'
             ]
         );
-        $view->setTemplate('admin/sections/admin/partials/generic-left');
+        $view->setTemplate('admin/sections/admin/partials/generic-left-overflow');
 
         return $view;
     }
