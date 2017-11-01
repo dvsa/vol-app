@@ -1075,7 +1075,8 @@ return array(
             'LvaVariation/Review'                   => \Common\Controller\Lva\ReviewController::class,
             'LvaDirectorChange/FinancialHistory'    =>
                 Olcs\Controller\Lva\DirectorChange\FinancialHistoryController::class,
-            'LvaDirectorChange/ConvictionsPenalties'=>  Olcs\Controller\Lva\Licence\ConvictionsPenaltiesController::class,
+            'LvaDirectorChange/ConvictionsPenalties'=>
+                \Olcs\Controller\Lva\DirectorChange\ConvictionsPenaltiesController::class,
         ),
         'invokables' => array(
             'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,

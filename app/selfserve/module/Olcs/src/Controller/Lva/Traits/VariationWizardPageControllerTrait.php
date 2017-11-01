@@ -30,6 +30,8 @@ trait VariationWizardPageControllerTrait
      */
     abstract protected function fetchDataForLva();
 
+    abstract protected function getStartRoute();
+
     /**
      * Ensure this controller is being called with a suitable variation
      *
@@ -40,10 +42,17 @@ trait VariationWizardPageControllerTrait
         if ($this->isApplicationNew()) {
             return $this->notFoundAction();
         }
-       // var_dump($this->fetchDataForLva());
         if ($this->fetchDataForLva()['variationType']['id'] !== $this->getVariationType()) {
             return $this->notFoundAction();
         }
         return null;
+    }
+
+    protected function handleWizardCancel()
+    {
+        return $this->redirect()->toRoute(
+            $this->getStartRoute()['name'],
+            $this->getStartRoute()['params']
+        );
     }
 }
