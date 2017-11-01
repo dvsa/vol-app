@@ -53,12 +53,12 @@ class DataRetentionRecordFilter
      * @Form\Options({
      *     "label": "Assigned to",
      *     "disable_inarray_validator": false,
-     *     "service_name": "Olcs\Service\Data\UserListInternal",
-     *     "use_groups": "false"
+     *     "service_name": "Olcs\Service\Data\AssignedToList",
+     *     "use_groups": false
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $assignedTo = null;
+    public $assignedToUser = null;
 
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary"})
