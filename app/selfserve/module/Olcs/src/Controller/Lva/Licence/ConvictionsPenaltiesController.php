@@ -5,39 +5,23 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva\AbstractConvictionsPenaltiesController;
 use Common\RefData;
-use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
+use Olcs\Controller\Lva\Traits\VariationWizardPageWithSubsequentPageControllerTrait;
 
 class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesController
 {
-    use ExternalControllerTrait;
+    use VariationWizardPageWithSubsequentPageControllerTrait;
+
+    protected $location = 'external';
 
     protected $lva = self::LVA_VAR;
-    protected $variationType = RefData::VARIATION_TYPE_DIRECTOR_CHANGE;
 
-    protected function getIdentifier()
+    protected function getNextPageRouteName()
     {
-        return $this->params($this->getIdentifierIndex());
+        return 'lva-director_change/financial_history';
     }
 
-    /**
-     * Get Identifier Index
-     *
-     * @return string
-     */
-    protected function getIdentifierIndex()
+    protected function getVariationType()
     {
-
-        if ($this->lva === self::LVA_LIC) {
-            return 'licence';
-        }
-
-        return 'application';
+        return RefData::VARIATION_TYPE_DIRECTOR_CHANGE;
     }
-
-
-
-
-
-
-
 }

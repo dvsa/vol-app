@@ -40,6 +40,7 @@ trait VariationWizardPageControllerTrait
         if ($this->isApplicationNew()) {
             return $this->notFoundAction();
         }
+       // var_dump($this->fetchDataForLva());
         if ($this->fetchDataForLva()['variationType']['id'] !== $this->getVariationType()) {
             return $this->notFoundAction();
         }
