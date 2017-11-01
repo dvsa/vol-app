@@ -43,11 +43,80 @@ class PeopleController extends Lva\AbstractPeopleController
     }
 
     /**
-     * Create (and redirect to) a director change variation for adding directors
+     * Disallow adding (uses director change variations for add instead)
      *
      * @return Response
      */
     public function addAction()
+    {
+        return $this->redirectToIndex();
+    }
+
+    /**
+     * Disallow deleting
+     *
+     *
+     * @return Response
+     */
+    public function deleteAction()
+    {
+        return $this->redirectToIndex();
+    }
+
+    /**
+     * Disallow editing by disallowing non-get requests (still allow the edit page to be accessible via get)
+     *
+     * @return Response
+     */
+    public function editAction()
+    {
+        /** @var Request $request */
+        $request = $this->request;
+        return $request->isGet() ? parent::editAction() : $this->redirectToIndex();
+    }
+
+    /**
+     * Intercept the 'Add' POST action on index and create (and redirect to) the director change variation wizard
+     *
+     * @param array  $data             Data
+     * @param array  $rowsNotRequired  Action
+     * @param string $childIdParamName Child route identifier
+     * @param string $route            Route
+     *
+     * @return Response
+     */
+    protected function handleCrudAction(
+        $data,
+        $rowsNotRequired = ['add'],
+        $childIdParamName = 'child_id',
+        $route = null
+    ) {
+        if (!isset($data['action']) or $data['action'] !== 'Add') {
+            return parent::handleCrudAction($data, $rowsNotRequired, $childIdParamName, $route);
+        }
+
+        return $this->redirectToIndexIfNonPost()
+            ?: $this->createNewDirectorChangeVariation();
+    }
+
+    /**
+     * Redirect to index page if this is not a POST request
+     *
+     * @return null|Response
+     */
+    private function redirectToIndexIfNonPost()
+    {
+        /** @var Request $request */
+        $request = $this->request;
+        return $request->isPost() ? null : $this->redirectToIndex();
+    }
+
+    /**
+     * Create a new Director Change Variation and redirect to the first page of the wizard
+     *
+     * @return Response
+     */
+    private function createNewDirectorChangeVariation()
     {
         $variationResult = $this->handleCommand(
             CreateVariation::create(
@@ -130,6 +199,17 @@ class PeopleController extends Lva\AbstractPeopleController
             'add_person_' . $adapter->getOrganisationType(),
             $form,
             ['sectionText' => 'licence_add-Person-PersonType-' . $adapter->getOrganisationType()]
+        );
+    }
+
+    /**
+     * @return Response
+     */
+    private function redirectToIndex()
+    {
+        return $this->redirect()->toRoute(
+            'lva-' . $this->lva . '/' . $this->section,
+            [$this->getIdentifierIndex() => $this->getLicenceId()]
         );
     }
 }
