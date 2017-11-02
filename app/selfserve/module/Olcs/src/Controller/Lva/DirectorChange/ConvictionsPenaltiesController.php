@@ -32,7 +32,8 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
 
     public function getStartRoute()
     {
-        return ['name'=>'lva-licence/people', 'params'=>['licence' =>'07']];
+        $licenceId = $this->getLicenceId($this->getApplicationId());
+        return ['name'=>'lva-licence/people', 'params'=>['licence' =>$licenceId]];
     }
 
     protected function goToOverview($lvaId = null)
