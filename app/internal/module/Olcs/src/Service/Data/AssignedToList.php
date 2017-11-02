@@ -3,6 +3,7 @@
 namespace Olcs\Service\Data;
 
 use Dvsa\Olcs\Transfer\Query as TransferQry;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 
 /**
  * Internal User data service with current user on top of the list
@@ -16,12 +17,12 @@ class AssignedToList extends UserListInternal
      * Prepend current user, Not assigned and All options to list
      *
      * @param array $optionData The option data returned by formatData
-     * @param bool  $useGroups The 'use_groups' Form\Option
+     * @param bool  $useGroups  The 'use_groups' Form\Option
      *
      * @return array
      */
-    private function prependOptions(array $optionData, $useGroups) {
-
+    private function prependOptions(array $optionData, $useGroups)
+    {
         $currentUser = $this->getCurrentUser();
 
         $items = [
@@ -30,7 +31,7 @@ class AssignedToList extends UserListInternal
             'all' => 'All'
         ];
 
-        if($useGroups) {
+        if ($useGroups) {
             $items = [[
                 'label' => null,
                 'options' => [
@@ -46,11 +47,20 @@ class AssignedToList extends UserListInternal
         return $optionData;
     }
 
-    private function  getCurrentUser() {
-
+    /**
+     * Get the current user details
+     *
+     * @return array|false
+     */
+    private function getCurrentUser()
+    {
         $response = $this->handleQuery(
             TransferQry\MyAccount\MyAccount::create([])
         );
+
+        if (!$response->isOk()) {
+            throw new UnexpectedResponseException('unknown-error');
+        }
 
         return $response->getResult();
     }
@@ -77,5 +87,4 @@ class AssignedToList extends UserListInternal
 
         return $this->prependOptions($this->formatData($data), $useGroups);
     }
-
 }
