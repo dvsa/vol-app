@@ -8,6 +8,7 @@ use Dvsa\Olcs\Transfer\Command\Application\CreatePeople;
 use Dvsa\Olcs\Transfer\Command\Application\UpdatePeople;
 use Dvsa\Olcs\Transfer\Command\Licence\CreateVariation;
 use Dvsa\Olcs\Transfer\Query\Application\People;
+use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Zend\Form\Form;
 use Zend\Http\Request;
@@ -28,7 +29,7 @@ class PeopleController extends Lva\AbstractPeopleController
     protected $section = 'people';
 
     /**
-     * Alter form for LVA
+     * Prevent default licence actions
      *
      * @param Form  $form Form
      * @param array $data Api/Form Data
@@ -37,9 +38,6 @@ class PeopleController extends Lva\AbstractPeopleController
      */
     protected function alterFormForLva(Form $form, $data = null)
     {
-        $table = $form->get('table')->get('table')->getTable();
-
-        $table->removeColumn('actionLinks');
     }
 
     /**
@@ -55,12 +53,16 @@ class PeopleController extends Lva\AbstractPeopleController
     /**
      * Disallow deleting
      *
-     *
      * @return Response
      */
     public function deleteAction()
     {
-        return $this->redirectToIndex();
+        $licencePeopleAdapter = $this->getLicencePeopleAdapter();
+        $licencePeopleAdapter->loadPeopleData($this->lva, $this->getIdentifier());
+        if ($licencePeopleAdapter->isExceptionalOrganisation()) {
+            return $this->redirectToIndex();
+        }
+        return parent::deleteAction();
     }
 
     /**
@@ -144,7 +146,8 @@ class PeopleController extends Lva\AbstractPeopleController
      */
     public function addPeopleAction()
     {
-        $adapter = $this->getAdapter();
+        $adapter = $this->getLicencePeopleAdapter();
+
         $adapter->loadPeopleData($this->lva, $this->getIdentifier());
 
         /** @var Request $request */
@@ -211,5 +214,17 @@ class PeopleController extends Lva\AbstractPeopleController
             'lva-' . $this->lva . '/' . $this->section,
             [$this->getIdentifierIndex() => $this->getLicenceId()]
         );
+    }
+
+    /**
+     * Get LicencePeopleAdapter
+     *
+     * @return LicencePeopleAdapter
+     */
+    private function getLicencePeopleAdapter()
+    {
+        /** @var LicencePeopleAdapter $adapter */
+        $adapter = $this->getAdapter();
+        return $adapter;
     }
 }
