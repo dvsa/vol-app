@@ -47,7 +47,7 @@ class PeopleController extends Lva\AbstractPeopleController
      */
     public function addAction()
     {
-        return $this->redirectToIndex();
+        return $this->redirectToIndexWithPermissionError();
     }
 
     /**
@@ -60,7 +60,7 @@ class PeopleController extends Lva\AbstractPeopleController
         $licencePeopleAdapter = $this->getLicencePeopleAdapter();
         $licencePeopleAdapter->loadPeopleData($this->lva, $this->getIdentifier());
         if ($licencePeopleAdapter->isExceptionalOrganisation()) {
-            return $this->redirectToIndex();
+            return $this->redirectToIndexWithPermissionError();
         }
         return parent::deleteAction();
     }
@@ -74,7 +74,7 @@ class PeopleController extends Lva\AbstractPeopleController
     {
         /** @var Request $request */
         $request = $this->request;
-        return $request->isGet() ? parent::editAction() : $this->redirectToIndex();
+        return $request->isGet() ? parent::editAction() : $this->redirectToIndexWithPermissionError();
     }
 
     /**
@@ -120,6 +120,12 @@ class PeopleController extends Lva\AbstractPeopleController
      */
     private function createNewDirectorChangeVariation()
     {
+        $licencePeopleAdapter = $this->getLicencePeopleAdapter();
+        $licencePeopleAdapter->loadPeopleData($this->lva, $this->getIdentifier());
+        if ($licencePeopleAdapter->isExceptionalOrganisation() !== false) {
+            return $this->redirectToIndexWithPermissionError();
+        }
+
         $variationResult = $this->handleCommand(
             CreateVariation::create(
                 [
@@ -206,11 +212,21 @@ class PeopleController extends Lva\AbstractPeopleController
     }
 
     /**
+     * Redirect to the people index and display a permission flash message
+     * @return Response
+     */
+    private function redirectToIndexWithPermissionError()
+    {
+        $this->addErrorMessage('cannot-perform-action');
+        return $this->redirectToIndex();
+    }
+
+    /**
      * @return Response
      */
     private function redirectToIndex()
     {
-        return $this->redirect()->toRoute(
+        return $this->redirect()->toRouteAjax(
             'lva-' . $this->lva . '/' . $this->section,
             [$this->getIdentifierIndex() => $this->getLicenceId()]
         );
