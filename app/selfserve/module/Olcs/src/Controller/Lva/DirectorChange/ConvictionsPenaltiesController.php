@@ -5,6 +5,7 @@ namespace Olcs\Controller\Lva\DirectorChange;
 
 use Common\Controller\Lva\AbstractConvictionsPenaltiesController;
 use Common\RefData;
+use Dvsa\Olcs\Transfer\Command\Application\Grant;
 use Olcs\Controller\Lva\Traits\VariationWizardFinalPageControllerTrait;
 
 class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesController
@@ -25,10 +26,18 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
         return RefData::VARIATION_TYPE_DIRECTOR_CHANGE;
     }
 
-    protected function handleSubmission()
+    protected function submitAction()
     {
-        return "submission handled";
+        return $this->handleCommand(
+            Grant::create(
+                [
+                    'id' => $id = $this->getApplicationId(),
+                    'variationType' => RefData::VARIATION_TYPE_DIRECTOR_CHANGE
+                ]
+            )
+        );
     }
+
 
     public function getStartRoute()
     {
@@ -40,5 +49,11 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
     {
         $route = $this->getStartRoute();
         $this->handleWizardCancel($route);
+    }
+
+    protected function getConvictionsPenaltiesForm(array $data = [])
+    {
+        $params['variationType'] = $this->getVariationType();
+        return parent::getConvictionsPenaltiesForm($data, $params);
     }
 }

@@ -50,9 +50,10 @@ trait VariationWizardPageControllerTrait
 
     protected function handleWizardCancel()
     {
+        $route = $this->getStartRoute();
         return $this->redirect()->toRoute(
-            $this->getStartRoute()['name'],
-            $this->getStartRoute()['params']
+            $route['name'],
+            $route['params']
         );
     }
 }

@@ -7,10 +7,15 @@ trait VariationWizardFinalPageControllerTrait
 {
     use VariationWizardPageControllerTrait;
 
-    abstract protected function handleSubmission();
+    abstract protected function submitAction();
 
     protected function goToNextSection($currentSection)
     {
-        exit('redirect to next  page' . $this->handleSubmission());
+        $response = $this->submitAction();
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+        $this->goToOverview();
     }
 }
