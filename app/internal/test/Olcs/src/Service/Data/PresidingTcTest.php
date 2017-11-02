@@ -52,7 +52,7 @@ class PresidingTcTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $sut = new PresidingTc();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
         $this->assertEquals($results['results'], $sut->fetchUserListData([]));
     }
@@ -72,7 +72,7 @@ class PresidingTcTest extends AbstractDataServiceTestCase
             ->once()
             ->getMock();
         $sut = new PresidingTc();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, []);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
         $sut->fetchUserListData([]);
     }
