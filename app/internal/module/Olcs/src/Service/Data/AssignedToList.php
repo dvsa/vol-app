@@ -50,7 +50,7 @@ class AssignedToList extends UserListInternal
     /**
      * Get the current user details
      *
-     * @return array|false
+     * @return array
      */
     private function getCurrentUser()
     {
