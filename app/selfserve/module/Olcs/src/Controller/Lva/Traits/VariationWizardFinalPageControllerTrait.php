@@ -7,8 +7,20 @@ trait VariationWizardFinalPageControllerTrait
 {
     use VariationWizardPageControllerTrait;
 
+    /**
+     * Submit action to be overridden
+     *
+     * @return mixed
+     */
     abstract protected function submitAction();
 
+    /**
+     * go to the next section in the wizard
+     *
+     * @param section $currentSection current section
+     *
+     * @return void
+     */
     protected function goToNextSection($currentSection)
     {
         $response = $this->submitAction();

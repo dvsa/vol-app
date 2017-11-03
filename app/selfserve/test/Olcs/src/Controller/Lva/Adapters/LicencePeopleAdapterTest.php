@@ -9,8 +9,8 @@
 namespace OlcsTest\Controller\Lva\Adapters;
 
 use Common\RefData;
-use Common\Service\Cqrs\Response;
 use Common\Service\Lva\PeopleLvaService;
+use Common\Service\Cqrs\Response;
 use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\Licence\DeletePeopleViaVariation;
 use Mockery as m;

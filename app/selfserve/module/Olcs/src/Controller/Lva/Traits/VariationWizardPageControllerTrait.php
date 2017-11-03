@@ -2,8 +2,7 @@
 
 namespace Olcs\Controller\Lva\Traits;
 
-use Common\Controller\Lva\AbstractController;
-use Common\RefData;
+use Zend\Http\Response;
 
 /**
  * Trait for use in an AbstractController that forms part of a variation wizard
@@ -30,6 +29,13 @@ trait VariationWizardPageControllerTrait
      */
     abstract protected function fetchDataForLva();
 
+    /**
+     * Get the initial wizard start location
+     *
+     * @see consuming class to provide implementation
+     *
+     * @return mixed
+     */
     abstract protected function getStartRoute();
 
     /**
@@ -48,6 +54,11 @@ trait VariationWizardPageControllerTrait
         return null;
     }
 
+    /**
+     * Handle the cancel action and return to start
+     *
+     * @return Response
+     */
     protected function handleWizardCancel()
     {
         $route = $this->getStartRoute();

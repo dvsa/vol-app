@@ -67,4 +67,15 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
         $data['organisationType'] = $this->fetchDataForLva()['licence']['organisation']['type']['id'];
         return parent::getFinancialHistoryForm($data);
     }
+
+    /**
+     * Get the start of the start of the wizard
+     *
+     * @return array
+     */
+    public function getStartRoute()
+    {
+        $licenceId = $this->getLicenceId($this->getApplicationId());
+        return ['name'=>'lva-licence/people', 'params'=>['licence' =>$licenceId]];
+    }
 }
