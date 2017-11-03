@@ -37,7 +37,7 @@ class PublicInquiryReasonTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $sut = new PublicInquiryReason();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
         $this->assertEquals($results, $sut->fetchListData([]));
     }
@@ -62,7 +62,7 @@ class PublicInquiryReasonTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $sut = new PublicInquiryReason();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
         $this->assertEmpty($sut->fetchListData([]));
     }
@@ -124,7 +124,7 @@ class PublicInquiryReasonTest extends AbstractDataServiceTestCase
         $sut = new PublicInquiryReason();
         $sut->setLicenceService($mockLicenceService);
 
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
         $this->assertEquals($this->getSingleExpected(), $sut->fetchListOptions($params));
     }

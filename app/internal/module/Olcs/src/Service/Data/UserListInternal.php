@@ -110,7 +110,7 @@ class UserListInternal extends AbstractListDataService
      *
      * @return string
      */
-    private function getPersonIdentifier(array $datum)
+    protected function getPersonIdentifier(array $datum)
     {
         $label = null;
         if (isset($datum['contactDetails']['person'])) {

@@ -64,7 +64,7 @@ class UserTest extends AbstractDataServiceTestCase
 
         $sut = new User();
         $sut->setTeam($team);
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
         $this->assertEquals($results['results'], $sut->fetchUserListData(['isInternal' => true]));
     }
@@ -84,7 +84,7 @@ class UserTest extends AbstractDataServiceTestCase
             ->once()
             ->getMock();
         $sut = new User();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, []);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
         $sut->fetchUserListData([]);
     }

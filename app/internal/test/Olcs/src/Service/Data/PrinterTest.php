@@ -39,7 +39,7 @@ class PrinterTest extends AbstractDataServiceTestCase
             ->getMock();
 
         $sut = new Printer();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, $results);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
         $this->assertEquals($results['results'], $sut->fetchListData([]));
     }
@@ -56,7 +56,7 @@ class PrinterTest extends AbstractDataServiceTestCase
             ->once()
             ->getMock();
         $sut = new Printer();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse, []);
+        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
         $sut->fetchListData([]);
     }
