@@ -15,7 +15,7 @@
                 <?php if (!$isActive) : ?>
                     <?php echo $this->navigation()->menu()->htmlify($page); ?>
                 <?php else: ?>
-                    <span><?php echo $this->translate($page->getLabel()); ?></span>
+                    <span><?php echo htmlspecialchars($this->translate($page->getLabel())); ?></span>
                     <?php
                     $tableFilters = $this->placeholder('tableFilters')->getValue();
                     if($tableFilters instanceof \Zend\Form\Form) {
