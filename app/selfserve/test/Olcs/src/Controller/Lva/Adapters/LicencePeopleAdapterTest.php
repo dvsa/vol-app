@@ -9,8 +9,10 @@
 namespace OlcsTest\Controller\Lva\Adapters;
 
 use Common\RefData;
+use Common\Service\Cqrs\Response;
 use Common\Service\Lva\PeopleLvaService;
 use Common\Service\Table\TableBuilder;
+use Dvsa\Olcs\Transfer\Command\Licence\DeletePeopleViaVariation;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
@@ -105,5 +107,23 @@ class LicencePeopleAdapterTest extends MockeryTestCase
                 'expect' => true,
             ],
         ];
+    }
+
+    public function testGetDeleteCommand()
+    {
+        $this->sut->shouldReceive('getLicenceId')->andReturn(999);
+        $this->sut->shouldReceive('handleCommand')
+            ->once()
+            ->andReturnUsing(
+                function (DeletePeopleViaVariation $cmd) {
+                    $this->assertEquals(['TEST_PERSON_ID_1', 'TEST_PERSON_ID_2'], $cmd->getPersonIds());
+                    $this->assertEquals(999, $cmd->getId());
+                    $result = m::mock(Response::class);
+                    $result->shouldReceive('isOk')->andReturn(true);
+                    return $result;
+                }
+            );
+
+        $this->sut->delete(['TEST_PERSON_ID_1', 'TEST_PERSON_ID_2']);
     }
 }
