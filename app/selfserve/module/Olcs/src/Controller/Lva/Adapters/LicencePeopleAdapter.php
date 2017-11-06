@@ -10,6 +10,8 @@ namespace Olcs\Controller\Lva\Adapters;
 
 use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
 use Common\Service\Table\TableBuilder;
+use Dvsa\Olcs\Transfer\Command\AbstractCommand;
+use Dvsa\Olcs\Transfer\Command\Licence\DeletePeopleViaVariation;
 use Zend\Form\Form;
 
 /**
@@ -69,5 +71,18 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
     {
         $table = parent::createTable();
         return parent::amendLicencePeopleListTable($table);
+    }
+
+    /**
+     * Get the backend command to delete a Person
+     *
+     * @param array $params Params
+     *
+     * @return AbstractCommand
+     */
+    protected function getDeleteCommand($params)
+    {
+        $params['id'] = $this->getLicenceId();
+        return DeletePeopleViaVariation::create($params);
     }
 }
