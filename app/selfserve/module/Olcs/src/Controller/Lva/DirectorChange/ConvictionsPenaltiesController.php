@@ -48,6 +48,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      */
     protected function submitAction()
     {
+        exit('covered in story OLCS-17958');
     }
 
     /**
