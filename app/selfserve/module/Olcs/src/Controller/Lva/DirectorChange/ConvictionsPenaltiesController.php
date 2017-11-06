@@ -48,7 +48,11 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      */
     protected function submitAction()
     {
-        exit('covered in story OLCS-17958');
+        return $this->redirect()->toRoute(
+            $this->getStartRoute()['name'],
+            $this->getStartRoute()['params']
+        );
+        //note full action covered in story OLCS-17958;
     }
 
     /**
@@ -83,7 +87,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      *
      * @return mixed]
      */
-    protected function getConvictionsPenaltiesForm(array $data = [], $params = [])
+    protected function getConvictionsPenaltiesForm($data, $params = [])
     {
         $params['variationType'] = $this->getVariationType();
         $params['organisationType'] = $this->fetchDataForLva()['licence']['organisation']['type']['id'];
