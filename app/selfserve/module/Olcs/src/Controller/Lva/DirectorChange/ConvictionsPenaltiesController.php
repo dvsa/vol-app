@@ -6,7 +6,6 @@ namespace Olcs\Controller\Lva\DirectorChange;
 use Common\Controller\Lva\AbstractConvictionsPenaltiesController;
 use Common\RefData;
 use Common\Service\Table\TableBuilder;
-use Dvsa\Olcs\Transfer\Command\Application\Grant;
 use Olcs\Controller\Lva\Traits\VariationWizardFinalPageControllerTrait;
 
 /**

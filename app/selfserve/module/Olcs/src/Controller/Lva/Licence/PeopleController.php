@@ -243,22 +243,4 @@ class PeopleController extends Lva\AbstractPeopleController
         $adapter = $this->getAdapter();
         return $adapter;
     }
-
-    public function convictionsAction()
-    {
-        $adapter = $this->getAdapter();
-        $adapter->loadPeopleData($this->lva, $this->getIdentifier());
-
-        /** @var \Common\Form\Form $form */
-        $form = $this->getServiceLocator()
-            ->get('FormServiceManager')
-            ->get('lva-variation-convictions_penalties')
-            ->getForm(
-                ['canModify' => $adapter->canModify(), 'isPartnership' => $adapter->isPartnership()]
-            );
-        return $this->render(
-            'convictions_and_penalties',
-            $form
-        );
-    }
 }
