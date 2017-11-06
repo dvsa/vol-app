@@ -78,8 +78,8 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
     /**
      * Get the form
      *
-     * @param array $data form data
-     * @params array $params parameters for form
+     * @param array $data   form data
+     * @param array $params parameters for form
      *
      * @return mixed]
      */
