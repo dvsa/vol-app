@@ -82,7 +82,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             $form->remove('financialEvidence');
         }
 
-        if($this->shouldShowOperatingCentre()) {
+        if ($this->shouldShowOperatingCentre()) {
             $data = $this->getData();
             $form->get('operatingCentres')->setCount(count($data['operatingCentres']));
             \Common\Data\Mapper\Lva\UploadEvidence::mapFromResultForm($data, $form);
@@ -101,7 +101,6 @@ abstract class AbstractUploadEvidenceController extends AbstractController
         } elseif ($form->has('operatingCentres')) {
             $form->remove('operatingCentres');
         }
-
         return $form;
     }
 
@@ -126,6 +125,8 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      * Process a file upload to an operating centre
      *
      * @param array $file Uploaded file data
+     * 
+     * @return void
      */
     public function operatingCentreProcessFileUpload($file)
     {
