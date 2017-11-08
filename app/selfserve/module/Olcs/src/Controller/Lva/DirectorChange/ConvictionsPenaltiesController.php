@@ -46,7 +46,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      *
      * @return mixed
      */
-    protected function submitAction()
+    protected function submit()
     {
         return $this->redirect()->toRoute(
             $this->getStartRoute()['name'],
@@ -71,12 +71,12 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      *
      * @param null $lvaId licence or application id
      *
-     * @return void|\Zend\Http\Response
+     * @return \Zend\Http\Response
      */
     protected function goToOverview($lvaId = null)
     {
         $route = $this->getStartRoute();
-        $this->handleWizardCancel($route);
+        return $this->handleWizardCancel($route);
     }
 
     /**

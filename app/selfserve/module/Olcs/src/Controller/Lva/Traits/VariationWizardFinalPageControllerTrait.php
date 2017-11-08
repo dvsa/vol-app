@@ -12,7 +12,7 @@ trait VariationWizardFinalPageControllerTrait
      *
      * @return mixed
      */
-    abstract protected function submitAction();
+    abstract protected function submit();
 
     /**
      * go to the next section in the wizard
