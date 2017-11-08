@@ -18,13 +18,14 @@ class ApplicationConvictionsPenalties extends ConvictionsPenalties
     /**
      * Make form alterations
      *
-     * @param Form $form form
+     * @param Form  $form   form
+     * @param array $params parameters
      *
      * @return Form
      */
-    protected function alterForm($form)
+    protected function alterForm($form, array $params = [])
     {
-        parent::alterForm($form);
+        parent::alterForm($form, $params);
         $this->alterButtons($form);
 
         return $form;
