@@ -3,6 +3,9 @@
 
 namespace Olcs\Controller\Lva\Traits;
 
+/**
+ * Trait for use in an AbstractController that forms the final part of a variation wizard
+ */
 trait VariationWizardFinalPageControllerTrait
 {
     use VariationWizardPageControllerTrait;
