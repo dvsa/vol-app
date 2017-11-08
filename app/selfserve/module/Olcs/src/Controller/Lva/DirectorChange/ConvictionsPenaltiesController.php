@@ -8,6 +8,7 @@ use Common\RefData;
 use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\Variation\GrantDirectorChange;
 use Olcs\Controller\Lva\Traits\VariationWizardFinalPageControllerTrait;
+use Zend\Http\Response;
 
 /**
  * Class ConvictionsPenaltiesController
@@ -45,11 +46,15 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
     /**
      * Method to complete the process
      *
-     * @return mixed
+     * @return Response
      */
     protected function submit()
     {
-        // Todo: call new grant command
+        $response = $this->handleCommand(GrantDirectorChange::create(['id'=>$this->getIdentifier()]));
+        if ($response->isClientError() || $response->isServerError()) {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+        return $this->goToOverview();
     }
 
     /**
@@ -72,8 +77,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      */
     protected function goToOverview($lvaId = null)
     {
-        $route = $this->getStartRoute();
-        return $this->handleWizardCancel($route);
+        return $this->handleWizardCancel();
     }
 
     /**
