@@ -40,7 +40,7 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
      */
     public function getSubmitActionText()
     {
-        return 'Continue to licence history';
+        return 'Continue to Convictions and Penalties';
     }
 
     /**
@@ -51,7 +51,7 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
     protected function getNextPageRouteName()
     {
         # This will need to change to something like 'lva-director_change/licence_history' once that controller exists
-        return 'lva-director_change/financial_history';
+        return 'lva-director_change/convictions_penalties';
     }
 
     /**

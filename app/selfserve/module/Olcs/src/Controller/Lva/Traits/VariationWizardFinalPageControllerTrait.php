@@ -3,6 +3,9 @@
 
 namespace Olcs\Controller\Lva\Traits;
 
+/**
+ * Trait for use in an AbstractController that forms the final part of a variation wizard
+ */
 trait VariationWizardFinalPageControllerTrait
 {
     use VariationWizardPageControllerTrait;
@@ -17,13 +20,13 @@ trait VariationWizardFinalPageControllerTrait
     /**
      * go to the next section in the wizard
      *
-     * @param section $currentSection current section
+     * @param string $currentSection current section
      *
      * @return void
      */
     protected function goToNextSection($currentSection)
     {
-        $response = $this->submitAction();
+        $response = $this->submit();
 
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
