@@ -17,13 +17,13 @@ trait VariationWizardFinalPageControllerTrait
     /**
      * go to the next section in the wizard
      *
-     * @param section $currentSection current section
+     * @param string $currentSection current section
      *
      * @return void
      */
     protected function goToNextSection($currentSection)
     {
-        $response = $this->submitAction();
+        $response = $this->submit();
 
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');

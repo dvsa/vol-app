@@ -6,6 +6,7 @@ namespace Olcs\Controller\Lva\DirectorChange;
 use Common\Controller\Lva\AbstractConvictionsPenaltiesController;
 use Common\RefData;
 use Common\Service\Table\TableBuilder;
+use Dvsa\Olcs\Transfer\Command\Variation\GrantDirectorChange;
 use Olcs\Controller\Lva\Traits\VariationWizardFinalPageControllerTrait;
 
 /**
@@ -48,11 +49,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      */
     protected function submit()
     {
-        return $this->redirect()->toRoute(
-            $this->getStartRoute()['name'],
-            $this->getStartRoute()['params']
-        );
-        //note full action covered in story OLCS-17958;
+        // Todo: call new grant command
     }
 
     /**
