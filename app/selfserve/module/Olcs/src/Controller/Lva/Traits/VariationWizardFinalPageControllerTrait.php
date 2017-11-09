@@ -3,6 +3,8 @@
 
 namespace Olcs\Controller\Lva\Traits;
 
+use Zend\Http\Response;
+
 /**
  * Trait for use in an AbstractController that forms the final part of a variation wizard
  */
@@ -13,7 +15,7 @@ trait VariationWizardFinalPageControllerTrait
     /**
      * Submit action to be overridden
      *
-     * @return mixed
+     * @return Response
      */
     abstract protected function submit();
 
@@ -22,15 +24,10 @@ trait VariationWizardFinalPageControllerTrait
      *
      * @param string $currentSection current section
      *
-     * @return void
+     * @return Response
      */
     protected function goToNextSection($currentSection)
     {
-        $response = $this->submit();
-
-        if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-        }
-        $this->goToOverview();
+        return $this->submit();
     }
 }
