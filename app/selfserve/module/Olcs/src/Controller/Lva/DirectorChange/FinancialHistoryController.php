@@ -78,4 +78,13 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
         $licenceId = $this->getLicenceId($this->getApplicationId());
         return ['name'=>'lva-licence/people', 'params'=>['licence' =>$licenceId]];
     }
+
+    /**
+     * Get the Application state and test if previous section completed or needs redirecting
+     */
+    public function canProceed()
+    {
+        $id = $this->getIdentifier();
+
+    }
 }

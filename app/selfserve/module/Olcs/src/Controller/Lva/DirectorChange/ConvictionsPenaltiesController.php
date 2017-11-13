@@ -108,6 +108,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
          * @var TableBuilder table
          */
         $table = parent::getConvictionsPenaltiesTable($data);
+
         $table->setSetting(
             'crud',
             [
@@ -118,6 +119,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
                 ]
             ]
         );
+        $table->setVariable('empty_message', 'selfserve-app-subSection-previous-history-criminal-conviction-hasConv-hint-director-change');
         return $table;
     }
 }

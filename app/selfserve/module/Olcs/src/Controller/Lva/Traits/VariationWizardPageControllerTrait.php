@@ -67,4 +67,21 @@ trait VariationWizardPageControllerTrait
             $route['params']
         );
     }
+
+    /**
+     * get the status of the current variation
+     *
+     * @param $id
+     *
+     * @return mixed
+     */
+    protected function getCurrentVariationStatus($id)
+    {
+        $dto = ApplicationQry::create(['id' => $id, 'validateAppCompletion' => true]);
+        $response = $this->handleQuery($dto);
+
+        return $response->getResult();
+    }
+
+
 }
