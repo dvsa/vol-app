@@ -15,7 +15,7 @@ use Zend\Http\Response;
 /**
  * Director Change Variation People Controller
  *
- * @author Rob Caiger <richard.ward@bjss.com>
+ * @author Richard Ward <richard.ward@bjss.com>
  */
 class PeopleController extends AbstractController implements AdapterAwareInterface
 {
