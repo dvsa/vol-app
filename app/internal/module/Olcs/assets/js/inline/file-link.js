@@ -27,6 +27,10 @@ OLCS.ready(function() {
 
       var fileUrl = $(this).data('file-url');
 
+      if(fileUrl.charAt(0) === '/') {
+          fileUrl = window.location.origin + fileUrl;
+      }
+
       var body = template.replace('%s', fileUrl);
       var title = 'Open document';
 
