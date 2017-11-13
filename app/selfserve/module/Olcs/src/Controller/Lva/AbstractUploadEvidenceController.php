@@ -82,22 +82,25 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             $form->remove('financialEvidence');
         }
 
-        $data = $this->getData();
-        $form->get('operatingCentres')->setCount(count($data['operatingCentres']));
-        \Common\Data\Mapper\Lva\UploadEvidence::mapFromResultForm($data, $form);
+        if ($this->shouldShowOperatingCentre()) {
+            $data = $this->getData();
+            $form->get('operatingCentres')->setCount(count($data['operatingCentres']));
+            \Common\Data\Mapper\Lva\UploadEvidence::mapFromResultForm($data, $form);
 
-        for ($i = 0; $i < count($data['operatingCentres']); $i++) {
-            // process files for each operating centre
-            $this->operatingCentreId = $data['operatingCentres'][$i]['operatingCentre']['id'];
-            $this->processFiles(
-                $form,
-                'operatingCentres->'. (string)$i .'->file',
-                [$this, 'operatingCentreProcessFileUpload'],
-                [$this, 'deleteFile'],
-                [$this, 'operatingCentreLoadFileUpload']
-            );
+            for ($i = 0; $i < count($data['operatingCentres']); $i++) {
+                // process files for each operating centre
+                $this->operatingCentreId = $data['operatingCentres'][$i]['operatingCentre']['id'];
+                $this->processFiles(
+                    $form,
+                    'operatingCentres->'. (string)$i .'->file',
+                    [$this, 'operatingCentreProcessFileUpload'],
+                    [$this, 'deleteFile'],
+                    [$this, 'operatingCentreLoadFileUpload']
+                );
+            }
+        } elseif ($form->has('operatingCentres')) {
+            $form->remove('operatingCentres');
         }
-
         return $form;
     }
 
@@ -122,6 +125,8 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      * Process a file upload to an operating centre
      *
      * @param array $file Uploaded file data
+     * 
+     * @return void
      */
     public function operatingCentreProcessFileUpload($file)
     {
@@ -174,6 +179,17 @@ abstract class AbstractUploadEvidenceController extends AbstractController
         $this->data = $response->getResult();
 
         return $this->data;
+    }
+
+    /**
+     * Should the Operating centre section be shown on the form
+     *
+     * @return bool
+     */
+    private function shouldShowOperatingCentre()
+    {
+        $application = $this->getApplicationData($this->getIdentifier());
+        return $application['goodsOrPsv']['id'] == 'lcat_psv' ? false : true;
     }
 
     /**
