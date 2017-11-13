@@ -50,7 +50,6 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
      */
     protected function getNextPageRouteName()
     {
-        # This will need to change to something like 'lva-director_change/licence_history' once that controller exists
         return 'lva-director_change/convictions_penalties';
     }
 
