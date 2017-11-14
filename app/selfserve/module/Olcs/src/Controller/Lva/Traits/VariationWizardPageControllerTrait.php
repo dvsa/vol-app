@@ -2,10 +2,17 @@
 
 namespace Olcs\Controller\Lva\Traits;
 
+use Common\Controller\Plugin\Redirect;
+use Common\Service\Cqrs\Response as CqrsResponse;
+use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Zend\Http\Request;
 use Zend\Http\Response;
 
 /**
  * Trait for use in an AbstractController that forms part of a variation wizard
+ * @method CqrsResponse handleCommand(CommandInterface $query)
+ * @method Request getRequest()
+ * @method Redirect redirect()
  */
 trait VariationWizardPageControllerTrait
 {
@@ -54,12 +61,21 @@ trait VariationWizardPageControllerTrait
         return null;
     }
 
+    public function indexAction()
+    {
+        $formActions = $this->getRequest()->getPost('form-actions');
+        if (is_array($formActions) and array_key_exists('cancel',$formActions)) {
+            return $this->handleCancelRedirect();
+        }
+        return parent::indexAction();
+    }
+
     /**
      * Handle the cancel action and return to start
      *
      * @return Response
      */
-    protected function handleWizardCancel()
+    protected function handleCancelRedirect()
     {
         $route = $this->getStartRoute();
         return $this->redirect()->toRoute(
