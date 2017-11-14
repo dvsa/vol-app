@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Lva\Traits;
 
+use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 use Zend\Http\Response;
 
 /**
@@ -51,6 +52,14 @@ trait VariationWizardPageControllerTrait
         if ($this->fetchDataForLva()['variationType']['id'] !== $this->getVariationType()) {
             return $this->notFoundAction();
         }
+        if (isset($this->previousSections) && !$this->hasCompleted($this->previousSections)) {
+            $route = $this->getStartRoute();
+            return $this->redirect()->toRoute(
+                $route['name'],
+                $route['params']
+            );
+
+        }
         return null;
     }
 
@@ -80,7 +89,33 @@ trait VariationWizardPageControllerTrait
         $dto = ApplicationQry::create(['id' => $id, 'validateAppCompletion' => true]);
         $response = $this->handleQuery($dto);
 
-        return $response->getResult();
+        return $response->getResult()['applicationCompletion'];
+    }
+
+    /**
+     *
+     * @param $sections
+     *
+     * @return bool
+     */
+    public function hasCompleted($previousSections, $sectionsCompleted)
+    {
+        $completed = false;
+
+        if (!empty($previousSections)) {
+            foreach ($previousSections as $keyToCheck) {
+                if (in_array($keyToCheck, array_keys($sectionsCompleted))) {
+                    if ($sectionsCompleted[$keyToCheck] === 2) {
+                        $completed = true;
+                    } else {
+                        $completed = false;
+                    }
+                }
+            }
+
+        }
+
+        return $completed;
     }
 
 
