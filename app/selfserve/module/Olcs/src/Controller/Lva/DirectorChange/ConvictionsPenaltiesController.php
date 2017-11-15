@@ -21,6 +21,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
 
     protected $location = 'external';
     protected $lva = self::LVA_VAR;
+    protected $previousSections = ['peopleStatus', 'financialHistoryStatus'];
 
 
     /**

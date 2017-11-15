@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Lva\Traits;
 
+use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 use Zend\Http\Response;
 
@@ -12,6 +13,7 @@ trait VariationWizardPageControllerTrait
 {
     use ApplicationControllerTrait;
 
+
     /**
      * Get the variation type upon which controllers using this trait can operate
      *
@@ -20,6 +22,7 @@ trait VariationWizardPageControllerTrait
      * @return string
      */
     abstract protected function getVariationType();
+
 
     /**
      * Fetch Data for Lva
@@ -52,13 +55,19 @@ trait VariationWizardPageControllerTrait
         if ($this->fetchDataForLva()['variationType']['id'] !== $this->getVariationType()) {
             return $this->notFoundAction();
         }
-        if (isset($this->previousSections) && !$this->hasCompleted($this->previousSections)) {
-            $route = $this->getStartRoute();
-            return $this->redirect()->toRoute(
-                $route['name'],
-                $route['params']
-            );
 
+        if (isset($this->previousSections)) {
+            $variationId = $this->getApplicationId();
+            $sectionsCompleted = $this->getCurrentVariationStatus($variationId);
+
+            if (!$this->hasCompleted($sectionsCompleted, $this->previousSections)) {
+                $route = $this->getStartRoute();
+                return $this->redirect()->toRoute(
+                    $route['name'],
+                    $route['params']
+                );
+
+            }
         }
         return null;
     }
@@ -80,43 +89,44 @@ trait VariationWizardPageControllerTrait
     /**
      * get the status of the current variation
      *
-     * @param $id
+     * @param int $id the variation id
      *
      * @return mixed
      */
     protected function getCurrentVariationStatus($id)
     {
+        $variationStatus = [];
         $dto = ApplicationQry::create(['id' => $id, 'validateAppCompletion' => true]);
         $response = $this->handleQuery($dto);
-
-        return $response->getResult()['applicationCompletion'];
+        if ($response->getStatusCode() === 200) {
+            $variationStatus = $response->getResult()['applicationCompletion'];
+        }
+        return $variationStatus;
     }
 
     /**
+     * hasCompleted checks if previous sections of the wizard flow have been completed
      *
-     * @param $sections
+     * @param array $sectionsCompleted sections already flagged completed from db
+     * @param array $requiredSections  sections that must be completed
      *
      * @return bool
+     * @internal param $sections
+     *
      */
-    public function hasCompleted($previousSections, $sectionsCompleted)
+    protected function hasCompleted(array $sectionsCompleted, array $requiredSections)
     {
-        $completed = false;
-
-        if (!empty($previousSections)) {
-            foreach ($previousSections as $keyToCheck) {
-                if (in_array($keyToCheck, array_keys($sectionsCompleted))) {
-                    if ($sectionsCompleted[$keyToCheck] === 2) {
-                        $completed = true;
-                    } else {
-                        $completed = false;
-                    }
-                }
-            }
-
+        if (empty($requiredSections)) {
+            return false;
         }
+        $sections = array_filter(
+            $sectionsCompleted,
+            function ($v, $k) use ($requiredSections) {
+                return in_array($k, $requiredSections) && $v === 2;
+            },
+            ARRAY_FILTER_USE_BOTH
+        );
 
-        return $completed;
+        return count($sections) === count($requiredSections);
     }
-
-
 }

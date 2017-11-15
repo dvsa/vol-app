@@ -36,6 +36,4 @@ trait VariationWizardPageWithSubsequentPageControllerTrait
             ['application' => $this->getIdentifier()]
         );
     }
-
-
 }

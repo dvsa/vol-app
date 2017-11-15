@@ -25,7 +25,7 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
     protected $lva = 'variation';
     protected $location = 'external';
     protected $section = 'people';
-    // protected $previousSections = [];
+
     /**
      * Get the variation type upon which controllers using this trait can operate
      *
@@ -76,15 +76,11 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
      */
     public function indexAction()
     {
-
-
         $adapter = $this->geVariationPeopleAdapter();
 
         $adapter->loadPeopleData($this->lva, $this->getIdentifier());
 
         $variationId = $this->getIdentifier();
-
-        $result = $this->getCurrentVariationStatus($variationId);
 
         $peopleResult = $this->handleQuery(People::create(['id' => $variationId]));
 
