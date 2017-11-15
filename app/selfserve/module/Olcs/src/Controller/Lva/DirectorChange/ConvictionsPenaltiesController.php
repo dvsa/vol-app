@@ -69,18 +69,6 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
     }
 
     /**
-     * Overridden method to redirect to start
-     *
-     * @param null $lvaId licence or application id
-     *
-     * @return \Zend\Http\Response
-     */
-    protected function goToOverview($lvaId = null)
-    {
-        return $this->handleWizardCancel();
-    }
-
-    /**
      * Get the form
      *
      * @param array $data   form data

@@ -8,6 +8,7 @@ use Common\Controller\Lva\Traits\AdapterAwareTrait;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Application\People;
 use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;
+use Olcs\Controller\Lva\Traits\VariationWizardPageFormActionsTrait;
 use Olcs\Controller\Lva\Traits\VariationWizardPageWithSubsequentPageControllerTrait;
 use Zend\Http\Request;
 use Zend\Http\Response;
@@ -20,6 +21,7 @@ use Zend\Http\Response;
 class PeopleController extends AbstractController implements AdapterAwareInterface
 {
     use VariationWizardPageWithSubsequentPageControllerTrait;
+    use VariationWizardPageFormActionsTrait;
     use AdapterAwareTrait;
 
     protected $lva = 'variation';
@@ -92,9 +94,9 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
         $form = $this->getServiceLocator()
             ->get('FormServiceManager')
             ->get('lva-licence-addperson')
-            ->getForm(
-                ['canModify' => $adapter->canModify(), 'isPartnership' => $adapter->isPartnership()]
-            );
+            ->getForm();
+
+        $this->alterFormForLva($form);
 
         $existingPersonId = null;
         if ($people) {
