@@ -6,6 +6,7 @@ use Common\Controller\Lva\AbstractController;
 use Common\Controller\Plugin\Redirect;
 use Common\Service\Cqrs\Response as CqrsResponse;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Dvsa\Olcs\Transfer\Command\Variation\DeleteVariation;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\Plugin\Params;
@@ -86,6 +87,7 @@ trait VariationWizardPageControllerTrait
      */
     protected function handleCancelRedirect()
     {
+        $this->handleCommand(DeleteVariation::create(['id' => $this->getIdentifier()]))->getResult();
         $route = $this->getStartRoute();
         return $this->redirect()->toRoute(
             $route['name'],
