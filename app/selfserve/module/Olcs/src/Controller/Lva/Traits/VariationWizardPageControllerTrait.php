@@ -13,6 +13,12 @@ trait VariationWizardPageControllerTrait
 {
     use ApplicationControllerTrait;
 
+    /**
+     * Get the required previous sections
+     *
+     * @return array required previous sections or empty array
+     */
+    abstract protected function getRequiredSections();
 
     /**
      * Get the variation type upon which controllers using this trait can operate
@@ -22,7 +28,6 @@ trait VariationWizardPageControllerTrait
      * @return string
      */
     abstract protected function getVariationType();
-
 
     /**
      * Fetch Data for Lva
@@ -56,18 +61,15 @@ trait VariationWizardPageControllerTrait
             return $this->notFoundAction();
         }
 
-        if (isset($this->previousSections)) {
-            $variationId = $this->getApplicationId();
-            $sectionsCompleted = $this->getCurrentVariationStatus($variationId);
+        $variationId = $this->getApplicationId();
+        $sectionsCompleted = $this->getCurrentVariationStatus($variationId);
 
-            if (!$this->hasCompleted($sectionsCompleted, $this->previousSections)) {
-                $route = $this->getStartRoute();
-                return $this->redirect()->toRoute(
-                    $route['name'],
-                    $route['params']
-                );
-
-            }
+        if ($this->hasCompleted($sectionsCompleted, $this->getRequiredSections())) {
+            $route = $this->getStartRoute();
+            return $this->redirect()->toRoute(
+                $route['name'],
+                $route['params']
+            );
         }
         return null;
     }
@@ -111,13 +113,12 @@ trait VariationWizardPageControllerTrait
      * @param array $requiredSections  sections that must be completed
      *
      * @return bool
-     * @internal param $sections
      *
      */
     protected function hasCompleted(array $sectionsCompleted, array $requiredSections)
     {
         if (empty($requiredSections)) {
-            return false;
+            return true;
         }
         $sections = array_filter(
             $sectionsCompleted,

@@ -21,7 +21,16 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
 
     protected $location = 'external';
     protected $lva = self::LVA_VAR;
-    protected $previousSections = ['peopleStatus', 'financialHistoryStatus'];
+
+    /**
+     * Get the required previous sections
+     *
+     * @return array required previous sections;
+     */
+    protected function getRequiredSections()
+    {
+        return ['peopleStatus', 'financialHistoryStatus'];
+    }
 
 
     /**
@@ -51,7 +60,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      */
     protected function submit()
     {
-        $response = $this->handleCommand(GrantDirectorChange::create(['id'=>$this->getIdentifier()]));
+        $response = $this->handleCommand(GrantDirectorChange::create(['id' => $this->getIdentifier()]));
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }

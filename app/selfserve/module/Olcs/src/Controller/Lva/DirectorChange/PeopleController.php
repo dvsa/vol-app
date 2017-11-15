@@ -27,6 +27,16 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
     protected $section = 'people';
 
     /**
+     * Get the required previous sections
+     *
+     * @return array required previous sections;
+     */
+    protected function getRequiredSections()
+    {
+        return [];
+    }
+
+    /**
      * Get the variation type upon which controllers using this trait can operate
      *
      * @see RefData::VARIATION_TYPE_DIRECTOR_CHANGE for example

@@ -22,7 +22,16 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
 
     protected $location = 'external';
     protected $lva = 'variation';
-    protected $previousSections = ['peopleStatus'];
+
+    /**
+     * Get the required previous sections
+     *
+     * @return array required previous sections or return empty array
+     */
+    protected function getRequiredSections()
+    {
+        return ['peopleStatus'];
+    }
 
     /**
      * Get the variation type upon which this controller can operate
