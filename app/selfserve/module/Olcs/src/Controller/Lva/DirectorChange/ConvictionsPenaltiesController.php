@@ -60,7 +60,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      */
     protected function submit()
     {
-        $response = $this->handleCommand(GrantDirectorChange::create(['id'=>$this->getIdentifier()]));
+        $response = $this->handleCommand(GrantDirectorChange::create(['id' => $this->getIdentifier()]));
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
@@ -116,7 +116,10 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
                 ]
             ]
         );
-        $table->setVariable('empty_message', 'selfserve-app-subSection-previous-history-criminal-conviction-hasConv-hint-director-change');
+        $table->setVariable(
+            'empty_message',
+            'selfserve-app-subSection-previous-history-criminal-conviction-hasConv-hint-director-change'
+        );
         return $table;
     }
 }

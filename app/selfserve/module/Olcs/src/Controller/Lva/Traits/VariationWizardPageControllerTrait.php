@@ -85,7 +85,6 @@ trait VariationWizardPageControllerTrait
             return $this->notFoundAction();
         }
 
-
         $variationId = $this->getApplicationId();
         $sectionsCompleted = $this->getCurrentVariationStatus($variationId);
 
