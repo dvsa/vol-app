@@ -1041,6 +1041,7 @@ return array(
             'LvaLicence/BusinessDetails'            => 'Olcs\Controller\Lva\Licence\BusinessDetailsController',
             'LvaLicence/Addresses'                  => 'Olcs\Controller\Lva\Licence\AddressesController',
             'LvaLicence/People'                     => 'Olcs\Controller\Lva\Licence\PeopleController',
+
             'LvaLicence/OperatingCentres'           => 'Olcs\Controller\Lva\Licence\OperatingCentresController',
             'LvaLicence/TransportManagers'          => Olcs\Controller\Lva\Licence\TransportManagersController::class,
             'LvaLicence/Vehicles'                   => 'Olcs\Controller\Lva\Licence\VehiclesController',
@@ -1072,6 +1073,12 @@ return array(
             'LvaVariation/UploadEvidence'           => \Olcs\Controller\Lva\Variation\UploadEvidenceController::class,
             'LvaVariation/PaymentSubmission'        => 'Olcs\Controller\Lva\Variation\PaymentSubmissionController',
             'LvaVariation/Review'                   => \Common\Controller\Lva\ReviewController::class,
+            'LvaDirectorChange/People'=>
+                \Olcs\Controller\Lva\DirectorChange\PeopleController::class,
+            'LvaDirectorChange/FinancialHistory'    =>
+                Olcs\Controller\Lva\DirectorChange\FinancialHistoryController::class,
+            'LvaDirectorChange/ConvictionsPenalties'=>
+                \Olcs\Controller\Lva\DirectorChange\ConvictionsPenaltiesController::class,
         ),
         'invokables' => array(
             'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,
@@ -1316,6 +1323,8 @@ return array(
             'lva-application-financial_history' => LvaFormService\ApplicationFinancialHistory::class,
             'lva-application-licence_history' => LvaFormService\ApplicationLicenceHistory::class,
             'lva-application-convictions_penalties' => LvaFormService\ApplicationConvictionsPenalties::class,
+            'lva-licence-convictions_penalties' => Olcs\FormService\Form\Lva\ConvictionsPenalties::class,
+
             'lva-application-vehicles_psv' => LvaFormService\ApplicationPsvVehicles::class,
             'lva-application-goods-vehicles' => LvaFormService\ApplicationGoodsVehicles::class,
 

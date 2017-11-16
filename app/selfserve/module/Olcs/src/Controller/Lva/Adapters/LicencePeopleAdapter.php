@@ -5,10 +5,14 @@
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Adapters;
 
-use Zend\Form\Form;
 use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
+use Common\Service\Table\TableBuilder;
+use Dvsa\Olcs\Transfer\Command\AbstractCommand;
+use Dvsa\Olcs\Transfer\Command\Licence\DeletePeopleViaVariation;
+use Zend\Form\Form;
 
 /**
  * External Licence People Adapter
@@ -17,18 +21,68 @@ use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
  */
 class LicencePeopleAdapter extends AbstractPeopleAdapter
 {
+    /**
+     * Alter Form For Organisation
+     *
+     * @param Form         $form  Form
+     * @param TableBuilder $table Table
+     *
+     * @return void
+     */
     public function alterFormForOrganisation(Form $form, $table)
     {
-        return $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table);
+        if ($this->canModify()) {
+            parent::alterFormForOrganisation($form, $table);
+            return;
+        }
+
+        $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table);
     }
 
+    /**
+     * Change the Add/Edit buttons based on organisation
+     *
+     * @param \Zend\Form\Form $form form
+     *
+     * @return mixed
+     */
     public function alterAddOrEditFormForOrganisation(Form $form)
     {
         return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $this->getOrganisationType());
     }
 
+    /**
+     * Determine if form can be modified
+     *
+     * @return bool
+     */
     public function canModify()
     {
-        return false;
+        return !$this->isExceptionalOrganisation();
+    }
+
+    /**
+     * Create the table with added button for adding person
+     *
+     * @return TableBuilder
+     *
+     */
+    public function createTable()
+    {
+        $table = parent::createTable();
+        return parent::amendLicencePeopleListTable($table);
+    }
+
+    /**
+     * Get the backend command to delete a Person
+     *
+     * @param array $params Params
+     *
+     * @return AbstractCommand
+     */
+    protected function getDeleteCommand($params)
+    {
+        $params['id'] = $this->getLicenceId();
+        return DeletePeopleViaVariation::create($params);
     }
 }
