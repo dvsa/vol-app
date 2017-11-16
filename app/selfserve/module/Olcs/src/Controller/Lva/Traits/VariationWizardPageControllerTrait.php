@@ -2,12 +2,21 @@
 
 namespace Olcs\Controller\Lva\Traits;
 
-use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
+use Common\Controller\Plugin\Redirect;
+use Common\Service\Cqrs\Response as CqrsResponse;
+use Dvsa\Olcs\Transfer\Command\CommandInterface;
+use Dvsa\Olcs\Transfer\Command\Variation\DeleteVariation;
+use Zend\Http\Request;
 use Zend\Http\Response;
+use Zend\Mvc\Controller\Plugin\Params;
 
 /**
  * Trait for use in an AbstractController that forms part of a variation wizard
+ * @method CqrsResponse handleCommand(CommandInterface $query)
+ * @method Request getRequest()
+ * @method Redirect redirect()
+ * @method Params params(string $param = null, mixed $default = null)
  */
 trait VariationWizardPageControllerTrait
 {
@@ -48,6 +57,18 @@ trait VariationWizardPageControllerTrait
     abstract protected function getStartRoute();
 
     /**
+     * Check if a button has been pressed
+     *
+     * @see AbstractController::isButtonPressed
+     *
+     * @param string $button button
+     * @param array  $data   data
+     *
+     * @return bool
+     */
+    abstract protected function isButtonPressed($button, $data = []);
+
+    /**
      * Ensure this controller is being called with a suitable variation
      *
      * @return null|mixed
@@ -61,15 +82,19 @@ trait VariationWizardPageControllerTrait
             return $this->notFoundAction();
         }
 
+
         $variationId = $this->getApplicationId();
         $sectionsCompleted = $this->getCurrentVariationStatus($variationId);
 
-        if ($this->hasCompleted($sectionsCompleted, $this->getRequiredSections())) {
+        if ($this->hasCompleted($sectionsCompleted, $this->getRequiredSections()) === false) {
             $route = $this->getStartRoute();
             return $this->redirect()->toRoute(
                 $route['name'],
                 $route['params']
             );
+        }
+        if ($this->isButtonPressed('cancel') && $this->params('action') === 'index') {
+            return $this->handleCancelRedirect();
         }
         return null;
     }
@@ -79,8 +104,9 @@ trait VariationWizardPageControllerTrait
      *
      * @return Response
      */
-    protected function handleWizardCancel()
+    protected function handleCancelRedirect()
     {
+        $this->handleCommand(DeleteVariation::create(['id' => $this->getIdentifier()]))->getResult();
         $route = $this->getStartRoute();
         return $this->redirect()->toRoute(
             $route['name'],

@@ -60,7 +60,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      */
     protected function submit()
     {
-        $response = $this->handleCommand(GrantDirectorChange::create(['id' => $this->getIdentifier()]));
+        $response = $this->handleCommand(GrantDirectorChange::create(['id'=>$this->getIdentifier()]));
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
@@ -76,18 +76,6 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
     {
         $licenceId = $this->getLicenceId($this->getApplicationId());
         return ['name' => 'lva-licence/people', 'params' => ['licence' => $licenceId]];
-    }
-
-    /**
-     * Overridden method to redirect to start
-     *
-     * @param null $lvaId licence or application id
-     *
-     * @return \Zend\Http\Response
-     */
-    protected function goToOverview($lvaId = null)
-    {
-        return $this->handleWizardCancel();
     }
 
     /**
@@ -118,7 +106,6 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
          * @var TableBuilder table
          */
         $table = parent::getConvictionsPenaltiesTable($data);
-
         $table->setSetting(
             'crud',
             [
