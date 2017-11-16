@@ -6,6 +6,7 @@
 
 namespace Admin\Controller;
 
+use Admin\Form\Model\Form\PublishedPublicationFilter;
 use Dvsa\Olcs\Transfer\Query\Publication\PublishedList;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -22,6 +23,7 @@ class PublishedPublicationController extends AbstractInternalController implemen
     protected $inlineScripts = array('indexAction' => ['file-link']);
     protected $listDto = PublishedList::class;
     protected $tableName = 'admin-published-publication';
+    protected $filterForm = PublishedPublicationFilter::class;
 
     /**
      * Get view for menu on left of page
