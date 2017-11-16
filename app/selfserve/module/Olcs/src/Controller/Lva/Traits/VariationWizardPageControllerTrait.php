@@ -81,6 +81,9 @@ trait VariationWizardPageControllerTrait
         if ($this->fetchDataForLva()['variationType']['id'] !== $this->getVariationType()) {
             return $this->notFoundAction();
         }
+        if (!$this->checkAppStatus($this->getApplicationId())) {
+            return $this->notFoundAction();
+        }
 
 
         $variationId = $this->getApplicationId();
