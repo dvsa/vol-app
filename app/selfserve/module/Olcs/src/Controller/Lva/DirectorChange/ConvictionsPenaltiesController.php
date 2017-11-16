@@ -22,6 +22,16 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
     protected $location = 'external';
     protected $lva = self::LVA_VAR;
 
+    /**
+     * Get the required previous sections
+     *
+     * @return array required previous sections;
+     */
+    protected function getRequiredSections()
+    {
+        return ['peopleStatus', 'financialHistoryStatus'];
+    }
+
 
     /**
      * Return the route the wizard lives under
@@ -106,6 +116,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
                 ]
             ]
         );
+        $table->setVariable('empty_message', 'selfserve-app-subSection-previous-history-criminal-conviction-hasConv-hint-director-change');
         return $table;
     }
 }
