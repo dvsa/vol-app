@@ -81,7 +81,9 @@ trait VariationWizardPageControllerTrait
         if ($this->fetchDataForLva()['variationType']['id'] !== $this->getVariationType()) {
             return $this->notFoundAction();
         }
-
+        if (!$this->checkAppStatus($this->getApplicationId())) {
+            return $this->notFoundAction();
+        }
 
         $variationId = $this->getApplicationId();
         $sectionsCompleted = $this->getCurrentVariationStatus($variationId);
@@ -107,6 +109,16 @@ trait VariationWizardPageControllerTrait
     protected function handleCancelRedirect()
     {
         $this->handleCommand(DeleteVariation::create(['id' => $this->getIdentifier()]))->getResult();
+        return $this->redirectToStartRoute();
+    }
+
+    /**
+     * Redirect to the route that started this wizard
+     *
+     * @return Response
+     */
+    protected function redirectToStartRoute()
+    {
         $route = $this->getStartRoute();
         return $this->redirect()->toRoute(
             $route['name'],
