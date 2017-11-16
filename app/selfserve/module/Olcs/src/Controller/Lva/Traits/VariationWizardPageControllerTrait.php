@@ -107,6 +107,16 @@ trait VariationWizardPageControllerTrait
     protected function handleCancelRedirect()
     {
         $this->handleCommand(DeleteVariation::create(['id' => $this->getIdentifier()]))->getResult();
+        return $this->redirectToStartRoute();
+    }
+
+    /**
+     * Redirect to the route that started this wizard
+     *
+     * @return Response
+     */
+    protected function redirectToStartRoute()
+    {
         $route = $this->getStartRoute();
         return $this->redirect()->toRoute(
             $route['name'],

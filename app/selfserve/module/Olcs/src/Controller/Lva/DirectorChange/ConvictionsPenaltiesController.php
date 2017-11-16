@@ -64,7 +64,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
         if ($response->isClientError() || $response->isServerError()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
-        return $this->goToOverview();
+        return $this->redirectToStartRoute();
     }
 
     /**

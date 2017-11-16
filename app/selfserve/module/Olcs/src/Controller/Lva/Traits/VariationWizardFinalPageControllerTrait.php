@@ -20,13 +20,14 @@ trait VariationWizardFinalPageControllerTrait
     abstract protected function submit();
 
     /**
-     * go to the next section in the wizard
+     * Finish the wizard
      *
-     * @param string $currentSection current section
+     * @param string $section section
+     * @param array  $prg     prg
      *
      * @return Response
      */
-    protected function goToNextSection($currentSection)
+    protected function completeSection($section, $prg = [])
     {
         return $this->submit();
     }
