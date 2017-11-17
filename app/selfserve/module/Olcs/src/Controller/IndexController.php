@@ -20,6 +20,9 @@ class IndexController extends AbstractController
         if ($identity === null || $identity->isAnonymous()) {
             return $this->redirect()->toRoute('auth/login');
         }
+        if ($identity->isNotIdentified()) {
+            throw new \Exception('Unable to retrieve identity');
+        }
 
         // redir to the dashboard
         if ($this->isGranted(RefData::PERMISSION_SELFSERVE_DASHBOARD)) {
