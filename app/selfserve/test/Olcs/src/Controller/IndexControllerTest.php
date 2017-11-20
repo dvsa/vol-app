@@ -53,6 +53,20 @@ class IndexControllerTest extends MockeryTestCase
         static::assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
+    public function testIndexLoginNotIdentified()
+    {
+        $mockIdentity = new User();
+        $mockIdentity->setUserType(User::USER_TYPE_NOT_IDENTIFIED);
+
+        $this->sut->shouldReceive('currentUser->getIdentity')
+            ->once()
+            ->andReturn($mockIdentity);
+
+        $this->expectException(\Exception::class);
+
+        static::assertEquals('REDIRECT', $this->sut->indexAction());
+    }
+
     public function testIndexDashboard()
     {
         $mockIdentity = new User();
