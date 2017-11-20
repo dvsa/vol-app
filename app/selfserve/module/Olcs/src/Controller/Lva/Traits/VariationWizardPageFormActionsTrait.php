@@ -39,6 +39,6 @@ trait VariationWizardPageFormActionsTrait
         $formActions->get('saveAndContinue')->setLabel($this->getSubmitActionText());
         $cancelButton = $formActions->get('cancel');
         $currentCancelButtonClass = $cancelButton->getAttribute("class");
-        $cancelButton->setAttribute("class", $currentCancelButtonClass." action--cancel");
+        $cancelButton->setAttribute("class", $currentCancelButtonClass." button--block");
     }
 }
