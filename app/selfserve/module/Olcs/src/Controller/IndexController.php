@@ -13,6 +13,12 @@ use Common\RefData;
  */
 class IndexController extends AbstractController
 {
+
+    /**
+     * Index action
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
         // redirect to the login
