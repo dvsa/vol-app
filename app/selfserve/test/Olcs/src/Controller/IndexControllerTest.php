@@ -64,7 +64,7 @@ class IndexControllerTest extends MockeryTestCase
 
         $this->expectException(\Exception::class);
 
-        static::assertEquals('REDIRECT', $this->sut->indexAction());
+        $this->sut->indexAction();
     }
 
     public function testIndexDashboard()
