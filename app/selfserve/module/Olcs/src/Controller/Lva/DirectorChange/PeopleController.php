@@ -88,7 +88,7 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
      */
     public function indexAction()
     {
-        $adapter = $this->geVariationPeopleAdapter();
+        $adapter = $this->getVariationPeopleAdapter();
 
         $adapter->loadPeopleData($this->lva, $this->getIdentifier());
 
@@ -109,6 +109,7 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
         $this->alterFormForLva($form);
 
         $existingPersonId = null;
+
         if ($people) {
             $personData = $people[0]['person'];
             $form->populateValues(['data' => $personData]);
@@ -143,11 +144,11 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
     }
 
     /**
-     * Get LicencePeopleAdapter
+     * Get VariationPeopleAdapter
      *
      * @return VariationPeopleAdapter
      */
-    private function geVariationPeopleAdapter()
+    private function getVariationPeopleAdapter()
     {
         /** @var VariationPeopleAdapter $adapter */
         $adapter = $this->getAdapter();

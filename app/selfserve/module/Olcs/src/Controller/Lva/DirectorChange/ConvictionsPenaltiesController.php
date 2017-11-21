@@ -3,12 +3,14 @@
 
 namespace Olcs\Controller\Lva\DirectorChange;
 
+use Common\Controller\Lva\AbstractController;
 use Common\Controller\Lva\AbstractConvictionsPenaltiesController;
 use Common\RefData;
 use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\Variation\GrantDirectorChange;
 use Olcs\Controller\Lva\Traits\VariationWizardFinalPageControllerTrait;
 use Zend\Http\Response;
+use Zend\Mvc\Controller\Plugin\FlashMessenger;
 
 /**
  * Class ConvictionsPenaltiesController
@@ -61,9 +63,25 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
     protected function submit()
     {
         $response = $this->handleCommand(GrantDirectorChange::create(['id' => $this->getIdentifier()]));
-        if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+
+        $responseContent = json_decode($response->getBody());
+        $createdPersonIDs = $responseContent->id->createdPerson;
+
+        if (!is_array($createdPersonIDs)) {
+            $createdPersonIDs = [$createdPersonIDs];
         }
+
+        /** @var FlashMessenger $flashMessenger */
+        $flashMessenger = $this->plugin('FlashMessenger');
+
+        if ($response->isClientError() || $response->isServerError()) {
+            $flashMessenger->addErrorMessage('unknown-error');
+        }
+
+        foreach ($createdPersonIDs as $createdPersonID) {
+            $flashMessenger->addMessage($createdPersonID, AbstractController::FLASH_MESSENGER_CREATED_PERSON_NAMESPACE);
+        }
+
         return $this->redirectToStartRoute();
     }
 

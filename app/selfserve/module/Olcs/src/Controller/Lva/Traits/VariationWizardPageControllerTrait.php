@@ -120,6 +120,7 @@ trait VariationWizardPageControllerTrait
     protected function redirectToStartRoute()
     {
         $route = $this->getStartRoute();
+
         return $this->redirect()->toRoute(
             $route['name'],
             $route['params']
