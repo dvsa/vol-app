@@ -13,12 +13,21 @@ use Common\RefData;
  */
 class IndexController extends AbstractController
 {
+
+    /**
+     * Index action
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
         // redirect to the login
         $identity = $this->currentUser()->getIdentity();
         if ($identity === null || $identity->isAnonymous()) {
             return $this->redirect()->toRoute('auth/login');
+        }
+        if ($identity->isNotIdentified()) {
+            throw new \Exception('Unable to retrieve identity');
         }
 
         // redir to the dashboard
