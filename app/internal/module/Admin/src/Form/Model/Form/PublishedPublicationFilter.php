@@ -13,6 +13,27 @@ use Zend\Form\Annotation as Form;
 class PublishedPublicationFilter
 {
     /**
+     * @Form\Type("Select")
+     * @Form\Required(false)
+     * @Form\Options({
+     *      "label": "Publication type",
+     *      "empty_option": "All",
+     *      "value_options": {
+     *          "A&D":"Applications and Decisions",
+     *          "N&P":"Notices and Proceedings"
+     *      }
+     * })
+     * @Form\Validator({
+     *     "name": "InArray",
+     *     "required": true,
+     *     "options": {
+     *         "haystack": {"A&D", "N&P"}
+     *     }
+     * })
+     */
+    public $pubType;
+
+    /**
      * @Form\Attributes({"type":"submit","class":"action--primary"})
      * @Form\Options({"label": "filter-button"})
      * @Form\Type("\Zend\Form\Element\Button")
