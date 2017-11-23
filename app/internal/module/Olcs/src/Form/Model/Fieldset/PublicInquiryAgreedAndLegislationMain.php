@@ -50,6 +50,19 @@ class PublicInquiryAgreedAndLegislationMain
     public $agreedByTcRole = null;
 
     /**
+     * @Form\Attributes({"id":"assignedTo","placeholder":"","class":"medium"})
+     * @Form\Options({
+     *     "label": "Assigned caseworker",
+     *     "disable_inarray_validator": false,
+     *     "empty_option": "Please Select",
+     *     "service_name": "Olcs\Service\Data\UserListInternal",
+     *     "use_groups": false
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $assignedTo = null;
+
+    /**
      * @Form\Attributes({"id":"","placeholder":"", "class":"chosen-select-medium", "multiple":true})
      * @Form\Options({
      *     "label": "Type of PI",
