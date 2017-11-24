@@ -769,7 +769,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "698e67d7f01621716b4b3f79c81e7dba42744638"
+                "reference": "77c82f6ab42d378a5fc4f950dba333c2b8a6596d"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -818,7 +818,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2017-11-22 09:54:11"
+            "time": "2017-11-23 14:21:54"
         },
         {
             "name": "olcs/olcs-auth",
@@ -826,7 +826,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "5bca61e5e428e5e0fe5eb5f2c44b9ff8b983455a"
+                "reference": "0745fe4d6e3a1f86be35d403fcbc597d6f0b58bb"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -866,7 +866,7 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2017-11-22 09:26:59"
+            "time": "2017-11-23 14:11:41"
         },
         {
             "name": "olcs/olcs-logging",
@@ -874,7 +874,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git",
-                "reference": "9f0a1f8ee2c1c5e1d60144184231cf0ec3a988df"
+                "reference": "34776a0bd9fce8668e2585f790fdd2265ef4af13"
             },
             "require": {
                 "php": ">=5.4",
@@ -918,7 +918,7 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2017-11-22 09:25:08"
+            "time": "2017-11-23 14:10:46"
         },
         {
             "name": "olcs/olcs-transfer",
@@ -926,7 +926,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
-                "reference": "c48cfb27c70246bd298fb594caabf064d758c018"
+                "reference": "c6c18e9c519d62389b2d8245d5ffbda913cc6fc8"
             },
             "require": {
                 "php": ">=5.4",
@@ -964,7 +964,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2017-11-22 09:28:56"
+            "time": "2017-11-23 14:12:35"
         },
         {
             "name": "olcs/olcs-utils",
@@ -972,7 +972,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-utils.git",
-                "reference": "5d3d0c81987660ffcb7498d96a9e0c69da95490a"
+                "reference": "b3795a2af947fd636f8764d8177ced8352009fc6"
             },
             "require": {
                 "php": ">=5.4",
@@ -1010,7 +1010,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2017-11-22 09:30:27"
+            "time": "2017-11-23 14:13:12"
         },
         {
             "name": "psr/log",
@@ -1831,7 +1831,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-testhelpers.git",
-                "reference": "537d482b3b2ba23aaa03dce45f0687a79728d214"
+                "reference": "9c41c1994219c5a60318b99d51da2e19f37a5f08"
             },
             "require": {
                 "php": ">=5.4"
@@ -1848,7 +1848,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2017-11-08 16:41:02"
+            "time": "2017-11-22 23:19:00"
         },
         {
             "name": "pdepend/pdepend",
