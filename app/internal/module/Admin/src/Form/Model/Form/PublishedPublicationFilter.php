@@ -23,13 +23,6 @@ class PublishedPublicationFilter
      *          "N&P":"Notices and Proceedings"
      *      }
      * })
-     * @Form\Validator({
-     *     "name": "InArray",
-     *     "required": true,
-     *     "options": {
-     *         "haystack": {"A&D", "N&P"}
-     *     }
-     * })
      */
     public $pubType;
 

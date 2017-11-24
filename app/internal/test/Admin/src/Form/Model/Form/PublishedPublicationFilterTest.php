@@ -26,11 +26,6 @@ class PublishedPublicationFilterTest extends AbstractFormValidationTestCase
         $this->assertFormElementValid(['pubType'], '');
     }
 
-    public function testPubTypeDisallowed()
-    {
-        $this->assertFormElementNotValid(['pubType'], 'Something Else', 'notInArray');
-    }
-
     public function testFilterButton()
     {
         $this->assertFormElementActionButton(['filter']);
