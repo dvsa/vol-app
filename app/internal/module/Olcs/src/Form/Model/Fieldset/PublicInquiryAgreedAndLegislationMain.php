@@ -50,7 +50,8 @@ class PublicInquiryAgreedAndLegislationMain
     public $agreedByTcRole = null;
 
     /**
-     * @Form\Attributes({"id":"assignedTo","placeholder":"","class":"medium"})
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"assignedCaseworker","class":"medium"})
      * @Form\Options({
      *     "label": "Assigned caseworker",
      *     "disable_inarray_validator": false,
@@ -60,7 +61,7 @@ class PublicInquiryAgreedAndLegislationMain
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $assignedTo = null;
+    public $assignedCaseworker = null;
 
     /**
      * @Form\Required(true)
