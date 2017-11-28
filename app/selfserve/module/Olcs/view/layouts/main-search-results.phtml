@@ -1,6 +1,11 @@
 <?php
-$count = $this->results->getTotal();
-$results = $this->results;
+$count = 0;
+if(isset($results))
+{
+    $count = $this->results->getTotal();
+    $results = $this->results;
+}
+
 
 /** @var \Common\Service\Helper\TranslationHelperService $translationHlp */
 $translationHlp = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');

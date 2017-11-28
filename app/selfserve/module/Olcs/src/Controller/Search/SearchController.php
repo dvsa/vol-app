@@ -3,9 +3,11 @@
 /**
  * Search Controller
  */
+
 namespace Olcs\Controller\Search;
 
 use Common\Controller\Lva\AbstractController;
+use Common\Exception\SearchDateRangeParseException;
 use Zend\View\Model\ViewModel;
 use Olcs\Form\Model\Form\SearchOperator;
 use Olcs\Form\Model\Form\SimpleSearch;
@@ -121,11 +123,11 @@ class SearchController extends AbstractController
             $incomingParameters += $routeParams;
         }
 
-        if ($queryParams = (array) $this->params()->fromQuery()) {
+        if ($queryParams = (array)$this->params()->fromQuery()) {
             $incomingParameters = array_merge($incomingParameters, $queryParams);
         }
 
-        if ($postParams = (array) $this->params()->fromPost()) {
+        if ($postParams = (array)$this->params()->fromPost()) {
             $incomingParameters = array_merge($incomingParameters, $postParams);
         }
 
@@ -137,7 +139,6 @@ class SearchController extends AbstractController
 
         // if "search" is an array within text on the filter form ... throws undefined index error otherwise
         if (isset($incomingParameters['text']) && isset($incomingParameters['text']['search'])) {
-
             $search = $incomingParameters['text']['search'];
         }
 
@@ -207,19 +208,40 @@ class SearchController extends AbstractController
                 'backRoute' => $this->getBackRoute($indexPrm)
             ]
         );
+
         $view->setTemplate('layouts/main-search-results.phtml');
-
-        $view->results = $this->getSearchService()->fetchResultsTable();
-
-        if ($view->results->getTotal() === 0) {
-            $view->noResultsMessage = 'search-no-results';
-        }
 
         $this->getServiceLocator()->get('Script')->loadFile('search-results');
 
-        $this->placeholder()->setPlaceholder('pageTitle', 'page.title.search-'.$indexPrm.'.index');
+        $this->placeholder()->setPlaceholder('pageTitle', 'page.title.search-' . $indexPrm . '.index');
         $this->placeholder()->setPlaceholder('usePageTitleAsHeader', true);
 
+
+        try {
+            $formData = $request->getQuery()->toArray();
+            foreach ($form->getInputFilter()->get('filter')->getInputs() as $input) {
+                /* @var $input \Zend\InputFilter\Input */
+                $input->setRequired(false);
+            }
+            // make all elements not required
+            foreach ($form->getInputFilter()->get('dateRanges')->getInputs() as $input) {
+                /* @var $input \Zend\InputFilter\Input */
+                $input->setAllowEmpty(true);
+            }
+
+            if (!empty($formData)) {
+                $form->setData($formData);
+                if ($form->isValid()) {
+                    $view->results = $this->getSearchService()->fetchResultsTable();
+
+                    if ($view->results->getTotal() === 0) {
+                        $view->noResultsMessage = 'search-no-results';
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            $view->noResultsMessage = 'Invalid search criteria ';
+        }
         return $view;
     }
 
@@ -341,6 +363,7 @@ class SearchController extends AbstractController
             // date ranges
             $fs = $this->getServiceLocator()->get('FormElementManager')
                 ->get(SearchDateRangeFieldset::class, ['index' => $index, 'name' => 'dateRanges']);
+
             $form->add($fs);
 
             // order

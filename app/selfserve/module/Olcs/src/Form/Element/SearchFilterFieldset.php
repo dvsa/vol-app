@@ -35,7 +35,8 @@ class SearchFilterFieldset extends Fieldset
             $select->setName($filterClass->getKey());
             $select->setLabel($filterClass->getTitle());
             $select->setEmptyOption('All');
-
+            $select->setUnselectedValue('All');
+            $select->setDisableInArrayValidator(true);
             $this->add($select);
         }
     }

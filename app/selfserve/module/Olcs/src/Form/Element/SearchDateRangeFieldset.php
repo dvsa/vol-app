@@ -8,9 +8,8 @@
 
 namespace Olcs\Form\Element;
 
+use Common\Form\Elements\Custom\DateSelect;
 use Zend\Form\Fieldset;
-use Zend\Form\Element\DateSelect;
-use Common\Service\Data\Search\Search as SearchService;
 use Common\Service\Data\Search\SearchAwareTrait as SearchAwareTrait;
 
 /**
@@ -29,13 +28,10 @@ class SearchDateRangeFieldset extends Fieldset
 
         /** @var \Common\Data\Object\Search\Aggregations\DateRange\DateRangeAbstract $class */
         foreach ($this->getSearchService()->getDateRanges() as $class) {
-
-            /** @var \Zend\Form\Element\DateSelect $select */
-            $date = new DateSelect;
+            $date = new DateSelect();
             $date->setName($class->getKey());
             $date->setLabel($class->getTitle());
             $date->setShouldCreateEmptyOption(true);
-
             $this->add($date);
         }
     }
