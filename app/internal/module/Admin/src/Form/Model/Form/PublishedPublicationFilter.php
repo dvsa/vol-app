@@ -36,6 +36,16 @@ class PublishedPublicationFilter
     public $pubDate;
 
     /**
+     * @Form\Options({
+     *     "label": "Traffic area",
+     *     "service_name": "Common\Service\Data\TrafficArea",
+     *     "empty_option": "All",
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $trafficArea;
+
+    /**
      * @Form\Attributes({"type":"submit","class":"action--primary"})
      * @Form\Options({"label": "filter-button"})
      * @Form\Type("\Zend\Form\Element\Button")

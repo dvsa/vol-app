@@ -31,6 +31,11 @@ class PublishedPublicationFilterTest extends AbstractFormValidationTestCase
         $this->assertFormElementMonthSelect(['pubDate']);
     }
 
+    public function testTrafficArea()
+    {
+        $this->assertFormElementDynamicSelect(['trafficArea'], false);
+    }
+
     public function testFilterButton()
     {
         $this->assertFormElementActionButton(['filter']);
