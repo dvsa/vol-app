@@ -22,6 +22,11 @@ class SearchFilterFieldset extends Fieldset
 {
     use SearchAwareTrait;
 
+    /**
+     * initialise the fieldset
+     *
+     * @return void
+     */
     public function init()
     {
         $index = $this->getOption('index');
@@ -35,8 +40,6 @@ class SearchFilterFieldset extends Fieldset
             $select->setName($filterClass->getKey());
             $select->setLabel($filterClass->getTitle());
             $select->setEmptyOption('All');
-            $select->setUnselectedValue('All');
-            $select->setDisableInArrayValidator(true);
             $this->add($select);
         }
     }

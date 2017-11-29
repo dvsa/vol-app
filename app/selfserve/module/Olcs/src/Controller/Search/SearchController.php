@@ -215,20 +215,13 @@ class SearchController extends AbstractController
 
         $this->placeholder()->setPlaceholder('pageTitle', 'page.title.search-' . $indexPrm . '.index');
         $this->placeholder()->setPlaceholder('usePageTitleAsHeader', true);
-
-
         try {
             $formData = $request->getQuery()->toArray();
+            /** Set all filter elements not required */
             foreach ($form->getInputFilter()->get('filter')->getInputs() as $input) {
                 /* @var $input \Zend\InputFilter\Input */
                 $input->setRequired(false);
             }
-            // make all elements not required
-            foreach ($form->getInputFilter()->get('dateRanges')->getInputs() as $input) {
-                /* @var $input \Zend\InputFilter\Input */
-                $input->setAllowEmpty(true);
-            }
-
             if (!empty($formData)) {
                 $form->setData($formData);
                 if ($form->isValid()) {

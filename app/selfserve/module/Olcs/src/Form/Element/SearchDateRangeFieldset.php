@@ -21,11 +21,15 @@ class SearchDateRangeFieldset extends Fieldset
 {
     use SearchAwareTrait;
 
+    /**
+     * initial function fired when fieldset called
+     *
+     * @return void
+     */
     public function init()
     {
         $index = $this->getOption('index');
         $this->getSearchService()->setIndex($index);
-
         /** @var \Common\Data\Object\Search\Aggregations\DateRange\DateRangeAbstract $class */
         foreach ($this->getSearchService()->getDateRanges() as $class) {
             $date = new DateSelect();
