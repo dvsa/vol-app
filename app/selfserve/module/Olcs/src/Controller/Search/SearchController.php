@@ -7,18 +7,17 @@
 namespace Olcs\Controller\Search;
 
 use Common\Controller\Lva\AbstractController;
-use Common\Exception\SearchDateRangeParseException;
-use Zend\View\Model\ViewModel;
+use Common\Controller\Traits\ViewHelperManagerAware;
+use Common\Service\Data\Search\Search;
+use Common\Service\Data\Search\SearchType;
+use Olcs\Form\Element\SearchDateRangeFieldset;
+use Olcs\Form\Element\SearchFilterFieldset;
+use Olcs\Form\Element\SearchOrderFieldset;
+use Olcs\Form\Model\Form\SearchFilter as SearchFilterForm;
 use Olcs\Form\Model\Form\SearchOperator;
 use Olcs\Form\Model\Form\SimpleSearch;
-use Common\Controller\Traits\ViewHelperManagerAware;
-use Common\Service\Data\Search\SearchType;
-use Common\Service\Data\Search\Search;
-use Olcs\Form\Model\Form\SearchFilter as SearchFilterForm;
-use Olcs\Form\Element\SearchFilterFieldset;
-use Olcs\Form\Element\SearchDateRangeFieldset;
-use Olcs\Form\Element\SearchOrderFieldset;
 use Zend\Session\Container;
+use Zend\View\Model\ViewModel;
 
 /**
  * Search Controller
