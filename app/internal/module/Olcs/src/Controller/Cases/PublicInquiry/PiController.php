@@ -125,7 +125,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
     public function indexAction()
     {
         $pi = $this->getPi();
-
+        $this->getServiceLocator()->get('Script')->loadFile('pi-form');
         //if we don't have a Pi, display the add Pi page
         if (!isset($pi['id'])) {
             return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);

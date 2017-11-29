@@ -50,6 +50,54 @@ class PublicInquiryAgreedAndLegislationMain
     public $agreedByTcRole = null;
 
     /**
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"assignedCaseworker","class":"medium"})
+     * @Form\Options({
+     *     "label": "Assigned caseworker",
+     *     "disable_inarray_validator": false,
+     *     "empty_option": "Please Select",
+     *     "service_name": "Olcs\Service\Data\UserListInternal",
+     *     "use_groups": false
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $assignedCaseworker = null;
+
+    /**
+     * @Form\Required(true)
+     * @Form\Type("Select")
+     * @Form\Options({
+     *      "label": "Is this related to an ECMS case?",
+     *      "value_options":{
+     *          "N":"No",
+     *          "Y":"Yes"
+     *      }
+     * })
+     * @Form\Attributes({
+     *     "id" : "someClass",
+     *     "value":"N",
+     *     "class":"medium"
+     * })
+     */
+    public $isEcmsCase = null;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Options({
+     *     "label": "Date ECMS case first received by OTC",
+     *     "create_empty_option": false,
+     *     "render_delimiters": "d m y",
+     *     "fieldsetClass": "pi_ecms_first_received_date"
+     * })
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
+     */
+    public $ecmsFirstReceivedDate = null;
+
+    /**
      * @Form\Attributes({"id":"","placeholder":"", "class":"chosen-select-medium", "multiple":true})
      * @Form\Options({
      *     "label": "Type of PI",
