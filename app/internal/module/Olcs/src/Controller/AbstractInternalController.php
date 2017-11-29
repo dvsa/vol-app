@@ -106,7 +106,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * all these variables are required
      * itemDto (see above) is also required.
      *
-     * @var string $formClass This now represents the add or edit form, that is unless there's an $addFormClass
+     * @var string                 $formClass This now represents the add or edit form, that is unless there's an $addFormClass
      * @var string|MapperInterface $mapperClass
      */
     protected $formClass = '';
@@ -131,6 +131,7 @@ abstract class AbstractInternalController extends AbstractActionController
      * Variables for controlling edit view rendering
      * all these variables are required
      * itemDto (see above) is also required.
+     *
      * @var string|CommandInterface
      */
     protected $createCommand;
@@ -244,6 +245,7 @@ abstract class AbstractInternalController extends AbstractActionController
 
     /**
      * Caches the list data result
+     *
      * @var array
      */
     protected $listData;
@@ -268,11 +270,12 @@ abstract class AbstractInternalController extends AbstractActionController
 
         return $commentBox;
     }
+
     /**
-       * Index Action
-       *
-       * @return HttpResponse| ViewModel
-       */
+     * Index Action
+     *
+     * @return HttpResponse| ViewModel
+     */
     public function indexAction()
     {
         if (null !== $this->commentItemDto) {
@@ -327,6 +330,7 @@ abstract class AbstractInternalController extends AbstractActionController
             $this->addContentTitle
         );
     }
+
     /**
      * edit's an entity
      *
@@ -419,14 +423,14 @@ abstract class AbstractInternalController extends AbstractActionController
         Logger::debug(__METHOD__);
 
         $paramProvider->setParams($this->plugin('params'));
-        $provideParameters = $paramProvider->provideParameters();
-        $response = $this->handleQuery($listDto::create($this->modifyListQueryParameters($provideParameters)));
+        $providedParameters = $this->modifyListQueryParameters($paramProvider->provideParameters());
+        $response = $this->handleQuery($listDto::create($providedParameters));
 
         if ($response->isOk()) {
             $data = $response->getResult();
             $this->listData = $data;
 
-            $table = $this->table()->buildTable($tableName, $data, $this->modifyListQueryParameters($provideParameters));
+            $table = $this->table()->buildTable($tableName, $data, $providedParameters);
 
             $table = $this->alterTable($table, $data);
 
@@ -454,6 +458,7 @@ abstract class AbstractInternalController extends AbstractActionController
 
         return $this->viewBuilder()->buildViewFromTemplate($tableViewTemplate);
     }
+
     /**
      * desc
      *
@@ -815,7 +820,7 @@ abstract class AbstractInternalController extends AbstractActionController
         }
 
         if (!isset($this->redirectConfig[$action])) {
-            return[];
+            return [];
         }
 
         $params = [];
@@ -931,6 +936,7 @@ abstract class AbstractInternalController extends AbstractActionController
 
         $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'attachScripts'), -100);
     }
+
     /**
      * attach Scripts
      *

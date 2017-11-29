@@ -7,7 +7,8 @@
 namespace Admin\Controller;
 
 use Admin\Form\Model\Form\PublishedPublicationFilter;
-use DateTime;
+use DateInterval;
+use DateTimeImmutable;
 use Dvsa\Olcs\Transfer\Query\Publication\PublishedList;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -48,19 +49,27 @@ class PublishedPublicationController extends AbstractInternalController implemen
     {
         $parameters = parent::modifyListQueryParameters($parameters);
 
-        $now = new DateTime();
-        $parameters['pubDateMonth'] = $now->format('m');
-        $parameters['pubDateYear'] = $now->format('m');
+        $now = new DateTimeImmutable('today');
+        $pubDateMonth = $now->format('m');
+        $pubDateYear = $now->format('Y');
 
         if (array_key_exists('pubDate', $parameters)) {
             $pubDate = $parameters['pubDate'];
             if (array_key_exists('month', $pubDate)) {
-                $parameters['pubDateMonth'] = $pubDate['month'];
+                $pubDateMonth = intVal($pubDate['month']);
             }
             if (array_key_exists('year', $pubDate)) {
-                $parameters['pubDateYear'] = $pubDate['year'];
+                $pubDateYear = intVal($pubDate['year']);
             }
         }
+
+        $monthStart = $now
+            ->setDate($pubDateYear, $pubDateMonth, 1)
+            ->setTime(0, 0, 0);
+
+        $parameters['pubDateFrom'] = $monthStart->format('Y-m-d H:i:s');
+
+        $parameters['pubDateTo'] = $monthStart->add(new DateInterval('P1M'))->format('Y-m-d H:i:s');
 
         unset($parameters['pubDate']);
 
