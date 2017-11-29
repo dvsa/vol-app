@@ -1070,7 +1070,9 @@ abstract class AbstractInternalController extends AbstractActionController
     /**
      * Override this to make any required changes to parameters prior to creation of $listDto
      *
-     * @param $parameters
+     * @param array $parameters parameters
+     *
+     * @return array
      */
     protected function modifyListQueryParameters($parameters)
     {

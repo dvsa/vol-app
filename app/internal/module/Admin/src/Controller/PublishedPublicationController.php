@@ -45,6 +45,13 @@ class PublishedPublicationController extends AbstractInternalController implemen
         return $view;
     }
 
+    /**
+     * Convert from form values to query values
+     *
+     * @param array $parameters parameters
+     *
+     * @return array
+     */
     protected function modifyListQueryParameters($parameters)
     {
         $parameters = parent::modifyListQueryParameters($parameters);
