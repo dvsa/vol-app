@@ -26,6 +26,11 @@ class PublishedPublicationFilterTest extends AbstractFormValidationTestCase
         $this->assertFormElementValid(['pubType'], '');
     }
 
+    public function testPublicationDate()
+    {
+        $this->assertFormElementMonthSelect(['pubDate']);
+    }
+
     public function testFilterButton()
     {
         $this->assertFormElementActionButton(['filter']);

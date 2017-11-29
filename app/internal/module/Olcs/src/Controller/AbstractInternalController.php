@@ -268,7 +268,7 @@ abstract class AbstractInternalController extends AbstractActionController
 
         return $commentBox;
     }
-       /**
+    /**
        * Index Action
        *
        * @return HttpResponse| ViewModel
@@ -419,14 +419,14 @@ abstract class AbstractInternalController extends AbstractActionController
         Logger::debug(__METHOD__);
 
         $paramProvider->setParams($this->plugin('params'));
-        $listParams = $paramProvider->provideParameters();
-        $response = $this->handleQuery($listDto::create($listParams));
+        $provideParameters = $paramProvider->provideParameters();
+        $response = $this->handleQuery($listDto::create($this->modifyListQueryParameters($provideParameters)));
 
         if ($response->isOk()) {
             $data = $response->getResult();
             $this->listData = $data;
 
-            $table = $this->table()->buildTable($tableName, $data, $listParams);
+            $table = $this->table()->buildTable($tableName, $data, $this->modifyListQueryParameters($provideParameters));
 
             $table = $this->alterTable($table, $data);
 
@@ -1059,6 +1059,16 @@ abstract class AbstractInternalController extends AbstractActionController
     protected function alterTable($table, $data)
     {
         return $table;
+    }
+
+    /**
+     * Override this to make any required changes to parameters prior to creation of $listDto
+     *
+     * @param $parameters
+     */
+    protected function modifyListQueryParameters($parameters)
+    {
+        return $parameters;
     }
 
     /**

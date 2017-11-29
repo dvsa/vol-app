@@ -7,6 +7,7 @@
 namespace Admin\Controller;
 
 use Admin\Form\Model\Form\PublishedPublicationFilter;
+use DateTime;
 use Dvsa\Olcs\Transfer\Query\Publication\PublishedList;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -41,5 +42,28 @@ class PublishedPublicationController extends AbstractInternalController implemen
         $view->setTemplate('admin/sections/admin/partials/generic-left');
 
         return $view;
+    }
+
+    protected function modifyListQueryParameters($parameters)
+    {
+        $parameters = parent::modifyListQueryParameters($parameters);
+
+        $now = new DateTime();
+        $parameters['pubDateMonth'] = $now->format('m');
+        $parameters['pubDateYear'] = $now->format('m');
+
+        if (array_key_exists('pubDate', $parameters)) {
+            $pubDate = $parameters['pubDate'];
+            if (array_key_exists('month', $pubDate)) {
+                $parameters['pubDateMonth'] = $pubDate['month'];
+            }
+            if (array_key_exists('year', $pubDate)) {
+                $parameters['pubDateYear'] = $pubDate['year'];
+            }
+        }
+
+        unset($parameters['pubDate']);
+
+        return $parameters;
     }
 }

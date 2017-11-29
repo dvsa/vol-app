@@ -27,6 +27,15 @@ class PublishedPublicationFilter
     public $pubType;
 
     /**
+     * @Form\Options({
+     *     "label": "Publication Date",
+     *     "default_date": "now"
+     * })
+     * @Form\Type("MonthSelect")
+     */
+    public $pubDate;
+
+    /**
      * @Form\Attributes({"type":"submit","class":"action--primary"})
      * @Form\Options({"label": "filter-button"})
      * @Form\Type("\Zend\Form\Element\Button")
