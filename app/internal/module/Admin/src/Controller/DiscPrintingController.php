@@ -47,8 +47,6 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
     /**
      * Index action
      *
-     * @todo this needs cleaning up, the part where it attaches the disc-printing-popup js file needs refactoring
-     * to work as other sections do when showing a modal. We can't have JS files with hardcoded urls etc
      *
      * @return ViewModel
      */

@@ -45,11 +45,10 @@ class UnlicensedOperatorLicenceVehicle implements MapperInterface
     }
 
     /**
-     * Should map form data back into a command data structure
+     * Map form data back into a command data structure
      *
      * @param array $data
      * @return array
-     * @todo
      */
     public static function mapFromForm(array $data)
     {
