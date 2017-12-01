@@ -120,7 +120,8 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();
-
+            unset($data['data']['submit_add_another_director']);
+            $data['data'][]=[];
             $form->setData($data);
 
             if ($form->isValid()) {
