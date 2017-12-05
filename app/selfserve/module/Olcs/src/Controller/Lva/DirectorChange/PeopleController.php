@@ -104,7 +104,7 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
         $form = $this->getServiceLocator()
             ->get('FormServiceManager')
             ->get('lva-licence-addperson')
-            ->getForm();
+            ->getForm(['organisationType' =>  $adapter->getOrganisationType()]);
 
         $this->alterFormForLva($form);
 
