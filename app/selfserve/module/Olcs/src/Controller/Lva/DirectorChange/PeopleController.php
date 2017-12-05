@@ -116,13 +116,12 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
                 $existingPeople[] = $person['person'];
                 $existingPersonIds[] = $person['person']['id'];
             }
+
             $form->populateValues(['data' => $existingPeople]);
         }
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();
-            unset($data['data']['submit_add_another_director']);
-            $data['data'][]=[];
             $form->setData($data);
 
             if ($form->isValid()) {
