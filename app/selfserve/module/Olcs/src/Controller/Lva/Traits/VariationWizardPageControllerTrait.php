@@ -172,17 +172,4 @@ trait VariationWizardPageControllerTrait
 
         return count($sections) === count($requiredSections);
     }
-
-    /**
-     * Alters the form labels
-     *
-     * @param Form $form form
-     * @return void
-     */
-    protected function alterFormLabels(Form $form)
-    {
-        $dataFieldset = $form->get('data');
-        $existingClasses = $dataFieldset->getAttribute('class');
-        $dataFieldset->setAttribute('class', $existingClasses. ' add-another-director-change');
-    }
 }

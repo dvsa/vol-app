@@ -107,8 +107,6 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
             ->getForm();
 
         $this->alterFormForLva($form);
-        $this->alterFormLabels($form);
-
         $existingPersonId = null;
 
         if ($people) {
@@ -140,7 +138,7 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
         return $this->render(
             'add_person_' . $adapter->getOrganisationType(),
             $form,
-            ['sectionText' => 'licence_add-Person-PersonType-' . $adapter->getOrganisationType()]
+            ['sectionText' => '']
         );
     }
 
