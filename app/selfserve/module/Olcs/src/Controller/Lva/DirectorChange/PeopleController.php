@@ -107,28 +107,38 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
             ->getForm();
 
         $this->alterFormForLva($form);
-        $existingPersonId = null;
+
+        $existingPeople = [];
+        $existingPersonIds = [];
 
         if ($people) {
-            $personData = $people[0]['person'];
-            $form->populateValues(['data' => $personData]);
-            $existingPersonId = $personData['id'];
+            foreach ($people as $person) {
+                $existingPeople[] = $person['person'];
+                $existingPersonIds[] = $person['person']['id'];
+            }
+            $form->populateValues(['data' => $existingPeople]);
         }
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();
-
+            unset($data['data']['submit_add_another_director']);
+            $data['data'][]=[];
             $form->setData($data);
 
             if ($form->isValid()) {
-                $validData = $form->getData()['data'];
+                $submittedPersonIds = [];
+                foreach ($form->getData()['data'] as $submittedPerson) {
+                    if ($submittedPerson['id']) {
+                        $submittedPersonIds[] = $submittedPerson['id'];
+                        $adapter->update($submittedPerson);
+                    } else {
+                        $adapter->create(array_merge($submittedPerson, ['id' => $variationId]));
+                    }
+                }
 
-                if ($existingPersonId) {
-                    $validData['id'] = $existingPersonId;
-                    $adapter->update($validData);
-                } else {
-                    $validData['id'] = $variationId;
-                    $adapter->create($validData);
+                $deletedPersonIds = array_diff($existingPersonIds, $submittedPersonIds);
+                if ($deletedPersonIds) {
+                    $adapter->delete($deletedPersonIds);
                 }
 
                 return $this->completeSection('people');
