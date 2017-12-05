@@ -107,6 +107,7 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
             ->getForm();
 
         $this->alterFormForLva($form);
+        $this->alterFormLabels($form);
 
         $existingPersonId = null;
 

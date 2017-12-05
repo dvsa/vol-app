@@ -10,6 +10,9 @@ use Dvsa\Olcs\Transfer\Command\Variation\DeleteVariation;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\Plugin\Params;
+use Zend\Form\Form;
+use Zend\Form\FieldsetInterface;
+use Zend\Form\Element\Collection;
 
 /**
  * Trait for use in an AbstractController that forms part of a variation wizard
@@ -168,5 +171,18 @@ trait VariationWizardPageControllerTrait
         );
 
         return count($sections) === count($requiredSections);
+    }
+
+    /**
+     * Alters the form labels
+     *
+     * @param Form $form form
+     * @return void
+     */
+    protected function alterFormLabels(Form $form)
+    {
+        $dataFieldset = $form->get('data');
+        $existingClasses = $dataFieldset->getAttribute('class');
+        $dataFieldset->setAttribute('class', $existingClasses. ' add-another-director-change');
     }
 }
