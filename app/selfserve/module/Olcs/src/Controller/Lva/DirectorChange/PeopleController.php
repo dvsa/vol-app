@@ -122,6 +122,7 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();
+
             $form->setData($data);
 
             if ($form->isValid()) {
