@@ -59,10 +59,10 @@ trait VariationWizardPageControllerTrait
     /**
      * Check if a button has been pressed
      *
-     * @see AbstractController::isButtonPressed
-     *
      * @param string $button button
      * @param array  $data   data
+     *
+     * @see AbstractController::isButtonPressed
      *
      * @return bool
      */
