@@ -10,9 +10,6 @@ use Dvsa\Olcs\Transfer\Command\Variation\DeleteVariation;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\Plugin\Params;
-use Zend\Form\Form;
-use Zend\Form\FieldsetInterface;
-use Zend\Form\Element\Collection;
 
 /**
  * Trait for use in an AbstractController that forms part of a variation wizard
