@@ -24,6 +24,20 @@ class StatementDetails extends CaseBase
     public $statementType = null;
 
     /**
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"assignedCaseworker","class":"medium"})
+     * @Form\Options({
+     *     "label": "Assigned caseworker",
+     *     "disable_inarray_validator": false,
+     *     "empty_option": "Please Select",
+     *     "service_name": "Olcs\Service\Data\UserListInternal",
+     *     "use_groups": false
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $assignedCaseworker = null;
+
+    /**
      * @Form\Options({"label":"Vehicle registration mark"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Common\Filter\Vrm"})

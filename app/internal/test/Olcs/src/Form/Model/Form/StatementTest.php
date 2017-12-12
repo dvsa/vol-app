@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Form\Model\Form;
 
+use Olcs\Form\Model\Form\Statement;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Zend\Validator\Date;
 use Common\Validator\Date as CommonDateValidator;
@@ -16,12 +17,23 @@ class StatementTest extends AbstractFormValidationTestCase
     /**
      * @var string The class name of the form being tested
      */
-    protected $formName = \Olcs\Form\Model\Form\Statement::class;
+    protected $formName = Statement::class;
 
     public function testStatementType()
     {
         $this->assertFormElementDynamicSelect(
             ['fields', 'statementType'],
+            true
+        );
+    }
+
+    public function testAssignedCaseWorker()
+    {
+        $this->assertFormElementIsRequired(['fields', 'assignedCaseworker'], false);
+        $this->assertNull($this->sut->getData()['fields']['assignedCaseworker']);
+
+        $this->assertFormElementDynamicSelect(
+            ['fields', 'assignedCaseworker'],
             true
         );
     }
@@ -60,9 +72,9 @@ class StatementTest extends AbstractFormValidationTestCase
         $this->assertFormElementNotValid(
             $element,
             [
-                'year'  => 'XXX',
+                'year' => 'XXX',
                 'month' => date('m'),
-                'day'   => date('j'),
+                'day' => date('j'),
             ],
             [
                 CommonDateValidator::DATE_ERR_CONTAINS_STRING,
@@ -75,16 +87,16 @@ class StatementTest extends AbstractFormValidationTestCase
         $this->assertFormElementValid(
             $element,
             [
-                'year'  => date('Y') - 1,
+                'year' => date('Y') - 1,
                 'month' => date('m'),
-                'day'   => date('j'),
+                'day' => date('j'),
             ],
             [
                 'fields' => [
                     'requestedDate' => [
-                        'year'  => date('Y') + 1,
+                        'year' => date('Y') + 1,
                         'month' => date('m'),
-                        'day'   => date('j'),
+                        'day' => date('j'),
                     ],
                 ],
             ]
