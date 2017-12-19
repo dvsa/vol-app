@@ -19,8 +19,7 @@ class Bootstrap
 
     public static function init()
     {
-        // Only really using less than 300mb now....
-        ini_set('memory_limit', '300M');
+        ini_set('memory_limit', '500M');
 
         $zf2ModulePaths = array(dirname(dirname(__DIR__)));
         if (($path = static::findParentPath('vendor'))) {
