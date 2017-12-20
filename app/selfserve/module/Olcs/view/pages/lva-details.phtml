@@ -82,9 +82,9 @@ echo $this->partial(
       }
 
       if (isset($sectionText)) {
-          echo $this->translate($sectionText);
+        ?><h2><?php  echo $this->translate($sectionText);
       }
-      ?>
+              ?></h2>
 
       <?php
         $messages = $this->flashMessengerAll('norender')->getMessagesFromNamespace('prominent-error');
