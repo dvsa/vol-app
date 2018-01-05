@@ -21,6 +21,17 @@ class RevokeTest extends AbstractFormValidationTestCase
         $this->assertFormElementDynamicSelect(['fields', 'reasons'], true);
     }
 
+    public function testAssignedCaseWorker()
+    {
+        $this->assertFormElementIsRequired(['fields', 'assignedCaseworker'], false);
+        $this->assertNull($this->sut->getData()['fields']['assignedCaseworker']);
+
+        $this->assertFormElementDynamicSelect(
+            ['fields', 'assignedCaseworker'],
+            true
+        );
+    }
+
     public function testPresidingTc()
     {
         $this->assertFormElementDynamicSelect(['fields', 'presidingTc'], true);
@@ -38,9 +49,8 @@ class RevokeTest extends AbstractFormValidationTestCase
 
     public function testComment()
     {
-        $element = ['fields', 'comment'];
-        $this->assertFormElementRequired($element, false);
-        $this->assertFormElementText($element, 5, 4000);
+        $this->assertFormElementIsRequired(['fields', 'comment'], false);
+        $this->assertFormElementText(['fields', 'comment'], 5, 4000);
     }
 
     public function testCase()
