@@ -26,6 +26,11 @@ class RevokeTest extends AbstractFormValidationTestCase
         $this->assertFormElementDynamicSelect(['fields', 'presidingTc'], true);
     }
 
+    public function testPresidingTcService()
+    {
+        $this->assertServiceEquals(['fields', 'presidingTc'], \Olcs\Service\Data\UserListInternal::class);
+    }
+
     public function testPtrAgreedDate()
     {
         $this->assertFormElementDate(['fields', 'ptrAgreedDate']);
