@@ -517,6 +517,20 @@ return [
             ]
         ]
     ],
+    'processing_in_office_revocation_sla' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/processing/in-office-revocation/sla[/:action][/]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => '(edit)'
+            ],
+            'defaults' => [
+                'controller' => 'CaseRevokeController',
+                'action' => 'index'
+            ]
+        ]
+    ],
     'processing_history' => [
         'type' => 'segment',
         'options' => [
