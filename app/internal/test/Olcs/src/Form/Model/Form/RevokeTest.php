@@ -49,8 +49,9 @@ class RevokeTest extends AbstractFormValidationTestCase
 
     public function testComment()
     {
-        $this->assertFormElementIsRequired(['fields', 'comment'], false);
-        $this->assertFormElementText(['fields', 'comment'], 5, 4000);
+        $element = ['fields', 'comment'];
+        $this->assertFormElementIsRequired($element, false);
+        $this->assertFormElementText($element, 5, 4000);
     }
 
     public function testCase()
