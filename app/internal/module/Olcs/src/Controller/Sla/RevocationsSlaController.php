@@ -1,0 +1,38 @@
+<?php
+
+
+namespace Olcs\Controller\Sla;
+
+
+use Dvsa\Olcs\Transfer\Command\Cases\ProposeToRevoke\UpdateProposeToRevoke;
+use Dvsa\Olcs\Transfer\Query\Cases\ProposeToRevoke\ProposeToRevokeByCase;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Form\Model\Form\RevocationsSla;
+
+class RevocationsSlaController extends AbstractInternalController
+{
+
+    protected $formClass = RevocationsSla::class;
+
+    protected $itemDto = ProposeToRevokeByCase::class;
+
+    protected $updateCommand = UpdateProposeToRevoke::class;
+
+    protected $addContentTitle = 'Add In Office Revocation Sla Target Dates';
+
+    protected $editContentTitle = 'Edit In Office Revocation Sla Target Dates';
+
+    protected $defaultData = [
+        'case' => 'route'
+    ];
+    protected $mapperClass = \Olcs\Data\Mapper\RevocationsSla::class;
+
+    protected $itemParams = ['case'];
+
+
+    public function editAction()
+    {
+        return parent::editAction();
+    }
+
+}

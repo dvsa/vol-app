@@ -1,21 +1,38 @@
 <?php
+
 $items = [
-        ['label' => 'Submission required for approval of ptr', 'date' => 'tbc'],
-        ['label' => 'Date approval submission sent', 'date' => 'tbc'],
-        ['label' => 'Date approval submission returned', 'date' => 'tbc'],
-        ['label' => 'Approval submission TC/TDC', 'value' => $revoke['presidingTc']['name']],
-        ['label' => 'Date IOR letter issued', 'date' => 'tbc'],
-        ['label' => 'Date Operator\'s response due', 'date' => 'tbc'],
-        ['label' => 'Date Response Received', 'date' => ''],
-        ['label' => 'Is submission required for action', 'value' => ''],
-        ['label' => 'Date final submission sent', 'value' => ''],
-        ['label' => 'Date final submission returned', 'value' => ''],
-        ['label' => 'Final submission TC/DTC', 'value' => ''],
-        ['label' => 'Action to be taken', 'value' => ''],
-        ['label' => 'NFA letter issued date', 'date' => ''],
-        ['label' => 'Warning letter issued date', 'date' => ''],
-        ['label' => 'PI Agreed', 'date' => ''],
-        ['label' => 'Other Action agreed', 'date' => '']
+    ['label' => 'Submission required for approval of ptr', 'date' => 'tbc'],
+
+    //conditional if above yes
+    ['label' => 'Date approval submission sent', 'date' => 'tbc'],
+    ['label' => 'Date approval submission returned', 'date' => 'tbc'],
+    ['label' => 'Approval submission TC/TDC', 'value' => $revoke['presidingTc']['name']],
+
+    ['label' => 'Date IOR letter issued', 'date' => 'tbc'],
+    ['label' => 'Date Operator\'s response due', 'date' => 'tbc'],
+    ['label' => 'Date Response Received', 'date' => ''],
+
+
+    ['label' => 'Is submission required for action', 'value' => ''],
+
+    //conditional if above yes
+    ['label' => 'Date final submission sent', 'value' => ''],
+    ['label' => 'Date final submission returned', 'value' => ''],
+    ['label' => 'Final submission TC/DTC', 'value' => ''],
+
+    ['label' => 'Action to be taken', 'value' => ''],
+
+    // if action revoked
+    ['label' => 'Revocation letter issued date', 'date' => ''],
+    //if action is NFA
+    ['label' => 'NFA letter issued date', 'date' => ''],
+    // if action is warning
+    ['label' => 'Warning letter issued date', 'date' => ''],
+   // if action is PI
+    ['label' => 'PI Agreed', 'date' => ''],
+
+    //if action other
+    ['label' => 'Other Action agreed', 'date' => '']
 
 ];
 
@@ -28,7 +45,7 @@ $actions = [
             [],
             true
         ),
-        'class' => 'action--secondary js-modal-ajax'
+       'class' => 'action--secondary js-modal-ajax'
     ],
 ];
 echo $this->render('partials/read-only/main',

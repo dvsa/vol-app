@@ -149,6 +149,7 @@ return array(
             Cases\Hearing\AppealController::class => Cases\Hearing\AppealController::class,
             Cases\Hearing\StayController::class => Cases\Hearing\StayController::class,
 
+
             'CaseDocsController' => 'Olcs\Controller\Cases\Docs\CaseDocsController',
             'CaseComplaintController' => 'Olcs\Controller\Cases\Complaint\ComplaintController',
             'CaseEnvironmentalComplaintController'
@@ -183,6 +184,7 @@ return array(
             'CaseDecisionsNoFurtherActionController'
                 => 'Olcs\Controller\Cases\Processing\DecisionsNoFurtherActionController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
+            \Olcs\Controller\Sla\RevocationsSlaController::class => \Olcs\Controller\Sla\RevocationsSlaController::class,
             'DefaultController' => 'Olcs\Olcs\Placeholder\Controller\DefaultController',
             Olcs\Controller\IndexController::class => Olcs\Controller\IndexController::class,
             SearchController::class => SearchController::class,

@@ -2,6 +2,7 @@
 
 use Olcs\Controller\Cases;
 
+
 /**
  * @internal as we work on each controller, replace string with controller class
  * Routes for the licence section and case route.
@@ -503,6 +504,19 @@ return [
             ],
         ],
     ],
+    'processing_in_office_revocation_sla' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/processing/in-office-revocation/sla/:action[/]',
+            'constraints' => [
+                'case' => '[0-9]+',
+                'action' => 'edit'
+            ],
+            'defaults' => [
+                'controller' => \Olcs\Controller\Sla\RevocationsSlaController::class,
+            ]
+        ]
+    ],
     'processing_in_office_revocation' => [
         'type' => 'segment',
         'options' => [
@@ -513,24 +527,11 @@ return [
             ],
             'defaults' => [
                 'controller' => 'CaseRevokeController',
-                'action' => 'index'
+                'action' => 'edit'
             ]
         ]
     ],
-    'processing_in_office_revocation_sla' => [
-        'type' => 'segment',
-        'options' => [
-            'route' => '/case/:case/processing/in-office-revocation/sla[/:action][/]',
-            'constraints' => [
-                'case' => '[0-9]+',
-                'action' => '(edit)'
-            ],
-            'defaults' => [
-                'controller' => 'CaseRevokeController',
-                'action' => 'index'
-            ]
-        ]
-    ],
+
     'processing_history' => [
         'type' => 'segment',
         'options' => [

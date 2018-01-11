@@ -78,7 +78,7 @@ class RevokeController extends AbstractInternalController implements CaseControl
     /**
      * Lock unused actions
      *
-     * @return ViewModel
+     * @return array
      */
     public function deleteAction()
     {
