@@ -23,6 +23,20 @@ class RevokeMain extends CaseBase
     public $reasons = null;
 
     /**
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"assignedCaseworker","class":"medium"})
+     * @Form\Options({
+     *     "label": "Assigned caseworker",
+     *     "disable_inarray_validator": false,
+     *     "empty_option": "Please Select",
+     *     "service_name": "Olcs\Service\Data\UserListInternal",
+     *     "use_groups": false
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $assignedCaseworker = null;
+
+    /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Agreed by",
