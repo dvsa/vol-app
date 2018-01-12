@@ -40,7 +40,7 @@ class RevokeMain extends CaseBase
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Agreed by",
-     *     "service_name": "Olcs\Service\Data\UserListInternal",
+     *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false
      * })
