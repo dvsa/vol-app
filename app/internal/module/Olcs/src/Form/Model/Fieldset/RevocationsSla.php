@@ -11,23 +11,21 @@ use Zend\Form\Annotation as Form;
  */
 class RevocationsSla
 {
-
-
     /**
      * @Form\Type("Radio")
      * @Form\Options({
      *      "label": "Submission required for approval of ptr?",
      *      "value_options":{
-     *          "N":"No",
-     *          "Y":"Yes"
+     *          "0":"No",
+     *          "1":"Yes"
      *      },
      *      "fieldset-attributes" : {
      *          "class":"inline"
      *      }
      * })
-     * @Form\Attributes({"value": "N"})
+     * @Form\Attributes({"value": "0"})
      */
-    public $is_submission_required_for_approval;
+    public $isSubmissionRequiredForApproval;
 
     /**
      * @Form\Attributes({"id":""})
@@ -41,7 +39,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $approval_submission_issued_date;
+    public $approvalSubmissionIssuedDate;
 
     /**
      * @Form\Attributes({"id":""})
@@ -55,7 +53,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $approval_submission_returned_date;
+    public $approvalSubmissionReturnedDate;
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
@@ -67,7 +65,7 @@ class RevocationsSla
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $approval_submission_presiding_tc;
+    public $approvalSubmissionPresidingTc;
 
     /**
      * @Form\Attributes({"id":""})
@@ -81,7 +79,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $ior_letter_issued_date;
+    public $iorLetterIssuedDate;
 
     /**
      * @Form\Attributes({"id":""})
@@ -95,7 +93,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $operator_response_due_date;
+    public $operatorResponseDueDate;
 
     /**
      * @Form\Attributes({"id":""})
@@ -109,7 +107,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $operator_response_received_date;
+    public $operatorResponseReceivedDate;
 
 
     /**
@@ -117,16 +115,16 @@ class RevocationsSla
      * @Form\Options({
      *      "label": "Is submission required for action?",
      *      "value_options":{
-     *          "N":"No",
-     *          "Y":"Yes"
+     *          "0":"No",
+     *          "1":"Yes"
      *      },
      *      "fieldset-attributes" : {
      *          "class":"inline"
      *      }
      * })
-     * @Form\Attributes({"value": "N"})
+     * @Form\Attributes({"value": "0"})
      */
-    public $is_submission_required_for_action;
+    public $isSubmissionRequiredForAction;
 
     /**
      * @Form\Attributes({"id":""})
@@ -140,7 +138,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $final_submission_issued_date;
+    public $finalSubmissionIssuedDate;
 
     /**
      * @Form\Attributes({"id":""})
@@ -154,7 +152,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $final_submission_returned_date;
+    public $finalSubmissionReturnedDate;
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
@@ -166,7 +164,7 @@ class RevocationsSla
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $final_submission_presiding_tc;
+    public $finalSubmissionPresidingTc;
 
     //@todo get values from refdata for actions
     /**
@@ -179,7 +177,7 @@ class RevocationsSla
      * })
      * @Form\Type("DynamicSelect")
      */
-    public $action_to_be_taken;
+    public $actionToBeTaken;
 
     /**
      * @Form\Attributes({"id":""})
@@ -193,7 +191,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Val
      **/
-    public $revocation_letter_issued_date;
+    public $revocationLetterIssuedDate;
 
     /**
      * @Form\Attributes({"id":""})
@@ -207,7 +205,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $nfa_letter_issued_date;
+    public $nfaLetterIssuedDate;
 
     /**
      * @Form\Attributes({"id":""})
@@ -221,7 +219,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $warning_letter_issued_date_date;
+    public $warningLetterIssuedDate;
 
     /**
      * @Form\Attributes({"id":""})
@@ -235,7 +233,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $pi_agreed_date;
+    public $piAgreedDate;
 
     /**
      * @Form\Attributes({"id":""})
@@ -249,5 +247,5 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $other_action_agreed_date;
+    public $otherActionAgreedDate;
 }

@@ -28,4 +28,16 @@ class RevocationsSla
      * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $id = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $version = null;
 }
