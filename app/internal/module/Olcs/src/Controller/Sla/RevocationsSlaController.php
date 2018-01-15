@@ -28,8 +28,12 @@ class RevocationsSlaController extends AbstractInternalController
     protected $mapperClass = \Olcs\Data\Mapper\RevocationsSla::class;
 
     protected $itemParams = ['case'];
-
-
+    protected $redirectConfig = [
+        'edit' => [
+            'route' => 'processing_in_office_revocation',
+            'action' => 'details'
+        ]
+     ];
 
 
     public function editAction()
