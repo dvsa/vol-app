@@ -35,6 +35,8 @@ class RevocationsSlaController extends AbstractInternalController
         ]
      ];
 
+    protected $inlineScripts =["editAction"=>['forms/ior-sla-form']];
+
 
     public function editAction()
     {
