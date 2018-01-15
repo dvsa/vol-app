@@ -41,13 +41,7 @@ if ($revoke['isSubmissionRequiredForApproval']) {
                 'label' => 'Approval submission TC/TDC',
                 'value' => $revoke['approvalSubmissionPresidingTc']
                     ? $revoke['approvalSubmissionPresidingTc']['name']
-                    : null,
-                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                    $revoke['approvalSubmissionPresidingTc'],
-                    isset($revoke['approvalSubmissionPresidingTcTarget'])
-                        ? $revoke['approvalSubmissionPresidingTcTarget']
-                        : null
-                ),
+                    : null
             ],
         ]
     );
@@ -102,7 +96,7 @@ if ($revoke['isSubmissionRequiredForAction']) {
         [
             [
                 'label' => 'Date final submission issued',
-                'value' => $revoke['finalSubmissionIssuedDate'],
+                'date' => $revoke['finalSubmissionIssuedDate'],
                 'suffix' => $this->slaIndicator()->hasTargetBeenMet(
                     $revoke['finalSubmissionIssuedDate'],
                     isset($revoke['finalSubmissionIssuedDateTarget'])
@@ -112,7 +106,7 @@ if ($revoke['isSubmissionRequiredForAction']) {
             ],
             [
                 'label' => 'Date final submission returned',
-                'value' => $revoke['finalSubmissionReturnedDate'],
+                'date' => $revoke['finalSubmissionReturnedDate'],
                 'suffix' => $this->slaIndicator()->hasTargetBeenMet(
                     $revoke['finalSubmissionReturnedDate'],
                     isset($revoke['finalSubmissionReturnedDateTarget'])
