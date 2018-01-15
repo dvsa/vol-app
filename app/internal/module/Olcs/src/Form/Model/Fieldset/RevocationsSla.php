@@ -34,6 +34,7 @@ class RevocationsSla
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
+     * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
@@ -43,6 +44,7 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Date approval submission returned",
      *     "create_empty_option": true,
@@ -128,6 +130,7 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Date final submission sent",
      *     "create_empty_option": true,
@@ -142,6 +145,7 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Date final submission sent",
      *     "create_empty_option": true,
@@ -156,6 +160,7 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Final submission TC/TDC",
      *     "service_name": "Olcs\Service\Data\PresidingTc",
@@ -169,15 +174,17 @@ class RevocationsSla
     /**
      * @Form\Options({
      *     "label": "Action to be taken",
-     *     "service_name":"Olcs\Service\Data\ActionToBeTaken"
+     *     "service_name":"Olcs\Service\Data\ActionToBeTaken",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      */
     public $actionToBeTaken;
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Revocation letter issued date",
      *     "create_empty_option": true,
@@ -192,6 +199,7 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "NFA letter issued date",
      *     "create_empty_option": true,
@@ -206,6 +214,7 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Warning letter issued date",
      *     "create_empty_option": true,
@@ -220,6 +229,7 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "PI Agreed",
      *     "create_empty_option": true,
@@ -234,6 +244,7 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Other Action agreed",
      *     "create_empty_option": true,
