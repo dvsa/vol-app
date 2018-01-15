@@ -17,26 +17,8 @@ if ($revoke['isSubmissionRequiredForApproval']) {
     $items = array_merge(
         $items,
         [
-            [
-                'label' => 'Date approval submission issued',
-                'date' => $revoke['approvalSubmissionIssuedDate'],
-                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                    $revoke['approvalSubmissionIssuedDate'],
-                    isset($revoke['approvalSubmissionIssuedDateTarget'])
-                        ? $revoke['approvalSubmissionIssuedDateTarget']
-                        : null
-                ),
-            ],
-            [
-                'label' => 'Date approval submission returned',
-                'date' => $revoke['approvalSubmissionReturnedDate'],
-                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                    $revoke['approvalSubmissionReturnedDate'],
-                    isset($revoke['approvalSubmissionReturnedDateTarget'])
-                        ? $revoke['approvalSubmissionReturnedDateTarget']
-                        : null
-                ),
-            ],
+            $this->slaIndicator()->generateDateItem('Date approval submission issued', $revoke, 'approvalSubmissionIssuedDate'),
+            $this->slaIndicator()->generateDateItem('Date approval submission returned', $revoke, 'approvalSubmissionReturnedDate'),
             [
                 'label' => 'Approval submission TC/TDC',
                 'value' => $revoke['approvalSubmissionPresidingTc']
@@ -50,36 +32,9 @@ if ($revoke['isSubmissionRequiredForApproval']) {
 $items = array_merge(
     $items,
     [
-        [
-            'label' => 'Date IOR letter issued',
-            'date' => $revoke['iorLetterIssuedDate'],
-            'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                $revoke['iorLetterIssuedDate'],
-                isset($revoke['iorLetterIssuedDateTarget'])
-                    ? $revoke['iorLetterIssuedDateTarget']
-                    : null
-            ),
-        ],
-        [
-            'label' => 'Date Operator\'s response due',
-            'date' => $revoke['operatorResponseDueDate'],
-            'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                $revoke['operatorResponseDueDate'],
-                isset($revoke['operatorResponseDueDateTarget'])
-                    ? $revoke['operatorResponseDueDateTarget']
-                    : null
-            ),
-        ],
-        [
-            'label' => 'Date Response Received',
-            'date' => $revoke['operatorResponseReceivedDate'],
-            'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                $revoke['operatorResponseReceivedDate'],
-                isset($revoke['operatorResponseReceivedDateTarget'])
-                    ? $revoke['operatorResponseReceivedDateTarget']
-                    : null
-            ),
-        ],
+        $this->slaIndicator()->generateDateItem('Date IOR letter issued', $revoke, 'iorLetterIssuedDate'),
+        $this->slaIndicator()->generateDateItem('Date Operator\'s response due', $revoke, 'operatorResponseDueDate'),
+        $this->slaIndicator()->generateDateItem('Date Response Received', $revoke, 'operatorResponseReceivedDate'),
 
         [
             'label' => 'Is submission required for action',
@@ -94,26 +49,8 @@ if ($revoke['isSubmissionRequiredForAction']) {
     $items = array_merge(
         $items,
         [
-            [
-                'label' => 'Date final submission issued',
-                'date' => $revoke['finalSubmissionIssuedDate'],
-                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                    $revoke['finalSubmissionIssuedDate'],
-                    isset($revoke['finalSubmissionIssuedDateTarget'])
-                        ? $revoke['finalSubmissionIssuedDateTarget']
-                        : null
-                ),
-            ],
-            [
-                'label' => 'Date final submission returned',
-                'date' => $revoke['finalSubmissionReturnedDate'],
-                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                    $revoke['finalSubmissionReturnedDate'],
-                    isset($revoke['finalSubmissionReturnedDateTarget'])
-                        ? $revoke['finalSubmissionReturnedDateTarget']
-                        : null
-                ),
-            ],
+            $this->slaIndicator()->generateDateItem('Date final submission issued', $revoke, 'finalSubmissionIssuedDate'),
+            $this->slaIndicator()->generateDateItem('Date final submission returned', $revoke, 'finalSubmissionReturnedDate'),
             [
                 'label' => 'Final submission TC/DTC',
                 'value' => $revoke['finalSubmissionPresidingTc']
@@ -134,64 +71,19 @@ $items[] = [
 if ($revoke['actionToBeTaken']) {
     switch ($revoke['actionToBeTaken']['id']) {
         case RefData::PTR_ACTION_TO_BE_TAKEN_REVOKE:
-            $items[] = [
-                'label' => 'Revocation letter issued date',
-                'date' => $revoke['revocationLetterIssuedDate'],
-                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                    $revoke['revocationLetterIssuedDate'],
-                    isset($revoke['revocationLetterIssuedDateTarget'])
-                        ? $revoke['revocationLetterIssuedDateTarget']
-                        : null
-                ),
-            ];
+            $items[] = $this->slaIndicator()->generateDateItem('Revocation letter issued date', $revoke, 'revocationLetterIssuedDate');
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_NFA:
-            $items[] = [
-                'label' => 'NFA letter issued date',
-                'date' => $revoke['nfaLetterIssuedDate'],
-                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                    $revoke['nfaLetterIssuedDate'],
-                    isset($revoke['nfaLetterIssuedDateTarget'])
-                        ? $revoke['nfaLetterIssuedDateTarget']
-                        : null
-                ),
-            ];
+            $items[] = $this->slaIndicator()->generateDateItem('NFA letter issued date', $revoke, 'nfaLetterIssuedDate');
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_WARNING:
-            $items[] = [
-                'label' => 'Warning letter issued date',
-                'date' => $revoke['warningLetterIssuedDate'],
-                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                    $revoke['warningLetterIssuedDate'],
-                    isset($revoke['warningLetterIssuedDateTarget'])
-                        ? $revoke['warningLetterIssuedDateTarget']
-                        : null
-                ),
-            ];
+            $items[] = $this->slaIndicator()->generateDateItem('Warning letter issued date', $revoke, 'warningLetterIssuedDate');
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_PI:
-            $items[] = [
-                'label' => 'PI Agreed',
-                'date' => $revoke['piAgreedDate'],
-                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                    $revoke['piAgreedDate'],
-                    isset($revoke['piAgreedDateTarget'])
-                        ? $revoke['piAgreedDateTarget']
-                        : null
-                ),
-            ];
+            $items[] = $this->slaIndicator()->generateDateItem('PI Agreed', $revoke, 'piAgreedDate');
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_OTHER:
-            $items[] = [
-                'label' => 'Other Action agreed',
-                'date' => $revoke['otherActionAgreedDate'],
-                'suffix' => $this->slaIndicator()->hasTargetBeenMet(
-                    $revoke['otherActionAgreedDate'],
-                    isset($revoke['otherActionAgreedDateTarget'])
-                        ? $revoke['otherActionAgreedDateTarget']
-                        : null
-                ),
-            ];
+            $items[] = $this->slaIndicator()->generateDateItem('Other Action agreed', $revoke, 'otherActionAgreedDate');
             break;
     };
 }

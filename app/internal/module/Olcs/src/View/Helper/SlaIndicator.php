@@ -9,19 +9,25 @@ use Zend\View\Helper\AbstractHelper;
  *
  * @package Olcs\View\Helper
  *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
+ * @author  Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 class SlaIndicator extends AbstractHelper
 {
-    /**
-     * @param $data
-     * @param $targetDate
-     *
-     * @return string
-     */
     public function __invoke()
     {
         return $this;
+    }
+
+    public function generateDateItem($label, $queryResult, $dateFieldName)
+    {
+        return [
+            'label' => $label,
+            'date' => $queryResult[$dateFieldName],
+            'suffix' => $this->hasTargetBeenMet(
+                $queryResult[$dateFieldName],
+                isset($queryResult[$dateFieldName . 'Target']) ? $queryResult[$dateFieldName . 'Target'] : null
+            ),
+        ];
     }
 
     public function hasTargetBeenMet($date = null, $targetDate = null)
