@@ -17,11 +17,19 @@ if ($revoke['isSubmissionRequiredForApproval']) {
     $items = array_merge(
         $items,
         [
-            ['label' => 'Date approval submission sent', 'date' => $revoke['approvalSubmissionIssuedDate']],
-            ['label' => 'Date approval submission returned', 'date' => $revoke['approvalSubmissionReturnedDate']],
+            [
+                'label' => 'Date approval submission sent',
+                'date' => $revoke['approvalSubmissionIssuedDate'],
+            ],
+            [
+                'label' => 'Date approval submission returned',
+                'date' => $revoke['approvalSubmissionReturnedDate']
+            ],
             [
                 'label' => 'Approval submission TC/TDC',
-                'value' => $revoke['approvalSubmissionPresidingTc'] ? $revoke['approvalSubmissionPresidingTc']['name'] : null
+                'value' => $revoke['approvalSubmissionPresidingTc']
+                    ? $revoke['approvalSubmissionPresidingTc']['name']
+                    : null,
             ],
         ]
     );
@@ -30,15 +38,24 @@ if ($revoke['isSubmissionRequiredForApproval']) {
 $items = array_merge(
     $items,
     [
-        ['label' => 'Date IOR letter issued', 'date' => $revoke['iorLetterIssuedDate']],
-        ['label' => 'Date Operator\'s response due', 'date' => $revoke['operatorResponseDueDate']],
-        ['label' => 'Date Response Received', 'date' => $revoke['operatorResponseReceivedDate']],
+        [
+            'label' => 'Date IOR letter issued',
+            'date' => $revoke['iorLetterIssuedDate'],
+        ],
+        [
+            'label' => 'Date Operator\'s response due',
+            'date' => $revoke['operatorResponseDueDate'],
+        ],
+        [
+            'label' => 'Date Response Received',
+            'date' => $revoke['operatorResponseReceivedDate'],
+        ],
 
         [
             'label' => 'Is submission required for action',
             'value' => $revoke['isSubmissionRequiredForAction'] === null
                 ? null
-                : ($revoke['isSubmissionRequiredForAction'] ? 'Y' : 'N')
+                : ($revoke['isSubmissionRequiredForAction'] ? 'Y' : 'N'),
         ],
     ]
 );
@@ -47,11 +64,19 @@ if ($revoke['isSubmissionRequiredForAction']) {
     $items = array_merge(
         $items,
         [
-            ['label' => 'Date final submission sent', 'value' => $revoke['finalSubmissionIssuedDate']],
-            ['label' => 'Date final submission returned', 'value' => $revoke['finalSubmissionReturnedDate']],
+            [
+                'label' => 'Date final submission sent',
+                'value' => $revoke['finalSubmissionIssuedDate'],
+            ],
+            [
+                'label' => 'Date final submission returned',
+                'value' => $revoke['finalSubmissionReturnedDate'],
+            ],
             [
                 'label' => 'Final submission TC/DTC',
-                'value' => $revoke['finalSubmissionPresidingTc'] ?: $revoke['finalSubmissionPresidingTc']['name']
+                'value' => $revoke['finalSubmissionPresidingTc']
+                    ? $revoke['finalSubmissionPresidingTc']['name']
+                    : null,
             ],
         ]
     );
@@ -59,25 +84,42 @@ if ($revoke['isSubmissionRequiredForAction']) {
 
 $items[] = [
     'label' => 'Action to be taken',
-    'value' => $revoke['actionToBeTaken'] ? $revoke['actionToBeTaken']['description'] : null
+    'value' => $revoke['actionToBeTaken']
+        ? $revoke['actionToBeTaken']['description']
+        : null,
 ];
 
 if ($revoke['actionToBeTaken']) {
     switch ($revoke['actionToBeTaken']['id']) {
         case RefData::PTR_ACTION_TO_BE_TAKEN_REVOKE:
-            $items[] = ['label' => 'Revocation letter issued date', 'date' => $revoke['revocationLetterIssuedDate']];
+            $items[] = [
+                'label' => 'Revocation letter issued date',
+                'date' => $revoke['revocationLetterIssuedDate'],
+            ];
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_NFA:
-            $items = ['label' => 'NFA letter issued date', 'date' => $revoke['nfaLetterIssuedDate']];
+            $items = [
+                'label' => 'NFA letter issued date',
+                'date' => $revoke['nfaLetterIssuedDate'],
+            ];
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_WARNING:
-            $items = ['label' => 'Warning letter issued date', 'date' => $revoke['warningLetterIssuedDate']];
+            $items = [
+                'label' => 'Warning letter issued date',
+                'date' => $revoke['warningLetterIssuedDate'],
+            ];
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_PI:
-            $items = ['label' => 'PI Agreed', 'date' => $revoke['piAgreedDate']];
+            $items = [
+                'label' => 'PI Agreed',
+                'date' => $revoke['piAgreedDate'],
+            ];
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_OTHER:
-            $items = ['label' => 'Other Action agreed', 'date' => $revoke['otherActionAgreedDate']];
+            $items = [
+                'label' => 'Other Action agreed',
+                'date' => $revoke['otherActionAgreedDate'],
+            ];
             break;
     };
 }
