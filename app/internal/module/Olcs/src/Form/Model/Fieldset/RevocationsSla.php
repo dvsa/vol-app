@@ -166,16 +166,13 @@ class RevocationsSla
      */
     public $finalSubmissionPresidingTc;
 
-    //@todo get values from refdata for actions
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Action to be taken",
-     *     "value_options":{ "0":"todo get from refdata"},
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false
+     *     "service_name":"Olcs\Service\Data\ActionToBeTaken"
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      */
     public $actionToBeTaken;
 
