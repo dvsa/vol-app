@@ -126,41 +126,4 @@ class SlaIndicatorTest extends \PHPUnit_Framework_TestCase
             self::INACTIVE_HTML,
         ];
     }
-
-    /**
-     * @dataProvider doHasTargetBeenMetProvider
-     *
-     * @param string $dateFrom
-     * @param string $targetDate
-     * @param bool   $boolean
-     *
-     * @return void
-     */
-    public function testDoHasTargetBeenMet($dateFrom, $targetDate, $boolean)
-    {
-        $sut = new SlaIndicator();
-
-        $this->assertSame($boolean, $sut->doHasTargetBeenMet($dateFrom, $targetDate));
-    }
-
-    /**
-     * Data provider.
-     *
-     * return array
-     */
-    public function doHasTargetBeenMetProvider()
-    {
-        return [
-            [
-                '2014-03-01',
-                '2014-03-02',
-                true
-            ],
-            [
-                '2014-03-01',
-                '2014-02-28',
-                false
-            ],
-        ];
-    }
 }

@@ -45,7 +45,7 @@ class SlaIndicator extends AbstractHelper
         return '<span class="status green">Pass</span>';
     }
 
-    public function doHasTargetBeenMet($date = null, $targetDate = null)
+    private function doHasTargetBeenMet($date = null, $targetDate = null)
     {
         $dateTime = \DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime($date)));
         $targetDateTime = \DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime($targetDate)));
