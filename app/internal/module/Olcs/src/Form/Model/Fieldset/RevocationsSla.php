@@ -62,6 +62,7 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Approval submission TC/TDC",
      *     "service_name": "Olcs\Service\Data\PresidingTc",
