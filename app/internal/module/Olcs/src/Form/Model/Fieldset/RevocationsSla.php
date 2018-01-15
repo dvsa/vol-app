@@ -32,8 +32,11 @@ class RevocationsSla
      * @Form\Options({
      *     "label": "Date approval submission sent",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
+     *     "fieldsetClass":"__ptr-yes"
+     *
      * })
+     * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
@@ -43,10 +46,12 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Date approval submission returned",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
+     *     "fieldsetClass":"__ptr-yes"
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
@@ -57,11 +62,13 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Approval submission TC/TDC",
      *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false
+     *     "disable_inarray_validator": false,
+     *     "fieldsetClass":"__ptr-yes"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -128,10 +135,12 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Date final submission sent",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
+     *     "fieldsetClass":"__sra-yes"
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
@@ -142,10 +151,12 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Date final submission sent",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
+     *     "fieldsetClass":"__sra-yes"
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
@@ -156,11 +167,13 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Final submission TC/TDC",
      *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false
+     *     "disable_inarray_validator": false,
+     *     "fieldsetClass":"__sra-yes"
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -169,19 +182,22 @@ class RevocationsSla
     /**
      * @Form\Options({
      *     "label": "Action to be taken",
-     *     "service_name":"Olcs\Service\Data\ActionToBeTaken"
+     *     "service_name":"Olcs\Service\Data\ActionToBeTaken",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      */
     public $actionToBeTaken;
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Revocation letter issued date",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
+     *     "fieldsetClass":"__ior-revoke"
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
@@ -192,10 +208,12 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "NFA letter issued date",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
+     *     "fieldsetClass":"__ior-nfa"
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
@@ -206,10 +224,12 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Warning letter issued date",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
+     *     "fieldsetClass":"__ior-warning"
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
@@ -220,10 +240,12 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "PI Agreed",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
+     *     "fieldsetClass":"__ior-pi"
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
@@ -234,10 +256,12 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Other Action agreed",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
+     *     "fieldsetClass":"__ior-other"
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
