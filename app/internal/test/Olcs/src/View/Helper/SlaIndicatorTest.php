@@ -28,6 +28,60 @@ class SlaIndicatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider provideHasTargetBeenMetCases
+     *
+     * @param $date
+     * @param $target
+     * @param $result
+     *
+     * @return void
+     */
+    public function testHasTargetBeenMet($date, $target, $result)
+    {
+        $sut = new SlaIndicator();
+        $this->assertSame(
+            $result,
+            $sut->hasTargetBeenMet($date, $target)
+        );
+    }
+
+    public function provideHasTargetBeenMetCases()
+    {
+        return [
+            [
+                '2014-03-01',
+                '2014-03-02',
+                self::PASS_HTML,
+            ],
+            [
+                '2014-03-01',
+                '2014-03-01',
+                self::PASS_HTML,
+            ],
+            [
+                '2014-03-02',
+                '2014-03-01',
+                self::FAIL_HTML,
+            ],
+            [
+                null,
+                '2014-03-01',
+                self::INACTIVE_HTML,
+            ],
+            [
+                '2014-03-01',
+                null,
+                self::INACTIVE_HTML,
+            ],
+            [
+                null,
+                null,
+                self::INACTIVE_HTML,
+            ],
+        ];
+    }
+
+    /**
      * @dataProvider provideGenerateItemCases
      *
      * @param      $queryResult
@@ -50,61 +104,26 @@ class SlaIndicatorTest extends \PHPUnit_Framework_TestCase
 
     public function provideGenerateItemCases()
     {
-        return [
-            [
+        foreach ($this->provideHasTargetBeenMetCases() as list($date, $target, $result)) {
+            yield [
                 [
-                    'date' => '2014-03-01',
-                    'dateTarget' => '2014-03-02'
+                    'date' => $date,
+                    'dateTarget' => $target,
                 ],
-                self::PASS_HTML,
-            ],
+                $result
+            ];
+        }
+        yield [
             [
-                [
-                    'date' => '2014-03-01',
-                    'dateTarget' => '2014-03-01',
-                ],
-                self::PASS_HTML,
+                'date' => null,
             ],
+            self::INACTIVE_HTML,
+        ];
+        yield [
             [
-                [
-                    'date' => '2014-03-02',
-                    'dateTarget' => '2014-03-01',
-                ],
-                self::FAIL_HTML,
+                'date' => '2014-03-01',
             ],
-            [
-                [
-                    'date' => null,
-                    'dateTarget' => '2014-03-01',
-                ],
-                self::INACTIVE_HTML,
-            ],
-            [
-                [
-                    'date' => '2014-03-01',
-                    'dateTarget' => null,
-                ],
-                self::INACTIVE_HTML,
-            ],
-            [
-                [
-                    'date' => null,
-                    'dateTarget' => null,
-                ],
-                self::INACTIVE_HTML,
-            ],
-            [
-                [
-                    'date' => null,
-                ],
-                self::INACTIVE_HTML,
-            ],
-            [
-                [
-                    'date' => '2014-03-01',
-                ],
-                self::INACTIVE_HTML,
-            ],
+            self::INACTIVE_HTML,
         ];
     }
 
