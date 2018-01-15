@@ -1,38 +1,58 @@
 <?php
 
+/** @var array $revoke */
+
 $items = [
-    ['label' => 'Submission required for approval of ptr', 'date' => 'tbc'],
+    [
+        'label' => 'Submission required for approval of ptr',
+        'value' => $revoke['isSubmissionRequiredForApproval'] === null
+            ? null
+            : ($revoke['isSubmissionRequiredForApproval'] ? 'Y' : 'N')
+    ],
 
     //conditional if above yes
-    ['label' => 'Date approval submission sent', 'date' => 'tbc'],
-    ['label' => 'Date approval submission returned', 'date' => 'tbc'],
-    ['label' => 'Approval submission TC/TDC', 'value' => $revoke['presidingTc']['name']],
+    ['label' => 'Date approval submission sent', 'date' => $revoke['approvalSubmissionIssuedDate']],
+    ['label' => 'Date approval submission returned', 'date' => $revoke['approvalSubmissionReturnedDate']],
+    [
+        'label' => 'Approval submission TC/TDC',
+        'value' => $revoke['presidingTc'] ? $revoke['presidingTc']['name'] : null
+    ],
 
-    ['label' => 'Date IOR letter issued', 'date' => 'tbc'],
-    ['label' => 'Date Operator\'s response due', 'date' => 'tbc'],
-    ['label' => 'Date Response Received', 'date' => ''],
+    ['label' => 'Date IOR letter issued', 'date' => $revoke['iorLetterIssuedDate']],
+    ['label' => 'Date Operator\'s response due', 'date' => $revoke['operatorResponseDueDate']],
+    ['label' => 'Date Response Received', 'date' => $revoke['operatorResponseReceivedDate']],
 
-
-    ['label' => 'Is submission required for action', 'value' => ''],
+    [
+        'label' => 'Is submission required for action',
+        'value' => $revoke['isSubmissionRequiredForAction'] === null
+            ? null
+            : ($revoke['isSubmissionRequiredForAction'] ? 'Y' : 'N')
+    ],
 
     //conditional if above yes
-    ['label' => 'Date final submission sent', 'value' => ''],
-    ['label' => 'Date final submission returned', 'value' => ''],
-    ['label' => 'Final submission TC/DTC', 'value' => ''],
+    ['label' => 'Date final submission sent', 'value' => $revoke['finalSubmissionIssuedDate']],
+    ['label' => 'Date final submission returned', 'value' => $revoke['finalSubmissionReturnedDate']],
+    [
+        'label' => 'Final submission TC/DTC',
+        'value' => $revoke['finalSubmissionPresidingTc'] ?: $revoke['finalSubmissionPresidingTc']['name']
+    ],
 
-    ['label' => 'Action to be taken', 'value' => ''],
+    [
+        'label' => 'Action to be taken',
+        'value' => $revoke['actionToBeTaken'] ? $revoke['actionToBeTaken']['description'] : null
+    ],
 
     // if action revoked
-    ['label' => 'Revocation letter issued date', 'date' => ''],
+    ['label' => 'Revocation letter issued date', 'date' => $revoke['revocationLetterIssuedDate']],
     //if action is NFA
-    ['label' => 'NFA letter issued date', 'date' => ''],
+    ['label' => 'NFA letter issued date', 'date' => $revoke['nfaLetterIssuedDate']],
     // if action is warning
-    ['label' => 'Warning letter issued date', 'date' => ''],
-   // if action is PI
-    ['label' => 'PI Agreed', 'date' => ''],
+    ['label' => 'Warning letter issued date', 'date' => $revoke['warningLetterIssuedDate']],
+    // if action is PI
+    ['label' => 'PI Agreed', 'date' => $revoke['piAgreedDate']],
 
     //if action other
-    ['label' => 'Other Action agreed', 'date' => '']
+    ['label' => 'Other Action agreed', 'date' => $revoke['otherActionAgreedDate']]
 
 ];
 
@@ -45,12 +65,14 @@ $actions = [
             [],
             true
         ),
-       'class' => 'action--secondary js-modal-ajax'
+        'class' => 'action--secondary js-modal-ajax'
     ],
 ];
-echo $this->render('partials/read-only/main',
+echo $this->render(
+    'partials/read-only/main',
     [
         'header' => 'Service level agreement',
         'actions' => $actions,
         'items' => $items
-    ]);
+    ]
+);
