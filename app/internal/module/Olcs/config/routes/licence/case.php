@@ -527,7 +527,7 @@ return [
             ],
             'defaults' => [
                 'controller' => 'CaseRevokeController',
-                'action' => 'edit'
+                'action' => 'index'
             ]
         ]
     ],
