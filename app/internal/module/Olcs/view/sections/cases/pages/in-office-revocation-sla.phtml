@@ -27,7 +27,7 @@ if ($revoke['isSubmissionRequiredForApproval']) {
                 'date' => $revoke['approvalSubmissionReturnedDate'],
             ],
             [
-                'label' => 'Approval submission TC/TDC',
+                'label' => 'Approval submission TC/TDC/TR',
                 'value' => $revoke['approvalSubmissionPresidingTc']
                     ? $revoke['approvalSubmissionPresidingTc']['name']
                     : null
@@ -74,7 +74,7 @@ if ($revoke['isSubmissionRequiredForAction']) {
                 'date' => $revoke['finalSubmissionReturnedDate'],
             ],
             [
-                'label' => 'Final submission TC/DTC',
+                'label' => 'Final submission TC/DTC/TR',
                 'value' => $revoke['finalSubmissionPresidingTc']
                     ? $revoke['finalSubmissionPresidingTc']['name']
                     : null,

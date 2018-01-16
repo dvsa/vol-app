@@ -14,7 +14,6 @@ use Olcs\Form\Model\Form\RevocationsSla;
  */
 class RevocationsSlaController extends AbstractInternalController
 {
-
     protected $formClass = RevocationsSla::class;
 
     protected $itemDto = ProposeToRevokeByCase::class;
@@ -39,15 +38,4 @@ class RevocationsSlaController extends AbstractInternalController
     ];
 
     protected $inlineScripts = ["editAction" => ['forms/ior-sla-form']];
-
-
-    /**
-     * Edit Action
-     *
-     * @return array|\Zend\View\Model\ViewModel
-     */
-    public function editAction()
-    {
-        return parent::editAction();
-    }
 }
