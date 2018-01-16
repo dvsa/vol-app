@@ -32,7 +32,7 @@ class RevocationsSla
      * @Form\Attributes({"id":""})
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Date approval submission sent",
+     *     "label": "Date approval submission issued",
      *     "create_empty_option": true,
      *     "render_delimiters": false,
      *     "fieldsetClass":"__ptr-yes"
@@ -142,7 +142,7 @@ class RevocationsSla
      * @Form\Attributes({"id":""})
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Date final submission sent",
+     *     "label": "Date final submission issued",
      *     "create_empty_option": true,
      *     "render_delimiters": false,
      *     "fieldsetClass":"__sra-yes"
