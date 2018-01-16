@@ -27,6 +27,7 @@ class RevocationsSlaTest extends AbstractFormValidationTestCase
         $this->assertFormElementAllowEmpty($elementHierarchy, true);
         $this->assertFormElementIsRequired($elementHierarchy, false);
         $this->assertFormElementType($elementHierarchy, Radio::class);
+        $this->assertEquals(0, $this->sut->getData()['fields']['isSubmissionRequiredForApproval']);
     }
 
     public function testApprovalSubmissionReturnedDate()
@@ -107,6 +108,8 @@ class RevocationsSlaTest extends AbstractFormValidationTestCase
         $this->assertFormElementAllowEmpty($elementHierarchy, true);
         $this->assertFormElementIsRequired($elementHierarchy, false);
         $this->assertFormElementType($elementHierarchy, Radio::class);
+        $this->assertFormElementIsRequired($elementHierarchy, false);
+        $this->assertEquals(0, $this->sut->getData()['fields']['isSubmissionRequiredForAction']);
     }
 
     public function testActionToBeTaken()
