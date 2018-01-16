@@ -184,7 +184,8 @@ return array(
             'CaseDecisionsNoFurtherActionController'
                 => 'Olcs\Controller\Cases\Processing\DecisionsNoFurtherActionController',
             'CaseRevokeController' => 'Olcs\Controller\Cases\Processing\RevokeController',
-            \Olcs\Controller\Sla\RevocationsSlaController::class => \Olcs\Controller\Sla\RevocationsSlaController::class,
+            \Olcs\Controller\Sla\RevocationsSlaController::class =>
+                \Olcs\Controller\Sla\RevocationsSlaController::class,
             'DefaultController' => 'Olcs\Olcs\Placeholder\Controller\DefaultController',
             Olcs\Controller\IndexController::class => Olcs\Controller\IndexController::class,
             SearchController::class => SearchController::class,
