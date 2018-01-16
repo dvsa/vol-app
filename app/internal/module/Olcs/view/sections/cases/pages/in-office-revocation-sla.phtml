@@ -1,0 +1,146 @@
+<?php
+
+/** @var array $revoke */
+
+use Common\RefData;
+
+$items = [
+    [
+        'label' => 'Submission required for approval of ptr',
+        'value' => $revoke['isSubmissionRequiredForApproval'] === null
+            ? null
+            : ($revoke['isSubmissionRequiredForApproval'] ? 'Y' : 'N')
+    ],
+];
+
+if ($revoke['isSubmissionRequiredForApproval']) {
+    $items = array_merge(
+        $items,
+        [
+            [
+                'label' => 'Date approval submission issued',
+                'date' => $revoke['approvalSubmissionIssuedDate'],
+            ],
+            [
+                'label' => 'Date approval submission returned',
+                'date' => $revoke['approvalSubmissionReturnedDate']
+            ],
+            [
+                'label' => 'Approval submission TC/TDC/TR',
+                'value' => $revoke['approvalSubmissionPresidingTc']
+                    ? $revoke['approvalSubmissionPresidingTc']['name']
+                    : null,
+            ],
+        ]
+    );
+}
+
+$items = array_merge(
+    $items,
+    [
+        [
+            'label' => 'Date IOR letter issued',
+            'date' => $revoke['iorLetterIssuedDate'],
+        ],
+        [
+            'label' => 'Date Operator\'s response due',
+            'date' => $revoke['operatorResponseDueDate'],
+        ],
+        [
+            'label' => 'Date Response Received',
+            'date' => $revoke['operatorResponseReceivedDate'],
+        ],
+
+        [
+            'label' => 'Is submission required for action',
+            'value' => $revoke['isSubmissionRequiredForAction'] === null
+                ? null
+                : ($revoke['isSubmissionRequiredForAction'] ? 'Y' : 'N'),
+        ],
+    ]
+);
+
+if ($revoke['isSubmissionRequiredForAction']) {
+    $items = array_merge(
+        $items,
+        [
+            [
+                'label' => 'Date final submission issued',
+                'date' => $revoke['finalSubmissionIssuedDate'],
+            ],
+            [
+                'label' => 'Date final submission returned',
+                'date' => $revoke['finalSubmissionReturnedDate'],
+            ],
+            [
+                'label' => 'Final submission TC/DTC/TR',
+                'value' => $revoke['finalSubmissionPresidingTc']
+                    ? $revoke['finalSubmissionPresidingTc']['name']
+                    : null,
+            ],
+        ]
+    );
+}
+
+$items[] = [
+    'label' => 'Action to be taken',
+    'value' => $revoke['actionToBeTaken']
+        ? $revoke['actionToBeTaken']['description']
+        : null,
+];
+
+if ($revoke['actionToBeTaken']) {
+    switch ($revoke['actionToBeTaken']['id']) {
+        case RefData::PTR_ACTION_TO_BE_TAKEN_REVOKE:
+            $items[] = [
+                'label' => 'Revocation letter issued date',
+                'date' => $revoke['revocationLetterIssuedDate'],
+            ];
+            break;
+        case RefData::PTR_ACTION_TO_BE_TAKEN_NFA:
+            $items[] = [
+                'label' => 'NFA letter issued date',
+                'date' => $revoke['nfaLetterIssuedDate'],
+            ];
+            break;
+        case RefData::PTR_ACTION_TO_BE_TAKEN_WARNING:
+            $items[] = [
+                'label' => 'Warning letter issued date',
+                'date' => $revoke['warningLetterIssuedDate'],
+            ];
+            break;
+        case RefData::PTR_ACTION_TO_BE_TAKEN_PI:
+            $items[] = [
+                'label' => 'PI Agreed',
+                'date' => $revoke['piAgreedDate'],
+            ];
+            break;
+        case RefData::PTR_ACTION_TO_BE_TAKEN_OTHER:
+            $items[] = [
+                'label' => 'Other Action agreed',
+                'date' => $revoke['otherActionAgreedDate'],
+            ];
+            break;
+    };
+}
+
+$actions = [
+    [
+        'label' => 'Edit',
+        'url' => $this->url(
+            'processing_in_office_revocation_sla',
+            ['action' => 'edit'],
+            [],
+            true
+        ),
+        'class' => 'action--secondary js-modal-ajax'
+    ],
+];
+echo $this->render(
+    'partials/read-only/main',
+    [
+        'header' => 'Service level agreement',
+        'actions' => $actions,
+        'items' => $items
+    ]
+);

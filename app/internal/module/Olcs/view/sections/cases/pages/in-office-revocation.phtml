@@ -14,7 +14,7 @@ if (empty($revoke)) {
     $revokeReasons = '';
 
     foreach ($revoke['reasons'] as $reason) {
-        $revokeReasons .= $reason['sectionCode'] . ' - ' . $reason['description'] .'<br />';
+        $revokeReasons .= $reason['sectionCode'] . ' - ' . $reason['description'] . '<br />';
     }
 
     echo $this->render('partials/read-only/main',
@@ -31,13 +31,17 @@ if (empty($revoke)) {
                     )
                 ],
             ],
-            'items' => [
-                ['label' => 'Legislation', 'value' => $revokeReasons, 'noEscape' => true, 'class' => 'full-width'],
-                ['label' => 'TC/TDC agreed', 'value' => $revoke['presidingTc']['name']],
-                ['label' => 'Agreed date', 'date' => $revoke['ptrAgreedDate']],
-                ['label' => 'Closed date', 'date' => $revoke['closedDate']],
-                ['label' => 'Notes', 'value' => $revoke['comment'], 'class' => 'full-width']
+            'multiItems' => [
+                0 => [
+                    ['label' => 'Legislation', 'value' => $revokeReasons, 'noEscape' => true, 'class' => 'full-width'],
+                    ['label' => 'TC/TDC agreed', 'value' => $revoke['presidingTc']['name']],
+                    ['label' => 'Agreed date', 'date' => $revoke['ptrAgreedDate']],
+                    ['label' => 'Closed date', 'date' => $revoke['closedDate']],
+                    ['label' => 'Notes', 'value' => $revoke['comment'], 'class' => 'full-width']
+                ]
             ]
         ]
     );
+
+    echo $this->render('sections/cases/pages/in-office-revocation-sla', array('revoke' => $revoke));
 }
