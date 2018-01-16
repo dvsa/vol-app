@@ -12,8 +12,7 @@ use Common\Service\Data\RefData;
  */
 class ActionToBeTaken extends RefData
 {
-
-     /**
+    /**
      * Fetch list data
      *
      * @param array $category Category

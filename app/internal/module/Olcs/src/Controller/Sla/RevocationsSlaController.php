@@ -14,7 +14,6 @@ use Olcs\Form\Model\Form\RevocationsSla;
  */
 class RevocationsSlaController extends AbstractInternalController
 {
-
     protected $formClass = RevocationsSla::class;
 
     protected $itemDto = ProposeToRevokeByCase::class;
