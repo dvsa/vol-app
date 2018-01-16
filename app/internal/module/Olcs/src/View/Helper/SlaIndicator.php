@@ -9,21 +9,49 @@ use Zend\View\Helper\AbstractHelper;
  *
  * @package Olcs\View\Helper
  *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
+ * @author  Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 class SlaIndicator extends AbstractHelper
 {
     /**
-     * @param $data
-     * @param $targetDate
+     * Invoke the helper
      *
-     * @return string
+     * @return $this
      */
     public function __invoke()
     {
         return $this;
     }
 
+    /**
+     * Generate Date item for read only section
+     *
+     * @param string $label         label
+     * @param array  $queryResult   query result
+     * @param string $dateFieldName date field name
+     *
+     * @return array
+     */
+    public function generateDateItem($label, $queryResult, $dateFieldName)
+    {
+        return [
+            'label' => $label,
+            'date' => $queryResult[$dateFieldName],
+            'suffix' => $this->hasTargetBeenMet(
+                $queryResult[$dateFieldName],
+                isset($queryResult[$dateFieldName . 'Target']) ? $queryResult[$dateFieldName . 'Target'] : null
+            ),
+        ];
+    }
+
+    /**
+     * Generate SLA HTML
+     *
+     * @param string|null $date       date
+     * @param string|null $targetDate target date
+     *
+     * @return string
+     */
     public function hasTargetBeenMet($date = null, $targetDate = null)
     {
         if (is_null($date) || is_null($targetDate)) {
@@ -39,7 +67,15 @@ class SlaIndicator extends AbstractHelper
         return '<span class="status green">Pass</span>';
     }
 
-    public function doHasTargetBeenMet($date = null, $targetDate = null)
+    /**
+     * check if target date has been met
+     *
+     * @param string|null $date       date
+     * @param string|null $targetDate targetDate
+     *
+     * @return bool
+     */
+    private function doHasTargetBeenMet($date = null, $targetDate = null)
     {
         $dateTime = \DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime($date)));
         $targetDateTime = \DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime($targetDate)));
