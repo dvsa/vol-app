@@ -1,14 +1,17 @@
 <?php
 
-
 namespace Olcs\Controller\Sla;
-
 
 use Dvsa\Olcs\Transfer\Command\Cases\ProposeToRevoke\UpdateProposeToRevokeSla;
 use Dvsa\Olcs\Transfer\Query\Cases\ProposeToRevoke\ProposeToRevokeByCase;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Form\Model\Form\RevocationsSla;
 
+/**
+ * Class RevocationsSlaController
+ *
+ * @package Olcs\Controller\Sla
+ */
 class RevocationsSlaController extends AbstractInternalController
 {
 
@@ -33,11 +36,16 @@ class RevocationsSlaController extends AbstractInternalController
             'route' => 'processing_in_office_revocation',
             'action' => 'details'
         ]
-     ];
+    ];
 
-    protected $inlineScripts =["editAction"=>['forms/ior-sla-form']];
+    protected $inlineScripts = ["editAction" => ['forms/ior-sla-form']];
 
 
+    /**
+     * Edit Action
+     *
+     * @return array|\Zend\View\Model\ViewModel
+     */
     public function editAction()
     {
         return parent::editAction();

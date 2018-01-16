@@ -1,8 +1,6 @@
 <?php
 
-
 namespace OlcsTest\Form\Model\Form;
-
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Zend\Form\Element\Radio;
@@ -161,7 +159,6 @@ class RevocationsSlaTest extends AbstractFormValidationTestCase
         $this->assertFormElementDate($elementHierarchy);
     }
 
-
     public function testSubmit()
     {
         $elementHierarchy = ['form-actions', 'submit'];
@@ -173,5 +170,4 @@ class RevocationsSlaTest extends AbstractFormValidationTestCase
         $elementHierarchy = ['form-actions', 'cancel'];
         $this->assertFormElementActionButton($elementHierarchy);
     }
-
 }

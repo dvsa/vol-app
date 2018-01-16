@@ -14,7 +14,7 @@ class RevocationsSla implements MapperInterface
 {
 
     /**
-     * @param array $data
+     * @param array $data data
      *
      * @return array
      */
@@ -40,9 +40,12 @@ class RevocationsSla implements MapperInterface
     }
 
     /**
-     * @param $formData
+     * Map from form
+     *
+     * @param array $formData form data
+     *
+     * @return array
      */
-
     public static function mapFromForm($formData)
     {
         $data = [];
@@ -54,9 +57,16 @@ class RevocationsSla implements MapperInterface
         return $data;
     }
 
+    /**
+     * map form errors
+     *
+     * @param mixed $form   form
+     * @param array $errors errors
+     *
+     * @return array
+     */
     public static function mapFromErrors($form, array $errors)
     {
-
         return $errors;
     }
 }

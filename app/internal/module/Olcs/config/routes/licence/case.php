@@ -2,7 +2,6 @@
 
 use Olcs\Controller\Cases;
 
-
 /**
  * @internal as we work on each controller, replace string with controller class
  * Routes for the licence section and case route.
