@@ -98,25 +98,25 @@ if ($revoke['actionToBeTaken']) {
             ];
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_NFA:
-            $items = [
+            $items[] = [
                 'label' => 'NFA letter issued date',
                 'date' => $revoke['nfaLetterIssuedDate'],
             ];
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_WARNING:
-            $items = [
+            $items[] = [
                 'label' => 'Warning letter issued date',
                 'date' => $revoke['warningLetterIssuedDate'],
             ];
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_PI:
-            $items = [
+            $items[] = [
                 'label' => 'PI Agreed',
                 'date' => $revoke['piAgreedDate'],
             ];
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_OTHER:
-            $items = [
+            $items[] = [
                 'label' => 'Other Action agreed',
                 'date' => $revoke['otherActionAgreedDate'],
             ];
