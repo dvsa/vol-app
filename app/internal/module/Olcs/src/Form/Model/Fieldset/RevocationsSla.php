@@ -42,7 +42,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $approvalSubmissionIssuedDate;
+    public $approvalSubmissionIssuedDate = null;
 
     /**
      * @Form\Attributes({"id":""})
@@ -61,14 +61,13 @@ class RevocationsSla
     public $approvalSubmissionReturnedDate;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Attributes({"id":"approvalSubmissionPresidingTc","class":"__ptr-yes"})
      * @Form\Required(false)
      * @Form\Options({
      *     "label": "Approval submission TC/TDC",
      *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "fieldsetClass":"__ptr-yes"
+     *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
      */
@@ -166,14 +165,15 @@ class RevocationsSla
     public $finalSubmissionReturnedDate;
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
+     * @Form\Attributes({"id":"finalSubmissionPresidingTc","class":"__sra-yes"})
      * @Form\Required(false)
      * @Form\Options({
      *     "label": "Final submission TC/TDC",
      *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
-     *     "fieldsetClass":"__sra-yes"
+     *      "labelClass":"__sra-yes"
+     *
      * })
      * @Form\Type("DynamicSelect")
      */
