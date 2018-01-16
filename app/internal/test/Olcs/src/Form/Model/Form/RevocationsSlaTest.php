@@ -159,7 +159,6 @@ class RevocationsSlaTest extends AbstractFormValidationTestCase
         $this->assertFormElementDate($elementHierarchy);
     }
 
-
     public function testSubmit()
     {
         $elementHierarchy = ['form-actions', 'submit'];
