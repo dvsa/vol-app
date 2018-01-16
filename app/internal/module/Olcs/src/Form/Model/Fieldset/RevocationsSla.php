@@ -32,7 +32,7 @@ class RevocationsSla
      * @Form\Attributes({"id":""})
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Date approval submission sent",
+     *     "label": "Date approval submission issued",
      *     "create_empty_option": true,
      *     "render_delimiters": false,
      *     "fieldsetClass":"__ptr-yes"
@@ -66,7 +66,7 @@ class RevocationsSla
      * @Form\Attributes({"id":"approvalSubmissionPresidingTc","class":"__ptr-yes"})
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Approval submission TC/TDC",
+     *     "label": "Approval submission TC/DTC/TR",
      *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false
@@ -94,7 +94,7 @@ class RevocationsSla
      * @Form\Attributes({"id":""})
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Date Response Received",
+     *     "label": "Date Operator's Response due",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
@@ -109,7 +109,7 @@ class RevocationsSla
      * @Form\Attributes({"id":""})
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Date Response Received",
+     *     "label": "Date Operator's Response Received",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
@@ -142,7 +142,7 @@ class RevocationsSla
      * @Form\Attributes({"id":""})
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Date final submission sent",
+     *     "label": "Date final submission issued",
      *     "create_empty_option": true,
      *     "render_delimiters": false,
      *     "fieldsetClass":"__sra-yes"
@@ -158,7 +158,7 @@ class RevocationsSla
      * @Form\Attributes({"id":""})
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Date final submission sent",
+     *     "label": "Date final submission returned",
      *     "create_empty_option": true,
      *     "render_delimiters": false,
      *     "fieldsetClass":"__sra-yes"
@@ -174,7 +174,7 @@ class RevocationsSla
      * @Form\Attributes({"id":"finalSubmissionPresidingTc","class":"__sra-yes"})
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Final submission TC/TDC",
+     *     "label": "Final submission TC/DTC/TR",
      *     "service_name": "Olcs\Service\Data\PresidingTc",
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false,
@@ -209,7 +209,7 @@ class RevocationsSla
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Val
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      **/
     public $revocationLetterIssuedDate = null;
 
