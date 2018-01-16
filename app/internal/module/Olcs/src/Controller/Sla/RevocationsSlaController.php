@@ -39,15 +39,4 @@ class RevocationsSlaController extends AbstractInternalController
     ];
 
     protected $inlineScripts = ["editAction" => ['forms/ior-sla-form']];
-
-
-    /**
-     * Edit Action
-     *
-     * @return array|\Zend\View\Model\ViewModel
-     */
-    public function editAction()
-    {
-        return parent::editAction();
-    }
 }
