@@ -13,6 +13,7 @@ class RevocationsSla
 {
     /**
      * @Form\Type("Radio")
+     * @Form\Required(false)
      * @Form\Options({
      *      "label": "Submission required for approval of ptr?",
      *      "value_options":{
@@ -29,6 +30,7 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Date approval submission sent",
      *     "create_empty_option": true,
@@ -75,6 +77,7 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Date IOR letter issued",
      *     "create_empty_option": true,
@@ -89,6 +92,7 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Date Response Received",
      *     "create_empty_option": true,
@@ -103,6 +107,7 @@ class RevocationsSla
 
     /**
      * @Form\Attributes({"id":""})
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "Date Response Received",
      *     "create_empty_option": true,
@@ -118,6 +123,7 @@ class RevocationsSla
 
     /**
      * @Form\Type("Radio")
+     * @Form\Required(false)
      * @Form\Options({
      *      "label": "Is submission required for action?",
      *      "value_options":{
@@ -186,6 +192,7 @@ class RevocationsSla
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": false
      * })
+     * @Form\Required(false)
      * @Form\Type("DynamicSelect")
      */
     public $actionToBeTaken;
