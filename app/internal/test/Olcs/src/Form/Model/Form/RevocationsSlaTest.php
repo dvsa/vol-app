@@ -25,6 +25,7 @@ class RevocationsSlaTest extends AbstractFormValidationTestCase
     {
         $elementHierarchy = ['fields', 'isSubmissionRequiredForApproval'];
         $this->assertFormElementType($elementHierarchy, Radio::class);
+        $this->assertFormElementIsRequired($elementHierarchy, false);
     }
 
     public function testApprovalSubmissionReturnedDate()
@@ -37,6 +38,7 @@ class RevocationsSlaTest extends AbstractFormValidationTestCase
     {
         $elementHierarchy = ['fields', 'approvalSubmissionPresidingTc'];
         $this->assertFormElementDynamicSelect($elementHierarchy);
+        $this->assertFormElementIsRequired($elementHierarchy, false);
     }
 
     public function testIorLetterIssuedDate()
@@ -79,6 +81,7 @@ class RevocationsSlaTest extends AbstractFormValidationTestCase
     {
         $elementHierarchy = ['fields', 'finalSubmissionPresidingTc'];
         $this->assertFormElementDynamicSelect($elementHierarchy);
+        $this->assertFormElementIsRequired($elementHierarchy, false);
     }
 
     public function testIsSubmissionRequiredForAction()
@@ -91,6 +94,7 @@ class RevocationsSlaTest extends AbstractFormValidationTestCase
     {
         $elementHierarchy = ['fields', 'actionToBeTaken'];
         $this->assertFormElementDynamicSelect($elementHierarchy);
+        $this->assertFormElementIsRequired($elementHierarchy, false);
     }
 
     public function testRevocationLetterIssuedDate()
