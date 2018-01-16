@@ -13,11 +13,25 @@ use Zend\View\Helper\AbstractHelper;
  */
 class SlaIndicator extends AbstractHelper
 {
+    /**
+     * Invoke the helper
+     *
+     * @return $this
+     */
     public function __invoke()
     {
         return $this;
     }
 
+    /**
+     * Generate Date item for read only section
+     *
+     * @param string $label         label
+     * @param array  $queryResult   query result
+     * @param string $dateFieldName date field name
+     *
+     * @return array
+     */
     public function generateDateItem($label, $queryResult, $dateFieldName)
     {
         return [
@@ -30,6 +44,14 @@ class SlaIndicator extends AbstractHelper
         ];
     }
 
+    /**
+     * Generate SLA HTML
+     *
+     * @param string|null $date       date
+     * @param string|null $targetDate target date
+     *
+     * @return string
+     */
     public function hasTargetBeenMet($date = null, $targetDate = null)
     {
         if (is_null($date) || is_null($targetDate)) {
@@ -45,6 +67,14 @@ class SlaIndicator extends AbstractHelper
         return '<span class="status green">Pass</span>';
     }
 
+    /**
+     * check if target date has been met
+     *
+     * @param string|null $date       date
+     * @param string|null $targetDate targetDate
+     *
+     * @return bool
+     */
     private function doHasTargetBeenMet($date = null, $targetDate = null)
     {
         $dateTime = \DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime($date)));
