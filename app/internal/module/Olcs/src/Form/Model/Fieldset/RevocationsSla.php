@@ -209,7 +209,7 @@ class RevocationsSla
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Val
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      **/
     public $revocationLetterIssuedDate = null;
 
