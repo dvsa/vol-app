@@ -17,8 +17,15 @@ if ($revoke['isSubmissionRequiredForApproval']) {
     $items = array_merge(
         $items,
         [
-            $this->slaIndicator()->generateDateItem('Date approval submission issued', $revoke, 'approvalSubmissionIssuedDate'),
-            $this->slaIndicator()->generateDateItem('Date approval submission returned', $revoke, 'approvalSubmissionReturnedDate'),
+            $this->slaIndicator()->generateDateItem(
+                'Date approval submission issued',
+                $revoke,
+                'approvalSubmissionIssuedDate'
+            ),
+            [
+                'label' => 'Date approval submission returned',
+                'date' => $revoke['approvalSubmissionReturnedDate'],
+            ],
             [
                 'label' => 'Approval submission TC/TDC',
                 'value' => $revoke['approvalSubmissionPresidingTc']
@@ -32,10 +39,18 @@ if ($revoke['isSubmissionRequiredForApproval']) {
 $items = array_merge(
     $items,
     [
-        $this->slaIndicator()->generateDateItem('Date IOR letter issued', $revoke, 'iorLetterIssuedDate'),
-        $this->slaIndicator()->generateDateItem('Date Operator\'s response due', $revoke, 'operatorResponseDueDate'),
-        $this->slaIndicator()->generateDateItem('Date Response Received', $revoke, 'operatorResponseReceivedDate'),
-
+        [
+            'label' => 'Date IOR letter issued',
+            'date' => $revoke['iorLetterIssuedDate'],
+        ],
+        [
+            'label' => 'Date Operator\'s response due',
+            'date' => $revoke['operatorResponseDueDate'],
+        ],
+        [
+            'label' => 'Date Response Received',
+            'date' => $revoke['operatorResponseReceivedDate'],
+        ],
         [
             'label' => 'Is submission required for action',
             'value' => $revoke['isSubmissionRequiredForAction'] === null
@@ -49,8 +64,15 @@ if ($revoke['isSubmissionRequiredForAction']) {
     $items = array_merge(
         $items,
         [
-            $this->slaIndicator()->generateDateItem('Date final submission issued', $revoke, 'finalSubmissionIssuedDate'),
-            $this->slaIndicator()->generateDateItem('Date final submission returned', $revoke, 'finalSubmissionReturnedDate'),
+            $this->slaIndicator()->generateDateItem(
+                'Date final submission issued',
+                $revoke,
+                'finalSubmissionIssuedDate'
+            ),
+            [
+                'label' => 'Date final submission returned',
+                'date' => $revoke['finalSubmissionReturnedDate'],
+            ],
             [
                 'label' => 'Final submission TC/DTC',
                 'value' => $revoke['finalSubmissionPresidingTc']
@@ -71,19 +93,37 @@ $items[] = [
 if ($revoke['actionToBeTaken']) {
     switch ($revoke['actionToBeTaken']['id']) {
         case RefData::PTR_ACTION_TO_BE_TAKEN_REVOKE:
-            $items[] = $this->slaIndicator()->generateDateItem('Revocation letter issued date', $revoke, 'revocationLetterIssuedDate');
+            $items[] = $this->slaIndicator()->generateDateItem(
+                'Revocation letter issued date',
+                $revoke,
+                'revocationLetterIssuedDate'
+            );
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_NFA:
-            $items[] = $this->slaIndicator()->generateDateItem('NFA letter issued date', $revoke, 'nfaLetterIssuedDate');
+            $items[] = $this->slaIndicator()->generateDateItem(
+                'NFA letter issued date',
+                $revoke,
+                'nfaLetterIssuedDate'
+            );
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_WARNING:
-            $items[] = $this->slaIndicator()->generateDateItem('Warning letter issued date', $revoke, 'warningLetterIssuedDate');
+            $items[] = $this->slaIndicator()->generateDateItem(
+                'Warning letter issued date',
+                $revoke,
+                'warningLetterIssuedDate'
+            );
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_PI:
-            $items[] = $this->slaIndicator()->generateDateItem('PI Agreed', $revoke, 'piAgreedDate');
+            $items[] = [
+                'label' => 'PI Agreed',
+                'date' => $revoke['piAgreedDate'],
+            ];
             break;
         case RefData::PTR_ACTION_TO_BE_TAKEN_OTHER:
-            $items[] = $this->slaIndicator()->generateDateItem('Other Action agreed', $revoke, 'otherActionAgreedDate');
+            $items[] = [
+                'label' => 'Other Action agreed',
+                'date' => $revoke['otherActionAgreedDate'],
+            ];
             break;
     };
 }
