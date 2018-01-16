@@ -58,7 +58,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $approvalSubmissionReturnedDate;
+    public $approvalSubmissionReturnedDate = null;
 
     /**
      * @Form\Attributes({"id":"approvalSubmissionPresidingTc","class":"__ptr-yes"})
@@ -85,7 +85,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $iorLetterIssuedDate;
+    public $iorLetterIssuedDate = null;
 
     /**
      * @Form\Attributes({"id":""})
@@ -99,7 +99,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $operatorResponseDueDate;
+    public $operatorResponseDueDate = null;
 
     /**
      * @Form\Attributes({"id":""})
@@ -113,7 +113,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $operatorResponseReceivedDate;
+    public $operatorResponseReceivedDate = null;
 
 
     /**
@@ -146,7 +146,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $finalSubmissionIssuedDate;
+    public $finalSubmissionIssuedDate = null;
 
     /**
      * @Form\Attributes({"id":""})
@@ -204,7 +204,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Val
      **/
-    public $revocationLetterIssuedDate;
+    public $revocationLetterIssuedDate = null;
 
     /**
      * @Form\Attributes({"id":""})
@@ -220,7 +220,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $nfaLetterIssuedDate;
+    public $nfaLetterIssuedDate = null;
 
     /**
      * @Form\Attributes({"id":""})
@@ -236,7 +236,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $warningLetterIssuedDate;
+    public $warningLetterIssuedDate = null;
 
     /**
      * @Form\Attributes({"id":""})
@@ -252,7 +252,7 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $piAgreedDate;
+    public $piAgreedDate = null;
 
     /**
      * @Form\Attributes({"id":""})
@@ -268,5 +268,5 @@ class RevocationsSla
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
-    public $otherActionAgreedDate;
+    public $otherActionAgreedDate = null;
 }
