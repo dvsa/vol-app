@@ -23,101 +23,118 @@ class RevocationsSlaTest extends AbstractFormValidationTestCase
 
     public function testisSubmissionRequiredForApproval()
     {
-        $element = ['fields', 'isSubmissionRequiredForApproval'];
-        $this->assertFormElementType($element, Radio::class);
+        $elementHierarchy = ['fields', 'isSubmissionRequiredForApproval'];
+        $this->assertFormElementType($elementHierarchy, Radio::class);
     }
 
     public function testApprovalSubmissionReturnedDate()
     {
-        $this->assertFormElementDate(['fields', 'approvalSubmissionReturnedDate']);
+        $elementHierarchy = ['fields', 'approvalSubmissionReturnedDate'];
+        $this->assertFormElementDate($elementHierarchy);
     }
 
     public function testApprovalSubmissionPresidingTc()
     {
-        $this->assertFormElementDynamicSelect(['fields', 'approvalSubmissionPresidingTc']);
+        $elementHierarchy = ['fields', 'approvalSubmissionPresidingTc'];
+        $this->assertFormElementDynamicSelect($elementHierarchy);
     }
 
     public function testIorLetterIssuedDate()
     {
-        $this->assertFormElementDate(['fields', 'iorLetterIssuedDate']);
+        $elementHierarchy = ['fields', 'iorLetterIssuedDate'];
+        $this->assertFormElementDate($elementHierarchy);
     }
 
     public function testOperatorResponseDueDate()
     {
-        $this->assertFormElementDate(['fields', 'operatorResponseDueDate']);
+        $elementHierarchy = ['fields', 'operatorResponseDueDate'];
+        $this->assertFormElementDate($elementHierarchy);
     }
 
     public function testOperatorResponseReceivedDate()
     {
-        $this->assertFormElementDate(['fields', 'operatorResponseReceivedDate']);
+        $elementHierarchy = ['fields', 'operatorResponseReceivedDate'];
+        $this->assertFormElementDate($elementHierarchy);
     }
 
     public function testApprovalSubmissionIssuedDate()
     {
-        $this->assertFormElementDate(['fields', 'approvalSubmissionIssuedDate']);
+        $elementHierarchy = ['fields', 'approvalSubmissionIssuedDate'];
+        $this->assertFormElementDate($elementHierarchy);
     }
 
     public function testFinalSubmissionIssuedDate()
     {
-        $this->assertFormElementDate(['fields', 'finalSubmissionIssuedDate']);
+        $elementHierarchy = ['fields', 'finalSubmissionIssuedDate'];
+        $this->assertFormElementDate($elementHierarchy);
     }
 
     public function testFinalSubmissionReturnedDate()
     {
-        $this->assertFormElementDate(['fields', 'finalSubmissionReturnedDate']);
+        $elementHierarchy = ['fields', 'finalSubmissionReturnedDate'];
+        $this->assertFormElementDate($elementHierarchy);
     }
 
     public function testFinalSubmissionPresidingTc()
     {
-        $this->assertFormElementDynamicSelect(['fields', 'finalSubmissionPresidingTc']);
+        $elementHierarchy = ['fields', 'finalSubmissionPresidingTc'];
+        $this->assertFormElementDynamicSelect($elementHierarchy);
     }
 
     public function testIsSubmissionRequiredForAction()
     {
-        $element = ['fields', 'isSubmissionRequiredForAction'];
-        $this->assertFormElementType($element, Radio::class);
+        $elementHierarchy = ['fields', 'isSubmissionRequiredForAction'];
+        $this->assertFormElementType($elementHierarchy, Radio::class);
     }
 
     public function testActionToBeTaken()
     {
-        $this->assertFormElementDynamicSelect(['fields', 'actionToBeTaken']);
+        $elementHierarchy = ['fields', 'actionToBeTaken'];
+        $this->assertFormElementDynamicSelect($elementHierarchy);
     }
 
     public function testRevocationLetterIssuedDate()
     {
-        $this->assertFormElementDate(['fields', 'revocationLetterIssuedDate']);
+        $elementHierarchy = ['fields', 'revocationLetterIssuedDate'];
+        $this->assertFormElementDate($elementHierarchy);
     }
 
 
     public function testNfaLetterIssuedDate()
     {
-        $this->assertFormElementDate(['fields', 'nfaLetterIssuedDate']);
+        $elementHierarchy = ['fields', 'nfaLetterIssuedDate'];
+        $this->assertFormElementDate($elementHierarchy);
     }
 
     public function testWarningLetterIssuedDate()
     {
-        $this->assertFormElementDate(['fields', 'warningLetterIssuedDate']);
+        $elementHierarchy = ['fields', 'warningLetterIssuedDate'];
+        $this->assertFormElementDate($elementHierarchy);
     }
 
     public function testPiAgreedDate()
     {
-        $this->assertFormElementDate(['fields', 'piAgreedDate']);
+        $elementHierarchy = ['fields', 'piAgreedDate'];
+        $this->assertFormElementDate($elementHierarchy);
     }
 
     public function testOtherActionAgreedDate()
     {
-        $this->assertFormElementDate(['fields', 'otherActionAgreedDate']);
+        $elementHierarchy = ['fields', 'otherActionAgreedDate'];
+        $this->assertFormElementDate($elementHierarchy);
     }
 
 
     public function testSubmit()
     {
-        $this->assertFormElementActionButton(['form-actions', 'submit']);
+        $elementHierarchy = ['form-actions', 'submit'];
+        $this->assertFormElementActionButton($elementHierarchy);
     }
 
     public function testCancel()
     {
-        $this->assertFormElementActionButton(['form-actions', 'cancel']);
+        $elementHierarchy = ['form-actions', 'cancel'];
+        $this->assertFormElementActionButton($elementHierarchy);
     }
 
 }
