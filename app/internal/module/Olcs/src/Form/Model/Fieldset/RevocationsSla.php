@@ -19,9 +19,6 @@ class RevocationsSla
      *      "value_options":{
      *          "0":"No",
      *          "1":"Yes"
-     *      },
-     *      "fieldset-attributes" : {
-     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "0"})
@@ -129,9 +126,6 @@ class RevocationsSla
      *      "value_options":{
      *          "0":"No",
      *          "1":"Yes"
-     *      },
-     *      "fieldset-attributes" : {
-     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "0"})
