@@ -89,7 +89,6 @@ class RevocationsSlaTest extends MockeryTestCase
     public function testMapFromResult(array $input, $expected)
     {
         $actual = Sut::mapFromResult($input);
-        var_dump($actual);
         $this->assertEquals($expected, $actual);
     }
 
