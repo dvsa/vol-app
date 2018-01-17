@@ -16,7 +16,7 @@ class SlaIndicator extends AbstractHelper
     /**
      * invoke function
      *
-     * @return string
+     * @return $this
      */
     public function __invoke()
     {
@@ -24,10 +24,31 @@ class SlaIndicator extends AbstractHelper
     }
 
     /**
-     * hasTargetBeenMet
+     * Generate Date item for read only section
      *
-     * @param null $date       date
-     * @param null $targetDate targetDate
+     * @param string $label         label
+     * @param array  $queryResult   query result
+     * @param string $dateFieldName date field name
+     *
+     * @return array
+     */
+    public function generateDateItem($label, $queryResult, $dateFieldName)
+    {
+        return [
+            'label' => $label,
+            'date' => $queryResult[$dateFieldName],
+            'suffix' => $this->hasTargetBeenMet(
+                $queryResult[$dateFieldName],
+                isset($queryResult[$dateFieldName . 'Target']) ? $queryResult[$dateFieldName . 'Target'] : null
+            ),
+        ];
+    }
+
+    /**
+     * Generate SLA HTML
+     *
+     * @param string|null $date       date
+     * @param string|null $targetDate target date
      *
      * @return string
      */
@@ -47,14 +68,14 @@ class SlaIndicator extends AbstractHelper
     }
 
     /**
-     * doHasTargetBeenMet
+     * check if target date has been met
      *
-     * @param null $date       date
-     * @param null $targetDate targetDate
+     * @param string|null $date       date
+     * @param string|null $targetDate targetDate
      *
      * @return bool
      */
-    public function doHasTargetBeenMet($date = null, $targetDate = null)
+    private function doHasTargetBeenMet($date = null, $targetDate = null)
     {
         $dateTime = \DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime($date)));
         $targetDateTime = \DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime($targetDate)));
