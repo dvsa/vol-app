@@ -9,13 +9,12 @@ use Zend\View\Helper\AbstractHelper;
  *
  * @package Olcs\View\Helper
  *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
+ * @author  Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
 class SlaIndicator extends AbstractHelper
 {
     /**
-     * @param $data
-     * @param $targetDate
+     * invoke function
      *
      * @return string
      */
@@ -24,6 +23,14 @@ class SlaIndicator extends AbstractHelper
         return $this;
     }
 
+    /**
+     * hasTargetBeenMet
+     *
+     * @param null $date       date
+     * @param null $targetDate targetDate
+     *
+     * @return string
+     */
     public function hasTargetBeenMet($date = null, $targetDate = null)
     {
         if (is_null($date) || is_null($targetDate)) {
@@ -39,6 +46,14 @@ class SlaIndicator extends AbstractHelper
         return '<span class="status green">Pass</span>';
     }
 
+    /**
+     * doHasTargetBeenMet
+     *
+     * @param null $date       date
+     * @param null $targetDate targetDate
+     *
+     * @return bool
+     */
     public function doHasTargetBeenMet($date = null, $targetDate = null)
     {
         $dateTime = \DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime($date)));
