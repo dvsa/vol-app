@@ -14,7 +14,7 @@ use Zend\View\Helper\AbstractHelper;
 class SlaIndicator extends AbstractHelper
 {
     /**
-     * Invoke the helper
+     * invoke function
      *
      * @return $this
      */

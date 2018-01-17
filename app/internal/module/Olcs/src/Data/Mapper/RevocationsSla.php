@@ -20,22 +20,26 @@ class RevocationsSla implements MapperInterface
      */
     public static function mapFromResult(array $data)
     {
-        $formData['fields'] = $data;
-
-        foreach ($formData['fields'] as $key => $value) {
-            if (isset($value['id'])) {
-                $formData['fields'][$key] = $value['id'];
-            }
-        }
-
         if (isset($data['id'])) {
             $formData['id'] = $data['id'];
+            unset($data['id']);
         }
 
         if (isset($data['version'])) {
             $formData['version'] = $data['version'];
+            unset($data['version']);
         }
 
+        $formData['fields'] = $data;
+
+        foreach ($formData['fields'] as $key => $value) {
+            if (!in_array($key, ['id', 'version'])) {
+                if (isset($value['id'])) {
+                    $formData['fields'][$key] = $value['id'];
+                }
+            }
+
+        }
         return $formData;
     }
 

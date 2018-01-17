@@ -19,9 +19,6 @@ class RevocationsSla
      *      "value_options":{
      *          "0":"No",
      *          "1":"Yes"
-     *      },
-     *      "fieldset-attributes" : {
-     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "0"})
@@ -94,7 +91,7 @@ class RevocationsSla
      * @Form\Attributes({"id":""})
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Date Operator's Response due",
+     *     "label": "Date operator's response due",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
@@ -109,7 +106,7 @@ class RevocationsSla
      * @Form\Attributes({"id":""})
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Date Operator's Response Received",
+     *     "label": "Date operator's response received",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
@@ -129,9 +126,6 @@ class RevocationsSla
      *      "value_options":{
      *          "0":"No",
      *          "1":"Yes"
-     *      },
-     *      "fieldset-attributes" : {
-     *          "class":"inline"
      *      }
      * })
      * @Form\Attributes({"value": "0"})
@@ -189,7 +183,7 @@ class RevocationsSla
      * @Form\Options({
      *     "label": "Action to be taken",
      *     "service_name":"Olcs\Service\Data\ActionToBeTaken",
-     *     "empty_option": "Please Select",
+     *     "empty_option": "Please select",
      *     "disable_inarray_validator": false
      * })
      * @Form\Required(false)
@@ -249,7 +243,7 @@ class RevocationsSla
      * @Form\Attributes({"id":""})
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "PI Agreed",
+     *     "label": "PI agreed",
      *     "create_empty_option": true,
      *     "render_delimiters": false,
      *     "fieldsetClass":"__ior-pi"
@@ -265,7 +259,7 @@ class RevocationsSla
      * @Form\Attributes({"id":""})
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Other Action agreed",
+     *     "label": "Other action agreed",
      *     "create_empty_option": true,
      *     "render_delimiters": false,
      *     "fieldsetClass":"__ior-other"
