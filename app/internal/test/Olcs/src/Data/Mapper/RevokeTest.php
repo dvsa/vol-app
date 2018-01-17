@@ -56,7 +56,7 @@ class RevokeTest extends MockeryTestCase
 
     public function testMapFromErrors()
     {
-        $mockForm = m::mock(FormInterface::class);
+        $mockForm =  m::mock(FormInterface::class);
         $errors = ['field' => 'data'];
 
         $this->assertEquals($errors, Sut::mapFromErrors($mockForm, $errors));

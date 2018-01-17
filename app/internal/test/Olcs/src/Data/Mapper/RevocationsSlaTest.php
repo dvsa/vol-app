@@ -4,6 +4,8 @@ namespace OlcsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\RevocationsSla as Sut;
+use Zend\Form\FormInterface;
+use Mockery as m;
 
 class RevocationsSlaTest extends MockeryTestCase
 {
@@ -143,5 +145,13 @@ class RevocationsSlaTest extends MockeryTestCase
                 ]
             ]
         ];
+    }
+
+    public function testMapFromErrors()
+    {
+        $mockForm = m::mock(FormInterface::class);
+        $errors = ['field' => 'data'];
+
+        $this->assertEquals($errors, Sut::mapFromErrors($mockForm, $errors));
     }
 }
