@@ -94,6 +94,12 @@ class OverviewController extends AbstractController
         return $response->getResult();
     }
 
+    /**
+     * Disable trailers for NI
+     *
+     * @param bool $keysOnly only return keys?
+     * @return array
+     */
     protected function getAccessibleSections($keysOnly = true)
     {
         $accessibleSections = parent::getAccessibleSections($keysOnly);

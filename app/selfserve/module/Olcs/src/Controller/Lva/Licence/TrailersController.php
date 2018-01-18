@@ -27,9 +27,9 @@ class TrailersController extends Lva\AbstractTrailersController
     protected $location = 'external';
 
     /**
-     * Prevent access to NI:w
+     * Prevent access to NI
      *
-     * @param MvcEvent $e
+     * @param MvcEvent $e event
      *
      * @return array|null|\Zend\Http\Response
      */
