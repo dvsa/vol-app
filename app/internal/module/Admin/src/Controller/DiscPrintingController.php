@@ -104,7 +104,8 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
             $dataToSend = [
                 'licenceType'  => $params['licenceType'],
                 'startNumber'  => $params['startNumber'],
-                'discSequence' =>  $params['discSequence']
+                'discSequence' =>  $params['discSequence'],
+                'maxPages' =>  $params['maxPages'],
             ];
             $dtoClass = PrintDiscsPsvDto::class;
         } else {
@@ -112,7 +113,8 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
                 'niFlag'      => $params['niFlag'],
                 'licenceType' => $params['licenceType'],
                 'startNumber' => $params['startNumber'],
-                'discSequence' =>  $params['discSequence']
+                'discSequence' =>  $params['discSequence'],
+                'maxPages' => $params['maxPages'],
             ];
             $dtoClass = PrintDiscsGoodsDto::class;
         }
