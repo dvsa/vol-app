@@ -42,6 +42,19 @@ class DiscNumbering
     public $totalPages = null;
 
     /**
+     * @Form\Name("maxPages")
+     * @Form\Options({
+     *     "label": "Max pages to print",
+     *     "hint":"Setting 'Max pages to print' will not be reflected in the values displayed in 'End Number' or 'Number of pages'",
+     * })
+     * @Form\Type("Text")
+     * @Form\Filter({"name": "Digits"})
+     * @Form\Validator({"name": "GreaterThan", "options": {"min" : 0}})
+     * @Form\Required(false)
+     */
+    public $maxPages = null;
+
+    /**
      * @Form\Name("originalEndNumber")
      * @Form\Type("Hidden")
      */
