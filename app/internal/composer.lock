@@ -972,7 +972,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
-                "reference": "fc1d052875db29ab1e725f9b9d7e392d6683064f"
+                "reference": "504d8629f7a69e9d09ccd4d78a7ad0dae4c6a553"
             },
             "require": {
                 "php": ">=5.4",
