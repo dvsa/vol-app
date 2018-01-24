@@ -31,6 +31,7 @@ OLCS.ready(function() {
   var originalEndNumber  = F("discs-numbering", "originalEndNumber");
   var endNumberIncreased = F("discs-numbering", "endNumberIncreased");
   var totalPages         = F("discs-numbering", "totalPages");
+  var maxPages           = F("discs-numbering", "maxPages");
 
   // get list of prefixes for selected operator location, operator type and licence type
   $(licenceType).on("change", function() {
@@ -57,9 +58,12 @@ OLCS.ready(function() {
     fetchDiscs();
   });
 
-  // validate start number change
+  // validate start number or max pages change
   $(startNumber).on("change", function() {
-    fetchDiscs($(this).val());
+      fetchDiscs($(startNumber).val());
+  });
+  $(maxPages).on("change", function() {
+    fetchDiscs($(startNumber).val());
   });
 
   // if user start journey again we need to clear previous discs numbers
@@ -115,6 +119,7 @@ OLCS.ready(function() {
       "licenceType": licenceType.filter(":checked").val(),
       "discSequence": $("#discSequence :selected").val(),
       "discPrefix": $("#discSequence :selected").text(),
+      "maxPages": maxPages.val(),
       "security": securityToken
     };
 
@@ -151,6 +156,7 @@ OLCS.ready(function() {
   function clearDiscNumbers() {
     totalPages.val("");
     startNumber.val("");
+    maxPages.val("");
     // trigger a change so our cascade rules kick in
     endNumber.val("").change();
   }
