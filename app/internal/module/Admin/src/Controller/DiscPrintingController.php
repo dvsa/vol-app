@@ -180,13 +180,15 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
             $form->get('operator-type')->get('goodsOrPsv')->getValue() : '';
         $discSequence = $form->get('prefix')->get('discSequence')->getValue();
         $startNumberEntered = $form->get('discs-numbering')->get('startNumber')->getValue();
+        $maxPages = $form->get('discs-numbering')->get('maxPages')->getValue();
 
         $numbering = $this->processDiscNumbering(
             $niFlag,
             $licenceType,
             $operatorType,
             $discSequence,
-            $startNumberEntered
+            $startNumberEntered,
+            $maxPages
         );
 
         if (isset($numbering['endNumber'])) {
@@ -215,7 +217,8 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
             $params['licenceType'],
             $params['operatorType'],
             $params['discSequence'],
-            $params['startNumber']
+            $params['startNumber'],
+            $params['maxPages']
         );
 
         return new JsonModel($viewResults);
@@ -227,9 +230,10 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
      * @param string $niFlag
      * @param string $licenceType
      * @param string $operatorType
-     * @param string $discPrefix
      * @param string $discSequence
-     * @param int $startNumberEntered
+     * @param int    $startNumberEntered
+     * @param int|null   $maxPages
+     *
      * @return array
      */
     protected function processDiscNumbering(
@@ -237,7 +241,8 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
         $licenceType,
         $operatorType,
         $discSequence,
-        $startNumberEntered = null
+        $startNumberEntered = null,
+        $maxPages = null
     ) {
         $retv = [];
 
@@ -246,7 +251,8 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
             'operatorType' => $operatorType,
             'licenceType' => $licenceType,
             'discSequence' => $discSequence,
-            'startNumberEntered' => $startNumberEntered
+            'startNumberEntered' => $startNumberEntered,
+            'maxPages' => $maxPages,
         ];
 
         $response = $this->handleQuery(DiscsNumberingQry::create($data));
