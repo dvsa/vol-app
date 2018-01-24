@@ -52,6 +52,7 @@ class DiscPrintingTest extends MockeryTestCase
                     'isSuccessfull' => 1,
                     'endNumber' => 5,
                     'queueId' => 1,
+                    'maxPages' => null,
                 ],
                 [
                     'niFlag' => 'Y',
@@ -63,6 +64,7 @@ class DiscPrintingTest extends MockeryTestCase
                     'isSuccessfull' => 1,
                     'endNumber' => 5,
                     'queueId' => 1,
+                    'maxPages' => null,
                  ]
             ],
             [
@@ -76,6 +78,7 @@ class DiscPrintingTest extends MockeryTestCase
                     'isSuccessfull' => 1,
                     'endNumber' => 5,
                     'queueId' => 1,
+                    'maxPages' => null,
                 ],
                 [
                     'niFlag' => 'Y',
@@ -87,6 +90,7 @@ class DiscPrintingTest extends MockeryTestCase
                     'isSuccessfull' => 1,
                     'endNumber' => 5,
                     'queueId' => 1,
+                    'maxPages' => null,
                 ]
             ],
             [
@@ -103,8 +107,26 @@ class DiscPrintingTest extends MockeryTestCase
                     'isSuccessfull' => '',
                     'endNumber' => '',
                     'queueId' => 1,
+                    'maxPages' => null,
                 ]
             ],
+            [
+                [
+                    'discs-numbering' => ['maxPages' => 1],
+                ],
+                [
+                    'niFlag' => '',
+                    'operatorType' => '',
+                    'licenceType' => '',
+                    'startNumber' => null,
+                    'discSequence' => '',
+                    'discPrefix' =>  '',
+                    'isSuccessfull' => '',
+                    'endNumber' => '',
+                    'queueId' => '',
+                    'maxPages' => 1,
+                ]
+            ]
         ];
     }
 
