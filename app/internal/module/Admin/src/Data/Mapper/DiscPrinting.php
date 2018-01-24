@@ -49,7 +49,7 @@ class DiscPrinting
                 (isset($params['discSequence']) ? $params['discSequence'] : '');
         $data['maxPages'] = (isset($params['discs-numbering']) && isset($params['discs-numbering']['maxPages']))
             ? $params['discs-numbering']['maxPages']
-            : null;
+            : (isset($params['maxPages']) ? $params['maxPages'] : null);
         $data['discPrefix'] = isset($params['discPrefix']) ? $params['discPrefix'] : '';
         $data['isSuccessfull'] = isset($params['isSuccessfull']) ? $params['isSuccessfull'] : '';
         $data['endNumber'] = isset($params['endNumber']) ? $params['endNumber'] : '';
