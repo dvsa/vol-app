@@ -156,8 +156,8 @@ OLCS.ready(function() {
   function clearDiscNumbers() {
     totalPages.val("");
     startNumber.val("");
+    maxPages.val("");
     // trigger a change so our cascade rules kick in
     endNumber.val("").change();
-    maxPages.val("").change();
   }
 });
