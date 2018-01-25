@@ -1,4 +1,5 @@
 <?php
+
 namespace AdminTest\Data\Mapper;
 
 use Mockery as m;
@@ -48,7 +49,7 @@ class DiscPrintingTest extends MockeryTestCase
                     'licence-type' => ['licenceType' => 'ltyp_r'],
                     'discs-numbering' => ['startNumber' => 1],
                     'prefix' => ['discSequence' => 2],
-                    'discPrefix' =>  'OB',
+                    'discPrefix' => 'OB',
                     'isSuccessfull' => 1,
                     'endNumber' => 5,
                     'queueId' => 1,
@@ -59,11 +60,12 @@ class DiscPrintingTest extends MockeryTestCase
                     'licenceType' => 'ltyp_r',
                     'startNumber' => 1,
                     'discSequence' => 2,
-                    'discPrefix' =>  'OB',
+                    'discPrefix' => 'OB',
                     'isSuccessfull' => 1,
                     'endNumber' => 5,
                     'queueId' => 1,
-                 ]
+                    'maxPages' => null,
+                ]
             ],
             [
                 [
@@ -72,7 +74,7 @@ class DiscPrintingTest extends MockeryTestCase
                     'licenceType' => 'ltyp_r',
                     'startNumberEntered' => 1,
                     'discSequence' => 2,
-                    'discPrefix' =>  'OB',
+                    'discPrefix' => 'OB',
                     'isSuccessfull' => 1,
                     'endNumber' => 5,
                     'queueId' => 1,
@@ -83,10 +85,11 @@ class DiscPrintingTest extends MockeryTestCase
                     'licenceType' => 'ltyp_r',
                     'startNumber' => 1,
                     'discSequence' => 2,
-                    'discPrefix' =>  'OB',
+                    'discPrefix' => 'OB',
                     'isSuccessfull' => 1,
                     'endNumber' => 5,
                     'queueId' => 1,
+                    'maxPages' => null,
                 ]
             ],
             [
@@ -99,14 +102,50 @@ class DiscPrintingTest extends MockeryTestCase
                     'licenceType' => '',
                     'startNumber' => null,
                     'discSequence' => '',
-                    'discPrefix' =>  '',
+                    'discPrefix' => '',
                     'isSuccessfull' => '',
                     'endNumber' => '',
                     'queueId' => 1,
+                    'maxPages' => null,
                 ]
             ],
+            [
+                [
+                    'discs-numbering' => ['maxPages' => 1],
+                ],
+                [
+                    'niFlag' => '',
+                    'operatorType' => '',
+                    'licenceType' => '',
+                    'startNumber' => null,
+                    'discSequence' => '',
+                    'discPrefix' => '',
+                    'isSuccessfull' => '',
+                    'endNumber' => '',
+                    'queueId' => '',
+                    'maxPages' => 1,
+                ]
+            ],
+            [
+                [
+                    'maxPages' => 1
+                ],
+                [
+                    'niFlag' => '',
+                    'operatorType' => '',
+                    'licenceType' => '',
+                    'startNumber' => null,
+                    'discSequence' => '',
+                    'discPrefix' => '',
+                    'isSuccessfull' => '',
+                    'endNumber' => '',
+                    'queueId' => '',
+                    'maxPages' => 1,
+                ]
+            ]
         ];
     }
+
 
     public function testMapFromErrors()
     {
