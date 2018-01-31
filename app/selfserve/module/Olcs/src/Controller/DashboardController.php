@@ -86,7 +86,7 @@ class DashboardController extends AbstractController
         $view->setVariable('numberOfApplications', count($dashboardData['applications']));
         $view->setVariable('niFlag', $this->isNiFlagTrue($dashboardData));
 
-        // populate the navigation tabs with correct counts
+        // populate the navigation tabs with correct counts got fees and correspondence
         $this->populateTabCounts(
             $dashboardData['feeCount'],
             $dashboardData['correspondenceCount']
