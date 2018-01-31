@@ -36,15 +36,13 @@ class OverviewController extends AbstractController
         }
 
         $data['idIndex'] = $this->getIdentifierIndex();
-        $sections = array_keys($data['sections']);
-
         $variables = ['shouldShowCreateVariation' => true];
 
         if ($data['licenceType']['id'] === RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
             $variables['shouldShowCreateVariation'] = false;
         }
 
-        return new LicenceOverview($data, $sections, $variables);
+        return new LicenceOverview($data, $this->getAccessibleSections(), $variables);
     }
 
     /**
@@ -54,7 +52,7 @@ class OverviewController extends AbstractController
      */
     public function printAction()
     {
-        $cmd =  PrintLicence::create(
+        $cmd = PrintLicence::create(
             [
                 'id' => $this->getLicenceId(),
                 'dispatch' => false,
@@ -62,7 +60,7 @@ class OverviewController extends AbstractController
         );
 
         $response = $this->handleCommand($cmd);
-        if (! $response->isOk()) {
+        if (!$response->isOk()) {
             $this->addErrorMessage('licence.print.failed');
 
             return null;
@@ -94,5 +92,24 @@ class OverviewController extends AbstractController
         }
 
         return $response->getResult();
+    }
+
+    /**
+     * Disable trailers for NI
+     *
+     * @param bool $keysOnly only return keys?
+     * @return array
+     */
+    protected function getAccessibleSections($keysOnly = true)
+    {
+        $accessibleSections = parent::getAccessibleSections($keysOnly);
+        if ($this->fetchDataForLva()['niFlag'] === 'Y') {
+            if ($keysOnly) {
+                $accessibleSections = array_values(array_diff($accessibleSections, ['trailers']));
+            } else {
+                unset($accessibleSections['trailers']);
+            }
+        }
+        return $accessibleSections;
     }
 }

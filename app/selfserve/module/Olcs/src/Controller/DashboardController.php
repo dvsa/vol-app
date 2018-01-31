@@ -80,6 +80,8 @@ class DashboardController extends AbstractController
         // setup view
         $view = new \Zend\View\Model\ViewModel($params);
         $view->setTemplate('dashboard');
+        $view->setVariable('numberOfLicences', count($dashboardData['licences']));
+        $view->setVariable('numberOfApplications', count($dashboardData['applications']));
 
         // populate the navigation tabs with correct counts
         $this->populateTabCounts(
