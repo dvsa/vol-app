@@ -84,7 +84,7 @@ class DashboardController extends AbstractController
         $view->setTemplate('dashboard');
         $view->setVariable('numberOfLicences', count($dashboardData['licences']));
         $view->setVariable('numberOfApplications', count($dashboardData['applications']));
-        $view->setVariable('niFlag', $this->isNiUser($dashboardData));
+        $view->setVariable('niFlag', $this->isNiFlagTrue($dashboardData));
 
         // populate the navigation tabs with correct counts
         $this->populateTabCounts(
@@ -95,13 +95,13 @@ class DashboardController extends AbstractController
         return $view;
     }
 
-    protected function isNiUser($dashboardData)
+    private function isNiFlagTrue($dashboardData)
     {
         $licencesApplications = array_merge($dashboardData['licences'], $dashboardData['applications']);
-        $niFlags = array_filter(array_column('niFlag', $licencesApplications), function ($niFlag) {
+        $niFlags = array_filter(array_column($licencesApplications, 'niFlag'), function ($niFlag) {
             return $niFlag === 'Y';
         });
-        return count($niFlags >= 1);
+        return count($niFlags) >= 1;
     }
 
     /**
