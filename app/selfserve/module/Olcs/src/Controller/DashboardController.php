@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller;
 
 use Olcs\View\Model\Dashboard;
@@ -22,6 +23,8 @@ class DashboardController extends AbstractController
 {
     use Lva\Traits\ExternalControllerTrait,
         Lva\Traits\DashboardNavigationTrait;
+
+    protected $lva = "application";
 
     /**
      * Dashboard index action
@@ -64,7 +67,6 @@ class DashboardController extends AbstractController
         if (isset($dashboardData['licences'])
             && isset($dashboardData['applications'])
             && isset($dashboardData['variations'])) {
-
             $total = count($dashboardData['licences'])
                 + count($dashboardData['applications'])
                 + count($dashboardData['variations']);
@@ -82,6 +84,7 @@ class DashboardController extends AbstractController
         $view->setTemplate('dashboard');
         $view->setVariable('numberOfLicences', count($dashboardData['licences']));
         $view->setVariable('numberOfApplications', count($dashboardData['applications']));
+        $view->setVariable('niFlag', $this->isNiFlagTrue($dashboardData));
 
         // populate the navigation tabs with correct counts
         $this->populateTabCounts(
@@ -90,6 +93,15 @@ class DashboardController extends AbstractController
         );
 
         return $view;
+    }
+
+    private function isNiFlagTrue($dashboardData)
+    {
+        $licencesApplications = array_merge($dashboardData['licences'], $dashboardData['applications']);
+        $niFlags = array_filter(array_column($licencesApplications, 'niFlag'), function ($niFlag) {
+            return $niFlag === 'Y';
+        });
+        return count($niFlags) >= 1;
     }
 
     /**
