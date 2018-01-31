@@ -97,22 +97,11 @@ class DashboardController extends AbstractController
 
     protected function isNiUser($dashboardData)
     {
-        $isNiUser = false;
-        if (isset($dashboardData['applications']) || isset($dashboardData['licences'])) {
-            foreach ($dashboardData['applications'] as $application) {
-                if ($application['niFlag'] === 'Y') {
-                    $isNiUser = true;
-                    break;
-                }
-            }
-            foreach ($dashboardData['licences'] as $licence) {
-                if ($licence['niFlag'] === 'Y') {
-                    $isNiUser = true;
-                    break;
-                }
-            }
-        }
-        return $isNiUser;
+        $licencesApplications = array_merge($dashboardData['licences'], $dashboardData['applications']);
+        $niFlags = array_filter(array_column('niFlag', $licencesApplications), function ($niFlag) {
+            return $niFlag === 'Y';
+        });
+        return count($niFlags >= 1);
     }
 
     /**
