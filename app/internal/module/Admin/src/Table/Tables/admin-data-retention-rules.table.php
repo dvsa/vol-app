@@ -26,5 +26,11 @@ return array(
             'sort' => 'description',
             'formatter' => 'DataRetentionRuleLink'
         ),
+        array(
+            'title' => 'Action type',
+            'name' => 'actionType',
+            'sort' => 'actionType',
+            'formatter' => 'DataRetentionRuleActionType'
+        ),
     )
 );
