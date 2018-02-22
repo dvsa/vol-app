@@ -52,7 +52,11 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
         return $this->redirect()->toRoute($this->getBaseRoute(), ['action' => null], [], true);
     }
 
-
+    /**
+     * Export vehicles action
+     *
+     * @return \Zend\Http\Response
+     */
     public function exportAction()
     {
         /** @var \Zend\Http\Request $request */
