@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva;
 use Common\Controller\Lva\AbstractGoodsVehiclesController;
 use Dvsa\Olcs\Transfer\Command\Application\CreateVehicleListDocument as ApplicationCreateDocument;
 use Dvsa\Olcs\Transfer\Command\Licence\CreateVehicleListDocument as LicenceCreateDocument;
+use Dvsa\Olcs\Transfer\Query;
 
 /**
  * Abstract Generic Vehicles Goods Controller
@@ -22,6 +23,12 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
         'licence' => LicenceCreateDocument::class,
         'variation' => ApplicationCreateDocument::class,
         'application' => ApplicationCreateDocument::class
+    ];
+
+    protected static $exportDataMap = [
+        'licence' => Query\Licence\GoodsVehiclesExport::class,
+        'variation' => Query\Variation\GoodsVehiclesExport::class,
+        'application' => Query\Application\GoodsVehiclesExport::class,
     ];
 
     /**
@@ -43,5 +50,46 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
         }
 
         return $this->redirect()->toRoute($this->getBaseRoute(), ['action' => null], [], true);
+    }
+
+
+    public function exportAction()
+    {
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
+
+        $query = $request->getPost('query');
+        unset(
+            $query['page'],
+            $query['limit']
+        );
+        $request->getPost()->set('query', $query);
+
+        return $this->getServiceLocator()
+            ->get('Helper\Response')
+            ->tableToCsv(
+                $this->getResponse(),
+                $this->getTable($this->getExportData(), $this->getFilters()),
+                'vehicles'
+            );
+    }
+
+    /**
+     * Request vehicle data for export
+     *
+     * @return array
+     */
+    private function getExportData()
+    {
+        $dtoData = $this->getFilters();
+        $dtoData['id'] = $this->getIdentifier();
+
+        $dtoClass = self::$exportDataMap[$this->lva];
+
+        $response = $this->handleQuery($dtoClass::create($dtoData));
+
+        return [
+            'licenceVehicles' => $response->getResult(),
+        ];
     }
 }
