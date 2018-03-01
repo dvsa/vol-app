@@ -25,9 +25,9 @@ echo $this->partial(
     [
         'pageTitle' => $this->translate($this->title),
         'pageSubTitle' => $subTitle,
-        'backUrl' => [
-            'url' => ($backPage !== null ? $backPage->getHref() : null),
-        ],
+        'backUrl' => $this->vars()->offsetExists('backUrlOverride')
+            ? $this->backUrlOverride
+            : ['url' => ($backPage !== null ? $backPage->getHref() : null)],
     ]
 );
 ?>
