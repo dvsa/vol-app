@@ -97,6 +97,18 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
     }
 
     /**
+     * Get the previous wizard page location
+     *
+     * @see consuming class to provide implementation
+     *
+     * @return array route definition
+     */
+    protected function getPreviousPageRoute()
+    {
+        return ['name' => 'lva-director_change/financial_history', 'params' => ['application' => $this->getIdentifier()]];
+    }
+
+    /**
      * Get the form
      *
      * @param array $data   form data

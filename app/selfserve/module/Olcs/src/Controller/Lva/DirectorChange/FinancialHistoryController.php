@@ -54,13 +54,28 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
     }
 
     /**
-     * Provide the route name for the next page in the wizard
+     * Get the previous wizard page location
      *
-     * @return string
+     * @see consuming class to provide implementation
+     *
+     * @return array route definition
      */
-    protected function getNextPageRouteName()
+    protected function getPreviousPageRoute()
     {
-        return 'lva-director_change/convictions_penalties';
+        return ['name' => 'lva-director_change/people', 'params' => ['application' => $this->getIdentifier()]];
+    }
+
+    /**
+     * Provide the route for the next page in the wizard
+     *
+     * @return array route definition
+     */
+    protected function getNextPageRoute()
+    {
+        return [
+            'name' => 'lva-director_change/convictions_penalties',
+            'params' => ['application' => $this->getIdentifier()]
+        ];
     }
 
     /**
@@ -85,6 +100,6 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
     public function getStartRoute()
     {
         $licenceId = $this->getLicenceId($this->getApplicationId());
-        return ['name'=>'lva-licence/people', 'params'=>['licence' =>$licenceId]];
+        return ['name' => 'lva-licence/people', 'params' => ['licence' => $licenceId]];
     }
 }

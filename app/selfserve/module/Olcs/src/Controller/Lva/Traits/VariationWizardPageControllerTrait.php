@@ -7,9 +7,11 @@ use Common\Controller\Plugin\Redirect;
 use Common\Service\Cqrs\Response as CqrsResponse;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\Variation\DeleteVariation;
+use Zend\Form\Form;
 use Zend\Http\Request;
 use Zend\Http\Response;
 use Zend\Mvc\Controller\Plugin\Params;
+use Zend\Mvc\Controller\Plugin\Url;
 
 /**
  * Trait for use in an AbstractController that forms part of a variation wizard
@@ -20,7 +22,9 @@ use Zend\Mvc\Controller\Plugin\Params;
  */
 trait VariationWizardPageControllerTrait
 {
-    use ApplicationControllerTrait;
+    use ApplicationControllerTrait {
+        render as protected applicationControllerTraitRender;
+    }
 
     /**
      * Get the required previous sections
@@ -52,9 +56,18 @@ trait VariationWizardPageControllerTrait
      *
      * @see consuming class to provide implementation
      *
-     * @return mixed
+     * @return array route definition
      */
     abstract protected function getStartRoute();
+
+    /**
+     * Get the previous wizard page location
+     *
+     * @see consuming class to provide implementation
+     *
+     * @return array route definition
+     */
+    abstract protected function getPreviousPageRoute();
 
     /**
      * Check if a button has been pressed
@@ -168,5 +181,34 @@ trait VariationWizardPageControllerTrait
         );
 
         return count($sections) === count($requiredSections);
+    }
+
+    protected function render($content, Form $form = null, $variables = array())
+    {
+        $backUrl = $this->getBackUrl();
+
+        return $this->applicationControllerTraitRender(
+            $content,
+            $form,
+            array_merge(
+                ['backUrlOverride' => ['url' => $backUrl]],
+                $variables
+            )
+        );
+    }
+
+    /**
+     * @return string
+     */
+    private function getBackUrl()
+    {
+        /** @var Url $urlPlugin */
+        $urlPlugin = $this->plugin('url');
+        $route = $this->getPreviousPageRoute();
+        $backUrl = $urlPlugin->fromRoute(
+            $route['name'],
+            $route['params']
+        );
+        return $backUrl;
     }
 }
