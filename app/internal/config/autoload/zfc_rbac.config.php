@@ -39,6 +39,7 @@ return [
             'admin-dashboard/admin-partner-management*' => [RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-printer-management*' => [ RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-user-management*' => [RefData::PERMISSION_CAN_MANAGE_USER_INTERNAL],
+            'admin-dashboard/admin-sifting*' => [RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-system-parameters*' => [RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-data-retention*' => [RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-system-info-message*' => [RefData::PERMISSION_INTERNAL_ADMIN],

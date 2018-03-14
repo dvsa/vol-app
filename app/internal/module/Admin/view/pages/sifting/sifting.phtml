@@ -1,0 +1,18 @@
+<div class="guidance">
+    <p>Some descriptive text here...</p>
+</div>
+
+
+<form method="post" action="/admin/sifting/run" class="table__form">
+    <input type="hidden" value="default" name="table">
+
+    <div class="table__wrapper">
+<?php
+echo $this->render('pages/table');
+?>
+        <div class="actions-container"><button id="add" class="action--primary" name="action" type="submit" value="Trigger" data-label="Trigger Sifting">Trigger Sifting</button></div>
+    </div>    <input type="hidden" class="js-csrf-token" value="<?php echo $this->token; ?>" name="security">
+</form>
+
+
+
