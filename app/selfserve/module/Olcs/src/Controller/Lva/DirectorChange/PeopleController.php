@@ -62,6 +62,31 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
     }
 
     /**
+     * Get the previous wizard page location
+     *
+     * @see consuming class to provide implementation
+     *
+     * @return array route definition
+     */
+    protected function getPreviousPageRoute()
+    {
+        return $this->getStartRoute();
+    }
+
+    /**
+     * Provide the route for the next page in the wizard
+     *
+     * @return array route definition
+     */
+    protected function getNextPageRoute()
+    {
+        return [
+            'name' => 'lva-director_change/financial_history',
+            'params' => ['application' => $this->getIdentifier()]
+        ];
+    }
+
+    /**
      * Get the text (or translation string) for the saveAndContinue button
      *
      * @return string
@@ -69,16 +94,6 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
     public function getSubmitActionText()
     {
         return 'Continue to financial History';
-    }
-
-    /**
-     * Get the route name for the next page in the wizard
-     *
-     * @return string
-     */
-    protected function getNextPageRouteName()
-    {
-        return 'lva-director_change/financial_history';
     }
 
     /**
