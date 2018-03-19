@@ -12,8 +12,11 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Dvsa\Olcs\Transfer\Query\Sectors\Sectors as ListDto;
 use Common\Controller\Traits\GenericRenderView;
 use Zend\View\Model\ViewModel;
+use Zend\Http\Client\Adapter\Curl;
+use Zend\Http\Client;
+use Zend\Http\Request;
 
-use Zend\Session\Container;
+
 
 /**
  * Sifting Controller
@@ -58,8 +61,27 @@ class SiftingController extends AbstractInternalController implements LeftViewPr
 
     public function postAction()
     {
+
+        $url = 'http://192.168.0.22:8000/permits/sifting/apply';
+        $request = new Request;
+        $request->getHeaders()->addHeaders([
+          'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8'
+        ]);
+        $request->setUri($url);
+        $request->setMethod('PUT');
+        $request->getPost()->set('username', 'ff');
+        $client = new Client;
+        $curl = new Curl;
+        $client->setAdapter($curl);
+        $response = $client->dispatch($request);
+
+
+
+
         $view = new ViewModel();
         $view->setTemplate('admin/sifting/run');
+        $view->setVariable('curlResponse', $response->getContent());
+
         return $this->renderView($view, 'Sifting is running');
     }
 }

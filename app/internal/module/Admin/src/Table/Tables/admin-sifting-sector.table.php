@@ -31,11 +31,11 @@ return array(
     ),
 
     array(
-      'title' => 'No of allocated permits',
+      'title' => 'Number of permits',
       'name' => 'allocatedPermits'
     ),
     array(
-      'title' => 'Total applications',
+      'title' => 'Total received applications',
       'name' => 'applicationsTotal'
     ),
   )

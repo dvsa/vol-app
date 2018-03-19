@@ -33,13 +33,13 @@ class SiftingResultsController extends AbstractInternalController implements Lef
     // list
     protected $tableViewPlaceholderName = 'table';
     protected $tableViewTemplate = 'pages/sifting/sifting-results';
-    protected $defaultTableSortField = 'permitsId';
-    protected $defaultTableOrderField = 'ASC';
-    protected $defaultTableLimit = 25;
+    protected $defaultTableSortField = 'siftingValue';
+    protected $defaultTableOrderField = 'DESC';
+    protected $defaultTableLimit = 10;
     protected $tableName = 'admin-sifting-results';
     protected $listDto = ListDto::class;
     protected $filterForm = sectorsFilter::class;
-    protected $defaultSector = 4;
+    protected $defaultSector = 1;
 
 
 
