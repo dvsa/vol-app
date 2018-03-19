@@ -31,11 +31,6 @@ return [
                     'label' => 'Sifting results',
                     'route' => 'admin-dashboard/admin-sifting-results',
                   ],
-                  /*[
-                    'id' => 'admin-dashboard/admin-sifting-run',
-                    'label' => 'Sifting running',
-                    'route' => 'admin-dashboard/admin-sifting-run',
-                  ]*/
                 ]
               ],
 

@@ -108,20 +108,6 @@ return [
                         'controller' => Admin\Controller\SiftingController::class,
                         'action' => 'index',
                       ]
-                    ],
-                    'may_terminate' => true,
-                    'child_routes' => [
-                      'admin-sifting-run' => [
-                        'type' => 'segment',
-                        'options' => [
-                          'route' => 'sifting/run[/]',
-                          'defaults' => [
-                            'controller' => Admin\Controller\SiftingController::class,
-                            'action' => 'post'
-                          ]
-                        ]
-                      ],
-
                     ]
                   ],
                   'admin-sifting-results' => [
@@ -131,6 +117,16 @@ return [
                       'defaults' => [
                         'controller' => Admin\Controller\SiftingResultsController::class,
                         'action' => 'index',
+                      ]
+                    ],
+                  ],
+                  'admin-sifting-run' => [
+                    'type' => 'segment',
+                    'options' => [
+                      'route' => 'sifting/run[/]',
+                      'defaults' => [
+                        'controller' => Admin\Controller\SiftingController::class,
+                        'action' => 'post',
                       ]
                     ],
                   ],
@@ -397,6 +393,7 @@ return [
                             ],
                         ],
                     ],
+
                   'admin-sifting' => [
                     'type' => 'Segment',
                     'options' => [
@@ -410,19 +407,7 @@ return [
                       ]
                     ]
                   ],
-                  'admin-sifting-run' => [
-                    'type' => 'Segment',
-                    'options' => [
-                      'route' => 'sifting/run[/]',
-                      'constraints' => [
-                        'action' => '(sifting)'
-                      ],
-                      'defaults' => [
-                        'controller' => 'Admin\Controller\SiftingController',
-                        'action' => 'post'
-                      ]
-                    ]
-                  ],
+
                   'admin-sifting-results' => [
                     'type' => 'Segment',
                     'options' => [
@@ -677,7 +662,7 @@ return [
             'Admin\IrfoPsvAuthContinuationController' => 'Admin\Controller\IrfoPsvAuthContinuationController',
             Admin\Controller\ScanningController::class => Admin\Controller\ScanningController::class,
           'Admin\Controller\SiftingController' => 'Admin\Controller\SiftingController',
-          'Admin\Controller\SiftingResultsController' => 'Admin\Controller\SiftingController',
+          'Admin\Controller\SiftingResultsController' => 'Admin\Controller\SiftingResultsController',
 
           'Admin\PublicationController' => 'Admin\Controller\PublicationController',
             PublishedPublicationController::class => PublishedPublicationController::class,

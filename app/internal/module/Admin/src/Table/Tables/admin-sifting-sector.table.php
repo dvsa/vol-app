@@ -3,7 +3,7 @@
 return array(
   'variables' => array(
     'title' => 'Freight sectors',
-    'titleSingular' => 'parameter'
+    'titleSingular' => 'Freight sector'
   ),
   'settings' => array(
     'crud' => array(

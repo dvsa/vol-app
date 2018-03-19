@@ -1,10 +1,7 @@
 <?php
 
 return array(
-  'variables' => array(
-    'title' => 'Sifting results for sector 01. Food products, beverages and tobacco',
-    'titleSingular' => 'parameter'
-  ),
+
   'settings' => array(
     'crud' => array(
       'actions' => array(
@@ -23,45 +20,50 @@ return array(
   ),
   'columns' => array(
     array(
-      'title' => 'Permit?',
-      'name' => '',
-      'sort' => 'id'
+      'title' => 'Permit',
+      'name' => 'permitsId',
+      'sort' => 'permitsId'
     ),
     array(
       'title' => 'Operator',
-      'name' => '',
-      'sort' => ''
+      'name' => 'startDate',
+      'sort' => 'startDate'
+    ),
+    array(
+      'title' => 'Licence',
+      'name' => 'ecmtPermitsApplication',
+      'sort' => 'ecmtPermitsApplication'
     ),
     array(
       'title' => 'Intensity of Use',
+      'name' => 'intensity',
+      'sort' => 'intensity',
+    ),
+
+    /*array(
+      'title' => 'Italy',
       'name' => '',
       'sort' => '',
     ),
-
-    array(
-      'title' => 'Italy',
-      'width' => '',
-      'format' => ''
-    ),
     array(
       'title' => 'Austria',
-      'width' => '',
-      'format' => ''
+      'name' => '',
+      'sort' => '',
     ),
     array(
       'title' => 'Greece',
-      'width' => '',
-      'format' => ''
-    ),
+      'name' => '',
+      'sort' => '',
+    ),*/
     array(
-      'title' => 'License no',
-      'width' => '',
-      'format' => ''
+      'title' => 'Countries',
+      'name' => 'ecmtCountriesIds',
+      'sort' => 'ecmtCountriesIds',
     ),
     array(
       'title' => 'Sifting value',
-      'width' => '',
-      'format' => ''
+      'name' => 'siftingValue',
+      'sort' => 'siftingValue',
     ),
     array(
       'title' => '',
@@ -70,3 +72,14 @@ return array(
     ),
   )
 );
+
+/*
+ecmtCountriesIds
+ecmtPermitsApplicationId
+intensity
+permitsId
+sectorId
+siftingRandomFactor
+siftingValue
+siftingValueRandom
+*/
