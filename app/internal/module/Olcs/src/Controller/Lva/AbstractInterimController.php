@@ -6,6 +6,7 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
@@ -52,7 +53,10 @@ abstract class AbstractInterimController extends AbstractController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $form->setData((array)$request->getPost());
+            $requestData = (array)$request->getPost();
+            $requestData['data']['totAuthTrailers'] = $interimData['totAuthTrailers'];
+            $requestData['data']['totAuthVehicles'] = $interimData['totAuthVehicles'];
+            $form->setData($requestData);
         } else {
             $form->setData(Mapper::mapFromResult($interimData));
         }
@@ -111,7 +115,7 @@ abstract class AbstractInterimController extends AbstractController
             return $this->redirectToIndex();
         }
 
-        $request  = $this->getRequest();
+        $request = $this->getRequest();
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
 
@@ -156,7 +160,7 @@ abstract class AbstractInterimController extends AbstractController
             return $this->redirectToIndex();
         }
 
-        $request  = $this->getRequest();
+        $request = $this->getRequest();
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
 
