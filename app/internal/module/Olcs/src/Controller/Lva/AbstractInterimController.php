@@ -63,7 +63,10 @@ abstract class AbstractInterimController extends AbstractController
 
         if ($request->isPost() && $form->isValid()) {
 
-            $dtoData = Mapper::mapFromForm($form->getData());
+            $formData = $form->getData();
+            $formData['data']['totAuthTrailers'] = $interimData['totAuthTrailers'];
+            $formData['data']['totAuthVehicles'] = $interimData['totAuthVehicles'];
+            $dtoData = Mapper::mapFromForm($formData);
 
             $dtoData['id'] = $this->getIdentifier();
             $dtoData['action'] = $this->determinePostSaveAction();
