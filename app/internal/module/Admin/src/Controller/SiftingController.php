@@ -62,7 +62,7 @@ class SiftingController extends AbstractInternalController implements LeftViewPr
     public function postAction()
     {
 
-        $url = 'http://192.168.0.22:8000/permits/sifting/apply';
+        $url = 'http://10.99.203.236:8000/permits/sifting/apply';
         $request = new Request;
         $request->getHeaders()->addHeaders([
           'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -75,12 +75,12 @@ class SiftingController extends AbstractInternalController implements LeftViewPr
         $client->setAdapter($curl);
         $response = $client->dispatch($request);
 
-
+        $sift = json_decode($response->getContent());
 
 
         $view = new ViewModel();
         $view->setTemplate('admin/sifting/run');
-        $view->setVariable('curlResponse', $response->getContent());
+        $view->setVariable('curlResponse', $sift);
 
         return $this->renderView($view, 'Sifting is running');
     }

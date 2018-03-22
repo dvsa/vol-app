@@ -33,7 +33,7 @@ class SiftingResultsController extends AbstractInternalController implements Lef
     // list
     protected $tableViewPlaceholderName = 'table';
     protected $tableViewTemplate = 'pages/sifting/sifting-results';
-    protected $defaultTableSortField = 'siftingValue';
+    protected $defaultTableSortField = 'siftingValueRandom';
     protected $defaultTableOrderField = 'DESC';
     protected $defaultTableLimit = 10;
     protected $tableName = 'admin-sifting-results';
@@ -49,7 +49,7 @@ class SiftingResultsController extends AbstractInternalController implements Lef
         $tableData = $this->getTableData();
         $sectorName = $this->getSectorName();
 
-        $this->placeholder()->setPlaceholder('pageTitle', 'Sifting Results');
+        $this->placeholder()->setPlaceholder('pageTitle', 'ECMT applications');
         $this->placeholder()->setPlaceholder('tableHeader', $tableData . ' permit applications for sector ');
         $this->placeholder()->setPlaceholder('sectorName', $sectorName);
         return parent::indexAction();
@@ -60,7 +60,7 @@ class SiftingResultsController extends AbstractInternalController implements Lef
         $view = new ViewModel(
           [
             'navigationId' => 'admin-dashboard/admin-sifting',
-            'navigationTitle' => 'Sifting Results'
+            'navigationTitle' => 'ECMT applications'
           ]
         );
         $view->setTemplate('admin/sections/admin/partials/generic-left');

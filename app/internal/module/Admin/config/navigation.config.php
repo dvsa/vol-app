@@ -28,7 +28,7 @@ return [
                   ],
                   [
                     'id' => 'admin-dashboard/admin-sifting-results',
-                    'label' => 'Sifting results',
+                    'label' => 'ECMT applications',
                     'route' => 'admin-dashboard/admin-sifting-results',
                   ],
                 ]

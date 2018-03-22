@@ -20,7 +20,7 @@ return array(
   ),
   'columns' => array(
     array(
-      'title' => 'Permit',
+      'title' => 'Application',
       'name' => 'permitsId',
       'sort' => 'permitsId'
     ),
@@ -62,8 +62,8 @@ return array(
     ),
     array(
       'title' => 'Sifting value',
-      'name' => 'siftingValue',
-      'sort' => 'siftingValue',
+      'name' => 'siftingValueRandom',
+      'sort' => 'siftingValueRandom',
     ),
     array(
       'title' => '',
