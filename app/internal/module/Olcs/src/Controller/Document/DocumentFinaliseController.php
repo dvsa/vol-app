@@ -87,9 +87,9 @@ class DocumentFinaliseController extends AbstractDocumentController
         );
 
         $data = [
-            'category'    => htmlspecialchars($category, ENT_QUOTES, 'utf-8'),
+            'category' => htmlspecialchars($category, ENT_QUOTES, 'utf-8'),
             'subCategory' => htmlspecialchars($documentSubCategory, ENT_QUOTES, 'utf-8'),
-            'template'    => $link,
+            'template' => $link,
         ];
 
         $form = $this->generateFormWithData('FinaliseDocument', 'processSaveLetter', $data, false);
@@ -119,8 +119,8 @@ class DocumentFinaliseController extends AbstractDocumentController
         $docId = $this->params('doc');
 
         /**
- * @var \Zend\Http\Request $request
-*/
+         * @var \Zend\Http\Request $request
+         */
         $request = $this->getRequest();
 
         //  POST: process form
