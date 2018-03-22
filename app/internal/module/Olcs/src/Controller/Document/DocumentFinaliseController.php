@@ -72,15 +72,24 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         $url = sprintf($uriPattern, $data['data']['identifier']);
 
-        $link = sprintf('<a href="%s" data-file-url="%s" target="blank">%s</a>', $url, $url, $templateName);
+        $link = sprintf(
+            '<a href="%s" data-file-url="%s" target="blank">%s</a>',
+            htmlentities($url,ENT_QUOTES, 'utf-8'),
+            htmlentities($url,ENT_QUOTES, 'utf-8'),
+            htmlentities($templateName,ENT_QUOTES, 'utf-8')
+        );
 
         $data = [
-            'category'    => $category,
-            'subCategory' => $documentSubCategory,
-            'template'    => $link
+            'category'    => htmlspecialchars($category, ENT_QUOTES, 'utf-8'),
+            'subCategory' => htmlspecialchars($documentSubCategory, ENT_QUOTES, 'utf-8'),
+            'template'    => $link,
         ];
 
         $form = $this->generateFormWithData('FinaliseDocument', 'processSaveLetter', $data, false);
+
+        foreach ($data as $key => $value) {
+            $form->get($key)->setAttribute('value', $value);
+        }
 
         if ($this->redirect !== null) {
             return $this->redirect;
