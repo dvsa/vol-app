@@ -23,9 +23,13 @@ class DocumentFinaliseController extends AbstractDocumentController
 
     private $redirect;
 
-    /** @var  \Common\Service\Helper\FlashMessengerHelperService */
+    /**
+     * @var  \Common\Service\Helper\FlashMessengerHelperService
+     */
     private $hlpFlashMsgr;
-    /** @var  \Common\Service\Helper\FormHelperService */
+    /**
+     * @var  \Common\Service\Helper\FormHelperService
+     */
     private $hlpForm;
 
     /**
@@ -58,7 +62,10 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         if ($this->isButtonPressed('cancelFinalise')) {
             return $this->redirect()->toRoute(
-                null, ['action' => 'cancel'], ['query' => $this->getRequest()->getQuery()->toArray()], true
+                null,
+                ['action' => 'cancel'],
+                ['query' => $this->getRequest()->getQuery()->toArray()],
+                true
             );
         }
 
@@ -74,9 +81,9 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         $link = sprintf(
             '<a href="%s" data-file-url="%s" target="blank">%s</a>',
-            htmlentities($url,ENT_QUOTES, 'utf-8'),
-            htmlentities($url,ENT_QUOTES, 'utf-8'),
-            htmlentities($templateName,ENT_QUOTES, 'utf-8')
+            htmlentities($url, ENT_QUOTES, 'utf-8'),
+            htmlentities($url, ENT_QUOTES, 'utf-8'),
+            htmlentities($templateName, ENT_QUOTES, 'utf-8')
         );
 
         $data = [
@@ -111,7 +118,9 @@ class DocumentFinaliseController extends AbstractDocumentController
     {
         $docId = $this->params('doc');
 
-        /** @var \Zend\Http\Request $request */
+        /**
+ * @var \Zend\Http\Request $request
+*/
         $request = $this->getRequest();
 
         //  POST: process form
@@ -160,7 +169,6 @@ class DocumentFinaliseController extends AbstractDocumentController
 
             if ($resp->isServerError()) {
                 $this->hlpFlashMsgr->addUnknownError();
-
             } elseif ($resp->isClientError()) {
                 $respResult = $resp->getResult();
                 $errMsgs = (isset($respResult['messages']) ? $respResult['messages'] : []);
@@ -202,15 +210,16 @@ class DocumentFinaliseController extends AbstractDocumentController
     public function cancelAction()
     {
         if ($this->getRequest()->isPost()) {
-
             if ($this->isButtonPressed('yes')) {
-
                 $this->removeDocument($this->params('doc'));
                 return $this->handleRedirectToDocumentRoute(true);
             }
 
             return $this->redirect()->toRoute(
-                null, ['action' => null], ['query' => $this->getRequest()->getQuery()->toArray()], true
+                null,
+                ['action' => null],
+                ['query' => $this->getRequest()->getQuery()->toArray()],
+                true
             );
         }
 
@@ -279,7 +288,10 @@ class DocumentFinaliseController extends AbstractDocumentController
         }
 
         return $this->redirect()->toRoute(
-            null, ['action' => 'print'], ['query' => $this->getRequest()->getQuery()->toArray()], true
+            null,
+            ['action' => 'print'],
+            ['query' => $this->getRequest()->getQuery()->toArray()],
+            true
         );
     }
 
