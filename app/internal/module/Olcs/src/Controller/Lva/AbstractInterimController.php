@@ -62,12 +62,11 @@ abstract class AbstractInterimController extends AbstractController
         }
 
         if ($request->isPost() && $form->isValid()) {
-
             $formData = $form->getData();
             $formData['data']['totAuthTrailers'] = $interimData['totAuthTrailers'];
             $formData['data']['totAuthVehicles'] = $interimData['totAuthVehicles'];
-            $dtoData = Mapper::mapFromForm($formData);
 
+            $dtoData = Mapper::mapFromForm($formData);
             $dtoData['id'] = $this->getIdentifier();
             $dtoData['action'] = $this->determinePostSaveAction();
 
@@ -126,13 +125,11 @@ abstract class AbstractInterimController extends AbstractController
         $form->get('messages')->get('message')->setValue('internal.interim.form.grant_confirm');
 
         if ($request->isPost()) {
-
             $response = $this->handleCommand(GrantInterim::create(['id' => $this->getIdentifier()]));
 
             $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
 
             if ($response->isOk()) {
-
                 $messageMap = [
                     self::ACTION_FEE_REQUEST => 'internal.interim.interim_granted_fee_requested',
                     self::ACTION_IN_FORCE    => 'internal.interim.form.interim_in_force',
@@ -171,7 +168,6 @@ abstract class AbstractInterimController extends AbstractController
         $form->get('messages')->get('message')->setValue('internal.interim.form.refuse_confirm');
 
         if ($request->isPost()) {
-
             $response = $this->handleCommand(RefuseInterim::create(['id' => $this->getIdentifier()]));
 
             $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
@@ -262,7 +258,6 @@ abstract class AbstractInterimController extends AbstractController
         }
 
         if (!$application['canUpdateInterim']) {
-
             $formHelper->disableElement($form, 'data->interimReason');
             $formHelper->disableElement($form, 'data->interimStart');
             $formHelper->disableElement($form, 'data->interimEnd');
