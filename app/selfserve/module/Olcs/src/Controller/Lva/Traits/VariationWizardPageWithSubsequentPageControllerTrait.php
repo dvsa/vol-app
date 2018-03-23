@@ -15,11 +15,11 @@ trait VariationWizardPageWithSubsequentPageControllerTrait
     use VariationWizardPageControllerTrait;
 
     /**
-     * Get the route name for the next page in the wizard
+     * Provide the route for the next page in the wizard
      *
-     * @return string
+     * @return array route definition
      */
-    abstract protected function getNextPageRouteName();
+    abstract protected function getNextPageRoute();
 
     /**
      * Redirects to the next page in the wizard once this page has been submitted
@@ -31,9 +31,10 @@ trait VariationWizardPageWithSubsequentPageControllerTrait
      */
     protected function completeSection($section, $prg = [])
     {
+        $route = $this->getNextPageRoute();
         return $this->redirect()->toRoute(
-            $this->getNextPageRouteName(),
-            ['application' => $this->getIdentifier()]
+            $route['name'],
+            $route['params']
         );
     }
 }
