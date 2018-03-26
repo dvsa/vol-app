@@ -68,7 +68,7 @@ class InterimDetails
      * @Form\Attributes({"class":"short","id":"interimAuthVehicles"})
      * @Form\Options({"label":"internal.interim.form.interim_auth_vehicles"})
      * @Form\Type("Text")
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\InterimVehicleAuthority"})
+     * @Form\Validator({"name":"Olcs\Validator\InterimVehicleAuthority"})
      * @Form\Validator({"name":"Digits"})
      */
     public $interimAuthVehicles = null;
@@ -78,7 +78,7 @@ class InterimDetails
      * @Form\Attributes({"class":"short","id":"interimAuthTrailers"})
      * @Form\Options({"label":"internal.interim.form.interim_auth_trailers"})
      * @Form\Type("Text")
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\InterimTrailerAuthority"})
+     * @Form\Validator({"name":"Olcs\Validator\InterimTrailerAuthority"})
      * @Form\Validator({"name":"Digits"})
      */
     public $interimAuthTrailers = null;
