@@ -14,7 +14,8 @@ use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\Application\GrantInterim;
 use Dvsa\Olcs\Transfer\Command\Application\PrintInterimDocument;
 use Dvsa\Olcs\Transfer\Command\Application\RefuseInterim;
-use Dvsa\Olcs\Transfer\Command\Application\UpdateInterim;
+use Dvsa\Olcs\Transfer\Command\Application\UpdateInterim as ApplicationUpdateInterim;
+use Dvsa\Olcs\Transfer\Command\Variation\UpdateInterim as VariationUpdateInterim;
 use Dvsa\Olcs\Transfer\Query\Application\Interim;
 use Zend\View\Model\ViewModel;
 use Common\Data\Mapper\Lva\Interim as Mapper;
@@ -56,6 +57,7 @@ abstract class AbstractInterimController extends AbstractController
             $requestData = (array)$request->getPost();
             $requestData['data']['totAuthTrailers'] = $interimData['totAuthTrailers'];
             $requestData['data']['totAuthVehicles'] = $interimData['totAuthVehicles'];
+            $requestData['data']['isVariation']     = $interimData['isVariation'];
             $form->setData($requestData);
         } else {
             $form->setData(Mapper::mapFromResult($interimData));
@@ -63,14 +65,16 @@ abstract class AbstractInterimController extends AbstractController
 
         if ($request->isPost() && $form->isValid()) {
             $formData = $form->getData();
-            $formData['data']['totAuthTrailers'] = $interimData['totAuthTrailers'];
-            $formData['data']['totAuthVehicles'] = $interimData['totAuthVehicles'];
 
             $dtoData = Mapper::mapFromForm($formData);
             $dtoData['id'] = $this->getIdentifier();
             $dtoData['action'] = $this->determinePostSaveAction();
 
-            $response = $this->handleCommand(UpdateInterim::create($dtoData));
+            if ($interimData['isVariation'] == false) {
+                $response = $this->handleCommand(ApplicationUpdateInterim::create($dtoData));
+            } elseif ($interimData['isVariation'] == true) {
+                $response = $this->handleCommand(VariationUpdateInterim::create($dtoData));
+            }
 
             if ($response->isOk()) {
                 $this->maybeDisplayCreateFeeMessage($response->getResult());
