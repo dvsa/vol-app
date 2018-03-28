@@ -28,11 +28,25 @@ return array(
             'name' => 'companyOrLlpNo',
         ),
         array(
+            'title' => 'Licence No.',
+            'name' => 'licNo',
+            'formatter' => function ($row) {
+                return $row['licence']['licNo'];
+            }
+        ),
+        array(
+            'title' => 'Licence Type.',
+            'name' => 'description',
+            'formatter' => 'LicenceTypeShort'
+        ),
+        array(
             'title' => 'OLCS Company name.',
             'name' => 'organisation',
             'sort' => 'o.name',
             'formatter' => 'OrganisationLink',
         ),
+
+
         array(
             'title' => 'Reason(s)',
             'name' => 'reason',
