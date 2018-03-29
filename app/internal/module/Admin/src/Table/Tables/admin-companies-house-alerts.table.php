@@ -30,6 +30,7 @@ return array(
         array(
             'title' => 'Licence No.',
             'name' => 'licNo',
+            'sort' => 'licNo',
             'formatter' => function ($row) {
                 return $row['licence']['licNo'];
             }
@@ -37,6 +38,7 @@ return array(
         array(
             'title' => 'Licence Type.',
             'name' => 'description',
+            'sort' => 'description',
             'formatter' => 'LicenceTypeShort'
         ),
         array(
@@ -68,6 +70,7 @@ return array(
         array(
             'title' => 'Detected',
             'name' => 'createdOn',
+            'sort' => 'createdOn',
             'formatter' => 'Date',
         ),
         array(
