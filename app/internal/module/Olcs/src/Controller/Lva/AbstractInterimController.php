@@ -6,6 +6,7 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
@@ -52,15 +53,20 @@ abstract class AbstractInterimController extends AbstractController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            $form->setData((array)$request->getPost());
+            $requestData = (array)$request->getPost();
+            $requestData['data']['totAuthTrailers'] = $interimData['totAuthTrailers'];
+            $requestData['data']['totAuthVehicles'] = $interimData['totAuthVehicles'];
+            $form->setData($requestData);
         } else {
             $form->setData(Mapper::mapFromResult($interimData));
         }
 
         if ($request->isPost() && $form->isValid()) {
+            $formData = $form->getData();
+            $formData['data']['totAuthTrailers'] = $interimData['totAuthTrailers'];
+            $formData['data']['totAuthVehicles'] = $interimData['totAuthVehicles'];
 
-            $dtoData = Mapper::mapFromForm($form->getData());
-
+            $dtoData = Mapper::mapFromForm($formData);
             $dtoData['id'] = $this->getIdentifier();
             $dtoData['action'] = $this->determinePostSaveAction();
 
@@ -111,7 +117,7 @@ abstract class AbstractInterimController extends AbstractController
             return $this->redirectToIndex();
         }
 
-        $request  = $this->getRequest();
+        $request = $this->getRequest();
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
 
@@ -119,13 +125,11 @@ abstract class AbstractInterimController extends AbstractController
         $form->get('messages')->get('message')->setValue('internal.interim.form.grant_confirm');
 
         if ($request->isPost()) {
-
             $response = $this->handleCommand(GrantInterim::create(['id' => $this->getIdentifier()]));
 
             $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
 
             if ($response->isOk()) {
-
                 $messageMap = [
                     self::ACTION_FEE_REQUEST => 'internal.interim.interim_granted_fee_requested',
                     self::ACTION_IN_FORCE    => 'internal.interim.form.interim_in_force',
@@ -156,7 +160,7 @@ abstract class AbstractInterimController extends AbstractController
             return $this->redirectToIndex();
         }
 
-        $request  = $this->getRequest();
+        $request = $this->getRequest();
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
 
@@ -164,7 +168,6 @@ abstract class AbstractInterimController extends AbstractController
         $form->get('messages')->get('message')->setValue('internal.interim.form.refuse_confirm');
 
         if ($request->isPost()) {
-
             $response = $this->handleCommand(RefuseInterim::create(['id' => $this->getIdentifier()]));
 
             $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
@@ -255,7 +258,6 @@ abstract class AbstractInterimController extends AbstractController
         }
 
         if (!$application['canUpdateInterim']) {
-
             $formHelper->disableElement($form, 'data->interimReason');
             $formHelper->disableElement($form, 'data->interimStart');
             $formHelper->disableElement($form, 'data->interimEnd');
