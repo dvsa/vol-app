@@ -1,5 +1,4 @@
 <?php
-
 return array(
     'variables' => array(
         'title' => 'crud-companies-house-alert-title',
@@ -30,7 +29,7 @@ return array(
         array(
             'title' => 'Licence No.',
             'name' => 'licNo',
-            'sort' => 'licNo',
+            'sort' => 'cha_o_ls.licNo',
             'formatter' => function ($row) {
                 return $row['licence']['licNo'];
             }
@@ -38,13 +37,13 @@ return array(
         array(
             'title' => 'Licence Type.',
             'name' => 'description',
-            'sort' => 'description',
+            'sort' => 'cha_o_lst.id',
             'formatter' => 'LicenceTypeShort'
         ),
         array(
             'title' => 'OLCS Company name.',
             'name' => 'organisation',
-            'sort' => 'o.name',
+            'sort' => 'cha_o.name',
             'formatter' => 'OrganisationLink',
         ),
 
