@@ -37,6 +37,9 @@ class InterimVehicleAuthorityTest extends PHPUnit_Framework_TestCase
             [0, ['totAuthVehicles' => 5, 'isVariation' => false], false],
             [0, ['totAuthVehicles' => 0, 'isVariation' => false], false],
             [0, ['totAuthVehicles' => 2, 'isVariation' => true], true],
+            [6, ['totAuthVehicles' => 5, 'isVariation' => false], false],
+            [6, ['totAuthVehicles' => 5, 'isVariation' => false], false],
+            [4, ['totAuthVehicles' => 5, 'isVariation' => false], true],
         ];
     }
 }
