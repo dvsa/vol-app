@@ -32,21 +32,15 @@ class InterimVehicleAuthority extends AbstractValidator
         $this->setValue($value);
         $totalAuthVehicles = ($context['totAuthVehicles'] == null ? 0 : $context['totAuthVehicles']);
 
-        if ($context['isVariation']) {
-            if ($this->getValue() > $totalAuthVehicles) {
-                $this->error(self::VEHICLE_AUTHORITY_EXCEEDED);
-                return false;
-            }
-            return true;
-        } else {
-            if ($this->getValue() > $totalAuthVehicles) {
-                $this->error(self::VEHICLE_AUTHORITY_EXCEEDED);
-                return false;
-            } elseif ($this->getValue() == 0) {
-                $this->error(self::VALUE_BELOW_ONE);
-                return false;
-            }
-            return true;
+        if ($this->getValue() > $totalAuthVehicles) {
+            $this->error(self::VEHICLE_AUTHORITY_EXCEEDED);
+            return false;
         }
+
+        if (!$context['isVariation'] && $this->getValue() == 0) {
+            $this->error(self::VALUE_BELOW_ONE);
+            return false;
+        }
+        return true;
     }
 }
