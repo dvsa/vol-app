@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Variation;
 use Olcs\Controller\Lva\AbstractInterimController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Olcs\Controller\Interfaces\VariationControllerInterface;
+use Dvsa\Olcs\Transfer\Command\Variation\UpdateInterim;
 
 /**
  * Internal Variation Interim Controller
@@ -22,4 +23,5 @@ class InterimController extends AbstractInterimController implements VariationCo
 
     protected $lva = 'variation';
     protected $location = 'internal';
+    protected $updateInterimCommand = UpdateInterim::class;
 }

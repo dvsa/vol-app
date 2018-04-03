@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Application;
 use Olcs\Controller\Lva\AbstractInterimController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Dvsa\Olcs\Transfer\Command\Application\UpdateInterim;
 
 /**
  * Internal Application Interim Controller
@@ -23,4 +24,5 @@ class InterimController extends AbstractInterimController implements Application
 
     protected $lva = 'application';
     protected $location = 'internal';
+    protected $updateInterimCommand = UpdateInterim::class;
 }
