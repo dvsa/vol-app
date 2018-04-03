@@ -14,8 +14,6 @@ use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\Application\GrantInterim;
 use Dvsa\Olcs\Transfer\Command\Application\PrintInterimDocument;
 use Dvsa\Olcs\Transfer\Command\Application\RefuseInterim;
-use Dvsa\Olcs\Transfer\Command\Application\UpdateInterim as ApplicationUpdateInterim;
-use Dvsa\Olcs\Transfer\Command\Variation\UpdateInterim as VariationUpdateInterim;
 use Dvsa\Olcs\Transfer\Query\Application\Interim;
 use Zend\View\Model\ViewModel;
 use Common\Data\Mapper\Lva\Interim as Mapper;
@@ -32,6 +30,8 @@ abstract class AbstractInterimController extends AbstractController
     const ACTION_GRANTED = 'granted';
     const ACTION_IN_FORCE = 'in_force';
     const ACTION_FEE_REQUEST = 'fee_request';
+
+    protected $updateInterimCommand;
 
     /**
      * Index Action
@@ -70,11 +70,8 @@ abstract class AbstractInterimController extends AbstractController
             $dtoData['id'] = $this->getIdentifier();
             $dtoData['action'] = $this->determinePostSaveAction();
 
-            if ($interimData['isVariation'] == false) {
-                $response = $this->handleCommand(ApplicationUpdateInterim::create($dtoData));
-            } elseif ($interimData['isVariation'] == true) {
-                $response = $this->handleCommand(VariationUpdateInterim::create($dtoData));
-            }
+            $command = call_user_func($this->updateInterimCommand . '::create', $dtoData);
+            $response = $this->handleCommand($command);
 
             if ($response->isOk()) {
                 $this->maybeDisplayCreateFeeMessage($response->getResult());
