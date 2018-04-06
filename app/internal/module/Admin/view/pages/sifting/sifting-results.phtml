@@ -1,0 +1,18 @@
+<div class="guidance">
+    <p>View permit applications by sector</p>
+</div>
+<div class="table__header">
+    <h3>
+        <?php
+        echo $this->placeholder('tableHeader')->getValue();
+        ?>
+
+        <span><?php
+        echo $this->placeholder('sectorName')->getValue();
+        ?><span>
+    </h3>
+</div>
+
+
+<?php
+echo $this->render('pages/table');

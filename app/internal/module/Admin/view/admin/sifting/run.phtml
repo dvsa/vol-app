@@ -1,0 +1,30 @@
+
+<div class="table__header">
+    <h3>Sifting has been applied</h3></div><br>
+<span><?php echo count($curlResponse); ?> sets of data have been modified.</span>
+</div>
+
+
+<table class="js-rows">
+        <thead>
+            <tr>
+                <th class="sortable" width="">Permit</th><th class="sortable" width="">Intensity</th><th class="sortable" width="">Sector ID</th></tr>
+        </thead>
+        <tbody>
+
+<?php
+    foreach ($curlResponse as $sift)
+    {
+        echo '<tr><td data-heading="Permit">' . $sift->permits_id .'</td>';
+        echo '<td data-heading="Intensity">' . $sift->intensity .'</td>';
+        echo '<td data-heading="Sector">' . $sift->sector_id .'</td></tr>';
+    }
+
+
+?>
+
+
+
+
+                        </tbody>
+            </table>

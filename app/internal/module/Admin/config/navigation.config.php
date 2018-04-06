@@ -13,6 +13,30 @@ return [
                     'label' => 'Scanning',
                     'route' => 'admin-dashboard/admin-scanning',
                 ],
+
+
+
+              [
+                'id'    => 'admin-dashboard/admin-sifting',
+                'label' => 'Sifting',
+                'route' => 'admin-dashboard/admin-sifting',
+                'pages' => [
+                  [
+                    'id' => 'admin-dashboard/admin-sifting',
+                    'label' => 'Sifting',
+                    'route' => 'admin-dashboard/admin-sifting',
+                  ],
+                  [
+                    'id' => 'admin-dashboard/admin-sifting-results',
+                    'label' => 'ECMT applications',
+                    'route' => 'admin-dashboard/admin-sifting-results',
+                  ],
+                ]
+              ],
+
+
+
+
                 [
                     'id'    => 'admin-dashboard/admin-user-management',
                     'label' => 'User management',
