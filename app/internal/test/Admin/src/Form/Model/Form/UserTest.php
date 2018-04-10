@@ -2,6 +2,7 @@
 
 namespace AdminTest\Form\Model\Form;
 
+use Common\Form\Elements\Types\Readonly;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Common\Form\Elements\Types\Html;
 use Zend\Form\Element\Button;
@@ -332,7 +333,7 @@ class UserTest extends AbstractFormValidationTestCase
     {
         $element = ['userLoginSecurity', 'createdOn'];
         $this->assertFormElementIsRequired($element, false);
-        $this->assertFormElementType($element, Html::class);
+        $this->assertFormElementType($element, HtmlDateTime::class);
     }
 
     public function testUserLoginLastLoggedIn()
@@ -346,14 +347,14 @@ class UserTest extends AbstractFormValidationTestCase
     {
         $element = ['userLoginSecurity', 'locked'];
         $this->assertFormElementIsRequired($element, false);
-        $this->assertFormElementType($element, Html::class);
+        $this->assertFormElementType($element, Readonly::class);
     }
 
     public function testUserPasswordLastReset()
     {
         $element = ['userLoginSecurity', 'passwordLastReset'];
         $this->assertFormElementIsRequired($element, false);
-        $this->assertFormElementType($element, Html::class);
+        $this->assertFormElementType($element, Readonly::class);
     }
 
     public function testUserLoginResetPassword()
@@ -374,7 +375,7 @@ class UserTest extends AbstractFormValidationTestCase
     {
         $element = ['userLoginSecurity', 'disabledDate'];
         $this->assertFormElementIsRequired($element, false);
-        $this->assertFormElementType($element, Html::class);
+        $this->assertFormElementType($element, HtmlDateTime::class);
     }
 
     public function testSubmit()
