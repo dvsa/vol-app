@@ -57,7 +57,8 @@ abstract class AbstractInterimController extends AbstractController
             $requestData = (array)$request->getPost();
             $requestData['data']['totAuthTrailers'] = $interimData['totAuthTrailers'];
             $requestData['data']['totAuthVehicles'] = $interimData['totAuthVehicles'];
-            $requestData['data']['isVariation']     = $interimData['isVariation'];
+            $requestData['data']['isVariation'] = $interimData['isVariation'];
+
             $form->setData($requestData);
         } else {
             $form->setData(Mapper::mapFromResult($interimData));
@@ -133,8 +134,8 @@ abstract class AbstractInterimController extends AbstractController
             if ($response->isOk()) {
                 $messageMap = [
                     self::ACTION_FEE_REQUEST => 'internal.interim.interim_granted_fee_requested',
-                    self::ACTION_IN_FORCE    => 'internal.interim.form.interim_in_force',
-                    self::ACTION_GRANTED     => 'internal.interim.interim_granted',
+                    self::ACTION_IN_FORCE => 'internal.interim.form.interim_in_force',
+                    self::ACTION_GRANTED => 'internal.interim.interim_granted',
                 ];
                 $action = $response->getResult()['id']['action'];
                 if (array_key_exists($action, $messageMap)) {
@@ -278,6 +279,10 @@ abstract class AbstractInterimController extends AbstractController
             $formHelper->remove($form, 'form-actions->reprint');
         }
 
+        if ($this->isButtonPressed('grant')) {
+            $form->getInputFilter()->get('data')->get('interimStart')->setRequired(true);
+            $form->getInputFilter()->get('data')->get('interimEnd')->setRequired(true);
+        }
         return $form;
     }
 
