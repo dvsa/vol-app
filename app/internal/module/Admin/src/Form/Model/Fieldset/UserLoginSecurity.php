@@ -25,7 +25,7 @@ class UserLoginSecurity
      * @Form\Options({"label":"Created on"})
      * @Form\Required(false)
      * @Form\Attributes({"id":"createdOn", "required": false})
-     * @Form\Type("Common\Form\Elements\Types\Html")
+     * @Form\Type("Common\Form\Elements\Types\HtmlDateTime")
      */
     public $createdOn = null;
 
@@ -41,7 +41,7 @@ class UserLoginSecurity
      * @Form\Options({"label":"Account locked"})
      * @Form\Required(false)
      * @Form\Attributes({"id":"locked", "required": false})
-     * @Form\Type("Common\Form\Elements\Types\Html")
+     * @Form\Type("Common\Form\Elements\Types\Readonly")
      */
     public $locked = null;
 
@@ -49,7 +49,7 @@ class UserLoginSecurity
      * @Form\Options({"label":"Password last reset"})
      * @Form\Required(false)
      * @Form\Attributes({"id":"passwordLastReset", "required": false})
-     * @Form\Type("Common\Form\Elements\Types\Html")
+     * @Form\Type("Common\Form\Elements\Types\Readonly")
      */
     public $passwordLastReset = null;
 
@@ -81,7 +81,7 @@ class UserLoginSecurity
      * @Form\Options({"label":"Account disabled"})
      * @Form\Required(false)
      * @Form\Attributes({"id":"disabledDate", "required": false})
-     * @Form\Type("Common\Form\Elements\Types\Html")
+     * @Form\Type("Common\Form\Elements\Types\HtmlDateTime")
      */
     public $disabledDate = null;
 }
