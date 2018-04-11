@@ -35,17 +35,11 @@ class User implements MapperInterface
             $formData['userLoginSecurity']['accountDisabled'] = $data['accountDisabled'];
 
             if (!empty($data['disabledDate'])) {
-                $formData['userLoginSecurity']['disabledDate'] = date(
-                    \DATETIMESEC_FORMAT,
-                    strtotime($data['disabledDate'])
-                );
+                $formData['userLoginSecurity']['disabledDate'] = $data['disabledDate'];
             }
 
             if (!empty($data['createdOn'])) {
-                $formData['userLoginSecurity']['createdOn'] = date(
-                    \DATETIMESEC_FORMAT,
-                    strtotime($data['createdOn'])
-                );
+                $formData['userLoginSecurity']['createdOn'] = $data['createdOn'];
             }
 
             $formData['userLoginSecurity']['locked']

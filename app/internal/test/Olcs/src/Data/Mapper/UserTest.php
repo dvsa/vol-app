@@ -89,11 +89,11 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
-                        'createdOn' => '01/06/2012 17:11:12',
+                        'createdOn' => '2012-06-01 17:11:12',
                         'lastLoggedInOn' => '2016-12-06T16:12:46+0000',
                         'passwordLastReset' => 'By email on 09/12/2016 14:13:36',
                         'accountDisabled' => 'Y',
-                        'disabledDate' => '07/06/2015 17:11:12',
+                        'disabledDate' => '2015-06-07 17:11:12',
                         'locked' => 'Yes on 01/10/2016 10:11:46',
                     ],
                     'userType' => [
@@ -171,7 +171,7 @@ class UserTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'userLoginSecurity' => [
-                        'createdOn' => '01/06/2012 17:11:12',
+                        'createdOn' => '2012-06-01 17:11:12',
                         'lastLoggedInOn' => null,
                         'loginId' => 'testuser',
                         'accountDisabled' => 'Y',
@@ -242,7 +242,7 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
-                        'createdOn' => '01/06/2012 17:11:12',
+                        'createdOn' => '2012-06-01 17:11:12',
                         'lastLoggedInOn' => null,
                         'accountDisabled' => 'Y',
                         'locked' => 'No',
@@ -311,7 +311,7 @@ class UserTest extends MockeryTestCase
                     'version' => 1,
                     'userLoginSecurity' => [
                         'loginId' => 'testuser',
-                        'createdOn' => '01/06/2012 17:11:12',
+                        'createdOn' => '2012-06-01 17:11:12',
                         'lastLoggedInOn' => null,
                         'accountDisabled' => 'Y',
                         'locked' => 'No',
