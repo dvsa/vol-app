@@ -4,12 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "hash": "10871a9bb4dd53fc6e549d732455755f",
     "content-hash": "370734de9a59ca0c8f9ccf374c4c4a20",
-=======
-    "content-hash": "7bf6b81492d8f0c2c08ca1cfc29ce346",
->>>>>>> master
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -23,7 +18,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-annotations-54cacc9b81758b14e3ce750f205a393d52339e97-zip-879343.tar",
                 "reference": "54cacc9b81758b14e3ce750f205a393d52339e97",
-                "shasum": "88950f002eade5cce9f6dbcb7252fe9329ac2625"
+                "shasum": "6104ec839f9b971bc8837970fc9a37d51b0e2e14"
             },
             "require": {
                 "doctrine/lexer": "1.*",
@@ -91,7 +86,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-cache-eb152c5100571c7a45470ff2a35095ab3f3b900b-zip-d06c9d.tar",
                 "reference": "eb152c5100571c7a45470ff2a35095ab3f3b900b",
-                "shasum": "1baf5cdff2da91f0dffde5f970d31e436edf39f2"
+                "shasum": "32937319ccd69a7f2cd392bf269a745a8d769b02"
             },
             "require": {
                 "php": "~5.5|~7.0"
@@ -161,7 +156,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-collections-1a4fb7e902202c33cce8c55989b945612943c2ba-zip-cefe7d.tar",
                 "reference": "1a4fb7e902202c33cce8c55989b945612943c2ba",
-                "shasum": "bc93888adb2b188953dfee73dce0d4708606bf63"
+                "shasum": "a6c5c12edb42c64c2c719ca269b3bbd4ee2ca2d9"
             },
             "require": {
                 "php": "^5.6 || ^7.0"
@@ -228,7 +223,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-common-4acb8f89626baafede6ee5475bc5844096eba8a9-zip-f1a3cd.tar",
                 "reference": "4acb8f89626baafede6ee5475bc5844096eba8a9",
-                "shasum": "8f63fd354a8d537c374d6ce86542f31729e3280c"
+                "shasum": "b56cb5c09fd5ff3065ef495f08067b85d04fbba2"
             },
             "require": {
                 "doctrine/annotations": "1.*",
@@ -301,7 +296,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-dbal-729340d8d1eec8f01bff708e12e449a3415af873-zip-1dbf70.tar",
                 "reference": "729340d8d1eec8f01bff708e12e449a3415af873",
-                "shasum": "8e4bb3f4c9052ff18bbb7dfe12a970d81e1c69ca"
+                "shasum": "60bc2afb61fdbbb74e5d52b1a23e024ae9d73a44"
             },
             "require": {
                 "doctrine/common": ">=2.4,<2.8-dev",
@@ -528,7 +523,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-inflector-90b2128806bfde671b6952ab8bea493942c1fdae-zip-a91357.tar",
                 "reference": "90b2128806bfde671b6952ab8bea493942c1fdae",
-                "shasum": "36afb41eb4ca5dac80d06a31ebd853f521ac92f4"
+                "shasum": "8534dfe5ac8de99fa7448199045e28b38ddd4de0"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -595,7 +590,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-instantiator-8e884e78f9f0eb1329e445619e04456e64d8051d-zip-681b88.tar",
                 "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
-                "shasum": "cf5e99553fa1eaf68a0b8fd419a5a9a6788f6c14"
+                "shasum": "984509bdae405858fab90df357491c69b1cc792c"
             },
             "require": {
                 "php": ">=5.3,<8.0-DEV"
@@ -816,19 +811,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-<<<<<<< HEAD
             "version": "dev-release/4.178",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
                 "reference": "5929106a7a4f71e7036d4d414b5a0576e0b0a13c"
-=======
-            "version": "dev-release/4.35.1",
-            "source": {
-                "type": "git",
-                "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "241c80d7c0a8606a4eaca47bf6d176f2d0b73381"
->>>>>>> master
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -877,8 +864,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-<<<<<<< HEAD
-            "time": "2018-04-13 15:38:15"
+            "time": "2018-04-13T15:38:15+00:00"
         },
         {
             "name": "olcs/olcs-auth",
@@ -892,22 +878,6 @@
                 "doctrine/annotations": "^1.2.3",
                 "olcs/olcs-transfer": "dev-release/4.178",
                 "olcs/olcscommon": "dev-release/4.178",
-=======
-            "time": "2018-03-22T16:17:49+00:00"
-        },
-        {
-            "name": "olcs/olcs-auth",
-            "version": "dev-release/4.35.1",
-            "source": {
-                "type": "git",
-                "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "e45b8569b5e7804df8bf08df6d4a8bc95637b1f3"
-            },
-            "require": {
-                "doctrine/annotations": "^1.2.3",
-                "olcs/olcs-transfer": "dev-release/4.35.1",
-                "olcs/olcscommon": "dev-release/4.35.1",
->>>>>>> master
                 "php": ">=5.4",
                 "zendframework/zendframework": "~2.4.0"
             },
@@ -942,11 +912,7 @@
                 ]
             },
             "description": "OLCS Authentication",
-<<<<<<< HEAD
-            "time": "2018-04-13 15:25:08"
-=======
-            "time": "2018-03-22T21:38:01+00:00"
->>>>>>> master
+            "time": "2018-04-13T15:25:08+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -998,19 +964,11 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-<<<<<<< HEAD
-            "time": "2018-04-13 15:23:13"
+            "time": "2018-04-13T15:23:13+00:00"
         },
         {
             "name": "olcs/olcs-transfer",
             "version": "dev-release/4.178",
-=======
-            "time": "2018-03-13T18:28:01+00:00"
-        },
-        {
-            "name": "olcs/olcs-transfer",
-            "version": "dev-release/4.35.1",
->>>>>>> master
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
@@ -1052,19 +1010,11 @@
                 ]
             },
             "description": "OLCS Transfer",
-<<<<<<< HEAD
-            "time": "2018-04-13 15:26:24"
+            "time": "2018-04-13T15:26:24+00:00"
         },
         {
             "name": "olcs/olcs-utils",
             "version": "dev-release/4.178",
-=======
-            "time": "2018-03-13T18:31:13+00:00"
-        },
-        {
-            "name": "olcs/olcs-utils",
-            "version": "dev-release/4.35.1",
->>>>>>> master
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-utils.git",
@@ -1106,11 +1056,7 @@
                 ]
             },
             "description": "OLCS Utils",
-<<<<<<< HEAD
-            "time": "2018-04-13 15:27:27"
-=======
-            "time": "2018-03-13T18:32:40+00:00"
->>>>>>> master
+            "time": "2018-04-13T15:27:27+00:00"
         },
         {
             "name": "psr/log",
@@ -1329,11 +1275,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-<<<<<<< HEAD
-            "time": "2018-04-03 05:22:50"
-=======
-            "time": "2018-02-28T21:49:22+00:00"
->>>>>>> master
+            "time": "2018-04-03T05:22:50+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -1818,7 +1760,7 @@
             ],
             "authors": [
                 {
-                    "name": "Padraic Brady",
+                    "name": "Pádraic Brady",
                     "email": "padraic.brady@gmail.com",
                     "homepage": "http://blog.astrumfutura.com"
                 },
@@ -1959,11 +1901,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-<<<<<<< HEAD
-            "time": "2018-03-16 15:26:20"
-=======
             "time": "2018-03-16T15:26:20+00:00"
->>>>>>> master
         },
         {
             "name": "pdepend/pdepend",
@@ -3379,11 +3317,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-<<<<<<< HEAD
-            "time": "2018-03-19 21:11:56"
-=======
-            "time": "2018-01-21T19:03:25+00:00"
->>>>>>> master
+            "time": "2018-03-19T21:11:56+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -3495,11 +3429,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-<<<<<<< HEAD
-            "time": "2018-04-04 05:07:11"
-=======
-            "time": "2018-03-05T18:28:11+00:00"
->>>>>>> master
+            "time": "2018-04-04T05:07:11+00:00"
         },
         {
             "name": "symfony/yaml",
