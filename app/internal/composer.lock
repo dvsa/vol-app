@@ -1884,7 +1884,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-testhelpers.git",
-                "reference": "2d865c8a2b4614be66433847d4fa14c1db93b291"
+                "reference": "95b64f1db03987fd820a26a7eb9d9f16b1a81726"
             },
             "require": {
                 "php": ">=5.4"
@@ -1901,7 +1901,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2018-03-16T15:26:20+00:00"
+            "time": "2018-04-13T23:06:56+00:00"
         },
         {
             "name": "pdepend/pdepend",
