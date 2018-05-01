@@ -379,7 +379,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-
             $ids = explode(',', $this->params('grand_child_id'));
 
             $commandClass = $this->deleteCommandMap[$type];
@@ -443,7 +442,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
 
         if (!$hasProcessedAddressLookup && $request->isPost() && $form->isValid()) {
-
             $data = $form->getData();
             if ($mode == 'add') {
                 $command = $this->{'get' . $type . 'CreateCommand'}($data);
@@ -1168,7 +1166,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             'content' => $translationHelper->translate('markup-tma-ab1-3'),
             'bottomContent' => $translationHelper->translateReplace(
                 'TMA_RESEND_TM1',
-                [$translationHelper->translate('TM1_FORM_LINK')]
+                [$this->url()->fromRoute(
+                    'getfile',
+                    ['identifier' => base64_encode(
+                        $translationHelper->translate('tm-add-user-no-email-document-identifier')
+                    )]
+                )]
             ),
         ];
 
