@@ -48,11 +48,11 @@
         "doctrine/annotations": "^1.2.3",
         "symfony/Filesystem": "~2.6.0",
         "zf-commons/zfc-rbac": "~2.4.0",
-        "olcs/OlcsCommon": "dev-release/4.178",
-        "olcs/olcs-transfer": "dev-release/4.178",
-        "olcs/olcs-utils": "dev-release/4.178",
-        "olcs/olcs-auth": "dev-release/4.178",
-        "olcs/olcs-logging": "dev-release/4.178",
+        "olcs/OlcsCommon": "dev-release/4.179.2",
+        "olcs/olcs-transfer": "dev-release/4.179.2",
+        "olcs/olcs-utils": "dev-release/4.179.2",
+        "olcs/olcs-auth": "dev-release/4.179.2",
+        "olcs/olcs-logging": "dev-release/4.179.2",
         "soflomo/purifier": "~0.1.0"
     },
     "require-dev": {
@@ -74,7 +74,7 @@
         "preferred-install": "dist",
         "secure-http": false,
         "platform": {
-            "php": "5.6.31"
+            "php": "7.1.15"
         }
     },
     "scripts": {
