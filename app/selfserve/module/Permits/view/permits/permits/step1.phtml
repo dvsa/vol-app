@@ -1,0 +1,75 @@
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script type="text/javascript" src="jquery.js"></script>
+</head>
+
+<?php
+$title = 'International haulier permit';
+$this->headTitle($title);
+?>
+<p>Step <?php echo $step ?> of 3</p>
+
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<?php
+$form->setAttribute('action', $this->url('permits', array('action' => 'step2')));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('id'));
+?>
+<h2>Will you be carrying out cabotage?</h2>
+<p>Transport goods between two places in the same country</p>
+<?php echo $this->formRow($form->get('willCabotage')); ?>
+
+<h2>Do your vehicles meet the environmentally compliant standard Euro 6?</h2>
+<a href="">Compliant standards</a>
+<p hidden>HIDDEN TEXT TO BE DISPLAYED WHEN Compliant Standards IS TOGGLED</p>
+<?php echo $this->formRow($form->get('meetsEuro6')); ?>
+
+<h2>Which countries will you be delivering to?</h2>
+<div class="input_fields_wrap">
+  <?php 
+  foreach ($form->get('country') as $element) : 
+    echo $this->formRow($element);
+  endforeach;
+  ?>
+  <a href="#" class="add_country_button">Add another country</a>
+</div>
+
+<?php echo $this->formSubmit($form->get('submit'));  ?>
+<a href=""> Cancel </a>
+<?php echo $this->form()->closeTag(); ?>
+
+
+
+<script>
+  $(document).ready(function() {
+    var max_fields      = 10; //maximum input boxes allowed
+    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+    var add_button      = $(".add_country_button"); //Add button ID
+    var country_count   = 1;
+    
+    var x = 1; //initlal text box count
+    $(add_button).click(function(e){ //on add input button click
+      e.preventDefault();
+        if(x < max_fields){ //max input box allowed
+            x++; //text box increment
+      country_count++; //label increment
+      $(wrapper).append('<div><label>Country ' 
+        + country_count 
+        + ' </label><input type="text" name="country[]"/>'
+                + '<a href="#" class="remove_field">Remove</a></div>'); //add input box
+    }
+  });
+    
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+      e.preventDefault(); $(this).parent('div').remove();
+      x--;
+      country_count--;
+    })
+  });
+</script>
+
