@@ -29,9 +29,6 @@ echo $this->formRow($form->get('numberOfTrips'));
 echo $this->formSubmit($form->get('submit'));
 echo $this->form()->closeTag();
 
-foreach ($inputFilter->getInvalidInput() as $error) {
-  var_dump($error->getMessages());
-}
 ?>
 
 <a href=""> Cancel </a>

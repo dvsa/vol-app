@@ -5,7 +5,7 @@ use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Input;
 
-class Step2Form extends Form {
+class ApplicationForm extends Form {
   
   private $inputFilter;
   

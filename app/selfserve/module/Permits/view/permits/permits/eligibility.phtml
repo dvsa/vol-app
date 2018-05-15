@@ -6,30 +6,33 @@
 </head>
 
 <?php
-$title = 'International haulier permit';
-$this->headTitle($title);
+    $title = 'International haulier permit';
+    $this->headTitle($title);
 ?>
-<p>Step <?php echo $step ?> of 3</p>
+<p><?php echo $this->linkBack($this->backUrl); ?></p>
 
-<h1><?php echo $this->escapeHtml($title); ?></h1>
+<p>Step 1 of 3</p>
+
+<h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
 
 <?php
-$form->setAttribute('action', $this->url('permits', array('action' => 'step2')));
+$form->setAttribute('action', $this->url('permits', array('action' => 'application')));
 $form->prepare();
 
 echo $this->form()->openTag($form);
 echo $this->formHidden($form->get('id'));
 ?>
-<h2>Will you be carrying out cabotage?</h2>
+<legend>Will you be carrying out cabotage?</legend>
 <p>Transport goods between two places in the same country</p>
-<?php echo $this->formRow($form->get('willCabotage')); ?>
+<div class="form-group"><fieldset class="inline"><?php echo $this->formRow($form->get('willCabotage')); ?></fieldset></div>
 
-<h2>Do your vehicles meet the environmentally compliant standard Euro 6?</h2>
+
+<legend>Do your vehicles meet the environmentally compliant standard Euro 6?</legend>
 <a href="">Compliant standards</a>
 <p hidden>HIDDEN TEXT TO BE DISPLAYED WHEN Compliant Standards IS TOGGLED</p>
 <?php echo $this->formRow($form->get('meetsEuro6')); ?>
 
-<h2>Which countries will you be delivering to?</h2>
+<legend>Which countries will you be delivering to?</legend>
 <div class="input_fields_wrap">
   <?php 
   foreach ($form->get('country') as $element) : 
@@ -38,9 +41,10 @@ echo $this->formHidden($form->get('id'));
   ?>
   <a href="#" class="add_country_button">Add another country</a>
 </div>
-
-<?php echo $this->formSubmit($form->get('submit'));  ?>
-<a href=""> Cancel </a>
+<div class="actions-container new-application--wrapper">
+    <p><?php echo $this->formSubmit($form->get('submit'));  ?></p>
+    <p><a href="/permits"> Cancel </a></p>
+</div>
 <?php echo $this->form()->closeTag(); ?>
 
 
