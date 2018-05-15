@@ -1,13 +1,19 @@
 <?php
-    $title = 'Home';
+    $title = 'Permits Home - ';
     $this->headTitle($title);
 ?>
 <h1>Home</h1>
 
-<h2>Permits</h2>
-<br>
-<p>You haven't applied for any permits</p>
-<br>
-<p>
-    <a href="/permits/step1" title="Apply for a permit">Apply for a permit</a>
-</p>
+<div class="row">
+    <div class="dashboard two-thirds">
+        <h3>Permits</h3>
+        <p>You haven't applied for any permits</p>
+        <div class="actions-container new-application--wrapper">
+            <a href="/permits/step1" class="action--primary large">
+                <?php echo $this->translate('application.permit.button'); ?>
+            </a>
+        </div>
+    </div>
+
+    <?php echo $this->partial('partials/dashboard-right-column'); ?>
+</div>
