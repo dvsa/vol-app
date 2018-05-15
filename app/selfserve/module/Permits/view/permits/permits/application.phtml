@@ -26,11 +26,11 @@ echo $this->formRow($form->get('deliveryCountries'));
 echo $this->formRow($form->get('numberOfTrips'));
 
 echo $this->formRow($form->get('sector'));
-
-echo $this->formSubmit($form->get('submit'));
-echo $this->form()->closeTag();
-
 ?>
+<div class="actions-container new-application--wrapper">
+    <p><?php echo $this->formSubmit($form->get('submit'));  ?></p>
+</div>
+<?php echo $this->form()->closeTag(); ?>
 
 <a href=""> Cancel </a>
 

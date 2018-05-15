@@ -60,6 +60,7 @@ class ApplicationForm extends Form {
       'attributes' => array(
         'value' => 'Save and continue',
         'id' => 'submitbutton',
+        'class' => 'action--primary large',
       ),
     ));
   }
