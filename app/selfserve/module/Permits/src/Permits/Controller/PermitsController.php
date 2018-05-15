@@ -19,9 +19,7 @@ class PermitsController extends AbstractActionController
 
   public function indexAction()
   {
-    return new ViewModel([
-      'permits' => $this->table->fetchAll(),
-    ]);
+    return new ViewModel();
   }
 
   public function step1Action()
