@@ -5,7 +5,7 @@ use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Input;
 
-class Step1Form extends Form {
+class EligibilityForm extends Form {
   
   private $inputFilter;
   private $numOfCountries;

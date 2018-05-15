@@ -5,7 +5,7 @@ namespace Permits\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Permits\Model\PermitTable;
-use Permits\Form\Step1Form;
+use Permits\Form\EligibilityForm;
 use Permits\Form\Step2Form;
 
 class PermitsController extends AbstractActionController 
@@ -22,9 +22,9 @@ class PermitsController extends AbstractActionController
     return new ViewModel();
   }
 
-  public function step1Action()
+  public function eligibilityAction()
   {
-    $form = new Step1Form();
+    $form = new EligibilityForm();
 
     $request = $this->getRequest();
     if($request->isPost()){
@@ -45,7 +45,7 @@ class PermitsController extends AbstractActionController
       $jsonObject = json_encode($data); //convert data to JSON
       
       //START VALIDATION
-      $step1Form = new Step1Form();
+      $step1Form = new EligibilityForm();
       $inputFilter = $step1Form->getInputFilter(); //Get validation rules
       $inputFilter->setData($data);
       
