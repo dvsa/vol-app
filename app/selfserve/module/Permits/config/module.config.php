@@ -20,7 +20,7 @@ return array(
           ),
           'defaults' => array(
             'controller'    => 'Permits\Controller\Permits',
-            'action'        => 'step1',
+            'action'        => 'index',
           ),
         ),
       ),
