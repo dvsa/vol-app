@@ -42,7 +42,7 @@ class ApplicationForm extends Form {
       'type' => 'Text',
       'name' => 'sector',
       'options' => array(
-        'label' => 'Sector',
+        'label' => 'What type of goods will you be carrying?',
       ),
     ));
 

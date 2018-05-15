@@ -1,10 +1,11 @@
 <?php
-$title = 'International haulier permit';
+$title = 'You will need to apply for an annual ECMT permit';
 $this->headTitle($title);
 ?>
-<p>Step <?php echo $step ?> of 3</p>
+<p><?php echo $this->linkBack($this->backUrl); ?></p>
+<p>Step 2 of 3</p>
 
-<h1>You will need to apply for a new ECMT permit</h1>
+<h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
 
 <?php
 $form->setAttribute('action', $this->url('permits', array('action' => 'step3')));
@@ -14,17 +15,17 @@ echo $this->form()->openTag($form);
 echo $this->formHidden($form->get('id'));
 
 ?>
-<h2>You can apply up to 12 permits based on your total vehicle authorisations<br>
-  <br>
-  Which countries will you be delivering to?
-</h2>
+<div class="form-group panel panel-border-wide">
+    <p class="guidance">You can apply for up to 12 permits </p>
+</div>
+<legend>Which countries will you be delivering to?</legend>
 <p>Select all the apply</p>
 <?php
 echo $this->formRow($form->get('deliveryCountries'));
 
-echo $this->formRow($form->get('sector'));
-
 echo $this->formRow($form->get('numberOfTrips'));
+
+echo $this->formRow($form->get('sector'));
 
 echo $this->formSubmit($form->get('submit'));
 echo $this->form()->closeTag();
