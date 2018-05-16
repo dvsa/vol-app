@@ -1,0 +1,34 @@
+<?php
+$title = 'Can you get an international haulier permit?';
+$this->headTitle($title);
+?>
+<p><?php echo $this->linkBack($this->backUrl); ?></p>
+
+<h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
+
+<div class="row">
+    <div class="two-thirds">
+        <div class="actions-container">
+            <h3>Based on your answers, you may apply for an EMCT (European Conference of Ministers of Transport) permit if you know:</h3>
+            <ul class="list-bullet">
+                <li>the total number of trips you may take abroad over the next 12 months</li>
+                <li>the types of goods you are likely to carry during the calendar year.</li>
+                <li>you’ve read the ECMT permits <a href="#">guidance notes.</a> </li>
+            </ul>
+        </div>
+        <div class="actions-container">
+            <h3>ECMT permits are valid for one calendar year and allow an unlimited number of journeys within that period. </h3>
+            <ul class="list-bullet">
+                <li>The UK does not issue short-term permits.</li>
+                <li>Permits may be transferred between vehicles, but are valid for only one vehicle at a time.</li>
+                <li>The permit must be kept on board for the whole journey.</li>
+            </ul>
+        </div>
+        <div class="actions-container new-application--wrapper">
+            <p><a href="/permits/application" class="action--primary large"><?php echo $this->translate('continue.button'); ?></a></p>
+            <p><a href="/permits"> Cancel </a></p>
+        </div>
+    </div>
+
+    <?php echo $this->partial('partials/dashboard-right-column'); ?>
+</div>

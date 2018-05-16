@@ -16,7 +16,7 @@
 <h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
 
 <?php
-$form->setAttribute('action', $this->url('permits', array('action' => 'application')));
+$form->setAttribute('action', $this->url('permits', array('action' => 'eligible')));
 $form->prepare();
 
 echo $this->form()->openTag($form);

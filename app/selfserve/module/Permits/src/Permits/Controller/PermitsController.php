@@ -33,6 +33,11 @@ class PermitsController extends AbstractActionController
     return array('form' => $form);
   }
 
+  public function eligibleAction()
+  {
+    return new ViewModel();
+  }
+
   public function applicationAction()
   {
     $form = new ApplicationForm();
