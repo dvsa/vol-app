@@ -4,14 +4,25 @@ $this->headTitle($title);
 ?>
 <p><?php echo $this->linkBack($this->backUrl); ?></p>
 
-<h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
-
 <div class="row">
     <div class="two-thirds">
+        <div class="govuk-box-highlight">
+            <h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
+            <p>
+                Your reference number is <br>
+                <strong class="heading-medium">84051</strong>
+            </p>
+        </div>
         <div class="actions-container">
             <h3 class="heading-small">What happens next:</h3>
             <p>You will receive a confirmation email in the next few minutes and another email once the application has been processed.</p>
-            <p>Your application could be refused if you operate goods vehicles before your licence has been issued.</p>
+
+            <div class="notice form-group">
+                <i class="icon icon-important">
+                    <span class="visually-hidden">Warning</span>
+                </i>
+                <p>Your application could be refused if you operate goods vehicles before your licence has been issued.</p>
+            </div>
         </div>
         <div class="actions-container new-application--wrapper">
             <p><a href="/dashboard" class="action--primary large"> Finish </a></p>
