@@ -1,9 +1,9 @@
 <?php
-$title = 'You will need to apply for an annual ECMT permit';
+$title = $this->translate('permits.application.ecmt.title');
 $this->headTitle($title);
 ?>
 <p><?php echo $this->linkBack($this->backUrl); ?></p>
-<p>Step 2 of 3</p>
+<p><?php echo sprintf($this->translate('application.steps'), 2, 3); ?></p>
 
 <h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
 
@@ -16,10 +16,12 @@ echo $this->formHidden($form->get('id'));
 
 ?>
 <div class="form-group panel panel-border-wide">
-    <p class="guidance">You can apply for up to 12 permits </p>
+    <p class="guidance"><?php echo sprintf($this->translate('permits.application.ecmt.permits'), $this->data['maxApplications']); ?> </p>
 </div>
-<legend>Which countries will you be delivering to?</legend>
-<p>Select all the apply</p>
+
+
+<legend><?php echo $this->escapeHtml($this->translate('permits.application.ecmt.countries')); ?></legend>
+<p><?php echo $this->escapeHtml($this->translate('permits.application.ecmt.select')); ?></p>
 <?php
 echo $this->formRow($form->get('deliveryCountries'));
 
@@ -32,5 +34,5 @@ echo $this->formRow($form->get('sector'));
 </div>
 <?php echo $this->form()->closeTag(); ?>
 
-<a href="/permits"> Cancel </a>
+<a href="/permits"> <?php echo $this->escapeHtml($this->translate('Cancel')); ?> </a>
 
