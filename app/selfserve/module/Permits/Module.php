@@ -23,30 +23,7 @@ class Module {
 	public function getConfig(){
 		return include __DIR__ . '/config/module.config.php';
 	}
-	
-	public function getServiceConfig(){
-		/*
-		return array(
-			'Permits\Model\BookTable' => function($sm){
-				$tableGateway = $sm->get('BookTableGateway');
-				$table = new BookTable($tableGateway);
-				return $table;
-			},
-			'BookTableGateway' => function($sm) {
-				$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-				$resultSetPrototype = new ResultSet();
-				$resultSetPrototype->setArrayObjectPrototype(new Book());
-				return new TableGateway('book', $dbAdapter, null, resultSetPrototype);
-			},
-			
-			'Permits\Controller\Book' => function($sm){
-				echo "TEST";
-				return null;
-			},
-			
-		);
-		*/
-	}
+
 }
 
 ?>
