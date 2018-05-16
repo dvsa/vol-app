@@ -106,4 +106,12 @@ class PermitsController extends AbstractActionController
     return array('jsonObj' => $jsonObject, 'inputFilter' => $inputFilter, 'step' => '3');
   }
 
+    /**
+     * @return mixed
+     */
+    public function submittedAction()
+    {
+        return new ViewModel();
+    }
+
 }
