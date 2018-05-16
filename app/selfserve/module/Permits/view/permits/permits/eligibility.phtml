@@ -6,12 +6,12 @@
 </head>
 
 <?php
-    $title = 'International haulier permit';
+    $title = $this->translate('permits.application.eligibility.title');
     $this->headTitle($title);
 ?>
 <p><?php echo $this->linkBack($this->backUrl); ?></p>
 
-<p>Step 1 of 3</p>
+<p><?php echo sprintf($this->translate('application.steps'), 1, 3); ?></p>
 
 <h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
 
@@ -22,28 +22,33 @@ $form->prepare();
 echo $this->form()->openTag($form);
 echo $this->formHidden($form->get('id'));
 ?>
-<legend>Will you be carrying out cabotage?</legend>
-<p>Transport goods between two places in the same country</p>
+<legend><?php echo $this->escapeHtml($this->translate('permits.application.eligibility.willCabotage.question')); ?></legend>
+<p><?php echo $this->escapeHtml($this->translate('permits.application.eligibility.willCabotage.explanation')); ?></p>
 <div class="form-group"><fieldset class="inline"><?php echo $this->formRow($form->get('willCabotage')); ?></fieldset></div>
 
-
-<legend>Do your vehicles meet the environmentally compliant standard Euro 6?</legend>
-<a href="">Compliant standards</a>
-<p hidden>HIDDEN TEXT TO BE DISPLAYED WHEN Compliant Standards IS TOGGLED</p>
+<legend><?php echo $this->escapeHtml($this->translate('permits.application.eligibility.meetsEuro6.question')); ?></legend>
+<a href=""><?php echo $this->escapeHtml($this->translate('permits.application.eligibility.meetsEuro6.link')); ?></a>
+<p hidden><?php echo $this->escapeHtml($this->translate('permits.application.eligibility.meetsEuro6.hidden')); ?></p>
 <?php echo $this->formRow($form->get('meetsEuro6')); ?>
 
-<legend>Which countries will you be delivering to?</legend>
+
+
+
+
+
+
+<legend><?php echo $this->escapeHtml($this->translate('permits.application.eligibility.country.question')); ?></legend>
 <div class="input_fields_wrap">
   <?php 
   foreach ($form->get('country') as $element) : 
     echo $this->formRow($element);
   endforeach;
   ?>
-  <a href="#" class="add_country_button">Add another country</a>
+  <a href="#" class="add_country_button"><?php echo $this->escapeHtml($this->translate('permits.application.eligibility.country.add')); ?></a>
 </div>
 <div class="actions-container new-application--wrapper">
     <p><?php echo $this->formSubmit($form->get('submit'));  ?></p>
-    <p><a href="/permits"> Cancel </a></p>
+    <p><a href="/permits"> <?php echo $this->translate('cancel'); ?> </a></p>
 </div>
 <?php echo $this->form()->closeTag(); ?>
 

@@ -51,7 +51,7 @@ class EligibilityForm extends Form {
       'name' => 'country',
       'type' => 'Collection',
       'options' => array(
-        'label' => '',
+        'label' => 'Country',
         'count' => $numOfCountries,
         'should_create_template' => true,
         'target_element' => array(
@@ -110,7 +110,7 @@ class EligibilityForm extends Form {
         'required' => true,
         'filters'  => [],
         'options'  => array(
-          'label'          => 'Product features',
+          'label'          => 'Country',
           'count'          => $this->numOfCountries,
                                    // 'should_create_template' => true,
                                     //'allow_add'      => true,
