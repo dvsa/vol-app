@@ -76,6 +76,10 @@ class PermitsController extends AbstractActionController
       return new ViewModel();
   }
 
+  public function paymentAction()
+  {
+    return new ViewModel();
+  }
 
 
   public function step3Action()
