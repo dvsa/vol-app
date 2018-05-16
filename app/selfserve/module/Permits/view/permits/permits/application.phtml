@@ -8,7 +8,7 @@ $this->headTitle($title);
 <h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
 
 <?php
-$form->setAttribute('action', $this->url('permits', array('action' => 'step3')));
+$form->setAttribute('action', $this->url('permits', array('action' => 'application-overview')));
 $form->prepare();
 
 echo $this->form()->openTag($form);
