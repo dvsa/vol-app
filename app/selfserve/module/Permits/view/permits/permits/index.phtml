@@ -2,15 +2,16 @@
     $title = 'Permits Home - ';
     $this->headTitle($title);
 ?>
-<h1>Home</h1>
+
+<h1><?php echo $this->translate('permits.application.overwiew.title'); ?></h1>
 
 <div class="row">
     <div class="dashboard two-thirds">
-        <h3>Permits</h3>
-        <p class="guidance">You haven't applied for any permits</p>
+        <h3><?php echo $this->translate('permits.application.overwiew.subtitle'); ?></h3>
+        <p class="guidance"><?php echo $this->translate('permits.application.overwiew.no-permits'); ?></p>
         <div class="actions-container new-application--wrapper">
             <a href="/permits/eligibility" class="action--primary large">
-                <?php echo $this->translate('application.permit.button'); ?>
+                <?php echo $this->translate('permits.application.overwiew.button'); ?>
             </a>
         </div>
     </div>
