@@ -1,0 +1,22 @@
+<?php
+$title = 'Permits ';
+$this->headTitle($title);
+?>
+<p><?php echo $this->linkBack($this->backUrl); ?></p>
+<p>Step 3 of 3</p>
+
+<h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
+
+<!-- Application Overview Form needs to be added here -->
+<div class="row">
+    <div class="two-thirds">
+        <div class="actions-container">
+            <p class="guidance">You can apply for up to 12 permits </p>
+        </div>
+
+        <div class="actions-container new-application--wrapper">
+            <p><a href="/permits/declaration" class="action--primary large"><?php echo $this->translate('Save and continue'); ?></a></p>
+            <p><a href="/permits"> Cancel </a></p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+<?php
+$title = 'Declaration ';
+$this->headTitle($title);
+?>
+<p><?php echo $this->linkBack($this->backUrl); ?></p>
+
+<h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
+
+<div class="row">
+    <div class="two-thirds">
+        <div class="actions-container">
+            <p>By continuing you confirm that:</p>
+            <ul class="list-bullet">
+                <li>the information you’ve given is correct</li>
+                <li>you’ve read the ECMT permits <a href="#">Guidance notes.</a> </li>
+                <li>you agree with the <a href="">terms and conditions</a>.</li>
+            </ul>
+        </div>
+        <div class="actions-container new-application--wrapper">
+            <p><a href="/permits/declaration" class="action--primary large"><?php echo $this->translate('Save and continue'); ?></a></p>
+            <p><a href="/permits"> Cancel </a></p>
+        </div
+</div>
