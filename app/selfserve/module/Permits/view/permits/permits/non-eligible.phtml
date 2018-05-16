@@ -1,0 +1,25 @@
+<?php
+$title = 'Can you get an international haulier permit?';
+$this->headTitle($title);
+?>
+<p><?php echo $this->linkBack($this->backUrl); ?></p>
+
+<h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
+
+<div class="row">
+    <div class="two-thirds">
+        <div class="actions-container">
+            <h3>You are not eligable for an international haulier permit based on your answers. </h3>
+            <h3 class="heading-small">What happens next:</h3>
+            <ul class="list-bullet">
+                <li>go <a href="/permits">back</a> and change your answers</li>
+                <li>apply for another permit type</li>
+            </ul>
+        </div>
+        <div class="actions-container new-application--wrapper">
+            <p><a href="/dashboard" class="action--primary large"> Finish </a></p>
+        </div>
+    </div>
+
+    <?php echo $this->partial('partials/dashboard-right-column'); ?>
+</div>

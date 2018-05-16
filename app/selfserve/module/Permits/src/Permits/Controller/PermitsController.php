@@ -38,6 +38,11 @@ class PermitsController extends AbstractActionController
     return new ViewModel();
   }
 
+  public function nonEligibleAction()
+  {
+    return new ViewModel();
+  }
+
   public function applicationAction()
   {
     $form = new ApplicationForm();
