@@ -913,6 +913,11 @@ $applicationNavigation = array(
                     'label' => 'dashboard-nav-documents',
                     'route' => 'correspondence',
                 ),
+                array(
+                    'id' => 'dashboard-permits',
+                    'label' => 'Permits',
+                    'route' => 'permits',
+                ),
             ),
         ),
     ),
