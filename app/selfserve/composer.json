@@ -10,19 +10,19 @@
             "type": "composer"
         },
         {
-            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git",
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:Permits/olcs-logging.git",
             "type": "vcs"
         },
         {
-            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:Permits/olcs-common.git",
             "type": "vcs"
         },
         {
-            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:Permits/olcs-transfer.git",
             "type": "vcs"
         },
         {
-            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-utils.git",
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:Permits/olcs-utils.git",
             "type": "vcs"
         },
         {
@@ -35,7 +35,7 @@
         },
         {
             "type": "vcs",
-            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-testhelpers.git"
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:Permits/olcs-testhelpers.git"
         },
         {
             "type": "vcs",
