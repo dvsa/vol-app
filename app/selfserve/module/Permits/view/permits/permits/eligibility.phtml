@@ -33,20 +33,8 @@ echo $this->formHidden($form->get('id'));
 
     <fieldset id="euro6" data-group="euro6">
         <legend><?php echo $this->escapeHtml($this->translate('permits.application.eligibility.meetsEuro6.question')); ?></legend>
-        <div class="hint">
-            <details class="help">
-                <summary class="help__summary" role="button" aria-expanded="false">
-                    <?php echo $this->escapeHtml($this->translate('permits.application.eligibility.meetsEuro6.hidden')); ?>
-                </summary>
-                <div class="article help__text">
-                    <p>Your total vehicle authorisation can't be:</p>
-                    <ul>
-                        <li>less than the largest operating centre</li>
-                        <li>more than the total across all centres</li>
-                    </ul>
-                </div>
-            </details>
-        </div>
+        <p class="hint"><?php echo $this->escapeHtml($this->translate('permits.application.eligibility.meetsEuro6.link')); ?></a>
+        <p hidden><?php echo $this->escapeHtml($this->translate('markup-permits-eligibility')); ?></p>
         <?php echo $this->formRow($form->get('willCabotage')); ?>
     </fieldset>
 
