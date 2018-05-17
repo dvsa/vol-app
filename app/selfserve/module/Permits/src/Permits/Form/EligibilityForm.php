@@ -28,6 +28,9 @@ class EligibilityForm extends Form {
       'name' => 'willCabotage',
       'options' => array(
         'label' => '',
+        'label_attributes' => array(
+            'class' => 'form-control form-control--radio',
+        ),
         'value_options' => array(
           '1' => 'Yes',
           '0' => 'No',
@@ -40,6 +43,9 @@ class EligibilityForm extends Form {
       'name' => 'meetsEuro6',
       'options' => array(
         'label' => '',
+        'label_attributes' => array(
+          'class' => 'form-control form-control--radio',
+        ),
         'value_options' => array(
           '1' => 'Yes',
           '0' => 'No',
@@ -69,7 +75,7 @@ class EligibilityForm extends Form {
       'attributes' => array(
         'value' => 'Save and continue',
         'id' => 'submitbutton',
-          'class' => 'action--primary large',
+        'class' => 'action--primary large',
       ),
     ));
   }
