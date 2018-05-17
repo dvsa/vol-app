@@ -1,5 +1,5 @@
 <?php
-$title = 'Declaration ';
+$title = $this->translate('permits.application.declaration.title');
 $this->headTitle($title);
 ?>
 <p><?php echo $this->linkBack($this->backUrl); ?></p>
@@ -8,16 +8,9 @@ $this->headTitle($title);
 
 <div class="row">
     <div class="two-thirds">
-        <div class="actions-container">
-            <p>By continuing you confirm that:</p>
-            <ul class="list-bullet">
-                <li>the information you’ve given is correct</li>
-                <li>you’ve read the ECMT permits <a href="#">Guidance notes.</a> </li>
-                <li>you agree with the <a href="">terms and conditions</a>.</li>
-            </ul>
-        </div>
+        <?php echo $this->translate('markup-ecmt-declaration'); ?>
         <div class="actions-container new-application--wrapper">
-            <p><a href="/permits/payment" class="action--primary large"><?php echo $this->translate('submit-and-pay.button'); ?></a></p>
-            <p><a href="/permits"> Cancel </a></p>
+            <p><a href="/permits/payment" class="action--primary large"><?php echo $this->translate('Submit and pay'); ?></a></p>
+            <p><a href="/permits"> <?php echo $this->translate('Cancel'); ?> </a></p>
         </div
 </div>
