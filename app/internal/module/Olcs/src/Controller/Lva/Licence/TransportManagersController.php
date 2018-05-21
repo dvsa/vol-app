@@ -27,4 +27,18 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
 
     protected $lva = 'licence';
     protected $location = 'internal';
+
+    /**
+     * Return different delete message if last TM.
+     *
+     * @return string The modal message key.
+     */
+    protected function getDeleteMessage() {
+
+        if ($this->isLastTmLicence()) {
+            return 'internal-delete.final-tm.confirmation.text';
+        }
+
+        return 'delete.confirmation.text';
+    }
 }
