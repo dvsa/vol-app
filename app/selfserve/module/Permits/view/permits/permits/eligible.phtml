@@ -7,7 +7,6 @@ $this->headTitle($title);
 <h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
 
 <div class="row">
-
     <div class="two-thirds">
 
         <?php echo $this->translate('markup-ecmt-eligible'); ?>
@@ -17,5 +16,6 @@ $this->headTitle($title);
             <p><a href="/permits"> <?php echo $this->translate('Cancel'); ?> </a></p>
         </div>
     </div>
+
     <?php echo $this->partial('partials/dashboard-right-column'); ?>
 </div>
