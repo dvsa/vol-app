@@ -33,9 +33,12 @@ echo $this->formHidden($form->get('id'));
     </fieldset>
 
     <fieldset id="number-of-trips" data-group="number-of-trips">
+        <legend><?php echo $this->escapeHtml($this->translate('How many trips will you be making')); ?></legend>
         <?php echo $this->formRow($form->get('numberOfTrips')); ?>
     </fieldset>
-    <fieldset id="number-of-trips" data-group="number-of-trips">
+    <fieldset id="sector" data-group="sector">
+        <legend><?php echo $this->escapeHtml($this->translate('What type of goods will you be carrying?')); ?></legend>
+        <p class="hint"><?php echo $this->escapeHtml($this->translate('permits.application.sector.hint')); ?></p>
         <?php echo $this->formRow($form->get('sector')); ?>
     </fieldset>
 

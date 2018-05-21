@@ -42,7 +42,7 @@ class ApplicationForm extends Form {
       'type' => 'Text',
       'name' => 'sector',
       'options' => array(
-        'label' => 'What type of goods will you be carrying?',
+        'label' => '',
       ),
     ));
 
@@ -50,7 +50,7 @@ class ApplicationForm extends Form {
       'name' => 'numberOfTrips',
       'type' => 'Text',
       'options' => array(
-        'label' => 'How many trips will you be making?',
+        'label' => '',
       ),
     ));
 
