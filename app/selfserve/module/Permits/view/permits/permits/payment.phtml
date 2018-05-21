@@ -1,12 +1,16 @@
 <?php
-    $title = 'Pay the fee ';
-    $this->headTitle($title);
+$title = 'Pay the fee ';
+$this->headTitle($title);
 ?>
 
-<h1 class="js-title">
-    <p>ECMT Permit 84051</p>
-    <?php echo $this->escapeHtml($title); ?>
-</h1>
+<div class="page-header">
+    <div class="page-header__wrapper">
+        <h1 class="js-title">
+            <p>ECMT Permit 84051</p>
+            <?php echo $this->escapeHtml($title); ?>
+        </h1>
+    </div>
+</div>
 
 <div class="row">
     <div class="two-thirds">
@@ -15,21 +19,21 @@
                 <p>The fee to use your permit is:</p>
                 <strong class="bold-large">£XX.00</strong>
             </h2>
-            <div class="form-group">
-                <fieldset>
+            <div class="field">
+                <fieldset id="payment-type" data-group="payment-type">
                     <legend class="heading-medium">Choose your card</legend>
 
-                    <label for="pay1" class="block-label selection-button-radio">
+                    <label for="pay1" class="form-control form-control--radio">
                         <input id="pay1" type="radio" name="card" value="Card1">
                         Mastercard **** **** **** 2343
                     </label>
 
-                    <label for="pay2" class="block-label selection-button-radio">
+                    <label for="pay2" class="form-control form-control--radio">
                         <input id="pay2" type="radio" name="card" value="Card2">
                         Visa **** **** **** 1897
                     </label>
 
-                    <label for="new" class="block-label selection-button-radio">
+                    <label for="new" class="form-control form-control--radio">
                         <input id="new" type="radio" name="card" value="New">
                         Add a new card
                     </label>
