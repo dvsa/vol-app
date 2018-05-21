@@ -20,8 +20,11 @@ echo $this->formHidden($form->get('id'));
 
 ?>
 <div class="<?php echo ($hasValidationError) ? 'field error__wrapper' : 'field' ?>">
-    <p class="guidance"><?php echo sprintf($this->translate('permits.application.ecmt.permits'), $this->data['maxApplications']); ?>
-    </p>
+    <div class="guidance"><?php echo sprintf($this->translate('permits.application.ecmt.permits'), $this->data['maxApplications']); ?>
+    </div>
+    <div class="field">
+        <?php echo sprintf($this->translate('markup-permits-application-ecmt'),$this->escapeHtml($this->translate('permits.application.eligibility.meetsEuro6.link'))); ?>
+    </div>
 
     <fieldset id="delivery-countries" data-group="delivery-countries">
         <legend><?php echo $this->escapeHtml($this->translate('permits.application.ecmt.countries')); ?></legend>
