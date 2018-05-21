@@ -2,10 +2,14 @@
 $title = $this->translate('permits.application.ecmt.title');
 $this->headTitle($title);
 ?>
-<p><?php echo $this->linkBack($this->backUrl); ?></p>
-<p><?php echo sprintf($this->translate('application.steps'), 2, 3); ?></p>
 
-<h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
+<div class="page-header">
+    <p><?php echo $this->linkBack($this->backUrl); ?></p>
+    <div class="page-header__wrapper">
+        <h3 class="page-header__subtitle"><?php echo sprintf($this->translate('application.steps'), 2, 3); ?></h3>
+        <h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
+    </div>
+</div>
 
 <?php
 $form->setAttribute('action', $this->url('permits', array('action' => 'overview')));
@@ -15,24 +19,27 @@ echo $this->form()->openTag($form);
 echo $this->formHidden($form->get('id'));
 
 ?>
-<div class="form-group panel panel-border-wide">
-    <p class="guidance"><?php echo sprintf($this->translate('permits.application.ecmt.permits'), $this->data['maxApplications']); ?> </p>
-</div>
+<div class="<?php echo ($hasValidationError) ? 'field error__wrapper' : 'field' ?>">
+    <p class="guidance"><?php echo sprintf($this->translate('permits.application.ecmt.permits'), $this->data['maxApplications']); ?>
+    </p>
 
+    <fieldset id="delivery-countries" data-group="delivery-countries">
+        <legend><?php echo $this->escapeHtml($this->translate('permits.application.ecmt.countries')); ?></legend>
+        <p><?php echo $this->escapeHtml($this->translate('permits.application.ecmt.select')); ?></p>
+        <p> <?php echo $this->formRow($form->get('deliveryCountries')); ?> </p>
+    </fieldset>
 
-<legend><?php echo $this->escapeHtml($this->translate('permits.application.ecmt.countries')); ?></legend>
-<p><?php echo $this->escapeHtml($this->translate('permits.application.ecmt.select')); ?></p>
-<?php
-echo $this->formRow($form->get('deliveryCountries'));
+    <fieldset id="number-of-trips" data-group="number-of-trips">
+        <?php echo $this->formRow($form->get('numberOfTrips')); ?>
+    </fieldset>
+    <fieldset id="number-of-trips" data-group="number-of-trips">
+        <?php echo $this->formRow($form->get('sector')); ?>
+    </fieldset>
 
-echo $this->formRow($form->get('numberOfTrips'));
-
-echo $this->formRow($form->get('sector'));
-?>
-<div class="actions-container new-application--wrapper">
-    <p><?php echo $this->formSubmit($form->get('submit'));  ?></p>
+    <div class="actions-container new-application--wrapper">
+        <p><?php echo $this->formSubmit($form->get('submit'));  ?></p>
+    </div>
 </div>
 <?php echo $this->form()->closeTag(); ?>
 
 <a href="/permits"> <?php echo $this->escapeHtml($this->translate('Cancel')); ?> </a>
-
