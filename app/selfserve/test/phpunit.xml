@@ -9,9 +9,12 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../module/Olcs/src</directory>
+            <directory suffix=".php">../module/Permits/src</directory>
             <exclude>
                 <directory>../module/Olcs/src/Table/</directory>
                 <directory>../module/Olcs/src/Form/</directory>
+                <directory>../module/Permits/src/Permits/Table/</directory>
+                <directory>../module/Permits/src/Permits/Form/</directory>
             </exclude>
         </whitelist>
     </filter>
