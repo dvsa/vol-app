@@ -26,6 +26,9 @@ class ApplicationForm extends Form {
       'name' => 'deliveryCountries',
       'options' => array(
         'label' => '',
+        'label_attributes' => array(
+            'class' => 'form-control form-control--checkbox',
+        ),
         'value_options' => array(
           '0' => 'Austria',
           '1' => 'Greece',
