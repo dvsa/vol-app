@@ -7,6 +7,7 @@ use Zend\View\Model\ViewModel;
 use Permits\Model\PermitTable;
 use Permits\Form\EligibilityForm;
 use Permits\Form\ApplicationForm;
+use Permits\Form\TripsForm;
 
 class PermitsController extends AbstractActionController 
 {
@@ -24,7 +25,7 @@ class PermitsController extends AbstractActionController
 
   public function tripsAction()
   {
-      $form = new ApplicationForm();
+      $form = new TripsForm();
 
       $request = $this->getRequest();
       if($request->isPost()){
