@@ -22,6 +22,17 @@ class PermitsController extends AbstractActionController
     return new ViewModel();
   }
 
+  public function tripsAction()
+  {
+      $form = new ApplicationForm();
+
+      $request = $this->getRequest();
+      if($request->isPost()){
+          //If handling returned form (submit clicked)
+      }
+      return array('form' => $form);
+  }
+
   public function eligibilityAction()
   {
     $form = new EligibilityForm();

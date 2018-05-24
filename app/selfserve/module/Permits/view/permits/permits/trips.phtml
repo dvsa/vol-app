@@ -1,0 +1,35 @@
+<?php
+$title = $this->translate('permits.fields.number-of-trips.title');
+$this->headTitle($title);
+?>
+
+<div class="page-header">
+    <p><?php echo $this->linkBack($this->backUrl); ?></p>
+    <div class="page-header__wrapper">
+        <h3 class="page-header__subtitle"><?php echo sprintf($this->translate('application.steps'), 1, 3); ?></h3>
+        <h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
+    </div>
+</div>
+
+<?php
+    $form->setAttribute('action', $this->url('permits', array('action' => 'eligibility')));
+    $form->prepare();
+
+    echo $this->form()->openTag($form);
+    echo $this->formHidden($form->get('id'));
+?>
+
+<div class="<?php echo ($hasValidationError) ? 'field error__wrapper' : 'field' ?>">
+    <fieldset id="number-of-trips" data-group="number-of-trips">
+        <legend><?php echo $this->escapeHtml($this->translate('How many trips will you be making')); ?></legend>
+        <?php echo $this->formRow($form->get('numberOfTrips')); ?>
+    </fieldset>
+
+    <fieldset class="actions-container new-application--wrapper">
+        <p><?php echo $this->formSubmit($form->get('submit'));  ?></p>
+        <p><a href="/permits"> <?php echo $this->translate('cancel'); ?> </a></p>
+    </fieldset>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>
+
