@@ -12,6 +12,8 @@ use Common\Controller\Lva;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
+use Dvsa\Olcs\Transfer\Command\Licence\DeleteUpdateOptOutTmLetter;
+use Dvsa\Olcs\Transfer\Command\TransportManagerLicence\Delete;
 
 /**
  * Internal Licence Transport Managers Controller
@@ -33,12 +35,53 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
      *
      * @return string The modal message key.
      */
-    protected function getDeleteMessage() {
+    protected function getDeleteMessage()
+    {
 
         if ($this->isLastTmLicence()) {
             return 'internal-delete.final-tm.confirmation.text';
         }
 
         return 'delete.confirmation.text';
+    }
+
+    protected function getDeleteConfirmationForm()
+    {
+        if ($this->isLastTmLicence()) {
+            return 'InternalGenericDeleteConfirmation';
+        }
+    }
+
+    protected function delete()
+    {
+
+        if (!$this->isLastTmLicence()) {
+            return parent::delete();
+        }
+
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
+
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        /** @var \Common\Form\Form $form */
+        $form = $formHelper->createFormWithRequest($this->getDeleteConfirmationForm(), $request);
+
+        $form->setData((array)$request->getPost());
+
+        if ($form->isValid()) {
+            $data = $form->getData();
+            $id = $this->params('child_id');
+
+            return $this->handleCommand(DeleteUpdateOptOutTmLetter::create(
+                [
+                    'id' => $id,
+                    'yesNo' => $data["YesNoRadio"]["yesNo"],
+                ]
+            ));
+        }
+
+        $params = ['sectionText' => $this->getDeleteMessage()];
+
+        return $this->render($this->getDeleteConfirmationForm(), $form, $params);
     }
 }
