@@ -54,7 +54,7 @@ class TripsForm extends Form {
                         'name' => 'StringLength',
                         'options' => [
                             'min' => 1,
-                            'max' => 23
+                            'max' => 300,
                         ]
                     ],
                 ]
