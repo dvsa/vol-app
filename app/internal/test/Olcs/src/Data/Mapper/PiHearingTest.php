@@ -125,6 +125,7 @@ class PiHearingTest extends MockeryTestCase
         $venueOther = 'pi venue other';
         $otherFieldId = 99;
         $witnesses = 88;
+        $drivers = 10;
 
         return [
             [
@@ -133,6 +134,7 @@ class PiHearingTest extends MockeryTestCase
                     'fields' => [
                         'witnesses' => 0,
                         'isFullDay' => 'not-set',
+                        'drivers' => 0,
                     ]
                 ]
             ],
@@ -145,6 +147,7 @@ class PiHearingTest extends MockeryTestCase
                     ],
                     'witnesses' => $witnesses,
                     'isFullDay' => 'Y',
+                    'drivers'   => $drivers,
                 ],
                 [
                     'fields' => [
@@ -153,6 +156,7 @@ class PiHearingTest extends MockeryTestCase
                         'otherField' => $otherFieldId,
                         'witnesses' => $witnesses,
                         'isFullDay' => 'Y',
+                        'drivers'   => $drivers,
                     ]
                 ]
             ],
@@ -165,6 +169,7 @@ class PiHearingTest extends MockeryTestCase
                     ],
                     'witnesses' => null,
                     'isFullDay' => 'N',
+                    'drivers'   => null,
                 ],
                 [
                     'fields' => [
@@ -173,6 +178,7 @@ class PiHearingTest extends MockeryTestCase
                         'otherField' => $otherFieldId,
                         'witnesses' => 0,
                         'isFullDay' => 'N',
+                        'drivers'   => 0,
                     ]
                 ]
             ]
