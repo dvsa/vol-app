@@ -48,7 +48,7 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
     protected function getDeleteConfirmationForm()
     {
         if ($this->isLastTmLicence()) {
-            return 'InternalGenericDeleteConfirmation';
+            return 'LastTransportManagerDeleteConfirmation';
         }
     }
 
