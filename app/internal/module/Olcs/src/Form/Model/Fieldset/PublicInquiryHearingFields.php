@@ -111,6 +111,41 @@ class PublicInquiryHearingFields extends Base
     public $witnesses;
 
     /**
+     * @Form\Type("Text")
+     * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
+     * @Form\Options({"label": "Number of drivers","error-message" : "digits.validation.zero-to-ninety-nine"})
+     * @Form\Validator({"name":"Digits",
+     *                  "options": {
+     *                      "messages": {
+     *                          "notDigits" : "digits.validation.zero-to-ninety-nine",
+     *                          "digitsStringEmpty" : "digits.validation.zero-to-ninety-nine",
+     *                          "digitsInvalid" : "digits.validation.zero-to-ninety-nine"
+     *                      },
+     *                      "break_chain_on_failure": true,
+     *                  }
+     *                  })
+     * @Form\Validator({"name":"Zend\Validator\Between",
+     *                  "options":{
+     *                      "min":0,
+     *                      "max":99,
+     *                      "inclusive":true,
+     *                      "messages": {
+     *                          "notBetween" : "digits.validation.zero-to-ninety-nine"
+     *                          }
+     *                      }
+     *                  })
+     * @Form\Validator({"name":"NotEmpty",
+     *                  "options": {
+     *                      "messages": {
+     *                          "isEmpty" : "digits.validation.zero-to-ninety-nine"
+     *                      },
+     *                      "break_chain_on_failure": true,
+     *                  }
+     *     })
+     */
+    public $drivers;
+
+    /**
      * @Form\Type("OlcsCheckbox")
      * @Form\Options({"checked_value":"Y","unchecked_value":"N","label":"Cancelled / Withdrawn"})
      */
