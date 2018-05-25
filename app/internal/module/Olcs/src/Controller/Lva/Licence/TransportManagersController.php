@@ -70,11 +70,11 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
 
         if ($form->isValid()) {
             $data = $form->getData();
-            $id = $this->params('child_id');
+            $ids = explode(',', $this->params('child_id'));
 
-            return $this->handleCommand(DeleteUpdateOptOutTmLetter::create(
+            return $this->handleCommand(Delete::create(
                 [
-                    'id' => $id,
+                    'ids' => $ids,
                     'yesNo' => $data["YesNoRadio"]["yesNo"],
                 ]
             ));
