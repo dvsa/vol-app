@@ -123,7 +123,15 @@ class PublicInquiryHearingFields extends Base
      *                      },
      *                      "break_chain_on_failure": true,
      *                  }
-     *                  })
+     *              })
+     * @Form\Validator({"name":"NotEmpty",
+     *                  "options": {
+     *                      "messages": {
+     *                          "isEmpty" : "digits.validation.zero-to-ninety-nine"
+     *                      },
+     *                      "break_chain_on_failure": true,
+     *                  }
+     *              })
      * @Form\Validator({"name":"Zend\Validator\Between",
      *                  "options":{
      *                      "min":0,
@@ -132,16 +140,8 @@ class PublicInquiryHearingFields extends Base
      *                      "messages": {
      *                          "notBetween" : "digits.validation.zero-to-ninety-nine"
      *                          }
-     *                      }
-     *                  })
-     * @Form\Validator({"name":"NotEmpty",
-     *                  "options": {
-     *                      "messages": {
-     *                          "isEmpty" : "digits.validation.zero-to-ninety-nine"
-     *                      },
-     *                      "break_chain_on_failure": true,
      *                  }
-     *     })
+     *              })
      */
     public $drivers;
 
