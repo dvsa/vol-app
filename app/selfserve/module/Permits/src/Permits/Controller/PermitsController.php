@@ -31,8 +31,6 @@ class PermitsController extends AbstractActionController
     if($request->isPost())
     {
       $data = $this->params()->fromPost();
-      $jsonObject = json_encode($data);
-
       $inputFilter = $form->getInputFilter();
       $inputFilter->setData($data);
     }
