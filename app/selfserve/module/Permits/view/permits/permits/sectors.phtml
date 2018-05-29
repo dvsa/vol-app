@@ -1,0 +1,37 @@
+<?php
+$title = $this->translate('permits.page.title.sectors');
+$this->headTitle($title);
+?>
+
+<div class="page-header">
+    <p><a href="/permits/trips" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
+    <div class="page-header__wrapper">
+        <h3 class="page-header__subtitle">
+            <?php echo sprintf($this->translate('application.steps'), 2, 3); ?>
+        </h3>
+        <h1 class="js-title">
+            <?php echo $this->escapeHtml($title); ?>
+        </h1>
+    </div>
+</div>
+
+<?php
+$form->setAttribute('action', $this->url('permits', array('action' => 'overview')));
+$form->prepare();
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('id'));
+?>
+
+<div class="<?php echo ($hasValidationError) ? 'field error__wrapper' : 'field' ?>">
+    <fieldset id="sectors" data-group="sectors">
+        <legend><?php echo $this->escapeHtml($this->translate('permits.page.field.sectors')); ?></legend>
+        <?php echo $this->formRow($form->get('sectors')); ?>
+    </fieldset>
+
+    <fieldset class="actions-container new-application--wrapper">
+        <p><?php echo $this->formSubmit($form->get('submit'));  ?></p>
+        <p><a href="/permits"> <?php echo $this->translate('cancel'); ?> </a></p>
+    </fieldset>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>
