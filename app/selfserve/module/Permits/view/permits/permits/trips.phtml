@@ -1,5 +1,5 @@
 <?php
-    $title = $this->translate('permits.fields.number-of-trips.title');
+    $title = $this->translate('permits.page.title.number-of-trips');
     $this->headTitle($title);
 ?>
 
@@ -16,7 +16,7 @@
 </div>
 
 <?php
-    $form->setAttribute('action', $this->url('permits', array('action' => 'overview')));
+    $form->setAttribute('action', $this->url('permits', array('action' => 'sectors')));
     $form->prepare();
     echo $this->form()->openTag($form);
     echo $this->formHidden($form->get('id'));
@@ -24,7 +24,7 @@
 
 <div class="<?php echo ($hasValidationError) ? 'field error__wrapper' : 'field' ?>">
     <fieldset id="number-of-trips" data-group="number-of-trips">
-        <legend><?php echo $this->escapeHtml($this->translate('How many trips will you be making')); ?></legend>
+        <legend><?php echo $this->escapeHtml($this->translate('permits.page.field.number-of-trips')); ?></legend>
         <?php echo $this->formRow($form->get('numberOfTrips')); ?>
     </fieldset>
 
