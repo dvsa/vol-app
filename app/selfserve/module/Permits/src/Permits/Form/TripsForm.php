@@ -59,7 +59,7 @@ class TripsForm extends Form
                         'options' => [
                             'min' => 1,
                             'max' => 3000,
-                        ]
+                        ],
                     ],
                 ]
             ]);
