@@ -31,8 +31,8 @@ class TripsForm extends Form {
             ),
             'attributes' => [
                 'min' => '1',
-                'max' => '300',
-                'step' => '1', // default step interval is 1
+                'step' => '1',
+                'class' => 'input--trips',
             ],
         ));
 
