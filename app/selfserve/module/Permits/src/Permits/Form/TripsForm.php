@@ -3,10 +3,8 @@ namespace Permits\Form;
 
 use Zend\Form\Form;
 use Zend\Form\Element;
-use Zend\Filter;
 use Zend\InputFilter\Input;
 use Zend\InputFilter\InputFilter;
-use Zend\Validator;
 
 class TripsForm extends Form
 {
@@ -25,7 +23,7 @@ class TripsForm extends Form
 
         $this->add(array(
             'name' => 'numberOfTrips',
-            'type' => Element\Number::class,
+            'type' => 'number',
             'options' => array(
                 'label' => '',
             ),
@@ -60,7 +58,7 @@ class TripsForm extends Form
                         'name' => 'StringLength',
                         'options' => [
                             'min' => 1,
-                            'max' => 300,
+                            'max' => 3000,
                         ]
                     ],
                 ]
