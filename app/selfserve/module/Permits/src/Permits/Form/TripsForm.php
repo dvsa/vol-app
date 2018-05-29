@@ -3,8 +3,10 @@ namespace Permits\Form;
 
 use Zend\Form\Form;
 use Zend\Form\Element;
-use Zend\InputFilter\InputFilter;
+use Zend\Filter;
 use Zend\InputFilter\Input;
+use Zend\InputFilter\InputFilter;
+use Zend\Validator;
 
 class TripsForm extends Form {
 
@@ -27,6 +29,11 @@ class TripsForm extends Form {
             'options' => array(
                 'label' => '',
             ),
+            'attributes' => [
+                'min' => '1',
+                'max' => '300',
+                'step' => '1', // default step interval is 1
+            ],
         ));
 
         $this->add(array(
