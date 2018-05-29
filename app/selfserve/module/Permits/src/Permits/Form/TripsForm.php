@@ -8,8 +8,8 @@ use Zend\InputFilter\Input;
 use Zend\InputFilter\InputFilter;
 use Zend\Validator;
 
-class TripsForm extends Form {
-
+class TripsForm extends Form
+{
     private $inputFilter;
 
     public function __construct($name = null)
@@ -47,7 +47,8 @@ class TripsForm extends Form {
 
     public function getInputFilter()
     {
-        if($this->inputFilter == null){
+        if($this->inputFilter == null)
+        {
             $this->inputFilter = new InputFilter();
 
             $this->inputFilter->add([
@@ -69,5 +70,3 @@ class TripsForm extends Form {
         return $this->inputFilter;
     }
 }
-
-?>
