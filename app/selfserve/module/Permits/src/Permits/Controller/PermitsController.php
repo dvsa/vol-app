@@ -25,13 +25,19 @@ class PermitsController extends AbstractActionController
 
   public function tripsAction()
   {
-      $form = new TripsForm();
+    $form = new TripsForm();
+    $request = $this->getRequest();
 
-      $request = $this->getRequest();
-      if($request->isPost()){
-          //If handling returned form (submit clicked)
-      }
-      return array('form' => $form);
+    if($request->isPost())
+    {
+      $data = $this->params()->fromPost();
+      $jsonObject = json_encode($data);
+
+      $inputFilter = $form->getInputFilter();
+      $inputFilter->setData($data);
+    }
+
+    return array('form' => $form, 'data' => $data);
   }
 
   public function eligibilityAction()
