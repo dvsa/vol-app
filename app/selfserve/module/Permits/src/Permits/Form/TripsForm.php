@@ -30,8 +30,6 @@ class TripsForm extends Form {
                 'label' => '',
             ),
             'attributes' => [
-                'min' => '1',
-                'step' => '1',
                 'class' => 'input--trips',
             ],
         ));
