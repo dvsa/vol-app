@@ -16,10 +16,10 @@ $this->headTitle($title);
 </div>
 
 <?php
-$form->setAttribute('action', $this->url('permits', array('action' => 'restricted-countries')));
-$form->prepare();
-echo $this->form()->openTag($form);
-echo $this->formHidden($form->get('id'));
+    $form->setAttribute('action', $this->url('permits', array('action' => 'restricted-countries')));
+    $form->prepare();
+    echo $this->form()->openTag($form);
+    echo $this->formHidden($form->get('id'));
 ?>
 
 <div class="<?php echo ($hasValidationError) ? 'field error__wrapper' : 'field' ?>">
