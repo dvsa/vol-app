@@ -16,7 +16,7 @@ $this->headTitle($title);
 </div>
 
 <?php
-$form->setAttribute('action', $this->url('permits', array('action' => 'overview')));
+$form->setAttribute('action', $this->url('permits', array('action' => 'restricted-countries')));
 $form->prepare();
 echo $this->form()->openTag($form);
 echo $this->formHidden($form->get('id'));
