@@ -8,6 +8,7 @@ use Permits\Model\PermitTable;
 use Permits\Form\EligibilityForm;
 use Permits\Form\ApplicationForm;
 use Permits\Form\TripsForm;
+use Permits\Form\SectorsForm;
 
 class PermitsController extends AbstractActionController 
 {
@@ -33,6 +34,21 @@ class PermitsController extends AbstractActionController
       $data = $this->params()->fromPost();
       $inputFilter = $form->getInputFilter();
       $inputFilter->setData($data);
+    }
+
+    return array('form' => $form, 'data' => $data);
+  }
+
+  public function sectorsAction()
+  {
+    $form = new SectorsForm();
+    $request = $this->getRequest();
+
+    if($request->isPost())
+    {
+        $data = $this->params()->fromPost();
+        $inputFilter = $form->getInputFilter();
+        $inputFilter->setData($data);
     }
 
     return array('form' => $form, 'data' => $data);
