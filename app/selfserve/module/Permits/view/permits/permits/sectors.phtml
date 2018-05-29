@@ -25,6 +25,7 @@ echo $this->formHidden($form->get('id'));
 <div class="<?php echo ($hasValidationError) ? 'field error__wrapper' : 'field' ?>">
     <fieldset id="sectors" data-group="sectors">
         <legend><?php echo $this->escapeHtml($this->translate('permits.page.field.sectors')); ?></legend>
+        <p class="hint"><?php echo $this->escapeHtml($this->translate('permits.application.ecmt.select')); ?></p>
         <?php echo $this->formRow($form->get('sectors')); ?>
     </fieldset>
 
