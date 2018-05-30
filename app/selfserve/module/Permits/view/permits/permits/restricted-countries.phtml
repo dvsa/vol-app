@@ -5,11 +5,10 @@
 
 <head>
     <style>
-        #restricted-countries-list,
-        #restricted-countries label:last-child .restrictedRadio.selected ~ #restricted-countries-list{
+        #restricted-countries-list{
             display: none;
         }
-        .restrictedRadio.selected ~ #restricted-countries-list {
+        .restrictedRadio:first-of-type.selected ~ #restricted-countries-list {
             display: block;
         }
     </style>
