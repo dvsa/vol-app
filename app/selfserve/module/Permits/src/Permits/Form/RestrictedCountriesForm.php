@@ -25,7 +25,7 @@ class RestrictedCountriesForm extends Form
             'options' => array(
                 'label' => '',
                 'label_attributes' => array(
-                    'class' => 'form-control form-control--radio',
+                    'class' => 'form-control form-control--radio restrictedRadio',
                 ),
                 'value_options' => array(
                     '1' => 'Yes',

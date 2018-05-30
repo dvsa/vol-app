@@ -1,7 +1,19 @@
 <?php
-$title = $this->translate('permits.page.title.restricted-countries');
-$this->headTitle($title);
+    $title = $this->translate('permits.page.title.restricted-countries');
+    $this->headTitle($title);
 ?>
+
+<head>
+    <style>
+        #restricted-countries-list,
+        #restricted-countries label:last-child .restrictedRadio.selected ~ #restricted-countries-list{
+            display: none;
+        }
+        .restrictedRadio.selected ~ #restricted-countries-list {
+            display: block;
+        }
+    </style>
+</head>
 
 <div class="page-header">
     <p><a href="/permits/sectors" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
@@ -26,9 +38,13 @@ $this->headTitle($title);
 ?>
 
 <div class="field">
-    <fieldset id="sectors" data-group="sectors">
+    <fieldset id="restricted-countries" data-group="restricted-countries">
         <legend><?php echo $this->escapeHtml($this->translate('permits.page.field.restricted-countries')); ?></legend>
         <?php echo $this->formRow($form->get('restrictedCountries')); ?>
+        <fieldset id="restricted-countries-list" data-group="restricted-countries-list" class="guidance">
+            <p class="hint"><?php echo $this->escapeHtml($this->translate('permits.application.ecmt.select')); ?></p>
+            <?php echo $this->formRow($form->get('restrictedCountriesList')); ?>
+        </fieldset>
     </fieldset>
 
     <fieldset class="actions-container new-application--wrapper">
