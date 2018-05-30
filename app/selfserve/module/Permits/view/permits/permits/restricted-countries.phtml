@@ -8,9 +8,13 @@
         #restricted-countries-list{
             display: none;
         }
+        .restrictedRadio {
+            margin-bottom: 0.5em;
+        }
         .restrictedRadio:first-of-type.selected ~ #restricted-countries-list {
             display: block;
         }
+
     </style>
 </head>
 
@@ -39,11 +43,25 @@
 <div class="field">
     <fieldset id="restricted-countries" data-group="restricted-countries">
         <legend><?php echo $this->escapeHtml($this->translate('permits.page.field.restricted-countries')); ?></legend>
-        <?php echo $this->formRow($form->get('restrictedCountries')); ?>
+        <?php
+            $element = $form->get('restrictedCountries');
+            $options = $element->getOptions();
+            $valueOptions = $options['value_options'];
+        ?>
+        <label class="<?php echo $options['label_attributes']['class'];?> ">
+            <input type="radio" name="<?php echo $element->getName();?>" value="1">
+            <?php echo $valueOptions['1'] ?>
+        </label>
+
         <fieldset id="restricted-countries-list" data-group="restricted-countries-list" class="guidance">
             <p class="hint"><?php echo $this->escapeHtml($this->translate('permits.application.ecmt.select')); ?></p>
             <?php echo $this->formRow($form->get('restrictedCountriesList')); ?>
         </fieldset>
+
+        <label class="<?php echo $options['label_attributes']['class'];?> ">
+            <input type="radio" name="<?php echo $element->getName();?>" value="0">
+            <?php echo $valueOptions['0'] ?>
+        </label>
     </fieldset>
 
     <fieldset class="actions-container new-application--wrapper">
