@@ -22,7 +22,7 @@
     echo $this->formHidden($form->get('id'));
 ?>
 
-<div class="<?php echo ($hasValidationError) ? 'field error__wrapper' : 'field' ?>">
+<div class="field">
     <fieldset id="number-of-trips" data-group="number-of-trips">
         <legend><?php echo $this->escapeHtml($this->translate('permits.page.field.number-of-trips')); ?></legend>
         <?php echo $this->formRow($form->get('numberOfTrips')); ?>
