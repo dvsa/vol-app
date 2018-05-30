@@ -35,6 +35,24 @@ class RestrictedCountriesForm extends Form
         ));
 
         $this->add(array(
+            'type' => 'MultiCheckBox',
+            'name' => 'restrictedCountriesList',
+            'options' => array(
+                'label' => '',
+                'label_attributes' => array(
+                    'class' => 'form-control form-control--checkbox',
+                ),
+                'value_options' => array(
+                    'AT' => 'Austria',
+                    'GR' => 'Greece',
+                    'HU' => 'Hungary',
+                    'IT' => 'Italy',
+                    'RU' => 'Russia',
+                ),
+            )
+        ));
+
+        $this->add(array(
             'name' => 'submit',
             'type' => 'Submit',
             'attributes' => array(
@@ -63,6 +81,12 @@ class RestrictedCountriesForm extends Form
                         ]
                     ],
                 ]
+            ]);
+
+            $this->inputFilter->add([
+                'name'     => 'restrictedCountriesList',
+                'required' => false,
+                'filters'  => [],
             ]);
         }
 
