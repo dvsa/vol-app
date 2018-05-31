@@ -22,27 +22,7 @@ class SectorsForm extends Form
         $this->add(array(
             'type' => 'MultiCheckBox',
             'name' => 'sectors',
-            'options' => array(
-                'label' => '',
-                'label_attributes' => array(
-                    'class' => 'form-control form-control--checkbox',
-                ),
-                'value_options' => array(
-                    'Food' => 'Food products',
-                    'Mail' => 'Mail and parcels',
-                    'Transport' => 'Transport equipment',
-                    'Metal' => 'Metal',
-                    'Chemicals' => 'Chemicals',
-                    'Non-Metallic' => 'Non-Metallic mineral product',
-                    'Wood' => 'Wood',
-                    'Furniture' => 'Furniture',
-                    'Raw-materials' => 'Raw materials',
-                    'Coke-petroleum' => 'Coke and refined petroleum products',
-                    'Textiles' => 'Textiles',
-                    'Chemicals' => 'Chemicals',
-                    'Other' => 'Other',
-                ),
-            )
+            'options' => $this->getDefaultSectorsFieldOptions(),
         ));
 
         $this->add(array(
@@ -54,6 +34,21 @@ class SectorsForm extends Form
                 'class' => 'action--primary large',
             ),
         ));
+    }
+
+    /**
+     * Created because unable to use setOption method to
+     * set a single option, need defaults to
+     * use the setOptions method instead
+     */
+    public function getDefaultSectorsFieldOptions()
+    {
+        return array(
+            'label' => '',
+            'label_attributes' => array(
+                'class' => 'form-control form-control--checkbox',
+            ),
+        );
     }
 
     public function getInputFilter()
