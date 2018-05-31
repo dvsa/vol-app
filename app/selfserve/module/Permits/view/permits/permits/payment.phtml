@@ -3,46 +3,46 @@ $title = 'Pay the fee ';
 $this->headTitle($title);
 ?>
 
-<div class="page-header">
-    <div class="page-header__wrapper">
-        <h1 class="js-title">
-            <p>ECMT Permit 84051</p>
-            <?php echo $this->escapeHtml($title); ?>
-        </h1>
-    </div>
-</div>
-
 <div class="row">
-    <div class="two-thirds">
-        <div class="actions-container">
+    <div class="three-quarters">
+        <div class="page-header">
+            <div class="page-header__wrapper">
+                <h1 class="js-title">
+                    <p>ECMT Permit 84051</p>
+                    <?php echo $this->escapeHtml($title); ?>
+                </h1>
+            </div>
+        </div>
+
+        <div class="field">
             <h2 class="guidance">
                 <p>The fee to use your permit is:</p>
                 <strong class="bold-large">£XX.00</strong>
             </h2>
-            <div class="field">
-                <fieldset id="payment-type" data-group="payment-type">
-                    <legend class="heading-medium">Choose your card</legend>
 
-                    <label for="pay1" class="form-control form-control--radio">
-                        <input id="pay1" type="radio" name="card" value="Card1">
-                        Mastercard **** **** **** 2343
-                    </label>
+            <fieldset id="payment-type" data-group="payment-type">
+                <legend class="heading-medium">Choose your card</legend>
+                <label for="pay1" class="form-control form-control--radio">
+                    <input id="pay1" type="radio" name="card" value="Card1">
+                    Mastercard **** **** **** 2343
+                </label>
+                <label for="pay2" class="form-control form-control--radio">
+                    <input id="pay2" type="radio" name="card" value="Card2">
+                    Visa **** **** **** 1897
+                </label>
+                <label for="new" class="form-control form-control--radio">
+                    <input id="new" type="radio" name="card" value="New">
+                    Add a new card
+                </label>
+            </fieldset>
 
-                    <label for="pay2" class="form-control form-control--radio">
-                        <input id="pay2" type="radio" name="card" value="Card2">
-                        Visa **** **** **** 1897
-                    </label>
-
-                    <label for="new" class="form-control form-control--radio">
-                        <input id="new" type="radio" name="card" value="New">
-                        Add a new card
-                    </label>
-
-                </fieldset>
+            <div class="actions-container new-application--wrapper">
+                <p>
+                    <a href="/permits/submitted" class="action--primary large">
+                        <?php echo $this->translate('pay-now'); ?>
+                    </a>
+                </p>
             </div>
         </div>
-        <div class="actions-container new-application--wrapper">
-            <p><a href="/permits/submitted" class="action--primary large"><?php echo $this->translate('pay-now'); ?></a></p>
-        </div
     </div>
 </div>
