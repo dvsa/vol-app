@@ -122,8 +122,8 @@ class PermitsController extends AbstractActionController
     {
         $form = new ApplicationForm();
         $inputFilter = null;
-        $data['maxApplications'] = 12;
         $request = $this->getRequest();
+        $data['maxApplications'] = 12;
 
         if ($request->isPost())
         {
@@ -151,8 +151,8 @@ class PermitsController extends AbstractActionController
     {
         $inputFilter = null;
         $jsonObject = null;
-
         $request = $this->getRequest();
+
         if ($request->isPost())
         {
             $data = $this->params()->fromPost();
@@ -177,7 +177,7 @@ class PermitsController extends AbstractActionController
     {
         return new ViewModel();
     }
-    private function transformListIntoValueOptions($list = array())
+private function transformListIntoValueOptions($list = array())
     {
         $value_options = array();
 
