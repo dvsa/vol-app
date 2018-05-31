@@ -4,21 +4,20 @@ namespace Permits\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Permits\Model\PermitTable;
 use Permits\Form\EligibilityForm;
 use Permits\Form\ApplicationForm;
 use Permits\Form\TripsForm;
 use Permits\Form\SectorsForm;
 use Permits\Form\RestrictedCountriesForm;
-use Dvsa\Olcs\Transfer\Query\Permits\SectorsList as Sectors;
+use Dvsa\Olcs\Transfer\Query\Permits\SectorsList;
 
 class PermitsController extends AbstractActionController 
 {
-  private $table;
+  private $sectors;
 
   public function __construct()
   {
-        //$this->table = $table;
+        $this->sectors = SectorsList::class;
   }
 
   public function indexAction()
@@ -44,7 +43,7 @@ class PermitsController extends AbstractActionController
   public function sectorsAction()
   {
 
-      $response = $this->handleQuery(Sectors::create(array()));
+      $response = $this->handleQuery($this->sectors::create(array()));
       $formData = $response->getResult();
 
 echo '<pre>';var_dump(($formData['results']));die();
