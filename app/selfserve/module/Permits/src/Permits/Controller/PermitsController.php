@@ -81,6 +81,16 @@ echo '<pre>';var_dump(($formData['results']));die();
     return new ViewModel();
   }
 
+  public function declarationAction()
+  {
+    return new ViewModel();
+  }
+
+  public function paymentAction()
+  {
+    return new ViewModel();
+  }
+
   public function eligibilityAction()
   {
     $form = new EligibilityForm();
@@ -130,17 +140,6 @@ echo '<pre>';var_dump(($formData['results']));die();
   {
       return new ViewModel();
   }
-
-  public function declarationAction()
-  {
-      return new ViewModel();
-  }
-
-  public function paymentAction()
-  {
-    return new ViewModel();
-  }
-
 
   public function step3Action()
   {
