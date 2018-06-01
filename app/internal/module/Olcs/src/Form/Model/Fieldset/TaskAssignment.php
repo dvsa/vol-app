@@ -44,7 +44,7 @@ class TaskAssignment
      * @Form\Attributes({"id":"assignedToUser","placeholder":""})
      * @Form\Options({
      *     "label": "tasks.data.owner",
-     *     "service_name": "Olcs\Service\Data\UserListInternal",
+     *     "service_name": "Olcs\Service\Data\UserListInternalTask",
      *     "empty_option": "Unassigned",
      * })
      * @Form\Validator({"name": "NotEmpty", "options": {"null"}})
