@@ -7,7 +7,7 @@ namespace Olcs\Service\Data;
  *
  * @package Olcs\Service\Data
  */
-class UserListInternalTask extends UserListInternal
+class UserListInternalExcludingLimitedReadOnlyUsers extends UserListInternal
 {
     const ROLE_INTERNAL_LIMITED_READ_ONLY = 'internal-limited-read-only';
 
@@ -27,16 +27,16 @@ class UserListInternalTask extends UserListInternal
             return [];
         }
 
-        if ($useGroups) {
-            return $this->formatDataForGroups($list);
-        }
-
         foreach ($list as $key => $user) {
             foreach ($user['roles'] as $role) {
                 if ($role['role'] === self::ROLE_INTERNAL_LIMITED_READ_ONLY) {
                     unset($list[$key]);
                 }
             }
+        }
+
+        if ($useGroups) {
+            return $this->formatDataForGroups($list);
         }
 
         return $this->formatData($list);
