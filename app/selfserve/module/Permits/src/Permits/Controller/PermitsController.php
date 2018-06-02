@@ -10,46 +10,42 @@ use Permits\Form\TripsForm;
 use Permits\Form\SectorsForm;
 use Permits\Form\RestrictedCountriesForm;
 use Dvsa\Olcs\Transfer\Query\Permits\SectorsList as Sectors;
+use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries as Countries;
+
+use Zend\Session\Container; // We need this when using sessions
 
 class PermitsController extends AbstractActionController 
 {
     private $sectors;
 
-    public function __construct()
-    {
+    const SESSION_NAMESPACE = 'permit_application';
 
-    }
+  public function __construct()
+  {
+  }
 
     public function indexAction()
     {
         return new ViewModel();
     }
 
-    public function tripsAction()
-    {
-        $form = new TripsForm();
-        $request = $this->getRequest();
+  public function tripsAction()
+  {
+    $form = new TripsForm();
 
-        if($request->isPost())
-        {
-            $data = $this->params()->fromPost();
-            $inputFilter = $form->getInputFilter();
-            $inputFilter->setData($data);
-        }
-
-        return array('form' => $form, 'data' => $data);
+        return array('form' => $form);
     }
 
-    public function sectorsAction()
-    {
-        $form = new SectorsForm();
-        $request = $this->getRequest();
+  public function sectorsAction()
+  {
+    $form = new SectorsForm();
 
-        if($request->isPost())
-        {
-            $data = $this->params()->fromPost();
-            $inputFilter = $form->getInputFilter();
-            $inputFilter->setData($data);
+        $data = $this->params()->fromPost();
+    if(array_key_exists('submit', $data))
+    {
+      //Save data to session
+      $session = new Container(self::SESSION_NAMESPACE);
+      $session->tripsData = $data;
         }
 
         /*
@@ -63,27 +59,68 @@ class PermitsController extends AbstractActionController
      */
     $options = $form->getDefaultSectorsFieldOptions();
     $options['value_options'] = $this->transformListIntoValueOptions($sectorList);
-    $form->get('sectors')->setOptions($options);return array('form' => $form, 'data' => $data);
+    $form->get('sectors')->setOptions($options);return array('form' => $form);
     }
 
-    public function restrictedCountriesAction()
-    {
-        $form = new RestrictedCountriesForm();
-        $request = $this->getRequest();
+  public function restrictedCountriesAction()
+  {
+    $form = new RestrictedCountriesForm();
+    $restrictedCountriesString = '';
 
-        if($request->isPost())
+    $data = $this->params()->fromPost();
+
+        if(array_key_exists('submit', $data))
+    {
+      //Save data to session
+      $session = new Container(self::SESSION_NAMESPACE);
+      $session->sectorsData = $data;
+    }
+
+    /*
+    * Get Sectors List from Database
+    */
+    $response = $this->handleQuery(Countries::create(array()));
+    $restrictedCountryList = $response->getResult();
+var_dump($restrictedCountryList);
+    /*
+    * Make the restricted countries list the value_options of the form
+    */
+    $options = $form->getDefaultRestrictedCountriesListFieldOptions();
+    $restrictedCountryList = $this->transformListIntoValueOptions($restrictedCountryList, 'description');
+    $options['value_options'] = $restrictedCountryList;
+    $form->get('restrictedCountriesList')->setOptions($options);
+
+    /*
+    * Construct dynamic list of countries
+    * for use in question title
+    */
+    $count = 1;
+    foreach($restrictedCountryList as $id => $countryName)
+    {
+        if($count == count($restrictedCountryList)) //if on last country
         {
-            $data = $this->params()->fromPost();
-            $inputFilter = $form->getInputFilter();
-            $inputFilter->setData($data);
+            $restrictedCountriesString = $restrictedCountriesString . 'or ';
+        }
+        $restrictedCountriesString = $restrictedCountriesString . $countryName . ', ';
+        $count++;
         }
 
-        return array('form' => $form, 'data' => $data);
+        return array('form' => $form, 'restrictedCountriesString' => $restrictedCountriesString);
     }
 
     public function summaryAction()
     {
-        return new ViewModel();
+        //$form = new RestrictedCountriesForm();
+
+    $data = $this->params()->fromPost();
+    if(array_key_exists('submit', $data))
+    {
+      //Save data to session
+      $session = new Container(self::SESSION_NAMESPACE);
+      $session->restrictedCountriesData = $data;
+    }
+
+    return array();
     }
 
     public function declarationAction()
@@ -177,13 +214,18 @@ class PermitsController extends AbstractActionController
     {
         return new ViewModel();
     }
-private function transformListIntoValueOptions($list = array())
+private function transformListIntoValueOptions($list = array(), $displayFieldName = 'name')
     {
+        if(!is_string($displayFieldName) || !is_array($list)){
+            //throw exception?
+            return array();
+        }
+
         $value_options = array();
 
         foreach($list['results'] as $item)
         {
-            $value_options[$item['id']] = $item['name'];
+            $value_options[$item['id']] = $item[$displayFieldName];
         }
 
         return $value_options;

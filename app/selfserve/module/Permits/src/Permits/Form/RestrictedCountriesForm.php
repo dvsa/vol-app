@@ -37,19 +37,7 @@ class RestrictedCountriesForm extends Form
         $this->add(array(
             'type' => 'MultiCheckBox',
             'name' => 'restrictedCountriesList',
-            'options' => array(
-                'label' => '',
-                'label_attributes' => array(
-                    'class' => 'form-control form-control--checkbox',
-                ),
-                'value_options' => array(
-                    'AT' => 'Austria',
-                    'GR' => 'Greece',
-                    'HU' => 'Hungary',
-                    'IT' => 'Italy',
-                    'RU' => 'Russia',
-                ),
-            )
+            'options' => $this->getDefaultRestrictedCountriesListFieldOptions(),
         ));
 
         $this->add(array(
@@ -61,6 +49,16 @@ class RestrictedCountriesForm extends Form
                 'class' => 'action--primary large',
             ),
         ));
+    }
+
+    public function getDefaultRestrictedCountriesListFieldOptions()
+    {
+        return array(
+            'label' => '',
+            'label_attributes' => array(
+                'class' => 'form-control form-control--checkbox',
+            ),
+        );
     }
 
     public function getInputFilter()

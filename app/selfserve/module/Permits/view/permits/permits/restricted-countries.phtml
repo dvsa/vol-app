@@ -44,7 +44,12 @@
 
         <div class="field">
             <fieldset id="restricted-countries" data-group="restricted-countries">
-                <legend><?php echo $this->escapeHtml($this->translate('permits.page.field.restricted-countries')); ?></legend>
+                <legend>
+                    <?php
+                        $template = $this->escapeHtml($this->translate('permits.page.field.restricted-countries'));
+                        echo sprintf($template, $restrictedCountriesString);
+                    ?>
+                </legend>
                 <?php
                 $element = $form->get('restrictedCountries');
                 $options = $element->getOptions();
