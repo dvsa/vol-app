@@ -30,7 +30,14 @@
                     <?php echo $this->escapeHtml($title); ?>
                 </h1>
                 <h2 class="guidance">
-                    <p><?php echo $this->translate('permits.page.message.restricted-countries'); ?></p>
+                    <p>
+                        <?php
+                            //Print out title using dynamic list of countries
+                            //$restrictedCountriesString is the list of countries, replace placeholder with 'and'
+                            $template = $this->translate('permits.page.message.restricted-countries');
+                            echo sprintf($template, str_replace('%s', 'and', $restrictedCountriesString));
+                        ?>
+                    </p>
                 </h2>
             </div>
         </div>
@@ -46,14 +53,15 @@
             <fieldset id="restricted-countries" data-group="restricted-countries">
                 <legend>
                     <?php
+                        //Print out Question Title using dynamic list of countries
                         $template = $this->escapeHtml($this->translate('permits.page.field.restricted-countries'));
-                        echo sprintf($template, $restrictedCountriesString);
+                        echo sprintf($template, str_replace('%s', 'or', $restrictedCountriesString));
                     ?>
                 </legend>
                 <?php
-                $element = $form->get('restrictedCountries');
-                $options = $element->getOptions();
-                $valueOptions = $options['value_options'];
+                    $element = $form->get('restrictedCountries');
+                    $options = $element->getOptions();
+                    $valueOptions = $options['value_options'];
                 ?>
                 <label class="<?php echo $options['label_attributes']['class'];?> ">
                     <input type="radio" name="<?php echo $element->getName();?>" value="1">

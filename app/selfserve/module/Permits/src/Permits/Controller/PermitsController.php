@@ -81,7 +81,7 @@ class PermitsController extends AbstractActionController
     */
     $response = $this->handleQuery(Countries::create(array()));
     $restrictedCountryList = $response->getResult();
-var_dump($restrictedCountryList);
+
     /*
     * Make the restricted countries list the value_options of the form
     */
@@ -92,16 +92,18 @@ var_dump($restrictedCountryList);
 
     /*
     * Construct dynamic list of countries
-    * for use in question title
+    * for use in titles
     */
     $count = 1;
     foreach($restrictedCountryList as $id => $countryName)
     {
-        if($count == count($restrictedCountryList)) //if on last country
+        if($count == count($restrictedCountryList)) //if this country is last
         {
-            $restrictedCountriesString = $restrictedCountriesString . 'or ';
+            $restrictedCountriesString = $restrictedCountriesString . '%s ' . $countryName; //%s as placeholder for or/and
+        }else{
+            $restrictedCountriesString = $restrictedCountriesString . $countryName . ', ';
         }
-        $restrictedCountriesString = $restrictedCountriesString . $countryName . ', ';
+
         $count++;
         }
 
