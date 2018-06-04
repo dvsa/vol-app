@@ -45,7 +45,7 @@ class PermitsController extends AbstractActionController
     {
       //Save data to session
       $session = new Container(self::SESSION_NAMESPACE);
-      $session->tripsData = $data;
+      $session->tripsData = $data['numberOfTrips'];
         }
 
         /*
@@ -73,7 +73,7 @@ class PermitsController extends AbstractActionController
     {
       //Save data to session
       $session = new Container(self::SESSION_NAMESPACE);
-      $session->sectorsData = $data;
+      $session->sectorsData = $data['sectors'];
     }
 
     /*
@@ -119,7 +119,7 @@ class PermitsController extends AbstractActionController
     {
       //Save data to session
       $session = new Container(self::SESSION_NAMESPACE);
-      $session->restrictedCountriesData = $data;
+      $session->restrictedCountriesData = $data['restrictedCountries'];
     }
 
     return array();
