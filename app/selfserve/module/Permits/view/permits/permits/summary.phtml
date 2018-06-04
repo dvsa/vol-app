@@ -3,6 +3,16 @@
     $this->headTitle($title);
 ?>
 
+<head>
+    <style>
+        td{
+            max-width: 8em;
+            vertical-align: middle;
+        }
+
+    </style>
+</head>
+
 <div class="row">
     <div class="three-quarters">
         <div class="page-header">
@@ -24,7 +34,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                <?php echo $sessionData['tripsQuestion'] ?>
+                                <h4><?php echo $sessionData['tripsQuestion'] ?></h4>
                             </td>
                             <td>
                                 <?php echo $sessionData['trips'] ?>
@@ -37,7 +47,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <?php echo $sessionData['sectorsQuestion'] ?>
+                                <h4><?php echo $sessionData['sectorsQuestion'] ?></h4>
                             </td>
                             <td>
                                 <?php
@@ -55,7 +65,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <?php echo $sessionData['restrictedCountriesQuestion'] ?>
+                                <h4><?php echo $sessionData['restrictedCountriesQuestion'] ?></h4>
                             </td>
                             <td>
                                 <?php echo $sessionData['restrictedCountries'] ?>
