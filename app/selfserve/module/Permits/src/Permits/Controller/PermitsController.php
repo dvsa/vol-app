@@ -124,13 +124,22 @@ class PermitsController extends AbstractActionController
       * Collate session data for use in view
       */
      $sessionData = array();
+     $sessionData['tripsQuestion'] = 'How many trips will be
+                                        made by your company abroad
+                                        over the next 12 months?';
      $sessionData['trips'] = $session->tripsData;
+
+     $sessionData['sectorsQuestion'] = 'What type of goods
+                                        will you carry over
+                                        the next 12 months?';
      $sessionData['sectors'] = array();
      foreach($session->sectorsData as $sector)
      {
          //add everything right of '|' to the list of sectors to get rid of the sector ID
          array_push($sessionData['sectors'], substr($sector, strpos($sector, '|') + 1));
      }
+
+     $sessionData['restrictedCountriesQuestion'] = 'Restricted countries';
      $sessionData['restrictedCountries'] = $session->restrictedCountriesData == 1 ? 'Yes' : 'No';
 
     return array('sessionData' => $sessionData);

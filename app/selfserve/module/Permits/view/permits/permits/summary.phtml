@@ -24,9 +24,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                How many trips will be
-                                made by your company abroad
-                                over the next 12 months?
+                                <?php echo $sessionData['tripsQuestion'] ?>
                             </td>
                             <td>
                                 <?php echo $sessionData['trips'] ?>
@@ -39,9 +37,7 @@
                         </tr>
                         <tr>
                             <td>
-                                What type of goods
-                                will you carry over
-                                the next 12 months?
+                                <?php echo $sessionData['sectorsQuestion'] ?>
                             </td>
                             <td>
                                 <?php
@@ -59,7 +55,7 @@
                         </tr>
                         <tr>
                             <td>
-                                Restricted countries
+                                <?php echo $sessionData['restrictedCountriesQuestion'] ?>
                             </td>
                             <td>
                                 <?php echo $sessionData['restrictedCountries'] ?>
