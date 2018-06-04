@@ -22,6 +22,27 @@ class UserListInternal extends AbstractListDataService
     protected $teamId = null;
 
     /**
+     * @var bool
+     */
+    protected $excludeLimitedReadOnly = false;
+
+    /**
+     * @return bool
+     */
+    public function getExcludeLimitedReadOnly()
+    {
+        return $this->excludeLimitedReadOnly;
+    }
+
+    /**
+     * @param bool $excludeLimitedReadOnly
+     */
+    public function setExcludeLimitedReadOnly($excludeLimitedReadOnly)
+    {
+        $this->excludeLimitedReadOnly = $excludeLimitedReadOnly;
+    }
+
+    /**
      * Set teamId
      *
      * @param int $teamId Team id
@@ -69,6 +90,7 @@ class UserListInternal extends AbstractListDataService
                     'sort' => self::$sort,
                     'order' => self::$order,
                     'team' => ($teamId > 0 ? $teamId : null),
+                    'excludeLimitedReadOnly' => $this->getExcludeLimitedReadOnly()
                 ]
             )
         );
