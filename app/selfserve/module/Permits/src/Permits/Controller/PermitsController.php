@@ -112,17 +112,28 @@ class PermitsController extends AbstractActionController
 
     public function summaryAction()
     {
-        //$form = new RestrictedCountriesForm();
+        $session = new Container(self::SESSION_NAMESPACE);
 
     $data = $this->params()->fromPost();
     if(array_key_exists('submit', $data))
     {
       //Save data to session
-      $session = new Container(self::SESSION_NAMESPACE);
       $session->restrictedCountriesData = $data['restrictedCountries'];
     }
+     /*
+      * Collate session data for use in view
+      */
+     $sessionData = array();
+     $sessionData['trips'] = $session->tripsData;
+     $sessionData['sectors'] = array();
+     foreach($session->sectorsData as $sector)
+     {
+         //add everything right of '|' to the list of sectors to get rid of the sector ID
+         array_push($sessionData['sectors'], substr($sector, strpos($sector, '|') + 1));
+     }
+     $sessionData['restrictedCountries'] = $session->restrictedCountriesData == 1 ? 'Yes' : 'No';
 
-    return array();
+    return array('sessionData' => $sessionData);
     }
 
     public function declarationAction()
@@ -227,7 +238,8 @@ private function transformListIntoValueOptions($list = array(), $displayFieldNam
 
         foreach($list['results'] as $item)
         {
-            $value_options[$item['id']] = $item[$displayFieldName];
+            //add display name to the key so that it can be used after submission
+            $value_options[$item['id'] . '|' . $item[$displayFieldName]] = $item[$displayFieldName];
         }
 
         return $value_options;

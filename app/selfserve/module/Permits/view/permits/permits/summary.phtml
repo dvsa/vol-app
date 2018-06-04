@@ -29,7 +29,7 @@
                                 over the next 12 months?
                             </td>
                             <td>
-                                350
+                                <?php echo $sessionData['trips'] ?>
                             </td>
                             <td>
                                 <a href="">
@@ -44,7 +44,12 @@
                                 the next 12 months?
                             </td>
                             <td>
-                                All
+                                <?php
+                                    foreach($sessionData['sectors'] as $sector)
+                                    {
+                                        echo $sector . ', ';
+                                    }
+                                ?>
                             </td>
                             <td>
                                 <a href="">
@@ -57,7 +62,7 @@
                                 Restricted countries
                             </td>
                             <td>
-                                Yes
+                                <?php echo $sessionData['restrictedCountries'] ?>
                             </td>
                             <td>
                                 <a href="">
