@@ -40,12 +40,13 @@ class PermitsController extends AbstractActionController
   public function sectorsAction()
   {
     $form = new SectorsForm();
+    $session = new Container(self::SESSION_NAMESPACE);
+
 
         $data = $this->params()->fromPost();
     if(array_key_exists('submit', $data))
     {
       //Save data to session
-      $session = new Container(self::SESSION_NAMESPACE);
       $session->tripsData = $data['numberOfTrips'];
         }
 
@@ -54,6 +55,9 @@ class PermitsController extends AbstractActionController
      */
     $response = $this->handleQuery(Sectors::create(array()));
     $sectorList = $response->getResult();
+
+    //Save count to session for use in summary page (determining if all options were selected).
+    $session['totalSectorsCount'] = $sectorList['count'];
 
     /*
      * Make the Sectors List the value_options of the form
@@ -134,10 +138,13 @@ class PermitsController extends AbstractActionController
                                         will you carry over
                                         the next 12 months?';
      $sessionData['sectors'] = array();
-     foreach($session->sectorsData as $sector)
-     {
-         //add everything right of '|' to the list of sectors to get rid of the sector ID
-         array_push($sessionData['sectors'], substr($sector, strpos($sector, $this::DEFAULT_SEPARATOR) + 1));
+     if(count($session->sectorsData) >= $session->totalSectorsCount){
+         array_push($sessionData['sectors'], 'All');
+     }else {
+         foreach ($session->sectorsData as $sector) {
+             //add everything right of '|' to the list of sectors to get rid of the sector ID
+             array_push($sessionData['sectors'], substr($sector, strpos($sector, $this::DEFAULT_SEPARATOR) + 1));
+         }
      }
 
      $sessionData['restrictedCountriesQuestion'] = 'Restricted countries';

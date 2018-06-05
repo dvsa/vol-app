@@ -51,20 +51,15 @@
                             </td>
                             <td>
                                 <?php
+                                    $count = 1;
                                     $listSize = count($sessionData['sectors']);
-                                    if($listSize >= 13){ //Temporary
-                                       echo 'All';
-                                    }else {
-                                        $count = 1;
-
-                                        foreach ($sessionData['sectors'] as $sector) {
-                                            if ($count == $listSize) {
-                                                echo $sector;
-                                            } else {
-                                                echo $sector . ', ';
-                                            }
-                                            $count++;
+                                    foreach ($sessionData['sectors'] as $sector) {
+                                        if ($count == $listSize) {
+                                            echo $sector;
+                                        } else {
+                                            echo $sector . ', ';
                                         }
+                                        $count++;
                                     }
                                 ?>
                             </td>
