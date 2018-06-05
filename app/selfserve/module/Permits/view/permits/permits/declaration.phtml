@@ -1,6 +1,18 @@
 <?php
 $title = $this->translate('permits.application.declaration.title');
 $this->headTitle($title);
+
+    /*
+     * HIDDEN FORM TO SAVE TO DATABASE
+     */
+    $form->setAttribute('action', $this->url('ecmt-permits'));
+    $form->prepare();
+    echo $this->form()->openTag($form);
+    echo $this->formHidden($form->get('id'));
+    echo $this->formHidden($form->get('numberOfTrips'));
+    echo $this->formHidden($form->get('sectors'));
+    echo $this->formHidden($form->get('restrictedCountries'));
+    echo $this->formHidden($form->get('restrictedCountriesList'));
 ?>
 <p><?php echo $this->linkBack($this->backUrl); ?></p>
 

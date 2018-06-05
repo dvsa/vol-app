@@ -12,7 +12,8 @@ use Permits\Form\RestrictedCountriesForm;
 use Dvsa\Olcs\Transfer\Query\Permits\SectorsList as Sectors;
 use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries as Countries;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermits;
-use Zend\Session\Container; // We need this when using sessions
+use Zend\Session\Container;
+use Zend\View\View; // We need this when using sessions
 
 class PermitsController extends AbstractActionController
 {
@@ -65,16 +66,18 @@ class PermitsController extends AbstractActionController
     {
       //Save data to session
       $session->tripsData = $data['numberOfTrips'];
+        }else{
         }
 
         /*
-     * Get Sectors List from Database
-     */
-    $response = $this->handleQuery(Sectors::create(array()));
-    $sectorList = $response->getResult();
+        * Get Sectors List from Database
+        */
+        $response = $this->handleQuery(Sectors::create(array()));
+        $sectorList = $response->getResult();
 
-    //Save count to session for use in summary page (determining if all options were selected).
-    $session['totalSectorsCount'] = $sectorList['count'];
+        //Save count to session for use in summary page (determining if all options were selected).
+        $session['totalSectorsCount'] = $sectorList['count'];
+
 
     /*
      * Make the Sectors List the value_options of the form
@@ -172,16 +175,6 @@ class PermitsController extends AbstractActionController
     return array('sessionData' => $sessionData);
     }
 
-    public function declarationAction()
-    {
-        return new ViewModel();
-    }
-
-    public function paymentAction()
-    {
-        return new ViewModel();
-    }
-
     public function eligibilityAction()
     {
         $form = new EligibilityForm();
@@ -233,6 +226,16 @@ class PermitsController extends AbstractActionController
         return new ViewModel();
     }
 
+    public function declarationAction()
+    {
+        return new ViewModel();
+    }
+
+    public function paymentAction()
+    {
+        return new ViewModel();
+    }
+
     public function step3Action()
     {
         $inputFilter = null;
@@ -271,6 +274,8 @@ class PermitsController extends AbstractActionController
             'restrictedCountriesList'   => $this->extractIDFromSessionData($session->restrictedCountriesListData)
 
         ));
+
+        echo '<pre>'; echo var_dump($form); die;
 
         return new ViewModel();
     }
