@@ -32,4 +32,9 @@ return array(
       'permits' => __DIR__ . '/../view',
     ),
   ),
+  'tables' => array(
+    'config' => array(
+      __DIR__ . '/../src/Permits/Table/Tables/'
+    )
+  ),
 );

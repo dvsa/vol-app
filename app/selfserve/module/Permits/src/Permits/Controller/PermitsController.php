@@ -11,7 +11,7 @@ use Permits\Form\SectorsForm;
 use Permits\Form\RestrictedCountriesForm;
 use Dvsa\Olcs\Transfer\Query\Permits\SectorsList as Sectors;
 use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries as Countries;
-
+use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermits;
 use Zend\Session\Container; // We need this when using sessions
 
 class PermitsController extends AbstractActionController
@@ -21,13 +21,30 @@ class PermitsController extends AbstractActionController
     const SESSION_NAMESPACE = 'permit_application';
   const DEFAULT_SEPARATOR = '|';
 
-  public function __construct()
-  {
-  }
+  protected $tableName = 'dashboard-permits';
+
+    public function __construct()
+    {
+    }
 
     public function indexAction()
     {
-        return new ViewModel();
+
+        $query = EcmtPermits::create(array());
+        $response = $this->handleQuery($query);
+        $dashboardData = $response->getResult();
+
+        $theTable = $this->getServiceLocator()->get('Table')->prepareTable('dashboard-permits', $dashboardData['results']);
+
+        $view = new ViewModel();
+        $view->setVariable('permitsNo', $dashboardData['count']);
+        $view->setVariable('table', $theTable);
+
+        //echo '<pre>'; var_dump($dashboardData['results'][0]['status']);die();
+
+
+
+        return $view;
     }
 
   public function tripsAction()

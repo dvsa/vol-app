@@ -17,10 +17,18 @@ echo $menu->setMinDepth(0)->setMaxDepth(0)
 
 ?>
 
+
 <div class="row">
     <div class="dashboard two-thirds">
+        <?php echo $this->flashMessengerAll(); ?>
         <h3><?php echo $this->translate('permits.application.overwiew.subtitle'); ?></h3>
+
+        <?php if($permitsNo === 0): ?>
         <p class="guidance"><?php echo $this->translate('permits.application.overwiew.no-permits'); ?></p>
+        <?php else : ?>
+            <p class="guidance"><?php echo $this->translate('permits.application.overwiew.has-permits'); ?></p>
+        <?php echo $table; ?>
+        <?php endif; ?>
         <div class="actions-container new-application--wrapper">
             <a href="/permits/trips" class="action--primary large">
                 <?php echo $this->translate('permits.application.overwiew.button'); ?>
