@@ -1,7 +1,7 @@
 <?php
 
 namespace Permits\Controller;
-
+use Permits\Form\PermitApplicationForm;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Permits\Form\EligibilityForm;
@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries as Countries;
 
 use Zend\Session\Container; // We need this when using sessions
 
-class PermitsController extends AbstractActionController 
+class PermitsController extends AbstractActionController
 {
     private $sectors;
 
@@ -118,18 +118,20 @@ class PermitsController extends AbstractActionController
     public function summaryAction()
     {
         $session = new Container(self::SESSION_NAMESPACE);
+        $data = $this->params()->fromPost();
 
-    $data = $this->params()->fromPost();
-    if(array_key_exists('submit', $data))
-    {
-      //Save data to session
-      $session->restrictedCountriesData = $data['restrictedCountries'];
-    }
-     /*
-      * Collate session data for use in view
-      */
-     $sessionData = array();
-     $sessionData['tripsQuestion'] = 'How many trips will be
+        if(array_key_exists('submit', $data))
+        {
+            //Save data to session
+            $session->restrictedCountriesData = $data['restrictedCountries'];
+            $session->restrictedCountriesListData = $data['restrictedCountriesList'];
+        }
+
+        /*
+         * Collate session data for use in view
+         */
+        $sessionData = array();
+        $sessionData['tripsQuestion'] = 'How many trips will be
                                         made by your company abroad
                                         over the next 12 months?';
      $sessionData['trips'] = $session->tripsData;
@@ -242,9 +244,32 @@ class PermitsController extends AbstractActionController
      */
     public function submittedAction()
     {
+        $session = new Container(self::SESSION_NAMESPACE);
+
+        $form = new PermitApplicationForm();
+        $form->setData(array(
+            'numberOfTrips'             => $session->tripsData,
+            'sectors'                   => $this->extractIDFromSessionData($session->sectorsData),
+            'restrictedCountries'       => $session->restrictedCountriesData,
+            'restrictedCountriesList'   => $this->extractIDFromSessionData($session->restrictedCountriesListData)
+
+        ));
+
         return new ViewModel();
     }
-private function transformListIntoValueOptions($list = array(), $displayFieldName = 'name')
+
+    private function extractIDFromSessionData($sessionData){
+        $IDList = array();
+
+        foreach ($sessionData as $entry){
+            //Add everything before the separator to the list (ID is before separator)
+            array_push($IDList, substr($entry, 0, strpos($entry, self::DEFAULT_SEPARATOR)));
+        }
+
+        return $IDList;
+    }
+
+    private function transformListIntoValueOptions($list = array(), $displayFieldName = 'name')
     {
         if(!is_string($displayFieldName) || !is_array($list)){
             //throw exception?
