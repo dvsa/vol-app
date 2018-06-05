@@ -892,6 +892,11 @@ $applicationNavigation = array(
                     'route' => 'dashboard',
                 ),
                 array(
+                    'id' => 'dashboard-permits',
+                    'label' => 'Permits',
+                    'route' => 'permits',
+                ),
+                array(
                     'id' => 'dashboard-fees',
                     'label' => 'dashboard-nav-fees',
                     'route' => 'fees',
@@ -912,11 +917,6 @@ $applicationNavigation = array(
                     'id' => 'dashboard-correspondence',
                     'label' => 'dashboard-nav-documents',
                     'route' => 'correspondence',
-                ),
-                array(
-                    'id' => 'dashboard-permits',
-                    'label' => 'Permits',
-                    'route' => 'permits',
                 ),
             ),
         ),
