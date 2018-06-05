@@ -74,7 +74,8 @@ class UserListInternalTest extends AbstractDataServiceTestCase
         $params = [
             'sort' => 'p.forename',
             'order' => 'ASC',
-            'team' => 1
+            'team' => 1,
+            'excludeLimitedReadOnly' => false
         ];
 
         $mockTransferAnnotationBuilder = m::mock()
@@ -83,6 +84,7 @@ class UserListInternalTest extends AbstractDataServiceTestCase
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
                     $this->assertEquals($params['team'], $dto->getTeam());
+                    $this->assertEquals($params['excludeLimitedReadOnly'], $dto->getExcludeLimitedReadOnly());
                     return 'query';
                 }
             )
@@ -194,5 +196,12 @@ class UserListInternalTest extends AbstractDataServiceTestCase
         $sut = new UserListInternal();
         $sut->setTeamId(1);
         $this->assertEquals($sut->getTeamId(), 1);
+    }
+
+    public function testExcludeLimitedReadOnly()
+    {
+        $sut = new UserListInternal();
+        $sut->setExcludeLimitedReadOnly(true);
+        $this->assertEquals($sut->getExcludeLimitedReadOnly(), true);
     }
 }

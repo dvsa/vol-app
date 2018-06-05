@@ -36,6 +36,7 @@ class UserListInternal extends AbstractListDataService
 
     /**
      * @param bool $excludeLimitedReadOnly
+     * @return void
      */
     public function setExcludeLimitedReadOnly($excludeLimitedReadOnly)
     {
