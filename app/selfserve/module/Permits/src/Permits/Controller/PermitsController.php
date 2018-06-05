@@ -19,6 +19,7 @@ class PermitsController extends AbstractActionController
     private $sectors;
 
     const SESSION_NAMESPACE = 'permit_application';
+  const DEFAULT_SEPARATOR = '|';
 
   public function __construct()
   {
@@ -136,7 +137,7 @@ class PermitsController extends AbstractActionController
      foreach($session->sectorsData as $sector)
      {
          //add everything right of '|' to the list of sectors to get rid of the sector ID
-         array_push($sessionData['sectors'], substr($sector, strpos($sector, '|') + 1));
+         array_push($sessionData['sectors'], substr($sector, strpos($sector, $this::DEFAULT_SEPARATOR) + 1));
      }
 
      $sessionData['restrictedCountriesQuestion'] = 'Restricted countries';
@@ -248,7 +249,7 @@ private function transformListIntoValueOptions($list = array(), $displayFieldNam
         foreach($list['results'] as $item)
         {
             //add display name to the key so that it can be used after submission
-            $value_options[$item['id'] . '|' . $item[$displayFieldName]] = $item[$displayFieldName];
+            $value_options[$item['id'] . $this::DEFAULT_SEPARATOR . $item[$displayFieldName]] = $item[$displayFieldName];
         }
 
         return $value_options;
