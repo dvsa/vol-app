@@ -233,6 +233,23 @@ class PermitsController extends AbstractActionController
 
     public function paymentAction()
     {
+        $request = $this->getRequest();
+        $data = $request->getPost()->toArray();
+
+
+        //$session = new Container(self::SESSION_NAMESPACE);
+
+        $data['ecmtPermitsApplication'] = 1;
+        $data['applicationStatus'] = 1;
+        $data['paymentStatus'] = 1;
+
+
+        $command = CreateEcmtPermits::create($data);
+        $response = $this->handleCommand($command);
+        $insert = $response->getResult();
+        echo '<pre>'; var_dump($insert); die();
+
+
         return new ViewModel();
     }
 

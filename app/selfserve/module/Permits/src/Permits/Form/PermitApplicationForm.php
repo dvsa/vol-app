@@ -23,7 +23,7 @@ class PermitApplicationForm extends Form
         ));
 
         $this->add(array(
-            'name' => 'numberOfTrips',
+            'name' => 'intensity',
             'type' => 'Hidden',//number
         ));
 
