@@ -36,6 +36,11 @@ class Submission implements MapperInterface
             ];
         }
 
+        if(isset($data['assignedDate']) && !empty($data['assignedDate']))
+        {
+            $formData['readOnlyFields'] = ['assignedDate'];
+        }
+
         return $formData;
     }
 

@@ -592,7 +592,13 @@ class SubmissionController extends AbstractInternalController implements Submiss
             // remove form-actions
             $form->remove('form-actions');
         }
-
+        if(isset($initialData['readOnlyFields']) && !empty($initialData['readOnlyFields']))
+        {
+            foreach ($initialData['readOnlyFields'] as $field)
+            {
+                $form->get($field)->setAttribute('readonly',true);
+            }
+        }
         return $form;
     }
 
