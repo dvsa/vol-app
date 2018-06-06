@@ -264,19 +264,6 @@ class PermitsController extends AbstractActionController
      */
     public function submittedAction()
     {
-        $session = new Container(self::SESSION_NAMESPACE);
-
-        $form = new PermitApplicationForm();
-        $form->setData(array(
-            'numberOfTrips'             => $session->tripsData,
-            'sectors'                   => $this->extractIDFromSessionData($session->sectorsData),
-            'restrictedCountries'       => $session->restrictedCountriesData,
-            'restrictedCountriesList'   => $this->extractIDFromSessionData($session->restrictedCountriesListData)
-
-        ));
-
-        echo '<pre>'; echo var_dump($form); die;
-
         return new ViewModel();
     }
 

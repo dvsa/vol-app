@@ -24,6 +24,20 @@ return array(
           ),
         ),
       ),
+        'ecmt-permits' => array(
+            'type'    => 'segment',
+            'options' => array(
+                'route'    => '/ecmt-permits[/]',
+                'constraints' => array(
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    'id'     => '[0-9]+',
+                ),
+                'defaults' => array(
+                    'controller'    => 'Permits\Controller\Permits',
+                    'action'        => 'index',
+                ),
+            ),
+        ),
     ),
   ),
 

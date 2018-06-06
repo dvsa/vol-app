@@ -24,16 +24,16 @@ class PermitApplicationForm extends Form
 
         $this->add(array(
             'name' => 'numberOfTrips',
-            'type' => 'Hidden',
+            'type' => 'Hidden',//number
         ));
 
         $this->add(array(
-            'type' => 'Hidden',
+            'type' => 'MultiCheckBox',//MultiCheckBox
             'name' => 'sectors',
             ));
 
         $this->add(array(
-            'type' => 'Hidden',
+            'type' => 'Hidden',//Radio
             'name' => 'restrictedCountries',
             'options' => array(
                 'value_options' => array(
@@ -44,7 +44,7 @@ class PermitApplicationForm extends Form
         ));
 
         $this->add(array(
-            'type' => 'Hidden',
+            'type' => 'MultiCheckBox',
             'name' => 'restrictedCountriesList',
         ));
 
