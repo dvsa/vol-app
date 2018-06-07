@@ -434,6 +434,7 @@ return array(
             Olcs\Service\Data\TaskSubCategory::class => Olcs\Service\Data\TaskSubCategory::class,
             'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
             Olcs\Service\Data\UserListInternal::class => Olcs\Service\Data\UserListInternal::class,
+            Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers::class => Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers::class,
             'Olcs\Service\Data\UserWithName' => 'Olcs\Service\Data\UserWithName',
             'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
             'Olcs\Service\Data\IrfoCountry' => 'Olcs\Service\Data\IrfoCountry',

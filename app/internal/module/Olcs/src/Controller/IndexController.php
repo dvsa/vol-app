@@ -125,6 +125,18 @@ class IndexController extends AbstractController implements LeftViewProvider
                     $srv->fetchListOptions(null);
 
                 break;
+            case 'users-internal-exclude-limited-read-only':
+                /** @var \Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers $srv */
+                $srv = $sm->get(\Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers::class);
+                $srv->setTeamId($value);
+
+                $results =
+                    [
+                        '' => ((int)$value > 0 ? 'Unassigned' : 'Please select'),
+                    ] +
+                    $srv->fetchListOptions(null);
+
+                break;
             case 'users':
                 $results = $this->getListDataUser($value, 'All');
                 break;
