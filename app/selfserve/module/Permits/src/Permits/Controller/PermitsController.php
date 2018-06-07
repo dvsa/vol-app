@@ -41,10 +41,6 @@ class PermitsController extends AbstractActionController
         $view->setVariable('permitsNo', $dashboardData['count']);
         $view->setVariable('table', $theTable);
 
-        //echo '<pre>'; var_dump($dashboardData['results'][0]['status']);die();
-
-
-
         return $view;
     }
 
@@ -234,23 +230,33 @@ class PermitsController extends AbstractActionController
     public function paymentAction()
     {
         $request = $this->getRequest();
-        $data = $request->getPost()->toArray();
+        $data = (array)$request->getPost();
+        $session = new Container(self::SESSION_NAMESPACE);
 
 
-        //$session = new Container(self::SESSION_NAMESPACE);
+        if(!empty($data)) {
 
-        $data['ecmtPermitsApplication'] = 1;
-        $data['applicationStatus'] = 1;
-        $data['paymentStatus'] = 1;
+            $data['ecmtPermitsApplication'] = 1;
+            $data['applicationStatus'] = 1;
+            $data['paymentStatus'] = 1;
+            if($session->restrictedCountriesData == 1)
+            {
+                $data['countries'] = $this->extractIDFromSessionData($session->restrictedCountriesListData);
+            }
+            $command = CreateEcmtPermits::create($data);
 
+            $response = $this->handleCommand($command);
+            $insert = $response->getResult();
 
-        $command = CreateEcmtPermits::create($data);
-        $response = $this->handleCommand($command);
-        $insert = $response->getResult();
-        echo '<pre>'; var_dump($insert); die();
+            $session->permitsNo = $insert['id']['ecmtPermit'];
 
+            $this->redirect()->toRoute('permits',['action'=>'payment']);
+        }
 
-        return new ViewModel();
+        $view = new ViewModel();
+        $view->setVariable('permitsNo', $session->permitsNo);
+
+        return $view;
     }
 
     public function step3Action()
@@ -281,7 +287,11 @@ class PermitsController extends AbstractActionController
      */
     public function submittedAction()
     {
-        return new ViewModel();
+        $session = new Container(self::SESSION_NAMESPACE);
+        $view = new ViewModel();
+        $view->setVariable('refNumber', $session->permitsNo);
+
+        return $view;
     }
 
     private function extractIDFromSessionData($sessionData){
