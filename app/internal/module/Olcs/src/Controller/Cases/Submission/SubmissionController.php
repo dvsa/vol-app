@@ -161,6 +161,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
 
     /**
      * Stores the submission data
+     *
      * @var array
      */
     protected $submissionData;
@@ -168,6 +169,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
     /**
      * Temporary storage of the document section sub category id. Used as each section form is generated to extract the
      * relevant documents for that section.
+     *
      * @var int
      */
     private $sectionSubcategory;
@@ -196,7 +198,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
      */
     public function addAction()
     {
-        $defaultDataProvider =  new AddFormDefaultData($this->defaultData);
+        $defaultDataProvider = new AddFormDefaultData($this->defaultData);
 
         $defaultDataProvider->setParams($this->plugin('params'));
 
@@ -211,7 +213,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
         $this->placeholder()->setPlaceholder('contentTitle', 'Add submission');
 
         if ($this->getRequest()->isPost()) {
-            $form->setData((array) $this->params()->fromPost());
+            $form->setData((array)$this->params()->fromPost());
         }
 
         if ($this->persist && $this->getRequest()->isPost() && $form->isValid()) {
@@ -254,7 +256,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
         $this->placeholder()->setPlaceholder('contentTitle', 'Edit submission');
 
         if ($request->isPost()) {
-            $dataFromPost = (array) $this->params()->fromPost();
+            $dataFromPost = (array)$this->params()->fromPost();
             $form->setData($dataFromPost);
             $form = $this->alterFormForSubmission($form, $dataFromPost);
         }
@@ -279,7 +281,6 @@ class SubmissionController extends AbstractInternalController implements Submiss
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Submission updated');
                 return $this->redirectTo($response->getResult());
             }
-
         } elseif (!$request->isPost()) {
             $paramProvider->setParams($this->plugin('params'));
             $itemParams = $paramProvider->provideParameters();
@@ -417,7 +418,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
                 $allSectionsRefData = $this->getAllSectionsRefData();
                 $submissionConfig = $this->getSubmissionConfig();
 
-                $readOnly = (bool) ($printView || $data['isClosed']);
+                $readOnly = (bool)($printView || $data['isClosed']);
                 $this->placeholder()->setPlaceholder(
                     'selectedSectionsArray',
                     $this->generateSelectedSectionsArray($data, $allSectionsRefData, $submissionConfig, $readOnly)
@@ -592,11 +593,9 @@ class SubmissionController extends AbstractInternalController implements Submiss
             // remove form-actions
             $form->remove('form-actions');
         }
-        if(isset($initialData['readOnlyFields']) && !empty($initialData['readOnlyFields']))
-        {
-            foreach ($initialData['readOnlyFields'] as $field)
-            {
-                $form->get($field)->setAttribute('readonly',true);
+        if (isset($initialData['readOnlyFields']) && !empty($initialData['readOnlyFields'])) {
+            foreach ($initialData['readOnlyFields'] as $field) {
+                $form->get($field)->setAttribute('readonly', true);
             }
         }
         return $form;
@@ -623,9 +622,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
                 // if we allow attachments, then create the attachments form for this section
                 if (isset($submissionConfig['sections'][$sectionId]['allow_attachments']) &&
                     $submissionConfig['sections'][$sectionId]['allow_attachments']) {
-
                     $this->sectionSubcategory = $submissionConfig['sections'][$sectionId]['subcategoryId'];
-
                     // generate a unique attachment form for this section
                     $attachmentsForm = $this->getSectionForm($this->sectionId);
                     if ($readOnly) {
@@ -687,7 +684,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
                     'submission' => $this->params()->fromRoute('submission'),
                     'description' => $file['name'],
                     'isExternal' => 0,
-                    'category'    => CategoryDataService::CATEGORY_SUBMISSION,
+                    'category' => CategoryDataService::CATEGORY_SUBMISSION,
                     'subCategory' => $this->sectionSubcategory,
                 ];
 
