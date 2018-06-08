@@ -39,11 +39,18 @@ class Submission implements MapperInterface
             ];
         }
 
-        if (isset($data['assignedDate']) && !empty($data['assignedDate'])) {
-            $formData['readOnlyFields'] = ['assignedDate'];
-        } elseif (empty($formData['fields']['assignedDate'])) {
-            $formData['fields']['assignedDate'] = new \DateTime('now');
+        $defaultSetFields = ['informationCompleteDate', 'assignedDate'];
+        $readOnlyFields = [];
+        foreach ($defaultSetFields as $field) {
+            if (isset($data[$field]) && !empty($data[$field])) {
+                $readOnlyFields[] = $field;
+                $formData['readOnlyFields'] = $readOnlyFields;
+            } elseif (empty($formData['fields'][$field])) {
+                $formData['fields'][$field] = new \DateTime('now');
+            }
         }
+
+
         return $formData;
     }
 
