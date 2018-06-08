@@ -46,7 +46,6 @@ class IndexController extends AbstractController implements LeftViewProvider
 
             $this->getServiceLocator()->get('Helper\FlashMessenger')
                 ->addWarningMessage('tasks.search.error.filter.needed');
-
         } else {
             //  if user specified then remove team from filters (ignore team) @see OLCS-13501
             if (!empty($filters['assignedToUser'])) {
