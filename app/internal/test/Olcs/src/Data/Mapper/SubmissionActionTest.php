@@ -1,4 +1,5 @@
 <?php
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -12,11 +13,11 @@ use Zend\Form\FormInterface;
 class SubmissionActionTest extends MockeryTestCase
 {
     /**
-    * @dataProvider mapFromResultDataProvider
-    *
-    * @param $inData
-    * @param $expected
-    */
+     * @dataProvider mapFromResultDataProvider
+     *
+     * @param $inData
+     * @param $expected
+     */
     public function testMapFromResult($inData, $expected)
     {
         $this->assertEquals($expected, Sut::mapFromResult($inData));
@@ -74,11 +75,11 @@ class SubmissionActionTest extends MockeryTestCase
     }
 
     /**
-    * @dataProvider mapFromFormDataProvider
-    *
-    * @param $inData
-    * @param $expected
-    */
+     * @dataProvider mapFromFormDataProvider
+     *
+     * @param $inData
+     * @param $expected
+     */
     public function testMapFromForm($inData, $expected)
     {
         $this->assertEquals($expected, Sut::mapFromForm($inData));

@@ -7,6 +7,7 @@ use Zend\Form\FormInterface;
 
 /**
  * Class Submission Mapper
+ *
  * @package Olcs\Data\Mapper
  */
 class Submission implements MapperInterface
@@ -15,6 +16,8 @@ class Submission implements MapperInterface
      * Should map data from a result array into an array suitable for a form
      *
      * @param array $data
+     *
+     * @return array $formData
      */
     public static function mapFromResult(array $data)
     {
@@ -36,6 +39,10 @@ class Submission implements MapperInterface
             ];
         }
 
+        if (isset($data['assignedDate']) && !empty($data['assignedDate'])) {
+            $formData['readOnlyFields'] = ['assignedDate'];
+        }
+
         return $formData;
     }
 
@@ -45,6 +52,7 @@ class Submission implements MapperInterface
      * 'fields' array in order to preset the type and sections values. These two fields are in fact one element.
      *
      * @param array $data
+     *
      * @return array
      */
     public static function mapFromForm(array $data)
@@ -63,7 +71,8 @@ class Submission implements MapperInterface
      * to the flash messenger
      *
      * @param FormInterface $form
-     * @param array $errors
+     * @param array         $errors
+     *
      * @return array
      */
     public static function mapFromErrors(FormInterface $form, array $errors)
