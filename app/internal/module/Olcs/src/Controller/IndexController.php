@@ -46,7 +46,6 @@ class IndexController extends AbstractController implements LeftViewProvider
 
             $this->getServiceLocator()->get('Helper\FlashMessenger')
                 ->addWarningMessage('tasks.search.error.filter.needed');
-
         } else {
             //  if user specified then remove team from filters (ignore team) @see OLCS-13501
             if (!empty($filters['assignedToUser'])) {
@@ -116,6 +115,18 @@ class IndexController extends AbstractController implements LeftViewProvider
             case 'users-internal':
                 /** @var \Olcs\Service\Data\UserListInternal $srv */
                 $srv = $sm->get(\Olcs\Service\Data\UserListInternal::class);
+                $srv->setTeamId($value);
+
+                $results =
+                    [
+                        '' => ((int)$value > 0 ? 'Unassigned' : 'Please select'),
+                    ] +
+                    $srv->fetchListOptions(null);
+
+                break;
+            case 'users-internal-exclude-limited-read-only':
+                /** @var \Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers $srv */
+                $srv = $sm->get(\Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers::class);
                 $srv->setTeamId($value);
 
                 $results =
