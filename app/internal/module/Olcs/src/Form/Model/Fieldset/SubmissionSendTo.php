@@ -32,7 +32,7 @@ class SubmissionSendTo extends Base
     public $senderUser = null;
 
     /**
-     * @Form\Attributes({"value":"","class":"visually-hidden"})
+     * @Form\Attributes({"value":"","class":"visually-hidden", "readonly":"true"})
      * @Form\Options({
      *     "label":"Information Complete Date",
      *     "create_empty_option": false,
