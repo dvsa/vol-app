@@ -98,7 +98,7 @@ class ProcessSubmissionController extends AbstractInternalController implements 
     {
         if (isset($initialData['readOnlyFields']) && !empty($initialData['readOnlyFields'])) {
             foreach ($initialData['readOnlyFields'] as $field) {
-                if($form->has('fields >'.$field)){
+                if ($form->has('fields >' . $field)) {
                     $dateSelect = $form->get('fields')->get($field);
                     $dateSelect->getDayElement()->setAttribute('readonly', 'readonly');
                     $dateSelect->getMonthElement()->setAttribute('readonly', 'readonly');

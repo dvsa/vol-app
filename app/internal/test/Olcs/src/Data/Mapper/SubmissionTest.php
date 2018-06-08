@@ -13,16 +13,17 @@ class SubmissionTest extends MockeryTestCase
      * @param $expected
      * @param $inData
      */
-    public function testAssignedDateReadOnly($expected, $inData)
+    public function testReadOnlyFields($expected, $inData)
     {
         $actual = Sut::mapFromResult($inData);
+        var_dump($actual);
         $this->assertEquals($expected, $actual);
     }
 
     public function assignedDateDataProvider()
     {
         return [
-            [['fields' => ['assignedDate' => 'TEST'], 'readOnlyFields' => ['assignedDate']], ['assignedDate' => 'TEST']]
+            [['fields' => ['assignedDate' => 'TEST'], 'readOnlyFields' => ['assignedDate','informationCompleteDate']], ['assignedDate' => 'TEST','informationCompleteDate' =>'TEST']]
         ];
     }
 }

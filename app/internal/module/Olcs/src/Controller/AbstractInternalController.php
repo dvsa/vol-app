@@ -677,8 +677,10 @@ abstract class AbstractInternalController extends AbstractActionController
 
                 $formData = $mapperClass::mapFromResult($result);
 
-                $methodName =preg_replace_callback("#\-([A-z])#", function($letter) use ($action) { return strtoupper($letter[1]); },$action);
-                if (method_exists($this, 'alterFormFor' .$methodName )) {
+                $methodName = preg_replace_callback("#\-([A-z])#", function ($letter) use ($action) {
+                    return strtoupper($letter[1]);
+                }, $action);
+                if (method_exists($this, 'alterFormFor' . $methodName)) {
                     $form = $this->{'alterFormFor' . $methodName}($form, $formData);
                 }
 
