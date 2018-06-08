@@ -41,8 +41,9 @@ class Submission implements MapperInterface
 
         if (isset($data['assignedDate']) && !empty($data['assignedDate'])) {
             $formData['readOnlyFields'] = ['assignedDate'];
+        } elseif (empty($formData['fields']['assignedDate'])) {
+            $formData['fields']['assignedDate'] = new \DateTime('now');
         }
-
         return $formData;
     }
 
