@@ -104,7 +104,6 @@ class ProcessSubmissionController extends AbstractInternalController implements 
                     $dateSelect->getMonthElement()->setAttribute('readonly', 'readonly');
                     $dateSelect->getYearElement()->setAttribute('readonly', 'readonly');
                 }
-
             }
         }
         return $form;

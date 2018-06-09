@@ -3,6 +3,7 @@
 namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
+use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTimeFrontEnd;
 use Zend\Form\FormInterface;
 
 /**
@@ -39,7 +40,7 @@ class Submission implements MapperInterface
             ];
         }
 
-        $defaultSetFields = ['informationCompleteDate', 'assignedDate'];
+        $defaultSetFields = ['assignedDate', 'informationCompleteDate'];
         $readOnlyFields = [];
         foreach ($defaultSetFields as $field) {
             if (isset($data[$field]) && !empty($data[$field])) {
