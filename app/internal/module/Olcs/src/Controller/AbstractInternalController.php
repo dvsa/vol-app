@@ -442,11 +442,9 @@ abstract class AbstractInternalController extends AbstractActionController
                 $tableViewPlaceholderName,
                 $table->render()
             );
-
         } elseif ($response->isClientError() || $response->isServerError()) {
             $this->handleErrors($response->getResult());
         }
-
         if ($filterForm !== '') {
             /** @var \Common\Service\Helper\FormHelperService $formHelper */
             $formHelper = $this->getServiceLocator()->get('Helper\Form');
@@ -496,7 +494,6 @@ abstract class AbstractInternalController extends AbstractActionController
                 if (isset($data)) {
                     $this->placeholder()->setPlaceholder($detailsViewPlaceHolderName, $data);
                 }
-
             } elseif ($response->isClientError() || $response->isServerError()) {
                 $this->handleErrors($response->getResult());
             }
@@ -583,9 +580,7 @@ abstract class AbstractInternalController extends AbstractActionController
                 if (isset($formActions['addAnother'])) {
                     $this->redirectRefresh();
                 }
-
                 return $this->redirectTo($response->getResult());
-
             } elseif ($response->isClientError()) {
                 $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
 
@@ -639,7 +634,6 @@ abstract class AbstractInternalController extends AbstractActionController
         if ($request->isPost()) {
             $dataFromPost = (array)$this->params()->fromPost();
             $form->setData($dataFromPost);
-
             if (method_exists($this, 'alterFormFor' . $action)) {
                 $form = $this->{'alterFormFor' . $action}($form, $dataFromPost);
             }
@@ -655,18 +649,15 @@ abstract class AbstractInternalController extends AbstractActionController
             if ($response->isOk()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
                 return $this->redirectTo($response->getResult());
-
             } elseif ($response->isClientError()) {
                 $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
 
                 foreach ($flashErrors as $error) {
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
                 }
-
             } elseif ($response->isServerError()) {
                 $this->handleErrors($response->getResult());
             }
-
         } elseif (!$request->isPost()) {
             $paramProvider->setParams($this->plugin('params'));
             $itemParams = $paramProvider->provideParameters();
@@ -677,12 +668,14 @@ abstract class AbstractInternalController extends AbstractActionController
 
                 $formData = $mapperClass::mapFromResult($result);
 
-                if (method_exists($this, 'alterFormFor' . $action)) {
-                    $form = $this->{'alterFormFor' . $action}($form, $formData);
+                $methodName = preg_replace_callback("#\-([A-z])#", function ($letter) use ($action) {
+                    return strtoupper($letter[1]);
+                }, $action);
+                if (method_exists($this, 'alterFormFor' . $methodName)) {
+                    $form = $this->{'alterFormFor' . $methodName}($form, $formData);
                 }
 
                 $form->setData($formData);
-
             } elseif ($response->isClientError() || $response->isServerError()) {
                 $this->handleErrors($response->getResult());
             }
@@ -726,7 +719,6 @@ abstract class AbstractInternalController extends AbstractActionController
 
         if ($response->isOk()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
-
         } elseif ($response->isClientError() || $response->isServerError()) {
             $this->handleErrors($response->getResult());
         }
@@ -794,11 +786,9 @@ abstract class AbstractInternalController extends AbstractActionController
 
         if ($response->isOk()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
-
         } elseif ($response->isClientError() || $response->isServerError()) {
             $this->handleErrors($response->getResult());
         }
-
         return $this->redirectTo($response->getResult());
     }
 
@@ -954,7 +944,6 @@ abstract class AbstractInternalController extends AbstractActionController
         $scripts = $this->getScriptFiles($action);
 
         $this->script()->appendScriptFiles($scripts);
-
     }
 
     /**
