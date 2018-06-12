@@ -8,7 +8,6 @@ use Permits\Form\EligibilityForm;
 use Permits\Form\ApplicationForm;
 use Permits\Form\TripsForm;
 use Permits\Form\SectorsForm;
-use Permits\Form\RestrictedCountriesForm;
 use Dvsa\Olcs\Transfer\Query\Permits\SectorsList as Sectors;
 use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries as Countries;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermits;
@@ -44,51 +43,15 @@ class PermitsController extends AbstractActionController
         return $view;
     }
 
-  public function tripsAction()
-  {
-    $form = new TripsForm();
-
-        return array('form' => $form);
-    }
-
-  public function sectorsAction()
-  {
-    $form = new SectorsForm();
-    $session = new Container(self::SESSION_NAMESPACE);
-
-
-        $data = $this->params()->fromPost();
-    if(array_key_exists('submit', $data))
-    {
-      //Save data to session
-      $session->tripsData = $data['numberOfTrips'];
-        }else{
-        }
-
-        /*
-        * Get Sectors List from Database
-        */
-        $response = $this->handleQuery(Sectors::create(array()));
-        $sectorList = $response->getResult();
-
-        //Save count to session for use in summary page (determining if all options were selected).
-        $session['totalSectorsCount'] = $sectorList['count'];
-
-
-    /*
-     * Make the Sectors List the value_options of the form
-     */
-    $options = $form->getDefaultSectorsFieldOptions();
-    $options['value_options'] = $this->transformListIntoValueOptions($sectorList);
-    $form->get('sectors')->setOptions($options);return array('form' => $form);
-    }
-
   public function restrictedCountriesAction()
   {
-    $form = new RestrictedCountriesForm();
-    $restrictedCountriesString = '';
+    //Create form from annotations
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('Permits\Form\RestrictedCountriesForm');
 
-    $data = $this->params()->fromPost();
+        $restrictedCountriesString = '';
+        $data = $this->params()->fromPost();
 
         if(array_key_exists('submit', $data))
     {
@@ -106,8 +69,8 @@ class PermitsController extends AbstractActionController
     /*
     * Make the restricted countries list the value_options of the form
     */
-    $options = $form->getDefaultRestrictedCountriesListFieldOptions();
     $restrictedCountryList = $this->transformListIntoValueOptions($restrictedCountryList, 'description');
+        $options = array();
     $options['value_options'] = $restrictedCountryList;
     $form->get('restrictedCountriesList')->setOptions($options);
 

@@ -1,93 +1,58 @@
 <?php
 namespace Permits\Form;
 
-use Zend\Form\Form;
-use Zend\InputFilter\InputFilter;
+use Zend\Form\Annotation as Form;
 
-class RestrictedCountriesForm extends Form
+/**
+ * @Form\Name("restrictedCountries")
+ * @Form\Attributes({"method":"post"})
+ * @Form\Type("Permits\Form\Form")
+ */
+class RestrictedCountriesForm
 {
-    private $inputFilter;
 
-    public function __construct($name = null)
-    {
-        parent::__construct();
+    /**
+     *@Form\Name("restrictedCountries")
+     * @Form\Attributes({
+     *   "class" : "input--trips",
+     * })
+     * @Form\Options({
+     *     "label": "",
+     *     "label_attributes":{
+     *          "class" : "form-control form-control--radio restrictedRadio"
+     *     },
+     *     "value_options":{
+     *          "1" : "Yes",
+     *          "0" : "No"
+     *     }
+     * })
+     * @Form\Type("Radio")
+     */
+    public $restrictedCountries = null;
 
-        $this->inputFilter = null;
+    /**
+     * @Form\Name("restrictedCountriesList")
+     * @Form\Options({
+     *     "label": "",
+     *     "label_attributes":{
+     *          "class" : "form-control form-control--checkbox"
+     *     }
+     * })
+     * @Form\Type("MultiCheckBox")
+     */
+    public $restrictedCountriesList = null;
 
-        $this->add(array(
-            'name' => 'id',
-            'type' => 'Hidden',
-        ));
+    /**
+     * @Form\Name("submit")
+     * @Form\Attributes({
+     *     "class":"action--primary large",
+     *     "id":"submitbutton",
+     *     "value":"Save and continue",
+     * })
+     * @Form\Type("Submit")
+     */
+    public $submitButton = null;
 
-        $this->add(array(
-            'type' => 'Radio',
-            'name' => 'restrictedCountries',
-            'options' => array(
-                'label' => '',
-                'label_attributes' => array(
-                    'class' => 'form-control form-control--radio restrictedRadio',
-                ),
-                'value_options' => array(
-                    '1' => 'Yes',
-                    '0' => 'No',
-                ),
-            ),
-        ));
 
-        $this->add(array(
-            'type' => 'MultiCheckBox',
-            'name' => 'restrictedCountriesList',
-            'options' => $this->getDefaultRestrictedCountriesListFieldOptions(),
-        ));
 
-        $this->add(array(
-            'name' => 'submit',
-            'type' => 'Submit',
-            'attributes' => array(
-                'value' => 'Save and continue',
-                'id' => 'submitbutton',
-                'class' => 'action--primary large',
-            ),
-        ));
-    }
-
-    public function getDefaultRestrictedCountriesListFieldOptions()
-    {
-        return array(
-            'label' => '',
-            'label_attributes' => array(
-                'class' => 'form-control form-control--checkbox',
-            ),
-        );
-    }
-
-    public function getInputFilter()
-    {
-        if($this->inputFilter == null)
-        {
-            $this->inputFilter = new InputFilter();
-
-            $this->inputFilter->add([
-                'name'     => 'restrictedCountries',
-                'required' => true,
-                'filters'  => [],
-                'validators' => [
-                    [
-                        'name' => 'Regex',
-                        'options' => [
-                            'pattern' => '/[1|0]/'
-                        ]
-                    ],
-                ]
-            ]);
-
-            $this->inputFilter->add([
-                'name'     => 'restrictedCountriesList',
-                'required' => false,
-                'filters'  => [],
-            ]);
-        }
-
-        return $this->inputFilter;
-    }
 }
