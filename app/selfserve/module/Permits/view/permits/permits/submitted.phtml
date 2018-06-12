@@ -1,8 +1,9 @@
 <?php
-$title = $this->translate('permits.application.submitted.title');
-$this->headTitle($title);
+    $title = $this->translate('permits.application.submitted.title');
+    $this->headTitle($title);
 ?>
-<div class="row">
+
+<div class="row ecmt">
     <div class="two-thirds">
 
         <?php echo sprintf($this->translate('markup-ecmt-application-submitted'),$this->escapeHtml($title),$refNumber); ?>

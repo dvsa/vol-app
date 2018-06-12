@@ -3,27 +3,7 @@
     $this->headTitle($title);
 ?>
 
-<head>
-    <style>
-        #restricted-countries-list{
-            display: none;
-        }
-        .restrictedRadio {
-            margin-bottom: 0.5em;
-        }
-        .restrictedRadio:first-of-type.selected ~ #restricted-countries-list {
-            display: block;
-        }
-        .inline .block-label {
-            clear: none;
-            float: left;
-            margin: 10px 1em 0.5em 0;
-        }
-
-    </style>
-</head>
-
-<div class="row">
+<div class="row ecmt">
     <div class="three-quarters">
         <div class="page-header">
             <p><a href="/permits" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
