@@ -78,7 +78,7 @@ class SubmissionSendTo extends Base
      *                  "options": {
      *                      "has_time": false,
      *                      "compare_to":"informationCompleteDate",
-     *                      "operator":"lte",
+     *                      "operator":"gte",
      *                      "compare_to_label":"Information Complete Date"
      *                  }
      *              }
