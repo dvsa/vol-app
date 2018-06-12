@@ -83,29 +83,4 @@ class ProcessSubmissionController extends AbstractInternalController implements 
 
         return $this->editAction();
     }
-
-    protected function alterFormForAssign($form, $initialData)
-    {
-        return $this->alterFormForDefaultDate($form, $initialData);
-    }
-
-    protected function alterFormForInformationComplete($form, $initialData)
-    {
-        return $this->alterFormForDefaultDate($form, $initialData);
-    }
-
-    protected function alterFormForDefaultDate($form, $initialData)
-    {
-        if (isset($initialData['readOnlyFields']) && !empty($initialData['readOnlyFields'])) {
-            foreach ($initialData['readOnlyFields'] as $field) {
-                if ($form->has('fields >' . $field)) {
-                    $dateSelect = $form->get('fields')->get($field);
-                    $dateSelect->getDayElement()->setAttribute('readonly', 'readonly');
-                    $dateSelect->getMonthElement()->setAttribute('readonly', 'readonly');
-                    $dateSelect->getYearElement()->setAttribute('readonly', 'readonly');
-                }
-            }
-        }
-        return $form;
-    }
 }
