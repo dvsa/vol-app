@@ -14,6 +14,11 @@
         .restrictedRadio:first-of-type.selected ~ #restricted-countries-list {
             display: block;
         }
+        .inline .block-label {
+            clear: none;
+            float: left;
+            margin: 10px 1em 0.5em 0;
+        }
 
     </style>
 </head>
@@ -21,24 +26,11 @@
 <div class="row">
     <div class="three-quarters">
         <div class="page-header">
-            <p><a href="/permits/sectors" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
+            <p><a href="/permits" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
             <div class="page-header__wrapper">
-                <h3 class="page-header__subtitle">
-                    <?php echo sprintf($this->translate('application.steps'), 3, 3); ?>
-                </h3>
-                <h1 class="js-title">
-                    <?php echo $this->escapeHtml($title); ?>
-                </h1>
-                <h2 class="guidance">
-                    <p>
-                        <?php
-                            //Print out title using dynamic list of countries
-                            //$restrictedCountriesString is the list of countries, replace placeholder with 'and'
-                            $template = $this->translate('permits.page.message.restricted-countries');
-                            echo sprintf($template, str_replace('%s', 'and', $restrictedCountriesString));
-                        ?>
-                    </p>
-                </h2>
+<!--                <h1 class="js-title">-->
+<!--                    --><?php //echo $this->escapeHtml($title); ?>
+<!--                </h1>-->
             </div>
         </div>
 
@@ -50,7 +42,7 @@
         ?>
 
         <div class="field">
-            <fieldset id="restricted-countries" data-group="restricted-countries">
+            <fieldset id="restricted-countries" class="inline" data-group="restricted-countries">
                 <legend>
                     <?php
                         //Print out Question Title using dynamic list of countries
@@ -58,25 +50,29 @@
                         echo sprintf($template, str_replace('%s', 'or', $restrictedCountriesString));
                     ?>
                 </legend>
+
+                <?php echo $this->translate('markup-ecmt-restricted-countries'); ?>
+
                 <?php
                     $element = $form->get('restrictedCountries');
                     $options = $element->getOptions();
                     $valueOptions = $options['value_options'];
                 ?>
-                <label class="<?php echo $options['label_attributes']['class'];?> ">
+
+                <label class="block-label <?php echo $options['label_attributes']['class'];?> ">
                     <input type="radio" name="<?php echo $element->getName();?>" value="1">
                     <?php echo $valueOptions['1'] ?>
+                </label>
+
+                <label class="block-label <?php echo $options['label_attributes']['class'];?> ">
+                    <input type="radio" name="<?php echo $element->getName();?>" value="0">
+                    <?php echo $valueOptions['0'] ?>
                 </label>
 
                 <fieldset id="restricted-countries-list" data-group="restricted-countries-list" class="guidance">
                     <p class="hint"><?php echo $this->escapeHtml($this->translate('permits.application.ecmt.select')); ?></p>
                     <?php echo $this->formRow($form->get('restrictedCountriesList')); ?>
                 </fieldset>
-
-                <label class="<?php echo $options['label_attributes']['class'];?> ">
-                    <input type="radio" name="<?php echo $element->getName();?>" value="0">
-                    <?php echo $valueOptions['0'] ?>
-                </label>
             </fieldset>
 
             <fieldset class="actions-container new-application--wrapper">

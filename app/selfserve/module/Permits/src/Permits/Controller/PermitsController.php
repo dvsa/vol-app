@@ -131,6 +131,43 @@ class PermitsController extends AbstractActionController
         return array('form' => $form, 'restrictedCountriesString' => $restrictedCountriesString);
     }
 
+    public function tripsAction()
+    {
+        $form = new TripsForm();
+        return array('form' => $form);
+    }
+
+    public function sectorsAction()
+    {
+        $form = new SectorsForm();
+        $session = new Container(self::SESSION_NAMESPACE);
+        $data = $this->params()->fromPost();
+
+        if(array_key_exists('submit', $data))
+        {
+            //Save data to session
+            $session->tripsData = $data['numberOfTrips'];
+        }else{
+
+        }
+        /*
+        * Get Sectors List from Database
+        */
+        $response = $this->handleQuery(Sectors::create(array()));
+        $sectorList = $response->getResult();
+
+        //Save count to session for use in summary page (determining if all options were selected).
+        $session['totalSectorsCount'] = $sectorList['count'];
+
+        /*
+        * Make the Sectors List the value_options of the form
+        */
+        $options = $form->getDefaultSectorsFieldOptions();
+        $options['value_options'] = $this->transformListIntoValueOptions($sectorList);
+        $form->get('sectors')->setOptions($options);
+        return array('form' => $form);
+    }
+
     public function summaryAction()
     {
         $session = new Container(self::SESSION_NAMESPACE);
