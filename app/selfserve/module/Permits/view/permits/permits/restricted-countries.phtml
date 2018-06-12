@@ -39,6 +39,10 @@
             $form->prepare();
             echo $this->form()->openTag($form);
             echo $this->formHidden($form->get('id'));
+
+            $element = $form->get('restrictedCountries');
+            $options = $element->getOptions();
+            $valueOptions = $options['value_options'];
         ?>
 
         <div class="field">
@@ -53,19 +57,13 @@
 
                 <?php echo $this->translate('markup-ecmt-restricted-countries'); ?>
 
-                <?php
-                    $element = $form->get('restrictedCountries');
-                    $options = $element->getOptions();
-                    $valueOptions = $options['value_options'];
-                ?>
-
-                <label class="block-label <?php echo $options['label_attributes']['class'];?> ">
-                    <input type="radio" name="<?php echo $element->getName();?>" value="1">
+                <label for="yes" class="block-label <?php echo $options['label_attributes']['class'];?> ">
+                    <input id="yes" type="radio" name="<?php echo $element->getName();?>" value="1">
                     <?php echo $valueOptions['1'] ?>
                 </label>
 
-                <label class="block-label <?php echo $options['label_attributes']['class'];?> ">
-                    <input type="radio" name="<?php echo $element->getName();?>" value="0">
+                <label for="no" class="block-label <?php echo $options['label_attributes']['class'];?> ">
+                    <input id="no" type="radio" name="<?php echo $element->getName();?>" value="0">
                     <?php echo $valueOptions['0'] ?>
                 </label>
 
