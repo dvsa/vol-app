@@ -1,0 +1,63 @@
+<?php
+    $title = $this->translate('permits.page.title.cabotage');
+    $this->headTitle($title);
+?>
+
+<div class="row ecmt">
+    <div class="three-quarters">
+        <div class="page-header">
+            <p>
+                <a href="/permits/euro6-emissions" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a>
+            </p>
+        </div>
+
+        <?php
+            $form->setAttribute('action', $this->url('permits', array('action' => 'declaration')));
+            $form->prepare();
+            echo $this->form()->openTag($form);
+            echo $this->formHidden($form->get('id'));
+
+            $element = $form->get('willCabotage');
+            $options = $element->getOptions();
+            $valueOptions = $options['value_options'];
+        ?>
+
+        <div class="field">
+            <fieldset id="cabotage" class="inline" data-group="cabotage">
+                <legend>
+                    <div class="page-header__wrapper">
+                        <h1 class="heading-medium">
+                            <?php
+                                echo $this->translate('permits.application.cabotage.question');
+                            ?>
+                        </h1>
+                    </div>
+                </legend>
+
+                <label for="cabotage-yes" class="block-label <?php echo $options['label_attributes']['class'];?> ">
+                    <input id="cabotage-yes" type="radio" name="<?php echo $element->getName();?>" value="1">
+                    <?php echo $valueOptions['1'] ?>
+                </label>
+
+                <label for="cabotage-no" class="block-label <?php echo $options['label_attributes']['class'];?> ">
+                    <input id="cabotage-no" type="radio" name="<?php echo $element->getName();?>" value="0">
+                    <?php echo $valueOptions['0'] ?>
+                </label>
+
+                <div id="cabotage-hint" data-group="cabotage-hint" class="guidance">
+                    <p class="hint">
+                        <?php echo $this->translate('permits.application.cabotage.hint'); ?>
+                    </p>
+                </div>
+
+            </fieldset>
+
+            <fieldset class="actions-container new-application--wrapper">
+                <p><?php echo $this->formSubmit($form->get('submit'));  ?></p>
+                <p><a href="/permits"> <?php echo $this->translate('permits.button.save-return-to-permits'); ?> </a></p>
+            </fieldset>
+        </div>
+
+        <?php echo $this->form()->closeTag(); ?>
+    </div>
+</div>

@@ -2,6 +2,7 @@
 
 namespace Permits\Controller;
 use Permits\Form\Euro6EmissionsForm;
+use Permits\Form\CabotageForm;
 use Permits\Form\PermitApplicationForm;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -101,6 +102,11 @@ class PermitsController extends AbstractActionController
         return array('form' => $form);
     }
 
+    public function cabotageAction()
+    {
+        $form = new CabotageForm();
+        return array('form' => $form);
+    }
 
     public function tripsAction()
     {
