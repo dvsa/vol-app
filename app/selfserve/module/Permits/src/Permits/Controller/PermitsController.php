@@ -58,9 +58,13 @@ class PermitsController extends AbstractActionController
         if(array_key_exists('submit', $data))
     {
       //Save data to session
-      $session = new Container(self::SESSION_NAMESPACE);
-      $session->sectorsData = $data['sectors'];
-    }
+      //$session = new Container(self::SESSION_NAMESPACE);
+           // $session->sectorsData = $data['sectors'];
+            $form->setData($data);
+            if($form->isValid()){
+
+            }
+        }
 
     /*
     * Get Sectors List from Database
