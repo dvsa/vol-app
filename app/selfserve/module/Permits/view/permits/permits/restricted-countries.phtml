@@ -25,11 +25,15 @@
         <div class="field">
             <fieldset id="restricted-countries" class="inline" data-group="restricted-countries">
                 <legend>
-                    <?php
-                        //Print out Question Title using dynamic list of countries
-                        $template = $this->escapeHtml($this->translate('permits.page.field.restricted-countries'));
-                        echo sprintf($template, str_replace('%s', 'or', $restrictedCountriesString));
-                    ?>
+                    <div class="page-header__wrapper">
+                        <h1 class="heading-medium">
+                            <?php
+                                //Print out Question Title using dynamic list of countries
+                                $template = $this->escapeHtml($this->translate('permits.page.field.restricted-countries'));
+                                echo sprintf($template, str_replace('%s', 'or', $restrictedCountriesString));
+                            ?>
+                        </h1>
+                    </div>
                 </legend>
 
                 <?php echo $this->translate('markup-ecmt-restricted-countries'); ?>
