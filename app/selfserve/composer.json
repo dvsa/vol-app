@@ -43,7 +43,8 @@
         },
         {
             "type": "vcs",
-            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/coding-standards.git"
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-coding-standards.git"
+
         }
     ],
     "require": {
