@@ -1,6 +1,7 @@
 <?php
 
 namespace Permits\Controller;
+use Permits\Form\Euro6EmissionsForm;
 use Permits\Form\PermitApplicationForm;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -93,6 +94,13 @@ class PermitsController extends AbstractActionController
 
         return array('form' => $form, 'restrictedCountriesString' => $restrictedCountriesString);
     }
+
+    public function euro6EmissionsAction()
+    {
+        $form = new Euro6EmissionsForm();
+        return array('form' => $form);
+    }
+
 
     public function tripsAction()
     {
