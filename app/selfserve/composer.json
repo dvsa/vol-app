@@ -40,6 +40,10 @@
         {
             "type": "vcs",
             "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-devtools.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/coding-standards.git"
         }
     ],
     "require": {
