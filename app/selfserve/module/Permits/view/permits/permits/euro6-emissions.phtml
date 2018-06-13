@@ -1,0 +1,63 @@
+<?php
+$title = $this->translate('permits.page.title.restricted-countries');
+$this->headTitle($title);
+?>
+
+<div class="row ecmt">
+    <div class="three-quarters">
+        <div class="page-header">
+            <p><a href="/permits/restricted-countries" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
+            <div class="page-header__wrapper">
+            </div>
+        </div>
+
+        <?php
+            $form->setAttribute('action', $this->url('permits', array('action' => 'cabotage')));
+            $form->prepare();
+            echo $this->form()->openTag($form);
+            echo $this->formHidden($form->get('id'));
+
+            $element = $form->get('meetsEuro6');
+            $options = $element->getOptions();
+            $valueOptions = $options['value_options'];
+        ?>
+
+        <div class="field">
+            <fieldset id="euro6" class="inline" data-group="euro6">
+                <legend>
+                    <div class="page-header__wrapper">
+                        <h1 class="heading-medium">
+                            <?php
+                                echo $this->translate('permits.application.euro6.question');
+                            ?>
+                        </h1>
+                    </div>
+                </legend>
+
+                <label for="yes" class="block-label <?php echo $options['label_attributes']['class'];?> ">
+                    <input id="yes" type="radio" name="<?php echo $element->getName();?>" value="1">
+                    <?php echo $valueOptions['1'] ?>
+                </label>
+
+                <label for="no" class="block-label <?php echo $options['label_attributes']['class'];?> ">
+                    <input id="no" type="radio" name="<?php echo $element->getName();?>" value="0">
+                    <?php echo $valueOptions['0'] ?>
+                </label>
+
+                <div id="euro6-hint" data-group="euro6-hint" class="guidance">
+                    <p class="hint">
+                        <?php echo $this->translate('permits.application.euro6.hint'); ?>
+                    </p>
+                </div>
+
+            </fieldset>
+
+            <fieldset class="actions-container new-application--wrapper">
+                <p><?php echo $this->formSubmit($form->get('submit'));  ?></p>
+                <p><a href="/permits"> <?php echo $this->translate('permits.button.save-return-to-permits'); ?> </a></p>
+            </fieldset>
+        </div>
+
+        <?php echo $this->form()->closeTag(); ?>
+    </div>
+</div>
