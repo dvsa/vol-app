@@ -3,20 +3,10 @@
     $this->headTitle($title);
 ?>
 
-<head>
-    <style>
-        td{
-            max-width: 8em;
-            vertical-align: middle;
-        }
-
-    </style>
-</head>
-
-<div class="row">
+<div class="row ecmt">
     <div class="three-quarters">
         <div class="page-header">
-            <p><a href="/permits/restricted-countries" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
+            <p><a href="/permits/cabotage" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
             <div class="page-header__wrapper">
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($title); ?>
@@ -84,10 +74,10 @@
                         </tr>
                     </tbody>
                 </table>
-           </div>
+            </div>
             <div class="actions-container new-application--wrapper">
-                <h3><?php echo $this->translate('permits.page.message.summary'); ?></h3>
                 <p><a href="/permits/declaration" class="action--primary large"><?php echo $this->translate('permits.button.accept-and-continue'); ?></a></p>
+                <p><a href="/permits"> <?php echo $this->translate('permits.button.save-return-to-permits'); ?> </a></p>
             </div>
         </div>
     </div>
