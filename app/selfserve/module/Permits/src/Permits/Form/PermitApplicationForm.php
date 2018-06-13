@@ -52,7 +52,7 @@ class PermitApplicationForm extends Form
             'name' => 'submit',
             'type' => 'Submit',
             'attributes' => array(
-                'value' => 'Submit and Pay',
+                'value' => 'Accept and continue',
                 'id' => 'submitbutton',
                 'class' => 'action--primary large',
             ),
