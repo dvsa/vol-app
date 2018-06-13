@@ -1,5 +1,5 @@
 <?php
-namespace Permits\Form;
+namespace Permits\Form\Model\Form;
 
 use Zend\Form\Annotation as Form;
 
@@ -12,7 +12,7 @@ class RestrictedCountriesForm
 {
 
     /**
-     *@Form\Name("restrictedCountries")
+     * @Form\Name("restrictedCountries")
      * @Form\Attributes({
      *   "class" : "input--trips",
      * })
@@ -49,10 +49,8 @@ class RestrictedCountriesForm
      *     "id":"submitbutton",
      *     "value":"Save and continue",
      * })
-     * @Form\Type("Submit")
+     * @Form\Type("Zend\Form\Element\Submit")
      */
     public $submitButton = null;
-
-
 
 }
