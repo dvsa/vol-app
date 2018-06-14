@@ -10,10 +10,9 @@ use Zend\Form\Annotation as Form;
  */
 class RestrictedCountriesForm
 {
-
     /**
      * @Form\Name("restrictedCountries")
-     * @Form\Validator({"name": "\Zend\Validator\NotEmpty"})
+     * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--trips",
      * })
@@ -33,6 +32,7 @@ class RestrictedCountriesForm
 
     /**
      * @Form\Name("restrictedCountriesList")
+     * @Form\Required(true)
      * @Form\Options({
      *     "label": "",
      *     "label_attributes":{
@@ -53,13 +53,5 @@ class RestrictedCountriesForm
      * @Form\Type("Zend\Form\Element\Submit")
      */
     public $submitButton = null;
-
-    /**
-     * @Form\Name("test")
-     * @Form\Type("Zend\Form\Element\Text")
-     * @Form\Validator({"name": "\Zend\Validator\NotEmpty"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
-     */
-    public $test = null;
 
 }

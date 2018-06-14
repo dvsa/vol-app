@@ -14,6 +14,9 @@
         <?php
             $form->setAttribute('action', $this->url('permits', array('action' => 'euro6-emissions')));
             $form->prepare();
+
+            echo $this->formErrors($form); //Print validation errors
+
             echo $this->form()->openTag($form);
             echo $this->formHidden($form->get('id'));
 
