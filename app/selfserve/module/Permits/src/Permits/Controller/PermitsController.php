@@ -113,7 +113,11 @@ class PermitsController extends AbstractActionController
 
     public function cabotageAction()
     {
-        $form = new CabotageForm();
+        //Create form from annotations
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('Permits\Form\Model\Form\CabotageForm', false, false);
+
         return array('form' => $form);
     }
 

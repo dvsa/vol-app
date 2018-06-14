@@ -15,7 +15,6 @@
             $form->setAttribute('action', $this->url('permits', array('action' => 'summary')));
             $form->prepare();
             echo $this->form()->openTag($form);
-            echo $this->formHidden($form->get('id'));
 
             $element = $form->get('willCabotage');
             $options = $element->getOptions();
