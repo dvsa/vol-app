@@ -19,7 +19,7 @@ class CabotageForm
      * @Form\Options({
      *     "label": "",
      *     "label_attributes":{
-     *          "class" : "form-control form-control--radio restrictedRadio"
+     *          "class" : "form-control form-control--radio cabotageRadio"
      *     },
      *     "value_options":{
      *          "1" : "Yes",

@@ -19,7 +19,7 @@ class Euro6EmissionsForm
          * @Form\Options({
          *     "label": "",
          *     "label_attributes":{
-         *          "class" : "form-control form-control--radio restrictedRadio"
+         *          "class" : "form-control form-control--radio euro6Radio"
          *     },
          *     "value_options":{
          *          "1" : "Yes",
