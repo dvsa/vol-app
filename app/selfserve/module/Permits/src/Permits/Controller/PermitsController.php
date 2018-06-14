@@ -102,7 +102,12 @@ class PermitsController extends AbstractActionController
 
     public function euro6EmissionsAction()
     {
-        $form = new Euro6EmissionsForm();
+        //Create form from annotations
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('Permits\Form\Model\Form\Euro6EmissionsForm', false, false);
+
+
         return array('form' => $form);
     }
 
