@@ -107,6 +107,21 @@ class PermitsController extends AbstractActionController
             ->get('Helper\Form')
             ->createForm('Permits\Form\Model\Form\Euro6EmissionsForm', false, false);
 
+        $data = $this->params()->fromPost();
+
+        if(array_key_exists('submit', $data))
+        {
+
+            //Save data to session
+            $session = new Container(self::SESSION_NAMESPACE);
+            $session->restrictedCountries = $data['restrictedCountries'];
+
+            if($session->restrictedCountries == 1) //if true
+            {
+                $session->restrictedCountriesList = $data['restrictedCountriesList'];
+            }
+
+        }
 
         return array('form' => $form);
     }
@@ -117,6 +132,16 @@ class PermitsController extends AbstractActionController
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
             ->createForm('Permits\Form\Model\Form\CabotageForm', false, false);
+
+        $data = $this->params()->fromPost();
+
+        if(array_key_exists('submit', $data))
+        {
+            //Save data to session
+            $session = new Container(self::SESSION_NAMESPACE);
+            $session->meetsEuro6 = $data['meetsEuro6'];
+        }
+
 
         return array('form' => $form);
     }
@@ -166,8 +191,7 @@ class PermitsController extends AbstractActionController
         if(array_key_exists('submit', $data))
         {
             //Save data to session
-            $session->restrictedCountriesData = $data['restrictedCountries'];
-            $session->restrictedCountriesListData = $data['restrictedCountriesList'];
+            $session->willCabotage = $data['willCabotage'];
         }
 
         /*
