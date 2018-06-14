@@ -24,32 +24,23 @@
                     <tbody>
                         <tr>
                             <td>
-                                <h4><?php echo $sessionData['tripsQuestion'] ?></h4>
-                            </td>
-                            <td>
-                                <?php echo $sessionData['trips'] ?>
-                            </td>
-                            <td>
-                                <a href="">
-                                    Change
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h4><?php echo $sessionData['sectorsQuestion'] ?></h4>
+                                <h4><?php echo $sessionData['countriesQuestion'] ?></h4>
                             </td>
                             <td>
                                 <?php
-                                    $count = 1;
-                                    $listSize = count($sessionData['sectors']);
-                                    foreach ($sessionData['sectors'] as $sector) {
-                                        if ($count == $listSize) {
-                                            echo $sector;
-                                        } else {
-                                            echo $sector . ', ';
+                                    if($sessionData['countries'] == 'No'){
+                                        echo $sessionData['countries'];
+                                    }else {
+                                        $count = 1;
+                                        $listSize = count($sessionData['countries']);
+                                        foreach ($sessionData['countries'] as $country) {
+                                            if ($count == $listSize) {
+                                                echo $country;
+                                            } else {
+                                                echo $country . ', ';
+                                            }
+                                            $count++;
                                         }
-                                        $count++;
                                     }
                                 ?>
                             </td>
@@ -61,10 +52,23 @@
                         </tr>
                         <tr>
                             <td>
-                                <h4><?php echo $sessionData['restrictedCountriesQuestion'] ?></h4>
+                                <h4><?php echo $sessionData['meetsEuro6Question'] ?></h4>
                             </td>
                             <td>
-                                <?php echo $sessionData['restrictedCountries'] ?>
+                                <?php echo $sessionData['meetsEuro6'] ?>
+                            </td>
+                            <td>
+                                <a href="">
+                                    Change
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4><?php echo $sessionData['cabotageQuestion'] ?></h4>
+                            </td>
+                            <td>
+                                <?php echo $sessionData['cabotage'] ?>
                             </td>
                             <td>
                                 <a href="">
