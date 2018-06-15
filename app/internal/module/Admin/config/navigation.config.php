@@ -233,6 +233,11 @@ return [
                     'route' => 'admin-dashboard/admin-system-parameters',
                 ],
                 [
+                    'id' => 'admin-dashboard/admin-feature-toggle',
+                    'label' => 'Feature toggle',
+                    'route' => 'admin-dashboard/admin-feature-toggle',
+                ],
+                [
                     'id' => 'admin-dashboard/admin-system-info-message',
                     'label' => 'System messages',
                     'route' => 'admin-dashboard/admin-system-info-message',
