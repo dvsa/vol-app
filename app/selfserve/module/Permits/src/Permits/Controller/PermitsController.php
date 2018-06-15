@@ -1,8 +1,7 @@
 <?php
 
 namespace Permits\Controller;
-use Permits\Form\Euro6EmissionsForm;
-use Permits\Form\CabotageForm;
+
 use Permits\Form\PermitApplicationForm;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -52,7 +51,6 @@ class PermitsController extends AbstractActionController
             ->get('Helper\Form')
             ->createForm('Permits\Form\Model\Form\RestrictedCountriesForm');
 
-        $restrictedCountriesString = '';
         $data = $this->params()->fromPost();
 
         if(array_key_exists('submit', $data))
@@ -67,7 +65,7 @@ class PermitsController extends AbstractActionController
         }
 
     /*
-    * Get Sectors List from Database
+    * Get Countries List from Database
     */
     $response = $this->handleQuery(Countries::create(array()));
     $restrictedCountryList = $response->getResult();
@@ -97,7 +95,7 @@ class PermitsController extends AbstractActionController
         $count++;
         }
 
-        return array('form' => $form, 'restrictedCountriesString' => $restrictedCountriesString);
+        return array('form' => $form);
     }
 
     public function euro6EmissionsAction()
@@ -111,7 +109,6 @@ class PermitsController extends AbstractActionController
 
         if(array_key_exists('submit', $data))
         {
-
             //Save data to session
             $session = new Container(self::SESSION_NAMESPACE);
             $session->restrictedCountries = $data['restrictedCountries'];
@@ -119,6 +116,8 @@ class PermitsController extends AbstractActionController
             if($session->restrictedCountries == 1) //if true
             {
                 $session->restrictedCountriesList = $data['restrictedCountriesList'];
+            }else{
+                $session->restrictedCountriesList = null;
             }
 
         }
@@ -141,7 +140,6 @@ class PermitsController extends AbstractActionController
             $session = new Container(self::SESSION_NAMESPACE);
             $session->meetsEuro6 = $data['meetsEuro6'];
         }
-
 
         return array('form' => $form);
     }
@@ -372,5 +370,15 @@ class PermitsController extends AbstractActionController
         }
 
         return $value_options;
+    }
+
+    private function setFormValueOptionsFromList($form, $formFieldName, $list, $displayFieldName = 'name' )
+    {
+        $restrictedCountryList = $this->transformListIntoValueOptions($list, $displayFieldName);
+        $options = array();
+        $options['value_options'] = $restrictedCountryList;
+        $form->get($formFieldName)->setOptions($options);
+
+        return $form;
     }
 }
