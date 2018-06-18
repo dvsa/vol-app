@@ -1,0 +1,28 @@
+<?php
+    $title = $this->translate('permits.page.title.fee');
+    $this->headTitle($title);
+?>
+
+<div class="row">
+    <div class="three-quarters">
+        <div class="page-header">
+            <p><a href="/permits/declaration" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
+            <div class="page-header__wrapper">
+                <h1 class="js-title">
+                    <?php
+                        echo $this->escapeHtml($title);
+                        echo $permitsNo; ?>
+                </h1>
+            </div>
+        </div>
+
+        <div class="field">
+
+            <div class="actions-container new-application--wrapper">
+                <?php echo $this->translate('permits.page.message.fee'); ?>
+                <p><a href="#" class="action--primary large"><?php echo $this->translate('submit-and-pay.button'); ?></a></p>
+                <p><a href="/permits"> <?php echo $this->translate('permits.button.save-return-to-permits'); ?> </a></p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -6,7 +6,7 @@ $this->headTitle($title);
      * HIDDEN FORM TO SAVE TO DATABASE
      */
 
-    $form->setAttribute('action', $this->url('permits', array('action' => 'payment')));
+    $form->setAttribute('action', $this->url('permits', array('action' => 'fee')));
 
     $form->prepare();
     echo $this->form()->openTag($form);

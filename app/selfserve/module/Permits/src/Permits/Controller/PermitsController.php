@@ -308,6 +308,37 @@ class PermitsController extends AbstractActionController
         return $view;
     }
 
+    public function feeAction()
+    {
+        $request = $this->getRequest();
+        $data = (array)$request->getPost();
+        $session = new Container(self::SESSION_NAMESPACE);
+
+        if(!empty($data)) {
+
+            $data['ecmtPermitsApplication'] = 1;
+            $data['applicationStatus'] = 1;
+            $data['paymentStatus'] = 1;
+            if($session->restrictedCountriesData == 1)
+            {
+                $data['countries'] = $this->extractIDFromSessionData($session->restrictedCountriesListData);
+            }
+            $command = CreateEcmtPermits::create($data);
+
+            $response = $this->handleCommand($command);
+            $insert = $response->getResult();
+
+            $session->permitsNo = $insert['id']['ecmtPermit'];
+
+            $this->redirect()->toRoute('permits',['action'=>'fee']);
+        }
+
+        $view = new ViewModel();
+        $view->setVariable('permitsNo', $session->permitsNo);
+
+        return $view;
+    }
+
     public function step3Action()
     {
         $inputFilter = null;
