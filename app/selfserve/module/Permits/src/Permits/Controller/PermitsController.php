@@ -288,9 +288,9 @@ class PermitsController extends AbstractActionController
             $data['ecmtPermitsApplication'] = 1;
             $data['applicationStatus'] = 1;
             $data['paymentStatus'] = 1;
-            if($session->restrictedCountriesData == 1)
+            if($session->restrictedCountries == 1)
             {
-                $data['countries'] = $this->extractIDFromSessionData($session->restrictedCountriesListData);
+                $data['countries'] = $this->extractIDFromSessionData($session->restrictedCountriesList);
             }
             $command = CreateEcmtPermits::create($data);
 

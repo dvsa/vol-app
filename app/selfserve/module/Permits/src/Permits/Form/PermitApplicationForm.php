@@ -46,6 +46,7 @@ class PermitApplicationForm extends Form
         $this->add(array(
             'type' => 'MultiCheckBox',
             'name' => 'restrictedCountriesList',
+
         ));
 
         $this->add(array(
