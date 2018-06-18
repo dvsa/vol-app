@@ -286,8 +286,8 @@ class PermitsController extends AbstractActionController
         if(!empty($data)) {
 
             $data['ecmtPermitsApplication'] = 1;
-            $data['applicationStatus'] = 1;
-            $data['paymentStatus'] = 1;
+            $data['status'] = 'lsts_consideration';
+            $data['paymentStatus'] = 'lfs_ot';
             if($session->restrictedCountries == 1)
             {
                 $data['countries'] = $this->extractIDFromSessionData($session->restrictedCountriesList);
@@ -317,8 +317,8 @@ class PermitsController extends AbstractActionController
         if(!empty($data)) {
 
             $data['ecmtPermitsApplication'] = 1;
-            $data['applicationStatus'] = 1;
-            $data['paymentStatus'] = 1;
+            $data['status'] = 'lsts_consideration';
+            $data['paymentStatus'] = 'lfs_ot';
             if($session->restrictedCountriesData == 1)
             {
                 $data['countries'] = $this->extractIDFromSessionData($session->restrictedCountriesListData);
