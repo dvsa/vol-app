@@ -282,29 +282,7 @@ class PermitsController extends AbstractActionController
         $data = (array)$request->getPost();
         $session = new Container(self::SESSION_NAMESPACE);
 
-
-        if(!empty($data)) {
-
-            $data['ecmtPermitsApplication'] = 1;
-            $data['status'] = 'lsts_consideration';
-            $data['paymentStatus'] = 'lfs_ot';
-            if($session->restrictedCountries == 1)
-            {
-                $data['countries'] = $this->extractIDFromSessionData($session->restrictedCountriesList);
-            }
-            $command = CreateEcmtPermits::create($data);
-
-            $response = $this->handleCommand($command);
-            $insert = $response->getResult();
-
-            $session->permitsNo = $insert['id']['ecmtPermit'];
-
-            $this->redirect()->toRoute('permits',['action'=>'payment']);
-        }
-
         $view = new ViewModel();
-        $view->setVariable('permitsNo', $session->permitsNo);
-
         return $view;
     }
 
