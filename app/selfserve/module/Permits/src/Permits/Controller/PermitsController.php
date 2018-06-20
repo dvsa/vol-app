@@ -44,17 +44,21 @@ class PermitsController extends AbstractActionController
         return $view;
     }
 
-  public function restrictedCountriesAction()
-  {
-    //Create form from annotations
+    public function restrictedCountriesAction()
+    {
+
+        //Create form from annotations
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
             ->createForm('Permits\Form\Model\Form\RestrictedCountriesForm');
 
         $data = $this->params()->fromPost();
 
+
+
         if(array_key_exists('submit', $data))
     {
+
       //Save data to session
       //$session = new Container(self::SESSION_NAMESPACE);
            // $session->sectorsData = $data['sectors'];
@@ -118,6 +122,17 @@ class PermitsController extends AbstractActionController
                 $session->restrictedCountriesList = $data['restrictedCountriesList'];
             }else{
                 $session->restrictedCountriesList = null;
+            }
+
+            //create application in db
+            if(empty($session->applicationId))
+            {
+                $applicationData['status'] = 'permit_awaiting';
+                $applicationData['paymentStatus'] = 'lfs_ot';
+                $command = CreateEcmtPermitApplication::create($applicationData);
+                $response = $this->handleCommand($command);
+                $insert = $response->getResult();
+                $session->applicationId = $insert['id']['ecmtPermitApplication'];
             }
 
         }
@@ -294,12 +309,12 @@ class PermitsController extends AbstractActionController
 
         if(!empty($data)) {
 
-            $data['ecmtPermitsApplication'] = 1;
-            $data['status'] = 'lsts_consideration';
+            $data['ecmtPermitsApplication'] = $session->applicationId;
+            $data['status'] = 'permit_awaiting';
             $data['paymentStatus'] = 'lfs_ot';
             if($session->restrictedCountriesData == 1)
             {
-                $data['countries'] = $this->extractIDFromSessionData($session->restrictedCountriesListData);
+                $data['countries'] = $this->extractIDFromSessionData($session->restrictedCountriesList);
             }
             $command = CreateEcmtPermits::create($data);
 
