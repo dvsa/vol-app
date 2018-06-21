@@ -320,12 +320,12 @@ class PermitsController extends AbstractActionController
 
             $response = $this->handleCommand($command);
             $insert = $response->getResult();
-
+//TODO undefined index id
             $session->permitsNo = $insert['id']['ecmtPermit'];
 
             $this->redirect()->toRoute('permits',['action'=>'fee']);
         }
-
+//TODO missing page title
         $view = new ViewModel();
         $view->setVariable('permitsNo', $session->permitsNo);
 
@@ -369,7 +369,7 @@ class PermitsController extends AbstractActionController
 
     private function extractIDFromSessionData($sessionData){
         $IDList = array();
-
+//TODO check the mess (invalid argument supplied for foreach)
         foreach ($sessionData as $entry){
             //Add everything before the separator to the list (ID is before separator)
             array_push($IDList, substr($entry, 0, strpos($entry, self::DEFAULT_SEPARATOR)));
