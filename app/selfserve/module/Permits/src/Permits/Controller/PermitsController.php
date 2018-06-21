@@ -306,13 +306,14 @@ class PermitsController extends AbstractActionController
         $request = $this->getRequest();
         $data = (array)$request->getPost();
         $session = new Container(self::SESSION_NAMESPACE);
-
         if(!empty($data)) {
 
             $data['ecmtPermitsApplication'] = $session->applicationId;
             $data['status'] = 'permit_awaiting';
             $data['paymentStatus'] = 'lfs_ot';
-            if($session->restrictedCountriesData == 1)
+            $data['intensity'] = '1';
+
+            if($session->restrictedCountries == 1)
             {
                 $data['countries'] = $this->extractIDFromSessionData($session->restrictedCountriesList);
             }
@@ -320,12 +321,12 @@ class PermitsController extends AbstractActionController
 
             $response = $this->handleCommand($command);
             $insert = $response->getResult();
-//TODO undefined index id
+            //TODO undefined index id
             $session->permitsNo = $insert['id']['ecmtPermit'];
 
             $this->redirect()->toRoute('permits',['action'=>'fee']);
         }
-//TODO missing page title
+        //TODO missing page title
         $view = new ViewModel();
         $view->setVariable('permitsNo', $session->permitsNo);
 
