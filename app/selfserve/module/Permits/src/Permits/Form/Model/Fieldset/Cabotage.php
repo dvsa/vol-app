@@ -11,7 +11,7 @@ class Cabotage
 {
 
     /**
-     * @Form\Name("willCabotage")
+     * @Form\Name("WillCabotage")
      * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--trips",

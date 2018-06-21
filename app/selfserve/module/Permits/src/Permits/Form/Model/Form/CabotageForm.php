@@ -11,10 +11,10 @@ use Zend\Form\Annotation as Form;
 class CabotageForm
 {
     /**
-     * @Form\Name("CabotageFields")
+     * @Form\Name("Fields")
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\Cabotage")
      */
-    public $meetsEuro6 = null;
+    public $fields = null;
 
     /**
      * @Form\Name("Submit")

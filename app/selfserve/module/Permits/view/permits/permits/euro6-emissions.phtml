@@ -3,15 +3,17 @@
     $this->headTitle($title);
 ?>
 
-<div class="row ecmt">
-    <div class="three-quarters">
+
+ <!-- <div class="row ecmt">
+   <div class="three-quarters">
         <div class="page-header">
             <p>
-                <a href="/permits/restricted-countries" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a>
+                <a href="/permits/restricted-countries" class="back-link"> <?php //echo $this->translate('permits.back-link'); ?> </a>
             </p>
-        </div>
+        </div> -->
 
         <?php
+            /*
             $form->setAttribute('action', $this->url('permits', array('action' => 'cabotage')));
             $form->prepare();
             echo $this->form()->openTag($form);
@@ -59,4 +61,37 @@
 
         <?php echo $this->form()->closeTag(); ?>
     </div>
+</div>*/?>
+
+<div class="page-header">
+    <p>
+        <a href="/permits/restricted-countries" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a>
+    </p>
 </div>
+<fieldset id="euro6" class="inline" data-group="euro6">
+    <legend>
+        <div class="page-header__wrapper">
+            <h1 class="heading-medium">
+                <?php
+                    echo $this->translate('permits.application.euro6.question');
+                ?>
+            </h1>
+        </div>
+    </legend>
+
+    <div class="row">
+        <div class="dashboard two-thirds js-body">
+            <?php
+                echo $this->flashMessengerAll();
+                echo $this->formErrors($form);
+                echo $this->form($form);
+            ?>
+
+            <div id="euro6-hint" data-group="euro6-hint" class="guidance">
+                <p class="hint">
+                    <?php echo $this->translate('permits.application.euro6.hint'); ?>
+                </p>
+            </div>
+        </div>
+    </div>
+</fieldset>

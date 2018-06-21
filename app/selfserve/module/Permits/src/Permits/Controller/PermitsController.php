@@ -110,9 +110,11 @@ class PermitsController extends AbstractActionController
             ->createForm('Permits\Form\Model\Form\Euro6EmissionsForm', false, false);
 
         $data = $this->params()->fromPost();
+        var_dump($data);
 
-        if(array_key_exists('submit', $data))
+        if(array_key_exists('submit', $data) && array_key_exists('restrictedCountries', $data))
         {
+            //TODO once validation is implemented for restrictedCountries form, Do this saving in the previous action
             //Save data to session
             $session = new Container(self::SESSION_NAMESPACE);
             $session->restrictedCountries = $data['restrictedCountries'];
@@ -134,7 +136,17 @@ class PermitsController extends AbstractActionController
                 $insert = $response->getResult();
                 $session->applicationId = $insert['id']['ecmtPermitApplication'];
             }
+        } else if(array_key_exists('Submit', $data))
+        {
+            //Validate
+            $form->setData($data);
+            if($form->isValid()){
+                //TODO save data here instead of in next action
+                $session = new Container(self::SESSION_NAMESPACE);
+                $session->meetsEuro = $data['Fields']['MeetsEuro6'];
 
+                $this->redirect()->toRoute('permits',['action'=>'cabotage']);
+            }
         }
 
         return array('form' => $form);
@@ -149,11 +161,17 @@ class PermitsController extends AbstractActionController
 
         $data = $this->params()->fromPost();
 
-        if(array_key_exists('submit', $data))
+        if(array_key_exists('Submit', $data))
         {
-            //Save data to session
-            $session = new Container(self::SESSION_NAMESPACE);
-            $session->meetsEuro6 = $data['meetsEuro6'];
+            //Validate
+            $form->setData($data);
+            if($form->isValid()){
+                //Save to session
+                $session = new Container(self::SESSION_NAMESPACE);
+                $session->willCabotage = $data['Fields']['WillCabotage'];
+
+                $this->redirect()->toRoute('permits',['action'=>'summary']);
+            }
         }
 
         return array('form' => $form);

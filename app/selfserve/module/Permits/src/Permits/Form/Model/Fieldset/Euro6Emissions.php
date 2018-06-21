@@ -27,9 +27,6 @@ class Euro6Emissions
      *     }
      * })
      * @Form\Type("Radio")
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $meetsEuro6 = null;
 
