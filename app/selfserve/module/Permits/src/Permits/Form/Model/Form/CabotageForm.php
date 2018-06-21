@@ -11,33 +11,14 @@ use Zend\Form\Annotation as Form;
 class CabotageForm
 {
     /**
-     * @Form\Name("willCabotage")
-     * @Form\Required(true)
-     * @Form\Attributes({
-     *   "class" : "input--trips",
-     * })
-     * @Form\Options({
-     *     "label": "",
-     *     "label_attributes":{
-     *          "class" : "form-control form-control--radio cabotageRadio"
-     *     },
-     *     "value_options":{
-     *          "1" : "Yes",
-     *          "0" : "No"
-     *     }
-     * })
-     * @Form\Type("Radio")
+     * @Form\Name("CabotageFields")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\Cabotage")
      */
     public $meetsEuro6 = null;
 
     /**
-     * @Form\Name("submit")
-     * @Form\Attributes({
-     *     "class":"action--primary large",
-     *     "id":"submitbutton",
-     *     "value":"Save and continue",
-     * })
-     * @Form\Type("Zend\Form\Element\Submit")
+     * @Form\Name("Submit")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\Submit")
      */
     public $submitButton = null;
 }

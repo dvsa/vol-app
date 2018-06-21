@@ -9,16 +9,16 @@ use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
  *
  * @group FormTests
  */
-class CabotageFormTest extends AbstractFormValidationTestCase
+class Euro6EmissionsFormTest extends AbstractFormValidationTestCase
 {
     /**
      * @var string The class name of the form being tested
      */
-    protected $formName = \Permits\Form\Model\Form\CabotageForm::class;
+    protected $formName = \Permits\Form\Model\Form\Euro6EmissionsForm::class;
 
-    public function testWillCabotage()
+    public function testMeetsEuro6()
     {
-        $element = ['CabotageFields', 'willCabotage'];
+        $element = ['Fields', 'MeetsEuro6'];
 
         $this->assertFormElementRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);

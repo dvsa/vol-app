@@ -11,33 +11,14 @@ use Zend\Form\Annotation as Form;
 class Euro6EmissionsForm
 {
         /**
-         * @Form\Name("meetsEuro6")
-         * @Form\Required(true)
-         * @Form\Attributes({
-         *   "class" : "input--trips",
-         * })
-         * @Form\Options({
-         *     "label": "",
-         *     "label_attributes":{
-         *          "class" : "form-control form-control--radio euro6Radio"
-         *     },
-         *     "value_options":{
-         *          "1" : "Yes",
-         *          "0" : "No"
-         *     }
-         * })
-         * @Form\Type("Radio")
+         * @Form\Name("Fields")
+         * @Form\ComposedObject("Permits\Form\Model\Fieldset\Euro6Emissions")
          */
-        public $meetsEuro6 = null;
+        public $fields = null;
 
         /**
-         * @Form\Name("submit")
-         * @Form\Attributes({
-         *     "class":"action--primary large",
-         *     "id":"submitbutton",
-         *     "value":"Save and continue",
-         * })
-         * @Form\Type("Zend\Form\Element\Submit")
+         * @Form\Name("Submit")
+         * @Form\ComposedObject("Permits\Form\Model\Fieldset\Submit")
          */
         public $submitButton = null;
 
