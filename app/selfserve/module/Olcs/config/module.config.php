@@ -1391,6 +1391,7 @@ return array(
                 'user-registration' => ['*'],
                 'user-forgot-username' => ['*'],
                 'cookies' => ['*'],
+                'privacy-notice' => ['*'],
                 'terms-and-conditions' => ['*'],
                 'not-found' => ['*'],
                 'server-error' => ['*'],
