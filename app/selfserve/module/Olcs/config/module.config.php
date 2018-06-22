@@ -62,11 +62,22 @@ $routes = array(
     'cookies' => array(
         'type' => 'segment',
         'options' =>  array(
-            'route' => '/privacy-and-cookies[/]',
+            'route' => '/cookies[/]',
             'defaults' => array(
                 'controller' => \Common\Controller\GuidesController::class,
                 'action' => 'index',
-                'guide' => 'privacy-and-cookies',
+                'guide' => 'cookies',
+            )
+        )
+    ),
+    'privacy-notice' => array(
+        'type' => 'segment',
+        'options' =>  array(
+            'route' => '/privacy-notice[/]',
+            'defaults' => array(
+                'controller' => \Common\Controller\GuidesController::class,
+                'action' => 'index',
+                'guide' => 'privacy-notice',
             )
         )
     ),
@@ -1380,6 +1391,7 @@ return array(
                 'user-registration' => ['*'],
                 'user-forgot-username' => ['*'],
                 'cookies' => ['*'],
+                'privacy-notice' => ['*'],
                 'terms-and-conditions' => ['*'],
                 'not-found' => ['*'],
                 'server-error' => ['*'],
