@@ -54,8 +54,6 @@ class PermitsController extends AbstractActionController
 
         $data = $this->params()->fromPost();
 
-
-
         if(array_key_exists('submit', $data))
     {
 
@@ -110,7 +108,6 @@ class PermitsController extends AbstractActionController
             ->createForm('Permits\Form\Model\Form\Euro6EmissionsForm', false, false);
 
         $data = $this->params()->fromPost();
-        var_dump($data);
 
         if(array_key_exists('submit', $data) && array_key_exists('restrictedCountries', $data))
         {

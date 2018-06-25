@@ -32,7 +32,7 @@ class RestrictedCountriesForm
 
     /**
      * @Form\Name("restrictedCountriesList")
-     * @Form\Required(true)
+     * @Form\Required(false)
      * @Form\Options({
      *     "label": "",
      *     "label_attributes":{
