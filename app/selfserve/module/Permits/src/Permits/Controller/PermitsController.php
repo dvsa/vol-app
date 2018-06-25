@@ -5,12 +5,7 @@ namespace Permits\Controller;
 use Permits\Form\PermitApplicationForm;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Permits\Form\EligibilityForm;
-use Permits\Form\ApplicationForm;
-use Permits\Form\TripsForm;
-use Permits\Form\SectorsForm;
-use Dvsa\Olcs\Transfer\Query\Permits\SectorsList as Sectors;
-use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries as Countries;
+use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermits;
 use Zend\Session\Container;
 use Zend\View\View; // We need this when using sessions
@@ -24,9 +19,6 @@ class PermitsController extends AbstractActionController
 
   protected $tableName = 'dashboard-permits';
 
-    public function __construct()
-    {
-    }
 
     public function indexAction()
     {
@@ -35,7 +27,7 @@ class PermitsController extends AbstractActionController
         $response = $this->handleQuery($query);
         $dashboardData = $response->getResult();
 
-        $theTable = $this->getServiceLocator()->get('Table')->prepareTable('dashboard-permits', $dashboardData['results']);
+        $theTable = $this->getServiceLocator()->get('Table')->prepareTable($this->tableName, $dashboardData['results']);
 
         $view = new ViewModel();
         $view->setVariable('permitsNo', $dashboardData['count']);
@@ -50,13 +42,12 @@ class PermitsController extends AbstractActionController
         //Create form from annotations
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
-            ->createForm('Permits\Form\Model\Form\RestrictedCountriesForm');
+            ->createForm('RestrictedCountriesForm');
 
         $data = $this->params()->fromPost();
 
         if(array_key_exists('submit', $data))
     {
-
       //Save data to session
       //$session = new Container(self::SESSION_NAMESPACE);
            // $session->sectorsData = $data['sectors'];
@@ -69,7 +60,7 @@ class PermitsController extends AbstractActionController
     /*
     * Get Countries List from Database
     */
-    $response = $this->handleQuery(Countries::create(array()));
+    $response = $this->handleQuery(ConstrainedCountries::create(array()));
     $restrictedCountryList = $response->getResult();
 
     /*
@@ -105,7 +96,7 @@ class PermitsController extends AbstractActionController
         //Create form from annotations
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
-            ->createForm('Permits\Form\Model\Form\Euro6EmissionsForm', false, false);
+            ->createForm('Euro6EmissionsForm', false, false);
 
         $data = $this->params()->fromPost();
 
@@ -154,7 +145,7 @@ class PermitsController extends AbstractActionController
         //Create form from annotations
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
-            ->createForm('Permits\Form\Model\Form\CabotageForm', false, false);
+            ->createForm('CabotageForm', false, false);
 
         $data = $this->params()->fromPost();
 
@@ -174,42 +165,6 @@ class PermitsController extends AbstractActionController
         return array('form' => $form);
     }
 
-    public function tripsAction()
-    {
-        $form = new TripsForm();
-        return array('form' => $form);
-    }
-
-    public function sectorsAction()
-    {
-        $form = new SectorsForm();
-        $session = new Container(self::SESSION_NAMESPACE);
-        $data = $this->params()->fromPost();
-
-        if(array_key_exists('submit', $data))
-        {
-            //Save data to session
-            $session->tripsData = $data['numberOfTrips'];
-        }else{
-
-        }
-        /*
-        * Get Sectors List from Database
-        */
-        $response = $this->handleQuery(Sectors::create(array()));
-        $sectorList = $response->getResult();
-
-        //Save count to session for use in summary page (determining if all options were selected).
-        $session['totalSectorsCount'] = $sectorList['count'];
-
-        /*
-        * Make the Sectors List the value_options of the form
-        */
-        $options = $form->getDefaultSectorsFieldOptions();
-        $options['value_options'] = $this->transformListIntoValueOptions($sectorList);
-        $form->get('sectors')->setOptions($options);
-        return array('form' => $form);
-    }
 
     public function summaryAction()
     {
@@ -306,16 +261,6 @@ class PermitsController extends AbstractActionController
         return new ViewModel();
     }
 
-    public function paymentAction()
-    {
-        $request = $this->getRequest();
-        $data = (array)$request->getPost();
-        $session = new Container(self::SESSION_NAMESPACE);
-
-        $view = new ViewModel();
-        return $view;
-    }
-
     public function feeAction()
     {
         $request = $this->getRequest();
@@ -379,9 +324,10 @@ class PermitsController extends AbstractActionController
         $session = new Container(self::SESSION_NAMESPACE);
         $view = new ViewModel();
         $view->setVariable('refNumber', $session->permitsNo);
-
+        $session->getManager()->getStorage()->clear(self::SESSION_NAMESPACE);
         return $view;
     }
+
 
     private function extractIDFromSessionData($sessionData){
         $IDList = array();
