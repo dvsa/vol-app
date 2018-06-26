@@ -29,14 +29,14 @@
         </exec>
 
         <exec executable="sed" dir="." failonerror="true">
-            <arg line="-i -e 's/satis.inf.mgt.mtpdvsa/devrepo.shd.ci.nonprod.dvsa.aws/g' composer.json"/>
+            <arg line="-i -e 's/satis.inf.mgt.mtpdvsa/devrepo.shd.ci.nonprod.dvsa.aws/g' composer-eux.json"/>
         </exec>
         <exec executable="sed" dir=".">
             <arg line="-i -e 's/satis.inf.mgt.mtpdvsa/devrepo.shd.ci.nonprod.dvsa.aws/g' composer.lock"/>
         </exec>
 
         <exec executable="sed" dir="." failonerror="true">
-            <arg line="-i -e 's/gitlab.inf.mgt.mtpdvsa/repo.shd.ci.nonprod.dvsa.aws/g' composer.json"/>
+            <arg line="-i -e 's/gitlab.inf.mgt.mtpdvsa/repo.shd.ci.nonprod.dvsa.aws/g' composer-eux.json"/>
         </exec>
         <exec executable="sed" dir=".">
             <arg line="-i -e 's/gitlab.inf.mgt.mtpdvsa/repo.shd.ci.nonprod.dvsa.aws/g' composer.lock"/>
@@ -84,6 +84,7 @@
             <arg value="--optimize-autoloader"/>
             <arg value="--no-interaction"/>
             <arg value="--no-progress"/>
+            <arg value="--filename=composer-eux.json"/>
         </exec>
     </target>
 
@@ -94,6 +95,7 @@
             <arg value="--optimize-autoloader"/>
             <arg value="--no-interaction"/>
             <arg value="--no-progress"/>
+            <arg value="--filename=composer-eux.json"/>
             <arg value="olcs/*"/>
         </exec>
     </target>
@@ -105,6 +107,7 @@
             <arg value="--optimize-autoloader"/>
             <arg value="--no-interaction"/>
             <arg value="--no-progress"/>
+            <arg value="--filename=composer-eux.json"/>
         </exec>
     </target>
 
@@ -116,6 +119,7 @@
             <arg value="--no-dev"/>
             <arg value="--no-interaction"/>
             <arg value="--no-progress"/>
+            <arg value="--filename=composer-eux.json"/>
         </exec>
     </target>
 
