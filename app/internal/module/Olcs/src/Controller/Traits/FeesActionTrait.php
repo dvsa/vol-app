@@ -2,7 +2,10 @@
 
 namespace Olcs\Controller\Traits;
 
+use Common\Rbac\IdentityProvider;
+use Common\Rbac\User;
 use Common\RefData;
+use Common\Service\Cqrs\Response;
 use Dvsa\Olcs\Transfer\Command\Fee\ApproveWaive as ApproveWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\CreateFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RecommendWaive as RecommendWaiveCmd;
@@ -18,6 +21,7 @@ use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList as FeeTypeListQry;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
+use Zend\Form\Form;
 
 /**
  * Fees action trait
@@ -546,8 +550,13 @@ trait FeesActionTrait
      */
     public function refundFeeAction()
     {
-        $feeId = $this->params('fee');
-        $form = $this->getRefundFeeForm();
+        /** @var IdentityProvider $authenticationService */
+        $authenticationService = $this->getServiceLocator()->get('Common\Rbac\IdentityProvider');
+        /** @var User $user */
+        $user = $authenticationService->getIdentity();
+        $isAdmin = $user->hasRole(RefData::ROLE_INTERNAL_ADMIN);
+
+        $form = $this->getRefundFeeForm($isAdmin);
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -555,6 +564,9 @@ trait FeesActionTrait
             $form->setData($data);
         }
         $hasProcessed = false;
+        if (!$this->isMiscellaneousFees() && $isAdmin) {
+            $this->alterRefundFeeFormForAdmin($form);
+        }
         if ($form->has('address')) {
             $hasProcessed =
                 $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
@@ -565,22 +577,16 @@ trait FeesActionTrait
                 return $this->redirectToFeeDetails();
             }
             if ($form->isValid()) {
-                $dtoData = [
-                    'id' => $feeId
-                ];
-                if ($this->isMiscellaneousFees()) {
-                    $details = $data['details'];
-                    $dtoData['customerReference'] = $details['customerReference'];
-                    $dtoData['customerName'] = $details['customerName'];
-                    $dtoData['address'] = $data['address'];
-                }
+                $dtoData = $this->refundFeeDtoData($data);
+                /** @var Response $response */
                 $response = $this->handleCommand(
                     RefundFeeCmd::create($dtoData)
                 );
                 if ($response->isOk()) {
                     $this->addSuccessMessage('fees.refund.success');
                 } else {
-                    $this->addErrorMessage('unknown-error');
+                    $responseContent = json_decode($response->getHttpResponse()->getContent());
+                    $this->addErrorMessage(implode('; ', $responseContent->messages));
                 }
                 return $this->redirectToFeeDetails(true);
             }
@@ -592,16 +598,52 @@ trait FeesActionTrait
         return $this->renderView($view, 'fees.refund.title');
     }
 
+
+    private function refundFeeDtoData($data)
+    {
+        $dtoData = [
+            'id' => $this->params('fee')
+        ];
+        if (array_key_exists('details', $data)) {
+            $details = $data['details'];
+            if (array_key_exists('customerReference', $details)) {
+                $dtoData['customerReference'] = $details['customerReference'];
+            }
+            if (array_key_exists('customerName', $details)) {
+                $dtoData['customerName'] = $details['customerName'];
+            }
+            if (array_key_exists('address', $data)) {
+                $dtoData['address'] = $data['address'];
+            }
+        }
+        return $dtoData;
+    }
+
+    private function alterRefundFeeFormForAdmin(Form $form): void
+    {
+        $fee = $this->getFee($this->params('fee'));
+        $form->get('details')->get('customerReference')->setValue($fee['customerReference']);
+        $form->getInputFilter()->get('details')->get('customerName')->setRequired(false);
+        $form->getInputFilter()->get('details')->get('customerReference')->setRequired(false);
+        $form->getInputFilter()->get('address')->get('addressLine1')->setRequired(false);
+        $form->getInputFilter()->get('address')->get('town')->setRequired(false);
+        $form->getInputFilter()->get('address')->get('town')->setRequired(false);
+        $form->getInputFilter()->get('address')->get('postcode')->setRequired(false);
+        $form->getInputFilter()->get('address')->get('countryCode')->setRequired(false);
+        $form->get('details')->remove('customerName');
+        $form->remove('address');
+    }
+
     /**
      * Get refund fee form
      *
      * @return Form
      */
-    private function getRefundFeeForm()
+    private function getRefundFeeForm($isAdmin)
     {
-        $formName = $this->isMiscellaneousFees() ? 'RefundFee' : 'GenericConfirmation';
+        $formName = $this->isMiscellaneousFees() || $isAdmin ? 'RefundFee' : 'GenericConfirmation';
         $form = $this->getServiceLocator()->get('Helper\Form')->createFormWithRequest($formName, $this->getRequest());
-        if (!$this->isMiscellaneousFees()) {
+        if ($formName === 'GenericConfirmation') {
             $form->setSubmitLabel('Refund');
         }
         $form->get('messages')->get('message')->setValue('fees.refund.confirm');
