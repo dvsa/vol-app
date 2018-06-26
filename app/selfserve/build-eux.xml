@@ -84,7 +84,6 @@
             <arg value="--optimize-autoloader"/>
             <arg value="--no-interaction"/>
             <arg value="--no-progress"/>
-            <arg value="--file=composer-eux.json"/>
         </exec>
     </target>
 
@@ -95,7 +94,6 @@
             <arg value="--optimize-autoloader"/>
             <arg value="--no-interaction"/>
             <arg value="--no-progress"/>
-            <arg value="--file=composer-eux.json"/>
             <arg value="olcs/*"/>
         </exec>
     </target>
@@ -107,7 +105,6 @@
             <arg value="--optimize-autoloader"/>
             <arg value="--no-interaction"/>
             <arg value="--no-progress"/>
-            <arg value="--file=composer-eux.json"/>
         </exec>
     </target>
 
@@ -119,7 +116,6 @@
             <arg value="--no-dev"/>
             <arg value="--no-interaction"/>
             <arg value="--no-progress"/>
-            <arg value="--file=composer-eux.json"/>
         </exec>
     </target>
 
