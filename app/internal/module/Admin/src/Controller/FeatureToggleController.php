@@ -53,7 +53,7 @@ class FeatureToggleController extends AbstractInternalController implements Left
     protected $addContentTitle = 'Add feature toggle';
     protected $editContentTitle = 'Edit feature toggle';
 
-    protected $tableViewTemplate = 'pages/table';
+    protected $tableViewTemplate = 'pages/feature-toggle/index';
 
     public function getLeftView()
     {
@@ -70,7 +70,6 @@ class FeatureToggleController extends AbstractInternalController implements Left
 
     public function indexAction()
     {
-
         $this->placeholder()->setPlaceholder('pageTitle', 'Feature toggles');
 
         return parent::indexAction();

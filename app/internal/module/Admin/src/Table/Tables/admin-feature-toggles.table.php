@@ -25,18 +25,15 @@ return array(
         array(
             'title' => 'Name',
             'name' => 'friendlyName',
-            'sort' => 'friendlyName',
             'formatter' => 'featureToggleEditLink'
         ),
         array(
             'title' => 'Handler (or config key)',
             'name' => 'configName',
-            'sort' => 'configName'
         ),
         array(
             'title' => 'Status',
             'name' => 'status',
-            'sort' => 'status',
             'formatter' => 'refDataStatus'
         ),
         array(

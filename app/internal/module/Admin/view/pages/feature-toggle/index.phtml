@@ -1,5 +1,23 @@
 <div class="guidance">
-    <p>Changing or removing feature toggles can affect the running of the system</p>
+    <p>Changing or removing feature toggles can affect the running of the system. This config should only be changed by
+        someone with sufficient understanding of the inner workings - see guidance below.</p>
 </div>
 <?php
-echo $this->render('pages/table');
+    echo $this->render('pages/table');
+?>
+<div class="guidance">
+    <p>Most config will involve switching on/off individual backend command/query handlers, or front end controllers
+        by specifying the final part of the FQDN:<br />
+        <br /><strong>CommandHandler/Section/Handler</strong> (back end command handlers)
+        <br /><strong>QueryHandler/Section/Handler</strong> (backend end query handlers)
+        <br /><strong>Olcs/Controller/Name</strong> (original internal/selfserve controllers)
+        <br /><strong>Admin/Controller/Name</strong> (original internal admin controllers)
+        <br /><strong>Permits/Controller/Name</strong> (self serve permits controllers)
+        <br /><strong>InternalPermits/Controller/Name</strong> ("guessed at" future internal permits namespace)
+    </p>
+    <p>
+        Although it's unlikely, in theory there could be a conflict between configs for the original internal/selfserve
+        controllers, as they're namespaced the same way within their respective repos. However since we're not expecting
+        to toggle many/any of the original controllers, no steps have been taken to mitigate this.
+    </p>
+</div>
