@@ -63,7 +63,7 @@
         "olcs/olcs-devtools": "dev-master",
         "mockery/mockery": "~0.9.3",
         "mikey179/vfsstream": "^1.4.0",
-        "olcs/olcs-testhelpers": "dev-develop"
+        "olcs/olcs-testhelpers": "dev-project/eupermits"
     },
     "autoload": {
         "classmap": [
