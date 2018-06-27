@@ -134,7 +134,6 @@ trait FeesActionTrait
     protected function checkActionRedirect()
     {
         if ($this->getRequest()->isPost()) {
-
             $data = (array)$this->getRequest()->getPost();
 
             $action = isset($data['action']) ? strtolower($data['action']) : '';
@@ -237,7 +236,10 @@ trait FeesActionTrait
         if ($this->isButtonPressed('refund')) {
             $route = $this->getFeesRoute() . '/fee_action';
             return $this->redirect()->toRoute(
-                $route, ['action' => 'refund-fee'], ['query' => $this->getRequest()->getQuery()->toArray()], true
+                $route,
+                ['action' => 'refund-fee'],
+                ['query' => $this->getRequest()->getQuery()->toArray()],
+                true
             );
         }
 
@@ -296,9 +298,7 @@ trait FeesActionTrait
     public function ftDisplayFilter($feeTransaction)
     {
         // OLCS-10687 exclude outstanding waive transactions
-        if (
-            $feeTransaction['transaction']['status']['id'] === RefData::TRANSACTION_STATUS_OUTSTANDING
-            &&
+        if ($feeTransaction['transaction']['status']['id'] === RefData::TRANSACTION_STATUS_OUTSTANDING &&
             $feeTransaction['transaction']['type']['id'] === RefData::TRANSACTION_TYPE_WAIVE
         ) {
             return false;
@@ -321,7 +321,10 @@ trait FeesActionTrait
 
         $route = $this->getFeesRoute() . '/fee_action';
         return $this->redirect()->$method(
-            $route, ['action' => 'edit-fee'], ['query' => $this->getRequest()->getQuery()->toArray()], true
+            $route,
+            ['action' => 'edit-fee'],
+            ['query' => $this->getRequest()->getQuery()->toArray()],
+            true
         );
     }
 
@@ -339,7 +342,10 @@ trait FeesActionTrait
         }
 
         return $this->redirect()->$method(
-            $route, $params, ['query' => $this->getRequest()->getQuery()->toArray()], true
+            $route,
+            $params,
+            ['query' => $this->getRequest()->getQuery()->toArray()],
+            true
         );
     }
 
@@ -379,9 +385,8 @@ trait FeesActionTrait
         switch ($transaction['type']['id']) {
             case RefData::TRANSACTION_TYPE_PAYMENT:
                 $title = 'internal.transaction-details.title-payment';
-                if (
-                    $transaction['status']['id'] == RefData::TRANSACTION_STATUS_COMPLETE
-                    && !empty($transaction['reference'])
+                if ($transaction['status']['id'] == RefData::TRANSACTION_STATUS_COMPLETE &&
+                    !empty($transaction['reference'])
                 ) {
                     $receiptLink = $urlHelper->fromRoute(
                         $this->getFeesRoute() . '/print-receipt',
@@ -501,7 +506,6 @@ trait FeesActionTrait
         }
 
         if (!$hasProcessed && $request->isPost()) {
-
             $data = (array) $request->getPost();
 
             // check if we need to recover serialized data from confirm step
@@ -519,7 +523,6 @@ trait FeesActionTrait
             $form->setData($data);
 
             if ($form->isValid()) {
-
                 if ($this->shouldConfirmPayment($feeData, $data)) {
                     $confirmMessage = $this->getConfirmPaymentMessage($feeData, $data);
                     $confirm = $this->confirm($confirmMessage, false, json_encode($data));
@@ -532,7 +535,10 @@ trait FeesActionTrait
                 $formData = $form->getData();
                 $address = isset($formData['address']) ? $formData['address'] : null;
                 return $this->initiatePaymentRequest(
-                    $feeIds, $formData['details'], $backToFee, $address
+                    $feeIds,
+                    $formData['details'],
+                    $backToFee,
+                    $address
                 );
             }
         }
@@ -1118,7 +1124,6 @@ trait FeesActionTrait
 
         switch ($paymentMethod) {
             case RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE:
-
                 $cpmsRedirectUrl = $this->url()->fromRoute(
                     $this->getFeesRoute() . '/fee_action',
                     [
@@ -1127,7 +1132,8 @@ trait FeesActionTrait
                     [
                         'force_canonical' => true,
                         'query' => array_merge(
-                            ['backToFee' => (int) $backToFee], $this->getRequest()->getQuery()->toArray()
+                            ['backToFee' => (int) $backToFee],
+                            $this->getRequest()->getQuery()->toArray()
                         ),
                     ],
                     true
