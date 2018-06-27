@@ -53,11 +53,11 @@
         "doctrine/annotations": "^1.2.3",
         "symfony/Filesystem": "~2.6.0",
         "zf-commons/zfc-rbac": "~2.4.0",
-        "olcs-tmp/OlcsCommon": "dev-project/eupermits",
-        "olcs-tmp/olcs-transfer": "dev-project/eupermits",
-        "olcs/olcs-utils": "dev-develop",
-        "olcs/olcs-auth": "dev-develop",
-        "olcs/olcs-logging": "dev-develop"
+        "olcs/OlcsCommon": "dev-project/eupermits",
+        "olcs/olcs-transfer": "dev-project/eupermits",
+        "olcs/olcs-utils": "dev-project/eupermits",
+        "olcs/olcs-auth": "dev-project/eupermits",
+        "olcs/olcs-logging": "dev-project/eupermits"
     },
     "require-dev": {
         "olcs/olcs-devtools": "dev-master",
