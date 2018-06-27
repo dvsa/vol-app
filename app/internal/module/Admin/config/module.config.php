@@ -459,7 +459,8 @@ return [
                         'options' => [
                             'route' => 'feature-toggle[/:action][/:id][/]',
                             'constraints' => [
-                                'action' => '(index|add|edit|delete)'
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
                             ],
                             'defaults' => [
                                 'controller' => \Admin\Controller\FeatureToggleController::class,
