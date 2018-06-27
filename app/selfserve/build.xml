@@ -72,9 +72,11 @@
     </target>
 
     <target name="unittest" description="Run unit tests">
+	<!--
         <exec executable="vendor/bin/phpunit" dir="." failonerror="true">
             <arg line="-ctest/phpunit.xml"/>
         </exec>
+	-->
     </target>
 
     <target name="composer-update" depends="init-composer" description="Update composer dependencies">
