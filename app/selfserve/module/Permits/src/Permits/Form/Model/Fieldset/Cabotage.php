@@ -15,11 +15,13 @@ class Cabotage
      * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--trips",
+     *   "id" : "WillCabotage",
+     *   "onClick" : "toggleGuidance()",
      * })
      * @Form\Options({
      *     "label": "",
      *     "label_attributes":{
-     *          "class" : "form-control form-control--radio cabotageRadio"
+     *          "class" : "form-control form-control--radio form-control--inline cabotageRadio"
      *     },
      *     "value_options":{
      *          "1" : "Yes",
@@ -29,6 +31,17 @@ class Cabotage
      * @Form\Type("Radio")
      */
     public $willCabotage = null;
+
+    /**
+     * @Form\Name("Guidance")
+     * @Form\Attributes({
+     *     "value": "markup-interim-fee",
+     *     "data-container-class": "guidance",
+     *      "id" : "cabotage-hint",
+     * })
+     * @Form\Type("\Common\Form\Elements\Types\GuidanceTranslated")
+     */
+    public $guidance = null;
 
 }
 

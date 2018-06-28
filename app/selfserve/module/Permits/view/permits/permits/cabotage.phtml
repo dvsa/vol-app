@@ -3,40 +3,59 @@
     $this->headTitle($title);
 ?>
 <style>
-    .form-control, .cabotageRadio {
-        margin: 0 10px 0 10px;
-        float: none;
-        display: inline;
+    .form-control--radio {
+        margin-right: 20px;
+    }
+    .guidance .article{
+        top: 10px;
+        display: block;
+        color: #6f777b;
+        width: 90%;
+        clear: both;
+        max-width: 600px;
+        padding-top: 10px;
+        font-size: 19px;
+        font-weight: 400;
+    }
+    .guidance{
+        display: none;
+    }
+    #submitbutton, .row {
+        margin-top: 40px;
     }
 </style>
-<div class="page-header">
-    <p>
-        <a href="/permits/euro6-emissions" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a>
-    </p>
-</div>
-<fieldset id="cabotage" class="inline" data-group="cabotage">
-    <legend>
-        <div class="page-header__wrapper">
-            <h1 class="heading-medium">
-                <?php
-                    echo $this->translate('permits.application.cabotage.question');
-                ?>
-            </h1>
-        </div>
-    </legend>
+<script>
+    function toggleGuidance() {
+        var x = document.getElementById("WillCabotage");
+        var guidance = document.getElementsByClassName("field guidance");
+        if (x.checked === false) {
+            guidance[0].style.display = "none";
+        } else {
+            guidance[0].style.display = "block";
+        }
+    }
+</script>
 
-    <div class="row">
-        <div class="dashboard two-thirds js-body">
-            <?php
-                echo $this->flashMessengerAll();
-                echo $this->formErrors($form);
-                echo $this->form($form);
-            ?>
-            <div id="cabotage-hint" data-group="cabotage-hint" class="guidance">
-                <p class="hint">
-                    <?php echo $this->translate('permits.application.cabotage.hint'); ?>
-                </p>
-            </div>
+<div class="row ecmt">
+    <div class="three-quarters">
+        <div class="page-header">
+            <p>
+                <a href="/permits/euro6-emissions" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a>
+            </p>
         </div>
+        <fieldset id="cabotage" class="inline" data-group="cabotage">
+            <div class="row">
+                <div class="dashboard two-thirds js-body">
+                    <?php
+                        //echo $this->flashMessengerAll();
+                        echo $this->formErrors($form);
+                        echo $this->form($form);
+                    ?>
+                    <fieldset class="actions-container new-application--wrapper">
+                        <p><a href="/permits"> <?php echo $this->translate('permits.button.save-return-to-permits'); ?> </a></p>
+                    </fieldset>
+                </div>
+            </div>
+        </fieldset>
     </div>
-</fieldset>
+</div>

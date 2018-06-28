@@ -11,47 +11,19 @@ use Zend\Form\Annotation as Form;
 class RestrictedCountriesForm
 {
     /**
-     * @Form\Name("restrictedCountries")
-     * @Form\Required(true)
-     * @Form\Attributes({
-     *   "class" : "input--trips",
-     * })
+     * @Form\Name("Fields")
      * @Form\Options({
-     *     "label": "",
-     *     "label_attributes":{
-     *          "class" : "form-control form-control--radio restrictedRadio"
-     *     },
-     *     "value_options":{
-     *          "1" : "Yes",
-     *          "0" : "No"
-     *     }
+     *     "label" : "permits.page.field.restricted-countries"
      * })
-     * @Form\Type("Radio")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\RestrictedCountries")
      */
-    public $restrictedCountries = null;
+    public $fields = null;
 
     /**
-     * @Form\Name("restrictedCountriesList")
-     * @Form\Required(false)
-     * @Form\Options({
-     *     "label": "",
-     *     "label_attributes":{
-     *          "class" : "form-control form-control--checkbox"
-     *     }
-     * })
-     * @Form\Type("MultiCheckBox")
-     */
-    public $restrictedCountriesList = null;
-
-    /**
-     * @Form\Name("submit")
-     * @Form\Attributes({
-     *     "class":"action--primary large",
-     *     "id":"submitbutton",
-     *     "value":"Save and continue",
-     * })
-     * @Form\Type("Zend\Form\Element\Submit")
+     * @Form\Name("Submit")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\Submit")
      */
     public $submitButton = null;
+
 
 }

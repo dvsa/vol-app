@@ -46,20 +46,40 @@ class PermitsController extends AbstractActionController
 
         $data = $this->params()->fromPost();
         if(is_array($data)) {
-            if (array_key_exists('submit', $data)) {
-//Save data to session
-                //$session = new Container(self::SESSION_NAMESPACE);
-           // $session->sectorsData = $data['sectors'];
+            if (array_key_exists('Submit', $data)) {
+                //Validate
                 $form->setData($data);
                 if ($form->isValid()) {
+                    //EXTRA VALIDATION
+                    if(($data['Fields']['restrictedCountries'] == 1
+                            && isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList']))
+                        || ($data['Fields']['restrictedCountries'] == 0)) {
 
+                        //Save data to session
+                        $session = new Container(self::SESSION_NAMESPACE);
+                        $session->restrictedCountries = $data['Fields']['restrictedCountries'];
 
-                    $session = new Container(self::SESSION_NAMESPACE);
-                    $session->restrictedCountries = $data['restrictedCountries'];
+                        if ($session->restrictedCountries == 1) //if true
+                        {
+                            $session->restrictedCountriesList = $data['Fields']['restrictedCountriesList']['restrictedCountriesList'];
+                        } else {
+                            $session->restrictedCountriesList = null;
+                        }
 
-                    if ($session->restrictedCountries == 1) //if true
-                    {
-                        $session->restrictedCountriesList = $data['restrictedCountriesList'];
+                        //create application in db
+                        if (empty($session->applicationId)) {
+                            $applicationData['status'] = 'permit_awaiting';
+                            $applicationData['paymentStatus'] = 'lfs_ot';
+                            $command = CreateEcmtPermitApplication::create($applicationData);
+                            $response = $this->handleCommand($command);
+                            $insert = $response->getResult();
+                            $session->applicationId = $insert['id']['ecmtPermitApplication'];
+                        }
+
+                        $this->redirect()->toRoute('permits', ['action' => 'euro6Emissions']);
+                    }else{
+                        //conditional validation failed, restricted countries list should not be empty
+                        $form->get('Fields')->get('restrictedCountriesList')->get('restrictedCountriesList')->setMessages(['Value is required']);
                     }
                 }
             }
@@ -70,30 +90,15 @@ class PermitsController extends AbstractActionController
         $response = $this->handleQuery(ConstrainedCountries::create(array()));
     $restrictedCountryList = $response->getResult();
 
-    /*
-    * Make the restricted countries list the value_options of the form
-    */
-    $restrictedCountryList = $this->transformListIntoValueOptions($restrictedCountryList, 'description');
+        /*
+        * Make the restricted countries list the value_options of the form
+        */
+        $restrictedCountryList = $this->getServiceLocator()
+            ->get('Helper\Form')->transformListIntoValueOptions($restrictedCountryList, 'description');
+
         $options = array();
-    $options['value_options'] = $restrictedCountryList;
-    $form->get('restrictedCountriesList')->setOptions($options);
-
-    /*
-    * Construct dynamic list of countries
-    * for use in titles
-    */
-    $count = 1;
-    foreach($restrictedCountryList as $id => $countryName)
-    {
-        if($count == count($restrictedCountryList)) //if this country is last
-        {
-            $restrictedCountriesString = $restrictedCountriesString . '%s ' . $countryName; //%s as placeholder for or/and
-        }else{
-            $restrictedCountriesString = $restrictedCountriesString . $countryName . ', ';
-        }
-
-        $count++;
-        }
+        $options['value_options'] = $restrictedCountryList;
+        $form->get('Fields')->get('restrictedCountriesList')->get('restrictedCountriesList')->setOptions($options);
 
         return array('form' => $form);
     }
@@ -107,40 +112,21 @@ class PermitsController extends AbstractActionController
 
         $data = $this->params()->fromPost();
         if(is_array($data)) {
-            if (array_key_exists('submit', $data) && array_key_exists('restrictedCountries', $data)) {
-                //TODO once validation is implemented for restrictedCountries form, Do this saving in the previous action
-                //Save data to session
-                $session = new Container(self::SESSION_NAMESPACE);
-                $session->restrictedCountries = $data['restrictedCountries'];
-
-                if ($session->restrictedCountries == 1) //if true
-                {
-                    $session->restrictedCountriesList = $data['restrictedCountriesList'];
-                } else {
-                    $session->restrictedCountriesList = null;
-                }
-
-                //create application in db
-                if (empty($session->applicationId)) {
-                    $applicationData['status'] = 'permit_awaiting';
-                    $applicationData['paymentStatus'] = 'lfs_ot';
-                    $command = CreateEcmtPermitApplication::create($applicationData);
-                    $response = $this->handleCommand($command);
-                    $insert = $response->getResult();
-                    $session->applicationId = $insert['id']['ecmtPermitApplication'];
-                }
-            } else if (array_key_exists('Submit', $data)) {
+            if (array_key_exists('Submit', $data)) {
                 //Validate
                 $form->setData($data);
                 if ($form->isValid()) {
-                    //TODO save data here instead of in next action
                     $session = new Container(self::SESSION_NAMESPACE);
-                    $session->meetsEuro = $data['Fields']['MeetsEuro6'];
+                    $session->meetsEuro6 = $data['Fields']['MeetsEuro6'];
 
                     $this->redirect()->toRoute('permits', ['action' => 'cabotage']);
                 }
             }
         }
+
+        $form->get('Fields')->get('Guidance')->setValue(
+            "ECMT permits can only be used by vehicles that meet Euro 6 standards"
+        );
 
         return array('form' => $form);
     }
@@ -166,6 +152,11 @@ class PermitsController extends AbstractActionController
                 }
             }
         }
+
+        $form->get('Fields')->get('Guidance')->setValue(
+            "You can't carry out cabotage with an ECMT permit."
+        );
+
         return array('form' => $form);
     }
 

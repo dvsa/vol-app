@@ -12,6 +12,9 @@ class CabotageForm
 {
     /**
      * @Form\Name("Fields")
+     * @Form\Options({
+     *     "label" : "permits.application.cabotage.question"
+     * })
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\Cabotage")
      */
     public $fields = null;
