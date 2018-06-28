@@ -238,6 +238,11 @@ return [
                     'route' => 'admin-dashboard/admin-feature-toggle',
                 ],
                 [
+                    'id' => 'admin-dashboard/admin-permits',
+                    'label' => 'Permits',
+                    'route' => 'admin-dashboard/admin-permits',
+                ],
+                [
                     'id' => 'admin-dashboard/admin-system-info-message',
                     'label' => 'System messages',
                     'route' => 'admin-dashboard/admin-system-info-message',

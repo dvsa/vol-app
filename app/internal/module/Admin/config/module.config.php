@@ -468,6 +468,16 @@ return [
                             ]
                         ]
                     ],
+                    'admin-permits' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'permits[/]',
+                            'defaults' => [
+                                'controller' => \Admin\Controller\PermitsController::class,
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
                     'admin-system-info-message' => [
                         'type' => 'Segment',
                         'options' => [
@@ -646,6 +656,8 @@ return [
                 Admin\Controller\DataRetentionReviewController::class,
             Admin\Controller\DataRetention\ExportController::class =>
                 Admin\Controller\DataRetention\ExportController::class,
+            Admin\Controller\PermitsController::class =>
+                Admin\Controller\PermitsController::class,
             Admin\Controller\DataRetention\RuleAdminController::class =>
                 Admin\Controller\DataRetention\RuleAdminController::class
         ],
