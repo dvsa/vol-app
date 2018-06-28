@@ -12,6 +12,8 @@ use Zend\Mvc\MvcEvent;
 use Zend\Navigation\Navigation;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Common\Service\Cqrs\Query\QuerySender;
+use Common\FeatureToggle;
 
 /**
  * Class NavigationToggle
@@ -30,6 +32,16 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
      * @var IdentityProvider
      */
     protected $authenticationService;
+
+    /**
+     * @var QuerySender
+     */
+    protected $querySender;
+
+    /**
+     * @var array
+     */
+    protected $listeners = [];
 
     /**
      * Attach one or more listeners
@@ -68,6 +80,11 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
 
         $this->navigation->findBy('id', 'admin-dashboard/admin-data-retention')
             ->setVisible($disableDataRetentionRecords);
+
+        $permitsMenuEnabled = $this->querySender->featuresEnabled([FeatureToggle::ADMIN_PERMITS]);
+
+        //permits navigation
+        $this->navigation->findBy('id', 'admin-dashboard/admin-permits')->setVisible($permitsMenuEnabled);
     }
 
     /**
@@ -75,12 +92,13 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
      *
      * @param ServiceLocatorInterface $serviceLocator Service locator
      *
-     * @return HeaderSearch
+     * @return $this
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $this->navigation = $serviceLocator->get('navigation');
         $this->authenticationService = $serviceLocator->get('Common\Rbac\IdentityProvider');
+        $this->querySender = $serviceLocator->get('QuerySender');
 
         return $this;
     }
