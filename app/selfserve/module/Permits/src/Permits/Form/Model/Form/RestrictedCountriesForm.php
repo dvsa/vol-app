@@ -14,9 +14,7 @@ class RestrictedCountriesForm
      * @Form\Name("Fields")
      * @Form\Options({
      *     "label" : "permits.page.field.restricted-countries",
-     *     "hint" : "TEST",
-     *     "hint" : "TEST1",
-     *     "hint" : "TEST2",
+     *     "hint" : "markup-ecmt-restricted-countries",
      * })
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\RestrictedCountries")
      */
