@@ -1,24 +1,36 @@
 <?php
 namespace Permits\Controller;
 
+use Common\Controller\Interfaces\ToggleAwareInterface;
 use Permits\Form\PermitApplicationForm;
-use Zend\Mvc\Controller\AbstractActionController;
+use Common\Controller\AbstractOlcsController;
+use Common\FeatureToggle;
 use Zend\View\Model\ViewModel;
 use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries;
+use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermits;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermits;
 use Zend\Session\Container; // We need this when using sessions
 
-class PermitsController extends AbstractActionController
+use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
+
+class PermitsController extends AbstractOlcsController implements ToggleAwareInterface
 {
+    use ExternalControllerTrait;
+
     //TODO: Add event for all checks for whether or not $data(from form) is an array
     const SESSION_NAMESPACE = 'permit_application';
     const DEFAULT_SEPARATOR = '|';
 
     protected $tableName = 'dashboard-permits';
 
+    protected $toggleConfig = [
+        'default' => [
+            FeatureToggle::SELFSERVE_ECMT
+        ],
+    ];
 
     public function indexAction()
     {
@@ -36,12 +48,10 @@ class PermitsController extends AbstractActionController
         return $view;
     }
 
+
     public function ecmtLicenceAction()
     {
-        //Create form from annotations
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
-            ->createForm('EcmtLicenceForm', false, false);
+        $form = $this->getEcmtLicenceForm();
 
         $data = $this->params()->fromPost();
         if (is_array($data)) {
@@ -50,7 +60,7 @@ class PermitsController extends AbstractActionController
                 $form->setData($data);
                 if ($form->isValid()) {
                     $session = new Container(self::SESSION_NAMESPACE);
-                    $session->meetsEuro6 = $data['Fields']['MeetsEuro6'];
+                    $session->meetsEuro6 = $data['Fields']['EcmtLicence'];
 
                     $this->redirect()->toRoute('permits', ['action' => 'application-overview']);
                 }
@@ -71,6 +81,18 @@ class PermitsController extends AbstractActionController
             }
         }
 
+        $sections = [array(
+            'type' => 'application',
+            'variables' => array(
+                'enabled' => true,
+                'status' => 'COMPLETE',
+                'statusColour' => 'green',
+                'sectionNumber' => 1,
+                'identifier' => 9,
+                'name' => 'test',
+            )
+        )];
+
         //TEMPORARY
         $applicationFee = "£10.00";
         $issuingFee = "£123.00";
@@ -78,6 +100,7 @@ class PermitsController extends AbstractActionController
         $view = new ViewModel();
         $view->setVariable('applicationFee', $applicationFee);
         $view->setVariable('issuingFee', $issuingFee);
+        $view->setVariable('sections', $sections);
 
         return $view;
     }
@@ -225,22 +248,6 @@ class PermitsController extends AbstractActionController
         return array('form' => $form);
     }
 
-    public function checkAnswersAction()
-    {
-        $session = new Container(self::SESSION_NAMESPACE);
-        $data = $this->params()->fromPost();
-        if(is_array($data)) {
-            if (array_key_exists('submit', $data)) {
-                //Save data to session
-                $session->willCabotage = $data['willCabotage'];
-            }
-        }
-
-        $sessionData = null;
-
-        return array('sessionData' => $sessionData);
-    }
-
     public function summaryAction()
     {
         $session = new Container(self::SESSION_NAMESPACE);
@@ -338,6 +345,97 @@ class PermitsController extends AbstractActionController
         return $view;
     }
 
+    /**
+     * Used to retrieve the licences for the ecmt-licence page.
+     *
+     * @return mixed
+     *
+     */
+    private function getRelevantLicences()
+    {
+        $organisationId = $this->getCurrentOrganisationId();
+        $query = Organisation::create(['id' => $organisationId]);
+
+        $response = $this->handleQuery($query);
+        $organisationData = $response->getResult();
+
+        return $organisationData['relevantLicences'];
+    }
+
+    /**
+     * Modified version of the method in FormHelperServices
+     * that is used by the restricted countries view.
+     *
+     *
+     * @param array $list
+     * @param string $displayFieldName
+     * @param string $separator
+     * @return array
+     */
+    private function transformListIntoValueOptions($list = array(), $displayMembers = array('name'), $separator = '|')
+    {
+        //TODO: MOVE THIS INTO FormHelperService AND REPLACE OLD VERSION
+        if(!is_string($displayMembers[0]) || !is_array($list)){
+            //throw exception?
+            return array();
+        }
+
+        $value_options = array();
+        foreach($list as $item)
+        {
+            //Concatenate display values (incase there is more than one field to be used)
+            $displayValue = "";
+            foreach($displayMembers as $displayKey)
+            {
+                $displayValue = $displayValue . $item[$displayKey] . " ";
+            }
+
+            //add display name to the key so that it can be used after submission
+            $value_options[$item['id'] . $separator . $displayValue] = $displayValue;
+        }
+
+        return $value_options;
+    }
+
+    private function getEcmtLicenceForm()
+    {
+        //TODO: MOVE THIS TO A SERVICE/HELPER
+        /*
+         * Create form from annotations
+         */
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('EcmtLicenceForm', false, false);
+
+        /*
+         * Get licence to display in question
+         */
+        $licenceList = $this->getRelevantLicences();
+        $value_options = $this->transformListIntoValueOptions($licenceList, array('licNo', 'trafficArea'));
+
+        /*
+         * Add brackets
+         */
+        foreach($value_options as $key => $value)
+        {
+            $spacePosition = strpos($value, ' '); //find position of first space
+            $newValue = substr_replace($value, ' (', $spacePosition, 1); //add bracket after first space
+
+            $newValue = trim($newValue) . ')';//add bracket to end
+
+            $value_options[$key] = $newValue;//set current value option to reformatted value
+        }
+
+        /*
+         * Set 'licences to display' as the value_options of the field
+         */
+        $options = array();
+        $options['value_options'] = $value_options;
+        $form->get('Fields')->get('EcmtLicence')->setOptions($options);
+
+        return $form;
+    }
+
 
     private function extractIDFromSessionData($sessionData){
         $IDList = array();
@@ -349,19 +447,5 @@ class PermitsController extends AbstractActionController
 
         return $IDList;
     }
-    
-    private function transformListIntoValueOptions($list = array(), $displayFieldName = 'name')
-    {
-        if(!is_string($displayFieldName) || !is_array($list)){
-            //throw exception?
-            return array();
-        }
-        $value_options = array();
-        foreach($list['results'] as $item)
-        {
-            //add display name to the key so that it can be used after submission
-            $value_options[$item['id'] . $this::DEFAULT_SEPARATOR . $item[$displayFieldName]] = $item[$displayFieldName];
-        }
-        return $value_options;
-    }
+
 }

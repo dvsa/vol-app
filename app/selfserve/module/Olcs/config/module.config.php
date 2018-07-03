@@ -1026,6 +1026,9 @@ return array(
         'routes' => array_merge($routes, $configRoutes),
     ),
     'controllers' => array(
+        'initializers' => array(
+            Olcs\Controller\Initializer\Navigation::class
+        ),
         'lva_controllers' => array(
             'LvaApplication'                        => 'Olcs\Controller\Lva\Application\OverviewController',
             'LvaApplication/TypeOfLicence'          => Olcs\Controller\Lva\Application\TypeOfLicenceController::class,
@@ -1142,6 +1145,7 @@ return array(
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
             'navigation' => Zend\Navigation\Service\DefaultNavigationFactory::class,
             'Olcs\Navigation\DashboardNavigation' => Olcs\Navigation\DashboardNavigationFactory::class,
+            Olcs\Controller\Listener\Navigation::class => Olcs\Controller\Listener\NavigationFactory::class,
             'LicenceTransportManagerAdapter' =>
                 \Olcs\Controller\Lva\Factory\Adapter\LicenceTransportManagerAdapterFactory::class,
             'VariationTransportManagerAdapter' =>
