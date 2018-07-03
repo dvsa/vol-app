@@ -20,6 +20,7 @@ class RestrictedCountries
      * })
      * @Form\Options({
      *     "label": "",
+     *     "short-label": "short-label-tol-licence-type",
      *     "label_attributes":{
      *          "class" : "form-control form-control--radio form-control--inline restrictedRadio"
      *     },

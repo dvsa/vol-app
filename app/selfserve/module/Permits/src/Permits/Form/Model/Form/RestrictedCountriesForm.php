@@ -13,7 +13,10 @@ class RestrictedCountriesForm
     /**
      * @Form\Name("Fields")
      * @Form\Options({
-     *     "label" : "permits.page.field.restricted-countries"
+     *     "label" : "permits.page.field.restricted-countries",
+     *     "hint" : "TEST",
+     *     "hint" : "TEST1",
+     *     "hint" : "TEST2",
      * })
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\RestrictedCountries")
      */
