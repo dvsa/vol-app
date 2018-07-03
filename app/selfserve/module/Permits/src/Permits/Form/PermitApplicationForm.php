@@ -2,10 +2,6 @@
 namespace Permits\Form;
 
 use Zend\Form\Form;
-use Zend\Form\Element;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Input;
-
 
 class PermitApplicationForm extends Form
 {
@@ -60,8 +56,4 @@ class PermitApplicationForm extends Form
         ));
     }
 
-    public function getInputFilter()
-    {
-        return $this->inputFilter;
-    }
 }

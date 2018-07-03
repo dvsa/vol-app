@@ -352,14 +352,4 @@ class PermitsController extends AbstractActionController
 
         return $value_options;
     }
-
-    private function setFormValueOptionsFromList($form, $formFieldName, $list, $displayFieldName = 'name' )
-    {
-        $restrictedCountryList = $this->transformListIntoValueOptions($list, $displayFieldName);
-        $options = array();
-        $options['value_options'] = $restrictedCountryList;
-        $form->get($formFieldName)->setOptions($options);
-
-        return $form;
-    }
 }
