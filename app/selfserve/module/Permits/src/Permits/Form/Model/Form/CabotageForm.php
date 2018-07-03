@@ -6,7 +6,7 @@ use Zend\Form\Annotation as Form;
 /**
  * @Form\Name("Cabotage")
  * @Form\Attributes({"method":"post"})
- * @Form\Type("Permits\Form\Form")
+ * @Form\Type("Common\Form\Form")
  */
 class CabotageForm
 {
