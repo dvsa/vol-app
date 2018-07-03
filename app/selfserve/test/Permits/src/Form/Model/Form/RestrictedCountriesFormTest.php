@@ -18,25 +18,26 @@ class RestrictedCountriesFormTest extends AbstractFormValidationTestCase
 
     public function testRestrictedCountries()
     {
-        $element = ['restrictedCountries'];
+        $element = ['Fields','restrictedCountries'];
 
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementType($element, "Zend\Form\Element\Radio");
     }
 
     public function testRestrictedCountriesList()
     {
-        $element = ['restrictedCountriesList'];
+        $this->markTestSkipped();
+        $element = ['Fields','restrictedCountriesList'];
 
-        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementType($element, "Zend\Form\Element\MultiCheckBox");
     }
 
     public function testSubmit()
     {
-        $element = ['submit'];
+        $element = ['Submit', 'SubmitButton'];
         $this->assertFormElementActionButton($element);
         $this->assertFormElementType($element, "Zend\Form\Element\Submit");
     }

@@ -46,5 +46,3 @@ class RestrictedCountries
     public $restrictedCountriesList = null;
 
 }
-
-?>
