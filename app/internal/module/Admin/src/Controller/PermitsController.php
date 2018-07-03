@@ -2,6 +2,8 @@
 
 namespace Admin\Controller;
 
+use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\FeatureToggle;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
@@ -9,22 +11,15 @@ use Zend\View\Model\ViewModel;
 /**
  * Permits Controller
  *
- * @author Alexander Peshkov <alex.peshkov@valtech.co.uk>
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PermitsController extends AbstractInternalController implements LeftViewProvider
+class PermitsController extends AbstractInternalController implements LeftViewProvider, ToggleAwareInterface
 {
     protected $navigationId = 'admin-dashboard/admin-permits';
 
-    /**
-     * @var array
-     */
-    protected $inlineScripts = [
-        'indexAction' => ['table-actions'],
-    ];
-
     protected $toggleConfig = [
         'default' => [
-            'admin_permits'
+            FeatureToggle::ADMIN_PERMITS
         ],
     ];
 

@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller;
 
+use Common\Controller\AbstractOlcsController;
 use Common\Data\Mapper\MapperInterface;
 use Common\Service\Cqrs\Response;
 use Common\Service\Table\TableBuilder;
@@ -19,7 +20,6 @@ use Olcs\Mvc\Controller\Plugin;
 use Common\Controller\Plugin\FeaturesEnabled as FeaturesEnabledPlugin;
 use Olcs\View\Builder\BuilderInterface as ViewBuilderInterface;
 use Zend\Http\Response as HttpResponse;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\ArrayUtils;
 use Zend\View\Model\ViewModel;
@@ -42,7 +42,7 @@ use Zend\View\Model\ViewModel;
  * @method \Common\Controller\Plugin\Redirect redirect()
  * @method Plugin\Confirm confirm($string)
  */
-abstract class AbstractInternalController extends AbstractActionController
+abstract class AbstractInternalController extends AbstractOlcsController
 {
     /**
      * Holds the navigation ID,
@@ -246,28 +246,11 @@ abstract class AbstractInternalController extends AbstractActionController
     protected $commentTitle;
 
     /**
-     * @var array
-     *
-     * Config for feature toggles - for usage see https://wiki.i-env.net/display/olcs/Feature+toggles
-     */
-    protected $toggleConfig = [];
-
-    /**
      * Caches the list data result
      *
      * @var array
      */
     protected $listData;
-
-    public function onDispatch(MvcEvent $e)
-    {
-        if (!$this->featuresEnabled($this->toggleConfig, $e))
-        {
-            return $this->notFoundAction();
-        }
-
-        return parent::onDispatch($e);
-    }
 
     /**
      * Gets a comment box
