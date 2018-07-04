@@ -19,6 +19,7 @@ use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeType as FeeTypeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList as FeeTypeListQry;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
+use Mockery\Exception;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Zend\Form\Form;
@@ -591,8 +592,12 @@ trait FeesActionTrait
                 if ($response->isOk()) {
                     $this->addSuccessMessage('fees.refund.success');
                 } else {
-                    $responseContent = json_decode($response->getHttpResponse()->getContent());
-                    $this->addErrorMessage(implode('; ', $responseContent->messages));
+                    try {
+                        $responseContent = json_decode($response->getHttpResponse()->getContent());
+                        $this->addErrorMessage(implode('; ', $responseContent->messages));
+                    } catch (Exception $e) {
+                        $this->addErrorMessage('unknown-error');
+                    }
                 }
                 return $this->redirectToFeeDetails(true);
             }
