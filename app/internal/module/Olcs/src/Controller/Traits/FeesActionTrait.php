@@ -591,12 +591,7 @@ trait FeesActionTrait
                 if ($response->isOk()) {
                     $this->addSuccessMessage('fees.refund.success');
                 } else {
-                    try {
-                        $responseContent = json_decode($response->getHttpResponse()->getContent());
-                        $this->addErrorMessage(implode('; ', $responseContent->messages));
-                    } catch (\Exception $e) {
-                        $this->addErrorMessage('unknown-error');
-                    }
+                    $this->processErrorResponse($response);
                 }
                 return $this->redirectToFeeDetails(true);
             }
@@ -608,6 +603,17 @@ trait FeesActionTrait
         return $this->renderView($view, 'fees.refund.title');
     }
 
+    private function processErrorResponse(Response $response): void
+    {
+        try {
+            $responseContent = json_decode($response->getHttpResponse()->getContent());
+            $message = implode('; ', $responseContent->messages);
+            $error = strlen($message) > 0 ? $message : 'unknown-error';
+            $this->addErrorMessage($error);
+        } catch (\Exception $e) {
+            $this->addErrorMessage('unknown-error');
+        }
+    }
 
     private function refundFeeDtoData($data)
     {
