@@ -607,7 +607,7 @@ trait FeesActionTrait
     private function processErrorResponse(Response $response): void
     {
         try {
-            $responseContent = json_decode((string) $response->getBody());
+            $responseContent = json_decode($response->getBody());
             $message = implode('; ', $responseContent->messages);
             $error = strlen($message) > 0 ? $message : 'unknown-error';
             $this->addErrorMessage($error);
