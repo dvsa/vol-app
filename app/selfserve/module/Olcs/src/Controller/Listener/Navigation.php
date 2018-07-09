@@ -77,6 +77,8 @@ class Navigation implements ListenerAggregateInterface
 
     /**
      * Toggle ECMT menus
+     *
+     * @return void
      */
     private function toggleEcmtMenus(): void
     {
@@ -86,11 +88,12 @@ class Navigation implements ListenerAggregateInterface
 
     /**
      * Toggle EU permits menus
+     *
+     *  @return void
      */
     private function togglePermitsMenus(): void
     {
         //permits related config will go here once available
         //$permitsEnabled = $this->querySender->featuresEnabled([FeatureToggle::SELFSERVE_PERMITS]);
     }
-
 }

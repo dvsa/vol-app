@@ -16,6 +16,8 @@ class Navigation implements InitializerInterface
      *
      * @param mixed                   $instance
      * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return void
      */
     public function initialize($instance, ServiceLocatorInterface $serviceLocator): void
     {
