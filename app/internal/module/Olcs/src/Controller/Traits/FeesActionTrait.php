@@ -607,12 +607,8 @@ trait FeesActionTrait
     private function processErrorResponse(Response $response): void
     {
         try {
-            Logger::debug("FeesActionTraitLog: " . $response->__toString());
             $responseContent = json_decode((string) $response->getBody());
-            $message = $response->getBody();
-            if($responseContent) {
-                $message = implode('; ', $responseContent->messages);
-            }
+            $message = implode('; ', $responseContent->messages);
             $error = strlen($message) > 0 ? $message : 'unknown-error';
             $this->addErrorMessage($error);
         } catch (\Exception $e) {
