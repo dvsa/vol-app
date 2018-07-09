@@ -2,7 +2,10 @@
 
 namespace Olcs\Controller\Traits;
 
+use Common\Rbac\IdentityProvider;
+use Common\Rbac\User;
 use Common\RefData;
+use Common\Service\Cqrs\Response;
 use Dvsa\Olcs\Transfer\Command\Fee\ApproveWaive as ApproveWaiveCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\CreateFee as CreateFeeCmd;
 use Dvsa\Olcs\Transfer\Command\Fee\RecommendWaive as RecommendWaiveCmd;
@@ -18,6 +21,7 @@ use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList as FeeTypeListQry;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
+use Zend\Form\Form;
 
 /**
  * Fees action trait
@@ -130,7 +134,6 @@ trait FeesActionTrait
     protected function checkActionRedirect()
     {
         if ($this->getRequest()->isPost()) {
-
             $data = (array)$this->getRequest()->getPost();
 
             $action = isset($data['action']) ? strtolower($data['action']) : '';
@@ -233,7 +236,10 @@ trait FeesActionTrait
         if ($this->isButtonPressed('refund')) {
             $route = $this->getFeesRoute() . '/fee_action';
             return $this->redirect()->toRoute(
-                $route, ['action' => 'refund-fee'], ['query' => $this->getRequest()->getQuery()->toArray()], true
+                $route,
+                ['action' => 'refund-fee'],
+                ['query' => $this->getRequest()->getQuery()->toArray()],
+                true
             );
         }
 
@@ -292,9 +298,7 @@ trait FeesActionTrait
     public function ftDisplayFilter($feeTransaction)
     {
         // OLCS-10687 exclude outstanding waive transactions
-        if (
-            $feeTransaction['transaction']['status']['id'] === RefData::TRANSACTION_STATUS_OUTSTANDING
-            &&
+        if ($feeTransaction['transaction']['status']['id'] === RefData::TRANSACTION_STATUS_OUTSTANDING &&
             $feeTransaction['transaction']['type']['id'] === RefData::TRANSACTION_TYPE_WAIVE
         ) {
             return false;
@@ -317,7 +321,10 @@ trait FeesActionTrait
 
         $route = $this->getFeesRoute() . '/fee_action';
         return $this->redirect()->$method(
-            $route, ['action' => 'edit-fee'], ['query' => $this->getRequest()->getQuery()->toArray()], true
+            $route,
+            ['action' => 'edit-fee'],
+            ['query' => $this->getRequest()->getQuery()->toArray()],
+            true
         );
     }
 
@@ -335,7 +342,10 @@ trait FeesActionTrait
         }
 
         return $this->redirect()->$method(
-            $route, $params, ['query' => $this->getRequest()->getQuery()->toArray()], true
+            $route,
+            $params,
+            ['query' => $this->getRequest()->getQuery()->toArray()],
+            true
         );
     }
 
@@ -375,9 +385,8 @@ trait FeesActionTrait
         switch ($transaction['type']['id']) {
             case RefData::TRANSACTION_TYPE_PAYMENT:
                 $title = 'internal.transaction-details.title-payment';
-                if (
-                    $transaction['status']['id'] == RefData::TRANSACTION_STATUS_COMPLETE
-                    && !empty($transaction['reference'])
+                if ($transaction['status']['id'] == RefData::TRANSACTION_STATUS_COMPLETE &&
+                    !empty($transaction['reference'])
                 ) {
                     $receiptLink = $urlHelper->fromRoute(
                         $this->getFeesRoute() . '/print-receipt',
@@ -497,7 +506,6 @@ trait FeesActionTrait
         }
 
         if (!$hasProcessed && $request->isPost()) {
-
             $data = (array) $request->getPost();
 
             // check if we need to recover serialized data from confirm step
@@ -515,7 +523,6 @@ trait FeesActionTrait
             $form->setData($data);
 
             if ($form->isValid()) {
-
                 if ($this->shouldConfirmPayment($feeData, $data)) {
                     $confirmMessage = $this->getConfirmPaymentMessage($feeData, $data);
                     $confirm = $this->confirm($confirmMessage, false, json_encode($data));
@@ -528,7 +535,10 @@ trait FeesActionTrait
                 $formData = $form->getData();
                 $address = isset($formData['address']) ? $formData['address'] : null;
                 return $this->initiatePaymentRequest(
-                    $feeIds, $formData['details'], $backToFee, $address
+                    $feeIds,
+                    $formData['details'],
+                    $backToFee,
+                    $address
                 );
             }
         }
@@ -546,8 +556,13 @@ trait FeesActionTrait
      */
     public function refundFeeAction()
     {
-        $feeId = $this->params('fee');
-        $form = $this->getRefundFeeForm();
+        /** @var IdentityProvider $authenticationService */
+        $authenticationService = $this->getServiceLocator()->get('Common\Rbac\IdentityProvider');
+        /** @var User $user */
+        $user = $authenticationService->getIdentity();
+        $isAdmin = $user->hasRole(RefData::ROLE_INTERNAL_ADMIN);
+
+        $form = $this->getRefundFeeForm($isAdmin);
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -555,6 +570,9 @@ trait FeesActionTrait
             $form->setData($data);
         }
         $hasProcessed = false;
+        if (!$this->isMiscellaneousFees() && $isAdmin) {
+            $this->alterRefundFeeFormForAdmin($form);
+        }
         if ($form->has('address')) {
             $hasProcessed =
                 $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
@@ -565,22 +583,15 @@ trait FeesActionTrait
                 return $this->redirectToFeeDetails();
             }
             if ($form->isValid()) {
-                $dtoData = [
-                    'id' => $feeId
-                ];
-                if ($this->isMiscellaneousFees()) {
-                    $details = $data['details'];
-                    $dtoData['customerReference'] = $details['customerReference'];
-                    $dtoData['customerName'] = $details['customerName'];
-                    $dtoData['address'] = $data['address'];
-                }
+                $dtoData = $this->refundFeeDtoData($data);
+                /** @var Response $response */
                 $response = $this->handleCommand(
                     RefundFeeCmd::create($dtoData)
                 );
                 if ($response->isOk()) {
                     $this->addSuccessMessage('fees.refund.success');
                 } else {
-                    $this->addErrorMessage('unknown-error');
+                    $this->processErrorResponse($response);
                 }
                 return $this->redirectToFeeDetails(true);
             }
@@ -592,16 +603,63 @@ trait FeesActionTrait
         return $this->renderView($view, 'fees.refund.title');
     }
 
+    private function processErrorResponse(Response $response): void
+    {
+        try {
+            $responseContent = json_decode($response->getHttpResponse()->getContent());
+            $message = implode('; ', $responseContent->messages);
+            $error = strlen($message) > 0 ? $message : 'unknown-error';
+            $this->addErrorMessage($error);
+        } catch (\Exception $e) {
+            $this->addErrorMessage('unknown-error');
+        }
+    }
+
+    private function refundFeeDtoData($data)
+    {
+        $dtoData = [
+            'id' => $this->params('fee')
+        ];
+        if (array_key_exists('details', $data)) {
+            $details = $data['details'];
+            if (array_key_exists('customerReference', $details)) {
+                $dtoData['customerReference'] = $details['customerReference'];
+            }
+            if (array_key_exists('customerName', $details)) {
+                $dtoData['customerName'] = $details['customerName'];
+            }
+            if (array_key_exists('address', $data)) {
+                $dtoData['address'] = $data['address'];
+            }
+        }
+        return $dtoData;
+    }
+
+    private function alterRefundFeeFormForAdmin(Form $form): void
+    {
+        $fee = $this->getFee($this->params('fee'));
+        $form->get('details')->get('customerReference')->setValue($fee['customerReference']);
+        $form->getInputFilter()->get('details')->get('customerName')->setRequired(false);
+        $form->getInputFilter()->get('details')->get('customerReference')->setRequired(false);
+        $form->getInputFilter()->get('address')->get('addressLine1')->setRequired(false);
+        $form->getInputFilter()->get('address')->get('town')->setRequired(false);
+        $form->getInputFilter()->get('address')->get('town')->setRequired(false);
+        $form->getInputFilter()->get('address')->get('postcode')->setRequired(false);
+        $form->getInputFilter()->get('address')->get('countryCode')->setRequired(false);
+        $form->get('details')->remove('customerName');
+        $form->remove('address');
+    }
+
     /**
      * Get refund fee form
      *
      * @return Form
      */
-    private function getRefundFeeForm()
+    private function getRefundFeeForm($isAdmin)
     {
-        $formName = $this->isMiscellaneousFees() ? 'RefundFee' : 'GenericConfirmation';
+        $formName = $this->isMiscellaneousFees() || $isAdmin ? 'RefundFee' : 'GenericConfirmation';
         $form = $this->getServiceLocator()->get('Helper\Form')->createFormWithRequest($formName, $this->getRequest());
-        if (!$this->isMiscellaneousFees()) {
+        if ($formName === 'GenericConfirmation') {
             $form->setSubmitLabel('Refund');
         }
         $form->get('messages')->get('message')->setValue('fees.refund.confirm');
@@ -1076,7 +1134,6 @@ trait FeesActionTrait
 
         switch ($paymentMethod) {
             case RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE:
-
                 $cpmsRedirectUrl = $this->url()->fromRoute(
                     $this->getFeesRoute() . '/fee_action',
                     [
@@ -1085,7 +1142,8 @@ trait FeesActionTrait
                     [
                         'force_canonical' => true,
                         'query' => array_merge(
-                            ['backToFee' => (int) $backToFee], $this->getRequest()->getQuery()->toArray()
+                            ['backToFee' => (int) $backToFee],
+                            $this->getRequest()->getQuery()->toArray()
                         ),
                     ],
                     true
