@@ -19,6 +19,7 @@ use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeType as FeeTypeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList as FeeTypeListQry;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
+use Olcs\Logging\Log\Logger;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Zend\Form\Form;
@@ -606,6 +607,7 @@ trait FeesActionTrait
     private function processErrorResponse(Response $response): void
     {
         try {
+            Logger::debug("FeesActionTraitLog: " .$response->getHttpResponse()->getContent());
             $responseContent = json_decode($response->getHttpResponse()->getContent());
             $message = implode('; ', $responseContent->messages);
             $error = strlen($message) > 0 ? $message : 'unknown-error';
