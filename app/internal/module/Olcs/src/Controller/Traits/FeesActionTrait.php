@@ -608,8 +608,8 @@ trait FeesActionTrait
     {
         try {
             Logger::debug("FeesActionTraitLog: " . $response->__toString());
-            $responseContent = json_decode((string) $response->getHttpResponse()->getContent());
-            $message = $response->__toString();
+            $responseContent = json_decode((string) $response->getBody());
+            $message = $response->getBody();
             if($responseContent) {
                 $message = implode('; ', $responseContent->messages);
             }
