@@ -589,7 +589,6 @@ abstract class AbstractInternalController extends AbstractOlcsController
                 foreach ($flashErrors as $error) {
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
                 }
-
             } elseif ($response->isServerError()) {
                 $this->handleErrors($response->getResult());
             }
