@@ -1,0 +1,39 @@
+<?php
+    $title = $this->translate('permits.page.ecmt.licence.title');
+    $this->headTitle($title);
+?>
+
+<div class="row ecmt">
+    <div class="two-thirds">
+        <div class="page-header">
+            <p><a href="/permits" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
+            <div class="page-header__wrapper">
+                <h1 class="js-title">
+                    <?php echo $this->translate('permits.page.ecmt.licence.question'); ?>
+                </h1>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="govuk-hint">
+                <p><?php echo $this->translate('permits.page.ecmt.licence.info'); ?></p>
+            </div>
+
+            <fieldset id="ecmt-licence" class="inline" data-group="ecmt-licence">
+                <?php
+                    echo $this->flashMessengerAll();
+                    echo $this->formErrors($form);
+                    echo $this->form($form);
+                ?>
+
+                <fieldset class="actions-container new-application--wrapper">
+                    <p><a href="/permits/overview"> <?php echo $this->translate('permits.button.save-return-to-overview'); ?> </a></p>
+                </fieldset>
+            </fieldset>
+        </div>
+
+    </div>
+</div>
+
+
+
