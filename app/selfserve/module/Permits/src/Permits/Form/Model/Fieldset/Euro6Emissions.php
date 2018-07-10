@@ -20,7 +20,7 @@ class Euro6Emissions
      * @Form\Options({
      *   "checked_value": "Y",
      *     "unchecked_value": "N",
-     *     "label": "I confirm that my ECMT permit(s) will only be used by vehicle(s) that are environmentally compliant to Euro 6 emissions standards.",
+     *     "label": "permits.form.euro6.label",
      *     "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
      *     "must_be_value": "Y"
      * })
