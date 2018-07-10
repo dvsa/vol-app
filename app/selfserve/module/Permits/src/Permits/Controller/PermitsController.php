@@ -42,14 +42,17 @@ class PermitsController extends AbstractActionController
         $data = (array)$request->getPost();
         $session = new Container(self::SESSION_NAMESPACE);
         if(is_array($data)) {
-            if (!empty($data)) {
+            if (array_key_exists('Submit', $data)) {
+                //Validate
+                $form->setData($data);
+                if ($form->isValid()) {
+                    $session = new Container(self::SESSION_NAMESPACE);
+                    $session->meetsEuro6 = $data['Fields']['MeetsEuro6'];
 
+                    $this->redirect()->toRoute('permits', ['action' => 'cabotage']);
+                }
             }
         }
-
-        //TEMPORARY
-        $applicationFee = "£10.00";
-        $issuingFee = "£123.00";
 
         $view = new ViewModel();
         $view->setVariable('applicationFee', $applicationFee);
