@@ -36,32 +36,26 @@ class PermitsController extends AbstractActionController
         return $view;
     }
 
-    public function ecmtLicenceAction()
+    public function applicationOverviewAction()
     {
-        //Create form from annotations
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
-            ->createForm('EcmtLicenceForm', false, false);
-
-        $data = $this->params()->fromPost();
+        $request = $this->getRequest();
+        $data = (array)$request->getPost();
+        $session = new Container(self::SESSION_NAMESPACE);
         if(is_array($data)) {
-            if (array_key_exists('Submit', $data)) {
-                //Validate
-                $form->setData($data);
-                if ($form->isValid()) {
-                    $session = new Container(self::SESSION_NAMESPACE);
-                    $session->ecmtLicence = $data['Fields']['EcmtLicence'];
+            if (!empty($data)) {
 
-                    $this->redirect()->toRoute('permits', ['action' => 'permitsOverview']);
-                }
             }
         }
 
-        $form->get('Fields')->get('Guidance')->setValue(
-            "ECMT permits can only be used by vehicles that meet Euro 6 standards"
-        );
+        //TEMPORARY
+        $applicationFee = "£10.00";
+        $issuingFee = "£123.00";
 
-        return array('form' => $form);
+        $view = new ViewModel();
+        $view->setVariable('applicationFee', $applicationFee);
+        $view->setVariable('issuingFee', $issuingFee);
+
+        return $view;
     }
 
     public function restrictedCountriesAction()

@@ -1,0 +1,62 @@
+<?php
+    $title = $this->translate('permits.application.overwiew.main-title');
+    $this->headTitle($title);
+?>
+
+<div class="row ecmt">
+    <div class="two-thirds">
+        <div class="page-header">
+            <div class="page-header__wrapper">
+                <h3 class="page-header__subtitle">OB2013691 / 107762</h3>
+                <h1 class="js-title">
+                    <?php echo $this->escapeHtml($title); ?>
+                </h1>
+            </div>
+        </div>
+
+        <p class="important">You must complete all of the sections to apply for a new permit.</p>
+
+        <div class="field">
+           <div class="table_wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="actions-container new-application--wrapper">
+                <p><a href="/permits/declaration" class="action--primary large"><?php echo $this->translate('permits.button.accept-and-continue'); ?></a></p>
+                <p><a href="/permits"> <?php echo $this->translate('permits.button.save-return-to-permits'); ?> </a></p>
+            </div>
+        </div>
+    </div>
+
+<!-- SIDE PANEL -->
+    <div class="one-third">
+        <aside class="sidebar" role="complementary">
+
+            <div class="info-box info-box--grey">
+                <h3 class="info-box__heading">Progress</h3>
+                <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i>Cancelled</p>
+                <p><b>1 of 8 complete</b></p>
+                <p><b>Application fee (non-refundable): </b> <?php echo $applicationFee; ?></p>
+                <p><b>Issuing fee (if application is successful): </b> <?php echo $issuingFee; ?></p>
+                <p>You can't submit until you've completed all of the sections</p>
+            </div>
+
+            <div class="info-box info-box--grey">
+                <h3 class="info-box__heading">Application status</h3>
+                <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i>Not Submitted</p>
+                <ul class="info-box__links">
+                    <li>
+                        <a href="#" target="_blank" class="">Cancel application</a>
+                    </li>
+                </ul>
+            </div>
+
+        </aside>
+    </div>
+</div>
