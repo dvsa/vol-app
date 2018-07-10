@@ -5,7 +5,7 @@ namespace PermitsTest\Form\Model\Form;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 
 /**
- * Class UserTest
+ * Class Euro6EmissionsFormTest
  *
  * @group FormTests
  */
@@ -22,7 +22,14 @@ class Euro6EmissionsFormTest extends AbstractFormValidationTestCase
 
         $this->assertFormElementRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
-        $this->assertFormElementType($element, "Zend\Form\Element\Radio");
+        $this->assertFormElementCheckbox($element);
+
+        //Not sure the bellow would work ($element isn't an object?)
+        $this->assertAttributeEquals(
+                    "form-control form-control--checkbox form-control--advanced",
+            "class",
+                              $element
+        );
     }
 
     public function testSubmit()

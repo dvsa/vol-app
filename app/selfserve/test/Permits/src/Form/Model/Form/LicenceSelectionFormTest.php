@@ -5,24 +5,24 @@ namespace PermitsTest\Form\Model\Form;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 
 /**
- * Class UserTest
+ * Class LicenceSelectionFormTest
  *
  * @group FormTests
  */
-class CabotageFormTest extends AbstractFormValidationTestCase
+class LicenceSelectionFormTest extends AbstractFormValidationTestCase
 {
     /**
      * @var string The class name of the form being tested
      */
-    protected $formName = \Permits\Form\Model\Form\CabotageForm::class;
+    protected $formName = \Permits\Form\Model\Form\LicenceSelectionForm::class;
 
-    public function testWillCabotage()
+    public function testLicence()
     {
-        $element = ['Fields', 'WillCabotage'];
+        $element = ['Fields', 'Licence'];
 
         $this->assertFormElementRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
-        $this->assertFormElementCheckbox($element);
+        $this->assertFormElementType($element, "Zend\Form\Element\Radio");
     }
 
     public function testGuidance()
@@ -34,6 +34,7 @@ class CabotageFormTest extends AbstractFormValidationTestCase
         $this->assertFormElementType($element, "\Common\Form\Elements\Types\GuidanceTranslated");
         $this->assertAttributeEquals("guidance", "data-container-class", $element);
     }
+
 
     public function testSubmit()
     {
