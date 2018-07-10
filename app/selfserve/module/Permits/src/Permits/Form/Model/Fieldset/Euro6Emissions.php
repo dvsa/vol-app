@@ -9,7 +9,6 @@ use Zend\Form\Annotation as Form;
  */
 class Euro6Emissions
 {
-
     /**
      * @Form\Name("MeetsEuro6")
      * @Form\Required(true)
@@ -19,16 +18,13 @@ class Euro6Emissions
      *    "onClick" : "toggleGuidance()",
      * })
      * @Form\Options({
-     *     "label": "",
-     *     "label_attributes":{
-     *          "class" : "block-label form-control form-control--radio form-control--inline euro6Radio"
-     *     },
-     *     "value_options":{
-     *          "1" : "Yes",
-     *          "0" : "No"
-     *     }
+     *   "checked_value": "Y",
+     *     "unchecked_value": "N",
+     *     "label": "I confirm that my ECMT permit(s) will only be used by vehicle(s) that are environmentally compliant to Euro 6 emissions standards.",
+     *     "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
+     *     "must_be_value": "Y"
      * })
-     * @Form\Type("Radio")
+     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
      */
     public $meetsEuro6 = null;
 
