@@ -146,10 +146,6 @@ class PermitsController extends AbstractActionController
             }
         }
 
-        $form->get('Fields')->get('Guidance')->setValue(
-            "ECMT permits can only be used by vehicles that meet Euro 6 standards"
-        );
-
         return array('form' => $form);
     }
 

@@ -12,10 +12,6 @@ class Euro6EmissionsForm
 {
         /**
          * @Form\Name("Fields")
-         * @Form\Options({
-         *     "label" : "",
-         *     "hint" : ""
-         * })
          * @Form\ComposedObject("Permits\Form\Model\Fieldset\Euro6Emissions")
          */
         public $fields = null;
