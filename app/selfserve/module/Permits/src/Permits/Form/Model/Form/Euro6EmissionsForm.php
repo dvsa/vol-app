@@ -13,7 +13,7 @@ class Euro6EmissionsForm
         /**
          * @Form\Name("Fields")
          * @Form\Options({
-         *     "label" : "permits.application.euro6.question"
+         *     "label" : "permits.page.euro6.emissions.question"
          * })
          * @Form\ComposedObject("Permits\Form\Model\Fieldset\Euro6Emissions")
          */
