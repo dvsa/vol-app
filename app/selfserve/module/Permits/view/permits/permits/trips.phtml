@@ -1,0 +1,32 @@
+<?php
+$title = $this->translate('permits.page.number-of-trips.title');
+$this->headTitle($title);
+?>
+
+<div class="row ecmt">
+    <div class="two-thirds">
+        <div class="page-header">
+            <p><a href="/permits/application-overview" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
+            <div class="page-header__wrapper">
+                <h1 class="js-title">
+                    <?php echo $this->translate('permits.page.number-of-trips.question'); ?>
+                </h1>
+            </div>
+        </div>
+
+        <div class="field">
+
+            <fieldset id="number-of-trips" class="inline" data-group="number-of-trips">
+                <?php
+                echo $this->formErrors($form);
+                echo $this->form($form);
+                ?>
+
+                <fieldset class="actions-container new-application--wrapper">
+                    <p><a href="/permits/application-overview"> <?php echo $this->translate('permits.button.save-return-to-overview'); ?> </a></p>
+                </fieldset>
+            </fieldset>
+        </div>
+
+    </div>
+</div>
