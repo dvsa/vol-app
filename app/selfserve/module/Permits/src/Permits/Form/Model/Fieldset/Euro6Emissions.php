@@ -13,7 +13,7 @@ class Euro6Emissions
      * @Form\Name("MeetsEuro6")
      * @Form\Required(true)
      * @Form\Attributes({
-     *   "class" : "input--trips",
+     *   "class" : "input--euro6",
      *    "id" : "MeetsEuro6",
      * })
      * @Form\Options({
@@ -30,8 +30,6 @@ class Euro6Emissions
      * })
      * @Form\Type("Radio")
      */
+
     public $meetsEuro6 = null;
-
 }
-
-?>

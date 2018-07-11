@@ -8,18 +8,18 @@ use Zend\Form\Annotation as Form;
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  */
+
 class Euro6EmissionsForm
 {
-        /**
-         * @Form\Name("Fields")
-         * @Form\ComposedObject("Permits\Form\Model\Fieldset\Euro6Emissions")
-         */
-        public $fields = null;
+    /**
+     * @Form\Name("Fields")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\Euro6Emissions")
+     */
+    public $fields = null;
 
-        /**
-         * @Form\Name("Submit")
-         * @Form\ComposedObject("Permits\Form\Model\Fieldset\Submit")
-         */
-        public $submitButton = null;
-
+    /**
+     * @Form\Name("Submit")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\Submit")
+     */
+    public $submitButton = null;
 }
