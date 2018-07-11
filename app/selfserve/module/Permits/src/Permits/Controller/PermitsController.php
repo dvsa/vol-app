@@ -92,6 +92,55 @@ class PermitsController extends AbstractActionController
         return $view;
     }
 
+    public function euro6EmissionsAction()
+    {
+        //Create form from annotations
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('Euro6EmissionsForm', false, false);
+
+        $data = $this->params()->fromPost();
+        if(is_array($data)) {
+            if (array_key_exists('Submit', $data)) {
+                //Validate
+                $form->setData($data);
+                if ($form->isValid()) {
+                    $session = new Container(self::SESSION_NAMESPACE);
+                    $session->meetsEuro6 = $data['Fields']['MeetsEuro6'];
+
+                    $this->redirect()->toRoute('permits', ['action' => 'cabotage']);
+                }
+            }
+        }
+
+        return array('form' => $form);
+    }
+
+    public function cabotageAction()
+    {
+        //Create form from annotations
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('CabotageForm', false, false);
+
+        $data = $this->params()->fromPost();
+        if(is_array($data)) {
+            if (array_key_exists('Submit', $data)) {
+                //Validate
+                $form->setData($data);
+                if ($form->isValid()) {
+                    //Save to session
+                    $session = new Container(self::SESSION_NAMESPACE);
+                    $session->willCabotage = $data['Fields']['WillCabotage'];
+
+                    $this->redirect()->toRoute('permits', ['action' => 'restricted-countries']);
+                }
+            }
+        }
+
+        return array('form' => $form);
+    }
+
     public function restrictedCountriesAction()
     {
 
@@ -158,56 +207,6 @@ class PermitsController extends AbstractActionController
 
         return array('form' => $form);
     }
-
-    public function euro6EmissionsAction()
-    {
-        //Create form from annotations
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
-            ->createForm('Euro6EmissionsForm', false, false);
-
-        $data = $this->params()->fromPost();
-        if(is_array($data)) {
-            if (array_key_exists('Submit', $data)) {
-                //Validate
-                $form->setData($data);
-                if ($form->isValid()) {
-                    $session = new Container(self::SESSION_NAMESPACE);
-                    $session->meetsEuro6 = $data['Fields']['MeetsEuro6'];
-
-                    $this->redirect()->toRoute('permits', ['action' => 'cabotage']);
-                }
-            }
-        }
-
-        return array('form' => $form);
-    }
-
-    public function cabotageAction()
-    {
-        //Create form from annotations
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
-            ->createForm('CabotageForm', false, false);
-
-        $data = $this->params()->fromPost();
-        if(is_array($data)) {
-            if (array_key_exists('Submit', $data)) {
-                //Validate
-                $form->setData($data);
-                if ($form->isValid()) {
-                    //Save to session
-                    $session = new Container(self::SESSION_NAMESPACE);
-                    $session->willCabotage = $data['Fields']['WillCabotage'];
-
-                    $this->redirect()->toRoute('permits', ['action' => 'restricted-countries']);
-                }
-            }
-        }
-
-        return array('form' => $form);
-    }
-
 
     public function summaryAction()
     {
