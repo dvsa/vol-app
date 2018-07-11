@@ -12,10 +12,6 @@ class RestrictedCountriesForm
 {
     /**
      * @Form\Name("Fields")
-     * @Form\Options({
-     *     "label" : "permits.page.field.restricted-countries",
-     *     "hint" : "markup-ecmt-restricted-countries",
-     * })
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\RestrictedCountries")
      */
     public $fields = null;
@@ -25,6 +21,4 @@ class RestrictedCountriesForm
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\Submit")
      */
     public $submitButton = null;
-
-
 }
