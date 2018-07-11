@@ -45,6 +45,7 @@ class OverviewController extends AbstractOverviewController
      */
     protected function getSections($data)
     {
+        var_dump($data['sections']); echo '----------******-----'; var_dump($data['applicationCompletion']); die;
         return $this->setEnabledAndCompleteFlagOnSections(
             $data['sections'],
             $data['applicationCompletion']
