@@ -18,7 +18,7 @@ class RestrictedCountries
      * })
      * @Form\Options({
      *     "label": "",
-     *     "short-label": "short-label-tol-licence-type",
+     *     "short-label": "error.messages.restricted.countries",
      *     "label_attributes":{
      *          "class" : "form-control form-control--radio form-control--inline restrictedRadio"
      *     },
