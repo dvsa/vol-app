@@ -1,5 +1,4 @@
 <?php
-
 namespace Permits\Controller;
 
 use Permits\Form\PermitApplicationForm;
@@ -11,8 +10,7 @@ use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermits;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermits;
-use Zend\Session\Container;
-use Zend\View\View; // We need this when using sessions
+use Zend\Session\Container; // We need this when using sessions
 
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 
@@ -22,9 +20,9 @@ class PermitsController extends AbstractActionController
 
     //TODO: Add event for all checks for whether or not $data(from form) is an array
     const SESSION_NAMESPACE = 'permit_application';
-  const DEFAULT_SEPARATOR = '|';
+    const DEFAULT_SEPARATOR = '|';
 
-  protected $tableName = 'dashboard-permits';
+    protected $tableName = 'dashboard-permits';
 
 
     public function indexAction()
@@ -43,20 +41,36 @@ class PermitsController extends AbstractActionController
         return $view;
     }
 
-    public function applicationOverviewAction()
+    public function ecmtLicenceAction()
     {
-        $request = $this->getRequest();
-        $data = (array)$request->getPost();
-        $session = new Container(self::SESSION_NAMESPACE);
-        if(is_array($data)) {
+        //Create form from annotations
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('EcmtLicenceForm', false, false);
+
+        /*
+         * Get licence to display in question
+         */
+        $licenceList = $this->getRelevantLicences();
+        $value_options = $this->transformListIntoValueOptions($licenceList, array('licNo', 'trafficArea'));
+
+        /*
+         * Set 'licences to display' as the value_options of the field
+         */
+        $options = array();
+        $options['value_options'] = $value_options;
+        $form->get('Fields')->get('EcmtLicence')->setOptions($options);
+
+        $data = $this->params()->fromPost();
+        if (is_array($data)) {
             if (array_key_exists('Submit', $data)) {
                 //Validate
                 $form->setData($data);
                 if ($form->isValid()) {
                     $session = new Container(self::SESSION_NAMESPACE);
-                    $session->meetsEuro6 = $data['Fields']['MeetsEuro6'];
+                    $session->meetsEuro6 = $data['Fields']['EcmtLicence'];
 
-                    $this->redirect()->toRoute('permits', ['action' => 'euro6Emissions']);
+                    $this->redirect()->toRoute('permits', ['action' => 'application-overview']);
                 }
             }
         }
@@ -106,62 +120,13 @@ class PermitsController extends AbstractActionController
         return $view;
     }
 
-    public function euro6EmissionsAction()
-    {
-        //Create form from annotations
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
-            ->createForm('Euro6EmissionsForm', false, false);
-
-        $data = $this->params()->fromPost();
-        if(is_array($data)) {
-            if (array_key_exists('Submit', $data)) {
-                //Validate
-                $form->setData($data);
-                if ($form->isValid()) {
-                    $session = new Container(self::SESSION_NAMESPACE);
-                    $session->meetsEuro6 = $data['Fields']['MeetsEuro6'];
-
-                    $this->redirect()->toRoute('permits', ['action' => 'cabotage']);
-                }
-            }
-        }
-
-        return array('form' => $form);
-    }
-
-    public function cabotageAction()
-    {
-        //Create form from annotations
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
-            ->createForm('CabotageForm', false, false);
-
-        $data = $this->params()->fromPost();
-        if(is_array($data)) {
-            if (array_key_exists('Submit', $data)) {
-                //Validate
-                $form->setData($data);
-                if ($form->isValid()) {
-                    //Save to session
-                    $session = new Container(self::SESSION_NAMESPACE);
-                    $session->willCabotage = $data['Fields']['WillCabotage'];
-
-                    $this->redirect()->toRoute('permits', ['action' => 'restricted-countries']);
-                }
-            }
-        }
-
-        return array('form' => $form);
-    }
-
     public function restrictedCountriesAction()
     {
 
         //Create form from annotations
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
-            ->createForm('RestrictedCountriesForm');
+            ->createForm('RestrictedCountriesForm', false, false);
 
         $data = $this->params()->fromPost();
         if(is_array($data)) {
@@ -207,7 +172,7 @@ class PermitsController extends AbstractActionController
         * Get Countries List from Database
         */
         $response = $this->handleQuery(ConstrainedCountries::create(array()));
-    $restrictedCountryList = $response->getResult();
+        $restrictedCountryList = $response->getResult();
 
         /*
         * Make the restricted countries list the value_options of the form
@@ -221,6 +186,60 @@ class PermitsController extends AbstractActionController
 
         return array('form' => $form);
     }
+
+    public function euro6EmissionsAction()
+    {
+        //Create form from annotations
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('Euro6EmissionsForm', false, false);
+
+        $data = $this->params()->fromPost();
+        if(is_array($data)) {
+            if (array_key_exists('Submit', $data)) {
+                //Validate
+                $form->setData($data);
+                if ($form->isValid()) {
+                    $session = new Container(self::SESSION_NAMESPACE);
+                    $session->meetsEuro6 = $data['Fields']['MeetsEuro6'];
+
+                    $this->redirect()->toRoute('permits', ['action' => 'cabotage']);
+                }
+            }
+        }
+
+        return array('form' => $form);
+    }
+
+    public function cabotageAction()
+    {
+        //Create form from annotations
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('CabotageForm', false, false);
+
+        $data = $this->params()->fromPost();
+        if(is_array($data)) {
+            if (array_key_exists('Submit', $data)) {
+                //Validate
+                $form->setData($data);
+                if ($form->isValid()) {
+                    //Save to session
+                    $session = new Container(self::SESSION_NAMESPACE);
+                    $session->willCabotage = $data['Fields']['WillCabotage'];
+
+                    $this->redirect()->toRoute('permits', ['action' => 'summary']);
+                }
+            }
+        }
+
+        $form->get('Fields')->get('Guidance')->setValue(
+            "You can't carry out cabotage with an ECMT permit."
+        );
+
+        return array('form' => $form);
+    }
+
 
     public function summaryAction()
     {
@@ -236,84 +255,44 @@ class PermitsController extends AbstractActionController
          * Collate session data for use in view
          */
         $sessionData = array();
-        $sessionData['tripsQuestion'] = 'How many trips will be
-                                        made by your company abroad
-                                        over the next 12 months?';
-     $sessionData['trips'] = $session->tripsData;
+        $sessionData['countriesQuestion'] = 'Are you transporting goods to a 
+                                        restricted country such as Austria, 
+                                        Greece, Hungary, Italy or Russia?';
 
-     $sessionData['sectorsQuestion'] = 'What type of goods
-                                        will you carry over
-                                        the next 12 months?';
-     $sessionData['sectors'] = array();
-     if(count($session->sectorsData) >= $session->totalSectorsCount){
-         array_push($sessionData['sectors'], 'All');
-     }else {
-         foreach ($session->sectorsData as $sector) {
-             //add everything right of '|' to the list of sectors to get rid of the sector ID
-             array_push($sessionData['sectors'], substr($sector, strpos($sector, $this::DEFAULT_SEPARATOR) + 1));
-         }
-     }
-
-     $sessionData['restrictedCountriesQuestion'] = 'Restricted countries';
-     $sessionData['restrictedCountries'] = $session->restrictedCountriesData == 1 ? 'Yes' : 'No';
-
-    return array('sessionData' => $sessionData);
-    }
-
-    public function eligibilityAction()
-    {
-        $form = new EligibilityForm();
-        $request = $this->getRequest();
-
-        if($request->isPost()){
-            //If handling returned form (submit clicked)
-        }
-
-        return array('form' => $form);
-    }
-
-    public function eligibleAction()
-    {
-        return new ViewModel();
-    }
-
-    public function nonEligibleAction()
-    {
-        return new ViewModel();
-    }
-
-    public function applicationAction()
-    {
-        $form = new ApplicationForm();
-        $inputFilter = null;
-        $request = $this->getRequest();
-        $data['maxApplications'] = 12;
-
-        if ($request->isPost())
+        $sessionData['countries'] = array();
+        if($session->restrictedCountries == 1)
         {
-            $data = $this->params()->fromPost();
-            $jsonObject = json_encode($data);
-
-            $step1Form = new EligibilityForm();
-            $inputFilter = $step1Form->getInputFilter();
-            $inputFilter->setData($data);
-
-            if ($inputFilter->isValid())
-            {
-                //valid so save data
+            foreach ($session->restrictedCountriesList as $country) {
+                //add everything right of '|' to the list of countries to get rid of the sector ID
+                array_push($sessionData['countries'], substr($country, strpos($country, $this::DEFAULT_SEPARATOR) + 1));
             }
+        }else{
+            array_push($sessionData['countries'], 'No');
         }
-        return array('form' => $form, 'data' => $data);
-    }
 
-    public function overviewAction()
-    {
-        return new ViewModel();
+        $sessionData['meetsEuro6Question'] = 'Do your vehicles meet Euro 6 emissions standards?';
+        $sessionData['meetsEuro6'] = $session->meetsEuro6 == 1 ? 'Yes' : 'No';
+
+        $sessionData['cabotageQuestion'] = 'Will you be carrying out cabotage?';
+        $sessionData['cabotage'] = $session->willCabotage == 1 ? 'Yes' : 'No';
+
+        return array('sessionData' => $sessionData);
     }
 
     public function declarationAction()
     {
-        return new ViewModel();
+        $session = new Container(self::SESSION_NAMESPACE);
+
+        $form = new PermitApplicationForm();
+        $form->setData(array(
+            'intensity'                 => $session->tripsData,
+            'sectors'                   => $this->extractIDFromSessionData($session->sectorsData),
+            'restrictedCountries'       => $session->restrictedCountriesData,
+            'restrictedCountriesList'   => $this->extractIDFromSessionData($session->restrictedCountriesList)
+
+        ));
+
+        return array('form' => $form);
     }
 
     public function feeAction()
@@ -349,32 +328,7 @@ class PermitsController extends AbstractActionController
         return $view;
     }
 
-    public function step3Action()
-    {
-        $inputFilter = null;
-        $jsonObject = null;
-        $request = $this->getRequest();
 
-        if ($request->isPost())
-        {
-            $data = $this->params()->fromPost();
-            $jsonObject = json_encode($data);
-
-            $step2Form = new ApplicationForm();
-            $inputFilter = $step2Form->getInputFilter();
-            $inputFilter->setData($data);
-
-            if ($inputFilter->isValid())
-            {
-                //valid so save data
-            }
-        }
-        return array('jsonObj' => $jsonObject, 'inputFilter' => $inputFilter, 'step' => '3');
-    }
-
-    /**
-     * @return mixed
-     */
     public function submittedAction()
     {
         $session = new Container(self::SESSION_NAMESPACE);
@@ -448,4 +402,5 @@ class PermitsController extends AbstractActionController
 
         return $IDList;
     }
+
 }
