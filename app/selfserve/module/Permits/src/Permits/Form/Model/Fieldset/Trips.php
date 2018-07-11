@@ -17,13 +17,10 @@ class Trips
      *   "id" : "TripsAbroad",
      * })
      * @Form\Options({
-     *   "checked_value": "Y",
-     *     "unchecked_value": "N",
      *     "label": "permits.form.trips.label",
-     *     "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
-     *     "must_be_value": "Y"
+     *     "label_attributes": {"class": "form-control form-control--advanced"},
      * })
-     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
+     * @Form\Type("Zend\Form\Element\Number")
      */
 
     public $tripsAbroad = null;
