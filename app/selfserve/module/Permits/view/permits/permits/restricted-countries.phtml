@@ -1,68 +1,36 @@
 <?php
-    $title = $this->translate('permits.page.title.restricted-countries');
+    $title = $this->translate('permits.page.restricted-countries.title');
     $this->headTitle($title);
 ?>
-<style>
-    .form-control--radio {
-        margin-right: 20px;
-    }
-    #Euro6Emissions .article, .guidance legend {
-        top: 10px;
-        display: block;
-        color: #6f777b;
-        width: 90%;
-        clear: both;
-        max-width: 600px;
-        padding-top: 10px;
-        font-size: 19px;
-        font-weight: 400;
-    }
-    .restrictedCountriesListFieldset{
-        display: none;
-    }
-    #submitbutton, .row {
-        margin-top: 40px;
-    }
-
-</style>
-<script>
-    function toggleGuidance() {
-        var x = document.getElementById("restrictedCountriesRadio");
-        var list = document.getElementsByClassName("restrictedCountriesListFieldset");
-        if (x.checked === true) {
-            list[0].style.display = "block";
-        } else {
-            list[0].style.display = "none";
-        }
-    }
-</script>
 
 <div class="row ecmt">
-    <div class="three-quarters">
-
+    <div class="two-thirds">
         <div class="page-header">
-            <p>
-                <a href="/permits/restricted-countries" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a>
-            </p>
+            <p><a href="/permits/application-overview" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
+            <div class="page-header__wrapper">
+                <h1 class="js-title">
+                    <?php echo $this->translate('permits.page.restricted-countries.question'); ?>
+                </h1>
+            </div>
         </div>
 
-        <fieldset id="restricted-countries" class="inline" data-group="restricted-countries">
-
-            <div class="row">
-                <div class="dashboard two-thirds js-body" >
-                    <?php
-                        //echo $this->flashMessengerAll();
-                        echo $this->formErrors($form);
-                        echo $this->form($form);
-                    ?>
-
-                    <fieldset class="actions-container new-application--wrapper">
-                        <p><a href="/permits"> <?php echo $this->translate('permits.button.save-return-to-permits'); ?> </a></p>
-                    </fieldset>
-                </div>
+        <div class="field">
+            <div class="govuk-hint">
+                <p><?php echo $this->translate('markup-ecmt-restricted-countries-info'); ?></p>
             </div>
-        </fieldset>
+
+            <fieldset id="restricted-countries" class="inline" data-group="restricted-countries">
+                <?php
+                    echo $this->flashMessengerAll();
+                    echo $this->formErrors($form);
+                    echo $this->form($form);
+                ?>
+
+                <fieldset class="actions-container new-application--wrapper">
+                    <p><a href="/permits/application-overview"> <?php echo $this->translate('permits.button.save-return-to-overview'); ?> </a></p>
+                </fieldset>
+            </fieldset>
+        </div>
 
     </div>
 </div>
-
