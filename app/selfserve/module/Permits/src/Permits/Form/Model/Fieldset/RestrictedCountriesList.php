@@ -7,13 +7,11 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("RestrictedCountriesList")
  * @Form\Attributes({
- *     "class" : "restrictedCountriesListFieldset guidance"
+ *     "class" : "restricted-countries-list guidance"
  * })
  */
 class RestrictedCountriesList
 {
-
-
     /**
      * @Form\Name("restrictedCountriesList")
      * @Form\Required(false)
@@ -22,7 +20,7 @@ class RestrictedCountriesList
      *      "data-container-class": "form-control__container",
      *     })
      * @Form\Options({
-     *     "label": "Select all options that are relevant to you.",
+     *     "label": "markup-ecmt-restricted-countries-list-label",
      *     "label_attributes":{
      *          "class" : "form-control form-control--checkbox"
      *     },
@@ -33,5 +31,3 @@ class RestrictedCountriesList
     public $restrictedCountriesList = null;
 
 }
-
-?>
