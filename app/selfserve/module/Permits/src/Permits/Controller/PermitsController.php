@@ -169,14 +169,10 @@ class PermitsController extends AbstractActionController
                     $session = new Container(self::SESSION_NAMESPACE);
                     $session->willCabotage = $data['Fields']['WillCabotage'];
 
-                    $this->redirect()->toRoute('permits', ['action' => 'summary']);
+                    $this->redirect()->toRoute('permits', ['action' => 'restricted-countries']);
                 }
             }
         }
-
-        $form->get('Fields')->get('Guidance')->setValue(
-            "You can't carry out cabotage with an ECMT permit."
-        );
 
         return array('form' => $form);
     }
