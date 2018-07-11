@@ -14,7 +14,6 @@ class RestrictedCountries
      * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--restricted-countries",
-     *   "onClick" : "toggleGuidance()",
      *   "id" : "restrictedCountriesRadio",
      * })
      * @Form\Options({
