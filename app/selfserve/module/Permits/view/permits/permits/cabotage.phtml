@@ -1,61 +1,36 @@
 <?php
-    $title = $this->translate('permits.page.title.cabotage');
+    $title = $this->translate('permits.page.cabotage.title');
     $this->headTitle($title);
 ?>
-<style>
-    .form-control--radio {
-        margin-right: 20px;
-    }
-    .guidance .article{
-        top: 10px;
-        display: block;
-        color: #6f777b;
-        width: 90%;
-        clear: both;
-        max-width: 600px;
-        padding-top: 10px;
-        font-size: 19px;
-        font-weight: 400;
-    }
-    .guidance{
-        display: none;
-    }
-    #submitbutton, .row {
-        margin-top: 40px;
-    }
-</style>
-<script>
-    function toggleGuidance() {
-        var x = document.getElementById("WillCabotage");
-        var guidance = document.getElementsByClassName("field guidance");
-        if (x.checked === false) {
-            guidance[0].style.display = "none";
-        } else {
-            guidance[0].style.display = "block";
-        }
-    }
-</script>
 
 <div class="row ecmt">
-    <div class="three-quarters">
+    <div class="two-thirds">
         <div class="page-header">
-            <p>
-                <a href="/permits/euro6-emissions" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a>
-            </p>
-        </div>
-        <fieldset id="cabotage" class="inline" data-group="cabotage">
-            <div class="row">
-                <div class="dashboard two-thirds js-body">
-                    <?php
-                        //echo $this->flashMessengerAll();
-                        echo $this->formErrors($form);
-                        echo $this->form($form);
-                    ?>
-                    <fieldset class="actions-container new-application--wrapper">
-                        <p><a href="/permits"> <?php echo $this->translate('permits.button.save-return-to-permits'); ?> </a></p>
-                    </fieldset>
-                </div>
+            <p><a href="/permits/application-overview" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
+            <div class="page-header__wrapper">
+                <h1 class="js-title">
+                    <?php echo $this->translate('permits.page.cabotage.question'); ?>
+                </h1>
             </div>
-        </fieldset>
+        </div>
+
+        <div class="field">
+            <div class="govuk-hint">
+                <p><?php echo $this->translate('markup-ecmt-cabotage-info'); ?></p>
+            </div>
+
+            <fieldset id="cabotage" class="inline" data-group="cabotage">
+                <?php
+                echo $this->flashMessengerAll();
+                echo $this->formErrors($form);
+                echo $this->form($form);
+                ?>
+
+                <fieldset class="actions-container new-application--wrapper">
+                    <p><a href="/permits/application-overview"> <?php echo $this->translate('permits.button.save-return-to-overview'); ?> </a></p>
+                </fieldset>
+            </fieldset>
+        </div>
+
     </div>
 </div>
