@@ -122,7 +122,6 @@ class PermitsController extends AbstractActionController
 
     public function restrictedCountriesAction()
     {
-
         //Create form from annotations
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
@@ -135,9 +134,10 @@ class PermitsController extends AbstractActionController
                 $form->setData($data);
                 if ($form->isValid()) {
                     //EXTRA VALIDATION
-                    if(($data['Fields']['restrictedCountries'] == 1
+                    if (($data['Fields']['restrictedCountries'] == 1
                             && isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList']))
-                        || ($data['Fields']['restrictedCountries'] == 0)) {
+                        || ($data['Fields']['restrictedCountries'] == 0))
+                    {
 
                         //Save data to session
                         $session = new Container(self::SESSION_NAMESPACE);
@@ -146,7 +146,8 @@ class PermitsController extends AbstractActionController
                         if ($session->restrictedCountries == 1) //if true
                         {
                             $session->restrictedCountriesList = $data['Fields']['restrictedCountriesList']['restrictedCountriesList'];
-                        } else {
+                        }
+                        else {
                             $session->restrictedCountriesList = null;
                         }
 
@@ -160,8 +161,9 @@ class PermitsController extends AbstractActionController
                             $session->applicationId = $insert['id']['ecmtPermitApplication'];
                         }
 
-                        $this->redirect()->toRoute('permits', ['action' => 'euro6Emissions']);
-                    }else{
+                        $this->redirect()->toRoute('permits', ['action' => 'trips']);
+                    }
+                    else{
                         //conditional validation failed, restricted countries list should not be empty
                         $form->get('Fields')->get('restrictedCountriesList')->get('restrictedCountriesList')->setMessages(['Value is required']);
                     }
