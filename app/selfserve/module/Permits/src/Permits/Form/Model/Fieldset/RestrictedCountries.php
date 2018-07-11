@@ -9,12 +9,11 @@ use Zend\Form\Annotation as Form;
  */
 class RestrictedCountries
 {
-
     /**
      * @Form\Name("restrictedCountries")
      * @Form\Required(true)
      * @Form\Attributes({
-     *   "class" : "input--trips",
+     *   "class" : "input--restricted-countries",
      *   "onClick" : "toggleGuidance()",
      *   "id" : "restrictedCountriesRadio",
      * })
@@ -32,7 +31,6 @@ class RestrictedCountries
      * @Form\Type("Radio")
      */
     public $restrictedCountries = null;
-
 
     /**
      * @Form\Name("restrictedCountriesList")
