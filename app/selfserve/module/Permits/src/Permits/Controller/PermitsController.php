@@ -41,25 +41,10 @@ class PermitsController extends AbstractActionController
         return $view;
     }
 
+
     public function ecmtLicenceAction()
     {
-        //Create form from annotations
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
-            ->createForm('EcmtLicenceForm', false, false);
-
-        /*
-         * Get licence to display in question
-         */
-        $licenceList = $this->getRelevantLicences();
-        $value_options = $this->transformListIntoValueOptions($licenceList, array('licNo', 'trafficArea'));
-
-        /*
-         * Set 'licences to display' as the value_options of the field
-         */
-        $options = array();
-        $options['value_options'] = $value_options;
-        $form->get('Fields')->get('EcmtLicence')->setOptions($options);
+        $form = $this->getEcmtLicenceForm();
 
         $data = $this->params()->fromPost();
         if (is_array($data)) {
@@ -392,6 +377,44 @@ class PermitsController extends AbstractActionController
         return $value_options;
     }
 
+    private function getEcmtLicenceForm()
+    {
+        //TODO: MOVE THIS TO A SERVICE/HELPER
+        /*
+         * Create form from annotations
+         */
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('EcmtLicenceForm', false, false);
+
+        /*
+         * Get licence to display in question
+         */
+        $licenceList = $this->getRelevantLicences();
+        $value_options = $this->transformListIntoValueOptions($licenceList, array('licNo', 'trafficArea'));
+
+        /*
+         * Add brack
+         */
+        foreach($value_options as $key => $value)
+        {
+            $spacePosition = strpos($value, ' '); //find position of first space
+            $newValue = substr_replace($value, ' (', $spacePosition, 1); //add bracket after first space
+
+            $newValue = trim($newValue) . ')';//add bracket to end
+
+            $value_options[$key] = $newValue;//set current value option to reformatted value
+        }
+
+        /*
+         * Set 'licences to display' as the value_options of the field
+         */
+        $options = array();
+        $options['value_options'] = $value_options;
+        $form->get('Fields')->get('EcmtLicence')->setOptions($options);
+
+        return $form;
+    }
 
 
     private function extractIDFromSessionData($sessionData){
