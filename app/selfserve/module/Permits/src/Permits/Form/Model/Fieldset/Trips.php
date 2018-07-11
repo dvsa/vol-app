@@ -18,7 +18,8 @@ class Trips
      * })
      * @Form\Options({
      *     "label": "permits.form.trips.label",
-     *     "label_attributes": {"class": "form-control form-control--advanced"},
+     *     "hint": "For licence OB2013691 (North East of England)",
+     *     "short-label": "error.messages.trips",
      * })
      * @Form\Type("Zend\Form\Element\Number")
      */
