@@ -394,7 +394,7 @@ class PermitsController extends AbstractActionController
         $value_options = $this->transformListIntoValueOptions($licenceList, array('licNo', 'trafficArea'));
 
         /*
-         * Add brack
+         * Add brackets
          */
         foreach($value_options as $key => $value)
         {
