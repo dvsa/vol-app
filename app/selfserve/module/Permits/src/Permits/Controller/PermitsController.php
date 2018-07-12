@@ -226,8 +226,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     {
         //Create form from annotations
         $form = $this->getServiceLocator()
-            ->get('Helper\Form')
-            ->createForm('TripsForm', false, false);
+        ->get('Helper\Form')
+        ->createForm('TripsForm', false, false);
 
         $data = $this->params()->fromPost();
         if(is_array($data)) {
@@ -240,6 +240,30 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                     $session->willCabotage = $data['Fields']['TripsAbroad'];
 
                     $this->redirect()->toRoute('permits', ['action' => 'international-journey']);
+                }
+            }
+        }
+
+        return array('form' => $form);
+    }
+
+    public function internationalJourneyAction()
+    {
+        //Create form from annotations
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('InternationalJourneyForm', false, false);
+
+        $data = $this->params()->fromPost();
+        if (is_array($data)) {
+            if (array_key_exists('Submit', $data)) {
+                //Validate
+                $form->setData($data);
+                if ($form->isValid()) {
+                    $session = new Container(self::SESSION_NAMESPACE);
+                    $session->meetsEuro6 = $data['Fields']['InternationalJourney'];
+
+                    $this->redirect()->toRoute('permits', ['action' => 'sector']);
                 }
             }
         }
