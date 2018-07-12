@@ -34,7 +34,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
     public function indexAction()
     {
-
         $query = EcmtPermits::create(array());
         $response = $this->handleQuery($query);
         $dashboardData = $response->getResult();
@@ -248,6 +247,22 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return array('form' => $form);
     }
 
+    public function checkAnswersAction()
+    {
+        $session = new Container(self::SESSION_NAMESPACE);
+        $data = $this->params()->fromPost();
+        if(is_array($data)) {
+            if (array_key_exists('submit', $data)) {
+                //Save data to session
+                $session->willCabotage = $data['willCabotage'];
+            }
+        }
+
+        $sessionData = $this->collateSessionData();
+
+        return array('sessionData' => $sessionData);
+    }
+
     public function summaryAction()
     {
         $session = new Container(self::SESSION_NAMESPACE);
@@ -446,6 +461,66 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         }
 
         return $IDList;
+    }
+
+    /**
+     * Returns a new array with all the user's answers (taken from the session)
+     * and associated question titles (as per the check-answers/summary page).
+     *
+     *
+     * @return array
+     */
+    private function collateSessionData()
+    {
+        $session = new Container(self::SESSION_NAMESPACE);
+        $sessionData = array();
+
+        //SELECTED LICENCE
+        $sessionData['licenceQuestion']
+            = 'Licence selected';
+        $sessionData['licenceAnswer'] = $session['licence'];
+
+        //EURO 6 EMISSIONS CONFIRMATION
+        $sessionData['meetsEuro6Question']
+            = 'I confirm that my ECMT permit(s) will only be 
+                used by vehicle(s) that are environmentally compliant 
+                to Euro 6 emissions standards.';
+        $sessionData['meetsEuro6Answer'] = $session['meetsEuro6'];
+
+        //CABOTAGE CONFIRMATION
+        $sessionData['cabotageQuestion']
+            = 'I confirm that I will not undertake a 
+                cabotage journey(s) with an ECMT permit.';
+        $sessionData['cabotageAnswer'] = $session['cabotage'];
+
+        //RESTRICTED COUNTRIES
+        $sessionData['restrictedCountriesQuestion']
+            = 'Do you intend to transport goods to
+                Austria, Greece, Hungary, Italy or Russia?';
+        $sessionData['restrictedCountriesAnswer'] = $session['restrictedCountries'];
+
+        //NUMBER OF TRIPS PER YEAR
+        $sessionData['tripsQuestion']
+            = 'How many international trips were carried out over the past 12 months?';
+        $sessionData['tripsAnswer'] = $session['trips'];
+
+        //'PERCENTAGE' QUESTION
+        $sessionData['percentageQuestion']
+            = 'What percentage of your business 
+                is related to international journeys over the past 12 months?';
+        $sessionData['percentageAnswer'] = $session['percentage'];
+
+        //SECTORS QUESTION
+        $sessionData['specialistHaulageQuestion']
+            = 'Do you specialise in carrying goods for one specific sector?';
+        $sessionData['specialistHaulageAnswer'] = $session['specialistHaulage'];
+
+        //NUMBER OF PERMITS REQUIRED
+        $sessionData['permitsQuestion']
+            = 'How many permits does your business require?';
+        $sessionData['permitsAnswer'] = $session['permits'];
+
+        return $sessionData;
     }
 
 }
