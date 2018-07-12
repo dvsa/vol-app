@@ -3,6 +3,7 @@
 namespace PermitsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Zend\Validator;
 
 /**
  * Class UserTest
@@ -22,17 +23,11 @@ class CabotageFormTest extends AbstractFormValidationTestCase
 
         $this->assertFormElementRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
-        $this->assertFormElementCheckbox($element);
-    }
+        $this->assertFormElementType($element, "\Common\Form\Elements\InputFilters\SingleCheckbox");
 
-    public function testGuidance()
-    {
-        $element = ['Fields', 'Guidance'];
-
-        $this->assertFormElementRequired($element, false);
-        $this->assertFormElementAllowEmpty($element, true);
-        $this->assertFormElementType($element, "\Common\Form\Elements\Types\GuidanceTranslated");
-        $this->assertAttributeEquals("guidance", "data-container-class", $element);
+        $this->assertFormElementValid($element, 'Y');
+        $this->assertFormElementNotValid($element, 'N', [Validator\Identical::NOT_SAME]);
+        $this->assertFormElementNotValid($element, 'X', [Validator\Identical::NOT_SAME]); //[Validator\InArray::NOT_IN_ARRAY]
     }
 
     public function testSubmit()
