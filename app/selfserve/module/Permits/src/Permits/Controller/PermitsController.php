@@ -225,6 +225,22 @@ class PermitsController extends AbstractActionController
         return array('form' => $form);
     }
 
+    public function checkAnswersAction()
+    {
+        $session = new Container(self::SESSION_NAMESPACE);
+        $data = $this->params()->fromPost();
+        if(is_array($data)) {
+            if (array_key_exists('submit', $data)) {
+                //Save data to session
+                $session->willCabotage = $data['willCabotage'];
+            }
+        }
+
+        $sessionData = null;
+
+        return array('sessionData' => $sessionData);
+    }
+
     public function summaryAction()
     {
         $session = new Container(self::SESSION_NAMESPACE);
