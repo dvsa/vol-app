@@ -18,7 +18,7 @@ class SpecialistHaulage
      * })
      * @Form\Options({
      *     "label": "",
-     *     "short-label": "error.messages.restricted.countries",
+     *     "short-label": "error.messages.sector",
      *     "label_attributes":{
      *          "class" : "form-control form-control--radio form-control--inline specialistRadio"
      *     },

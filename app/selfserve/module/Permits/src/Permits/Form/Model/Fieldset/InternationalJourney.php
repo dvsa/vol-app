@@ -13,7 +13,7 @@ class InternationalJourney
      * @Form\Name("InternationalJourney")
      * @Form\Required(true)
      * @Form\Attributes({
-     *   "class" : "input--trips",
+     *   "class" : "input--international-journey",
      *    "id" : "InternationalJourney",
      * })
      * @Form\Options({
