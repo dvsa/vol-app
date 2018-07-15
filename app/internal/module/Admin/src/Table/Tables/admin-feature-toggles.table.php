@@ -25,7 +25,7 @@ return array(
         array(
             'title' => 'Name',
             'name' => 'friendlyName',
-            'formatter' => 'featureToggleEditLink'
+            'formatter' => 'FeatureToggleEditLink'
         ),
         array(
             'title' => 'Handler (or config key)',
@@ -34,7 +34,7 @@ return array(
         array(
             'title' => 'Status',
             'name' => 'status',
-            'formatter' => 'refDataStatus'
+            'formatter' => 'RefDataStatus'
         ),
         array(
             'title' => '',
