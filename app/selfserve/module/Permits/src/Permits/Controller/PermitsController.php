@@ -7,11 +7,13 @@ use Common\Controller\AbstractOlcsController;
 use Common\FeatureToggle;
 use Zend\View\Model\ViewModel;
 use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries;
+use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
 use Dvsa\Olcs\Transfer\Query\Permits\SectorsList;
 
 use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermits;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
+use Zend\Mvc\MvcEvent;
 
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermits;
@@ -38,8 +40,27 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         ],
     ];
 
+    /**
+     * @todo This is just a placeholder, this will be implemented properly using system parameters in OLCS-20848
+     *
+     * @var array
+     */
+    protected $govUkReferrers = [];
+
     public function indexAction()
     {
+        $eligibleForPermits = $this->isEligibleForPermits();
+        $view = new ViewModel();
+        $view->setVariable('isEligible', $eligibleForPermits);
+
+        if (!$eligibleForPermits) {
+            if (!$this->referredFromGovUkPermits($this->getEvent())) {
+                return $this->notFoundAction();
+            }
+
+            return $view;
+        }
+
         $query = EcmtPermitApplication::create(array());
         $response = $this->handleQuery($query);
         $applicationData = $response->getResult();
@@ -51,7 +72,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $applicationsTable = $this->getServiceLocator()->get('Table')->prepareTable($this->applicationsTableName, $applicationData['results']);
         $issuedTable = $this->getServiceLocator()->get('Table')->prepareTable($this->issuedTableName, $issuedData['results']);
 
-        $view = new ViewModel();
         $view->setVariable('issuedNo', $issuedData['count']);
         $view->setVariable('applicationsNo', $applicationData['count']);
         $view->setVariable('applicationsTable', $applicationsTable);
@@ -59,7 +79,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         return $view;
     }
-
 
     public function ecmtLicenceAction()
     {
@@ -623,6 +642,38 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         }
 
         return $IDList;
+    }
+
+    /**
+     * Whether the organisation is eligible for permits
+     *
+     * @return bool
+     */
+    private function isEligibleForPermits(): bool
+    {
+        //check whether user is allowed to access permits
+        $query = EligibleForPermits::create([]);
+        $response = $this->handleQuery($query)->getResult();
+
+        return $response['eligibleForPermits'];
+    }
+
+    /**
+     * Check whether the referrer is the gov.uk permits page
+     *
+     * @param MvcEvent $e
+     *
+     * @return bool
+     */
+    private function referredFromGovUkPermits(MvcEvent $e): bool
+    {
+        /**
+         * @var \Zend\Http\PhpEnvironment\Request $request
+         * @var \Zend\Http\Header\Referer $referer
+         */
+        $request = $e->getRequest();
+        $referer = $request->getHeader('referer');
+        return in_array($referer->getUri(), $this->govUkReferrers);
     }
 
     //TODO remove this method once all session functionality is removed

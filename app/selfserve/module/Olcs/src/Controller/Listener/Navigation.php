@@ -9,6 +9,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\Navigation\Navigation as ZendNavigation;
 use Common\Service\Cqrs\Query\QuerySender;
 use Common\FeatureToggle;
+use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
 
 /**
  * Class Navigation
@@ -32,6 +33,13 @@ class Navigation implements ListenerAggregateInterface
      * @var array
      */
     protected $listeners = [];
+
+    /**
+     * @todo This is just a placeholder, this will be implemented properly using system parameters in OLCS-20848
+     *
+     * @var array
+     */
+    protected $govUkReferers = [];
 
     /**
      * Navigation constructor
@@ -71,29 +79,97 @@ class Navigation implements ListenerAggregateInterface
      */
     public function onDispatch(MvcEvent $e)
     {
-        $this->toggleEcmtMenus();
-        $this->togglePermitsMenus();
+        $shouldShowPermitsTab = $this->shouldShowPermitsTab($e);
+        $this->toggleEcmtMenus($shouldShowPermitsTab);
+        $this->togglePermitsMenus($shouldShowPermitsTab);
     }
 
     /**
      * Toggle ECMT menus
      *
+     * @param bool $shouldShowPermitsTab whether to show permits tab
+     *
      * @return void
      */
-    private function toggleEcmtMenus(): void
+    private function toggleEcmtMenus(bool $shouldShowPermitsTab): void
     {
         $ecmtEnabled = $this->querySender->featuresEnabled([FeatureToggle::SELFSERVE_ECMT]);
-        $this->navigation->findBy('id', 'dashboard-permits')->setVisible($ecmtEnabled);
+        $this->navigation->findBy('id', 'dashboard-permits')->setVisible($ecmtEnabled && $shouldShowPermitsTab);
     }
 
     /**
      * Toggle EU permits menus
      *
-     *  @return void
+     * @param bool $shouldShowPermitsTab whether to show permits tab
+     *
+     * @return void
      */
-    private function togglePermitsMenus(): void
+    private function togglePermitsMenus(bool $shouldShowPermitsTab): void
     {
         //permits related config will go here once available
         //$permitsEnabled = $this->querySender->featuresEnabled([FeatureToggle::SELFSERVE_PERMITS]);
+    }
+
+    /**
+     * We need to have either been referred from gov.uk or meet the criteria to be eligible for permits
+     * We check the referrer first, as we may be able to save an API call this way
+     *
+     * @param MvcEvent $e
+     *
+     * @return bool
+     */
+    private function shouldShowPermitsTab(MvcEvent $e)
+    {
+        $referedFromGovUk = $this->referedFromGovUkPermits($e);
+
+        if (!$referedFromGovUk) {
+            return $this->isEligibleForPermits();
+        }
+
+        return $referedFromGovUk;
+    }
+
+    /**
+     * Whether the organisation is eligible for permits
+     *
+     * @return bool
+     */
+    private function isEligibleForPermits(): bool
+    {
+        //check whether user is allowed to access permits
+        $query = EligibleForPermits::create([]);
+        $response = $this->querySender->send($query)->getResult();
+
+        return $response['eligibleForPermits'];
+    }
+
+    /**
+     * Check whether the referer is the gov.uk permits page
+     *
+     * @param MvcEvent $e
+     *
+     * @return bool
+     */
+    private function referedFromGovUkPermits(MvcEvent $e): bool
+    {
+        /**
+         * @var \Zend\Http\PhpEnvironment\Request $request
+         * @var \Zend\Http\Header\Referer $referer
+         */
+        $request = $e->getRequest();
+        $referer = $request->getHeader('referer');
+        return in_array($referer->getUri(), $this->govUkReferers);
+    }
+
+    /**
+     * For the benefit of unit testing
+     *
+     * @param array $govUkReferers
+     *
+     * @return void
+     */
+    public function setGovUkReferers(array $govUkReferers): void
+    {
+        $this->govUkReferers = $govUkReferers;
     }
 }

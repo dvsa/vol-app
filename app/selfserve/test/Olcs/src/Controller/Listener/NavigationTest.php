@@ -4,8 +4,12 @@ namespace OlcsTest\Listener;
 
 use Common\FeatureToggle;
 use Common\Service\Cqrs\Query\QuerySender;
+use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
 use Olcs\Controller\Listener\Navigation as NavigationListener;
 use Mockery as m;
+use Zend\Http\Header\Referer as HttpReferer;
+use Zend\Http\Response as HttpResponse;
+use Zend\Http\PhpEnvironment\Request as HttpRequest;
 use Zend\Navigation\Navigation;
 use Zend\Navigation\Page\Uri;
 use Zend\Mvc\MvcEvent;
@@ -45,10 +49,23 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
     /**
      * @dataProvider dpDispatch
      */
-    public function testOnDispatch($dashboardPermitsEnabled)
+    public function testOnDispatchWithGovUkReferal($dashboardPermitsEnabled, $govUkReferer, $eligibleForPermits)
     {
+
         $dashboardPermitsKey = 'dashboard-permits';
         $dashboardPermitsPage = new Uri();
+
+        $httpResponse = m::mock(HttpResponse::class);
+
+        $httpResponse->shouldReceive('getResult')
+            ->withNoArgs()
+            ->times(empty($govUkReferer) ? 1 : 0)
+            ->andReturn(['eligibleForPermits' => $eligibleForPermits]);
+
+        $this->mockQuerySender->shouldReceive('send')
+            ->with(m::type(EligibleForPermits::class))
+            ->times(empty($govUkReferer) ? 1 : 0)
+            ->andReturn($httpResponse);
 
         $this->mockQuerySender->shouldReceive('featuresEnabled')
             ->with([FeatureToggle::SELFSERVE_ECMT])
@@ -59,8 +76,18 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
             ->with('id', $dashboardPermitsKey)
             ->andReturn($dashboardPermitsPage);
 
+        $refererUri = 'uri';
+        $this->sut->setGovUkReferers($govUkReferer);
+        $referer = m::mock(HttpReferer::class);
+        $referer->shouldReceive('getUri')->once()->withNoArgs()->andReturn($refererUri);
+
+        $request = m::mock(HttpRequest::class);
+        $request->shouldReceive('getHeader')->once()->with('referer')->andReturn($referer);
+
         /** @var \Zend\Mvc\MvcEvent | m\MockInterface $mockEvent */
         $mockEvent = m::mock(\Zend\Mvc\MvcEvent::class);
+        $mockEvent->shouldReceive('getRequest')->once()->withNoArgs()->andReturn($request);
+
         $this->sut->onDispatch($mockEvent);
 
         $this->assertEquals(
@@ -71,9 +98,13 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
 
     public function dpDispatch(): array
     {
+        $govUkReferer = ['uri'];
+
         return [
-            [true],
-            [false]
+            [true, $govUkReferer, true],
+            [true, $govUkReferer, false],
+            [true, [], true],
+            [false, [], false]
         ];
     }
 }

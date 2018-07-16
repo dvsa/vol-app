@@ -20,28 +20,31 @@
         </div>
 
         <?php echo $this->flashMessengerAll(); ?>
+        <?php if($isEligible): ?>
+            <div class="actions-container new-application--wrapper">
+                <a href="/permits/ecmt-licence" class="action--primary large">
+                    <?php echo $this->translate('permits.application.overwiew.button'); ?>
+                </a>
+            </div>
 
-        <div class="actions-container new-application--wrapper">
-            <a href="/permits/ecmt-licence" class="action--primary large">
-                <?php echo $this->translate('permits.application.overwiew.button'); ?>
-            </a>
-        </div>
+            <div class="table__header">
+                <?php if($issuedNo === 0): ?>
+                    <h3><?php echo $this->translate('dashboard-table-permits-title'); ?></h3>
+                    <p class="guidance"><?php echo $this->translate('permits.application.overwiew.no-permits'); ?></p>
+                <?php else : ?>
+                    <?php echo $issuedTable; ?>
+                <?php endif; ?>
 
-        <div class="table__header">
-            <?php if($issuedNo === 0): ?>
-                <h3><?php echo $this->translate('dashboard-table-permits-title'); ?></h3>
-                <p class="guidance"><?php echo $this->translate('permits.application.overwiew.no-permits'); ?></p>
-            <?php else : ?>
-                <?php echo $issuedTable; ?>
-            <?php endif; ?>
-
-            <?php if($applicationsNo > 0): ?>
-            <?php echo $applicationsTable; ?>
-            <?php else : ?>
+                <?php if($applicationsNo > 0): ?>
+                <?php echo $applicationsTable; ?>
+                <?php else : ?>
                 <h3><?php echo $this->translate('dashboard-table-permit-application-title'); ?></h3>
                 <p class="guidance"><?php echo $this->translate('permits.application.overwiew.no-permits'); ?></p>
             <?php endif; ?>
-        </div>
+            </div>
+        <?php else : ?>
+            <p class="guidance"><?php echo $this->translate('permits.application.ineligible'); ?></p>
+        <?php endif; ?>
     </div>
     <?php echo $this->partial('partials/dashboard-right-column'); ?>
 </div>
