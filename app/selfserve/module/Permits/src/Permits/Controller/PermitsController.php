@@ -255,7 +255,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 if ($form->isValid()) {
                     //Save to session
                     $session = new Container(self::SESSION_NAMESPACE);
-                    $session->willCabotage = $data['Fields']['TripsAbroad'];
+                    $session->trips = $data['Fields']['TripsAbroad'];
 
                     $this->redirect()->toRoute('permits', ['action' => 'international-journey']);
                 }
@@ -279,7 +279,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $form->setData($data);
                 if ($form->isValid()) {
                     $session = new Container(self::SESSION_NAMESPACE);
-                    $session->meetsEuro6 = $data['Fields']['InternationalJourney'];
+                    $session->internationalJourneyPercentage = $data['Fields']['InternationalJourney'];
 
                     $this->redirect()->toRoute('permits', ['action' => 'sector']);
                 }
@@ -325,14 +325,14 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
                         //Save data to session
                         $session = new Container(self::SESSION_NAMESPACE);
-                        $session->SpecialistHaulage = $data['Fields']['SpecialistHaulage'];
+                        $session->specialistHaulage = $data['Fields']['SpecialistHaulage'];
 
-                        if ($session->SpecialistHaulage == 1) //if true
+                        if ($session->specialistHaulage == 1) //if true
                         {
-                            $session->SectorList = $data['Fields']['SectorList']['SectorList'];
+                            $session->sectorList = $data['Fields']['SectorList']['SectorList'];
                         }
                         else {
-                            $session->SectorList = null;
+                            $session->sectorList = null;
                         }
 
                         //create application in db
@@ -373,7 +373,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 if ($form->isValid()) {
                     //Save to session
                     $session = new Container(self::SESSION_NAMESPACE);
-                    $session->PermitsRequired = $data['Fields']['PermitsRequired'];
+                    $session->permitsRequired = $data['Fields']['PermitsRequired'];
 
                     $this->redirect()->toRoute('permits', ['action' => 'check-answers']);
                 }
@@ -636,34 +636,34 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $sessionData['cabotageQuestion']
             = 'I confirm that I will not undertake a 
                 cabotage journey(s) with an ECMT permit.';
-        $sessionData['cabotageAnswer'] = $session['cabotage'];
+        $sessionData['cabotageAnswer'] = $session->willCabotage;
 
         //RESTRICTED COUNTRIES
         $sessionData['restrictedCountriesQuestion']
             = 'Do you intend to transport goods to
                 Austria, Greece, Hungary, Italy or Russia?';
-        $sessionData['restrictedCountriesAnswer'] = $session['restrictedCountries'];
+        $sessionData['restrictedCountriesAnswer'] = $session->restrictedCountries;
 
         //NUMBER OF TRIPS PER YEAR
         $sessionData['tripsQuestion']
             = 'How many international trips were carried out over the past 12 months?';
-        $sessionData['tripsAnswer'] = $session['trips'];
+        $sessionData['tripsAnswer'] = $session->trips;
 
         //'PERCENTAGE' QUESTION
         $sessionData['percentageQuestion']
             = 'What percentage of your business 
                 is related to international journeys over the past 12 months?';
-        $sessionData['percentageAnswer'] = $session['percentage'];
+        $sessionData['percentageAnswer'] = $session->internationalJourneyPercentage;
 
         //SECTORS QUESTION
         $sessionData['specialistHaulageQuestion']
             = 'Do you specialise in carrying goods for one specific sector?';
-        $sessionData['specialistHaulageAnswer'] = $session['specialistHaulage'];
+        $sessionData['specialistHaulageAnswer'] = $session->specialistHaulage;
 
         //NUMBER OF PERMITS REQUIRED
         $sessionData['permitsQuestion']
             = 'How many permits does your business require?';
-        $sessionData['permitsAnswer'] = $session['permits'];
+        $sessionData['permitsAnswer'] = $session->permitsRequired;
 
         return $sessionData;
     }
