@@ -1,30 +1,37 @@
 <?php
-$title = $this->translate('permits.application.declaration.title');
-$this->headTitle($title);
-
-    /*
-     * HIDDEN FORM TO SAVE TO DATABASE
-     */
-
-    $form->setAttribute('action', $this->url('permits', array('action' => 'fee')));
-
-    $form->prepare();
-    echo $this->form()->openTag($form);
-    echo $this->formHidden($form->get('id'));
-    echo $this->formHidden($form->get('intensity'));
-    echo $this->formRow($form->get('sectors'));
-    echo $this->formRow($form->get('restrictedCountries'));
-    echo $this->formRow($form->get('restrictedCountriesList'));
+    $title = $this->translate('permits.page.declaration.title');
+    $this->headTitle($title);
 ?>
-<p><?php echo $this->linkBack($this->backUrl); ?></p>
 
-<h1 class="js-title"><?php echo $this->escapeHtml($title); ?></h1>
-
-<div class="row">
+<div class="row ecmt">
     <div class="two-thirds">
-        <?php echo $this->translate('markup-ecmt-declaration'); ?>
-        <div class="actions-container new-application--wrapper">
-            <p><a href="/permits/payment" class="action--primary large"><?php echo $this->translate('continuation.success.pay'); ?></a></p>
-            <p><a href="/permits"> <?php echo $this->translate('Cancel'); ?> </a></p>
-        </div
+        <div class="page-header">
+            <p><a href="/permits/application-overview" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
+            <div class="page-header__wrapper">
+                <h1 class="js-title">
+                    <?php echo $this->translate('permits.page.declaration.title'); ?>
+                </h1>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="govuk-hint">
+            </div>
+            <div>
+                <?php echo $this->translate('markup-ecmt-declaration'); ?>
+            </div>
+
+            <fieldset id="declaration" class="inline" data-group="declaration">
+                <?php
+                    echo $this->formErrors($form);
+                    echo $this->form($form);
+                ?>
+
+                <fieldset class="actions-container new-application--wrapper">
+                    <p><a href="/permits/application-overview"> <?php echo $this->translate('permits.button.save-return-to-overview'); ?> </a></p>
+                </fieldset>
+            </fieldset>
+        </div>
+
+    </div>
 </div>

@@ -7,6 +7,7 @@ use Common\Controller\AbstractOlcsController;
 use Common\FeatureToggle;
 use Zend\View\Model\ViewModel;
 use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries;
+use Dvsa\Olcs\Transfer\Query\Permits\SectorsList;
 use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermits;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
@@ -286,8 +287,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 if ($form->isValid()) {
                     //EXTRA VALIDATION
                     if (($data['Fields']['SpecialistHaulage'] == 1
-                            && isset($data['Fields']['SectorList']['SectorList']))
-                        || ($data['Fields']['SectorList'] == 0))
+                            && isset($data['Fields']['SectorsList']['SectorsList']))
+                        || ($data['Fields']['SectorsList'] == 0))
                     {
 
                         //Save data to session
@@ -296,10 +297,10 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
                         if ($session->SpecialistHaulage == 1) //if true
                         {
-                            $session->SectorList = $data['Fields']['SectorList']['SectorList'];
+                            $session->SectorList = $data['Fields']['SectorsList']['SectorsList'];
                         }
                         else {
-                            $session->SectorList = null;
+                            $session->SectorsList = null;
                         }
 
                         //create application in db
@@ -316,7 +317,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                     }
                     else{
                         //conditional validation failed, sector list should not be empty
-                        $form->get('Fields')->get('SectorList')->get('SectorList')->setMessages('error.messages.sector');
+                        $form->get('Fields')->get('SectorsList')->get('SectorsList')->setMessages('error.messages.sector');
                     }
                 }
             }
@@ -324,7 +325,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         /*
         * Get Sector List from Database
         */
-        $response = $this->handleQuery(ConstrainedCountries::create(array()));
+        $response = $this->handleQuery(SectorsList::create(array()));
         $sectorList = $response->getResult();
 
         /*
@@ -421,16 +422,25 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
     public function declarationAction()
     {
-        $session = new Container(self::SESSION_NAMESPACE);
+        //Create form from annotations
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('DeclarationForm', false, false);
 
-        $form = new PermitApplicationForm();
-        $form->setData(array(
-            'intensity'                 => $session->tripsData,
-            'sectors'                   => $this->extractIDFromSessionData($session->sectorsData),
-            'restrictedCountries'       => $session->restrictedCountriesData,
-            'restrictedCountriesList'   => $this->extractIDFromSessionData($session->restrictedCountriesList)
+        $data = $this->params()->fromPost();
+        if(is_array($data)) {
+            if (array_key_exists('Submit', $data)) {
+                //Validate
+                $form->setData($data);
+                if ($form->isValid()) {
+                    //Save to session
+                    $session = new Container(self::SESSION_NAMESPACE);
+                    $session->Declaration = $data['Fields']['Declaration'];
 
-        ));
+                    $this->redirect()->toRoute('permits', ['action' => 'fee']);
+                }
+            }
+        }
 
         return array('form' => $form);
     }
