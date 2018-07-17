@@ -3,6 +3,7 @@
 namespace PermitsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Zend\Validator;
 
 /**
  * Class Euro6EmissionsFormTest
@@ -22,14 +23,11 @@ class Euro6EmissionsFormTest extends AbstractFormValidationTestCase
 
         $this->assertFormElementRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
-        $this->assertFormElementCheckbox($element);
+        $this->assertFormElementType($element, "\Common\Form\Elements\InputFilters\SingleCheckbox");
 
-        //Not sure the bellow would work ($element isn't an object?)
-        $this->assertAttributeEquals(
-                    "form-control form-control--checkbox form-control--advanced",
-            "class",
-                              $element
-        );
+        $this->assertFormElementValid($element, 'Yes');
+        $this->assertFormElementNotValid($element, 'No', [Validator\Identical::NOT_SAME]);
+        $this->assertFormElementNotValid($element, 'X', [Validator\Identical::NOT_SAME]);//InArray::NOT_IN_ARRAY
     }
 
     public function testSubmit()
