@@ -17,18 +17,13 @@ class Euro6Emissions
      *    "id" : "MeetsEuro6",
      * })
      * @Form\Options({
-     *      "label": "Choose one licence below",
-     *      "fieldset-attributes": {"id": "ecmt-licence"},
-     *      "fieldset-data-group": "licence-type",
-     *      "label_attributes": {"class": "form-control form-control--radio"},
-     *      "value_options": {
-     *          "OB2013691 (North East)",
-     *          "OC010019897 (North West)",
-     *          "PB5553691 (South East)",
-     *          "PC010119896 (South West)",
-     *      },
+     *   "checked_value": "Yes",
+     *     "unchecked_value": "No",
+     *     "label": "permits.form.euro6.label",
+     *     "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
+     *     "must_be_value": "Yes"
      * })
-     * @Form\Type("Radio")
+     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
      */
 
     public $meetsEuro6 = null;

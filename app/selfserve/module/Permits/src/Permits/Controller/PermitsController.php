@@ -70,7 +70,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $form->setData($data);
                 if ($form->isValid()) {
                     $session = new Container(self::SESSION_NAMESPACE);
-                    $session->meetsEuro6 = $data['Fields']['EcmtLicence'];
+                    $session->licence = $data['Fields']['EcmtLicence'];
+//                    var_dump($session->licence);
+//                    die;
 
                     $this->redirect()->toRoute('permits', ['action' => 'application-overview']);
                 }
@@ -621,14 +623,14 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         //SELECTED LICENCE
         $sessionData['licenceQuestion']
             = 'Licence selected';
-        $sessionData['licenceAnswer'] = $session['licence'];
+        $sessionData['licenceAnswer'] = $session->licence;
 
         //EURO 6 EMISSIONS CONFIRMATION
         $sessionData['meetsEuro6Question']
             = 'I confirm that my ECMT permit(s) will only be 
                 used by vehicle(s) that are environmentally compliant 
                 to Euro 6 emissions standards.';
-        $sessionData['meetsEuro6Answer'] = $session['meetsEuro6'];
+        $sessionData['meetsEuro6Answer'] = $session->meetsEuro6;
 
         //CABOTAGE CONFIRMATION
         $sessionData['cabotageQuestion']
