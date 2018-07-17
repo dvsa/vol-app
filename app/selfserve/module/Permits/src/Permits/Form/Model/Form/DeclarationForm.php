@@ -19,7 +19,7 @@ class DeclarationForm
 
     /**
      * @Form\Name("Submit")
-     * @Form\ComposedObject("Permits\Form\Model\Fieldset\Submit")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\SubmitAccept")
      */
-    public $submitButton = null;
+    public $submitAcceptButton = null;
 }
