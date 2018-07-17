@@ -5,16 +5,16 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Submit")
+ * @Form\Name("SubmitAccept")
  */
-class Submit
+class SubmitAccept
 {
     /**
-     * @Form\Name("SubmitButton")
+     * @Form\Name("SubmitAcceptButton")
      * @Form\Attributes({
      *     "class":"action--primary large",
-     *     "id":"submitbutton",
-     *     "value":"Save and continue",
+     *     "id":"submit-accept-button",
+     *     "value":"permits.button.accept-and-continue",
      * })
      * @Form\Type("Zend\Form\Element\Submit")
      */
