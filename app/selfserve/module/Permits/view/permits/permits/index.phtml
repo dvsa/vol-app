@@ -20,20 +20,25 @@
         </div>
 
         <?php echo $this->flashMessengerAll(); ?>
-        <h3><?php echo $this->translate('permits.application.overwiew.subtitle'); ?></h3>
 
-        <?php if($permitsNo === 0): ?>
-        <p class="guidance"><?php echo $this->translate('permits.application.overwiew.no-permits'); ?></p>
-        <?php else : ?>
-            <p class="guidance"><?php echo $this->translate('permits.application.overwiew.has-permits'); ?></p>
-        <?php echo $table; ?>
-        <?php endif; ?>
         <div class="actions-container new-application--wrapper">
             <a href="/permits/ecmt-licence" class="action--primary large">
                 <?php echo $this->translate('permits.application.overwiew.button'); ?>
             </a>
         </div>
-    </div>
 
+        <div class="table__header">
+            <?php if($issuedNo === 0): ?>
+                <h3><?php echo $this->translate('dashboard-table-permits-title'); ?></h3>
+                <p class="guidance"><?php echo $this->translate('permits.application.overwiew.no-permits'); ?></p>
+            <?php else : ?>
+                <?php echo $issuedTable; ?>
+            <?php endif; ?>
+
+            <?php if($applicationsNo > 0): ?>
+            <?php echo $applicationsTable; ?>
+            <?php endif; ?>
+        </div>
+    </div>
     <?php echo $this->partial('partials/dashboard-right-column'); ?>
 </div>

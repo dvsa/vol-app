@@ -2,7 +2,7 @@
 
 return array(
   'variables' => array(
-    'title' => 'dashboard-table-permits-title',
+    'title' => 'dashboard-table-permit-application-title',
     'empty_message' => 'dashboard-no-permit-text',
     'hide_column_headers' => false,
   ),
@@ -10,22 +10,22 @@ return array(
   'attributes' => array(),
   'columns' => array(
     array(
-      'title' => 'dashboard-table-permits-ref',
+      'title' => 'dashboard-table-permit-application-ref',
       'name' => 'id',
       'formatter' => 'LicencePermitReference'
     ),
     array(
-      'title' => 'dashboard-table-permits-num',
+      'title' => 'dashboard-table-permit-application-num',
       'name' => 'permitsRequired',
       'formatter' => 'Translate'
     ),
     array(
-     'title' => 'dashboard-table-permits-type',
-     'name' => 'permitType',
-     'formatter' => 'RefData'
+      'title' => 'dashboard-table-permit-application-type',
+      'name' => 'permitType',
+      'formatter' => 'RefData'
     ),
     array(
-      'title' => 'dashboard-table-permits-status',
+      'title' => 'dashboard-table-permit-application-status',
       'name' => 'status',
       'formatter' => 'Status'
     )
