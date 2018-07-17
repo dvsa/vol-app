@@ -642,7 +642,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $sessionData['restrictedCountriesQuestion']
             = 'Do you intend to transport goods to
                 Austria, Greece, Hungary, Italy or Russia?';
-        $sessionData['restrictedCountriesAnswer'] = $session->restrictedCountries;
+        $sessionData['restrictedCountriesAnswer'] = $session->restrictedCountries  == 1 ? 'Yes' : 'No';;
 
         //NUMBER OF TRIPS PER YEAR
         $sessionData['tripsQuestion']
@@ -653,12 +653,22 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $sessionData['percentageQuestion']
             = 'What percentage of your business 
                 is related to international journeys over the past 12 months?';
-        $sessionData['percentageAnswer'] = $session->internationalJourneyPercentage;
+        switch ($session->internationalJourneyPercentage) {
+            case 0:
+                $sessionData['percentageAnswer'] = 'Less than 60%';
+                break;
+            case 1:
+                $sessionData['percentageAnswer'] = 'From 60% to 90%';
+                break;
+            case 2:
+                $sessionData['percentageAnswer'] = 'More than 90%';
+                break;
+        }
 
         //SECTORS QUESTION
         $sessionData['specialistHaulageQuestion']
             = 'Do you specialise in carrying goods for one specific sector?';
-        $sessionData['specialistHaulageAnswer'] = $session->specialistHaulage;
+        $sessionData['specialistHaulageAnswer'] = $session->specialistHaulage  == 1 ? 'Yes' : 'No';;
 
         //NUMBER OF PERMITS REQUIRED
         $sessionData['permitsQuestion']
