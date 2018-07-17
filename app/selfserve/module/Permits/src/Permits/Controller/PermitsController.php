@@ -294,6 +294,22 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             ->get('Helper\Form')
             ->createForm('SpecialistHaulageForm', false, false);
 
+        /*
+        * Get Sector List from Database
+        */
+        $response = $this->handleQuery(SectorsList::create(array()));
+        $sectorList = $response->getResult();
+
+        /*
+        * Make the sectors list the value_options of the form
+        */
+        $sectorList = $this->getServiceLocator()
+            ->get('Helper\Form')->transformListIntoValueOptions($sectorList, 'description');
+
+        $options = array();
+        $options['value_options'] = $sectorList;
+        $form->get('Fields')->get('SectorList')->get('SectorList')->setOptions($options);
+
         $data = $this->params()->fromPost();
         if(is_array($data)) {
             if (array_key_exists('Submit', $data)) {
@@ -301,9 +317,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $form->setData($data);
                 if ($form->isValid()) {
                     //EXTRA VALIDATION
-                    if (($data['Fields']['SpecialistHaulage'] == 1
-                            && isset($data['Fields']['SectorsList']['SectorsList']))
-                        || ($data['Fields']['SectorsList'] == 0))
+                    if ($data['Fields']['SpecialistHaulage'] == 1
+                            && isset($data['Fields']['SectorList']['SectorList']))
                     {
 
                         //Save data to session
@@ -312,10 +327,10 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
                         if ($session->SpecialistHaulage == 1) //if true
                         {
-                            $session->SectorList = $data['Fields']['SectorsList']['SectorsList'];
+                            $session->SectorList = $data['Fields']['SectorList']['SectorList'];
                         }
                         else {
-                            $session->SectorsList = null;
+                            $session->SectorList = null;
                         }
 
                         //create application in db
@@ -332,26 +347,11 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                     }
                     else{
                         //conditional validation failed, sector list should not be empty
-                        $form->get('Fields')->get('SectorsList')->get('SectorsList')->setMessages('error.messages.sector');
+                        $form->get('Fields')->get('SectorList')->get('SectorList')->setMessages(['error.messages.sector']);
                     }
                 }
             }
         }
-        /*
-        * Get Sector List from Database
-        */
-        $response = $this->handleQuery(SectorsList::create(array()));
-        $sectorList = $response->getResult();
-
-        /*
-        * Make the sectors list the value_options of the form
-        */
-        $sectorList = $this->getServiceLocator()
-            ->get('Helper\Form')->transformListIntoValueOptions($sectorList, 'description');
-
-        $options = array();
-        $options['value_options'] = $sectorList;
-        $form->get('Fields')->get('SectorList')->get('SectorList')->setOptions($options);
 
         return array('form' => $form);
     }
