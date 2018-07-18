@@ -4,6 +4,7 @@ namespace Olcs\Controller\Initializer;
 use Olcs\Controller\Listener\Navigation as NavigationListener;
 use Zend\ServiceManager\InitializerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Dvsa\Olcs\Auth\Controller\LoginController;
 
 /**
  * Class Navigation
@@ -21,7 +22,12 @@ class Navigation implements InitializerInterface
      */
     public function initialize($instance, ServiceLocatorInterface $serviceLocator): void
     {
-        $navigationListener = $serviceLocator->getServiceLocator()->get(NavigationListener::class);
-        $instance->getEventManager()->attach($navigationListener);
+        /**
+         * don't need the navigation listener on the login page (and also need to prevent unauthenticated requests)
+         */
+        if (!$instance instanceof LoginController) {
+            $navigationListener = $serviceLocator->getServiceLocator()->get(NavigationListener::class);
+            $instance->getEventManager()->attach($navigationListener);
+        }
     }
 }
