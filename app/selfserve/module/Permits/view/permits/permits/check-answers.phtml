@@ -6,7 +6,7 @@
 <div class="row ecmt">
     <div class="three-quarters">
         <div class="page-header">
-            <p><a href="/permits/cabotage" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
+            <p><a href="/permits/cabotage/<?php echo $id; ?>" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
             <div class="page-header__wrapper">
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($title); ?>
@@ -30,7 +30,7 @@
                                 <?php echo $sessionData['licenceAnswer']; ?>
                             </td>
                             <td>
-                                <a href="/permits/ecmt-licence">
+                                <a href="/permits/ecmt-licence/<?php echo $id; ?>">
                                     Change
                                 </a>
                             </td>
@@ -43,7 +43,7 @@
                                 <?php  echo $sessionData['meetsEuro6Answer']; ?>
                             </td>
                             <td>
-                                <a href="/permits/euro6-emissions">
+                                <a href="/permits/euro6-emissions/<?php echo $id; ?>">
                                     Change
                                 </a>
                             </td>
@@ -56,7 +56,7 @@
                                 <?php echo $sessionData['cabotageAnswer'] ?>
                             </td>
                             <td>
-                                <a href="/permits/cabotage">
+                                <a href="/permits/cabotage/<?php echo $id; ?>">
                                     Change
                                 </a>
                             </td>
@@ -66,10 +66,29 @@
                                 <h4><?php echo $sessionData['restrictedCountriesQuestion'] ?></h4>
                             </td>
                             <td>
-                                <?php echo $sessionData['restrictedCountriesAnswer'] ?>
+                                <?php
+                                $count = 1;
+                                $listSize = count($sessionData['restrictedCountriesAnswer']);
+                                if($listSize > 1)
+                                {
+                                    echo "Yes";
+                                    echo "<br>";
+
+                                    foreach ($sessionData['restrictedCountriesAnswer'] as $country) {
+                                        if ($count == $listSize) {
+                                            echo $country;
+                                        } else {
+                                            echo $country . ', ';
+                                        }
+                                        $count++;
+                                    }
+                                }else{
+                                    echo "No";
+                                }
+                                ?>
                             </td>
                             <td>
-                                <a href="/permits/restricted-countries">
+                                <a href="/permits/restricted-countries/<?php echo $id; ?>">
                                     Change
                                 </a>
                             </td>
@@ -82,7 +101,7 @@
                                 <?php echo $sessionData['tripsAnswer'] ?>
                             </td>
                             <td>
-                                <a href="/permits/trips">
+                                <a href="/permits/trips/<?php echo $id; ?>">
                                     Change
                                 </a>
                             </td>
@@ -95,7 +114,7 @@
                                 <?php echo $sessionData['percentageAnswer'] ?>
                             </td>
                             <td>
-                                <a href="/permits/international-journey">
+                                <a href="/permits/international-journey/<?php echo $id; ?>">
                                     Change
                                 </a>
                             </td>
@@ -108,7 +127,7 @@
                                 <?php echo $sessionData['specialistHaulageAnswer'] ?>
                             </td>
                             <td>
-                                <a href="/permits/sector">
+                                <a href="/permits/sector/<?php echo $id; ?>">
                                     Change
                                 </a>
                             </td>
@@ -121,7 +140,7 @@
                                 <?php echo $sessionData['permitsAnswer'] ?>
                             </td>
                             <td>
-                                <a href="/permits/permits-required">
+                                <a href="/permits/permits-required/<?php echo $id; ?>">
                                     Change
                                 </a>
                             </td>
@@ -130,7 +149,7 @@
                 </table>
             </div>
             <div class="actions-container new-application--wrapper">
-                <p><a href="/permits/declaration" class="action--primary large"><?php echo $this->translate('permits.button.confirm-and-continue'); ?></a></p>
+                <p><a href="/permits/declaration/<?php echo $id; ?>" class="action--primary large"><?php echo $this->translate('permits.button.confirm-and-continue'); ?></a></p>
                 <p><a href="/permits"> <?php echo $this->translate('permits.button.save-return-to-permits'); ?> </a></p>
             </div>
         </div>

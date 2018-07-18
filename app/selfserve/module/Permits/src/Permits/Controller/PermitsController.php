@@ -13,7 +13,6 @@ use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermits;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 
-
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermits;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
@@ -64,6 +63,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
     public function ecmtLicenceAction()
     {
+
+        $id = $this->params()->fromRoute('id', '');
+
         $form = $this->getEcmtLicenceForm();
         $data = $this->params()->fromPost();
         if ($data && array_key_exists('Submit', $data)) {
@@ -82,7 +84,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $this->redirect()->toRoute('permits', ['action' => 'application-overview', 'id' => $insert['id']['ecmtPermitApplication']]);
             }
         }
-        return array('form' => $form);
+        return array('form' => $form, 'id' => $id);
     }
 
     public function applicationOverviewAction()
@@ -139,6 +141,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         $view = new ViewModel();
         $view->setVariable('ref', $applicationRef);
+        $view->setVariable('id', $id);
         $view->setVariable('applicationFee', $applicationFee);
         $view->setVariable('issuingFee', $issuingFee);
         $view->setVariable('sections', $sections);
@@ -149,108 +152,80 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
     public function euro6EmissionsAction()
     {
+
+        $id = $this->params()->fromRoute('id', -1);
+
         //Create form from annotations
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
             ->createForm('Euro6EmissionsForm', false, false);
 
         $data = $this->params()->fromPost();
-        if(is_array($data)) {
-            if (array_key_exists('Submit', $data)) {
-                //Validate
-                $form->setData($data);
-                if ($form->isValid()) {
-                    $session = new Container(self::SESSION_NAMESPACE);
-                    $session->meetsEuro6 = $data['Fields']['MeetsEuro6'];
-
-                    $this->redirect()->toRoute('permits', ['action' => 'cabotage']);
-                }
+        if (is_array($data) && array_key_exists('Submit', $data)) {
+            //Validate
+            $form->setData($data);
+            if ($form->isValid()) {
+                $this->redirect()
+                  ->toRoute('permits',
+                    ['action' => 'cabotage', 'id' => $id]);
             }
         }
 
-        return array('form' => $form);
+        return array('form' => $form, 'id' => $id);
     }
 
     public function cabotageAction()
     {
+        $id = $this->params()->fromRoute('id', -1);
+
         //Create form from annotations
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
             ->createForm('CabotageForm', false, false);
 
         $data = $this->params()->fromPost();
-        if(is_array($data)) {
-            if (array_key_exists('Submit', $data)) {
-                //Validate
-                $form->setData($data);
-                if ($form->isValid()) {
-                    //Save to session
-                    $session = new Container(self::SESSION_NAMESPACE);
-                    $session->willCabotage = $data['Fields']['WillCabotage'];
-
-                    $this->redirect()->toRoute('permits', ['action' => 'restricted-countries']);
-                }
+        if (is_array($data) && array_key_exists('Submit', $data)) {
+            //Validate
+            $form->setData($data);
+            if ($form->isValid()) {
+                $this->redirect()->toRoute('permits', ['action' => 'restricted-countries', 'id' => $id]);
             }
         }
 
-        return array('form' => $form);
+        return array('form' => $form, 'id' => $id);
     }
 
     public function restrictedCountriesAction()
     {
+        $id = $this->params()->fromRoute('id', -1);
+
         //Create form from annotations
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
             ->createForm('RestrictedCountriesForm', false, false);
 
         $data = $this->params()->fromPost();
-        if(is_array($data)) {
-            if (array_key_exists('Submit', $data)) {
 
-                //Validate
-                $form->setData($data);
-                if ($form->isValid()) {
+        if (is_array($data) && array_key_exists('Submit', $data)) {
 
-                    //EXTRA VALIDATION
-                    if (($data['Fields']['restrictedCountries'] == 1
-                            && isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList']))
-                        || ($data['Fields']['restrictedCountries'] == 0))
-                    {
+            //Validate
+            $form->setData($data);
+            if ($form->isValid()) {
 
-                        //Save data to session
-                        $session = new Container(self::SESSION_NAMESPACE);
-                        $session->restrictedCountries = $data['Fields']['restrictedCountries'];
-
-                        if ($session->restrictedCountries == 1) //if true
-                        {
-                            $session->restrictedCountriesList = $data['Fields']['restrictedCountriesList']['restrictedCountriesList'];
-                        }
-                        else {
-                            $session->restrictedCountriesList = null;
-                        }
-
-                        //create application in db
-                        if (empty($session->applicationId)) {
-
-                            $applicationData['status'] = 'permit_awaiting';
-                            $applicationData['paymentStatus'] = 'lfs_ot';
-                            $applicationData['permitType'] = 'permit_ecmt';
-                            $command = CreateEcmtPermitApplication::create($applicationData);
-                            $response = $this->handleCommand($command);
-                            $insert = $response->getResult();
-
-                            $session->applicationId = $insert['id']['ecmtPermitApplication'];
-                        }
-
-                        $this->redirect()->toRoute('permits', ['action' => 'trips']);
-                    }
-                    else{
-                        //conditional validation failed, restricted countries list should not be empty
-                        $form->get('Fields')->get('restrictedCountriesList')->get('restrictedCountriesList')->setMessages('error.messages.restricted.countries');
-                    }
+                //EXTRA VALIDATION
+                if (($data['Fields']['restrictedCountries'] == 1
+                        && isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList']))
+                    || ($data['Fields']['restrictedCountries'] == 0))
+                {
+                    $this->redirect()->toRoute('permits', ['action' => 'trips', 'id' => $id]);
+                }
+                else{
+                    //conditional validation failed, restricted countries list should not be empty
+                    $form->get('Fields')->get('restrictedCountriesList')->get('restrictedCountriesList')->setMessages(['error.messages.restricted.countries']);
                 }
             }
         }
+
         /*
         * Get Countries List from Database
         */
@@ -267,15 +242,14 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $options['value_options'] = $restrictedCountryList;
         $form->get('Fields')->get('restrictedCountriesList')->get('restrictedCountriesList')->setOptions($options);
 
-        return array('form' => $form);
+        return array('form' => $form, 'id' => $id);
     }
 
     public function tripsAction()
     {
-        //$id = $this->params()->fromRoute('id', -1);
-        //$application = $this->getApplication($id);
-        //$applicationRef = $application['licence']['licNo'] . ' / ' . $application['id'];
-
+        $id = $this->params()->fromRoute('id', -1);
+        $application = $this->getApplication($id);
+        $applicationRef = $application['licence']['licNo'] . ' / ' . $application['id'];
 
         //Create form from annotations
         $form = $this->getServiceLocator()
@@ -283,97 +257,48 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         ->createForm('TripsForm', false, false);
 
         $data = $this->params()->fromPost();
-        if(is_array($data)) {
-            if (array_key_exists('Submit', $data)) {
-                //Validate
-                $form->setData($data);
-                if ($form->isValid()) {
-                    //Save to session
-                    $session = new Container(self::SESSION_NAMESPACE);
-                    $session->willCabotage = $data['Fields']['TripsAbroad'];
 
-                    $this->redirect()->toRoute('permits', ['action' => 'international-journey']);
-                }
+        if (is_array($data) && array_key_exists('Submit', $data)) {
+            //Validate
+            $form->setData($data);
+            if ($form->isValid()) {
+                $this->redirect()->toRoute('permits', ['action' => 'international-journey', 'id' => $id]);
             }
         }
 
-        return array('form' => $form);
+        return array('form' => $form, 'ref' => $applicationRef, 'id' => $id);
     }
 
     public function internationalJourneyAction()
     {
+        $id = $this->params()->fromRoute('id', -1);
+
         //Create form from annotations
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
             ->createForm('InternationalJourneyForm', false, false);
 
         $data = $this->params()->fromPost();
-        if (is_array($data)) {
-            if (array_key_exists('Submit', $data)) {
-                //Validate
-                $form->setData($data);
-                if ($form->isValid()) {
-                    $session = new Container(self::SESSION_NAMESPACE);
-                    $session->meetsEuro6 = $data['Fields']['InternationalJourney'];
 
-                    $this->redirect()->toRoute('permits', ['action' => 'sector']);
-                }
+        if (is_array($data) && array_key_exists('Submit', $data)) {
+            //Validate
+            $form->setData($data);
+            if ($form->isValid()) {
+                $this->redirect()->toRoute('permits', ['action' => 'sector', 'id' => $id]);
             }
         }
 
-        return array('form' => $form);
+        return array('form' => $form, 'id' => $id);
     }
 
     public function sectorAction()
     {
+        $id = $this->params()->fromRoute('id', -1);
+
         //Create form from annotations
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
             ->createForm('SpecialistHaulageForm', false, false);
-
-        $data = $this->params()->fromPost();
-        if(is_array($data)) {
-            if (array_key_exists('Submit', $data)) {
-                //Validate
-                $form->setData($data);
-                if ($form->isValid()) {
-                    //EXTRA VALIDATION
-                    if (($data['Fields']['SpecialistHaulage'] == 1
-                            && isset($data['Fields']['SectorList']['SectorList']))
-                        || ($data['Fields']['SectorList'] == 0))
-                    {
-
-                        //Save data to session
-                        $session = new Container(self::SESSION_NAMESPACE);
-                        $session->SpecialistHaulage = $data['Fields']['SpecialistHaulage'];
-
-                        if ($session->SpecialistHaulage == 1) //if true
-                        {
-                            $session->SectorList = $data['Fields']['SectorList']['SectorList'];
-                        }
-                        else {
-                            $session->SectorList = null;
-                        }
-
-                        //create application in db
-                        if (empty($session->applicationId)) {
-                            $applicationData['status'] = 'permit_awaiting';
-                            $applicationData['paymentStatus'] = 'lfs_ot';
-                            $command = CreateEcmtPermitApplication::create($applicationData);
-                            $response = $this->handleCommand($command);
-                            $insert = $response->getResult();
-                            $session->applicationId = $insert['id']['ecmtPermitApplication'];
-                        }
-
-                        $this->redirect()->toRoute('permits', ['action' => 'permits-required']);
-                    }
-                    else{
-                        //conditional validation failed, sector list should not be empty
-                        $form->get('Fields')->get('SectorList')->get('SectorList')->setMessages('error.messages.sector');
-                    }
-                }
-            }
-        }
         /*
         * Get Sector List from Database
         */
@@ -384,65 +309,96 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         * Make the sectors list the value_options of the form
         */
         $sectorList = $this->getServiceLocator()
-            ->get('Helper\Form')->transformListIntoValueOptions($sectorList, 'description');
+          ->get('Helper\Form')->transformListIntoValueOptions($sectorList, 'description');
 
         $options = array();
         $options['value_options'] = $sectorList;
         $form->get('Fields')->get('SectorList')->get('SectorList')->setOptions($options);
 
-        return array('form' => $form);
+        $data = $this->params()->fromPost();
+
+        if (is_array($data) && array_key_exists('Submit', $data)) {
+            //Validate
+            $form->setData($data);
+            if ($form->isValid()) {
+                //EXTRA VALIDATION
+                if (($data['Fields']['SpecialistHaulage'] == 1
+                        && isset($data['Fields']['SectorList']['SectorList']))
+                    || ($data['Fields']['SectorList'] == 0))
+                {
+                    $this->redirect()->toRoute('permits', ['action' => 'permits-required', 'id' => $id]);
+                }
+                else{
+                    //conditional validation failed, sector list should not be empty
+                    $form->get('Fields')->get('SectorList')->get('SectorList')->setMessages('error.messages.sector');
+                }
+            }
+        }
+
+        return array('form' => $form, 'id' => $id);
     }
 
     public function permitsRequiredAction()
     {
+        $id = $this->params()->fromRoute('id', -1);
+        $application = $this->getApplication($id);
+
         //Create form from annotations
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
             ->createForm('PermitsRequiredForm', false, false);
 
         $data = $this->params()->fromPost();
-        if(is_array($data)) {
-            if (array_key_exists('Submit', $data)) {
-                //Validate
-                $form->setData($data);
-                if ($form->isValid()) {
-                    //Save to session
-                    $session = new Container(self::SESSION_NAMESPACE);
-                    $session->PermitsRequired = $data['Fields']['PermitsRequired'];
 
-                    $this->redirect()->toRoute('permits', ['action' => 'check-answers']);
-                }
+        if (is_array($data) && array_key_exists('Submit', $data)) {
+            //Validate
+            $form->setData($data);
+            if ($form->isValid()) {
+                //Save to session
+                $session = new Container(self::SESSION_NAMESPACE);
+                $session->PermitsRequired = $data['Fields']['PermitsRequired'];
+
+                $this->redirect()->toRoute('permits', ['action' => 'check-answers', 'id' => $id]);
             }
         }
 
-        return array('form' => $form);
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $totalVehicles = $translationHelper->translateReplace('permits.page.permits.required.info', [$application['licence']['totAuthVehicles']]);
+
+        return array('form' => $form, 'totalVehicles' => $totalVehicles, 'id' => $id);
     }
 
     public function checkAnswersAction()
     {
+
+        $id = $this->params()->fromRoute('id', -1);
+        $application = $this->getApplication($id);
+        $applicationRef = $application['licence']['licNo'] . ' / ' . $application['id'];
+
         $session = new Container(self::SESSION_NAMESPACE);
         $data = $this->params()->fromPost();
-        if(is_array($data)) {
-            if (array_key_exists('submit', $data)) {
-                //Save data to session
-                $session->willCabotage = $data['willCabotage'];
-            }
+
+        if (is_array($data) && array_key_exists('submit', $data)) {
+            //Save data to session
+            $session->willCabotage = $data['willCabotage'];
         }
 
         $sessionData = $this->collateSessionData();
 
-        return array('sessionData' => $sessionData);
+        return array('sessionData' => $sessionData, 'applicationData' => $application, 'id' => $id);
     }
 
     public function summaryAction()
     {
+        $id = $this->params()->fromRoute('id', -1);
+        $application = $this->getApplication($id);
+
         $session = new Container(self::SESSION_NAMESPACE);
         $data = $this->params()->fromPost();
-        if(is_array($data)) {
-            if (array_key_exists('submit', $data)) {
-                //Save data to session
-                $session->willCabotage = $data['willCabotage'];
-            }
+
+        if (is_array($data) && array_key_exists('submit', $data)) {
+            //Save data to session
+            $session->willCabotage = $data['willCabotage'];
         }
         /*
          * Collate session data for use in view
@@ -469,54 +425,71 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $sessionData['cabotageQuestion'] = 'Will you be carrying out cabotage?';
         $sessionData['cabotage'] = $session->willCabotage == 1 ? 'Yes' : 'No';
 
-        return array('sessionData' => $sessionData);
+        return array('sessionData' => $sessionData, 'applicationData' => $application);
     }
 
     public function declarationAction()
     {
-        $session = new Container(self::SESSION_NAMESPACE);
 
-        $form = new PermitApplicationForm();
-        $form->setData(array(
-            'intensity'                 => $session->tripsData,
-            'sectors'                   => $this->extractIDFromSessionData($session->sectorsData),
-            'restrictedCountries'       => $session->restrictedCountriesData,
-            'restrictedCountriesList'   => $this->extractIDFromSessionData($session->restrictedCountriesList)
+        $id = $this->params()->fromRoute('id', -1);
 
-        ));
+        //Create form from annotations
+        $form = $this->getServiceLocator()
+          ->get('Helper\Form')
+          ->createForm('DeclarationForm', false, false);
 
-        return array('form' => $form);
+        $data = $this->params()->fromPost();
+
+        if (is_array($data) && array_key_exists('Submit', $data)) {
+            //Validate
+            $form->setData($data);
+            if ($form->isValid()) {
+                //Save to session
+                $session = new Container(self::SESSION_NAMESPACE);
+                $session->Declaration = $data['Fields']['Declaration'];
+
+                $this->redirect()->toRoute('permits', ['action' => 'fee', 'id' => $id]);
+            }
+        }
+
+        return array('form' => $form, 'id' => $id);
     }
+
 
     public function feeAction()
     {
+        $id = $this->params()->fromRoute('id', -1);
+        $application = $this->getApplication($id);
+        $applicationRef = $application['licence']['licNo'] . ' / ' . $application['id'];
+
         $request = $this->getRequest();
         $data = (array)$request->getPost();
         $session = new Container(self::SESSION_NAMESPACE);
-        if(is_array($data)) {
-            if (!empty($data)) {
+        
+        if (!empty($data)) {
 
-                $data['ecmtPermitsApplication'] = $session->applicationId;
-                $data['status'] = 'permit_awaiting';
-                $data['paymentStatus'] = 'lfs_ot';
-                $data['intensity'] = '1';
+            $data['ecmtPermitsApplication'] = $session->applicationId;
+            $data['status'] = 'permit_awaiting';
+            $data['paymentStatus'] = 'lfs_ot';
+            $data['intensity'] = '1';
 
-                if ($session->restrictedCountries == 1) {
-                    $data['countries'] = $this->extractIDFromSessionData($session->restrictedCountriesList);
-                }
-                $command = CreateEcmtPermits::create($data);
-
-                $response = $this->handleCommand($command);
-                $insert = $response->getResult();
-                //TODO undefined index id
-                $session->permitsNo = $insert['id']['ecmtPermit'];
-
-                $this->redirect()->toRoute('permits', ['action' => 'fee']);
+            if ($session->restrictedCountries == 1) {
+                $data['countries'] = $this->extractIDFromSessionData($session->restrictedCountriesList);
             }
+            $command = CreateEcmtPermits::create($data);
+
+            $response = $this->handleCommand($command);
+            $insert = $response->getResult();
+            //TODO undefined index id
+            $session->permitsNo = $insert['id']['ecmtPermit'];
+
+            $this->redirect()->toRoute('permits', ['action' => 'fee', 'id' => $id]);
         }
+
         //TODO missing page title
         $view = new ViewModel();
-        $view->setVariable('permitsNo', $session->permitsNo);
+        $view->setVariable('permitsNo', $applicationRef);
+        $view->setVariable('id', $id);
 
         return $view;
     }
@@ -524,10 +497,11 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
     public function submittedAction()
     {
-        $session = new Container(self::SESSION_NAMESPACE);
+        $id = $this->params()->fromRoute('id', -1);
+        $application = $this->getApplication($id);
+        $applicationRef = $application['licence']['licNo'] . ' / ' . $application['id'];
         $view = new ViewModel();
-        $view->setVariable('refNumber', $session->permitsNo);
-        $session->getManager()->getStorage()->clear(self::SESSION_NAMESPACE);
+        $view->setVariable('refNumber', $applicationRef);
         return $view;
     }
 
@@ -634,6 +608,16 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $IDList;
     }
 
+
+
+
+    private function getApplication($id)
+    {
+        $query = ById::create(['id'=>$id]);
+        $response = $this->handleQuery($query);
+        return $response->getResult();
+    }
+
     /**
      * Returns a new array with all the user's answers (taken from the session)
      * and associated question titles (as per the check-answers/summary page).
@@ -648,58 +632,75 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         //SELECTED LICENCE
         $sessionData['licenceQuestion']
-            = 'Licence selected';
-        $sessionData['licenceAnswer'] = $session['licence'];
+          = 'Licence selected';
+        $sessionData['licenceAnswer'] = $session->licence;
 
         //EURO 6 EMISSIONS CONFIRMATION
         $sessionData['meetsEuro6Question']
-            = 'I confirm that my ECMT permit(s) will only be 
+          = 'I confirm that my ECMT permit(s) will only be 
                 used by vehicle(s) that are environmentally compliant 
                 to Euro 6 emissions standards.';
-        $sessionData['meetsEuro6Answer'] = $session['meetsEuro6'];
+        $sessionData['meetsEuro6Answer'] = $session->meetsEuro6  == 1 ? 'Yes' : 'No';
 
         //CABOTAGE CONFIRMATION
         $sessionData['cabotageQuestion']
-            = 'I confirm that I will not undertake a 
+          = 'I confirm that I will not undertake a 
                 cabotage journey(s) with an ECMT permit.';
-        $sessionData['cabotageAnswer'] = $session['cabotage'];
+        $sessionData['cabotageAnswer'] = $session->willCabotage  > 1 ? 'Yes' : 'No';
 
         //RESTRICTED COUNTRIES
         $sessionData['restrictedCountriesQuestion']
-            = 'Do you intend to transport goods to
+          = 'Do you intend to transport goods to
                 Austria, Greece, Hungary, Italy or Russia?';
-        $sessionData['restrictedCountriesAnswer'] = $session['restrictedCountries'];
+        if($session->restrictedCountries  == 1)
+        {
+            $sessionData['restrictedCountriesAnswer'] = [];
+            foreach ($session->restrictedCountriesList as $country)
+            {
+                //add everything right of '|' to the list of countries to get rid of the sector ID
+                array_push($sessionData['restrictedCountriesAnswer'], substr($country, strpos($country, $this::DEFAULT_SEPARATOR) + 1));
+            }
+        }else{
+            $sessionData['restrictedCountriesAnswer'] = 'No';
+        }
 
         //NUMBER OF TRIPS PER YEAR
         $sessionData['tripsQuestion']
-            = 'How many international trips were carried out over the past 12 months?';
-        $sessionData['tripsAnswer'] = $session['trips'];
+          = 'How many international trips were carried out over the past 12 months?';
+        $sessionData['tripsAnswer'] = $session->trips;
 
         //'PERCENTAGE' QUESTION
         $sessionData['percentageQuestion']
-            = 'What percentage of your business 
+          = 'What percentage of your business 
                 is related to international journeys over the past 12 months?';
-        $sessionData['percentageAnswer'] = $session['percentage'];
+        switch ($session->internationalJourneyPercentage) {
+            case 0:
+                $sessionData['percentageAnswer'] = 'Less than 60%';
+                break;
+            case 1:
+                $sessionData['percentageAnswer'] = 'From 60% to 90%';
+                break;
+            case 2:
+                $sessionData['percentageAnswer'] = 'More than 90%';
+                break;
+        }
 
         //SECTORS QUESTION
         $sessionData['specialistHaulageQuestion']
-            = 'Do you specialise in carrying goods for one specific sector?';
-        $sessionData['specialistHaulageAnswer'] = $session['specialistHaulage'];
+          = 'Do you specialise in carrying goods for one specific sector?';
+        if($session->specialistHaulage  == 1)
+        {
+            $sessionData['specialistHaulageAnswer'] = substr($session->sectorList, strpos($session->sectorList, $this::DEFAULT_SEPARATOR) + 1);
+        }else {
+            $sessionData['specialistHaulageAnswer'] = 'No';
+        }
 
         //NUMBER OF PERMITS REQUIRED
         $sessionData['permitsQuestion']
-            = 'How many permits does your business require?';
-        $sessionData['permitsAnswer'] = $session['permits'];
+          = 'How many permits does your business require?';
+        $sessionData['permitsAnswer'] = $session->permitsRequired;
 
         return $sessionData;
-    }
-
-
-    private function getApplication($id)
-    {
-        $query = ById::create(['id'=>$id]);
-        $response = $this->handleQuery($query);
-        return $response->getResult();
     }
 
 }

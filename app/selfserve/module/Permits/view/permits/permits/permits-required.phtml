@@ -6,7 +6,7 @@ $this->headTitle($title);
 <div class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
-            <p><a href="/permits/application-overview" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
+            <p><a href="/permits/application-overview/<?php echo $id; ?>" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
             <div class="page-header__wrapper">
                 <h1 class="js-title">
                     <?php echo $this->translate('permits.page.permits.required.question'); ?>
@@ -16,7 +16,7 @@ $this->headTitle($title);
 
         <div class="field">
             <div class="govuk-hint">
-                <p><?php echo $this->translate('permits.page.permits.required.info'); ?></p>
+                <p><?php echo $totalVehicles; ?></p>
             </div>
 
             <fieldset id="permits-required" class="inline" data-group="permits-required">
@@ -26,7 +26,7 @@ $this->headTitle($title);
                 ?>
 
                 <fieldset class="actions-container new-application--wrapper">
-                    <p><a href="/permits/application-overview"> <?php echo $this->translate('permits.button.save-return-to-overview'); ?> </a></p>
+                    <p><a href="/permits/application-overview/<?php echo $id; ?>"> <?php echo $this->translate('permits.button.save-return-to-overview'); ?> </a></p>
                 </fieldset>
             </fieldset>
         </div>
