@@ -45,6 +45,22 @@ class ApplicationOverviewSection extends LvaOverviewSection
                 $statusText = 'COMPLETE';
                 $statusColour = 'green';
                 break;
+            case 3:
+                $mode = 'edit';
+                $statusText = 'NOT STARTED YET';
+                $statusColour = 'grey';
+                break;
+            case 4:
+                $mode = 'edit';
+                $statusText = 'COMPLETED';
+                $statusColour = 'green';
+                break;
+            case 5:
+                $mode = 'edit';
+                $statusText = 'CAN\'T START YET';
+                $statusColour = 'grey';
+                break;
+
             default:
                 $mode = 'add';
                 $statusText = 'NOT STARTED';

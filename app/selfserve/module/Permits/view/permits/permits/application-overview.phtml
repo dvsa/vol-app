@@ -7,7 +7,7 @@
     <div class="two-thirds">
         <div class="page-header">
             <div class="page-header__wrapper">
-                <h3 class="page-header__subtitle">OB2013691 / 107762</h3>
+                <h3 class="page-header__subtitle"> <?php echo $ref; ?></h3>
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($title); ?>
                 </h1>
@@ -20,10 +20,9 @@
            <div class="table_wrapper">
                <ol class="overview__list">
                    <?php
-                      /* foreach ($sections as $section) {
-                           var_dump($section); die;
+                       foreach ($sections as $section) {
                            echo $this->render($section);
-                       }*/
+                       }
                    ?>
                </ol>
             </div>
