@@ -80,7 +80,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
                 //TODO additional validation required: if total of possible permit applications has been reached,
                 // the user should not be able to create another application.
-                
+
                 $command = CreateEcmtPermitApplication::create($applicationData);
                 $response = $this->handleCommand($command);
                 $insert = $response->getResult();

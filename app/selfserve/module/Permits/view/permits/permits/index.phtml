@@ -37,6 +37,9 @@
 
             <?php if($applicationsNo > 0): ?>
             <?php echo $applicationsTable; ?>
+            <?php else : ?>
+                <h3><?php echo $this->translate('dashboard-table-permit-application-title'); ?></h3>
+                <p class="guidance"><?php echo $this->translate('permits.application.overwiew.no-permits'); ?></p>
             <?php endif; ?>
         </div>
     </div>
