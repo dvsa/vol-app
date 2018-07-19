@@ -78,6 +78,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $applicationData['permitType'] = 'permit_ecmt';
                 $applicationData['licence'] = explode('|',$data['Fields']['EcmtLicence'])[0];
 
+                //TODO additional validation required: if total of possible permit applications has been reached,
+                // the user should not be able to create another application.
+                
                 $command = CreateEcmtPermitApplication::create($applicationData);
                 $response = $this->handleCommand($command);
                 $insert = $response->getResult();
@@ -87,6 +90,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return array('form' => $form, 'id' => $id);
     }
 
+
+    //TODO needs reworking
     public function applicationOverviewAction()
     {
         $id = $this->params()->fromRoute('id', -1);
@@ -251,6 +256,11 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $application = $this->getApplication($id);
         $applicationRef = $application['licence']['licNo'] . ' / ' . $application['id'];
 
+        //TODO insert the trips hint into the form
+        $licenceTrafficArea = $application['licence']['licNo'] . ' (' . $application['licence']['trafficArea']['name'] . ')';
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $tripsHint = $translationHelper->translateReplace('permits.page.trips.form.hint', [$licenceTrafficArea]);
+
         //Create form from annotations
         $form = $this->getServiceLocator()
         ->get('Helper\Form')
@@ -338,6 +348,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return array('form' => $form, 'id' => $id);
     }
 
+
+    //TODO remove all session elements and replace with queries
+
     public function permitsRequiredAction()
     {
         $id = $this->params()->fromRoute('id', -1);
@@ -368,6 +381,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return array('form' => $form, 'totalVehicles' => $totalVehicles, 'id' => $id);
     }
 
+
+    //TODO remove all session elements and replace with queries
     public function checkAnswersAction()
     {
 
@@ -387,6 +402,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         return array('sessionData' => $sessionData, 'applicationData' => $application, 'id' => $id);
     }
+
+    //TODO remove all session elements and replace with queries
 
     public function summaryAction()
     {
@@ -428,6 +445,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return array('sessionData' => $sessionData, 'applicationData' => $application);
     }
 
+    //TODO remove all session elements and replace with queries
     public function declarationAction()
     {
 
@@ -455,6 +473,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return array('form' => $form, 'id' => $id);
     }
 
+    //TODO remove all session elements and replace with queries
 
     public function feeAction()
     {
@@ -465,7 +484,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $request = $this->getRequest();
         $data = (array)$request->getPost();
         $session = new Container(self::SESSION_NAMESPACE);
-        
+
         if (!empty($data)) {
 
             $data['ecmtPermitsApplication'] = $session->applicationId;
@@ -480,13 +499,11 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
             $response = $this->handleCommand($command);
             $insert = $response->getResult();
-            //TODO undefined index id
             $session->permitsNo = $insert['id']['ecmtPermit'];
 
             $this->redirect()->toRoute('permits', ['action' => 'fee', 'id' => $id]);
         }
 
-        //TODO missing page title
         $view = new ViewModel();
         $view->setVariable('permitsNo', $applicationRef);
         $view->setVariable('id', $id);
@@ -508,7 +525,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     /**
      * Used to retrieve the licences for the ecmt-licence page.
      *
-     * @return mixed
+     * @return array
      *
      */
     private function getRelevantLicences()
@@ -596,10 +613,10 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $form;
     }
 
+    //TODO remove this method once all session functionality is removed
 
     private function extractIDFromSessionData($sessionData){
         $IDList = array();
-//TODO check the mess (invalid argument supplied for foreach)
         foreach ($sessionData as $entry){
             //Add everything before the separator to the list (ID is before separator)
             array_push($IDList, substr($entry, 0, strpos($entry, self::DEFAULT_SEPARATOR)));
@@ -608,15 +625,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $IDList;
     }
 
-
-
-
-    private function getApplication($id)
-    {
-        $query = ById::create(['id'=>$id]);
-        $response = $this->handleQuery($query);
-        return $response->getResult();
-    }
+    //TODO remove this method once all session functionality is removed
 
     /**
      * Returns a new array with all the user's answers (taken from the session)
@@ -703,4 +712,17 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $sessionData;
     }
 
+    /**
+     * Returns an application entry by id
+     *
+     * @param $id application id
+     * @return array
+     */
+
+    private function getApplication($id)
+    {
+        $query = ById::create(['id'=>$id]);
+        $response = $this->handleQuery($query);
+        return $response->getResult();
+    }
 }
