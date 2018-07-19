@@ -46,12 +46,57 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->sut->attach($mockEventManager);
     }
 
+    public function testOnDispatchWithNoReferal()
+    {
+        $eligibleForPermits = true;
+        $dashboardPermitsEnabled = true;
+
+        $dashboardPermitsKey = 'dashboard-permits';
+        $dashboardPermitsPage = new Uri();
+
+        $httpResponse = m::mock(HttpResponse::class);
+
+        $httpResponse->shouldReceive('getResult')
+            ->withNoArgs()
+            ->once()
+            ->andReturn(['eligibleForPermits' => $eligibleForPermits]);
+
+        $this->mockQuerySender->shouldReceive('send')
+            ->with(m::type(EligibleForPermits::class))
+            ->once()
+            ->andReturn($httpResponse);
+
+        $this->mockQuerySender->shouldReceive('featuresEnabled')
+            ->with([FeatureToggle::SELFSERVE_ECMT])
+            ->once()
+            ->andReturn($dashboardPermitsEnabled);
+
+        $this->mockNavigation
+            ->shouldReceive('findBy')
+            ->with('id', $dashboardPermitsKey)
+            ->twice()
+            ->andReturn($dashboardPermitsPage);
+
+        $request = m::mock(HttpRequest::class);
+        $request->shouldReceive('getHeader')->once()->with('referer')->andReturn(false);
+
+        /** @var \Zend\Mvc\MvcEvent | m\MockInterface $mockEvent */
+        $mockEvent = m::mock(\Zend\Mvc\MvcEvent::class);
+        $mockEvent->shouldReceive('getRequest')->once()->withNoArgs()->andReturn($request);
+
+        $this->sut->onDispatch($mockEvent);
+
+        $this->assertEquals(
+            $dashboardPermitsEnabled,
+            $this->mockNavigation->findBy('id', $dashboardPermitsKey)->getVisible()
+        );
+    }
+
     /**
      * @dataProvider dpDispatch
      */
     public function testOnDispatchWithGovUkReferal($dashboardPermitsEnabled, $govUkReferer, $eligibleForPermits)
     {
-
         $dashboardPermitsKey = 'dashboard-permits';
         $dashboardPermitsPage = new Uri();
 
@@ -68,11 +113,13 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
             ->andReturn($httpResponse);
 
         $this->mockQuerySender->shouldReceive('featuresEnabled')
+            ->once()
             ->with([FeatureToggle::SELFSERVE_ECMT])
             ->andReturn($dashboardPermitsEnabled);
 
         $this->mockNavigation
             ->shouldReceive('findBy')
+            ->twice()
             ->with('id', $dashboardPermitsKey)
             ->andReturn($dashboardPermitsPage);
 

@@ -5,6 +5,8 @@ namespace Olcs\Controller\Listener;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
+use Zend\Http\Header\Referer as HttpReferer;
+use Zend\Http\PhpEnvironment\Request as HttpRequest;
 use Zend\Mvc\MvcEvent;
 use Zend\Navigation\Navigation as ZendNavigation;
 use Common\Service\Cqrs\Query\QuerySender;
@@ -153,11 +155,16 @@ class Navigation implements ListenerAggregateInterface
     private function referedFromGovUkPermits(MvcEvent $e): bool
     {
         /**
-         * @var \Zend\Http\PhpEnvironment\Request $request
-         * @var \Zend\Http\Header\Referer $referer
+         * @var HttpRequest $request
+         * @var HttpReferer|bool $referer
          */
         $request = $e->getRequest();
         $referer = $request->getHeader('referer');
+
+        if (!$referer instanceof HttpReferer) {
+            return false;
+        }
+
         return in_array($referer->getUri(), $this->govUkReferers);
     }
 

@@ -14,6 +14,8 @@ use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermits;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 use Zend\Mvc\MvcEvent;
+use Zend\Http\Header\Referer as HttpReferer;
+use Zend\Http\PhpEnvironment\Request as HttpRequest;
 
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermits;
@@ -668,11 +670,16 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     private function referredFromGovUkPermits(MvcEvent $e): bool
     {
         /**
-         * @var \Zend\Http\PhpEnvironment\Request $request
-         * @var \Zend\Http\Header\Referer $referer
+         * @var HttpRequest $request
+         * @var HttpReferer|bool $referer
          */
         $request = $e->getRequest();
         $referer = $request->getHeader('referer');
+
+        if (!$referer instanceof HttpReferer) {
+            return false;
+        }
+
         return in_array($referer->getUri(), $this->govUkReferrers);
     }
 
