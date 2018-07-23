@@ -654,6 +654,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     private function isEligibleForPermits(): bool
     {
         //check whether user is allowed to access permits
+        return true;
         $query = EligibleForPermits::create([]);
         $response = $this->handleQuery($query)->getResult();
 

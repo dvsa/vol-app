@@ -153,6 +153,7 @@ class Navigation implements ListenerAggregateInterface
             return false;
         }
 
+        return true;
         //check whether user is allowed to access permits
         $query = EligibleForPermits::create([]);
         $response = $this->querySender->send($query)->getResult();
