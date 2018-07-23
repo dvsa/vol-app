@@ -11,6 +11,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\Navigation\Navigation as ZendNavigation;
 use Common\Service\Cqrs\Query\QuerySender;
 use Common\FeatureToggle;
+use Common\Rbac\User as RbacUser;
 use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
 
 /**
@@ -32,6 +33,11 @@ class Navigation implements ListenerAggregateInterface
     protected $querySender;
 
     /**
+     * @var RbacUser $identity
+     */
+    protected $identity;
+
+    /**
      * @var array
      */
     protected $listeners = [];
@@ -48,13 +54,15 @@ class Navigation implements ListenerAggregateInterface
      *
      * @param ZendNavigation $navigation
      * @param QuerySender    $querySender
+     * @param RbacUser       $identity
      *
      * @return void
      */
-    public function __construct(ZendNavigation $navigation, QuerySender $querySender)
+    public function __construct(ZendNavigation $navigation, QuerySender $querySender, RbacUser $identity)
     {
         $this->navigation = $navigation;
         $this->querySender = $querySender;
+        $this->identity = $identity;
     }
 
     /**
@@ -95,8 +103,11 @@ class Navigation implements ListenerAggregateInterface
      */
     private function toggleEcmtMenus(bool $shouldShowPermitsTab): void
     {
-        $ecmtEnabled = $this->querySender->featuresEnabled([FeatureToggle::SELFSERVE_ECMT]);
-        $this->navigation->findBy('id', 'dashboard-permits')->setVisible($ecmtEnabled && $shouldShowPermitsTab);
+        if ($shouldShowPermitsTab) {
+            $shouldShowPermitsTab = $this->querySender->featuresEnabled([FeatureToggle::SELFSERVE_ECMT]);
+        }
+
+        $this->navigation->findBy('id', 'dashboard-permits')->setVisible($shouldShowPermitsTab);
     }
 
     /**
@@ -138,6 +149,10 @@ class Navigation implements ListenerAggregateInterface
      */
     private function isEligibleForPermits(): bool
     {
+        if ($this->identity->isAnonymous()) {
+            return false;
+        }
+
         //check whether user is allowed to access permits
         $query = EligibleForPermits::create([]);
         $response = $this->querySender->send($query)->getResult();

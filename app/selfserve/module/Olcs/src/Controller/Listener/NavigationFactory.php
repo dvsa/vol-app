@@ -4,6 +4,7 @@ namespace Olcs\Controller\Listener;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Class NavigationFactory
@@ -22,7 +23,8 @@ class NavigationFactory implements FactoryInterface
     {
         return new Navigation(
             $serviceLocator->get('navigation'),
-            $serviceLocator->get('QuerySender')
+            $serviceLocator->get('QuerySender'),
+            $serviceLocator->get(AuthorizationService::class)->getIdentity()
         );
     }
 }

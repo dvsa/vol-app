@@ -3,6 +3,7 @@
 namespace OlcsTest\Listener;
 
 use Common\FeatureToggle;
+use Common\Rbac\User as RbacUser;
 use Common\Service\Cqrs\Query\QuerySender;
 use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
 use Olcs\Controller\Listener\Navigation as NavigationListener;
@@ -29,11 +30,15 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
     /** @var QuerySender|m\MockInterface */
     private $mockQuerySender;
 
+    /** @var RbacUser|m\MockInterface */
+    private $mockIdentity;
+
     public function setUp()
     {
         $this->mockNavigation = m::mock(Navigation::class);
         $this->mockQuerySender = m::mock(QuerySender::class);
-        $this->sut = new NavigationListener($this->mockNavigation, $this->mockQuerySender);
+        $this->mockIdentity = m::mock(RbacUser::class);
+        $this->sut = new NavigationListener($this->mockNavigation, $this->mockQuerySender, $this->mockIdentity);
     }
 
     public function testAttach()
@@ -46,30 +51,12 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->sut->attach($mockEventManager);
     }
 
-    public function testOnDispatchWithNoReferal()
+    public function testOnDispatchWithNoReferalAnonymousUser()
     {
-        $eligibleForPermits = true;
-        $dashboardPermitsEnabled = true;
-
         $dashboardPermitsKey = 'dashboard-permits';
         $dashboardPermitsPage = new Uri();
 
-        $httpResponse = m::mock(HttpResponse::class);
-
-        $httpResponse->shouldReceive('getResult')
-            ->withNoArgs()
-            ->once()
-            ->andReturn(['eligibleForPermits' => $eligibleForPermits]);
-
-        $this->mockQuerySender->shouldReceive('send')
-            ->with(m::type(EligibleForPermits::class))
-            ->once()
-            ->andReturn($httpResponse);
-
-        $this->mockQuerySender->shouldReceive('featuresEnabled')
-            ->with([FeatureToggle::SELFSERVE_ECMT])
-            ->once()
-            ->andReturn($dashboardPermitsEnabled);
+        $this->mockIdentity->shouldReceive('isAnonymous')->once()->withNoArgs()->andReturn(true);
 
         $this->mockNavigation
             ->shouldReceive('findBy')
@@ -87,35 +74,90 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->sut->onDispatch($mockEvent);
 
         $this->assertEquals(
-            $dashboardPermitsEnabled,
+            false,
             $this->mockNavigation->findBy('id', $dashboardPermitsKey)->getVisible()
         );
     }
 
     /**
-     * @dataProvider dpDispatch
+     * @dataProvider dpDispatchNoReferer
      */
-    public function testOnDispatchWithGovUkReferal($dashboardPermitsEnabled, $govUkReferer, $eligibleForPermits)
+    public function testOnDispatchWithNoReferal($ecmtEnabled, $eligibleForPermits, $tabDisplayed)
     {
         $dashboardPermitsKey = 'dashboard-permits';
         $dashboardPermitsPage = new Uri();
 
         $httpResponse = m::mock(HttpResponse::class);
 
+        $this->mockIdentity->shouldReceive('isAnonymous')->once()->withNoArgs()->andReturn(false);
+
         $httpResponse->shouldReceive('getResult')
             ->withNoArgs()
-            ->times(empty($govUkReferer) ? 1 : 0)
+            ->once()
             ->andReturn(['eligibleForPermits' => $eligibleForPermits]);
 
         $this->mockQuerySender->shouldReceive('send')
             ->with(m::type(EligibleForPermits::class))
-            ->times(empty($govUkReferer) ? 1 : 0)
+            ->once()
             ->andReturn($httpResponse);
+
+        //only need to check feature is enabled if the user is eligible in the first place
+        $this->mockQuerySender->shouldReceive('featuresEnabled')
+            ->with([FeatureToggle::SELFSERVE_ECMT])
+            ->times($eligibleForPermits ? 1 : 0)
+            ->andReturn($ecmtEnabled);
+
+        $this->mockNavigation
+            ->shouldReceive('findBy')
+            ->with('id', $dashboardPermitsKey)
+            ->twice()
+            ->andReturn($dashboardPermitsPage);
+
+        $request = m::mock(HttpRequest::class);
+        $request->shouldReceive('getHeader')->once()->with('referer')->andReturn(false);
+
+        /** @var \Zend\Mvc\MvcEvent | m\MockInterface $mockEvent */
+        $mockEvent = m::mock(\Zend\Mvc\MvcEvent::class);
+        $mockEvent->shouldReceive('getRequest')->once()->withNoArgs()->andReturn($request);
+
+        $this->sut->onDispatch($mockEvent);
+
+        $this->assertEquals(
+            $tabDisplayed,
+            $this->mockNavigation->findBy('id', $dashboardPermitsKey)->getVisible()
+        );
+    }
+
+    public function dpDispatchNoReferer()
+    {
+        return [
+            [true, true, true],
+            [false, false, false],
+            [true, false, false],
+            [false, true, false]
+        ];
+    }
+
+    /**
+     * @dataProvider dpDispatchWithMatchedReferer
+     */
+    public function testOnDispatchWithGovUkReferalMatch($ecmtEnabled, $tabDisplayed)
+    {
+        $dashboardPermitsKey = 'dashboard-permits';
+        $dashboardPermitsPage = new Uri();
+        $uri = 'uri';
+        $this->sut->setGovUkReferers([$uri]);
+
+        //mock the http referer - this will be checked against our list of gov.uk referers (and will match)
+        $referer = m::mock(HttpReferer::class);
+        $referer->shouldReceive('getUri')->once()->withNoArgs()->andReturn($uri);
+        $request = m::mock(HttpRequest::class);
+        $request->shouldReceive('getHeader')->once()->with('referer')->andReturn($referer);
 
         $this->mockQuerySender->shouldReceive('featuresEnabled')
             ->once()
             ->with([FeatureToggle::SELFSERVE_ECMT])
-            ->andReturn($dashboardPermitsEnabled);
+            ->andReturn($ecmtEnabled);
 
         $this->mockNavigation
             ->shouldReceive('findBy')
@@ -123,11 +165,65 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
             ->with('id', $dashboardPermitsKey)
             ->andReturn($dashboardPermitsPage);
 
-        $refererUri = 'uri';
-        $this->sut->setGovUkReferers($govUkReferer);
-        $referer = m::mock(HttpReferer::class);
-        $referer->shouldReceive('getUri')->once()->withNoArgs()->andReturn($refererUri);
+        /** @var \Zend\Mvc\MvcEvent | m\MockInterface $mockEvent */
+        $mockEvent = m::mock(\Zend\Mvc\MvcEvent::class);
+        $mockEvent->shouldReceive('getRequest')->once()->withNoArgs()->andReturn($request);
 
+        $this->sut->onDispatch($mockEvent);
+
+        $this->assertEquals(
+            $tabDisplayed,
+            $this->mockNavigation->findBy('id', $dashboardPermitsKey)->getVisible()
+        );
+    }
+
+    public function dpDispatchWithMatchedReferer()
+    {
+        return [
+            [true, true],
+            [false, false],
+        ];
+    }
+
+    /**
+     * @dataProvider dpDispatchWithoutMatchedReferer
+     */
+    public function testOnDispatchWithNoGovUkReferal($ecmtEnabled, $eligibleForPermits, $tabDisplayed)
+    {
+        $dashboardPermitsKey = 'dashboard-permits';
+        $dashboardPermitsPage = new Uri();
+
+        $httpResponse = m::mock(HttpResponse::class);
+
+        $this->mockIdentity->shouldReceive('isAnonymous')
+            ->once()
+            ->withNoArgs()
+            ->andReturn(false);
+
+        $httpResponse->shouldReceive('getResult')
+            ->withNoArgs()
+            ->once()
+            ->andReturn(['eligibleForPermits' => $eligibleForPermits]);
+
+        $this->mockQuerySender->shouldReceive('send')
+            ->with(m::type(EligibleForPermits::class))
+            ->once()
+            ->andReturn($httpResponse);
+
+        $this->mockQuerySender->shouldReceive('featuresEnabled')
+            ->times($eligibleForPermits ? 1 : 0)
+            ->with([FeatureToggle::SELFSERVE_ECMT])
+            ->andReturn($ecmtEnabled);
+
+        $this->mockNavigation
+            ->shouldReceive('findBy')
+            ->twice()
+            ->with('id', $dashboardPermitsKey)
+            ->andReturn($dashboardPermitsPage);
+
+        //mock the http referer - this will be checked against our list of gov.uk referers (and won't match)
+        $referer = m::mock(HttpReferer::class);
+        $referer->shouldReceive('getUri')->once()->withNoArgs()->andReturn('uri');
         $request = m::mock(HttpRequest::class);
         $request->shouldReceive('getHeader')->once()->with('referer')->andReturn($referer);
 
@@ -138,20 +234,18 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->sut->onDispatch($mockEvent);
 
         $this->assertEquals(
-            $dashboardPermitsEnabled,
+            $tabDisplayed,
             $this->mockNavigation->findBy('id', $dashboardPermitsKey)->getVisible()
         );
     }
 
-    public function dpDispatch(): array
+    public function dpDispatchWithoutMatchedReferer()
     {
-        $govUkReferer = ['uri'];
-
         return [
-            [true, $govUkReferer, true],
-            [true, $govUkReferer, false],
-            [true, [], true],
-            [false, [], false]
+            [true, true, true],
+            [false, false, false],
+            [true, false, false],
+            [false, true, false]
         ];
     }
 }
