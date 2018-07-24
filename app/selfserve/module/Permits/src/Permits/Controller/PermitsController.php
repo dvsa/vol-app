@@ -11,6 +11,7 @@ use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
 use Dvsa\Olcs\Transfer\Query\Permits\SectorsList;
 
 use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
+use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermits;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 use Zend\Mvc\MvcEvent;
@@ -178,6 +179,18 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
     public function euro6EmissionsAction()
     {
+
+//TEST
+        echo 'HIT METHOD';
+        $data = array();
+        $data['id'] = 1;
+        $command = CancelEcmtPermitApplication::create($data);
+
+        $response = $this->handleCommand($command);
+        $insert = $response->getResult();
+        //$session->permitsNo = $insert['id']['ecmtPermit'];
+        var_dump($insert); die;
+//TEST END
 
         $id = $this->params()->fromRoute('id', -1);
 
