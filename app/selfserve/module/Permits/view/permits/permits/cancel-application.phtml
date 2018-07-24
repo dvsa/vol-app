@@ -1,13 +1,13 @@
 <?php
-    $title = $this->translate('permits.application.overwiew.main-title');
+    $title = $this->translate('permits.application.cancel-application');
     $this->headTitle($title);
 ?>
 
 <div class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
+            <p><a href="/permits/application-overview/<?php echo $id; ?>" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
             <div class="page-header__wrapper">
-                <h3 class="page-header__subtitle"> <?php echo $ref; ?></h3>
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($title); ?>
                 </h1>
@@ -49,7 +49,7 @@
                 <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i>Not Submitted</p>
                 <ul class="info-box__links">
                     <li>
-                        <a href="/permits/cancel-application" target="_blank" class="">Cancel application</a>
+                        <a href="#" target="_blank" class="">Cancel application</a>
                     </li>
                 </ul>
             </div>
