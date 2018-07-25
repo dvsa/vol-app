@@ -107,6 +107,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $response = $this->handleCommand($command);
                 $insert = $response->getResult();
                 $this->redirect()->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $insert['id']['ecmtPermitApplication']]);
+            } else {
+                //Custom Error Message
+                $form->get('Fields')->get('EcmtLicence')->setMessages(['error.messages.ecmt-licence']);
             }
         }
         return array('form' => $form, 'id' => $id);
