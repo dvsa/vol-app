@@ -10,21 +10,21 @@ use Zend\Form\Annotation as Form;
 class Cabotage
 {
     /**
-     * @Form\Name("WillCabotage")
+     * @Form\Name("WontCabotage")
      * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--cabotage",
-     *   "id" : "WillCabotage",
+     *   "id" : "WontCabotage",
      * })
      * @Form\Options({
-     *   "checked_value": "Y",
-     *     "unchecked_value": "N",
+     *   "checked_value": "Yes",
+     *     "unchecked_value": "No",
      *     "label": "permits.form.cabotage.label",
      *     "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
-     *     "must_be_value": "Y"
+     *     "must_be_value": "Yes"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
      */
 
-    public $willCabotage = null;
+    public $wontCabotage = null;
 }
