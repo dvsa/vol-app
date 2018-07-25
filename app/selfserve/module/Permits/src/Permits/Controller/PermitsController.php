@@ -359,7 +359,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
 
     //TODO remove all session elements and replace with queries
-
+    //TODO correct form validation so that max value == total vehicle authority (currently hardcoded). See acceptance criteria
     public function permitsRequiredAction()
     {
         $id = $this->params()->fromRoute('id', -1);
