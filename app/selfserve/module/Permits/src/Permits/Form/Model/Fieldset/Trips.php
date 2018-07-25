@@ -21,7 +21,7 @@ class Trips
      *     "hint": "For licence OB2013691 (North East of England)",
      *     "short-label": "error.messages.trips",
      * })
-     * @Form\Validator({"name": "Permits\Form\Validator\CustomBetween", "options": {"min":10, "max":100}})
+     * @Form\Validator({"name": "Permits\Form\Validator\CustomBetween", "options": {"min":1, "max":999999}})
      * @Form\Type("Zend\Form\Element\Number")
      */
 

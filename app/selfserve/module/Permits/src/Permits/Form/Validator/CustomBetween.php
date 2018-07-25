@@ -22,8 +22,9 @@ class CustomBetween extends Between
      * @var array
      */
     protected $messageTemplates = array(
-        self::TOO_SMALL      => "You must enter a number which is '%min%' or more.",
-        self::TOO_LARGE      => "You must enter a number equal to or less than your total vehicle authority. You must correct it."
+        self::TOO_SMALL      => "You must enter a number which can be '%min%' or more.",
+        self::TOO_LARGE      => "You must enter a number which is bellow '%max%'"
+        //self::TOO_LARGE      => "You must enter a number equal to or less than your total vehicle authority. You must correct it."
     );
 
 
