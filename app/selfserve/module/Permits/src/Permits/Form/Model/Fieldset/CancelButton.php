@@ -14,7 +14,7 @@ class CancelButton
      * @Form\Attributes({
      *     "class":"action--primary large",
      *     "id":"cancelbutton",
-     *     "value":"Cancel application",
+     *     "value":"permits.form.cancel_application.button",
      * })
      * @Form\Type("Zend\Form\Element\Submit")
      */

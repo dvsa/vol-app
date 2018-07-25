@@ -21,8 +21,7 @@ class CancelApplication
      *     "unchecked_value": "No",
      *     "label": "permits.form.cancel_application.label",
      *     "label_attributes": {"class": "form-control form-control--checkbox"},
-     *     "must_be_value": "Yes",
-     *     "value": "I confirm that I would like to cancel my application."
+     *     "must_be_value": "Yes"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
      */
