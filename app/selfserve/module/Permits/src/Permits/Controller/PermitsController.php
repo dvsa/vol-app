@@ -179,19 +179,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
     public function euro6EmissionsAction()
     {
-
-//TEST
-        echo 'HIT METHOD';
-        $data = array();
-        $data['id'] = 1;
-        $command = CancelEcmtPermitApplication::create($data);
-
-        $response = $this->handleCommand($command);
-        $insert = $response->getResult();
-        //$session->permitsNo = $insert['id']['ecmtPermit'];
-        var_dump($insert); die;
-//TEST END
-
         $id = $this->params()->fromRoute('id', -1);
 
         //Create form from annotations
@@ -565,16 +552,25 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $application = $this->getApplication($id);
         $applicationRef = $application['licence']['licNo'] . ' / ' . $application['id'];
 
-
         //Create form from annotations
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
             ->createForm('CancelApplicationForm', false, false);
 
         if (is_array($data) && array_key_exists('Submit', $data)) {
+
             //Validate
             $form->setData($data);
+
             if ($form->isValid()) {
+                $queryParams = array();
+                $queryParams['id'] = $id;
+
+                $command = CancelEcmtPermitApplication::create($queryParams);
+
+                $response = $this->handleCommand($command);
+                $insert = $response->getResult();
+
                 $this->redirect()->toRoute('permits', ['action' => 'cancel-confirmation', 'id' => $id]);
             }
         }
