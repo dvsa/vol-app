@@ -20,7 +20,7 @@ class CancelApplication
      *   "checked_value": "Yes",
      *     "unchecked_value": "No",
      *     "label": "permits.form.cancel_application.label",
-     *     "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
+     *     "label_attributes": {"class": "form-control form-control--checkbox"},
      *     "must_be_value": "Yes",
      *     "value": "I confirm that I would like to cancel my application."
      * })
