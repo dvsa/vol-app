@@ -1,0 +1,20 @@
+<?php
+    $title = $this->translate('permits.application.cancel-confirmation');
+    $this->headTitle($title);
+?>
+
+<div class="row ecmt">
+    <div class="two-thirds">
+        <div class="govuk-box-highlight">
+            <h2 class="js-title"><?php echo $this->escapeHtml($title); ?></h2>
+            <br />
+        </div>
+
+        <div class="field">
+            <div class="govuk-hint">
+                <?php echo $this->translate('markup-ecmt-cancel-confirmation'); ?>
+            </div>
+        </div>
+        <p><a href="/permits" class="action--primary large"><?php echo $this->translate('permits.button.confirm-cancel-finish'); ?></a></p>
+    </div>
+</div>

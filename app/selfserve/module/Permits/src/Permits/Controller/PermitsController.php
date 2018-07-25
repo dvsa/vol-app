@@ -559,20 +559,44 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     public function cancelApplicationAction()
     {
         $id = $this->params()->fromRoute('id', -1);
+        $request = $this->getRequest();
+        $data = (array)$request->getPost();
 
         $application = $this->getApplication($id);
         $applicationRef = $application['licence']['licNo'] . ' / ' . $application['id'];
+
 
         //Create form from annotations
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
             ->createForm('CancelApplicationForm', false, false);
 
+        if (is_array($data) && array_key_exists('Submit', $data)) {
+            //Validate
+            $form->setData($data);
+            if ($form->isValid()) {
+                $this->redirect()->toRoute('permits', ['action' => 'cancel-confirmation', 'id' => $id]);
+            }
+        }
+
         $view = new ViewModel();
 
         $view->setVariable('form', $form);
         $view->setVariable('id', $id);
         $view->setVariable('ref', $applicationRef);
+
+        return $view;
+    }
+
+    public function cancelConfirmationAction() {
+        $id = $this->params()->fromRoute('id', -1);
+
+        $application = $this->getApplication($id);
+        $applicationRef = $application['licence']['licNo'] . ' / ' . $application['id'];
+
+        $view = new ViewModel();
+
+        $view->setVariable('id', $id);
 
         return $view;
     }
