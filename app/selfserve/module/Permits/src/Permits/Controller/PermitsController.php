@@ -310,6 +310,30 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $form = $this->getServiceLocator()
             ->get('Helper\Form')
             ->createForm('SpecialistHaulageForm', false, false);
+
+        $data = $this->params()->fromPost();
+
+        if (is_array($data) && array_key_exists('Submit', $data)) {
+
+            //Validate
+            $form->setData($data);
+            if ($form->isValid()) {
+
+                //EXTRA VALIDATION
+                if (($data['Fields']['SpecialistHaulage'] == 1
+                        && isset($data['Fields']['SectorList']['SectorList']))
+                    || ($data['Fields']['SpecialistHaulage'] == 0))
+                {
+                    $this->nextStep(EcmtSection::ROUTE_ECMT_CHECK_ANSWERS);
+                }
+                else
+                {
+                    //conditional validation failed, sector list should not be empty
+                    $form->get('Fields')->get('SectorList')->get('SectorList')->setMessages(['error.messages.sector']);
+                }
+            }
+        }
+
         /*
         * Get Sector List from Database
         */
@@ -320,31 +344,11 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         * Make the sectors list the value_options of the form
         */
         $sectorList = $this->getServiceLocator()
-          ->get('Helper\Form')->transformListIntoValueOptions($sectorList, 'description');
+            ->get('Helper\Form')->transformListIntoValueOptions($sectorList, 'description');
 
         $options = array();
         $options['value_options'] = $sectorList;
         $form->get('Fields')->get('SectorList')->get('SectorList')->setOptions($options);
-
-        $data = $this->params()->fromPost();
-
-        if (is_array($data) && array_key_exists('Submit', $data)) {
-            //Validate
-            $form->setData($data);
-            if ($form->isValid()) {
-                //EXTRA VALIDATION
-                if (($data['Fields']['SpecialistHaulage'] == 1
-                        && isset($data['Fields']['SectorList']['SectorList']))
-                    || ($data['Fields']['SectorList'] == 0))
-                {
-                    $this->nextStep(EcmtSection::ROUTE_ECMT_CHECK_ANSWERS);
-                }
-                else{
-                    //conditional validation failed, sector list should not be empty
-                    $form->get('Fields')->get('SectorList')->get('SectorList')->setMessages('error.messages.sector');
-                }
-            }
-        }
 
         return array('form' => $form, 'id' => $id);
     }
