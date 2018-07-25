@@ -18,10 +18,11 @@ class Euro6Emissions
      * })
      * @Form\Options({
      *   "checked_value": "Yes",
-     *     "unchecked_value": "No",
-     *     "label": "permits.form.euro6.label",
-     *     "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
-     *     "must_be_value": "Yes"
+     *   "unchecked_value": "No",
+     *   "label": "permits.form.euro6.label",
+     *   "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
+     *   "must_be_value": "Yes",
+     *   "error-message": "error.messages.euro6"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
      */
