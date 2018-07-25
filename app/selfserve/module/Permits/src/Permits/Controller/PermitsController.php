@@ -455,8 +455,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
          * Collate session data for use in view
          */
         $sessionData = array();
-        $sessionData['countriesQuestion'] = 'Are you transporting goods to a 
-                                        restricted country such as Austria, 
+        $sessionData['countriesQuestion'] = 'Are you transporting goods to a
+                                        restricted country such as Austria,
                                         Greece, Hungary, Italy or Russia?';
 
         $sessionData['countries'] = array();
@@ -553,6 +553,27 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $applicationRef = $application['licence']['licNo'] . ' / ' . $application['id'];
         $view = new ViewModel();
         $view->setVariable('refNumber', $applicationRef);
+        return $view;
+    }
+
+    public function cancelApplicationAction()
+    {
+        $id = $this->params()->fromRoute('id', -1);
+
+        $application = $this->getApplication($id);
+        $applicationRef = $application['licence']['licNo'] . ' / ' . $application['id'];
+
+        //Create form from annotations
+        $form = $this->getServiceLocator()
+            ->get('Helper\Form')
+            ->createForm('CancelApplicationForm', false, false);
+
+        $view = new ViewModel();
+
+        $view->setVariable('form', $form);
+        $view->setVariable('id', $id);
+        $view->setVariable('ref', $applicationRef);
+
         return $view;
     }
 
@@ -718,14 +739,14 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         //EURO 6 EMISSIONS CONFIRMATION
         $sessionData['meetsEuro6Question']
-          = 'I confirm that my ECMT permit(s) will only be 
-                used by vehicle(s) that are environmentally compliant 
+          = 'I confirm that my ECMT permit(s) will only be
+                used by vehicle(s) that are environmentally compliant
                 to Euro 6 emissions standards.';
         $sessionData['meetsEuro6Answer'] = $session->meetsEuro6  == 1 ? 'Yes' : 'No';
 
         //CABOTAGE CONFIRMATION
         $sessionData['cabotageQuestion']
-          = 'I confirm that I will not undertake a 
+          = 'I confirm that I will not undertake a
                 cabotage journey(s) with an ECMT permit.';
         $sessionData['cabotageAnswer'] = $session->willCabotage  > 1 ? 'Yes' : 'No';
 
@@ -752,7 +773,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         //'PERCENTAGE' QUESTION
         $sessionData['percentageQuestion']
-          = 'What percentage of your business 
+          = 'What percentage of your business
                 is related to international journeys over the past 12 months?';
         switch ($session->internationalJourneyPercentage) {
             case 0:

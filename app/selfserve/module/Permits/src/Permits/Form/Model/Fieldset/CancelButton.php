@@ -1,0 +1,22 @@
+<?php
+namespace Permits\Form\Model\Fieldset;
+
+use Zend\Form\Annotation as Form;
+
+/**
+ * @codeCoverageIgnore Auto-generated file with no methods
+ * @Form\Name("CancelButton")
+ */
+class CancelButton
+{
+    /**
+     * @Form\Name("CancelButton")
+     * @Form\Attributes({
+     *     "class":"action--primary large",
+     *     "id":"cancelbutton",
+     *     "value":"Cancel application",
+     * })
+     * @Form\Type("Zend\Form\Element\Submit")
+     */
+    public $cancel = null;
+}
