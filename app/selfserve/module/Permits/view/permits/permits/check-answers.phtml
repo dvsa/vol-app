@@ -64,24 +64,7 @@
                             </td>
                             <td>
                                 <?php
-                                $count = 1;
-                                $listSize = count($sessionData['restrictedCountriesAnswer']);
-                                if($listSize > 1)
-                                {
-                                    echo "Yes";
-                                    echo "<br>";
-
-                                    foreach ($sessionData['restrictedCountriesAnswer'] as $country) {
-                                        if ($count == $listSize) {
-                                            echo $country;
-                                        } else {
-                                            echo $country . ', ';
-                                        }
-                                        $count++;
-                                    }
-                                }else{
-                                    echo "No";
-                                }
+                                    echo str_replace(array("\r\n", "\n"), '<br />', $sessionData['restrictedCountriesAnswer'])
                                 ?>
                             </td>
                             <td>

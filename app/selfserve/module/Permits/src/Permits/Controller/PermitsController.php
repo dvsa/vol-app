@@ -234,7 +234,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         }
 
         /*
-        * Get Countries List from Database
+        * Get Countrys List from Database
         */
         $response = $this->handleQuery(ConstrainedCountries::create(array()));
         $restrictedCountryList = $response->getResult();
@@ -403,7 +403,24 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $sessionData['licenceAnswer'] = $application['licence']['licNo'];
         $sessionData['meetsEuro6Answer'] = $application['emissions'] == 1 ? 'Yes' : 'No';
         $sessionData['cabotageAnswer'] = $application['cabotage'] == 1 ? 'Yes' : 'No';
-        $sessionData['restrictedCountriesAnswer'] = $application['countrys'];
+        if(isset($application['countrys']))
+        {
+            $sessionData['restrictedCountriesAnswer'] = "Yes\n";
+
+            $count = 1;
+            $numOfCountries = count($application['countrys']);
+            foreach($application['countrys'] as $countryDetails)
+            {
+                if ($count == $numOfCountries) {
+                    $sessionData['restrictedCountriesAnswer'] .= $countryDetails['countryDesc'];
+                } else {
+                    $sessionData['restrictedCountriesAnswer'] .= $countryDetails['countryDesc'] . ', ';
+                }
+                $count++;
+            }
+        }else{
+            $sessionData['restrictedCountriesAnswer'] = "No";
+        }
         $sessionData['tripsAnswer'] = $application['trips'];
         switch ($application['internationalJourneys']) {
             case 0:
