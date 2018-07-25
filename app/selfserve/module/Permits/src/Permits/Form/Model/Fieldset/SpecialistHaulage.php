@@ -18,14 +18,14 @@ class SpecialistHaulage
      * })
      * @Form\Options({
      *     "label": "",
-     *     "short-label": "error.messages.sector",
      *     "label_attributes":{
      *          "class" : "form-control form-control--radio form-control--inline specialistRadio"
      *     },
      *     "value_options":{
      *          "1" : "Yes",
      *          "0" : "No"
-     *     }
+     *     },
+     *     "error-message": "error.messages.sector"
      * })
      * @Form\Type("Radio")
      */
