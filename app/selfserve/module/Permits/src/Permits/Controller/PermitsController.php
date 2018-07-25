@@ -399,7 +399,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         }
 
         $sessionData = $this->collateSessionData();
-
+//var_dump($application); die;
         $sessionData['licenceAnswer'] = $application['licence']['licNo'];
         $sessionData['meetsEuro6Answer'] = $application['emissions'] == 1 ? 'Yes' : 'No';
         $sessionData['cabotageAnswer'] = $application['cabotage'] == 1 ? 'Yes' : 'No';
@@ -416,7 +416,11 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $sessionData['percentageAnswer'] = 'More than 90%';
                 break;
         }
-        $sessionData['specialistHaulageAnswer'] = $application['sectors'];
+        if(isset($application['sectors']['description'])){
+            $sessionData['specialistHaulageAnswer'] = "Yes\n";
+            $sessionData['specialistHaulageAnswer'] .= $application['sectors']['description'];
+        }
+
         $sessionData['permitsAnswer'] = $application['permitsRequired'];
 
         return array('sessionData' => $sessionData, 'applicationData' => $application, 'id' => $id, 'ref' => $applicationRef);
