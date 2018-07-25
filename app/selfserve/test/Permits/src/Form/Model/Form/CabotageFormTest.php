@@ -17,16 +17,16 @@ class CabotageFormTest extends AbstractFormValidationTestCase
      */
     protected $formName = \Permits\Form\Model\Form\CabotageForm::class;
 
-    public function testWillCabotage()
+    public function testWontCabotage()
     {
-        $element = ['Fields', 'WillCabotage'];
+        $element = ['Fields', 'WontCabotage'];
 
         $this->assertFormElementRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementType($element, "\Common\Form\Elements\InputFilters\SingleCheckbox");
 
-        $this->assertFormElementValid($element, 'Y');
-        $this->assertFormElementNotValid($element, 'N', [Validator\Identical::NOT_SAME]);
+        $this->assertFormElementValid($element, 'Yes');
+        $this->assertFormElementNotValid($element, 'No', [Validator\Identical::NOT_SAME]);
         $this->assertFormElementNotValid($element, 'X', [Validator\Identical::NOT_SAME]); //[Validator\InArray::NOT_IN_ARRAY]
     }
 
