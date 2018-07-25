@@ -419,7 +419,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $sessionData['specialistHaulageAnswer'] = $application['sectors'];
         $sessionData['permitsAnswer'] = $application['permitsRequired'];
 
-        return array('sessionData' => $sessionData, 'applicationData' => $application, 'id' => $id);
+        return array('sessionData' => $sessionData, 'applicationData' => $application, 'id' => $id, 'ref' => $applicationRef);
     }
 
     //TODO remove all session elements and replace with queries
