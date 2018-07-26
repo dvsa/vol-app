@@ -21,7 +21,7 @@ class PermitsRequired
      *     "label": "permits.form.permits.required.label",
      *     "hint": "",
      *     "short-label": "error.messages.permits.required",
-     *      "allow_empty" : true,
+     *     "allow_empty" : true,
      * })
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Validator({

@@ -15,12 +15,15 @@ class Trips
      * @Form\Attributes({
      *   "class" : "input--trips",
      *   "id" : "TripsAbroad",
+     *   "step" : "any"
      * })
      * @Form\Options({
      *     "label": "permits.form.trips.label",
      *     "hint": "For licence OB2013691 (North East of England)",
      *     "short-label": "error.messages.trips",
+     *     "allow_empty" : true,
      * })
+     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Validator({
      *     "name": "Permits\Form\Validator\CustomBetween",
      *     "options": {
