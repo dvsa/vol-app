@@ -20,7 +20,7 @@ class Trips
      * @Form\Options({
      *     "label": "permits.form.trips.label",
      *     "hint": "For licence OB2013691 (North East of England)",
-     *     "short-label": "error.messages.trips",
+     *     "short-label": "",
      *     "allow_empty" : true,
      * })
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
