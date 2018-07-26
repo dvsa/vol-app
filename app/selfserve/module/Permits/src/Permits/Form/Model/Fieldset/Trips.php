@@ -28,7 +28,7 @@ class Trips
      * @Form\Validator({
      *     "name": "Permits\Form\Validator\CustomBetween",
      *     "options": {
-     *          "min":1,
+     *          "min":0,
      *          "max":999999,
      *          "too_small_message" : "error.messages.trips.too-small",
      *          "too_large_message" : "error.messages.trips.too-large",
