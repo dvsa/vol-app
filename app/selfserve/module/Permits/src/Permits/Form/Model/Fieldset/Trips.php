@@ -24,6 +24,7 @@ class Trips
      *     "allow_empty" : true,
      * })
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Transfer\Validator({"name":"Zend\Validator\Digits"})
      * @Form\Validator({
      *     "name": "Permits\Form\Validator\CustomBetween",
      *     "options": {

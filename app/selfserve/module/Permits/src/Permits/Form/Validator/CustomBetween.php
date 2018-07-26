@@ -43,7 +43,7 @@ class CustomBetween extends Between
     {
         $this->setValue($value);
 
-        if($this->getMin() > $value) {
+        if($this->getMin() > $value || !ctype_digit($myString)) {
             $this->error( self::TOO_SMALL );
             return false;
         }
