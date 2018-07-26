@@ -413,7 +413,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
         $applicationRef = $application['licence']['licNo'] . ' / ' . $application['id'];
-var_dump($application); die;
+
         $session = new Container(self::SESSION_NAMESPACE);
         $data = $this->params()->fromPost();
 
