@@ -24,7 +24,6 @@ class PermitsRequired
      *     "allow_empty" : true,
      * })
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Transfer\Validator({"name":"Zend\Validator\Digits"})
      * @Form\Validator({
      *     "name": "Permits\Form\Validator\CustomBetween",
      *     "options": {
@@ -32,6 +31,7 @@ class PermitsRequired
      *          "max":12,
      *          "too_small_message" : "error.messages.permits.required.too-small",
      *          "too_large_message" : "error.messages.permits.required.too-large",
+     *          "not_digit_message" : "error.messages.permits.required.not-digit"
      *     }})
      * @Form\Type("Zend\Form\Element\Number")
      */

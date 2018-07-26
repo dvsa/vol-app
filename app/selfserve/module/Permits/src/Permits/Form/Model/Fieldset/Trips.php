@@ -24,7 +24,6 @@ class Trips
      *     "allow_empty" : true,
      * })
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Transfer\Validator({"name":"Zend\Validator\Digits"})
      * @Form\Validator({
      *     "name": "Permits\Form\Validator\CustomBetween",
      *     "options": {
@@ -32,6 +31,7 @@ class Trips
      *          "max":999999,
      *          "too_small_message" : "error.messages.trips.too-small",
      *          "too_large_message" : "error.messages.trips.too-large",
+     *          "not_digit_message" : "error.messages.permits.required.not-digit"
      *     }})
      * @Form\Type("Zend\Form\Element\Number")
      */
