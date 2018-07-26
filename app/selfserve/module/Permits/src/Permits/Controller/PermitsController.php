@@ -310,6 +310,10 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             if ($form->isValid()) {
                 $this->nextStep(EcmtSection::ROUTE_ECMT_SECTORS);
             }
+            else {
+                //Custom Error Message
+                $form->get('Fields')->get('InternationalJourney')->setMessages(['error.messages.international-journey']);
+            }
         }
 
         return array('form' => $form, 'id' => $id);
