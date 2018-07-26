@@ -220,6 +220,22 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             ->get('Helper\Form')
             ->createForm('RestrictedCountriesForm', false, false);
 
+        /*
+        * Get Countries List from Database
+        */
+        $response = $this->handleQuery(ConstrainedCountries::create(array()));
+        $restrictedCountryList = $response->getResult();
+
+        /*
+        * Make the restricted countries list the value_options of the form
+        */
+        $restrictedCountryList = $this->getServiceLocator()
+            ->get('Helper\Form')->transformListIntoValueOptions($restrictedCountryList, 'description');
+
+        $options = array();
+        $options['value_options'] = $restrictedCountryList;
+        $form->get('Fields')->get('restrictedCountriesList')->get('restrictedCountriesList')->setOptions($options);
+
         $data = $this->params()->fromPost();
 
         if (is_array($data) && array_key_exists('Submit', $data)) {
@@ -239,27 +255,12 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                     //conditional validation failed, restricted countries list should not be empty
                     $form->get('Fields')->get('restrictedCountriesList')->get('restrictedCountriesList')->setMessages(['error.messages.restricted.countries']);
                 }
-            }else{
+            }
+            else {
                 //Custom Error Message
                 $form->get('Fields')->get('restrictedCountries')->setMessages(['error.messages.restricted.countries']);
             }
         }
-
-        /*
-        * Get Countrys List from Database
-        */
-        $response = $this->handleQuery(ConstrainedCountries::create(array()));
-        $restrictedCountryList = $response->getResult();
-
-        /*
-        * Make the restricted countries list the value_options of the form
-        */
-        $restrictedCountryList = $this->getServiceLocator()
-            ->get('Helper\Form')->transformListIntoValueOptions($restrictedCountryList, 'description');
-
-        $options = array();
-        $options['value_options'] = $restrictedCountryList;
-        $form->get('Fields')->get('restrictedCountriesList')->get('restrictedCountriesList')->setOptions($options);
 
         return array('form' => $form, 'id' => $id);
     }
