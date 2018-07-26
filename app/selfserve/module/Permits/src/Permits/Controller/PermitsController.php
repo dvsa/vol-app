@@ -168,6 +168,10 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 //Custom Error Message
                 $form->get('Fields')->get('MeetsEuro6')->setMessages(['error.messages.checkbox']);
             }
+            else {
+                //Custom Error Message
+                $form->get('Fields')->get('MeetsEuro6')->setMessages(['error.messages.checkbox']);
+            }
         }
 
         return array('form' => $form, 'id' => $id);
@@ -195,11 +199,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             $form->setData($data);
             if ($form->isValid()) {
                 $cabotage = ($data['Fields']['WontCabotage'] === 'Yes') ? 1 : 0;
-                $command = UpdateEcmtCabotage::create(['id' => $id, 'cabotage' => $cabotage]);
-
-                $response = $this->handleCommand($command);
+                $command = UpdateEcmtCabotage::create([ 'id' => $id, 'cabotage' => $cabotage]);
+            $response = $this->handleCommand($command);
                 $insert = $response->getResult();
-
                 $this->nextStep(EcmtSection::ROUTE_ECMT_COUNTRIES);
             }
         }
