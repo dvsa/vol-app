@@ -342,10 +342,15 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                     || ($data['Fields']['SpecialistHaulage'] == 0))
                 {
                     $this->nextStep(EcmtSection::ROUTE_ECMT_CHECK_ANSWERS);
-                } else {
+                }
+                else {
                     //conditional validation failed, sector list should not be empty
                     $form->get('Fields')->get('SectorList')->get('SectorList')->setMessages(['error.messages.sector.list']);
                 }
+            }
+            else {
+                //Custom Error Message
+                $form->get('Fields')->get('SpecialistHaulage')->setMessages(['error.messages.sector']);
             }
         }
 
