@@ -20,7 +20,7 @@ class SectorList
      *    "id" : "EcmtLicence",
      * })
      * @Form\Options({
-     *      "label": "Which sector do you mainly specialise in?",
+     *      "label": "markup-ecmt-sector-list-label",
      *      "fieldset-attributes": {"id": "sector-list"},
      *      "fieldset-data-group": "sector-list",
      *      "label_attributes": {"class": "form-control form-control--radio"},
