@@ -1,54 +1,62 @@
 <?php
     use Permits\View\Helper\EcmtSection;
-    $title = $this->translate('permits.page.title.fee');
+    $title = $this->translate('permits.page.fee.title');
     $this->headTitle($title);
 ?>
 
-<div class="row">
-    <div class="three-quarters">
+<div class="row ecmt">
+    <div class="two-thirds">
         <div class="page-header">
             <p><?php echo $this->permitsBackLink(); ?></p>
             <div class="page-header__wrapper">
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($title); ?>
-                    <span><?php echo $permitsNo; ?></span>
                 </h1>
             </div>
         </div>
 
         <div class="field">
+            <div class="govuk-hint">
+                <p><?php echo $this->translate('permits.page.fee.subtitle'); ?></p>
+            </div>
+
             <div class="form-group">
                 <table class="fee-table">
                     <tr>
-                        <td><h4>Fee number</h4></td>
-                        <td>10090317</td>
-                    </tr>
-                    <tr>
-                        <td><h4>Description</h4></td>
-                        <td>Fee for <abbr title="European Conference of Ministers of Transport">ECMT permit <?php echo $permitsNo; ?></abbr></td>
-                    </tr>
-                    <tr>
-                        <td><h4>Reference</h4></td>
+                        <td><h4>Application reference</h4></td>
                         <td><?php echo $permitsNo; ?></td>
                     </tr>
                     <tr>
-                        <td><h4>Created</h4></td>
+                        <td><h4>Application Date</h4></td>
                         <td><?php echo date("d F Y"); ?></td>
                     </tr>
                     <tr>
-                        <td><h4>Invoice amount</h4></td>
-                        <td>£133.00</td>
+                        <td><h4>Permit type</h4></td>
+                        <td>ECMT</td>
                     </tr>
                     <tr>
-                        <td><h4>Oustanding</h4></td>
-                        <td>£133.00</td>
+                        <td><h4>Permit validity</h4></td>
+                        <td>January 2019 to December 2019</td>
+                    </tr>
+                    <tr>
+                        <td><h4>Number of permits required</h4></td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td><h4>Application fee per permit</h4></td>
+                        <td>£10.00</td>
+                    </tr>
+
+                    <tr>
+                        <td><h4>Total application fee to be paid
+                                (non-refundable)</h4></td>
+                        <td>£100.00</td>
                     </tr>
                 </table>
-
             </div>
 
             <div class="actions-container new-application--wrapper">
-                <?php echo $this->translate('permits.page.message.fee'); ?>
+                <?php echo $this->translate('permits.page.fee.message'); ?>
                 <p><a href="<?php $this->url('permits/' . EcmtSection::ROUTE_ECMT_SUBMITTED, [], [], true) ?>" class="action--primary large"><?php echo $this->translate('submit-and-pay.button'); ?></a></p>
                 <p><a href="<?php echo $this->url('permits') ?>"> <?php echo $this->translate('permits.button.save-return-to-permits'); ?> </a></p>
             </div>
