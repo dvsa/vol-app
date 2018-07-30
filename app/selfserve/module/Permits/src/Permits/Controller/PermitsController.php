@@ -431,13 +431,13 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         //International Journeys Question
         switch ($application['internationalJourneys']) {
             case 0:
-                $answerData['percentageAnswer'] = 'Less than 60%';
+                $answerData['percentageAnswer'] = 'less.than.60%';
                 break;
             case 1:
-                $answerData['percentageAnswer'] = 'From 60% to 90%';
+                $answerData['percentageAnswer'] = 'from.60%.to.90%';
                 break;
             case 2:
-                $answerData['percentageAnswer'] = 'More than 90%';
+                $answerData['percentageAnswer'] = 'more.than.90%';
                 break;
         }
 

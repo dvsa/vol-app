@@ -22,9 +22,9 @@ class InternationalJourney
      *      "fieldset-data-group": "percentage-type",
      *      "label_attributes": {"class": "form-control form-control--radio"},
      *      "value_options": {
-     *          "Less than 60%",
-     *          "From 60% to 90%",
-     *          "More than 90%",
+     *          "less.than.60%",
+     *          "from.60%.to.90%",
+     *          "more.than.90%",
      *      },
      * })
      * @Form\Type("Radio")
