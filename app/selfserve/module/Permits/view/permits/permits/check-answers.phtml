@@ -27,7 +27,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                <h4><?php echo $sessionData['licenceQuestion'] ?></h4>
+                                <h4><?php echo $this->translate($sessionData['licenceQuestion']); ?></h4>
                             </td>
                             <td>
                                 <?php echo str_replace(array("\r\n", "\n"), '<br />', $sessionData['licenceAnswer']); ?>
@@ -38,7 +38,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h4><?php echo $sessionData['meetsEuro6Question'] ?></h4>
+                                <h4><?php echo $this->translate($sessionData['meetsEuro6Question']); ?></h4>
                             </td>
                             <td>
                                 <?php  echo $sessionData['meetsEuro6Answer']; ?>
@@ -49,7 +49,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h4><?php echo $sessionData['cabotageQuestion'] ?></h4>
+                                <h4><?php echo $this->translate($sessionData['cabotageQuestion']); ?></h4>
                             </td>
                             <td>
                                 <?php echo $sessionData['cabotageAnswer'] ?>
@@ -60,7 +60,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h4><?php echo $sessionData['restrictedCountriesQuestion'] ?></h4>
+                                <h4><?php echo $this->translate($sessionData['restrictedCountriesQuestion']); ?></h4>
                             </td>
                             <td>
                                 <?php
@@ -73,7 +73,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h4><?php echo $sessionData['tripsQuestion'] ?></h4>
+                                <h4><?php echo $this->translate($sessionData['tripsQuestion']); ?></h4>
                             </td>
                             <td>
                                 <?php echo $sessionData['tripsAnswer'] ?>
@@ -84,7 +84,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h4><?php echo $sessionData['percentageQuestion'] ?></h4>
+                                <h4><?php echo $this->translate($sessionData['percentageQuestion']); ?></h4>
                             </td>
                             <td>
                                 <?php echo $sessionData['percentageAnswer'] ?>
@@ -95,7 +95,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h4><?php echo $sessionData['specialistHaulageQuestion'] ?></h4>
+                                <h4><?php echo $this->translate($sessionData['specialistHaulageQuestion']); ?></h4>
                             </td>
                             <td>
                                 <?php echo str_replace(array("\r\n", "\n"), '<br />', $sessionData['specialistHaulageAnswer']) ?>
@@ -106,7 +106,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <h4><?php echo $sessionData['permitsQuestion'] ?></h4>
+                                <h4><?php echo $this->translate($sessionData['permitsQuestion']); ?></h4>
                             </td>
                             <td>
                                 <?php echo $sessionData['permitsAnswer'] ?>

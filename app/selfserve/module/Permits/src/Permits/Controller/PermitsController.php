@@ -10,7 +10,6 @@ use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
 use Dvsa\Olcs\Transfer\Query\Permits\SectorsList;
 
 use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
-use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermits;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtEmissions;
@@ -775,41 +774,37 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         //SELECTED LICENCE
         $sessionData['licenceQuestion']
-          = 'Licence selected';
+          = 'check-answers.page.question.licence';
 
         //EURO 6 EMISSIONS CONFIRMATION
         $sessionData['meetsEuro6Question']
-          = 'I confirm that my ECMT permit(s) will only be
-                used by vehicle(s) that are environmentally compliant
-                to Euro 6 emissions standards.';
+          = 'check-answers.page.question.euro6';
 
         //CABOTAGE CONFIRMATION
         $sessionData['cabotageQuestion']
-          = 'I confirm that I will not undertake a
-                cabotage journey(s) with an ECMT permit.';
+          = 'check-answers.page.question. 
+                cabotage ';
         $sessionData['cabotageAnswer'] = $session->wontCabotage  > 1 ? 'Yes' : 'No';
 
         //RESTRICTED COUNTRIES
         $sessionData['restrictedCountriesQuestion']
-          = 'Do you intend to transport goods to
-                Austria, Greece, Hungary, Italy or Russia?';
+          = 'check-answers.page.question.restricted-countries';
 
         //NUMBER OF TRIPS PER YEAR
         $sessionData['tripsQuestion']
-          = 'How many international trips were carried out over the past 12 months?';
+          = 'check-answers.page.question.trips';
 
         //'PERCENTAGE' QUESTION
         $sessionData['percentageQuestion']
-          = 'What percentage of your business
-                is related to international journeys over the past 12 months?';
+          = 'check-answers.page.question.internationalJourneys';
 
         //SECTORS QUESTION
         $sessionData['specialistHaulageQuestion']
-          = 'Do you specialise in carrying goods for one specific sector?';
+          = 'check-answers.page.question.sector';
 
         //NUMBER OF PERMITS REQUIRED
         $sessionData['permitsQuestion']
-          = 'How many permits does your business require?';
+          = 'check-answers.page.question.permits-required';
 
         return $sessionData;
     }
