@@ -38,7 +38,9 @@ return array(
             'formatter' => function ($data) {
                 $returnString = '';
                 foreach ($data['otherLicences'] as $other) {
-                    $returnString .= $other['licNo'] . ' / ' . $other['applicationId'] . "<br />";
+                    $returnString .= $other['licNo'];
+                    $returnString .= $other['applicationId'] ? ' / ' . $other['applicationId'] : '';
+                    $returnString .= "<br />";
                 }
                 return $returnString;
             },
