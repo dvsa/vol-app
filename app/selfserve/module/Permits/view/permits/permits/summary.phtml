@@ -1,4 +1,6 @@
 <?php
+    use Permits\View\Helper\EcmtSection;
+
     $title = $this->translate('permits.page.title.summary');
     $this->headTitle($title);
 ?>
@@ -6,7 +8,7 @@
 <div class="row ecmt">
     <div class="three-quarters">
         <div class="page-header">
-            <p><a href="/permits/cabotage" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
+            <p><?php echo $this->permitsBackLink(); ?></p>
             <div class="page-header__wrapper">
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($title); ?>
@@ -45,9 +47,7 @@
                                 ?>
                             </td>
                             <td>
-                                <a href="/permits/restricted-countries">
-                                    Change
-                                </a>
+                                <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_COUNTRIES); ?>
                             </td>
                         </tr>
                         <tr>
@@ -58,9 +58,7 @@
                                 <?php echo $sessionData['meetsEuro6'] ?>
                             </td>
                             <td>
-                                <a href="/permits/euro6-emissions">
-                                    Change
-                                </a>
+                                <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_EURO6); ?>
                             </td>
                         </tr>
                         <tr>
@@ -71,17 +69,15 @@
                                 <?php echo $sessionData['cabotage'] ?>
                             </td>
                             <td>
-                                <a href="/permits/cabotage">
-                                    Change
-                                </a>
+                                <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_CABOTAGE); ?>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="actions-container new-application--wrapper">
-                <p><a href="/permits/declaration/<?php echo $id; ?>" class="action--primary large"><?php echo $this->translate('permits.button.accept-and-continue'); ?></a></p>
-                <p><a href="/permits"> <?php echo $this->translate('permits.button.save-return-to-permits'); ?> </a></p>
+                <p><a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_DECLARATION, [], [], true); ?>" class="action--primary large"><?php echo $this->translate('permits.button.accept-and-continue'); ?></a></p>
+                <p><a href="<?php echo $this->url('permits') ?>"> <?php echo $this->translate('permits.button.save-return-to-permits'); ?> </a></p>
             </div>
         </div>
     </div>

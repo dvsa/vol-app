@@ -6,7 +6,7 @@
 <div class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
-            <p><a href="/permits" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
+            <p><a href="<?php echo $this->url('permits') ?>" class="back-link"><?php echo $this->translate('common.link.back.label'); ?></a></p>
             <div class="page-header__wrapper">
                 <h1 class="js-title">
                     <?php echo $this->translate('permits.page.ecmt.licence.question'); ?>
@@ -26,7 +26,7 @@
                 ?>
 
                 <fieldset class="actions-container new-application--wrapper">
-                    <p><a href="/permits/application-overview/<?php echo $id; ?>"> <?php echo $this->translate('permits.button.save-return-to-overview'); ?> </a></p>
+                    <p><a href="<?php echo $this->url('permits') ?>" class="back-link"><?php echo $this->translate('common.link.back.label'); ?></a></p>
                 </fieldset>
             </fieldset>
         </div>

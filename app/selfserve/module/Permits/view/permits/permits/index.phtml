@@ -1,4 +1,5 @@
 <?php
+    use Permits\View\Helper\EcmtSection;
     $title = 'Permits Home - ';
     $this->headTitle($title);
 ?>
@@ -22,7 +23,7 @@
         <?php echo $this->flashMessengerAll(); ?>
         <?php if($isEligible): ?>
             <div class="actions-container new-application--wrapper">
-                <a href="/permits/ecmt-licence" class="action--primary large">
+                <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_LICENCE, [], [], true); ?>" class="action--primary large">
                     <?php echo $this->translate('permits.application.overwiew.button'); ?>
                 </a>
             </div>

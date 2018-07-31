@@ -9,7 +9,7 @@
         <?php echo sprintf($this->translate('markup-ecmt-application-submitted'),$this->escapeHtml($title),$refNumber); ?>
 
         <div class="actions-container new-application--wrapper">
-            <p><a href="/dashboard" class="action--primary large"> <?php echo $this->translate('Finish'); ?> </a></p>
+            <p><a href="<?php echo $this->url('dashboard') ?>" class="action--primary large"> <?php echo $this->translate('Finish'); ?> </a></p>
         </div>
     </div>
 </div>

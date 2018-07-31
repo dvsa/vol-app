@@ -6,7 +6,7 @@
 <div class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
-            <p><a href="/permits/trips/<?php echo $id; ?>" class="back-link"> <?php echo $this->translate('permits.back-link'); ?> </a></p>
+            <p><?php echo $this->permitsBackLink(); ?></p>
             <div class="page-header__wrapper">
                 <h1 class="js-title">
                     <?php echo $this->translate('permits.page.international.journey.question'); ?>
@@ -25,10 +25,9 @@
                 ?>
 
                 <fieldset class="actions-container new-application--wrapper">
-                    <p><a href="/permits/application-overview/<?php echo $id; ?>"> <?php echo $this->translate('permits.button.save-return-to-overview'); ?> </a></p>
+                    <p><?php echo $this->permitsBackLink('permits.button.save-return-to-overview'); ?></p>
                 </fieldset>
             </fieldset>
         </div>
-
     </div>
 </div>

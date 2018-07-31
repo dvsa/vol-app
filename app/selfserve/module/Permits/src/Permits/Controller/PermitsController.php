@@ -2,7 +2,6 @@
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
-use Permits\Form\PermitApplicationForm;
 use Common\Controller\AbstractOlcsController;
 use Common\FeatureToggle;
 use Zend\View\Model\ViewModel;
@@ -24,7 +23,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Zend\Session\Container; // We need this when using sessions
 
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
-use Olcs\View\Model\Application\ApplicationOverviewSection as ApplicationOverviewSection;
+use Permits\View\Helper\EcmtSection;
 
 class PermitsController extends AbstractOlcsController implements ToggleAwareInterface
 {
@@ -106,14 +105,12 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $command = CreateEcmtPermitApplication::create($applicationData);
                 $response = $this->handleCommand($command);
                 $insert = $response->getResult();
-                $this->redirect()->toRoute('permits', ['action' => 'application-overview', 'id' => $insert['id']['ecmtPermitApplication']]);
+                $this->redirect()->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $insert['id']['ecmtPermitApplication']]);
             }
         }
         return array('form' => $form, 'id' => $id);
     }
 
-
-    //TODO needs reworking
     public function applicationOverviewAction()
     {
         $id = $this->params()->fromRoute('id', -1);
@@ -124,45 +121,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         $applicationRef = $application['licence']['licNo'] . ' / ' . $application['id'];
 
-        $sections = array();
-
-        $sectionsData = [
-            'ecmt_licence' => ['ecmt_licence','ecmtLicenceStatus'],
-            'emissions' => ['euro6_emissions','euro6EmissionsStatus'],
-            'cabotage' => ['cabotage','cabotageStatus'],
-            'countrys' => ['restricted_countries','restrictedCountriesStatus'],
-            'trips' => ['trips','tripsStatus'],
-            'internationalJourneys' => ['international_journey','internationalJourneyStatus'],
-            'sectors' => ['sector','sectorStatus'],
-            'noOfPermits' => ['permits_required','permitsRequiredStatus'],
-            'check_answers' => ['check_answers','checkAnswersStatus'],
-            'declaration' => ['declaration','declarationStatus']
-        ];
-
-        foreach ($sectionsData as $key => $value)
-        {
-            $sectionDetails = ['enabled' => true];
-            $status = ($application[$key] != null) ? 4 : 3;
-            $ref = $value[0];
-            $data = [
-              'id' => $id,
-              'idIndex' => 'application',
-              'applicationCompletion' => [
-                $value[1] => $status
-              ],
-              'licence' => [
-                'organisation' => [
-                  'type' => [
-                    'id' => 'org_t_llp'
-                  ]
-                ]
-              ]
-            ];
-
-            $test = new ApplicationOverviewSection($ref, $data, $sectionDetails);
-            array_push($sections, $test);
-        }
-
         $applicationFee = "£10.00";
         $issuingFee = "£123.00";
 
@@ -171,10 +129,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $view->setVariable('id', $id);
         $view->setVariable('applicationFee', $applicationFee);
         $view->setVariable('issuingFee', $issuingFee);
-        $view->setVariable('sections', $sections);
+        $view->setVariable('application', $application);
 
         return $view;
-
     }
 
     public function euro6EmissionsAction()
@@ -191,9 +148,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             //Validate
             $form->setData($data);
             if ($form->isValid()) {
-                $this->redirect()
-                  ->toRoute('permits',
-                    ['action' => 'cabotage', 'id' => $id]);
+                $this->nextStep(EcmtSection::ROUTE_ECMT_CABOTAGE);
             }
         }
 
@@ -214,7 +169,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             //Validate
             $form->setData($data);
             if ($form->isValid()) {
-                $this->redirect()->toRoute('permits', ['action' => 'restricted-countries', 'id' => $id]);
+                $this->nextStep(EcmtSection::ROUTE_ECMT_COUNTRIES);
             }
         }
 
@@ -243,7 +198,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                         && isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList']))
                     || ($data['Fields']['restrictedCountries'] == 0))
                 {
-                    $this->redirect()->toRoute('permits', ['action' => 'trips', 'id' => $id]);
+                    $this->nextStep(EcmtSection::ROUTE_ECMT_NO_OF_PERMITS);
                 }
                 else{
                     //conditional validation failed, restricted countries list should not be empty
@@ -293,7 +248,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             //Validate
             $form->setData($data);
             if ($form->isValid()) {
-                $this->redirect()->toRoute('permits', ['action' => 'international-journey', 'id' => $id]);
+                $this->nextStep(EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
             }
         }
 
@@ -315,7 +270,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             //Validate
             $form->setData($data);
             if ($form->isValid()) {
-                $this->redirect()->toRoute('permits', ['action' => 'sector', 'id' => $id]);
+                $this->nextStep(EcmtSection::ROUTE_ECMT_SECTORS);
             }
         }
 
@@ -357,7 +312,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                         && isset($data['Fields']['SectorList']['SectorList']))
                     || ($data['Fields']['SectorList'] == 0))
                 {
-                    $this->redirect()->toRoute('permits', ['action' => 'permits-required', 'id' => $id]);
+                    $this->nextStep(EcmtSection::ROUTE_ECMT_CHECK_ANSWERS);
                 }
                 else{
                     //conditional validation failed, sector list should not be empty
@@ -391,8 +346,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 //Save to session
                 $session = new Container(self::SESSION_NAMESPACE);
                 $session->PermitsRequired = $data['Fields']['PermitsRequired'];
-
-                $this->redirect()->toRoute('permits', ['action' => 'check-answers', 'id' => $id]);
+                $this->nextStep(EcmtSection::ROUTE_ECMT_TRIPS);
             }
         }
 
@@ -487,7 +441,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $session = new Container(self::SESSION_NAMESPACE);
                 $session->Declaration = $data['Fields']['Declaration'];
 
-                $this->redirect()->toRoute('permits', ['action' => 'fee', 'id' => $id]);
+                $this->nextStep(EcmtSection::ROUTE_ECMT_FEE);
             }
         }
 
@@ -507,7 +461,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $session = new Container(self::SESSION_NAMESPACE);
 
         if (!empty($data)) {
-
             $data['ecmtPermitsApplication'] = $session->applicationId;
             $data['status'] = 'permit_awaiting';
             $data['paymentStatus'] = 'lfs_ot';
@@ -521,8 +474,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             $response = $this->handleCommand($command);
             $insert = $response->getResult();
             $session->permitsNo = $insert['id']['ecmtPermit'];
-
-            $this->redirect()->toRoute('permits', ['action' => 'fee', 'id' => $id]);
+            $this->nextStep(EcmtSection::ROUTE_ECMT_SUBMITTED);
         }
 
         $view = new ViewModel();
@@ -823,6 +775,11 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $sessionData['permitsAnswer'] = $session->permitsRequired;
 
         return $sessionData;
+    }
+
+    private function nextStep(string $route)
+    {
+        $this->redirect()->toRoute('permits/' . $route, [], [], true);
     }
 
     /**
