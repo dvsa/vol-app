@@ -443,7 +443,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         //Sectors Question
         if(isset($application['sectors']['description'])){
-            $answerData['specialistHaulageAnswer'] = "Yes\n" . $application['sectors']['description'];
+            $answerData['specialistHaulageAnswer'] = $application['sectors']['description'];
         }
 
         return array('sessionData' => $answerData, 'applicationData' => $application, 'id' => $id, 'ref' => $applicationRef);
