@@ -406,7 +406,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $answerData['permitsAnswer'] = $application['permitsRequired'];
 
         //Restricted Coutries Question
-        if(isset($application['countrys']))
+        if(isset($application['countrys']) && count($application['countrys']) > 0)
         {
             $answerData['restrictedCountriesAnswer'] = "Yes\n";
 
@@ -784,7 +784,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $sessionData['cabotageQuestion']
           = 'check-answers.page.question. 
                 cabotage ';
-        $sessionData['cabotageAnswer'] = $session->wontCabotage  > 1 ? 'Yes' : 'No';
 
         //RESTRICTED COUNTRIES
         $sessionData['restrictedCountriesQuestion']
