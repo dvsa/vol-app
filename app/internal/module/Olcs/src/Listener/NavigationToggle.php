@@ -4,6 +4,7 @@ namespace Olcs\Listener;
 
 use Common\Rbac\IdentityProvider;
 use Common\Rbac\User;
+use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Zend\Authentication\AuthenticationService;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
@@ -55,7 +56,7 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, array($this, 'onDispatch'), 20);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 20);
     }
 
     /**
@@ -83,8 +84,22 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
 
         $permitsMenuEnabled = $this->querySender->featuresEnabled([FeatureToggle::ADMIN_PERMITS]);
 
+
         //permits navigation
         $this->navigation->findBy('id', 'admin-dashboard/admin-permits')->setVisible($permitsMenuEnabled);
+
+        //ihrp permits navigation
+        $this->navigation->findBy('id', 'licence_irhp_permits')->setVisible($this->licenceIsSiGoods($e));
+    }
+
+
+
+    protected function licenceIsSiGoods(MvcEvent $mvcEvent){
+        $params = $mvcEvent->getRouteMatch()->getParams();
+        $queryResult = $this->querySender->send(Licence::create(['id' => $params['licence']]));
+        $licence = $queryResult->getResult();
+
+        return ($licence['goodsOrPsv']['id'] == 'lcat_gv');
     }
 
     /**
