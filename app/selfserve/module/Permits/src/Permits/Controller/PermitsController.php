@@ -170,10 +170,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 //Custom Error Message
                 $form->get('Fields')->get('MeetsEuro6')->setMessages(['error.messages.checkbox']);
             }
-            else {
-                //Custom Error Message
-                $form->get('Fields')->get('MeetsEuro6')->setMessages(['error.messages.checkbox']);
-            }
         }
 
         return array('form' => $form, 'id' => $id);
