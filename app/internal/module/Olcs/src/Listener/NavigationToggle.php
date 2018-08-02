@@ -89,17 +89,29 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
         $this->navigation->findBy('id', 'admin-dashboard/admin-permits')->setVisible($permitsMenuEnabled);
 
         //ihrp permits navigation
-        $this->navigation->findBy('id', 'licence_irhp_permits')->setVisible($this->licenceIsSiGoods($e));
+        // Get request params and perform check only if in licence context
+        $params = $e->getRouteMatch()->getParams();
+        if(array_key_exists('licence', $params)){
+            $this->navigation->findBy('id', 'licence_irhp_permits')->setVisible($this->goodsLicenceAndFeatureToggle($params));
+        }
+
     }
 
 
+    /**
+     * Query contextual licence to check if goods to render IRHP Permits tab and check Feature Toggle for Internal Permits
+     *
+     * @param String $params request params
+     *
+     * @return bool
+     */
+    protected function goodsLicenceAndFeatureToggle($params){
 
-    protected function licenceIsSiGoods(MvcEvent $mvcEvent){
-        $params = $mvcEvent->getRouteMatch()->getParams();
-        $queryResult = $this->querySender->send(Licence::create(['id' => $params['licence']]));
-        $licence = $queryResult->getResult();
+        $internalPermitsEnabled = $this->querySender->featuresEnabled([FeatureToggle::INTERNAL_PERMITS]);
+        $licenceQuery = $this->querySender->send(Licence::create(['id' => $params['licence']]));
+        $licence = $licenceQuery->getResult();
 
-        return ($licence['goodsOrPsv']['id'] == 'lcat_gv');
+        return ($licence['goodsOrPsv']['id'] == 'lcat_gv' && $internalPermitsEnabled);
     }
 
     /**
