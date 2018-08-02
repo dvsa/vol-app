@@ -26,6 +26,10 @@ class EcmtSection extends AbstractHelper
     const ROUTE_ECMT_FEE = 'ecmt-fee';
     const ROUTE_ECMT_SUBMITTED = 'ecmt-submitted';
 
+    //cancellation
+    const ROUTE_ECMT_CANCEL_APPLICATION = 'ecmt-cancel-application';
+    const ROUTE_ECMT_CANCEL_CONFIRMATION = self::ROUTE_ECMT_CANCEL_APPLICATION . '/confirmation';
+
     const ROUTE_ORDER = [
         self:: ROUTE_ECMT_LICENCE,
         self:: ROUTE_ECMT_EURO6,

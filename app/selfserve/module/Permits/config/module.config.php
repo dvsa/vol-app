@@ -203,6 +203,33 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
+              'ecmt-cancel-application' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/:id/ecmt-cancel-application[/]',
+                      'defaults' => [
+                          'controller'    => 'Permits\Controller\Permits',
+                          'action'        => 'cancelApplication',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => true,
+                  'child_routes' => [
+                      'confirmation' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/confirmation[/]',
+                              'defaults' => [
+                                  'controller'    => 'Permits\Controller\Permits',
+                                  'action'        => 'cancelConfirmation',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                  ],
+              ],
           ],
       ),
     ),

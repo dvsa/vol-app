@@ -1,4 +1,5 @@
 <?php
+    use Permits\View\Helper\EcmtSection;
     $title = $this->translate('permits.application.overwiew.main-title');
     $this->headTitle($title);
 ?>
@@ -51,7 +52,7 @@
                 <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i>Not Submitted</p>
                 <ul class="info-box__links">
                     <li>
-                        <a href="/permits/cancel-application/<?php echo $id; ?>">Cancel application</a>
+                        <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_CANCEL_APPLICATION, [], [], true); ?>">Cancel application</a>
                     </li>
                 </ul>
             </div>
