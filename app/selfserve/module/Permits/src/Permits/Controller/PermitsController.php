@@ -22,6 +22,7 @@ use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCabotage;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtEmissions;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCountries;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateInternationalJourney;
+use Dvsa\Olcs\Transfer\Command\Permits\UpdateSector;
 
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 
@@ -414,6 +415,27 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             ->get('SectorList')
             ->setOptions($options);
 
+        // Read data
+        $application = $this->getApplication($id);
+
+        if (isset($application)) {
+            if (isset($application['sectors'])) {
+                $form->get('Fields')->get('SpecialistHaulage')->setValue('1');
+
+                //Format results from DB before setting values on form
+                $selectedValue = $application['sectors']['id'] . $this::DEFAULT_SEPARATOR . $application['sectors']['description'];
+
+                $form->get('Fields')
+                    ->get('SectorList')
+                    ->get('SectorList')
+                    ->setValue($selectedValue);
+            } else {
+                $form->get('Fields')
+                    ->get('SpecialistHaulage')
+                    ->setValue('0');
+            }
+        }
+
         $data = $this->params()->fromPost();
 
         if (is_array($data) && array_key_exists('Submit', $data)) {
@@ -427,6 +449,14 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                         && isset($data['Fields']['SectorList']['SectorList']))
                     || ($data['Fields']['SpecialistHaulage'] == 0))
                 {
+                    $tmpSectorArray[0] = $data['Fields']['SectorList']['SectorList']; //pass into array in preparation for extractIDFromSessionData()
+                    $sectorIDArray = $this->extractIDFromSessionData($tmpSectorArray);
+
+                    $command = UpdateSector::create(['id' => $id, 'sector' => $sectorIDArray[0]]); //$sectorIDArray[0] because should only be 1 entry
+
+                    $response = $this->handleCommand($command);
+                    $result = $response->getResult();
+
                     $this->nextStep(EcmtSection::ROUTE_ECMT_CHECK_ANSWERS);
                 } else {
                     //conditional validation failed, sector list should not be empty
