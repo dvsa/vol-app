@@ -4,6 +4,7 @@ namespace Permits\Controller;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Controller\AbstractOlcsController;
 use Common\FeatureToggle;
+use Dvsa\Olcs\Transfer\Command\Permits\UpdateInternationalJourney;
 use Zend\View\Model\ViewModel;
 use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries;
 use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
@@ -14,6 +15,7 @@ use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermits;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtEmissions;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCabotage;
+use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
 use Zend\Mvc\MvcEvent;
 use Zend\Http\Header\Referer as HttpReferer;
 use Zend\Http\PhpEnvironment\Request as HttpRequest;
@@ -305,6 +307,12 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             //Validate
             $form->setData($data);
             if ($form->isValid()) {
+                $commandData = [
+                    'id' => $id,
+                    'internationalJourney' => $data['Fields']['InternationalJourney'],
+                ];
+                $command = UpdateInternationalJourney::create($commandData);
+                $this->handleCommand($command);
                 $this->nextStep(EcmtSection::ROUTE_ECMT_SECTORS);
             }
             else {
@@ -806,8 +814,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         //CABOTAGE CONFIRMATION
         $sessionData['cabotageQuestion']
-          = 'check-answers.page.question. 
-                cabotage ';
+          = 'check-answers.page.question.cabotage';
 
         //RESTRICTED COUNTRIES
         $sessionData['restrictedCountriesQuestion']
