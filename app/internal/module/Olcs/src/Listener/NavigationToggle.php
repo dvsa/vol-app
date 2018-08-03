@@ -79,24 +79,25 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
             $disableDataRetentionRecords = !$userData['disableDataRetentionRecords'];
         }
 
-        $this->navigation->findBy('id', 'admin-dashboard/admin-data-retention')
+        $this->navigation
+            ->findBy('id', 'admin-dashboard/admin-data-retention')
             ->setVisible($disableDataRetentionRecords);
 
         $permitsMenuEnabled = $this->querySender->featuresEnabled([FeatureToggle::ADMIN_PERMITS]);
 
-
-        //permits navigation
+        // Permits Navigation
         $this->navigation->findBy('id', 'admin-dashboard/admin-permits')->setVisible($permitsMenuEnabled);
 
-        //ihrp permits navigation
+        // IRHP Permits Navigation
         // Get request params and perform check only if in licence context
         $irhpPermitsTabEnabled = false;
         $params = $e->getRouteMatch()->getParams();
-        if(array_key_exists('licence', $params)){
+
+        if (array_key_exists('licence', $params)) {
             $irhpPermitsTabEnabled = $this->goodsLicenceAndFeatureToggle($params);
         }
-        $this->navigation->findBy('id', 'licence_irhp_permits')->setVisible($irhpPermitsTabEnabled);
 
+        $this->navigation->findBy('id', 'licence_irhp_permits')->setVisible($irhpPermitsTabEnabled);
     }
 
 
@@ -107,8 +108,8 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
      *
      * @return bool
      */
-    protected function goodsLicenceAndFeatureToggle($params){
-
+    protected function goodsLicenceAndFeatureToggle($params)
+    {
         $internalPermitsEnabled = $this->querySender->featuresEnabled([FeatureToggle::INTERNAL_PERMITS]);
         $licenceQuery = $this->querySender->send(Licence::create(['id' => $params['licence']]));
         $licence = $licenceQuery->getResult();
