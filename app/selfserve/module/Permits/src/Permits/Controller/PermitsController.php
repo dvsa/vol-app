@@ -650,7 +650,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $application = $this->getApplication($id);
 
         $ecmtPermitFees = $this->getEcmtPermitFees();
-        $ecmtPermitFeeTotal = $ecmtPermitFees['fee']['fixedValue'] * $application['permitsRequired'];
+        $ecmtApplicationFee =  $ecmtPermitFees['fee']['IRHP_GV_APP_ECMT']['fixedValue'];
+        $ecmtApplicationFeeTotal =$ecmtApplicationFee * $application['permitsRequired'];
+        $ecmtIssuingFee = $ecmtPermitFees['fee']['TEST']['fixedValue'];
 
         $request = $this->getRequest();
         $data = (array)$request->getPost();
@@ -679,8 +681,10 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $view->setVariable('applicationDate', $application['createdOn']);
         $view->setVariable('id', $id);
         $view->setVariable('noOfPermits', $application['permitsRequired']);
-        $view->setVariable('fee', $ecmtPermitFees['fee']['fixedValue']);
-        $view->setVariable('totalFee', $ecmtPermitFeeTotal);
+        $view->setVariable('fee', $ecmtApplicationFee);
+        $view->setVariable('totalFee', $ecmtApplicationFeeTotal);
+        $view->setVariable('issuingFee', $ecmtIssuingFee);
+
 
 
         return $view;
@@ -969,7 +973,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
     private function getEcmtPermitFees()
     {
-        $query = EcmtPermitFees::create([]);
+        $query = EcmtPermitFees::create(['productReferences' => ['IRHP_GV_APP_ECMT', 'TEST']]);
         $response = $this->handleQuery($query);
         return $response->getResult();
     }

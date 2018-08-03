@@ -57,7 +57,7 @@ $this->headTitle($title);
             </div>
 
             <div class="actions-container new-application--wrapper">
-                <?php echo $this->translate('permits.page.fee.message'); ?>
+                <?php echo sprintf($this->translate('permits.page.fee.message'), '£' . $issuingFee); ?>
                 <p><a href="<?php $this->url('permits/' . EcmtSection::ROUTE_ECMT_SUBMITTED, [], [], true) ?>" class="action--primary large"><?php echo $this->translate('submit-and-pay.button'); ?></a></p>
                 <p><?php echo $this->permitsBackLink('permits.button.save-return-to-permits'); ?></p>
             </div>
