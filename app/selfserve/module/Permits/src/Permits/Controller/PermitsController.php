@@ -36,6 +36,7 @@ use Permits\View\Helper\EcmtSection;
 use Zend\Http\Header\Referer as HttpReferer;
 use Zend\Http\PhpEnvironment\Request as HttpRequest;
 use Zend\Mvc\MvcEvent;
+use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitFees;
 use Zend\Session\Container; // We need this when using sessions
 use Zend\View\Model\ViewModel;
 
@@ -648,6 +649,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         $application = $this->getApplication($id);
 
+        $ecmtPermitFees = $this->getEcmtPermitFees();
+        $ecmtPermitFeeTotal = $ecmtPermitFees['fee']['fixedValue'] * $application['permitsRequired'];
+
         $request = $this->getRequest();
         $data = (array)$request->getPost();
         $session = new Container(self::SESSION_NAMESPACE);
@@ -672,7 +676,12 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         $view = new ViewModel();
         $view->setVariable('permitsNo', $application['applicationRef']);
+        $view->setVariable('applicationDate', $application['createdOn']);
         $view->setVariable('id', $id);
+        $view->setVariable('noOfPermits', $application['permitsRequired']);
+        $view->setVariable('fee', $ecmtPermitFees['fee']['fixedValue']);
+        $view->setVariable('totalFee', $ecmtPermitFeeTotal);
+
 
         return $view;
     }
@@ -951,4 +960,18 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         return $response->getResult();
     }
+
+    /**
+     * Returns Issuing application fees
+     *
+     * @return array
+     */
+
+    private function getEcmtPermitFees()
+    {
+        $query = EcmtPermitFees::create([]);
+        $response = $this->handleQuery($query);
+        return $response->getResult();
+    }
+
 }
