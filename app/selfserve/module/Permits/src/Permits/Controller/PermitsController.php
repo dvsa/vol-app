@@ -38,7 +38,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 {
     use ExternalControllerTrait;
 
-    //TODO: Add event for all checks for whether or not $data(from form) is an array
+    // TODO: Add event for all checks for whether or not $data(from form) is an array
     const SESSION_NAMESPACE = 'permit_application';
     const DEFAULT_SEPARATOR = '|';
 
@@ -106,13 +106,12 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             //Validate
             $form->setData($data);
             if ($form->isValid()) {
-
                 $applicationData['status'] = 'permit_awaiting';
                 $applicationData['paymentStatus'] = 'lfs_ot';
                 $applicationData['permitType'] = 'permit_ecmt';
-                $applicationData['licence'] = explode('|',$data['Fields']['EcmtLicence'])[0];
+                $applicationData['licence'] = explode('|', $data['Fields']['EcmtLicence'])[0];
 
-                //TODO additional validation required: if total of possible permit applications has been reached,
+                // TODO: additional validation required: if total of possible permit applications has been reached,
                 // the user should not be able to create another application.
 
                 $command = CreateEcmtPermitApplication::create($applicationData);
@@ -183,7 +182,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $insert = $response->getResult();
 
                 $this->nextStep(EcmtSection::ROUTE_ECMT_CABOTAGE);
-            } else{
+            } else {
                 //Custom Error Message
                 $form->get('Fields')->get('MeetsEuro6')->setMessages(['error.messages.checkbox']);
             }
@@ -215,8 +214,10 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             if ($form->isValid()) {
                 $cabotage = ($data['Fields']['WontCabotage'] === 'Yes') ? 1 : 0;
                 $command = UpdateEcmtCabotage::create([ 'id' => $id, 'cabotage' => $cabotage]);
-            $response = $this->handleCommand($command);
+
+                $response = $this->handleCommand($command);
                 $insert = $response->getResult();
+
                 $this->nextStep(EcmtSection::ROUTE_ECMT_COUNTRIES);
             }
         }
@@ -257,7 +258,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $application = $this->getApplication($id);
 
         if (isset($application)) {
-            if (isset($application['countrys'])){
+            if (isset($application['countrys'])) {
                 $form->get('Fields')
                     ->get('restrictedCountries')
                     ->setValue('1');
@@ -265,7 +266,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 //Format results from DB before setting values on form
                 $selectedValues = array();
 
-                foreach($application['countrys'] as $country) {
+                foreach ($application['countrys'] as $country) {
                     $selectedValues[] = $country['id'] . $this::DEFAULT_SEPARATOR . $country['countryDesc'];
                 }
 
@@ -282,16 +283,14 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $data = $this->params()->fromPost();
 
         if (is_array($data) && array_key_exists('Submit', $data)) {
-
             //Validate
             $form->setData($data);
             if ($form->isValid()) {
-
                 //EXTRA VALIDATION
                 if (($data['Fields']['restrictedCountries'] == 1
-                        && isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList']))
-                    || ($data['Fields']['restrictedCountries'] == 0))
-                {
+                    && isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList']))
+                    || ($data['Fields']['restrictedCountries'] == 0)
+                ) {
                     $countriesList = $data['Fields']['restrictedCountriesList']['restrictedCountriesList'];
                     $countryIds = $this->extractIDFromSessionData($countriesList);
                     $command = UpdateEcmtCountries::create(['ecmtApplicationId' => $id, 'countryIds' => $countryIds]);
@@ -300,16 +299,14 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                     $insert = $response->getResult();
 
                     $this->nextStep(EcmtSection::ROUTE_ECMT_NO_OF_PERMITS);
-                }
-                else {
+                } else {
                     //conditional validation failed, restricted countries list should not be empty
                     $form->get('Fields')
                         ->get('restrictedCountriesList')
                         ->get('restrictedCountriesList')
                         ->setMessages(['error.messages.restricted.countries']);
                 }
-            }
-            else {
+            } else {
                 //Custom Error Message
                 $form->get('Fields')
                     ->get('restrictedCountries')
@@ -326,7 +323,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $application = $this->getApplication($id);
         $applicationRef = $application['licence']['licNo'] . ' / ' . $application['id'];
 
-        //TODO insert the trips hint into the form
+        // TODO: insert the trips hint into the form
         $licenceTrafficArea = $application['licence']['licNo'] . ' (' . $application['licence']['trafficArea']['name'] . ')';
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $tripsHint = $translationHelper->translateReplace('permits.page.trips.form.hint', [$licenceTrafficArea]);
@@ -374,8 +371,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
                 $this->handleCommand($command);
                 $this->nextStep(EcmtSection::ROUTE_ECMT_SECTORS);
-            }
-            else {
+            } else {
                 //Custom Error Message
                 $form->get('Fields')
                     ->get('InternationalJourney')
@@ -439,16 +435,14 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $data = $this->params()->fromPost();
 
         if (is_array($data) && array_key_exists('Submit', $data)) {
-
             //Validate
             $form->setData($data);
             if ($form->isValid()) {
-
                 //EXTRA VALIDATION
                 if (($data['Fields']['SpecialistHaulage'] == 1
-                        && isset($data['Fields']['SectorList']['SectorList']))
-                    || ($data['Fields']['SpecialistHaulage'] == 0))
-                {
+                    && isset($data['Fields']['SectorList']['SectorList']))
+                    || ($data['Fields']['SpecialistHaulage'] == 0)
+                ) {
                     $tmpSectorArray[0] = $data['Fields']['SectorList']['SectorList']; //pass into array in preparation for extractIDFromSessionData()
                     $sectorIDArray = $this->extractIDFromSessionData($tmpSectorArray);
 
@@ -477,8 +471,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     }
 
 
-    //TODO remove all session elements and replace with queries
-    //TODO correct form validation so that max value == total vehicle authority (currently hardcoded). See acceptance criteria
+    // TODO: remove all session elements and replace with queries
+    // TODO: correct form validation so that max value == total vehicle authority (currently hardcoded). See acceptance criteria
     public function permitsRequiredAction()
     {
         $id = $this->params()->fromRoute('id', -1);
@@ -510,7 +504,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     }
 
 
-    //TODO remove all session elements and replace with queries
+    // TODO: remove all session elements and replace with queries
     public function checkAnswersAction()
     {
         $id = $this->params()->fromRoute('id', -1);
@@ -573,7 +567,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return array('sessionData' => $answerData, 'applicationData' => $application, 'id' => $id, 'ref' => $applicationRef);
     }
 
-    //TODO remove all session elements and replace with queries
+    // TODO: remove all session elements and replace with queries
 
     public function summaryAction()
     {
@@ -615,7 +609,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return array('sessionData' => $sessionData, 'applicationData' => $application);
     }
 
-    //TODO remove all session elements and replace with queries
+    // TODO: remove all session elements and replace with queries
     public function declarationAction()
     {
         $id = $this->params()->fromRoute('id', -1);
@@ -648,7 +642,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return array('form' => $form, 'id' => $id);
     }
 
-    //TODO remove all session elements and replace with queries
+    // TODO: remove all session elements and replace with queries
 
     public function feeAction()
     {
@@ -716,7 +710,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             ->createForm('CancelApplicationForm', false, false);
 
         if (is_array($data) && array_key_exists('Submit', $data)) {
-
             //Validate
             $form->setData($data);
 
@@ -742,7 +735,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $view;
     }
 
-    public function cancelConfirmationAction() {
+    public function cancelConfirmationAction()
+    {
         $id = $this->params()->fromRoute('id', -1);
 
         $application = $this->getApplication($id);
@@ -784,7 +778,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
      */
     private function transformListIntoValueOptions($list = array(), $displayMembers = array('name'), $separator = '|')
     {
-        //TODO: MOVE THIS INTO FormHelperService AND REPLACE OLD VERSION
+        // TODO: MOVE THIS INTO FormHelperService AND REPLACE OLD VERSION
         if (!is_string($displayMembers[0]) || !is_array($list)) {
             //throw exception?
             return array();
@@ -809,7 +803,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
     private function getEcmtLicenceForm()
     {
-        //TODO: MOVE THIS TO A SERVICE/HELPER
+        // TODO: MOVE THIS TO A SERVICE/HELPER
         /*
          * Create form from annotations
          */
@@ -847,8 +841,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $form;
     }
 
-    //TODO remove this method once all session functionality is removed
-    private function extractIDFromSessionData($sessionData) {
+    // TODO: remove this method once all session functionality is removed
+    private function extractIDFromSessionData($sessionData)
+    {
         $IDList = array();
         foreach ($sessionData as $entry) {
             //Add everything before the separator to the list (ID is before separator)
@@ -868,10 +863,10 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         //check whether user is allowed to access permits
         return true;
 
-        $query = EligibleForPermits::create([]);
-        $response = $this->handleQuery($query)->getResult();
+        // $query = EligibleForPermits::create([]);
+        // $response = $this->handleQuery($query)->getResult();
 
-        return $response['eligibleForPermits'];
+        // return $response['eligibleForPermits'];
     }
 
     /**
@@ -897,7 +892,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return in_array($referer->getUri(), $this->govUkReferrers);
     }
 
-    //TODO remove this method once all session functionality is removed
+    // TODO: remove this method once all session functionality is removed
 
     /**
      * Returns a new array with all the question titles
