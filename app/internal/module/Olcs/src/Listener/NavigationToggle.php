@@ -90,10 +90,12 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
 
         //ihrp permits navigation
         // Get request params and perform check only if in licence context
+        $irhpPermitsTabEnabled = false;
         $params = $e->getRouteMatch()->getParams();
         if(array_key_exists('licence', $params)){
-            $this->navigation->findBy('id', 'licence_irhp_permits')->setVisible($this->goodsLicenceAndFeatureToggle($params));
+            $irhpPermitsTabEnabled = $this->goodsLicenceAndFeatureToggle($params);
         }
+        $this->navigation->findBy('id', 'licence_irhp_permits')->setVisible($irhpPermitsTabEnabled);
 
     }
 
