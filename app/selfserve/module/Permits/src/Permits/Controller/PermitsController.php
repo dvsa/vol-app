@@ -48,6 +48,10 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     const SESSION_NAMESPACE = 'permit_application';
     const DEFAULT_SEPARATOR = '|';
 
+    const ECMT_APPLICATION_FEE_PRODUCT_REFENCE = 'IRHP_GV_APP_ECMT';
+    const ECMT_ISSUING_FEE_PRODUCT_REFENCE = 'IRHP_GV_ECMT_100_PERMIT_FEE';
+
+
     protected $applicationsTableName = 'dashboard-permit-application';
     protected $issuedTableName = 'dashboard-permits';
 
@@ -142,8 +146,10 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
 
-        $applicationFee = "£10.00";
-        $issuingFee = "£123.00";
+        // Get Fee Data
+        $ecmtFees = $this->getEcmtPermitFees();
+        $applicationFee = $ecmtFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
+        $issuingFee = $ecmtFees['fee'][$this::ECMT_ISSUING_FEE_PRODUCT_REFENCE]['fixedValue'];
 
         $view = new ViewModel();
         $view->setVariable('id', $id);
@@ -649,10 +655,11 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         $application = $this->getApplication($id);
 
+        // Get Fee Data
         $ecmtPermitFees = $this->getEcmtPermitFees();
-        $ecmtApplicationFee =  $ecmtPermitFees['fee']['IRHP_GV_APP_ECMT']['fixedValue'];
-        $ecmtApplicationFeeTotal =$ecmtApplicationFee * $application['permitsRequired'];
-        $ecmtIssuingFee = $ecmtPermitFees['fee']['TEST']['fixedValue'];
+        $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
+        $ecmtApplicationFeeTotal = $ecmtApplicationFee * $application['permitsRequired'];
+        $ecmtIssuingFee = $ecmtPermitFees['fee'][$this::ECMT_ISSUING_FEE_PRODUCT_REFENCE]['fixedValue'];
 
         $request = $this->getRequest();
         $data = (array)$request->getPost();
@@ -973,7 +980,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
     private function getEcmtPermitFees()
     {
-        $query = EcmtPermitFees::create(['productReferences' => ['IRHP_GV_APP_ECMT', 'TEST']]);
+        $query = EcmtPermitFees::create(['productReferences' => [$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE, $this::ECMT_ISSUING_FEE_PRODUCT_REFENCE]]);
         $response = $this->handleQuery($query);
         return $response->getResult();
     }
