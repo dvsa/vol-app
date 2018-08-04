@@ -7,6 +7,7 @@ use Common\FeatureToggle;
 use Common\Form\Form;
 
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateDeclaration;
+use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtLicence;
 use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries;
 use Dvsa\Olcs\Transfer\Query\Permits\SectorsList;
 
@@ -110,14 +111,20 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             //Validate
             $form->setData($data);
             if ($form->isValid()) {
-                $applicationData['licence'] = explode('|', $data['Fields']['EcmtLicence'])[0];
+                $licenceId = explode('|', $data['Fields']['EcmtLicence'])[0];
+                $existingApplicationId = $this->params()->fromRoute('id', -1);
+                if ($existingApplicationId == -1) {
+                    $applicationData['licence'] = $licenceId;
 
-                // TODO: additional validation required: if total of possible permit applications has been reached,
-                // the user should not be able to create another application.
+                    $command = CreateEcmtPermitApplication::create($applicationData);
+                    $response = $this->handleCommand($command);
+                    $insert = $response->getResult();
+                } else {
+                    $command = UpdateEcmtLicence::create(['id' => $existingApplicationId, 'licence' => $licenceId]);
+                    $response = $this->handleCommand($command);
+                    $insert = $response->getResult();
+                }
 
-                $command = CreateEcmtPermitApplication::create($applicationData);
-                $response = $this->handleCommand($command);
-                $insert = $response->getResult();
                 $this->redirect()
                     ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $insert['id']['ecmtPermitApplication']]);
             } else {
