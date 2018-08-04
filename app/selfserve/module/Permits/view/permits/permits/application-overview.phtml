@@ -7,8 +7,9 @@
 <div class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
+            <p><a href="<?php echo $this->url('permits') ?>" class="back-link"> <?php echo $this->translate('common.link.back.label'); ?></a></p>
             <div class="page-header__wrapper">
-                <h3 class="page-header__subtitle"> <?php echo $ref; ?></h3>
+                <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($application['applicationRef']); ?></h3>
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($title); ?>
                 </h1>
@@ -30,7 +31,7 @@
                </ol>
             </div>
             <div class="actions-container new-application--wrapper">
-                <p><a href="<?php echo $this->url('permits/ecmt-fee', [], [], true) ?>" class="action--primary large"><?php echo $this->translate('permits.button.accept-and-continue'); ?></a></p>
+                <!--<p><a href="<?php echo $this->url('permits/ecmt-fee', [], [], true) ?>" class="action--primary large"><?php echo $this->translate('permits.button.accept-and-continue'); ?></a></p>-->
             </div>
         </div>
     </div>
@@ -49,12 +50,18 @@
 
             <div class="info-box info-box--grey">
                 <h3 class="info-box__heading">Application status</h3>
-                <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i>Not Submitted</p>
-                <ul class="info-box__links">
-                    <li>
-                        <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_CANCEL_APPLICATION, [], [], true); ?>">Cancel application</a>
-                    </li>
-                </ul>
+                <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><?php echo $this->escapeHtml($application['status']['description']); ?></p>
+                <?php
+                    if ($application['canBeCancelled']) {
+                ?>
+                    <ul class="info-box__links">
+                        <li>
+                            <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_CANCEL_APPLICATION, [], [], true); ?>">Cancel application</a>
+                        </li>
+                    </ul>
+                <?php
+                    }
+                ?>
             </div>
 
         </aside>

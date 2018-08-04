@@ -10,7 +10,6 @@ use Zend\Form\Annotation as Form;
 class PermitsRequired
 {
     /**
-     * @Form\Name("PermitsRequired")
      * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--permits-required",
@@ -23,18 +22,23 @@ class PermitsRequired
      *     "short-label": "",
      *     "allow_empty" : true,
      * })
-     * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
+     * @Form\Filter({"name":"Zend\Filter\Digits"})
+     * @Form\Validator({"name":"Zend\Validator\Digits"})
+     * @Form\Validator({"name":"Zend\Validator\GreaterThan", "options": {"min": 1}})
      * @Form\Validator({
-     *     "name": "Permits\Form\Validator\CustomBetween",
+     *     "name": "NumberCompare",
      *     "options": {
-     *          "min":1,
-     *          "max":12,
-     *          "too_small_message" : "error.messages.permits.required.too-small",
-     *          "too_large_message" : "error.messages.permits.required.too-large",
-     *          "not_digit_message" : "error.messages.permits.required.not-digit"
-     *     }})
+     *          "compare_to":"numVehicles",
+     *          "operator":"lte",
+     *          "compare_to_label":"Your number of authorised vehicles",
+     *     }
+     * })
      * @Form\Type("Zend\Form\Element\Number")
      */
+    public $permitsRequired = null;
 
-    public $tripsAbroad = null;
+    /**
+     * @Form\Type("Zend\Form\Element\Hidden")
+     */
+    public $numVehicles;
 }

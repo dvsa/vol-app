@@ -5,7 +5,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("Declaration")
- * @Form\Attributes({"method":"post"})
+ * @Form\Attributes({"method":"POST"})
  * @Form\Type("Common\Form\Form")
  */
 

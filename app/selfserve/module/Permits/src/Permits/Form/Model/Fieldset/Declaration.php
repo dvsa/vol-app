@@ -10,21 +10,19 @@ use Zend\Form\Annotation as Form;
 class Declaration
 {
     /**
-     * @Form\Name("Declaration")
      * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--declaration",
      *   "id" : "declaration",
      * })
      * @Form\Options({
-     *   "checked_value": "Y",
-     *     "unchecked_value": "N",
+     *     "checked_value": "1",
+     *     "unchecked_value": "0",
      *     "label": "permits.form.declaration.label",
      *     "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
-     *     "must_be_value": "Y"
+     *     "must_be_value": "1"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
      */
-
     public $declaration = null;
 }

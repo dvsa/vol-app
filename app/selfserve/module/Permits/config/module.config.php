@@ -220,7 +220,7 @@ return array(
                       'confirmation' => [
                           'type'    => 'segment',
                           'options' => [
-                              'route'    => '/confirmation[/]',
+                              'route'    => 'confirmation[/]',
                               'defaults' => [
                                   'controller'    => 'Permits\Controller\Permits',
                                   'action'        => 'cancelConfirmation',
