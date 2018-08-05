@@ -17,7 +17,6 @@ class Trips
      * })
      * @Form\Options({
      *     "label": "permits.form.trips.label",
-     *     "hint": "For licence OB2013691 (North East of England)",
      *     "short-label": "",
      * })
      * @Form\Validator({"name":"Zend\Validator\Digits"})

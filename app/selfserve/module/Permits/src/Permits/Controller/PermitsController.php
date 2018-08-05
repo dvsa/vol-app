@@ -115,7 +115,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $existingApplicationId = $this->params()->fromRoute('id', -1);
                 if ($existingApplicationId == -1) {
                     $applicationData['licence'] = $licenceId;
-
                     $command = CreateEcmtPermitApplication::create($applicationData);
                     $response = $this->handleCommand($command);
                     $insert = $response->getResult();
@@ -187,7 +186,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             }
         }
 
-        return array('form' => $form, 'id' => $id);
+        return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef']);
     }
 
     public function cabotageAction()
@@ -217,7 +216,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             }
         }
 
-        return array('form' => $form, 'id' => $id);
+        return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef']);
     }
 
     public function restrictedCountriesAction()
@@ -302,7 +301,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             }
         }
 
-        return array('form' => $form, 'id' => $id);
+        return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef']);
     }
 
     public function tripsAction()
@@ -341,6 +340,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     public function internationalJourneyAction()
     {
         $id = $this->params()->fromRoute('id', -1);
+        $application = $this->getApplication($id);
 
         //Create form from annotations
         $form = $this->getForm('InternationalJourneyForm');
@@ -368,12 +368,13 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             }
         }
 
-        return array('form' => $form, 'id' => $id);
+        return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef']);
     }
 
     public function sectorAction()
     {
         $id = $this->params()->fromRoute('id', -1);
+        $application = $this->getApplication($id);
 
         //Create form from annotations
         $form = $this->getForm('SpecialistHaulageForm');
@@ -454,7 +455,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             }
         }
 
-        return array('form' => $form, 'id' => $id);
+        return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef']);
     }
 
     // TODO: remove all session elements and replace with queries
@@ -493,7 +494,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $totalVehicles = $translationHelper->translateReplace('permits.page.permits.required.info', [$application['licence']['totAuthVehicles']]);
 
-        return array('form' => $form, 'totalVehicles' => $totalVehicles, 'id' => $id);
+        return array('form' => $form, 'totalVehicles' => $totalVehicles, 'id' => $id, 'ref' => $application['applicationRef']);
     }
 
     // TODO: remove all session elements and replace with queries
