@@ -512,7 +512,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $answerData['permitsAnswer'] = $application['permitsRequired'];
 
         //Restricted Coutries Question
-        if (isset($application['countrys']) && count($application['countrys']) > 0) {
+        $answerData['restrictedCountriesAnswer'] = "No";
+
+        if (count($application['countrys']) > 0) {
             $answerData['restrictedCountriesAnswer'] = "Yes\n";
             $count = 1;
             $numOfCountries = count($application['countrys']);
@@ -526,24 +528,33 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
                 $count++;
             }
-        } else {
-            $answerData['restrictedCountriesAnswer'] = "No";
         }
 
         //International Journeys Question
-        switch ($application['internationalJourneys']) {
-            case 0:
-                $answerData['percentageAnswer'] = 'less.than.60%';
-                break;
-            case 1:
-                $answerData['percentageAnswer'] = 'from.60%.to.90%';
-                break;
-            case 2:
-                $answerData['percentageAnswer'] = 'more.than.90%';
-                break;
+        /**
+         * @todo ugly - had to do this because this info is currently stored (wrongly) as a number,
+         * and a switch statement doesn't do the type check.
+         * Can be removed following OLCS-21033
+         */
+        if ($application['internationalJourneys'] === null) {
+            $answerData['percentageAnswer'] = 'Not completed';
+        } else {
+            switch ($application['internationalJourneys']) {
+                case 0:
+                    $answerData['percentageAnswer'] = 'less.than.60%';
+                    break;
+                case 1:
+                    $answerData['percentageAnswer'] = 'from.60%.to.90%';
+                    break;
+                case 2:
+                    $answerData['percentageAnswer'] = 'more.than.90%';
+                    break;
+            }
         }
 
         //Sectors Question
+        $answerData['specialistHaulageAnswer'] = 'No';
+
         if (isset($application['sectors']['description'])) {
             $answerData['specialistHaulageAnswer'] = $application['sectors']['description'];
         }
