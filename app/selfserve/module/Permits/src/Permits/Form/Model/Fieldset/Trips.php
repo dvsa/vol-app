@@ -21,7 +21,7 @@ class Trips
      *     "short-label": "",
      * })
      * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Validator({"name":"Zend\Validator\GreaterThan", "options": {"min": 1, "max": 999999}})
+     * @Form\Validator({"name":"Zend\Validator\Between", "options": {"min": 1, "max": 999999}})
      * @Form\Type("Zend\Form\Element\Number")
      */
     public $tripsAbroad = null;
