@@ -14,6 +14,7 @@ class Trips
      * @Form\Attributes({
      *   "class" : "input--trips",
      *   "id" : "TripsAbroad",
+     *   "step" : "any"
      * })
      * @Form\Options({
      *     "label": "permits.form.trips.label",

@@ -220,6 +220,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $insert = $response->getResult();
 
                 $this->nextStep(EcmtSection::ROUTE_ECMT_COUNTRIES);
+            }else {
+                //Custom Error Message
+                $form->get('Fields')->get('WontCabotage')->setMessages(['error.messages.checkbox']);
             }
         }
 
