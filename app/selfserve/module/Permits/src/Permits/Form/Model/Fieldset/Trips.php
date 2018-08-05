@@ -20,9 +20,8 @@ class Trips
      *     "hint": "For licence OB2013691 (North East of England)",
      *     "short-label": "",
      * })
-     * @Form\Filter({"name":"Zend\Filter\Digits"})
      * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Validator({"name":"Zend\Validator\GreaterThan", "options": {"min": 1}})
+     * @Form\Validator({"name":"Zend\Validator\GreaterThan", "options": {"min": 1, "max": 999999}})
      * @Form\Type("Zend\Form\Element\Number")
      */
     public $tripsAbroad = null;

@@ -22,7 +22,6 @@ class PermitsRequired
      *     "short-label": "",
      *     "allow_empty" : true,
      * })
-     * @Form\Filter({"name":"Zend\Filter\Digits"})
      * @Form\Validator({"name":"Zend\Validator\Digits"})
      * @Form\Validator({"name":"Zend\Validator\GreaterThan", "options": {"min": 1}})
      * @Form\Validator({
