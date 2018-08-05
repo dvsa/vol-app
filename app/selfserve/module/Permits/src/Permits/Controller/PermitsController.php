@@ -251,7 +251,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $application = $this->getApplication($id);
 
         if (isset($application)) {
-            if (isset($application['countrys'])) {
+            if (isset($application['countrys']) && count($application['countrys']) > 0) {
                 $form->get('Fields')
                     ->get('restrictedCountries')
                     ->setValue('1');
@@ -268,7 +268,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                     ->get('restrictedCountriesList')
                     ->setValue($selectedValues);
             } else {
-                $form->get('Fields')->get('restrictedCountries')->setValue('0');
+                //$form->get('Fields')->get('restrictedCountries')->setValue('0');
             }
         }
 
