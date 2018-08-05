@@ -250,26 +250,22 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         // Read data
         $application = $this->getApplication($id);
 
-        if (isset($application)) {
-            if (isset($application['countrys']) && count($application['countrys']) > 0) {
-                $form->get('Fields')
-                    ->get('restrictedCountries')
-                    ->setValue('1');
+        if (count($application['countrys']) > 0) {
+            $form->get('Fields')
+                ->get('restrictedCountries')
+                ->setValue('1');
 
-                //Format results from DB before setting values on form
-                $selectedValues = array();
+            //Format results from DB before setting values on form
+            $selectedValues = array();
 
-                foreach ($application['countrys'] as $country) {
-                    $selectedValues[] = $country['id'] . $this::DEFAULT_SEPARATOR . $country['countryDesc'];
-                }
-
-                $form->get('Fields')
-                    ->get('restrictedCountriesList')
-                    ->get('restrictedCountriesList')
-                    ->setValue($selectedValues);
-            } else {
-                //$form->get('Fields')->get('restrictedCountries')->setValue('0');
+            foreach ($application['countrys'] as $country) {
+                $selectedValues[] = $country['id'] . $this::DEFAULT_SEPARATOR . $country['countryDesc'];
             }
+
+            $form->get('Fields')
+                ->get('restrictedCountriesList')
+                ->get('restrictedCountriesList')
+                ->setValue($selectedValues);
         }
 
         $data = $this->params()->fromPost();
