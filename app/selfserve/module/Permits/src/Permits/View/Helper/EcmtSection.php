@@ -30,26 +30,58 @@ class EcmtSection extends AbstractHelper
     const ROUTE_ECMT_CANCEL_APPLICATION = 'ecmt-cancel-application';
     const ROUTE_ECMT_CANCEL_CONFIRMATION = self::ROUTE_ECMT_CANCEL_APPLICATION . '/confirmation';
 
+    /**
+     * list of overview routes and the field denoting completion status
+     */
     const ROUTE_ORDER = [
-        self:: ROUTE_ECMT_LICENCE,
-        self:: ROUTE_ECMT_EURO6,
-        self:: ROUTE_ECMT_CABOTAGE,
-        self:: ROUTE_ECMT_COUNTRIES,
-        self:: ROUTE_ECMT_NO_OF_PERMITS,
-        self:: ROUTE_ECMT_TRIPS,
-        self:: ROUTE_ECMT_INTERNATIONAL_JOURNEY,
-        self:: ROUTE_ECMT_SECTORS,
-        self:: ROUTE_ECMT_CHECK_ANSWERS,
-        self:: ROUTE_ECMT_DECLARATION,
+        self:: ROUTE_ECMT_LICENCE => 'licence',
+        self:: ROUTE_ECMT_EURO6 => 'emissions',
+        self:: ROUTE_ECMT_CABOTAGE => 'cabotage',
+        self:: ROUTE_ECMT_COUNTRIES => 'countrys',
+        self:: ROUTE_ECMT_NO_OF_PERMITS => 'permitsRequired',
+        self:: ROUTE_ECMT_TRIPS => 'trips',
+        self:: ROUTE_ECMT_INTERNATIONAL_JOURNEY => 'internationalJourneys',
+        self:: ROUTE_ECMT_SECTORS => 'sectors',
+    ];
+
+    /**
+     * list of overview routes that are used for confirmation
+     */
+    const CONFIRMATION_ROUTE_ORDER = [
+        self:: ROUTE_ECMT_CHECK_ANSWERS => 'checkedAnswers',
+        self:: ROUTE_ECMT_DECLARATION => 'declaration',
+    ];
+
+    /**
+     * @todo pasted here temporarily while getting this working - move to a reusable helper/formatter
+     */
+    const SECTION_COMPLETION_CANNOT_START = 'ecmt_section_sts_csy';
+    const SECTION_COMPLETION_NOT_STARTED = 'ecmt_section_sts_nys';
+    const SECTION_COMPLETION_COMPLETED = 'ecmt_section_sts_com';
+
+    /**
+     * @todo pasted here temporarily while getting this working - move to a reusable helper/formatter
+     */
+    const COMPLETION_STATUS = [
+        self::SECTION_COMPLETION_CANNOT_START => 'Can\'t start yet',
+        self::SECTION_COMPLETION_NOT_STARTED => 'Not started yet',
+        self::SECTION_COMPLETION_COMPLETED => 'Completed',
+    ];
+
+    /**
+     * @todo pasted here temporarily while getting this working - move to a reusable helper/formatter
+     */
+    const COMPLETION_STATUS_COLOUR = [
+        self::SECTION_COMPLETION_CANNOT_START => 'grey',
+        self::SECTION_COMPLETION_NOT_STARTED => 'grey',
+        self::SECTION_COMPLETION_COMPLETED => 'green',
     ];
 
     /**
      * Currently returns an array of sections - could be much better, but this is part 1...
      *
-     * @todo enabled on/off, based on info we don't yet know - mostly self explanatory, but what are the rules?
-     * @todo work out what to do with completion statuses - do we have the info?
+     * @todo messy/rushed - must be improved and made more robust
      * @todo investigate (do we need) a separate view partial, currently sharing/reusing view from licence applications
-     * @todo section numbering (xx of xx complete) - do it here or elsewhere?
      * @todo handle ordering of steps in the permits controller, currently that's manual - do it here or elsewhere?
      *
      * @param array $application application data
@@ -58,21 +90,79 @@ class EcmtSection extends AbstractHelper
      */
     public function __invoke(array $application): array
     {
+        //if the application isn't submitted, build the overview as normal
+        if ($application['isNotYetSubmitted']){
+            $sections = [];
+            $appId = $application['id'];
+
+            foreach (self::ROUTE_ORDER as $route => $testedField) {
+                $status = $application['sectionCompletion'][$testedField];
+                $colour = self::COMPLETION_STATUS_COLOUR[$status];
+                array_push($sections, $this->createSection($route, $status, $colour, $appId));
+            }
+
+            if (!$application['sectionCompletion']['allCompleted']) {
+                foreach (self::CONFIRMATION_ROUTE_ORDER as $route => $testedField) {
+                    $status = self::SECTION_COMPLETION_CANNOT_START;
+                    $colour = self::COMPLETION_STATUS_COLOUR[$status];
+                    array_push($sections, $this->createSection($route, $status, $colour, $appId, false));
+                }
+            } else{
+                foreach (self::CONFIRMATION_ROUTE_ORDER as $route => $testedField) {
+                    $status = $application['confirmationSectionCompletion'][$testedField];
+                    $colour = self::COMPLETION_STATUS_COLOUR[$status];
+                    array_push($sections, $this->createSection($route, $status, $colour, $appId));
+                }
+            }
+
+            return $sections;
+        }
+
+        //application is a status other than not submitted
+        return $this->buildReadOnly($application['id']);
+    }
+
+    private function buildReadOnly(int $appId): array
+    {
         $sections = [];
 
-        foreach (self::ROUTE_ORDER as $route) {
-            $section = new ViewModel();
-            $section->setTemplate('partials/overview_section');
-            $section->setVariable('enabled', true);
-            $section->setVariable('status', 'statuses to be added');
-            $section->setVariable('statusColour', 'green');
-            $section->setVariable('identifier', $application['id']);
-            $section->setVariable('identifierIndex', 'id');
-            $section->setVariable('name', 'section.name.' . $route);
-            $section->setVariable('route', 'permits/' . $route);
-            array_push($sections, $section);
+        foreach (self::ROUTE_ORDER as $route => $testedField) {
+            $status = self::SECTION_COMPLETION_CANNOT_START;
+            $colour = self::COMPLETION_STATUS_COLOUR[$status];
+            array_push($sections, $this->createSection($route, $status, $colour, $appId, false));
+        }
+
+        foreach (self::CONFIRMATION_ROUTE_ORDER as $route => $testedField) {
+            $status = self::SECTION_COMPLETION_CANNOT_START;
+            $colour = self::COMPLETION_STATUS_COLOUR[$status];
+            array_push($sections, $this->createSection($route, $status, $colour, $appId, false));
         }
 
         return $sections;
+    }
+
+    /**
+     * create a section
+     *
+     * @param string $route
+     * @param string $status
+     * @param string $appId
+     * @param bool   $enabled
+     *
+     * @return ViewModel
+     */
+    private function createSection(string $route, string $status, string $colour, string $appId, bool $enabled = true): ViewModel
+    {
+        $section = new ViewModel();
+        $section->setTemplate('partials/overview_section');
+        $section->setVariable('enabled', $enabled);
+        $section->setVariable('status', self::COMPLETION_STATUS[$status]);
+        $section->setVariable('statusColour', $colour);
+        $section->setVariable('identifier', $appId);
+        $section->setVariable('identifierIndex', 'id');
+        $section->setVariable('name', 'section.name.' . $route);
+        $section->setVariable('route', 'permits/' . $route);
+
+        return $section;
     }
 }

@@ -31,20 +31,22 @@
                </ol>
             </div>
             <div class="actions-container new-application--wrapper">
-                <!--<p><a href="<?php echo $this->url('permits/ecmt-fee', [], [], true) ?>" class="action--primary large"><?php echo $this->translate('permits.button.accept-and-continue'); ?></a></p>-->
+                <?php if ($application['canBeSubmitted']) { ?>
+                    <p><a href="<?php echo $this->url('permits/ecmt-fee', [], [], true) ?>" class="action--primary large"><?php echo $this->translate('permits.button.accept-and-continue'); ?></a></p>
+                <?php } ?>
             </div>
         </div>
     </div>
-
+<?php //echo'<pre>'; print_r($application); die(); ?>
 <!-- SIDE PANEL -->
     <div class="one-third">
         <aside class="sidebar" role="complementary">
 
             <div class="info-box info-box--grey">
                 <h3 class="info-box__heading">Progress</h3>
-                <p><b>1 of 8 complete</b></p>
-                <p><b>Application fee (non-refundable): </b> <?php echo "£" . $applicationFee; ?></p>
-                <p><b>Issuing fee (if application is successful): </b> <?php echo "£" . $issuingFee; ?></p>
+                <p><b><?php echo $this->escapeHtml($application['sectionCompletion']['totalCompleted']); ?> of <?php echo $this->escapeHtml($application['sectionCompletion']['totalSections']); ?> complete</b></p>
+                <p><b>Application fee (non-refundable): </b> <?php echo $applicationFee; ?></p>
+                <p><b>Issuing fee (if application is successful): </b> <?php echo $issuingFee; ?></p>
                 <p>You can't submit until you've completed all of the sections</p>
             </div>
 
