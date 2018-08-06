@@ -4,16 +4,16 @@ namespace Permits\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("CheckAnswers")
+ * @Form\Name("Fees")
  * @Form\Attributes({"method":"POST"})
  * @Form\Type("Common\Form\Form")
  */
 
-class CheckAnswersForm
+class FeesForm
 {
     /**
      * @Form\Name("Submit")
-     * @Form\ComposedObject("Permits\Form\Model\Fieldset\SubmitAccept")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\SubmitAndPay")
      */
-    public $submitAcceptButton = null;
+    public $submitButton = null;
 }

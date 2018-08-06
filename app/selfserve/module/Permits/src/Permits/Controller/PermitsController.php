@@ -19,7 +19,6 @@ use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermits;
 
 use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
-use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermits;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCabotage;
@@ -29,6 +28,7 @@ use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitsRequired;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtTrips;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateInternationalJourney;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateSector;
+use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 
@@ -509,35 +509,15 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     {
         $id = $this->params()->fromRoute('id', -1);
 
+        if (!empty($this->params()->fromPost())) {
+            $command = UpdateEcmtCheckAnswers::create(['id' => $id]);
+            $this->handleCommand($command);
+            $this->nextStep(EcmtSection::ROUTE_ECMT_DECLARATION);
+        }
+
         $form = $this->getForm('CheckAnswersForm');
 
         $application = $this->getApplication($id);
-        $existing['Fields']['checkAnswers'] = $application['checkAnswers'];
-        $form->setData($existing);
-
-        $data = $this->params()->fromPost();
-
-        if (!empty($data)) {
-            $form->setData($data);
-
-            if ($form->isValid()) {
-                $command = UpdateEcmtCheckAnswers::create(
-                    [
-                        'id' => $id,
-                        'checkAnswers' => $data['Fields']['checkAnswers']
-                    ]
-                );
-                $this->handleCommand($command);
-
-                $this->nextStep(EcmtSection::ROUTE_ECMT_DECLARATION);
-            } else {
-                //Custom Error Message
-                $form->get('Fields')
-                    ->get('checkAnswers')
-                    ->setMessages(['error.messages.checkbox']);
-            }
-        }
-
         $answerData = $this->collatePermitQuestions(); //Get all the questions in returned array
 
         $answerData['licenceAnswer'] = $application['licence']['licNo'] . "\n" . '(' . $application['licence']['trafficArea']['name'] . ')';
@@ -681,7 +661,14 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     {
         $id = $this->params()->fromRoute('id', -1);
 
+        if (!empty($this->params()->fromPost())) {
+            $command = EcmtSubmitApplication::create(['id' => $id]);
+            $this->handleCommand($command);
+            $this->nextStep(EcmtSection::ROUTE_ECMT_SUBMITTED);
+        }
+
         $application = $this->getApplication($id);
+        $form = $this->getForm('FeesForm');
 
         // Get Fee Data
         $ecmtPermitFees = $this->getEcmtPermitFees();
@@ -689,14 +676,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $ecmtApplicationFeeTotal = $ecmtApplicationFee * $application['permitsRequired'];
         $ecmtIssuingFee = $ecmtPermitFees['fee'][$this::ECMT_ISSUING_FEE_PRODUCT_REFENCE]['fixedValue'];
 
-        $request = $this->getRequest();
-        $data = (array)$request->getPost();
-
-        if (!empty($data)) {
-            $this->nextStep(EcmtSection::ROUTE_ECMT_SUBMITTED);
-        }
-
         $view = new ViewModel();
+        $view->setVariable('form', $form);
         $view->setVariable('permitsNo', $application['applicationRef']);
         $view->setVariable('applicationDate', $application['createdOn']);
         $view->setVariable('id', $id);

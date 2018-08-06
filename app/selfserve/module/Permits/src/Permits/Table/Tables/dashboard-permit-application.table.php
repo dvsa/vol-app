@@ -27,7 +27,7 @@ return array(
     array(
       'title' => 'dashboard-table-permit-application-status',
       'name' => 'status',
-      'formatter' => 'Status'
+      'formatter' => 'RefDataStatus'
     )
   )
 );
