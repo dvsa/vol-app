@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d8bf83ba5a44b6e5f684063ba2d995c7",
-    "content-hash": "3ebe7d50c67a8032e44f6440f927f31c",
+    "content-hash": "bb734b680f48cc2424754a5ee9b64cdc",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -73,7 +72,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2017-12-06 07:11:42"
+            "time": "2017-12-06T07:11:42+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -147,7 +146,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2017-08-25 07:02:50"
+            "time": "2017-08-25T07:02:50+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -214,7 +213,7 @@
                 "collections",
                 "iterator"
             ],
-            "time": "2017-07-22 10:37:32"
+            "time": "2017-07-22T10:37:32+00:00"
         },
         {
             "name": "doctrine/common",
@@ -297,7 +296,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2018-07-12 21:16:12"
+            "time": "2018-07-12T21:16:12+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -370,7 +369,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-11-19 13:38:54"
+            "time": "2017-11-19T13:38:54+00:00"
         },
         {
             "name": "doctrine/doctrine-module",
@@ -448,7 +447,7 @@
                 "module",
                 "zf2"
             ],
-            "time": "2016-03-21 23:55:21"
+            "time": "2016-03-21T23:55:21+00:00"
         },
         {
             "name": "doctrine/doctrine-orm-module",
@@ -526,7 +525,7 @@
                 "orm",
                 "zf2"
             ],
-            "time": "2015-10-05 23:06:08"
+            "time": "2015-10-05T23:06:08+00:00"
         },
         {
             "name": "doctrine/event-manager",
@@ -600,7 +599,7 @@
                 "eventdispatcher",
                 "eventmanager"
             ],
-            "time": "2018-06-11 11:59:03"
+            "time": "2018-06-11T11:59:03+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -667,7 +666,7 @@
                 "singularize",
                 "string"
             ],
-            "time": "2018-01-09 20:05:19"
+            "time": "2018-01-09T20:05:19+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -721,7 +720,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2017-07-22 11:58:36"
+            "time": "2017-07-22T11:58:36+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -775,7 +774,7 @@
                 "lexer",
                 "parser"
             ],
-            "time": "2014-09-09 13:34:57"
+            "time": "2014-09-09T13:34:57+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -790,6 +789,20 @@
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-orm-d2b4dd71d2a276edd65d0c170375b445f8a4a4a8-zip-0a750b.tar",
                 "reference": "d2b4dd71d2a276edd65d0c170375b445f8a4a4a8",
                 "shasum": "762954ce75d1a509edced44fac2685f26ea8ec4a"
+            },
+            "archive": {
+                "exclude": [
+                    "!vendor",
+                    "tests",
+                    "*phpunit.xml",
+                    ".travis.yml",
+                    "build.xml",
+                    "build.properties",
+                    "composer.phar",
+                    "vendor/satooshi",
+                    "lib/vendor",
+                    "*.swp"
+                ]
             },
             "require": {
                 "doctrine/annotations": "~1.5",
@@ -857,7 +870,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2018-07-12 20:47:13"
+            "time": "2018-07-12T20:47:13+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -935,7 +948,7 @@
             "keywords": [
                 "persistence"
             ],
-            "time": "2018-06-14 18:57:48"
+            "time": "2018-06-14T18:57:48+00:00"
         },
         {
             "name": "doctrine/reflection",
@@ -1010,11 +1023,11 @@
             "keywords": [
                 "reflection"
             ],
-            "time": "2018-06-14 14:45:07"
+            "time": "2018-06-14T14:45:07+00:00"
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/4.186",
+            "version": "dev-release/4.186.1",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
@@ -1068,20 +1081,20 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2018-07-28 17:37:16"
+            "time": "2018-07-28T17:37:16+00:00"
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "dev-release/4.186",
+            "version": "dev-release/4.186.1",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "88cb0f6e6f5abb41b78edaba8b7d2562a93dda24"
+                "reference": "154ac209c511d377387a08f82f3bebc98077e09a"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
-                "olcs/olcs-transfer": "dev-release/4.186",
-                "olcs/olcscommon": "dev-release/4.186",
+                "olcs/olcs-transfer": "dev-release/4.186.1",
+                "olcs/olcscommon": "dev-release/4.186.1",
                 "php": ">=5.4",
                 "zendframework/zendframework": "~2.4.0"
             },
@@ -1116,15 +1129,15 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2018-07-28 17:10:28"
+            "time": "2018-08-06T15:48:35+00:00"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "dev-release/4.186",
+            "version": "dev-release/4.186.1",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git",
-                "reference": "2322647b51e9b783ae1035fe683d36aa394550f9"
+                "reference": "d1af075807dab259ab14432519b0d436ed98ee47"
             },
             "require": {
                 "php": ">=5.4",
@@ -1168,15 +1181,15 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2018-07-28 17:09:31"
+            "time": "2018-08-06T15:47:28+00:00"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "dev-release/4.186",
+            "version": "dev-release/4.186.1",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
-                "reference": "98c3ce76320070d3647dc6bcb491a7a1d2a6a54e"
+                "reference": "46b92497ff400620e83cc38403d5531e8d80987b"
             },
             "require": {
                 "php": ">=5.4",
@@ -1214,15 +1227,15 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2018-07-28 17:11:28"
+            "time": "2018-08-06T13:12:39+00:00"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "dev-release/4.186",
+            "version": "dev-release/4.186.1",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-utils.git",
-                "reference": "83b2cff0f41d786c19bc8c5dae294c015e48a00e"
+                "reference": "f24225968abd3a775a451aacab19ff969f382b30"
             },
             "require": {
                 "php": ">=5.4",
@@ -1231,7 +1244,7 @@
             "require-dev": {
                 "mockery/mockery": "~0.9.3",
                 "olcs/olcs-devtools": "dev-master",
-                "olcs/olcs-logging": "dev-release/4.186"
+                "olcs/olcs-logging": "dev-release/4.186.1"
             },
             "type": "library",
             "autoload": {
@@ -1260,7 +1273,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2018-07-28 17:12:12"
+            "time": "2018-08-06T20:21:51+00:00"
         },
         {
             "name": "psr/log",
@@ -1307,7 +1320,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10 12:19:37"
+            "time": "2016-10-10T12:19:37+00:00"
         },
         {
             "name": "symfony/console",
@@ -1370,21 +1383,21 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-07-29 21:27:41"
+            "time": "2017-07-29T21:27:41+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.13",
+            "version": "v3.4.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "0e3ca9cbde90fffec8038f4d4e16fd4046bbd018"
+                "reference": "d5a058ff6ecad26b30c1ba452241306ea34c65cc"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-debug-0e3ca9cbde90fffec8038f4d4e16fd4046bbd018-zip-03f59c.tar",
-                "reference": "0e3ca9cbde90fffec8038f4d4e16fd4046bbd018",
-                "shasum": "1fe11a56ee2e7c482d0242b3cef3dfac151eac9d"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-debug-d5a058ff6ecad26b30c1ba452241306ea34c65cc-zip-c1d04d.tar",
+                "reference": "d5a058ff6ecad26b30c1ba452241306ea34c65cc",
+                "shasum": "e5beb55688090fda7bc254d67c2fac423defca54"
             },
             "require": {
                 "php": "^5.5.9|>=7.0.8",
@@ -1426,7 +1439,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2018-06-26 08:45:54"
+            "time": "2018-07-26T11:19:56+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -1476,7 +1489,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2015-07-08 05:59:48"
+            "time": "2015-07-08T05:59:48+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1535,7 +1548,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-04-26 10:06:28"
+            "time": "2018-04-26T10:06:28+00:00"
         },
         {
             "name": "zendframework/zendframework",
@@ -1652,7 +1665,7 @@
                 "framework",
                 "zf2"
             ],
-            "time": "2017-07-13 17:23:56"
+            "time": "2017-07-13T17:23:56+00:00"
         },
         {
             "name": "zendframework/zendxml",
@@ -1698,7 +1711,7 @@
                 "xml",
                 "zf"
             ],
-            "time": "2018-04-30 15:11:04"
+            "time": "2018-04-30T15:11:04+00:00"
         },
         {
             "name": "zf-commons/zfc-rbac",
@@ -1774,7 +1787,7 @@
                 "rbac",
                 "zf2"
             ],
-            "time": "2015-01-26 11:29:23"
+            "time": "2015-01-26T11:29:23+00:00"
         },
         {
             "name": "zfr/rbac",
@@ -1824,7 +1837,7 @@
                 "zf2",
                 "zf3"
             ],
-            "time": "2014-02-06 14:18:34"
+            "time": "2014-02-06T14:18:34+00:00"
         }
     ],
     "packages-dev": [
@@ -1871,7 +1884,7 @@
             "keywords": [
                 "test"
             ],
-            "time": "2015-05-11 14:41:42"
+            "time": "2015-05-11T14:41:42+00:00"
         },
         {
             "name": "mikey179/vfsStream",
@@ -1917,7 +1930,7 @@
             ],
             "description": "Virtual file system to mock the real file system in unit tests.",
             "homepage": "http://vfs.bovigo.org/",
-            "time": "2017-08-01 08:02:14"
+            "time": "2017-08-01T08:02:14+00:00"
         },
         {
             "name": "mockery/mockery",
@@ -1982,7 +1995,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2017-02-28 12:52:32"
+            "time": "2017-02-28T12:52:32+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2030,7 +2043,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2018-06-11 23:09:50"
+            "time": "2018-06-11T23:09:50+00:00"
         },
         {
             "name": "olcs/coding-standards",
@@ -2048,7 +2061,7 @@
             },
             "type": "library",
             "description": "OLCS CodeSniffer and MessDetector rule sets",
-            "time": "2018-03-13 16:45:48"
+            "time": "2018-03-13T16:45:48+00:00"
         },
         {
             "name": "olcs/olcs-devtools",
@@ -2077,7 +2090,7 @@
                 }
             },
             "description": "Dev tools",
-            "time": "2018-01-26 14:36:55"
+            "time": "2018-01-26T14:36:55+00:00"
         },
         {
             "name": "olcs/olcs-testhelpers",
@@ -2085,7 +2098,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-testhelpers.git",
-                "reference": "e53be1b8ebb5d733aa3f9e5899df87cd427dd706"
+                "reference": "037b5729994eb7cf0c67573fc3d76904ed4f098a"
             },
             "require": {
                 "php": ">=5.4"
@@ -2102,7 +2115,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2018-06-09 13:47:45"
+            "time": "2018-07-31T19:27:43+00:00"
         },
         {
             "name": "pdepend/pdepend",
@@ -2142,7 +2155,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Official version of pdepend to be handled with Composer",
-            "time": "2017-12-13 13:21:38"
+            "time": "2017-12-13T13:21:38+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -2196,7 +2209,7 @@
                 "reflection",
                 "static analysis"
             ],
-            "time": "2017-09-11 18:02:19"
+            "time": "2017-09-11T18:02:19+00:00"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -2247,7 +2260,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2017-11-30 07:14:17"
+            "time": "2017-11-30T07:14:17+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -2294,7 +2307,7 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
-            "time": "2017-07-14 14:27:02"
+            "time": "2017-07-14T14:27:02+00:00"
         },
         {
             "name": "phpmd/phpmd",
@@ -2360,21 +2373,21 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2017-01-20 14:41:10"
+            "time": "2017-01-20T14:41:10+00:00"
         },
         {
             "name": "phpspec/prophecy",
-            "version": "1.7.6",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "33a7e3c4fda54e912ff6338c48823bd5c0f0b712"
+                "reference": "4ba436b55987b4bf311cb7c6ba82aa528aac0a06"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpspec-prophecy-33a7e3c4fda54e912ff6338c48823bd5c0f0b712-zip-d750f0.tar",
-                "reference": "33a7e3c4fda54e912ff6338c48823bd5c0f0b712",
-                "shasum": "6dea6f9e9b9f1e26d45efc7a1489c6fb00f282e8"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpspec-prophecy-4ba436b55987b4bf311cb7c6ba82aa528aac0a06-zip-cb340e.tar",
+                "reference": "4ba436b55987b4bf311cb7c6ba82aa528aac0a06",
+                "shasum": "00331940879a52f460078c5b0e8a2a3a224e4d9d"
             },
             "require": {
                 "doctrine/instantiator": "^1.0.2",
@@ -2385,12 +2398,12 @@
             },
             "require-dev": {
                 "phpspec/phpspec": "^2.5|^3.2",
-                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5"
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5 || ^7.1"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.7.x-dev"
+                    "dev-master": "1.8.x-dev"
                 }
             },
             "autoload": {
@@ -2423,7 +2436,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2018-04-18 13:57:24"
+            "time": "2018-08-05T17:53:17+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2486,7 +2499,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-04-02 07:44:40"
+            "time": "2017-04-02T07:44:40+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2533,7 +2546,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2017-11-27 13:52:08"
+            "time": "2017-11-27T13:52:08+00:00"
         },
         {
             "name": "phpunit/php-text-template",
@@ -2574,7 +2587,7 @@
             "keywords": [
                 "template"
             ],
-            "time": "2015-06-21 13:50:34"
+            "time": "2015-06-21T13:50:34+00:00"
         },
         {
             "name": "phpunit/php-timer",
@@ -2623,7 +2636,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2017-02-26 11:10:40"
+            "time": "2017-02-26T11:10:40+00:00"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -2672,7 +2685,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2017-11-27 05:48:46"
+            "time": "2017-11-27T05:48:46+00:00"
         },
         {
             "name": "phpunit/phpcov",
@@ -2724,7 +2737,7 @@
             ],
             "description": "CLI frontend for PHP_CodeCoverage",
             "homepage": "https://github.com/sebastianbergmann/phpcov",
-            "time": "2016-06-03 07:01:55"
+            "time": "2016-06-03T07:01:55+00:00"
         },
         {
             "name": "phpunit/phpunit",
@@ -2806,7 +2819,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-02-01 05:50:59"
+            "time": "2018-02-01T05:50:59+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -2865,7 +2878,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2017-06-30 09:13:00"
+            "time": "2017-06-30T09:13:00+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -2910,7 +2923,7 @@
             ],
             "description": "Looks up which function or method a line of code belongs to",
             "homepage": "https://github.com/sebastianbergmann/code-unit-reverse-lookup/",
-            "time": "2017-03-04 06:30:41"
+            "time": "2017-03-04T06:30:41+00:00"
         },
         {
             "name": "sebastian/comparator",
@@ -2974,7 +2987,7 @@
                 "compare",
                 "equality"
             ],
-            "time": "2017-01-29 09:50:25"
+            "time": "2017-01-29T09:50:25+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -3026,7 +3039,7 @@
             "keywords": [
                 "diff"
             ],
-            "time": "2017-05-22 07:24:03"
+            "time": "2017-05-22T07:24:03+00:00"
         },
         {
             "name": "sebastian/environment",
@@ -3076,7 +3089,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2016-11-26 07:53:53"
+            "time": "2016-11-26T07:53:53+00:00"
         },
         {
             "name": "sebastian/exporter",
@@ -3143,7 +3156,7 @@
                 "export",
                 "exporter"
             ],
-            "time": "2016-11-19 08:54:04"
+            "time": "2016-11-19T08:54:04+00:00"
         },
         {
             "name": "sebastian/finder-facade",
@@ -3182,7 +3195,7 @@
             ],
             "description": "FinderFacade is a convenience wrapper for Symfony's Finder component.",
             "homepage": "https://github.com/sebastianbergmann/finder-facade",
-            "time": "2017-11-18 17:31:49"
+            "time": "2017-11-18T17:31:49+00:00"
         },
         {
             "name": "sebastian/global-state",
@@ -3233,7 +3246,7 @@
             "keywords": [
                 "global state"
             ],
-            "time": "2015-10-12 03:26:01"
+            "time": "2015-10-12T03:26:01+00:00"
         },
         {
             "name": "sebastian/object-enumerator",
@@ -3279,7 +3292,7 @@
             ],
             "description": "Traverses array structures and object graphs to enumerate all referenced objects",
             "homepage": "https://github.com/sebastianbergmann/object-enumerator/",
-            "time": "2017-02-18 15:18:39"
+            "time": "2017-02-18T15:18:39+00:00"
         },
         {
             "name": "sebastian/recursion-context",
@@ -3332,7 +3345,7 @@
             ],
             "description": "Provides functionality to recursively process PHP variables",
             "homepage": "http://www.github.com/sebastianbergmann/recursion-context",
-            "time": "2016-11-19 07:33:16"
+            "time": "2016-11-19T07:33:16+00:00"
         },
         {
             "name": "sebastian/resource-operations",
@@ -3374,7 +3387,7 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
-            "time": "2015-07-28 20:34:47"
+            "time": "2015-07-28T20:34:47+00:00"
         },
         {
             "name": "sebastian/version",
@@ -3417,7 +3430,7 @@
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
-            "time": "2016-10-03 07:35:21"
+            "time": "2016-10-03T07:35:21+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -3468,21 +3481,21 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-07-26 23:47:18"
+            "time": "2018-07-26T23:47:18+00:00"
         },
         {
             "name": "symfony/config",
-            "version": "v2.8.43",
+            "version": "v2.8.44",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "93bdf96d0e3c9b29740bf9050e7a996b443c8436"
+                "reference": "06c0be4cdd8363f3ec8d592c9a4d1b981d5052af"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-config-93bdf96d0e3c9b29740bf9050e7a996b443c8436-zip-7bbc73.tar",
-                "reference": "93bdf96d0e3c9b29740bf9050e7a996b443c8436",
-                "shasum": "09d22efbf83fe3fbbea438b6e787f35ee5937a70"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-config-06c0be4cdd8363f3ec8d592c9a4d1b981d5052af-zip-7e3605.tar",
+                "reference": "06c0be4cdd8363f3ec8d592c9a4d1b981d5052af",
+                "shasum": "4b00c55b94a99c260ca67f73adc010541c18b7d6"
             },
             "require": {
                 "php": ">=5.3.9",
@@ -3525,7 +3538,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2018-05-01 22:52:40"
+            "time": "2018-07-26T11:13:39+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -3588,21 +3601,21 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2017-07-28 15:22:55"
+            "time": "2017-07-28T15:22:55+00:00"
         },
         {
             "name": "symfony/finder",
-            "version": "v4.1.2",
+            "version": "v4.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "84714b8417d19e4ba02ea78a41a975b3efaafddb"
+                "reference": "e162f1df3102d0b7472805a5a9d5db9fcf0a8068"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-finder-84714b8417d19e4ba02ea78a41a975b3efaafddb-zip-3d4754.tar",
-                "reference": "84714b8417d19e4ba02ea78a41a975b3efaafddb",
-                "shasum": "1bd294c477fb1aff7b5e7ed312b61b8f86193a71"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-finder-e162f1df3102d0b7472805a5a9d5db9fcf0a8068-zip-c456c1.tar",
+                "reference": "e162f1df3102d0b7472805a5a9d5db9fcf0a8068",
+                "shasum": "cfd641a01ff5640d24c8e31f5d71afd6de58bf95"
             },
             "require": {
                 "php": "^7.1.3"
@@ -3637,7 +3650,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2018-06-19 21:38:16"
+            "time": "2018-07-26T11:24:31+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -3692,11 +3705,11 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2018-04-30 19:57:29"
+            "time": "2018-04-30T19:57:29+00:00"
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.3.17",
+            "version": "v3.3.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
@@ -3747,7 +3760,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2018-01-20 15:04:53"
+            "time": "2018-01-20T15:04:53+00:00"
         },
         {
             "name": "theseer/fdomdocument",
@@ -3787,7 +3800,7 @@
             ],
             "description": "The classes contained within this repository extend the standard DOM to use exceptions at all occasions of errors instead of PHP warnings or notices. They also add various custom methods and shortcuts for convenience and to simplify the usage of DOM.",
             "homepage": "https://github.com/theseer/fDOMDocument",
-            "time": "2017-06-30 11:53:12"
+            "time": "2017-06-30T11:53:12+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -3837,7 +3850,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2018-01-29 19:49:41"
+            "time": "2018-01-29T19:49:41+00:00"
         }
     ],
     "aliases": [],
