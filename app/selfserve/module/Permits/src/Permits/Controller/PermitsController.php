@@ -1008,6 +1008,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
     private function getEcmtPermitFees()
     {
+        // echo 'test'; die;
         $query = EcmtPermitFees::create(['productReferences' => [$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE, $this::ECMT_ISSUING_FEE_PRODUCT_REFENCE]]);
         $response = $this->handleQuery($query);
         return $response->getResult();

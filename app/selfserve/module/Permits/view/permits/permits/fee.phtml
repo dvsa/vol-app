@@ -17,7 +17,14 @@ $this->headTitle($title);
 
         <div class="field">
             <div class="govuk-hint">
-                <p><?php echo $this->translate('permits.page.fee.subtitle'); ?></p>
+                <p class="fee-subtitle"><?php echo $this->translate('permits.page.fee.subtitle'); ?></p>
+                <br />
+                <div class="notice">
+                    <i class="icon icon-important">
+                        <span class="visually-hidden">warning message</span>
+                    </i>
+                    <strong><b><?php echo sprintf($this->translate('permits.page.fee.message'), '£' . $issuingFee); ?></b></strong>
+                </div>
             </div>
 
             <div class="form-group">
@@ -57,11 +64,9 @@ $this->headTitle($title);
             </div>
 
             <div class="actions-container new-application--wrapper">
-                <?php echo sprintf($this->translate('permits.page.fee.message'), '£' . $issuingFee); ?>
                 <p><a href="<?php $this->url('permits/' . EcmtSection::ROUTE_ECMT_SUBMITTED, [], [], true) ?>" class="action--primary large"><?php echo $this->translate('submit-and-pay.button'); ?></a></p>
                 <p><?php echo $this->permitsBackLink('permits.button.save-return-to-permits'); ?></p>
             </div>
         </div>
     </div>
 </div>
-
