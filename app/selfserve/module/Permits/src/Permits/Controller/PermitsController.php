@@ -691,23 +691,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         $request = $this->getRequest();
         $data = (array)$request->getPost();
-        $session = new Container(self::SESSION_NAMESPACE);
 
         if (!empty($data)) {
-            $data['ecmtPermitsApplication'] = $session->applicationId;
-            $data['status'] = 'permit_awaiting';
-            $data['paymentStatus'] = 'lfs_ot';
-            $data['intensity'] = '1';
-
-            if ($session->restrictedCountries == 1) {
-                $data['countries'] = $this->extractIDFromSessionData($session->restrictedCountriesList);
-            }
-
-            $command = CreateEcmtPermits::create($data);
-            $response = $this->handleCommand($command);
-            $insert = $response->getResult();
-            $session->permitsNo = $insert['id']['ecmtPermit'];
-
             $this->nextStep(EcmtSection::ROUTE_ECMT_SUBMITTED);
         }
 
@@ -719,8 +704,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $view->setVariable('fee', $ecmtApplicationFee);
         $view->setVariable('totalFee', $ecmtApplicationFeeTotal);
         $view->setVariable('issuingFee', $ecmtIssuingFee);
-
-
 
         return $view;
     }
