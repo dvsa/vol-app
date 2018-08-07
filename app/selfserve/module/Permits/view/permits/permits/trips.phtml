@@ -1,6 +1,6 @@
 <?php
-$title = $this->translate('permits.page.number-of-trips.title');
-$this->headTitle($title);
+    $title = $this->translate('permits.page.number-of-trips.title');
+    $this->headTitle($title);
 ?>
 
 <div class="row ecmt">
@@ -12,6 +12,14 @@ $this->headTitle($title);
                 <h1 class="js-title">
                     <?php echo $this->translate('permits.page.number-of-trips.question'); ?>
                 </h1>
+                <p>
+                    <?php
+                        // Only show if the Licence Traffic Area is 'Northern Ireland'
+                        if ($this->trafficAreaId === 'N') {
+                            echo $this->translate('permits.page.number-of-trips.northern-ireland');
+                        }
+                    ?>
+                </p>
             </div>
         </div>
 
@@ -19,8 +27,8 @@ $this->headTitle($title);
 
             <fieldset id="number-of-trips" class="inline" data-group="number-of-trips">
                 <?php
-                echo $this->formErrors($form);
-                echo $this->form($form);
+                    echo $this->formErrors($form);
+                    echo $this->form($form);
                 ?>
 
                 <fieldset class="actions-container new-application--wrapper">
