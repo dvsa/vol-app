@@ -187,7 +187,14 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $response = $this->handleCommand($command);
                 $insert = $response->getResult();
 
-                $this->nextStep(EcmtSection::ROUTE_ECMT_CABOTAGE);
+                if(array_key_exists('SubmitButton', $data['Submit']))
+                {
+                    $this->nextStep(EcmtSection::ROUTE_ECMT_CABOTAGE);
+                }
+                else if(array_key_exists('SaveAndReturnButton', $data['Submit']))
+                {
+                    $this->nextStep(EcmtSection::ROUTE_APPLICATION_OVERVIEW);
+                }
             } else {
                 //Custom Error Message
                 $form->get('Fields')->get('MeetsEuro6')->setMessages(['error.messages.checkbox']);
