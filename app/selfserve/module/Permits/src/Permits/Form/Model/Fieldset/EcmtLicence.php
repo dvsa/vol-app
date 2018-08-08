@@ -26,4 +26,26 @@ class EcmtLicence
      */
     public $ecmtLicence = null;
 
+    /**
+     * @Form\Name("SubmitButton")
+     * @Form\Attributes({
+     *     "class":"action--primary large",
+     *     "id":"submitbutton",
+     *     "value":"Save and continue",
+     * })
+     * @Form\Type("Zend\Form\Element\Submit")
+     */
+    public $submit = null;
+
+    /**
+     * @Form\Name("Cancel")
+     * @Form\Attributes({
+     *     "class":"action--primary large return-overview",
+     *     "id":"save-return-button",
+     *     "value":"Cancel",
+     * })
+     * @Form\Type("Zend\Form\Element\Submit")
+     */
+    public $save = null;
+
 }

@@ -16,10 +16,4 @@ class EcmtLicenceForm
      */
     public $fields = null;
 
-    /**
-     * @Form\Name("Submit")
-     * @Form\ComposedObject("Permits\Form\Model\Fieldset\Submit")
-     */
-    public $submitButton = null;
-
 }
