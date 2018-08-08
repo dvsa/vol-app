@@ -113,7 +113,13 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         $form = $this->getEcmtLicenceForm();
         $data = $this->params()->fromPost();
-        if (is_array($data) && array_key_exists('SubmitButton', $data['Fields'])) {
+        
+        if (isset($data['Fields']['Cancel'])) {
+            $this->redirect()
+                ->toRoute('permits');
+        }
+
+        if (isset($data['Fields']['SubmitButton'])) {
             //Validate
             $form->setData($data);
             if ($form->isValid()) {
@@ -137,11 +143,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $form->get('Fields')
                     ->get('EcmtLicence')
                     ->setMessages(['error.messages.ecmt-licence']);
-            }
-        }else if(isset($data['Fields'])){ //First check for 'Fields' index as only exists after submit
-            if(array_key_exists('Cancel', $data['Fields'])){
-                $this->redirect()
-                    ->toRoute('permits');
             }
         }
 
