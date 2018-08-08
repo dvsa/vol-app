@@ -75,7 +75,7 @@ $this->headTitle($title);
                         <td><h4><?php echo $this->translate('permits.page.fee.permit.fee.total'); ?></h4></td>
                         <td>
                             <?php
-                                echo '£' . $this->escapeHtml($totalFee);
+                                echo $this->feeCalculator();
                                 echo $this->translate('permits.page.fee.permit.fee.non-refundable');
                             ?>
                         </td>
