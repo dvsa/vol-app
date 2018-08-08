@@ -239,6 +239,7 @@ return array(
             'ecmtSection' => \Permits\View\Helper\EcmtSection::class,
             'permitsBackLink' => \Permits\View\Helper\BackToOverview::class,
             'changeAnswerLink' => \Permits\View\Helper\ChangeAnswerLink::class,
+            'feeCalculator' => \Permits\View\Helper\FeeCalculator::class,
         ],
     ],
   'view_manager' => array(
