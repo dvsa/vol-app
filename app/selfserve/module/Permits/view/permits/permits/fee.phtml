@@ -1,7 +1,17 @@
 <?php
 use Permits\View\Helper\EcmtSection;
+
 $title = $this->translate('permits.page.fee.title');
 $this->headTitle($title);
+
+    // Only display decimal places if the result does not end in '.00'
+    if (substr($issuingFee, strlen($issuingFee) - 2) === '00') {
+        $issuingFee = substr($issuingFee, 0, strlen($issuingFee) - 3);
+    }
+
+    if (substr($fee, strlen($fee) - 2) === '00') {
+        $fee = substr($fee, 0, strlen($fee) - 3);
+    }
 ?>
 
 <div class="row ecmt">
