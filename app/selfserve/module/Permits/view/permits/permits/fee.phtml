@@ -35,7 +35,7 @@ $this->headTitle($title);
                     </i>
                     <strong>
                         <b>
-                            <?php echo sprintf($this->translate('permits.page.fee.message'), '£' . $issuingFee); ?>
+                            <?php echo sprintf($this->translate('permits.page.fee.message'), '£' . $this->escapeHtml($issuingFee)); ?>
                         </b>
                     </strong>
                 </div>
