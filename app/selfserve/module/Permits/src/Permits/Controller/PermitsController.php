@@ -187,14 +187,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $response = $this->handleCommand($command);
                 $insert = $response->getResult();
 
-                if(array_key_exists('SubmitButton', $data['Submit']))
-                {
-                    $this->nextStep(EcmtSection::ROUTE_ECMT_CABOTAGE);
-                }
-                else if(array_key_exists('SaveAndReturnButton', $data['Submit']))
-                {
-                    $this->nextStep(EcmtSection::ROUTE_APPLICATION_OVERVIEW);
-                }
+                $this->handleSubmit($data, EcmtSection::ROUTE_ECMT_CABOTAGE);
             } else {
                 //Custom Error Message
                 $form->get('Fields')->get('MeetsEuro6')->setMessages(['error.messages.checkbox']);
@@ -979,12 +972,31 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
      *
      * @return array
      */
-
     private function getEcmtPermitFees()
     {
         // echo 'test'; die;
         $query = EcmtPermitFees::create(['productReferences' => [$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE, $this::ECMT_ISSUING_FEE_PRODUCT_REFENCE]]);
         $response = $this->handleQuery($query);
         return $response->getResult();
+    }
+
+    /**
+     * Decides the route of the application
+     * after a form has been Submitted
+     *
+     * @param $submittedData - an array of the data submitted by the form
+     * @param $nextStep - the EcmtSection:: route to be taken if the form was submitted normally
+     */
+    private function handleSubmit($submittedData, $nextStep)
+    {
+        if(array_key_exists('SubmitButton', $submittedData['Submit']))
+        {
+            //Form was submitted normally so continue on chosen path
+            $this->nextStep($nextStep);
+            return;
+        }
+
+        //A button other than the primary submit button was clicked so return to overview
+        $this->nextStep(EcmtSection::ROUTE_APPLICATION_OVERVIEW);
     }
 }
