@@ -23,7 +23,11 @@ $this->headTitle($title);
                     <i class="icon icon-important">
                         <span class="visually-hidden">warning message</span>
                     </i>
-                    <strong><b><?php echo sprintf($this->translate('permits.page.fee.message'), '£' . $issuingFee); ?></b></strong>
+                    <strong>
+                        <b>
+                            <?php echo sprintf($this->translate('permits.page.fee.message'), '£' . $issuingFee); ?>
+                        </b>
+                    </strong>
                 </div>
             </div>
 
@@ -49,16 +53,22 @@ $this->headTitle($title);
                     </tr>
                     <tr>
                         <td><h4><?php echo $this->translate('permits.page.fee.number.permits'); ?></h4></td>
-                        <td><?php echo $this->escapeHtml($noOfPermits); ?></td>
+                        <td>
+                            <?php echo $this->escapeHtml($noOfPermits) . ' x '; ?>
+                            <?php
+                                echo '£' . $this->escapeHtml($fee);
+                                echo $this->translate('permits.page.fee.per-permit');
+                            ?>
+                        </td>
                     </tr>
-                    <tr>
-                        <td><h4><?php echo $this->translate('permits.page.fee.permit.fee.single'); ?></h4></td>
-                        <td><?php echo '£' . $this->escapeHtml($fee); ?></td>
-                    </tr>
-
                     <tr>
                         <td><h4><?php echo $this->translate('permits.page.fee.permit.fee.total'); ?></h4></td>
-                        <td><?php echo '£' . $this->escapeHtml($totalFee); ?></td>
+                        <td>
+                            <?php
+                                echo '£' . $this->escapeHtml($totalFee);
+                                echo $this->translate('permits.page.fee.permit.fee.non-refundable');
+                            ?>
+                        </td>
                     </tr>
                 </table>
             </div>
