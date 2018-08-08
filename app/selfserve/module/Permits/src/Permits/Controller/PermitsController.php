@@ -1003,6 +1003,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         }
 
         //A button other than the primary submit button was clicked so return to overview
-        $this->nextStep(EcmtSection::ROUTE_APPLICATION_OVERVIEW);
+        return $this->nextStep(EcmtSection::ROUTE_APPLICATION_OVERVIEW);
     }
 }
