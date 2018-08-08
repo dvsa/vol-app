@@ -21,7 +21,7 @@ class FeeCalculator extends AbstractHelper
      */
     public function __invoke(?string $value): string
     {
-        if ((substr($value, strlen($value) - 2) === '00') && (strlen($value) > 0)) {
+        if ((substr($value, strlen($value) - 2) === '00') && (strpos($value, '.00' === false))) {
             return sprintf("£" . $this->escapeHtml(substr($value, 0, strlen($value) - 3)));
         }
 
