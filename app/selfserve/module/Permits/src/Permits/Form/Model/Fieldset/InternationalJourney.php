@@ -21,14 +21,10 @@ class InternationalJourney
      *      "fieldset-attributes": {"id": "international-journey"},
      *      "fieldset-data-group": "percentage-type",
      *      "label_attributes": {"class": "form-control form-control--radio"},
-     *      "value_options": {
-     *          "less.than.60%",
-     *          "from.60%.to.90%",
-     *          "more.than.90%",
-     *      },
+     *      "category": "inter_journey_percentage",
      *      "error-message": "error.messages.international-journey"
      * })
-     * @Form\Type("Radio")
+     * @Form\Type("DynamicRadio")
      */
     public $ecmtLicence = null;
 
