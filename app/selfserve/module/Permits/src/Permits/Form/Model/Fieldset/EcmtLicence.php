@@ -47,5 +47,4 @@ class EcmtLicence
      * @Form\Type("Zend\Form\Element\Submit")
      */
     public $save = null;
-
 }

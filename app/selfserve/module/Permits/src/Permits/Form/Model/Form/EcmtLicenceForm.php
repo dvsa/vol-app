@@ -15,5 +15,4 @@ class EcmtLicenceForm
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\EcmtLicence")
      */
     public $fields = null;
-
 }

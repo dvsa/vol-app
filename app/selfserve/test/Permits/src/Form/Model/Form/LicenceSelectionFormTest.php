@@ -27,9 +27,12 @@ class LicenceSelectionFormTest extends AbstractFormValidationTestCase
 
     public function testSubmit()
     {
-        $element = ['Submit', 'SubmitButton'];
+        $element = ['Fields', 'SubmitButton'];
+        $this->assertFormElementActionButton($element);
+        $this->assertFormElementType($element, "Zend\Form\Element\Submit");
+
+        $element = ['Fields', 'Cancel'];
         $this->assertFormElementActionButton($element);
         $this->assertFormElementType($element, "Zend\Form\Element\Submit");
     }
-
 }

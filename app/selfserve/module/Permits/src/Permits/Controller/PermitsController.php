@@ -997,8 +997,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
      */
     private function handleRedirect($submittedData, $nextStep)
     {
-        if(array_key_exists('SubmitButton', $submittedData['Submit']))
-        {
+        if (array_key_exists('SubmitButton', $submittedData['Submit'])) {
             //Form was submitted normally so continue on chosen path
             return $this->nextStep($nextStep);
         }
