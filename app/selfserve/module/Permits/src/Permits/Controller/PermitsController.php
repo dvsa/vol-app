@@ -17,6 +17,7 @@ use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermits;
+use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
 
 use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
@@ -757,6 +758,17 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $view = new ViewModel();
         $view->setVariable('id', $id);
 
+        return $view;
+    }
+
+    public function ecmtGuidanceAction()
+    {
+        $query = EcmtCountriesList::create(['isEcmtState' => 1]);
+        $response = $this->handleQuery($query);
+        $ecmtCountries = $response->getResult();
+
+        $view = new ViewModel();
+        $view->setVariable('ecmtCountries', $ecmtCountries);
         return $view;
     }
 
