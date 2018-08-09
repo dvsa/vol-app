@@ -96,7 +96,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             ->get('Table')
             ->prepareTable($this->applicationsTableName, $applicationData['results']);
 
-            $issuedTable = $this->getServiceLocator()
+        $issuedTable = $this->getServiceLocator()
             ->get('Table')
             ->prepareTable($this->issuedTableName, $issuedData['results']);
 
