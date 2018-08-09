@@ -88,14 +88,18 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $response = $this->handleQuery($query);
         $applicationData = $response->getResult();
 
+        // Reverse the table so that it is in descending order of 'id'
+        $results = array_reverse($applicationData['results']);
+
         $query = EcmtPermits::create(array());
         $response = $this->handleQuery($query);
         $issuedData = $response->getResult();
 
         $applicationsTable = $this->getServiceLocator()
             ->get('Table')
-            ->prepareTable($this->applicationsTableName, $applicationData['results']);
-        $issuedTable = $this->getServiceLocator()
+            ->prepareTable($this->applicationsTableName, $results);
+
+            $issuedTable = $this->getServiceLocator()
             ->get('Table')
             ->prepareTable($this->issuedTableName, $issuedData['results']);
 
