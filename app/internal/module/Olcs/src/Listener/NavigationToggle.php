@@ -83,23 +83,25 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
             ->findBy('id', 'admin-dashboard/admin-data-retention')
             ->setVisible($disableDataRetentionRecords);
 
-        $permitsMenuEnabled = $this->querySender->featuresEnabled([FeatureToggle::ADMIN_PERMITS]);
+        //prevent this from running if the user is not logged in
+        if (isset($userData['id'])) {
+            $permitsMenuEnabled = $this->querySender->featuresEnabled([FeatureToggle::ADMIN_PERMITS]);
 
-        // Permits Navigation
-        $this->navigation->findBy('id', 'admin-dashboard/admin-permits')->setVisible($permitsMenuEnabled);
+            // Permits Navigation
+            $this->navigation->findBy('id', 'admin-dashboard/admin-permits')->setVisible($permitsMenuEnabled);
 
-        // IRHP Permits Navigation
-        // Get request params and perform queries only if in licence context
-        $irhpPermitsTabEnabled = false;
-        $params = $e->getRouteMatch()->getParams();
+            // IRHP Permits Navigation
+            // Get request params and perform queries only if in licence context
+            $irhpPermitsTabEnabled = false;
+            $params = $e->getRouteMatch()->getParams();
 
-        if (array_key_exists('licence', $params)) {
-            $irhpPermitsTabEnabled = $this->goodsLicenceAndFeatureToggle($params);
+            if (array_key_exists('licence', $params)) {
+                $irhpPermitsTabEnabled = $this->goodsLicenceAndFeatureToggle($params);
+            }
+
+            $this->navigation->findBy('id', 'licence_irhp_permits')->setVisible($irhpPermitsTabEnabled);
         }
-
-        $this->navigation->findBy('id', 'licence_irhp_permits')->setVisible($irhpPermitsTabEnabled);
     }
-
 
     /**
      * Query contextual licence to check if goods to render IRHP Permits tab and check Feature Toggle for Internal Permits

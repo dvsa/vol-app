@@ -58,6 +58,42 @@ class NavigationToggleTest extends TestCase
     }
 
     /**
+     * Tests feature toggles aren't checked when not logged in
+     */
+    public function testOnDispatchNotLoggedIn()
+    {
+        $userData = [
+            'disableDataRetentionRecords' => false
+        ];
+
+        $userObject = new User();
+        $userObject->setUserData($userData);
+
+        $this->mockIdentityProvider
+            ->shouldReceive('getIdentity')
+            ->andReturn($userObject);
+
+        $page = new Uri();
+
+        $this->mockQuerySender->shouldNotReceive('featuresEnabled');
+
+        $this->mockNavigation
+            ->shouldReceive('findBy')
+            ->with('id', 'admin-dashboard/admin-data-retention')
+            ->andReturn($page);
+
+        /** @var \Zend\Mvc\MvcEvent | m\MockInterface $mockEvent */
+        $mockEvent = m::mock(\Zend\Mvc\MvcEvent::class);
+
+        $this->sut->createService($this->mockSm);
+        $this->sut->onDispatch($mockEvent);
+        $mockEvent->shouldNotReceive('getRouteMatch->getParams');
+
+        $isVisible = $this->mockNavigation->findBy('id', 'admin-dashboard/admin-data-retention')->getVisible();
+        $this->assertTrue($isVisible);
+    }
+
+    /**
      * @dataProvider dpDispatch
      */
     public function testOnDispatch($adminPermitsEnabled, $internalPermitEnabled, $params)
@@ -69,7 +105,10 @@ class NavigationToggleTest extends TestCase
 
         $permitsKey = 'admin-dashboard/admin-permits';
         $irhpPermitsKey = 'licence_irhp_permits';
-        $userData = [ 'disableDataRetentionRecords' => false ];
+        $userData = [
+            'id' => 'usr123',
+            'disableDataRetentionRecords' => false
+        ];
 
         $userObject = new User();
         $userObject->setUserData($userData);
