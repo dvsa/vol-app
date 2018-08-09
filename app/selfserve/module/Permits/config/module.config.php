@@ -21,6 +21,17 @@ return array(
         ),
           'may_terminate' => true,
           'child_routes' => [
+              'ecmt-guidance' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/ecmt-guidance[/]',
+                      'defaults' => [
+                          'controller'    => 'Permits\Controller\Permits',
+                          'action'        => 'ecmtGuidance',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
               'application-overview' => [
                   'type'    => 'segment',
                   'options' => [
