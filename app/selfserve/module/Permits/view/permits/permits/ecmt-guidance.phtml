@@ -18,18 +18,9 @@
 
         <div class="field">
             <p class="guidance-subtitle"><?php echo $this->translate('permits.page.ecmt.guidance.subtitle'); ?></p>
-
             <?php echo $this->translate('markup-ecmt-guidance-introduction'); ?>
-            <ul>
-                    <?php
-                        //echo var_dump($ecmtCountries);
-                        foreach ($ecmtCountries as $country) {
-                            echo "<li>" . $country . "</li>";
-
-                        }
-                    ?>
-            </ul>
+            <?php echo $this->translate('markup-ecmt-guidance-ecmt-countries'); ?>
+            <?php echo $this->translate('markup-ecmt-guidance-body'); ?>
         </div>
-
     </div>
 </div>
