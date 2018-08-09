@@ -766,9 +766,14 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $query = EcmtCountriesList::create(['isEcmtState' => 1]);
         $response = $this->handleQuery($query);
         $ecmtCountries = $response->getResult();
+        $ecmtCountryDescriptions = [];
+
+        foreach ($ecmtCountries['results'] as $countryRecord) {
+            $ecmtCountryDescriptions[] = $countryRecord['countryDesc'];
+        }
 
         $view = new ViewModel();
-        $view->setVariable('ecmtCountries', $ecmtCountries);
+        $view->setVariable('ecmtCountries', $ecmtCountryDescriptions);
         return $view;
     }
 
