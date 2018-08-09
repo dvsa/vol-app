@@ -800,8 +800,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
      * that is used by the restricted countries view.
      *
      *
-     * @param array $list
-     * @param string $displayFieldName
+     * @param array  $list
+     * @param string $displayMembers
      * @param string $separator
      * @return array
      */
@@ -974,7 +974,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     private function getForm(string $formName): Form
     {
         //Create form from annotations
-        return $this->getServiceLocator()
+        return $this->getServiceLocatorc()
             ->get('Helper\Form')
             ->createForm($formName, true, false);
     }
@@ -982,7 +982,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     /**
      * Returns an application entry by id
      *
-     * @param $id application id
+     * @param number $id application id
      * @return array
      */
     private function getApplication($id)
