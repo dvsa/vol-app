@@ -26,7 +26,10 @@ $this->headTitle($title);
                     </i>
                     <strong>
                         <b>
-                            <?php echo sprintf($this->translate('permits.page.fee.message'), '£' . $this->escapeHtml($issuingFee)); ?>
+                            <?php
+                                echo sprintf($this->translate('permits.page.fee.message'),
+                                    $this->currencyFormatter($issuingFee));
+                            ?>
                         </b>
                     </strong>
                 </div>
@@ -57,7 +60,7 @@ $this->headTitle($title);
                         <td>
                             <?php echo $this->escapeHtml($noOfPermits) . ' x '; ?>
                             <?php
-                                echo '£' . $this->escapeHtml($fee);
+                                echo $this->currencyFormatter($fee);
                                 echo $this->translate('permits.page.fee.per-permit');
                             ?>
                         </td>
@@ -66,7 +69,7 @@ $this->headTitle($title);
                         <td><h4><?php echo $this->translate('permits.page.fee.permit.fee.total'); ?></h4></td>
                         <td>
                             <?php
-                                echo "£" . $this->escapeHtml($totalFee);
+                                echo $this->currencyFormatter($totalFee);
                                 echo $this->translate('permits.page.fee.permit.fee.non-refundable');
                             ?>
                         </td>

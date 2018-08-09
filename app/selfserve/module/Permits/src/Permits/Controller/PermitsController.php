@@ -696,7 +696,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $view->setVariable('id', $id);
         $view->setVariable('noOfPermits', $application['permitsRequired']);
         $view->setVariable('fee', $ecmtApplicationFee);
-        $view->setVariable('totalFee', number_format($ecmtApplicationFeeTotal, 2));
+        $view->setVariable('totalFee', $ecmtApplicationFeeTotal);
         $view->setVariable('issuingFee', $ecmtIssuingFee);
 
         return $view;
