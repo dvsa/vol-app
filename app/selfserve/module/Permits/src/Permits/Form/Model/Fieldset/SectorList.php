@@ -12,27 +12,23 @@ use Zend\Form\Annotation as Form;
  */
 class SectorList
 {
+
     /**
      * @Form\Name("SectorList")
      * @Form\Required(false)
+     * @Form\Options({
+     *     "label": "markup-ecmt-sector-list-label",
+     *     "fieldset-attributes": {"id": "sector-list"},
+     *     "fieldset-data-group": "sector-list",
+     *     "label_attributes": {"class": "form-control form-control--radio"},
+     *     "service_name": "Common\Service\Data\Sector",
+     *     "category": ""
+     * })
      * @Form\Attributes({
      *   "class" : "input--trips",
-     *    "id" : "EcmtLicence",
+     *    "id" : "EcmtSectorList",
      * })
-     * @Form\Options({
-     *      "label": "markup-ecmt-sector-list-label",
-     *      "fieldset-attributes": {"id": "sector-list"},
-     *      "fieldset-data-group": "sector-list",
-     *      "label_attributes": {"class": "form-control form-control--radio"},
-     *      "value_options": {
-     *          "Food products, beverages and tobacco, products of agriculture,
-     *                      hunting and forests, fish and other fishing products",
-     *          "Unrefined coal and lignite, crude petroleum and natural gas",
-     *          "Textiles and textile products, leather and leather products",
-     *      },
-     * })
-     * @Form\Type("Radio")
+     * @Form\Type("DynamicRadio")
      */
-    public $SectorList = null;
-
+    public $busRegStatus;
 }
