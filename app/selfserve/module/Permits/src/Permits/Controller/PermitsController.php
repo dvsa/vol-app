@@ -598,17 +598,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         if ($application['internationalJourneys'] === null) {
             $answerData['percentageAnswer'] = 'Not completed';
         } else {
-            switch ($application['internationalJourneys']) {
-                case 0:
-                    $answerData['percentageAnswer'] = 'less.than.60%';
-                    break;
-                case 1:
-                    $answerData['percentageAnswer'] = 'from.60%.to.90%';
-                    break;
-                case 2:
-                    $answerData['percentageAnswer'] = 'more.than.90%';
-                    break;
-            }
+            $answerData['percentageAnswer'] = $application['internationalJourneys']['description'];
         }
 
         //Sectors Question
