@@ -428,19 +428,19 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         // Read data
         $application = $this->getApplication($id);
 
-       /* if (isset($application)) {
+        if (isset($application)) {
             if (isset($application['sectors'])) {
                 $form->get('Fields')->get('SpecialistHaulage')->setValue('1');
 
                 //Format results from DB before setting values on form
-                $selectedValue = $application['sectors']['id'] . $this::DEFAULT_SEPARATOR . $application['sectors']['description'];
+                $selectedValue = $application['sectors']['id'];
 
                 $form->get('Fields')
                     ->get('SectorList')
                     ->get('SectorList')
                     ->setValue($selectedValue);
             }
-        }*/
+        }
 
         $data = $this->params()->fromPost();
 
