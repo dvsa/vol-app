@@ -9,8 +9,6 @@ use Common\Form\Form;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateDeclaration;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCheckAnswers;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtLicence;
-use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries;
-use Dvsa\Olcs\Transfer\Query\Permits\SectorsList;
 
 use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
 use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
