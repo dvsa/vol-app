@@ -102,7 +102,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $issuedTable = $this->getServiceLocator()
             ->get('Table')
             ->prepareTable($this->issuedTableName, $issuedData['results']);
-        
+
         $view->setVariable('isEligible', $eligibleForPermits);
         $view->setVariable('issuedNo', $issuedData['count']);
         $view->setVariable('applicationsNo', $applicationData['count']);
@@ -420,7 +420,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     public function sectorAction()
     {
         $id = $this->params()->fromRoute('id', -1);
-        $application = $this->getApplication($id);
 
         //Create form from annotations
         $form = $this->getForm('SpecialistHaulageForm');

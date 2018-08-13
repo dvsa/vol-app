@@ -32,7 +32,7 @@ class RestrictedCountriesFormTest extends AbstractFormValidationTestCase
 
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
-        $this->assertFormElementType($element, "Zend\Form\Element\MultiCheckBox");
+        $this->assertFormElementType($element, "Zend\Form\Element\DynamicMultiCheckbox");
     }
 
     public function testSubmit()
@@ -41,5 +41,4 @@ class RestrictedCountriesFormTest extends AbstractFormValidationTestCase
         $this->assertFormElementActionButton($element);
         $this->assertFormElementType($element, "Zend\Form\Element\Submit");
     }
-
 }

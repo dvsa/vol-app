@@ -27,5 +27,4 @@ class InternationalJourney
      * @Form\Type("DynamicRadio")
      */
     public $ecmtLicence = null;
-
 }
