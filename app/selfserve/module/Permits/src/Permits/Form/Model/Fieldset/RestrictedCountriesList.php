@@ -22,7 +22,7 @@ class RestrictedCountriesList
      *          "class" : "form-control form-control--checkbox"
      *     },
      *     "service_name": "Common\Service\Data\Country",
-     *     "category": "",
+     *     "category": "ecmtConstraint",
      *     "disable_inarray_validator" : true,
      * })
      * @Form\Attributes({
@@ -34,5 +34,4 @@ class RestrictedCountriesList
      * @Form\Type("DynamicMultiCheckbox")
      */
     public $restrictedCountriesList;
-
 }
