@@ -21,6 +21,7 @@ class PermitsRequired
      *     "hint": "",
      *     "short-label": "",
      *     "allow_empty" : true,
+     *     "error-message": "error.messages.permits.required"
      * })
      * @Form\Validator({"name":"Zend\Validator\Digits"})
      * @Form\Validator({"name":"Zend\Validator\GreaterThan", "options": {"min": 0}})
