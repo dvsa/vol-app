@@ -301,7 +301,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         // Read data
         $application = $this->getApplication($id);
-
+//var_dump($application['countrys']); die;
        /* if (count($application['countrys']) > 0) {
             $form->get('Fields')
                 ->get('restrictedCountries')
@@ -331,8 +331,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                     && isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList']))
                     || ($data['Fields']['restrictedCountries'] == 0)
                 ) {
-                    $countriesList = $data['Fields']['restrictedCountriesList']['restrictedCountriesList'];
-                    $countryIds = $this->extractIDFromSessionData($countriesList);
+                    $countryIds = $data['Fields']['restrictedCountriesList']['restrictedCountriesList'];
                     $command = UpdateEcmtCountries::create(['ecmtApplicationId' => $id, 'countryIds' => $countryIds]);
 
                     $response = $this->handleCommand($command);
