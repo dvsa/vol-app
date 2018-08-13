@@ -152,8 +152,6 @@ class Navigation implements ListenerAggregateInterface
         if ($this->identity->isAnonymous()) {
             return false;
         }
-
-        return true;
         //check whether user is allowed to access permits
         $query = EligibleForPermits::create([]);
         $response = $this->querySender->send($query)->getResult();
