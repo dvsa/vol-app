@@ -1,7 +1,8 @@
 <?php
-use Permits\View\Helper\EcmtSection;
-$title = 'Permits Home - ';
-$this->headTitle($title);
+    use Permits\View\Helper\EcmtSection;
+
+    $title = 'Permits Home - ';
+    $this->headTitle($title);
 ?>
 
 <div class="page-header__wrapper">
@@ -12,15 +13,20 @@ $this->headTitle($title);
     <div class="dashboard two-thirds">
         <div class="tabs">
             <?php
-            /* @var \Zend\View\Helper\Navigation\Menu $menu */
-            $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'dashboard-licences-applications'))->menu();
+                /* @var \Zend\View\Helper\Navigation\Menu $menu */
+                $menu = $this->navigation($this->navigation('navigation')
+                                            ->getContainer()
+                                            ->findBy('id', 'dashboard-licences-applications'))
+                                            ->menu();
 
-            echo $menu->setMinDepth(0)->setMaxDepth(0)
-                ->setPartial('partials/tabs-nav');
+                echo $menu->setMinDepth(0)
+                    ->setMaxDepth(0)
+                    ->setPartial('partials/tabs-nav');
             ?>
         </div>
 
-        <?php echo $this->flashMessengerAll(); ?>
+        <?php echo $this->escapeHtml($this->flashMessengerAll()); ?>
+
         <?php if($isEligible): ?>
             <div class="actions-container new-application--wrapper">
                 <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_LICENCE, [], [], true); ?>" class="action--primary large">
@@ -29,14 +35,12 @@ $this->headTitle($title);
             </div>
 
             <?php if($issuedNo != 0 || $applicationsNo != 0) : ?>
-
-
                 <?php if($issuedNo === 0): ?>
                     <div class="table__header">
                     <h3><?php echo $this->translate('dashboard-table-permits-title'); ?></h3>
                     <p class="guidance"><?php echo $this->translate('permits.application.overwiew.no-permits'); ?></p>
                 <?php else : ?>
-                    <?php echo $issuedTable; ?>
+                    <?php echo $this->escapeHtml($issuedTable); ?>
                 <?php endif; ?>
                 </div>
                 <div class="table__header">
