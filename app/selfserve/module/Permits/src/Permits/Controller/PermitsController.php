@@ -17,6 +17,7 @@ use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermits;
+use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
 
 use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
@@ -87,7 +88,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $response = $this->handleQuery($query);
         $applicationData = $response->getResult();
 
-        $query = EcmtPermits::create([]);
+        $query = EcmtPermits::create(array());
         $response = $this->handleQuery($query);
         $issuedData = $response->getResult();
 
@@ -113,17 +114,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         $form = $this->getEcmtLicenceForm();
         $data = $this->params()->fromPost();
-        $application = $this->getApplication($id);
-
-        // Read Data
-        if ($application['licence']) {
-            // Large amount of formatting due to the way the fields are represented.
-            $currentLicence = $application['licence']['id'] . '|' .
-                $application['licence']['licNo'] . " " .
-                $application['licence']['trafficArea']['name'] . " ";
-
-            $form->get('Fields')->get('EcmtLicence')->setValue($currentLicence);
-        }
 
         if (isset($data['Fields']['Cancel'])) {
             $this->redirect()
@@ -377,9 +367,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         //Create form from annotations
         $form = $this->getForm('InternationalJourneyForm');
 
-        // read data
-        $form->get('Fields')->get('InternationalJourney')->setValue($application['internationalJourneys']);
-
         $data = $this->params()->fromPost();
 
         if (is_array($data) && array_key_exists('Submit', $data)) {
@@ -520,10 +507,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $this->handleCommand($command);
 
                 $this->handleRedirect($data, EcmtSection::ROUTE_ECMT_TRIPS);
-            } else {
-                $form->get('Fields')
-                    ->get('permitsRequired')
-                    ->setMessages(['error.messages.permits.required']);
             }
         }
 
@@ -778,6 +761,29 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $view;
     }
 
+    public function ecmtGuidanceAction()
+    {
+        $query = EcmtCountriesList::create(['isEcmtState' => 1]);
+        $response = $this->handleQuery($query);
+        $ecmtCountries = $response->getResult();
+        $ecmtCountryDescriptions = [];
+
+        foreach ($ecmtCountries['results'] as $countryRecord) {
+            $ecmtCountryDescriptions[] = $countryRecord['countryDesc'];
+        }
+
+        // Get Fee Data
+        $ecmtPermitFees = $this->getEcmtPermitFees();
+        $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
+        $ecmtIssuingFee = $ecmtPermitFees['fee'][$this::ECMT_ISSUING_FEE_PRODUCT_REFENCE]['fixedValue'];
+
+        $view = new ViewModel();
+        $view->setVariable('ecmtCountries', $ecmtCountryDescriptions);
+        $view->setVariable('applicationFee', $ecmtApplicationFee);
+        $view->setVariable('issueFee', $ecmtIssuingFee);
+        return $view;
+    }
+
     /**
      * Used to retrieve the licences for the ecmt-licence page.
      *
@@ -800,8 +806,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
      * that is used by the restricted countries view.
      *
      *
-     * @param array $list
-     * @param string $displayFieldName
+     * @param array  $list
+     * @param string $displayMembers
      * @param string $separator
      * @return array
      */
@@ -982,7 +988,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     /**
      * Returns an application entry by id
      *
-     * @param $id application id
+     * @param number $id application id
      * @return array
      */
     private function getApplication($id)

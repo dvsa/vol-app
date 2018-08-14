@@ -1,6 +1,10 @@
 <?php
     use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
 
+    $title = $this->translate('permits.application.overwiew.main-title');
+    $this->headTitle($title);
+?>
+
     $title = $this->translate('permits.page.ecmt.guidance.header.title');
     $this->headTitle($title);
 ?>
@@ -20,7 +24,8 @@
             <p class="guidance-subtitle"><?php echo $this->translate('permits.page.ecmt.guidance.subtitle'); ?></p>
             <?php echo $this->translate('markup-ecmt-guidance-introduction'); ?>
             <?php echo $this->translate('markup-ecmt-guidance-ecmt-countries'); ?>
-            <?php echo $this->translate('markup-ecmt-guidance-body'); ?>
+            <?php echo sprintf($this->translate('markup-ecmt-guidance-body'), '£' . $applicationFee,'£' . $applicationFee, '£' . $issueFee); ?>
+<!--            --><?php //echo sprintf($this->translate('markup-ecmt-guidance-body'), $this->currencyFormatter($applicationFee), $this->currencyFormatter($applicationFee), $this->currencyFormatter($issueFee)); ?>
         </div>
     </div>
 </div>
