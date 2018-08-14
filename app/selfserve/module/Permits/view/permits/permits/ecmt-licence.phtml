@@ -16,14 +16,16 @@
 
         <div class="field">
             <div class="govuk-hint">
-                <p class="exclamation"><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.licence.info')); ?></p>
+                <p class=" guidance-blue extra-space large"><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.licence.info')); ?></p>
             </div>
 
             <fieldset id="ecmt-licence" class="inline" data-group="ecmt-licence">
                 <?php
                     echo $this->formErrors($form);
                     echo $this->form($form);
+                    echo $this->translate('markup-ecmt-licence-restricted-info');
                 ?>
+
             </fieldset>
         </div>
 
