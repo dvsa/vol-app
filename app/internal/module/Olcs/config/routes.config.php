@@ -752,6 +752,43 @@ $routes = [
                     ],
                 ],
             ],
+            'permits' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'permits[/]',
+                    'defaults' => [
+                        'controller' => 'LicencePermitsController',
+                        'action' => 'permits',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+
+
+                    'create' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'create[/]',
+                            'defaults' => [
+                                'type' => 'licence',
+                                'controller' => 'DocumentUploadController',
+                                'action' => 'upload'
+                            ]
+                        ],
+                    ],
+                    'delete' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'delete/:doc[/]',
+                            'defaults' => [
+                                'type' => 'licence',
+                                'controller' => 'LicenceDocsController',
+                                'action' => 'delete-document'
+                            ]
+                        ],
+                    ],
+                ],
+            ],
             'processing' => [
                 'type' => 'segment',
                 'options' => [
@@ -1576,7 +1613,7 @@ $routes = [
             ],
         ],
         'may_terminate' => true,
-    ],
+     ],
     'create_transport_manager' => [
         'type' => 'segment',
         'options' => [
