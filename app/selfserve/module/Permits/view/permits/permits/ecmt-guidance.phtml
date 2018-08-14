@@ -24,8 +24,7 @@
             <p class="guidance-subtitle"><?php echo $this->translate('permits.page.ecmt.guidance.subtitle'); ?></p>
             <?php echo $this->translate('markup-ecmt-guidance-introduction'); ?>
             <?php echo $this->translate('markup-ecmt-guidance-ecmt-countries'); ?>
-            <?php echo sprintf($this->translate('markup-ecmt-guidance-body'), '£' . $applicationFee,'£' . $applicationFee, '£' . $issueFee); ?>
-<!--            --><?php //echo sprintf($this->translate('markup-ecmt-guidance-body'), $this->currencyFormatter($applicationFee), $this->currencyFormatter($applicationFee), $this->currencyFormatter($issueFee)); ?>
+            <?php echo sprintf($this->translate('markup-ecmt-guidance-body'), $this->currencyFormatter($applicationFee), $this->currencyFormatter($applicationFee), $this->currencyFormatter($issueFee)); ?>
         </div>
     </div>
 </div>
