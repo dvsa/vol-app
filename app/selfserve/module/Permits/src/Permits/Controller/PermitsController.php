@@ -846,41 +846,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $organisationData['relevantLicences'];
     }
 
-    /**
-     * Modified version of the method in FormHelperServices
-     * that is used by the restricted countries view.
-     *
-     *
-     * @param array  $list
-     * @param string $displayMembers
-     * @param string $separator
-     * @return array
-     */
-    private function transformListIntoValueOptions($list = array(), $displayMembers = array('name'), $separator = '|')
-    {
-        // TODO: MOVE THIS INTO FormHelperService AND REPLACE OLD VERSION
-        if (!is_string($displayMembers[0]) || !is_array($list)) {
-            //throw exception?
-            return array();
-        }
-
-        $value_options = array();
-
-        foreach ($list as $item) {
-            //Concatenate display values (incase there is more than one field to be used)
-            $displayValue = "";
-
-            foreach ($displayMembers as $displayKey) {
-                $displayValue = $displayValue . $item[$displayKey] . " ";
-            }
-
-            //add display name to the key so that it can be used after submission
-            $value_options[$item['id'] . $separator . $displayValue] = $displayValue;
-        }
-
-        return $value_options;
-    }
-
     private function getEcmtLicenceForm()
     {
         // TODO: MOVE THIS TO A SERVICE/HELPER
@@ -893,23 +858,22 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
          * Get licence to display in question
          */
         $licenceList = $this->getRelevantLicences();
-        $value_options = $this->transformListIntoValueOptions($licenceList, array('licNo', 'trafficArea'));
 
-        /*
-         * Add brackets
-         */
-        foreach ($value_options as $key => $value) {
-            $spacePosition = strpos($value, ' '); //find position of first space
-            $newValue = substr_replace($value, ' (', $spacePosition, 1); //add bracket after first space
+        $value_options = array();
 
-            $newValue = trim($newValue) . ')';//add bracket to end
+        foreach ($licenceList as $item) {
+            $tmp = array();
+            $tmp['value'] = $item['id'] . '|' . $item['licNo'] . ' ' . $item['trafficArea'];
+            $tmp['label'] = $item['licNo'] . ' (' . $item['trafficArea'] . ')';
 
-            $value_options[$key] = $newValue;//set current value option to reformatted value
+            if($item['licenceType']['id'] == 'ltyp_r') {
+                $tmp['attributes'] = [
+                    'class' => 'restricted-licence ' . $form->get('Fields')->get('EcmtLicence')->getAttributes()['class']
+                ];
+            }
+            $value_options[] = $tmp;
         }
 
-        /*
-         * Set 'licences to display' as the value_options of the field
-         */
         $options = array();
         $options['value_options'] = $value_options;
         $form->get('Fields')
