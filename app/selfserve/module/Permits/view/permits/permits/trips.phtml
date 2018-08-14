@@ -1,22 +1,22 @@
 <?php
     $title = $this->translate('permits.page.number-of-trips.title');
-    $this->headTitle($title);
+    $this->escapeHtml($this->headTitle($title));
 ?>
 
 <div class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
-            <p><?php echo $this->permitsBackLink(); ?></p>
+            <p><?php echo $this->escapeHtml($this->permitsBackLink()); ?></p>
             <div class="page-header__wrapper">
                 <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($ref); ?></h3>
                 <h1 class="js-title">
-                    <?php echo $this->translate('permits.page.number-of-trips.question'); ?>
+                    <?php echo $this->escapeHtml($this->translate('permits.page.number-of-trips.question')); ?>
                 </h1>
                 <p>
                     <?php
                         // Only show if the Licence Traffic Area is 'Northern Ireland'
                         if ($this->trafficAreaId === 'N') {
-                            echo $this->translate('permits.page.number-of-trips.northern-ireland');
+                            echo $this->escapeHtml($this->translate('permits.page.number-of-trips.northern-ireland'));
                         }
                     ?>
                 </p>
