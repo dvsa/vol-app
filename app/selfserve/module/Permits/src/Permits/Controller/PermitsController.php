@@ -865,11 +865,11 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             $tmp['value'] = $item['id'];
             $tmp['label'] = $item['licNo'] . ' (' . $item['trafficArea'] . ')';
 
-            if($licenceId == $item['id']) {
+            if($licenceId === $item['id']) {
                 $tmp['selected'] = true;
             }
 
-            if($item['licenceType']['id'] == 'ltyp_r') {
+            if($item['licenceType']['id'] === 'ltyp_r') {
                 $tmp['attributes'] = [
                     'class' => 'restricted-licence ' . $form->get('Fields')->get('EcmtLicence')->getAttributes()['class']
                 ];
