@@ -7,7 +7,7 @@
 <div class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
-            <p><a href="<?php echo $this->escapeHtml($this->url('permits')) ?>" class="back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
+            <p><a href="<?php echo $this->url('permits') ?>" class="back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
             <div class="page-header__wrapper">
                 <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($application['applicationRef']); ?></h3>
                 <h1 class="js-title">
@@ -25,14 +25,14 @@
                        $sections = $this->ecmtSection($application);
 
                        foreach ($sections as $section) {
-                           echo $this->escapeHtml($this->render($section));
+                           echo $this->render($section);
                        }
                    ?>
                </ol>
             </div>
             <div class="actions-container new-application--wrapper">
                 <?php if ($application['canBeSubmitted']) { ?>
-                    <p><a href="<?php echo $this->escapeHtml($this->url('permits/ecmt-fee', [], [], true)); ?>" class="action--primary large"><?php echo $this->escapeHtml($this->translate('permits.button.accept-and-continue')); ?></a></p>
+                    <p><a href="<?php echo $this->url('permits/ecmt-fee', [], [], true); ?>" class="action--primary large"><?php echo $this->escapeHtml($this->translate('permits.button.accept-and-continue')); ?></a></p>
                 <?php } ?>
             </div>
         </div>
@@ -57,7 +57,7 @@
                 ?>
                     <ul class="info-box__links">
                         <li>
-                            <a href="<?php echo $this->escapeHtml($this->url('permits/' . EcmtSection::ROUTE_ECMT_CANCEL_APPLICATION, [], [], true)); ?>">Cancel application</a>
+                            <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_CANCEL_APPLICATION, [], [], true); ?>">Cancel application</a>
                         </li>
                     </ul>
                 <?php

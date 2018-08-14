@@ -8,7 +8,7 @@
 <div class="row ecmt">
     <div class="three-quarters">
         <div class="page-header">
-            <p><?php echo $this->escapeHtml($this->permitsBackLink()); ?></p>
+            <p><?php echo $this->permitsBackLink(); ?></p>
             <div class="page-header__wrapper">
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($title); ?>
@@ -77,12 +77,12 @@
             </div>
             <div class="actions-container new-application--wrapper">
                 <p>
-                    <a href="<?php echo $this->escapeHtml($this->url('permits/' . EcmtSection::ROUTE_ECMT_DECLARATION, [], [], true)); ?>" class="action--primary large">
+                    <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_DECLARATION, [], [], true); ?>" class="action--primary large">
                         <?php echo $this->escapeHtml($this->translate('permits.button.accept-and-continue')); ?>
                     </a>
                 </p>
                 <p>
-                    <a href="<?php echo $this->escapeHtml($this->url('permits')); ?>">
+                    <a href="<?php echo $this->url('permits'); ?>">
                         <?php echo $this->escapeHtml($this->translate('permits.button.save-return-to-permits')); ?>
                     </a>
                 </p>

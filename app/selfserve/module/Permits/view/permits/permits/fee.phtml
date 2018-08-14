@@ -8,7 +8,7 @@
 <div class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
-            <p><?php echo $this->escapeHtml($this->permitsBackLink()); ?></p>
+            <p><?php echo $this->permitsBackLink(); ?></p>
             <div class="page-header__wrapper">
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($title); ?>
@@ -54,7 +54,7 @@
                         <td>
                             <?php
                                 $date = date_create($applicationDate);
-                                echo date_format($this->escapeHtml($date), "d F Y");
+                                echo $this->escapeHtml(date_format($date, "d F Y"));
                             ?>
                         </td>
                     </tr>
@@ -109,7 +109,7 @@
                     echo $this->formErrors($form);
                     echo $this->form($form);
                 ?>
-                <p><?php echo $this->escapeHtml($this->permitsBackLink('permits.button.save-return-to-overview')); ?></p>
+                <p><?php echo $this->permitsBackLink('permits.button.save-return-to-overview'); ?></p>
             </div>
         </div>
     </div>

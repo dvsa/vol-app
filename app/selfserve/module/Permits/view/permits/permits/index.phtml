@@ -19,17 +19,17 @@
                                             ->findBy('id', 'dashboard-licences-applications'))
                                             ->menu();
 
-                echo $this->escapeHtml($menu->setMinDepth(0)
+                echo $menu->setMinDepth(0)
                     ->setMaxDepth(0)
-                    ->setPartial('partials/tabs-nav'));
+                    ->setPartial('partials/tabs-nav');
             ?>
         </div>
 
-        <?php echo $this->escapeHtml($this->flashMessengerAll()); ?>
+        <?php echo $this->flashMessengerAll(); ?>
 
         <?php if($isEligible): ?>
             <div class="actions-container new-application--wrapper">
-                <a href="<?php echo $this->escapeHtml($this->url('permits/' . EcmtSection::ROUTE_ECMT_LICENCE, [], [], true)); ?>" class="action--primary large">
+                <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_LICENCE, [], [], true); ?>" class="action--primary large">
                     <?php echo $this->escapeHtml($this->translate('permits.application.overwiew.button')); ?>
                 </a>
             </div>
@@ -40,12 +40,12 @@
                     <h3><?php echo $this->escapeHtml($this->translate('dashboard-table-permits-title')); ?></h3>
                     <p class="guidance"><?php echo $this->escapeHtml($this->translate('permits.application.overwiew.no-permits')); ?></p>
                 <?php else : ?>
-                    <?php echo $this->escapeHtml($issuedTable); ?>
+                    <?php echo $issuedTable; ?>
                 <?php endif; ?>
                 </div>
                 <div class="table__header">
                     <?php if($applicationsNo > 0): ?>
-                        <?php echo $this->escapeHtml($applicationsTable); ?>
+                        <?php echo $applicationsTable; ?>
                     <?php else : ?>
                         <h3><?php echo $this->escapeHtml($this->translate('dashboard-table-permit-application-title')); ?></h3>
                         <p class="guidance"><?php echo $this->escapeHtml($this->translate('permits.application.overwiew.no-permits')); ?></p>
@@ -53,11 +53,11 @@
                     <?php endif; ?>
                 </div>
             <?php else: ?>
-                <?php echo $this->escapeHtml($this->translate('markup-ecmt-permit-guidance-first-time')); ?>
+                <?php echo $this->translate('markup-ecmt-permit-guidance-first-time'); ?>
             <?php endif; ?>
         <?php else : ?>
             <p class="guidance"><?php echo $this->escapeHtml($this->translate('permits.application.ineligible')); ?></p>
         <?php endif; ?>
     </div>
-    <?php echo $this->escapeHtml($this->translate('markup-ecmt-permit-dashboard-right-column')); ?>
+    <?php echo $this->translate('markup-ecmt-permit-dashboard-right-column'); ?>
 </div>

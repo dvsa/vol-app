@@ -5,7 +5,7 @@
 
 <div class="row ecmt">
     <div class="two-thirds">
-        <?php echo sprintf($this->escapeHtml($this->translate('markup-ecmt-application-submitted')), $this->escapeHtml($title), $this->escapeHtml($refNumber)); ?>
+        <?php echo sprintf($this->translate('markup-ecmt-application-submitted'), $this->escapeHtml($title), $this->escapeHtml($refNumber)); ?>
         <div class="actions-container new-application--wrapper">
             <p>
                 <a href="<?php echo $this->escapeHtml($this->url('permits')); ?>" class="action--primary large">

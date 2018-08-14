@@ -6,7 +6,7 @@
 <div class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
-            <p><?php echo $this->escapeHtml($this->permitsBackLink()); ?></p>
+            <p><?php echo $this->permitsBackLink(); ?></p>
             <div class="page-header__wrapper">
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($this->translate('permits.page.declaration.question')); ?>
@@ -16,7 +16,7 @@
 
         <div class="field">
             <div>
-                <?php echo $this->escapeHtml($this->translate('markup-ecmt-declaration')); ?>
+                <?php echo $this->translate('markup-ecmt-declaration'); ?>
             </div>
 
             <fieldset id="declaration" class="inline" data-group="declaration">
@@ -26,7 +26,7 @@
                 ?>
 
                 <fieldset class="actions-container new-application--wrapper">
-                    <p><?php echo $this->escapeHtml($this->permitsBackLink('permits.button.save-return-to-overview')); ?></p>
+                    <p><?php echo $this->permitsBackLink('permits.button.save-return-to-overview'); ?></p>
                 </fieldset>
             </fieldset>
         </div>

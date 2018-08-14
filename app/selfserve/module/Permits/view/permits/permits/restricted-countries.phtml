@@ -6,7 +6,7 @@
 <div class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
-            <p><?php echo $this->escapeHtml($this->permitsBackLink()); ?></p>
+            <p><?php echo $this->permitsBackLink(); ?></p>
             <div class="page-header__wrapper">
                 <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($ref); ?></h3>
                 <h1 class="js-title">
@@ -17,7 +17,7 @@
 
         <div class="field">
             <div class="govuk-hint">
-                <p><?php echo $this->escapeHtml($this->translate('markup-ecmt-restricted-countries-info')); ?></p>
+                <p><?php echo $this->translate('markup-ecmt-restricted-countries-info'); ?></p>
             </div>
 
             <fieldset id="restricted-countries" class="inline" data-group="restricted-countries">
