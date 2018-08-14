@@ -1,22 +1,22 @@
 <?php
     $title = $this->translate('permits.page.ecmt.licence.title');
-    $this->headTitle($title);
+    $this->escapeHtml($this->headTitle($title));
 ?>
 
 <div class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
-            <p><a href="<?php echo $this->url('permits') ?>" class="back-link"><?php echo $this->translate('common.link.back.label'); ?></a></p>
+            <p><a href="<?php echo $this->escapeHtml($this->url('permits')); ?>" class="back-link"><?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
             <div class="page-header__wrapper">
                 <h1 class="js-title">
-                    <?php echo $this->translate('permits.page.ecmt.licence.question'); ?>
+                    <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.licence.question')); ?>
                 </h1>
             </div>
         </div>
 
         <div class="field">
             <div class="govuk-hint">
-                <p class="exclamation"><?php echo $this->translate('permits.page.ecmt.licence.info'); ?></p>
+                <p class="exclamation"><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.licence.info')); ?></p>
             </div>
 
             <fieldset id="ecmt-licence" class="inline" data-group="ecmt-licence">
@@ -29,6 +29,3 @@
 
     </div>
 </div>
-
-
-
