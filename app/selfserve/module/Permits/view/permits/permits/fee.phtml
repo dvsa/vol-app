@@ -1,14 +1,14 @@
 <?php
-use Permits\View\Helper\EcmtSection;
+    use Permits\View\Helper\EcmtSection;
 
-$title = $this->translate('permits.page.fee.title');
-$this->headTitle($title);
+    $title = $this->translate('permits.page.fee.title');
+    $this->escapeHtml($this->headTitle($title));
 ?>
 
 <div class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
-            <p><?php echo $this->permitsBackLink(); ?></p>
+            <p><?php echo $this->escapeHtml($this->permitsBackLink()); ?></p>
             <div class="page-header__wrapper">
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($title); ?>
@@ -18,7 +18,7 @@ $this->headTitle($title);
 
         <div class="field">
             <div class="govuk-hint">
-                <p class="fee-subtitle"><?php echo $this->translate('permits.page.fee.subtitle'); ?></p>
+                <p class="fee-subtitle"><?php echo $this->escapeHtml($this->translate('permits.page.fee.subtitle')); ?></p>
                 <br />
                 <div class="notice">
                     <i class="icon icon-important">
@@ -27,7 +27,7 @@ $this->headTitle($title);
                     <strong>
                         <b>
                             <?php
-                                echo sprintf($this->translate('permits.page.fee.message'),
+                                echo sprintf($this->escapeHtml($this->translate('permits.page.fee.message')),
                                     $this->currencyFormatter($issuingFee));
                             ?>
                         </b>
@@ -40,7 +40,7 @@ $this->headTitle($title);
                     <tr>
                         <td>
                             <h4>
-                                <?php echo $this->translate('permits.page.fee.application.reference'); ?>
+                                <?php echo $this->escapeHtml($this->translate('permits.page.fee.application.reference')); ?>
                             </h4>
                         </td>
                         <td><?php echo $this->escapeHtml($permitsNo); ?></td>
@@ -48,7 +48,7 @@ $this->headTitle($title);
                     <tr>
                         <td>
                             <h4>
-                                <?php echo $this->translate('permits.page.fee.application.date'); ?>
+                                <?php echo $this->escapeHtml($this->translate('permits.page.fee.application.date')); ?>
                             </h4>
                         </td>
                         <td>
@@ -61,7 +61,7 @@ $this->headTitle($title);
                     <tr>
                         <td>
                             <h4>
-                                <?php echo $this->translate('permits.page.fee.permit.type'); ?>
+                                <?php echo $this->escapeHtml($this->translate('permits.page.fee.permit.type')); ?>
                             </h4>
                         </td>
                         <td>ECMT</td>
@@ -69,7 +69,7 @@ $this->headTitle($title);
                     <tr>
                         <td>
                             <h4>
-                                <?php echo $this->translate('permits.page.fee.permit.validity'); ?>
+                                <?php echo $this->escapeHtml($this->translate('permits.page.fee.permit.validity')); ?>
                             </h4>
                         </td>
                         <td>January 2019 to December 2019</td>
@@ -77,27 +77,27 @@ $this->headTitle($title);
                     <tr>
                         <td>
                             <h4>
-                                <?php echo $this->translate('permits.page.fee.number.permits'); ?>
+                                <?php echo $this->escapeHtml($this->translate('permits.page.fee.number.permits')); ?>
                             </h4>
                         </td>
                         <td>
                             <?php echo $this->escapeHtml($noOfPermits) . ' x '; ?>
                             <?php
                                 echo $this->currencyFormatter($fee);
-                                echo $this->translate('permits.page.fee.per-permit');
+                                echo $this->escapeHtml($this->translate('permits.page.fee.per-permit'));
                             ?>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <h4>
-                                <?php echo $this->translate('permits.page.fee.permit.fee.total'); ?>
+                                <?php echo $this->escapeHtml($this->translate('permits.page.fee.permit.fee.total')); ?>
                             </h4>
                         </td>
                         <td>
                             <?php
                                 echo $this->currencyFormatter($totalFee);
-                                echo $this->translate('permits.page.fee.permit.fee.non-refundable');
+                                echo $this->escapeHtml($this->translate('permits.page.fee.permit.fee.non-refundable'));
                             ?>
                         </td>
                     </tr>
@@ -109,7 +109,7 @@ $this->headTitle($title);
                     echo $this->formErrors($form);
                     echo $this->form($form);
                 ?>
-                <p><?php echo $this->permitsBackLink('permits.button.save-return-to-overview'); ?></p>
+                <p><?php echo $this->escapeHtml($this->permitsBackLink('permits.button.save-return-to-overview')); ?></p>
             </div>
         </div>
     </div>
