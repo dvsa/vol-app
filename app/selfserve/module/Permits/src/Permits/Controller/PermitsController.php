@@ -873,8 +873,24 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $tmp['attributes'] = [
                     'class' => 'restricted-licence ' . $form->get('Fields')->get('EcmtLicence')->getAttributes()['class']
                 ];
+                $tmp['label_attributes'] = [
+                    'class' => 'restricted-licence-label ' . $form->get('Fields')->get('EcmtLicence')->getLabelAttributes()['class']
+                ];
+                $value_options[] = $tmp;
+
+                $tmp = array();
+                $tmp['value'] = '';
+                $tmp['label'] = 'permits.form.ecmt-licence.restricted-licence.hint';
+                $tmp['label_attributes'] = [
+                    'class' => 'restricted-licence-hint ' . $form->get('Fields')->get('EcmtLicence')->getLabelAttributes()['class']
+                ];
+                $tmp['attributes'] = [
+                    'class' => 'visually-hidden'
+                ];
+                $value_options[] = $tmp;
+            } else {
+                $value_options[] = $tmp;
             }
-            $value_options[] = $tmp;
         }
 
         $options = array();
