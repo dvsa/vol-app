@@ -2,13 +2,13 @@
     use Permits\View\Helper\EcmtSection;
 
     $title = $this->translate('permits.page.title.summary');
-    $this->headTitle($title);
+    $this->escapeHtml($this->headTitle($title));
 ?>
 
 <div class="row ecmt">
     <div class="three-quarters">
         <div class="page-header">
-            <p><?php echo $this->permitsBackLink(); ?></p>
+            <p><?php echo $this->escapeHtml($this->permitsBackLink()); ?></p>
             <div class="page-header__wrapper">
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($title); ?>
@@ -47,7 +47,7 @@
                                 ?>
                             </td>
                             <td>
-                                <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_COUNTRIES); ?>
+                                <?php echo $this->escapeHtml($this->changeAnswerLink(EcmtSection::ROUTE_ECMT_COUNTRIES)); ?>
                             </td>
                         </tr>
                         <tr>
@@ -58,7 +58,7 @@
                                 <?php echo $this->escapeHtml($sessionData['meetsEuro6']); ?>
                             </td>
                             <td>
-                                <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_EURO6); ?>
+                                <?php echo $this->escapeHtml($this->changeAnswerLink(EcmtSection::ROUTE_ECMT_EURO6)); ?>
                             </td>
                         </tr>
                         <tr>
@@ -69,7 +69,7 @@
                                 <?php echo $this->escapeHtml($sessionData['cabotage']); ?>
                             </td>
                             <td>
-                                <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_CABOTAGE); ?>
+                                <?php echo $this->escapeHtml($this->changeAnswerLink(EcmtSection::ROUTE_ECMT_CABOTAGE)); ?>
                             </td>
                         </tr>
                     </tbody>
@@ -77,13 +77,13 @@
             </div>
             <div class="actions-container new-application--wrapper">
                 <p>
-                    <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_DECLARATION, [], [], true); ?>" class="action--primary large">
-                        <?php echo $this->translate('permits.button.accept-and-continue'); ?>
+                    <a href="<?php echo $this->escapeHtml($this->url('permits/' . EcmtSection::ROUTE_ECMT_DECLARATION, [], [], true)); ?>" class="action--primary large">
+                        <?php echo $this->escapeHtml($this->translate('permits.button.accept-and-continue')); ?>
                     </a>
                 </p>
                 <p>
-                    <a href="<?php echo $this->url('permits') ?>">
-                        <?php echo $this->translate('permits.button.save-return-to-permits'); ?>
+                    <a href="<?php echo $this->escapeHtml($this->url('permits')); ?>">
+                        <?php echo $this->escapeHtml($this->translate('permits.button.save-return-to-permits')); ?>
                     </a>
                 </p>
             </div>
