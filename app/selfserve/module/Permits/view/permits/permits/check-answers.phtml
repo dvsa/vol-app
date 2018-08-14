@@ -123,8 +123,7 @@
                     echo $this->formErrors($form);
                     echo $this->form($form);
                 ?>
-                <!--<p><a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_DECLARATION, [], [], true); ?>" class="action--primary large"><?php echo $this->translate('permits.button.confirm-and-continue'); ?></a></p>-->
-                <p><a href="<?php echo $this->url('permits') ?>"> <?php echo $this->translate('permits.button.save-return-to-overview'); ?> </a></p>
+                <p><a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, [], [], true); ?>"> <?php echo $this->translate('permits.button.save-return-to-overview'); ?> </a></p>
             </div>
         </div>
     </div>
