@@ -1,15 +1,15 @@
 <?php
     $title = $this->translate('permits.application.submitted.title');
-    $this->headTitle($title);
+    $this->escapeHtml($this->headTitle($title));
 ?>
 
 <div class="row ecmt">
     <div class="two-thirds">
-        <?php echo sprintf($this->translate('markup-ecmt-application-submitted'), $this->escapeHtml($title), $refNumber); ?>
+        <?php echo sprintf($this->escapeHtml($this->translate('markup-ecmt-application-submitted')), $this->escapeHtml($title), $this->escapeHtml($refNumber)); ?>
         <div class="actions-container new-application--wrapper">
             <p>
-                <a href="<?php echo $this->url('permits') ?>" class="action--primary large">
-                    <?php echo $this->translate('Finish'); ?>
+                <a href="<?php echo $this->escapeHtml($this->url('permits')); ?>" class="action--primary large">
+                    <?php echo $this->escapeHtml($this->translate('Finish')); ?>
                 </a>
             </p>
         </div>
