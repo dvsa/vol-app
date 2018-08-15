@@ -30,5 +30,5 @@ class SectorList
      * })
      * @Form\Type("DynamicRadio")
      */
-    public $busRegStatus;
+    public $sectorList;
 }

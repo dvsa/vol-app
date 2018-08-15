@@ -12,22 +12,27 @@ use Zend\Form\Annotation as Form;
  */
 class RestrictedCountriesList
 {
+
     /**
      * @Form\Name("restrictedCountriesList")
      * @Form\Required(false)
-     * @Form\Attributes({
-     *      "allowWrap":true,
-     *      "data-container-class": "form-control__container",
-     *     })
      * @Form\Options({
      *     "label": "markup-ecmt-restricted-countries-list-label",
      *     "label_attributes":{
      *          "class" : "form-control form-control--checkbox"
      *     },
+     *     "service_name": "Common\Service\Data\Country",
+     *     "category": "",
      *     "disable_inarray_validator" : true,
      * })
-     * @Form\Type("MultiCheckBox")
+     * @Form\Attributes({
+     *     "class" : "input--trips",
+     *     "id" : "RestrictedCountriesList",
+     *     "allowWrap":true,
+     *     "data-container-class": "form-control__container",
+     * })
+     * @Form\Type("DynamicMultiCheckbox")
      */
-    public $restrictedCountriesList = null;
+    public $restrictedCountriesList;
 
 }
