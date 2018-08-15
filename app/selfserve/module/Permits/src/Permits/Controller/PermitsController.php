@@ -882,9 +882,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         /*
          * Get licence to display in question
          */
-
         $licenceList = $this->getRelevantLicences();
-        
         $value_options = array();
         foreach ($licenceList as $item) {
             $tmp = array();
