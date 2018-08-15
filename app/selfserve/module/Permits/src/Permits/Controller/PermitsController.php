@@ -281,28 +281,10 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         //Create form from annotations
         $form = $this->getForm('RestrictedCountriesForm');
 
-        /*
-        * Get Countries List from Database
-        */
-
-        /*
-        * Make the restricted countries list the value_options of the form
-        */
-       /* $restrictedCountryList = $this->getServiceLocator()
-            ->get('Helper\Form')
-            ->transformListIntoValueOptions($restrictedCountryList, 'description');
-
-        $options = array();
-        $options['value_options'] = $restrictedCountryList;
-        $form->get('Fields')
-            ->get('restrictedCountriesList')
-            ->get('restrictedCountriesList')
-            ->setOptions($options);*/
-
         // Read data
         $application = $this->getApplication($id);
-//var_dump($application['countrys']); die;
-       /* if (count($application['countrys']) > 0) {
+
+        if (count($application['countrys']) > 0) {
             $form->get('Fields')
                 ->get('restrictedCountries')
                 ->setValue('1');
@@ -311,14 +293,14 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             $selectedValues = array();
 
             foreach ($application['countrys'] as $country) {
-                $selectedValues[] = $country['id'] . $this::DEFAULT_SEPARATOR . $country['countryDesc'];
+                $selectedValues[] = $country['id'];
             }
 
             $form->get('Fields')
                 ->get('restrictedCountriesList')
                 ->get('restrictedCountriesList')
                 ->setValue($selectedValues);
-        }*/
+        }
 
         $data = $this->params()->fromPost();
 
