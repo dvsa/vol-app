@@ -129,7 +129,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $application = $this->getApplication($id);
 
         // Read Data
-        if ($application['licence']) {
+        if (isset($application['licence'])) {
             // Large amount of formatting due to the way the fields are represented.
             $currentLicence = $application['licence']['id'] . '|' .
                 $application['licence']['licNo'] . " " .
