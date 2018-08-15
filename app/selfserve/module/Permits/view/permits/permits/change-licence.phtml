@@ -1,0 +1,34 @@
+<?php
+    $title = $this->translate('permits.application.change-licence');
+    $this->headTitle($this->translate('permits.application.change-licence.title'));
+?>
+
+<div class="row ecmt">
+    <div class="two-thirds">
+        <div class="page-header">
+        <p><?php echo $this->permitsBackLink(); ?></p>
+            <div class="page-header__wrapper">
+                <h3 class="page-header__subtitle"> <?php echo $this->escapeHtml($ref); ?></h3>
+                <h1 class="js-title">
+                    <?php echo $this->escapeHtml($title); ?>
+                </h1>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="govuk-hint">
+                <?php echo $this->translate('markup-ecmt-licence-change'); ?>
+            </div>
+
+            <fieldset id="changeLicence" class="inline" data-group="changeLicence">
+                <?php
+                    echo $this->formErrors($form);
+                    echo $this->form($form);
+                ?>
+                <fieldset class="actions-container new-application--wrapper">
+                    <p><?php echo $this->permitsBackLink('permits.button.cancel-return-to-overview'); ?></p>
+                </fieldset>
+            </fieldset>
+        </div>
+    </div>
+</div>

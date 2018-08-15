@@ -132,9 +132,14 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                     $response = $this->handleCommand($command);
                     $insert = $response->getResult();
                 } else {
-                    $command = UpdateEcmtLicence::create(['id' => $existingApplicationId, 'licence' => $licenceId]);
-                    $response = $this->handleCommand($command);
-                    $insert = $response->getResult();
+                    // Redirect to confirmation page before clearning answers. Possibly better in Session than as GET Param?
+                    $this->redirect()
+                        ->toRoute('permits/' . EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE,
+                            ['id' => $existingApplicationId],
+                            [ 'query' => [
+                                'licenceId' => $licenceId
+                                ]
+                            ]);
                 }
 
                 $this->redirect()
@@ -757,6 +762,45 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         $view = new ViewModel();
         $view->setVariable('id', $id);
+
+        return $view;
+    }
+
+
+
+    public function changeLicenceAction()
+    {
+        $id = $this->params()->fromRoute('id', -1);
+
+        $request = $this->getRequest();
+        $data = (array)$request->getPost();
+        $application = $this->getApplication($id);
+
+        //Create form from annotations
+        $form = $this->getForm('ChangeLicenceForm');
+        if (is_array($data) && array_key_exists('Submit', $data)) {
+            //Validate
+            $form->setData($data);
+
+            if ($form->isValid()) {
+                $command = UpdateEcmtLicence::create(['id' => $id, 'licence' => $data['Fields']['licenceId']]);
+                $response = $this->handleCommand($command);
+                $insert = $response->getResult();
+                $this->redirect()
+                    ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
+            }
+        }
+
+
+        // todo: Possibly move this into a session var instead of GET Query Param
+        $formData['Fields']['licenceId'] = $this->getRequest()->getQuery('licenceId');
+        $form->setData($formData);
+
+        $view = new ViewModel();
+
+        $view->setVariable('form', $form);
+        $view->setVariable('id', $id);
+        $view->setVariable('ref', $application['applicationRef']);
 
         return $view;
     }

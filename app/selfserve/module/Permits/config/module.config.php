@@ -60,6 +60,20 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
+              'ecmt-change-licence' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/:id/ecmt-change-licence[/]',
+                      'defaults' => [
+                          'controller'    => 'Permits\Controller\Permits',
+                          'action'        => 'changeLicence',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => true,
+              ],
               'ecmt-euro6' => [
                   'type'    => 'segment',
                   'options' => [
