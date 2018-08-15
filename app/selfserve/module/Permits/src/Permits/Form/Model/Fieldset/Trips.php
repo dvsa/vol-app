@@ -19,6 +19,7 @@ class Trips
      * @Form\Options({
      *     "label": "permits.form.trips.label",
      *     "short-label": "",
+     *     "hint" : "permits.form.trips.hint",
      * })
      * @Form\Validator({"name":"Zend\Validator\Digits"})
      * @Form\Validator({"name":"Zend\Validator\Between", "options": {"min": 1, "max": 999999}})
