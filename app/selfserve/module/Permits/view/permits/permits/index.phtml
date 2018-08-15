@@ -28,11 +28,15 @@
         <?php echo $this->flashMessengerAll(); ?>
 
         <?php if($isEligible): ?>
+            <?php echo $this->translate($introMarkUp['value']); ?>
+
+            <?php if($introMarkUp['switch']): ?>
             <div class="actions-container new-application--wrapper">
                 <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_LICENCE, [], [], true); ?>" class="action--primary large">
                     <?php echo $this->escapeHtml($this->translate('permits.application.overwiew.button')); ?>
                 </a>
             </div>
+            <?php endif; ?>
 
             <?php if($issuedNo != 0 || $applicationsNo != 0) : ?>
                 <?php if($issuedNo === 0): ?>
