@@ -45,8 +45,8 @@
             <div class="info-box info-box--grey">
                 <h3 class="info-box__heading">Progress</h3>
                 <p><b><?php echo $this->escapeHtml($application['sectionCompletion']['totalCompleted']); ?> of <?php echo $this->escapeHtml($application['sectionCompletion']['totalSections']); ?> complete</b></p>
-                <p><b>Application fee (non-refundable): </b> <?php echo "£" . $this->escapeHtml($applicationFee); ?></p>
-                <p><b>Issuing fee (if application is successful): </b> <?php echo "£" . $this->escapeHtml($issuingFee); ?></p>
+                <p><b>Fee per permit </b> <?php echo "£" . $this->escapeHtml($applicationFee); ?> <br />(non-refundable)</p>
+                <p><b>Total application fee: </b> <?php echo "£" . $this->escapeHtml($issuingFee); ?></p>
                 <p>You can't submit until you've completed all of the sections</p>
             </div>
 
