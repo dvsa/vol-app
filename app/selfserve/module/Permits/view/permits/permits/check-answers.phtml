@@ -73,6 +73,17 @@
                         </tr>
                         <tr>
                             <td>
+                                <h4><?php echo $this->translate($sessionData['permitsQuestion']); ?></h4>
+                            </td>
+                            <td>
+                                <?php echo $sessionData['permitsAnswer'] ?>
+                            </td>
+                            <td>
+                                <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_NO_OF_PERMITS); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
                                 <h4><?php echo $this->escapeHtml($this->translate($sessionData['tripsQuestion'])); ?></h4>
                             </td>
                             <td>
