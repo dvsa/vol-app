@@ -916,6 +916,16 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $value_options[] = $tmp;
             }
         }
+        $value_options = array();
+        if (count($value_options) == 0) {
+            $form->get('Fields')
+                ->get('SubmitButton')
+                ->setAttribute('class', 'visually-hidden');
+
+            $form->get('Fields')
+                ->get('EcmtLicence')
+                ->setOptions(['label' => '']);
+        }
 
         $options = array();
         $options['value_options'] = $value_options;
