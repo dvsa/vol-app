@@ -20,7 +20,7 @@ class LicencePermitsController extends LicenceController implements LeftViewProv
     /**
      * Table to use
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\PermitActionTrait
      * @return string
      */
     protected function getPermitTableName()
@@ -31,7 +31,7 @@ class LicencePermitsController extends LicenceController implements LeftViewProv
     /**
      * Route (prefix) for permit action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\PermitActionTrait
      * @return string
      */
     protected function getPermitRoute()
@@ -42,7 +42,7 @@ class LicencePermitsController extends LicenceController implements LeftViewProv
     /**
      * Route params for permit action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see \Olcs\Controller\Traits\PermitActionTrait
      * @return array
      */
     protected function getPermitRouteParams()
@@ -58,9 +58,7 @@ class LicencePermitsController extends LicenceController implements LeftViewProv
     protected function getConfiguredPermitForm()
     {
         $filters = $this->mapPermitFilters(['licence' => $this->getFromRoute('licence')]);
-
-        return $this->getPermitForm($filters)
-            ->remove('showDocs');
+        return $this->getPermitForm($filters);
     }
 
     /**

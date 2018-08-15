@@ -8,7 +8,7 @@ use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Zend\Form\Element\Select;
 
 /**
- * Document Search Trait
+ * Permit Search Trait
  */
 trait PermitSearchTrait
 {
@@ -33,7 +33,6 @@ trait PermitSearchTrait
             'order' => 'DESC',
             'page' => 1,
             'limit' => 10,
-            'showDocs' => FilterOptions::SHOW_ALL,
         ];
 
         $filters = array_merge(

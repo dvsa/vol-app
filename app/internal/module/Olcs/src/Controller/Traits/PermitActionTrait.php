@@ -45,8 +45,6 @@ trait PermitActionTrait
      */
     protected abstract function getConfiguredPermitForm();
 
-    protected $permitIdentifierName = 'doc';
-
     protected $formHelper;
 
     /**
