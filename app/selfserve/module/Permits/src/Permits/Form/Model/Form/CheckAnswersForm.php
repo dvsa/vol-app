@@ -13,7 +13,7 @@ class CheckAnswersForm
 {
     /**
      * @Form\Name("Submit")
-     * @Form\ComposedObject("Permits\Form\Model\Fieldset\SubmitAccept")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\SubmitConfirm")
      */
-    public $submitAcceptButton = null;
+    public $submitConfirmButton = null;
 }
