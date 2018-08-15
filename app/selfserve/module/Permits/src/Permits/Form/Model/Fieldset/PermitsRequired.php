@@ -10,7 +10,7 @@ use Zend\Form\Annotation as Form;
 class PermitsRequired
 {
     /**
-     * @Form\Name("PermitsRequired")
+     * @Form\Name("permitsRequired")
      * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--permits-required",
