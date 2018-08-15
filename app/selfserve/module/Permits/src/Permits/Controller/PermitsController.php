@@ -74,6 +74,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     {
         $eligibleForPermits = $this->isEligibleForPermits();
 
+        $view = new ViewModel();
         if (!$eligibleForPermits) {
             if (!$this->referredFromGovUkPermits($this->getEvent())) {
                 return $this->notFoundAction();
@@ -107,7 +108,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             $introMarkUp['switch'] = false;
         }
 
-        $view = new ViewModel();
+
         $view->setVariable('isEligible', $eligibleForPermits);
         $view->setVariable('introMarkUp', $introMarkUp);
         $view->setVariable('issuedNo', $issuedData['count']);
@@ -883,6 +884,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
          * Get licence to display in question
          */
         $licenceList = $this->getRelevantLicences();
+
         $value_options = array();
         foreach ($licenceList as $item) {
             $tmp = array();
@@ -916,7 +918,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $value_options[] = $tmp;
             }
         }
-        $value_options = array();
+
         if (count($value_options) == 0) {
             $form->get('Fields')
                 ->get('SubmitButton')
