@@ -14,7 +14,6 @@ class PermitsHome
 {
 
     /**
-     * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
      *     "label": "Status",
      *     "value_options": {
@@ -31,7 +30,7 @@ class PermitsHome
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary"})
      * @Form\Options({
-     *     "label": "documents-home.submit.filter"
+     *     "label": "permits-home.submit.filter"
      * })
      * @Form\Type("\Zend\Form\Element\Button")
      */

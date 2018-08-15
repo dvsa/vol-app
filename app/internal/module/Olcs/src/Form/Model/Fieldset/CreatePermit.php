@@ -176,12 +176,12 @@ class CreatePermit extends Base
      * @Form\Required(false)
      * @Form\Attributes({
      *   "class" : "input--international-journey",
-     *    "id" : "international_journeys",
+     *    "id" : "internationalJourneyList",
      * })
      * @Form\Options({
      *      "label": "Percentage of International Journeys",
-     *      "fieldset-attributes": {"id": "international-journey"},
-     *      "fieldset-data-group": "percentage-type",
+     *      "fieldset-attributes": {"id": "international_journeys"},
+     *      "fieldset-data-group": "international_journeys",
      *      "label_attributes": {"class": "form-control form-control--radio"},
      *      "value_options": {
      *          "less.than.60%",

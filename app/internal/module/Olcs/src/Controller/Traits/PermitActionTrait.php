@@ -130,10 +130,7 @@ trait PermitActionTrait
         $request = $this->getRequest();
         $licence = $this->getLicence((int)$this->params()->fromRoute('licence', null));
 
-        // POST happens when loading/submitting the modal form
-
         if ($request->isPost()) {
-            // Get the action from the POST body and put post data into array
             $action = strtolower($this->params()->fromPost('action'));
             $data = (array)$request->getPost();
             $application = [];
@@ -147,15 +144,16 @@ trait PermitActionTrait
                         $applicationData = $this->mapApplicationData($form->getData()['fields'], $licence['id']);
                         $command = CreateEcmtPermitApplication::create($applicationData);
                         $response = $this->handleCommand($command);
-                        $cmdResult = $response->getResult();
                     } else {
                         $applicationData = $this->mapApplicationData($form->getData()['fields'], $licence['id']);
                         $command = UpdateEcmtPermitApplication::create($applicationData);
                         $response = $this->handleCommand($command);
-                        $cmdResult = $response->getResult();
                     }
 
+                    // todo: refactor this when form is not being rendered into modal popup
                     $view = new ViewModel();
+                    $saveMessage = in_array($response->getStatusCode(), [200, 201]) ? "Save Successful" : "Error saving form";
+                    $view->setVariable('saveMessage', $saveMessage);
                     $view->setVariable('licenceId', $licence['id']);
                     $view->setTemplate('pages/permits/done');
                     return $this->renderView($view);
@@ -174,7 +172,6 @@ trait PermitActionTrait
 
             // Handles loading a pre-populated form for an existing application.
             if ($action === 'edit') {
-                // Check user has selected a table-row to edit.
                 if (is_array($data['id']) && count($data['id'] == 1)) {
                     $application = $this->getApplication($data['id'][0]);
                 }
@@ -191,7 +188,7 @@ trait PermitActionTrait
             ->prepareTable('issued-permits', []);
 
         $view->setVariable('issuedPermitTable', $issuedTable);
-        $this->loadScripts(['table-actions']);
+        $this->loadScripts(['permits', 'table-actions']);
         $view->setTemplate('pages/permits/two-tables');
 
         return $this->renderView($view);
