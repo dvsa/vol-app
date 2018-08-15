@@ -10,6 +10,7 @@ use Zend\Form\Annotation as Form;
 class PermitsRequired
 {
     /**
+     * @Form\Name("PermitsRequired")
      * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--permits-required",
@@ -18,7 +19,7 @@ class PermitsRequired
      * })
      * @Form\Options({
      *     "label": "permits.form.permits.required.label",
-     *     "hint": "",
+     *     "hint": "permits.form.permits-required.hint",
      *     "short-label": "",
      * })
      * @Form\Validator({"name":"Zend\Validator\Digits"})

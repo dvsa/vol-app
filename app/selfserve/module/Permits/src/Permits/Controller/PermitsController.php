@@ -489,6 +489,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
 
+        $ecmtPermitFees = $this->getEcmtPermitFees();
+        $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
+
         //Create form from annotations
         $form = $this->getForm('PermitsRequiredForm');
 
@@ -516,9 +519,12 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         }
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $totalVehicles = $translationHelper->translateReplace('permits.page.permits.required.info', [$application['licence']['totAuthVehicles']]);
+        $totalVehicles = $translationHelper->translateReplace('permits.form.permits-required.hint', [$application['licence']['totAuthVehicles']]);
+        $form->get('Fields')->get('PermitsRequired')->setOption('hint', $totalVehicles);
 
-        return array('form' => $form, 'totalVehicles' => $totalVehicles, 'id' => $id, 'ref' => $application['applicationRef']);
+        $guidanceMessage = $translationHelper->translateReplace('permits.form.permits-required.fee.guidance', ['£' . $ecmtApplicationFee]);
+
+        return array('form' => $form, 'guidanceMessage' => $guidanceMessage, 'id' => $id, 'ref' => $application['applicationRef']);
     }
 
     // TODO: remove all session elements and replace with queries
