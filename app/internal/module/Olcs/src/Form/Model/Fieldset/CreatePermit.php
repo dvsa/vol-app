@@ -71,7 +71,7 @@ class CreatePermit extends Base
      * @Form\Required(false)
      * @Form\Attributes({
      *   "class" : "input--permits-required",
-     *   "id" : "noOfPermits",
+     *   "id" : "permitsRequired",
      *   "step" : "any"
      * })
      * @Form\Options({
@@ -92,7 +92,7 @@ class CreatePermit extends Base
      * })
      * @Form\Type("Zend\Form\Element\Number")
      */
-    public $noOfPermits = null;
+    public $permitsRequired = null;
 
 
     /**

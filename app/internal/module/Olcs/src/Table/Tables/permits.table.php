@@ -26,7 +26,7 @@ return [
         ],
         [
             'title' => 'dashboard-table-permit-application-num',
-            'name' => 'noOfPermits',
+            'name' => 'permitsRequired',
         ],
         [
             'title' => 'dashboard-table-permit-application-type',
