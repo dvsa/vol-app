@@ -73,8 +73,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     public function indexAction()
     {
         $eligibleForPermits = $this->isEligibleForPermits();
-        $view = new ViewModel();
-        $view->setVariable('isEligible', $eligibleForPermits);
 
         if (!$eligibleForPermits) {
             if (!$this->referredFromGovUkPermits($this->getEvent())) {
@@ -83,22 +81,23 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             return $view;
         }
 
-        $query = EcmtPermitApplication::create(array());
+        $licenceList = $this->getRelevantLicences();
+
+        $query = EcmtPermitApplication::create(['order' => 'DESC']);
         $response = $this->handleQuery($query);
         $applicationData = $response->getResult();
 
-        $query = EcmtPermits::create(array());
+        $query = EcmtPermits::create([]);
         $response = $this->handleQuery($query);
         $issuedData = $response->getResult();
 
         $applicationsTable = $this->getServiceLocator()
             ->get('Table')
             ->prepareTable($this->applicationsTableName, $applicationData['results']);
+
         $issuedTable = $this->getServiceLocator()
             ->get('Table')
             ->prepareTable($this->issuedTableName, $issuedData['results']);
-
-        $licenceList = $this->getRelevantLicences();
 
         $introMarkUp['value'] = 'markup-ecmt-permit-guidance-first-time';
         $introMarkUp['switch'] = true;
@@ -108,6 +107,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             $introMarkUp['switch'] = false;
         }
 
+        $view = new ViewModel();
+        $view->setVariable('isEligible', $eligibleForPermits);
         $view->setVariable('introMarkUp', $introMarkUp);
         $view->setVariable('issuedNo', $issuedData['count']);
         $view->setVariable('applicationsNo', $applicationData['count']);
@@ -124,6 +125,17 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         $form = $this->getEcmtLicenceForm($application['licence']['id']);
         $data = $this->params()->fromPost();
+        $application = $this->getApplication($id);
+
+        // Read Data
+        if ($application['licence']) {
+            // Large amount of formatting due to the way the fields are represented.
+            $currentLicence = $application['licence']['id'] . '|' .
+                $application['licence']['licNo'] . " " .
+                $application['licence']['trafficArea']['name'] . " ";
+
+            $form->get('Fields')->get('EcmtLicence')->setValue($currentLicence);
+        }
 
         if (isset($data['Fields']['Cancel'])) {
             $this->redirect()
@@ -381,6 +393,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         //Create form from annotations
         $form = $this->getForm('InternationalJourneyForm');
+
+        // read data
+        $form->get('Fields')->get('InternationalJourney')->setValue($application['internationalJourneys']);
 
         $data = $this->params()->fromPost();
 
@@ -867,7 +882,16 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         /*
          * Get licence to display in question
          */
+
         $licenceList = $this->getRelevantLicences();
+
+        $query = EcmtPermitApplication::create(['order' => 'DESC']);
+        $response = $this->handleQuery($query);
+        $applicationData = $response->getResult();
+
+        //var_dump($applicationData);die;
+
+
 
         $value_options = array();
         foreach ($licenceList as $item) {
