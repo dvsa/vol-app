@@ -163,12 +163,12 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         // Get Fee Data
         $ecmtFees = $this->getEcmtPermitFees();
         $applicationFee = $ecmtFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
-        $issuingFee = $ecmtFees['fee'][$this::ECMT_ISSUING_FEE_PRODUCT_REFENCE]['fixedValue'];
+        $applicationFeeTotal = $applicationFee * $application['permitsRequired'];
 
         $view = new ViewModel();
         $view->setVariable('id', $id);
         $view->setVariable('applicationFee', $applicationFee);
-        $view->setVariable('issuingFee', $issuingFee);
+        $view->setVariable('totalFee', $applicationFeeTotal);
         $view->setVariable('application', $application);
 
         return $view;
