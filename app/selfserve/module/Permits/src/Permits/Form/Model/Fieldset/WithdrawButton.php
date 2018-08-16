@@ -18,5 +18,5 @@ class WithdrawButton
      * })
      * @Form\Type("Zend\Form\Element\Submit")
      */
-    public $cancel = null;
+    public $withdraw = null;
 }
