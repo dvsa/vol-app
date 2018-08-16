@@ -17,7 +17,7 @@
         </div>
 
         <p class="extra-space large">You must complete all of the sections to apply for a new permit.<br>
-            Further <a href="/permits/ecmt-guidance">guidance on ECMT permits</a> is available on GOV.UK.</p>
+            Further <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_GUIDANCE, [], [], true); ?>">guidance on ECMT permits</a> is available on GOV.UK.</p>
 
         <div class="field">
            <div class="table_wrapper">
@@ -33,7 +33,7 @@
             </div>
             <div class="actions-container new-application--wrapper">
                 <?php if ($application['canBeSubmitted']) { ?>
-                    <p><a href="<?php echo $this->url('permits/ecmt-fee', [], [], true); ?>" class="action--primary large"><?php echo $this->escapeHtml($this->translate('permits.button.accept-and-continue')); ?></a></p>
+                    <p><a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_FEE, [], [], true); ?>" class="action--primary large"><?php echo $this->escapeHtml($this->translate('permits.button.accept-and-continue')); ?></a></p>
                 <?php } ?>
             </div>
         </div>
@@ -45,8 +45,8 @@
             <div class="info-box info-box--grey">
                 <h3 class="info-box__heading">Progress</h3>
                 <p><b><?php echo $this->escapeHtml($application['sectionCompletion']['totalCompleted']); ?> of <?php echo $this->escapeHtml($application['sectionCompletion']['totalSections']); ?> complete</b></p>
-                <p><b>Fee per permit </b> <?php echo "£" . $this->escapeHtml($applicationFee); ?> <br />(non-refundable)</p>
-                <p><b>Total application fee: </b> <?php echo "£" . $this->escapeHtml($totalFee); ?></p>
+                <p><b>Fee per permit </b> <?php echo $this->currencyFormatter($applicationFee); ?> <br />(non-refundable)</p>
+                <p><b>Total application fee: </b> <?php echo $this->currencyFormatter($totalFee); ?></p>
                 <p>You can't submit until you've completed all of the sections</p>
             </div>
 

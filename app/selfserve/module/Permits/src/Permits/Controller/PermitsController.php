@@ -627,47 +627,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     }
 
     // TODO: remove all session elements and replace with queries
-    public function summaryAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-        $application = $this->getApplication($id);
-
-        $session = new Container(self::SESSION_NAMESPACE);
-        $data = $this->params()->fromPost();
-
-        if (is_array($data) && array_key_exists('submit', $data)) {
-            //Save data to session
-            $session->wontCabotage = $data['wontCabotage'];
-        }
-        /*
-         * Collate session data for use in view
-         */
-        $sessionData = array();
-        $sessionData['countriesQuestion'] = 'Are you transporting goods to a
-                                        restricted country such as Austria,
-                                        Greece, Hungary, Italy or Russia?';
-
-        $sessionData['countries'] = array();
-
-        if ($session->restrictedCountries == 1) {
-            foreach ($session->restrictedCountriesList as $country) {
-                //add everything right of '|' to the list of countries to get rid of the sector ID
-                array_push($sessionData['countries'], substr($country, strpos($country, $this::DEFAULT_SEPARATOR) + 1));
-            }
-        } else {
-            array_push($sessionData['countries'], 'No');
-        }
-
-        $sessionData['meetsEuro6Question'] = 'Do your vehicles meet Euro 6 emissions standards?';
-        $sessionData['meetsEuro6'] = $session->meetsEuro6 == 1 ? 'Yes' : 'No';
-
-        $sessionData['cabotageQuestion'] = 'Will you be carrying out cabotage?';
-        $sessionData['cabotage'] = $session->wontCabotage == 1 ? 'Yes' : 'No';
-
-        return array('sessionData' => $sessionData, 'applicationData' => $application);
-    }
-
-    // TODO: remove all session elements and replace with queries
     public function declarationAction()
     {
         $id = $this->params()->fromRoute('id', -1);
@@ -869,7 +828,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $response = $this->handleQuery($query);
         $organisationData = $response->getResult();
 
-        return $organisationData['relevantLicences'];
+        return $organisationData['eligibleEcmtLicences'];
     }
 
     private function getEcmtLicenceForm($licenceId = null)
