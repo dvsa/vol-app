@@ -32,6 +32,10 @@ class EcmtSection extends AbstractHelper
     const ROUTE_ECMT_CANCEL_APPLICATION = 'ecmt-cancel-application';
     const ROUTE_ECMT_CANCEL_CONFIRMATION = self::ROUTE_ECMT_CANCEL_APPLICATION . '/confirmation';
 
+    //withdraw
+    const ROUTE_ECMT_WITHDRAW_APPLICATION = 'ecmt-withdraw-application';
+    const ROUTE_ECMT_WITHDRAW_CONFIRMATION = self::ROUTE_ECMT_WITHDRAW_APPLICATION . '/confirmation';
+
     /**
      * list of overview routes and the field denoting completion status
      */

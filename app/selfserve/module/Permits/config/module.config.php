@@ -269,10 +269,10 @@ return array(
                     ],
                     'may_terminate' => true,
                     'child_routes' => [
-                        'withdraw-confirmation' => [
+                        'confirmation' => [
                             'type'    => 'segment',
                             'options' => [
-                                'route'    => 'withdraw-confirmation[/]',
+                                'route'    => 'confirmation[/]',
                                 'defaults' => [
                                     'controller'    => 'Permits\Controller\Permits',
                                     'action'        => 'withdrawConfirmation',

@@ -777,8 +777,28 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
 
+        $request = $this->getRequest();
+        $data = (array)$request->getPost();
+
         //Create form from annotations
         $form = $this->getForm('WithdrawApplicationForm');
+
+        if (is_array($data) && array_key_exists('Submit', $data)) {
+            //Validate
+            $form->setData($data);
+
+            if ($form->isValid()) {
+                $queryParams = array();
+                $queryParams['id'] = $id;
+
+                $command = WithdrawEcmtPermitApplication::create($queryParams);
+
+                $response = $this->handleCommand($command);
+                $insert = $response->getResult();
+
+                $this->nextStep(EcmtSection::ROUTE_ECMT_WITHDRAW_CONFIRMATION);
+            }
+        }
 
         $view = new ViewModel();
 
