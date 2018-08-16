@@ -1,0 +1,25 @@
+<?php
+    $title = $this->translate('permits.application.withdraw-confirmation');
+    $this->translate('permits.application.withdraw-confirmation.title');
+?>
+
+<div class="row ecmt">
+    <div class="two-thirds">
+        <div class="govuk-box-highlight">
+            <h2><?php echo $this->escapeHtml($title); ?></h2>
+            <p>
+              <?php echo $this->escapeHtml($this->translate('permits.application.withdraw-confirmation.success-1')); ?>
+              <br />
+              <?php echo $this->escapeHtml($this->translate('permits.application.withdraw-confirmation.success-2')); ?>
+            </p>
+            <h3><strong><?php echo $this->escapeHtml($ref); ?></strong></h3>
+        </div>
+
+        <div class="field">
+            <div class="govuk-hint">
+                <?php echo $this->translate('markup-ecmt-withdraw-confirmation'); ?>
+            </div>
+        </div>
+        <p><a href="<?php echo $this->url('permits'); ?>" class="action--primary large"><?php echo $this->escapeHtml($this->translate('permits.button.confirm-cancel-finish')); ?></a></p>
+    </div>
+</div>

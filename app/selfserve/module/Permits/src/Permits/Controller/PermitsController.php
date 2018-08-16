@@ -798,6 +798,11 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $insert = $response->getResult();
 
                 $this->nextStep(EcmtSection::ROUTE_ECMT_WITHDRAW_CONFIRMATION);
+            } else {
+                // Required to set the error message on the checkbox itself.
+                $form->get('Fields')
+                    ->get('ConfirmWithdraw')
+                    ->setMessages(['permits.form.withdraw_application.error_message']);
             }
         }
 
@@ -806,6 +811,18 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         // $view->setVariable('form', $form);
         $view->setVariable('id', $id);
         $view->setVariable('form', $form);
+        $view->setVariable('ref', $application['applicationRef']);
+
+        return $view;
+    }
+
+    public function withdrawConfirmationAction() {
+        $id = $this->params()->fromRoute('id', -1);
+        $application = $this->getApplication($id);
+
+        $view = new ViewModel();
+
+        $view->setVariable('id', $id);
         $view->setVariable('ref', $application['applicationRef']);
 
         return $view;

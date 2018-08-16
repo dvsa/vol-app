@@ -6,6 +6,7 @@
 <div class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
+        <!-- Change to 'under consideration' page when that is complete. -->
         <p><?php echo $this->permitsBackLink(); ?></p>
             <div class="page-header__wrapper">
                 <h3 class="page-header__subtitle"> <?php echo $this->escapeHtml($ref); ?></h3>
@@ -25,9 +26,6 @@
                     echo $this->formErrors($form);
                     echo $this->form($form);
                 ?>
-                <fieldset class="actions-container new-application--wrapper">
-                    <p><?php echo $this->permitsBackLink('permits.button.cancel-return-to-overview'); ?></p>
-                </fieldset>
             </fieldset>
         </div>
     </div>
