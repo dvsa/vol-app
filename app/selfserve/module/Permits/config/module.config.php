@@ -255,6 +255,33 @@ return array(
                       ],
                   ],
               ],
+              'ecmt-withdraw-application' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => '/:id/ecmt-withdraw-application[/]',
+                        'defaults' => [
+                            'controller' => 'Permits\Controller\Permits',
+                            'action' => 'withdrawApplication'
+                        ],
+                        'constraints' => [
+                            'id' => '[0-9]+',
+                        ],
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'withdraw-confirmation' => [
+                            'type'    => 'segment',
+                            'options' => [
+                                'route'    => 'withdraw-confirmation[/]',
+                                'defaults' => [
+                                    'controller'    => 'Permits\Controller\Permits',
+                                    'action'        => 'withdrawConfirmation',
+                                ],
+                            ],
+                            'may_terminate' => false,
+                        ],
+                    ],
+                ]
           ],
       ),
     ),

@@ -773,6 +773,19 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $view;
     }
 
+    public function withdrawApplicationAction() {
+        $id = $this->params()->fromRoute('id', -1);
+        $application = $this->getApplication($id);
+
+        $view = new ViewModel();
+
+        // $view->setVariable('form', $form);
+        $view->setVariable('id', $id);
+        $view->setVariable('ref', $application['applicationRef']);
+
+        return $view;
+    }
+
     /**
      * Used to retrieve the licences for the ecmt-licence page.
      *
