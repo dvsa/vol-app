@@ -228,6 +228,20 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
+              'ecmt-under-consideration' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/:id/ecmt-under-consideration[/]',
+                      'defaults' => [
+                          'controller'    => 'Permits\Controller\Permits',
+                          'action'        => 'underConsideration',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
               'ecmt-cancel-application' => [
                   'type'    => 'segment',
                   'options' => [

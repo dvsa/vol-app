@@ -1,0 +1,17 @@
+<div class="row ecmt">
+    <div class="two-thirds">
+        <div class="page-header">
+            <p><?php echo $this->permitsBackLink(); ?></p>
+        </div>
+
+        <div class="field">
+            <fieldset id="under-consideration" class="inline" data-group="under-consideration">
+                <?php
+                    echo $this->formErrors($form);
+                    echo $this->form($form);
+                ?>
+            </fieldset>
+        </div>
+
+    </div>
+</div>

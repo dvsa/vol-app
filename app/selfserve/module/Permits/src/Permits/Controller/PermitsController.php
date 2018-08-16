@@ -822,6 +822,62 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     }
 
     /**
+     * Page displayed when from the Permit Dashboard
+     * the user clicks the Reference of an application
+     * in status 'Under Consideration'.
+     *
+     * From this page the user may or may not be given the
+     * opportunity to withdraw the application.
+     *
+     */
+    public function underConsiderationAction() {
+        $id = $this->params()->fromRoute('id', -1);
+        $application = $this->getApplication($id);
+
+        $tableData = array(
+            'results' => array(
+                0 => array(
+                    'applicationDetailsTitle' => 'Application status',
+                    'applicationDetailsAnswer' => 'test detail'
+                ),
+                1 => array(
+                    'applicationDetailsTitle' => 'Permit type',
+                    'applicationDetailsAnswer' => 'test detail'
+                ),
+                2 => array(
+                    'applicationDetailsTitle' => 'Reference number',
+                    'applicationDetailsAnswer' => 'test detail'
+                ),
+                3 => array(
+                    'applicationDetailsTitle' => 'Application date',
+                    'applicationDetailsAnswer' => 'test detail'
+                ),
+                4 => array(
+                    'applicationDetailsTitle' => 'Permits required',
+                    'applicationDetailsAnswer' => 'test detail'
+                ),
+                5 => array(
+                    'applicationDetailsTitle' => 'Application fee paid',
+                    'applicationDetailsAnswer' => 'test detail'
+                )
+            )
+        );
+
+        /** @var \Common\Service\Table\TableBuilder $table */
+        $table = $this->getServiceLocator()
+            ->get('Table')
+            ->prepareTable('under-consideration', $tableData);
+
+        $form = $this->getForm('UnderConsideration');
+
+        $this->getServiceLocator()->get('Helper\Form')
+            ->populateFormTable($form->get('table'), $table);
+
+        return array('form' => $form);
+    }
+
+
+    /**
      * Used to retrieve the licences for the ecmt-licence page.
      *
      * @return array
