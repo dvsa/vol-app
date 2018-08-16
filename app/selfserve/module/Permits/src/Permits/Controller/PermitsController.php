@@ -158,7 +158,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 } else {
                     // Redirect to confirmation page before clearning answers. Possibly better in Session than as GET Param?
                     $this->redirect()
-                        ->toRoute('permits/' . EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE,
+                        ->toRoute(
+                            'permits/' . EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE,
                             ['id' => $existingApplicationId],
                             [ 'query' => [
                                 'licenceId' => $licenceId
@@ -183,7 +184,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             'application'   => $application,
         );
     }
-
 
     public function applicationOverviewAction()
     {
@@ -774,7 +774,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $view;
     }
 
-    public function withdrawApplicationAction() {
+    public function withdrawApplicationAction()
+    {
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
 
@@ -816,7 +817,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $view;
     }
 
-    public function withdrawConfirmationAction() {
+    public function withdrawConfirmationAction()
+    {
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
 
@@ -910,10 +912,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             ->get('EcmtLicence')
             ->setOptions($options);
 
-
         return $form;
     }
-
 
     // TODO: remove this method once all session functionality is removed
     private function extractIDFromSessionData($sessionData)

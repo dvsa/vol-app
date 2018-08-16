@@ -97,7 +97,7 @@ class EcmtSection extends AbstractHelper
     public function __invoke(array $application): array
     {
         //if the application isn't submitted, build the overview as normal
-        if ($application['isNotYetSubmitted']){
+        if ($application['isNotYetSubmitted']) {
             $sections = [];
             $appId = $application['id'];
 
@@ -113,7 +113,7 @@ class EcmtSection extends AbstractHelper
                     $colour = self::COMPLETION_STATUS_COLOUR[$status];
                     array_push($sections, $this->createSection($route, $status, $colour, $appId, false));
                 }
-            } else{
+            } else {
                 foreach (self::CONFIRMATION_ROUTE_ORDER as $route => $testedField) {
                     $status = $application['confirmationSectionCompletion'][$testedField];
                     $colour = self::COMPLETION_STATUS_COLOUR[$status];
