@@ -391,6 +391,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     {
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
+        $trafficArea = $application['licence']['trafficArea'];
 
         //Create form from annotations
         $form = $this->getForm('InternationalJourneyForm');
@@ -422,7 +423,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             }
         }
 
-        return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef']);
+        return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef'], 'trafficAreaId' => $trafficArea['id']);
     }
 
     public function sectorAction()
