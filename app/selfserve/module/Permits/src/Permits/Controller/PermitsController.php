@@ -777,10 +777,14 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
 
+        //Create form from annotations
+        $form = $this->getForm('WithdrawApplicationForm');
+
         $view = new ViewModel();
 
         // $view->setVariable('form', $form);
         $view->setVariable('id', $id);
+        $view->setVariable('form', $form);
         $view->setVariable('ref', $application['applicationRef']);
 
         return $view;
