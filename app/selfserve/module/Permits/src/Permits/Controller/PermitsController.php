@@ -112,12 +112,12 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $id = $this->params()->fromRoute('id', '');
         $application = $this->getApplication($id);
 
-        $form = $this->getEcmtLicenceForm($application['licence']['id']);
+        $licences = $this->getRelevantLicences();
+        $form = $this->getEcmtLicenceForm($application['licence']['id'], $licences);
+
         $data = $this->params()->fromPost();
-        $application = $this->getApplication($id);
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
 
-        $licences = $this->getRelevantLicences();
         if(count($licences) == 1) {
             $licenceForDisplay = $licences[0]['licNo'] . ' (' . $licences[0]['trafficArea'] . ')';
             $questionTitle = $translationHelper->translateReplace('permits.page.ecmt.licence.question.one.licence', [$licenceForDisplay]);
@@ -837,18 +837,13 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $organisationData['eligibleEcmtLicences'];
     }
 
-    private function getEcmtLicenceForm($licenceId = null)
+    private function getEcmtLicenceForm($licenceId = null, $licenceList = array())
     {
         // TODO: MOVE THIS TO A SERVICE/HELPER
         /*
          * Create form from annotations
          */
         $form = $this->getForm('EcmtLicenceForm');
-
-        /*
-         * Get licence to display in question
-         */
-        $licenceList = $this->getRelevantLicences();
 
         if (count($licenceList) != 1) { //If there is only 1, we don't want to display list of licences
             $value_options = array();
