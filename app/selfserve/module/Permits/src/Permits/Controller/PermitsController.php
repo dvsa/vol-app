@@ -850,55 +850,62 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
          */
         $licenceList = $this->getRelevantLicences();
 
-        $value_options = array();
-        foreach ($licenceList as $item) {
-            $tmp = array();
-            $tmp['value'] = $item['id'];
-            $tmp['label'] = $item['licNo'] . ' (' . $item['trafficArea'] . ')';
-
-            if($licenceId === $item['id']) {
-                $tmp['selected'] = true;
-            }
-
-            if($item['licenceType']['id'] === 'ltyp_r') {
-                $tmp['attributes'] = [
-                    'class' => 'restricted-licence ' . $form->get('Fields')->get('EcmtLicence')->getAttributes()['class']
-                ];
-                $tmp['label_attributes'] = [
-                    'class' => 'restricted-licence-label ' . $form->get('Fields')->get('EcmtLicence')->getLabelAttributes()['class']
-                ];
-                $value_options[] = $tmp;
-
+        if (count($licenceList) != 1) { //If there is only 1, we don't want to display list of licences
+            $value_options = array();
+            foreach ($licenceList as $item) {
                 $tmp = array();
-                $tmp['value'] = '';
-                $tmp['label'] = 'permits.form.ecmt-licence.restricted-licence.hint';
-                $tmp['label_attributes'] = [
-                    'class' => 'restricted-licence-hint ' . $form->get('Fields')->get('EcmtLicence')->getLabelAttributes()['class']
-                ];
-                $tmp['attributes'] = [
-                    'class' => 'visually-hidden'
-                ];
-                $value_options[] = $tmp;
-            } else {
-                $value_options[] = $tmp;
+                $tmp['value'] = $item['id'];
+                $tmp['label'] = $item['licNo'] . ' (' . $item['trafficArea'] . ')';
+
+                if ($licenceId === $item['id']) {
+                    $tmp['selected'] = true;
+                }
+
+                if ($item['licenceType']['id'] === 'ltyp_r') {
+                    $tmp['attributes'] = [
+                        'class' => 'restricted-licence ' . $form->get('Fields')->get('EcmtLicence')->getAttributes()['class']
+                    ];
+                    $tmp['label_attributes'] = [
+                        'class' => 'restricted-licence-label ' . $form->get('Fields')->get('EcmtLicence')->getLabelAttributes()['class']
+                    ];
+                    $value_options[] = $tmp;
+
+                    $tmp = array();
+                    $tmp['value'] = '';
+                    $tmp['label'] = 'permits.form.ecmt-licence.restricted-licence.hint';
+                    $tmp['label_attributes'] = [
+                        'class' => 'restricted-licence-hint ' . $form->get('Fields')->get('EcmtLicence')->getLabelAttributes()['class']
+                    ];
+                    $tmp['attributes'] = [
+                        'class' => 'visually-hidden'
+                    ];
+                    $value_options[] = $tmp;
+                } else {
+                    $value_options[] = $tmp;
+                }
             }
-        }
 
-        if (count($value_options) == 0) {
-            $form->get('Fields')
-                ->get('SubmitButton')
-                ->setAttribute('class', 'visually-hidden');
+            if (count($value_options) == 0) {
+                $form->get('Fields')
+                    ->get('SubmitButton')
+                    ->setAttribute('class', 'visually-hidden');
 
+                $form->get('Fields')
+                    ->get('EcmtLicence')
+                    ->setOptions(['label' => '']);
+            }
+
+            $options = array();
+            $options['value_options'] = $value_options;
             $form->get('Fields')
                 ->get('EcmtLicence')
-                ->setOptions(['label' => '']);
-        }
+                ->setOptions($options);
 
-        $options = array();
-        $options['value_options'] = $value_options;
-        $form->get('Fields')
-            ->get('EcmtLicence')
-            ->setOptions($options);
+        } else {
+            $form->get('Fields')
+                ->get('EcmtLicence')
+                ->setAttribute('class', 'visually-hidden');
+        }
 
         return $form;
     }
