@@ -117,7 +117,13 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $application = $this->getApplication($id);
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
 
-        $questionTitle = $translationHelper->translateReplace('permits.page.ecmt.licence.question.one.licence', ['TEST']);
+        $licences = $this->getRelevantLicences();
+        if(count($licences) == 1) {
+            $licenceForDisplay = $licences[0]['licNo'] . ' (' . $licences[0]['trafficArea'] . ')';
+            $questionTitle = $translationHelper->translateReplace('permits.page.ecmt.licence.question.one.licence', [$licenceForDisplay]);
+        }else {
+            $questionTitle = $translationHelper->translate('permits.page.ecmt.licence.question');
+        }
 
         // Read Data
         if (isset($application['licence'])) {
