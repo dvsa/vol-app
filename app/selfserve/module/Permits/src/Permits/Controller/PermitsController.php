@@ -880,7 +880,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 ->setAttribute('class', 'visually-hidden');
         }
 
-        return array('form' => $form);
+        return array('form' => $form, 'licenceNumber' => $application['licence']['licNo']);
     }
 
 

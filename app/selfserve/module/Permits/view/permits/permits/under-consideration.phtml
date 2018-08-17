@@ -2,9 +2,12 @@
     <div class="two-thirds">
         <div class="page-header">
             <p><?php echo $this->permitsBackLink(); ?></p>
-        </div>
-        <div class="guidance-grey">
-            <p class=""><?php echo $this->escapeHtml('test '); ?></p>
+            <div class="page-header__wrapper">
+                <div class="guidance pre-selected" style="background: #F8F8F8">
+                    <p class=""><?php echo $this->escapeHtml('Permit application for license'); ?></p>
+                    <h2><?php echo $licenceNumber?></h2>
+                </div>
+            </div>
         </div>
         <div class="field">
             <fieldset id="under-consideration" class="inline" data-group="under-consideration">
