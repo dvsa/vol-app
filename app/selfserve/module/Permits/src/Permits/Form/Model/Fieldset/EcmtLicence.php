@@ -17,7 +17,7 @@ class EcmtLicence
      *    "id" : "EcmtLicence",
      * })
      * @Form\Options({
-     *      "label": "Choose one licence below",
+     *      "label": "",
      *      "fieldset-attributes": {"id": "ecmt-licence"},
      *      "fieldset-data-group": "licence-type",
      *      "label_attributes": {"class": "form-control form-control--radio"}
