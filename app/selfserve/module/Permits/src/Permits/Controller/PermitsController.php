@@ -382,6 +382,10 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
                 $this->handleRedirect($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
             }
+            else {
+                //Custom Error Message
+                $form->get('Fields')->get('tripsAbroad')->setMessages(['error.messages.trips']);
+            }
         }
 
         return array('form' => $form, 'ref' => $application['applicationRef'], 'id' => $id, 'trafficAreaId' => $trafficArea['id']);
@@ -542,6 +546,10 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 $response = $this->handleCommand($command);
 
                 $this->handleRedirect($data, EcmtSection::ROUTE_ECMT_TRIPS);
+            }
+            else {
+                //Custom Error Message
+                $form->get('Fields')->get('permitsRequired')->setMessages(['error.messages.permits.required']);
             }
         }
 
