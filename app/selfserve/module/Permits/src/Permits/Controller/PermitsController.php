@@ -873,6 +873,13 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $this->getServiceLocator()->get('Helper\Form')
             ->populateFormTable($form->get('table'), $table);
 
+        if ($application['status']['id'] !== 'ecmt_permit_uc') {
+            $form
+                ->get('Submit')
+                ->get('SubmitButton')
+                ->setAttribute('class', 'visually-hidden');
+        }
+
         return array('form' => $form);
     }
 
