@@ -29,7 +29,7 @@ class EcmtLicence
     /**
      * @Form\Name("SubmitButton")
      * @Form\Attributes({
-     *     "class":"action--primary large",
+     *     "class":"action--primary extra-space large",
      *     "id":"submitbutton",
      *     "value":"Save and continue",
      * })
