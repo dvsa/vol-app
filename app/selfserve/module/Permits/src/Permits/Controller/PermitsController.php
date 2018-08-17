@@ -782,6 +782,10 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $request = $this->getRequest();
         $data = (array)$request->getPost();
 
+        if (!$application['canBeWithdrawn']) {
+            $this->redirect()->toRoute('permits');
+        }
+
         //Create form from annotations
         $form = $this->getForm('WithdrawApplicationForm');
 
@@ -873,7 +877,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                 break;
             }
             if ($item['licenceType']['id'] === 'ltyp_r') {
-                $tmp['attributes'] = [
+            $tmp['attributes'] = [
                     'class' => 'restricted-licence ' . $form->get('Fields')->get('EcmtLicence')->getAttributes()['class']
                 ];
                 $tmp['label_attributes'] = [
