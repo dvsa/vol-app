@@ -115,6 +115,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $form = $this->getEcmtLicenceForm($application['licence']['id']);
         $data = $this->params()->fromPost();
         $application = $this->getApplication($id);
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+
+        $questionTitle = $translationHelper->translateReplace('permits.page.ecmt.licence.question.one.licence', ['TEST']);
 
         // Read Data
         if (isset($application['licence'])) {
@@ -163,7 +166,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             }
         }
 
-        return array('form' => $form, 'id' => $id);
+        return array('form' => $form, 'id' => $id, 'questionTitle' => $questionTitle);
     }
 
     public function applicationOverviewAction()
