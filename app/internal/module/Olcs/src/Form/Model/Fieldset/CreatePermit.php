@@ -13,6 +13,19 @@ class CreatePermit extends Base
 
 
     /**
+     * @Form\Options({
+     *     "label": "<h4>Permit Application</h4>",
+     *     "label_options": {
+     *         "disable_html_escape": "true"
+     *     }
+     * })
+     *
+     * @Form\Type("\Common\Form\Elements\Types\Html")
+     */
+    public $title = null;
+
+
+    /**
      * @Form\Attributes({"id":"permitType"})
      * @Form\Options({
      *     "label": "Permit Type",
@@ -44,29 +57,6 @@ class CreatePermit extends Base
     public $dateReceived = null;
 
 
-
-    /**
-     * @Form\Type("Zend\Form\Element\Hidden")
-     * @Form\Type("\Common\Form\Elements\Types\Readonly")
-     * @Form\Options({
-     *     "label": "Total Authorized Vehicles"
-     * })
-     *
-     */
-    public $numVehiclesLabel;
-
-
-    /**
-     * @Form\Type("Zend\Form\Element\Hidden")
-     * @Form\Options({
-     *     "label": "Total Authorized Vehicles"
-     * })
-     *
-     */
-    public $numVehicles;
-
-
-
     /**
      * @Form\Required(false)
      * @Form\Attributes({
@@ -81,7 +71,7 @@ class CreatePermit extends Base
      *     "allow_empty" : true,
      * })
      * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Validator({"name":"Zend\Validator\GreaterThan", "options": {"min": 1}})
+     * @Form\Validator({"name":"Zend\Validator\GreaterThan", "options": {"min": 0}})
      * @Form\Validator({
      *     "name": "NumberCompare",
      *     "options": {
@@ -93,6 +83,23 @@ class CreatePermit extends Base
      * @Form\Type("Zend\Form\Element\Number")
      */
     public $permitsRequired = null;
+
+    /**
+     * @Form\Type("Zend\Form\Element\Hidden")
+     *
+     */
+    public $numVehicles;
+
+    /**
+     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("\Common\Form\Elements\Types\Readonly")
+     * @Form\Options({
+     *     "label": "Current total vehicle authorization"
+     * })
+     *
+     */
+    public $numVehiclesLabel;
+
 
 
     /**
@@ -164,7 +171,7 @@ class CreatePermit extends Base
      *     "short-label": "",
      * })
      * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Validator({"name":"Zend\Validator\Between", "options": {"min": 1, "max": 999999}})
+     * @Form\Validator({"name":"Zend\Validator\Between", "options": {"min": -1, "max": 999999}})
      * @Form\Type("Zend\Form\Element\Number")
      */
     public $trips = null;

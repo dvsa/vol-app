@@ -71,14 +71,13 @@ trait PermitActionTrait
         if (!$permitForm) {
             $this->formHelper = $this->getServiceLocator()->get('Helper\Form');
             $permitForm = $this->formHelper->createForm('PermitCreate');
+            $data['fields']['dateReceived'] = date("Y-m-d");
         }
+
         // Check to see if were editing a populated application
         if (!empty($application)) {
             // Call function to set the form values from the application
             $data = $this->prepareFormData($application);
-        } else {
-            //Just set the default date
-            $data['fields']['dateReceived'] = date("Y-m-d");
         }
 
         // Set the numVehicles label and hidden fields on the form
@@ -93,6 +92,7 @@ trait PermitActionTrait
 
         // Instantiate view model and render the form
         $view = new ViewModel(['form' => $permitForm]);
+        $this->loadScripts(['permits']); 
         $view->setTemplate('pages/form');
         return $view;
     }
@@ -147,14 +147,6 @@ trait PermitActionTrait
                         $command = UpdateEcmtPermitApplication::create($applicationData);
                         $response = $this->handleCommand($command);
                     }
-
-                    // todo: refactor this when form is not being rendered into modal popup
-                    $view = new ViewModel();
-                    $saveMessage = in_array($response->getStatusCode(), [200, 201]) ? "Save Successful" : "Error saving form";
-                    $view->setVariable('saveMessage', $saveMessage);
-                    $view->setVariable('licenceId', $licence['id']);
-                    $view->setTemplate('pages/permits/done');
-                    return $this->renderView($view);
                 } else {
                     // Form didnt validate so re-render the form with errors highligted.
                     $invalidFormView = $this->getCreateView($application, $licence, $form);
@@ -165,6 +157,7 @@ trait PermitActionTrait
             // Handles loading the a blank application form for case worker to populate
             if ($action === 'apply') {
                 $applyView = $this->getCreateView($application, $licence);
+
                 return $this->renderView($applyView);
             }
 
@@ -186,7 +179,7 @@ trait PermitActionTrait
             ->prepareTable('issued-permits', []);
 
         $view->setVariable('issuedPermitTable', $issuedTable);
-        $this->loadScripts(['permits', 'table-actions']);
+        $this->loadScripts(['permits']);
         $view->setTemplate('pages/permits/two-tables');
 
         return $this->renderView($view);

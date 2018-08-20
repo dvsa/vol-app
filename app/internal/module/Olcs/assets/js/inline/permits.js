@@ -10,5 +10,6 @@ OLCS.ready(function() {
     filter: ".js-body"
   });
 
+  if(!$(".js-rows").length) $(".filters").hide();
 
 });

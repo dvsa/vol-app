@@ -3,6 +3,7 @@
 return [
     'variables' => [
         'title' => 'Permit Applications',
+        'id' => 'permit-applications-table',
         'empty_message' => 'There are no permit application records to display'
     ],
     'settings' => [
@@ -44,11 +45,9 @@ return [
             'formatter' => 'RefDataStatus'
         ],
         [
+            'title' => '',
             'width' => 'checkbox',
-            'type' => 'Checkbox',
-            'data-attributes' => [
-                'filename'
-            ],
+            'format' => '{{[elements/radio]}}'
         ],
     ],
 ];
