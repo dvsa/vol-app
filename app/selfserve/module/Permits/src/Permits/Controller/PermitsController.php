@@ -97,12 +97,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $issuedTable = $this->getServiceLocator()
             ->get('Table')
             ->prepareTable($this->issuedTableName, $issuedData['results']);
-
-        $introMarkUp['value'] = 'markup-ecmt-permit-guidance-first-time';
-        $introMarkUp['switch'] = true;
         
         $view->setVariable('isEligible', $eligibleForPermits);
-        $view->setVariable('introMarkUp', $introMarkUp);
         $view->setVariable('issuedNo', $issuedData['count']);
         $view->setVariable('applicationsNo', $applicationData['count']);
         $view->setVariable('applicationsTable', $applicationsTable);
