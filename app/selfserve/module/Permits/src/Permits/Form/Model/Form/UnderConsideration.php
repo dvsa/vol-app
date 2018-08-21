@@ -20,6 +20,7 @@ class UnderConsideration
      */
     public $table = null;
 
+
     /**
      * @Form\Name("Submit")
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\SubmitWithdraw")
