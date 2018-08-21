@@ -4,11 +4,13 @@ namespace Olcs\Controller\Traits;
 
 use DateTime;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
+use Dvsa\Olcs\Transfer\Command\Permits\CreateFullPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtApplicationByLicence;
 use Dvsa\Olcs\Transfer\Query\Permits\SectorsList;
+use Olcs\Logging\Log\Logger;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -114,6 +116,7 @@ trait PermitActionTrait
                 $data['fields'][$key] = $application[$key];
             }
         }
+        $data['fields']['countryIds'] = $application['countrys'];
         return ($data);
     }
 
@@ -140,8 +143,9 @@ trait PermitActionTrait
                 if ($form->isValid()) {
                     if (empty($data['fields']['id'])) {
                         $applicationData = $this->mapApplicationData($form->getData()['fields'], $licence['id']);
-                        $command = CreateEcmtPermitApplication::create($applicationData);
+                        $command = CreateFullPermitApplication::create($applicationData);
                         $response = $this->handleCommand($command);
+                        Logger::crit(print_r($response, true));
                     } else {
                         $applicationData = $this->mapApplicationData($form->getData()['fields'], $licence['id']);
                         $command = UpdateEcmtPermitApplication::create($applicationData);
@@ -163,8 +167,8 @@ trait PermitActionTrait
 
             // Handles loading a pre-populated form for an existing application.
             if ($action === 'edit') {
-                if (is_array($data['id']) && count($data['id'] == 1)) {
-                    $application = $this->getApplication($data['id'][0]);
+                if (!empty($data['id'])) {
+                    $application = $this->getApplication($data['id']);
                 }
                 return $this->renderView($this->getCreateView($application, $licence));
             }
@@ -227,7 +231,9 @@ trait PermitActionTrait
                 unset($formFields[$key]);
             }
         }
-        $formFields['fromInternal'] = true;
+        if(empty($formFields['countryIds'])){
+            $formFields['countryIds'] = [];
+        }
         return ($formFields);
     }
 

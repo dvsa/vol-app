@@ -26,16 +26,20 @@ class PermitsHome
     public $title = null;
 
     /**
-     * @Form\Options({
-     *     "label": "Status",
-     *     "value_options": {
-     *          "all":"All",
-     *          "ecmt_permit_nys":"Not Yet Submitted",
-     *          "ecmt_permit_uc":"Under Consideration"
-     *     },
-     *     "disable_inarray_validator": false
+     * @Form\Name("status")
+     * @Form\Required(false)
+     * @Form\Attributes({
+     *    "id" : "status",
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Options({
+     *      "label": "Status",
+     *      "fieldset-attributes": {"id": "ecmt-status"},
+     *      "category": "ecmt_permit_status",
+     *      "empty_option": "All",
+     * })
+     * @Form\Type("DynamicSelect")
+     *
+     *
      */
     public $status = null;
 

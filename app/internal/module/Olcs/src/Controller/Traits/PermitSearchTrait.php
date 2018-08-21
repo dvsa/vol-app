@@ -106,7 +106,6 @@ trait PermitSearchTrait
 
         /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->handleQuery(EcmtApplicationByLicence::create($filters));
-        Logger::crit(print_r($response, true));
         if (!$response->isOk()) {
             throw new \Exception('Error retrieving permit list');
         }
