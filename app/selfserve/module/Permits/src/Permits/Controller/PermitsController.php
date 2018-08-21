@@ -833,32 +833,32 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     public function underConsiderationAction() {
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
-
+var_dump($application);
         $tableData = array(
             'results' => array(
                 0 => array(
                     'applicationDetailsTitle' => 'Application status',
-                    'applicationDetailsAnswer' => 'test detail'
+                    'applicationDetailsAnswer' => strtoupper($application['status']['description'])
                 ),
                 1 => array(
                     'applicationDetailsTitle' => 'Permit type',
-                    'applicationDetailsAnswer' => 'test detail'
+                    'applicationDetailsAnswer' => $application['permitType']['description']
                 ),
                 2 => array(
                     'applicationDetailsTitle' => 'Reference number',
-                    'applicationDetailsAnswer' => 'test detail'
+                    'applicationDetailsAnswer' => $application['applicationRef']
                 ),
                 3 => array(
                     'applicationDetailsTitle' => 'Application date',
-                    'applicationDetailsAnswer' => 'test detail'
+                    'applicationDetailsAnswer' => $application['dateReceived']
                 ),
                 4 => array(
                     'applicationDetailsTitle' => 'Permits required',
-                    'applicationDetailsAnswer' => 'test detail'
+                    'applicationDetailsAnswer' => $application['permitsRequired']
                 ),
                 5 => array(
                     'applicationDetailsTitle' => 'Application fee paid',
-                    'applicationDetailsAnswer' => 'test detail'
+                    'applicationDetailsAnswer' => 'Dunno'
                 )
             )
         );
