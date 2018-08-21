@@ -60,6 +60,20 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
+              'ecmt-add-licence' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/ecmt-add-licence[/]',
+                      'defaults' => [
+                          'controller'    => 'Permits\Controller\Permits',
+                          'action'        => 'add',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
               'ecmt-change-licence' => [
                   'type'    => 'segment',
                   'options' => [
@@ -304,6 +318,7 @@ return array(
         'invokables' => [
             'ecmtSection' => \Permits\View\Helper\EcmtSection::class,
             'permitsBackLink' => \Permits\View\Helper\BackToOverview::class,
+            'permitsDashboardLink' => \Permits\View\Helper\PermitsDashboardLink::class,
             'changeAnswerLink' => \Permits\View\Helper\ChangeAnswerLink::class,
             'ecmtLicenceTitle' => \Permits\View\Helper\EcmtLicenceTitle::class,
         ],

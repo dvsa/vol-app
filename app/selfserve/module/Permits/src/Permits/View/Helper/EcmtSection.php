@@ -14,6 +14,7 @@ class EcmtSection extends AbstractHelper
 {
     const ROUTE_APPLICATION_OVERVIEW = 'application-overview';
     const ROUTE_ECMT_LICENCE = 'ecmt-licence';
+    const ROUTE_ECMT_ADD_LICENCE = 'ecmt-add-licence';
     const ROUTE_ECMT_EURO6 = 'ecmt-euro6';
     const ROUTE_ECMT_CABOTAGE = 'ecmt-cabotage';
     const ROUTE_ECMT_COUNTRIES = 'ecmt-countries';

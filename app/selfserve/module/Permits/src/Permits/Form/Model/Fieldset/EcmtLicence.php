@@ -20,10 +20,15 @@ class EcmtLicence
      *      "label": "",
      *      "fieldset-attributes": {"id": "ecmt-licence"},
      *      "fieldset-data-group": "licence-type",
-     *      "label_attributes": {"class": "form-control form-control--radio"}
+     *      "label_attributes": {"class": "form-control form-control--radio"},
+     *      "service_name": "Common\Service\Data\EcmtLicence",
+     *      "category": "",
+     *      "disable_inarray_validator" : true,
+     *      "error-message": "error.messages.ecmt-licence"
      * })
-     * @Form\Type("Radio")
+     * @Form\Type("DynamicRadio")
      */
+
     public $ecmtLicence = null;
 
     /**
@@ -36,15 +41,4 @@ class EcmtLicence
      * @Form\Type("Zend\Form\Element\Submit")
      */
     public $submit = null;
-
-    /**
-     * @Form\Name("Cancel")
-     * @Form\Attributes({
-     *     "class":"action--primary large return-overview",
-     *     "id":"save-return-button",
-     *     "value":"Cancel",
-     * })
-     * @Form\Type("Zend\Form\Element\Submit")
-     */
-    public $save = null;
 }

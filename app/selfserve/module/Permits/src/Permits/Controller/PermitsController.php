@@ -111,78 +111,57 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $view;
     }
 
-    public function ecmtLicenceAction()
-    {
-        $id = $this->params()->fromRoute('id', '');
-        $application = $this->getApplication($id);
 
-        $licences = $this->getRelevantLicences();
-        $form = $this->getEcmtLicenceForm($application['licence']['id'], $licences['result']);
+    public function addAction()
+    {
+        $form = $this->getForm('EcmtLicenceForm');
+
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('permits/ecmt-licence');
 
         $data = $this->params()->fromPost();
-
-        /*
-         * Read existing value
-         */
-        if (isset($application['licence'])) { //there is an existing value
-            $licenceData = $application['licence'];
-        } else if (count($licences['result']) == 1) { //only 1 licence so it will be hidden (need to fill value for user since they can't select)
-            $licenceData = $licences['result'][0];
-        }
-
-        if (isset($licenceData)) {
-            // Large amount of formatting due to the way the fields are represented.
-            $currentLicence = $licenceData['id'] . '|' .
-                $licenceData['licNo'] . " " .
-                $licenceData['trafficArea']['name'] . " ";
-
-            $form->get('Fields')->get('EcmtLicence')->setValue($currentLicence);
-        }
-
-        if (isset($data['Fields']['Cancel'])) {
-            $this->redirect()
-                ->toRoute('permits');
-        }
-
         if (isset($data['Fields']['SubmitButton'])) {
             //Validate
             $form->setData($data);
             if ($form->isValid()) {
-                $licenceId = explode('|', $data['Fields']['EcmtLicence'])[0];
-                $existingApplicationId = $this->params()->fromRoute('id', -1);
-                if ($existingApplicationId == -1) {
-                    $applicationData['licence'] = $licenceId;
-                    $command = CreateEcmtPermitApplication::create($applicationData);
+                $command = CreateEcmtPermitApplication::create(['licence'=> $data['Fields']['EcmtLicence']]);
                     $response = $this->handleCommand($command);
                     $insert = $response->getResult();
-                } else {
-                    // Redirect to confirmation page before clearning answers. Possibly better in Session than as GET Param?
-                    $this->redirect()
-                        ->toRoute(
-                            'permits/' . EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE,
-                            ['id' => $existingApplicationId],
-                            [ 'query' => [
-                                'licenceId' => $licenceId
-                            ]
-                            ]);
-                }
 
-                $this->redirect()
-                    ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $insert['id']['ecmtPermitApplication']]);
-            } else {
-                //Custom Error Message
-                $form->get('Fields')
-                    ->get('EcmtLicence')
-                    ->setMessages(['error.messages.ecmt-licence']);
+                    $this->redirect()
+                        ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $insert['id']['ecmtPermitApplication']]);
             }
         }
 
-        return array(
-            'form'          => $form,
-            'id'            => $id,
-            'licences'      => $licences,
-            'application'   => $application,
-        );
+        return $view;
+    }
+
+
+    public function ecmtLicenceAction()
+    {
+                            $form = $this->getForm('EcmtLicenceForm');
+
+                                $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('permits/ecmt-licence');
+
+        $data = $this->params()->fromPost();
+                                if (isset($data['Fields']['SubmitButton'])) {
+                            //Validate
+                $form->setData($data);
+if ($form->isValid()) {
+                $this->redirect()
+                    ->toRoute('permits/' . EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE, ['id' => $this->params()->fromRoute('id', -1)],
+                        [ 'query' => [
+                            'licenceId' => $data['Fields']['EcmtLicence']
+                        ]]);
+            }
+                }
+                if (empty($form->get('Fields')
+                    ->get('EcmtLicence')->getValueOptions())) {
+                    $form->get('Fields')->get('SubmitButton')->setAttribute('class', 'visually-hidden');
+            $form->get('Fields')->get('EcmtLicence')->setOptions(['label' => '']);
+        }
+        return $view;
     }
 
     public function applicationOverviewAction()
@@ -759,6 +738,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $view;
     }
 
+
     public function withdrawApplicationAction()
     {
         $id = $this->params()->fromRoute('id', -1);
@@ -829,7 +809,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         /**
          * @todo status view helper and table config shouldn't be in the controller
-         * @var \Common\View\Helper\Status $statusHelper 
+         * @var \Common\View\Helper\Status $statusHelper
          */
          $statusHelper = $this->getServiceLocator()->get('ViewHelperManager')->get('status');
 
