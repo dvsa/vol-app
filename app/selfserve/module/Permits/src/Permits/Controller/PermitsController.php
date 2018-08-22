@@ -82,7 +82,12 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             return $view;
         }
 
-        $query = EcmtPermitApplication::create(['order' => 'DESC']);
+        $query = EcmtPermitApplication::create(
+            [
+                'order' => 'DESC',
+                'organisationId' => $this->getCurrentOrganisationId()
+            ]
+        );
         $response = $this->handleQuery($query);
         $applicationData = $response->getResult();
 
