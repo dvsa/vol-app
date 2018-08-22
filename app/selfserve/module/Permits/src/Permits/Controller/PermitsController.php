@@ -563,6 +563,11 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     public function checkAnswersAction()
     {
         $id = $this->params()->fromRoute('id', -1);
+        $application = $this->getApplication($id);
+
+        if (!$application['sectionCompletion']['allCompleted']) {
+            $this->nextStep(EcmtSection::ROUTE_APPLICATION_OVERVIEW);
+        }
 
         if (!empty($this->params()->fromPost())) {
             $command = UpdateEcmtCheckAnswers::create(['id' => $id]);
@@ -572,7 +577,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         $form = $this->getForm('CheckAnswersForm');
 
-        $application = $this->getApplication($id);
+
         $answerData = $this->collatePermitQuestions(); //Get all the questions in returned array
 
         $answerData['licenceAnswer'] = $application['licence']['licNo'] . "\n" . '(' . $application['licence']['trafficArea']['name'] . ')';
