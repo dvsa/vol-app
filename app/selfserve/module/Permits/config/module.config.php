@@ -264,6 +264,7 @@ return array(
             'ecmtSection' => \Permits\View\Helper\EcmtSection::class,
             'permitsBackLink' => \Permits\View\Helper\BackToOverview::class,
             'changeAnswerLink' => \Permits\View\Helper\ChangeAnswerLink::class,
+            'ecmtLicenceTitle' => \Permits\View\Helper\EcmtLicenceTitle::class,
         ],
     ],
   'view_manager' => array(

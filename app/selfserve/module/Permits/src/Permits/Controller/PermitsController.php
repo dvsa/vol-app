@@ -113,24 +113,24 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $application = $this->getApplication($id);
 
         $licences = $this->getRelevantLicences();
-        $form = $this->getEcmtLicenceForm($application['licence']['id'], $licences);
+        $form = $this->getEcmtLicenceForm($application['licence']['id'], $licences['result']);
 
         $data = $this->params()->fromPost();
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
 
-        if(count($licences) == 1) {
-            $licenceForDisplay = $licences[0]['licNo'] . ' (' . $licences[0]['trafficArea'] . ')';
-            $questionTitle = $translationHelper->translateReplace('permits.page.ecmt.licence.question.one.licence', [$licenceForDisplay]);
-        }else {
-            $questionTitle = $translationHelper->translate('permits.page.ecmt.licence.question');
+        /*
+         * Read existing value
+         */
+        if (isset($application['licence'])) { //there is an existing value
+            $licenceData = $application['licence'];
+        } else if (count($licences['result']) == 1) { //only 1 licence so it will be hidden (need to fill value for user since they can't select)
+            $licenceData = $licences['result'][0];
         }
 
-        // Read Data
-        if (isset($application['licence'])) {
+        if(isset($licenceData)) {
             // Large amount of formatting due to the way the fields are represented.
-            $currentLicence = $application['licence']['id'] . '|' .
-                $application['licence']['licNo'] . " " .
-                $application['licence']['trafficArea']['name'] . " ";
+            $currentLicence = $licenceData['id'] . '|' .
+                $licenceData['licNo'] . " " .
+                $licenceData['trafficArea']['name'] . " ";
 
             $form->get('Fields')->get('EcmtLicence')->setValue($currentLicence);
         }
@@ -158,7 +158,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                             ['id' => $existingApplicationId],
                             [ 'query' => [
                                 'licenceId' => $licenceId
-                                ]
+                            ]
                             ]);
                 }
 
@@ -172,8 +172,15 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             }
         }
 
-        return array('form' => $form, 'id' => $id, 'questionTitle' => $questionTitle);
+        return array(
+            'form'          => $form,
+            'id'            => $id,
+            'licences'      => $licences,
+            'application'   => $application,
+            'translator'    => $this->getServiceLocator()->get('Helper\Translation'),
+        );
     }
+
 
     public function applicationOverviewAction()
     {
@@ -848,65 +855,67 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
          */
         $form = $this->getForm('EcmtLicenceForm');
 
-        if (count($licenceList) != 1) { //If there is only 1, we don't want to display list of licences
-            $value_options = array();
-            foreach ($licenceList as $item) {
+        $value_options = array();
+        foreach ($licenceList as $item) {
+            $tmp = array();
+            $tmp['value'] = $item['id'];
+            $tmp['label'] = $item['licNo'] . ' (' . $item['trafficArea'] . ')';
+
+            if ($licenceId === $item['id']) {
+                $tmp['selected'] = true;
+            }
+
+            if (count($licenceList) == 1) { //do not hide if there is one licence but there is an application
+                $tmp['label_attributes'] = [
+                    'class' => 'visually-hidden'
+                ];
+                $value_options[] = $tmp;
+                break;
+            }
+            if ($item['licenceType']['id'] === 'ltyp_r') {
+                $tmp['attributes'] = [
+                    'class' => 'restricted-licence ' . $form->get('Fields')->get('EcmtLicence')->getAttributes()['class']
+                ];
+                $tmp['label_attributes'] = [
+                    'class' => 'restricted-licence-label ' . $form->get('Fields')->get('EcmtLicence')->getLabelAttributes()['class']
+                ];
+                $value_options[] = $tmp;
+
                 $tmp = array();
-                $tmp['value'] = $item['id'];
-                $tmp['label'] = $item['licNo'] . ' (' . $item['trafficArea'] . ')';
-
-                if ($licenceId === $item['id']) {
-                    $tmp['selected'] = true;
-                }
-
-                if ($item['licenceType']['id'] === 'ltyp_r') {
-                    $tmp['attributes'] = [
-                        'class' => 'restricted-licence ' . $form->get('Fields')->get('EcmtLicence')->getAttributes()['class']
-                    ];
-                    $tmp['label_attributes'] = [
-                        'class' => 'restricted-licence-label ' . $form->get('Fields')->get('EcmtLicence')->getLabelAttributes()['class']
-                    ];
-                    $value_options[] = $tmp;
-
-                    $tmp = array();
-                    $tmp['value'] = '';
-                    $tmp['label'] = 'permits.form.ecmt-licence.restricted-licence.hint';
-                    $tmp['label_attributes'] = [
-                        'class' => 'restricted-licence-hint ' . $form->get('Fields')->get('EcmtLicence')->getLabelAttributes()['class']
-                    ];
-                    $tmp['attributes'] = [
-                        'class' => 'visually-hidden'
-                    ];
-                    $value_options[] = $tmp;
-                } else {
-                    $value_options[] = $tmp;
-                }
+                $tmp['value'] = '';
+                $tmp['label'] = 'permits.form.ecmt-licence.restricted-licence.hint';
+                $tmp['label_attributes'] = [
+                    'class' => 'restricted-licence-hint ' . $form->get('Fields')->get('EcmtLicence')->getLabelAttributes()['class']
+                ];
+                $tmp['attributes'] = [
+                    'class' => 'visually-hidden'
+                ];
+                $value_options[] = $tmp;
+            } else {
+                $value_options[] = $tmp;
             }
-
-            if (count($value_options) == 0) {
-                $form->get('Fields')
-                    ->get('SubmitButton')
-                    ->setAttribute('class', 'visually-hidden');
-
-                $form->get('Fields')
-                    ->get('EcmtLicence')
-                    ->setOptions(['label' => '']);
-            }
-
-            $options = array();
-            $options['value_options'] = $value_options;
-            $form->get('Fields')
-                ->get('EcmtLicence')
-                ->setOptions($options);
-
-        } else {
-            $form->get('Fields')
-                ->get('EcmtLicence')
-                ->setAttribute('class', 'visually-hidden');
         }
+
+        if (count($value_options) == 0) {
+            $form->get('Fields')
+                ->get('SubmitButton')
+                ->setAttribute('class', 'visually-hidden');
+
+            $form->get('Fields')
+                ->get('EcmtLicence')
+                ->setOptions(['label' => '']);
+        }
+
+        $options = array();
+        $options['value_options'] = $value_options;
+        $form->get('Fields')
+            ->get('EcmtLicence')
+            ->setOptions($options);
+
 
         return $form;
     }
+
 
     // TODO: remove this method once all session functionality is removed
     private function extractIDFromSessionData($sessionData)
