@@ -2,15 +2,11 @@
 
 namespace Olcs\Controller\Traits;
 
-use DateTime;
-use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateFullPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitApplication;
-use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
-use Dvsa\Olcs\Transfer\Query\Permits\EcmtApplicationByLicence;
 use Dvsa\Olcs\Transfer\Query\Permits\SectorsList;
-use Olcs\Logging\Log\Logger;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -145,11 +141,16 @@ trait PermitActionTrait
                         $applicationData = $this->mapApplicationData($form->getData()['fields'], $licence['id']);
                         $command = CreateFullPermitApplication::create($applicationData);
                         $response = $this->handleCommand($command);
-                        Logger::crit(print_r($response, true));
+                        if (!$response->isOk()) {
+                            throw new UnexpectedResponseException('Error creating Application');
+                        }
                     } else {
                         $applicationData = $this->mapApplicationData($form->getData()['fields'], $licence['id']);
                         $command = UpdateEcmtPermitApplication::create($applicationData);
                         $response = $this->handleCommand($command);
+                        if (!$response->isOk()) {
+                            throw new UnexpectedResponseException('Error updating Application');
+                        }
                     }
                 } else {
                     // Form didnt validate so re-render the form with errors highligted.
@@ -227,7 +228,7 @@ trait PermitActionTrait
         }
         // Remove any empty values
         foreach ($formFields as $key => $val) {
-            if (empty($val)) {
+            if (empty($val) && !is_numeric($val)) {
                 unset($formFields[$key]);
             }
         }
@@ -236,7 +237,6 @@ trait PermitActionTrait
         }
         return ($formFields);
     }
-
 
 
     /**
