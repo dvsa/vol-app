@@ -131,7 +131,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             $licenceData = $licences['result'][0];
         }
 
-        if(isset($licenceData)) {
+        if (isset($licenceData)) {
             // Large amount of formatting due to the way the fields are represented.
             $currentLicence = $licenceData['id'] . '|' .
                 $licenceData['licNo'] . " " .

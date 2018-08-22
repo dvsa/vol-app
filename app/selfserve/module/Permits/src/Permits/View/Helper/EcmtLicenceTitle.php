@@ -24,7 +24,7 @@ class EcmtLicenceTitle extends AbstractHelper
      * @param array $application
      * @return string
      */
-    public function __invoke(array $licences = array(), array $application, $translator)
+    public function __invoke(array $application, $translator, array $licences = array())
     {
         if (empty($licences)) {
             return ''; //Throw exception?
@@ -68,4 +68,3 @@ class EcmtLicenceTitle extends AbstractHelper
         return $licNo . ' (' . $trafficArea . ')';
     }
 }
-
