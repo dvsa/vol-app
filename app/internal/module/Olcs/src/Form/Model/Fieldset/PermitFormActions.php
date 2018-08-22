@@ -20,7 +20,7 @@ class PermitFormActions
 
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"cancel"})
+     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"permit-cancel"})
      * @Form\Options({"label": "Back"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
