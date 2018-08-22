@@ -837,8 +837,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $ecmtPermitFees = $this->getEcmtPermitFees();
         $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
         $ecmtApplicationFeeTotal = $ecmtApplicationFee * $application['permitsRequired'];
-
-var_dump($application);
+var_dump($application['dateReceived']); 
         $tableData = array(
             'results' => array(
                 0 => array(
@@ -863,7 +862,7 @@ var_dump($application);
                 ),
                 5 => array(
                     'applicationDetailsTitle' => 'Application fee paid',
-                    'applicationDetailsAnswer' => $ecmtApplicationFeeTotal
+                    'applicationDetailsAnswer' => '£' . $ecmtApplicationFeeTotal
                 )
             )
         );
