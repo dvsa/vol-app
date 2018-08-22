@@ -837,35 +837,45 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $ecmtPermitFees = $this->getEcmtPermitFees();
         $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
         $ecmtApplicationFeeTotal = $ecmtApplicationFee * $application['permitsRequired'];
-var_dump($application); 
-        $tableData = array(
-            'results' => array(
-                0 => array(
-                    'applicationDetailsTitle' => 'Application status',
-                    'applicationDetailsAnswer' => strtoupper($application['status']['description'])
-                ),
-                1 => array(
-                    'applicationDetailsTitle' => 'Permit type',
-                    'applicationDetailsAnswer' => $application['permitType']['description']
-                ),
-                2 => array(
-                    'applicationDetailsTitle' => 'Reference number',
-                    'applicationDetailsAnswer' => $application['applicationRef']
-                ),
-                3 => array(
-                    'applicationDetailsTitle' => 'Application date',
-                    'applicationDetailsAnswer' => $application['dateReceived']
-                ),
-                4 => array(
-                    'applicationDetailsTitle' => 'Permits required',
-                    'applicationDetailsAnswer' => empty($application['permitsRequired']) ? 0 : $application['permitsRequired']
-                ),
-                5 => array(
-                    'applicationDetailsTitle' => 'Application fee paid',
-                    'applicationDetailsAnswer' => '£' . $ecmtApplicationFeeTotal
-                )
-            )
-        );
+var_dump($application);
+
+
+        $status = [
+            'id' => $application['status']['id'],
+            'description' => $application['status']['description']
+        ];
+        /** @var \Common\View\Helper\Status $statusHelper */
+         $statusHelper = $this->getServiceLocator()->get('ViewHelperManager')->get('status');
+         $status = $statusHelper->__invoke($status);  //strtoupper($application['status']['description'])
+
+         $tableData = array(
+             'results' => array(
+                 0 => array(
+                     'applicationDetailsTitle' => 'Application status',
+                     'applicationDetailsAnswer' => $status
+                 ),
+                 1 => array(
+                     'applicationDetailsTitle' => 'Permit type',
+                     'applicationDetailsAnswer' => $application['permitType']['description']
+                 ),
+                 2 => array(
+                     'applicationDetailsTitle' => 'Reference number',
+                     'applicationDetailsAnswer' => $application['applicationRef']
+                 ),
+                 3 => array(
+                     'applicationDetailsTitle' => 'Application date',
+                     'applicationDetailsAnswer' => $application['dateReceived']
+                 ),
+                 4 => array(
+                     'applicationDetailsTitle' => 'Permits required',
+                     'applicationDetailsAnswer' => empty($application['permitsRequired']) ? 0 : $application['permitsRequired']
+                 ),
+                 5 => array(
+                     'applicationDetailsTitle' => 'Application fee paid',
+                     'applicationDetailsAnswer' => '£' . $ecmtApplicationFeeTotal
+                 )
+             )
+         );
 
         /** @var \Common\Service\Table\TableBuilder $table */
         $table = $this->getServiceLocator()
