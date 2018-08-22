@@ -54,11 +54,10 @@ trait PermitSearchTrait
     /**
      * Create filter form
      *
-     * @param array $filters Filters data
      *
      * @return \Zend\Form\FormInterface
      */
-    protected function getPermitForm($filters = [])
+    protected function getPermitForm()
     {
         /** @var \Zend\Di\ServiceLocator $sm */
         $sm = $this->getServiceLocator();

@@ -90,7 +90,7 @@ trait PermitActionTrait
 
         // Instantiate view model and render the form
         $view = new ViewModel(['form' => $permitForm]);
-        $this->loadScripts(['permits']); 
+        $this->loadScripts(['permits']);
         $view->setTemplate('pages/form');
         return $view;
     }
@@ -103,7 +103,6 @@ trait PermitActionTrait
      */
     protected function prepareFormData($application)
     {
-
         // Ignore these array indexes on the application array when building from data array.
         $dontSet = ["permitType", 'licence', 'sectionCompletion', 'paymentStatus', 'status', 'confirmationSectionCompletion'];
         // Add necessary values to the array to re-populate the form.
@@ -141,16 +140,12 @@ trait PermitActionTrait
                         $applicationData = $this->mapApplicationData($form->getData()['fields'], $licence['id']);
                         $command = CreateFullPermitApplication::create($applicationData);
                         $response = $this->handleCommand($command);
-                        if (!$response->isOk()) {
-                            throw new UnexpectedResponseException('Error creating Application');
-                        }
+                        $this->checkResponse($response);
                     } else {
                         $applicationData = $this->mapApplicationData($form->getData()['fields'], $licence['id']);
                         $command = UpdateEcmtPermitApplication::create($applicationData);
                         $response = $this->handleCommand($command);
-                        if (!$response->isOk()) {
-                            throw new UnexpectedResponseException('Error updating Application');
-                        }
+                        $this->checkResponse($response);
                     }
                 } else {
                     // Form didnt validate so re-render the form with errors highligted.
@@ -173,8 +168,6 @@ trait PermitActionTrait
                 }
                 return $this->renderView($this->getCreateView($application, $licence));
             }
-
-
         }
 
         $view = $this->getPermitView();
@@ -188,6 +181,15 @@ trait PermitActionTrait
         $view->setTemplate('pages/permits/two-tables');
 
         return $this->renderView($view);
+    }
+
+
+
+    protected function checkResponse($response)
+    {
+        if (!$response->isOk()) {
+            throw new UnexpectedResponseException('An error occured saving the application');
+        }
     }
 
 
@@ -232,7 +234,7 @@ trait PermitActionTrait
                 unset($formFields[$key]);
             }
         }
-        if(empty($formFields['countryIds'])){
+        if (empty($formFields['countryIds'])) {
             $formFields['countryIds'] = [];
         }
         return ($formFields);
