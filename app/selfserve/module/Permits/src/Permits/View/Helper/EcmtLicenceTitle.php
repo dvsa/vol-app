@@ -24,7 +24,7 @@ class EcmtLicenceTitle extends AbstractHelper
      * @param array $application
      * @return string
      */
-    public function __invoke(array $application, $translator, array $licences = array())
+    public function __invoke(array $application, array $licences = array())
     {
         if (empty($licences)) {
             return ''; //Throw exception?
@@ -38,7 +38,7 @@ class EcmtLicenceTitle extends AbstractHelper
                 $application['licence']['trafficArea']['name']
             );
 
-            return $translator->translateReplace('permits.page.ecmt.licence.question.one.licence', [$licenceForDisplay]);
+            return sprintf($this->view->translate('permits.page.ecmt.licence.question.one.licence'), $licenceForDisplay);
         }
 
         //Determine if user already has an application for all relevant licences
@@ -56,7 +56,7 @@ class EcmtLicenceTitle extends AbstractHelper
                 $licences['result'][0]['licNo'],
                 $licences['result'][0]['trafficArea']
             );
-            return $translator->translateReplace('permits.page.ecmt.licence.question.one.licence', [$licenceForDisplay]);
+            return sprintf($this->view->translate('permits.page.ecmt.licence.question.one.licence'), $licenceForDisplay);
         }
 
         return $this->view->translate('permits.page.ecmt.licence.question');
