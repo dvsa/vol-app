@@ -1090,6 +1090,7 @@ return array(
                 Olcs\Controller\Lva\DirectorChange\FinancialHistoryController::class,
             'LvaDirectorChange/ConvictionsPenalties'=>
                 \Olcs\Controller\Lva\DirectorChange\ConvictionsPenaltiesController::class,
+            'LvaTransportManager/CheckAnswers' => \OLCS\Controller\Lva\TransportManager\CheckAnswersController::class
         ),
         'invokables' => array(
             'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,
