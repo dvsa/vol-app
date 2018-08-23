@@ -2,14 +2,28 @@
 
 namespace OLCS\Controller\Lva\TransportManager;
 
-use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractTmController;
+use Common\Controller\Lva\AbstractTransportManagersController;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication;
 use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetDetails;
 use Olcs\View\Model\ViewModel;
 
-class CheckAnswersController extends CommonAbstractTmController
+class CheckAnswersController extends AbstractTransportManagersController
 {
 
+
+    public function indexAction()
+    {
+        $transportManagerApplicationId = $this->params("application");
+        /**
+         * @var TransportManagerApplication
+         */
+        $transportManagerApplication = $this->handleQuery(
+            GetDetails::create(['id' => $transportManagerApplicationId])
+        )->getResult();
+
+        var_dump($transportManagerApplication);
+        exit();
+    }
 
     public function reviewAction()
     {
