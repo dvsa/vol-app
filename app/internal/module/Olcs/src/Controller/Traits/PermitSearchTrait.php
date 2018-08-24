@@ -5,7 +5,6 @@ namespace Olcs\Controller\Traits;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtApplicationByLicence;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
-use Olcs\Logging\Log\Logger;
 use Zend\Form\Element\Select;
 
 /**
