@@ -1,17 +1,17 @@
 <div class="js-body">
     <?php
-    echo $this->partial(
-        'partials/page-header-simple',
-        [
-            'pageTitle' => $this->translate($this->title),
-            'pageSubTitle' => $this->tmFullName
-        ]
-    );
+        echo $this->partial(
+            'partials/page-header-simple',
+            [
+                'pageTitle' => $this->translate($this->title),
+                'pageSubTitle' => $this->tmFullName
+            ]
+        );
     ?>
 
     <div class="row">
         
-      <div class="two-thirds article">
+      <div class="full-width article">
           <?php
   
           $guidanceMessage = $this->placeholder('guidance');
@@ -27,13 +27,20 @@
           }
   
           if (isset($sectionText)) {
-              ?><p><?php echo $this->translate($sectionText); ?></p><?php
+              ?><h1><?php echo $this->translate($sectionText); ?></h1><?php
           }
   
           echo $this->flashMessengerAll();
           ?>
-  
+
+
+
           <?php echo $this->content ?>
+
+          <?php echo $this->partialLoop(
+          'partials/check-answer-section',
+            $this->sections
+          ); ?>
   
           <?php if (isset($form)): ?>
             <?php

@@ -3,9 +3,7 @@
 namespace OLCS\Controller\Lva\TransportManager;
 
 use Common\Controller\Lva\AbstractTransportManagersController;
-use Common\Service\Helper\FormHelperService;
-use Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication;
-use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetDetails;
+use Common\Data\Mapper\Lva\TransportManagerApplication;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
 
@@ -24,15 +22,45 @@ class CheckAnswersController extends AbstractTransportManagersController
         $defaultParams = [
             'tmFullName' => $this->getTmName($transportManagerApplication),
             'backLink' => $this->url()->fromRoute(
-                "dashboard",
-                [],
+                "lva-{$this->lva}/transport_managers",
+                ['application' => $this->getIdentifier()],
                 [],
                 false
             ),
             'backText' => 'transport-manager-save-return',
 
         ];
+        $form = $this->getConfirmationForm($transportManagerApplicationId);
+        $sections = TransportManagerApplication::mapForSections($transportManagerApplication);
+        $params = array_merge(["sections" =>$sections], $defaultParams);
+        /* @var $layout \Zend\View\Model\ViewModel */
 
+        $layout = $this->render($title, $form, $params);
+        $content = $layout->getChildrenByCaptureTo('content')[0];
+        $content->setTemplate('pages/lva-tm-details-checkAnswers');
+
+        return $layout;
+    }
+
+    /**
+     * confirmAction
+     */
+    public function confirmAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            exit('declaration redirect');
+        }
+    }
+
+    /**
+     * getConfirmationForm
+     *
+     * @param $transportManagerApplicationId
+     *
+     * @return \Common\Form\Form
+     */
+    private function getConfirmationForm(int $transportManagerApplicationId): \Common\Form\Form
+    {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         /* @var $form \Common\Form\Form */
@@ -47,26 +75,6 @@ class CheckAnswersController extends AbstractTransportManagersController
         $submitLabel = 'Confirm and continue';
         $form->setSubmitLabel($submitLabel);
         $form->removeCancel();
-
-
-        $params = array_merge([/* data for sections */], $defaultParams);
-
-        /* @var $layout \Zend\View\Model\ViewModel */
-        $layout = $this->render($title, $form, $params);
-
-        $content = $layout->getChildrenByCaptureTo('content')[0];
-
-        $content->setTemplate('pages/lva-tm-details-checkAnswers');
-
-        return $layout;
+        return $form;
     }
-
-    public function confirmAction()
-    {
-        if ($this->getRequest()->isPost()) {
-            exit('declaration redirect');
-        }
-    }
-
-
 }
