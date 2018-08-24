@@ -833,12 +833,18 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     public function underConsiderationAction() {
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
+        
+        $request = $this->getRequest();
+        $data = (array)$request->getPost();
+
+        if (is_array($data) && array_key_exists('Submit', $data)) {
+            $this->redirect()
+                ->toRoute('permits/' . EcmtSection::ROUTE_ECMT_WITHDRAW_APPLICATION, ['id' => $id]);
+        }
 
         $ecmtPermitFees = $this->getEcmtPermitFees();
         $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
         $ecmtApplicationFeeTotal = $ecmtApplicationFee * $application['permitsRequired'];
-var_dump($application);
-
 
         $status = [
             'id' => $application['status']['id'],
@@ -864,7 +870,8 @@ var_dump($application);
                  ),
                  3 => array(
                      'applicationDetailsTitle' => 'Application date',
-                     'applicationDetailsAnswer' => $application['dateReceived']
+                     //TODO $application['lastModifiedOn'] needs to change to $application['dateReceived'] once it's being populated
+                     'applicationDetailsAnswer' => date(\DATETIME_FORMAT, strtotime($application['lastModifiedOn']))
                  ),
                  4 => array(
                      'applicationDetailsTitle' => 'Permits required',

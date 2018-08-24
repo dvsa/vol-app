@@ -27,7 +27,21 @@ return array(
     array(
       'title' => 'dashboard-table-permit-application-status',
       'name' => 'status',
-      'formatter' => 'RefDataStatus'
+      'formatter' => function ($data, $column) {
+          if (isset($data['id'])) {
+              $column['formatter'] = 'RefDataStatus';
+              if ($data['status']['id'] == 'ecmt_permit_uc'){
+                  return sprintf(
+                      '<a href="%s">%s</a>',
+                      '/permits/' . $data['id'] . '/ecmt-under-consideration',
+                      $this->callFormatter($column, $data)
+                  );
+              } else {
+                  return $this->callFormatter($column, $data);
+              }
+          }
+          return '';
+      }
     )
   )
 );

@@ -30,15 +30,4 @@ class SubmitWithdraw
      * @Form\Type("Zend\Form\Element\Submit")
      */
     public $submit = null;
-
-    /**
-     * @Form\Name("SaveAndReturnButton")
-     * @Form\Attributes({
-     *     "class":"action--primary large return-overview",
-     *     "id":"save-return-button",
-     *     "value":"Return to permits dashboard",
-     * })
-     * @Form\Type("Zend\Form\Element\Submit")
-     */
-    public $save = null;
 }
