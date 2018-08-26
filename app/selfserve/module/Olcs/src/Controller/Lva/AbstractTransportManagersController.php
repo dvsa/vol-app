@@ -1120,7 +1120,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 $flashMessenger->addSuccessMessage('lva-tm-details-submit-success');
                 //redirect to checkAnswers
                 return $this->redirect()->toRoute('lva-transport_manager/check_answers', ['application' => $tma['id']]);
-
             } else {
                 $flashMessenger->addErrorMessage('unknown-error');
             }

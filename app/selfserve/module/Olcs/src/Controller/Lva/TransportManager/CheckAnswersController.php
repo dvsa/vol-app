@@ -6,7 +6,6 @@ use Common\Controller\Lva\AbstractTransportManagersController;
 use Common\Data\Mapper\Lva\TransportManagerApplication;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
-
 class CheckAnswersController extends AbstractTransportManagersController
 {
 
