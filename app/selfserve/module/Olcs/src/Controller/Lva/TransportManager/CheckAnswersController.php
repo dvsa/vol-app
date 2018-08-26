@@ -17,13 +17,16 @@ class CheckAnswersController extends AbstractTransportManagersController
         $transportManagerApplicationId = $this->params("application");
 
         $transportManagerApplication = $this->getTransportManagerApplication($transportManagerApplicationId);
+        $translator = $sl->get('Helper\Translation');
 
+        $checkAnswersHint = $translator->translate('lva.section.transport-manager-check-answers-hint');
         $title = 'check_answers';
         $defaultParams = [
+            'content' => $checkAnswersHint,
             'tmFullName' => $this->getTmName($transportManagerApplication),
             'backLink' => $this->url()->fromRoute(
-                "lva-{$this->lva}/transport_managers",
-                ['application' => $this->getIdentifier()],
+                "dashboard",
+                [],
                 [],
                 false
             ),
@@ -32,9 +35,8 @@ class CheckAnswersController extends AbstractTransportManagersController
         ];
         $form = $this->getConfirmationForm($transportManagerApplicationId);
         $sections = TransportManagerApplication::mapForSections($transportManagerApplication);
-        $params = array_merge(["sections" =>$sections], $defaultParams);
+        $params = array_merge(["sections" => $sections], $defaultParams);
         /* @var $layout \Zend\View\Model\ViewModel */
-
         $layout = $this->render($title, $form, $params);
         $content = $layout->getChildrenByCaptureTo('content')[0];
         $content->setTemplate('pages/lva-tm-details-checkAnswers');
@@ -48,7 +50,7 @@ class CheckAnswersController extends AbstractTransportManagersController
     public function confirmAction()
     {
         if ($this->getRequest()->isPost()) {
-            exit('declaration redirect');
+            exit("Decalarion page -> OLCS-19791");
         }
     }
 

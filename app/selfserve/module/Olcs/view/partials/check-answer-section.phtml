@@ -3,7 +3,9 @@
 </h2>
 
 
-<dl class="app-check-your-answers app-check-your-answers--short">
-   <?php echo $this->partialLoop('partials/check-answer-question',$this->questions);?>
-   <?php echo $this->partial('partials/check-answer-change',$this->change);?>
+<dl class="app-check-your-answers app-check-your-answers--long">
+    <div class="app-check-your-answers__contents">
+    <?php echo $this->partial('partials/check-answer-change',$this->change);?>
+    <?php echo $this->partialLoop('partials/check-answer-question',$this->questions);?>
+    </div>
 </dl>

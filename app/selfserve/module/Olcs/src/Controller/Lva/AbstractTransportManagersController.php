@@ -1125,30 +1125,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 $flashMessenger->addErrorMessage('unknown-error');
             }
         }
-
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $params = [
-            'content' => $translationHelper->translateReplace(
-                $this->isTmOperator($tma) ? 'markup-tma-b1-2' : 'markup-tma-a1-2',
-                [$this->getViewTmUrl()]
-            ),
-            'bottomContent' => sprintf(
-                '<p><a href="%s">%s</a></p>',
-                $this->url()->fromRoute(null, [], [], true),
-                $translationHelper->translate('TMA_CHANGE_DETAILS')
-            ),
-            'backLink' => null,
-        ];
-
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $formHelper->createForm('GenericConfirmation');
-        /* @var $form \Common\Form\Form */
-        $formHelper->setFormActionFromRequest($form, $this->getRequest());
-        $submitLabel = $this->isTmOperator($tma) ? 'submit' : 'submit-for-operator-approval';
-        $form->setSubmitLabel($submitLabel);
-        $form->removeCancel();
-
-        return $this->renderTmAction('transport-manager-application.review-and-submit', $form, $tma, $params);
+        return $this->redirect()->refresh();
     }
 
     /**
