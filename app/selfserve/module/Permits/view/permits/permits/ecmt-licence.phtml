@@ -1,31 +1,48 @@
 <?php
 $title = $this->translate('permits.page.ecmt.licence.title');
 $this->headTitle($title);
+$data = $this->ecmtLicenceData($form, $application);
 ?>
-
-<div class="row ecmt">
+<p class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
             <p><a href="<?php echo $this->url('permits'); ?>" class="back-link"><?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
             <div class="page-header__wrapper">
                 <h1 class="js-title">
-                    <?php echo $this->escapeHtml($this->ecmtLicenceTitle($application, $licences)); ?>
+                    <?php echo $this->escapeHtml($data['title']); ?>
                 </h1>
             </div>
         </div>
 
         <p class="field">
+            <?php if (!$data['empty']): ?>
             <div class="govuk-hint">
                 <p class=" guidance-blue extra-space large"><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.licence.info')); ?></p>
             </div>
+            <?php endif; ?>
+            <div class="ecmt">
+                <fieldset id="ecmt-licence" class="inline " data-group="ecmt-licence">
+                    <?php
+                    echo $data['copy'];
 
-            <fieldset id="ecmt-licence" class="inline" data-group="ecmt-licence">
-                <?php
-                    echo $this->form($form);
-                    echo $this->translate('markup-ecmt-licence-restricted-info');
-                ?>
-            </fieldset>
-        <p><?php echo $this->permitsDashboardLink(); ?></p>
+                    if (empty($form->get('Fields')
+                        ->get('EcmtLicence')->getValueOptions())) {
+                        $form->get('Fields')->get('SubmitButton')->setAttribute('class', 'visually-hidden');
+                        $form->get('Fields')->get('EcmtLicence')->setOptions(['label' => '']);
+                    }
+
+                    echo $this->formErrors($form);
+                        echo $this->form($form);
+                    ?>
+                </fieldset>
+            </div>
+            <p>
+            <?php
+            if(!$data['empty']) {
+                echo $this->permitsDashboardLink();
+            }
+            ?>
+            </p>
         </div>
 
     </div>

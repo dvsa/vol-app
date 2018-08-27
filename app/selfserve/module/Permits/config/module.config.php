@@ -320,7 +320,7 @@ return array(
             'permitsBackLink' => \Permits\View\Helper\BackToOverview::class,
             'permitsDashboardLink' => \Permits\View\Helper\PermitsDashboardLink::class,
             'changeAnswerLink' => \Permits\View\Helper\ChangeAnswerLink::class,
-            'ecmtLicenceTitle' => \Permits\View\Helper\EcmtLicenceTitle::class,
+            'ecmtLicenceData' => \Permits\View\Helper\EcmtLicenceData::class,
         ],
     ],
   'view_manager' => array(

@@ -139,28 +139,26 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
     public function ecmtLicenceAction()
     {
-                            $form = $this->getForm('EcmtLicenceForm');
+        $id = $this->params()->fromRoute('id', -1);
+        $application = $this->getApplication($id);
 
-                                $view = new ViewModel(['form' => $form]);
+        $form = $this->getForm('EcmtLicenceForm');
+
+        $view = new ViewModel(['form' => $form, 'application' => $application]);
         $view->setTemplate('permits/ecmt-licence');
 
         $data = $this->params()->fromPost();
-                                if (isset($data['Fields']['SubmitButton'])) {
-                            //Validate
-                $form->setData($data);
-if ($form->isValid()) {
+        if (isset($data['Fields']['SubmitButton'])) {
+            $form->setData($data);
+            if ($form->isValid()) {
                 $this->redirect()
                     ->toRoute('permits/' . EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE, ['id' => $this->params()->fromRoute('id', -1)],
                         [ 'query' => [
                             'licenceId' => $data['Fields']['EcmtLicence']
                         ]]);
             }
-                }
-                if (empty($form->get('Fields')
-                    ->get('EcmtLicence')->getValueOptions())) {
-                    $form->get('Fields')->get('SubmitButton')->setAttribute('class', 'visually-hidden');
-            $form->get('Fields')->get('EcmtLicence')->setOptions(['label' => '']);
         }
+
         return $view;
     }
 
