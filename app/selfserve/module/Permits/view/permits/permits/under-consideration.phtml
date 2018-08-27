@@ -3,16 +3,16 @@
         <div class="page-header">
             <p><a href="<?php echo $this->url('permits') ?>" class="back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
             <div class="page-header__wrapper">
-                <div class="guidance pre-selected" style="background: #F8F8F8">
-                    <p class=""><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.header')); ?></p>
-                    <h2><?php echo $application['licence']['licNo']?></h2>
+                <div class="guidance pre-selected highlight-box">
+                    <p><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.header')); ?></p>
+                    <h2><?php echo $this->escapeHtml($application['licence']['licNo']); ?></h2>
                 </div>
             </div>
         </div>
         <div class="field">
             <fieldset id="under-consideration" class="inline" data-group="under-consideration">
                 <?php
-                    if ($application['status']['id'] !== 'ecmt_permit_uc') {
+                    if ($application['status']['id'] !== Common\RefData::ECMT_APP_STATUS_UNDER_CONSIDERATION) {
                         $form
                             ->get('Submit')
                             ->get('SubmitButton')

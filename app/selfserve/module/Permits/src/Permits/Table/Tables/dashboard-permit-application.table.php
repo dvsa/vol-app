@@ -30,7 +30,7 @@ return array(
       'formatter' => function ($data, $column) {
           if (isset($data['id'])) {
               $column['formatter'] = 'RefDataStatus';
-              if ($data['status']['id'] == 'ecmt_permit_uc'){
+              if ($data['status']['id'] == Common\RefData::ECMT_APP_STATUS_UNDER_CONSIDERATION){
                   return sprintf(
                       '<a href="%s">%s</a>',
                       '/permits/' . $data['id'] . '/ecmt-under-consideration',
