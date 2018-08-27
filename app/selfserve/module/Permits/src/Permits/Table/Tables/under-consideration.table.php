@@ -12,7 +12,9 @@ return array(
         array(
             'title' => 'applicationDetailsTitle',
             'name' => 'applicationDetailsTitle',
-            'formatter' => 'Translate'
+            'formatter' => function ($data) {
+                return '<b>' . $data['applicationDetailsTitle'] . '</b>';
+            },
         ),
         array(
             'title' => 'applicationDetailsAnswer',
