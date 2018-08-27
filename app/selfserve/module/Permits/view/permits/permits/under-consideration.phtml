@@ -4,14 +4,20 @@
             <p><a href="<?php echo $this->url('permits') ?>" class="back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
             <div class="page-header__wrapper">
                 <div class="guidance pre-selected" style="background: #F8F8F8">
-                    <p class=""><?php echo $this->escapeHtml('Permit application for license'); ?></p>
-                    <h2><?php echo $licenceNumber?></h2>
+                    <p class=""><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.header')); ?></p>
+                    <h2><?php echo $application['licence']['licNo']?></h2>
                 </div>
             </div>
         </div>
         <div class="field">
             <fieldset id="under-consideration" class="inline" data-group="under-consideration">
                 <?php
+                    if ($application['status']['id'] !== 'ecmt_permit_uc') {
+                        $form
+                            ->get('Submit')
+                            ->get('SubmitButton')
+                            ->setAttribute('class', 'visually-hidden');
+                    }
                     echo $this->formErrors($form);
                     echo $this->form($form);
                 ?>

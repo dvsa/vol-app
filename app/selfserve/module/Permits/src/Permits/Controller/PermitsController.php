@@ -838,8 +838,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $data = (array)$request->getPost();
 
         if (is_array($data) && array_key_exists('Submit', $data)) {
-            $this->redirect()
-                ->toRoute('permits/' . EcmtSection::ROUTE_ECMT_WITHDRAW_APPLICATION, ['id' => $id]);
+            $this->nextStep(EcmtSection::ROUTE_ECMT_WITHDRAW_APPLICATION);
         }
 
         $ecmtPermitFees = $this->getEcmtPermitFees();
@@ -894,14 +893,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $this->getServiceLocator()->get('Helper\Form')
             ->populateFormTable($form->get('table'), $table);
 
-        if ($application['status']['id'] !== 'ecmt_permit_uc') {
-            $form
-                ->get('Submit')
-                ->get('SubmitButton')
-                ->setAttribute('class', 'visually-hidden');
-        }
-
-        return array('form' => $form, 'licenceNumber' => $application['licence']['licNo']);
+        return array('form' => $form, 'application' => $application);
     }
 
 
