@@ -869,8 +869,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                  ),
                  3 => array(
                      'applicationDetailsTitle' => 'Application date',
-                     //TODO $application['lastModifiedOn'] needs to change to $application['dateReceived'] once it's being populated
-                     'applicationDetailsAnswer' => date(\DATETIME_FORMAT, strtotime($application['lastModifiedOn']))
+                     'applicationDetailsAnswer' => date(\DATETIME_FORMAT, strtotime($application['dateReceived']))
                  ),
                  4 => array(
                      'applicationDetailsTitle' => 'Permits required',
