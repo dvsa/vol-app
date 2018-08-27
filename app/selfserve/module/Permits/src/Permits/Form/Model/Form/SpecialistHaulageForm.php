@@ -12,7 +12,7 @@ class SpecialistHaulageForm
 {
     /**
      * @Form\Name("Fields")
-     * @Form\ComposedObject("Permits\Form\Model\Fieldset\SpecialistHaulage")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\SectorList")
      */
     public $fields = null;
 

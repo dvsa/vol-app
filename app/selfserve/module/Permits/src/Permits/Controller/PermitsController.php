@@ -428,13 +428,10 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         if (isset($application)) {
             if (isset($application['sectors'])) {
-                $form->get('Fields')->get('SpecialistHaulage')->setValue('1');
-
                 //Format results from DB before setting values on form
                 $selectedValue = $application['sectors']['id'];
 
                 $form->get('Fields')
-                    ->get('SectorList')
                     ->get('SectorList')
                     ->setValue($selectedValue);
             }
@@ -446,29 +443,17 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             //Validate
             $form->setData($data);
             if ($form->isValid()) {
-                //EXTRA VALIDATION
-                if (($data['Fields']['SpecialistHaulage'] == 1
-                    && isset($data['Fields']['SectorList']['SectorList']))
-                    || ($data['Fields']['SpecialistHaulage'] == 0)
-                ) {
-                    $sectorID = $data['Fields']['SectorList']['SectorList'];
+                    $sectorID = $data['Fields']['SectorList'];
                     $command = UpdateSector::create(['id' => $id, 'sector' => $sectorID]);
 
                     $this->handleCommand($command);
 
                     $this->handleRedirect($data, EcmtSection::ROUTE_ECMT_CHECK_ANSWERS);
-                } else {
-                    //conditional validation failed, sector list should not be empty
-                    $form->get('Fields')
-                        ->get('SectorList')
-                        ->get('SectorList')
-                        ->setMessages(['error.messages.sector.list']);
-                }
             } else {
                 //Custom Error Message
                 $form->get('Fields')
-                    ->get('SpecialistHaulage')
-                    ->setMessages(['error.messages.sector']);
+                    ->get('SectorList')
+                    ->setMessages(['error.messages.sector.list']);
             }
         }
 
