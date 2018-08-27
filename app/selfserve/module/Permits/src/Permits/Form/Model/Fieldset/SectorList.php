@@ -30,5 +30,6 @@ class SectorList
      * })
      * @Form\Type("DynamicRadio")
      */
-    public $sectorList;
+    public $SectorList;
+
 }
