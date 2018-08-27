@@ -12,8 +12,9 @@ return array(
         array(
             'title' => 'applicationDetailsTitle',
             'name' => 'applicationDetailsTitle',
-            'formatter' => function ($data) {
-                return '<b>' . $data['applicationDetailsTitle'] . '</b>';
+            'formatter' => function ($row, $column, $sm) {
+                return '<b>' . $sm->get('translator')
+                        ->translate($row['applicationDetailsTitle']) . '</b>';
             },
         ),
         array(

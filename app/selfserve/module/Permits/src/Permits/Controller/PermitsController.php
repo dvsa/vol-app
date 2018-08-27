@@ -856,27 +856,27 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
          $tableData = array(
              'results' => array(
                  0 => array(
-                     'applicationDetailsTitle' => 'Application status',
+                     'applicationDetailsTitle' => 'permits.page.ecmt.consideration.application.status',
                      'applicationDetailsAnswer' => $status
                  ),
                  1 => array(
-                     'applicationDetailsTitle' => 'Permit type',
+                     'applicationDetailsTitle' => 'permits.page.ecmt.consideration.permit.type',
                      'applicationDetailsAnswer' => $application['permitType']['description']
                  ),
                  2 => array(
-                     'applicationDetailsTitle' => 'Reference number',
+                     'applicationDetailsTitle' => 'permits.page.ecmt.consideration.reference.number',
                      'applicationDetailsAnswer' => $application['applicationRef']
                  ),
                  3 => array(
-                     'applicationDetailsTitle' => 'Application date',
+                     'applicationDetailsTitle' => 'permits.page.ecmt.consideration.application.date',
                      'applicationDetailsAnswer' => date(\DATETIME_FORMAT, strtotime($application['dateReceived']))
                  ),
                  4 => array(
-                     'applicationDetailsTitle' => 'Permits required',
+                     'applicationDetailsTitle' => 'permits.page.ecmt.consideration.permits.required',
                      'applicationDetailsAnswer' => empty($application['permitsRequired']) ? 0 : $application['permitsRequired']
                  ),
                  5 => array(
-                     'applicationDetailsTitle' => 'Application fee paid',
+                     'applicationDetailsTitle' => 'permits.page.ecmt.consideration.application.fee',
                      'applicationDetailsAnswer' => '£' . $ecmtApplicationFeeTotal
                  )
              )
