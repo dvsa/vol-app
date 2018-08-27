@@ -779,41 +779,28 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
 
-        $request = $this->getRequest();
-        $data = (array)$request->getPost();
-
         if (!$application['canBeWithdrawn']) {
             $this->redirect()->toRoute('permits');
         }
 
+        $data = $this->params()->fromPost();
+
         //Create form from annotations
         $form = $this->getForm('WithdrawApplicationForm');
 
-        if (is_array($data) && array_key_exists('Submit', $data)) {
+        if (isset($data['Submit'])) {
             //Validate
             $form->setData($data);
 
             if ($form->isValid()) {
-                $queryParams = array();
-                $queryParams['id'] = $id;
-
-                $command = WithdrawEcmtPermitApplication::create($queryParams);
-
-                $response = $this->handleCommand($command);
-                $insert = $response->getResult();
-
+                $command = WithdrawEcmtPermitApplication::create(['id' => $id]);
+                $this->handleCommand($command);
                 $this->nextStep(EcmtSection::ROUTE_ECMT_WITHDRAW_CONFIRMATION);
-            } else {
-                // Required to set the error message on the checkbox itself.
-                $form->get('Fields')
-                    ->get('ConfirmWithdraw')
-                    ->setMessages(['permits.form.withdraw_application.error_message']);
             }
         }
 
         $view = new ViewModel();
 
-        // $view->setVariable('form', $form);
         $view->setVariable('id', $id);
         $view->setVariable('form', $form);
         $view->setVariable('ref', $application['applicationRef']);
