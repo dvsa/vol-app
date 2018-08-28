@@ -831,33 +831,27 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
      *
      */
     public function underConsiderationAction() {
-        $id = $this->params()->fromRoute('id', -1);
-        $application = $this->getApplication($id);
-        
-        $request = $this->getRequest();
-        $data = (array)$request->getPost();
+        $data = $this->params()->fromPost();
 
-        if (is_array($data) && array_key_exists('Submit', $data)) {
+        if (isset($data['Submit'])) {
             $this->nextStep(EcmtSection::ROUTE_ECMT_WITHDRAW_APPLICATION);
         }
+
+        $id = $this->params()->fromRoute('id', -1);
+        $application = $this->getApplication($id);
 
         $ecmtPermitFees = $this->getEcmtPermitFees();
         $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
         $ecmtApplicationFeeTotal = $ecmtApplicationFee * $application['permitsRequired'];
 
-        $status = [
-            'id' => $application['status']['id'],
-            'description' => $application['status']['description']
-        ];
         /** @var \Common\View\Helper\Status $statusHelper */
          $statusHelper = $this->getServiceLocator()->get('ViewHelperManager')->get('status');
-         $status = $statusHelper->__invoke($status);  //strtoupper($application['status']['description'])
 
          $tableData = array(
              'results' => array(
                  0 => array(
                      'applicationDetailsTitle' => 'permits.page.ecmt.consideration.application.status',
-                     'applicationDetailsAnswer' => $status
+                     'applicationDetailsAnswer' => $statusHelper->__invoke($application['status'])
                  ),
                  1 => array(
                      'applicationDetailsTitle' => 'permits.page.ecmt.consideration.permit.type',
@@ -873,7 +867,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                  ),
                  4 => array(
                      'applicationDetailsTitle' => 'permits.page.ecmt.consideration.permits.required',
-                     'applicationDetailsAnswer' => empty($application['permitsRequired']) ? 0 : $application['permitsRequired']
+                     'applicationDetailsAnswer' => $application['permitsRequired']
                  ),
                  5 => array(
                      'applicationDetailsTitle' => 'permits.page.ecmt.consideration.application.fee',
@@ -894,7 +888,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         return array('form' => $form, 'application' => $application);
     }
-
 
     /**
      * Used to retrieve the licences for the ecmt-licence page.
