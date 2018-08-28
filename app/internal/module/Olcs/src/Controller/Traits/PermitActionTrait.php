@@ -135,7 +135,10 @@ trait PermitActionTrait
 
             // This was a From Action button being pressed, handle in helper method.
             if (array_key_exists('form-actions', $data)) {
-                $this->handleFormActions($data, $licence);
+                $formActionResult = $this->handleFormActions($data, $licence);
+                if($formActionResult){
+                    return $this->renderView($formActionResult);
+                }
             }
 
             // Handles loading the a blank application form for case worker to populate
@@ -190,7 +193,7 @@ trait PermitActionTrait
             } else {
                 // Form didnt validate so re-render the form with errors highligted.
                 $invalidFormView = $this->getCreateView($application, $licence, $form);
-                return $this->renderView($invalidFormView);
+                return $invalidFormView;
             }
         }
 
@@ -205,6 +208,7 @@ trait PermitActionTrait
             $response = $this->handleCommand($command);
             $this->checkResponse($response);
         }
+        return false;
     }
 
 

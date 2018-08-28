@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Traits;
 
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtApplicationByLicence;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
@@ -102,9 +103,14 @@ trait PermitSearchTrait
      */
     private function getPermitList($filters)
     {
-
+        $query = array_merge($filters, ['statusIds' => [
+            RefData::ECMT_APP_STATUS_NOT_YET_SUBMITTED,
+            RefData::ECMT_APP_STATUS_UNDER_CONSIDERATION,
+            RefData::ECMT_APP_STATUS_AWAITING_FEE,
+            RefData::ECMT_APP_STATUS_WITHDRAWN]
+        ]);
         /** @var \Common\Service\Cqrs\Response $response */
-        $response = $this->handleQuery(EcmtApplicationByLicence::create($filters));
+        $response = $this->handleQuery(EcmtApplicationByLicence::create($query));
         if (!$response->isOk()) {
             throw new \Exception('Error retrieving permit list');
         }
