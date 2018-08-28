@@ -22,7 +22,7 @@ class ConfirmationController extends AbstractTransportManagersController
     public function indexAction()
     {
         $tmaId = (int)$this->params('application');
-        $tma = $this->getTmaDetails($tmaId);
+        $tma = $this->getTransportManagerApplication($tmaId);
 
         $this->getCurrentUser();
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
@@ -33,7 +33,7 @@ class ConfirmationController extends AbstractTransportManagersController
         $params = [
             'content' => $translationHelper->translateReplace($confirmationMarkup,
                 [$this->getCurrentUserFullName(), $this->getVerifySignatureDate($tma), $this->getBacklink()]),
-            'tmFullName' => $this->getTmFullName($tma),
+            'tmFullName' => $this->getTmName($tma),
         ];
 
         return $this->renderTmAction(null, null, $tma, $params);
@@ -95,25 +95,6 @@ class ConfirmationController extends AbstractTransportManagersController
     {
         return ($this->isGranted(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD) &&
             !$this->isGranted(RefData::PERMISSION_SELFSERVE_LVA));
-    }
-
-    protected function getTmaDetails($tmaId)
-    {
-        /* @var $response \Common\Service\Cqrs\Response */
-        $response = $this->handleQuery(
-            \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetDetails::create(['id' => $tmaId])
-        );
-
-        // this is need for use in the processFiles callbacks
-        $this->tma = $response->getResult();
-
-        return $response->getResult();
-    }
-
-    private function getTmFullName($tma)
-    {
-        return trim($tma['transportManager']['homeCd']['person']['forename'] . ' '
-            . $tma['transportManager']['homeCd']['person']['familyName']);
     }
 
     private function getVerifySignatureDate($tma)
