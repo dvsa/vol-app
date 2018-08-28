@@ -3,7 +3,7 @@ $title = $this->translate('permits.page.ecmt.licence.title');
 $this->headTitle($title);
 $data = $this->ecmtLicenceData($form, $application);
 ?>
-<p class="row ecmt">
+<div class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
             <p><a href="<?php echo $this->url('permits'); ?>" class="back-link"><?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
@@ -14,13 +14,6 @@ $data = $this->ecmtLicenceData($form, $application);
             </div>
         </div>
 
-        <p class="field">
-            <?php if (!$data['empty']): ?>
-            <div class="govuk-hint">
-                <p class=" guidance-blue extra-space large"><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.licence.info')); ?></p>
-            </div>
-            <?php endif; ?>
-            <div class="ecmt">
                 <fieldset id="ecmt-licence" class="inline " data-group="ecmt-licence">
                     <?php
                     echo $data['copy'];
@@ -31,18 +24,25 @@ $data = $this->ecmtLicenceData($form, $application);
                         $form->get('Fields')->get('EcmtLicence')->setOptions(['label' => '']);
                     }
 
+                    if (!isset($application)) {
+                        if (count($form->get('Fields')->get('EcmtLicence')->getValueOptions()) === 1 ||
+                            isset($form->get('Fields')->get('EcmtLicence')->getValueOptions()[0]['label_attributes'])) {
+                            $option = $form->get('Fields')->get('EcmtLicence')->getValueOptions()[0];
+                            $option['selected'] = true;
+                            $option['attributes'] = ['class' => 'visually-hidden'];
+                            $option['label_attributes'] = ['class' => 'visually-hidden'];
+                            $form->get('Fields')->get('EcmtLicence')->setValueOptions([$option]);
+                        }
+                    }
                     echo $this->formErrors($form);
                         echo $this->form($form);
                     ?>
                 </fieldset>
-            </div>
-            <p>
-            <?php
-            if(!$data['empty']) {
+    <?php
+            if (count($form->get('Fields')->get('EcmtLicence')->getValueOptions()) > 0 || isset($application)) {
                 echo $this->permitsDashboardLink();
             }
-            ?>
-            </p>
+    ?>
         </div>
 
     </div>

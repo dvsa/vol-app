@@ -43,17 +43,25 @@ class EcmtLicenceData extends AbstractHelper
             $data['title'] = $this->view->translate('permits.page.ecmt.licence.saturated');
             $data['copy'] = sprintf($this->view->translate('markup-ecmt-licence-saturated'), '/permits');
             $data['empty'] = true;
+            if (!empty($application)) {
+                $data['title'] = sprintf($this->view->translate('permits.page.ecmt.licence.question.one.licence'),
+                    $application['licence']['licNo'] . ' (' . $application['licence']['trafficArea']['name'] . ')');
+                $data['copy'] = '<p class="guidance-blue extra-space large">' .
+                    $this->view->translate('permits.page.ecmt.licence.info') . '</p>';
+            }
             return $data;
         }
 
+        $data['copy'] = '<p class="guidance-blue extra-space large">' .
+            $this->view->translate('permits.page.ecmt.licence.info') . '</p>';
+
         if ($licenceCount > 1) {
             $data['title'] = $this->view->translate('permits.page.ecmt.licence.question');
-            $data['copy'] = '';
         } else {
             $data['title'] = sprintf($this->view->translate('permits.page.ecmt.licence.question.one.licence'), $licences[0]['label']);
-            $data['copy'] = '';
-            if (array_key_exists('label_attributes',$licences[0])) {
-                $data['copy'] = $this->view->translate('markup-ecmt-licence-restricted-info');
+
+            if (array_key_exists('label_attributes',$licences[0]) && empty($application)) {
+                $data['copy'] .= '<p>' . $this->view->translate('permits.form.ecmt-licence.restricted-licence.hint') . '</p>';
             }
         }
         if (!empty($application)) {
