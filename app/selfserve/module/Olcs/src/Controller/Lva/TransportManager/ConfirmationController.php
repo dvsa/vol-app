@@ -10,8 +10,6 @@ class ConfirmationController extends AbstractTransportManagersController
 {
     use ApplicationControllerTrait;
 
-    // todo make sure url is not accessible to every ss user
-
     /**
      * index action for /transport-manager/:TmaId/confirmation route
      *
