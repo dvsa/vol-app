@@ -5,6 +5,7 @@ namespace Olcs\Controller\Traits;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtApplicationByLicence;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
+use Olcs\Logging\Log\Logger;
 use Zend\Form\Element\Select;
 
 /**
@@ -107,6 +108,7 @@ trait PermitSearchTrait
         if (!$response->isOk()) {
             throw new \Exception('Error retrieving permit list');
         }
+        Logger::crit(print_r($response, true));
 
         return $response;
     }

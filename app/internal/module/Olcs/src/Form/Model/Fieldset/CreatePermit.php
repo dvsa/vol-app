@@ -262,4 +262,28 @@ class CreatePermit extends Base
      *
      */
     public $status;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({
+     *   "id" : "canBeSubmitted",
+     *   "class": "permitApplicationCanBeSubmitted"
+     * })
+     *
+     * @Form\Type("Zend\Form\Element\Hidden")
+     *
+     */
+    public $canBeSubmitted;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({
+     *   "id" : "canBeWithdrawn",
+     *   "class": "permitApplicationCanBeWithdrawn"
+     * })
+     *
+     * @Form\Type("Zend\Form\Element\Hidden")
+     *
+     */
+    public $canBeWithdrawn;
 }

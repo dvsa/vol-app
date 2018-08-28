@@ -4,6 +4,7 @@ namespace Olcs\Controller\Traits;
 
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateFullPermitApplication;
+use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
@@ -131,35 +132,10 @@ trait PermitActionTrait
             $data = (array)$request->getPost();
             $application = [];
 
-            if (array_key_exists('form-actions', $data) && array_key_exists('save', $data['form-actions'])) {
-                $form = $this->getForm('PermitCreate');
-                $form->setData($data);
-                if ($form->isValid()) {
-                    if (empty($data['fields']['id'])) {
-                        $applicationData = $this->mapApplicationData($form->getData()['fields'], $licence['id']);
-                        $command = CreateFullPermitApplication::create($applicationData);
-                        $response = $this->handleCommand($command);
-                        $this->checkResponse($response);
-                    } else {
-                        $applicationData = $this->mapApplicationData($form->getData()['fields'], $licence['id']);
-                        $command = UpdateEcmtPermitApplication::create($applicationData);
-                        $response = $this->handleCommand($command);
-                        $this->checkResponse($response);
-                    }
-                } else {
-                    // Form didnt validate so re-render the form with errors highligted.
-                    $invalidFormView = $this->getCreateView($application, $licence, $form);
-                    return $this->renderView($invalidFormView);
-                }
-            }
 
-
-            if (array_key_exists('form-actions', $data) && array_key_exists('withdraw', $data['form-actions'])) {
-                if (!empty($data['fields']['id'])) {
-                    $command = WithdrawEcmtPermitApplication::create(['id' => $data['fields']['id']]);
-                    $response = $this->handleCommand($command);
-                    $this->checkResponse($response);
-                }
+            // This was a From Action button being pressed, handle in helper method.
+            if (array_key_exists('form-actions', $data)) {
+                $this->handleFormActions($data, $licence);
             }
 
             // Handles loading the a blank application form for case worker to populate
@@ -188,6 +164,47 @@ trait PermitActionTrait
         $view->setTemplate('pages/permits/two-tables');
 
         return $this->renderView($view);
+    }
+
+
+    protected function handleFormActions($data, $licence)
+    {
+
+        $application = [];
+
+        if (array_key_exists('save', $data['form-actions'])) {
+            $form = $this->getForm('PermitCreate');
+            $form->setData($data);
+            if ($form->isValid()) {
+                if (empty($data['fields']['id'])) {
+                    $applicationData = $this->mapApplicationData($form->getData()['fields'], $licence['id']);
+                    $command = CreateFullPermitApplication::create($applicationData);
+                    $response = $this->handleCommand($command);
+                    $this->checkResponse($response);
+                } else {
+                    $applicationData = $this->mapApplicationData($form->getData()['fields'], $licence['id']);
+                    $command = UpdateEcmtPermitApplication::create($applicationData);
+                    $response = $this->handleCommand($command);
+                    $this->checkResponse($response);
+                }
+            } else {
+                // Form didnt validate so re-render the form with errors highligted.
+                $invalidFormView = $this->getCreateView($application, $licence, $form);
+                return $this->renderView($invalidFormView);
+            }
+        }
+
+        if (array_key_exists('withdraw', $data['form-actions'])) {
+            $command = WithdrawEcmtPermitApplication::create(['id' => $data['fields']['id']]);
+            $response = $this->handleCommand($command);
+            $this->checkResponse($response);
+        }
+
+        if (array_key_exists('submit', $data['form-actions'])) {
+            $command = EcmtSubmitApplication::create(['id' => $data['fields']['id']]);
+            $response = $this->handleCommand($command);
+            $this->checkResponse($response);
+        }
     }
 
 

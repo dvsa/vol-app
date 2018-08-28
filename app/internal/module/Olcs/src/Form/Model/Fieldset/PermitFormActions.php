@@ -20,14 +20,14 @@ class PermitFormActions
 
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"cancelPermitApplication"})
+     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"backToPermitList"})
      * @Form\Options({"label": "Back"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $cancel = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large"})
+     * @Form\Attributes({"type":"submit","class":"action--primary large visually-hidden", "id": "submitPermitApplication"})
      * @Form\Options({"label": "Submit Application"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
