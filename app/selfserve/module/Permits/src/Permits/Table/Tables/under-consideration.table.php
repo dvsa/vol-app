@@ -2,7 +2,7 @@
 
 return array(
     'variables' => array(
-        'title' => '',
+        'title' => 'Application details',
         'empty_message' => '',
         'hide_column_headers' => true,
     ),

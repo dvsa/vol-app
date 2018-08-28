@@ -1,3 +1,7 @@
+<?php
+    use Permits\View\Helper\EcmtSection;
+?>
+
 <div class="row ecmt">
     <div class="two-thirds">
         <div class="page-header">
@@ -11,19 +15,13 @@
         </div>
         <div class="field">
             <fieldset id="under-consideration" class="inline" data-group="under-consideration">
-                <?php
-                    if ($application['status']['id'] !== Common\RefData::ECMT_APP_STATUS_UNDER_CONSIDERATION) {
-                        $form
-                            ->get('Submit')
-                            ->get('SubmitButton')
-                            ->setAttribute('class', 'visually-hidden');
-                    }
-                    echo $this->formErrors($form);
-                    echo $this->form($form);
-                ?>
+                <?php echo $this->table; ?>
             </fieldset>
-            <p><a href="<?php echo $this->url('permits') ?>"> <?php echo $this->escapeHtml($this->translate('permits.link.return.to.dashboard')); ?></a></p>
-
+            <div class="field govuk-hint guidance-blue extra-space large">
+                We will get back to you by <strong><?php echo $this->escapeHtml($this->responseDate); ?></strong>.
+            </div>
+            <p><a class="action--primary" href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_WITHDRAW_APPLICATION, [], [], true); ?>">Withdraw application</a></p>
+            <p><a href="<?php echo $this->url('permits'); ?>"> <?php echo $this->escapeHtml($this->translate('permits.link.return.to.dashboard')); ?></a></p>
         </div>
     </div>
 </div>

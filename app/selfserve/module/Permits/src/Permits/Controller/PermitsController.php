@@ -831,20 +831,21 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
      *
      */
     public function underConsiderationAction() {
-        $data = $this->params()->fromPost();
-
-        if (isset($data['Submit'])) {
-            $this->nextStep(EcmtSection::ROUTE_ECMT_WITHDRAW_APPLICATION);
-        }
-
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
+
+        if (!$application['isUnderConsideration']) {
+            $this->redirect()->toRoute('permits');
+        }
 
         $ecmtPermitFees = $this->getEcmtPermitFees();
         $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
         $ecmtApplicationFeeTotal = $ecmtApplicationFee * $application['permitsRequired'];
 
-        /** @var \Common\View\Helper\Status $statusHelper */
+        /**
+         * @todo status view helper and table config shouldn't be in the controller
+         * @var \Common\View\Helper\Status $statusHelper 
+         */
          $statusHelper = $this->getServiceLocator()->get('ViewHelperManager')->get('status');
 
          $tableData = array(
@@ -881,12 +882,12 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             ->get('Table')
             ->prepareTable('under-consideration', $tableData);
 
-        $form = $this->getForm('UnderConsideration');
+        $view = new ViewModel();
+        $view->setVariable('application', $application);
+        $view->setVariable('table', $table);
+        $view->setVariable('responseDate', '30 November 2018'); /** @todo this needs to be a system parameter */
 
-        $this->getServiceLocator()->get('Helper\Form')
-            ->populateFormTable($form->get('table'), $table);
-
-        return array('form' => $form, 'application' => $application);
+        return $view;
     }
 
     /**
@@ -1103,7 +1104,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
      */
     private function getEcmtPermitFees()
     {
-        // echo 'test'; die;
         $query = EcmtPermitFees::create(['productReferences' => [$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE, $this::ECMT_ISSUING_FEE_PRODUCT_REFENCE]]);
         $response = $this->handleQuery($query);
         return $response->getResult();
