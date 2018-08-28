@@ -3,80 +3,56 @@
 namespace OLCS\Controller\Lva\TransportManager;
 
 use Common\Controller\Lva\AbstractTransportManagersController;
-use Common\Data\Mapper\Lva\TransportManagerApplication;
-use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-
+use Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication;
+use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetDetails;
+use Olcs\View\Model\ViewModel;
 
 class CheckAnswersController extends AbstractTransportManagersController
 {
 
-    use ApplicationControllerTrait;
 
     public function indexAction()
     {
         $transportManagerApplicationId = $this->params("application");
+        /**
+         * @var TransportManagerApplication
+         */
+        $transportManagerApplication = $this->handleQuery(
+            GetDetails::create(['id' => $transportManagerApplicationId])
+        )->getResult();
 
-        $transportManagerApplication = $this->getTransportManagerApplication($transportManagerApplicationId);
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
-
-        $checkAnswersHint = $translator->translate('lva.section.transport-manager-check-answers-hint');
-        $title = 'check_answers';
-        $defaultParams = [
-            'content' => $checkAnswersHint,
-            'tmFullName' => $this->getTmName($transportManagerApplication),
-            'backLink' => $this->url()->fromRoute(
-                "dashboard",
-                [],
-                [],
-                false
-            ),
-            'backText' => 'transport-manager-save-return',
-
-        ];
-        $form = $this->getConfirmationForm($transportManagerApplicationId);
-        $sections = TransportManagerApplication::mapForSections($transportManagerApplication);
-        $params = array_merge(["sections" => $sections], $defaultParams);
-        /* @var $layout \Zend\View\Model\ViewModel */
-        $layout = $this->render($title, $form, $params);
-        $content = $layout->getChildrenByCaptureTo('content')[0];
-        $content->setTemplate('pages/lva-tm-details-checkAnswers');
-
-        return $layout;
+        var_dump($transportManagerApplication);
+        exit();
     }
 
-    /**
-     * confirmAction
-     */
-    public function confirmAction()
+    public function reviewAction()
     {
-        if ($this->getRequest()->isPost()) {
-            exit("Decalarion page -> OLCS-19791");
-        }
+        $transportManagerApplicationId = $this->params("id");
+        /**
+         * @var TransportManagerApplication
+         */
+        $transportManagerApplication = $this->handleQuery(
+            GetDetails::create(['id' => $transportManagerApplicationId])
+        )->getResult();
+
+        $viewModel = new ViewModel();
     }
 
-    /**
-     * getConfirmationForm
-     *
-     * @param $transportManagerApplicationId
-     *
-     * @return \Common\Form\Form
-     */
-    private function getConfirmationForm(int $transportManagerApplicationId): \Common\Form\Form
+    public function returnAction()
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-
-        /* @var $form \Common\Form\Form */
-        $form = $formHelper->createForm('GenericConfirmation');
-        $form->setAttribute(
-            "action",
-            $this->url()->fromRoute(
-                'lva-transport_manager/check_answers',
-                ['application' => $transportManagerApplicationId]
-            ) . 'confirm'
+        return $this->redirect()->toRoute(
+            'dashboard',
+            []
         );
-        $submitLabel = 'Confirm and continue';
-        $form->setSubmitLabel($submitLabel);
-        $form->removeCancel();
-        return $form;
     }
+
+    public function changeAction()
+    {
+        $section = $this->params("section");
+        $transportManagerApplicationId = $this->params("id");
+
+        $routeParams = ['child_id' => $transportManagerApplicationId];
+        $route = ['name' =>'', 'params'=>$routeParams];
+    }
+
 }
