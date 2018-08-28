@@ -6,6 +6,7 @@ use Common\Controller\Lva\AbstractTransportManagersController;
 use Common\Data\Mapper\Lva\TransportManagerApplication;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
+
 class CheckAnswersController extends AbstractTransportManagersController
 {
 
@@ -16,7 +17,7 @@ class CheckAnswersController extends AbstractTransportManagersController
         $transportManagerApplicationId = $this->params("application");
 
         $transportManagerApplication = $this->getTransportManagerApplication($transportManagerApplicationId);
-        $translator = $sl->get('Helper\Translation');
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
 
         $checkAnswersHint = $translator->translate('lva.section.transport-manager-check-answers-hint');
         $title = 'check_answers';
