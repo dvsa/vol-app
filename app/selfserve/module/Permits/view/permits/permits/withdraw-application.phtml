@@ -1,4 +1,7 @@
 <?php
+
+use Permits\View\Helper\EcmtSection;
+
     $title = $this->translate('permits.application.withdraw-application');
     $this->headTitle($this->translate('permits.application.withdraw-application.title'));
 ?>
@@ -7,7 +10,7 @@
     <div class="two-thirds">
         <div class="page-header">
         <!-- Change to 'under consideration' page when that is complete. -->
-        <p><?php echo $this->permitsBackLink(); ?></p>
+        <p><?php echo $this->underConsiderationLink(EcmtSection::ROUTE_ECMT_UNDER_CONSIDERATION); ?></p>
             <div class="page-header__wrapper">
                 <h3 class="page-header__subtitle"> <?php echo $this->escapeHtml($ref); ?></h3>
                 <h1 class="js-title">

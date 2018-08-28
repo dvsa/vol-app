@@ -321,6 +321,8 @@ return array(
             'permitsDashboardLink' => \Permits\View\Helper\PermitsDashboardLink::class,
             'changeAnswerLink' => \Permits\View\Helper\ChangeAnswerLink::class,
             'ecmtLicenceData' => \Permits\View\Helper\EcmtLicenceData::class,
+            'underConsiderationLink' => \Permits\View\Helper\UnderConsiderationLink::class,
+
         ],
     ],
   'view_manager' => array(
