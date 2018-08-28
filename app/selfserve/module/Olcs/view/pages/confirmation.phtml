@@ -1,0 +1,20 @@
+<div class="js-body">
+<?php
+echo $this->partial(
+    'partials/page-header-confirmation',
+    [
+        'pageSubTitle' => $this->tmFullName,
+        'backUrl' => [
+                'url' => $this->backLink,
+            ],
+    ]
+);
+?>
+
+<?php echo $this->content ?>
+
+<?php if (isset($this->bottomContent)): ?>
+<?php echo $this->bottomContent ?>
+<?php endif; ?>
+
+</div>
