@@ -1,0 +1,44 @@
+<div class="js-body">
+<?php
+echo $this->partial(
+    'partials/page-header-confirmation',
+    [
+        'pageSubTitle' => $this->tmFullName,
+        'backUrl' => [
+                'url' => $this->backLink,
+            ],
+    ]
+);
+?>
+
+<?php echo $this->content ?>
+
+<?php if (isset($form)): ?>
+<?php
+$form->prepare();
+echo $this->formErrors($form);
+echo $this->form($form);
+?>
+<?php endif; ?>
+
+<?php if (isset($this->bottomContent)): ?>
+<?php echo $this->bottomContent ?>
+<?php endif; ?>
+
+<?php if (isset($resendForm)): ?>
+    <details class="help">
+        <summary class="help__summary">Resend link to Transport Manager</summary>
+<?php
+$resendForm->prepare();
+echo $this->formErrors($resendForm);
+echo $this->form($resendForm);
+?>
+</details>
+<?php endif; ?>
+
+
+        </div>
+
+    </div>
+
+</div>
