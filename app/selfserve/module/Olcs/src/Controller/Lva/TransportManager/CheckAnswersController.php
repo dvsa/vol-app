@@ -11,6 +11,10 @@ class CheckAnswersController extends AbstractTransportManagersController
 
     use ApplicationControllerTrait;
 
+    /**
+     * indexAction
+     * @return array|\Common\View\Model\Section|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $transportManagerApplicationId = $this->params("application");
