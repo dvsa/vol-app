@@ -8,8 +8,6 @@ use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
-use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries;
-use Dvsa\Olcs\Transfer\Query\Permits\SectorsList;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -136,7 +134,7 @@ trait PermitActionTrait
             // This was a From Action button being pressed, handle in helper method.
             if (array_key_exists('form-actions', $data)) {
                 $formActionResult = $this->handleFormActions($data, $licence);
-                if($formActionResult){
+                if ($formActionResult) {
                     return $this->renderView($formActionResult);
                 }
             }
