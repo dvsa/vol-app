@@ -26,7 +26,8 @@ $data = $this->ecmtLicenceData($form, $application);
 
                     if (!isset($application)) {
                         if (count($form->get('Fields')->get('EcmtLicence')->getValueOptions()) === 1 ||
-                            isset($form->get('Fields')->get('EcmtLicence')->getValueOptions()[0]['label_attributes'])) {
+                            (count($form->get('Fields')->get('EcmtLicence')->getValueOptions()) === 2 &&
+                                isset($form->get('Fields')->get('EcmtLicence')->getValueOptions()[0]['label_attributes']))) {
                             $option = $form->get('Fields')->get('EcmtLicence')->getValueOptions()[0];
                             $option['selected'] = true;
                             $option['attributes'] = ['class' => 'visually-hidden'];
