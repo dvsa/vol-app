@@ -827,7 +827,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                  ),
                  3 => array(
                      'applicationDetailsTitle' => 'permits.page.ecmt.consideration.application.date',
-                     'applicationDetailsAnswer' => date(\DATETIME_FORMAT, strtotime($application['dateReceived']))
+                     'applicationDetailsAnswer' => date(\DATE_FORMAT, strtotime($application['dateReceived']))
                  ),
                  4 => array(
                      'applicationDetailsTitle' => 'permits.page.ecmt.consideration.permits.required',
