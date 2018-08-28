@@ -1,0 +1,60 @@
+<div class="js-body">
+    <?php
+        echo $this->partial(
+            'partials/page-header-simple',
+            [
+                'pageTitle' => $this->translate($this->title),
+                'pageSubTitle' => $this->tmFullName
+            ]
+        );
+    ?>
+
+    <div class="row">
+        
+      <div class="full-width article">
+
+
+          <p><?php echo $this->content ?></p>
+
+          <?php echo $this->partialLoop(
+          'partials/check-answer-section',
+            $this->sections
+          ); ?>
+  
+          <?php if (isset($form)): ?>
+            <?php
+            $form->prepare();
+            echo $this->formErrors($form);
+            echo $this->form($form);
+            ?>
+          <?php endif; ?>
+  
+          <?php if (isset($this->bottomContent)): ?>
+              <?php echo $this->bottomContent ?>
+          <?php endif; ?>
+  
+          <?php if (isset($resendForm)): ?>
+              <details class="help">
+                  <summary class="help__summary">Resend link to Transport Manager</summary>
+                  <?php
+                  $resendForm->prepare();
+                  echo $this->formErrors($resendForm);
+                  echo $this->form($resendForm);
+                  ?>
+              </details>
+          <?php endif; ?>
+
+
+          <?php
+          if (isset($this->backLink)): ?>
+          <p>
+              <a href="<?php echo $this->backLink ?>">
+                  <?php echo $this->translate($this->backText); ?>
+              </a>
+          </p>
+          <?php endif; ?>
+      </div>
+      
+    </div>
+    
+</div>
