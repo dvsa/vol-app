@@ -50,7 +50,7 @@ class CheckAnswersController extends AbstractTransportManagersController
     /**
      * confirmAction
      *
-     * @return void
+     * @return  void
      */
     public function confirmAction()
     {
