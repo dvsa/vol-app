@@ -9,7 +9,6 @@ use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries;
 use Dvsa\Olcs\Transfer\Query\Permits\SectorsList;
-use Olcs\Logging\Log\Logger;
 use Zend\View\Model\ViewModel;
 
 /**

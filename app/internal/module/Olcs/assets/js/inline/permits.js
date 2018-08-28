@@ -21,7 +21,7 @@ OLCS.ready(function () {
 
     // Add event handler for Permits Form Back button click. Prevent default on Cancel, allow to continue on OK.
     $("#withdrawPermitApplication").click(function (e) {
-        if (!confirm("This will withdraw the application and any fees paid will not be refunded. Are you sude?")) {
+        if (!confirm("This will withdraw the application and any fees paid will not be refunded. Are you sure?")) {
             e.preventDefault();
         }
     });
