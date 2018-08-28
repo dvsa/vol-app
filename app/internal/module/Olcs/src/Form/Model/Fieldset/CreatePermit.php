@@ -249,4 +249,17 @@ class CreatePermit extends Base
      * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
      */
     public $declaration = null;
+
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({
+     *   "id" : "status",
+     *   "class": "permitApplicationStatus"
+     * })
+     *
+     * @Form\Type("Zend\Form\Element\Hidden")
+     *
+     */
+    public $status;
 }

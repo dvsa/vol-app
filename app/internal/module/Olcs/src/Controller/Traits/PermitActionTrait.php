@@ -5,9 +5,11 @@ namespace Olcs\Controller\Traits;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateFullPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitApplication;
+use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\ConstrainedCountries;
 use Dvsa\Olcs\Transfer\Query\Permits\SectorsList;
+use Olcs\Logging\Log\Logger;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -102,12 +104,14 @@ trait PermitActionTrait
         // Ignore these array indexes on the application array when building from data array.
         $dontSet = ["permitType", 'licence', 'sectionCompletion', 'paymentStatus', 'status', 'confirmationSectionCompletion'];
         // Add necessary values to the array to re-populate the form.
+
         foreach ($application as $key => $value) {
             if (!in_array($key, $dontSet)) {
                 $data['fields'][$key] = $application[$key];
             }
         }
         $data['fields']['countryIds'] = $application['countrys'];
+        $data['fields']['status'] = $application['status']['id'];
         return ($data);
     }
 
@@ -150,6 +154,15 @@ trait PermitActionTrait
                 }
             }
 
+
+            if (array_key_exists('form-actions', $data) && array_key_exists('withdraw', $data['form-actions'])) {
+                if (!empty($data['fields']['id'])) {
+                    $command = WithdrawEcmtPermitApplication::create(['id' => $data['fields']['id']]);
+                    $response = $this->handleCommand($command);
+                    $this->checkResponse($response);
+                }
+            }
+
             // Handles loading the a blank application form for case worker to populate
             if ($action === 'apply') {
                 $applyView = $this->getCreateView($application, $licence);
@@ -189,7 +202,7 @@ trait PermitActionTrait
     protected function checkResponse($response)
     {
         if (!$response->isOk()) {
-            throw new UnexpectedResponseException('An error occured saving the application');
+            throw new UnexpectedResponseException('An error occurred saving the application');
         }
     }
 
