@@ -6,7 +6,6 @@ use Common\Controller\Lva\AbstractTransportManagersController;
 use Common\Data\Mapper\Lva\TransportManagerApplication;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
-
 class CheckAnswersController extends AbstractTransportManagersController
 {
 
@@ -46,6 +45,8 @@ class CheckAnswersController extends AbstractTransportManagersController
 
     /**
      * confirmAction
+     *
+     * @return void
      */
     public function confirmAction()
     {
@@ -57,7 +58,7 @@ class CheckAnswersController extends AbstractTransportManagersController
     /**
      * getConfirmationForm
      *
-     * @param $transportManagerApplicationId
+     * @param int $transportManagerApplicationId
      *
      * @return \Common\Form\Form
      */

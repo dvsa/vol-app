@@ -13,8 +13,6 @@ class ConfirmationController extends AbstractTransportManagersController
     /**
      * index action for /transport-manager/:TmaId/confirmation route
      *
-     * @param array $tma TM application
-     *
      * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
@@ -29,8 +27,10 @@ class ConfirmationController extends AbstractTransportManagersController
             'markup-tma-confirmation-operator';
 
         $params = [
-            'content' => $translationHelper->translateReplace($confirmationMarkup,
-                [$this->getCurrentUserFullName(), $this->getVerifySignatureDate($tma), $this->getBacklink()]),
+            'content' => $translationHelper->translateReplace(
+                $confirmationMarkup,
+                [$this->getCurrentUserFullName(), $this->getVerifySignatureDate($tma), $this->getBacklink()]
+            ),
             'tmFullName' => $this->getTmName($tma),
         ];
 
@@ -107,5 +107,4 @@ class ConfirmationController extends AbstractTransportManagersController
         return trim($user["contactDetails"]["person"]["forename"] . ' '
             . $user["contactDetails"]["person"]["familyName"]);
     }
-
 }
