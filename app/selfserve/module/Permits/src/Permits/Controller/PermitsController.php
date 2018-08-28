@@ -30,6 +30,8 @@ use Dvsa\Olcs\Transfer\Command\Permits\UpdateInternationalJourney;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateSector;
 use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 
+use Common\RefData;
+
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 
 use Permits\View\Helper\EcmtSection;
@@ -51,7 +53,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
     const ECMT_APPLICATION_FEE_PRODUCT_REFENCE = 'IRHP_GV_APP_ECMT';
     const ECMT_ISSUING_FEE_PRODUCT_REFENCE = 'IRHP_GV_ECMT_100_PERMIT_FEE';
-
 
     protected $applicationsTableName = 'dashboard-permit-application';
     protected $issuedTableName = 'dashboard-permits';
@@ -84,7 +85,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $query = EcmtPermitApplication::create(
             [
                 'order' => 'DESC',
-                'organisationId' => $this->getCurrentOrganisationId()
+                'organisationId' => $this->getCurrentOrganisationId(),
+                'statusIds' => [RefData::ECMT_APP_STATUS_NOT_YET_SUBMITTED, RefData::ECMT_APP_STATUS_UNDER_CONSIDERATION, RefData::ECMT_APP_STATUS_AWAITING_FEE]
             ]
         );
         $response = $this->handleQuery($query);
