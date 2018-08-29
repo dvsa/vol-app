@@ -215,6 +215,13 @@ trait PermitActionTrait
             $response = $this->handleCommand($command);
             $this->checkResponse($response);
         }
+
+        if (array_key_exists('cancel', $data['form-actions'])) {
+            $command = CancelEcmtPermitApplication::create(['id' => $data['fields']['id']]);
+            $response = $this->handleCommand($command);
+            $this->checkResponse($response);
+        }
+
         return false;
     }
 

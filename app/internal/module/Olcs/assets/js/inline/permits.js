@@ -29,6 +29,10 @@ OLCS.ready(function () {
         $("#submitPermitApplication").removeClass("visually-hidden");
     }
 
+    if ($("#canBeCancelled").val()) {
+        $("#cancelPermitApplication").removeClass("visually-hidden");
+    }
+
     // Add event handlers for Permits buttons
     $("#withdrawPermitApplication").click(function (e) {
         if (!confirm("This will withdraw the application and any fees paid will not be refunded. Are you sure?")) {
@@ -58,6 +62,12 @@ OLCS.ready(function () {
 
     $("#submitPermitApplication").click(function (e) {
         if (!confirm("Are you sure you wish to submit this application?")) {
+            e.preventDefault();
+        }
+    });
+
+    $("#cancelPermitApplication").click(function (e) {
+        if (!confirm("Are you sure you wish to cancel this application?")) {
             e.preventDefault();
         }
     });
