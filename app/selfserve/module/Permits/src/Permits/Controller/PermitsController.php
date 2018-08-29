@@ -154,10 +154,13 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             $form->setData($data);
             if ($form->isValid()) {
                 $this->redirect()
-                    ->toRoute('permits/' . EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE, ['id' => $this->params()->fromRoute('id', -1)],
+                    ->toRoute(
+                        'permits/' . EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE,
+                        ['id' => $this->params()->fromRoute('id', -1)],
                         [ 'query' => [
                             'licenceId' => $data['Fields']['EcmtLicence']
-                        ]]);
+                        ]]
+                    );
             }
         }
 
@@ -344,10 +347,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             if ($form->isValid()) {
                 $command = UpdateEcmtTrips::create(['id' => $id, 'ecmtTrips' => $data['Fields']['tripsAbroad']]);
                 $this->handleCommand($command);
-
                 $this->handleRedirect($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
-            }
-            else {
+            } else {
                 //Custom Error Message
                 $form->get('Fields')->get('tripsAbroad')->setMessages(['error.messages.trips']);
             }
@@ -795,7 +796,8 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
      * opportunity to withdraw the application.
      *
      */
-    public function underConsiderationAction() {
+    public function underConsiderationAction()
+    {
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
 
@@ -855,102 +857,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $view;
     }
 
-    /**
-     * Used to retrieve the licences for the ecmt-licence page.
-     *
-     * @return array
-     *
-     */
-    private function getRelevantLicences()
-    {
-        $organisationId = $this->getCurrentOrganisationId();
-        $query = Organisation::create(['id' => $organisationId]);
 
-        $response = $this->handleQuery($query);
-        $organisationData = $response->getResult();
-
-        return $organisationData['eligibleEcmtLicences'];
-    }
-
-    private function getEcmtLicenceForm($licenceId = null, $licenceList = array())
-    {
-        // TODO: MOVE THIS TO A SERVICE/HELPER
-        /*
-         * Create form from annotations
-         */
-        $form = $this->getForm('EcmtLicenceForm');
-
-        $value_options = array();
-        foreach ($licenceList as $item) {
-            $tmp = array();
-            $tmp['value'] = $item['id'];
-            $tmp['label'] = $item['licNo'] . ' (' . $item['trafficArea'] . ')';
-
-            if ($licenceId === $item['id']) {
-                $tmp['selected'] = true;
-            }
-
-            if (count($licenceList) == 1) { //do not hide if there is one licence but there is an application
-                $tmp['label_attributes'] = [
-                    'class' => 'visually-hidden'
-                ];
-                $value_options[] = $tmp;
-                break;
-            }
-            if ($item['licenceType']['id'] === 'ltyp_r') {
-            $tmp['attributes'] = [
-                    'class' => 'restricted-licence ' . $form->get('Fields')->get('EcmtLicence')->getAttributes()['class']
-                ];
-                $tmp['label_attributes'] = [
-                    'class' => 'restricted-licence-label ' . $form->get('Fields')->get('EcmtLicence')->getLabelAttributes()['class']
-                ];
-                $value_options[] = $tmp;
-
-                $tmp = array();
-                $tmp['value'] = '';
-                $tmp['label'] = 'permits.form.ecmt-licence.restricted-licence.hint';
-                $tmp['label_attributes'] = [
-                    'class' => 'restricted-licence-hint ' . $form->get('Fields')->get('EcmtLicence')->getLabelAttributes()['class']
-                ];
-                $tmp['attributes'] = [
-                    'class' => 'visually-hidden'
-                ];
-                $value_options[] = $tmp;
-            } else {
-                $value_options[] = $tmp;
-            }
-        }
-
-        if (count($value_options) == 0) {
-            $form->get('Fields')
-                ->get('SubmitButton')
-                ->setAttribute('class', 'visually-hidden');
-
-            $form->get('Fields')
-                ->get('EcmtLicence')
-                ->setOptions(['label' => '']);
-        }
-
-        $options = array();
-        $options['value_options'] = $value_options;
-        $form->get('Fields')
-            ->get('EcmtLicence')
-            ->setOptions($options);
-
-        return $form;
-    }
-
-    // TODO: remove this method once all session functionality is removed
-    private function extractIDFromSessionData($sessionData)
-    {
-        $IDList = array();
-        foreach ($sessionData as $entry) {
-            //Add everything before the separator to the list (ID is before separator)
-            array_push($IDList, substr($entry, 0, strpos($entry, self::DEFAULT_SEPARATOR)));
-        }
-
-        return $IDList;
-    }
 
     /**
      * Whether the organisation is eligible for permits
