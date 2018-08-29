@@ -264,11 +264,15 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         // Read data
         $application = $this->getApplication($id);
 
-        if (count($application['countrys']) > 0) {
+        if (!is_null($application['hasRestrictedCountries'])) {
+            $restrictedCountries = $application['hasRestrictedCountries'] == true ? 1 : 0;
+
             $form->get('Fields')
                 ->get('restrictedCountries')
-                ->setValue('1');
+                ->setValue($restrictedCountries);
+        }
 
+        if (count($application['countrys']) > 0) {
             //Format results from DB before setting values on form
             $selectedValues = array();
 
@@ -290,13 +294,12 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             if ($form->isValid()) {
                 //EXTRA VALIDATION
                 if (($data['Fields']['restrictedCountries'] == 1
-                    && isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList']))
+                        && isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList']))
                     || ($data['Fields']['restrictedCountries'] == 0)
                 ) {
-                    $countryIds = [];
-
-                    //country ids won't always be posted
-                    if (isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList'])) {
+                    if ($data['Fields']['restrictedCountries'] == 0) {
+                        $countryIds = [];
+                    } else {
                         $countryIds = $data['Fields']['restrictedCountriesList']['restrictedCountriesList'];
                     }
 
@@ -322,6 +325,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         }
 
         return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef']);
+
     }
 
     public function tripsAction()
