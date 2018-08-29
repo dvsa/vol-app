@@ -21,6 +21,7 @@
 
             <fieldset id="sector" class="inline" data-group="sector">
                 <?php
+                    $form->get('Fields')->get('SectorList')->setLabelOptions(array('disable_html_escape' => true));
                     echo $this->form($form);
                 ?>
             </fieldset>

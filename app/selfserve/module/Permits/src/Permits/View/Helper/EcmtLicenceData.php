@@ -36,7 +36,6 @@ class EcmtLicenceData extends AbstractHelper
             }
         }
 
-
         $data['empty'] = false;
 
         if ($licenceCount === 0) {
@@ -52,18 +51,21 @@ class EcmtLicenceData extends AbstractHelper
             return $data;
         }
 
+
+        $data['title'] = $this->view->translate('permits.page.ecmt.licence.question');
         $data['copy'] = '<p class="guidance-blue extra-space large">' .
             $this->view->translate('permits.page.ecmt.licence.info') . '</p>';
 
-        if ($licenceCount > 1) {
-            $data['title'] = $this->view->translate('permits.page.ecmt.licence.question');
-        } else {
-            $data['title'] = sprintf($this->view->translate('permits.page.ecmt.licence.question.one.licence'), $licences[0]['label']);
 
-            if (array_key_exists('label_attributes',$licences[0]) && empty($application)) {
-                $data['copy'] .= '<p>' . $this->view->translate('permits.form.ecmt-licence.restricted-licence.hint') . '</p>';
-            }
+        if ($licenceCount === 1) {
+            $data['title'] = sprintf($this->view->translate('permits.page.ecmt.licence.question.one.licence'),
+                preg_replace ("/<div(.*?)>(.*?)<\/div>/i", "", $licences[0]['label']));
         }
+
+        if (empty($application) && array_key_exists('label_attributes',$licences[0]) && empty($application)) {
+            $data['copy'] .= '<p>' . $this->view->translate('permits.form.ecmt-licence.restricted-licence.hint') . '</p>';
+        }
+
         if (!empty($application)) {
             $data['title'] = sprintf($this->view->translate('permits.page.ecmt.licence.question.one.licence'),
                 $application['licence']['licNo'] . ' (' . $application['licence']['trafficArea']['name'] . ')');

@@ -117,7 +117,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
     public function addAction()
     {
         $form = $this->getForm('EcmtLicenceForm');
-
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('permits/ecmt-licence');
 
