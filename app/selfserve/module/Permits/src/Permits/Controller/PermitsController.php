@@ -294,7 +294,13 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
                     && isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList']))
                     || ($data['Fields']['restrictedCountries'] == 0)
                 ) {
-                    $countryIds = $data['Fields']['restrictedCountriesList']['restrictedCountriesList'];
+                    $countryIds = [];
+
+                    //country ids won't always be posted
+                    if (isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList'])) {
+                        $countryIds = $data['Fields']['restrictedCountriesList']['restrictedCountriesList'];
+                    }
+
                     $command = UpdateEcmtCountries::create(['ecmtApplicationId' => $id, 'countryIds' => $countryIds]);
 
                     $response = $this->handleCommand($command);
