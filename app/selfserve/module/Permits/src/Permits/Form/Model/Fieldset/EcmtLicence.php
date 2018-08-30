@@ -30,15 +30,4 @@ class EcmtLicence
      */
 
     public $ecmtLicence = null;
-
-    /**
-     * @Form\Name("SubmitButton")
-     * @Form\Attributes({
-     *     "class":"action--primary large top",
-     *     "id":"submitbutton",
-     *     "value":"Save and continue",
-     * })
-     * @Form\Type("Zend\Form\Element\Submit")
-     */
-    public $submit = null;
 }
