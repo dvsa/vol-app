@@ -20,7 +20,7 @@ $data = $this->ecmtLicenceData($form, $application);
 
                     if (empty($form->get('Fields')
                         ->get('EcmtLicence')->getValueOptions())) {
-                        $form->get('Fields')->get('SubmitButton')->setAttribute('class', 'visually-hidden');
+                        $form->get('Submit')->get('SubmitButton')->setAttribute('class', 'visually-hidden');
                         $form->get('Fields')->get('EcmtLicence')->setOptions(['label' => '']);
                     }
                     if (!isset($application) && count($form->get('Fields')->get('EcmtLicence')->getValueOptions()) === 1) {

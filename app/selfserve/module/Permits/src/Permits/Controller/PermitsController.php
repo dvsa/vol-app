@@ -149,6 +149,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $view->setTemplate('permits/ecmt-licence');
 
         $data = $this->params()->fromPost();
+
         if (isset($data['Submit']['SubmitButton'])) {
             $form->setData($data);
             if ($form->isValid()) {
