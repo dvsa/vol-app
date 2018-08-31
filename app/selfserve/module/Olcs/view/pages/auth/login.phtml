@@ -33,30 +33,24 @@
                 <div class="actions-container">
                     <?php echo $this->formElement($form->get('submit')); ?>
                 </div>
-                <div class="actions-container hint">
-                    <details class="help">
-                        <summary class="help__summary" role="button" aria-expanded="true"><?php echo $this->translate('help-sign-in'); ?></summary>
-                        <div class="article guidance">
-                            <ul class="actions-container list--compound">
-                                <li>
-                                    <a
-                                            href="<?php echo $this->url('user-forgot-username'); ?>"
-                                            aria-label="<?php echo $this->translate('auth.forgot-username.label.audio'); ?>"
-                                    >
-                                        <?php echo $this->translate('auth.forgot-username.label'); ?>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a
-                                            href="<?php echo $this->url('auth/forgot-password'); ?>"
-                                            aria-label="<?php echo $this->translate('auth.forgot-password.label.audio'); ?>"
-                                    >
-                                        <?php echo $this->translate('auth.forgot-password.label'); ?>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </details>
+                <div class="actions-container">
+                    <p><?php echo $this->translate('help-sign-in'); ?></p>
+                    <div class="guidance">
+                        <ul class="list--compound">
+                            <li>
+                                <a href="<?php echo $this->url('user-forgot-username'); ?>"
+                                   aria-label="<?php echo $this->translate('auth.forgot-username.label.audio'); ?>">
+                                    <?php echo $this->translate('auth.forgot-username.label'); ?>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php echo $this->url('auth/forgot-password'); ?>"
+                                   aria-label="<?php echo $this->translate('auth.forgot-password.label.audio'); ?>">
+                                    <?php echo $this->translate('auth.forgot-password.label'); ?>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </fieldset>
         <?php echo $this->formElement($form->get('security')); ?>
