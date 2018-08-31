@@ -3,8 +3,11 @@
 
 <div class="row">
     <div class="two-thirds">
-        <p><?php echo sprintf($this->translate('signin-or-register-text'), $this->url('user-registration')); ?></p>
-        <hr>
+        <div class="guidance">
+            <p><?php echo sprintf($this->translate('signin-or-register-text'), $this->url('user-registration')); ?></p>
+            <p><?php echo sprintf($this->translate('auth.login.termsAgreed'), $this->url('terms-and-conditions')); ?></p>
+            <hr>
+        </div>
         <?php
         echo $this->flashMessengerAll();
         echo $this->formErrors($form);
@@ -27,28 +30,42 @@
             <fieldset>
                 <?php echo $this->formRow($form->get('username')); ?>
                 <?php echo $this->formRow($form->get('password')); ?>
-                <p><?php echo sprintf($this->translate('auth.login.termsAgreed'), $this->url('terms-and-conditions')); ?></p>
                 <div class="actions-container">
                     <?php echo $this->formElement($form->get('submit')); ?>
                 </div>
-                <ul class="actions-container list--compound">
-                    <li>
-                        <a 
-                        href="<?php echo $this->url('user-forgot-username'); ?>"
-                        aria-label="<?php echo $this->translate('auth.forgot-username.label.audio'); ?>"
-                        >
-                            <?php echo $this->translate('auth.forgot-username.label'); ?>
-                        </a>
-                    </li>
-                    <li>
-                        <a 
-                        href="<?php echo $this->url('auth/forgot-password'); ?>"
-                        aria-label="<?php echo $this->translate('auth.forgot-password.label.audio'); ?>"
-                        >
-                            <?php echo $this->translate('auth.forgot-password.label'); ?>
-                        </a>
-                    </li>
-                </ul>
+                <div class="actions-container hint">
+                    <details class="help">
+                        <summary class="help__summary" role="button" aria-expanded="false"><?php echo $this->translate('help-sign-in'); ?></summary>
+                        <div class="article guidance">
+                            <ul class="actions-container list--compound">
+                                <li>
+                                    <a
+                                            href="<?php echo $this->url('user-forgot-username'); ?>"
+                                            aria-label="<?php echo $this->translate('auth.forgot-username.label.audio'); ?>"
+                                    >
+                                        <?php echo $this->translate('auth.forgot-username.label'); ?>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                            href="<?php echo $this->url('auth/forgot-password'); ?>"
+                                            aria-label="<?php echo $this->translate('auth.forgot-password.label.audio'); ?>"
+                                    >
+                                        <?php echo $this->translate('auth.forgot-password.label'); ?>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                            href="https://www.vehicle-operator-licensing.service.gov.uk/register"
+                                            aria-label="<?php echo $this->translate('vol.create-account.label'); ?>"
+                                    >
+                                        <?php echo $this->translate('vol.create-account.label'); ?>
+                                    </a> <?php echo $this->translate('to-get-started'); ?>
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
             </fieldset>
         <?php echo $this->formElement($form->get('security')); ?>
         <?php echo $this->form()->closeTag(); ?>
