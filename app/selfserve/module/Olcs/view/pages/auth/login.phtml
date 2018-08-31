@@ -35,7 +35,7 @@
                 </div>
                 <div class="actions-container hint">
                     <details class="help">
-                        <summary class="help__summary" role="button" aria-expanded="false"><?php echo $this->translate('help-sign-in'); ?></summary>
+                        <summary class="help__summary" role="button" aria-expanded="true"><?php echo $this->translate('help-sign-in'); ?></summary>
                         <div class="article guidance">
                             <ul class="actions-container list--compound">
                                 <li>
@@ -53,14 +53,6 @@
                                     >
                                         <?php echo $this->translate('auth.forgot-password.label'); ?>
                                     </a>
-                                </li>
-                                <li>
-                                    <a
-                                            href="<?php echo $this->url('user-registration'); ?>"
-                                            aria-label="<?php echo $this->translate('vol.create-account.label'); ?>"
-                                    >
-                                        <?php echo $this->translate('vol.create-account.label'); ?>
-                                    </a> <?php echo $this->translate('to-get-started'); ?>
                                 </li>
                             </ul>
                         </div>
