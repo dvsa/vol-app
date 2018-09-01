@@ -1,10 +1,13 @@
 <?php
 namespace Permits;
 
+use Permits\Controller\CheckAnswersController;
+
 return array(
   'controllers' => array(
     'invokables' => array(
       'Permits\Controller\Permits' => 'Permits\Controller\PermitsController',
+        CheckAnswersController::class => CheckAnswersController::class,
     ),
   ),
 
@@ -191,7 +194,7 @@ return array(
                   'options' => [
                       'route'    => '/:id/ecmt-check-answers[/]',
                       'defaults' => [
-                          'controller'    => 'Permits\Controller\Permits',
+                          'controller'    => CheckAnswersController::class,
                           'action'        => 'checkAnswers',
                       ],
                       'constraints' => [

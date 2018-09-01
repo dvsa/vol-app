@@ -1,8 +1,17 @@
 <?php
+    /** @todo controller refactored, still need to refactor this view */
     use Permits\View\Helper\EcmtSection;
 
     $title = $this->translate('permits.page.title.check-answers');
     $this->headTitle($title);
+    $application = $data['application'];
+
+    /** @todo restricted countries temporarily done here until the mapper is built */
+    $countriesArray = [];
+
+    foreach ($application['countrys'] as $countryDetails) {
+        $countriesArray[] = $countryDetails['countryDesc'];
+    }
 ?>
 
 <div class="row ecmt">
@@ -10,13 +19,12 @@
         <div class="page-header">
             <p><?php echo $this->permitsBackLink(); ?></p>
             <div class="page-header__wrapper">
-                <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($applicationData['applicationRef']); ?></h3>
+                <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($application['applicationRef']); ?></h3>
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($title); ?>
                 </h1>
             </div>
         </div>
-
         <div class="field">
            <div class="table_wrapper">
                 <table>
@@ -27,10 +35,10 @@
                     <tbody>
                         <tr>
                             <td>
-                                <h4><?php echo $this->escapeHtml($this->translate($this->escapeHtml($sessionData['licenceQuestion']))); ?></h4>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.licence')); ?></h4>
                             </td>
                             <td>
-                                <?php echo nl2br($this->escapeHtml($sessionData['licenceAnswer'])); ?>
+                                <?php echo $this->escapeHtml($application['licence']['licNo']) . '<br />  (' . $this->escapeHtml($application['licence']['trafficArea']['name']) . ')'; ?>
                             </td>
                             <td>
                                 <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_LICENCE); ?>
@@ -38,10 +46,9 @@
                         </tr>
                         <tr>
                             <td>
-                                <h4><?php echo $this->escapeHtml($this->translate($sessionData['meetsEuro6Question'])); ?></h4>
-                            </td>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.euro6')); ?></h4>
                             <td>
-                                <?php  echo $this->escapeHtml($sessionData['meetsEuro6Answer']); ?>
+                                <?php  echo $this->escapeHtml($this->translate($application['emissions'] ? 'Yes' : 'No')); ?>
                             </td>
                             <td>
                                 <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_EURO6); ?>
@@ -49,10 +56,10 @@
                         </tr>
                         <tr>
                             <td>
-                                <h4><?php echo $this->escapeHtml($this->translate($sessionData['cabotageQuestion'])); ?></h4>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.cabotage')); ?></h4>
                             </td>
                             <td>
-                                <?php echo $this->escapeHtml($sessionData['cabotageAnswer']); ?>
+                                <?php echo $this->escapeHtml($this->translate($application['cabotage'] ? 'Yes' : 'No')); ?>
                             </td>
                             <td>
                                 <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_CABOTAGE); ?>
@@ -60,11 +67,11 @@
                         </tr>
                         <tr>
                             <td>
-                                <h4><?php echo $this->escapeHtml($this->translate($sessionData['restrictedCountriesQuestion'])); ?></h4>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.restricted-countries')); ?></h4>
                             </td>
                             <td>
                                 <?php
-                                    echo nl2br($this->escapeHtml($sessionData['restrictedCountriesAnswer']));
+                                    echo empty($countriesArray) ? 'No' : 'Yes<br />' . $this->escapeHtml(implode(', ', $countriesArray));
                                 ?>
                             </td>
                             <td>
@@ -73,10 +80,10 @@
                         </tr>
                         <tr>
                             <td>
-                                <h4><?php echo $this->escapeHtml($this->translate($sessionData['permitsQuestion'])); ?></h4>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.permits-required')); ?></h4>
                             </td>
                             <td>
-                                <?php echo $this->escapeHtml($sessionData['permitsAnswer']); ?>
+                                <?php echo $this->escapeHtml($application['permitsRequired']); ?>
                             </td>
                             <td>
                                 <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_NO_OF_PERMITS); ?>
@@ -84,10 +91,10 @@
                         </tr>
                         <tr>
                             <td>
-                                <h4><?php echo $this->escapeHtml($this->translate($sessionData['tripsQuestion'])); ?></h4>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.trips')); ?></h4>
                             </td>
                             <td>
-                                <?php echo $this->escapeHtml($sessionData['tripsAnswer']); ?>
+                                <?php echo $this->escapeHtml($application['trips']); ?>
                             </td>
                             <td>
                                 <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_TRIPS); ?>
@@ -95,10 +102,10 @@
                         </tr>
                         <tr>
                             <td>
-                                <h4><?php echo $this->escapeHtml($this->translate($sessionData['percentageQuestion'])); ?></h4>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.internationalJourneys')); ?></h4>
                             </td>
                             <td>
-                                <?php echo $this->escapeHtml($this->translate($sessionData['percentageAnswer'])); ?>
+                                <?php echo $this->escapeHtml($this->translate($application['internationalJourneys']['description'])); ?>
                             </td>
                             <td>
                                 <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY); ?>
@@ -106,23 +113,23 @@
                         </tr>
                         <tr>
                             <td>
-                                <h4><?php echo $this->escapeHtml($this->translate($sessionData['specialistHaulageQuestion'])); ?></h4>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.sector')); ?></h4>
                             </td>
                             <td>
-                                <?php echo nl2br($this->escapeHtml($sessionData['specialistHaulageAnswer'])); ?>
+                                <?php echo $this->escapeHtml($application['sectors']['description']); ?>
                             </td>
                             <td>
                                 <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_SECTORS); ?>
                             </td>
                         </tr>
-
                     </tbody>
                 </table>
             </div>
             <div class="actions-container new-application--wrapper">
                 <?php
-                    echo $this->formErrors($form);
-                    echo $this->form($form);
+                    foreach ($this->forms as $form) {
+                        echo $this->form($form);
+                    }
                 ?>
                 <p><a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, [], [], true); ?>"> <?php echo $this->escapeHtml($this->translate('permits.button.save-return-to-overview')); ?> </a></p>
             </div>

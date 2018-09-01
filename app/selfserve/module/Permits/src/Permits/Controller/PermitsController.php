@@ -1,13 +1,10 @@
 <?php
 namespace Permits\Controller;
 
-use Common\Controller\AbstractOlcsController;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\FeatureToggle;
-use Common\Form\Form;
 
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateDeclaration;
-use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCheckAnswers;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtLicence;
 
 use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
@@ -32,6 +29,7 @@ use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 
 use Common\RefData;
 
+use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 
 use Permits\View\Helper\EcmtSection;
@@ -40,16 +38,11 @@ use Zend\Http\Header\Referer as HttpReferer;
 use Zend\Http\PhpEnvironment\Request as HttpRequest;
 use Zend\Mvc\MvcEvent;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitFees;
-use Zend\Session\Container; // We need this when using sessions
 use Zend\View\Model\ViewModel;
 
-class PermitsController extends AbstractOlcsController implements ToggleAwareInterface
+class PermitsController extends AbstractSelfserveController implements ToggleAwareInterface
 {
     use ExternalControllerTrait;
-
-    // TODO: Add event for all checks for whether or not $data(from form) is an array
-    const SESSION_NAMESPACE = 'permit_application';
-    const DEFAULT_SEPARATOR = '|';
 
     const ECMT_APPLICATION_FEE_PRODUCT_REFENCE = 'IRHP_GV_APP_ECMT';
     const ECMT_ISSUING_FEE_PRODUCT_REFENCE = 'IRHP_GV_ECMT_100_PERMIT_FEE';
@@ -113,7 +106,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $view;
     }
 
-
     public function addAction()
     {
         $form = $this->getForm('EcmtLicenceForm');
@@ -136,7 +128,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
 
         return $view;
     }
-
 
     public function ecmtLicenceAction()
     {
@@ -450,8 +441,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef']);
     }
 
-    // TODO: remove all session elements and replace with queries
-    // TODO: correct form validation so that max value == total vehicle authority (currently hardcoded). See acceptance criteria
     public function permitsRequiredAction()
     {
         $id = $this->params()->fromRoute('id', -1);
@@ -495,75 +484,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return array('form' => $form, 'guidanceMessage' => $guidanceMessage, 'id' => $id, 'ref' => $application['applicationRef']);
     }
 
-    // TODO: remove all session elements and replace with queries
-    public function checkAnswersAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-        $application = $this->getApplication($id);
-
-        if (!$application['sectionCompletion']['allCompleted']) {
-            $this->nextStep(EcmtSection::ROUTE_APPLICATION_OVERVIEW);
-        }
-
-        if (!empty($this->params()->fromPost())) {
-            $command = UpdateEcmtCheckAnswers::create(['id' => $id]);
-            $this->handleCommand($command);
-            $this->nextStep(EcmtSection::ROUTE_ECMT_DECLARATION);
-        }
-
-        $form = $this->getForm('CheckAnswersForm');
-
-
-        $answerData = $this->collatePermitQuestions(); //Get all the questions in returned array
-
-        $answerData['licenceAnswer'] = $application['licence']['licNo'] . "\n" . '(' . $application['licence']['trafficArea']['name'] . ')';
-        $answerData['meetsEuro6Answer'] = $application['emissions'] == 1 ? 'Yes' : 'No';
-        $answerData['cabotageAnswer'] = $application['cabotage'] == 1 ? 'Yes' : 'No';
-        $answerData['tripsAnswer'] = $application['trips'];
-        $answerData['permitsAnswer'] = $application['permitsRequired'];
-
-        //Restricted Coutries Question
-        $answerData['restrictedCountriesAnswer'] = "No";
-
-        if (count($application['countrys']) > 0) {
-            $answerData['restrictedCountriesAnswer'] = "Yes\n";
-            $count = 1;
-            $numOfCountries = count($application['countrys']);
-
-            foreach ($application['countrys'] as $countryDetails) {
-                $answerData['restrictedCountriesAnswer'] .= $countryDetails['countryDesc'];
-
-                if (!($count == $numOfCountries)) {
-                    $answerData['restrictedCountriesAnswer'] .= ', ';
-                }
-
-                $count++;
-            }
-        }
-
-        //International Journeys Question
-        /**
-         * @todo ugly - had to do this because this info is currently stored (wrongly) as a number,
-         * and a switch statement doesn't do the type check.
-         * Can be removed following OLCS-21033
-         */
-        if ($application['internationalJourneys'] === null) {
-            $answerData['percentageAnswer'] = 'Not completed';
-        } else {
-            $answerData['percentageAnswer'] = $application['internationalJourneys']['description'];
-        }
-
-        //Sectors Question
-        $answerData['specialistHaulageAnswer'] = 'No';
-
-        if (isset($application['sectors']['description'])) {
-            $answerData['specialistHaulageAnswer'] = $application['sectors']['description'];
-        }
-
-        return array('sessionData' => $answerData, 'applicationData' => $application, 'form' => $form);
-    }
-
-    // TODO: remove all session elements and replace with queries
     public function declarationAction()
     {
         $id = $this->params()->fromRoute('id', -1);
@@ -601,7 +521,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return array('form' => $form, 'id' => $id);
     }
 
-    // TODO: remove all session elements and replace with queries
     public function feeAction()
     {
         $id = $this->params()->fromRoute('id', -1);
@@ -717,7 +636,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
             }
         }
 
-
         // todo: Possibly move this into a session var instead of GET Query Param
         $formData['Fields']['licenceId'] = $this->getRequest()->getQuery('licenceId');
         $form->setData($formData);
@@ -749,14 +667,13 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $view;
     }
 
-
     public function withdrawApplicationAction()
     {
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
 
         if (!$application['canBeWithdrawn']) {
-            $this->redirect()->toRoute('permits');
+            return $this->conditionalDisplayNotMet();
         }
 
         $data = $this->params()->fromPost();
@@ -812,7 +729,7 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         $application = $this->getApplication($id);
 
         if (!$application['isUnderConsideration']) {
-            $this->redirect()->toRoute('permits');
+            return $this->conditionalDisplayNotMet();
         }
 
         $ecmtPermitFees = $this->getEcmtPermitFees();
@@ -867,8 +784,6 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return $view;
     }
 
-
-
     /**
      * Whether the organisation is eligible for permits
      *
@@ -905,64 +820,9 @@ class PermitsController extends AbstractOlcsController implements ToggleAwareInt
         return in_array($referer->getUri(), $this->govUkReferrers);
     }
 
-    // TODO: remove this method once all session functionality is removed
-
-    /**
-     * Returns a new array with all the question titles
-     *
-     *
-     * @return array
-     */
-    private function collatePermitQuestions()
-    {
-        $sessionData = array();
-
-        //SELECTED LICENCE
-        $sessionData['licenceQuestion']
-          = 'check-answers.page.question.licence';
-
-        //EURO 6 EMISSIONS CONFIRMATION
-        $sessionData['meetsEuro6Question']
-          = 'check-answers.page.question.euro6';
-
-        //CABOTAGE CONFIRMATION
-        $sessionData['cabotageQuestion']
-          = 'check-answers.page.question.cabotage';
-
-        //RESTRICTED COUNTRIES
-        $sessionData['restrictedCountriesQuestion']
-          = 'check-answers.page.question.restricted-countries';
-
-        //NUMBER OF TRIPS PER YEAR
-        $sessionData['tripsQuestion']
-          = 'check-answers.page.question.trips';
-
-        //'PERCENTAGE' QUESTION
-        $sessionData['percentageQuestion']
-          = 'check-answers.page.question.internationalJourneys';
-
-        //SECTORS QUESTION
-        $sessionData['specialistHaulageQuestion']
-          = 'check-answers.page.question.sector';
-
-        //NUMBER OF PERMITS REQUIRED
-        $sessionData['permitsQuestion']
-          = 'check-answers.page.question.permits-required';
-
-        return $sessionData;
-    }
-
     private function nextStep(string $route)
     {
         $this->redirect()->toRoute('permits/' . $route, [], [], true);
-    }
-
-    private function getForm(string $formName): Form
-    {
-        //Create form from annotations
-        return $this->getServiceLocator()
-            ->get('Helper\Form')
-            ->createForm($formName, true, false);
     }
 
     /**
