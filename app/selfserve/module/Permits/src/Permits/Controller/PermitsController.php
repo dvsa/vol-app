@@ -158,25 +158,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         return $view;
     }
 
-    public function applicationOverviewAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-        $application = $this->getApplication($id);
-
-        // Get Fee Data
-        $ecmtFees = $this->getEcmtPermitFees();
-        $applicationFee = $ecmtFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
-        $applicationFeeTotal = $applicationFee * $application['permitsRequired'];
-
-        $view = new ViewModel();
-        $view->setVariable('id', $id);
-        $view->setVariable('applicationFee', $applicationFee);
-        $view->setVariable('totalFee', $applicationFeeTotal);
-        $view->setVariable('application', $application);
-
-        return $view;
-    }
-
     public function euro6EmissionsAction()
     {
         $id = $this->params()->fromRoute('id', -1);

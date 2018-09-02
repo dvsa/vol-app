@@ -2,12 +2,14 @@
 namespace Permits;
 
 use Permits\Controller\CheckAnswersController;
+use Permits\Controller\OverviewController;
 
 return array(
   'controllers' => array(
     'invokables' => array(
       'Permits\Controller\Permits' => 'Permits\Controller\PermitsController',
         CheckAnswersController::class => CheckAnswersController::class,
+        OverviewController::class => OverviewController::class
     ),
   ),
 
@@ -40,8 +42,8 @@ return array(
                   'options' => [
                       'route'    => '/:id/application-overview[/]',
                       'defaults' => [
-                          'controller'    => 'Permits\Controller\Permits',
-                          'action'        => 'applicationOverview',
+                          'controller'    => OverviewController::class,
+                          'action'        => 'generic',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',

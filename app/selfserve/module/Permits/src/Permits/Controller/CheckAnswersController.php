@@ -11,6 +11,8 @@ use Permits\View\Helper\EcmtSection;
 
 class CheckAnswersController extends AbstractSelfserveController implements ToggleAwareInterface
 {
+    protected $genericTemplate = 'permits/check-answers';
+
     protected $toggleConfig = [
         'default' => [
             FeatureToggle::SELFSERVE_ECMT
@@ -19,7 +21,7 @@ class CheckAnswersController extends AbstractSelfserveController implements Togg
 
     protected $dataSourceConfig = [
         'default' => [
-            PermitAppDataSource::class,
+            PermitAppDataSource::class => [],
         ],
     ];
 

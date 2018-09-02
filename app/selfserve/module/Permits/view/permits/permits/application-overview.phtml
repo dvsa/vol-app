@@ -2,6 +2,8 @@
     use Permits\View\Helper\EcmtSection;
     $title = $this->translate('permits.application.overwiew.main-title');
     $this->headTitle($title);
+    $application = $data['application'];
+    $fee = $data['irhpFeeList'];
 ?>
 
 <div class="row ecmt">
@@ -45,8 +47,8 @@
             <div class="info-box info-box--grey">
                 <h3 class="info-box__heading">Progress</h3>
                 <p><b><?php echo $this->escapeHtml($application['sectionCompletion']['totalCompleted']); ?> of <?php echo $this->escapeHtml($application['sectionCompletion']['totalSections']); ?> complete</b></p>
-                <p><b>Fee per permit </b> <?php echo $this->currencyFormatter($applicationFee); ?> <br />(non-refundable)</p>
-                <p><b>Total application fee: </b> <?php echo $this->currencyFormatter($totalFee); ?></p>
+                <p><b>Fee per permit </b> <?php echo $this->currencyFormatter($fee['appFee']); ?> <br />(non-refundable)</p>
+                <p><b>Total application fee: </b> <?php echo $this->currencyFormatter($fee['appFee'] * $application['permitsRequired']); ?></p>
                 <p>You can't submit until you've completed all of the sections</p>
             </div>
 
