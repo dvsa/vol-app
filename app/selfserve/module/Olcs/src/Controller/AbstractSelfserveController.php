@@ -21,7 +21,7 @@ use Zend\View\Model\ViewModel;
  * This is a huge WIP and has been done inside a weekend. Somewhat permits centred for now, but with an eye on reuse
  * So please be nice :)
  */
-class AbstractSelfserveController extends AbstractOlcsController
+abstract class AbstractSelfserveController extends AbstractOlcsController
 {
     /**
      * The current controller action
@@ -101,6 +101,13 @@ class AbstractSelfserveController extends AbstractOlcsController
     protected $queryParams = [];
 
     /**
+     * @todo set up generic template (probably just output a form etc.)
+     *
+     * @var string
+     */
+    protected $genericTemplate = '';
+
+    /**
      * onDispatch method
      *
      * @param MvcEvent $e event
@@ -128,6 +135,9 @@ class AbstractSelfserveController extends AbstractOlcsController
     {
         $view = new ViewModel();
 
+        /** @todo map the data for display */
+        $this->mapDataForDisplay();
+
         $view->setVariable('data', $this->data);
         $view->setVariable('forms', $this->forms);
         $view->setVariable('tables', $this->tables);
@@ -135,10 +145,15 @@ class AbstractSelfserveController extends AbstractOlcsController
         return $view;
     }
 
+    public function mapDataForDisplay()
+    {
+        //
+    }
+
     public function genericAction()
     {
         $view = $this->genericView();
-        $view->setTemplate('permits/check-answers');
+        $view->setTemplate($this->genericTemplate);
 
         return $view;
     }
@@ -151,7 +166,7 @@ class AbstractSelfserveController extends AbstractOlcsController
         $dataSourceConfig = $this->configsForAction('dataSourceConfig');
 
         //retrieve DTO data
-        foreach ($dataSourceConfig as $dataSource) {
+        foreach ($dataSourceConfig as $dataSource => $config) {
             /**
              * @var DataSourceInterface $source
              * @var QueryInterface $query
@@ -160,7 +175,14 @@ class AbstractSelfserveController extends AbstractOlcsController
             $query = $source->queryFromParams(array_merge($this->routeParams, $this->queryParams));
 
             $response = $this->handleQuery($query);
-            $this->data[$source::DATA_KEY] = $this->handleResponse($response);
+            $data = $this->handleResponse($response);
+
+            if (isset($config['mapper'])) {
+                $mapper = isset($config['mapper']) ? $config['mapper'] : DefaultMapper::class;
+                $data = $mapper::mapForDisplay($data);
+            }
+
+            $this->data[$source::DATA_KEY] = $data;
         }
     }
 

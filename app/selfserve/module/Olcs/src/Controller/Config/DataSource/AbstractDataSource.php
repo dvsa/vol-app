@@ -12,15 +12,15 @@ class AbstractDataSource implements DataSourceInterface
     const DATA_KEY = 'changeMe'; //key for when multiple sources are used within a single controller
 
     protected $dto;
-    protected $params = ['id'];
+    protected $paramsMap = ['id' => 'id'];
     protected $extraQueryData = [];
 
     public function queryFromParams(array $inputParams): QueryInterface
     {
         $paramData = [];
 
-        foreach ($this->params as $param) {
-            $paramData[$param] = $inputParams[$param];
+        foreach ($this->paramsMap as $param => $mappedTo) {
+            $paramData[$mappedTo] = $inputParams[$param];
         }
 
         $queryData = array_merge($this->extraQueryData, $paramData);
