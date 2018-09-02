@@ -37,6 +37,20 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const PERMIT_APP_CAN_BE_WITHDRAWN = [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'canBeWithdrawn',
+            'value' => true
+        ],
+    ];
+
+    const PERMIT_APP_IS_WITHDRAWN = [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'isWithdrawn',
+            'value' => true
+        ],
+    ];
+
     const PERMIT_APP_CAN_BE_SUBMITTED = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'canBeSubmitted',

@@ -180,6 +180,11 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         return $this->genericAction();
     }
 
+    public function withdrawAction()
+    {
+        return $this->genericAction();
+    }
+
     public function confirmationAction()
     {
         return $this->genericAction();

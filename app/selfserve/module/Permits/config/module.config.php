@@ -2,6 +2,7 @@
 namespace Permits;
 
 use Permits\Controller\CancelApplicationController;
+use Permits\Controller\WithdrawApplicationController;
 use Permits\Controller\CheckAnswersController;
 use Permits\Controller\FeeController;
 use Permits\Controller\OverviewController;
@@ -15,7 +16,8 @@ return array(
         OverviewController::class => OverviewController::class,
         FeeController::class => FeeController::class,
         SubmittedController::class => SubmittedController::class,
-        CancelApplicationController::class => CancelApplicationController::class
+        CancelApplicationController::class => CancelApplicationController::class,
+        WithdrawApplicationController::class => WithdrawApplicationController::class
     ),
   ),
 
@@ -299,8 +301,8 @@ return array(
                     'options' => [
                         'route' => '/:id/ecmt-withdraw-application[/]',
                         'defaults' => [
-                            'controller' => 'Permits\Controller\Permits',
-                            'action' => 'withdrawApplication'
+                            'controller' => WithdrawApplicationController::class,
+                            'action' => 'withdraw'
                         ],
                         'constraints' => [
                             'id' => '[0-9]+',
@@ -313,8 +315,8 @@ return array(
                             'options' => [
                                 'route'    => 'confirmation[/]',
                                 'defaults' => [
-                                    'controller'    => 'Permits\Controller\Permits',
-                                    'action'        => 'withdrawConfirmation',
+                                    'controller'    => WithdrawApplicationController::class,
+                                    'action'        => 'confirmation',
                                 ],
                             ],
                             'may_terminate' => false,

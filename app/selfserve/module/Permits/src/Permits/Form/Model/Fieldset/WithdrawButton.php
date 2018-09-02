@@ -10,7 +10,7 @@ use Zend\Form\Annotation as Form;
 class WithdrawButton
 {
     /**
-     * @Form\Name("WithdrawButton")
+     * @Form\Name("SubmitButton")
      * @Form\Attributes({
      *     "class":"action--primary large",
      *     "id":"withdrawbutton",
