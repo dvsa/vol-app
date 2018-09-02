@@ -225,6 +225,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
     /**
      * @todo only checks that a value is true, needs a wider range of conditions + ability to call custom methods
+     * also needs to be made easier to check multiple conditions at once
      */
     public function checkConditionalDisplay()
     {

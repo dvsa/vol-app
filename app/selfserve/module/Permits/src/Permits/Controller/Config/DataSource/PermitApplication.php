@@ -6,7 +6,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\ById as PermitApplicationDto;
 use Olcs\Controller\Config\DataSource\AbstractDataSource;
 
 /**
- * Check answers
+ * Permit application data source config
  */
 class PermitApplication extends AbstractDataSource
 {

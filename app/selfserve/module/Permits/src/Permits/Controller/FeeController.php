@@ -2,12 +2,12 @@
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
 use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 use Olcs\Controller\AbstractSelfserveController;
-use Permits\Controller\Config\DataSource\FeeList as FeeListDto;
-use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
-use Permits\Data\Mapper\FeeList as FeeListMapper;
+use Permits\Controller\Config\DataSource\DataSourceConfig;
+use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
+use Permits\Controller\Config\Form\FormConfig;
 
 use Permits\View\Helper\EcmtSection;
 
@@ -16,26 +16,19 @@ class FeeController extends AbstractSelfserveController implements ToggleAwareIn
     protected $genericTemplate = 'permits/fee';
 
     protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::SELFSERVE_ECMT
-        ],
+        'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
     ];
 
     protected $dataSourceConfig = [
-        'default' => [
-            PermitAppDataSource::class => [],
-            FeeListDto::class => [
-                'mapper' => FeeListMapper::class
-            ],
-        ],
+        'default' => DataSourceConfig::PERMIT_APP_WITH_FEE_LIST,
+    ];
+
+    protected $conditionalDisplayConfig = [
+        'default' => ConditionalDisplayConfig::PERMIT_APP_CAN_BE_SUBMITTED,
     ];
 
     protected $formConfig = [
-        'default' => [
-            'fee' => [
-                'formClass' => 'FeesForm',
-            ],
-        ],
+        'default' => FormConfig::FORM_FEE,
     ];
 
     public function feeAction()

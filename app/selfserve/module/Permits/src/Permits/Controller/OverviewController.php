@@ -2,37 +2,24 @@
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
 use Olcs\Controller\AbstractSelfserveController;
-use Permits\Controller\Config\DataSource\FeeList as FeeListDto;
-use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
-use Permits\Data\Mapper\FeeList as FeeListMapper;
+use Permits\Controller\Config\DataSource\DataSourceConfig;
+use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 
 class OverviewController extends AbstractSelfserveController implements ToggleAwareInterface
 {
     protected $genericTemplate = 'permits/application-overview';
 
     protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::SELFSERVE_ECMT
-        ],
+        'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
     ];
 
     protected $dataSourceConfig = [
-        'default' => [
-            PermitAppDataSource::class => [],
-            FeeListDto::class => [
-                'mapper' => FeeListMapper::class
-            ],
-        ],
+        'default' => DataSourceConfig::PERMIT_APP_WITH_FEE_LIST,
     ];
 
     protected $conditionalDisplayConfig = [
-        'default' => [
-            PermitAppDataSource::DATA_KEY => [
-                'key' => 'isNotYetSubmitted',
-                'value' => true
-            ],
-        ],
+        'default' => ConditionalDisplayConfig::PERMIT_APP_NOT_SUBMITTED,
     ];
 }

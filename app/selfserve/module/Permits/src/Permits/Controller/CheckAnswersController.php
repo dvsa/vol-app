@@ -2,10 +2,12 @@
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCheckAnswers;
 use Olcs\Controller\AbstractSelfserveController;
-use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
+use Permits\Controller\Config\DataSource\DataSourceConfig;
+use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
+use Permits\Controller\Config\Form\FormConfig;
 
 use Permits\View\Helper\EcmtSection;
 
@@ -14,32 +16,19 @@ class CheckAnswersController extends AbstractSelfserveController implements Togg
     protected $genericTemplate = 'permits/check-answers';
 
     protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::SELFSERVE_ECMT
-        ],
+        'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
     ];
 
     protected $dataSourceConfig = [
-        'default' => [
-            PermitAppDataSource::class => [],
-        ],
-    ];
-
-    protected $formConfig = [
-        'default' => [
-            'checkAnswers' => [
-                'formClass' => 'CheckAnswersForm',
-            ],
-        ],
+        'default' => DataSourceConfig::PERMIT_APP_WITH_FEE_LIST,
     ];
 
     protected $conditionalDisplayConfig = [
-        'default' => [
-            PermitAppDataSource::DATA_KEY => [
-                'key' => 'canCheckAnswers',
-                'value' => true
-            ],
-        ],
+        'default' => ConditionalDisplayConfig::PERMIT_APP_CAN_CHECK_ANSWERS,
+    ];
+
+    protected $formConfig = [
+        'default' => FormConfig::FORM_CHECK_ANSWERS,
     ];
 
     public function checkAnswersAction()
