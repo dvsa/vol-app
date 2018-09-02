@@ -4,8 +4,8 @@ namespace Permits\Controller;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\FeatureToggle;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCheckAnswers;
-use Dvsa\Olcs\Transfer\Query\Permits\ById as PermitApplicationDto;
 use Olcs\Controller\AbstractSelfserveController;
+use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 
 use Permits\View\Helper\EcmtSection;
 
@@ -17,14 +17,9 @@ class CheckAnswersController extends AbstractSelfserveController implements Togg
         ],
     ];
 
-    const APP_DATA_SOURCE = 'application';
-
     protected $dataSourceConfig = [
         'default' => [
-            self::APP_DATA_SOURCE => [
-                'dto' => PermitApplicationDto::class,
-                'params' => ['id'],
-            ],
+            PermitAppDataSource::class,
         ],
     ];
 
@@ -38,7 +33,7 @@ class CheckAnswersController extends AbstractSelfserveController implements Togg
 
     protected $conditionalDisplayConfig = [
         'default' => [
-            self::APP_DATA_SOURCE => [
+            PermitAppDataSource::DATA_KEY => [
                 'key' => 'canCheckAnswers',
                 'value' => true
             ],
@@ -47,11 +42,10 @@ class CheckAnswersController extends AbstractSelfserveController implements Togg
 
     public function checkAnswersAction()
     {
-        if (!empty($this->params()->fromPost())) {
-            $command = UpdateEcmtCheckAnswers::create(['id' => $this->params['id']]);
+        if (!empty($this->postParams)) {
+            $command = UpdateEcmtCheckAnswers::create(['id' => $this->routeParams['id']]);
             $this->handleCommand($command);
-            $this->redirect()->toRoute('permits/' . EcmtSection::ROUTE_ECMT_DECLARATION, [], [], true);
-            //$this->nextStep(EcmtSection::ROUTE_ECMT_DECLARATION);
+            $this->nextStep(EcmtSection::ROUTE_ECMT_DECLARATION);
         }
 
         return $this->genericAction();

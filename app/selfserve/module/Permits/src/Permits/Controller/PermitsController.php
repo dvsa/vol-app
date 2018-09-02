@@ -203,7 +203,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 $response = $this->handleCommand($command);
                 $insert = $response->getResult();
 
-                $this->handleRedirect($data, EcmtSection::ROUTE_ECMT_CABOTAGE);
+                $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_CABOTAGE);
             } else {
                 //Custom Error Message
                 $form->get('Fields')->get('MeetsEuro6')->setMessages(['error.messages.checkbox.euro6']);
@@ -236,7 +236,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 $response = $this->handleCommand($command);
                 $insert = $response->getResult();
 
-                $this->handleRedirect($data, EcmtSection::ROUTE_ECMT_COUNTRIES);
+                $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_COUNTRIES);
             } else {
                 //Custom Error Message
                 $form->get('Fields')->get('WontCabotage')->setMessages(['error.messages.checkbox.cabotage']);
@@ -300,7 +300,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                     $response = $this->handleCommand($command);
                     $insert = $response->getResult();
 
-                    $this->handleRedirect($data, EcmtSection::ROUTE_ECMT_NO_OF_PERMITS);
+                    $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_NO_OF_PERMITS);
                 } else {
                     //conditional validation failed, restricted countries list should not be empty
                     $form->get('Fields')
@@ -348,7 +348,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             if ($form->isValid()) {
                 $command = UpdateEcmtTrips::create(['id' => $id, 'ecmtTrips' => $data['Fields']['tripsAbroad']]);
                 $this->handleCommand($command);
-                $this->handleRedirect($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
+                $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
             } else {
                 //Custom Error Message
                 $form->get('Fields')->get('tripsAbroad')->setMessages(['error.messages.trips']);
@@ -385,7 +385,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
                 $this->handleCommand($command);
 
-                $this->handleRedirect($data, EcmtSection::ROUTE_ECMT_SECTORS);
+                $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_SECTORS);
             } else {
                 //Custom Error Message
                 $form->get('Fields')
@@ -429,7 +429,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
                     $this->handleCommand($command);
 
-                    $this->handleRedirect($data, EcmtSection::ROUTE_ECMT_CHECK_ANSWERS);
+                    $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_CHECK_ANSWERS);
             } else {
                 //Custom Error Message
                 $form->get('Fields')
@@ -471,7 +471,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 );
                 $response = $this->handleCommand($command);
 
-                $this->handleRedirect($data, EcmtSection::ROUTE_ECMT_TRIPS);
+                $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_TRIPS);
             }
         }
 
@@ -820,11 +820,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         return in_array($referer->getUri(), $this->govUkReferrers);
     }
 
-    private function nextStep(string $route)
-    {
-        $this->redirect()->toRoute('permits/' . $route, [], [], true);
-    }
-
     /**
      * Returns an application entry by id
      *
@@ -851,21 +846,5 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         return $response->getResult();
     }
 
-    /**
-     * Decides the route of the application
-     * after a form has been Submitted
-     *
-     * @param $submittedData - an array of the data submitted by the form
-     * @param $nextStep - the EcmtSection:: route to be taken if the form was submitted normally
-     */
-    private function handleRedirect(array $submittedData, string $nextStep)
-    {
-        if (array_key_exists('SubmitButton', $submittedData['Submit'])) {
-            //Form was submitted normally so continue on chosen path
-            return $this->nextStep($nextStep);
-        }
 
-        //A button other than the primary submit button was clicked so return to overview
-        return $this->nextStep(EcmtSection::ROUTE_APPLICATION_OVERVIEW);
-    }
 }

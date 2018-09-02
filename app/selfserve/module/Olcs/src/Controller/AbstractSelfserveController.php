@@ -9,6 +9,9 @@ use Common\Form\Form;
 use Common\Service\Cqrs\Response as CqrsResponse;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Olcs\Controller\Config\DataSource\DataSourceInterface;
+use Permits\View\Helper\EcmtSection;
+use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
 
@@ -26,13 +29,6 @@ class AbstractSelfserveController extends AbstractOlcsController
      * @var string
      */
     protected $action;
-
-    /**
-     * Route params to retrieve
-     *
-     * @var array
-     */
-    protected $paramsConfig = ['id'];
 
     /**
      * Config to pull back various sources of data
@@ -84,11 +80,25 @@ class AbstractSelfserveController extends AbstractOlcsController
     protected $tables = [];
 
     /**
-     * Tables which have been created and are ready to pass to the view
+     * Route parameters
      *
      * @var array
      */
-    protected $params = [];
+    protected $routeParams = [];
+
+    /**
+     * Post parameters
+     *
+     * @var array
+     */
+    protected $postParams = [];
+
+    /**
+     * Query parameters
+     *
+     * @var array
+     */
+    protected $queryParams = [];
 
     /**
      * onDispatch method
@@ -99,11 +109,13 @@ class AbstractSelfserveController extends AbstractOlcsController
      */
     public function onDispatch(MvcEvent $e)
     {
-        foreach ($this->paramsConfig as $param) {
-            $this->params = $this->params()->fromRoute($param);
-        }
-
+        $params = $this->params();
+        $this->routeParams = $params->fromRoute();
+        $this->postParams = $params->fromPost();
+        $this->queryParams = $params->fromQuery();
         $this->action = strtolower($e->getRouteMatch()->getParam('action'));
+
+        /** @todo find a better place for these */
         $this->retrieveData();
         $this->checkConditionalDisplay();
         $this->retrieveForms();
@@ -131,7 +143,6 @@ class AbstractSelfserveController extends AbstractOlcsController
         return $view;
     }
 
-
     /**
      * Retrieve data for the specified DTOs
      */
@@ -140,17 +151,16 @@ class AbstractSelfserveController extends AbstractOlcsController
         $dataSourceConfig = $this->configsForAction('dataSourceConfig');
 
         //retrieve DTO data
-        foreach ($dataSourceConfig as $key => $config) {
-            $queryData = [];
+        foreach ($dataSourceConfig as $dataSource) {
+            /**
+             * @var DataSourceInterface $source
+             * @var QueryInterface $query
+             */
+            $source = new $dataSource();
+            $query = $source->queryFromParams(array_merge($this->routeParams, $this->queryParams));
 
-            foreach ($config['params'] as $param) {
-                $queryData[$param] = $this->params[$param];
-            }
-
-            /** @var QueryInterface $query */
-            $query = $config['dto']::create($queryData);
             $response = $this->handleQuery($query);
-            $this->data[$key] = $this->handleResponse($response);
+            $this->data[$source::DATA_KEY] = $this->handleResponse($response);
         }
     }
 
@@ -292,5 +302,39 @@ class AbstractSelfserveController extends AbstractOlcsController
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
 
         return $form;
+    }
+
+    /**
+     * @todo this is somehat permits specific, but can be generic once permits has switched to use VOL generic buttons
+     * currently asks EcmtSection view helper for routes, whereas it would be better to have something specifc to route
+     * ordering, that will automatically "know" the next route - this will also be needed to make this method generic
+     * for wider selfserve use
+     *
+     * @param $submittedData - an array of the data submitted by the form
+     * @param $nextStep - the EcmtSection:: route to be taken if the form was submitted normally
+     *
+     * @return HttpResponse
+     */
+    protected function handleSaveAndReturnStep(array $submittedData, string $nextStep): HttpResponse
+    {
+        if (array_key_exists('SubmitButton', $submittedData['Submit'])) {
+            //Form was submitted normally so continue on chosen path
+            return $this->nextStep($nextStep);
+        }
+
+        //A button other than the primary submit button was clicked so return to overview
+        return $this->nextStep(EcmtSection::ROUTE_APPLICATION_OVERVIEW);
+    }
+
+    /**
+     * @todo same as handleSaveAndReturnStep, in that this is currently permits specific, but can easily be made generic
+     *
+     * @param string $route
+     *
+     * @return HttpResponse
+     */
+    protected function nextStep(string $route): HttpResponse
+    {
+        return $this->redirect()->toRoute('permits/' . $route, [], [], true);
     }
 }
