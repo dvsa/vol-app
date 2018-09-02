@@ -10,7 +10,7 @@ use Zend\Form\Annotation as Form;
 class SubmitAndPay
 {
     /**
-     * @Form\Name("SubmitAndPayButton")
+     * @Form\Name("SubmitButton")
      * @Form\Attributes({
      *     "class":"action--primary large",
      *     "id":"submit-accept-button",

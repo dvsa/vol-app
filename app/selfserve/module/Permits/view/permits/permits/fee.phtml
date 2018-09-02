@@ -106,9 +106,7 @@
 
             <div class="actions-container new-application--wrapper">
                 <?php
-                    foreach ($this->forms as $form) {
-                        echo $this->form($form);
-                    }
+                    echo $this->form($form);
                 ?>
                 <p><?php echo $this->permitsBackLink('permits.button.save-return-to-overview'); ?></p>
             </div>

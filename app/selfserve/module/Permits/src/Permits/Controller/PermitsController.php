@@ -501,54 +501,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         return array('form' => $form, 'id' => $id);
     }
 
-    public function cancelApplicationAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-
-        $request = $this->getRequest();
-        $data = (array)$request->getPost();
-
-        $application = $this->getApplication($id);
-
-        //Create form from annotations
-        $form = $this->getForm('CancelApplicationForm');
-
-        if (is_array($data) && array_key_exists('Submit', $data)) {
-            //Validate
-            $form->setData($data);
-
-            if ($form->isValid()) {
-                $queryParams = array();
-                $queryParams['id'] = $id;
-
-                $command = CancelEcmtPermitApplication::create($queryParams);
-
-                $response = $this->handleCommand($command);
-                $insert = $response->getResult();
-
-                $this->nextStep(EcmtSection::ROUTE_ECMT_CANCEL_CONFIRMATION);
-            }
-        }
-
-        $view = new ViewModel();
-
-        $view->setVariable('form', $form);
-        $view->setVariable('id', $id);
-        $view->setVariable('ref', $application['applicationRef']);
-
-        return $view;
-    }
-
-    public function cancelConfirmationAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-
-        $view = new ViewModel();
-        $view->setVariable('id', $id);
-
-        return $view;
-    }
-
     public function changeLicenceAction()
     {
         $id = $this->params()->fromRoute('id', -1);
@@ -781,6 +733,4 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $response = $this->handleQuery($query);
         return $response->getResult();
     }
-
-
 }

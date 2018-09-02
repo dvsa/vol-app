@@ -10,7 +10,7 @@ use Zend\Form\Annotation as Form;
 class SubmitConfirm
 {
     /**
-     * @Form\Name("SubmitConfirmButton")
+     * @Form\Name("SubmitButton")
      * @Form\Attributes({
      *     "class":"action--primary large",
      *     "id":"submit-accept-button",
@@ -19,4 +19,15 @@ class SubmitConfirm
      * @Form\Type("Zend\Form\Element\Submit")
      */
     public $submit = null;
+
+    /**
+     * @Form\Name("SaveAndReturnButton")
+     * @Form\Attributes({
+     *     "class":"action--primary large return-overview",
+     *     "id":"save-return-button",
+     *     "value":"Save and return to overview",
+     * })
+     * @Form\Type("Zend\Form\Element\Submit")
+     */
+    public $save = null;
 }

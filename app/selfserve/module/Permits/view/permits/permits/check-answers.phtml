@@ -38,7 +38,10 @@
                                 <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.licence')); ?></h4>
                             </td>
                             <td>
-                                <?php echo $this->escapeHtml($application['licence']['licNo']) . '<br />  (' . $this->escapeHtml($application['licence']['trafficArea']['name']) . ')'; ?>
+                                <?php
+                                    /** @todo like this until the mapper is done */
+                                    echo $this->escapeHtml($application['licence']['licNo']) . '<br />  (' . $this->escapeHtml($application['licence']['trafficArea']['name']) . ')';
+                                ?>
                             </td>
                             <td>
                                 <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_LICENCE); ?>
@@ -127,11 +130,8 @@
             </div>
             <div class="actions-container new-application--wrapper">
                 <?php
-                    foreach ($this->forms as $form) {
-                        echo $this->form($form);
-                    }
+                    echo $this->form($form);
                 ?>
-                <p><a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, [], [], true); ?>"> <?php echo $this->escapeHtml($this->translate('permits.button.save-return-to-overview')); ?> </a></p>
             </div>
         </div>
     </div>

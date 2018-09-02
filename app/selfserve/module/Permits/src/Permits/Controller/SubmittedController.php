@@ -9,8 +9,6 @@ use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 
 class SubmittedController extends AbstractSelfserveController implements ToggleAwareInterface
 {
-    protected $genericTemplate = 'permits/submitted';
-
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
     ];
@@ -21,5 +19,9 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
 
     protected $conditionalDisplayConfig = [
         'default' => ConditionalDisplayConfig::PERMIT_APP_UNDER_CONSIDERATION,
+    ];
+
+    protected $templateConfig = [
+        'generic' => 'permits/submitted'
     ];
 }

@@ -66,6 +66,13 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     protected $data = [];
 
     /**
+     * Form ready to be manipulated or passed to the view
+     *
+     * @var Form
+     */
+    protected $form;
+
+    /**
      * Forms which have been created and are ready to be manipulated or passed to the view
      *
      * @var array
@@ -101,11 +108,21 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     protected $queryParams = [];
 
     /**
-     * @todo set up generic template (probably just output a form etc.)
+     * @todo add default reusable templates (probably just output a form etc.) for now extending classes must override
      *
-     * @var string
+     * @var array
      */
-    protected $genericTemplate = '';
+    protected $templateConfig = [
+        'generic' => '',
+        'cancel' => ''
+    ];
+
+    /**
+     * @todo look at where this could be made generic
+     *
+     * @var array
+     */
+    protected $postConfig = [];
 
     /**
      * onDispatch method
@@ -117,9 +134,9 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     public function onDispatch(MvcEvent $e)
     {
         $params = $this->params();
-        $this->routeParams = $params->fromRoute();
-        $this->postParams = $params->fromPost();
-        $this->queryParams = $params->fromQuery();
+        $this->routeParams = $params->fromRoute() ? $params->fromRoute() : [];
+        $this->postParams = $params->fromPost() ? $params->fromPost() : [];
+        $this->queryParams = $params->fromQuery() ? $params->fromQuery() : [];
         $this->action = strtolower($e->getRouteMatch()->getParam('action'));
 
         /** @todo find a better place for these */
@@ -139,8 +156,10 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         $this->mapDataForDisplay();
 
         $view->setVariable('data', $this->data);
+        $view->setVariable('form', $this->form);
         $view->setVariable('forms', $this->forms);
         $view->setVariable('tables', $this->tables);
+        $view->setTemplate($this->templateConfig[$this->action]);
 
         return $view;
     }
@@ -152,10 +171,63 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
     public function genericAction()
     {
-        $view = $this->genericView();
-        $view->setTemplate($this->genericTemplate);
+        $this->handlePost();
+        return $this->genericView();
+    }
 
-        return $view;
+    public function cancelAction()
+    {
+        return $this->genericAction();
+    }
+
+    public function confirmationAction()
+    {
+        return $this->genericAction();
+    }
+
+    /**
+     * @todo add in mapping data back from the form, right now this only works for confirmation pages
+     * @todo handle redirects, currently just assumes a "next step" is present
+     * @todo need to put in some error handling to help devs diagnose bad config etc.
+     */
+    public function handlePost()
+    {
+        if (!empty($this->postParams)) {
+            $this->form->setData($this->postParams);
+
+            if ($this->form->isValid()) {
+                $config = $this->configsForAction('postConfig');
+                $params = $this->fetchHandlePostParams();
+                $command = $config['command']::create($params);
+                $response = $this->handleCommand($command);
+                $this->handleResponse($response);
+
+                return $this->handleSaveAndReturnStep($this->postParams, $config['step']);
+            }
+        }
+    }
+
+    /**
+     * @todo error handling to help spot bad config, probably split into route/query etc
+     */
+    public function fetchHandlePostParams()
+    {
+        $params = [];
+        $config = $this->configsForAction('postConfig');
+
+        if (isset($config['params']['route'])) {
+            foreach($config['params']['route'] as $param) {
+                $params[$param] = $this->routeParams[$param];
+            }
+        }
+
+        if (isset($config['params']['query'])) {
+            foreach($config['params']['query'] as $param) {
+                $params[$param] = $this->queryParams[$param];
+            }
+        }
+
+        return $params;
     }
 
     /**
@@ -205,8 +277,12 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             $form = $this->getForm($config['formClass']);
 
             $form->setData($formData);
-
             $this->forms[$name] = $form;
+
+            /**
+             * @todo everything we do just has one form, this is a quick way during dev to avoid changing existing code
+             */
+            $this->form = $form;
         }
     }
 
@@ -332,7 +408,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * @todo this is somewhat permits specific, but can be generic once permits has switched to use VOL generic buttons
      * currently asks EcmtSection view helper for routes, whereas it would be better to have something specific to route
      * ordering, that will automatically "know" the next route - this will also be needed to make this method generic
-     * for wider selfserve use
+     * for wider selfserve use. Permits needs to start using VOL standard buttons before this can be truly reusable
      *
      * @param $submittedData - an array of the data submitted by the form
      * @param $nextStep - the EcmtSection:: route to be taken if the form was submitted normally

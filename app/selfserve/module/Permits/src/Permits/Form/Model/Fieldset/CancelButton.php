@@ -10,7 +10,7 @@ use Zend\Form\Annotation as Form;
 class CancelButton
 {
     /**
-     * @Form\Name("CancelButton")
+     * @Form\Name("SubmitButton")
      * @Form\Attributes({
      *     "class":"action--primary large",
      *     "id":"cancelbutton",

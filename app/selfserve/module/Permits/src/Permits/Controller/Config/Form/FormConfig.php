@@ -8,6 +8,8 @@ namespace Permits\Controller\Config\Form;
  */
 class FormConfig
 {
+    const FORM_CANCEL_PERMIT_APP_KEY = 'cancelPermitApp';
+
     const FORM_CHECK_ANSWERS = [
         'checkAnswers' => [
             'formClass' => 'CheckAnswersForm',
@@ -17,6 +19,12 @@ class FormConfig
     const FORM_FEE = [
         'fee' => [
             'formClass' => 'feesForm',
+        ],
+    ];
+
+    const FORM_CANCEL_PERMIT_APP = [
+        self::FORM_CANCEL_PERMIT_APP_KEY => [
+            'formClass' => 'CancelApplicationForm',
         ],
     ];
 }

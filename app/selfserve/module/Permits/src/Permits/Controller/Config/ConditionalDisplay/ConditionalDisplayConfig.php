@@ -23,6 +23,20 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const PERMIT_APP_CAN_BE_CANCELLED = [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'canBeCancelled',
+            'value' => true
+        ],
+    ];
+
+    const PERMIT_APP_IS_CANCELLED = [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'isCancelled',
+            'value' => true
+        ],
+    ];
+
     const PERMIT_APP_CAN_BE_SUBMITTED = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'canBeSubmitted',

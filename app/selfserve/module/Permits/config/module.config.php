@@ -1,6 +1,7 @@
 <?php
 namespace Permits;
 
+use Permits\Controller\CancelApplicationController;
 use Permits\Controller\CheckAnswersController;
 use Permits\Controller\FeeController;
 use Permits\Controller\OverviewController;
@@ -13,7 +14,8 @@ return array(
         CheckAnswersController::class => CheckAnswersController::class,
         OverviewController::class => OverviewController::class,
         FeeController::class => FeeController::class,
-        SubmittedController::class => SubmittedController::class
+        SubmittedController::class => SubmittedController::class,
+        CancelApplicationController::class => CancelApplicationController::class
     ),
   ),
 
@@ -201,7 +203,7 @@ return array(
                       'route'    => '/:id/ecmt-check-answers[/]',
                       'defaults' => [
                           'controller'    => CheckAnswersController::class,
-                          'action'        => 'checkAnswers',
+                          'action'        => 'generic',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -229,7 +231,7 @@ return array(
                       'route'    => '/:id/ecmt-fee[/]',
                       'defaults' => [
                           'controller'    => FeeController::class,
-                          'action'        => 'fee',
+                          'action'        => 'generic',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -270,8 +272,8 @@ return array(
                   'options' => [
                       'route'    => '/:id/ecmt-cancel-application[/]',
                       'defaults' => [
-                          'controller'    => 'Permits\Controller\Permits',
-                          'action'        => 'cancelApplication',
+                          'controller'    => CancelApplicationController::class,
+                          'action'        => 'cancel',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -284,8 +286,8 @@ return array(
                           'options' => [
                               'route'    => 'confirmation[/]',
                               'defaults' => [
-                                  'controller'    => 'Permits\Controller\Permits',
-                                  'action'        => 'cancelConfirmation',
+                                  'controller'    => CancelApplicationController::class,
+                                  'action'        => 'confirmation',
                               ],
                           ],
                           'may_terminate' => false,
@@ -323,6 +325,7 @@ return array(
       ),
     ),
   ),
+    /** @todo we don't need all of these different link helpers! OLCS-21512 */
     'view_helpers' => [
         'invokables' => [
             'ecmtSection' => \Permits\View\Helper\EcmtSection::class,

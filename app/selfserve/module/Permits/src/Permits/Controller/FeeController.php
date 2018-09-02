@@ -8,13 +8,12 @@ use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
+use Permits\Controller\Config\Params\ParamsConfig;
 
 use Permits\View\Helper\EcmtSection;
 
 class FeeController extends AbstractSelfserveController implements ToggleAwareInterface
 {
-    protected $genericTemplate = 'permits/fee';
-
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
     ];
@@ -31,14 +30,15 @@ class FeeController extends AbstractSelfserveController implements ToggleAwareIn
         'default' => FormConfig::FORM_FEE,
     ];
 
-    public function feeAction()
-    {
-        if (!empty($this->postParams)) {
-            $command = EcmtSubmitApplication::create(['id' => $this->routeParams['id']]);
-            $this->handleCommand($command);
-            $this->nextStep(EcmtSection::ROUTE_ECMT_SUBMITTED);
-        }
+    protected $templateConfig = [
+        'generic' => 'permits/fee'
+    ];
 
-        return $this->genericAction();
-    }
+    protected $postConfig = [
+        'default' => [
+            'command' => EcmtSubmitApplication::class,
+            'params' => ParamsConfig::ID_FROM_ROUTE,
+            'step' => EcmtSection::ROUTE_ECMT_SUBMITTED,
+        ],
+    ];
 }
