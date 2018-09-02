@@ -2,7 +2,6 @@
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
 
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateDeclaration;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtLicence;
@@ -14,8 +13,6 @@ use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermits;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
 
-use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
-use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCabotage;
@@ -31,6 +28,7 @@ use Common\RefData;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 
+use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\View\Helper\EcmtSection;
 
 use Zend\Http\Header\Referer as HttpReferer;
@@ -50,9 +48,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     protected $issuedTableName = 'dashboard-permits';
 
     protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::SELFSERVE_ECMT
-        ],
+        'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
     ];
 
     /**
@@ -552,53 +548,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $view->setVariable('ecmtCountries', $ecmtCountries['results']);
         $view->setVariable('applicationFee', $ecmtApplicationFee);
         $view->setVariable('issueFee', $ecmtIssuingFee);
-        return $view;
-    }
-
-    public function withdrawApplicationAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-        $application = $this->getApplication($id);
-
-        if (!$application['canBeWithdrawn']) {
-            return $this->conditionalDisplayNotMet();
-        }
-
-        $data = $this->params()->fromPost();
-
-        //Create form from annotations
-        $form = $this->getForm('WithdrawApplicationForm');
-
-        if (isset($data['Submit'])) {
-            //Validate
-            $form->setData($data);
-
-            if ($form->isValid()) {
-                $command = WithdrawEcmtPermitApplication::create(['id' => $id]);
-                $this->handleCommand($command);
-                $this->nextStep(EcmtSection::ROUTE_ECMT_WITHDRAW_CONFIRMATION);
-            }
-        }
-
-        $view = new ViewModel();
-
-        $view->setVariable('id', $id);
-        $view->setVariable('form', $form);
-        $view->setVariable('ref', $application['applicationRef']);
-
-        return $view;
-    }
-
-    public function withdrawConfirmationAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-        $application = $this->getApplication($id);
-
-        $view = new ViewModel();
-
-        $view->setVariable('id', $id);
-        $view->setVariable('ref', $application['applicationRef']);
-
         return $view;
     }
 
