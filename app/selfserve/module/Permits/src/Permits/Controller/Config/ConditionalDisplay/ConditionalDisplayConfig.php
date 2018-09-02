@@ -29,4 +29,11 @@ class ConditionalDisplayConfig
             'value' => true
         ],
     ];
+
+    const PERMIT_APP_UNDER_CONSIDERATION = [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'isUnderConsideration',
+            'value' => true
+        ],
+    ];
 }

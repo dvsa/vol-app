@@ -4,6 +4,7 @@ namespace Permits;
 use Permits\Controller\CheckAnswersController;
 use Permits\Controller\FeeController;
 use Permits\Controller\OverviewController;
+use Permits\Controller\SubmittedController;
 
 return array(
   'controllers' => array(
@@ -12,6 +13,7 @@ return array(
         CheckAnswersController::class => CheckAnswersController::class,
         OverviewController::class => OverviewController::class,
         FeeController::class => FeeController::class,
+        SubmittedController::class => SubmittedController::class
     ),
   ),
 
@@ -240,8 +242,8 @@ return array(
                   'options' => [
                       'route'    => '/:id/ecmt-submitted[/]',
                       'defaults' => [
-                          'controller'    => 'Permits\Controller\Permits',
-                          'action'        => 'submitted',
+                          'controller'    => SubmittedController::class,
+                          'action'        => 'generic',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',

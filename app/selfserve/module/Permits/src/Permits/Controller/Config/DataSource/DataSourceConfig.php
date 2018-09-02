@@ -13,9 +13,6 @@ class DataSourceConfig
 {
     const PERMIT_APP = [
         PermitAppDataSource::class => [],
-        FeeListDto::class => [
-            'mapper' => FeeListMapper::class
-        ],
     ];
 
     const PERMIT_APP_WITH_FEE_LIST = [

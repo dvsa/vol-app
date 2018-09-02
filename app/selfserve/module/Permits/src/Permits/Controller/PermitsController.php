@@ -501,18 +501,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         return array('form' => $form, 'id' => $id);
     }
 
-    public function submittedAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-
-        $application = $this->getApplication($id);
-
-        $view = new ViewModel();
-        $view->setVariable('refNumber', $application['applicationRef']);
-
-        return $view;
-    }
-
     public function cancelApplicationAction()
     {
         $id = $this->params()->fromRoute('id', -1);
