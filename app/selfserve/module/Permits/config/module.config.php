@@ -2,6 +2,7 @@
 namespace Permits;
 
 use Permits\Controller\CheckAnswersController;
+use Permits\Controller\FeeController;
 use Permits\Controller\OverviewController;
 
 return array(
@@ -9,7 +10,8 @@ return array(
     'invokables' => array(
       'Permits\Controller\Permits' => 'Permits\Controller\PermitsController',
         CheckAnswersController::class => CheckAnswersController::class,
-        OverviewController::class => OverviewController::class
+        OverviewController::class => OverviewController::class,
+        FeeController::class => FeeController::class,
     ),
   ),
 
@@ -224,7 +226,7 @@ return array(
                   'options' => [
                       'route'    => '/:id/ecmt-fee[/]',
                       'defaults' => [
-                          'controller'    => 'Permits\Controller\Permits',
+                          'controller'    => FeeController::class,
                           'action'        => 'fee',
                       ],
                       'constraints' => [

@@ -25,7 +25,6 @@ use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitsRequired;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtTrips;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateInternationalJourney;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateSector;
-use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 
 use Common\RefData;
 
@@ -500,38 +499,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         }
 
         return array('form' => $form, 'id' => $id);
-    }
-
-    public function feeAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-
-        if (!empty($this->params()->fromPost())) {
-            $command = EcmtSubmitApplication::create(['id' => $id]);
-            $this->handleCommand($command);
-            $this->nextStep(EcmtSection::ROUTE_ECMT_SUBMITTED);
-        }
-
-        $application = $this->getApplication($id);
-        $form = $this->getForm('FeesForm');
-
-        // Get Fee Data
-        $ecmtPermitFees = $this->getEcmtPermitFees();
-        $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
-        $ecmtApplicationFeeTotal = $ecmtApplicationFee * $application['permitsRequired'];
-        $ecmtIssuingFee = $ecmtPermitFees['fee'][$this::ECMT_ISSUING_FEE_PRODUCT_REFENCE]['fixedValue'];
-
-        $view = new ViewModel();
-        $view->setVariable('form', $form);
-        $view->setVariable('permitsNo', $application['applicationRef']);
-        $view->setVariable('applicationDate', $application['createdOn']);
-        $view->setVariable('id', $id);
-        $view->setVariable('noOfPermits', $application['permitsRequired']);
-        $view->setVariable('fee', $ecmtApplicationFee);
-        $view->setVariable('totalFee', $ecmtApplicationFeeTotal);
-        $view->setVariable('issuingFee', $ecmtIssuingFee);
-
-        return $view;
     }
 
     public function submittedAction()

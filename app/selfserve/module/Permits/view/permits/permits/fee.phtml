@@ -1,8 +1,8 @@
 <?php
-    use Permits\View\Helper\EcmtSection;
-
     $title = $this->translate('permits.page.fee.title');
     $this->headTitle($title);
+    $application = $data['application'];
+    $fee = $data['irhpFeeList'];
 ?>
 
 <div class="row ecmt">
@@ -28,7 +28,7 @@
                         <b>
                             <?php
                                 echo sprintf($this->escapeHtml($this->translate('permits.page.fee.message')),
-                                    $this->currencyFormatter($issuingFee));
+                                    $this->currencyFormatter($fee['issueFee']));
                             ?>
                         </b>
                     </strong>
@@ -43,7 +43,7 @@
                                 <?php echo $this->escapeHtml($this->translate('permits.page.fee.application.reference')); ?>
                             </h4>
                         </td>
-                        <td><?php echo $this->escapeHtml($permitsNo); ?></td>
+                        <td><?php echo $this->escapeHtml($application['applicationRef']); ?></td>
                     </tr>
                     <tr>
                         <td>
@@ -53,7 +53,7 @@
                         </td>
                         <td>
                             <?php
-                                $date = date_create($applicationDate);
+                                $date = date_create($application['dateReceived']);
                                 echo $this->escapeHtml(date_format($date, "d F Y"));
                             ?>
                         </td>
@@ -64,7 +64,7 @@
                                 <?php echo $this->escapeHtml($this->translate('permits.page.fee.permit.type')); ?>
                             </h4>
                         </td>
-                        <td>ECMT</td>
+                        <td><?php echo $this->escapeHtml($application['permitType']['description']); ?></td>
                     </tr>
                     <tr>
                         <td>
@@ -81,9 +81,9 @@
                             </h4>
                         </td>
                         <td>
-                            <?php echo $this->escapeHtml($noOfPermits) . ' x '; ?>
+                            <?php echo $this->escapeHtml($application['permitsRequired']) . ' x '; ?>
                             <?php
-                                echo $this->currencyFormatter($fee);
+                                echo $this->currencyFormatter($fee['appFee']);
                                 echo $this->escapeHtml($this->translate('permits.page.fee.per-permit'));
                             ?>
                         </td>
@@ -96,7 +96,7 @@
                         </td>
                         <td>
                             <?php
-                                echo $this->currencyFormatter($totalFee);
+                                echo $this->currencyFormatter($fee['appFee'] * $application['permitsRequired']);
                                 echo $this->escapeHtml($this->translate('permits.page.fee.permit.fee.non-refundable'));
                             ?>
                         </td>
@@ -106,8 +106,9 @@
 
             <div class="actions-container new-application--wrapper">
                 <?php
-                    echo $this->formErrors($form);
-                    echo $this->form($form);
+                    foreach ($this->forms as $form) {
+                        echo $this->form($form);
+                    }
                 ?>
                 <p><?php echo $this->permitsBackLink('permits.button.save-return-to-overview'); ?></p>
             </div>

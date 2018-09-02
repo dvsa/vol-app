@@ -327,8 +327,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     }
 
     /**
-     * @todo this is somehat permits specific, but can be generic once permits has switched to use VOL generic buttons
-     * currently asks EcmtSection view helper for routes, whereas it would be better to have something specifc to route
+     * @todo this is somewhat permits specific, but can be generic once permits has switched to use VOL generic buttons
+     * currently asks EcmtSection view helper for routes, whereas it would be better to have something specific to route
      * ordering, that will automatically "know" the next route - this will also be needed to make this method generic
      * for wider selfserve use
      *
