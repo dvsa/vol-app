@@ -474,9 +474,26 @@ return [
                             'route' => 'permits[/]',
                             'defaults' => [
                                 'controller' => \Admin\Controller\PermitsController::class,
-                                'action' => 'index'
+                                'action' => 'index',
                             ]
-                        ]
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'permits-system-settings' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'permits-system-settings[/:action][/:id][/]',
+                                    'constraints' => [
+                                        'id' => '[0-9\,]+',
+                                        'action' => '(index|add|edit|delete)'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\IrhpPermitsController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                     'admin-system-info-message' => [
                         'type' => 'Segment',
@@ -658,6 +675,8 @@ return [
                 Admin\Controller\DataRetention\ExportController::class,
             Admin\Controller\PermitsController::class =>
                 Admin\Controller\PermitsController::class,
+            Admin\Controller\IrhpPermitsController::class =>
+                Admin\Controller\IrhpPermitsController::class,
             Admin\Controller\DataRetention\RuleAdminController::class =>
                 Admin\Controller\DataRetention\RuleAdminController::class
         ],
