@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Companies House Alert Controller
- */
 namespace Admin\Controller;
 
 use Olcs\Controller\AbstractInternalController;
@@ -10,7 +7,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
 
 /**
- * Companies House Alert Controller
+ * IRHP Permits Admin Controller
  */
 class IrhpPermitsController extends AbstractInternalController implements LeftViewProvider
 {
