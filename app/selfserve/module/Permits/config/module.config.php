@@ -2,8 +2,11 @@
 namespace Permits;
 
 use Permits\Controller\CancelApplicationController;
+use Permits\Controller\EmissionsController;
+use Permits\Controller\CabotageController;
 use Permits\Controller\WithdrawApplicationController;
 use Permits\Controller\CheckAnswersController;
+use Permits\Controller\DeclarationController;
 use Permits\Controller\FeeController;
 use Permits\Controller\OverviewController;
 use Permits\Controller\SubmittedController;
@@ -13,7 +16,10 @@ return array(
   'controllers' => array(
     'invokables' => array(
         PermitsController::class => PermitsController::class,
+        EmissionsController::class => EmissionsController::class,
+        CabotageController::class => CabotageController::class,
         CheckAnswersController::class => CheckAnswersController::class,
+        DeclarationController::class => DeclarationController::class,
         OverviewController::class => OverviewController::class,
         FeeController::class => FeeController::class,
         SubmittedController::class => SubmittedController::class,
@@ -106,8 +112,8 @@ return array(
                   'options' => [
                       'route'    => '/:id/ecmt-euro6[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'euro6Emissions',
+                          'controller'    => EmissionsController::class,
+                          'action'        => 'generic',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -120,8 +126,8 @@ return array(
                   'options' => [
                       'route'    => '/:id/ecmt-cabotage[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'cabotage',
+                          'controller'    => CabotageController::class,
+                          'action'        => 'generic',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -218,8 +224,8 @@ return array(
                   'options' => [
                       'route'    => '/:id/ecmt-declaration[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'declaration',
+                          'controller'    => DeclarationController::class,
+                          'action'        => 'generic',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',

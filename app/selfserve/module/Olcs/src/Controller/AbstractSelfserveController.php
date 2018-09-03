@@ -191,7 +191,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     }
 
     /**
-     * @todo add in mapping data back from the form, right now this only works for confirmation pages
+     * @todo mapping data properly from the form, currently does a crude check for data and then uses default mapper
      * @todo handle redirects, currently just assumes a "next step" is present
      * @todo need to put in some error handling to help devs diagnose bad config etc.
      */
@@ -201,8 +201,15 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             $this->form->setData($this->postParams);
 
             if ($this->form->isValid()) {
+                $saveData = [];
+
+                /** @todo better mapping goes here */
+                if (isset($this->postParams['fields'])) {
+                    $saveData = DefaultMapper::mapFromForm($this->postParams);
+                }
+
                 $config = $this->configsForAction('postConfig');
-                $params = $this->fetchHandlePostParams();
+                $params = array_merge($saveData, $this->fetchHandlePostParams());
                 $command = $config['command']::create($params);
                 $response = $this->handleCommand($command);
                 $this->handleResponse($response);

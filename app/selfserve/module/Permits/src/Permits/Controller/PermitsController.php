@@ -3,7 +3,6 @@ namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
 
-use Dvsa\Olcs\Transfer\Command\Permits\UpdateDeclaration;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtLicence;
 
 use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
@@ -15,8 +14,6 @@ use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
 
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 
-use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCabotage;
-use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtEmissions;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCountries;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitsRequired;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtTrips;
@@ -153,59 +150,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         return $view;
     }
 
-    public function euro6EmissionsAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-
-        //Create form from annotations
-        $form = $this->getForm('Euro6EmissionsForm');
-
-        // read data
-        $application = $this->getApplication($id);
-        if ($application['emissions']) {
-            $form->get('fields')->get('emissions')->setValue('1');
-        }
-
-        $data = $this->params()->fromPost();
-        if (is_array($data) && array_key_exists('Submit', $data)) {
-            //Validate
-            $form->setData($data);
-            if ($form->isValid()) {
-                $command = UpdateEcmtEmissions::create(['id' => $id, 'emissions' => $data['fields']['emissions']]);
-                $this->handleCommand($command);
-                $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_CABOTAGE);
-            }
-        }
-
-        return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef']);
-    }
-
-    public function cabotageAction()
-    {
-        $form = $this->getForm('CabotageForm');
-
-        // read data
-        $id = $this->params()->fromRoute('id', -1);
-        $application = $this->getApplication($id);
-        if ($application['cabotage']) {
-            $form->get('fields')->get('cabotage')->setValue('1');
-        }
-
-        //  saving
-        $data = $this->params()->fromPost();
-        if (is_array($data) && array_key_exists('Submit', $data)) {
-            //Validate
-            $form->setData($data);
-            if ($form->isValid()) {
-                $command = UpdateEcmtCabotage::create(['id' => $id, 'cabotage' => $data['fields']['cabotage']]);
-                $this->handleCommand($command);
-                $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_COUNTRIES);
-            }
-        }
-
-        return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef']);
-    }
-
     public function restrictedCountriesAction()
     {
         $id = $this->params()->fromRoute('id', -1);
@@ -256,10 +200,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                     }
 
                     $command = UpdateEcmtCountries::create(['ecmtApplicationId' => $id, 'countryIds' => $countryIds]);
-
-                    $response = $this->handleCommand($command);
-                    $insert = $response->getResult();
-
+                    $this->handleCommand($command);
                     $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_NO_OF_PERMITS);
                 } else {
                     //conditional validation failed, restricted countries list should not be empty
@@ -277,7 +218,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         }
 
         return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef']);
-
     }
 
     public function tripsAction()
@@ -442,38 +382,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $guidanceMessage = $translationHelper->translateReplace('permits.form.permits-required.fee.guidance', ['£' . $ecmtApplicationFee]);
 
         return array('form' => $form, 'guidanceMessage' => $guidanceMessage, 'id' => $id, 'ref' => $application['applicationRef']);
-    }
-
-    public function declarationAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-
-
-        $form = $this->getForm('DeclarationForm');
-
-        $application = $this->getApplication($id);
-        $existing['fields']['declaration'] = $application['declaration'];
-        $form->setData($existing);
-
-        $data = $this->params()->fromPost();
-
-        if (!empty($data)) {
-            $form->setData($data);
-
-            if ($form->isValid()) {
-                $command = UpdateDeclaration::create(
-                    [
-                        'id' => $id,
-                        'declaration' => $data['fields']['declaration']
-                    ]
-                );
-                $this->handleCommand($command);
-
-                $this->nextStep(EcmtSection::ROUTE_ECMT_FEE);
-            }
-        }
-
-        return array('form' => $form, 'id' => $id);
     }
 
     public function changeLicenceAction()

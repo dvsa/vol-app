@@ -8,7 +8,7 @@
         <div class="page-header">
             <p><?php echo $this->permitsBackLink(); ?></p>
             <div class="page-header__wrapper">
-                <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($ref); ?></h3>
+                <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($data['application']['applicationRef']); ?></h3>
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($this->translate('permits.page.cabotage.question')); ?>
                 </h1>
@@ -22,7 +22,7 @@
 
             <fieldset id="cabotage" class="inline" data-group="cabotage">
                 <?php
-                echo $this->form($form);
+                    echo $this->form($form);
                 ?>
             </fieldset>
         </div>
