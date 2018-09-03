@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class CancelApplicationForm
 {
     /**
-     * @Form\Name("Fields")
+     * @Form\Name("fields")
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\CancelApplication")
      */
     public $fields = null;

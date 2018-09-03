@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class DeclarationForm
 {
     /**
-     * @Form\Name("Fields")
+     * @Form\Name("fields")
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\Declaration")
      */
     public $fields = null;

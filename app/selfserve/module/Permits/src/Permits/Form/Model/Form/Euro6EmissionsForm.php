@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class Euro6EmissionsForm
 {
     /**
-     * @Form\Name("Fields")
+     * @Form\Name("fields")
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\Euro6Emissions")
      */
     public $fields = null;

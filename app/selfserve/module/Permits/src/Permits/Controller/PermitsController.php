@@ -162,10 +162,8 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
         // read data
         $application = $this->getApplication($id);
-        if (isset($application) && $application['emissions']) {
-            $form->get('Fields')
-                ->get('MeetsEuro6')
-                ->setValue('Yes');
+        if ($application['emissions']) {
+            $form->get('fields')->get('emissions')->setValue('1');
         }
 
         $data = $this->params()->fromPost();
@@ -173,16 +171,9 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             //Validate
             $form->setData($data);
             if ($form->isValid()) {
-                $update['emissions'] = ($data['Fields']['MeetsEuro6'] === 'Yes') ? 1 : 0;
-                $command = UpdateEcmtEmissions::create(['id' => $id, 'emissions' => $update['emissions']]);
-
-                $response = $this->handleCommand($command);
-                $insert = $response->getResult();
-
+                $command = UpdateEcmtEmissions::create(['id' => $id, 'emissions' => $data['fields']['emissions']]);
+                $this->handleCommand($command);
                 $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_CABOTAGE);
-            } else {
-                //Custom Error Message
-                $form->get('Fields')->get('MeetsEuro6')->setMessages(['error.messages.checkbox.euro6']);
             }
         }
 
@@ -196,8 +187,8 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         // read data
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
-        if (isset($application) && $application['cabotage']) {
-            $form->get('Fields')->get('WontCabotage')->setValue('Yes');
+        if ($application['cabotage']) {
+            $form->get('fields')->get('cabotage')->setValue('1');
         }
 
         //  saving
@@ -206,16 +197,9 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             //Validate
             $form->setData($data);
             if ($form->isValid()) {
-                $cabotage = ($data['Fields']['WontCabotage'] === 'Yes') ? 1 : 0;
-                $command = UpdateEcmtCabotage::create([ 'id' => $id, 'cabotage' => $cabotage]);
-
-                $response = $this->handleCommand($command);
-                $insert = $response->getResult();
-
+                $command = UpdateEcmtCabotage::create(['id' => $id, 'cabotage' => $data['fields']['cabotage']]);
+                $this->handleCommand($command);
                 $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_COUNTRIES);
-            } else {
-                //Custom Error Message
-                $form->get('Fields')->get('WontCabotage')->setMessages(['error.messages.checkbox.cabotage']);
             }
         }
 
@@ -468,7 +452,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $form = $this->getForm('DeclarationForm');
 
         $application = $this->getApplication($id);
-        $existing['Fields']['declaration'] = $application['declaration'];
+        $existing['fields']['declaration'] = $application['declaration'];
         $form->setData($existing);
 
         $data = $this->params()->fromPost();
@@ -480,17 +464,12 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 $command = UpdateDeclaration::create(
                     [
                         'id' => $id,
-                        'declaration' => $data['Fields']['declaration']
+                        'declaration' => $data['fields']['declaration']
                     ]
                 );
                 $this->handleCommand($command);
 
                 $this->nextStep(EcmtSection::ROUTE_ECMT_FEE);
-            } else {
-                //Custom Error Message
-                $form->get('Fields')
-                    ->get('declaration')
-                    ->setMessages(['error.messages.checkbox']);
             }
         }
 

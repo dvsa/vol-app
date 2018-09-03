@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class CabotageForm
 {
     /**
-     * @Form\Name("Fields")
+     * @Form\Name("fields")
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\Cabotage")
      */
     public $fields = null;
