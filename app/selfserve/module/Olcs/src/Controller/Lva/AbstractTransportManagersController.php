@@ -52,7 +52,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     public function editAction()
     {
         // move status back to incomplete
-        $tmaId = (int) $this->params('child_id');
+        $tmaId = (int)$this->params('child_id');
         if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
             return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
         } else {
@@ -67,14 +67,14 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     public function detailsAction()
     {
-        $tmaId = (int) $this->params('child_id');
+        $tmaId = (int)$this->params('child_id');
         $tma = $this->getTmaDetails($tmaId);
         $isUserTm = $tma['isTmLoggedInUser'];
 
         switch ($tma['tmApplicationStatus']['id']) {
             case TransportManagerApplicationEntityService::STATUS_POSTAL_APPLICATION:
                 return $this->pagePostal($tma);
-                // no break
+            // no break
             case TransportManagerApplicationEntityService::STATUS_INCOMPLETE:
                 $submitted = $this->getRequest()->getQuery('submitted') !== null;
                 if ($isUserTm) {
@@ -86,20 +86,20 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 } else {
                     return $this->page1Point3($tma);
                 }
-                // no break
+            // no break
             case TransportManagerApplicationEntityService::STATUS_TM_SIGNED:
                 if ($isUserTm) {
                     return $this->page2Point1($tma);
                 } else {
                     return $this->page2Point2($tma);
                 }
-                // no break
+            // no break
             case TransportManagerApplicationEntityService::STATUS_OPERATOR_SIGNED:
                 return $this->page3($tma, $isUserTm);
-                // no break
+            // no break
             case TransportManagerApplicationEntityService::STATUS_RECEIVED:
                 return $this->page4($tma, $isUserTm);
-                // no break
+            // no break
         }
     }
 
@@ -167,13 +167,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                             'workAddress' => $data['workAddress'],
                             'tmType' => $data['responsibilities']['tmType'],
                             'isOwner' => $data['responsibilities']['isOwner'],
-                            'hoursMon' => (float) $hoursOfWeek['hoursPerWeekContent']['hoursMon'],
-                            'hoursTue' => (float) $hoursOfWeek['hoursPerWeekContent']['hoursTue'],
-                            'hoursWed' => (float) $hoursOfWeek['hoursPerWeekContent']['hoursWed'],
-                            'hoursThu' => (float) $hoursOfWeek['hoursPerWeekContent']['hoursThu'],
-                            'hoursFri' => (float) $hoursOfWeek['hoursPerWeekContent']['hoursFri'],
-                            'hoursSat' => (float) $hoursOfWeek['hoursPerWeekContent']['hoursSat'],
-                            'hoursSun' => (float) $hoursOfWeek['hoursPerWeekContent']['hoursSun'],
+                            'hoursMon' => (float)$hoursOfWeek['hoursPerWeekContent']['hoursMon'],
+                            'hoursTue' => (float)$hoursOfWeek['hoursPerWeekContent']['hoursTue'],
+                            'hoursWed' => (float)$hoursOfWeek['hoursPerWeekContent']['hoursWed'],
+                            'hoursThu' => (float)$hoursOfWeek['hoursPerWeekContent']['hoursThu'],
+                            'hoursFri' => (float)$hoursOfWeek['hoursPerWeekContent']['hoursFri'],
+                            'hoursSat' => (float)$hoursOfWeek['hoursPerWeekContent']['hoursSat'],
+                            'hoursSun' => (float)$hoursOfWeek['hoursPerWeekContent']['hoursSun'],
                             'additionalInfo' => $data['responsibilities']['additionalInformation'],
                             'submit' => ($submit) ? 'Y' : 'N',
                             'dob' => $data['details']['birthDate']
@@ -402,7 +402,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $params = ['sectionText' => 'delete.confirmation.text'];
 
-        return $this->render('delete-'. $type, $form, $params);
+        return $this->render('delete-' . $type, $form, $params);
     }
 
     /**
@@ -828,7 +828,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         foreach ($this->tma['transportManager']['documents'] as $document) {
             if ($document['category']['id'] === \Common\Category::CATEGORY_TRANSPORT_MANAGER &&
                 $document['subCategory']['id'] ===
-                    \Common\Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL &&
+                \Common\Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_TM1_ASSISTED_DIGITAL &&
                 $document['application']['id'] === $this->tma['application']['id']
             ) {
                 $documents[] = $document;
@@ -1018,7 +1018,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     public function editDetailsAction()
     {
-        $tmApplicationId = (int) $this->params('child_id');
+        $tmApplicationId = (int)$this->params('child_id');
         $tma = $this->getTmaDetails($tmApplicationId);
 
         $preGrantedStatuses = [
@@ -1118,34 +1118,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
             if ($response->isOk()) {
                 $flashMessenger->addSuccessMessage('lva-tm-details-submit-success');
-                return $this->redirect()->refresh();
+                //redirect to checkAnswers
+                return $this->redirect()->toRoute('lva-transport_manager/check_answers', ['application' => $tma['id']]);
             } else {
                 $flashMessenger->addErrorMessage('unknown-error');
             }
         }
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $params = [
-            'content' => $translationHelper->translateReplace(
-                $this->isTmOperator($tma) ? 'markup-tma-b1-2' : 'markup-tma-a1-2',
-                [$this->getViewTmUrl()]
-            ),
-            'bottomContent' => sprintf(
-                '<p><a href="%s">%s</a></p>',
-                $this->url()->fromRoute(null, [], [], true),
-                $translationHelper->translate('TMA_CHANGE_DETAILS')
-            ),
-            'backLink' => null,
-        ];
-
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $formHelper->createForm('GenericConfirmation');
-        /* @var $form \Common\Form\Form */
-        $formHelper->setFormActionFromRequest($form, $this->getRequest());
-        $submitLabel = $this->isTmOperator($tma) ? 'submit' : 'submit-for-operator-approval';
-        $form->setSubmitLabel($submitLabel);
-        $form->removeCancel();
-
-        return $this->renderTmAction('transport-manager-application.review-and-submit', $form, $tma, $params);
+        return $this->redirect()->refresh();
     }
 
     /**
@@ -1166,12 +1145,16 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             'content' => $translationHelper->translate('markup-tma-ab1-3'),
             'bottomContent' => $translationHelper->translateReplace(
                 'TMA_RESEND_TM1',
-                [$this->url()->fromRoute(
-                    'getfile',
-                    ['identifier' => base64_encode(
-                        $translationHelper->translate('tm-add-user-no-email-document-identifier')
-                    )]
-                )]
+                [
+                    $this->url()->fromRoute(
+                        'getfile',
+                        [
+                            'identifier' => base64_encode(
+                                $translationHelper->translate('tm-add-user-no-email-document-identifier')
+                            )
+                        ]
+                    )
+                ]
             ),
         ];
 
@@ -1334,8 +1317,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         $defaultParams = [
             'tmFullName' => trim(
-                $tma['transportManager']['homeCd']['person']['forename'].' '
-                .$tma['transportManager']['homeCd']['person']['familyName']
+                $tma['transportManager']['homeCd']['person']['forename'] . ' '
+                . $tma['transportManager']['homeCd']['person']['familyName']
             ),
             'backLink' => $this->getBacklink(),
             'backText' => $this->isTransportManagerRole() ? 'transport-manager-back-text-tm' :
@@ -1360,7 +1343,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     private function getViewTmUrl()
     {
-        $tmaId = (int) $this->params('child_id');
+        $tmaId = (int)$this->params('child_id');
         return $this->url()->fromRoute('transport_manager_review', ['id' => $tmaId]);
     }
 
@@ -1428,7 +1411,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     private function resendTmEmail()
     {
-        $tmaId = (int) $this->params('child_id');
+        $tmaId = (int)$this->params('child_id');
         $response = $this->handleCommand(
             Command\TransportManagerApplication\SendTmApplication::create(['id' => $tmaId])
         );
