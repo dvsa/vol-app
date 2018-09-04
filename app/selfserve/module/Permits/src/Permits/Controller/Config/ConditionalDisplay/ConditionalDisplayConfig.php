@@ -71,6 +71,7 @@ class ConditionalDisplayConfig
             'value' => true
         ],
     ];
+
     const PERMIT_APP_AWAITING_FEE = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'isAwaitingFee',

@@ -6,13 +6,13 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  */
-class DeclinedPermitFieldset
+class DeclineApplicationFieldset
 {
     /**
      * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--confirm-decline",
-     *   "id" : "DeclinedPermit",
+     *   "id" : "DeclineApplication",
      * })
      * @Form\Options({
      *   "checked_value": "1",

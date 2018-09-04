@@ -1,0 +1,34 @@
+<?php
+
+use Permits\View\Helper\EcmtSection;
+
+    $title = $this->translate('permits.page.declined_permit.title');
+    $this->headTitle($title);
+?>
+
+<div class="row ecmt">
+    <div class="two-thirds">
+        <div class="page-header">
+            <p><?php echo $this->permitsBackLink(); ?></p>
+            <div class="page-header__wrapper">
+                <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($data['application']['applicationRef']); ?></h3>
+                <h1 class="js-title">
+                    <?php echo $this->escapeHtml($title); ?>
+                </h1>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="govuk-hint">
+                <?php echo $this->translate('markup-ecmt-application-decline'); ?>
+            </div>
+
+            <fieldset id="declineApplication" class="inline" data-group="declineApplication">
+                <?php
+                    echo $this->form($form);
+                ?>
+            </fieldset>
+        </div>
+
+    </div>
+</div>

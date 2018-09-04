@@ -4,22 +4,22 @@ namespace Permits\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("DeclineAwardedPermit")
+ * @Form\Name("DeclineApplication")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  */
 
-class DeclineAwardedPermitForm
+class DeclineApplicationForm
 {
     /**
      * @Form\Name("fields")
-     * @Form\ComposedObject("Permits\Form\Model\Fieldset\DeclinedPermitFieldset")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\DeclineApplicationFieldset")
      */
     public $fields = null;
 
     /**
      * @Form\Name("Submit")
-     * @Form\ComposedObject("Permits\Form\Model\Fieldset\SubmitAccept")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\DeclineAccept")
      */
     public $declineButton = null;
 }
