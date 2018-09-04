@@ -12,6 +12,7 @@ class FormConfig
 {
     const FORM_CANCEL_PERMIT_APP_KEY = 'cancelPermitApp';
     const FORM_WITHDRAW_PERMIT_APP_KEY = 'withdrawPermitApp';
+    const FORM_DECLINE_PERMIT_APP_KEY = 'declinePermitApp';
 
     const FORM_EMISSIONS = [
         'emissions' => [
@@ -61,6 +62,12 @@ class FormConfig
     const FORM_ACCEPT_AND_PAY = [
         'acceptAndPay' => [
             'formClass' => 'AcceptAndPayForm',
+        ],
+    ];
+
+    const FORM_DECLINE_PERMIT = [
+        self::FORM_DECLINE_PERMIT_APP_KEY => [
+            'formClass' => 'DeclineAwardedPermitForm',
         ],
     ];
 }
