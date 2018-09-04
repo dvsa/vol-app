@@ -81,7 +81,7 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
     }
 
     /**
-     * Companies house alert list view
+     * Permit Stock Index View
      *
      * @return \Zend\Http\Response|ViewModel
      */
