@@ -23,6 +23,7 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
 
     protected $templateConfig = [
         'generic' => 'permits/submitted',
+        'decline' => 'permits/submitted',
         'fee-submitted' => 'permits/submitted'
     ];
 
@@ -40,6 +41,16 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
         $view = parent::genericAction();
         $view->setVariable('partialName', 'markup-ecmt-application-fee-submitted');
         $view->setVariable('titleName', 'permits.application.fee.submitted.title');
+
+        return $view;
+    }
+
+    public function declineAction()
+    {
+        $view = parent::genericAction();
+
+        $view->setVariable('partialName', 'markup-ecmt-decline-submitted');
+        $view->setVariable('titleName', 'permits.decline.submitted.title');
 
         return $view;
     }

@@ -275,6 +275,20 @@ return array(
                     ],
                     'may_terminate' => false,
                 ],
+              'ecmt-decline-submitted' => [
+                'type'    => 'segment',
+                'options' => [
+                    'route'    => '/:id/ecmt-decline-submitted[/]',
+                    'defaults' => [
+                        'controller'    => SubmittedController::class,
+                        'action'        => 'decline',
+                    ],
+                    'constraints' => [
+                        'id' => '[0-9]+',
+                    ],
+                ],
+                'may_terminate' => false,
+            ],
               'ecmt-under-consideration' => [
                   'type'    => 'segment',
                   'options' => [
