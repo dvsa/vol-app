@@ -261,6 +261,20 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
+              'ecmt-fee-submitted' => [
+                'type'    => 'segment',
+                'options' => [
+                    'route'    => '/:id/ecmt-fee-submitted[/]',
+                    'defaults' => [
+                        'controller'    => SubmittedController::class,
+                        'action'        => 'fee-submitted',
+                    ],
+                    'constraints' => [
+                        'id' => '[0-9]+',
+                    ],
+                ],
+                'may_terminate' => false,
+            ],
               'ecmt-under-consideration' => [
                   'type'    => 'segment',
                   'options' => [

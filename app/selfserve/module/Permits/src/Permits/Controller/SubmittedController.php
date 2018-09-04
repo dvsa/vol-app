@@ -9,11 +9,6 @@ use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 
 class SubmittedController extends AbstractSelfserveController implements ToggleAwareInterface
 {
-    private $partialConfig = [
-        'ecmt-submitted' => 'markup-ecmt-application-submitted',
-        'ecmt-fee-submitted' => ''
-    ];
-
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
     ];
@@ -27,18 +22,24 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/submitted'
+        'generic' => 'permits/submitted',
+        'fee-submitted' => 'permits/submitted'
     ];
 
-    public function genericView()
+    public function genericAction()
     {
-        $view = parent::genericView();
+        $view = parent::genericAction();
+        $view->setVariable('partialName', 'markup-ecmt-application-submitted');
+        $view->setVariable('titleName', 'permits.application.submitted.title');
 
-        foreach ($partialConfig as $actionName => $partialName) {
-            if ($actionName === $this->action) {
-                $view->setVariable('partialName', $partialName);
-            }
-        }
+        return $view;
+    }
+
+    public function feeSubmittedAction()
+    {
+        $view = parent::genericAction();
+        $view->setVariable('partialName', 'markup-ecmt-application-fee-submitted');
+        $view->setVariable('titleName', 'permits.application.fee.submitted.title');
 
         return $view;
     }

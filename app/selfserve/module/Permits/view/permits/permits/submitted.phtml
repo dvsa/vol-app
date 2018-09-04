@@ -1,11 +1,11 @@
 <?php
-    $title = $this->translate('permits.application.submitted.title');
+    $title = $this->translate($titleName);
     $this->headTitle($title);
 ?>
 
 <div class="row ecmt">
     <div class="two-thirds">
-        <?php echo sprintf($this->translate('markup-ecmt-application-submitted'), $this->escapeHtml($title), $this->escapeHtml($data['application']['applicationRef'])); ?>
+        <?php echo sprintf($this->translate($partialName), $this->escapeHtml($title), $this->escapeHtml($data['application']['applicationRef'])); ?>
         <div class="actions-container new-application--wrapper">
             <p>
                 <a href="<?php echo $this->escapeHtml($this->url('permits')); ?>" class="action--primary large">
