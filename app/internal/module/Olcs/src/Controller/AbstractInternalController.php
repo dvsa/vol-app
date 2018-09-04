@@ -451,7 +451,6 @@ abstract class AbstractInternalController extends AbstractOlcsController
             /** @var \Common\Service\Helper\FormHelperService $formHelper */
             $formHelper = $this->getServiceLocator()->get('Helper\Form');
             $form = $formHelper->createForm($filterForm, false);
-
             $form->setData($this->params()->fromQuery());
             $this->placeholder()->setPlaceholder('tableFilters', $form);
         }
@@ -590,14 +589,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
                 }
             } elseif ($response->isServerError()) {
-                $responseResult = $response->getResult();
-
-                if (isset($responseResult['messages'][0])) {
-                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($responseResult['messages'][0]);
-                } else {
                     $this->handleErrors($response->getResult());
-                }
-
             }
         }
 

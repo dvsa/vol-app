@@ -19,6 +19,7 @@ class PermitsController extends AbstractInternalController implements ToggleAwar
     use GenericMethods;
 
     protected $navigationId = 'admin-dashboard/admin-permits';
+    protected $tableViewTemplate = 'pages/irhp-permit-stock/index';
 
     protected $toggleConfig = [
         'default' => [
