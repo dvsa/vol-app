@@ -7,7 +7,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("SubmitAccept")
  */
-class SubmitAccept
+class DeclineAccept
 {
     /**
      * @Form\Name("SubmitButton")
@@ -19,15 +19,4 @@ class SubmitAccept
      * @Form\Type("Zend\Form\Element\Submit")
      */
     public $submit = null;
-
-    /**
-     * @Form\Name("SaveAndReturnButton")
-     * @Form\Attributes({
-     *     "class":"action--primary large return-overview",
-     *     "id":"save-return-button",
-     *     "value":"Save and return to overview",
-     * })
-     * @Form\Type("Zend\Form\Element\Submit")
-     */
-    public $save = null;
 }
