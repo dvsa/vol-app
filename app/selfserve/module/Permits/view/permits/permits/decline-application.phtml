@@ -27,6 +27,9 @@ use Permits\View\Helper\EcmtSection;
                 <?php
                     echo $this->form($form);
                 ?>
+                <fieldset class="actions-container new-application--wrapper">
+                    <p><?php echo $this->permitsBackLink('permits.button.cancel-and-return'); ?></p>
+                </fieldset>
             </fieldset>
         </div>
 
