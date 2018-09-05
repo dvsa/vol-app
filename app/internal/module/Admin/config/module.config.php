@@ -488,7 +488,7 @@ return [
                                         'action' => '(index|add|edit|delete)'
                                     ],
                                     'defaults' => [
-                                        'controller' => \Admin\Controller\IrhpPermitsController::class,
+                                        'controller' => \Admin\Controller\IrhpPermitStockController::class,
                                         'action' => 'index',
                                     ],
                                 ],
@@ -675,8 +675,8 @@ return [
                 Admin\Controller\DataRetention\ExportController::class,
             Admin\Controller\PermitsController::class =>
                 Admin\Controller\PermitsController::class,
-            Admin\Controller\IrhpPermitsController::class =>
-                Admin\Controller\IrhpPermitsController::class,
+            Admin\Controller\IrhpPermitStockController::class =>
+                Admin\Controller\IrhpPermitStockController::class,
             Admin\Controller\DataRetention\RuleAdminController::class =>
                 Admin\Controller\DataRetention\RuleAdminController::class
         ],

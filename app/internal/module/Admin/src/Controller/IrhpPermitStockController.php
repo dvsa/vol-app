@@ -9,7 +9,7 @@ use Zend\View\Model\ViewModel;
 /**
  * IRHP Permits Admin Controller
  */
-class IrhpPermitsController extends AbstractInternalController implements LeftViewProvider
+class IrhpPermitStockController extends AbstractInternalController implements LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -45,7 +45,7 @@ class IrhpPermitsController extends AbstractInternalController implements LeftVi
     {
         $this->placeholder()->setPlaceholder('pageTitle', 'Permits');
         $view = new ViewModel();
-        $view->setTemplate('pages/permits/IrhpPermits.phtml');
+        $view->setTemplate('pages/irhp-permit-stock/index');
 
         return $view;
     }
