@@ -19,8 +19,6 @@ OLCS.ready(function () {
         }
     });
 
-
-
     if ($("#canBeWithdrawn").val()) {
         $("#withdrawPermitApplication").removeClass("visually-hidden");
     }
@@ -32,19 +30,6 @@ OLCS.ready(function () {
     if ($("#canBeCancelled").val()) {
         $("#cancelPermitApplication").removeClass("visually-hidden");
     }
-
-    // Add event handlers for Permits buttons
-    $("#withdrawPermitApplication").click(function (e) {
-        if (!confirm("This will withdraw the application and any fees paid will not be refunded. Are you sure?")) {
-            e.preventDefault();
-        }
-    });
-
-    $("#cancelPermitApplication").click(function (e) {
-        if (!confirm("This will cancel the application. Are you sure?")) {
-            e.preventDefault();
-        }
-    });
 
     if ($.inArray($(".permitApplicationStatus").val(), ["ecmt_permit_uc", "ecmt_permit_awaiting", "ecmt_permit_issued"]) !== -1) {
         $("#withdrawPermitApplication").removeClass("visually-hidden");
@@ -62,6 +47,13 @@ OLCS.ready(function () {
 
     $("#submitPermitApplication").click(function (e) {
         if (!confirm("Are you sure you wish to submit this application?")) {
+            e.preventDefault();
+        }
+    });
+
+    // Add event handlers for Permits buttons
+    $("#withdrawPermitApplication").click(function (e) {
+        if (!confirm("This will withdraw the application and any fees paid will not be refunded. Are you sure?")) {
             e.preventDefault();
         }
     });
