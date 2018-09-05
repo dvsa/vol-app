@@ -37,7 +37,7 @@ class DeclineApplicationController extends AbstractSelfserveController implement
     ];
 
     protected $postConfig = [
-        'decline' => [
+        'generic' => [
             'command' => WithdrawEcmtPermitApplication::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => EcmtSection::ROUTE_ECMT_DECLARATION
