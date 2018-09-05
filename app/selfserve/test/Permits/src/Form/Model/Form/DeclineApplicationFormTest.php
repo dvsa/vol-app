@@ -15,17 +15,17 @@ class DeclineApplicationFormTest extends AbstractFormValidationTestCase
     /**
      * @var string The class name of the form being tested
      */
-    protected $formName = \Permits\Form\Model\Form\DeclineApplicationFormTest::class;
+    protected $formName = \Permits\Form\Model\Form\DeclineApplicationForm::class;
 
     public function testDeclineApplicationFieldset()
     {
-        $element = ['Fields', 'DeclineApplicationFieldset'];
+        $element = ['fields', 'DeclineApplicationFieldset'];
 
         $this->assertFormElementRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementType($element, "\Common\Form\Elements\InputFilters\SingleCheckbox");
 
-        $this->assertFormElementValid($element, 'Yes');
+        $this->assertFormElementValid($element, '1');
         $this->assertFormElementNotValid($element, 'No', [Validator\Identical::NOT_SAME]);
         $this->assertFormElementNotValid($element, 'X', [Validator\Identical::NOT_SAME]);
     }

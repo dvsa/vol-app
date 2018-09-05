@@ -9,6 +9,7 @@ use Zend\Form\Annotation as Form;
 class DeclineApplicationFieldset
 {
     /**
+     * @Form\Name("DeclineApplicationFieldset")
      * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--confirm-decline",
