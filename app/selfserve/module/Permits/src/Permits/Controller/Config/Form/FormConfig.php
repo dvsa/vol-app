@@ -42,7 +42,7 @@ class FormConfig
 
     const FORM_FEE = [
         'fee' => [
-            'formClass' => 'feesForm',
+            'formClass' => 'FeesForm',
         ],
     ];
 
