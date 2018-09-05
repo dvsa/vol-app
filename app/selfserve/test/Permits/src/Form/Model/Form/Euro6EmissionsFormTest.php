@@ -19,13 +19,14 @@ class Euro6EmissionsFormTest extends AbstractFormValidationTestCase
 
     public function testMeetsEuro6()
     {
-        $element = ['Fields', 'MeetsEuro6'];
+        $element = ['fields', 'emissions'];
 
         $this->assertFormElementRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementType($element, "\Common\Form\Elements\InputFilters\SingleCheckbox");
 
-        $this->assertFormElementValid($element, 'Yes');
+        $this->assertFormElementValid($element, '1');
+        $this->assertFormElementNotValid($element, '0', [Validator\Identical::NOT_SAME]);
         $this->assertFormElementNotValid($element, 'No', [Validator\Identical::NOT_SAME]);
         $this->assertFormElementNotValid($element, 'X', [Validator\Identical::NOT_SAME]);//InArray::NOT_IN_ARRAY
     }

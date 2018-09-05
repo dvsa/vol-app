@@ -19,13 +19,14 @@ class CabotageFormTest extends AbstractFormValidationTestCase
 
     public function testWontCabotage()
     {
-        $element = ['Fields', 'WontCabotage'];
+        $element = ['fields', 'cabotage'];
 
         $this->assertFormElementRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementType($element, "\Common\Form\Elements\InputFilters\SingleCheckbox");
 
-        $this->assertFormElementValid($element, 'Yes');
+        $this->assertFormElementValid($element, '1');
+        $this->assertFormElementNotValid($element, '0', [Validator\Identical::NOT_SAME]);
         $this->assertFormElementNotValid($element, 'No', [Validator\Identical::NOT_SAME]);
         $this->assertFormElementNotValid($element, 'X', [Validator\Identical::NOT_SAME]); //[Validator\InArray::NOT_IN_ARRAY]
     }
