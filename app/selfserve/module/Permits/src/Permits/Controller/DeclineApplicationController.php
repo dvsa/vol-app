@@ -9,6 +9,8 @@ use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
 
+use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
+
 use Permits\View\Helper\EcmtSection;
 
 class DeclineApplicationController extends AbstractSelfserveController implements ToggleAwareInterface
