@@ -1387,7 +1387,7 @@ return array(
 
                 'lva-application/transport_manager_details*' => ['selfserve-tm'],
                 'lva-variation/transport_manager_details*' => ['selfserve-tm'],
-                'lva-transport_manager/*' =>['selfserve-tm'],
+                'lva-transport_managers/*' =>['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
                 'search*' => ['*'],
                 'index' => ['*'],
