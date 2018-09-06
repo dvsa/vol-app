@@ -70,7 +70,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $query = EcmtPermitApplication::create(
             [
                 'order' => 'DESC',
-                'organisationId' => $this->getCurrentOrganisationId(),
+                'organisation' => $this->getCurrentOrganisationId(),
                 'statusIds' => [RefData::ECMT_APP_STATUS_NOT_YET_SUBMITTED, RefData::ECMT_APP_STATUS_UNDER_CONSIDERATION, RefData::ECMT_APP_STATUS_AWAITING_FEE]
             ]
         );
