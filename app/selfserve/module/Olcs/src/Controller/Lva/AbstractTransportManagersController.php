@@ -1110,21 +1110,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     private function page1Point2(array $tma)
     {
-        if ($this->getRequest()->isPost()) {
-            $response = $this->handleCommand(
-                Command\TransportManagerApplication\Submit::create(['id' => $tma['id']])
-            );
-
-            $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
-            if ($response->isOk()) {
-                $flashMessenger->addSuccessMessage('lva-tm-details-submit-success');
-                //redirect to checkAnswers
-                return $this->redirect()->toRoute('lva-transport_manager/check_answers', ['application' => $tma['id']]);
-            } else {
-                $flashMessenger->addErrorMessage('unknown-error');
-            }
-        }
-        return $this->redirect()->refresh();
+        return $this->redirect()->toRoute('lva-transport_manager/check_answers', ['application' => $tma['id']]);
     }
 
     /**
