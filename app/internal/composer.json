@@ -57,7 +57,8 @@
         "olcs/olcs-transfer": "dev-develop",
         "olcs/olcs-utils": "dev-develop",
         "olcs/olcs-auth": "dev-develop",
-        "soflomo/purifier": "~0.1.0"
+        "soflomo/purifier": "~0.1.0",
+       "olcs/olcs-logging": "dev-develop"
     },
     "require-dev": {
         "olcs/olcs-devtools": "dev-master",
