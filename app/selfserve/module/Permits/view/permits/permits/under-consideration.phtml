@@ -1,0 +1,27 @@
+<?php
+    use Permits\View\Helper\EcmtSection;
+?>
+
+<div class="row ecmt">
+    <div class="two-thirds">
+        <div class="page-header">
+            <p><a href="<?php echo $this->url('permits') ?>" class="back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
+            <div class="page-header__wrapper">
+                <div class="guidance pre-selected highlight-box">
+                    <p><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.header')); ?></p>
+                    <h2><?php echo $this->escapeHtml($application['licence']['licNo']); ?></h2>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <fieldset id="under-consideration" class="inline" data-group="under-consideration">
+                <?php echo $this->table; ?>
+            </fieldset>
+            <div class="field govuk-hint guidance-blue extra-space large">
+                We will get back to you by <strong><?php echo $this->escapeHtml($this->responseDate); ?></strong>.
+            </div>
+            <p><a class="action--primary" href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_WITHDRAW_APPLICATION, [], [], true); ?>">Withdraw application</a></p>
+            <p><a href="<?php echo $this->url('permits'); ?>"> <?php echo $this->escapeHtml($this->translate('permits.link.return.to.dashboard')); ?></a></p>
+        </div>
+    </div>
+</div>
