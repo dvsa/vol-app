@@ -1143,19 +1143,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $params = [
             'content' => $translationHelper->translate('markup-tma-ab1-3'),
-            'bottomContent' => $translationHelper->translateReplace(
-                'TMA_RESEND_TM1',
-                [
-                    $this->url()->fromRoute(
-                        'getfile',
-                        [
-                            'identifier' => base64_encode(
-                                $translationHelper->translate('tm-add-user-no-email-document-identifier')
-                            )
-                        ]
-                    )
-                ]
-            ),
         ];
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
