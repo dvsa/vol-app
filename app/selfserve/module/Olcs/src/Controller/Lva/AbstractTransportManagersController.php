@@ -114,11 +114,20 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 if ($element->getAttribute('data-section') == $activeSection) {
                     continue;
                 }
-                $element->setAttribute('disabled', true);
+                $element->setAttribute('readonly', true);
                 if ($element instanceof DateSelect) {
-                    $element->getDayElement()->setAttribute('disabled', true);
-                    $element->getMonthElement()->setAttribute('disabled', true);
-                    $element->getYearElement()->setAttribute('disabled', true);
+                    $element->getDayElement()->setAttribute('readonly', true);
+                    $element->getMonthElement()->setAttribute('readonly', true);
+                    $element->getYearElement()->setAttribute('readonly', true);
+                }
+                if ($element instanceof \Zend\Form\Element\Radio) {
+                    $options = $element->getValueOptions();
+                    $value = $element->getValue();
+                    foreach ($options as $optionName => $optionLabel) {
+                        if ($optionName !== $value) {
+                            $element->unsetValueOption($optionName);
+                        }
+                    }
                 }
             }
             $this->disableNonActiveSections($fieldset, $activeSection);
