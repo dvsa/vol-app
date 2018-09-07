@@ -1,0 +1,59 @@
+<?php
+    use Permits\View\Helper\EcmtSection;
+
+    $title = 'Permits Home - ';
+    $this->headTitle($title);
+?>
+
+<div class="page-header__wrapper">
+    <h1 class="js-title"><?php echo $this->escapeHtml($this->translate('permits.application.overwiew.title')); ?></h1>
+</div>
+
+<div class="row">
+    <div class="dashboard two-thirds">
+        <div class="tabs">
+            <?php
+                /* @var \Zend\View\Helper\Navigation\Menu $menu */
+                $menu = $this->navigation($this->navigation('navigation')
+                                            ->getContainer()
+                                            ->findBy('id', 'dashboard-licences-applications'))
+                                            ->menu();
+
+                echo $menu->setMinDepth(0)
+                    ->setMaxDepth(0)
+                    ->setPartial('partials/tabs-nav');
+            ?>
+        </div>
+
+        <?php echo $this->flashMessengerAll(); ?>
+
+        <?php if($isEligible): ?>
+
+            <?php if($issuedNo != 0 || $applicationsNo != 0) : ?>
+                <?php if($issuedNo === 0): ?>
+                    <div class="table__header">
+                <?php else : ?>
+                    <?php echo $issuedTable; ?>
+                <?php endif; ?>
+                </div>
+                <div class="table__header">
+                    <?php if($applicationsNo > 0): ?>
+                        <?php echo $applicationsTable; ?>
+                    <?php endif; ?>
+                </div>
+
+            <?php endif; ?>
+            <p class="extra-space">&nbsp;</p>
+        <?php //todo: add this extra space properly ?>
+            <?php echo $this->translate('markup-ecmt-permit-guidance-first-time'); ?>
+            <div class="actions-container new-application--wrapper">
+                <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_ADD_LICENCE, [], [], true); ?>" class="action--primary large">
+                    <?php echo $this->translate('permits.application.overwiew.button'); ?>
+                </a>
+            </div>
+        <?php else : ?>
+            <p class="guidance"><?php echo $this->escapeHtml($this->translate('permits.application.ineligible')); ?></p>
+        <?php endif; ?>
+    </div>
+    <?php echo $this->translate('markup-ecmt-permit-dashboard-right-column'); ?>
+</div>
