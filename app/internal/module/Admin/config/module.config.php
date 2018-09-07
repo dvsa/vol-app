@@ -454,6 +454,30 @@ return [
                             ]
                         ]
                     ],
+                    'admin-feature-toggle' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'feature-toggle[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => \Admin\Controller\FeatureToggleController::class,
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
+                    'admin-permits' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'permits[/]',
+                            'defaults' => [
+                                'controller' => \Admin\Controller\PermitsController::class,
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
                     'admin-system-info-message' => [
                         'type' => 'Segment',
                         'options' => [
@@ -622,6 +646,7 @@ return [
             Admin\Controller\CpmsReportController::class => Admin\Controller\CpmsReportController::class,
             Admin\Controller\TeamController::class => \Admin\Controller\TeamController::class,
             'Admin\SystemParametersController' => \Admin\Controller\SystemParametersController::class,
+            \Admin\Controller\FeatureToggleController::class => \Admin\Controller\FeatureToggleController::class,
             'Admin\TaskAllocationRulesController' => \Admin\Controller\TaskAllocationRulesController::class,
             'Admin\PiReportController' => 'Admin\Controller\PiReportController',
             Admin\Controller\SystemInfoMessageController::class => Admin\Controller\SystemInfoMessageController::class,
@@ -631,6 +656,8 @@ return [
                 Admin\Controller\DataRetentionReviewController::class,
             Admin\Controller\DataRetention\ExportController::class =>
                 Admin\Controller\DataRetention\ExportController::class,
+            Admin\Controller\PermitsController::class =>
+                Admin\Controller\PermitsController::class,
             Admin\Controller\DataRetention\RuleAdminController::class =>
                 Admin\Controller\DataRetention\RuleAdminController::class
         ],

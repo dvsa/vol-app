@@ -48,7 +48,7 @@
 
     ],
     "require": {
-        "php": ">=5.4",
+        "php": ">=7.0",
         "zendframework/zendframework": "~2.4.0",
         "doctrine/annotations": "^1.2.3",
         "symfony/Filesystem": "~2.6.0",
@@ -57,7 +57,6 @@
         "olcs/olcs-transfer": "dev-develop",
         "olcs/olcs-utils": "dev-develop",
         "olcs/olcs-auth": "dev-develop",
-        "olcs/olcs-logging": "dev-develop",
         "soflomo/purifier": "~0.1.0"
     },
     "require-dev": {
