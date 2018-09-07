@@ -4,6 +4,7 @@ namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractTmController;
 use Common\Controller\Traits\GenericUpload;
+use Common\Form\Elements\Custom\DateSelect;
 use Common\RefData;
 use Common\Service\Entity\TransportManagerApplicationEntityService;
 use Common\Service\Entity\ApplicationEntityService;
@@ -103,6 +104,20 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
     }
 
+    protected function disableFields($form) {
+        foreach ($form->getFieldsets() as $fieldset) {
+            foreach ($fieldset->getElements() as $element) {
+                $element->setAttribute('disabled', true);
+                if ($element instanceof DateSelect) {
+                    $element->getDayElement()->setAttribute('disabled', true);
+                    $element->getMonthElement()->setAttribute('disabled', true);
+                    $element->getYearElement()->setAttribute('disabled', true);
+                }
+            }
+            $this->disableFields($fieldset);
+        }
+    }
+
     /**
      * Details page, the big form for TM to input all details
      *
@@ -119,7 +134,11 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $formData = $this->formatFormData($transportManagerApplicationData, $postData);
 
         $form = $this->getDetailsForm($transportManagerApplicationData)->setData($formData);
-
+        if($this->params('activeSection')) {
+            $this->disableFields($form);
+        }
+//        $details = $form->get('details')->get('birthDate')->getDayElement();
+//        $details->setAttribute('disabled', true);
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         $hasProcessedAddressLookup = $formHelper->processAddressLookupForm($form, $request);
@@ -1110,21 +1129,22 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     private function page1Point2(array $tma)
     {
-        if ($this->getRequest()->isPost()) {
-            $response = $this->handleCommand(
-                Command\TransportManagerApplication\Submit::create(['id' => $tma['id']])
-            );
-
-            $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
-            if ($response->isOk()) {
-                $flashMessenger->addSuccessMessage('lva-tm-details-submit-success');
-                //redirect to checkAnswers
-                return $this->redirect()->toRoute('lva-transport_manager/check_answers', ['application' => $tma['id']]);
-            } else {
-                $flashMessenger->addErrorMessage('unknown-error');
-            }
-        }
-        return $this->redirect()->refresh();
+        return $this->redirect()->toRoute('lva-transport_manager/check_answers', ['application' => $tma['id']]);
+//        if ($this->getRequest()->isPost()) {
+//            $response = $this->handleCommand(
+//                Command\TransportManagerApplication\Submit::create(['id' => $tma['id']])
+//            );
+//
+//            $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+//            if ($response->isOk()) {
+//                $flashMessenger->addSuccessMessage('lva-tm-details-submit-success');
+//                //redirect to checkAnswers
+//                return $this->redirect()->toRoute('lva-transport_manager/check_answers', ['application' => $tma['id']]);
+//            } else {
+//                $flashMessenger->addErrorMessage('unknown-error');
+//            }
+//        }
+//        return $this->redirect()->refresh();
     }
 
     /**

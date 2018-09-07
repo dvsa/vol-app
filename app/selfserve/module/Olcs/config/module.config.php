@@ -727,6 +727,12 @@ foreach (['application', 'variation'] as $lva) {
                                 'grand_child_id' => '[0-9\,]+'
                             ),
                         )
+                    ),
+                    'change' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => 'change[/:activeSection][/]',
+                        )
                     )
                 )
             )
@@ -1182,7 +1188,8 @@ return array(
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'generatePeopleList' => \Olcs\View\Helper\GeneratePeopleList::class
+            'generatePeopleList' => \Olcs\View\Helper\GeneratePeopleList::class,
+            'tmCheckAnswersChangeLink' => \Olcs\View\Helper\TmCheckAnswersChangeLink::class
         )
     ),
     'view_manager' => array(
@@ -1387,6 +1394,7 @@ return array(
 
                 'lva-application/transport_manager_details*' => ['selfserve-tm'],
                 'lva-variation/transport_manager_details*' => ['selfserve-tm'],
+                'lva-transport_manager/*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
                 'search*' => ['*'],
                 'index' => ['*'],

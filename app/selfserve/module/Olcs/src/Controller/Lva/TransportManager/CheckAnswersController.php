@@ -33,8 +33,10 @@ class CheckAnswersController extends AbstractTransportManagersController
             'backText' => 'transport-manager-save-return',
 
         ];
+
         $form = $this->getConfirmationForm($transportManagerApplicationId);
         $sections = TransportManagerApplication::mapForSections($transportManagerApplication);
+        $sections = $this->addChangeSectionLink($sections, $transportManagerApplication);
         $params = array_merge(["sections" => $sections], $defaultParams);
         /* @var $layout \Zend\View\Model\ViewModel */
         $layout = $this->render($title, $form, $params);
@@ -78,5 +80,21 @@ class CheckAnswersController extends AbstractTransportManagersController
         $form->setSubmitLabel($submitLabel);
         $form->removeCancel();
         return $form;
+    }
+
+    private function addChangeSectionLink(array $sections, array $transportManagerApplication): array
+    {
+        $lva = $transportManagerApplication['application']['isVariation'] ? 'variation' : 'application';
+        foreach ($sections as $key => $value) {
+            $sections[$key]['change']['sectionLink'] = $this->url()->fromRoute(
+                'lva-' . $lva .'/transport_manager_details/change',
+                [
+                    'application' => $transportManagerApplication['application']['id'],
+                    'child_id' => $transportManagerApplication['id'],
+                    'activeSection' => $sections[$key]['change']['sectionName']
+                ]
+            );
+        }
+        return $sections;
     }
 }
