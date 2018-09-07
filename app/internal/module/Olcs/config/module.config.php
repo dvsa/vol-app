@@ -199,6 +199,7 @@ return array(
             'LicenceFeesController' => 'Olcs\Controller\Licence\Fees\LicenceFeesController',
             LicenceBusController::class => LicenceBusController::class,
             'LicenceDecisionsController' => 'Olcs\Controller\Licence\LicenceDecisionsController',
+            'LicencePermitsController' => 'Olcs\Controller\Licence\Permits\LicencePermitsController',
             'LicenceGracePeriodsController' => 'Olcs\Controller\Licence\LicenceGracePeriodsController',
             'TaskController' => 'Olcs\Controller\TaskController',
             'LicenceDetailsOverviewController' => 'Olcs\Controller\Licence\Details\OverviewController',
@@ -281,8 +282,7 @@ return array(
             OperatorProcessingNoteController::class => OperatorProcessingNoteController::class,
             'OperatorProcessingTasksController'
                 => 'Olcs\Controller\Operator\OperatorProcessingTasksController',
-            'OperatorFeesController'
-                => 'Olcs\Controller\Operator\OperatorFeesController',
+            'OperatorFeesController' => 'Olcs\Controller\Operator\OperatorFeesController',
             'TMController' => TransportManagerController::class,
             'HistoricTmController'
                 => Olcs\Controller\TransportManager\HistoricTm\HistoricTmController::class,

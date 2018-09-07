@@ -752,6 +752,20 @@ $routes = [
                     ],
                 ],
             ],
+            'permits' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'permits[/]',
+                    'defaults' => [
+                        'controller' => 'LicencePermitsController',
+                        'action' => 'permits',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+
+                ],
+            ],
             'processing' => [
                 'type' => 'segment',
                 'options' => [
@@ -1576,7 +1590,7 @@ $routes = [
             ],
         ],
         'may_terminate' => true,
-    ],
+     ],
     'create_transport_manager' => [
         'type' => 'segment',
         'options' => [

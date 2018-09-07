@@ -48,7 +48,7 @@
 
     ],
     "require": {
-        "php": ">=5.4",
+        "php": ">=7.0",
         "zendframework/zendframework": "~2.4.0",
         "doctrine/annotations": "^1.2.3",
         "symfony/Filesystem": "~2.6.0",
@@ -57,7 +57,11 @@
         "olcs/olcs-transfer": "dev-release/4.187",
         "olcs/olcs-utils": "dev-release/4.187",
         "olcs/olcs-auth": "dev-release/4.187",
-        "olcs/olcs-logging": "dev-release/4.187",
+        "olcs/olcs-logging": "dev-release/4.188",
+        "olcs/OlcsCommon": "dev-release/4.188",
+        "olcs/olcs-transfer": "dev-release/4.188",
+        "olcs/olcs-utils": "dev-release/4.188",
+        "olcs/olcs-auth": "dev-release/4.188",
         "soflomo/purifier": "~0.1.0"
     },
     "require-dev": {

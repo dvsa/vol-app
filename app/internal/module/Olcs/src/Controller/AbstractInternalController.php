@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller;
 
+use Common\Controller\AbstractOlcsController;
 use Common\Data\Mapper\MapperInterface;
 use Common\Service\Cqrs\Response;
 use Common\Service\Table\TableBuilder;
@@ -16,9 +17,9 @@ use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use Olcs\Mvc\Controller\ParameterProvider\ParameterProviderInterface;
 use Olcs\Mvc\Controller\Plugin;
+use Common\Controller\Plugin\FeaturesEnabled as FeaturesEnabledPlugin;
 use Olcs\View\Builder\BuilderInterface as ViewBuilderInterface;
 use Zend\Http\Response as HttpResponse;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\ArrayUtils;
 use Zend\View\Model\ViewModel;
@@ -35,12 +36,13 @@ use Zend\View\Model\ViewModel;
  * @method Plugin\Script script()
  * @method Plugin\Placeholder placeholder()
  * @method Plugin\Table table()
+ * @method FeaturesEnabledPlugin featuresEnabled(array $toggleConfig, MvcEvent $e)
  * @method Response handleQuery(QueryInterface $query)
  * @method Response handleCommand(CommandInterface $query)
  * @method \Common\Controller\Plugin\Redirect redirect()
  * @method Plugin\Confirm confirm($string)
  */
-abstract class AbstractInternalController extends AbstractActionController
+abstract class AbstractInternalController extends AbstractOlcsController
 {
     /**
      * Holds the navigation ID,
@@ -587,7 +589,6 @@ abstract class AbstractInternalController extends AbstractActionController
                 foreach ($flashErrors as $error) {
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
                 }
-
             } elseif ($response->isServerError()) {
                 $this->handleErrors($response->getResult());
             }

@@ -86,13 +86,14 @@ class TaskController extends AbstractController
             $teamId = (int)$data['assignedToTeam'];
         }
 
-        if ($teamId > 0) {
-            $this->getServiceLocator()->get(\Olcs\Service\Data\UserListInternal::class)
-                ->setTeamId($teamId);
-        }
-
         $form = $this->getForm('TaskReassign')
             ->setData($this->expandData($data));
+
+        if ($teamId > 0) {
+            $assignedToUserOptions = $form->get('assignment')->get('assignedToUser')->getOptions();
+            $this->getServiceLocator()->get($assignedToUserOptions['service_name'])
+                ->setTeamId($teamId);
+        }
 
         if ($teamId === 0) {
             $form->get('assignment')->get('assignedToUser')->setEmptyOption('please-select');
@@ -221,14 +222,16 @@ class TaskController extends AbstractController
             $this->getServiceLocator()->get(\Olcs\Service\Data\SubCategory::class)->setCategory($data['category']);
         }
 
+        $form = $this->getForm('Task');
+        $assignedToUserOptions = $form->get('assignment')->get('assignedToUser')->getOptions();
+        
         // Set up the data services so that dynamic selects populate correctly if we already have data
         $teamId = (int)$data['assignedToTeam'];
         if ($teamId > 0) {
-            $this->getServiceLocator()->get(\Olcs\Service\Data\UserListInternal::class)
+            $this->getServiceLocator()->get($assignedToUserOptions['service_name'])
                 ->setTeamId($data['assignedToTeam']);
         }
 
-        $form = $this->getForm('Task');
         $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
 
         if ($teamId === 0) {
@@ -464,7 +467,6 @@ class TaskController extends AbstractController
                     $resource[$child] = null;
                 }
             }
-
         } else {
             $resource = [];
         }
