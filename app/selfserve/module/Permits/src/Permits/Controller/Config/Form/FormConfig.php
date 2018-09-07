@@ -57,4 +57,10 @@ class FormConfig
             'formClass' => 'WithdrawApplicationForm',
         ],
     ];
+
+    const FORM_ACCEPT_AND_PAY = [
+        'acceptAndPay' => [
+            'formClass' => 'AcceptAndPayForm',
+        ],
+    ];
 }

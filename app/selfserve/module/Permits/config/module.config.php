@@ -4,6 +4,7 @@ namespace Permits;
 use Permits\Controller\CancelApplicationController;
 use Permits\Controller\EmissionsController;
 use Permits\Controller\CabotageController;
+use Permits\Controller\FeePartSuccessfulController;
 use Permits\Controller\WithdrawApplicationController;
 use Permits\Controller\CheckAnswersController;
 use Permits\Controller\DeclarationController;
@@ -22,6 +23,7 @@ return array(
         DeclarationController::class => DeclarationController::class,
         OverviewController::class => OverviewController::class,
         FeeController::class => FeeController::class,
+        FeePartSuccessfulController::class => FeePartSuccessfulController::class,
         SubmittedController::class => SubmittedController::class,
         CancelApplicationController::class => CancelApplicationController::class,
         WithdrawApplicationController::class => WithdrawApplicationController::class
@@ -247,6 +249,20 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
+              'ecmt-fee-part-successful' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/:id/ecmt-fee-part-successful[/]',
+                      'defaults' => [
+                          'controller'    => FeePartSuccessfulController::class,
+                          'action'        => 'generic',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
               'ecmt-submitted' => [
                   'type'    => 'segment',
                   'options' => [
@@ -369,6 +385,7 @@ return array(
             'permitsDashboardLink' => \Permits\View\Helper\PermitsDashboardLink::class,
             'changeAnswerLink' => \Permits\View\Helper\ChangeAnswerLink::class,
             'ecmtLicenceData' => \Permits\View\Helper\EcmtLicenceData::class,
+            'ecmtFees' => \Permits\View\Helper\EcmtFees::class,
             'underConsiderationLink' => \Permits\View\Helper\UnderConsiderationLink::class,
 
         ],
