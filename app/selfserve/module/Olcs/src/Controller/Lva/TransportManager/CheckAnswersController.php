@@ -93,7 +93,7 @@ class CheckAnswersController extends AbstractTransportManagersController
                     'child_id' => $transportManagerApplication['id'],
                     'activeSection' => $sections[$key]['change']['sectionName']
                 ]
-            );
+            ) . "#" . $sections[$key]['change']['sectionName'];
         }
         return $sections;
     }

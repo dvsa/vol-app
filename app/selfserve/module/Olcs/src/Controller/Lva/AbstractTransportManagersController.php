@@ -104,9 +104,16 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
     }
 
-    protected function disableFields($form) {
+    protected function disableNonActiveSections($form, $activeSection) {
         foreach ($form->getFieldsets() as $fieldset) {
+            if ($fieldset->getAttribute('data-section') == $activeSection ||
+                $fieldset->getAttribute('data-section') == 'actions-container') {
+                continue;
+            }
             foreach ($fieldset->getElements() as $element) {
+                if ($element->getAttribute('data-section') == $activeSection) {
+                    continue;
+                }
                 $element->setAttribute('disabled', true);
                 if ($element instanceof DateSelect) {
                     $element->getDayElement()->setAttribute('disabled', true);
@@ -114,7 +121,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     $element->getYearElement()->setAttribute('disabled', true);
                 }
             }
-            $this->disableFields($fieldset);
+            $this->disableNonActiveSections($fieldset, $activeSection);
         }
     }
 
@@ -135,10 +142,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $form = $this->getDetailsForm($transportManagerApplicationData)->setData($formData);
         if($this->params('activeSection')) {
-            $this->disableFields($form);
+            $this->disableNonActiveSections($form, $this->params('activeSection'));
         }
-//        $details = $form->get('details')->get('birthDate')->getDayElement();
-//        $details->setAttribute('disabled', true);
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         $hasProcessedAddressLookup = $formHelper->processAddressLookupForm($form, $request);
