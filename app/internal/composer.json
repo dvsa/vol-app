@@ -53,11 +53,10 @@
         "doctrine/annotations": "^1.2.3",
         "symfony/Filesystem": "~2.6.0",
         "zf-commons/zfc-rbac": "~2.4.0",
-        "olcs/OlcsCommon": "dev-project/eupermits",
-        "olcs/olcs-transfer": "dev-project/eupermits",
-        "olcs/olcs-utils": "dev-project/eupermits",
-        "olcs/olcs-auth": "dev-project/eupermits",
-        "olcs/olcs-logging": "dev-project/eupermits",
+        "olcs/OlcsCommon": "dev-develop",
+        "olcs/olcs-transfer": "dev-develop",
+        "olcs/olcs-utils": "dev-develop",
+        "olcs/olcs-auth": "dev-develop",
         "soflomo/purifier": "~0.1.0"
     },
     "require-dev": {
