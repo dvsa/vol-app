@@ -104,36 +104,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
     }
 
-    protected function disableNonActiveSections($form, $activeSection) {
-        foreach ($form->getFieldsets() as $fieldset) {
-            if ($fieldset->getAttribute('data-section') == $activeSection ||
-                $fieldset->getAttribute('data-section') == 'actions-container') {
-                continue;
-            }
-            foreach ($fieldset->getElements() as $element) {
-                if ($element->getAttribute('data-section') == $activeSection) {
-                    continue;
-                }
-                $element->setAttribute('readonly', true);
-                if ($element instanceof DateSelect) {
-                    $element->getDayElement()->setAttribute('readonly', true);
-                    $element->getMonthElement()->setAttribute('readonly', true);
-                    $element->getYearElement()->setAttribute('readonly', true);
-                }
-                if ($element instanceof \Zend\Form\Element\Radio) {
-                    $options = $element->getValueOptions();
-                    $value = $element->getValue();
-                    foreach ($options as $optionName => $optionLabel) {
-                        if ($optionName !== $value) {
-                            $element->unsetValueOption($optionName);
-                        }
-                    }
-                }
-            }
-            $this->disableNonActiveSections($fieldset, $activeSection);
-        }
-    }
-
     /**
      * Details page, the big form for TM to input all details
      *
@@ -150,9 +120,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $formData = $this->formatFormData($transportManagerApplicationData, $postData);
 
         $form = $this->getDetailsForm($transportManagerApplicationData)->setData($formData);
-        if($this->params('activeSection')) {
-            $this->disableNonActiveSections($form, $this->params('activeSection'));
-        }
+
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         $hasProcessedAddressLookup = $formHelper->processAddressLookupForm($form, $request);
