@@ -9,7 +9,6 @@ use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
 use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
-use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermits;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
 
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
@@ -77,20 +76,16 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $response = $this->handleQuery($query);
         $applicationData = $response->getResult();
 
-        $query = EcmtPermits::create([]);
-        $response = $this->handleQuery($query);
-        $issuedData = $response->getResult();
-
         $applicationsTable = $this->getServiceLocator()
             ->get('Table')
             ->prepareTable($this->applicationsTableName, $applicationData['results']);
 
         $issuedTable = $this->getServiceLocator()
             ->get('Table')
-            ->prepareTable($this->issuedTableName, $issuedData['results']);
+            ->prepareTable($this->issuedTableName, []);
 
         $view->setVariable('isEligible', $eligibleForPermits);
-        $view->setVariable('issuedNo', $issuedData['count']);
+        $view->setVariable('issuedNo', 0);
         $view->setVariable('applicationsNo', $applicationData['count']);
         $view->setVariable('applicationsTable', $applicationsTable);
         $view->setVariable('issuedTable', $issuedTable);
