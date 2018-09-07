@@ -728,12 +728,6 @@ foreach (['application', 'variation'] as $lva) {
                             ),
                         )
                     ),
-                    'change' => array(
-                        'type' => 'segment',
-                        'options' => array(
-                            'route' => 'change[/:activeSection][/]',
-                        )
-                    )
                 )
             )
         )

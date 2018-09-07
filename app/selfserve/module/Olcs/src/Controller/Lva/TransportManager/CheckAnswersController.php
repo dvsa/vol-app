@@ -100,11 +100,10 @@ class CheckAnswersController extends AbstractTransportManagersController
         $lva = $transportManagerApplication['application']['isVariation'] ? 'variation' : 'application';
         foreach ($sections as $key => $value) {
             $sections[$key]['change']['sectionLink'] = $this->url()->fromRoute(
-                'lva-' . $lva .'/transport_manager_details/change',
+                'lva-' . $lva .'/transport_manager_details',
                 [
                     'application' => $transportManagerApplication['application']['id'],
                     'child_id' => $transportManagerApplication['id'],
-                    'activeSection' => $sections[$key]['change']['sectionName']
                 ]
             ) . "#" . $sections[$key]['change']['sectionName'];
         }
