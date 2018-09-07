@@ -23,7 +23,7 @@ class FeePartSuccessfulController extends AbstractSelfserveController implements
     ];
 
     protected $conditionalDisplayConfig = [
-        //'default' => ConditionalDisplayConfig::PERMIT_APP_AWAITING_FEE,
+        'default' => ConditionalDisplayConfig::PERMIT_APP_AWAITING_FEE,
     ];
 
     protected $formConfig = [
@@ -36,9 +36,9 @@ class FeePartSuccessfulController extends AbstractSelfserveController implements
 
     protected $postConfig = [
         'default' => [
-            'command' => EcmtSubmitApplication::class,
+            //'command' => EcmtSubmitApplication::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
-            'step' => EcmtSection::ROUTE_ECMT_SUBMITTED,
+            //'step' => EcmtSection::ROUTE_ECMT_SUBMITTED,
         ],
     ];
 }
