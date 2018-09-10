@@ -1111,7 +1111,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     private function page1Point2(array $tma)
     {
-        return $this->redirect()->toRoute('lva-transport_manager/check_answers', ['application' => $tma['id']]);
+        return $this->redirect()->toRoute('lva-transport_manager/check_answers', ['application' => $tma['application']['id']]);
     }
 
     /**

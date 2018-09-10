@@ -2,6 +2,7 @@
 
 namespace OLCS\Controller\Lva\TransportManager;
 
+use Common\Form\Form;
 use OLCS\Command\TransportManagerApplication\Submit;
 use Common\Controller\Lva\AbstractTransportManagersController;
 use Common\Data\Mapper\Lva\TransportManagerApplication;
@@ -35,6 +36,7 @@ class CheckAnswersController extends AbstractTransportManagersController
         ];
 
         $form = $this->getConfirmationForm($transportManagerApplicationId);
+        $sectionMap = $this->getCheckAnswerSectionMapFromDetailsForm();
         $sections = TransportManagerApplication::mapForSections($transportManagerApplication);
         $sections = $this->addChangeSectionLink($sections, $transportManagerApplication);
         $params = array_merge(["sections" => $sections], $defaultParams);
@@ -55,7 +57,7 @@ class CheckAnswersController extends AbstractTransportManagersController
         $transportManagerApplicationId = $this->params("application");
         if ($this->getRequest()->isPost()) {
             $response = $this->handleCommand(
-                Submit::create(['id' =>$transportManagerApplicationId])
+                Submit::create(['id' => $transportManagerApplicationId])
             );
 
             $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
@@ -100,13 +102,27 @@ class CheckAnswersController extends AbstractTransportManagersController
         $lva = $transportManagerApplication['application']['isVariation'] ? 'variation' : 'application';
         foreach ($sections as $key => $value) {
             $sections[$key]['change']['sectionLink'] = $this->url()->fromRoute(
-                'lva-' . $lva .'/transport_manager_details',
+                'lva-' . $lva . '/transport_manager_details',
                 [
-                    'application' => $transportManagerApplication['application']['id'],
-                    'child_id' => $transportManagerApplication['id'],
+                'application' => $transportManagerApplication['application']['id'],
+                'child_id' => $transportManagerApplication['id'],
                 ]
             ) . "#" . $sections[$key]['change']['sectionName'];
         }
         return $sections;
+    }
+
+
+    private function getCheckAnswerSectionMapFromDetailsForm(): array
+    {
+        $sectionMap = [];
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        /* @var $form \Common\Form\Form */
+        $form = $formHelper->createForm('Lva\TransportManagerDetails');
+        foreach ($form->getFieldsets() as $fieldset) {
+            $sectionMap[$fieldset->getAttribute('data-section')] = $fieldset->getElements();
+        }
+        $form = null;
+        return $sectionMap;
     }
 }
