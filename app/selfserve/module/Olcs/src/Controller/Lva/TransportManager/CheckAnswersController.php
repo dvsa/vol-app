@@ -37,8 +37,8 @@ class CheckAnswersController extends AbstractTransportManagersController
         ];
 
         $form = $this->getConfirmationForm($transportManagerApplicationId);
-//        $sectionMap = $this->getCheckAnswerSectionMapFromDetailsForm();
-        $sections = TransportManagerApplication::mapForSections($transportManagerApplication);
+
+        $sections = TransportManagerApplication::mapForSections($transportManagerApplication, $postData);
         $sections = $this->addChangeSectionLink($sections, $transportManagerApplication);
         $params = array_merge(["sections" => $sections], $defaultParams);
         /* @var $layout \Zend\View\Model\ViewModel */
@@ -56,20 +56,10 @@ class CheckAnswersController extends AbstractTransportManagersController
     {
 
         $transportManagerApplicationId = $this->params("application");
-        if ($this->getRequest()->isPost()) {
-            $response = $this->handleCommand(
-                Submit::create(['id' => $transportManagerApplicationId])
-            );
 
-            $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
-            if ($response->isOk()) {
-                $flashMessenger->addSuccessMessage('lva-tm-details-submit-success');
                 //redirect to declaration at this point.
-                exit("Decalarion page -> OLCS-19791");
-            } else {
-                $flashMessenger->addErrorMessage('unknown-error');
-            }
-        }
+                exit("Decalarion page -> OLCS-19791"). $transportManagerApplicationId;
+
     }
 
     /**
@@ -103,27 +93,13 @@ class CheckAnswersController extends AbstractTransportManagersController
         $lva = $transportManagerApplication['application']['isVariation'] ? 'variation' : 'application';
         foreach ($sections as $key => $value) {
             $sections[$key]['change']['sectionLink'] = $this->url()->fromRoute(
-                'lva-' . $lva . '/transport_manager_details',
-                [
-                'application' => $transportManagerApplication['application']['id'],
-                'child_id' => $transportManagerApplication['id'],
-                ]
-            ) . "#" . $sections[$key]['change']['sectionName'];
+                    'lva-' . $lva . '/transport_manager_details',
+                    [
+                        'application' => $transportManagerApplication['application']['id'],
+                        'child_id' => $transportManagerApplication['id'],
+                    ]
+                ) . "#" . $sections[$key]['change']['sectionName'];
         }
         return $sections;
-    }
-
-
-    private function getCheckAnswerSectionMapFromDetailsForm(): array
-    {
-        $sectionMap = [];
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        /* @var $form \Common\Form\Form */
-        $form = $formHelper->createForm('Lva\TransportManagerDetails');
-        foreach ($form->getFieldsets() as $fieldset) {
-            $sectionMap[$fieldset->getAttribute('data-section')] = $fieldset->getElements();
-        }
-        $form = null;
-        return $sectionMap;
     }
 }

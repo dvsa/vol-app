@@ -76,13 +76,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 return $this->pagePostal($tma);
             // no break
             case TransportManagerApplicationEntityService::STATUS_INCOMPLETE:
-                $submitted = $this->getRequest()->getQuery('submitted') !== null;
                 if ($isUserTm) {
-                    if (!$submitted) {
                         return $this->page1Point1($tma);
-                    } else {
-                        return $this->page1Point2($tma);
-                    }
                 } else {
                     return $this->page1Point3($tma);
                 }
@@ -208,14 +203,28 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
                     return $this->redirectTmToHome();
                 }
+                $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
 
-                return $this->forward()->dispatch(
-                    'LvaTransportManager/CheckAnswers',
-                    [
-                        'action' => 'index',
-                        'application' => $transportManagerApplicationData['id'],
-                    ]
-                );
+                if ($this->getRequest()->isPost()) {
+                    $response = $this->handleCommand(
+                        Command\TransportManagerApplication\Submit::create(['id' => $transportManagerApplicationData['id']])
+                    );
+
+                    if ($response->isOk()) {
+                        $flashMessenger->addSuccessMessage('lva-tm-details-submit-success');
+                        return $this->forward()->dispatch(
+                            'LvaTransportManager/CheckAnswers',
+                            [
+                                'action' => 'index',
+                                'application' => $transportManagerApplicationData['id'],
+                            ]
+                        );
+                    }
+                } else {
+                    $flashMessenger->addErrorMessage('unknown-error');
+                }
+
+
             }
         }
 
