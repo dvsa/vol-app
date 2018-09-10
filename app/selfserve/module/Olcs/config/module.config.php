@@ -1092,6 +1092,7 @@ return array(
                 \Olcs\Controller\Lva\DirectorChange\ConvictionsPenaltiesController::class,
             'LvaTransportManager/CheckAnswers' => \OLCS\Controller\Lva\TransportManager\CheckAnswersController::class,
             'LvaTransportManager/Confirmation' => \OLCS\Controller\Lva\TransportManager\ConfirmationController::class,
+            'LvaTransportManager/Declaration' => \OLCS\Controller\Lva\TransportManager\DeclarationController::class,
         ),
         'invokables' => array(
             'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,
