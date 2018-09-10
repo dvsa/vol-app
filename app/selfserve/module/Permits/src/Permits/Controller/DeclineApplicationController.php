@@ -24,7 +24,7 @@ class DeclineApplicationController extends AbstractSelfserveController implement
     ];
 
     protected $conditionalDisplayConfig = [
-        'default' => ConditionalDisplayConfig::PERMIT_APP_UNDER_CONSIDERATION,
+        'default' => ConditionalDisplayConfig::PERMIT_APP_AWAITING_FEE,
     ];
 
     protected $formConfig = [
