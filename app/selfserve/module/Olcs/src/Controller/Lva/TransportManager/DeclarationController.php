@@ -42,8 +42,6 @@ class DeclarationController extends AbstractTransportManagersController
         $content = $layout->getChildrenByCaptureTo('content')[0];
         $content->setTemplate('pages/lva-tm-details-action');
 
-        $this->getServiceLocator()->get('Script')->loadFiles('tm-lva-declaration');
-
         return $layout;
     }
 
@@ -55,15 +53,15 @@ class DeclarationController extends AbstractTransportManagersController
     private function getBacklink($tma)
     {
         return $this->url()->fromRoute(
-                "lva-" . $this->returnApplicationOrVariation($tma) . "/transport_manager_details",
-                ['child_id' => $this->getIdentifier(), 'application' => $tma["application"]["id"]],
-                [],
-                false
+            "lva-" . $this->returnApplicationOrVariation($tma) . "/transport_manager_details",
+            ['child_id' => $this->getIdentifier(), 'application' => $tma["application"]["id"]],
+            [],
+            false
         );
     }
 
-    private function alterDeclarationForm(Form $form){
-
+    private function alterDeclarationForm(Form $form)
+    {
         $form->get('form-actions')->get('submit')->setLabel('application.review-declarations.sign-button');
     }
 
@@ -74,8 +72,7 @@ class DeclarationController extends AbstractTransportManagersController
      */
     private function returnApplicationOrVariation($tma)
     {
-        if($tma["application"]["isVariation"])
-        {
+        if ($tma["application"]["isVariation"]) {
             return "variation";
         }
         return "application";

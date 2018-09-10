@@ -6,8 +6,7 @@
             'pageTitle' => $this->translate($this->title),
             'pageSubTitle' => $this->tmFullName,
             'backUrl' => [
-                'url' => $this->backLink,
-                // may need to create new view as $this->navigationParentPage()->getHref() doesn't seem to work
+                'url' => $this->navigationParentPage() ? $this->navigationParentPage()->getHref() : $this->backLink,
             ],
         ]
     );
