@@ -252,7 +252,7 @@ return array(
               'ecmt-fee-part-successful' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-fee-part-successful[/]',
+                      'route'    => '/:id/ecmt-fee-successful[/]',
                       'defaults' => [
                           'controller'    => FeePartSuccessfulController::class,
                           'action'        => 'generic',
