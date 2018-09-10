@@ -59,7 +59,7 @@ $feeData = $this->ecmtFees($application);
                         </dd>
 
                         <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.issuing.fee.total')); ?></dt>
-                        <dd><?php echo $this->currencyFormatter($feeData['totalFee']); ?></dd>
+                        <dd><?php echo $this->currencyFormatter($feeData['totalFee']); ?> <?php echo $this->escapeHtml($this->translate('permits.page.non.refundable')); ?></dd>
 
                         <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.payment.due')); ?></dt>
                         <dd><?php echo date(\DATE_FORMAT, strtotime($feeData['dueDate'])); ?></dd>
@@ -69,7 +69,7 @@ $feeData = $this->ecmtFees($application);
             <?php
             echo $this->form($form);
             ?>
-            <p><?php echo $this->permitsBackLink('permits.link.cancel.return.to.dashboard'); ?></p>
+            <p><a href="<?php echo $this->url('permits') ?>"> <?php echo $this->escapeHtml($this->translate('permits.link.cancel.return.to.dashboard')); ?></a></p>
         </div>
     </div>
 </div>
