@@ -4,11 +4,11 @@ namespace OLCS\Controller\Lva\TransportManager;
 
 use Common\Controller\Lva\AbstractTransportManagersController;
 use Common\RefData;
-use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 
 class ConfirmationController extends AbstractTransportManagersController
 {
-    use ApplicationControllerTrait;
+    use ExternalControllerTrait;
 
     /**
      * index action for /transport-manager/:TmaId/confirmation route

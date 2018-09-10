@@ -2,17 +2,16 @@
 
 namespace OLCS\Controller\Lva\TransportManager;
 
-use Common\Form\Form;
 use OLCS\Command\TransportManagerApplication\Submit;
 use Common\Controller\Lva\AbstractTransportManagersController;
 use Common\Data\Mapper\Lva\TransportManagerApplication;
-use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 
 class CheckAnswersController extends AbstractTransportManagersController
 {
 
-    use ApplicationControllerTrait;
-
+    use ExternalControllerTrait;
+    
     public function indexAction()
     {
         $transportManagerApplicationId = $this->params("application");
@@ -36,7 +35,7 @@ class CheckAnswersController extends AbstractTransportManagersController
         ];
 
         $form = $this->getConfirmationForm($transportManagerApplicationId);
-        $sectionMap = $this->getCheckAnswerSectionMapFromDetailsForm();
+//        $sectionMap = $this->getCheckAnswerSectionMapFromDetailsForm();
         $sections = TransportManagerApplication::mapForSections($transportManagerApplication);
         $sections = $this->addChangeSectionLink($sections, $transportManagerApplication);
         $params = array_merge(["sections" => $sections], $defaultParams);
