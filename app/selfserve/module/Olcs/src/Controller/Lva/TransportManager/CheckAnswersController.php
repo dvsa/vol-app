@@ -11,11 +11,13 @@ class CheckAnswersController extends AbstractTransportManagersController
 {
 
     use ExternalControllerTrait;
-    
+
     public function indexAction()
     {
         $transportManagerApplicationId = $this->params("application");
-
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
+        $postData = (array)$request->getPost();
         $transportManagerApplication = $this->getTransportManagerApplication($transportManagerApplicationId);
         $translator = $this->serviceLocator->get('Helper\Translation');
 

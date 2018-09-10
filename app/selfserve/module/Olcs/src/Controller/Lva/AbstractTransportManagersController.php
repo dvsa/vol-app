@@ -4,7 +4,6 @@ namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractTmController;
 use Common\Controller\Traits\GenericUpload;
-use Common\Form\Elements\Custom\DateSelect;
 use Common\RefData;
 use Common\Service\Entity\TransportManagerApplicationEntityService;
 use Common\Service\Entity\ApplicationEntityService;
@@ -210,7 +209,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     return $this->redirectTmToHome();
                 }
 
-                return $this->redirect()->toRoute(null, [], ['query' => ['submitted' => 1]], true);
+                return $this->forward()->dispatch(
+                    'LvaTransportManager/CheckAnswers',
+                    [
+                        'action' => 'index',
+                        'application' => $transportManagerApplicationData['id'],
+                    ]
+                );
             }
         }
 
