@@ -16,8 +16,10 @@ $feeData = $this->ecmtFees($application);
             <div class="page-header__wrapper">
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($this->translate('permits.page.fee-part-successful.title')); ?>
-                    <?php echo $translatorHelper->translateReplace(
-                            'markup-ecmt-fee-part-successful-hint',
+                    <?php
+                    $markup = ($application['irhpPermitApplications'][0]['successfulPermitApplications'] === $application['permitsRequired']) ? 'markup-ecmt-fee-successful-hint' : 'markup-ecmt-fee-part-successful-hint';
+                    echo $translatorHelper->translateReplace(
+                            $markup,
                             [$application['irhpPermitApplications'][0]['successfulPermitApplications'],
                              $application['permitsRequired']]
                     ); ?>
