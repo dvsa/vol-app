@@ -140,14 +140,6 @@ trait PermitActionTrait
                 }
             }
 
-            if (array_key_exists('form-actions', $data) && array_key_exists('cancel', $data['form-actions'])) {
-                if (!empty($data['fields']['id'])) {
-                    $command = CancelEcmtPermitApplication::create(['id' => $data['fields']['id']]);
-                    $response = $this->handleCommand($command);
-                    $this->checkResponse($response);
-                }
-            }
-
             // Handles loading the a blank application form for case worker to populate
             if ($action === 'apply') {
                 $applyView = $this->getCreateView($application, $licence);
