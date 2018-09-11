@@ -3,12 +3,12 @@
 namespace OLCS\Controller\Lva\TransportManager;
 
 use Common\Controller\Lva\AbstractTransportManagersController;
-use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use \Common\Form\Form;
+use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 
 class DeclarationController extends AbstractTransportManagersController
 {
-    use ApplicationControllerTrait;
+    use ExternalControllerTrait;
 
     /**
      * index action for /transport-manager/[tmaId]/confirmation route
@@ -17,7 +17,7 @@ class DeclarationController extends AbstractTransportManagersController
      */
     public function indexAction()
     {
-        $tmaId = (int)$this->params('application');
+        $tmaId = (int)$this->params('child_id');
         $tma = $this->getTransportManagerApplication($tmaId);
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
