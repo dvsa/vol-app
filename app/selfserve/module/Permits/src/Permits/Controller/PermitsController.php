@@ -89,13 +89,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         );
         $response = $this->handleQuery($query);
         $issuedData = $response->getResult();
-
-        //var_dump($issuedData['results'][0]['irhpPermitApplications'][0]['successfulPermitApplications']);die;
-
-
-
-
-
         $issuedTable = $this->getServiceLocator()
             ->get('Table')
             ->prepareTable($this->issuedTableName, $issuedData['results']);
