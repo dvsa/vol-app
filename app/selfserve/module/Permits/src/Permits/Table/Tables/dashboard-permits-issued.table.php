@@ -17,7 +17,9 @@ return array(
     array(
       'title' => 'dashboard-table-permit-application-num',
       'name' => 'permitsRequired',
-      'formatter' => 'Translate'
+      'formatter' => function ($row) {
+          return $row['irhpPermitApplications'][0]['successfulPermitApplications'];
+      }
     ),
     array(
       'title' => 'dashboard-table-permit-application-type',

@@ -84,11 +84,17 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             [
                 'order' => 'DESC',
                 'organisation' => $this->getCurrentOrganisationId(),
-                'statusIds' => [RefData::ECMT_APP_STATUS_ISSUED]
+                'statusIds' => [RefData::PERMIT_VALID]
             ]
         );
         $response = $this->handleQuery($query);
         $issuedData = $response->getResult();
+
+        //var_dump($issuedData['results'][0]['irhpPermitApplications'][0]['successfulPermitApplications']);die;
+
+
+
+
 
         $issuedTable = $this->getServiceLocator()
             ->get('Table')
