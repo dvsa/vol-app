@@ -41,7 +41,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     const ECMT_ISSUING_FEE_PRODUCT_REFENCE = 'IRHP_GV_ECMT_100_PERMIT_FEE';
 
     protected $applicationsTableName = 'dashboard-permit-application';
-    protected $issuedTableName = 'dashboard-permits';
+    protected $issuedTableName = 'dashboard-permits-issued';
 
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
@@ -80,12 +80,22 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             ->get('Table')
             ->prepareTable($this->applicationsTableName, $applicationData['results']);
 
+        $query = EcmtPermitApplication::create(
+            [
+                'order' => 'DESC',
+                'organisation' => $this->getCurrentOrganisationId(),
+                'statusIds' => [RefData::ECMT_APP_STATUS_ISSUED]
+            ]
+        );
+        $response = $this->handleQuery($query);
+        $issuedData = $response->getResult();
+
         $issuedTable = $this->getServiceLocator()
             ->get('Table')
-            ->prepareTable($this->issuedTableName, []);
+            ->prepareTable($this->issuedTableName, $issuedData['results']);
 
         $view->setVariable('isEligible', $eligibleForPermits);
-        $view->setVariable('issuedNo', 0);
+        $view->setVariable('issuedNo', $issuedData['count']);
         $view->setVariable('applicationsNo', $applicationData['count']);
         $view->setVariable('applicationsTable', $applicationsTable);
         $view->setVariable('issuedTable', $issuedTable);

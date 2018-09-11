@@ -30,11 +30,11 @@
         <?php if($isEligible): ?>
 
             <?php if($issuedNo != 0 || $applicationsNo != 0) : ?>
-                <?php if($issuedNo === 0): ?>
-                    <div class="table__header">
-                <?php else : ?>
+                <div class="table__header">
+                <?php if($issuedNo > 0): ?>
                     <?php echo $issuedTable; ?>
                 <?php endif; ?>
+                    <p>&nbsp;</p>
                 </div>
                 <div class="table__header">
                     <?php if($applicationsNo > 0): ?>
