@@ -12,8 +12,7 @@ use Zend\Form\Annotation as Form;
 class AcceptAndPayForm
 {
     /**
-     * @Form\Name("AcceptAndPay")
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\AcceptAndPay")
      */
-    public $submitButton = null;
+    public $Submit = null;
 }

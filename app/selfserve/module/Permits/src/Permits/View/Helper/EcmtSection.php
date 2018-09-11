@@ -40,7 +40,8 @@ class EcmtSection extends AbstractHelper
     const ROUTE_ECMT_WITHDRAW_CONFIRMATION = self::ROUTE_ECMT_WITHDRAW_APPLICATION . '/confirmation';
 
     //decline
-    const ROUTE_ECMT_DECLINE_APPLICATION = 'ecmt-decline-application';
+    const ROUTE_ECMT_DECLINE_APPLICATION = 'ecmt-fee-successful';
+    const ROUTE_ECMT_DECLINE_CONFIRMATION = self::ROUTE_ECMT_DECLINE_APPLICATION . '/confirmation';
 
     /**
      * list of overview routes and the field denoting completion status

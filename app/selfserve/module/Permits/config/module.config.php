@@ -2,7 +2,6 @@
 namespace Permits;
 
 use Permits\Controller\CancelApplicationController;
-use Permits\Controller\DeclineApplicationController;
 use Permits\Controller\EmissionsController;
 use Permits\Controller\CabotageController;
 use Permits\Controller\FeePartSuccessfulController;
@@ -27,8 +26,7 @@ return array(
         FeePartSuccessfulController::class => FeePartSuccessfulController::class,
         SubmittedController::class => SubmittedController::class,
         CancelApplicationController::class => CancelApplicationController::class,
-        WithdrawApplicationController::class => WithdrawApplicationController::class,
-        DeclineApplicationController::class => DeclineApplicationController::class
+        WithdrawApplicationController::class => WithdrawApplicationController::class
     ),
   ),
   'router' => array(
@@ -251,20 +249,6 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-fee-part-successful' => [
-                  'type'    => 'segment',
-                  'options' => [
-                      'route'    => '/:id/ecmt-fee-successful[/]',
-                      'defaults' => [
-                          'controller'    => FeePartSuccessfulController::class,
-                          'action'        => 'generic',
-                      ],
-                      'constraints' => [
-                          'id' => '[0-9]+',
-                      ],
-                  ],
-                  'may_terminate' => false,
-              ],
               'ecmt-submitted' => [
                   'type'    => 'segment',
                   'options' => [
@@ -375,19 +359,33 @@ return array(
                         ],
                     ],
               ],
-              'ecmt-decline-application' => [
-                  'type' => 'segment',
+              'ecmt-fee-successful' => [
+                  'type'    => 'segment',
                   'options' => [
-                      'route' => '/:id/ecmt-decline-application[/]',
+                      'route'    => '/:id/ecmt-fee-successful[/]',
                       'defaults' => [
-                          'controller' => DeclineApplicationController::class,
-                          'action' => 'generic'
+                          'controller'    => FeePartSuccessfulController::class,
+                          'action'        => 'generic',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
                       ],
-                  ]
-              ]
+                  ],
+                  'may_terminate' => true,
+                  'child_routes' => [
+                      'confirmation' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'confirmation[/]',
+                              'defaults' => [
+                                  'controller'    => FeePartSuccessfulController::class,
+                                  'action'        => 'confirmation',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                  ],
+              ],
           ],
       ),
     ),

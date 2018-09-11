@@ -210,9 +210,12 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
                 $config = $this->configsForAction('postConfig');
                 $params = array_merge($saveData, $this->fetchHandlePostParams());
-                $command = $config['command']::create($params);
-                $response = $this->handleCommand($command);
-                $this->handleResponse($response);
+
+                if (isset($config['command'])) {
+                    $command = $config['command']::create($params);
+                    $response = $this->handleCommand($command);
+                    $this->handleResponse($response);
+                }
 
                 return $this->handleSaveAndReturnStep($this->postParams, $config['step']);
             }

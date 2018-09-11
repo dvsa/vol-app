@@ -8,6 +8,9 @@ use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
+use Permits\View\Helper\EcmtSection;
+use Dvsa\Olcs\Transfer\Command\Permits\DeclineEcmtPermits;
+use Dvsa\Olcs\Transfer\Command\Permits\AcceptEcmtPermits;
 
 class FeePartSuccessfulController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -20,20 +23,30 @@ class FeePartSuccessfulController extends AbstractSelfserveController implements
     ];
 
     protected $conditionalDisplayConfig = [
-        'default' => ConditionalDisplayConfig::PERMIT_APP_AWAITING_FEE,
+        'generic' => ConditionalDisplayConfig::PERMIT_APP_AWAITING_FEE,
     ];
 
     protected $formConfig = [
-        'default' => FormConfig::FORM_ACCEPT_AND_PAY,
+        'generic' => FormConfig::FORM_ACCEPT_AND_PAY,
+        'confirmation' => FormConfig::FORM_DECLINE_PERMIT,
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/fee-part-successful'
+        'generic' => 'permits/fee-part-successful',
+        'confirmation' => 'permits/decline-application',
     ];
 
     protected $postConfig = [
-        'default' => [
+        'confirmation' => [
+            'command' => DeclineEcmtPermits::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
+            'step' => '',
         ],
+        'generic' => [
+            'command' => AcceptEcmtPermits::class,
+            'params' => ParamsConfig::ID_FROM_ROUTE,
+            'step' => EcmtSection::ROUTE_ECMT_DECLINE_CONFIRMATION,
+        ]
     ];
+
 }
