@@ -307,10 +307,9 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     public function retrieveTables()
     {
         $tableConfig = $this->configsForAction('tableConfig');
-
         foreach ($tableConfig as $name => $config) {
-            $tableData = $this->data[$config['dataSource']];
-            $this->tables[$name] = $this->getTable($config['tableName'], $tableData);
+            $tableData = $this->data[$config['dataSource']]; echo 'table data: '; var_dump($tableData);
+            $this->tables[$name] = $this->getTable($config['tableName'], ['results' => []]);
         }
     }
 

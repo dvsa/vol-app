@@ -335,6 +335,20 @@ return array(
                 ],
                 'may_terminate' => false,
               ],
+            'ecmt-valid-permits' => [
+                'type'    => 'segment',
+                'options' => [
+                    'route'    => '/:id/ecmt-valid-permits[/]',
+                    'defaults' => [
+                        'controller'    => OverviewController::class,
+                        'action'        => 'validPermitsOverview',
+                    ],
+                    'constraints' => [
+                        'id' => '[0-9]+',
+                    ],
+                ],
+                'may_terminate' => false,
+            ],
               'ecmt-under-consideration' => [
                   'type'    => 'segment',
                   'options' => [
