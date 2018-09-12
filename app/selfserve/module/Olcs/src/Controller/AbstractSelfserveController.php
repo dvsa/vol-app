@@ -311,6 +311,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             $tableData = $this->data[$config['dataSource']]; echo 'table data: '; var_dump($tableData);
             $this->tables[$name] = $this->getTable($config['tableName'], ['results' => []]);
         }
+        echo 'finished retrieveTables method';
     }
 
     /**
