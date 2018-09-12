@@ -2,30 +2,27 @@
 
 namespace Admin\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
-use Common\Controller\Traits\GenericMethods;
 
 /**
- * Permits Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ * IRHP Permits Admin Controller
  */
-class PermitsController extends AbstractInternalController implements LeftViewProvider, ToggleAwareInterface
+class IrhpPermitStockController extends AbstractInternalController implements LeftViewProvider
 {
-    use GenericMethods;
-
+    /**
+     * Holds the navigation ID,
+     * required when an entire controller is
+     * represented by a single navigation id.
+     */
     protected $navigationId = 'admin-dashboard/admin-permits';
 
-    protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::ADMIN_PERMITS
-        ],
-    ];
-
+    /**
+     * Get left view
+     *
+     * @return ViewModel
+     */
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -40,12 +37,16 @@ class PermitsController extends AbstractInternalController implements LeftViewPr
     }
 
     /**
-     * index action
+     * Companies house alert list view
      *
-     * @return \Zend\Http\Response
+     * @return \Zend\Http\Response|ViewModel
      */
     public function indexAction()
     {
-        return $this->redirectToRoute('admin-dashboard/admin-permits/permits-system-settings', [], null, true);
+        $this->placeholder()->setPlaceholder('pageTitle', 'Permits');
+        $view = new ViewModel();
+        $view->setTemplate('pages/irhp-permit-stock/index');
+
+        return $view;
     }
 }
