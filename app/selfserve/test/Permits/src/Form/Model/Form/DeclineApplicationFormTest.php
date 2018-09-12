@@ -32,7 +32,7 @@ class DeclineApplicationFormTest extends AbstractFormValidationTestCase
 
     public function testSubmit()
     {
-        $element = ['Submit', 'SubmitButton'];
+        $element = ['Decline', 'SubmitButton'];
         $this->assertFormElementActionButton($element);
         $this->assertFormElementType($element, "Zend\Form\Element\Submit");
     }
