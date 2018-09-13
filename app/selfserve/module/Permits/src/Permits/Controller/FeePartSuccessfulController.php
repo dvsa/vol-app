@@ -48,5 +48,4 @@ class FeePartSuccessfulController extends AbstractSelfserveController implements
             'step' => EcmtSection::ROUTE_ECMT_DECLINE_CONFIRMATION,
         ]
     ];
-
 }

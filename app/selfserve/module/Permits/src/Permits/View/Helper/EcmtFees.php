@@ -19,7 +19,7 @@ class EcmtFees extends AbstractHelper
      */
     public function __invoke($application)
     {
-        $data['totalFee'] = $application['irhpPermitApplications'][0]['successfulPermitApplications'] * $application['fees'][0]['grossAmount'];
+        $data['totalFee'] = $application['irhpPermitApplications'][0]['permitsAwarded'] * $application['fees'][0]['grossAmount'];
         $data['dueDate'] = $this->calculateDueDate($application['fees'][0]['invoicedDate']);
         return $data;
     }
@@ -31,7 +31,7 @@ class EcmtFees extends AbstractHelper
      */
     private function calculateDueDate($date)
     {
-        $dueDate = date(\DATE_FORMAT,strtotime("+10 days", strtotime($date)));
+        $dueDate = date(\DATE_FORMAT, strtotime("+10 days", strtotime($date)));
         return $dueDate;
     }
 }

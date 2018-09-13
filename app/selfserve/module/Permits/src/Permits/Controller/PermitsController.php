@@ -230,7 +230,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
 
-        // TODO: insert the trips hint into the form
         $trafficArea = $application['licence']['trafficArea'];
         $trafficAreaName = $trafficArea['name'];
 
@@ -412,7 +411,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             }
         }
 
-        // todo: Possibly move this into a session var instead of GET Query Param
         $formData['Fields']['licenceId'] = $this->getRequest()->getQuery('licenceId');
         $form->setData($formData);
 

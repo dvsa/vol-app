@@ -290,7 +290,7 @@ return array(
                     ],
                 ],
                 'may_terminate' => false,
-            ],
+              ],
               'ecmt-under-consideration' => [
                   'type'    => 'segment',
                   'options' => [
