@@ -1,6 +1,6 @@
 <?php
 namespace Permits\Controller;
-
+use Zend\Http\Response as HttpResponse;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
@@ -40,7 +40,7 @@ class FeePartSuccessfulController extends AbstractSelfserveController implements
         'confirmation' => [
             'command' => DeclineEcmtPermits::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
-            'step' => '',
+            'step' => EcmtSection::ROUTE_ECMT_DECLINE_SUBMITTED,
         ],
         'generic' => [
             'command' => AcceptEcmtPermits::class,
@@ -48,4 +48,14 @@ class FeePartSuccessfulController extends AbstractSelfserveController implements
             'step' => EcmtSection::ROUTE_ECMT_DECLINE_CONFIRMATION,
         ]
     ];
+
+    protected function handleSaveAndReturnStep(array $submittedData, string $nextStep): HttpResponse
+    {
+        if (array_key_exists('AcceptAndPay', $submittedData['Submit'])) {
+            //Form was submitted normally so continue on chosen path
+            return $this->nextStep('ecmt-fee-submitted');
+        }
+
+        return parent::handleSaveAndReturnStep($submittedData, $nextStep);
+    }
 }

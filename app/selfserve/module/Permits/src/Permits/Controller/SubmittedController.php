@@ -19,6 +19,8 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
 
     protected $conditionalDisplayConfig = [
         'default' => ConditionalDisplayConfig::PERMIT_APP_UNDER_CONSIDERATION,
+        'decline' => [],
+        'fee-submitted' => []
     ];
 
     protected $templateConfig = [

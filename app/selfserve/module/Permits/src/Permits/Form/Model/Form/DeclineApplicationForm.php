@@ -18,7 +18,7 @@ class DeclineApplicationForm
     public $fields = null;
 
     /**
-     * @Form\Name("Decline")
+     * @Form\Name("Submit")
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\DeclineAccept")
      */
     public $declineButton = null;
