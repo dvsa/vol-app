@@ -1184,7 +1184,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             if ($this->getRequest()->getPost('emailAddress')) {
                 // resend form submitted
                 $this->resendTmEmail();
-            } elseif (!is_null($tma['digitalSignature']) && !$tma['disableSignatures']) {
+            } elseif (!is_null($tma['digitalSignature'])) {
                 return $this->redirect()->toRoute(
                     'lva-transport_manager/declaration/action',
                     [
@@ -1193,7 +1193,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                         'action' => 'index'
                     ]
                 );
-
             } else {
                 // approve Operator
                 $response = $this->handleCommand(
