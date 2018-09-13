@@ -4,6 +4,15 @@ namespace Admin\Controller;
 
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
+
+use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\ById as ItemDto;
+use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\GetList as ListDto;
+use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Delete as DeleteDto;
+use Admin\Form\Model\Form\IrhpPermitStock as PermitStockForm;
+use Admin\Data\Mapper\IrhpPermitStock as PermitStockMapper;
+
 use Zend\View\Model\ViewModel;
 
 /**
@@ -17,6 +26,42 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
      * represented by a single navigation id.
      */
     protected $navigationId = 'admin-dashboard/admin-permits';
+
+    /**
+     * @var array
+     */
+    protected $inlineScripts = [
+        'indexAction' => ['table-actions'],
+    ];
+
+    /*
+     * Variables for controlling table/list rendering
+     * tableName and listDto are required,
+     * listVars probably needs to be defined every time but will work without
+     */
+    protected $tableName = 'admin-irhp-permit-stock';
+    protected $defaultTableSortField = 'validFrom';
+    protected $defaultTableOrderField = 'DESC';
+    protected $listDto = ListDto::class;
+
+    protected $itemDto = ItemDto::class;
+    protected $formClass = PermitStockForm::class;
+    protected $addFormClass = PermitStockForm::class;
+    protected $mapperClass = PermitStockMapper::class;
+    protected $createCommand = CreateDto::class;
+    protected $updateCommand = UpdateDto::class;
+
+    protected $deleteCommand = DeleteDto::class;
+    protected $hasMultiDelete = false;
+    protected $deleteModalTitle = 'Remove IRHP Permit Stock';
+    protected $deleteConfirmMessage = 'Are you sure you want to remove this permit stock?';
+    protected $deleteSuccessMessage = 'The permit stock has been removed';
+
+    protected $addContentTitle = 'Add permit stock';
+
+    protected $tableViewTemplate = 'pages/irhp-permit-stock/index';
+
+
 
     /**
      * Get left view
@@ -43,10 +88,9 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
      */
     public function indexAction()
     {
+        $this->getServiceLocator()->get('Script')->loadFile('irhp-permit-stock');
         $this->placeholder()->setPlaceholder('pageTitle', 'Permits');
-        $view = new ViewModel();
-        $view->setTemplate('pages/irhp-permit-stock/index');
 
-        return $view;
+        return parent::indexAction();
     }
 }
