@@ -1,18 +1,52 @@
 <?php
-    use Permits\View\Helper\EcmtSection;
+$title = $this->translate('permits.page.fee.title');
+$this->headTitle($title);
+$application = $data['application'];
+$fee = $data['irhpFeeList'];
+
+
+
+$permits = [];
+
+foreach ($application['irhpPermitApplications'][0]['irhpCandidatePermits'] as $candidate) {
+    if (count($candidate['irhpPermits']) > 0) {
+        $permits[] = $candidate['irhpPermits'][0];
+    }
+}
+
+$data = [];
+foreach ($permits as $permit) {
+    $rc = [];
+    if (count($permit['irhpPermitRange']['restrictedCountries']) > 0) {
+        foreach ($permit['irhpPermitRange']['restrictedCountries'] as $restrictedCountry) {
+            $rc[] = $restrictedCountry['country']['countryDesc'];
+        }
+    }
+    $data[] = ['pNo' => $permit['permitNumber'], 'countries' => implode(', ', $rc)];
+
+
+
+    var_dump($data);
+}
 ?>
 
 <div class="row ecmt">
     <div class="two-thirds">
+        <p><?php echo $application['applicationRef']; ?></p>
+        <h1><?php echo count($permits); ?> ECMT Permits</h1>
         <div class="field">
             <fieldset id="under-consideration" class="inline" data-group="under-consideration">
-                <?php echo $tables['overview-valid-permits'];?>
+                <?php
+                //echo $tables['overview-valid-permits'];
+
+
+                ?>
             </fieldset>
         </div>
     </div>
 
 
-<!-- SIDE PANEL -->
+<!-- SIDE PANEL
     <div class="one-third">
         <aside class="sidebar" role="complementary">
             <div class="info-box info-box--grey">
@@ -30,5 +64,5 @@
             </div>
 
         </aside>
-    </div>
+    </div>-->
 </div>
