@@ -312,7 +312,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     public function addEmploymentAction()
     {
-        return $this->addOrEdit(self::TYPE_OTHER_EMPLOYMENT, 'add');
+        return $this->addOrEdit(
+            self::TYPE_OTHER_EMPLOYMENT,
+            'add',
+            null,
+            ['headerText' => 'lva.section.headerText.transport_managers-details-add-OtherEmployments']
+        );
     }
 
     /**
@@ -414,7 +419,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
-    protected function addOrEdit($type, $mode, $id = null)
+    protected function addOrEdit($type, $mode, $id = null, $variables = [])
     {
         if ($this->isButtonPressed('cancel')) {
             return $this->backToDetails();
@@ -470,7 +475,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             return $this->backToDetails($type);
         }
 
-        return $this->render('transport_managers-details-' . $mode . '-' . $type, $form);
+        return $this->render('transport_managers-details-' . $mode . '-' . $type, $form, $variables);
     }
 
     /**
