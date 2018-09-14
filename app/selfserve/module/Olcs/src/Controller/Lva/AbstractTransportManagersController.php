@@ -77,7 +77,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             // no break
             case TransportManagerApplicationEntityService::STATUS_INCOMPLETE:
                 if ($isUserTm) {
-                        return $this->page1Point1($tma);
+                    return $this->page1Point1($tma);
                 } else {
                     return $this->page1Point3($tma);
                 }
@@ -203,27 +203,14 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
                     return $this->redirectTmToHome();
                 }
-                $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
 
-                if ($this->getRequest()->isPost()) {
-                    $response = $this->handleCommand(
-                        Command\TransportManagerApplication\Submit::create(['id' => $transportManagerApplicationData['id']])
-                    );
-
-                    if ($response->isOk()) {
-                        $flashMessenger->addSuccessMessage('lva-tm-details-submit-success');
-                        return $this->forward()->dispatch(
-                            'LvaTransportManager/CheckAnswers',
-                            [
-                                'action' => 'index',
-                                'application' => $transportManagerApplicationData['id'],
-                            ]
-                        );
-                    }
-                } else {
-                    $flashMessenger->addErrorMessage('unknown-error');
-                }
-
+                return $this->forward()->dispatch(
+                    'LvaTransportManager/CheckAnswers',
+                    [
+                        'action' => 'index',
+                        'application' => $transportManagerApplicationData['id'],
+                    ]
+                );
 
             }
         }

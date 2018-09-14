@@ -2,19 +2,23 @@
 
 namespace OLCS\Controller\Lva\TransportManager;
 
-use OLCS\Command\TransportManagerApplication\Submit;
+
 use Common\Controller\Lva\AbstractTransportManagersController;
 use Common\Data\Mapper\Lva\TransportManagerApplication;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
+use Dvsa\Olcs\Transfer\Command;
 
 class CheckAnswersController extends AbstractTransportManagersController
 {
+
 
     use ExternalControllerTrait;
 
     public function indexAction()
     {
         $transportManagerApplicationId = $this->params("application");
+        $applicationId = $this->params('child_id');
+
         /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
         $postData = (array)$request->getPost();
@@ -54,12 +58,21 @@ class CheckAnswersController extends AbstractTransportManagersController
      */
     public function confirmAction()
     {
-
+        $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
         $transportManagerApplicationId = $this->params("application");
+        $response = $this->handleCommand(
+            Command\TransportManagerApplication\Submit::create(['id' => $transportManagerApplicationId])
+        );
 
-                //redirect to declaration at this point.
-                exit("Decalarion page -> OLCS-19791"). $transportManagerApplicationId;
+        if ($response->isOk()) {
+            $flashMessenger->addSuccessMessage('lva-tm-details-submit-success');
 
+
+            //redirect to declaration at this point.
+            exit("Decalarion page -> OLCS-19791") . $transportManagerApplicationId;
+        } else {
+            $flashMessenger->addErrorMessage('unknown-error');
+        }
     }
 
     /**
