@@ -184,8 +184,9 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             $form->setData($data);
             if ($form->isValid()) {
                 //EXTRA VALIDATION
-                if (($data['Fields']['restrictedCountries'] == 1
-                        && isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList']))
+                if ((
+                    $data['Fields']['restrictedCountries'] == 1
+                    && isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList']))
                     || ($data['Fields']['restrictedCountries'] == 0)
                 ) {
                     if ($data['Fields']['restrictedCountries'] == 0) {
@@ -194,7 +195,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                         $countryIds = $data['Fields']['restrictedCountriesList']['restrictedCountriesList'];
                     }
 
-                    $command = UpdateEcmtCountries::create(['ecmtApplicationId' => $id, 'countryIds' => $countryIds]);
+                    $command = UpdateEcmtCountries::create(['id' => $id, 'countryIds' => $countryIds]);
                     $this->handleCommand($command);
                     $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_NO_OF_PERMITS);
                 } else {
