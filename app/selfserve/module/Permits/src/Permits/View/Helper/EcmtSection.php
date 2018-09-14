@@ -29,6 +29,7 @@ class EcmtSection extends AbstractHelper
     const ROUTE_ECMT_CONFIRM_CHANGE = 'ecmt-change-licence';
     const ROUTE_ECMT_GUIDANCE = 'ecmt-guidance';
     const ROUTE_ECMT_UNDER_CONSIDERATION = 'ecmt-under-consideration';
+    const ROUTE_ECMT_AWAITING_FEE = 'ecmt-awaiting-fee';
     const ROUTE_ECMT_PARTIAL_PERMITS = 'ecmt-fee';
 
     //cancellation
@@ -40,10 +41,8 @@ class EcmtSection extends AbstractHelper
     const ROUTE_ECMT_WITHDRAW_CONFIRMATION = self::ROUTE_ECMT_WITHDRAW_APPLICATION . '/confirmation';
 
     //decline
-    const ROUTE_ECMT_DECLINE_APPLICATION = 'ecmt-fee-successful';
+    const ROUTE_ECMT_DECLINE_APPLICATION = self::ROUTE_ECMT_AWAITING_FEE . '/decline';
     const ROUTE_ECMT_DECLINE_CONFIRMATION = self::ROUTE_ECMT_DECLINE_APPLICATION . '/confirmation';
-    const ROUTE_ECMT_DECLINE_SUBMITTED = 'ecmt-decline-submitted';
-
 
     /**
      * list of overview routes and the field denoting completion status

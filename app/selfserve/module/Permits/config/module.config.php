@@ -10,6 +10,7 @@ use Permits\Controller\CheckAnswersController;
 use Permits\Controller\DeclarationController;
 use Permits\Controller\FeeController;
 use Permits\Controller\OverviewController;
+use Permits\Controller\DeclineController;
 use Permits\Controller\SubmittedController;
 use Permits\Controller\PermitsController;
 
@@ -24,6 +25,7 @@ return array(
         OverviewController::class => OverviewController::class,
         FeeController::class => FeeController::class,
         FeePartSuccessfulController::class => FeePartSuccessfulController::class,
+        DeclineController::class => DeclineController::class,
         SubmittedController::class => SubmittedController::class,
         CancelApplicationController::class => CancelApplicationController::class,
         WithdrawApplicationController::class => WithdrawApplicationController::class
@@ -359,10 +361,10 @@ return array(
                         ],
                     ],
               ],
-              'ecmt-fee-successful' => [
+              'ecmt-awaiting-fee' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-fee-successful[/]',
+                      'route'    => '/:id/ecmt-awaiting-fee[/]',
                       'defaults' => [
                           'controller'    => FeePartSuccessfulController::class,
                           'action'        => 'generic',
@@ -373,16 +375,29 @@ return array(
                   ],
                   'may_terminate' => true,
                   'child_routes' => [
-                      'confirmation' => [
+                      'decline' => [
                           'type'    => 'segment',
                           'options' => [
-                              'route'    => 'confirmation[/]',
+                              'route'    => 'decline[/]',
                               'defaults' => [
-                                  'controller'    => FeePartSuccessfulController::class,
-                                  'action'        => 'confirmation',
+                                  'controller'    => DeclineController::class,
+                                  'action'        => 'generic',
                               ],
                           ],
-                          'may_terminate' => false,
+                          'may_terminate' => true,
+                          'child_routes' => [
+                              'confirmation' => [
+                                  'type'    => 'segment',
+                                  'options' => [
+                                      'route'    => 'confirmation[/]',
+                                      'defaults' => [
+                                          'controller'    => SubmittedController::class,
+                                          'action'        => 'decline',
+                                      ],
+                                  ],
+                                  'may_terminate' => false,
+                              ],
+                          ],
                       ],
                   ],
               ],

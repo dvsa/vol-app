@@ -32,12 +32,12 @@ $feeData = $this->ecmtFees($application);
                     <dl>
                         <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.reference.number')); ?></dt>
                         <dd>
-                            <?php echo $application['applicationRef']; ?>
+                            <?php echo $this->escapeHtml($application['applicationRef']); ?>
                         </dd>
 
                         <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.permit.type')); ?></dt>
                         <dd>
-                            <?php echo $application['permitType']['description']; ?>
+                            <?php echo $this->escapeHtml($application['permitType']['description']); ?>
                         </dd>
 
                         <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.permit.validity')); ?></dt>
