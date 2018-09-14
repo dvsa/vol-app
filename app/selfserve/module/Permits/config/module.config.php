@@ -4,11 +4,13 @@ namespace Permits;
 use Permits\Controller\CancelApplicationController;
 use Permits\Controller\EmissionsController;
 use Permits\Controller\CabotageController;
+use Permits\Controller\FeePartSuccessfulController;
 use Permits\Controller\WithdrawApplicationController;
 use Permits\Controller\CheckAnswersController;
 use Permits\Controller\DeclarationController;
 use Permits\Controller\FeeController;
 use Permits\Controller\OverviewController;
+use Permits\Controller\DeclineController;
 use Permits\Controller\SubmittedController;
 use Permits\Controller\PermitsController;
 
@@ -22,6 +24,8 @@ return array(
         DeclarationController::class => DeclarationController::class,
         OverviewController::class => OverviewController::class,
         FeeController::class => FeeController::class,
+        FeePartSuccessfulController::class => FeePartSuccessfulController::class,
+        DeclineController::class => DeclineController::class,
         SubmittedController::class => SubmittedController::class,
         CancelApplicationController::class => CancelApplicationController::class,
         WithdrawApplicationController::class => WithdrawApplicationController::class
@@ -261,6 +265,34 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
+                'ecmt-fee-submitted' => [
+                    'type'    => 'segment',
+                    'options' => [
+                        'route'    => '/:id/ecmt-fee-submitted[/]',
+                        'defaults' => [
+                            'controller'    => SubmittedController::class,
+                            'action'        => 'fee-submitted',
+                        ],
+                        'constraints' => [
+                            'id' => '[0-9]+',
+                        ],
+                    ],
+                    'may_terminate' => false,
+                ],
+              'ecmt-decline-submitted' => [
+                'type'    => 'segment',
+                'options' => [
+                    'route'    => '/:id/ecmt-decline-submitted[/]',
+                    'defaults' => [
+                        'controller'    => SubmittedController::class,
+                        'action'        => 'decline',
+                    ],
+                    'constraints' => [
+                        'id' => '[0-9]+',
+                    ],
+                ],
+                'may_terminate' => false,
+              ],
               'ecmt-under-consideration' => [
                   'type'    => 'segment',
                   'options' => [
@@ -328,7 +360,47 @@ return array(
                             'may_terminate' => false,
                         ],
                     ],
-                ]
+              ],
+              'ecmt-awaiting-fee' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/:id/ecmt-awaiting-fee[/]',
+                      'defaults' => [
+                          'controller'    => FeePartSuccessfulController::class,
+                          'action'        => 'generic',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => true,
+                  'child_routes' => [
+                      'decline' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'decline[/]',
+                              'defaults' => [
+                                  'controller'    => DeclineController::class,
+                                  'action'        => 'generic',
+                              ],
+                          ],
+                          'may_terminate' => true,
+                          'child_routes' => [
+                              'confirmation' => [
+                                  'type'    => 'segment',
+                                  'options' => [
+                                      'route'    => 'confirmation[/]',
+                                      'defaults' => [
+                                          'controller'    => SubmittedController::class,
+                                          'action'        => 'decline',
+                                      ],
+                                  ],
+                                  'may_terminate' => false,
+                              ],
+                          ],
+                      ],
+                  ],
+              ],
           ],
       ),
     ),
@@ -341,6 +413,7 @@ return array(
             'permitsDashboardLink' => \Permits\View\Helper\PermitsDashboardLink::class,
             'changeAnswerLink' => \Permits\View\Helper\ChangeAnswerLink::class,
             'ecmtLicenceData' => \Permits\View\Helper\EcmtLicenceData::class,
+            'ecmtFees' => \Permits\View\Helper\EcmtFees::class,
             'underConsiderationLink' => \Permits\View\Helper\UnderConsiderationLink::class,
 
         ],

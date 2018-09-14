@@ -30,6 +30,13 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const PERMIT_APP_CAN_DECLINE = [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'canBeDeclined',
+            'value' => true
+        ],
+    ];
+
     const PERMIT_APP_CAN_BE_CANCELLED = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'canBeCancelled',
@@ -68,6 +75,13 @@ class ConditionalDisplayConfig
     const PERMIT_APP_UNDER_CONSIDERATION = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'isUnderConsideration',
+            'value' => true
+        ],
+    ];
+
+    const PERMIT_APP_AWAITING_FEE = [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'isAwaitingFee',
             'value' => true
         ],
     ];
