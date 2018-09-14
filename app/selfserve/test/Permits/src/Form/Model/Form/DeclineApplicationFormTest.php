@@ -30,9 +30,9 @@ class DeclineApplicationFormTest extends AbstractFormValidationTestCase
         $this->assertFormElementNotValid($element, 'X', [Validator\Identical::NOT_SAME]);
     }
 
-    public function testSubmit()
+    public function testSubmitDecline()
     {
-        $element = ['Decline', 'SubmitButton'];
+        $element = ['Submit', 'SubmitButton'];
         $this->assertFormElementActionButton($element);
         $this->assertFormElementType($element, "Zend\Form\Element\Submit");
     }
