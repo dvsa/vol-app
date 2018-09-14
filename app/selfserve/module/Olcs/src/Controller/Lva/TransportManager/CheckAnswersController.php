@@ -42,7 +42,7 @@ class CheckAnswersController extends AbstractTransportManagersController
 
         $form = $this->getConfirmationForm($transportManagerApplicationId);
 
-        $sections = TransportManagerApplication::mapForSections($transportManagerApplication, $postData);
+        $sections = TransportManagerApplication::mapForSections($transportManagerApplication, $translator);
         $sections = $this->addChangeSectionLink($sections, $transportManagerApplication);
         $params = array_merge(["sections" => $sections], $defaultParams);
         /* @var $layout \Zend\View\Model\ViewModel */
