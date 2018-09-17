@@ -34,6 +34,7 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
         $view = parent::genericAction();
         $view->setVariable('partialName', 'markup-ecmt-application-submitted');
         $view->setVariable('titleName', 'permits.application.submitted.title');
+        $view->setVariable('mainName', 'permits.application.submitted.main');
 
         return $view;
     }
