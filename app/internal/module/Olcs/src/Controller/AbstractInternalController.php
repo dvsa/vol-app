@@ -590,7 +590,14 @@ abstract class AbstractInternalController extends AbstractOlcsController
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
                 }
             } elseif ($response->isServerError()) {
-                $this->handleErrors($response->getResult());
+                $responseResult = $response->getResult();
+
+                if (isset($responseResult['messages'][0])) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($responseResult['messages'][0]);
+                } else {
+                    $this->handleErrors($response->getResult());
+                }
+
             }
         }
 

@@ -31,10 +31,9 @@ class PermitStockDetails
      * @Form\Options({
      *      "label": "Validity period start",
      *      "create_empty_option": true,
-     *      "max_year_delta": "+5",
-     *      "required": true
+     *      "max_year_delta": "+5"
      * })
-     * @Form\Attributes({"id": "validFrom"})
+     * @Form\Attributes({"required": true})
      * @Form\Validator({"name": "Date", "options": {"format": "d-m-Y"}})
      */
     public $validFrom = null;
@@ -46,10 +45,18 @@ class PermitStockDetails
      *      "label": "Validity period end",
      *      "create_empty_option": true,
      *      "max_year_delta": "+5",
-     *      "required": true
      * })
-     * @Form\Attributes({"id": "validTo"})
+     *
+     * @Form\Attributes({"required": true})
      * @Form\Validator({"name": "Date", "options": {"format": "d-m-Y"}})
+     * @Form\Validator({
+     *      "name": "DateCompare",
+     *      "options": {
+     *          "compare_to":"validFrom",
+     *          "operator":"gt",
+     *          "compare_to_label": "Validity period start"
+     *      }
+     * })
      */
     public $validTo = null;
 
@@ -59,13 +66,12 @@ class PermitStockDetails
      * @Form\Options({
      *      "label": "Quota"
      * })
-     * @Form\Type("Text")
-     * @Transfer\Filter({"name":"Zend\Filter\Digits"})
-     * @Transfer\Validator({"name":"Zend\Validator\Digits"})
+     * @Form\Validator({"name":"Zend\Validator\Digits"})
+     * @Form\Type("Zend\Form\Element\Number")
      * @Transfer\Validator({
-     *      "name":"Zend\Validator\GreaterThan",
+     *      "name":"Zend\Validator\Between",
      *      "options": {
-     *          "min": 0,
+     *          "min": -1,
      *          "max": 9999999
      *      }
      * })

@@ -12,11 +12,11 @@ return [
                     'requireRows' => false
                 ],
                 'edit' => [
-                    'requireRows' => true,
+                    'requireRows' => false,
                     'class' => 'action--secondary js-require--one'
                 ],
                 'delete' => [
-                    'requireRows' => true,
+                    'requireRows' => false,
                     'class' => 'action--secondary js-require--one'
                 ]
             ]
