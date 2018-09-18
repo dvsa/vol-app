@@ -24,7 +24,7 @@ class SectorList
      *   "class" : "input--trips",
      *    "id" : "EcmtSectorList",
      * })
-     * @Form\Type("DynamicRadio")
+     * @Form\Type("DynamicRadioHtml")
      */
     public $SectorList;
 

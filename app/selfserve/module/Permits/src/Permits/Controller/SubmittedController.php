@@ -19,9 +19,41 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
 
     protected $conditionalDisplayConfig = [
         'default' => ConditionalDisplayConfig::PERMIT_APP_UNDER_CONSIDERATION,
+        'decline' => [],
+        'fee-submitted' => []
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/submitted'
+        'generic' => 'permits/submitted',
+        'decline' => 'permits/submitted',
+        'fee-submitted' => 'permits/submitted'
     ];
+
+    public function genericAction()
+    {
+        $view = parent::genericAction();
+        $view->setVariable('partialName', 'markup-ecmt-application-submitted');
+        $view->setVariable('titleName', 'permits.application.submitted.title');
+
+        return $view;
+    }
+
+    public function feeSubmittedAction()
+    {
+        $view = parent::genericAction();
+        $view->setVariable('partialName', 'markup-ecmt-application-fee-submitted');
+        $view->setVariable('titleName', 'permits.application.fee.submitted.title');
+
+        return $view;
+    }
+
+    public function declineAction()
+    {
+        $view = parent::genericAction();
+
+        $view->setVariable('partialName', 'markup-ecmt-decline-submitted');
+        $view->setVariable('titleName', 'permits.decline.submitted.title');
+
+        return $view;
+    }
 }

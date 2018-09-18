@@ -26,11 +26,9 @@ class EcmtLicenceData extends AbstractHelper
      */
     public function __invoke($form, $application = [])
     {
-
         $licences = $form->get('Fields')->get('EcmtLicence')->getValueOptions();
-
         $licenceCount = 0;
-        foreach($licences as $licence){
+        foreach ($licences as $licence) {
             if ($licence['value'] !== '') {
                 $licenceCount++;
             }
@@ -43,35 +41,37 @@ class EcmtLicenceData extends AbstractHelper
             $data['copy'] = sprintf($this->view->translate('markup-ecmt-licence-saturated'), '/permits');
             $data['empty'] = true;
             if (!empty($application)) {
-                $data['title'] = sprintf($this->view->translate('permits.page.ecmt.licence.question.one.licence'),
-                    $application['licence']['licNo'] . ' (' . $application['licence']['trafficArea']['name'] . ')');
+                $data['title'] = sprintf(
+                    $this->view->translate('permits.page.ecmt.licence.question.one.licence'),
+                    $application['licence']['licNo'] . ' (' . $application['licence']['trafficArea']['name'] . ')'
+                );
                 $data['copy'] = '<p class="guidance-blue extra-space large">' .
                     $this->view->translate('permits.page.ecmt.licence.info') . '</p>';
             }
             return $data;
         }
 
-
         $data['title'] = $this->view->translate('permits.page.ecmt.licence.question');
         $data['copy'] = '<p class="guidance-blue extra-space large">' .
             $this->view->translate('permits.page.ecmt.licence.info') . '</p>';
 
-
         if ($licenceCount === 1) {
-            $data['title'] = sprintf($this->view->translate('permits.page.ecmt.licence.question.one.licence'),
-                preg_replace ("/<div(.*?)>(.*?)<\/div>/i", "", $licences[0]['label']));
+            $data['title'] = sprintf(
+                $this->view->translate('permits.page.ecmt.licence.question.one.licence'),
+                preg_replace("/<div(.*?)>(.*?)<\/div>/i", "", $licences[0]['label'])
+            );
         }
 
-        if (empty($application) && array_key_exists('label_attributes',$licences[0]) && empty($application)) {
+        if (empty($application) && array_key_exists('html_elements', $licences[0]) && empty($application)) {
             $data['copy'] .= '<p>' . $this->view->translate('permits.form.ecmt-licence.restricted-licence.hint') . '</p>';
         }
 
         if (!empty($application)) {
-            $data['title'] = sprintf($this->view->translate('permits.page.ecmt.licence.question.one.licence'),
-                $application['licence']['licNo'] . ' (' . $application['licence']['trafficArea']['name'] . ')');
+            $data['title'] = sprintf(
+                $this->view->translate('permits.page.ecmt.licence.question.one.licence'),
+                $application['licence']['licNo'] . ' (' . $application['licence']['trafficArea']['name'] . ')'
+            );
         }
-
-
         return $data;
     }
 }

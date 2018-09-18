@@ -13,10 +13,9 @@ $data = $this->ecmtLicenceData($form, $application);
                 </h1>
             </div>
         </div>
-
                 <fieldset id="ecmt-licence" class="inline " data-group="ecmt-licence">
                     <?php
-                    echo $data['copy'];
+                   echo $data['copy'];
 
                     if (empty($form->get('Fields')
                         ->get('EcmtLicence')->getValueOptions())) {
@@ -30,7 +29,6 @@ $data = $this->ecmtLicenceData($form, $application);
 
                         $form->get('Fields')->get('EcmtLicence')->setValueOptions([$option]);
                     }
-                    $form->get('Fields')->get('EcmtLicence')->setLabelOptions(array('disable_html_escape' => true));
 
                     echo $this->formErrors($form);
                     echo $this->form($form);
