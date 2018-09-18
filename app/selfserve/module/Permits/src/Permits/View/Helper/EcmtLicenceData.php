@@ -24,8 +24,10 @@ class EcmtLicenceData extends AbstractHelper
      * @param array $application
      * @return string
      */
-    public function __invoke($form, $application = [])
+    public function __invoke($form, $application = [], $window = [])
     {
+        $validFrom = date('d F Y', strtotime($window[0]['irhpPermitStock']['validFrom']));
+        $validTo = date('d F Y', strtotime($window[0]['irhpPermitStock']['validTo']));
         $licences = $form->get('Fields')->get('EcmtLicence')->getValueOptions();
         $licenceCount = 0;
         foreach ($licences as $licence) {
@@ -46,14 +48,16 @@ class EcmtLicenceData extends AbstractHelper
                     $application['licence']['licNo'] . ' (' . $application['licence']['trafficArea']['name'] . ')'
                 );
                 $data['copy'] = '<p class="guidance-blue extra-space large">' .
-                    $this->view->translate('permits.page.ecmt.licence.info') . '</p>';
+                    sprintf($this->view->translate('permits.page.ecmt.licence.info'),
+                    $application['permitType']['description'], $validFrom, $validTo) . '</p>';
             }
             return $data;
         }
 
         $data['title'] = $this->view->translate('permits.page.ecmt.licence.question');
         $data['copy'] = '<p class="guidance-blue extra-space large">' .
-            $this->view->translate('permits.page.ecmt.licence.info') . '</p>';
+            sprintf($this->view->translate('permits.page.ecmt.licence.info'),
+            $application['permitType']['description'], $validFrom, $validTo) . '</p>';
 
         if ($licenceCount === 1) {
             $data['title'] = sprintf(
