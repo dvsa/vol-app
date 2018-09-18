@@ -1176,7 +1176,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $tma TM application
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return mixed
      */
     private function page2Point2(array $tma)
     {
@@ -1184,28 +1184,15 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             if ($this->getRequest()->getPost('emailAddress')) {
                 // resend form submitted
                 $this->resendTmEmail();
-            } elseif (!is_null($tma['digitalSignature'])) {
+            } else {
                 return $this->redirect()->toRoute(
                     'lva-transport_manager/declaration/action',
                     [
-                        'application' => $this->getIdentifier(),
                         'child_id' => $tma['id'],
+                        'application' => $tma['application']['id'],
                         'action' => 'index'
                     ]
                 );
-            } else {
-                // approve Operator
-                $response = $this->handleCommand(
-                    Command\TransportManagerApplication\OperatorApprove::create(['id' => $tma['id']])
-                );
-
-                $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
-                if ($response->isOk()) {
-                    $flashMessenger->addSuccessMessage('operator-approve-message');
-                    return $this->redirect()->refresh();
-                } else {
-                    $flashMessenger->addErrorMessage('unknown-error');
-                }
             }
         }
 
