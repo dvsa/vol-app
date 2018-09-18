@@ -107,7 +107,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     public function addAction()
     {
         $form = $this->getForm('EcmtLicenceForm');
-        $query = IrhpPermitWindow::create(['permit_ecmt']);
+        $query = IrhpPermitWindow::create(['permitType' => 'permit_ecmt']);
         $window = $this->handleQuery($query)->getResult();
 
         $view = new ViewModel(['form' => $form, 'window' => $window]);

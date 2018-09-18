@@ -24,8 +24,9 @@ class EcmtLicenceData extends AbstractHelper
      * @param array $application
      * @return string
      */
-    public function __invoke($form, $application = [], $window = [])
+    public function __invoke($form, $application = [], $window)
     {
+        $permitType = isset($application['permitType']['description']) ? $application['permitType']['description'] : 'ECMT';
         $validFrom = date('d F Y', strtotime($window[0]['irhpPermitStock']['validFrom']));
         $validTo = date('d F Y', strtotime($window[0]['irhpPermitStock']['validTo']));
         $licences = $form->get('Fields')->get('EcmtLicence')->getValueOptions();
@@ -49,7 +50,7 @@ class EcmtLicenceData extends AbstractHelper
                 );
                 $data['copy'] = '<p class="guidance-blue extra-space large">' .
                     sprintf($this->view->translate('permits.page.ecmt.licence.info'),
-                    $application['permitType']['description'], $validFrom, $validTo) . '</p>';
+                    $permitType, $validFrom, $validTo) . '</p>';
             }
             return $data;
         }
@@ -57,7 +58,7 @@ class EcmtLicenceData extends AbstractHelper
         $data['title'] = $this->view->translate('permits.page.ecmt.licence.question');
         $data['copy'] = '<p class="guidance-blue extra-space large">' .
             sprintf($this->view->translate('permits.page.ecmt.licence.info'),
-            $application['permitType']['description'], $validFrom, $validTo) . '</p>';
+            $permitType, $validFrom, $validTo) . '</p>';
 
         if ($licenceCount === 1) {
             $data['title'] = sprintf(
