@@ -1219,7 +1219,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                         'action' => 'index'
                     ]
                 );
-
             } else {
                 // approve Operator
                 $response = $this->handleCommand(
