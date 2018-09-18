@@ -1,21 +1,28 @@
 <?php
 
 return array(
-  'variables' => array(
-
+  'variables' => array(),
+  'settings' => array(
+      'paginate' => array(
+          'limit' => array(
+              'default' => 10,
+              'options' => array(10, 25, 50)
+          ),
+      )
   ),
-  'settings' => array(),
   'attributes' => array(),
   'columns' => array(
     array(
-      'title' => 'dashboard-table-permits-ref',
-      'name' => 'id',
-      'formatter' => 'LicencePermitReference'
+      'title' => 'permits.ecmt.page.valid.tableheader.ref',
+      'name' => 'permitNumber',
+      'formatter' => function ($row) {
+          return '<b>' . $row['permitNumber'] . '</b>';
+      },
     ),
     array(
-      'title' => 'dashboard-table-permits-status',
-      'name' => 'status',
-      'formatter' => 'RefDataStatus'
+      'title' => 'permits.ecmt.page.valid.tableheader.countries',
+      'name' => 'countries',
+      'formatter' => 'translate'
     )
   )
 );

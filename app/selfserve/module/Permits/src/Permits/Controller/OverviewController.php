@@ -15,17 +15,16 @@ class OverviewController extends AbstractSelfserveController implements ToggleAw
     ];
 
     protected $dataSourceConfig = [
-        'default' => DataSourceConfig::PERMIT_APP_WITH_FEE_LIST,
+        'default' => DataSourceConfig::PERMIT_ECMT_VALID,
     ];
 
     protected $conditionalDisplayConfig = [
         //'default' => ConditionalDisplayConfig::PERMIT_APP_NOT_SUBMITTED,
     ];
 
-    /*protected $tableConfig = [
-        'default' => [],
+    protected $tableConfig = [
         'validpermitsoverview' => TableConfig::VALID_APP_OVERVIEW
-    ];*/
+    ];
 
     protected $templateConfig = [
         'generic' => 'permits/application-overview',

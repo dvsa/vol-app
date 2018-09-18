@@ -1,68 +1,38 @@
 <?php
+
 $title = $this->translate('permits.page.fee.title');
 $this->headTitle($title);
 $application = $data['application'];
-$fee = $data['irhpFeeList'];
-
-
-
-$permits = [];
-
-foreach ($application['irhpPermitApplications'][0]['irhpCandidatePermits'] as $candidate) {
-    if (count($candidate['irhpPermits']) > 0) {
-        $permits[] = $candidate['irhpPermits'][0];
-    }
-}
-
-$data = [];
-foreach ($permits as $permit) {
-    $rc = [];
-    if (count($permit['irhpPermitRange']['restrictedCountries']) > 0) {
-        foreach ($permit['irhpPermitRange']['restrictedCountries'] as $restrictedCountry) {
-            $rc[] = $restrictedCountry['country']['countryDesc'];
-        }
-    }
-    $data[] = ['pNo' => $permit['permitNumber'], 'countries' => implode(', ', $rc)];
-
-
-
-    var_dump($data);
-}
+$translationHelper = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');
 ?>
-
 <div class="row ecmt">
     <div class="two-thirds">
-        <p><?php echo $application['applicationRef']; ?></p>
-        <h1><?php echo count($permits); ?> ECMT Permits</h1>
+        <div class="page-header">
+            <p><a href="<?php echo $this->url('permits') ?>" class="back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
+            <div class="page-header__wrapper">
+                <div class="guidance pre-selected highlight-box">
+                    <p><?php echo $this->escapeHtml($application['ref']); ?></p>
+                    <h2><?php echo $translationHelper->translateReplace('permits.ecmt.page.valid.title', [$application['count']]); ?></h2>
+                </div>
+            </div>
+        </div>
         <div class="field">
             <fieldset id="under-consideration" class="inline" data-group="under-consideration">
                 <?php
-                //echo $tables['overview-valid-permits'];
-
-
+                echo $tables['overview-valid-permits'];
                 ?>
             </fieldset>
         </div>
+        <p><a href="<?php echo $this->url('permits'); ?>"> <?php echo $this->escapeHtml($this->translate('permits.link.return.to.dashboard')); ?></a></p>
     </div>
-
-
-<!-- SIDE PANEL
-    <div class="one-third">
-        <aside class="sidebar" role="complementary">
-            <div class="info-box info-box--grey">
-                <h3 class="info-box__heading">Progress</h3>
-                <p>You can't submit until you've completed all of the sections</p>
-            </div>
-
-            <div class="info-box info-box--grey">
-                <h3 class="info-box__heading">Application status</h3>
-                    <ul class="info-box__links">
-                        <li>
-                            <p>test</p>
-                        </li>
-                    </ul>
-            </div>
-
-        </aside>
-    </div>-->
+    <?php
+    echo $translationHelper->translateReplace(
+            'markup-ecmt-permit-valid-permits-right-column',
+            [
+                $application['status'],
+                date(\DATE_FORMAT, strtotime($application['irhpPermitStock']['validFrom'])),
+                date(\DATE_FORMAT, strtotime($application['irhpPermitStock']['validTo']))
+            ]
+    );
+    ?>
 </div>
