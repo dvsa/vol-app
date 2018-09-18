@@ -7,6 +7,7 @@ use Dvsa\Olcs\Transfer\Command\Permits\CreateFullPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
+use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Zend\View\Model\ViewModel;
 
@@ -206,6 +207,13 @@ trait PermitActionTrait
             $response = $this->handleCommand($command);
             $this->checkResponse($response);
         }
+
+        if (array_key_exists('cancel', $data['form-actions'])) {
+            $command = CancelEcmtPermitApplication::create(['id' => $data['fields']['id']]);
+            $response = $this->handleCommand($command);
+            $this->checkResponse($response);
+        }
+
         return false;
     }
 

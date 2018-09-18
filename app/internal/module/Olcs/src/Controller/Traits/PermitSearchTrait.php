@@ -106,7 +106,9 @@ trait PermitSearchTrait
             RefData::ECMT_APP_STATUS_NOT_YET_SUBMITTED,
             RefData::ECMT_APP_STATUS_UNDER_CONSIDERATION,
             RefData::ECMT_APP_STATUS_AWAITING_FEE,
-            RefData::ECMT_APP_STATUS_WITHDRAWN]
+            RefData::ECMT_APP_STATUS_WITHDRAWN,
+            RefData::ECMT_APP_STATUS_CANCELLED,
+            RefData::ECMT_APP_STATUS_UNSUCCESSFUL]
         ]);
         /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->handleQuery(EcmtApplicationByLicence::create($query));

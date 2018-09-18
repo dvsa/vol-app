@@ -24,7 +24,7 @@ class PermitFormActions
      * @Form\Options({"label": "Back"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
-    public $cancel = null;
+    public $back = null;
 
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large visually-hidden", "id": "submitPermitApplication"})
@@ -39,4 +39,11 @@ class PermitFormActions
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $withdraw = null;
+
+    /**
+     * @Form\Attributes({"type":"submit","class":"action--delete action--secondary large visually-hidden", "id": "cancelPermitApplication"})
+     * @Form\Options({"label": "Cancel"})
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
+     */
+    public $cancel = null;
 }

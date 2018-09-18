@@ -241,6 +241,13 @@ return [
                     'id' => 'admin-dashboard/admin-permits',
                     'label' => 'Permits',
                     'route' => 'admin-dashboard/admin-permits',
+                    'pages' => [
+                        [
+                            'id' => 'admin-dashboard/admin-permits/permits-system-settings',
+                            'label' => 'Permit system settings',
+                            'route' => 'admin-dashboard/admin-permits/permits-system-settings'
+                        ],
+                    ],
                 ],
                 [
                     'id' => 'admin-dashboard/admin-system-info-message',

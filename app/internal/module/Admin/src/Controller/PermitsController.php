@@ -7,14 +7,17 @@ use Common\FeatureToggle;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
+use Common\Controller\Traits\GenericMethods;
 
 /**
  * Permits Controller
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PermitsController extends AbstractInternalController implements LeftViewProvider, ToggleAwareInterface
+class PermitsController extends AbstractInternalController implements ToggleAwareInterface
 {
+    use GenericMethods;
+
     protected $navigationId = 'admin-dashboard/admin-permits';
 
     protected $toggleConfig = [
@@ -36,11 +39,13 @@ class PermitsController extends AbstractInternalController implements LeftViewPr
         return $view;
     }
 
+    /**
+     * index action
+     *
+     * @return \Zend\Http\Response
+     */
     public function indexAction()
     {
-        $this->placeholder()->setPlaceholder('pageTitle', 'Permits');
-        $view = new ViewModel();
-        $view->setTemplate('pages/placeholder.phtml');
-        return $view;
+        return $this->redirectToRoute('admin-dashboard/admin-permits/permits-system-settings', [], null, true);
     }
 }

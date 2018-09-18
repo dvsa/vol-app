@@ -10,8 +10,6 @@ use Zend\Form\Annotation as Form;
  */
 class CreatePermit extends Base
 {
-
-
     /**
      * @Form\Options({
      *     "label": "<h4>Permit Application</h4>",
@@ -23,7 +21,6 @@ class CreatePermit extends Base
      * @Form\Type("\Common\Form\Elements\Types\Html")
      */
     public $title = null;
-
 
     /**
      * @Form\Attributes({"id":"permitType"})
@@ -55,7 +52,6 @@ class CreatePermit extends Base
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $dateReceived = null;
-
 
     /**
      * @Form\Required(false)
@@ -100,8 +96,6 @@ class CreatePermit extends Base
      */
     public $numVehiclesLabel;
 
-
-
     /**
      * @Form\Name("emissions")
      * @Form\Required(false)
@@ -122,7 +116,6 @@ class CreatePermit extends Base
 
     public $emissions = null;
 
-
     /**
      * @Form\Name("cabotage")
      * @Form\Required(false)
@@ -140,8 +133,6 @@ class CreatePermit extends Base
      */
 
     public $cabotage = null;
-
-
 
     /**
      * @Form\Name("countryIds")
@@ -168,7 +159,6 @@ class CreatePermit extends Base
      */
     public $countryIds = null;
 
-
     /**
      * @Form\Required(false)
      * @Form\Attributes({
@@ -185,8 +175,6 @@ class CreatePermit extends Base
      * @Form\Type("Zend\Form\Element\Number")
      */
     public $trips = null;
-
-
 
     /**
      * @Form\Name("internationalJourneys")
@@ -209,10 +197,6 @@ class CreatePermit extends Base
      */
     public $internationalJourneys = null;
 
-
-
-
-
     /**
      * @Form\Name("sectors")
      * @Form\Required(false)
@@ -232,7 +216,6 @@ class CreatePermit extends Base
      */
     public $sectors = null;
 
-
     /**
      * @Form\Required(false)
      * @Form\Attributes({
@@ -250,7 +233,6 @@ class CreatePermit extends Base
      */
     public $declaration = null;
 
-
     /**
      * @Form\Required(false)
      * @Form\Attributes({
@@ -266,24 +248,12 @@ class CreatePermit extends Base
     /**
      * @Form\Required(false)
      * @Form\Attributes({
-     *   "id" : "canBeSubmitted",
-     *   "class": "permitApplicationCanBeSubmitted"
+     *   "id" : "canBeCancelled",
+     *   "class": "permitApplicationCanBeCancelled"
      * })
      *
      * @Form\Type("Zend\Form\Element\Hidden")
      *
      */
-    public $canBeSubmitted;
-
-    /**
-     * @Form\Required(false)
-     * @Form\Attributes({
-     *   "id" : "canBeWithdrawn",
-     *   "class": "permitApplicationCanBeWithdrawn"
-     * })
-     *
-     * @Form\Type("Zend\Form\Element\Hidden")
-     *
-     */
-    public $canBeWithdrawn;
+    public $canBeCancelled;
 }
