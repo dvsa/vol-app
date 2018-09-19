@@ -41,9 +41,10 @@ class EcmtLicenceData extends AbstractHelper
             $data['copy'] = sprintf($this->view->translate('markup-ecmt-licence-saturated'), '/permits');
             $data['empty'] = true;
             if (!empty($application)) {
-                $data['title'] = sprintf(
-                    $this->view->translate('permits.page.ecmt.licence.question.one.licence'),
-                    $application['licence']['licNo'] . ' (' . $application['licence']['trafficArea']['name'] . ')'
+                $data['title'] = $this->formatTitle(
+                    $application['licence']['licNo'],
+                    $application['licence']['licenceType']['id'],
+                    $application['licence']['trafficArea']['name']
                 );
                 $data['copy'] = '<p class="guidance-blue extra-space large">' .
                     $this->view->translate('permits.page.ecmt.licence.info') . '</p>';
@@ -62,16 +63,28 @@ class EcmtLicenceData extends AbstractHelper
             );
         }
 
-        if (empty($application) && array_key_exists('html_elements', $licences[0]) && empty($application)) {
+        if (empty($application) && $licenceCount === 1 && array_key_exists('html_elements', $licences[0])) {
             $data['copy'] .= '<p>' . $this->view->translate('permits.form.ecmt-licence.restricted-licence.hint') . '</p>';
         }
 
         if (!empty($application)) {
-            $data['title'] = sprintf(
-                $this->view->translate('permits.page.ecmt.licence.question.one.licence'),
-                $application['licence']['licNo'] . ' (' . $application['licence']['trafficArea']['name'] . ')'
+            $data['title'] = $this->formatTitle(
+                $application['licence']['licNo'],
+                $application['licence']['licenceType']['id'],
+                $application['licence']['trafficArea']['name']
             );
         }
         return $data;
+    }
+
+    private function formatTitle($licNo, $licType, $trafficArea) {
+        $title = sprintf(
+            $this->view->translate('permits.page.ecmt.licence.question.one.licence'),
+            $licNo . ' ' .
+            $this->view->translate($licType) .
+            ' (' . $this->view->translate($trafficArea) . ')'
+        );
+
+        return $title;
     }
 }
