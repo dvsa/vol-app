@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
-use Dvsa\Olcs\Transfer\Query\Permits\NextIrhpPermitStock;
+use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\NextIrhpPermitStock;
 
 
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
