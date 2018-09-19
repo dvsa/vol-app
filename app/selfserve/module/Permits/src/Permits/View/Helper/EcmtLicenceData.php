@@ -24,11 +24,11 @@ class EcmtLicenceData extends AbstractHelper
      * @param array $application
      * @return string
      */
-    public function __invoke($form, $application = [], $window)
+    public function __invoke($form, $application = [], $stock)
     {
         $permitType = isset($application['permitType']['description']) ? $application['permitType']['description'] : 'ECMT';
-        $validFrom = date('d F Y', strtotime($window[0]['irhpPermitStock']['validFrom']));
-        $validTo = date('d F Y', strtotime($window[0]['irhpPermitStock']['validTo']));
+        $validFrom = date('d F Y', strtotime($stock[0]['validFrom']));
+        $validTo = date('d F Y', strtotime($stock[0]['validTo']));
         $licences = $form->get('Fields')->get('EcmtLicence')->getValueOptions();
         $licenceCount = 0;
         foreach ($licences as $licence) {
