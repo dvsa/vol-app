@@ -176,7 +176,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                             'hoursSun' => (float)$hoursOfWeek['hoursPerWeekContent']['hoursSun'],
                             'additionalInfo' => $data['responsibilities']['additionalInformation'],
                             'hasOtherLicences' => $data['responsibilities']['hasOtherLicences'],
-                            'hasOtherEmployment'=> $data['otherEmployments']['hasOtherLicences'],
+                            'hasOtherEmployment'=> $data['otherEmployments']['hasOtherEmployment'],
                             'hasConvictions'=> $data['previousHistory']['hasConvictions'],
                             'hasPreviousLicences'=> $data['previousHistory']['hasPreviousLicences'],
                             'submit' => ($submit) ? 'Y' : 'N',
