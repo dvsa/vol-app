@@ -53,7 +53,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         // move status back to incomplete
         $tmaId = (int)$this->params('child_id');
-        if ($this->updateTmaStatus($tmaId, TransportManagerApplicatøionEntityService::STATUS_INCOMPLETE)) {
+        if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
             return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
         } else {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
