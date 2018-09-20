@@ -119,7 +119,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $formData = $this->formatFormData($transportManagerApplicationData, $postData);
 
         $form = $this->getDetailsForm($transportManagerApplicationData)->setData($formData);
-        $this->maybeSelectAndDisableOptions($transportManagerApplicationData, $form);
+        $this->maybeSelectOptions($transportManagerApplicationData, $form);
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         $hasProcessedAddressLookup = $formHelper->processAddressLookupForm($form, $request);
@@ -1450,34 +1450,22 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      * @param array $tma
      * @param       $form
      */
-    protected function maybeSelectAndDisableOptions(array $tma, $form): void
+    protected function maybeSelectOptions(array $tma, $form): void
     {
         $hasOtherLicences = $form->get('responsibilities')->get('hasOtherLicences')->getValue();
-        if (is_array($tma['otherLicences'])
-            && count($tma['otherLicences'])
-            && $hasOtherLicences === null
-        ) {
+        if (!empty($tma['otherLicences']) && $hasOtherLicences === null) {
             $form->get('responsibilities')->get('hasOtherLicences')->setValue('Y');
         }
         $hasOtherEmployment = $form->get('otherEmployments')->get('hasOtherEmployment')->getValue();
-        if (is_array($tma['transportManager']['employments'])
-            && count($tma['transportManager']['employments'])
-            && $hasOtherEmployment === null
-        ) {
+        if (!empty($tma['transportManager']['employments']) && $hasOtherEmployment === null) {
             $form->get('otherEmployments')->get('hasOtherEmployment')->setValue('Y');
         }
         $hasConvictions = $form->get('previousHistory')->get('hasConvictions')->getValue();
-        if (is_array($tma['transportManager']['previousConvictions'])
-            && count($tma['transportManager']['previousConvictions'])
-            && $hasConvictions === null
-        ) {
+        if (!empty($tma['transportManager']['previousConvictions']) && $hasConvictions === null) {
             $form->get('previousHistory')->get('hasConvictions')->setValue('Y');
         }
         $hasPreviousLicences = $form->get('previousHistory')->get('hasPreviousLicences')->getValue();
-        if (is_array($tma['transportManager']['otherLicences'])
-            && count($tma['transportManager']['otherLicences'])
-            && $hasPreviousLicences === null
-        ) {
+        if (!empty($tma['transportManager']['otherLicences']) && $hasPreviousLicences === null) {
             $form->get('previousHistory')->get('hasPreviousLicences')->setValue('Y');
         }
     }
