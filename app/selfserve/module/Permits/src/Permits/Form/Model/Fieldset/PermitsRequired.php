@@ -22,16 +22,34 @@ class PermitsRequired
      *     "hint": "permits.form.permits-required.hint",
      *     "short-label": "",
      * })
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Validator({"name":"Zend\Validator\GreaterThan", "options": {"min": 0}})
+     * @Form\Validator({
+     *      "name": "Zend\Validator\NotEmpty",
+     *      "options": {
+     *          "message": {
+     *              "isEmpty": "error.messages.permits.required"
+     *          }
+     *     }
+     * })
+     * @Form\Validator({
+     *      "name": "Zend\Validator\GreaterThan",
+     *      "options": {
+     *          "min":0,
+     *          "message": {
+     *              "notGreaterThan": "error.messages.permits.greater"
+     *          }
+     *     }
+     * })
      * @Form\Validator({
      *     "name": "NumberCompare",
      *     "options": {
      *          "compare_to":"numVehicles",
      *          "operator":"lte",
-     *          "compare_to_label":"Your number of authorised vehicles",
+     *          "message": {
+     *              "notNumberCompare": "error.messages.permits.less"
+     *          }
      *     }
      * })
+     *
      * @Form\Type("Zend\Form\Element\Number")
      */
     public $permitsRequired = null;
@@ -41,3 +59,5 @@ class PermitsRequired
      */
     public $numVehicles;
 }
+
+//error.messages.permits.required

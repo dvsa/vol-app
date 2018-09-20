@@ -124,6 +124,8 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
                     $this->redirect()
                         ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $insert['id']['ecmtPermitApplication']]);
+            } else {
+                $form->get('Fields')->get('EcmtLicence')->setMessages(['isEmpty' => "error.messages.ecmt-licence"]);
             }
         }
 
@@ -156,6 +158,8 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                             'licenceId' => $data['Fields']['EcmtLicence']
                         ]]
                     );
+            } else {
+                $form->get('Fields')->get('EcmtLicence')->setMessages(['isEmpty' => "error.messages.ecmt-licence"]);
             }
         }
 
@@ -381,6 +385,15 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 $response = $this->handleCommand($command);
 
                 $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_TRIPS);
+            } else {
+                $messages = $form->get('Fields')->get('permitsRequired')->getMessages();
+                if (array_key_exists('isEmpty', $messages)) {
+                    $messages = ['isEmpty' => $messages['isEmpty']];
+                }
+                if (array_key_exists('notGreaterThan', $messages)) {
+                    $messages = ['notGreaterThan' => $messages['notGreaterThan']];
+                }
+                $form->get('Fields')->get('permitsRequired')->setMessages($messages);
             }
         }
 

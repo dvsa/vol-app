@@ -17,17 +17,28 @@ class EcmtLicence
      *    "id" : "EcmtLicence",
      * })
      * @Form\Options({
-     *      "label": "",
      *      "fieldset-attributes": {"id": "ecmt-licence"},
      *      "fieldset-data-group": "licence-type",
      *      "label_attributes": {"class": "form-control form-control--radio restricted-licence-input"},
      *      "service_name": "Common\Service\Data\EcmtLicence",
-     *      "category": "",
      *      "disable_inarray_validator" : true,
-     *      "error-message": "error.messages.ecmt-licence",
+     * })
+     * @Form\Validator({
+     *      "name": "Zend\Validator\NotEmpty",
+     *      "options": {
+     *          "message": {
+     *              "isEmpty": "error.messages.ecmt-licence"
+     *          }
+     *     }
      * })
      * @Form\Type("DynamicRadioHtml")
      */
+
+
+
+
+
+
 
     public $ecmtLicence = null;
 }
