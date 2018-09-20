@@ -23,7 +23,7 @@ class DeclarationController extends AbstractTransportManagersController
         $tma = $this->getTransportManagerApplication($tmaId);
 
         if ($this->getRequest()->isPost()) {
-            if ($_POST["content"]["isDigitallySigned"] === 'Y') {
+            if ($this->params()->fromPost('content')['isDigitallySigned'] === 'Y') {
                 $this->digitalSignatureAction();
             } else {
                 $this->physicalSignatureAction($tma);
@@ -68,6 +68,13 @@ class DeclarationController extends AbstractTransportManagersController
         return $layout;
     }
 
+
+    /**
+     * Action for when the operator chooses to digitally sign the transport manager application
+     *
+     * @todo write method body
+     *
+     */
     private function digitalSignatureAction()
     {
         exit("external gov verify journey starts from here");
@@ -87,31 +94,16 @@ class DeclarationController extends AbstractTransportManagersController
             Command\TransportManagerApplication\OperatorApprove::create(['id' => $tma['id']])
         );
 
-        $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
         if ($response->isOk()) {
-            // does the flash work????
-            $flashMessenger->addSuccessMessage('operator-approve-message');
-            return $this->redirect()->toUrl($this->getTransportManagerDetailsUrl($tma));
+            return $this->redirect()->toRoute(
+                "lva-" . $this->returnApplicationOrVariation($tma) . "/transport_manager_details",
+                ['child_id' => $tma["id"], 'application' => $tma["application"]["id"]],
+                [],
+                false
+            );
         } else {
-            $flashMessenger->addErrorMessage('unknown-error');
+            $this->flashMessenger()->addErrorMessage('unknown-error');
         }
-    }
-
-    /**
-     * Returns url: /[applicationOrVariation]/[applicationId]/transport-managers/details/[tmaId]
-     *
-     * @param array $tma
-     *
-     * @return string
-     */
-    private function getTransportManagerDetailsUrl($tma): string
-    {
-        return $this->url()->fromRoute(
-            "lva-" . $this->returnApplicationOrVariation($tma) . "/transport_manager_details",
-            ['child_id' => $tma["id"], 'application' => $tma["application"]["id"]],
-            [],
-            false
-        );
     }
 
     /**
