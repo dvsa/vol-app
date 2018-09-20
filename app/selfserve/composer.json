@@ -58,6 +58,7 @@
         "olcs/olcs-utils": "dev-develop",
         "olcs/olcs-auth": "dev-develop",
         "olcs/olcs-logging": "dev-develop"
+
     },
     "require-dev": {
         "olcs/olcs-devtools": "dev-master",
