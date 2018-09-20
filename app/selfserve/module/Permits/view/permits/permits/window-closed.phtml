@@ -1,0 +1,36 @@
+<?php
+    $this->headTitle($this->translate('permits.application.window-closed.title'));
+
+    $lastOpenWindowDate = \DateTime::createFromFormat(
+        'Y-m-d',
+        substr($this->lastOpenWindowDate, 0, 10)
+    );
+
+    $markup = sprintf(
+        $this->translate('markup-ecmt-window-closed'),
+        $this->dateFormat(
+            $lastOpenWindowDate,
+            \IntlDateFormatter::LONG,
+            \IntlDateFormatter::NONE
+        ),
+        $this->url('permits')
+    );
+
+?>
+<div class="row ecmt">
+    <div class="two-thirds">
+        <div class="page-header">
+            <a href="<?php echo($this->url('permits')); ?>" class="back-link">
+                <?php echo($this->translate('common.link.back.label')); ?>
+            </a>
+            <div class="page-header__wrapper">
+                <h3 class="page-header__subtitle"></h3>
+                <h1 class="js-title">
+                    <?php echo $this->escapeHtml($this->translate('permits.application.window-closed')); ?>
+                </h1>
+                <?php echo($markup); ?>
+            </div>
+        </div>
+
+    </div>
+</div>
