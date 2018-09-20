@@ -1,0 +1,140 @@
+<?php
+    /** @todo controller refactored, still need to refactor this view */
+    use Permits\View\Helper\EcmtSection;
+
+    $title = $this->translate('permits.page.title.check-answers');
+    $this->headTitle($title);
+
+    $heading = $this->translate('permits.page.title.check-answers-heading');
+    $application = $data['application'];
+
+    /** @todo restricted countries temporarily done here until the mapper is built */
+    $countriesArray = [];
+
+    foreach ($application['countrys'] as $countryDetails) {
+        $countriesArray[] = $countryDetails['countryDesc'];
+    }
+?>
+
+<div class="row ecmt">
+    <div class="three-quarters">
+        <div class="page-header">
+            <p><?php echo $this->permitsBackLink(); ?></p>
+            <div class="page-header__wrapper">
+                <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($application['applicationRef']); ?></h3>
+                <h1 class="js-title">
+                    <?php echo $this->escapeHtml($heading); ?>
+                </h1>
+            </div>
+        </div>
+        <div class="field">
+           <div class="table_wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.licence')); ?></h4>
+                            </td>
+                            <td>
+                                <?php
+                                    /** @todo like this until the mapper is done */
+                                    echo $this->escapeHtml($application['licence']['licNo']) . '<br />  (' . $this->escapeHtml($application['licence']['trafficArea']['name']) . ')';
+                                ?>
+                            </td>
+                            <td>
+                                <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_LICENCE); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.euro6')); ?></h4>
+                            <td>
+                                <?php  echo $this->escapeHtml($this->translate($application['emissions'] ? 'Yes' : 'No')); ?>
+                            </td>
+                            <td>
+                                <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_EURO6); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.cabotage')); ?></h4>
+                            </td>
+                            <td>
+                                <?php echo $this->escapeHtml($this->translate($application['cabotage'] ? 'Yes' : 'No')); ?>
+                            </td>
+                            <td>
+                                <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_CABOTAGE); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.restricted-countries')); ?></h4>
+                            </td>
+                            <td>
+                                <?php
+                                    echo empty($countriesArray) ? 'No' : 'Yes<br />' . $this->escapeHtml(implode(', ', $countriesArray));
+                                ?>
+                            </td>
+                            <td>
+                                <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_COUNTRIES); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.permits-required')); ?></h4>
+                            </td>
+                            <td>
+                                <?php echo $this->escapeHtml($application['permitsRequired']); ?>
+                            </td>
+                            <td>
+                                <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_NO_OF_PERMITS); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.trips')); ?></h4>
+                            </td>
+                            <td>
+                                <?php echo $this->escapeHtml($application['trips']); ?>
+                            </td>
+                            <td>
+                                <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_TRIPS); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.internationalJourneys')); ?></h4>
+                            </td>
+                            <td>
+                                <?php echo $this->escapeHtml($this->translate($application['internationalJourneys']['description'])); ?>
+                            </td>
+                            <td>
+                                <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.sector')); ?></h4>
+                            </td>
+                            <td>
+                                <?php echo $this->escapeHtml($application['sectors']['description']); ?>
+                            </td>
+                            <td>
+                                <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_SECTORS); ?>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="actions-container new-application--wrapper">
+                <?php
+                    echo $this->form($form);
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+<?php
+    $title = $this->escapeHtml($this->translate($titleName));
+    $this->headTitle($title);
+?>
+
+<div class="row ecmt">
+    <div class="two-thirds">
+        <?php echo sprintf($this->translate($this->escapeHtml($partialName)), $this->escapeHtml($this->translate($mainName)), $this->escapeHtml($data['application']['applicationRef'])); ?>
+        <div class="actions-container new-application--wrapper">
+            <p>
+                <a href="<?php echo $this->escapeHtml($this->url('permits')); ?>" class="action--primary large">
+                    <?php echo $this->escapeHtml($this->translate('Finish')); ?>
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
