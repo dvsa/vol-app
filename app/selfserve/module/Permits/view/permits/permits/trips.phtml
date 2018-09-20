@@ -17,9 +17,6 @@
         </div>
 
         <div class="field">
-            <div class="govuk-hint guidance-blue">
-                <p><?php echo $this->translate('permits.form.trips.guidance'); ?></p>
-            </div>
             <p>
                 <?php
                 // Only show if the Licence Traffic Area is 'Northern Ireland'
@@ -28,6 +25,12 @@
                 }
                 ?>
             </p>
+            <?php if ($form->get('Fields')->get('intensityWarning')->getValue() === 'yes'): ?>
+                <div class="govuk-hint guidance-blue">
+                    <p><?php echo $this->translate('permits.form.trips.guidance'); ?></p>
+                </div>
+            <?php endif; ?>
+
             <?php echo $this->translate('markup-ecmt-trips-hint.phtml'); ?>
 
             <fieldset id="number-of-trips" class="inline" data-group="number-of-trips">
