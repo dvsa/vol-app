@@ -18,6 +18,7 @@
         <div class="field">
             <fieldset id="restricted-countries" class="inline extra-space long" data-group="restricted-countries">
                 <?php
+                    echo $this->formErrors($form);
                     echo $this->form($form);
                 ?>
             </fieldset>

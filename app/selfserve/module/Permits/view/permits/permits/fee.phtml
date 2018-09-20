@@ -106,6 +106,7 @@
 
             <div class="actions-container new-application--wrapper">
                 <?php
+                    echo $this->formErrors($form);
                     echo $this->form($form);
                 ?>
                 <p><?php echo $this->permitsBackLink('permits.button.save-return-to-overview'); ?></p>
