@@ -116,8 +116,8 @@ class DeclarationController extends AbstractTransportManagersController
     private function getBackLink($tma): string
     {
         return $this->url()->fromRoute(
-            "lva-" . $this->returnApplicationOrVariation($tma) . "/transport_managers",
-            ['application' => $tma["application"]["id"]],
+            "lva-" . $this->returnApplicationOrVariation($tma) . "/transport_managers_details",
+            ['child_id’'=> $this->getIdentifier(),'application' => $tma["application"]["id"]],
             [],
             false
         );
