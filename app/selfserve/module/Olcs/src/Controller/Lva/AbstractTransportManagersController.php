@@ -1176,14 +1176,14 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $tma TM application
      *
-     * @return mixed
+     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
     private function page2Point2(array $tma)
     {
         if ($this->getRequest()->isPost()) {
             if ($this->getRequest()->getPost('emailAddress')) {
-                // resend form submitted
-                $this->resendTmEmail();
+                $this->resetTmaStatusAndResendTmEmail();
+                return $this->redirectToTransportManagersPage();
             } else {
                 return $this->redirect()->toRoute(
                     'lva-transport_manager/declaration/action',
