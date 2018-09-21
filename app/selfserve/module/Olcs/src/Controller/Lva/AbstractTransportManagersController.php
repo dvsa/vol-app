@@ -1483,7 +1483,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     private function redirectToTransportManagersPage(): \Zend\Http\Response
     {
         return $this->redirect()->toRoute(
-            "lva-{$this->lva}/transport_managers", 
+            "lva-{$this->lva}/transport_managers",
             ['application' => $this->getIdentifier()]
         );
     }
