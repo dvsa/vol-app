@@ -72,12 +72,13 @@ class DeclarationController extends AbstractTransportManagersController
     /**
      * Action for when the operator chooses to digitally sign the transport manager application
      *
-     * @todo write method body
      *
+     *
+     * @return void
      */
     private function digitalSignatureAction()
     {
-        exit("external gov verify journey starts from here");
+        // write method body
     }
 
     /**
