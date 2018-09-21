@@ -1185,14 +1185,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 $this->resetTmaStatusAndResendTmEmail();
                 return $this->redirectToTransportManagersPage();
             } else {
-                return $this->redirect()->toRoute(
-                    'lva-transport_manager/declaration/action',
-                    [
-                        'child_id' => $tma['id'],
-                        'application' => $tma['application']['id'],
-                        'action' => 'index'
-                    ]
-                );
+                return $this->redirectToDeclarationPage($tma);
             }
         }
 
@@ -1406,5 +1399,22 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         } else {
             $flashMessenger->addErrorMessage('transport-manager-application.resend-form.error');
         }
+    }
+
+    /**
+     * @param array $tma
+     *
+     * @return \Zend\Http\Response
+     */
+    private function redirectToDeclarationPage(array $tma): \Zend\Http\Response
+    {
+        return $this->redirect()->toRoute(
+            'lva-transport_manager/declaration/action',
+            [
+                'child_id' => $tma['id'],
+                'application' => $tma['application']['id'],
+                'action' => 'index'
+            ]
+        );
     }
 }
