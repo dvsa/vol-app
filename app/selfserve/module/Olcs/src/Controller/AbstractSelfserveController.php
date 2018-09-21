@@ -310,7 +310,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
         foreach ($tableConfig as $name => $config) {
             $tableData = $this->data[$config['dataSource']];
-            $this->tables[$name] = $this->getTable($config['tableName'], $tableData);
+            $this->tables[$name] = $this->getTable($config['tableName'], $tableData, $this->queryParams);
         }
     }
 
@@ -399,7 +399,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     {
         return $this->getServiceLocator()
             ->get('Table')
-            ->prepareTable($tableName, $data['results']);
+            ->prepareTable($tableName, $data, $this->queryParams);
     }
 
     /**
