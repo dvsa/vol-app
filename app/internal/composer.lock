@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "93543a30311c07cfde0b091f1355457e",
+    "content-hash": "e21f4c062272e9d533e550946c2b4722",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1075,11 +1075,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/4.189",
+            "version": "dev-release/4.189.1",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "541bd22fca5577dee11cbe34dee095db46eaee6b"
+                "reference": "9893a50bbebf725c90c55dc1ce42afa690874446"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1129,20 +1129,20 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2018-09-18T16:34:19+00:00"
+            "time": "2018-09-21T11:34:59+00:00"
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "dev-release/4.189",
+            "version": "dev-release/4.189.1",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "6a5084d586d90af2213af70d9b1d5738e7c6a1ed"
+                "reference": "29322be9f783880cf2b33ee618ea5165fdb142c1"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
                 "olcs/olcs-transfer": "dev-release/4.189",
-                "olcs/olcscommon": "dev-release/4.189",
+                "olcs/olcscommon": "dev-release/4.189.1",
                 "php": ">=5.4",
                 "zendframework/zendframework": "~2.4.0"
             },
@@ -1177,7 +1177,7 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2018-09-17T16:35:55+00:00"
+            "time": "2018-09-21T12:20:11+00:00"
         },
         {
             "name": "olcs/olcs-logging",
