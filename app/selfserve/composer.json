@@ -56,7 +56,7 @@
         "olcs/OlcsCommon": "dev-epic/OLCS-15057",
         "olcs/olcs-transfer": "dev-epic/OLCS-15057",
         "olcs/olcs-utils": "dev-develop",
-        "olcs/olcs-auth": "dev-develop",
+        "olcs/olcs-auth": "dev-epic/OLCS-15057",
         "olcs/olcs-logging": "dev-develop"
 
     },
