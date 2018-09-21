@@ -1210,28 +1210,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             if ($this->getRequest()->getPost('emailAddress')) {
                 $this->resetTmaStatusAndResendTmEmail();
                 return $this->redirectToTransportManagersPage();
-            } elseif (!is_null($tma['digitalSignature'])) {
-                return $this->redirect()->toRoute(
-                    'lva-transport_manager/declaration/action',
-                    [
-                        'application' => $this->getIdentifier(),
-                        'child_id' => $tma['id'],
-                        'action' => 'index'
-                    ]
-                );
             } else {
-                // approve Operator
-                $response = $this->handleCommand(
-                    Command\TransportManagerApplication\OperatorApprove::create(['id' => $tma['id']])
-                );
-
-                $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
-                if ($response->isOk()) {
-                    $flashMessenger->addSuccessMessage('operator-approve-message');
-                    return $this->redirect()->refresh();
-                } else {
-                    $flashMessenger->addErrorMessage('unknown-error');
-                }
+                return $this->redirectToDeclarationPage($tma);
             }
         }
 
@@ -1289,6 +1269,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $params['content'] = $translationHelper->translateReplace($template, [$this->getViewTmUrl()]);
 
+        $this->flashMessenger()->addSuccessMessage('operator-approve-message');
         return $this->renderTmAction('transport-manager-application.print-sign', null, $tma, $params);
     }
 
@@ -1444,6 +1425,23 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         } else {
             $flashMessenger->addErrorMessage('transport-manager-application.resend-form.error');
         }
+    }
+
+    /**
+     * @param array $tma
+     *
+     * @return \Zend\Http\Response
+     */
+    private function redirectToDeclarationPage(array $tma): \Zend\Http\Response
+    {
+        return $this->redirect()->toRoute(
+            'lva-transport_manager/declaration/action',
+            [
+                'child_id' => $tma['id'],
+                'application' => $tma['application']['id'],
+                'action' => 'index'
+            ]
+        );
     }
 
     /**

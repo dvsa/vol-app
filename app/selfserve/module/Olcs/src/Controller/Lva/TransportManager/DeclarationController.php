@@ -5,26 +5,45 @@ namespace OLCS\Controller\Lva\TransportManager;
 use Common\Controller\Lva\AbstractTransportManagersController;
 use \Common\Form\Form;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
+use \Zend\View\Model\ViewModel as ZendViewModel;
+use Dvsa\Olcs\Transfer\Command;
 
 class DeclarationController extends AbstractTransportManagersController
 {
     use ExternalControllerTrait;
 
     /**
-     * index action for /transport-manager/[applicationId]/declaration/index/[tmaId] route
+     * Index action for the lva-transport_manager/declaration route
      *
      * @return \Zend\View\Model\ViewModel
      */
-    public function indexAction()
+    public function indexAction(): ZendViewModel
     {
         $tmaId = (int)$this->params('child_id');
         $tma = $this->getTransportManagerApplication($tmaId);
 
+        if ($this->getRequest()->isPost()) {
+            if ($this->params()->fromPost('content')['isDigitallySigned'] === 'Y') {
+                $this->digitalSignatureAction();
+            } else {
+                $this->physicalSignatureAction($tma);
+            }
+        }
+        return $this->renderDeclarationPage($tma);
+    }
+
+    /**
+     * @param array $tma
+     *
+     * @return ZendViewModel
+     */
+    private function renderDeclarationPage($tma): ZendViewModel
+    {
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $params = [
             'content' => $translationHelper->translate('markup-tma-declaration'),
             'tmFullName' => $this->getTmName($tma),
-            'backLink' => $this->getBacklink($tma)
+            'backLink' => $this->getBackLink($tma)
         ];
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
@@ -49,14 +68,53 @@ class DeclarationController extends AbstractTransportManagersController
         return $layout;
     }
 
+
     /**
-     * Returns route: /[applicationOrVariation]/[applicationId]/transport-managers/details/[tmaId]
+     * Action for when the operator chooses to digitally sign the transport manager application
+     *
+     *
+     *
+     * @return void
+     */
+    private function digitalSignatureAction()
+    {
+        // write method body
+    }
+
+    /**
+     * Action for when the operator chooses to physically sign the transport manager application
+     *
+     * @param array $tma
+     *
+     * @return \Zend\Http\Response
+     */
+    private function physicalSignatureAction($tma)
+    {
+        // approve Operator
+        $response = $this->handleCommand(
+            Command\TransportManagerApplication\OperatorApprove::create(['id' => $tma['id']])
+        );
+
+        if ($response->isOk()) {
+            return $this->redirect()->toRoute(
+                "lva-" . $this->returnApplicationOrVariation($tma) . "/transport_manager_details",
+                ['child_id' => $tma["id"], 'application' => $tma["application"]["id"]],
+                [],
+                false
+            );
+        } else {
+            $this->flashMessenger()->addErrorMessage('unknown-error');
+        }
+    }
+
+    /**
+     * Get the URL/link to go back
      *
      * @param array $tma
      *
      * @return string
      */
-    private function getBacklink($tma)
+    private function getBackLink($tma): string
     {
         return $this->url()->fromRoute(
             "lva-" . $this->returnApplicationOrVariation($tma) . "/transport_manager_details",
@@ -73,19 +131,19 @@ class DeclarationController extends AbstractTransportManagersController
      *
      * @return void
      */
-    private function alterDeclarationForm(Form $form)
+    private function alterDeclarationForm(Form $form): void
     {
         $form->get('form-actions')->get('submit')->setLabel('application.review-declarations.sign-button');
     }
 
     /**
-     * return "application" or "variation"
+     * Returns "application" or "variation"
      *
      * @param array $tma
      *
      * @return string
      */
-    private function returnApplicationOrVariation($tma)
+    private function returnApplicationOrVariation($tma): string
     {
         if ($tma["application"]["isVariation"]) {
             return "variation";
