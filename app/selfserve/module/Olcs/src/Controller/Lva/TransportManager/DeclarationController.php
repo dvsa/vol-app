@@ -11,7 +11,7 @@ class DeclarationController extends AbstractTransportManagersController
     use ExternalControllerTrait;
 
     /**
-     * index action for /transport-manager/[tmaId]/confirmation route
+     * index action for /transport-manager/[applicationId]/declaration/index/[tmaId] route
      *
      * @return \Zend\View\Model\ViewModel
      */
@@ -34,6 +34,10 @@ class DeclarationController extends AbstractTransportManagersController
 
         $this->alterDeclarationForm($form);
 
+        if ($tma['disableSignatures']) {
+            $formHelper->remove($form, 'content');
+        }
+
         $this->getServiceLocator()->get('Script')->loadFiles(['tm-lva-declaration']);
 
         $layout = $this->render('transport-manager-application.declaration', $form, $params);
@@ -48,6 +52,8 @@ class DeclarationController extends AbstractTransportManagersController
     /**
      * Returns route: /[applicationOrVariation]/[applicationId]/transport-managers/details/[tmaId]
      *
+     * @param array $tma
+     *
      * @return string
      */
     private function getBacklink($tma)
@@ -60,6 +66,13 @@ class DeclarationController extends AbstractTransportManagersController
         );
     }
 
+    /**
+     * Alter declaration form
+     *
+     * @param Form $form
+     *
+     * @return void
+     */
     private function alterDeclarationForm(Form $form)
     {
         $form->get('form-actions')->get('submit')->setLabel('application.review-declarations.sign-button');
@@ -67,6 +80,8 @@ class DeclarationController extends AbstractTransportManagersController
 
     /**
      * return "application" or "variation"
+     *
+     * @param array $tma
      *
      * @return string
      */

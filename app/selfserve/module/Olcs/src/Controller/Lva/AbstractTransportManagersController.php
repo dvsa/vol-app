@@ -1202,15 +1202,15 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $tma TM application
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\View\Model\ViewModel | \Zend\Http\Response
      */
     private function page2Point2(array $tma)
     {
         if ($this->getRequest()->isPost()) {
             if ($this->getRequest()->getPost('emailAddress')) {
-                // resend form submitted
-                $this->resendTmEmail();
-            } elseif (!is_null($tma['digitalSignature']) && !$tma['disableSignatures']) {
+                $this->resetTmaStatusAndResendTmEmail();
+                return $this->redirectToTransportManagersPage();
+            } elseif (!is_null($tma['digitalSignature'])) {
                 return $this->redirect()->toRoute(
                     'lva-transport_manager/declaration/action',
                     [
@@ -1468,5 +1468,23 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         if (!empty($tma['transportManager']['otherLicences']) && $hasPreviousLicences === null) {
             $form->get('previousHistory')->get('hasPreviousLicences')->setValue('Y');
         }
+    }
+
+    private function resetTmaStatusAndResendTmEmail()
+    {
+        $tmaId = (int)$this->params('child_id');
+        if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
+            $this->resendTmEmail();
+        } else {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+    }
+
+    private function redirectToTransportManagersPage(): \Zend\Http\Response
+    {
+        return $this->redirect()->toRoute(
+            "lva-{$this->lva}/transport_managers",
+            ['application' => $this->getIdentifier()]
+        );
     }
 }
