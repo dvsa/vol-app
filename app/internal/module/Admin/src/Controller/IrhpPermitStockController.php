@@ -61,8 +61,6 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
 
     protected $tableViewTemplate = 'pages/irhp-permit-stock/index';
 
-
-
     /**
      * Get left view
      *

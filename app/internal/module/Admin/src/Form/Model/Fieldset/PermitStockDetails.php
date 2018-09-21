@@ -26,30 +26,49 @@ class PermitStockDetails
     public $permitType = null;
 
     /**
-     * @Form\Type("DateSelect")
-     * @Form\Name("validFrom")
+     * @Form\Required(true)
      * @Form\Options({
-     *      "label": "Validity period start",
-     *      "create_empty_option": true,
-     *      "max_year_delta": "+5",
-     *      "required": true
+     *     "label": "Validity Period Start",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
      * })
-     * @Form\Attributes({"id": "validFrom"})
-     * @Form\Validator({"name": "Date", "options": {"format": "d-m-Y"}})
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      */
     public $validFrom = null;
 
     /**
-     * @Form\Type("DateSelect")
-     * @Form\Name("validTo")
+     * @Form\Required(false)
      * @Form\Options({
-     *      "label": "Validity period end",
-     *      "create_empty_option": true,
-     *      "max_year_delta": "+5",
-     *      "required": true
+     *     "label": "Validity Period End",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
      * })
-     * @Form\Attributes({"id": "validTo"})
-     * @Form\Validator({"name": "Date", "options": {"format": "d-m-Y"}})
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator({
+     *      "name": "DateCompare",
+     *      "options": {
+     *          "has_time": false,
+     *          "allow_empty": true,
+     *          "compare_to":"validFrom",
+     *          "operator":"gt",
+     *          "compare_to_label":"validFrom"
+     *      }
+     * })
+     * @Form\Validator({
+     *      "name": "Dvsa\Olcs\Transfer\Validators\DateInFuture",
+     *      "options": {
+     *          "include_today": true,
+     *          "use_time": false,
+     *          "allow_empty": true,
+     *          "error-message": "Validity Period End must be later than Validity Period Start"
+     *      }
+     * })
      */
     public $validTo = null;
 
@@ -59,13 +78,12 @@ class PermitStockDetails
      * @Form\Options({
      *      "label": "Quota"
      * })
-     * @Form\Type("Text")
-     * @Transfer\Filter({"name":"Zend\Filter\Digits"})
-     * @Transfer\Validator({"name":"Zend\Validator\Digits"})
+     * @Form\Validator({"name":"Zend\Validator\Digits"})
+     * @Form\Type("Zend\Form\Element\Number")
      * @Transfer\Validator({
-     *      "name":"Zend\Validator\GreaterThan",
+     *      "name":"Zend\Validator\Between",
      *      "options": {
-     *          "min": 0,
+     *          "min": -1,
      *          "max": 9999999
      *      }
      * })
