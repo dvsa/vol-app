@@ -3,6 +3,7 @@
 namespace Permits\Controller\Config\ConditionalDisplay;
 
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
+use Permits\View\Helper\EcmtSection;
 
 /**
  * Holds conditional display configs that are used regularly
@@ -19,7 +20,8 @@ class ConditionalDisplayConfig
     const PERMIT_APP_CAN_CHECK_ANSWERS = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'canCheckAnswers',
-            'value' => true
+            'value' => true,
+            'route' => 'permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
 
