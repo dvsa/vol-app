@@ -10,6 +10,8 @@ use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
+use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\NextIrhpPermitStock;
+
 
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 
@@ -105,7 +107,10 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     public function addAction()
     {
         $form = $this->getForm('EcmtLicenceForm');
-        $view = new ViewModel(['form' => $form]);
+        $query = NextIrhpPermitStock::create(['permitType' => 'permit_ecmt']);
+        $stock = $this->handleQuery($query)->getResult();
+
+        $view = new ViewModel(['form' => $form, 'stock' => $stock]);
         $view->setTemplate('permits/ecmt-licence');
 
         $data = $this->params()->fromPost();
@@ -130,9 +135,12 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
 
+        $query = NextIrhpPermitStock::create(['permitType' => $application['permitType']['id']]);
+        $stock = $this->handleQuery($query)->getResult();
+
         $form = $this->getForm('EcmtLicenceForm');
 
-        $view = new ViewModel(['form' => $form, 'application' => $application]);
+        $view = new ViewModel(['form' => $form, 'application' => $application, 'stock' => $stock]);
         $view->setTemplate('permits/ecmt-licence');
 
         $data = $this->params()->fromPost();
