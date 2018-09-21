@@ -1176,7 +1176,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $tma TM application
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Zend\View\Model\ViewModel | \Zend\Http\Response
      */
     private function page2Point2(array $tma)
     {
@@ -1406,5 +1406,23 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         } else {
             $flashMessenger->addErrorMessage('transport-manager-application.resend-form.error');
         }
+    }
+
+    private function resetTmaStatusAndResendTmEmail()
+    {
+        $tmaId = (int)$this->params('child_id');
+        if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
+            $this->resendTmEmail();
+        } else {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+    }
+
+    private function redirectToTransportManagersPage(): \Zend\Http\Response
+    {
+        return $this->redirect()->toRoute(
+            "lva-{$this->lva}/transport_managers",
+            ['application' => $this->getIdentifier()]
+        );
     }
 }
