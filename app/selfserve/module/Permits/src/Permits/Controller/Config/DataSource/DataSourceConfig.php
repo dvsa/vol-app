@@ -8,7 +8,6 @@ use Permits\Controller\Config\DataSource\ValidEcmtPermits as ValidEcmtPermitsDat
 use Permits\Data\Mapper\FeeList as FeeListMapper;
 use Permits\Data\Mapper\ValidEcmtPermits as ValidEcmtPermitsMapper;
 
-
 /**
  * Holds data source configs that are used regularly
  */

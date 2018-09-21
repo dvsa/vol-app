@@ -8,15 +8,14 @@ namespace Permits\Data\Mapper;
  */
 class ValidEcmtPermits
 {
-    public static function mapForDisplay (array $data) {
+    public static function mapForDisplay(array $data)
+    {
         $permits = [];
 
         foreach ($data['result'] as $permit) {
             $rc = [];
-            if (count($permit['irhpPermitRange']['countrys']) > 0) {
-                foreach ($permit['irhpPermitRange']['countrys'] as $restrictedCountry) {
-                    $rc[] = $restrictedCountry['countryDesc'];
-                }
+            foreach ($permit['irhpPermitRange']['countrys'] as $restrictedCountry) {
+                $rc[] = $restrictedCountry['countryDesc'];
             }
             $permits[] = [
                 'permitNumber' => $permit['permitNumber'],

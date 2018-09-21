@@ -2,9 +2,6 @@
 
 namespace Permits\Controller\Config\Table;
 
-use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
-use Permits\Controller\Config\DataSource\DataSourceConfig;
-
 /**
  * Holds data source configs that are used regularly
  */
@@ -16,5 +13,4 @@ class TableConfig
             'dataSource' => 'validPermits'
         ]
     ];
-
 }

@@ -102,6 +102,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         );
         $response = $this->handleQuery($query);
         $issuedData = $response->getResult();
+
         $issuedTable = $this->getServiceLocator()
             ->get('Table')
             ->prepareTable($this->issuedTableName, $issuedData['results']);

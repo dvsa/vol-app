@@ -337,7 +337,7 @@ return array(
                 ],
                 'may_terminate' => false,
               ],
-            'ecmt-valid-permits' => [
+              'ecmt-valid-permits' => [
                 'type'    => 'segment',
                 'options' => [
                     'route'    => '/:id/ecmt-valid-permits[/]',
@@ -350,7 +350,7 @@ return array(
                     ],
                 ],
                 'may_terminate' => false,
-            ],
+              ],
               'ecmt-under-consideration' => [
                   'type'    => 'segment',
                   'options' => [
