@@ -5,7 +5,6 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
-use Permits\Controller\Config\Table\TableConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 
 class OverviewController extends AbstractSelfserveController implements ToggleAwareInterface
@@ -15,24 +14,14 @@ class OverviewController extends AbstractSelfserveController implements ToggleAw
     ];
 
     protected $dataSourceConfig = [
-        'default' => DataSourceConfig::PERMIT_ECMT_VALID,
+        'default' => DataSourceConfig::PERMIT_APP_WITH_FEE_LIST,
     ];
 
     protected $conditionalDisplayConfig = [
-        //'default' => ConditionalDisplayConfig::PERMIT_APP_NOT_SUBMITTED,
-    ];
-
-    protected $tableConfig = [
-        'validpermitsoverview' => TableConfig::VALID_APP_OVERVIEW
+        'default' => ConditionalDisplayConfig::PERMIT_APP_NOT_SUBMITTED,
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/application-overview',
-        'validpermitsoverview' => 'permits/valid-permits-overview'
+        'generic' => 'permits/application-overview'
     ];
-
-    protected function validPermitsOverviewAction()
-    {
-        return parent::genericAction();
-    }
 }
