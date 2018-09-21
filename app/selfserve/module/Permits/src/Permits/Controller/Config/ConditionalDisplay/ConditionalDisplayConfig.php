@@ -87,4 +87,11 @@ class ConditionalDisplayConfig
             'value' => true
         ],
     ];
+
+    const PERMIT_APP_IS_VALID = [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'isValid',
+            'value' => true
+        ],
+    ];
 }

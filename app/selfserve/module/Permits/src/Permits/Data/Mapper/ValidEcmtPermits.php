@@ -10,7 +10,8 @@ class ValidEcmtPermits
 {
     public static function mapForDisplay (array $data) {
         $permits = [];
-        foreach ($data['results'] as $permit) {
+
+        foreach ($data['result'] as $permit) {
             $rc = [];
             if (count($permit['irhpPermitRange']['countrys']) > 0) {
                 foreach ($permit['irhpPermitRange']['countrys'] as $restrictedCountry) {

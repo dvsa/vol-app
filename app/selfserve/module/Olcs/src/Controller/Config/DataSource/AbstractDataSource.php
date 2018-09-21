@@ -13,14 +13,18 @@ class AbstractDataSource implements DataSourceInterface
 
     protected $dto;
     protected $paramsMap = ['id' => 'id'];
+    protected $defaultParamData = [];
     protected $extraQueryData = [];
 
     public function queryFromParams(array $inputParams): QueryInterface
     {
-        $paramData = [];
+        //if we have defaults then set them here, these will be overwritten later if the parameter exists
+        $paramData = $this->defaultParamData;
 
         foreach ($this->paramsMap as $param => $mappedTo) {
-            $paramData[$mappedTo] = $inputParams[$param];
+            if (isset($inputParams[$param])) {
+                $paramData[$mappedTo] = $inputParams[$param];
+            }
         }
 
         $queryData = array_merge($this->extraQueryData, $paramData);

@@ -5,6 +5,7 @@ use Permits\Controller\CancelApplicationController;
 use Permits\Controller\EmissionsController;
 use Permits\Controller\CabotageController;
 use Permits\Controller\FeePartSuccessfulController;
+use Permits\Controller\ValidPermitsController;
 use Permits\Controller\WithdrawApplicationController;
 use Permits\Controller\CheckAnswersController;
 use Permits\Controller\DeclarationController;
@@ -23,6 +24,7 @@ return array(
         CheckAnswersController::class => CheckAnswersController::class,
         DeclarationController::class => DeclarationController::class,
         OverviewController::class => OverviewController::class,
+        ValidPermitsController::class => ValidPermitsController::class,
         FeeController::class => FeeController::class,
         FeePartSuccessfulController::class => FeePartSuccessfulController::class,
         DeclineController::class => DeclineController::class,
@@ -340,8 +342,8 @@ return array(
                 'options' => [
                     'route'    => '/:id/ecmt-valid-permits[/]',
                     'defaults' => [
-                        'controller'    => OverviewController::class,
-                        'action'        => 'validPermitsOverview',
+                        'controller'    => ValidPermitsController::class,
+                        'action'        => 'generic',
                     ],
                     'constraints' => [
                         'id' => '[0-9]+',

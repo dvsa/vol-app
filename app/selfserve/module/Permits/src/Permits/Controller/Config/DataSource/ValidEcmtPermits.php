@@ -10,7 +10,15 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class ValidEcmtPermits extends AbstractDataSource
 {
-    const DATA_KEY = 'application';
+    const DATA_KEY = 'validPermits';
     protected $dto = ValidEcmtPermitsDto::class;
-    protected $paramsMap = ['id' => 'id', 'page' => 'page', 'limit' => 'limit'];
+    protected $paramsMap = [
+        'id' => 'id',
+        'page' => 'page',
+        'limit' => 'limit',
+    ];
+    protected $defaultParamData = [
+        'page' => 1,
+        'limit' => 10,
+    ];
 }
