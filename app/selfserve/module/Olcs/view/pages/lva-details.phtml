@@ -24,6 +24,7 @@ echo $this->partial(
     'partials/page-header-simple',
     [
         'pageTitle' => $this->translate($this->title),
+        'pageHeaderText' => $this->translate($this->headerText),
         'pageSubTitle' => $subTitle,
         'backUrl' => $this->vars()->offsetExists('backUrlOverride')
             ? $this->backUrlOverride

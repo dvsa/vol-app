@@ -119,7 +119,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $formData = $this->formatFormData($transportManagerApplicationData, $postData);
 
         $form = $this->getDetailsForm($transportManagerApplicationData)->setData($formData);
-
+        $this->maybeSelectOptions($transportManagerApplicationData, $form);
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         $hasProcessedAddressLookup = $formHelper->processAddressLookupForm($form, $request);
@@ -175,6 +175,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                             'hoursSat' => (float)$hoursOfWeek['hoursPerWeekContent']['hoursSat'],
                             'hoursSun' => (float)$hoursOfWeek['hoursPerWeekContent']['hoursSun'],
                             'additionalInfo' => $data['responsibilities']['additionalInformation'],
+                            'hasOtherLicences' => $data['responsibilities']['hasOtherLicences'],
+                            'hasOtherEmployment'=> $data['otherEmployments']['hasOtherEmployment'],
+                            'hasConvictions'=> $data['previousHistory']['hasConvictions'],
+                            'hasPreviousLicences'=> $data['previousHistory']['hasPreviousLicences'],
                             'submit' => ($submit) ? 'Y' : 'N',
                             'dob' => $data['details']['birthDate']
                         ]
@@ -312,7 +316,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     public function addEmploymentAction()
     {
-        return $this->addOrEdit(self::TYPE_OTHER_EMPLOYMENT, 'add');
+        return $this->addOrEdit(
+            self::TYPE_OTHER_EMPLOYMENT,
+            'add',
+            null,
+            ['headerText' => 'lva.section.headerText.transport_managers-details-add-OtherEmployments']
+        );
     }
 
     /**
@@ -414,7 +423,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
-    protected function addOrEdit($type, $mode, $id = null)
+    protected function addOrEdit($type, $mode, $id = null, $variables = [])
     {
         if ($this->isButtonPressed('cancel')) {
             return $this->backToDetails();
@@ -470,7 +479,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             return $this->backToDetails($type);
         }
 
-        return $this->render('transport_managers-details-' . $mode . '-' . $type, $form);
+        return $this->render('transport_managers-details-' . $mode . '-' . $type, $form, $variables);
     }
 
     /**
@@ -873,7 +882,15 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                             'hoursSat' => $data['hoursSat'],
                             'hoursSun' => $data['hoursSun'],
                         ]
-                    ]
+                    ],
+                    'hasOtherLicences' => $this->formatYesNo($data['hasOtherLicences'])
+                ],
+                'otherEmployments' => [
+                    'hasOtherEmployment' => $this->formatYesNo($data['hasOtherEmployment'])
+                ],
+                'previousHistory' => [
+                    'hasConvictions' => $this->formatYesNo($data['hasConvictions']),
+                    'hasPreviousLicences' => $this->formatYesNo($data['hasPreviousLicences'])
                 ],
                 'homeAddress' => $contactDetails['address'],
                 'workAddress' => $data['transportManager']['workCd']['address']
@@ -891,6 +908,15 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $formData['details']['name'] = $person['forename'] . ' ' . $person['familyName'];
 
         return $formData;
+    }
+
+    private function formatYesNo($value)
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return $value ? 'Y' : 'N';
     }
 
     /**
@@ -919,7 +945,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 ->setEmptyMessage('transport-manager.convictionsandpenalties.table.empty.ni');
         }
 
-        $this->hlpTransMngr->prepareOtherEmploymentTableTm($form->get('otherEmployment'), $tma['transportManager']);
+        $this->hlpTransMngr->prepareOtherEmploymentTableTm($form->get('otherEmployments')->get('otherEmployment'), $tma['transportManager']);
 
         $this->hlpForm->remove($form, 'responsibilities->tmApplicationStatus');
 
@@ -1417,6 +1443,30 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             $flashMessenger->addSuccessMessage('transport-manager-application.resend-form.success');
         } else {
             $flashMessenger->addErrorMessage('transport-manager-application.resend-form.error');
+        }
+    }
+
+    /**
+     * @param array $tma
+     * @param       $form
+     */
+    protected function maybeSelectOptions(array $tma, $form): void
+    {
+        $hasOtherLicences = $form->get('responsibilities')->get('hasOtherLicences')->getValue();
+        if (!empty($tma['otherLicences']) && $hasOtherLicences === null) {
+            $form->get('responsibilities')->get('hasOtherLicences')->setValue('Y');
+        }
+        $hasOtherEmployment = $form->get('otherEmployments')->get('hasOtherEmployment')->getValue();
+        if (!empty($tma['transportManager']['employments']) && $hasOtherEmployment === null) {
+            $form->get('otherEmployments')->get('hasOtherEmployment')->setValue('Y');
+        }
+        $hasConvictions = $form->get('previousHistory')->get('hasConvictions')->getValue();
+        if (!empty($tma['transportManager']['previousConvictions']) && $hasConvictions === null) {
+            $form->get('previousHistory')->get('hasConvictions')->setValue('Y');
+        }
+        $hasPreviousLicences = $form->get('previousHistory')->get('hasPreviousLicences')->getValue();
+        if (!empty($tma['transportManager']['otherLicences']) && $hasPreviousLicences === null) {
+            $form->get('previousHistory')->get('hasPreviousLicences')->setValue('Y');
         }
     }
 
