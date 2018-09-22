@@ -50,7 +50,7 @@ class ConfirmationController extends AbstractTransportManagersController
     private function renderTmAction($title, $form, $tma, $params)
     {
         $defaultParams = [
-            'tmFullName' => $this->getTmFullName($tma),
+            'tmFullName' => $this->getTmName($tma),
             'backLink' => $this->getBacklink(),
         ];
 
