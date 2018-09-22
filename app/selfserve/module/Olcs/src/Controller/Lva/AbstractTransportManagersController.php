@@ -208,7 +208,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     'LvaTransportManager/CheckAnswers',
                     [
                         'action' => 'index',
-                        'application' => $transportManagerApplicationData['id'],
+                        'child_id' => $transportManagerApplicationData['id'],
+                        'application' => (int)$this->params('application')
                     ]
                 );
 

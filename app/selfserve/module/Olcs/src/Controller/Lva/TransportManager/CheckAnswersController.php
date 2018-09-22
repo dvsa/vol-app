@@ -16,12 +16,7 @@ class CheckAnswersController extends AbstractTransportManagersController
 
     public function indexAction()
     {
-        $transportManagerApplicationId = $this->params("application");
-        $applicationId = $this->params('child_id');
-
-        /** @var \Zend\Http\Request $request */
-        $request = $this->getRequest();
-        $postData = (array)$request->getPost();
+        $transportManagerApplicationId = $this->params("child_id");
         $transportManagerApplication = $this->getTransportManagerApplication($transportManagerApplicationId);
         $translator = $this->serviceLocator->get('Helper\Translation');
 
@@ -59,7 +54,7 @@ class CheckAnswersController extends AbstractTransportManagersController
     public function confirmAction()
     {
         $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
-        $transportManagerApplicationId = $this->params("application");
+        $transportManagerApplicationId = $this->params("child_id");
         $response = $this->handleCommand(
             Command\TransportManagerApplication\Submit::create(['id' => $transportManagerApplicationId])
         );
