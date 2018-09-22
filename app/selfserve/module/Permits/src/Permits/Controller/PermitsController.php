@@ -261,19 +261,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 $command = UpdateEcmtTrips::create(['id' => $id, 'ecmtTrips' => $data['Fields']['tripsAbroad']]);
                 $this->handleCommand($command);
                 $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
-            } else {
-                //Custom Error Message
-                $messages = $form->get('Fields')->get('tripsAbroad')->getMessages();
-                if (array_key_exists('isEmpty', $messages) || array_key_exists('digitsStringEmpty', $messages)) {
-                    $messages = ['isEmpty' => $messages['isEmpty']];
-                }
-                if (array_key_exists('notDigits', $messages)) {
-                    $messages = ['notDigits' => $messages['notDigits']];
-                }
-                if (array_key_exists('notBetween', $messages)) {
-                    $messages = ['notBetween' => $messages['notBetween']];
-                }
-                $form->get('Fields')->get('tripsAbroad')->setMessages($messages);
             }
         }
 

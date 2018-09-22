@@ -22,29 +22,31 @@ class Trips
      *     "hint" : "permits.form.trips.hint",
      * })
      * @Form\Validator({
-     *      "name": "Zend\Validator\NotEmpty",
-     *      "options": {
-     *          "message": {
-     *              "isEmpty": "error.messages.trips.empty"
-     *          }
+     *     "name": "Zend\Validator\NotEmpty",
+     *     "options": {
+     *         "message": {
+     *             "isEmpty": "error.messages.trips.empty"
+     *         },
+     *         "breakchainonfailure": true
      *     }
      * })
      * @Form\Validator({
-     *      "name": "Zend\Validator\Digits",
-     *      "options": {
-     *          "message": {
-     *              "notDigits": "error.messages.trips.not.digits"
-     *          }
+     *     "name": "Zend\Validator\Digits",
+     *     "options": {
+     *         "message": {
+     *             "notDigits": "error.messages.trips.not.digits"
+     *         },
+     *         "breakchainonfailure": true
      *     }
      * })
      * @Form\Validator({
-     *      "name": "Zend\Validator\Between",
-     *      "options": {
-     *          "min": 0,
-     *          "max": 999999,
-     *          "message": {
-     *              "notBetween": "error.messages.trips.not.between"
-     *          }
+     *     "name": "Zend\Validator\Between",
+     *     "options": {
+     *         "min": 0,
+     *         "max": 999999,
+     *         "message": {
+     *             "notBetween": "error.messages.trips.not.between"
+     *         }
      *     }
      * })
 
