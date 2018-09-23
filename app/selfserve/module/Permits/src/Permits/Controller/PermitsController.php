@@ -5,13 +5,14 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtLicence;
 
+use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\NextIrhpPermitStock;
 use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
 use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
-use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\NextIrhpPermitStock;
-
+use Dvsa\Olcs\Transfer\Query\Permits\LastOpenWindow;
+use Dvsa\Olcs\Transfer\Query\Permits\OpenWindows;
 
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 
@@ -34,6 +35,8 @@ use Zend\Http\PhpEnvironment\Request as HttpRequest;
 use Zend\Mvc\MvcEvent;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitFees;
 use Zend\View\Model\ViewModel;
+
+use DateTime;
 
 class PermitsController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -106,6 +109,27 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
     public function addAction()
     {
+        $currentDateTime = new DateTime();
+        $formattedDateTime = $currentDateTime->format('Y-m-d H:i:s');
+
+        $response = $this->handleQuery(
+            OpenWindows::create(['currentDateTime' => $formattedDateTime])
+        );
+        $result = $this->handleResponse($response);
+
+        if (count($result['windows']) == 0) {
+            $response = $this->handleQuery(
+                LastOpenWindow::create(['currentDateTime' => $formattedDateTime])
+            );
+            $result = $this->handleResponse($response);
+
+            $view = new ViewModel();
+            $view->setVariable('lastOpenWindowDate', $result['results']['endDate']);
+            $view->setTemplate('permits/window-closed');
+
+            return $view;
+        }
+
         $form = $this->getForm('EcmtLicenceForm');
         $query = NextIrhpPermitStock::create(['permitType' => 'permit_ecmt']);
         $stock = $this->handleQuery($query)->getResult();
