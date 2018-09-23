@@ -26,7 +26,6 @@ use Common\RefData;
 
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
-
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\View\Helper\EcmtSection;
 
@@ -277,6 +276,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $form = $this->getForm('TripsForm');
 
         $existing['Fields']['tripsAbroad'] = $application['trips'];
+        $existing['Fields']['intensityWarning'] = 'no';
         $form->setData($existing);
 
         $data = $this->params()->fromPost();
@@ -288,12 +288,32 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             if ($form->isValid()) {
                 $command = UpdateEcmtTrips::create(['id' => $id, 'ecmtTrips' => $data['Fields']['tripsAbroad']]);
                 $this->handleCommand($command);
-                $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
+                if ($this->isHighIntensity($application, $data['Fields']['tripsAbroad']) && $data['Fields']['intensityWarning'] === 'no') {
+                    $form->get('Fields')->get('intensityWarning')->setValue('yes');
+                } else {
+                    $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
+                }
+            } else {
+                //Custom Error Message
+                $form->get('Fields')->get('tripsAbroad')->setMessages(['error.messages.trips']);
             }
         }
 
         return array('form' => $form, 'ref' => $application['applicationRef'], 'id' => $id, 'trafficAreaId' => $trafficArea['id']);
     }
+
+
+    // Understand this is a computer property but added to avoid a round-trip to API for simple arithmetic operation.
+    protected function isHighIntensity($application, $tripsAbroad)
+    {
+        if (isset($application['permitsRequired'])) {
+            return ($tripsAbroad / $application['permitsRequired']) > 100;
+        } else {
+            return false;
+        }
+    }
+
+
 
     public function internationalJourneyAction()
     {
@@ -306,6 +326,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
         // read data
         $form->get('Fields')->get('InternationalJourney')->setValue($application['internationalJourneys']);
+        $form->get('Fields')->get('intensityWarning')->setValue('no');
 
         $data = $this->params()->fromPost();
 
@@ -319,10 +340,12 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                     'internationalJourney' => $data['Fields']['InternationalJourney'],
                 ];
                 $command = UpdateInternationalJourney::create($commandData);
-
                 $this->handleCommand($command);
-
-                $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_SECTORS);
+                if ($data['Fields']['InternationalJourney'] === RefData::ECMT_APP_JOURNEY_OVER_90 && $data['Fields']['intensityWarning'] === 'no') {
+                    $form->get('Fields')->get('intensityWarning')->setValue('yes');
+                } else {
+                    $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_SECTORS);
+                }
             } else {
                 //Custom Error Message
                 $form->get('Fields')

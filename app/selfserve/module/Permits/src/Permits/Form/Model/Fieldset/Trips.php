@@ -9,6 +9,12 @@ use Zend\Form\Annotation as Form;
  */
 class Trips
 {
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $intensityWarning = 'no';
+
     /**
      * @Form\Required(true)
      * @Form\Attributes({
