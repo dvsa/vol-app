@@ -385,15 +385,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 $response = $this->handleCommand($command);
 
                 $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_TRIPS);
-            } else {
-                $messages = $form->get('Fields')->get('permitsRequired')->getMessages();
-                if (array_key_exists('isEmpty', $messages)) {
-                    $messages = ['isEmpty' => $messages['isEmpty']];
-                }
-                if (array_key_exists('notGreaterThan', $messages)) {
-                    $messages = ['notGreaterThan' => $messages['notGreaterThan']];
-                }
-                $form->get('Fields')->get('permitsRequired')->setMessages($messages);
             }
         }
 

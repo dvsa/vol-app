@@ -34,11 +34,5 @@ class EcmtLicence
      * @Form\Type("DynamicRadioHtml")
      */
 
-
-
-
-
-
-
     public $ecmtLicence = null;
 }

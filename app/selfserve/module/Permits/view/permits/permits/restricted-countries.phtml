@@ -7,6 +7,7 @@
     <div class="two-thirds">
         <div class="page-header">
             <p><?php echo $this->permitsBackLink(); ?></p>
+            <?php echo $this->formErrors($form); ?>
             <div class="page-header__wrapper">
                 <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($ref); ?></h3>
                 <h1 class="js-title">
@@ -17,10 +18,7 @@
 
         <div class="field">
             <fieldset id="restricted-countries" class="inline extra-space long" data-group="restricted-countries">
-                <?php
-                    echo $this->formErrors($form);
-                    echo $this->form($form);
-                ?>
+                <?php echo $this->form($form); ?>
             </fieldset>
         </div>
 

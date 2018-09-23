@@ -7,6 +7,7 @@
     <div class="two-thirds">
         <div class="page-header">
             <p><?php echo $this->permitsBackLink(); ?></p>
+            <?php echo $this->formErrors($form); ?>
             <div class="page-header__wrapper">
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($this->translate('permits.page.declaration.question')); ?>
@@ -20,10 +21,7 @@
             </div>
 
             <fieldset id="declaration" class="inline" data-group="declaration">
-                <?php
-                    echo $this->formErrors($form);
-                    echo $this->form($form);
-                ?>
+                <?php echo $this->form($form); ?>
             </fieldset>
         </div>
 
