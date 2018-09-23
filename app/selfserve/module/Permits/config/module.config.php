@@ -251,6 +251,48 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
+              'payment-result' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/:id/payment-result[/]',
+                      'defaults' => [
+                          'controller'    => FeeController::class,
+                          'action'        => 'paymentResult',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
+              'ecmt-payment' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/:id/ecmt-payment[/]',
+                      'defaults' => [
+                          'controller'    => PermitsController::class,
+                          'action'        => 'payment',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
+              'ecmt-print-receipt' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/:id/ecmt-print-receipt[/]:reference',
+                      'defaults' => [
+                          'controller'    => PermitsController::class,
+                          'action'        => 'print',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
               'ecmt-submitted' => [
                   'type'    => 'segment',
                   'options' => [
