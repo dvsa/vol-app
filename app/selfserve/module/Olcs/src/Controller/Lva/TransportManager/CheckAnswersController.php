@@ -16,26 +16,16 @@ class CheckAnswersController extends AbstractTransportManagersController
 
     public function indexAction()
     {
+
         $transportManagerApplicationId = $this->params("child_id");
         $transportManagerApplication = $this->getTransportManagerApplication($transportManagerApplicationId);
         $translator = $this->serviceLocator->get('Helper\Translation');
 
-        $checkAnswersHint = $translator->translate('lva.section.transport-manager-check-answers-hint');
-        $title = 'check_answers';
-        $defaultParams = [
-            'content' => $checkAnswersHint,
-            'tmFullName' => $this->getTmName($transportManagerApplication),
-            'backLink' => $this->url()->fromRoute(
-                "dashboard",
-                [],
-                [],
-                false
-            ),
-            'backText' => 'transport-manager-save-return',
-
-        ];
-
-        $form = $this->getConfirmationForm($transportManagerApplicationId);
+        list($title, $defaultParams, $form) = $this->getPageLayout(
+            $translator,
+            $transportManagerApplication,
+            $transportManagerApplicationId
+        );
 
         $sections = TransportManagerApplication::mapForSections($transportManagerApplication, $translator);
         $sections = $this->addChangeSectionLink($sections, $transportManagerApplication);
@@ -73,11 +63,13 @@ class CheckAnswersController extends AbstractTransportManagersController
     /**
      * getConfirmationForm
      *
-     * @param $transportManagerApplicationId
+     * @param int $transportManagerApplicationId
+     *
+     * @param int $applicationId
      *
      * @return \Common\Form\Form
      */
-    private function getConfirmationForm(int $transportManagerApplicationId): \Common\Form\Form
+    private function getConfirmationForm(int $transportManagerApplicationId, int $applicationId): \Common\Form\Form
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
@@ -86,9 +78,13 @@ class CheckAnswersController extends AbstractTransportManagersController
         $form->setAttribute(
             "action",
             $this->url()->fromRoute(
-                'lva-transport_manager/check_answers',
-                ['application' => $transportManagerApplicationId]
-            ) . 'confirm'
+                'lva-transport_manager/check_answers/action',
+                [
+                    'action' => 'confirm',
+                    'application' => $applicationId,
+                    'child_id' => $transportManagerApplicationId
+                ]
+            )
         );
         $submitLabel = 'Confirm and continue';
         $form->setSubmitLabel($submitLabel);
@@ -109,5 +105,35 @@ class CheckAnswersController extends AbstractTransportManagersController
                 ) . "#" . $sections[$key]['change']['sectionName'];
         }
         return $sections;
+    }
+
+    /**
+     * getPageLayout
+     *
+     * @param $translator
+     * @param $transportManagerApplication
+     * @param $transportManagerApplicationId
+     *
+     * @return array
+     */
+    private function getPageLayout($translator, $transportManagerApplication, $transportManagerApplicationId): array
+    {
+        $checkAnswersHint = $translator->translate('lva.section.transport-manager-check-answers-hint');
+        $title = 'check_answers';
+        $defaultParams = [
+            'content' => $checkAnswersHint,
+            'tmFullName' => $this->getTmName($transportManagerApplication),
+            'backLink' => $this->url()->fromRoute(
+                "dashboard",
+                [],
+                [],
+                false
+            ),
+            'backText' => 'transport-manager-save-return',
+
+        ];
+
+        $form = $this->getConfirmationForm($transportManagerApplicationId, $transportManagerApplication['application']['id']);
+        return array($title, $defaultParams, $form);
     }
 }

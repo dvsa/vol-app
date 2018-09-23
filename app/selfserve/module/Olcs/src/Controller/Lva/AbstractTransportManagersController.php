@@ -204,8 +204,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     return $this->redirectTmToHome();
                 }
 
-                return $this->forward()->dispatch(
-                    'LvaTransportManager/CheckAnswers',
+                return $this->redirect()->toRoute(
+                    'lva-transport_manager/check_answers/action',
                     [
                         'action' => 'index',
                         'child_id' => $transportManagerApplicationData['id'],
@@ -1102,18 +1102,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $response = $this->getServiceLocator()->get('CommandService')->send($command);
 
         return $response->isOk();
-    }
-
-    /**
-     * TM form is complete, but not submitted yet
-     *
-     * @param array $tma TM application
-     *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
-     */
-    private function page1Point2(array $tma)
-    {
-        return $this->redirect()->toRoute('lva-transport_manager/check_answers', ['application' => $tma['id']]);
     }
 
     /**
