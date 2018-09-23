@@ -474,7 +474,7 @@ return [
                             'route' => 'permits[/]',
                             'defaults' => [
                                 'controller' => \Admin\Controller\PermitsController::class,
-                                'action' => 'index',
+                                'action' => 'index'
                             ]
                         ],
                         'may_terminate' => true,
@@ -489,6 +489,34 @@ return [
                                     ],
                                     'defaults' => [
                                         'controller' => \Admin\Controller\IrhpPermitStockController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
+                            'permit-range' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'permit-range[/:parentId][/:action][/:id][/]',
+                                    'constraints' => [
+                                        'id' => '[0-9\,]+',
+                                        'action' => '(index|add|edit|delete)'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\IrhpPermitRangeController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
+                            'permit-windows' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'permit-windows[/:parentId][/:action][/:id][/]',
+                                    'constraints' => [
+                                        'id' => '[0-9\,]+',
+                                        'action' => '(index|add|edit|delete)'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\IrhpPermitWindowController::class,
                                         'action' => 'index',
                                     ],
                                 ],
@@ -677,6 +705,8 @@ return [
                 Admin\Controller\PermitsController::class,
             Admin\Controller\IrhpPermitStockController::class =>
                 Admin\Controller\IrhpPermitStockController::class,
+            Admin\Controller\IrhpPermitWindowController::class =>
+                Admin\Controller\IrhpPermitWindowController::class,
             Admin\Controller\DataRetention\RuleAdminController::class =>
                 Admin\Controller\DataRetention\RuleAdminController::class
         ],
