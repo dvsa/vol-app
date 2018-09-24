@@ -170,7 +170,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                             'hoursSat' => (float)$hoursOfWeek['hoursPerWeekContent']['hoursSat'],
                             'hoursSun' => (float)$hoursOfWeek['hoursPerWeekContent']['hoursSun'],
                             'additionalInfo' => $data['responsibilities']['additionalInformation'],
-                            'hasOtherLicences' => $data['responsibilities']['hasOtherLicences'],
+                            'hasOtherLicences' => $data['responsibilities']['otherLicencesFieldset']['hasOtherLicences'],
                             'hasOtherEmployment'=> $data['otherEmployments']['hasOtherEmployment'],
                             'hasConvictions'=> $data['previousHistory']['hasConvictions'],
                             'hasPreviousLicences'=> $data['previousHistory']['hasPreviousLicences'],
@@ -886,7 +886,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                             'hoursSun' => $data['hoursSun'],
                         ]
                     ],
-                    'hasOtherLicences' => $this->formatYesNo($data['hasOtherLicences'])
+                    'otherLicencesFieldset' => [
+                        'hasOtherLicences' => $this->formatYesNo($data['hasOtherLicences'])
+                    ],
                 ],
                 'otherEmployments' => [
                     'hasOtherEmployment' => $this->formatYesNo($data['hasOtherEmployment'])
@@ -1429,9 +1431,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     protected function maybeSelectOptions(array $tma, $form): void
     {
-        $hasOtherLicences = $form->get('responsibilities')->get('hasOtherLicences')->getValue();
+        $hasOtherLicences = $form->get('responsibilities')->get('otherLicencesFieldset')->get('hasOtherLicences')->getValue();
         if (!empty($tma['otherLicences']) && $hasOtherLicences === null) {
-            $form->get('responsibilities')->get('hasOtherLicences')->setValue('Y');
+            $form->get('responsibilities')->get('otherLicencesFieldset')->get('hasOtherLicences')->setValue('Y');
         }
         $hasOtherEmployment = $form->get('otherEmployments')->get('hasOtherEmployment')->getValue();
         if (!empty($tma['transportManager']['employments']) && $hasOtherEmployment === null) {
