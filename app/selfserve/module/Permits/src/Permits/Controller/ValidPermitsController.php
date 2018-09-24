@@ -3,6 +3,7 @@ namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
+use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\Table\TableConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
@@ -19,6 +20,10 @@ class ValidPermitsController extends AbstractSelfserveController implements Togg
 
     protected $tableConfig = [
         'generic' => TableConfig::VALID_APP_OVERVIEW
+    ];
+
+    protected $conditionalDisplayConfig = [
+        'default' => ConditionalDisplayConfig::PERMIT_APP_IS_VALID,
     ];
 
     protected $templateConfig = [
