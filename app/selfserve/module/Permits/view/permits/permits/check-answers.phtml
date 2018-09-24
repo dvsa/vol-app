@@ -14,11 +14,6 @@
     foreach ($application['countrys'] as $countryDetails) {
         $countriesArray[] = $countryDetails['countryDesc'];
     }
-
-    $sector = $application['sectors']['description'];
-    if ($sector == '') {
-        $sector = $application['sectors']['name'];
-    }
 ?>
 
 <div class="row ecmt">
@@ -127,7 +122,10 @@
                                 <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.sector')); ?></h4>
                             </td>
                             <td>
-                                <?php echo $this->escapeHtml($sector); ?>
+                                <?php
+                                    $sector = $application['sectors']['description'] ? $application['sectors']['description'] : $application['sectors']['name'];
+                                    echo $this->escapeHtml($sector);
+                                ?>
                             </td>
                             <td>
                                 <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_SECTORS); ?>
