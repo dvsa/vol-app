@@ -114,7 +114,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $formData = $this->formatFormData($transportManagerApplicationData, $postData);
 
         $form = $this->getDetailsForm($transportManagerApplicationData)->setData($formData);
-
+        $this->maybeSelectOptions($transportManagerApplicationData, $form);
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
         $hasProcessedAddressLookup = $formHelper->processAddressLookupForm($form, $request);
@@ -170,6 +170,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                             'hoursSat' => (float)$hoursOfWeek['hoursPerWeekContent']['hoursSat'],
                             'hoursSun' => (float)$hoursOfWeek['hoursPerWeekContent']['hoursSun'],
                             'additionalInfo' => $data['responsibilities']['additionalInformation'],
+                            'hasOtherLicences' => $data['responsibilities']['hasOtherLicences'],
+                            'hasOtherEmployment'=> $data['otherEmployments']['hasOtherEmployment'],
+                            'hasConvictions'=> $data['previousHistory']['hasConvictions'],
+                            'hasPreviousLicences'=> $data['previousHistory']['hasPreviousLicences'],
                             'submit' => ($submit) ? 'Y' : 'N',
                             'dob' => $data['details']['birthDate']
                         ]
@@ -315,7 +319,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     public function addEmploymentAction()
     {
-        return $this->addOrEdit(self::TYPE_OTHER_EMPLOYMENT, 'add');
+        return $this->addOrEdit(
+            self::TYPE_OTHER_EMPLOYMENT,
+            'add',
+            null,
+            ['headerText' => 'lva.section.headerText.transport_managers-details-add-OtherEmployments']
+        );
     }
 
     /**
@@ -417,7 +426,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
-    protected function addOrEdit($type, $mode, $id = null)
+    protected function addOrEdit($type, $mode, $id = null, $variables = [])
     {
         if ($this->isButtonPressed('cancel')) {
             return $this->backToDetails();
@@ -473,7 +482,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             return $this->backToDetails($type);
         }
 
-        return $this->render('transport_managers-details-' . $mode . '-' . $type, $form);
+        return $this->render('transport_managers-details-' . $mode . '-' . $type, $form, $variables);
     }
 
     /**
@@ -876,7 +885,15 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                             'hoursSat' => $data['hoursSat'],
                             'hoursSun' => $data['hoursSun'],
                         ]
-                    ]
+                    ],
+                    'hasOtherLicences' => $this->formatYesNo($data['hasOtherLicences'])
+                ],
+                'otherEmployments' => [
+                    'hasOtherEmployment' => $this->formatYesNo($data['hasOtherEmployment'])
+                ],
+                'previousHistory' => [
+                    'hasConvictions' => $this->formatYesNo($data['hasConvictions']),
+                    'hasPreviousLicences' => $this->formatYesNo($data['hasPreviousLicences'])
                 ],
                 'homeAddress' => $contactDetails['address'],
                 'workAddress' => $data['transportManager']['workCd']['address']
@@ -894,6 +911,15 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $formData['details']['name'] = $person['forename'] . ' ' . $person['familyName'];
 
         return $formData;
+    }
+
+    private function formatYesNo($value)
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return $value ? 'Y' : 'N';
     }
 
     /**
@@ -922,7 +948,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 ->setEmptyMessage('transport-manager.convictionsandpenalties.table.empty.ni');
         }
 
-        $this->hlpTransMngr->prepareOtherEmploymentTableTm($form->get('otherEmployment'), $tma['transportManager']);
+        $this->hlpTransMngr->prepareOtherEmploymentTableTm($form->get('otherEmployments')->get('otherEmployment'), $tma['transportManager']);
 
         $this->hlpForm->remove($form, 'responsibilities->tmApplicationStatus');
 
@@ -1153,36 +1179,16 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $tma TM application
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\View\Model\ViewModel | \Zend\Http\Response
      */
     private function page2Point2(array $tma)
     {
         if ($this->getRequest()->isPost()) {
             if ($this->getRequest()->getPost('emailAddress')) {
-                // resend form submitted
-                $this->resendTmEmail();
-            } elseif (!is_null($tma['digitalSignature'])) {
-                return $this->redirect()->toRoute(
-                    'lva-transport_manager/declaration/action',
-                    [
-                        'application' => $this->getIdentifier(),
-                        'child_id' => $tma['id'],
-                        'action' => 'index'
-                    ]
-                );
+                $this->resetTmaStatusAndResendTmEmail();
+                return $this->redirectToTransportManagersPage();
             } else {
-                // approve Operator
-                $response = $this->handleCommand(
-                    Command\TransportManagerApplication\OperatorApprove::create(['id' => $tma['id']])
-                );
-
-                $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
-                if ($response->isOk()) {
-                    $flashMessenger->addSuccessMessage('operator-approve-message');
-                    return $this->redirect()->refresh();
-                } else {
-                    $flashMessenger->addErrorMessage('unknown-error');
-                }
+                return $this->redirectToDeclarationPage($tma);
             }
         }
 
@@ -1240,6 +1246,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $params['content'] = $translationHelper->translateReplace($template, [$this->getViewTmUrl()]);
 
+        $this->flashMessenger()->addSuccessMessage('operator-approve-message');
         return $this->renderTmAction('transport-manager-application.print-sign', null, $tma, $params);
     }
 
@@ -1395,5 +1402,64 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         } else {
             $flashMessenger->addErrorMessage('transport-manager-application.resend-form.error');
         }
+    }
+
+    /**
+     * @param array $tma
+     *
+     * @return \Zend\Http\Response
+     */
+    private function redirectToDeclarationPage(array $tma): \Zend\Http\Response
+    {
+        return $this->redirect()->toRoute(
+            'lva-transport_manager/declaration/action',
+            [
+                'child_id' => $tma['id'],
+                'application' => $tma['application']['id'],
+                'action' => 'index'
+            ]
+        );
+    }
+
+    /**
+     * @param array $tma
+     * @param       $form
+     */
+    protected function maybeSelectOptions(array $tma, $form): void
+    {
+        $hasOtherLicences = $form->get('responsibilities')->get('hasOtherLicences')->getValue();
+        if (!empty($tma['otherLicences']) && $hasOtherLicences === null) {
+            $form->get('responsibilities')->get('hasOtherLicences')->setValue('Y');
+        }
+        $hasOtherEmployment = $form->get('otherEmployments')->get('hasOtherEmployment')->getValue();
+        if (!empty($tma['transportManager']['employments']) && $hasOtherEmployment === null) {
+            $form->get('otherEmployments')->get('hasOtherEmployment')->setValue('Y');
+        }
+        $hasConvictions = $form->get('previousHistory')->get('hasConvictions')->getValue();
+        if (!empty($tma['transportManager']['previousConvictions']) && $hasConvictions === null) {
+            $form->get('previousHistory')->get('hasConvictions')->setValue('Y');
+        }
+        $hasPreviousLicences = $form->get('previousHistory')->get('hasPreviousLicences')->getValue();
+        if (!empty($tma['transportManager']['otherLicences']) && $hasPreviousLicences === null) {
+            $form->get('previousHistory')->get('hasPreviousLicences')->setValue('Y');
+        }
+    }
+
+    private function resetTmaStatusAndResendTmEmail()
+    {
+        $tmaId = (int)$this->params('child_id');
+        if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
+            $this->resendTmEmail();
+        } else {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+    }
+
+    private function redirectToTransportManagersPage(): \Zend\Http\Response
+    {
+        return $this->redirect()->toRoute(
+            "lva-{$this->lva}/transport_managers",
+            ['application' => $this->getIdentifier()]
+        );
     }
 }
