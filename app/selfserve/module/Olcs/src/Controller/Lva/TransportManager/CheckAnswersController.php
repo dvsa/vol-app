@@ -2,7 +2,6 @@
 
 namespace OLCS\Controller\Lva\TransportManager;
 
-
 use Common\Controller\Lva\AbstractTransportManagersController;
 use Common\Data\Mapper\Lva\TransportManagerApplication;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
@@ -10,8 +9,6 @@ use Dvsa\Olcs\Transfer\Command;
 
 class CheckAnswersController extends AbstractTransportManagersController
 {
-
-
     use ExternalControllerTrait;
 
     public function indexAction()
@@ -40,6 +37,8 @@ class CheckAnswersController extends AbstractTransportManagersController
 
     /**
      * confirmAction
+     *
+     * @return void
      */
     public function confirmAction()
     {
@@ -97,12 +96,12 @@ class CheckAnswersController extends AbstractTransportManagersController
         $lva = $transportManagerApplication['application']['isVariation'] ? 'variation' : 'application';
         foreach ($sections as $key => $value) {
             $sections[$key]['change']['sectionLink'] = $this->url()->fromRoute(
-                    'lva-' . $lva . '/transport_manager_details',
-                    [
-                        'application' => $transportManagerApplication['application']['id'],
-                        'child_id' => $transportManagerApplication['id'],
-                    ]
-                ) . "#" . $sections[$key]['change']['sectionName'];
+                'lva-' . $lva . '/transport_manager_details',
+                [
+                    'application' => $transportManagerApplication['application']['id'],
+                    'child_id' => $transportManagerApplication['id'],
+                ]
+            ) . "#" . $sections[$key]['change']['sectionName'];
         }
         return $sections;
     }
@@ -110,9 +109,9 @@ class CheckAnswersController extends AbstractTransportManagersController
     /**
      * getPageLayout
      *
-     * @param $translator
-     * @param $transportManagerApplication
-     * @param $transportManagerApplicationId
+     * @param object $translator
+     * @param array  $transportManagerApplication
+     * @param int    $transportManagerApplicationId
      *
      * @return array
      */
@@ -133,7 +132,10 @@ class CheckAnswersController extends AbstractTransportManagersController
 
         ];
 
-        $form = $this->getConfirmationForm($transportManagerApplicationId, $transportManagerApplication['application']['id']);
+        $form = $this->getConfirmationForm(
+            $transportManagerApplicationId,
+            $transportManagerApplication['application']['id']
+        );
         return array($title, $defaultParams, $form);
     }
 }

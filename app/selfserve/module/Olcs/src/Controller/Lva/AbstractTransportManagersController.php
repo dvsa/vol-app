@@ -216,7 +216,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                         'application' => (int)$this->params('application')
                     ]
                 );
-
             }
         }
 
@@ -420,9 +419,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Add or edit
      *
-     * @param string $type Type
-     * @param string $mode Mode
-     * @param int    $id   Id
+     * @param string $type      Type
+     * @param string $mode      Mode
+     * @param int    $id        Id
+     * @param array  $variables Variables
      *
      * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
      */
@@ -1422,8 +1422,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     }
 
     /**
-     * @param array $tma
-     * @param       $form
+     * @param array  $tma
+     * @param object $form
+     *
+     * @return void
      */
     protected function maybeSelectOptions(array $tma, $form): void
     {
