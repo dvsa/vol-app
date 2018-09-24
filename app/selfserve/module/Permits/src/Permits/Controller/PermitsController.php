@@ -293,9 +293,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 } else {
                     $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
                 }
-            } else {
-                //Custom Error Message
-                $form->get('Fields')->get('tripsAbroad')->setMessages(['error.messages.trips']);
             }
         }
 
