@@ -23,7 +23,7 @@ class ValidPermitsController extends AbstractSelfserveController implements Togg
     ];
 
     protected $conditionalDisplayConfig = [
-        'default' => ConditionalDisplayConfig::PERMIT_APP_IS_VALID,
+        //'default' => ConditionalDisplayConfig::PERMIT_APP_IS_VALID,
     ];
 
     protected $templateConfig = [
