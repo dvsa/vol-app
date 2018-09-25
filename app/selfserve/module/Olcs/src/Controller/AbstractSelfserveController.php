@@ -451,4 +451,28 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     {
         return $this->redirect()->toRoute('permits/' . $route, [], [], true);
     }
+
+    /**
+     * Define is Nothern Ireland
+     *
+     * @param array $params Lva object data
+     *
+     * @return bool
+     */
+    protected function isNi(array $params)
+    {
+        if (isset($params['niFlag'])) {
+            return ValueHelper::isOn($params['niFlag']);
+        }
+
+        if (isset($params['trafficArea']['isNi'])) {
+            return (bool)$params['trafficArea']['isNi'];
+        }
+
+        if (isset($params['licence']['trafficArea']['isNi'])) {
+            return (bool)$params['licence']['trafficArea']['isNi'];
+        }
+
+        return false;
+    }
 }
