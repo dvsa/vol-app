@@ -296,7 +296,13 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             }
         }
 
-        return array('form' => $form, 'ref' => $application['applicationRef'], 'id' => $id, 'trafficAreaId' => $trafficArea['id']);
+        return array(
+            'form' => $form,
+            'ref' => $application['applicationRef'],
+            'id' => $id,
+            'trafficAreaId' => $trafficArea['id'],
+            'isNI' => $this->isNi($application)
+        );
     }
 
 
