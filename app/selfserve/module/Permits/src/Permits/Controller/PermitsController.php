@@ -3,8 +3,13 @@ namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
 
+use Common\Controller\Traits\GenericReceipt;
+use Common\Controller\Traits\StoredCardsTrait;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
+use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtLicence;
 
+use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\NextIrhpPermitStock;
 use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
 use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
@@ -40,6 +45,10 @@ use DateTime;
 class PermitsController extends AbstractSelfserveController implements ToggleAwareInterface
 {
     use ExternalControllerTrait;
+    use GenericReceipt;
+    use StoredCardsTrait;
+    use FlashMessengerTrait;
+
 
     const ECMT_APPLICATION_FEE_PRODUCT_REFENCE = 'IRHP_GV_APP_ECMT';
     const ECMT_ISSUING_FEE_PRODUCT_REFENCE = 'IRHP_GV_ECMT_100_PERMIT_FEE';
@@ -568,6 +577,56 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
         return $view;
     }
+
+    /**
+     * @return ViewModel
+     */
+    public function paymentAction()
+    {
+        $id = $this->params()->fromRoute('id', -1);
+
+        $redirectUrl = 'http://olcs-selfserve.olcs.gov.uk/permits/'.$id.'/payment-result/';
+
+        $dtoData = [
+            'cpmsRedirectUrl' => $redirectUrl,
+            'ecmtPermitApplicationId' => $id,
+            'paymentMethod' =>  RefData::FEE_PAYMENT_METHOD_CARD_ONLINE
+        ];
+        $dto = PayOutstandingFees::create($dtoData);
+        $response = $this->handleCommand($dto);
+
+        // Look up the new payment in order to get the redirect data
+        $paymentId = $response->getResult()['id']['transaction'];
+        $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
+        $payment = $response->getResult();
+
+        $view = new ViewModel(
+            [
+                'gateway' => $payment['gatewayUrl'],
+                'data' => [
+                    'receipt_reference' => $payment['reference']
+                ]
+            ]
+        );
+        // render the gateway redirect
+        $view->setTemplate('cpms/payment');
+        return $this->render($view);
+    }
+
+    /**
+     * Attach messages to display in the current response
+     *
+     * @return void
+     */
+    protected function attachCurrentMessages()
+    {
+        foreach ($this->currentMessages as $namespace => $messages) {
+            foreach ($messages as $message) {
+                $this->addMessage($message, $namespace);
+            }
+        }
+    }
+
 
     /**
      * Whether the organisation is eligible for permits
