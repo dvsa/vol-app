@@ -27,17 +27,15 @@ class ValidEcmtPermits
                 'permitNumber' => $permit['permitNumber'],
                 'countries' => implode(', ', $rc)
             ];
-            $permitStock = $permit['irhpPermitRange']['irhpPermitStock'];
-            $ref = $permit['irhpPermitApplication']['ecmtPermitApplication']['applicationRef'];
-            $status = $permit['status']['description'];
         }
 
+        $firstPermit = $data['result'][0];
         return [
-            'irhpPermitStock' => $permitStock,
+            'irhpPermitStock' => $firstPermit['irhpPermitRange']['irhpPermitStock'],
             'results' => $permits,
             'count' => $data['count'],
-            'ref' => $ref,
-            'status' => $status
+            'ref' => $firstPermit['irhpPermitApplication']['ecmtPermitApplication']['applicationRef'],
+            'status' => $firstPermit['status']['description']
         ];
     }
 }
