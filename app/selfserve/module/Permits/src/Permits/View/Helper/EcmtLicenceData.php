@@ -50,16 +50,24 @@ class EcmtLicenceData extends AbstractHelper
                     $application['licence']['trafficArea']['name']
                 );
                 $data['copy'] = '<p class="guidance-blue extra-space large">' .
-                    sprintf($this->view->translate('permits.page.ecmt.licence.info'),
-                    $permitType, $validFrom, $validTo) . '</p>';
+                    sprintf(
+                        $this->view->translate('permits.page.ecmt.licence.info'),
+                        $permitType,
+                        $validFrom,
+                        $validTo
+                    ) . '</p>';
             }
             return $data;
         }
 
         $data['title'] = $this->view->translate('permits.page.ecmt.licence.question');
         $data['copy'] = '<p class="guidance-blue extra-space large">' .
-            sprintf($this->view->translate('permits.page.ecmt.licence.info'),
-            $permitType, $validFrom, $validTo) . '</p>';
+            sprintf(
+                $this->view->translate('permits.page.ecmt.licence.info'),
+                $permitType,
+                $validFrom,
+                $validTo
+            ) . '</p>';
 
         if ($licenceCount === 1) {
             $data['title'] = sprintf(
