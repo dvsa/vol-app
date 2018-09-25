@@ -579,8 +579,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     public function paymentAction()
     {
         $id = $this->params()->fromRoute('id', -1);
-
-        $redirectUrl = 'http://olcs-selfserve.olcs.gov.uk/permits/'.$id.'/payment-result/';
+        $redirectUrl = $this->url()->fromRoute('permits/payment-result', ['id' => $id, 'reference' => $this->params()->fromQuery('receipt_reference')], ['force_canonical' => true]);
 
         $dtoData = [
             'cpmsRedirectUrl' => $redirectUrl,
