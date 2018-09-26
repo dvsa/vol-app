@@ -79,5 +79,4 @@ class IrhpPermitWindowController extends AbstractInternalController implements L
         $this->defaultData = array_merge($this->defaultData, ['compareStartDate' => date("Y-m-d")]);
         return parent::addAction();
     }
-
 }
