@@ -21,7 +21,9 @@ return array(
         array(
             'title' => 'permits.ecmt.page.valid.tableheader.countries',
             'name' => 'countries',
-            'formatter' => 'translate'
+            'formatter' => function ($row) {
+                return $row['countries'];
+            }
         )
     )
 );
