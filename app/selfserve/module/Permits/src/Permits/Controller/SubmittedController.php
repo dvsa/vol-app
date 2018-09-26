@@ -31,10 +31,13 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
 
     public function genericAction()
     {
+        $ecmtApplicationId = $this->params()->fromRoute('id');
         $view = parent::genericAction();
         $view->setVariable('partialName', 'markup-ecmt-application-submitted');
         $view->setVariable('titleName', 'permits.application.submitted.title');
         $view->setVariable('mainName', 'permits.application.submitted.main');
+        $view->setVariable('receiptUrl', $this->url()->fromRoute('permits/ecmt-print-receipt', ['id' => $ecmtApplicationId, 'reference' => $this->params()->fromQuery('receipt_reference')]));
+
 
         return $view;
     }

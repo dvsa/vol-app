@@ -3,15 +3,21 @@ namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
 
+use Common\Controller\Traits\GenericReceipt;
+use Common\Controller\Traits\StoredCardsTrait;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
+use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtLicence;
 
+use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
+use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\NextIrhpPermitStock;
 use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
 use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
-use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\NextIrhpPermitStock;
-
+use Dvsa\Olcs\Transfer\Query\Permits\LastOpenWindow;
+use Dvsa\Olcs\Transfer\Query\Permits\OpenWindows;
 
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 
@@ -25,7 +31,6 @@ use Common\RefData;
 
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
-
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\View\Helper\EcmtSection;
 
@@ -35,9 +40,15 @@ use Zend\Mvc\MvcEvent;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitFees;
 use Zend\View\Model\ViewModel;
 
+use DateTime;
+
 class PermitsController extends AbstractSelfserveController implements ToggleAwareInterface
 {
     use ExternalControllerTrait;
+    use GenericReceipt;
+    use StoredCardsTrait;
+    use FlashMessengerTrait;
+
 
     const ECMT_APPLICATION_FEE_PRODUCT_REFENCE = 'IRHP_GV_APP_ECMT';
     const ECMT_ISSUING_FEE_PRODUCT_REFENCE = 'IRHP_GV_ECMT_100_PERMIT_FEE';
@@ -91,6 +102,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         );
         $response = $this->handleQuery($query);
         $issuedData = $response->getResult();
+
         $issuedTable = $this->getServiceLocator()
             ->get('Table')
             ->prepareTable($this->issuedTableName, $issuedData['results']);
@@ -106,6 +118,27 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
     public function addAction()
     {
+        $currentDateTime = new DateTime();
+        $formattedDateTime = $currentDateTime->format('Y-m-d H:i:s');
+
+        $response = $this->handleQuery(
+            OpenWindows::create(['currentDateTime' => $formattedDateTime])
+        );
+        $result = $this->handleResponse($response);
+
+        if (count($result['windows']) == 0) {
+            $response = $this->handleQuery(
+                LastOpenWindow::create(['currentDateTime' => $formattedDateTime])
+            );
+            $result = $this->handleResponse($response);
+
+            $view = new ViewModel();
+            $view->setVariable('lastOpenWindowDate', $result['results']['endDate']);
+            $view->setTemplate('permits/window-closed');
+
+            return $view;
+        }
+
         $form = $this->getForm('EcmtLicenceForm');
         $query = NextIrhpPermitStock::create(['permitType' => 'permit_ecmt']);
         $stock = $this->handleQuery($query)->getResult();
@@ -124,6 +157,8 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
                     $this->redirect()
                         ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $insert['id']['ecmtPermitApplication']]);
+            } else {
+                $form->get('Fields')->get('EcmtLicence')->setMessages(['isEmpty' => "error.messages.ecmt-licence"]);
             }
         }
 
@@ -156,6 +191,8 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                             'licenceId' => $data['Fields']['EcmtLicence']
                         ]]
                     );
+            } else {
+                $form->get('Fields')->get('EcmtLicence')->setMessages(['isEmpty' => "error.messages.ecmt-licence"]);
             }
         }
 
@@ -249,6 +286,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $form = $this->getForm('TripsForm');
 
         $existing['Fields']['tripsAbroad'] = $application['trips'];
+        $existing['Fields']['intensityWarning'] = 'no';
         $form->setData($existing);
 
         $data = $this->params()->fromPost();
@@ -260,15 +298,34 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             if ($form->isValid()) {
                 $command = UpdateEcmtTrips::create(['id' => $id, 'ecmtTrips' => $data['Fields']['tripsAbroad']]);
                 $this->handleCommand($command);
-                $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
-            } else {
-                //Custom Error Message
-                $form->get('Fields')->get('tripsAbroad')->setMessages(['error.messages.trips']);
+                if ($this->isHighIntensity($application, $data['Fields']['tripsAbroad']) && $data['Fields']['intensityWarning'] === 'no') {
+                    $form->get('Fields')->get('intensityWarning')->setValue('yes');
+                } else {
+                    $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
+                }
             }
         }
 
-        return array('form' => $form, 'ref' => $application['applicationRef'], 'id' => $id, 'trafficAreaId' => $trafficArea['id']);
+        return array(
+            'form' => $form,
+            'ref' => $application['applicationRef'],
+            'id' => $id,
+            'isNI' => $this->isNi($application)
+        );
     }
+
+
+    // Understand this is a computer property but added to avoid a round-trip to API for simple arithmetic operation.
+    protected function isHighIntensity($application, $tripsAbroad)
+    {
+        if (isset($application['permitsRequired'])) {
+            return ($tripsAbroad / $application['permitsRequired']) > 100;
+        } else {
+            return false;
+        }
+    }
+
+
 
     public function internationalJourneyAction()
     {
@@ -281,6 +338,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
         // read data
         $form->get('Fields')->get('InternationalJourney')->setValue($application['internationalJourneys']);
+        $form->get('Fields')->get('intensityWarning')->setValue('no');
 
         $data = $this->params()->fromPost();
 
@@ -294,10 +352,12 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                     'internationalJourney' => $data['Fields']['InternationalJourney'],
                 ];
                 $command = UpdateInternationalJourney::create($commandData);
-
                 $this->handleCommand($command);
-
-                $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_SECTORS);
+                if ($data['Fields']['InternationalJourney'] === RefData::ECMT_APP_JOURNEY_OVER_90 && $data['Fields']['intensityWarning'] === 'no') {
+                    $form->get('Fields')->get('intensityWarning')->setValue('yes');
+                } else {
+                    $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_SECTORS);
+                }
             } else {
                 //Custom Error Message
                 $form->get('Fields')
@@ -518,6 +578,55 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
         return $view;
     }
+
+    /**
+     * @return ViewModel
+     */
+    public function paymentAction()
+    {
+        $id = $this->params()->fromRoute('id', -1);
+        $redirectUrl = $this->url()->fromRoute('permits/payment-result', ['id' => $id, 'reference' => $this->params()->fromQuery('receipt_reference')], ['force_canonical' => true]);
+
+        $dtoData = [
+            'cpmsRedirectUrl' => $redirectUrl,
+            'ecmtPermitApplicationId' => $id,
+            'paymentMethod' =>  RefData::FEE_PAYMENT_METHOD_CARD_ONLINE
+        ];
+        $dto = PayOutstandingFees::create($dtoData);
+        $response = $this->handleCommand($dto);
+
+        // Look up the new payment in order to get the redirect data
+        $paymentId = $response->getResult()['id']['transaction'];
+        $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
+        $payment = $response->getResult();
+
+        $view = new ViewModel(
+            [
+                'gateway' => $payment['gatewayUrl'],
+                'data' => [
+                    'receipt_reference' => $payment['reference']
+                ]
+            ]
+        );
+        // render the gateway redirect
+        $view->setTemplate('cpms/payment');
+        return $this->render($view);
+    }
+
+    /**
+     * Attach messages to display in the current response
+     *
+     * @return void
+     */
+    protected function attachCurrentMessages()
+    {
+        foreach ($this->currentMessages as $namespace => $messages) {
+            foreach ($messages as $message) {
+                $this->addMessage($message, $namespace);
+            }
+        }
+    }
+
 
     /**
      * Whether the organisation is eligible for permits

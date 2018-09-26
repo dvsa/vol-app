@@ -18,7 +18,7 @@ return array(
       'title' => 'dashboard-table-permit-application-num',
       'name' => 'permitsRequired',
       'formatter' => function ($row) {
-          return $row['irhpPermitApplications'][0]['permitsAwarded'];
+          return $row['irhpPermitApplications'][0]['validPermits'];
       }
     ),
     array(
