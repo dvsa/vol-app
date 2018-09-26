@@ -23,6 +23,7 @@ class IrhpPermitWindow implements MapperInterface
     {
         $mappedData['permitWindowDetails'] = $data;
         $mappedData['permitWindowDetails']['parentId'] = isset($data['parentId']) ? $data['parentId'] : $data['irhpPermitStock']['id'];
+        $mappedData['permitWindowDetails']['compareStartDate'] = $data['startDate'];
         return $mappedData;
     }
 
