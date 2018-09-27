@@ -2,7 +2,7 @@
 
 return [
     'variables' => [
-        'title' => 'Permit system settings'
+        'title' => 'Permit Stock Window'
     ],
     'settings' => [
         'crud' => [
@@ -12,11 +12,11 @@ return [
                     'requireRows' => false
                 ],
                 'edit' => [
-                    'requireRows' => false,
+                    'requireRows' => true,
                     'class' => 'action--secondary js-require--one'
                 ],
                 'delete' => [
-                    'requireRows' => false,
+                    'requireRows' => true,
                     'class' => 'action--secondary js-require--one'
                 ]
             ]
@@ -32,18 +32,14 @@ return [
     ],
     'columns' => [
         [
-            'title' => 'Type',
-            'name' => 'irhpPermitTypeId',
-            'formatter' => 'IrhpPermitStockType'
+            'title' => 'Window Start Date',
+            'name' => 'startDate',
+            'formatter' => 'Date'
         ],
         [
-            'title' => 'Validity Period',
-            'name' => 'validFrom',
-            'formatter' => 'IrhpPermitStockValidity'
-        ],
-        [
-            'title' => 'Quota',
-            'name' => 'initialStock',
+            'title' => 'Window End Date',
+            'name' => 'endDate',
+            'formatter' => 'Date'
         ],
         [
             'title' => '',

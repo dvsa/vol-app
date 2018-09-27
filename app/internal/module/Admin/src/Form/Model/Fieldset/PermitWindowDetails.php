@@ -8,27 +8,20 @@ use Common\Form\Model\Form\Traits\IdTrait;
 /**
  * @codeCoverageIgnore No methods
  */
-class PermitStockDetails
+class PermitWindowDetails
 {
     use IdTrait;
 
     /**
-     * @Form\Type("DynamicSelect")
-     * @Form\Name("permitType")
-     * @Form\Attributes({"id":"permitType","placeholder":"","class":"medium"})
-     * @Form\Options({
-     *     "label": "Permit Type",
-     *     "disable_inarray_validator": false,
-     *     "service_name": "Common\Service\Data\IrhpPermitType",
-     *     "required": true
-     * })
+     * @Form\Type("Hidden")
      */
-    public $permitType = null;
+    public $parentId = null;
+
 
     /**
      * @Form\Required(true)
      * @Form\Options({
-     *     "label": "Validity Period Start",
+     *     "label": "internal.community_licence.form.start_date",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
@@ -36,13 +29,20 @@ class PermitStockDetails
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator({
+     *      "name": "Dvsa\Olcs\Transfer\Validators\DateInFuture",
+     *      "options": {
+     *          "include_today": true,
+     *          "use_time": false
+     *      }
+     * })
      */
-    public $validFrom = null;
+    public $startDate = null;
 
     /**
      * @Form\Required(false)
      * @Form\Options({
-     *     "label": "Validity Period End",
+     *     "label": "internal.community_licence.form.end_date",
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
@@ -55,9 +55,9 @@ class PermitStockDetails
      *      "options": {
      *          "has_time": false,
      *          "allow_empty": true,
-     *          "compare_to":"validFrom",
-     *          "operator":"gt",
-     *          "compare_to_label":"validFrom"
+     *          "compare_to":"startDate",
+     *          "operator":"gte",
+     *          "compare_to_label":"Start date"
      *      }
      * })
      * @Form\Validator({
@@ -66,28 +66,21 @@ class PermitStockDetails
      *          "include_today": true,
      *          "use_time": false,
      *          "allow_empty": true,
-     *          "error-message": "Validity Period End must be later than Validity Period Start"
+     *          "error-message": "Window End Date must be later than Window Start Date"
      *      }
      * })
      */
-    public $validTo = null;
+    public $endDate = null;
 
     /**
-     * @Form\Name("initialStock")
-     * @Form\Attributes({"id": "initialStock"})
+     * @Form\Name("daysForPayment")
+     * @Form\Attributes({"id": "daysForPayment"})
      * @Form\Options({
-     *      "label": "Quota"
+     *      "label": "Days for Payment",
+     *      "required": false
      * })
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Type("Zend\Form\Element\Number")
-     * @Transfer\Validator({
-     *      "name":"Zend\Validator\Between",
-     *      "options": {
-     *          "min": -1,
-     *          "max": 9999999
-     *      }
-     * })
+     * @Form\Type("Text")
      * @Form\Required(false)
      */
-    public $initialStock = null;
+    public $daysForPayment = null;
 }
