@@ -18,14 +18,11 @@ class ValidEcmtPermits
             throw new ResourceNotFoundException('Permits not found');
         }
 
+
         foreach ($data['result'] as $permit) {
-            $rc = [];
-            foreach ($permit['irhpPermitRange']['countrys'] as $restrictedCountry) {
-                $rc[] = $restrictedCountry['countryDesc'];
-            }
             $permits[] = [
                 'permitNumber' => $permit['permitNumber'],
-                'countries' => implode(', ', $rc)
+                'countries' => $permit['irhpPermitRange']['countrys']
             ];
         }
 
