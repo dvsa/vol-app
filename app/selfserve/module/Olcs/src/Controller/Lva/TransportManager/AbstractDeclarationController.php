@@ -3,33 +3,39 @@
 namespace OLCS\Controller\Lva\TransportManager;
 
 use Common\Controller\Lva\AbstractTransportManagersController;
+use Common\Controller\Lva\Traits\TransportManagerApplicationTrait;
 use \Common\Form\Form;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
+use Common\Controller\Lva\AbstractController;
 use \Zend\View\Model\ViewModel as ZendViewModel;
-use Dvsa\Olcs\Transfer\Command;
 
-class DeclarationController extends AbstractTransportManagersController
+abstract class AbstractDeclarationController extends AbstractController
 {
-    use ExternalControllerTrait;
+    use ExternalControllerTrait,
+        TransportManagerApplicationTrait;
+
+    protected $declarationMarkup;
+
+    protected $tma;
 
     /**
-     * Index action for the lva-transport_manager/declaration route
+     * Index action for the lva-transport_manager/tm_declaration and lva-transport_manager/declaration routes
      *
      * @return \Zend\View\Model\ViewModel
      */
     public function indexAction(): ZendViewModel
     {
         $tmaId = (int)$this->params('child_id');
-        $tma = $this->getTransportManagerApplication($tmaId);
+        $this->tma = $this->getTransportManagerApplication($tmaId);
 
         if ($this->getRequest()->isPost()) {
             if ($this->params()->fromPost('content')['isDigitallySigned'] === 'Y') {
                 $this->digitalSignatureAction();
             } else {
-                $this->physicalSignatureAction($tma);
+                $this->physicalSignatureAction();
             }
         }
-        return $this->renderDeclarationPage($tma);
+        return $this->renderDeclarationPage();
     }
 
     /**
@@ -37,13 +43,14 @@ class DeclarationController extends AbstractTransportManagersController
      *
      * @return ZendViewModel
      */
-    private function renderDeclarationPage($tma): ZendViewModel
+    private function renderDeclarationPage(): ZendViewModel
     {
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+
         $params = [
-            'content' => $translationHelper->translate('markup-tma-declaration'),
-            'tmFullName' => $this->getTmName($tma),
-            'backLink' => $this->getBackLink($tma)
+            'content' => $translationHelper->translate($this->declarationMarkup),
+            'tmFullName' => $this->getTmName($this->tma),
+            'backLink' => $this->getBackLink()
         ];
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
@@ -52,10 +59,6 @@ class DeclarationController extends AbstractTransportManagersController
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
 
         $this->alterDeclarationForm($form);
-
-        if ($tma['disableSignatures'] || $tma['digitalSignature'] === null) {
-            $formHelper->remove($form, 'content');
-        }
 
         $this->getServiceLocator()->get('Script')->loadFiles(['tm-lva-declaration']);
 
@@ -76,7 +79,7 @@ class DeclarationController extends AbstractTransportManagersController
      *
      * @return void
      */
-    private function digitalSignatureAction()
+    protected function digitalSignatureAction()
     {
         // write method body
     }
@@ -88,18 +91,16 @@ class DeclarationController extends AbstractTransportManagersController
      *
      * @return \Zend\Http\Response
      */
-    private function physicalSignatureAction($tma)
+    private function physicalSignatureAction()
     {
-        $response = $this->handleCommand(
-            Command\TransportManagerApplication\OperatorApprove::create(['id' => $tma['id']])
-        );
+        $response = $this->handlePhysicalSignatureCommand();
 
         if ($response->isOk()) {
             return $this->redirect()->toRoute(
-                "lva-" . $this->returnApplicationOrVariation($tma) . "/transport_manager_details",
+                "lva-" . $this->returnApplicationOrVariation() . "/transport_manager_details",
                 [
-                    'child_id' => $tma["id"],
-                    'application' => $tma["application"]["id"]
+                    'child_id' => $this->tma["id"],
+                    'application' => $this->tma["application"]["id"]
                 ]
             );
         } else {
@@ -107,23 +108,11 @@ class DeclarationController extends AbstractTransportManagersController
         }
     }
 
-    /**
-     * Get the URL/link to go back
-     *
-     * @param array $tma
-     *
-     * @return string
-     */
-    private function getBackLink($tma): string
-    {
-        return $this->url()->fromRoute(
-            "lva-" . $this->returnApplicationOrVariation($tma) . "/transport_manager_details",
-            [
-                'child_id' => $tma["id"],
-                'application' => $tma["application"]["id"]
-            ]
-        );
-    }
+    protected abstract function handlePhysicalSignatureCommand(): \Common\Service\Cqrs\Response;
+
+    protected abstract function getSubmitActionLabel(): string;
+
+    protected abstract function getBackLink(): string;
 
     /**
      * Alter declaration form
@@ -134,7 +123,13 @@ class DeclarationController extends AbstractTransportManagersController
      */
     private function alterDeclarationForm(Form $form): void
     {
-        $form->get('form-actions')->get('submit')->setLabel('application.review-declarations.sign-button');
+        $label = $this->getSubmitActionLabel();
+
+        $form->get('form-actions')->get('submit')->setLabel($label);
+
+        if ($this->tma['disableSignatures']) {
+            $form->remove('content');
+        }
     }
 
     /**
@@ -144,9 +139,9 @@ class DeclarationController extends AbstractTransportManagersController
      *
      * @return string
      */
-    private function returnApplicationOrVariation($tma): string
+    private function returnApplicationOrVariation(): string
     {
-        if ($tma["application"]["isVariation"]) {
+        if ($this->tma["application"]["isVariation"]) {
             return "variation";
         }
         return "application";

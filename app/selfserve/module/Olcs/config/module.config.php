@@ -1100,6 +1100,7 @@ return array(
             'LvaTransportManager/CheckAnswers' => \OLCS\Controller\Lva\TransportManager\CheckAnswersController::class,
             'LvaTransportManager/Confirmation' => \OLCS\Controller\Lva\TransportManager\ConfirmationController::class,
             'LvaTransportManager/Declaration' => \OLCS\Controller\Lva\TransportManager\DeclarationController::class,
+            'LvaTransportManager/TmDeclaration' => \OLCS\Controller\Lva\TransportManager\TmDeclarationController::class,
         ),
         'invokables' => array(
             'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,

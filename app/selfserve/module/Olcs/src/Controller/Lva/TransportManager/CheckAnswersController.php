@@ -38,25 +38,10 @@ class CheckAnswersController extends AbstractTransportManagersController
     /**
      * confirmAction
      *
-     * @return void
      */
     public function confirmAction()
     {
-        $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
-        $transportManagerApplicationId = $this->params("child_id");
-        $response = $this->handleCommand(
-            Command\TransportManagerApplication\Submit::create(['id' => $transportManagerApplicationId])
-        );
-
-        if ($response->isOk()) {
-            $flashMessenger->addSuccessMessage('lva-tm-details-submit-success');
-
-
-            //redirect to declaration at this point.
-            exit("Decalarion page -> OLCS-19791") . $transportManagerApplicationId;
-        } else {
-            $flashMessenger->addErrorMessage('unknown-error');
-        }
+        return $this->redirectToTmDeclarationPage();
     }
 
     /**
@@ -137,5 +122,17 @@ class CheckAnswersController extends AbstractTransportManagersController
             $transportManagerApplication['application']['id']
         );
         return array($title, $defaultParams, $form);
+    }
+
+    private function redirectToTmDeclarationPage(): \Zend\Http\Response
+    {
+        return $this->redirect()->toRoute(
+            'lva-transport_manager/tm_declaration/action',
+            [
+                'child_id' => $this->params("child_id"),
+                'application' => $this->params("application"),
+                'action' => 'index'
+            ]
+        );
     }
 }
