@@ -49,7 +49,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     use StoredCardsTrait;
     use FlashMessengerTrait;
 
-
     const ECMT_APPLICATION_FEE_PRODUCT_REFENCE = 'IRHP_GV_APP_ECMT';
     const ECMT_ISSUING_FEE_PRODUCT_REFENCE = 'IRHP_GV_ECMT_100_PERMIT_FEE';
 
@@ -83,7 +82,11 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             [
                 'order' => 'DESC',
                 'organisation' => $this->getCurrentOrganisationId(),
-                'statusIds' => [RefData::ECMT_APP_STATUS_NOT_YET_SUBMITTED, RefData::ECMT_APP_STATUS_UNDER_CONSIDERATION, RefData::ECMT_APP_STATUS_AWAITING_FEE]
+                'statusIds' => [
+                    RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED,
+                    RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION,
+                    RefData::PERMIT_APP_STATUS_AWAITING_FEE,
+                ],
             ]
         );
         $response = $this->handleQuery($query);
@@ -97,7 +100,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             [
                 'order' => 'DESC',
                 'organisation' => $this->getCurrentOrganisationId(),
-                'statusIds' => [RefData::PERMIT_VALID]
+                'statusIds' => [RefData::PERMIT_APP_STATUS_VALID]
             ]
         );
         $response = $this->handleQuery($query);
