@@ -17,6 +17,18 @@ class PermitWindowDetails
      */
     public $parentId = null;
 
+    /**
+     * @Form\Required(true)
+     * @Form\Attributes({"class":"js-hidden","data-container-class":"js-hidden"})
+     * @Form\Options({
+     *     "create_empty_option": true,
+     *     "render_delimiters": false
+     * })
+     * @Form\Type("DateSelect")
+     * @Form\Name("compareStartDate")
+     */
+    public $compareStartDate = null;
+
 
     /**
      * @Form\Required(true)
@@ -26,25 +38,30 @@ class PermitWindowDetails
      *     "render_delimiters": false
      * })
      * @Form\Type("DateSelect")
+     * @Form\Name("startDate")
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
      * @Form\Validator({
-     *      "name": "Dvsa\Olcs\Transfer\Validators\DateInFuture",
+     *      "name": "DateCompare",
      *      "options": {
-     *          "include_today": true,
-     *          "use_time": false
+     *          "has_time": false,
+     *          "allow_empty": true,
+     *          "compare_to":"compareStartDate",
+     *          "operator":"gte",
+     *          "compare_to_label":"todays date",
+     *          "error-message": "Start Dates for windows can not be in the past."
      *      }
      * })
      */
     public $startDate = null;
 
     /**
-     * @Form\Required(false)
+     * @Form\Required(true)
      * @Form\Options({
      *     "label": "internal.community_licence.form.end_date",
      *     "create_empty_option": true,
-     *     "render_delimiters": false
+     *     "render_delimiters": false,
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
@@ -57,16 +74,7 @@ class PermitWindowDetails
      *          "allow_empty": true,
      *          "compare_to":"startDate",
      *          "operator":"gte",
-     *          "compare_to_label":"Start date"
-     *      }
-     * })
-     * @Form\Validator({
-     *      "name": "Dvsa\Olcs\Transfer\Validators\DateInFuture",
-     *      "options": {
-     *          "include_today": true,
-     *          "use_time": false,
-     *          "allow_empty": true,
-     *          "error-message": "Window End Date must be later than Window Start Date"
+     *          "compare_to_label":"Start date",
      *      }
      * })
      */
@@ -79,8 +87,8 @@ class PermitWindowDetails
      *      "label": "Days for Payment",
      *      "required": false
      * })
-     * @Form\Type("Text")
-     * @Form\Required(false)
+     * @Form\Type("Number")
+     * @Form\Required(true)
      */
     public $daysForPayment = null;
 }
