@@ -343,13 +343,27 @@ return array(
                     'route'    => '/:id/ecmt-valid-permits[/]',
                     'defaults' => [
                         'controller'    => ValidPermitsController::class,
-                        'action'        => 'generic',
+                        'action'        => 'valid',
                     ],
                     'constraints' => [
                         'id' => '[0-9]+',
                     ],
                 ],
                 'may_terminate' => false,
+              ],
+              'ecmt-unpaid-permits' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/:id/ecmt-unpaid-permits[/]',
+                      'defaults' => [
+                          'controller'    => ValidPermitsController::class,
+                          'action'        => 'unpaid',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
               ],
               'ecmt-under-consideration' => [
                   'type'    => 'segment',

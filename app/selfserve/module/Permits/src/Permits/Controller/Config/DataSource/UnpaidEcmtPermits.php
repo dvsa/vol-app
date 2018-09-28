@@ -2,16 +2,16 @@
 
 namespace Permits\Controller\Config\DataSource;
 
-use Dvsa\Olcs\Transfer\Query\Permits\ValidEcmtPermits as ValidEcmtPermitsDto;
+use Dvsa\Olcs\Transfer\Query\Permits\UnpaidEcmtPermits as UnpaidEcmtPermitsDto;
 use Olcs\Controller\Config\DataSource\AbstractDataSource;
 
 /**
- * Valid ECMT permits data source config
+ * Unpaod ECMT permits data source config
  */
-class ValidEcmtPermits extends AbstractDataSource
+class UnpaidEcmtPermits extends AbstractDataSource
 {
     const DATA_KEY = 'validPermits';
-    protected $dto = ValidEcmtPermitsDto::class;
+    protected $dto = UnpaidEcmtPermitsDto::class;
     protected $paramsMap = [
         'id' => 'id',
         'page' => 'page',
@@ -21,5 +21,6 @@ class ValidEcmtPermits extends AbstractDataSource
     protected $defaultParamData = [
         'page' => 1,
         'limit' => 10,
+        'status' => 'ecmt_permit_awaiting',
     ];
 }
