@@ -10,16 +10,9 @@ class TmDeclarationController extends AbstractDeclarationController
 
     protected $declarationMarkup = 'markup-tma-tm_declaration';
 
-    /**
-     * Action for when the operator chooses to digitally sign the transport manager application
-     *
-     *
-     *
-     * @return void
-     */
-    protected function digitalSignatureAction()
+    protected function getSignAsRole(): string
     {
-        // write method body
+        return $this->tma['isOwner'] === "Y" ? self::SIGN_AS_TM_OP : self::SIGN_AS_TM;
     }
 
     /**
@@ -58,9 +51,11 @@ class TmDeclarationController extends AbstractDeclarationController
      */
     protected function getSubmitActionLabel(): string
     {
+        $submitText = $this->tma['isOwner'] === "Y" ? 'submit' : 'submit-for-operator-approval';
+
         $label = $this->tma['disableSignatures'] === false
             ? 'application.review-declarations.sign-button'
-            : 'submit-for-operator-approval';
+            : $submitText;
         return $label;
     }
 }

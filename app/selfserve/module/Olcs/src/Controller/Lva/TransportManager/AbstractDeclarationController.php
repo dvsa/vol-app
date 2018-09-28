@@ -13,6 +13,10 @@ abstract class AbstractDeclarationController extends AbstractController
     use ExternalControllerTrait,
         TransportManagerApplicationTrait;
 
+    const SIGN_AS_TM = 'tm';
+    const SIGN_AS_OP = 'op';
+    const SIGN_AS_TM_OP = 'tm_op';
+
     protected $declarationMarkup;
 
     /**
@@ -100,6 +104,8 @@ abstract class AbstractDeclarationController extends AbstractController
     protected abstract function getSubmitActionLabel(): string;
 
     protected abstract function getBackLink(): string;
+
+    protected abstract function getSignAsRole(): string;
 
     /**
      * Alter declaration form

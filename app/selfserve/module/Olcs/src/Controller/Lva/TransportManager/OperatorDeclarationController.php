@@ -10,9 +10,9 @@ class OperatorDeclarationController extends AbstractDeclarationController
 {
     protected $declarationMarkup = 'markup-tma-operator_declaration';
 
-    protected function digitalSignatureAction()
+    protected function getSignAsRole(): string
     {
-        // write method body
+        return self::SIGN_AS_OP;
     }
 
     /**
