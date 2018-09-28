@@ -17,6 +17,15 @@ abstract class AbstractDeclarationController extends AbstractController
 
     protected $declarationMarkup;
 
+    protected $tma;
+
+    public function preDispatch()
+    {
+        $tmaId = (int)$this->params('child_id');
+        $this->tma = $this->getTransportManagerApplication($tmaId);
+        $this->lva = $this->returnApplicationOrVariation();
+    }
+
     /**
      * Index action for the lva-transport_manager/tm_declaration and lva-transport_manager/declaration routes
      *
@@ -122,5 +131,20 @@ abstract class AbstractDeclarationController extends AbstractController
         if ($this->tma['disableSignatures']) {
             $form->remove('content');
         }
+    }
+
+    /**
+     * Returns "application" or "variation"
+     *
+     * @param array $tma
+     *
+     * @return string
+     */
+    protected function returnApplicationOrVariation(): string
+    {
+        if ($this->tma["application"]["isVariation"]) {
+            return self::LVA_VAR;
+        }
+        return self::LVA_APP;
     }
 }
