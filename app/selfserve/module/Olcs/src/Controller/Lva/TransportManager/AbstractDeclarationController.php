@@ -99,13 +99,13 @@ abstract class AbstractDeclarationController extends AbstractController
         }
     }
 
-    protected abstract function handlePhysicalSignatureCommand(): \Common\Service\Cqrs\Response;
+    abstract protected function handlePhysicalSignatureCommand(): \Common\Service\Cqrs\Response;
 
-    protected abstract function getSubmitActionLabel(): string;
+    abstract protected function getSubmitActionLabel(): string;
 
-    protected abstract function getBackLink(): string;
+    abstract protected function getBackLink(): string;
 
-    protected abstract function getSignAsRole(): string;
+    abstract protected function getSignAsRole(): string;
 
     /**
      * Alter declaration form
