@@ -7,6 +7,7 @@ use Common\Controller\Lva\Traits\TransportManagerApplicationTrait;
 use \Common\Form\Form;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Common\Controller\Lva\AbstractController;
+use Zend\Mvc\MvcEvent;
 use \Zend\View\Model\ViewModel as ZendViewModel;
 
 abstract class AbstractDeclarationController extends AbstractController
@@ -17,6 +18,14 @@ abstract class AbstractDeclarationController extends AbstractController
     protected $declarationMarkup;
 
     protected $tma;
+
+    public function onDispatch(MvcEvent $e)
+    {
+        $tmaId = (int)$this->params('child_id');
+        $this->tma = $this->getTransportManagerApplication($tmaId);
+        $this->lva = $this->returnApplicationOrVariation();
+        parent::onDispatch($e);
+    }
 
     /**
      * Index action for the lva-transport_manager/tm_declaration and lva-transport_manager/declaration routes
@@ -47,8 +56,9 @@ abstract class AbstractDeclarationController extends AbstractController
     {
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
 
+        $content = $translationHelper->translate($this->declarationMarkup);
         $params = [
-            'content' => $translationHelper->translate($this->declarationMarkup),
+            'content' => $content,
             'tmFullName' => $this->getTmName($this->tma),
             'backLink' => $this->getBackLink()
         ];
@@ -71,14 +81,6 @@ abstract class AbstractDeclarationController extends AbstractController
         return $layout;
     }
 
-
-    /**
-     * Action for when the operator chooses to digitally sign the transport manager application
-     *
-     *
-     *
-     * @return void
-     */
     protected function digitalSignatureAction()
     {
         // write method body
@@ -121,7 +123,7 @@ abstract class AbstractDeclarationController extends AbstractController
      *
      * @return void
      */
-    private function alterDeclarationForm(Form $form): void
+    protected function alterDeclarationForm(Form $form): void
     {
         $label = $this->getSubmitActionLabel();
 
@@ -139,7 +141,7 @@ abstract class AbstractDeclarationController extends AbstractController
      *
      * @return string
      */
-    private function returnApplicationOrVariation(): string
+    protected function returnApplicationOrVariation(): string
     {
         if ($this->tma["application"]["isVariation"]) {
             return "variation";

@@ -2,21 +2,14 @@
 
 namespace OLCS\Controller\Lva\TransportManager;
 
+use Common\Form\Form;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Dvsa\Olcs\Transfer\Command;
 
-class TmDeclarationController extends AbstractDeclarationController
+class OperatorDeclarationController extends AbstractDeclarationController
 {
+    protected $declarationMarkup = 'markup-tma-operator_declaration';
 
-    protected $declarationMarkup = 'markup-tma-tm_declaration';
-
-    /**
-     * Action for when the operator chooses to digitally sign the transport manager application
-     *
-     *
-     *
-     * @return void
-     */
     protected function digitalSignatureAction()
     {
         // write method body
@@ -32,9 +25,8 @@ class TmDeclarationController extends AbstractDeclarationController
     protected function getBackLink(): string
     {
         return $this->url()->fromRoute(
-            "lva-transport_manager/check_answers/action",
+            "lva-" . $this->returnApplicationOrVariation() . "/transport_manager_details",
             [
-                'action' => 'index',
                 'child_id' => $this->tma["id"],
                 'application' => $this->tma["application"]["id"]
             ]
@@ -48,9 +40,18 @@ class TmDeclarationController extends AbstractDeclarationController
     protected function handlePhysicalSignatureCommand(): \Common\Service\Cqrs\Response
     {
         $response = $this->handleCommand(
-            Command\TransportManagerApplication\Submit::create(['id' => $this->tma['id']])
+            Command\TransportManagerApplication\OperatorApprove::create(['id' => $this->tma['id']])
         );
         return $response;
+    }
+
+    protected function alterDeclarationForm(Form $form): void
+    {
+        if ($this->tma['digitalSignatures'] === null) {
+            $form->remove('content');
+        }
+
+        parent::alterDeclarationForm($form);
     }
 
     /**
@@ -58,9 +59,6 @@ class TmDeclarationController extends AbstractDeclarationController
      */
     protected function getSubmitActionLabel(): string
     {
-        $label = $this->tma['disableSignatures'] === false
-            ? 'application.review-declarations.sign-button'
-            : 'submit-for-operator-approval';
-        return $label;
+        return 'application.review-declarations.sign-button';
     }
 }

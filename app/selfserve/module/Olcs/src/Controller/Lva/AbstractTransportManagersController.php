@@ -1190,7 +1190,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 $this->resetTmaStatusAndResendTmEmail();
                 return $this->redirectToTransportManagersPage();
             } else {
-                return $this->redirectToDeclarationPage($tma);
+                return $this->redirectToOperatorDeclarationPage($tma);
             }
         }
 
@@ -1411,10 +1411,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @return \Zend\Http\Response
      */
-    private function redirectToDeclarationPage(array $tma): \Zend\Http\Response
+    private function redirectToOperatorDeclarationPage(array $tma): \Zend\Http\Response
     {
         return $this->redirect()->toRoute(
-            'lva-transport_manager/declaration/action',
+            'lva-transport_manager/operator_declaration/action',
             [
                 'child_id' => $tma['id'],
                 'application' => $tma['application']['id'],
