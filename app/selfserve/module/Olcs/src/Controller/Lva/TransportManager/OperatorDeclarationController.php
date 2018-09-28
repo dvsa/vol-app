@@ -47,7 +47,7 @@ class OperatorDeclarationController extends AbstractDeclarationController
 
     protected function alterDeclarationForm(Form $form): void
     {
-        if ($this->tma['digitalSignatures'] === null) {
+        if ($this->tma['digitalSignature'] === null) {
             $form->remove('content');
         }
 

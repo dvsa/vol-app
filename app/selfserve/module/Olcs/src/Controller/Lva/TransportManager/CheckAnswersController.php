@@ -62,7 +62,7 @@ class CheckAnswersController extends AbstractTransportManagersController
         $form->setAttribute(
             "action",
             $this->url()->fromRoute(
-                'lva-transport_manager/check_answers/action',
+                'lva-' . $this->lva . '/transport_manager_check_answer/action',
                 [
                     'action' => 'confirm',
                     'application' => $applicationId,
@@ -127,7 +127,7 @@ class CheckAnswersController extends AbstractTransportManagersController
     private function redirectToTmDeclarationPage(): \Zend\Http\Response
     {
         return $this->redirect()->toRoute(
-            'lva-transport_manager/tm_declaration/action',
+            'lva-' . $this->lva . '/transport_manager_tm_declaration',
             [
                 'child_id' => $this->params("child_id"),
                 'application' => $this->params("application"),

@@ -32,7 +32,7 @@ class TmDeclarationController extends AbstractDeclarationController
     protected function getBackLink(): string
     {
         return $this->url()->fromRoute(
-            "lva-transport_manager/check_answers/action",
+            'lva-' . $this->lva . '/transport_manager_check_answer',
             [
                 'action' => 'index',
                 'child_id' => $this->tma["id"],

@@ -729,6 +729,62 @@ foreach (['application', 'variation'] as $lva) {
                         )
                     ),
                 )
+            ),
+            'transport_manager_check_answer' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'transport-managers/check-answer/:child_id[/]',
+                    'constraints' => array(
+                        'child_id' => '[0-9]+',
+                        'grand_child_id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'LvaTransportManager/CheckAnswers',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'action' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => ':action[/:grand_child_id][/]',
+                            'constraints' => array(
+                                'grand_child_id' => '[0-9\,]+'
+                            ),
+                        )
+                    ),
+                ),
+            ),
+            'transport_manager_tm_declaration' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'transport-managers/tm-declaration/:child_id[/]',
+                    'constraints' => array(
+                        'child_id' => '[0-9]+',
+                        'grand_child_id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'LvaTransportManager/TmDeclaration',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+            ),
+            'transport_manager_operator_declaration' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'transport-managers/operator-declaration/:child_id[/]',
+                    'constraints' => array(
+                        'child_id' => '[0-9]+',
+                        'grand_child_id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'LvaTransportManager/OperatorDeclaration',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
             )
         )
     );
@@ -1397,6 +1453,8 @@ return array(
                 'search-vehicle-external' => ['selfserve-search-vehicle-external'],
                 'lva-application/transport_manager_details*' => ['selfserve-tm'],
                 'lva-variation/transport_manager_details*' => ['selfserve-tm'],
+                'lva-application/transport_manager*' => ['selfserve-tm'],
+                'lva-variation/transport_manager*' => ['selfserve-tm'],
                 'lva-transport_manager/*' =>['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
                 'search*' => ['*'],
