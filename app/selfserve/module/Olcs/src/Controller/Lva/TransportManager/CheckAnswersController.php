@@ -2,18 +2,18 @@
 
 namespace OLCS\Controller\Lva\TransportManager;
 
-use Common\Controller\Lva\AbstractTransportManagersController;
+use Common\Controller\Lva\AbstractController;
+use Common\Controller\Lva\Traits\TransportManagerApplicationTrait;
 use Common\Data\Mapper\Lva\TransportManagerApplication;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
-use Dvsa\Olcs\Transfer\Command;
 
-class CheckAnswersController extends AbstractTransportManagersController
+class CheckAnswersController extends AbstractController
 {
-    use ExternalControllerTrait;
+    use ExternalControllerTrait,
+        TransportManagerApplicationTrait;
 
     public function indexAction()
     {
-
         $transportManagerApplicationId = $this->params("child_id");
         $transportManagerApplication = $this->getTransportManagerApplication($transportManagerApplicationId);
         $translator = $this->serviceLocator->get('Helper\Translation');

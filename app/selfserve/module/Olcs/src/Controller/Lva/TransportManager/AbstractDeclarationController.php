@@ -2,12 +2,10 @@
 
 namespace OLCS\Controller\Lva\TransportManager;
 
-use Common\Controller\Lva\AbstractTransportManagersController;
 use Common\Controller\Lva\Traits\TransportManagerApplicationTrait;
 use \Common\Form\Form;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Common\Controller\Lva\AbstractController;
-use Zend\Mvc\MvcEvent;
 use \Zend\View\Model\ViewModel as ZendViewModel;
 
 abstract class AbstractDeclarationController extends AbstractController
@@ -17,15 +15,6 @@ abstract class AbstractDeclarationController extends AbstractController
 
     protected $declarationMarkup;
 
-    protected $tma;
-
-    public function preDispatch()
-    {
-        $tmaId = (int)$this->params('child_id');
-        $this->tma = $this->getTransportManagerApplication($tmaId);
-        $this->lva = $this->returnApplicationOrVariation();
-    }
-
     /**
      * Index action for the lva-transport_manager/tm_declaration and lva-transport_manager/declaration routes
      *
@@ -33,9 +22,6 @@ abstract class AbstractDeclarationController extends AbstractController
      */
     public function indexAction(): ZendViewModel
     {
-        $tmaId = (int)$this->params('child_id');
-        $this->tma = $this->getTransportManagerApplication($tmaId);
-
         if ($this->getRequest()->isPost()) {
             if ($this->params()->fromPost('content')['isDigitallySigned'] === 'Y') {
                 $this->digitalSignatureAction();
@@ -131,20 +117,5 @@ abstract class AbstractDeclarationController extends AbstractController
         if ($this->tma['disableSignatures']) {
             $form->remove('content');
         }
-    }
-
-    /**
-     * Returns "application" or "variation"
-     *
-     * @param array $tma
-     *
-     * @return string
-     */
-    protected function returnApplicationOrVariation(): string
-    {
-        if ($this->tma["application"]["isVariation"]) {
-            return self::LVA_VAR;
-        }
-        return self::LVA_APP;
     }
 }
