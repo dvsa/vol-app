@@ -6,7 +6,7 @@
 ?>
 
 <div class="page-header__wrapper">
-    <h1 class="js-title"><?php echo $this->escapeHtml($this->translate('permits.application.overwiew.title')); ?></h1>
+    <h1 class="js-title"><?php echo $this->escapeHtml($this->translate('permits.application.overview.title')); ?></h1>
 </div>
 
 <div class="row">
@@ -48,7 +48,7 @@
             <?php echo $this->translate('markup-ecmt-permit-guidance-first-time'); ?>
             <div class="actions-container new-application--wrapper">
                 <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_ADD_LICENCE, [], [], true); ?>" class="action--primary large">
-                    <?php echo $this->translate('permits.application.overwiew.button'); ?>
+                    <?php echo $this->translate('permits.application.overview.button'); ?>
                 </a>
             </div>
         <?php else : ?>

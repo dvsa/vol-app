@@ -9,6 +9,12 @@ use Zend\Form\Annotation as Form;
  */
 class InternationalJourney
 {
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $intensityWarning = 'no';
+
     /**
      * @Form\Name("InternationalJourney")
      * @Form\Required(true)

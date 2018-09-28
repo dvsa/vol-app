@@ -49,6 +49,7 @@ class DigitalSignature extends \Zend\Session\Container
         return (int) $this->applicationId;
     }
 
+
     /**
      * Has ContinuationDetail ID been set
      *

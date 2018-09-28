@@ -1,13 +1,18 @@
 <?php
     $title = $this->translate('permits.application.cancel-confirmation');
-    $this->translate('permits.application.cancel-confirmation.title');
+    $this->headTitle($this->translate('permits.application.cancel-confirmation.title'));
 ?>
 
 <div class="row ecmt">
     <div class="two-thirds">
         <div class="govuk-box-highlight">
             <h2 class="js-title"><?php echo $this->escapeHtml($title); ?></h2>
-            <br />
+            <p>
+              <?php echo $this->escapeHtml($this->translate('permits.application.cancel-confirmation.success-1')); ?>
+              <br />
+              <?php echo $this->escapeHtml($this->translate('permits.application.cancel-confirmation.success-2')); ?>
+            </p>
+            <h3><strong><?php echo $this->escapeHtml($data['application']['applicationRef']); ?></strong></h3>
         </div>
 
         <div class="field">

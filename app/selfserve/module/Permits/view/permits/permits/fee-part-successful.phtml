@@ -5,7 +5,7 @@ $title = $this->translate('permits.page.fee.title');
 $this->headTitle($title);
 $application = $data['application'];
 $translatorHelper = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');
-$feeData = $this->ecmtFees($application);
+$feeData = $this->ecmtFees($application, $data['irhpFeeList']);
 
 ?>
 
@@ -13,6 +13,8 @@ $feeData = $this->ecmtFees($application);
     <div class="two-thirds">
         <div class="page-header">
             <p><a href="<?php echo $this->url('permits') ?>" class="back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
+            <?php echo $this->formErrors($form); ?>
+
             <div class="page-header__wrapper">
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($this->translate('permits.page.fee-part-successful.title')); ?>
@@ -52,7 +54,7 @@ $feeData = $this->ecmtFees($application);
                         <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.issuing.fee')); ?></dt>
                         <dd>
                             <?php echo $application['irhpPermitApplications'][0]['permitsAwarded']; ?> x
-                            <?php echo $this->currencyFormatter($application['fees'][0]['grossAmount']); ?> <br />
+                            <?php echo $this->currencyFormatter($data['irhpFeeList']['issueFee']); ?> <br />
                             <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_PARTIAL_PERMITS, [], [], true); ?>">
                                 <?php echo $this->escapeHtml($this->translate('permits.page.view.permits')); ?>
                             </a>
@@ -66,9 +68,7 @@ $feeData = $this->ecmtFees($application);
                     </dl>
                 </div>
             </div>
-            <?php
-            echo $this->form($form);
-            ?>
+            <?php echo $this->form($form); ?>
             <p><a href="<?php echo $this->url('permits') ?>"> <?php echo $this->escapeHtml($this->translate('permits.link.cancel.return.to.dashboard')); ?></a></p>
         </div>
     </div>
