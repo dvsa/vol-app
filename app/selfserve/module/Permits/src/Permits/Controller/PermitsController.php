@@ -143,7 +143,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $query = NextIrhpPermitStock::create(['permitType' => 'permit_ecmt']);
         $stock = $this->handleQuery($query)->getResult();
 
-        $view = new ViewModel(['form' => $form, 'stock' => $stock]);
+        $view = new ViewModel(['form' => $form, 'stock' => $stock, 'application' => []]);
         $view->setTemplate('permits/ecmt-licence');
 
         $data = $this->params()->fromPost();
