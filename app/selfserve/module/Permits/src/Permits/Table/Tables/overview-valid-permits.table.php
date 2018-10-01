@@ -21,7 +21,14 @@ return array(
         array(
             'title' => 'permits.ecmt.page.valid.tableheader.countries',
             'name' => 'countries',
-            'formatter' => 'translate'
+            'formatter' => function ($row, $column, $sm) {
+                $translator = $sm->get('translator');
+                $rc = [];
+                foreach ($row['countries'] as $country) {
+                    $rc[] = $translator->translate($country['countryDesc']);
+                }
+                return implode(', ', $rc);
+            }
         )
     )
 );
