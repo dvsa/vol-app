@@ -43,9 +43,8 @@ abstract class AbstractDeclarationController extends AbstractController
     {
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
 
-        $content = $translationHelper->translate($this->declarationMarkup);
         $params = [
-            'content' => $content,
+            'content' => $translationHelper->translate($this->declarationMarkup),
             'tmFullName' => $this->getTmName(),
             'backLink' => $this->getBackLink()
         ];
