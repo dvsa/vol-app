@@ -257,6 +257,11 @@ return [
                             'label' => 'Window',
                             'route' => 'admin-dashboard/admin-permits/permit-windows'
                         ],
+                        [
+                            'id' => 'admin-dashboard/admin-permits/permit-sectors',
+                            'label' => 'Sectors',
+                            'route' => 'admin-dashboard/admin-permits/permit-sectors'
+                        ],
                     ],
                 ],
                 [

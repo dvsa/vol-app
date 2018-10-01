@@ -535,6 +535,20 @@ return [
                                     ],
                                 ],
                             ],
+                            'permit-sectors' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'permit-sectors[/:parentId][/:action][/:id][/]',
+                                    'constraints' => [
+                                        'id' => '[0-9\,]+',
+                                        'action' => '(index|add|edit|delete)'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\IrhpPermitSectorController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                     'admin-system-info-message' => [
@@ -715,6 +729,8 @@ return [
                 Admin\Controller\DataRetentionReviewController::class,
             Admin\Controller\DataRetention\ExportController::class =>
                 Admin\Controller\DataRetention\ExportController::class,
+            Admin\Controller\DataRetention\RuleAdminController::class =>
+                Admin\Controller\DataRetention\RuleAdminController::class,
             Admin\Controller\PermitsController::class =>
                 Admin\Controller\PermitsController::class,
             Admin\Controller\IrhpPermitStockController::class =>
@@ -723,8 +739,8 @@ return [
                 Admin\Controller\IrhpPermitWindowController::class,
             Admin\Controller\IrhpPermitRangeController::class =>
                 Admin\Controller\IrhpPermitRangeController::class,
-            Admin\Controller\DataRetention\RuleAdminController::class =>
-                Admin\Controller\DataRetention\RuleAdminController::class
+            Admin\Controller\IrhpPermitSectorController::class =>
+                Admin\Controller\IrhpPermitSectorController::class,
         ],
     ],
     'view_manager' => [
