@@ -4,6 +4,7 @@ namespace Permits\Controller\Config\DataSource;
 
 use Dvsa\Olcs\Transfer\Query\Permits\UnpaidEcmtPermits as UnpaidEcmtPermitsDto;
 use Olcs\Controller\Config\DataSource\AbstractDataSource;
+use Common\RefData;
 
 /**
  * Unpaod ECMT permits data source config
@@ -21,6 +22,6 @@ class UnpaidEcmtPermits extends AbstractDataSource
     protected $defaultParamData = [
         'page' => 1,
         'limit' => 10,
-        'status' => 'ecmt_permit_awaiting',
+        'status' => RefData::ECMT_STATUS_AWAITING_FEE,
     ];
 }
