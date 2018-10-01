@@ -785,6 +785,21 @@ foreach (['application', 'variation'] as $lva) {
                     )
                 ),
                 'may_terminate' => true,
+            ),
+            'transport_manager_confirmation' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'transport-managers/confirmation/:child_id[/]',
+                    'constraints' => array(
+                        'child_id' => '[0-9]+',
+                        'grand_child_id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'LvaTransportManager/Confirmation',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
             )
         )
     );
