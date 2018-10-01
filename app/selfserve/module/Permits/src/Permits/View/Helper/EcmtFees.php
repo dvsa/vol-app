@@ -12,14 +12,16 @@ use Zend\View\Model\ViewModel;
  */
 class EcmtFees extends AbstractHelper
 {
+     const FEE_STATUS_OUTSTANDING = 'lfs_ot';
 
     /**
      * @param array $application
      * @return array
      */
-    public function __invoke($application, $feeList)
+    public function __invoke($application)
     {
-        $data['totalFee'] = $application['irhpPermitApplications'][0]['permitsAwarded'] * $feeList['issueFee'];
+        $data['issueFee'] = $this->getOutstandingIssueFee($application);
+        $data['totalFee'] = $application['irhpPermitApplications'][0]['permitsAwarded'] * $data['issueFee'];
         $data['dueDate'] = $this->calculateDueDate($application['fees'][0]['invoicedDate']);
         return $data;
     }
@@ -33,5 +35,21 @@ class EcmtFees extends AbstractHelper
     {
         $dueDate = date(\DATE_FORMAT, strtotime("+10 days", strtotime($date)));
         return $dueDate;
+    }
+
+    /**
+     * get the outstanding issuing fee from an array of application data
+     * @param array $application
+     * @return string
+     */
+    private function getOutstandingIssueFee($application)
+    {
+        foreach ($application['fees'] as $fee) {
+            if ($fee['feeStatus']['id'] == $this::FEE_STATUS_OUTSTANDING) {
+                return $fee['grossAmount']; //return first occurence as there should only be one
+            }
+        }
+
+        return null;
     }
 }

@@ -233,6 +233,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
         // Read data
         $application = $this->getApplication($id);
+        var_dump($application['fees']); die;
 
         if (!is_null($application['hasRestrictedCountries'])) {
             $restrictedCountries = $application['hasRestrictedCountries'] == true ? 1 : 0;
