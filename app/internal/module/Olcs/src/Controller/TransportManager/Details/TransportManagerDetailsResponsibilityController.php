@@ -630,7 +630,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
 
         // @NOTE This logic has been moved to the helper service, so it can be re-used
         $this->transportManagerHelper->alterResponsibilitiesFieldset(
-            $form->get('details'), $this->getOtherLicencesTable()
+            $form->get('details'),
+            $this->getOtherLicencesTable(),
+            $form->get('details')->get('otherLicences')
         );
 
         return $form;
