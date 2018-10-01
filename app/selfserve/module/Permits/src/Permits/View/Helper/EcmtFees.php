@@ -13,6 +13,7 @@ use Zend\View\Model\ViewModel;
 class EcmtFees extends AbstractHelper
 {
      const FEE_STATUS_OUTSTANDING = 'lfs_ot';
+     const FEE_TYPE_ISSUE = 'IRHPGVISSUE';
 
     /**
      * @param array $application
@@ -20,9 +21,19 @@ class EcmtFees extends AbstractHelper
      */
     public function __invoke($application)
     {
-        $data['totalFee'] = $this->getOutstandingIssueFee($application); //total should already be in fee record
-        $data['dueDate'] = $this->calculateDueDate($application['fees'][0]['invoicedDate']);
-        return $data;
+        foreach ($application['fees'] as $fee) {
+            if ($fee['feeStatus']['id'] == $this::FEE_STATUS_OUTSTANDING
+                && $fee['feeType']['feeType']['id'] == $this::FEE_TYPE_ISSUE) {
+                //return first occurence as there should only be one
+                return [
+                    'issueFee' => $fee['feeType']['displayValue'],
+                    'totalFee' => $fee['grossAmount'],
+                    'dueDate' => $this->calculateDueDate($fee['invoicedDate'])
+                ];
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -34,21 +45,5 @@ class EcmtFees extends AbstractHelper
     {
         $dueDate = date(\DATE_FORMAT, strtotime("+10 days", strtotime($date)));
         return $dueDate;
-    }
-
-    /**
-     * get the outstanding issuing fee from an array of application data
-     * @param array $application
-     * @return string
-     */
-    private function getOutstandingIssueFee($application)
-    {
-        foreach ($application['fees'] as $fee) {
-            if ($fee['feeStatus']['id'] == $this::FEE_STATUS_OUTSTANDING) {
-                return $fee['grossAmount']; //return first occurence as there should only be one
-            }
-        }
-
-        return null;
     }
 }
