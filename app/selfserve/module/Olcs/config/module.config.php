@@ -1466,11 +1466,8 @@ return array(
 
                 // Selfserve search
                 'search-vehicle-external' => ['selfserve-search-vehicle-external'],
-                'lva-application/transport_manager_details*' => ['selfserve-tm'],
-                'lva-variation/transport_manager_details*' => ['selfserve-tm'],
                 'lva-application/transport_manager*' => ['selfserve-tm'],
                 'lva-variation/transport_manager*' => ['selfserve-tm'],
-                'lva-transport_manager/*' =>['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
                 'search*' => ['*'],
                 'index' => ['*'],
