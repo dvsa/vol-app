@@ -3,14 +3,16 @@
 namespace OLCS\Controller\Lva\TransportManager;
 
 use Common\Controller\Lva\AbstractController;
-use Common\Controller\Lva\Traits\TransportManagerApplicationTrait;
 use Common\Data\Mapper\Lva\TransportManagerApplication;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
+use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
 
 class CheckAnswersController extends AbstractController
 {
     use ExternalControllerTrait,
         TransportManagerApplicationTrait;
+
+    protected $tma;
 
     public function indexAction()
     {
@@ -106,7 +108,7 @@ class CheckAnswersController extends AbstractController
         $title = 'check_answers';
         $defaultParams = [
             'content' => $checkAnswersHint,
-            'tmFullName' => $this->getTmName($transportManagerApplication),
+            'tmFullName' => $this->getTmName(),
             'backLink' => $this->url()->fromRoute(
                 "dashboard",
                 [],

@@ -2,13 +2,17 @@
 
 namespace OLCS\Controller\Lva\TransportManager;
 
-use Common\Controller\Lva\AbstractTransportManagersController;
+use Common\Controller\Lva\AbstractController;
 use Common\RefData;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
+use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
 
-class ConfirmationController extends AbstractTransportManagersController
+class ConfirmationController extends AbstractController
 {
-    use ExternalControllerTrait;
+    use ExternalControllerTrait,
+        TransportManagerApplicationTrait;
+
+    protected $tma;
 
     /**
      * index action for /transport-manager/:TmaId/confirmation route
@@ -17,24 +21,21 @@ class ConfirmationController extends AbstractTransportManagersController
      */
     public function indexAction()
     {
-        $tmaId = (int)$this->params('application');
-        $tma = $this->getTransportManagerApplication($tmaId);
-
         $this->getCurrentUser();
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
 
-        $confirmationMarkup = $tma["isOwner"] === "N" ? 'markup-tma-confirmation-tm' :
+        $confirmationMarkup = $this->tma["isOwner"] === "N" ? 'markup-tma-confirmation-tm' :
             'markup-tma-confirmation-operator';
 
         $params = [
             'content' => $translationHelper->translateReplace(
                 $confirmationMarkup,
-                [$this->getCurrentUserFullName(), $this->getVerifySignatureDate($tma), $this->getBacklink()]
+                [$this->getCurrentUserFullName(), $this->getVerifySignatureDate(), $this->getBacklink()]
             ),
-            'tmFullName' => $this->getTmName($tma),
+            'tmFullName' => $this->getTmName(),
         ];
 
-        return $this->renderTmAction(null, null, $tma, $params);
+        return $this->renderTmAction(null, null, $params);
     }
 
     /**
@@ -47,10 +48,10 @@ class ConfirmationController extends AbstractTransportManagersController
      *
      * @return \Zend\View\Model\ViewModel
      */
-    private function renderTmAction($title, $form, $tma, $params)
+    private function renderTmAction($title, $form, $params)
     {
         $defaultParams = [
-            'tmFullName' => $this->getTmName($tma),
+            'tmFullName' => $this->getTmName(),
             'backLink' => $this->getBacklink(),
         ];
 
@@ -95,9 +96,9 @@ class ConfirmationController extends AbstractTransportManagersController
             !$this->isGranted(RefData::PERMISSION_SELFSERVE_LVA));
     }
 
-    private function getVerifySignatureDate($tma)
+    private function getVerifySignatureDate()
     {
-        $unixTimeStamp = strtotime($tma['digitalSignature']['createdOn']);
+        $unixTimeStamp = strtotime($this->tma['digitalSignature']['createdOn']);
         return date("j M Y", $unixTimeStamp);
     }
 

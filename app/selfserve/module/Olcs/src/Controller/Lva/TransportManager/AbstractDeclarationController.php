@@ -2,10 +2,10 @@
 
 namespace OLCS\Controller\Lva\TransportManager;
 
-use Common\Controller\Lva\Traits\TransportManagerApplicationTrait;
 use \Common\Form\Form;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Common\Controller\Lva\AbstractController;
+use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
 use \Zend\View\Model\ViewModel as ZendViewModel;
 
 abstract class AbstractDeclarationController extends AbstractController
@@ -18,6 +18,8 @@ abstract class AbstractDeclarationController extends AbstractController
     const SIGN_AS_TM_OP = 'tm_op';
 
     protected $declarationMarkup;
+
+    protected $tma;
 
     /**
      * Index action for the lva-transport_manager/tm_declaration and lva-transport_manager/declaration routes
@@ -48,7 +50,7 @@ abstract class AbstractDeclarationController extends AbstractController
         $content = $translationHelper->translate($this->declarationMarkup);
         $params = [
             'content' => $content,
-            'tmFullName' => $this->getTmName($this->tma),
+            'tmFullName' => $this->getTmName(),
             'backLink' => $this->getBackLink()
         ];
 

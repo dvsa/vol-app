@@ -930,7 +930,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $this->hlpTransMngr->alterResponsibilitiesFieldset(
             $form->get('responsibilities'),
-            $this->getOtherLicencesTable($tma['otherLicences'])
+            $this->getOtherLicencesTable($tma['otherLicences']),
+            $form->get('responsibilities')->get('otherLicencesFieldset')->get('otherLicences')
         );
 
         $this->hlpTransMngr->alterPreviousHistoryFieldsetTm(
