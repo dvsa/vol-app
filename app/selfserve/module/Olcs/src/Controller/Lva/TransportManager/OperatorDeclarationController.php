@@ -3,6 +3,7 @@
 namespace OLCS\Controller\Lva\TransportManager;
 
 use Common\Form\Form;
+use Common\RefData;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Dvsa\Olcs\Transfer\Command;
 
@@ -12,7 +13,7 @@ class OperatorDeclarationController extends AbstractDeclarationController
 
     protected function getSignAsRole(): string
     {
-        return self::SIGN_AS_OP;
+        return RefData::TMA_SIGN_AS_OP;
     }
 
     /**
