@@ -20,8 +20,7 @@ class EcmtFees extends AbstractHelper
      */
     public function __invoke($application)
     {
-        $data['issueFee'] = $this->getOutstandingIssueFee($application);
-        $data['totalFee'] = $application['irhpPermitApplications'][0]['permitsAwarded'] * $data['issueFee'];
+        $data['totalFee'] = $this->getOutstandingIssueFee($application); //total should already be in fee record
         $data['dueDate'] = $this->calculateDueDate($application['fees'][0]['invoicedDate']);
         return $data;
     }
