@@ -19,7 +19,7 @@ class CheckAnswersController extends AbstractSelfserveController implements Togg
     ];
 
     protected $dataSourceConfig = [
-        'default' => DataSourceConfig::PERMIT_APP_WITH_FEE_LIST,
+        'default' => DataSourceConfig::PERMIT_APP_CHECK_ANSWERS,
     ];
 
     protected $conditionalDisplayConfig = [

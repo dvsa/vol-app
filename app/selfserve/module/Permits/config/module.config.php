@@ -482,6 +482,7 @@ return array(
         'invokables' => [
             'ecmtSection' => \Permits\View\Helper\EcmtSection::class,
             'permitsBackLink' => \Permits\View\Helper\BackToOverview::class,
+            'saveAndReturnLink' => \Permits\View\Helper\BackToOverview::class,
             'permitsDashboardLink' => \Permits\View\Helper\PermitsDashboardLink::class,
             'changeAnswerLink' => \Permits\View\Helper\ChangeAnswerLink::class,
             'ecmtLicenceData' => \Permits\View\Helper\EcmtLicenceData::class,
