@@ -22,6 +22,6 @@ class UnpaidEcmtPermits extends AbstractDataSource
     protected $defaultParamData = [
         'page' => 1,
         'limit' => 10,
-        'status' => RefData::ECMT_STATUS_AWAITING_FEE,
+        'status' => RefData::PERMIT_APP_STATUS_AWAITING_FEE,
     ];
 }
