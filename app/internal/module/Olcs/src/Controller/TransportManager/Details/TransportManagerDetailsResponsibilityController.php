@@ -628,9 +628,10 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $niTranslation->setLocaleForNiFlag($application['niFlag']);
         }
 
-        // @NOTE This logic has been moved to the helper service, so it can be re-used
-        $this->transportManagerHelper->alterResponsibilitiesFieldset(
-            $form->get('details'), $this->getOtherLicencesTable()
+        $this->transportManagerHelper->removeTmTypeBothOption($form->get('details')->get('tmType'));
+        $this->transportManagerHelper->populateOtherLicencesTable(
+            $form->get('details')->get('otherLicences'),
+            $this->getOtherLicencesTable()
         );
 
         return $form;
