@@ -69,7 +69,13 @@ abstract class AbstractDeclarationController extends AbstractController
 
     protected function digitalSignatureAction()
     {
-        // write method body
+        $routeName = 
+        $this->redirect()->toRoute(
+            'verify/transportManagerApplication',
+            [
+                'transportManagerApplicationId' =>$this->tma
+            ]
+        )
     }
 
     /**

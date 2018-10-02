@@ -442,6 +442,8 @@ $routes = array(
                 'options' => array(
                     'route' => '/initiate-request[/application/:application]'.
                         '[/continuation-detail/:continuationDetailId][/]',
+                        '[/transportManagerApplication/:transportManagerApplicationId[/]',
+                        '[/transportManagerApplication/OperatorSignature/:transportManagerApplicationId[/]',
                     'defaults' => array(
                         'action' => 'initiate-request',
                     ),

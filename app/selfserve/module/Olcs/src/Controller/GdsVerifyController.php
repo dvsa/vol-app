@@ -17,21 +17,18 @@ class GdsVerifyController extends AbstractController
      */
     public function initiateRequestAction()
     {
-        $applicationId = $this->params()->fromRoute('application');
+        $applicationId = $this->params()->fromRoute('appli
+        cation');
         $continuationDetailId = $this->params()->fromRoute('continuationDetailId');
+        $transportManagerApplicationId = $this->params()->fromRoute('transportManagerApplicationId');
+
+
         $session = new \Olcs\Session\DigitalSignature();
-        if ($applicationId) {
-            // Save the application identifier so that when we come back from verify we know where to go
-            $session->setApplicationId($applicationId);
-        } elseif ($continuationDetailId) {
-            // Save the continuation detail identifier so that when we come back from verify we know where to go
-            $session->setContinuationDetailId($continuationDetailId);
-        } else {
-            throw new \RuntimeException(
-                'An entity identifier needs to be present, this is used to to calculate where'
-                .' to return to after completing Verify'
-            );
-        }
+
+
+        $type = $this->getTypeOfRequest($this->params());
+
+        $this->verificationType($types, $session);
 
         $form = $this->getServiceLocator()->get('Helper\Form')->createForm('VerifyRequest');
 
@@ -91,5 +88,34 @@ class GdsVerifyController extends AbstractController
         }
 
         throw new \RuntimeException('There was an error processing the signature response');
+    }
+
+    /**
+     * verificationType
+     *
+     * @param $applicationId
+     * @param $session
+     * @param $continuationDetailId
+     */
+    private function verificationType($applicationId, $session, $continuationDetailId): void
+    {
+        if ($applicationId) {
+            // Save the application identifier so that when we come back from verify we know where to go
+            $session->setApplicationId($applicationId);
+        } elseif ($continuationDetailId) {
+            // Save the continuation detail identifier so that when we come back from verify we know where to go
+            $session->setContinuationDetailId($continuationDetailId);
+        } else {
+            throw new \RuntimeException(
+                'An entity identifier needs to be present, this is used to to calculate where'
+                . ' to return to after completing Verify'
+            );
+        }
+    }
+
+    private function getTypeOfRequest($params, \Olcs\Session\DigitalSignature $session)
+    {
+       $types = extract($params);
+
     }
 }
