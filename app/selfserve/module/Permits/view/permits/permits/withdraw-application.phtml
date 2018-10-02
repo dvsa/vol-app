@@ -10,6 +10,7 @@ use Permits\View\Helper\EcmtSection;
     <div class="two-thirds">
         <div class="page-header">
         <!-- Change to 'under consideration' page when that is complete. -->
+        <?php echo $this->formErrors($form); ?>
         <p><?php echo $this->underConsiderationLink(EcmtSection::ROUTE_ECMT_UNDER_CONSIDERATION); ?></p>
             <div class="page-header__wrapper">
                 <h3 class="page-header__subtitle"> <?php echo $this->escapeHtml($ref); ?></h3>
@@ -25,9 +26,7 @@ use Permits\View\Helper\EcmtSection;
             </div>
 
             <fieldset id="withdrawApplication" class="inline" data-group="withdrawApplication">
-                <?php
-                    echo $this->form($form);
-                ?>
+                <?php echo $this->form($form); ?>
             </fieldset>
         </div>
     </div>

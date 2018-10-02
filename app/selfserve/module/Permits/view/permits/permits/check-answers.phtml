@@ -20,6 +20,7 @@
     <div class="three-quarters">
         <div class="page-header">
             <p><?php echo $this->permitsBackLink(); ?></p>
+            <?php echo $this->formErrors($form); ?>
             <div class="page-header__wrapper">
                 <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($application['applicationRef']); ?></h3>
                 <h1 class="js-title">
@@ -121,7 +122,10 @@
                                 <h4><?php echo $this->escapeHtml($this->translate('check-answers.page.question.sector')); ?></h4>
                             </td>
                             <td>
-                                <?php echo $this->escapeHtml($application['sectors']['description']); ?>
+                                <?php
+                                    $sector = $application['sectors']['description'] ? $application['sectors']['description'] : $application['sectors']['name'];
+                                    echo $this->escapeHtml($sector);
+                                ?>
                             </td>
                             <td>
                                 <?php echo $this->changeAnswerLink(EcmtSection::ROUTE_ECMT_SECTORS); ?>
@@ -131,9 +135,7 @@
                 </table>
             </div>
             <div class="actions-container new-application--wrapper">
-                <?php
-                    echo $this->form($form);
-                ?>
+                <?php echo $this->form($form); ?>
             </div>
         </div>
     </div>
