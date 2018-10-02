@@ -208,14 +208,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     return $this->redirectTmToHome();
                 }
 
-                return $this->redirect()->toRoute(
-                    'lva-transport_manager/check_answers/action',
-                    [
-                        'action' => 'index',
-                        'child_id' => $transportManagerApplicationData['id'],
-                        'application' => (int)$this->params('application')
-                    ]
-                );
+                return $this->redirectToCheckAnswersPage($transportManagerApplicationData);
             }
         }
 
@@ -935,8 +928,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         $form = $this->hlpForm->createForm('Lva\TransportManagerDetails');
 
-        $this->hlpTransMngr->alterResponsibilitiesFieldset(
-            $form->get('responsibilities'),
+        $this->hlpTransMngr->removeTmTypeBothOption($form->get('responsibilities')->get('tmType'));
+        $this->hlpTransMngr->populateOtherLicencesTable(
+            $form->get('responsibilities')->get('otherLicencesFieldset')->get('otherLicences'),
             $this->getOtherLicencesTable($tma['otherLicences'])
         );
 
@@ -1190,7 +1184,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 $this->resetTmaStatusAndResendTmEmail();
                 return $this->redirectToTransportManagersPage();
             } else {
-                return $this->redirectToDeclarationPage($tma);
+                return $this->redirectToOperatorDeclarationPage($tma);
             }
         }
 
@@ -1411,10 +1405,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @return \Zend\Http\Response
      */
-    private function redirectToDeclarationPage(array $tma): \Zend\Http\Response
+    private function redirectToOperatorDeclarationPage(array $tma): \Zend\Http\Response
     {
         return $this->redirect()->toRoute(
-            'lva-transport_manager/declaration/action',
+            'lva-' . $this->lva . '/transport_manager_operator_declaration',
             [
                 'child_id' => $tma['id'],
                 'application' => $tma['application']['id'],
@@ -1464,6 +1458,22 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $this->redirect()->toRoute(
             "lva-{$this->lva}/transport_managers",
             ['application' => $this->getIdentifier()]
+        );
+    }
+
+    /**
+     * @param array $tma
+     * @return \Zend\Http\Response
+     */
+    protected function redirectToCheckAnswersPage(array $tma): \Zend\Http\Response
+    {
+        return $this->redirect()->toRoute(
+            'lva-' . $this->lva . '/transport_manager_check_answer',
+            [
+                'action' => 'index',
+                'child_id' => $tma['id'],
+                'application' => (int)$this->params('application')
+            ]
         );
     }
 }
