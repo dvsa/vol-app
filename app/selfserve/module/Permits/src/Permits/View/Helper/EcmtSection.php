@@ -31,6 +31,9 @@ class EcmtSection extends AbstractHelper
     const ROUTE_ECMT_UNDER_CONSIDERATION = 'ecmt-under-consideration';
     const ROUTE_ECMT_AWAITING_FEE = 'ecmt-awaiting-fee';
     const ROUTE_ECMT_PARTIAL_PERMITS = 'ecmt-fee';
+    const ROUTE_ECMT_PAYMENT_ACTION = 'ecmt-payment';
+    const ROUTE_ECMT_VALID_PERMITS = 'ecmt-valid-permits';
+
 
     //cancellation
     const ROUTE_ECMT_CANCEL_APPLICATION = 'ecmt-cancel-application';

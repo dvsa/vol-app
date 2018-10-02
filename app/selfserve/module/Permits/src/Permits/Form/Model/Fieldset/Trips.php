@@ -9,6 +9,12 @@ use Zend\Form\Annotation as Form;
  */
 class Trips
 {
+
+    /**
+     * @Form\Type("Hidden")
+     */
+    public $intensityWarning = 'no';
+
     /**
      * @Form\Required(true)
      * @Form\Attributes({
@@ -21,8 +27,36 @@ class Trips
      *     "short-label": "",
      *     "hint" : "permits.form.trips.hint",
      * })
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Validator({"name":"Zend\Validator\Between", "options": {"min": 0, "max": 999999}})
+     * @Form\Validator({
+     *     "name": "Zend\Validator\NotEmpty",
+     *     "options": {
+     *         "message": {
+     *             "isEmpty": "error.messages.trips.empty"
+     *         },
+     *         "breakchainonfailure": true
+     *     }
+     * })
+     * @Form\Validator({
+     *     "name": "Zend\Validator\Digits",
+     *     "options": {
+     *         "message": {
+     *             "notDigits": "error.messages.trips.not.digits"
+     *         },
+     *         "breakchainonfailure": true
+     *     }
+     * })
+     * @Form\Validator({
+     *     "name": "Zend\Validator\Between",
+     *     "options": {
+     *         "min": 0,
+     *         "max": 999999,
+     *         "message": {
+     *             "notBetween": "error.messages.trips.not.between"
+     *         }
+     *     }
+     * })
+
+
      * @Form\Type("Zend\Form\Element\Number")
      */
     public $tripsAbroad = null;

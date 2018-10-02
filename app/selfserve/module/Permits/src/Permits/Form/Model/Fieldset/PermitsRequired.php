@@ -22,16 +22,45 @@ class PermitsRequired
      *     "hint": "permits.form.permits-required.hint",
      *     "short-label": "",
      * })
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Validator({"name":"Zend\Validator\GreaterThan", "options": {"min": 0}})
+     * @Form\Validator({
+     *     "name": "Zend\Validator\NotEmpty",
+     *     "options": {
+     *         "message": {
+     *             "isEmpty": "error.messages.permits.required"
+     *         },
+     *         "breakchainonfailure": true
+     *     },
+     * })
+     * @Form\Validator({
+     *     "name": "Zend\Validator\Digits",
+     *     "options": {
+     *         "message": {
+     *             "notDigits": "error.messages.permits.not.digits"
+     *         },
+     *         "breakchainonfailure": true
+     *     }
+     * })
+     * @Form\Validator({
+     *     "name": "Zend\Validator\GreaterThan",
+     *     "options": {
+     *         "min":0,
+     *         "message": {
+     *             "notGreaterThan": "error.messages.permits.greater"
+     *         },
+     *         "breakchainonfailure": true
+     *     },
+     * })
      * @Form\Validator({
      *     "name": "NumberCompare",
      *     "options": {
-     *          "compare_to":"numVehicles",
-     *          "operator":"lte",
-     *          "compare_to_label":"Your number of authorised vehicles",
+     *         "compare_to":"numVehicles",
+     *         "operator":"lte",
+     *         "message": {
+     *             "notNumberCompare": "error.messages.permits.less"
+     *         }
      *     }
      * })
+     *
      * @Form\Type("Zend\Form\Element\Number")
      */
     public $permitsRequired = null;

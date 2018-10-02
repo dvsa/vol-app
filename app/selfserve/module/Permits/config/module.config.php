@@ -5,6 +5,7 @@ use Permits\Controller\CancelApplicationController;
 use Permits\Controller\EmissionsController;
 use Permits\Controller\CabotageController;
 use Permits\Controller\FeePartSuccessfulController;
+use Permits\Controller\ValidPermitsController;
 use Permits\Controller\WithdrawApplicationController;
 use Permits\Controller\CheckAnswersController;
 use Permits\Controller\DeclarationController;
@@ -23,6 +24,7 @@ return array(
         CheckAnswersController::class => CheckAnswersController::class,
         DeclarationController::class => DeclarationController::class,
         OverviewController::class => OverviewController::class,
+        ValidPermitsController::class => ValidPermitsController::class,
         FeeController::class => FeeController::class,
         FeePartSuccessfulController::class => FeePartSuccessfulController::class,
         DeclineController::class => DeclineController::class,
@@ -251,6 +253,48 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
+              'payment-result' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/:id/payment-result[/]',
+                      'defaults' => [
+                          'controller'    => FeeController::class,
+                          'action'        => 'paymentResult',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
+              'ecmt-payment' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/:id/ecmt-payment[/]',
+                      'defaults' => [
+                          'controller'    => PermitsController::class,
+                          'action'        => 'payment',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
+              'ecmt-print-receipt' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/:id/ecmt-print-receipt[/]:reference',
+                      'defaults' => [
+                          'controller'    => PermitsController::class,
+                          'action'        => 'print',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
               'ecmt-submitted' => [
                   'type'    => 'segment',
                   'options' => [
@@ -286,6 +330,20 @@ return array(
                     'defaults' => [
                         'controller'    => SubmittedController::class,
                         'action'        => 'decline',
+                    ],
+                    'constraints' => [
+                        'id' => '[0-9]+',
+                    ],
+                ],
+                'may_terminate' => false,
+              ],
+              'ecmt-valid-permits' => [
+                'type'    => 'segment',
+                'options' => [
+                    'route'    => '/:id/ecmt-valid-permits[/]',
+                    'defaults' => [
+                        'controller'    => ValidPermitsController::class,
+                        'action'        => 'generic',
                     ],
                     'constraints' => [
                         'id' => '[0-9]+',

@@ -17,9 +17,9 @@ class EcmtFees extends AbstractHelper
      * @param array $application
      * @return array
      */
-    public function __invoke($application)
+    public function __invoke($application, $feeList)
     {
-        $data['totalFee'] = $application['irhpPermitApplications'][0]['permitsAwarded'] * $application['fees'][0]['grossAmount'];
+        $data['totalFee'] = $application['irhpPermitApplications'][0]['permitsAwarded'] * $feeList['issueFee'];
         $data['dueDate'] = $this->calculateDueDate($application['fees'][0]['invoicedDate']);
         return $data;
     }

@@ -231,13 +231,13 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         $config = $this->configsForAction('postConfig');
 
         if (isset($config['params']['route'])) {
-            foreach($config['params']['route'] as $param) {
+            foreach ($config['params']['route'] as $param) {
                 $params[$param] = $this->routeParams[$param];
             }
         }
 
         if (isset($config['params']['query'])) {
-            foreach($config['params']['query'] as $param) {
+            foreach ($config['params']['query'] as $param) {
                 $params[$param] = $this->queryParams[$param];
             }
         }
@@ -310,7 +310,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
         foreach ($tableConfig as $name => $config) {
             $tableData = $this->data[$config['dataSource']];
-            $this->tables[$name] = $this->getTable($config['tableName'], $tableData);
+            $this->tables[$name] = $this->getTable($config['tableName'], $tableData, $this->queryParams);
         }
     }
 
@@ -322,7 +322,6 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     public function checkConditionalDisplay()
     {
         $conditionalDisplayConfig = $this->configsForAction('conditionalDisplayConfig');
-
         foreach ($conditionalDisplayConfig as $source => $criteria) {
             $data = $this->data[$source];
 
@@ -330,18 +329,19 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 continue;
             }
 
-            return $this->conditionalDisplayNotMet();
+            $route = isset($criteria['route']) ? $criteria['route'] : null;
+            return $this->conditionalDisplayNotMet($route);
         }
     }
 
     /**
-     * @todo needs to be more configurable (right now would need to be overridden), possibly add flash message
      *
      * @return \Zend\Http\Response
      */
-    protected function conditionalDisplayNotMet()
+    protected function conditionalDisplayNotMet($route)
     {
-        return $this->redirect()->toRoute('permits');
+        $route = $route ? $route : 'permits';
+        return $this->redirect()->toRoute($route, [], [], true);
     }
 
     /**
@@ -399,7 +399,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     {
         return $this->getServiceLocator()
             ->get('Table')
-            ->prepareTable($tableName, $data['results']);
+            ->prepareTable($tableName, $data, $this->queryParams);
     }
 
     /**
@@ -436,7 +436,6 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             //Form was submitted normally so continue on chosen path
             return $this->nextStep($nextStep);
         }
-
         //A button other than the primary submit button was clicked so return to overview
         return $this->nextStep(EcmtSection::ROUTE_APPLICATION_OVERVIEW);
     }
@@ -451,5 +450,29 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     protected function nextStep(string $route): HttpResponse
     {
         return $this->redirect()->toRoute('permits/' . $route, [], [], true);
+    }
+
+    /**
+     * Define is Nothern Ireland
+     *
+     * @param array $params Lva object data
+     *
+     * @return bool
+     */
+    protected function isNi(array $params)
+    {
+        if (isset($params['niFlag'])) {
+            return ValueHelper::isOn($params['niFlag']);
+        }
+
+        if (isset($params['trafficArea']['isNi'])) {
+            return (bool)$params['trafficArea']['isNi'];
+        }
+
+        if (isset($params['licence']['trafficArea']['isNi'])) {
+            return (bool)$params['licence']['trafficArea']['isNi'];
+        }
+
+        return false;
     }
 }

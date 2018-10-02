@@ -24,8 +24,13 @@ class EcmtLicenceData extends AbstractHelper
      * @param array $application
      * @return string
      */
-    public function __invoke($form, $application = [])
+    public function __invoke($form, $application = [], $stock)
     {
+        $permitType = isset($application['permitType']['description']) ? $application['permitType']['description'] : 'ECMT';
+        //$validFrom = date('d F Y', strtotime($stock[0]['validFrom']));
+        //$validTo = date('d F Y', strtotime($stock[0]['validTo']));
+        $validFrom = '01 January 2019';
+        $validTo = '31 December 2019';
         $licences = $form->get('Fields')->get('EcmtLicence')->getValueOptions();
         $licenceCount = 0;
         foreach ($licences as $licence) {
@@ -41,19 +46,30 @@ class EcmtLicenceData extends AbstractHelper
             $data['copy'] = sprintf($this->view->translate('markup-ecmt-licence-saturated'), '/permits');
             $data['empty'] = true;
             if (!empty($application)) {
-                $data['title'] = sprintf(
-                    $this->view->translate('permits.page.ecmt.licence.question.one.licence'),
-                    $application['licence']['licNo'] . ' (' . $application['licence']['trafficArea']['name'] . ')'
+                $data['title'] = $this->formatTitle(
+                    $application['licence']['licNo'],
+                    $application['licence']['licenceType']['id'],
+                    $application['licence']['trafficArea']['name']
                 );
                 $data['copy'] = '<p class="guidance-blue extra-space large">' .
-                    $this->view->translate('permits.page.ecmt.licence.info') . '</p>';
+                    sprintf(
+                        $this->view->translate('permits.page.ecmt.licence.info'),
+                        $permitType,
+                        $validFrom,
+                        $validTo
+                    ) . '</p>';
             }
             return $data;
         }
 
         $data['title'] = $this->view->translate('permits.page.ecmt.licence.question');
         $data['copy'] = '<p class="guidance-blue extra-space large">' .
-            $this->view->translate('permits.page.ecmt.licence.info') . '</p>';
+            sprintf(
+                $this->view->translate('permits.page.ecmt.licence.info'),
+                $permitType,
+                $validFrom,
+                $validTo
+            ) . '</p>';
 
         if ($licenceCount === 1) {
             $data['title'] = sprintf(
@@ -62,16 +78,28 @@ class EcmtLicenceData extends AbstractHelper
             );
         }
 
-        if (empty($application) && array_key_exists('html_elements', $licences[0]) && empty($application)) {
+        if (empty($application) && $licenceCount === 1 && array_key_exists('html_elements', $licences[0])) {
             $data['copy'] .= '<p>' . $this->view->translate('permits.form.ecmt-licence.restricted-licence.hint') . '</p>';
         }
 
         if (!empty($application)) {
-            $data['title'] = sprintf(
-                $this->view->translate('permits.page.ecmt.licence.question.one.licence'),
-                $application['licence']['licNo'] . ' (' . $application['licence']['trafficArea']['name'] . ')'
+            $data['title'] = $this->formatTitle(
+                $application['licence']['licNo'],
+                $application['licence']['licenceType']['id'],
+                $application['licence']['trafficArea']['name']
             );
         }
         return $data;
+    }
+
+    private function formatTitle($licNo, $licType, $trafficArea) {
+        $title = sprintf(
+            $this->view->translate('permits.page.ecmt.licence.question.one.licence'),
+            $licNo . ' ' .
+            $this->view->translate($licType) .
+            ' (' . $this->view->translate($trafficArea) . ')'
+        );
+
+        return $title;
     }
 }
