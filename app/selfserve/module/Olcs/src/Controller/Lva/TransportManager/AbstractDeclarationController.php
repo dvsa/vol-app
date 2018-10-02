@@ -3,6 +3,7 @@
 namespace OLCS\Controller\Lva\TransportManager;
 
 use \Common\Form\Form;
+use Common\RefData;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
@@ -69,11 +70,17 @@ abstract class AbstractDeclarationController extends AbstractController
 
     protected function digitalSignatureAction()
     {
-        $routeName = 
+        $role = $this->getSignAsRole();
+        $routeName =
+        if ($role === RefData::TMA_SIGN_AS_TM || $role === RefData::TMA_SIGN_AS_TM_OP) {
+            $routeName = 'verify/transportManagerApplication';
+        } elseif ($role === RefData::TMA_SIGN_AS_OP) {
+            $routeName = '/transportManagerApplication/OperatorSignature';
+        }
         $this->redirect()->toRoute(
-            'verify/transportManagerApplication',
-            [
-                'transportManagerApplicationId' =>$this->tma
+
+            [   $routeName,
+                'transportManagerApplicationId' => $this->tma
             ]
         )
     }
