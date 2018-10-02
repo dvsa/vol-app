@@ -281,20 +281,6 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-issuing' => [
-                  'type'    => 'segment',
-                  'options' => [
-                      'route'    => '/:id/ecmt-issuing[/]',
-                      'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'payment',
-                      ],
-                      'constraints' => [
-                          'id' => '[0-9]+',
-                      ],
-                  ],
-                  'may_terminate' => false,
-              ],
               'ecmt-print-receipt' => [
                   'type'    => 'segment',
                   'options' => [
