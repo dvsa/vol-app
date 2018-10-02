@@ -27,7 +27,7 @@ class BackToOverview extends AbstractHelper
         /**
          * @todo temporary to stop "return to overview" links losing their styling - can be removed following olcs-21034
          */
-        $linkClass = (self::BACK_LINK_LABEL === $label ? 'back-link' : 'ecmt-overview-return-link');
+        $linkClass = (self::BACK_LINK_LABEL === $label ? 'govuk-back-link' : 'govuk-link');
 
         $label = $this->view->escapeHtml($this->view->translate($label));
         $url = $this->view->url('permits/application-overview', [], [], true);
