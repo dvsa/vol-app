@@ -23,13 +23,23 @@ $translationHelper = $this->getHelperPluginManager()->getServiceLocator()->get('
                 ?>
             </fieldset>
         </div>
-        <p><a href="<?php echo $this->url('permits'); ?>"> <?php echo $this->escapeHtml($this->translate('permits.link.return.to.dashboard')); ?></a></p>
+
+
+        <p><?php  if (isset($returnLink)): ?>
+        <a href="<?php echo $this->url('permits/' . $returnLink, [], [], true) ?>" class="return-overview">
+            <?php echo $this->translate('permits.link.return.to.fee.overview'); ?>
+        </a>
+        <?php  else: ?>
+            <?php echo $this->permitsDashboardLink('permits.link.return.to.dashboard'); ?>
+        <?php endif ?></p>
+
     </div>
     <?php
     echo $translationHelper->translateReplace(
-            'markup-ecmt-permit-valid-permits-right-column',
+            $rightColumn,
             [
                 $application['status'],
+                $application['dueDate'],
                 date(\DATE_FORMAT, strtotime($application['irhpPermitStock']['validFrom'])),
                 date(\DATE_FORMAT, strtotime($application['irhpPermitStock']['validTo']))
             ]

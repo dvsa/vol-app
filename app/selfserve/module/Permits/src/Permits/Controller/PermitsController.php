@@ -49,7 +49,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     use StoredCardsTrait;
     use FlashMessengerTrait;
 
-
     const ECMT_APPLICATION_FEE_PRODUCT_REFENCE = 'IRHP_GV_APP_ECMT';
     const ECMT_ISSUING_FEE_PRODUCT_REFENCE = 'IRHP_GV_ECMT_100_PERMIT_FEE';
 
@@ -83,7 +82,11 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             [
                 'order' => 'DESC',
                 'organisation' => $this->getCurrentOrganisationId(),
-                'statusIds' => [RefData::ECMT_APP_STATUS_NOT_YET_SUBMITTED, RefData::ECMT_APP_STATUS_UNDER_CONSIDERATION, RefData::ECMT_APP_STATUS_AWAITING_FEE]
+                'statusIds' => [
+                    RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED,
+                    RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION,
+                    RefData::PERMIT_APP_STATUS_AWAITING_FEE,
+                ],
             ]
         );
         $response = $this->handleQuery($query);
@@ -97,7 +100,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             [
                 'order' => 'DESC',
                 'organisation' => $this->getCurrentOrganisationId(),
-                'statusIds' => [RefData::PERMIT_VALID]
+                'statusIds' => [RefData::PERMIT_APP_STATUS_VALID]
             ]
         );
         $response = $this->handleQuery($query);
@@ -143,7 +146,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $query = NextIrhpPermitStock::create(['permitType' => 'permit_ecmt']);
         $stock = $this->handleQuery($query)->getResult();
 
-        $view = new ViewModel(['form' => $form, 'stock' => $stock]);
+        $view = new ViewModel(['form' => $form, 'stock' => $stock, 'application' => []]);
         $view->setTemplate('permits/ecmt-licence');
 
         $data = $this->params()->fromPost();
@@ -579,13 +582,14 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         return $view;
     }
 
+
     /**
-     * @return ViewModel
+     * @return \Zend\Http\Response|ViewModel
      */
     public function paymentAction()
     {
         $id = $this->params()->fromRoute('id', -1);
-        $redirectUrl = $this->url()->fromRoute('permits/payment-result', ['id' => $id, 'reference' => $this->params()->fromQuery('receipt_reference')], ['force_canonical' => true]);
+        $redirectUrl = $this->url()->fromRoute('permits/payment-result', ['id' => $id], ['force_canonical' => true]);
 
         $dtoData = [
             'cpmsRedirectUrl' => $redirectUrl,
@@ -594,6 +598,31 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         ];
         $dto = PayOutstandingFees::create($dtoData);
         $response = $this->handleCommand($dto);
+
+        $messages = $response->getResult()['messages'];
+
+        $translateHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $errorMessage = '';
+        foreach ($messages as $message) {
+            if (is_array($message) && array_key_exists(RefData::ERR_WAIT, $message)) {
+                $errorMessage = $translateHelper->translate('payment.error.15sec');
+                break;
+            } elseif (is_array($message) && array_key_exists(RefData::ERR_NO_FEES, $message)) {
+                $errorMessage = $translateHelper->translate('payment.error.feepaid');
+                break;
+            }
+        }
+        if ($errorMessage !== '') {
+            $this->addErrorMessage($errorMessage);
+            return $this->redirect()
+                ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
+        }
+
+        if (!$response->isOk()) {
+            $this->addErrorMessage('feeNotPaidError');
+            return $this->redirect()
+                ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
+        }
 
         // Look up the new payment in order to get the redirect data
         $paymentId = $response->getResult()['id']['transaction'];
