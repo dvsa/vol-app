@@ -582,13 +582,14 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         return $view;
     }
 
+
     /**
-     * @return ViewModel
+     * @return \Zend\Http\Response|ViewModel
      */
     public function paymentAction()
     {
         $id = $this->params()->fromRoute('id', -1);
-        $redirectUrl = $this->url()->fromRoute('permits/payment-result', ['id' => $id, 'reference' => $this->params()->fromQuery('receipt_reference')], ['force_canonical' => true]);
+        $redirectUrl = $this->url()->fromRoute('permits/payment-result', ['id' => $id], ['force_canonical' => true]);
 
         $dtoData = [
             'cpmsRedirectUrl' => $redirectUrl,
@@ -597,6 +598,31 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         ];
         $dto = PayOutstandingFees::create($dtoData);
         $response = $this->handleCommand($dto);
+
+        $messages = $response->getResult()['messages'];
+
+        $translateHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $errorMessage = '';
+        foreach ($messages as $message) {
+            if (is_array($message) && array_key_exists(RefData::ERR_WAIT, $message)) {
+                $errorMessage = $translateHelper->translate('payment.error.15sec');
+                break;
+            } elseif (is_array($message) && array_key_exists(RefData::ERR_NO_FEES, $message)) {
+                $errorMessage = $translateHelper->translate('payment.error.feepaid');
+                break;
+            }
+        }
+        if ($errorMessage !== '') {
+            $this->addErrorMessage($errorMessage);
+            return $this->redirect()
+                ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
+        }
+
+        if (!$response->isOk()) {
+            $this->addErrorMessage('feeNotPaidError');
+            return $this->redirect()
+                ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
+        }
 
         // Look up the new payment in order to get the redirect data
         $paymentId = $response->getResult()['id']['transaction'];
