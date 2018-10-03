@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use Dvsa\Olcs\Transfer\Command\Permits\TriggerProcessEcmtApplications;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 
@@ -90,5 +91,19 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
         $this->placeholder()->setPlaceholder('pageTitle', 'Permits');
 
         return parent::indexAction();
+    }
+
+    public function triggerAction(){
+        $response = $this->handleCommand(TriggerProcessEcmtApplications::create([]));
+        $view = new ViewModel(
+            [
+                'triggerOutput' => $response->getResult(),
+
+            ]
+        );
+        $view->setTemplate('pages/irhp-permit-stock/index');
+
+        return $view;
+
     }
 }
