@@ -31,11 +31,11 @@ OLCS.ready(function () {
         $("#cancelPermitApplication").removeClass("visually-hidden");
     }
 
-    if ($.inArray($(".permitApplicationStatus").val(), ["ecmt_permit_uc", "ecmt_permit_awaiting", "ecmt_permit_issued"]) !== -1) {
+    if ($.inArray($(".permitApplicationStatus").val(), ["permit_app_uc", "permit_app_awaiting", "permit_app_issued"]) !== -1) {
         $("#withdrawPermitApplication").removeClass("visually-hidden");
     }
 
-    if ($.inArray($(".permitApplicationStatus").val(), ["ecmt_permit_nys"]) !== -1) {
+    if ($.inArray($(".permitApplicationStatus").val(), ["permit_app_nys"]) !== -1) {
         $("#cancelPermitApplication").removeClass("visually-hidden");
     }
 

@@ -4,7 +4,6 @@ namespace Admin\Controller;
 
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\GetList as ListDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitWindow\Create as CreateDto;
@@ -12,8 +11,6 @@ use Dvsa\Olcs\Transfer\Command\IrhpPermitWindow\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitWindow\Delete as DeleteDto;
 use Admin\Form\Model\Form\IrhpPermitWindow as PermitWindowForm;
 use Admin\Data\Mapper\IrhpPermitWindow as PermitWindowMapper;
-
-use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -75,5 +72,11 @@ class IrhpPermitWindowController extends AbstractInternalController implements L
         $view->setTemplate('admin/sections/admin/partials/generic-left');
 
         return $view;
+    }
+
+    public function addAction()
+    {
+        $this->defaultData = array_merge($this->defaultData, ['compareStartDate' => date("Y-m-d")]);
+        return parent::addAction();
     }
 }

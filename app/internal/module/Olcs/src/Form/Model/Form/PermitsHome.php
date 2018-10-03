@@ -34,7 +34,7 @@ class PermitsHome
      * @Form\Options({
      *      "label": "Status",
      *      "fieldset-attributes": {"id": "ecmt-status"},
-     *      "category": "ecmt_permit_status",
+     *      "category": "permit_application_status",
      *      "empty_option": "All",
      * })
      * @Form\Type("DynamicSelect")
