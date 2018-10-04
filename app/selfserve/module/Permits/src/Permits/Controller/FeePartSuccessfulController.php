@@ -1,5 +1,6 @@
 <?php
 namespace Permits\Controller;
+
 use Zend\Http\Response as HttpResponse;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
@@ -36,9 +37,8 @@ class FeePartSuccessfulController extends AbstractSelfserveController implements
 
     protected $postConfig = [
         'generic' => [
-            'command' => AcceptEcmtPermits::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
-            'step' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
+            'step' => EcmtSection::ROUTE_ECMT_PAYMENT_ACTION,
         ]
     ];
 
