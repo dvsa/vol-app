@@ -1,9 +1,6 @@
 <?php
 
 return [
-    'variables' => [
-        'title' => 'Permit system settings'
-    ],
     'settings' => [
         'crud' => [
             'actions' => [

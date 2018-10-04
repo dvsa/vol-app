@@ -22,7 +22,7 @@ class IrhpPermitWindow implements MapperInterface
     public static function mapFromResult(array $data): array
     {
         $mappedData['permitWindowDetails'] = $data;
-        $mappedData['permitWindowDetails']['parentId'] = isset($data['parentId']) ? $data['parentId'] : $data['irhpPermitStock']['id'];
+        $mappedData['permitWindowDetails']['stockId'] = isset($data['stockId']) ? $data['stockId'] : $data['irhpPermitStock']['id'];
         $mappedData['permitWindowDetails']['compareStartDate'] = $data['startDate'];
         return $mappedData;
     }
@@ -36,8 +36,8 @@ class IrhpPermitWindow implements MapperInterface
      */
     public static function mapFromForm(array $data): array
     {
-        $data['permitWindowDetails']['irhpPermitStock'] = $data['permitWindowDetails']['parentId'];
-        unset($data['permitWindowDetails']['parentId']);
+        $data['permitWindowDetails']['irhpPermitStock'] = $data['permitWindowDetails']['stockId'];
+        unset($data['permitWindowDetails']['stockId']);
         return $data['permitWindowDetails'];
     }
 

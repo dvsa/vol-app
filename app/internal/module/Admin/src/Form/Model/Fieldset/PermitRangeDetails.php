@@ -15,7 +15,7 @@ class PermitRangeDetails
     /**
      * @Form\Type("Hidden")
      */
-    public $parentId = null;
+    public $stockId = null;
 
     /**
      * @Form\Name("prefix")

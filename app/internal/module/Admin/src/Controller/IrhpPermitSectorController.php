@@ -2,25 +2,23 @@
 
 namespace Admin\Controller;
 
-use Olcs\Controller\AbstractInternalController;
+use Admin\Controller\AbstractIrhpPermitAdminController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitSector\Update as Update;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitSector\GetList as ListDto;
-use Admin\Data\Mapper\IrhpPermitSector as PermitSectorMapper;
 use Zend\View\Model\ViewModel;
 use Zend\Http\Response;
 
 /**
  * IRHP Permits Sector controller
  */
-class IrhpPermitSectorController extends AbstractInternalController implements LeftViewProvider
+class IrhpPermitSectorController extends AbstractIrhpPermitAdminController implements LeftViewProvider
 {
 
     protected $tableName = 'admin-irhp-permit-sector';
 
-    protected $listVars = ['irhpPermitStock' => 'parentId'];
+    protected $listVars = ['irhpPermitStock' => 'stockId'];
     protected $listDto = ListDto::class;
-    protected $mapperClass = PermitSectorMapper::class;
 
     protected $indexPageTitle = 'Permits';
 
@@ -30,7 +28,7 @@ class IrhpPermitSectorController extends AbstractInternalController implements L
 
     protected $navigationId = 'admin-dashboard/admin-permits';
 
-    protected $defaultData = ['parentId' => 'route'];
+    protected $defaultData = ['stockId' => 'route'];
 
     /**
      * Get left view
@@ -42,7 +40,8 @@ class IrhpPermitSectorController extends AbstractInternalController implements L
         $view = new ViewModel(
             [
                 'navigationId' => 'admin-dashboard/admin-permits',
-                'navigationTitle' => 'Permits'
+                'navigationTitle' => '',
+                'stockId' => $this->params()->fromRoute()['stockId']
             ]
         );
         $view->setTemplate('admin/sections/admin/partials/generic-left');

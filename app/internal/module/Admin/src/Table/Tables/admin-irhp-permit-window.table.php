@@ -1,9 +1,6 @@
 <?php
 
 return [
-    'variables' => [
-        'title' => 'Permit Stock Window'
-    ],
     'settings' => [
         'crud' => [
             'actions' => [

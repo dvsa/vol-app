@@ -2,7 +2,7 @@
 
 namespace Admin\Controller;
 
-use Olcs\Controller\AbstractInternalController;
+use Admin\Controller\AbstractIrhpPermitAdminController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitRange\GetList as ListDto;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitRange\ById as ItemDto;
@@ -17,7 +17,7 @@ use Zend\View\Model\ViewModel;
 /**
  * IRHP Permits Stock Range Controller
  */
-class IrhpPermitRangeController extends AbstractInternalController implements LeftViewProvider
+class IrhpPermitRangeController extends AbstractIrhpPermitAdminController implements LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -28,7 +28,7 @@ class IrhpPermitRangeController extends AbstractInternalController implements Le
     protected $defaultTableSortField = 'fromNo';
     protected $defaultTableOrderField = 'ASC';
 
-    protected $listVars = ['irhpPermitStock' => 'parentId'];
+    protected $listVars = ['irhpPermitStock' => 'stockId'];
     protected $listDto = ListDto::class;
     protected $itemDto = ItemDto::class;
     protected $formClass = PermitRangeForm::class;
@@ -49,7 +49,7 @@ class IrhpPermitRangeController extends AbstractInternalController implements Le
 
     protected $navigationId = 'admin-dashboard/admin-permits';
 
-    protected $defaultData = ['parentId' => 'route'];
+    protected $defaultData = ['stockId' => 'route'];
 
     /**
      * @var array
@@ -68,11 +68,22 @@ class IrhpPermitRangeController extends AbstractInternalController implements Le
         $view = new ViewModel(
             [
                 'navigationId' => 'admin-dashboard/admin-permits',
-                'navigationTitle' => 'Permits system settings'
+                'navigationTitle' => '',
+                'stockId' => $this->params()->fromRoute()['stockId']
             ]
         );
         $view->setTemplate('admin/sections/admin/partials/generic-left');
 
         return $view;
+    }
+
+    public function indexAction()
+    {
+        // If an IRHP Permit Stock ID is not specified then redirect the user to the Permits System Settings page.
+        if (!isset($this->params()->fromRoute()['stockId'])) {
+            $this->redirect()->toRoute($this->navigationId . '/permits-system-settings');
+        }
+
+        return parent::indexAction();
     }
 }

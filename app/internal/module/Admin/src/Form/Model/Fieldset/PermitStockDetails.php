@@ -40,7 +40,7 @@ class PermitStockDetails
     public $validFrom = null;
 
     /**
-     * @Form\Required(false)
+     * @Form\Required(true)
      * @Form\Options({
      *     "label": "Validity Period End",
      *     "create_empty_option": true,
@@ -56,8 +56,10 @@ class PermitStockDetails
      *          "has_time": false,
      *          "allow_empty": true,
      *          "compare_to":"validFrom",
-     *          "operator":"gt",
-     *          "compare_to_label":"validFrom"
+     *          "operator":"gte",
+     *          "messageTemplates": {
+     *              "notGreaterThanOrEqual": "Validity Period End Date must be equal to or later than Validity Period Start Date"
+     *          }
      *      }
      * })
      * @Form\Validator({

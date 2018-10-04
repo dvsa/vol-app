@@ -6,6 +6,23 @@ if (isset($navigation)): ?>
 <?php
 endif;
 
-echo $this->navigation($navigation)
-    ->menu()
-    ->setPartial('partials/vertical-navigation');
+/*
+ * If we have a stock ID then we are in a drilled-down state for a Permit Stock as so we need to render a custom
+ * vertical naviagtion partial.
+ */
+if (isset($stockId)) {
+    $this->navigation($navigation)->setParams(['stockId' => $stockId]);
+
+    echo $this->navigation($navigation)
+        ->menu()
+        ->setPartial('partials/vertical-navigation');
+
+    return;
+}
+
+// Don't render the list if the we only want the title.
+if (!isset($singleNav)) {
+    echo $this->navigation($navigation)
+        ->menu()
+        ->setPartial('partials/vertical-navigation');
+}
