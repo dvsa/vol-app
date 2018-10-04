@@ -59,6 +59,8 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
     ];
 
+    protected $currentMessages = [];
+
     /**
      * @todo This is just a placeholder, this will be implemented properly using system parameters in OLCS-20848
      *
@@ -649,6 +651,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
      */
     protected function attachCurrentMessages()
     {
+
         foreach ($this->currentMessages as $namespace => $messages) {
             foreach ($messages as $message) {
                 $this->addMessage($message, $namespace);
