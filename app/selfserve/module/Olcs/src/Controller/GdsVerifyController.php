@@ -20,9 +20,9 @@ class GdsVerifyController extends AbstractController
         $applicationId = $this->params()->fromRoute('appli
         cation');
         $continuationDetailId = $this->params()->fromRoute('continuationDetailId');
-        $transportManagerApplicationId = $this->params()->fromRoute('transportManagerApplicationId');
+        $transportManagerApplicationId = $this->params('transportManagerApplicationId');
 
-
+        $params = $this->params();
         $session = new \Olcs\Session\DigitalSignature();
 
 

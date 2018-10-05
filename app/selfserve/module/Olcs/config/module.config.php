@@ -442,13 +442,21 @@ $routes = array(
                 'options' => array(
                     'route' => '/initiate-request[/application/:application]'.
                         '[/continuation-detail/:continuationDetailId][/]',
-                        '[/transportManagerApplication/:transportManagerApplicationId[/]',
-                        '[/transportManagerApplication/OperatorSignature/:transportManagerApplicationId[/]',
                     'defaults' => array(
                         'action' => 'initiate-request',
                     ),
                 )
             ),
+            'transport-manager' =>[
+                'type' => Segment::class,
+                'options' => array(
+                    'route' => '/transport-manager[/application/:transportManagerApplicationId]'.
+                        '[/:transportManagerApplicationOperatorSignature][/]',
+                    'defaults' => array(
+                        'action' => 'initiate-request',
+                    ),
+                )
+            ],
             'process-response' => array(
                 'type' => Segment::class,
                 'options' => array(
