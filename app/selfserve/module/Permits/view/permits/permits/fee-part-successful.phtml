@@ -55,7 +55,7 @@ $feeData = $this->ecmtFees($application);
                         <dd>
                             <?php echo $application['irhpPermitApplications'][0]['permitsAwarded']; ?> x
                             <?php echo $this->currencyFormatter($feeData['issueFee']); ?> <br />
-                            <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_PARTIAL_PERMITS, [], [], true); ?>">
+                            <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_UNPAID_PERMITS, [], [], true); ?>">
                                 <?php echo $this->escapeHtml($this->translate('permits.page.view.permits')); ?>
                             </a>
                         </dd>
