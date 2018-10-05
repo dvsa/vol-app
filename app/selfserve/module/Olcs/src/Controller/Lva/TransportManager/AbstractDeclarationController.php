@@ -74,12 +74,11 @@ abstract class AbstractDeclarationController extends AbstractController
         $operatorRoute ='';
         // this will be either RefData::TMA_SIGN_AS_TM || RefData::TMA_SIGN_AS_TM_OP
         // isOwner will disambiguate later.
-        $routeParams = ['transportManagerApplicationId'=>$this->tma['id'],'action'=>'/'];
+        $routeParams = ['transportManagerApplicationId'=>$this->tma['id']];
         if ($role !== RefData::TMA_SIGN_AS_OP) {
             $routeParams = array_merge($routeParams, ['transportManagerApplicationOperatorSignature' =>'operator-confirm']);
         }
         $this->redirect()->toRoute(
-
             'verify/transport-manager',
             $routeParams
         );

@@ -17,20 +17,10 @@ class GdsVerifyController extends AbstractController
      */
     public function initiateRequestAction()
     {
-        $applicationId = $this->params()->fromRoute('appli
-        cation');
-        $continuationDetailId = $this->params()->fromRoute('continuationDetailId');
-        $transportManagerApplicationId = $this->params('transportManagerApplicationId');
-
-        $params = $this->params();
-        $session = new \Olcs\Session\DigitalSignature();
-
-
-        $type = $this->getTypeOfRequest($this->params());
-
-        $this->verificationType($types, $session);
-
+        $types = $this->getTypeOfRequest($this->params()->fromRoute());
         $form = $this->getServiceLocator()->get('Helper\Form')->createForm('VerifyRequest');
+        $this->handleType($types);
+
 
         $response = $this->handleQuery(\Dvsa\Olcs\Transfer\Query\GdsVerify\GetAuthRequest::create([]));
         if ($response->isOk()) {
@@ -93,29 +83,31 @@ class GdsVerifyController extends AbstractController
     /**
      * verificationType
      *
-     * @param $applicationId
-     * @param $session
-     * @param $continuationDetailId
+     * @param array $types
      */
-    private function verificationType($applicationId, $session, $continuationDetailId): void
+    private function handleType(array $types): void
     {
-        if ($applicationId) {
-            // Save the application identifier so that when we come back from verify we know where to go
-            $session->setApplicationId($applicationId);
-        } elseif ($continuationDetailId) {
-            // Save the continuation detail identifier so that when we come back from verify we know where to go
-            $session->setContinuationDetailId($continuationDetailId);
-        } else {
+        $session = new \Olcs\Session\DigitalSignature();
+
+        if (empty($types)) {
             throw new \RuntimeException(
                 'An entity identifier needs to be present, this is used to to calculate where'
                 . ' to return to after completing Verify'
             );
         }
+
+        foreach ($types as $key => $value) {
+            $methodName = 'set' . ucfirst($key);
+            if (method_exists($session, $methodName)) {
+                call_user_func([$session, $methodName], [$value]);
+            }
+        }
     }
 
-    private function getTypeOfRequest($params, \Olcs\Session\DigitalSignature $session)
+    private function getTypeOfRequest($params): array
     {
-       $types = extract($params);
-
+        // remove controller and action keys from params
+        $types = array_diff_assoc($params, ['controller' => self::class, 'action' => 'initiate-request']);
+        return $types;
     }
 }

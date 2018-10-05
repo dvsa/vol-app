@@ -4,18 +4,14 @@ namespace Olcs\Session;
 
 /**
  * Class DigitalSignature
- */
+ *
+ *
+*/
 class DigitalSignature extends \Zend\Session\Container
 {
-
-
-    /**
-     * @param mixed $transportManagerApplication
-     */
-    public function setTransportManagerApplication($transportManagerApplication): void
-    {
-        $this->transportManagerApplication = $transportManagerApplication;
-    }
+    const SESSION_NAME = 'DigitalSignature';
+    protected $transportManagerApplicationId;
+    protected $transportManagerApplicationOperatorSignature;
 
     /**
      * DigitalSignature constructor.
@@ -54,17 +50,7 @@ class DigitalSignature extends \Zend\Session\Container
      */
     public function getApplicationId()
     {
-        return (int)$this->applicationId;
-    }
-
-    public function getSignatureType(): int
-    {
-        return (int)$this->signatureType();
-    }
-
-    public function setSignatureType($signatureType): void
-    {
-        $this->signatureType = $signatureType;
+        return (int) $this->applicationId;
     }
 
     /**
@@ -96,21 +82,22 @@ class DigitalSignature extends \Zend\Session\Container
      */
     public function getContinuationDetailId()
     {
-        return (int)$this->continuationDetailId;
+        return (int) $this->continuationDetailId;
+    }
+
+    public function setTransportManagerApplicationOperatorSignature($transportManagerApplicationId)
+    {
+        $this->setTransportManagerApplicationId($transportManagerApplicationId);
+        $this->transportManagerApplicationOperatorSignature = true;
+    }
+
+    public function setTransportManagerApplicationId($transportManagerApplicationId)
+    {
+        $this->transportManagerApplicationId = $transportManagerApplicationId;
     }
 
     public function hasTransportManagerApplicationId()
     {
         return $this->offsetExists('transportManagerApplicationId');
-    }
-
-    /**
-     * getTransportManagerApplication
-     *
-     * @return int
-     */
-    public function getTransportManagerApplication(): int
-    {
-        return (int)$this->transportManagerApplication;
     }
 }
