@@ -10,8 +10,10 @@ namespace Olcs\Session;
 class DigitalSignature extends \Zend\Session\Container
 {
     const SESSION_NAME = 'DigitalSignature';
-    protected $transportManagerApplicationId;
-    protected $transportManagerApplicationOperatorSignature;
+
+
+
+
 
     /**
      * DigitalSignature constructor.
@@ -99,5 +101,21 @@ class DigitalSignature extends \Zend\Session\Container
     public function hasTransportManagerApplicationId()
     {
         return $this->offsetExists('transportManagerApplicationId');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTransportManagerApplicationOperatorSignature()
+    {
+        return $this->transportManagerApplicationOperatorSignature;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTransportManagerApplicationId()
+    {
+        return $this->transportManagerApplicationId;
     }
 }

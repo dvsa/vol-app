@@ -47,6 +47,8 @@ class GdsVerifyController extends AbstractController
         $session = new \Olcs\Session\DigitalSignature();
         $applicationId = $session->hasApplicationId() ? $session->getApplicationId() : false;
         $continuationDetailId = $session->hasContinuationDetailId() ? $session->getContinuationDetailId() : false;
+        $transportManagerApplicationId = $session->hasTransportManagerApplicationId()? $session->getTransportManagerApplicationId():false;
+
         $session->getManager()->getStorage()->clear(\Olcs\Session\DigitalSignature::SESSION_NAME);
 
         $dto = \Dvsa\Olcs\Transfer\Command\GdsVerify\ProcessSignatureResponse::create(
@@ -57,6 +59,13 @@ class GdsVerifyController extends AbstractController
         }
         if ($continuationDetailId) {
             $dto->setContinuationDetail($continuationDetailId);
+        }
+
+        if($transportManagerApplicationId){
+            $dto->setTransportManagerApplication($transportManagerApplicationId);
+            if($session->getTransportManagerApplicationOperatorSignature() === true){
+                $dto->set
+            }
         }
         $response = $this->handleCommand($dto);
         if (!$response->isOk()) {
