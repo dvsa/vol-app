@@ -47,9 +47,8 @@ class GdsVerifyController extends AbstractController
         $session = new \Olcs\Session\DigitalSignature();
         $applicationId = $session->hasApplicationId() ? $session->getApplicationId() : false;
         $continuationDetailId = $session->hasContinuationDetailId() ? $session->getContinuationDetailId() : false;
-        $transportManagerApplicationId = $session->hasTransportManagerApplicationId()? $session->getTransportManagerApplicationId():false;
+        $transportManagerApplicationId = $session->hasTransportManagerApplicationId() ? $session->getTransportManagerApplicationId() : false;
 
-        $session->getManager()->getStorage()->clear(\Olcs\Session\DigitalSignature::SESSION_NAME);
 
         $dto = \Dvsa\Olcs\Transfer\Command\GdsVerify\ProcessSignatureResponse::create(
             ['samlResponse' => $this->getRequest()->getPost('SAMLResponse')]
@@ -61,12 +60,17 @@ class GdsVerifyController extends AbstractController
             $dto->setContinuationDetail($continuationDetailId);
         }
 
-        if($transportManagerApplicationId){
+        if ($transportManagerApplicationId) {
             $dto->setTransportManagerApplication($transportManagerApplicationId);
-            if($session->getTransportManagerApplicationOperatorSignature() === true){
-                $dto->set
+            if ($session->getTransportManagerApplicationOperatorSignature() === true) {
+                $dto->setTransportManagerApplicationOperatorSignature('Y');
+            } else {
+                $dto->setTransportManagerApplicationOperatorSignature('N');
             }
+
         }
+        $session->getManager()->getStorage()->clear(\Olcs\Session\DigitalSignature::SESSION_NAME);
+
         $response = $this->handleCommand($dto);
         if (!$response->isOk()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('undertakings_not_signed');
