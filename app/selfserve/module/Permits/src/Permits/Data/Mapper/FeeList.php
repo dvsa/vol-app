@@ -12,6 +12,13 @@ class FeeList
     const FEE_STATUS_OUTSTANDING = 'lfs_ot';
     const FEE_TYPE_ISSUE = 'IRHPGVISSUE';
 
+    /**
+     * Maps fee data to easy to reference indexes
+     *
+     * @param array an array of data retrieved from the backend
+     * @return array the same array as passed in except possibly
+     *                  with additional indexes for fee data
+     */
     public static function mapForDisplay (array $data) {
         foreach ($data['fees'] as $fee) {
             if ($fee['feeStatus']['id'] == self::FEE_STATUS_OUTSTANDING
