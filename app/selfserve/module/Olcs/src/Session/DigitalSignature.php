@@ -97,7 +97,7 @@ class DigitalSignature extends \Zend\Session\Container
         $this->transportManagerApplicationOperatorSignature = true;
     }
 
-    public function setTransportManagerApplicationId(int $transportManagerApplicationId)
+    public function setTransportManagerApplicationId($transportManagerApplicationId)
     {
         $this->transportManagerApplicationId = $transportManagerApplicationId;
     }
