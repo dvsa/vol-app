@@ -456,7 +456,7 @@ $routes = array(
                         'action' => 'initiate-request',
                     ),
                     'constraints' =>[
-
+                            'lva' => '[application|variation]',
                             'applicationId' => '[0-9]+',
                             'transportManagerApplicationId' => '[0-9]+'
 
