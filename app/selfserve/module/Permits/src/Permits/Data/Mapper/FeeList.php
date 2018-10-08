@@ -1,6 +1,7 @@
 <?php
 
 namespace Permits\Data\Mapper;
+
 use Dvsa\Olcs\Api\Entity\Fee\Fee;
 use Dvsa\Olcs\Api\Entity\Fee\FeeType;
 
@@ -20,7 +21,8 @@ class FeeList
      * @return array the same array as passed in except possibly
      *                  with additional indexes for fee data
      */
-    public static function mapForDisplay (array $data) {
+    public static function mapForDisplay(array $data)
+    {
         foreach ($data['fees'] as $fee) {
             if ($fee['feeStatus']['id'] == Fee::STATUS_OUTSTANDING
                     && $fee['feeType']['feeType']['id'] == FeeType::FEE_TYPE_ECMT_ISSUE) {
