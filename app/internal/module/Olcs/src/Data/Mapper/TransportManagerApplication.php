@@ -2,6 +2,8 @@
 
 namespace Olcs\Data\Mapper;
 
+use Common\Service\Entity\TransportManagerApplicationEntityService;
+
 /**
  * Transport Manager Application mapper
  *
@@ -34,8 +36,10 @@ class TransportManagerApplication
             $details['tmType'] = $data['tmType'];
         }
         if (isset($data['tmApplicationStatus']['id'])) {
-            $details['tmApplicationStatus'] = $data['tmApplicationStatus']['id'];
+
+            $details['tmApplicationStatus'] = self::mapTmaStatus($data);
         }
+
         $details['id'] = $data['id'];
         $details['version'] = $data['version'];
         $details['isOwner'] = $data['isOwner'];
@@ -117,5 +121,27 @@ class TransportManagerApplication
         }
         $form->setMessages($formMessages);
         return $errors;
+    }
+
+    /**
+     * Map TMA statuses which should not be visible to the relevant visible statuses
+     *
+     * @param array $data
+     *
+     * @return mixed
+     */
+    private static function mapTmaStatus(array $data)
+    {
+        $status = $data['tmApplicationStatus']['id'];
+
+        if ($data['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED ||
+            $data['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED) {
+            $status = TransportManagerApplicationEntityService::STATUS_INCOMPLETE;
+        } elseif ($data['tmApplicationStatus']['id'] ===
+            TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED) {
+            $status = TransportManagerApplicationEntityService::STATUS_TM_SIGNED;
+        }
+
+        return $status;
     }
 }

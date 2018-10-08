@@ -634,6 +634,11 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $this->getOtherLicencesTable()
         );
 
+        $tmStatus = $form->get('details')->get('tmApplicationStatus');
+        $this->formHelper->removeValueOption($tmStatus, 'tmap_st_details_submitted');
+        $this->formHelper->removeValueOption($tmStatus, 'tmap_st_details_checked');
+        $this->formHelper->removeValueOption($tmStatus, 'tmap_st_operator_approved');
+
         return $form;
     }
 
