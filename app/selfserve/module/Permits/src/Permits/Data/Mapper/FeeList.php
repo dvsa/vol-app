@@ -33,7 +33,9 @@ class FeeList
             }
         }
 
-        return null;
+        throw new \RuntimeException(
+            'No outstanding issuing fees were found.'
+        );
     }
 
     /**
