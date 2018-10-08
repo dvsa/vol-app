@@ -102,9 +102,7 @@ trait TransportManagerApplicationTrait
             } else {
                 return $this->redirect()->toRoute(
                     "lva-{$this->lva}/transport_managers",
-                    ['application' => $this->tma["application"]["id"]],
-                    [],
-                    false
+                    ['application' => $this->tma["application"]["id"]]
                 );
             }
         }
