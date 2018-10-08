@@ -33,8 +33,7 @@ use Zend\View\Model\ViewModel;
 class TransportManagerDetailsResponsibilityController extends AbstractTransportManagerDetailsController implements
     LeftViewProvider
 {
-    use CheckForCrudAction {
-        CheckForCrudAction::getActionFromFullActionName as parentGetActionFromFullActionName;
+    use CheckForCrudAction {CheckForCrudAction::getActionFromFullActionName as parentGetActionFromFullActionName;
     }
 
     protected $navigationId = 'transport_manager_details_responsibility';

@@ -36,7 +36,6 @@ class TransportManagerApplication
             $details['tmType'] = $data['tmType'];
         }
         if (isset($data['tmApplicationStatus']['id'])) {
-
             $details['tmApplicationStatus'] = self::mapTmaStatus($data);
         }
 
