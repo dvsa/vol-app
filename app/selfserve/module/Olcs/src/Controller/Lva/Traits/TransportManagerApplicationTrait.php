@@ -21,7 +21,7 @@ trait TransportManagerApplicationTrait
 
     public function preDispatch()
     {
-       return $this->redirectIfSectionNotCorrect();
+        return $this->redirectIfSectionNotCorrect();
     }
 
     /**
@@ -42,8 +42,6 @@ trait TransportManagerApplicationTrait
     /**
      * getTmName
      *
-     * @param array $transportManagerApplication
-     *
      * @return string
      */
     protected function getTmName()
@@ -56,8 +54,6 @@ trait TransportManagerApplicationTrait
 
     /**
      * Returns "application" or "variation"
-     *
-     * @param array $tma
      *
      * @return string
      */
@@ -113,6 +109,4 @@ trait TransportManagerApplicationTrait
             }
         }
     }
-
 }
-

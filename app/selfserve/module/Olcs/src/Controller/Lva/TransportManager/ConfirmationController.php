@@ -44,7 +44,6 @@ class ConfirmationController extends AbstractController
      *
      * @param string            $title  Title
      * @param \Common\Form\Form $form   Form
-     * @param array             $tma    TM application
      * @param array             $params Params
      *
      * @return \Zend\View\Model\ViewModel

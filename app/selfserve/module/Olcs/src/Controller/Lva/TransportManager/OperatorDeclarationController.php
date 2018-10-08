@@ -20,8 +20,6 @@ class OperatorDeclarationController extends AbstractDeclarationController
     /**
      * Get the URL/link to go back
      *
-     * @param array $tma
-     *
      * @return string
      */
     protected function getBackLink(): string
@@ -36,7 +34,6 @@ class OperatorDeclarationController extends AbstractDeclarationController
     }
 
     /**
-     * @param $tma
      * @return \Common\Service\Cqrs\Response
      */
     protected function handlePhysicalSignatureCommand(): \Common\Service\Cqrs\Response

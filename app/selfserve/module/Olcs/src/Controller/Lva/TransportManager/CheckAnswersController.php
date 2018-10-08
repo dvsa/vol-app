@@ -8,7 +8,6 @@ use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
 use Common\Service\Entity\TransportManagerApplicationEntityService;
 
-
 class CheckAnswersController extends AbstractController
 {
     use ExternalControllerTrait,
@@ -44,12 +43,15 @@ class CheckAnswersController extends AbstractController
     /**
      * confirmAction
      *
+     * @return \Zend\Http\Response
      */
     public function confirmAction()
     {
         $transportManagerApplicationId = $this->params("child_id");
-        $this->updateTmaStatus($transportManagerApplicationId,
-            TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED);
+        $this->updateTmaStatus(
+            $transportManagerApplicationId,
+            TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED
+        );
         return $this->redirectToTmDeclarationPage();
     }
 
@@ -90,12 +92,12 @@ class CheckAnswersController extends AbstractController
         $lva = $transportManagerApplication['application']['isVariation'] ? 'variation' : 'application';
         foreach ($sections as $key => $value) {
             $sections[$key]['change']['sectionLink'] = $this->url()->fromRoute(
-                    'lva-' . $lva . '/transport_manager_details',
-                    [
-                        'application' => $transportManagerApplication['application']['id'],
-                        'child_id' => $transportManagerApplication['id'],
-                    ]
-                ) . "#" . $sections[$key]['change']['sectionName'];
+                'lva-' . $lva . '/transport_manager_details',
+                [
+                    'application' => $transportManagerApplication['application']['id'],
+                    'child_id' => $transportManagerApplication['id'],
+                ]
+            ) . "#" . $sections[$key]['change']['sectionName'];
         }
         return $sections;
     }
@@ -152,8 +154,10 @@ class CheckAnswersController extends AbstractController
     {
         if ($this->tma['tmApplicationStatus']['id'] ===
             TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED) {
-            $this->updateTmaStatus($this->tma['id'],
-                TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED);
+            $this->updateTmaStatus(
+                $this->tma['id'],
+                TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED
+            );
         }
     }
 
