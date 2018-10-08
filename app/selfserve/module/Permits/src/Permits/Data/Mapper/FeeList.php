@@ -19,7 +19,7 @@ class FeeList
                 //return first occurence as there should only be one
                 $data['issueFee'] = $fee['feeType']['displayValue'];
                 $data['totalFee'] = $fee['grossAmount'];
-                $data['dueDate'] = FeeList::calculateDueDate($fee['invoicedDate']);
+                $data['dueDate'] = self::calculateDueDate($fee['invoicedDate']);
 
                 return $data;
             }
