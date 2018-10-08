@@ -117,13 +117,13 @@ class ConfirmationController extends AbstractController
     protected function isUserPermitted()
     {
         if ($this->tma['isTmLoggedInUser'] &&
-            $this->tma['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_TM_SIGNED ||
-            $this->tma['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_RECEIVED &&
+            ($this->tma['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_TM_SIGNED ||
+            $this->tma['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_RECEIVED) &&
             !is_null($this->tma['tmDigitalSignature'])) {
             return true;
         }
 
-        if (!$this->tma['isTmLoggedInUser'] &&
+        if ((!$this->tma['isTmLoggedInUser']) &&
             $this->tma['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_RECEIVED &&
             !is_null($this->tma['opDigitalSignature'])) {
             return true;

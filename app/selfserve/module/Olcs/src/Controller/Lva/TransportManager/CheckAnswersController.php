@@ -171,10 +171,10 @@ class CheckAnswersController extends AbstractController
     protected function isUserPermitted($transportManagerApplication)
     {
         if ($transportManagerApplication['isTmLoggedInUser'] &&
-            $transportManagerApplication['tmApplicationStatus']['id'] ===
+            ($transportManagerApplication['tmApplicationStatus']['id'] ===
             TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED ||
             $transportManagerApplication['tmApplicationStatus']['id'] ===
-            TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED) {
+            TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED)) {
             return true;
         }
         return false;
