@@ -721,6 +721,8 @@ return [
                 Admin\Controller\IrhpPermitStockController::class,
             Admin\Controller\IrhpPermitWindowController::class =>
                 Admin\Controller\IrhpPermitWindowController::class,
+            Admin\Controller\IrhpPermitRangeController::class =>
+                Admin\Controller\IrhpPermitRangeController::class,
             Admin\Controller\DataRetention\RuleAdminController::class =>
                 Admin\Controller\DataRetention\RuleAdminController::class
         ],
