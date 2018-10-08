@@ -16,6 +16,9 @@ abstract class AbstractDeclarationController extends AbstractController
 
     protected $declarationMarkup;
 
+    /**
+     * @var TransportManagerApplication
+     */
     protected $tma;
 
     /**
@@ -71,10 +74,9 @@ abstract class AbstractDeclarationController extends AbstractController
     protected function digitalSignatureAction()
     {
         $role = $this->getSignAsRole();
-        $operatorRoute ='';
         // this will be either RefData::TMA_SIGN_AS_TM || RefData::TMA_SIGN_AS_TM_OP
         // isOwner will disambiguate later.
-        $routeParams = ['transportManagerApplicationId'=>$this->tma['id']];
+        $routeParams = ['applicationId'=>$this->tma['application']['id'], 'transportManagerApplicationId'=>$this->tma['id']];
         if ($role !== RefData::TMA_SIGN_AS_OP) {
             $routeParams = array_merge($routeParams, ['transportManagerApplicationOperatorSignature' =>'operator-confirm']);
         }

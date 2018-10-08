@@ -450,11 +450,17 @@ $routes = array(
             'transport-manager' =>[
                 'type' => Segment::class,
                 'options' => array(
-                    'route' => '/transport-manager[/application/:transportManagerApplicationId]'.
+                    'route' => '/:lva/:applicationId/transport-manager/:transportManagerApplicationId'.
                         '[/:transportManagerApplicationOperatorSignature][/]',
                     'defaults' => array(
                         'action' => 'initiate-request',
                     ),
+                    'constraints' =>[
+
+                            'applicationId' => '[0-9]+',
+                            'transportManagerApplicationId' => '[0-9]+'
+
+                    ],
                 )
             ],
             'process-response' => array(

@@ -48,7 +48,7 @@ class GdsVerifyController extends AbstractController
         $applicationId = $session->hasApplicationId() ? $session->getApplicationId() : false;
         $continuationDetailId = $session->hasContinuationDetailId() ? $session->getContinuationDetailId() : false;
         $transportManagerApplicationId = $session->hasTransportManagerApplicationId() ? $session->getTransportManagerApplicationId() : false;
-
+        $lva = $session->hasLva()? $session->getLva():'application';
 
         $dto = \Dvsa\Olcs\Transfer\Command\GdsVerify\ProcessSignatureResponse::create(
             ['samlResponse' => $this->getRequest()->getPost('SAMLResponse')]
@@ -88,6 +88,19 @@ class GdsVerifyController extends AbstractController
                 ['continuationDetailId' => $continuationDetailId]
             );
         }
+
+        /** @var  $transportManagerApplicationId */
+        if ($transportManagerApplicationId) {
+            return $this->redirect()->toRoute(
+                'lva-' . $lva . '/transport_manager_confirmation',
+                [
+                    'child_id' => $transportManagerApplicationId,
+                    'application' => $applicationId,
+                    'action' => 'index'
+                ]
+            );
+        }
+
 
         throw new \RuntimeException('There was an error processing the signature response');
     }

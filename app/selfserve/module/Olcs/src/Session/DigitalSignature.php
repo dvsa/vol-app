@@ -11,10 +11,6 @@ class DigitalSignature extends \Zend\Session\Container
 {
     const SESSION_NAME = 'DigitalSignature';
 
-
-
-
-
     /**
      * DigitalSignature constructor.
      */
@@ -33,6 +29,10 @@ class DigitalSignature extends \Zend\Session\Container
         return $this->offsetExists('applicationId');
     }
 
+    public function hasLva()
+    {
+        return $this->offsetExists('lva');
+    }
     /**
      * Set Application ID
      *
@@ -121,5 +121,21 @@ class DigitalSignature extends \Zend\Session\Container
     public function getTransportManagerApplicationId() :int
     {
         return (int) $this->transportManagerApplicationId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLva() :string
+    {
+        return $this->lva;
+    }
+
+    /**
+     * @param mixed $lva
+     */
+    public function setLva($lva): void
+    {
+        $this->lva = $lva;
     }
 }
