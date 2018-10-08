@@ -9,10 +9,33 @@ namespace Permits\Data\Mapper;
  */
 class FeeList
 {
+    const FEE_STATUS_OUTSTANDING = 'lfs_ot';
+    const FEE_TYPE_ISSUE = 'IRHPGVISSUE';
+
     public static function mapForDisplay (array $data) {
-        return [
-            'appFee' => $data['fee']['IRHP_GV_APP_ECMT']['fixedValue'],
-            'issueFee' => $data['fee']['IRHP_GV_ECMT_100_PERMIT_FEE']['fixedValue'],
-        ];
+        foreach ($data['fees'] as $fee) {
+            if ($fee['feeStatus']['id'] == self::FEE_STATUS_OUTSTANDING
+                    && $fee['feeType']['feeType']['id'] == self::FEE_TYPE_ISSUE) {
+                //return first occurence as there should only be one
+                $data['issueFee'] = $fee['feeType']['displayValue'];
+                $data['totalFee'] = $fee['grossAmount'];
+                $data['dueDate'] = FeeList::calculateDueDate($fee['invoicedDate']);
+
+                return $data;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * add 10 days to the date
+     * @param string $date
+     * @return string
+     */
+    private function calculateDueDate($date)
+    {
+        $dueDate = date(\DATE_FORMAT, strtotime("+10 days", strtotime($date)));
+        return $dueDate;
     }
 }

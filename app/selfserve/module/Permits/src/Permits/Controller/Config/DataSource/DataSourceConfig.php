@@ -19,11 +19,11 @@ class DataSourceConfig
         PermitAppDataSource::class => [],
     ];
     const PERMIT_APP_WITH_FEE_LIST = [
-        PermitAppDataSource::class => [],
-        FeeListDto::class => [
+        PermitAppDataSource::class => [
             'mapper' => FeeListMapper::class
         ],
     ];
+
     const PERMIT_ECMT_VALID = [
         ValidEcmtPermitsDataSource::class => [
             'mapper' => ValidEcmtPermitsMapper::class
