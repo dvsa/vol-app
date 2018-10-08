@@ -87,13 +87,17 @@ class DigitalSignature extends \Zend\Session\Container
         return (int) $this->continuationDetailId;
     }
 
+    /**
+     * setTransportManagerApplicationOperatorSignature
+     * @param $transportManagerApplicationId
+     */
     public function setTransportManagerApplicationOperatorSignature($transportManagerApplicationId)
     {
         $this->setTransportManagerApplicationId($transportManagerApplicationId);
         $this->transportManagerApplicationOperatorSignature = true;
     }
 
-    public function setTransportManagerApplicationId($transportManagerApplicationId)
+    public function setTransportManagerApplicationId(int $transportManagerApplicationId)
     {
         $this->transportManagerApplicationId = $transportManagerApplicationId;
     }
@@ -104,18 +108,18 @@ class DigitalSignature extends \Zend\Session\Container
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getTransportManagerApplicationOperatorSignature()
+    public function getTransportManagerApplicationOperatorSignature():bool
     {
-        return $this->transportManagerApplicationOperatorSignature;
+        return (bool) $this->transportManagerApplicationOperatorSignature;
     }
 
     /**
      * @return mixed
      */
-    public function getTransportManagerApplicationId()
+    public function getTransportManagerApplicationId() :int
     {
-        return $this->transportManagerApplicationId;
+        return (int) $this->transportManagerApplicationId;
     }
 }

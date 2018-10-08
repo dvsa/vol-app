@@ -67,7 +67,6 @@ class GdsVerifyController extends AbstractController
             } else {
                 $dto->setTransportManagerApplicationOperatorSignature('N');
             }
-
         }
         $session->getManager()->getStorage()->clear(\Olcs\Session\DigitalSignature::SESSION_NAME);
 
