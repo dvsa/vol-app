@@ -190,7 +190,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             $form->setData($data);
             if ($form->isValid()) {
                 if ($application['licence']['id'] != $data['Fields']['EcmtLicence']) {
-                    $this->redirect()
+                    return $this->redirect()
                         ->toRoute(
                             'permits/' . EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE,
                             ['id' => $id],
@@ -198,10 +198,10 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                                 'licenceId' => $data['Fields']['EcmtLicence']
                             ]]
                         );
-                } else {
-                    $this->redirect()
-                        ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
                 }
+
+                return $this->redirect()
+                    ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
             } else {
                 $form->get('Fields')->get('EcmtLicence')->setMessages(['isEmpty' => "error.messages.ecmt-licence"]);
             }
