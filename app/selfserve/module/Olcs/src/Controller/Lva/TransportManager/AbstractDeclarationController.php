@@ -3,6 +3,7 @@
 namespace OLCS\Controller\Lva\TransportManager;
 
 use \Common\Form\Form;
+use Common\RefData;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
@@ -15,6 +16,9 @@ abstract class AbstractDeclarationController extends AbstractController
 
     protected $declarationMarkup;
 
+    /**
+     * @var TransportManagerApplication
+     */
     protected $tma;
 
     /**
@@ -69,7 +73,17 @@ abstract class AbstractDeclarationController extends AbstractController
 
     protected function digitalSignatureAction()
     {
-        // write method body
+        $role = $this->getSignAsRole();
+        // this will be either RefData::TMA_SIGN_AS_TM || RefData::TMA_SIGN_AS_TM_OP
+        // isOwner will disambiguate later.
+        $routeParams = ['lva'=>$this->lva, 'applicationId'=>$this->tma['application']['id'], 'transportManagerApplicationId'=>$this->tma['id']];
+        if ($role === RefData::TMA_SIGN_AS_OP) {
+            $routeParams = array_merge($routeParams, ['transportManagerApplicationOperatorSignature' =>'operator-confirm']);
+        }
+        $this->redirect()->toRoute(
+            'verify/transport-manager',
+            $routeParams
+        );
     }
 
     /**

@@ -4,7 +4,9 @@ namespace Olcs\Session;
 
 /**
  * Class DigitalSignature
- */
+ *
+ *
+*/
 class DigitalSignature extends \Zend\Session\Container
 {
     const SESSION_NAME = 'DigitalSignature';
@@ -27,6 +29,10 @@ class DigitalSignature extends \Zend\Session\Container
         return $this->offsetExists('applicationId');
     }
 
+    public function hasLva()
+    {
+        return $this->offsetExists('lva');
+    }
     /**
      * Set Application ID
      *
@@ -48,7 +54,6 @@ class DigitalSignature extends \Zend\Session\Container
     {
         return (int) $this->applicationId;
     }
-
 
     /**
      * Has ContinuationDetail ID been set
@@ -80,5 +85,57 @@ class DigitalSignature extends \Zend\Session\Container
     public function getContinuationDetailId()
     {
         return (int) $this->continuationDetailId;
+    }
+
+    /**
+     * setTransportManagerApplicationOperatorSignature
+     * @param $transportManagerApplicationId
+     */
+    public function setTransportManagerApplicationOperatorSignature($transportManagerApplicationId)
+    {
+        $this->setTransportManagerApplicationId($transportManagerApplicationId);
+        $this->transportManagerApplicationOperatorSignature = true;
+    }
+
+    public function setTransportManagerApplicationId($transportManagerApplicationId)
+    {
+        $this->transportManagerApplicationId = $transportManagerApplicationId;
+    }
+
+    public function hasTransportManagerApplicationId()
+    {
+        return $this->offsetExists('transportManagerApplicationId');
+    }
+
+    /**
+     * @return bool
+     */
+    public function getTransportManagerApplicationOperatorSignature():bool
+    {
+        return (bool) $this->transportManagerApplicationOperatorSignature;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTransportManagerApplicationId() :int
+    {
+        return (int) $this->transportManagerApplicationId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLva() :?string
+    {
+        return $this->lva;
+    }
+
+    /**
+     * @param mixed $lva
+     */
+    public function setLva($lva): void
+    {
+        $this->lva = $lva;
     }
 }
