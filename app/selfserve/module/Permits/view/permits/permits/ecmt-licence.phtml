@@ -1,7 +1,7 @@
 <?php
 $title = $this->translate('permits.page.ecmt.licence.title');
 $this->headTitle($title);
-$data = $this->ecmtLicenceData($form, $application, $stock);
+$data = $this->ecmtLicenceData($form, $stock, $application);
 ?>
 <div class="row ecmt">
     <div class="two-thirds">
@@ -14,16 +14,11 @@ $data = $this->ecmtLicenceData($form, $application, $stock);
                 </h1>
             </div>
         </div>
-                <fieldset id="ecmt-licence" class="inline " data-group="ecmt-licence">
-                    <?php
-                   echo $data['copy'];
+            <fieldset id="ecmt-licence" class="inline " data-group="ecmt-licence">
+                <?php
+                    echo $data['copy'];
 
-                    if (empty($form->get('Fields')
-                        ->get('EcmtLicence')->getValueOptions())) {
-                        $form->get('Submit')->get('SubmitButton')->setAttribute('class', 'visually-hidden');
-                        $form->get('Fields')->get('EcmtLicence')->setOptions(['label' => '']);
-                    }
-                    if (!isset($application) && count($form->get('Fields')->get('EcmtLicence')->getValueOptions()) === 1) {
+                    if (count($form->get('Fields')->get('EcmtLicence')->getValueOptions()) === 1) {
                         $option = $form->get('Fields')->get('EcmtLicence')->getValueOptions()[0];
                         $option['selected'] = true;
                         $option['label_attributes'] = ['class' => 'visually-hidden'];
@@ -32,14 +27,13 @@ $data = $this->ecmtLicenceData($form, $application, $stock);
                     }
 
                     echo $this->form($form);
-                    ?>
-                </fieldset>
-    <?php
-            if (count($form->get('Fields')->get('EcmtLicence')->getValueOptions()) > 0 || isset($application)) {
-                echo $this->permitsDashboardLink();
-            }
-    ?>
+                ?>
+            </fieldset>
+            <?php
+                if (isset($application)) {
+                    echo $this->permitsDashboardLink();
+                }
+            ?>
         </div>
-
     </div>
 </div>

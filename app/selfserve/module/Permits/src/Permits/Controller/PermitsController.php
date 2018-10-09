@@ -5,6 +5,7 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 
 use Common\Controller\Traits\GenericReceipt;
 use Common\Controller\Traits\StoredCardsTrait;
+use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtLicence;
@@ -188,14 +189,19 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         if (isset($data['Submit']['SubmitButton'])) {
             $form->setData($data);
             if ($form->isValid()) {
-                $this->redirect()
-                    ->toRoute(
-                        'permits/' . EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE,
-                        ['id' => $this->params()->fromRoute('id', -1)],
-                        [ 'query' => [
-                            'licenceId' => $data['Fields']['EcmtLicence']
-                        ]]
-                    );
+                if ($application['licence']['id'] != $data['Fields']['EcmtLicence']) {
+                    return $this->redirect()
+                        ->toRoute(
+                            'permits/' . EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE,
+                            ['id' => $id],
+                            ['query' => [
+                                'licenceId' => $data['Fields']['EcmtLicence']
+                            ]]
+                        );
+                }
+
+                return $this->redirect()
+                    ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
             } else {
                 $form->get('Fields')->get('EcmtLicence')->setMessages(['isEmpty' => "error.messages.ecmt-licence"]);
             }
@@ -465,9 +471,12 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     {
         $id = $this->params()->fromRoute('id', -1);
 
-        $request = $this->getRequest();
-        $data = (array)$request->getPost();
         $application = $this->getApplication($id);
+        $data = $this->params()->fromPost();
+
+        $query = Licence::create(['id' => $this->params()->fromQuery('licenceId')]);
+        $response = $this->handleQuery($query);
+        $newLicence = $response->getResult();
 
         //Create form from annotations
         $form = $this->getForm('ChangeLicenceForm');
@@ -486,6 +495,10 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
         $formData['Fields']['licenceId'] = $this->getRequest()->getQuery('licenceId');
         $form->setData($formData);
+
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $confirmChangeLabel = $translationHelper->translateReplace('permits.form.change_licence.label', [$newLicence['licNo']]);
+        $form->get('Fields')->get('ConfirmChange')->setLabel($confirmChangeLabel);
 
         $view = new ViewModel();
 
