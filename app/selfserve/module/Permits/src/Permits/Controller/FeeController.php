@@ -1,4 +1,5 @@
 <?php
+
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
@@ -60,44 +61,56 @@ class FeeController extends AbstractSelfserveController implements ToggleAwareIn
     public function paymentResultAction()
     {
         $id = $this->params()->fromRoute('id', -1);
-
         $queryStringData = (array)$this->getRequest()->getQuery();
+
         $reference = isset($queryStringData['receipt_reference']) ? $queryStringData['receipt_reference'] : null;
 
         $dtoData = [
             'reference' => $reference,
             'cpmsData' => $queryStringData,
             'paymentMethod' => RefData::FEE_PAYMENT_METHOD_CARD_ONLINE,
-            'submitEcmtPermitApplicationId' => $id,
+            'submitEcmtPermitApplicationId' => $id
+
         ];
 
         $response = $this->handleCommand(CompletePaymentCmd::create($dtoData));
-
-        if (!$response->isOk()) {
-            $this->addErrorMessage('payment-failed');
-            $this->redirect()
-                ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
-        }
+        $this->handlePaymentError($response);
 
         // check payment status and redirect accordingly
         $paymentId = $response->getResult()['id']['transaction'];
         $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
         $payment = $response->getResult();
+
+        if ($this->data['application']['status']['id'] === RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED) {
+            $successRoute = EcmtSection::ROUTE_ECMT_SUBMITTED;
+            $failureRoute = EcmtSection::ROUTE_ECMT_FEE;
+        } else {
+            $successRoute = EcmtSection::ROUTE_ECMT_ISSUING;
+            $failureRoute = EcmtSection::ROUTE_ECMT_AWAITING_FEE;
+        }
+
         switch ($payment['status']['id']) {
             case RefData::TRANSACTION_STATUS_COMPLETE:
                 return $this->redirect()
-                    ->toRoute('permits/' . EcmtSection::ROUTE_ECMT_SUBMITTED, ['id' => $id], [ 'query' => ['receipt_reference' => $this->params()->fromQuery('receipt_reference')]]);
+                    ->toRoute('permits/' . $successRoute, ['id' => $id], ['query' => ['receipt_reference' => $this->params()->fromQuery('receipt_reference')]]);
             case RefData::TRANSACTION_STATUS_CANCELLED:
                 return $this->redirect()
-                    ->toRoute('permits/' . EcmtSection::ROUTE_ECMT_FEE, ['id' => $id]);
+                    ->toRoute('permits/' . $failureRoute, ['id' => $id]);
             case RefData::TRANSACTION_STATUS_FAILED:
                 return $this->redirect()
-                    ->toRoute('permits/' . EcmtSection::ROUTE_ECMT_FEE, ['id' => $id]);
+                    ->toRoute('permits/' . $failureRoute, ['id' => $id]);
             default:
                 break;
         }
 
         return $this->redirect()
-            ->toRoute('permits/' . EcmtSection::ROUTE_ECMT_FEE, ['id' => $id]);
+            ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
+    }
+
+    protected function handlePaymentError($response)
+    {
+        if (!$response->isOk()) {
+            $this->addErrorMessage('payment-failed');
+        }
     }
 }

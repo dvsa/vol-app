@@ -3,10 +3,10 @@ namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
-use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\Table\TableConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
+use Permits\View\Helper\EcmtSection;
 
 class ValidPermitsController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -15,18 +15,32 @@ class ValidPermitsController extends AbstractSelfserveController implements Togg
     ];
 
     protected $dataSourceConfig = [
-        'generic' => DataSourceConfig::PERMIT_ECMT_VALID,
+        'valid' => DataSourceConfig::PERMIT_ECMT_VALID,
+        'unpaid' => DataSourceConfig::PERMIT_ECMT_UNPAID,
     ];
 
     protected $tableConfig = [
-        'generic' => TableConfig::VALID_APP_OVERVIEW
+        'default' => TableConfig::VALID_APP_OVERVIEW,
     ];
 
-    protected $conditionalDisplayConfig = [
-        //'default' => ConditionalDisplayConfig::PERMIT_APP_IS_VALID,
-    ];
 
     protected $templateConfig = [
-        'generic' => 'permits/valid-permits-overview',
+        'valid' => 'permits/valid-permits-overview',
+        'unpaid' => 'permits/valid-permits-overview',
     ];
+
+    public function validAction()
+    {
+        $view = parent::genericAction();
+        $view->setVariable('rightColumn', 'markup-ecmt-permit-valid-permits-right-column');
+        return $view;
+    }
+
+    public function unpaidAction()
+    {
+        $view = parent::genericAction();
+        $view->setVariable('rightColumn', 'markup-ecmt-permit-unpaid-permits-right-column');
+        $view->setVariable('returnLink', EcmtSection::ROUTE_ECMT_AWAITING_FEE);
+        return $view;
+    }
 }
