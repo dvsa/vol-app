@@ -458,7 +458,8 @@ $routes = array(
                     'constraints' =>[
                             'lva' => '(application|variation)',
                             'applicationId' => '[0-9]+',
-                            'transportManagerApplicationId' => '[0-9]+'
+                            'transportManagerApplicationId' => '[0-9]+',
+                            'transportManagerApplicationOperatorSignature' =>'(operator-confirm)'
 
                     ],
                 )
