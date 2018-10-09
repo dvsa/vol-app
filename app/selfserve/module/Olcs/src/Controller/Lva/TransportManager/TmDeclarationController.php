@@ -5,6 +5,7 @@ namespace OLCS\Controller\Lva\TransportManager;
 use Common\RefData;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Dvsa\Olcs\Transfer\Command;
+use Common\Service\Entity\TransportManagerApplicationEntityService;
 
 class TmDeclarationController extends AbstractDeclarationController
 {
@@ -18,8 +19,6 @@ class TmDeclarationController extends AbstractDeclarationController
 
     /**
      * Get the URL/link to go back
-     *
-     * @param array $tma
      *
      * @return string
      */
@@ -36,7 +35,6 @@ class TmDeclarationController extends AbstractDeclarationController
     }
 
     /**
-     * @param $tma
      * @return \Common\Service\Cqrs\Response
      */
     protected function handlePhysicalSignatureCommand(): \Common\Service\Cqrs\Response
@@ -58,5 +56,20 @@ class TmDeclarationController extends AbstractDeclarationController
             ? 'application.review-declarations.sign-button'
             : $submitText;
         return $label;
+    }
+
+    /**
+     * Is user permitted to access this controller
+     *
+     * @return bool
+     */
+    protected function isUserPermitted()
+    {
+        if ($this->tma['isTmLoggedInUser'] &&
+            $this->tma['tmApplicationStatus']['id'] ===
+            TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED) {
+            return true;
+        }
+        return false;
     }
 }

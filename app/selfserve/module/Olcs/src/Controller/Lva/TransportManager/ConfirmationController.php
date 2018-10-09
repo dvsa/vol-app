@@ -6,6 +6,7 @@ use Common\Controller\Lva\AbstractController;
 use Common\RefData;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
+use Common\Service\Entity\TransportManagerApplicationEntityService;
 
 class ConfirmationController extends AbstractController
 {
@@ -27,10 +28,14 @@ class ConfirmationController extends AbstractController
         $confirmationMarkup = $this->tma["isOwner"] === "N" ? 'markup-tma-confirmation-tm' :
             'markup-tma-confirmation-operator';
 
+        $digitalSignature = $this->isTransportManagerRole() ?
+            $this->tma['tmDigitalSignature'] :
+            $this->tma['opDigitalSignature'];
+
         $params = [
             'content' => $translationHelper->translateReplace(
                 $confirmationMarkup,
-                [$this->getCurrentUserFullName(), $this->getVerifySignatureDate(), $this->getBacklink()]
+                [$this->getSignatureFullName($digitalSignature), $this->getSignatureDate($digitalSignature), $this->getBacklink()]
             ),
             'tmFullName' => $this->getTmName(),
         ];
@@ -43,7 +48,6 @@ class ConfirmationController extends AbstractController
      *
      * @param string            $title  Title
      * @param \Common\Form\Form $form   Form
-     * @param array             $tma    TM application
      * @param array             $params Params
      *
      * @return \Zend\View\Model\ViewModel
@@ -96,16 +100,37 @@ class ConfirmationController extends AbstractController
             !$this->isGranted(RefData::PERMISSION_SELFSERVE_LVA));
     }
 
-    private function getVerifySignatureDate()
+    private function getSignatureDate($signature)
     {
-        $unixTimeStamp = strtotime($this->tma['digitalSignature']['createdOn']);
+        $unixTimeStamp = strtotime($signature['createdOn']);
         return date("j M Y", $unixTimeStamp);
     }
 
-    private function getCurrentUserFullName()
+    private function getSignatureFullName($signature)
     {
-        $user = $this->currentUser()->getUserData();
-        return trim($user["contactDetails"]["person"]["forename"] . ' '
-            . $user["contactDetails"]["person"]["familyName"]);
+        $attributes = json_decode($signature['attributes']);
+        return $attributes->firstname . ' ' . $attributes->surname;
+    }
+
+    /**
+     * Is user permitted to access this controller
+     *
+     * @return bool
+     */
+    protected function isUserPermitted()
+    {
+        if ($this->tma['isTmLoggedInUser'] &&
+            ($this->tma['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_TM_SIGNED ||
+            $this->tma['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_RECEIVED) &&
+            !is_null($this->tma['tmDigitalSignature'])) {
+            return true;
+        }
+
+        if ((!$this->tma['isTmLoggedInUser']) &&
+            $this->tma['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_RECEIVED &&
+            !is_null($this->tma['opDigitalSignature'])) {
+            return true;
+        }
+        return false;
     }
 }

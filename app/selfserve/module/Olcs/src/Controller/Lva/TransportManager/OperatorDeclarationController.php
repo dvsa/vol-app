@@ -6,6 +6,7 @@ use Common\Form\Form;
 use Common\RefData;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Dvsa\Olcs\Transfer\Command;
+use Common\Service\Entity\TransportManagerApplicationEntityService;
 
 class OperatorDeclarationController extends AbstractDeclarationController
 {
@@ -18,8 +19,6 @@ class OperatorDeclarationController extends AbstractDeclarationController
 
     /**
      * Get the URL/link to go back
-     *
-     * @param array $tma
      *
      * @return string
      */
@@ -35,20 +34,19 @@ class OperatorDeclarationController extends AbstractDeclarationController
     }
 
     /**
-     * @param $tma
      * @return \Common\Service\Cqrs\Response
      */
     protected function handlePhysicalSignatureCommand(): \Common\Service\Cqrs\Response
     {
         $response = $this->handleCommand(
-            Command\TransportManagerApplication\OperatorApprove::create(['id' => $this->tma['id']])
+            Command\TransportManagerApplication\OperatorSigned::create(['id' => $this->tma['id']])
         );
         return $response;
     }
 
     protected function alterDeclarationForm(Form $form): void
     {
-        if ($this->tma['digitalSignature'] === null) {
+        if ($this->tma['tmDigitalSignature'] === null) {
             $form->remove('content');
         }
 
@@ -61,5 +59,20 @@ class OperatorDeclarationController extends AbstractDeclarationController
     protected function getSubmitActionLabel(): string
     {
         return 'application.review-declarations.sign-button';
+    }
+
+    /**
+     * Is user permitted to access this controller
+     *
+     * @return bool
+     */
+    protected function isUserPermitted()
+    {
+        if (!$this->tma['isTmLoggedInUser'] &&
+            $this->tma['tmApplicationStatus']['id'] ===
+            TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED) {
+            return true;
+        }
+        return false;
     }
 }

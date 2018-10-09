@@ -69,32 +69,48 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         $tmaId = (int)$this->params('child_id');
         $tma = $this->getTmaDetails($tmaId);
-        $isUserTm = $tma['isTmLoggedInUser'];
+        return $this->callActionByStatus($tma);
+    }
 
+    /**
+     * @param $tma
+     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
+    private function callActionByStatus($tma)
+    {
+        $isUserTm = $tma['isTmLoggedInUser'];
         switch ($tma['tmApplicationStatus']['id']) {
             case TransportManagerApplicationEntityService::STATUS_POSTAL_APPLICATION:
                 return $this->pagePostal($tma);
-            // no break
+
+            case TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED:
+            case TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED:
+                $tma = $this->changeToCorrectTmaStatus(
+                    $tma,
+                    TransportManagerApplicationEntityService::STATUS_INCOMPLETE
+                );
+                return $this->callActionByStatus($tma);
             case TransportManagerApplicationEntityService::STATUS_INCOMPLETE:
                 if ($isUserTm) {
                     return $this->page1Point1($tma);
                 } else {
                     return $this->page1Point3($tma);
                 }
-            // no break
             case TransportManagerApplicationEntityService::STATUS_TM_SIGNED:
+            case TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED:
                 if ($isUserTm) {
                     return $this->page2Point1($tma);
                 } else {
+                    $tma = $this->changeToCorrectTmaStatus(
+                        $tma,
+                        TransportManagerApplicationEntityService::STATUS_TM_SIGNED
+                    );
                     return $this->page2Point2($tma);
                 }
-            // no break
             case TransportManagerApplicationEntityService::STATUS_OPERATOR_SIGNED:
                 return $this->page3($tma, $isUserTm);
-            // no break
             case TransportManagerApplicationEntityService::STATUS_RECEIVED:
                 return $this->page4($tma, $isUserTm);
-            // no break
         }
     }
 
@@ -171,9 +187,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                             'hoursSun' => (float)$hoursOfWeek['hoursPerWeekContent']['hoursSun'],
                             'additionalInfo' => $data['responsibilities']['additionalInformation'],
                             'hasOtherLicences' => $data['responsibilities']['otherLicencesFieldset']['hasOtherLicences'],
-                            'hasOtherEmployment'=> $data['otherEmployments']['hasOtherEmployment'],
-                            'hasConvictions'=> $data['previousHistory']['hasConvictions'],
-                            'hasPreviousLicences'=> $data['previousHistory']['hasPreviousLicences'],
+                            'hasOtherEmployment' => $data['otherEmployments']['hasOtherEmployment'],
+                            'hasConvictions' => $data['previousHistory']['hasConvictions'],
+                            'hasPreviousLicences' => $data['previousHistory']['hasPreviousLicences'],
                             'submit' => ($submit) ? 'Y' : 'N',
                             'dob' => $data['details']['birthDate']
                         ]
@@ -208,6 +224,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     return $this->redirectTmToHome();
                 }
 
+                $this->updateTmaStatus(
+                    $transportManagerApplicationData['id'],
+                    TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED
+                );
                 return $this->redirectToCheckAnswersPage($transportManagerApplicationData);
             }
         }
@@ -944,7 +964,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 ->setEmptyMessage('transport-manager.convictionsandpenalties.table.empty.ni');
         }
 
-        $this->hlpTransMngr->prepareOtherEmploymentTableTm($form->get('otherEmployments')->get('otherEmployment'), $tma['transportManager']);
+        $this->hlpTransMngr->prepareOtherEmploymentTableTm(
+            $form->get('otherEmployments')->get('otherEmployment'),
+            $tma['transportManager']
+        );
 
         $this->hlpForm->remove($form, 'responsibilities->tmApplicationStatus');
 
@@ -1184,6 +1207,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 $this->resetTmaStatusAndResendTmEmail();
                 return $this->redirectToTransportManagersPage();
             } else {
+                $tma = $this->changeToCorrectTmaStatus(
+                    $tma,
+                    TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED
+                );
                 return $this->redirectToOperatorDeclarationPage($tma);
             }
         }
@@ -1463,6 +1490,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     /**
      * @param array $tma
+     *
      * @return \Zend\Http\Response
      */
     protected function redirectToCheckAnswersPage(array $tma): \Zend\Http\Response
@@ -1475,5 +1503,27 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 'application' => (int)$this->params('application')
             ]
         );
+    }
+
+    /**
+     * Change TMA status to correct status
+     *
+     * @param array  $tma
+     * @param string $status
+     *
+     * @return mixed
+     */
+    private function changeToCorrectTmaStatus($tma, $status)
+    {
+        if ($tma['tmApplicationStatus']['id'] != $status) {
+            return $tma;
+        }
+
+        if($this->updateTmaStatus($tma['id'], $status) === false) {
+            throw new \RuntimeException('updateTmaStatus failed');
+        }
+
+        $tma['tmApplicationStatus']['id'] = $status;
+        return $tma;
     }
 }
