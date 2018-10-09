@@ -19,6 +19,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
 use Dvsa\Olcs\Transfer\Query\Permits\LastOpenWindow;
 use Dvsa\Olcs\Transfer\Query\Permits\OpenWindows;
+use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
 
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 
@@ -32,6 +33,7 @@ use Common\RefData;
 
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
+use Olcs\Controller\Lva\Traits\DashboardNavigationTrait;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\View\Helper\EcmtSection;
 
@@ -49,6 +51,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     use GenericReceipt;
     use StoredCardsTrait;
     use FlashMessengerTrait;
+    use DashboardNavigationTrait;
 
     const ECMT_APPLICATION_FEE_PRODUCT_REFENCE = 'IRHP_GV_APP_ECMT';
     const ECMT_ISSUING_FEE_PRODUCT_REFENCE = 'IRHP_GV_ECMT_100_PERMIT_FEE';
@@ -72,6 +75,11 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     public function indexAction()
     {
         $eligibleForPermits = $this->isEligibleForPermits();
+        $organisationId = $this->getCurrentOrganisationId();
+
+        //retrieve data displayed in dashboard
+        $response = $this->handleQuery(DashboardQry::create(['id' => $organisationId]));
+        $dashboardData = $response->getResult()['dashboard'];
 
         $view = new ViewModel();
         if (!$eligibleForPermits) {
@@ -84,7 +92,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $query = EcmtPermitApplication::create(
             [
                 'order' => 'DESC',
-                'organisation' => $this->getCurrentOrganisationId(),
+                'organisation' => $organisationId,
                 'statusIds' => [
                     RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED,
                     RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION,
@@ -118,6 +126,12 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $view->setVariable('applicationsNo', $applicationData['count']);
         $view->setVariable('applicationsTable', $applicationsTable);
         $view->setVariable('issuedTable', $issuedTable);
+
+        // populate the navigation tabs with correct counts got fees and correspondence
+        $this->populateTabCounts(
+            $dashboardData['feeCount'],
+            $dashboardData['correspondenceCount']
+        );
 
         return $view;
     }
