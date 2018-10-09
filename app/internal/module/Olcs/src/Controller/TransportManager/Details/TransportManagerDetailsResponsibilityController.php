@@ -33,8 +33,7 @@ use Zend\View\Model\ViewModel;
 class TransportManagerDetailsResponsibilityController extends AbstractTransportManagerDetailsController implements
     LeftViewProvider
 {
-    use CheckForCrudAction {
-        CheckForCrudAction::getActionFromFullActionName as parentGetActionFromFullActionName;
+    use CheckForCrudAction {CheckForCrudAction::getActionFromFullActionName as parentGetActionFromFullActionName;
     }
 
     protected $navigationId = 'transport_manager_details_responsibility';
@@ -633,6 +632,11 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $form->get('details')->get('otherLicences'),
             $this->getOtherLicencesTable()
         );
+
+        $tmStatus = $form->get('details')->get('tmApplicationStatus');
+        $this->formHelper->removeValueOption($tmStatus, 'tmap_st_details_submitted');
+        $this->formHelper->removeValueOption($tmStatus, 'tmap_st_details_checked');
+        $this->formHelper->removeValueOption($tmStatus, 'tmap_st_operator_approved');
 
         return $form;
     }
