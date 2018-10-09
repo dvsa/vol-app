@@ -24,8 +24,8 @@ class FeeList
     public static function mapForDisplay(array $data)
     {
         foreach ($data['fees'] as $fee) {
-            if ($fee['feeStatus']['id'] == Fee::STATUS_OUTSTANDING
-                    && $fee['feeType']['feeType']['id'] == FeeType::FEE_TYPE_ECMT_ISSUE) {
+            if ($fee['feeStatus']['id'] === Fee::STATUS_OUTSTANDING
+                    && $fee['feeType']['feeType']['id'] === FeeType::FEE_TYPE_ECMT_ISSUE) {
                 //return first occurence as there should only be one
                 $data['issueFee'] = $fee['feeType']['displayValue'];
                 $data['totalFee'] = $fee['grossAmount'];
