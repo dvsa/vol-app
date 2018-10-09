@@ -167,7 +167,21 @@ trait VariationWizardPageControllerTrait
      * @return bool
      *
      */
+    protected function hasCompleted(array $sectionsCompleted, array $requiredSections)
+    {
+        if (empty($requiredSections)) {
+            return true;
+        }
+        $sections = array_filter(
+            $sectionsCompleted,
+            function ($v, $k) use ($requiredSections) {
+                return in_array($k, $requiredSections) && $v === 2;
+            },
+            ARRAY_FILTER_USE_BOTH
+        );
 
+        return count($sections) === count($requiredSections);
+    }
 
     protected function render($content, Form $form = null, $variables = array())
     {
