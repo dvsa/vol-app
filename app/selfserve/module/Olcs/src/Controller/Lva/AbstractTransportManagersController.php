@@ -1516,9 +1516,14 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     private function changeToCorrectTmaStatus($tma, $status)
     {
         if ($tma['tmApplicationStatus']['id'] != $status) {
-            $this->updateTmaStatus($tma['id'], $status);
-            $tma['tmApplicationStatus']['id'] = $status;
+            return $tma;
         }
+
+        if($this->updateTmaStatus($tma['id'], $status) === false) {
+            throw new \RuntimeException('updateTmaStatus failed');
+        }
+
+        $tma['tmApplicationStatus']['id'] = $status;
         return $tma;
     }
 }
