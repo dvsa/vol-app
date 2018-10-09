@@ -69,26 +69,33 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         $tmaId = (int)$this->params('child_id');
         $tma = $this->getTmaDetails($tmaId);
+        return $this->callActionByStatus($tma);
+    }
+
+    /**
+     * @param $tma
+     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
+    private function callActionByStatus($tma)
+    {
         $isUserTm = $tma['isTmLoggedInUser'];
-
-
         switch ($tma['tmApplicationStatus']['id']) {
             case TransportManagerApplicationEntityService::STATUS_POSTAL_APPLICATION:
                 return $this->pagePostal($tma);
-            // no break
-            case TransportManagerApplicationEntityService::STATUS_INCOMPLETE:
+
             case TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED:
             case TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED:
                 $tma = $this->changeToCorrectTmaStatus(
                     $tma,
                     TransportManagerApplicationEntityService::STATUS_INCOMPLETE
                 );
+                return $this->callActionByStatus($tma);
+            case TransportManagerApplicationEntityService::STATUS_INCOMPLETE:
                 if ($isUserTm) {
                     return $this->page1Point1($tma);
                 } else {
                     return $this->page1Point3($tma);
                 }
-            // no break
             case TransportManagerApplicationEntityService::STATUS_TM_SIGNED:
             case TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED:
                 if ($isUserTm) {
@@ -100,13 +107,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     );
                     return $this->page2Point2($tma);
                 }
-            // no break
             case TransportManagerApplicationEntityService::STATUS_OPERATOR_SIGNED:
                 return $this->page3($tma, $isUserTm);
-            // no break
             case TransportManagerApplicationEntityService::STATUS_RECEIVED:
                 return $this->page4($tma, $isUserTm);
-            // no break
         }
     }
 
