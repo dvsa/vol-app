@@ -126,7 +126,7 @@ class DigitalSignature extends \Zend\Session\Container
     /**
      * @return mixed
      */
-    public function getLva() :string
+    public function getLva() :?string
     {
         return $this->lva;
     }

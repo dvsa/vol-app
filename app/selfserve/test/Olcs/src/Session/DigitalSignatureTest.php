@@ -81,7 +81,7 @@ class DigitalSignatureTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $this->assertEquals(0, $this->sut->getLva());
         $this->sut->setLva('__TEST__');
-        $this->assertEquals('__TEST__', $this->sut->hasTransportManagerApplicationId());
+        $this->assertEquals('__TEST__', $this->sut->hasLva());
     }
 
     /**
