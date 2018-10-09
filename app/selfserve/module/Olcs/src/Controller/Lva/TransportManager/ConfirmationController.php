@@ -28,10 +28,14 @@ class ConfirmationController extends AbstractController
         $confirmationMarkup = $this->tma["isOwner"] === "N" ? 'markup-tma-confirmation-tm' :
             'markup-tma-confirmation-operator';
 
+        $digitalSignature = $this->isTransportManagerRole() ?
+            $this->tma['tmDigitalSignature'] :
+            $this->tma['opDigitalSignature'];
+
         $params = [
             'content' => $translationHelper->translateReplace(
                 $confirmationMarkup,
-                [$this->getCurrentUserFullName(), $this->getVerifySignatureDate(), $this->getBacklink()]
+                [$this->getSignatureFullName($digitalSignature), $this->getSignatureDate($digitalSignature), $this->getBacklink()]
             ),
             'tmFullName' => $this->getTmName(),
         ];
@@ -96,17 +100,16 @@ class ConfirmationController extends AbstractController
             !$this->isGranted(RefData::PERMISSION_SELFSERVE_LVA));
     }
 
-    private function getVerifySignatureDate()
+    private function getSignatureDate($signature)
     {
-        $unixTimeStamp = strtotime($this->tma['digitalSignature']['createdOn']);
+        $unixTimeStamp = strtotime($signature['createdOn']);
         return date("j M Y", $unixTimeStamp);
     }
 
-    private function getCurrentUserFullName()
+    private function getSignatureFullName($signature)
     {
-        $user = $this->currentUser()->getUserData();
-        return trim($user["contactDetails"]["person"]["forename"] . ' '
-            . $user["contactDetails"]["person"]["familyName"]);
+        $attributes = json_decode($signature['attributes']);
+        return $attributes->firstname . ' ' . $attributes->surname;
     }
 
     /**
