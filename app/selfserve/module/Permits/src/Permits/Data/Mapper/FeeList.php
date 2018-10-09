@@ -17,7 +17,7 @@ class FeeList
     /**
      * Maps fee data to easy to reference indexes
      *
-     * @param array an array of data retrieved from the backend
+     * @param array $data an array of data retrieved from the backend
      * @return array the same array as passed in except possibly
      *                  with additional indexes for fee data
      */
