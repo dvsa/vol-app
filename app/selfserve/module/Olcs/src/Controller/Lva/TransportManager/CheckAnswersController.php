@@ -4,6 +4,7 @@ namespace OLCS\Controller\Lva\TransportManager;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Data\Mapper\Lva\TransportManagerApplication;
+use Common\Service\Helper\TranslationHelperService;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
 use Common\Service\Entity\TransportManagerApplicationEntityService;
@@ -27,9 +28,10 @@ class CheckAnswersController extends AbstractController
         );
 
         $this->changeTmaStatusToDetailsSubmittedIfDetailsChecked();
-
-        $sections = TransportManagerApplication::mapForSections($transportManagerApplication, $translator);
-        $sections = $this->addChangeSectionLink($sections, $transportManagerApplication);
+        if (!empty($this->tma)) {
+            $sections = TransportManagerApplication::mapForSections($this->tma, $translator);
+            $sections = $this->addChangeSectionLink($sections, $this->tma);
+        }
         $params = array_merge(["sections" => $sections], $defaultParams);
         /* @var $layout \Zend\View\Model\ViewModel */
         $layout = $this->render($title, $form, $params);
@@ -82,12 +84,12 @@ class CheckAnswersController extends AbstractController
         $lva = $transportManagerApplication['application']['isVariation'] ? 'variation' : 'application';
         foreach ($sections as $key => $value) {
             $sections[$key]['change']['sectionLink'] = $this->url()->fromRoute(
-                'lva-' . $lva . '/transport_manager_details',
-                [
-                    'application' => $transportManagerApplication['application']['id'],
-                    'child_id' => $transportManagerApplication['id'],
-                ]
-            ) . "#" . $sections[$key]['change']['sectionName'];
+                    'lva-' . $lva . '/transport_manager_details',
+                    [
+                        'application' => $transportManagerApplication['application']['id'],
+                        'child_id' => $transportManagerApplication['id'],
+                    ]
+                ) . "#" . $sections[$key]['change']['sectionName'];
         }
         return $sections;
     }
@@ -159,9 +161,9 @@ class CheckAnswersController extends AbstractController
     {
         if ($transportManagerApplication['isTmLoggedInUser'] &&
             ($transportManagerApplication['tmApplicationStatus']['id'] ===
-            TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED ||
-            $transportManagerApplication['tmApplicationStatus']['id'] ===
-            TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED)) {
+                TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED ||
+                $transportManagerApplication['tmApplicationStatus']['id'] ===
+                TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED)) {
             return true;
         }
         return false;
