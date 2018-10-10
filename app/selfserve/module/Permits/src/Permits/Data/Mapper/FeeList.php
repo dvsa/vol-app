@@ -12,14 +12,12 @@ use Dvsa\Olcs\Api\Entity\Fee\FeeType;
  */
 class FeeList
 {
-    const FEE_TYPE_ISSUE = 'IRHPGVISSUE';
-
     /**
      * Maps fee data to easy to reference indexes
      *
      * @param array $data an array of data retrieved from the backend
-     * @return array the same array as passed in except possibly
-     *                  with additional indexes for fee data
+     * @return array the same array as passed in except with additional indexes for fee data
+     * @throws \Exception
      */
     public static function mapForDisplay(array $data)
     {
@@ -47,7 +45,7 @@ class FeeList
      */
     private function calculateDueDate($date)
     {
-        $dueDate = date(\DATE_FORMAT, strtotime("+10 days", strtotime($date)));
+        $dueDate = date(\DATE_FORMAT, strtotime('+10 days', strtotime($date)));
         return $dueDate;
     }
 }
