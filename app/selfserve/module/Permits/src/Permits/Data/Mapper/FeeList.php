@@ -17,7 +17,7 @@ class FeeList
      *
      * @param array $data an array of data retrieved from the backend
      * @return array the same array as passed in except with additional indexes for fee data
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public static function mapForDisplay(array $data)
     {
