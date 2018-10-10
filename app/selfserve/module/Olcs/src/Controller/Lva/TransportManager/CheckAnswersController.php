@@ -6,6 +6,7 @@ use Common\Controller\Lva\AbstractController;
 use Common\Data\Mapper\Lva\TransportManagerApplication;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
+use Common\Service\Entity\TransportManagerApplicationEntityService;
 
 class CheckAnswersController extends AbstractController
 {
@@ -16,15 +17,16 @@ class CheckAnswersController extends AbstractController
 
     public function indexAction()
     {
-        $transportManagerApplicationId = $this->params("child_id");
-        $transportManagerApplication = $this->getTransportManagerApplication($transportManagerApplicationId);
+
         $translator = $this->serviceLocator->get('Helper\Translation');
 
         list($title, $defaultParams, $form) = $this->getPageLayout(
             $translator,
-            $transportManagerApplication,
-            $transportManagerApplicationId
+            $this->tma,
+            $this->tma['id']
         );
+
+        $this->changeTmaStatusToDetailsSubmittedIfDetailsChecked();
 
         $sections = TransportManagerApplication::mapForSections($transportManagerApplication, $translator);
         $sections = $this->addChangeSectionLink($sections, $transportManagerApplication);
@@ -40,22 +42,19 @@ class CheckAnswersController extends AbstractController
     /**
      * confirmAction
      *
+     * @return \Zend\Http\Response
      */
     public function confirmAction()
     {
+        $transportManagerApplicationId = $this->params("child_id");
+        $this->updateTmaStatus(
+            $transportManagerApplicationId,
+            TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED
+        );
         return $this->redirectToTmDeclarationPage();
     }
 
-    /**
-     * getConfirmationForm
-     *
-     * @param int $transportManagerApplicationId
-     *
-     * @param int $applicationId
-     *
-     * @return \Common\Form\Form
-     */
-    private function getConfirmationForm(int $transportManagerApplicationId, int $applicationId): \Common\Form\Form
+    private function getConfirmationForm(): \Common\Form\Form
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
@@ -67,8 +66,8 @@ class CheckAnswersController extends AbstractController
                 'lva-' . $this->lva . '/transport_manager_check_answer/action',
                 [
                     'action' => 'confirm',
-                    'application' => $applicationId,
-                    'child_id' => $transportManagerApplicationId
+                    'application' => $this->tma['application']['id'],
+                    'child_id' => $this->tma['id']
                 ]
             )
         );
@@ -102,7 +101,7 @@ class CheckAnswersController extends AbstractController
      *
      * @return array
      */
-    private function getPageLayout($translator, $transportManagerApplication, $transportManagerApplicationId): array
+    private function getPageLayout($translator): array
     {
         $checkAnswersHint = $translator->translate('lva.section.transport-manager-check-answers-hint');
         $title = 'check_answers';
@@ -119,10 +118,7 @@ class CheckAnswersController extends AbstractController
 
         ];
 
-        $form = $this->getConfirmationForm(
-            $transportManagerApplicationId,
-            $transportManagerApplication['application']['id']
-        );
+        $form = $this->getConfirmationForm();
         return array($title, $defaultParams, $form);
     }
 
@@ -136,5 +132,38 @@ class CheckAnswersController extends AbstractController
                 'action' => 'index'
             ]
         );
+    }
+
+    /**
+     * @return void
+     */
+    private function changeTmaStatusToDetailsSubmittedIfDetailsChecked()
+    {
+        if ($this->tma['tmApplicationStatus']['id'] ===
+            TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED) {
+            $this->updateTmaStatus(
+                $this->tma['id'],
+                TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED
+            );
+        }
+    }
+
+    /**
+     * Is user permitted to access this controller
+     *
+     * @param array $transportManagerApplication
+     *
+     * @return bool
+     */
+    protected function isUserPermitted($transportManagerApplication)
+    {
+        if ($transportManagerApplication['isTmLoggedInUser'] &&
+            ($transportManagerApplication['tmApplicationStatus']['id'] ===
+            TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED ||
+            $transportManagerApplication['tmApplicationStatus']['id'] ===
+            TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED)) {
+            return true;
+        }
+        return false;
     }
 }

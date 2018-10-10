@@ -17,23 +17,10 @@ class GdsVerifyController extends AbstractController
      */
     public function initiateRequestAction()
     {
-        $applicationId = $this->params()->fromRoute('application');
-        $continuationDetailId = $this->params()->fromRoute('continuationDetailId');
-        $session = new \Olcs\Session\DigitalSignature();
-        if ($applicationId) {
-            // Save the application identifier so that when we come back from verify we know where to go
-            $session->setApplicationId($applicationId);
-        } elseif ($continuationDetailId) {
-            // Save the continuation detail identifier so that when we come back from verify we know where to go
-            $session->setContinuationDetailId($continuationDetailId);
-        } else {
-            throw new \RuntimeException(
-                'An entity identifier needs to be present, this is used to to calculate where'
-                .' to return to after completing Verify'
-            );
-        }
-
+        $types = $this->getTypeOfRequest($this->params()->fromRoute());
         $form = $this->getServiceLocator()->get('Helper\Form')->createForm('VerifyRequest');
+        $this->handleType($types);
+
 
         $response = $this->handleQuery(\Dvsa\Olcs\Transfer\Query\GdsVerify\GetAuthRequest::create([]));
         if ($response->isOk()) {
@@ -60,7 +47,8 @@ class GdsVerifyController extends AbstractController
         $session = new \Olcs\Session\DigitalSignature();
         $applicationId = $session->hasApplicationId() ? $session->getApplicationId() : false;
         $continuationDetailId = $session->hasContinuationDetailId() ? $session->getContinuationDetailId() : false;
-        $session->getManager()->getStorage()->clear(\Olcs\Session\DigitalSignature::SESSION_NAME);
+        $transportManagerApplicationId = $session->hasTransportManagerApplicationId() ? $session->getTransportManagerApplicationId() : false;
+        $lva = $session->hasLva()? $session->getLva():'application';
 
         $dto = \Dvsa\Olcs\Transfer\Command\GdsVerify\ProcessSignatureResponse::create(
             ['samlResponse' => $this->getRequest()->getPost('SAMLResponse')]
@@ -71,6 +59,17 @@ class GdsVerifyController extends AbstractController
         if ($continuationDetailId) {
             $dto->setContinuationDetail($continuationDetailId);
         }
+
+        if ($transportManagerApplicationId) {
+            $dto->setTransportManagerApplication($transportManagerApplicationId);
+            if ($session->getTransportManagerApplicationOperatorSignature() === true) {
+                $dto->setTransportManagerApplicationOperatorSignature('Y');
+            } else {
+                $dto->setTransportManagerApplicationOperatorSignature('N');
+            }
+        }
+        $session->getManager()->getStorage()->clear(\Olcs\Session\DigitalSignature::SESSION_NAME);
+
         $response = $this->handleCommand($dto);
         if (!$response->isOk()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('undertakings_not_signed');
@@ -90,6 +89,50 @@ class GdsVerifyController extends AbstractController
             );
         }
 
+        /** @var  $transportManagerApplicationId */
+        if ($transportManagerApplicationId) {
+            return $this->redirect()->toRoute(
+                'lva-' . $lva . '/transport_manager_confirmation',
+                [
+                    'child_id' => $transportManagerApplicationId,
+                    'application' => $applicationId,
+                    'action' => 'index'
+                ]
+            );
+        }
+
+
         throw new \RuntimeException('There was an error processing the signature response');
+    }
+
+    /**
+     * verificationType
+     *
+     * @param array $types
+     */
+    private function handleType(array $types): void
+    {
+        $session = new \Olcs\Session\DigitalSignature();
+
+        if (empty($types)) {
+            throw new \RuntimeException(
+                'An entity identifier needs to be present, this is used to to calculate where'
+                . ' to return to after completing Verify'
+            );
+        }
+
+        foreach ($types as $key => $value) {
+            $methodName = 'set' . ucfirst($key);
+            if (method_exists($session, $methodName)) {
+                call_user_func([$session, $methodName], [$value]);
+            }
+        }
+    }
+
+    private function getTypeOfRequest($params): array
+    {
+        // remove controller and action keys from params
+        $types = array_diff_assoc($params, ['controller' => self::class, 'action' => 'initiate-request']);
+        return $types;
     }
 }
