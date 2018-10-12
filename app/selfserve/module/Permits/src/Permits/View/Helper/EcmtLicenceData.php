@@ -22,10 +22,8 @@ class EcmtLicenceData extends AbstractHelper
     public function __invoke($form, $stock, $application = [])
     {
         $permitType = isset($application['permitType']['description']) ? $application['permitType']['description'] : 'ECMT';
-        //$validFrom = date('d F Y', strtotime($stock[0]['validFrom']));
-        //$validTo = date('d F Y', strtotime($stock[0]['validTo']));
-        $validFrom = '01 January 2019';
-        $validTo = '31 December 2019';
+        $validFrom = date('d F Y', strtotime($stock['validFrom']));
+        $validTo = date('d F Y', strtotime($stock['validTo']));
 
         $data['title'] = $this->view->translate('permits.page.ecmt.licence.question');
         // @todo: Remove custom styling, and markup should only be defined in the view template.
