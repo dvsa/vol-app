@@ -64,6 +64,7 @@ class CheckAnswers
         }
 
         return [
+            'canCheckAnswers' => $data['canCheckAnswers'],
             'answers' => $answers,
             'applicationRef' => $data['applicationRef']
         ];
