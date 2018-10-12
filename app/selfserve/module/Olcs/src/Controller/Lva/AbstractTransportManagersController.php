@@ -1428,6 +1428,25 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     }
 
     /**
+     *
+     *
+     */
+    private function sendAmendTmApplicationEmail()
+    {
+        $tmaId = (int)$this->params('child_id');
+        $response = $this->handleCommand(
+            Command\TransportManagerApplication\SendAmendTmApplication::create(['id' => $tmaId])
+        );
+
+        $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        if ($response->isOk()) {
+            $flashMessenger->addSuccessMessage('transport-manager-application.resend-form.success');
+        } else {
+            $flashMessenger->addErrorMessage('transport-manager-application.resend-form.error');
+        }
+    }
+
+    /**
      * @param array $tma
      *
      * @return \Zend\Http\Response
@@ -1474,7 +1493,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         $tmaId = (int)$this->params('child_id');
         if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
-            $this->resendTmEmail();
+            $this->sendAmendTmApplicationEmail();
         } else {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
