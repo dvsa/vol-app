@@ -17,6 +17,7 @@ return [
         [
             'title' => 'dashboard-table-permit-application-ref',
             'name' => 'id',
+            'formatter' => 'InternalLicencePermitReference'
         ],
         [
             'title' => 'dashboard-table-permit-application-num',
@@ -28,16 +29,14 @@ return [
             'formatter' => 'RefData'
         ],
         [
+            'title' => 'Rec\'d Date',
+            'name' => 'dateReceived',
+            'formatter' => 'Date'
+        ],
+        [
             'title' => 'dashboard-table-permit-application-status',
             'name' => 'status',
             'formatter' => 'RefDataStatus'
-        ],
-        [
-            'width' => 'checkbox',
-            'type' => 'Checkbox',
-            'data-attributes' => [
-                'filename'
-            ],
-        ],
+        ]
     ],
 ];
