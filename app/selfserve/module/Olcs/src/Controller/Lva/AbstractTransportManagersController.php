@@ -74,6 +74,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
     /**
      * @param $tma
+     *
      * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
      */
     private function callActionByStatus($tma)
@@ -1159,6 +1160,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     private function page1Point3(array $tma)
     {
         if ($this->getRequest()->isPost()) {
+
+            $test = $this->getRequest()->getPost('emailAddress');
+
             $this->resendTmEmail();
         }
 
@@ -1204,7 +1208,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         if ($this->getRequest()->isPost()) {
             if ($this->getRequest()->getPost('emailAddress')) {
-                $this->resetTmaStatusAndResendTmEmail();
+                $this->updateTmaStatusAndResendAmendTmApplicationEmail();
                 return $this->redirectToTransportManagersPage();
             } else {
                 $tma = $this->changeToCorrectTmaStatus(
@@ -1415,8 +1419,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     private function resendTmEmail()
     {
         $tmaId = (int)$this->params('child_id');
+        $email = $this->getRequest()->getPost('emailAddress');
+
         $response = $this->handleCommand(
-            Command\TransportManagerApplication\SendTmApplication::create(['id' => $tmaId])
+            Command\TransportManagerApplication\SendTmApplication::create(['id' => $tmaId, 'emailAddress' => $email])
         );
 
         $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
@@ -1434,8 +1440,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     private function sendAmendTmApplicationEmail()
     {
         $tmaId = (int)$this->params('child_id');
+        $email = $this->getRequest()->getPost('emailAddress');
         $response = $this->handleCommand(
-            Command\TransportManagerApplication\SendAmendTmApplication::create(['id' => $tmaId])
+            Command\TransportManagerApplication\SendAmendTmApplication::create([
+                'id' => $tmaId,
+                'emailAddress' => $email
+            ])
         );
 
         $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
@@ -1489,7 +1499,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
     }
 
-    private function resetTmaStatusAndResendTmEmail()
+    private function updateTmaStatusAndResendAmendTmApplicationEmail()
     {
         $tmaId = (int)$this->params('child_id');
         if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
@@ -1538,7 +1548,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             return $tma;
         }
 
-        if($this->updateTmaStatus($tma['id'], $status) === false) {
+        if ($this->updateTmaStatus($tma['id'], $status) === false) {
             throw new \RuntimeException('updateTmaStatus failed');
         }
 
