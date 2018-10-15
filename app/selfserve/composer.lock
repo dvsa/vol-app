@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "340b80ef8d4558650c41031f3f0d77b3",
-    "content-hash": "3cca986ba26deb2b97ce8353f0da9f64",
+    "hash": "d5746eb1e4bf12254d61b2a23183d4a1",
+    "content-hash": "109d627e970cddf4a409d16a3d96b24c",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1015,11 +1015,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/4.190i",
+            "version": "dev-release/4.191",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "ab4a5c0bec999bc764cf32a0fb128f602fc61407"
+                "reference": "447ad67cf7261bb108856ed800f984c4da303702"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1033,10 +1033,10 @@
                 "mikey179/vfsstream": "~1.4.0",
                 "mockery/mockery": "~0.9.3",
                 "olcs/olcs-devtools": "dev-master",
-                "olcs/olcs-logging": "dev-release/4.190i",
+                "olcs/olcs-logging": "dev-release/4.191",
                 "olcs/olcs-testhelpers": "dev-develop",
-                "olcs/olcs-transfer": "dev-release/4.190i",
-                "olcs/olcs-utils": "dev-release/4.190i",
+                "olcs/olcs-transfer": "dev-release/4.191",
+                "olcs/olcs-utils": "dev-release/4.191",
                 "soflomo/purifier": "~0.1.0"
             },
             "type": "library",
@@ -1069,20 +1069,20 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2018-10-04 18:49:08"
+            "time": "2018-10-11 09:44:12"
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "dev-release/4.190i",
+            "version": "dev-release/4.191",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "03585ecfcb8bf221cc2be5335d70a847d0bc5c6b"
+                "reference": "200fdd4562a1b6421620bf1eaffe5f9acb8f0abe"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
-                "olcs/olcs-transfer": "dev-release/4.190i",
-                "olcs/olcscommon": "dev-release/4.190i",
+                "olcs/olcs-transfer": "dev-release/4.191",
+                "olcs/olcscommon": "dev-release/4.191",
                 "php": ">=5.4",
                 "zendframework/zendframework": "~2.4.0"
             },
@@ -1117,15 +1117,15 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2018-10-04 18:11:21"
+            "time": "2018-10-11 08:41:26"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "dev-release/4.190i",
+            "version": "dev-release/4.191",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git",
-                "reference": "23622c65eee02f6efe048cdaec4d5a418f281bfb"
+                "reference": "8558392c6ec4b0b1e96f0acdfab041cf300c0fd8"
             },
             "require": {
                 "php": ">=5.4",
@@ -1169,15 +1169,15 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2018-10-04 18:10:18"
+            "time": "2018-10-11 08:40:22"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "dev-release/4.190i",
+            "version": "dev-release/4.191",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
-                "reference": "8ba5cf9ae657bb3ef2ba16b3f6f5ad2695546517"
+                "reference": "92a7fdc4b8112207be48afd773c7b7a7f3985d46"
             },
             "require": {
                 "php": ">=5.4",
@@ -1215,15 +1215,15 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2018-10-04 18:12:26"
+            "time": "2018-10-11 08:42:31"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "dev-release/4.190i",
+            "version": "dev-release/4.191",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-utils.git",
-                "reference": "971343c70241047161c305590e01cebfc12d1d69"
+                "reference": "3f3c37dfc718e2fbfe96f091f1eea77c6f9d0a14"
             },
             "require": {
                 "php": ">=5.4",
@@ -1232,7 +1232,7 @@
             "require-dev": {
                 "mockery/mockery": "~0.9.3",
                 "olcs/olcs-devtools": "dev-master",
-                "olcs/olcs-logging": "dev-release/4.190i"
+                "olcs/olcs-logging": "dev-release/4.191"
             },
             "type": "library",
             "autoload": {
@@ -1261,7 +1261,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2018-10-04 18:13:14"
+            "time": "2018-10-11 08:43:18"
         },
         {
             "name": "psr/log",
@@ -2086,7 +2086,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-testhelpers.git",
-                "reference": "c79caba1c87606517bf5233c843414126de0df6d"
+                "reference": "b36b709988562f894eda15fb8c547addaf843856"
             },
             "require": {
                 "php": ">=5.4"
@@ -2103,7 +2103,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2018-10-02 14:50:15"
+            "time": "2018-10-09 22:34:20"
         },
         {
             "name": "pdepend/pdepend",
