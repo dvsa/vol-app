@@ -2,9 +2,6 @@
 
 namespace Permits\Data\Mapper;
 
-use Dvsa\Olcs\Api\Entity\Fee\Fee;
-use Dvsa\Olcs\Api\Entity\Fee\FeeType;
-
 /**
  * @todo clearly this will need to be a lot better later - but will wait to see first if it's staying
  *
@@ -22,8 +19,7 @@ class ApplicationFees
     public static function mapForDisplay(array $data)
     {
         foreach ($data['fees'] as $fee) {
-            if ($fee['feeStatus']['id'] === Fee::STATUS_OUTSTANDING
-                    && $fee['feeType']['feeType']['id'] === FeeType::FEE_TYPE_ECMT_ISSUE) {
+            if ($fee['isOutstanding'] && $fee['isEcmtIssuingFee']) {
                 //return first occurence as there should only be one
                 $data['issueFee'] = $fee['feeType']['displayValue'];
                 $data['totalFee'] = $fee['grossAmount'];
