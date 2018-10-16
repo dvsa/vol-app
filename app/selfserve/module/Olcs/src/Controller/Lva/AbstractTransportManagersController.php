@@ -1159,12 +1159,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     private function page1Point3(array $tma)
     {
-        if ($this->getRequest()->isPost()) {
-
-            $test = $this->getRequest()->getPost('emailAddress');
-
-            $this->resendTmEmail();
-        }
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $params = [
@@ -1176,6 +1170,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         /* @var $form \Common\Form\Form */
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
         $form->get('emailAddress')->setValue($tma['transportManager']['homeCd']['emailAddress']);
+
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->getRequest()->getPost());
+            if ($form->isValid()) {
+                $this->resendTmEmail();
+            }
+        }
 
         return $this->renderTmAction('transport-manager-application.details-not-submitted', $form, $tma, $params);
     }
@@ -1206,18 +1207,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     private function page2Point2(array $tma)
     {
-        if ($this->getRequest()->isPost()) {
-            if ($this->getRequest()->getPost('emailAddress')) {
-                $this->updateTmaStatusAndResendAmendTmApplicationEmail();
-                return $this->redirectToTransportManagersPage();
-            } else {
-                $tma = $this->changeToCorrectTmaStatus(
-                    $tma,
-                    TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED
-                );
-                return $this->redirectToOperatorDeclarationPage($tma);
-            }
-        }
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $params = [
@@ -1242,6 +1231,25 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $resendForm->get('emailAddress')->setValue($tma['transportManager']['homeCd']['emailAddress']);
 
         $params['resendForm'] = $resendForm;
+
+        $sendAmendEmailRequest = $this->getRequest()->getPost('emailAddress');
+        $confirmTmDetailsRequest = $this->getRequest()->getPost('form-actions')['submit'];
+
+        if (isset($sendAmendEmailRequest)) {
+            $resendForm->setData($this->getRequest()->getPost());
+            if ($resendForm->isValid()) {
+                $this->updateTmaStatusAndResendAmendTmApplicationEmail();
+                return $this->redirectToTransportManagersPage();
+            }
+        }
+
+        if (isset($confirmTmDetailsRequest)) {
+            $tma = $this->changeToCorrectTmaStatus(
+                $tma,
+                TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED
+            );
+            return $this->redirectToOperatorDeclarationPage($tma);
+        }
 
         return $this->renderTmAction('transport-manager-application.review-and-submit', $form, $tma, $params);
     }
