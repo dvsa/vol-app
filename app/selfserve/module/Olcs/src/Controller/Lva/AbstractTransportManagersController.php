@@ -73,7 +73,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     }
 
     /**
-     * @param $tma
+     * @param array $tma
      *
      * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
      */
@@ -1238,7 +1238,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         if (isset($sendAmendEmailRequest)) {
             $resendForm->setData($this->getRequest()->getPost());
             if ($resendForm->isValid()) {
-                $this->updateTmaStatusAndResendAmendTmApplicationEmail();
+                $this->updateTmaStatusAndSendAmendTmApplicationEmail();
                 return $this->redirectToTransportManagersPage();
             }
         }
@@ -1442,10 +1442,11 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     }
 
     /**
+     * Send the amend TM application email
      *
-     *
+     * @return void
      */
-    private function sendAmendTmApplicationEmail()
+    private function sendAmendTmApplicationEmail(): void
     {
         $tmaId = (int)$this->params('child_id');
         $email = $this->getRequest()->getPost('emailAddress');
@@ -1507,7 +1508,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
     }
 
-    private function updateTmaStatusAndResendAmendTmApplicationEmail()
+    /**
+     * Update Tma status and send amend tm applcation email
+     *
+     * @return void
+     */
+    private function updateTmaStatusAndSendAmendTmApplicationEmail(): void
     {
         $tmaId = (int)$this->params('child_id');
         if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
