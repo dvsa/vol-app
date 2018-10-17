@@ -1,4 +1,5 @@
 <?php
+
 return array(
     'variables' => array(),
     'settings' => array(
@@ -23,6 +24,9 @@ return array(
             'name' => 'countries',
             'formatter' => function ($row, $column, $sm) {
                 $translator = $sm->get('translator');
+                if (count($row['countries']) === 0) {
+                    return $translator->translate('permits.ecmt.page.valid.tableheader.no.countries');
+                }
                 $rc = [];
                 foreach ($row['countries'] as $country) {
                     $rc[] = $translator->translate($country['countryDesc']);

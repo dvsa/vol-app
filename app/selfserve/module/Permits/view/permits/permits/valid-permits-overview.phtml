@@ -3,6 +3,8 @@
 $title = $this->translate('permits.page.fee.title');
 $this->headTitle($title);
 $application = $data['validPermits'];
+
+var_dump($application['results']);
 $translationHelper = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');
 ?>
 <div class="row ecmt">
