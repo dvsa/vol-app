@@ -97,6 +97,8 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                     RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED,
                     RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION,
                     RefData::PERMIT_APP_STATUS_AWAITING_FEE,
+                    RefData::PERMIT_APP_STATUS_FEE_PAID,
+                    RefData::PERMIT_APP_STATUS_ISSUING,
                 ],
             ]
         );
