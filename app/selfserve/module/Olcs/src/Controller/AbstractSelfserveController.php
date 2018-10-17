@@ -272,7 +272,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             if (isset($config['append'])) {
                 foreach ($config['append'] as $appendTo => $mapper) {
                     $combinedData = [
-                        $appendTo = $this->data[$appendTo],
+                        $appendTo => $this->data[$appendTo],
                         $source::DATA_KEY => $data
                     ];
                     $this->data[$appendTo] = $mapper::mapForDisplay($combinedData);

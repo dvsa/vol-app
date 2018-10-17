@@ -9,7 +9,7 @@ use JsonSchema\Exception\ResourceNotFoundException;
  * ECMT Constrained Countries mapper
  */
 
-class EcmtConstrainedCountries
+class ValidEcmtPermitConstrainedCountries
 {
     public static function mapForDisplay(array $data)
     {
@@ -21,7 +21,7 @@ class EcmtConstrainedCountries
             $constrainedCountries = [];
 
             if (!empty($datum['countries'])) {
-                $allCountries = $data[0]['results'];
+                $allCountries = $data['ecmtConstrainedCountries']['results'];
                 foreach ($allCountries as $key => $row) {
                     foreach ($datum['countries'] as $key2 => $row2) {
                         if ($row['id'] == $row2['id']) {
@@ -37,9 +37,11 @@ class EcmtConstrainedCountries
                 'countries' => $constrainedCountries
             ];
         }
+
+        unset ($data['ecmtConstrainedCountries']);
+
         $data['validPermits']['results'] = $newResults;
-//var_dump()
+
         return $data['validPermits'];
-        //return $data['validPermits']['results'];
     }
 }
