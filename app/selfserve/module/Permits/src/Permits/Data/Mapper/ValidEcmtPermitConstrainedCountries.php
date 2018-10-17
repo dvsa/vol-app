@@ -38,8 +38,7 @@ class ValidEcmtPermitConstrainedCountries
             ];
         }
 
-        unset ($data['ecmtConstrainedCountries']);
-
+        unset($data['ecmtConstrainedCountries']);
         $data['validPermits']['results'] = $newResults;
 
         return $data['validPermits'];
