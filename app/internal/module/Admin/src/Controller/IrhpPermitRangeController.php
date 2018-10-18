@@ -2,6 +2,9 @@
 
 namespace Admin\Controller;
 
+use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\FeatureToggle;
+
 use Admin\Controller\AbstractIrhpPermitAdminController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitRange\GetList as ListDto;
@@ -17,8 +20,16 @@ use Zend\View\Model\ViewModel;
 /**
  * IRHP Permits Stock Range Controller
  */
-class IrhpPermitRangeController extends AbstractIrhpPermitAdminController implements LeftViewProvider
+class IrhpPermitRangeController extends AbstractIrhpPermitAdminController implements
+    LeftViewProvider,
+    ToggleAwareInterface
 {
+    protected $toggleConfig = [
+        'default' => [
+            FeatureToggle::ADMIN_PERMITS
+        ],
+    ];
+
     /**
      * Holds the navigation ID,
      * required when an entire controller is

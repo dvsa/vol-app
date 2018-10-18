@@ -14,6 +14,11 @@ OLCS.ready(function() {
       e.target.value = "0";
     }
 
+    // If the user is inputting a number, then we need to clear out the initial '0'.
+    if (e.target.value.length > 1 && e.target.value[0] === '0') {
+      e.target.value = e.target.value.substring(1);
+    }
+
     calculateTotal();
   });
 
