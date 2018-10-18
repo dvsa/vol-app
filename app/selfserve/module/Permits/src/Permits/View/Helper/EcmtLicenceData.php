@@ -53,16 +53,14 @@ class EcmtLicenceData extends AbstractHelper
         }
 
         if ($licenceCount === 1) {
-            if (empty($application)) {
-                $data['title'] = sprintf(
-                    $this->view->translate('permits.page.ecmt.licence.question.one.licence'),
-                    preg_replace("/<div(.*?)>(.*?)<\/div>/i", "", $licences[0]['label'])
-                );
+            $data['title'] = sprintf(
+                $this->view->translate('permits.page.ecmt.licence.question.one.licence'),
+                preg_replace("/<div(.*?)>(.*?)<\/div>/i", "", $licences[0]['label'])
+            );
 
-                // @todo: Refactor how we identify a restricted licence and pass to the view. We should not be defining html in a Common data service (EcmtLicence) and we do not consider multiple licence options or when a user selects a non-restricted licence which would likely need to be delivered by JavaScript.
-                if (array_key_exists('html_elements', $licences[0])) {
-                    $data['copy'] .= '<p>' . $this->view->translate('permits.form.ecmt-licence.restricted-licence.hint') . '</p>';
-                }
+            // @todo: Refactor how we identify a restricted licence and pass to the view. We should not be defining html in a Common data service (EcmtLicence) and we do not consider multiple licence options or when a user selects a non-restricted licence which would likely need to be delivered by JavaScript.
+            if (array_key_exists('html_elements', $licences[0])) {
+                $data['copy'] .= '<p>' . $this->view->translate('permits.form.ecmt-licence.restricted-licence.hint') . '</p>';
             }
         }
 
