@@ -40,6 +40,11 @@ class DataSourceConfig
         UnpaidEcmtPermitsDataSource::class => [
             'mapper' => ValidEcmtPermitsMapper::class
         ],
+        EcmtConstrainedCountriesDataSource::class => [
+            'append' => [
+                ValidEcmtPermitsDataSource::DATA_KEY => EcmtConstrainedCountriesMapper::class
+            ]
+        ],
     ];
     const PERMIT_APP_CHECK_ANSWERS = [
         PermitAppDataSource::class => [
