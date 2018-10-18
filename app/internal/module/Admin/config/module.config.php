@@ -574,6 +574,34 @@ return [
                                     ],
                                 ],
                             ],
+                            'permit-scoring' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'stocks/:stockId/scoring[/:action][/]',
+                                    'constraints' => [
+                                        'stockId' =>'[0-9\,]+',
+                                        'action' => '(index|accept|run)'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\IrhpPermitScoringController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
+                            'exported-reports' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'stocks/:stockId/exported-reports[/:action][/]',
+                                    'constraints' => [
+                                        'id' => '[0-9\,]+',
+                                        'action' => '(index|add|edit|delete)'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\IrhpPermitReportingController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                     'admin-system-info-message' => [
@@ -768,6 +796,10 @@ return [
                 Admin\Controller\IrhpPermitSectorController::class,
             Admin\Controller\IrhpPermitJurisdictionController::class =>
                 Admin\Controller\IrhpPermitJurisdictionController::class,
+            Admin\Controller\IrhpPermitScoringController::class =>
+                Admin\Controller\IrhpPermitScoringController::class,
+            Admin\Controller\IrhpPermitReportingController::class =>
+                Admin\Controller\IrhpPermitReportingController::class,
         ],
     ],
     'view_manager' => [

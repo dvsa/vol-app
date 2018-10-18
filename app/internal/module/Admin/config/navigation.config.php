@@ -267,6 +267,16 @@ return [
                             'label' => 'Sectors',
                             'route' => 'admin-dashboard/admin-permits/permit-sectors'
                         ],
+                        [
+                            'id' => 'admin-dashboard/admin-permits/permit-scoring',
+                            'label' => 'Scoring',
+                            'route' => 'admin-dashboard/admin-permits/permit-scoring'
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-permits/exported-reports',
+                            'label' => 'Exported reports',
+                            'route' => 'admin-dashboard/admin-permits/exported-reports',
+                        ],
                     ],
                 ],
                 [
