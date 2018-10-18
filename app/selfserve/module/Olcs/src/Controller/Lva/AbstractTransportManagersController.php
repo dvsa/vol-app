@@ -22,6 +22,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     const TYPE_PREVIOUS_CONVICTION = 'PreviousConvictions';
     const TYPE_PREVIOUS_LICENCE = 'PreviousLicences';
     const TYPE_OTHER_EMPLOYMENT = 'OtherEmployments';
+    const TM_APPLICATION_RESEND_EMAIL = 'tm_app_resend_email';
+    const TM_APPLICATION_AMEND_EMAIL = 'tm_app_amend_email';
 
     /**
      * Store the Transport Manager Application data
@@ -1174,7 +1176,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         if ($this->getRequest()->isPost()) {
             $form->setData($this->getRequest()->getPost());
             if ($form->isValid()) {
-                $this->resendTmEmail();
+                $this->sendTmApplicationEmail(self::TM_APPLICATION_RESEND_EMAIL);
             }
         }
 
@@ -1241,9 +1243,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 $this->updateTmaStatusAndSendAmendTmApplicationEmail();
                 return $this->redirectToTransportManagersPage();
             }
-        }
-
-        if (isset($confirmTmDetailsRequest)) {
+        } elseif (isset($confirmTmDetailsRequest)) {
             $tma = $this->changeToCorrectTmaStatus(
                 $tma,
                 TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED
@@ -1420,42 +1420,33 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     }
 
     /**
-     * Resend the TMA application email to the TM
+     * Send Tm application emails
+     *
+     * @param string $resendOrAmend
      *
      * @return void
      */
-    private function resendTmEmail()
+    private function sendTmApplicationEmail($resendOrAmend): void
     {
         $tmaId = (int)$this->params('child_id');
         $email = $this->getRequest()->getPost('emailAddress');
 
-        $response = $this->handleCommand(
-            Command\TransportManagerApplication\SendTmApplication::create(['id' => $tmaId, 'emailAddress' => $email])
-        );
+        $dtoData = [
+            'id' => $tmaId,
+            'emailAddress' => $email
+        ];
 
-        $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
-        if ($response->isOk()) {
-            $flashMessenger->addSuccessMessage('transport-manager-application.resend-form.success');
-        } else {
-            $flashMessenger->addErrorMessage('transport-manager-application.resend-form.error');
+        if ($resendOrAmend === self::TM_APPLICATION_AMEND_EMAIL) {
+            $response = $this->handleCommand(
+                Command\TransportManagerApplication\SendAmendTmApplication::create($dtoData)
+            );
         }
-    }
 
-    /**
-     * Send the amend TM application email
-     *
-     * @return void
-     */
-    private function sendAmendTmApplicationEmail(): void
-    {
-        $tmaId = (int)$this->params('child_id');
-        $email = $this->getRequest()->getPost('emailAddress');
-        $response = $this->handleCommand(
-            Command\TransportManagerApplication\SendAmendTmApplication::create([
-                'id' => $tmaId,
-                'emailAddress' => $email
-            ])
-        );
+        if ($resendOrAmend === self::TM_APPLICATION_RESEND_EMAIL) {
+            $response = $this->handleCommand(
+                Command\TransportManagerApplication\SendTmApplication::create($dtoData)
+            );
+        }
 
         $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
         if ($response->isOk()) {
@@ -1517,7 +1508,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         $tmaId = (int)$this->params('child_id');
         if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
-            $this->sendAmendTmApplicationEmail();
+            $this->sendTmApplicationEmail(self::TM_APPLICATION_AMEND_EMAIL);
         } else {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
