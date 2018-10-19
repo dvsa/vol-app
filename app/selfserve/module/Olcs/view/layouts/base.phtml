@@ -28,6 +28,8 @@
                 $userType = 'Local authority';
             } elseif ($currentUser->isOperator()) {
                 $userType = 'Operator';
+            } elseif ($currentUser->isTransportManager()) {
+                $userType = 'Transport Manager';
             }
       ?>
       <script type="text/javascript">
