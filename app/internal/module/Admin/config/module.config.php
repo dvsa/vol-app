@@ -3,6 +3,9 @@
 use Admin\Controller\PublishedPublicationController;
 use Zend\Mvc\Router\Http\Segment;
 
+use Admin\Listener\RouteParam\IrhpPermitAdminFurniture;
+use Admin\Listener\RouteParam;
+
 return [
     'router' => [
         'routes' => [
@@ -482,13 +485,61 @@ return [
                             'permits-system-settings' => [
                                 'type' => 'Segment',
                                 'options' => [
-                                    'route' => 'permits-system-settings[/:action][/:id][/]',
+                                    'route' => 'stocks[/:action][/:id][/]',
                                     'constraints' => [
-                                        'id' => '[0-9\,]+',
-                                        'action' => '(index|add|edit|delete)'
+                                        'action' => '(index|add|edit|delete)',
+                                        'id' => '[0-9\,]+'
                                     ],
                                     'defaults' => [
                                         'controller' => \Admin\Controller\IrhpPermitStockController::class,
+                                        'action' => 'index'
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                            ],
+                            'permit-range' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'stocks/:stockId/ranges[/:action][/:id][/]',
+                                    'constraints' => [
+                                        'stockId' => '[0-9\,]+',
+                                        'action' => '(index|add|edit|delete)',
+                                        'id' => '[0-9\,]+'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\IrhpPermitRangeController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                                'may_terminate' => true
+                            ],
+                            'permit-windows' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'stocks/:stockId/windows[/:action][/:id][/]',
+                                    'constraints' => [
+                                        'stockId' => '[0-9\,]+',
+                                        'action' => '(index|add|edit|delete)',
+                                        'id' => '[0-9\,]+',
+                                    ],
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\IrhpPermitWindowController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                                'may_terminate' => true
+                            ],
+                            'permit-sectors' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'stocks/:stockId/sectors[/:action][/:id][/]',
+                                    'constraints' => [
+                                        'stockId' => '[0-9\,]+',
+                                        'action' => '(index|add|edit|delete)',
+                                        'id' => '[0-9\,]+',
+                                    ],
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\IrhpPermitSectorController::class,
                                         'action' => 'index',
                                     ],
                                 ],
@@ -504,48 +555,6 @@ return [
                                     'defaults' => [
                                         'controller' => \Admin\Controller\IrhpPermitStockController::class,
                                         'action' => 'trigger',
-                                    ],
-                                ],
-                            ],
-                            'permit-range' => [
-                                'type' => 'Segment',
-                                'options' => [
-                                    'route' => 'permit-range[/:parentId][/:action][/:id][/]',
-                                    'constraints' => [
-                                        'id' => '[0-9\,]+',
-                                        'action' => '(index|add|edit|delete)'
-                                    ],
-                                    'defaults' => [
-                                        'controller' => \Admin\Controller\IrhpPermitRangeController::class,
-                                        'action' => 'index',
-                                    ],
-                                ],
-                            ],
-                            'permit-windows' => [
-                                'type' => 'Segment',
-                                'options' => [
-                                    'route' => 'permit-windows[/:parentId][/:action][/:id][/]',
-                                    'constraints' => [
-                                        'id' => '[0-9\,]+',
-                                        'action' => '(index|add|edit|delete)'
-                                    ],
-                                    'defaults' => [
-                                        'controller' => \Admin\Controller\IrhpPermitWindowController::class,
-                                        'action' => 'index',
-                                    ],
-                                ],
-                            ],
-                            'permit-sectors' => [
-                                'type' => 'Segment',
-                                'options' => [
-                                    'route' => 'permit-sectors[/:parentId][/:action][/:id][/]',
-                                    'constraints' => [
-                                        'id' => '[0-9\,]+',
-                                        'action' => '(index|add|edit|delete)'
-                                    ],
-                                    'defaults' => [
-                                        'controller' => \Admin\Controller\IrhpPermitSectorController::class,
-                                        'action' => 'index',
                                     ],
                                 ],
                             ],
@@ -748,25 +757,31 @@ return [
             'admin/view' => dirname(__DIR__) . '/view',
         ]
     ],
-    'service_manager' => array(
+    'service_manager' => [
         'aliases' => [
             'user-details' => 'UserDetailsNavigation'
         ],
-        'factories' => array(
+        'factories' => [
             'UserDetailsNavigation' => 'Admin\Navigation\UserDetailsNavigationFactory',
-        )
-    ),
+            IrhpPermitAdminFurniture::class => IrhpPermitAdminFurniture::class,
+        ]
+    ],
     'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],
     //-------- Start navigation -----------------
-    'navigation' => array(
-        'default' => array(
+    'navigation' => [
+        'default' => [
             include __DIR__ . '/navigation.config.php'
-        ),
-        'user-details' => array(
+        ],
+        'user-details' => [
             include __DIR__ . '/navigation-user-details.config.php'
-        )
-    ),
+        ]
+    ],
     //-------- End navigation -----------------
     'local_scripts_path' => [__DIR__ . '/../assets/js/inline/'],
     'my_account_route' => 'admin-dashboard/admin-your-account',
+    'route_param_listeners' => [
+        \Admin\Controller\Interfaces\IrhpPermitStockControllerInterface::class => [
+            RouteParam\IrhpPermitAdminFurniture::class,
+        ],
+    ]
 ];

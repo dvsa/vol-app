@@ -15,7 +15,7 @@ class PermitWindowDetails
     /**
      * @Form\Type("Hidden")
      */
-    public $parentId = null;
+    public $stockId = null;
 
     /**
      * @Form\Required(true)

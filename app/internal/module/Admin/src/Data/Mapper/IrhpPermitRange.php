@@ -22,7 +22,7 @@ class IrhpPermitRange implements MapperInterface
     public static function mapFromResult(array $data): array
     {
         $mappedData['permitRangeDetails'] = $data;
-        $mappedData['permitRangeDetails']['parentId'] = isset($data['parentId']) ? $data['parentId'] : $data['irhpPermitStock']['id'];
+        $mappedData['permitRangeDetails']['stockId'] = isset($data['stockId']) ? $data['stockId'] : $data['irhpPermitStock']['id'];
 
         return $mappedData;
     }
@@ -36,8 +36,8 @@ class IrhpPermitRange implements MapperInterface
      */
     public static function mapFromForm(array $data): array
     {
-        $data['permitRangeDetails']['irhpPermitStock'] = $data['permitRangeDetails']['parentId'];
-        unset($data['permitRangeDetails']['parentId']);
+        $data['permitRangeDetails']['irhpPermitStock'] = $data['permitRangeDetails']['stockId'];
+        unset($data['permitRangeDetails']['stockId']);
 
         return $data['permitRangeDetails'];
     }

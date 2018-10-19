@@ -241,21 +241,21 @@ return [
                     'id' => 'admin-dashboard/admin-permits',
                     'label' => 'Permits',
                     'route' => 'admin-dashboard/admin-permits',
-                    'pages'=> [
+                    'pages' => [
                         [
                             'id' => 'admin-dashboard/admin-permits/permits-system-settings',
                             'label' => 'Permit system settings',
-                            'route' => 'admin-dashboard/admin-permits/permits-system-settings'
+                            'route' => 'admin-dashboard/admin-permits/stocks'
                         ],
                         [
                             'id' => 'admin-dashboard/admin-permits/permit-range',
                             'label' => 'Stock',
-                            'route' => 'admin-dashboard/admin-permits/permit-range'
+                            'route' => 'admin-dashboard/admin-permits/ranges'
                         ],
                         [
                             'id' => 'admin-dashboard/admin-permits/permit-windows',
                             'label' => 'Window',
-                            'route' => 'admin-dashboard/admin-permits/permit-windows'
+                            'route' => 'admin-dashboard/admin-permits/windows'
                         ],
                         [
                             'id' => 'admin-dashboard/admin-permits/permit-sectors',

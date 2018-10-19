@@ -72,7 +72,8 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
         $view = new ViewModel(
             [
                 'navigationId' => 'admin-dashboard/admin-permits',
-                'navigationTitle' => 'Permits'
+                'navigationTitle' => 'Permits system settings',
+                'singleNav' => true
             ]
         );
         $view->setTemplate('admin/sections/admin/partials/generic-left');
@@ -93,17 +94,16 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
         return parent::indexAction();
     }
 
-    public function triggerAction(){
+    public function triggerAction()
+    {
         $response = $this->handleCommand(TriggerProcessEcmtApplications::create([]));
         $view = new ViewModel(
             [
                 'triggerOutput' => $response->getResult(),
-
             ]
         );
         $view->setTemplate('pages/irhp-permit-stock/index');
 
         return $view;
-
     }
 }
