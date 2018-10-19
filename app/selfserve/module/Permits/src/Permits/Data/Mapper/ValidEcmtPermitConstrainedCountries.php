@@ -2,7 +2,7 @@
 
 namespace Permits\Data\Mapper;
 
-use JsonSchema\Exception\ResourceNotFoundException;
+use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 
 /**
  *
@@ -14,7 +14,7 @@ class ValidEcmtPermitConstrainedCountries
     public static function mapForDisplay(array $data)
     {
         if (empty($data)) {
-            throw new ResourceNotFoundException('Permits not found');
+            throw new NotFoundException('Permits not found');
         }
         $newResults = [];
         foreach ($data['validPermits']['results'] as $datum) {

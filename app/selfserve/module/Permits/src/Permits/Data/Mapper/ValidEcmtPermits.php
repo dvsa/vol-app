@@ -8,7 +8,6 @@ use JsonSchema\Exception\ResourceNotFoundException;
  *
  * Valid ECMT permits list mapper
  */
-
 class ValidEcmtPermits
 {
     public static function mapForDisplay(array $data)
