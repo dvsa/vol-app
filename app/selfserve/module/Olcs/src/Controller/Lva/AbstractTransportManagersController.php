@@ -22,6 +22,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     const TYPE_PREVIOUS_CONVICTION = 'PreviousConvictions';
     const TYPE_PREVIOUS_LICENCE = 'PreviousLicences';
     const TYPE_OTHER_EMPLOYMENT = 'OtherEmployments';
+    const TM_APPLICATION_RESEND_EMAIL = 'tm_app_resend_email';
+    const TM_APPLICATION_AMEND_EMAIL = 'tm_app_amend_email';
 
     /**
      * Store the Transport Manager Application data
@@ -73,7 +75,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     }
 
     /**
-     * @param $tma
+     * @param array $tma
+     *
      * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
      */
     private function callActionByStatus($tma)
@@ -1158,9 +1161,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     private function page1Point3(array $tma)
     {
-        if ($this->getRequest()->isPost()) {
-            $this->resendTmEmail();
-        }
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $params = [
@@ -1172,6 +1172,13 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         /* @var $form \Common\Form\Form */
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
         $form->get('emailAddress')->setValue($tma['transportManager']['homeCd']['emailAddress']);
+
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->getRequest()->getPost());
+            if ($form->isValid()) {
+                $this->sendTmApplicationEmail(self::TM_APPLICATION_RESEND_EMAIL);
+            }
+        }
 
         return $this->renderTmAction('transport-manager-application.details-not-submitted', $form, $tma, $params);
     }
@@ -1202,18 +1209,6 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     private function page2Point2(array $tma)
     {
-        if ($this->getRequest()->isPost()) {
-            if ($this->getRequest()->getPost('emailAddress')) {
-                $this->resetTmaStatusAndResendTmEmail();
-                return $this->redirectToTransportManagersPage();
-            } else {
-                $tma = $this->changeToCorrectTmaStatus(
-                    $tma,
-                    TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED
-                );
-                return $this->redirectToOperatorDeclarationPage($tma);
-            }
-        }
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $params = [
@@ -1238,6 +1233,23 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $resendForm->get('emailAddress')->setValue($tma['transportManager']['homeCd']['emailAddress']);
 
         $params['resendForm'] = $resendForm;
+
+        $sendAmendEmailRequest = $this->getRequest()->getPost('emailAddress');
+        $confirmTmDetailsRequest = $this->getRequest()->getPost('form-actions')['submit'];
+
+        if (isset($sendAmendEmailRequest)) {
+            $resendForm->setData($this->getRequest()->getPost());
+            if ($resendForm->isValid()) {
+                $this->updateTmaStatusAndSendAmendTmApplicationEmail();
+                return $this->redirectToTransportManagersPage();
+            }
+        } elseif (isset($confirmTmDetailsRequest)) {
+            $tma = $this->changeToCorrectTmaStatus(
+                $tma,
+                TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED
+            );
+            return $this->redirectToOperatorDeclarationPage($tma);
+        }
 
         return $this->renderTmAction('transport-manager-application.review-and-submit', $form, $tma, $params);
     }
@@ -1408,16 +1420,33 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     }
 
     /**
-     * Resend the TMA application email to the TM
+     * Send Tm application emails
+     *
+     * @param string $resendOrAmend
      *
      * @return void
      */
-    private function resendTmEmail()
+    private function sendTmApplicationEmail($resendOrAmend): void
     {
         $tmaId = (int)$this->params('child_id');
-        $response = $this->handleCommand(
-            Command\TransportManagerApplication\SendTmApplication::create(['id' => $tmaId])
-        );
+        $email = $this->getRequest()->getPost('emailAddress');
+
+        $dtoData = [
+            'id' => $tmaId,
+            'emailAddress' => $email
+        ];
+
+        if ($resendOrAmend === self::TM_APPLICATION_AMEND_EMAIL) {
+            $response = $this->handleCommand(
+                Command\TransportManagerApplication\SendAmendTmApplication::create($dtoData)
+            );
+        }
+
+        if ($resendOrAmend === self::TM_APPLICATION_RESEND_EMAIL) {
+            $response = $this->handleCommand(
+                Command\TransportManagerApplication\SendTmApplication::create($dtoData)
+            );
+        }
 
         $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
         if ($response->isOk()) {
@@ -1470,11 +1499,16 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
     }
 
-    private function resetTmaStatusAndResendTmEmail()
+    /**
+     * Update Tma status and send amend tm applcation email
+     *
+     * @return void
+     */
+    private function updateTmaStatusAndSendAmendTmApplicationEmail(): void
     {
         $tmaId = (int)$this->params('child_id');
         if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
-            $this->resendTmEmail();
+            $this->sendTmApplicationEmail(self::TM_APPLICATION_AMEND_EMAIL);
         } else {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
         }
@@ -1519,7 +1553,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             return $tma;
         }
 
-        if($this->updateTmaStatus($tma['id'], $status) === false) {
+        if ($this->updateTmaStatus($tma['id'], $status) === false) {
             throw new \RuntimeException('updateTmaStatus failed');
         }
 

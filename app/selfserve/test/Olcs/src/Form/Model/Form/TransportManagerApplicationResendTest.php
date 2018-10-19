@@ -19,9 +19,9 @@ class TransportManagerApplicationResendTest extends AbstractFormValidationTestCa
     public function testEmailAddress()
     {
         $element = ['emailAddress'];
-        $this->assertFormElementRequired($element, false);
-        $this->assertFormElementAllowEmpty($element, true);
-        $this->assertFormElementText($element);
+        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementEmailAddress($element);
     }
 
     public function testSubmit()

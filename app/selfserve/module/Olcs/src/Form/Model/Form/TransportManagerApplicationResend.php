@@ -12,7 +12,7 @@ use Zend\Form\Annotation as Form;
 class TransportManagerApplicationResend
 {
     /**
-     * @Form\Attributes({"id":"emailAddress","placeholder":"","class":"medium", "readonly":"readonly"})
+     * @Form\Attributes({"id":"emailAddress","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "transport-managers-email-address",
      *     "label_attributes": {
@@ -20,6 +20,8 @@ class TransportManagerApplicationResend
      *     }
      * })
      * @Form\Type("Text")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
      */
     protected $emailAddress;
 
