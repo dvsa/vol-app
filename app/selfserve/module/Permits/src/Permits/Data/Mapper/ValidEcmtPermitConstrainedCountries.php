@@ -2,20 +2,24 @@
 
 namespace Permits\Data\Mapper;
 
-use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
-
 /**
- *
  * ECMT Constrained Countries mapper
  */
-
 class ValidEcmtPermitConstrainedCountries
 {
-    public static function mapForDisplay(array $data)
+    /**
+     * Merges valid permit data with the constrained countries data
+     *
+     * @param array $data input data
+     *
+     * @return array
+     */
+    public static function mapForDisplay(array $data): array
     {
         if (empty($data)) {
-            throw new NotFoundException('Permits not found');
+            return $data;
         }
+
         $newResults = [];
         foreach ($data['validPermits']['results'] as $datum) {
             $constrainedCountries = [];

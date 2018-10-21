@@ -1,5 +1,7 @@
 <?php
 
+use Common\Util\Escape;
+
 return array(
     'variables' => array(),
     'settings' => array(
@@ -16,7 +18,7 @@ return array(
                 'title' => 'permits.ecmt.page.valid.tableheader.ref',
                 'name' => 'permitNumber',
                 'formatter' => function ($row) {
-                    return '<b>' . $row['permitNumber'] . '</b>';
+                    return '<b>' . Escape::html($row['permitNumber']) . '</b>';
                 },
             ),
         array(
@@ -31,7 +33,7 @@ return array(
                 foreach ($row['countries'] as $country) {
                     $rc[] = $translator->translate($country['countryDesc']);
                 }
-                return implode(', ', $rc);
+                return Escape::html(implode(', ', $rc));
             }
         )
     )
