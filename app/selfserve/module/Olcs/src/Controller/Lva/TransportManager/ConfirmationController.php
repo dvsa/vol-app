@@ -28,6 +28,10 @@ class ConfirmationController extends AbstractController
         $confirmationMarkup = $this->tma["isOwner"] === "N" ? 'markup-tma-confirmation-tm' :
             'markup-tma-confirmation-operator';
 
+        if (!empty($this->tma['opDigitalSignature'])) {
+            $confirmationMarkup = 'markup-tma-confirmation-operator';
+        }
+
         $digitalSignature = $this->isTransportManagerRole() ?
             $this->tma['tmDigitalSignature'] :
             $this->tma['opDigitalSignature'];
@@ -35,7 +39,11 @@ class ConfirmationController extends AbstractController
         $params = [
             'content' => $translationHelper->translateReplace(
                 $confirmationMarkup,
-                [$this->getSignatureFullName($digitalSignature), $this->getSignatureDate($digitalSignature), $this->getBacklink()]
+                [
+                    $this->getSignatureFullName($digitalSignature),
+                    $this->getSignatureDate($digitalSignature),
+                    $this->getBacklink()
+                ]
             ),
             'tmFullName' => $this->getTmName(),
         ];
@@ -121,7 +129,7 @@ class ConfirmationController extends AbstractController
     {
         if ($this->tma['isTmLoggedInUser'] &&
             ($this->tma['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_TM_SIGNED ||
-            $this->tma['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_RECEIVED) &&
+                $this->tma['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_RECEIVED) &&
             !is_null($this->tma['tmDigitalSignature'])) {
             return true;
         }
