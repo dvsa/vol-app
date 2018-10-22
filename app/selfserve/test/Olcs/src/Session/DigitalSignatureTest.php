@@ -65,7 +65,7 @@ class DigitalSignatureTest extends m\Adapter\Phpunit\MockeryTestCase
 
     public function testSetGetTransportManagerApplicationOperatorSignature()
     {
-        $this->sut->setTransportManagerApplicationOperatorSignature(12);
+        $this->sut->setRole(12);
         $this->assertTrue($this->sut->getTransportManagerApplicationOperatorSignature());
         $this->assertEquals(12, $this->sut->getTransportManagerApplicationId());
     }

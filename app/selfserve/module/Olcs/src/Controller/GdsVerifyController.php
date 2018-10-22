@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller;
 
+use Common\Service\Data\RefData;
 use Olcs\View\Model\Dashboard;
 use Common\Controller\Lva\AbstractController;
 
@@ -49,6 +50,7 @@ class GdsVerifyController extends AbstractController
         $continuationDetailId = $session->hasContinuationDetailId() ? $session->getContinuationDetailId() : false;
         $transportManagerApplicationId = $session->hasTransportManagerApplicationId() ? $session->getTransportManagerApplicationId() : false;
         $lva = $session->hasLva()? $session->getLva():'application';
+        $role = $session->hasRole()?$session->getRole():null;
 
         $dto = \Dvsa\Olcs\Transfer\Command\GdsVerify\ProcessSignatureResponse::create(
             ['samlResponse' => $this->getRequest()->getPost('SAMLResponse')]
@@ -63,11 +65,7 @@ class GdsVerifyController extends AbstractController
 
         if ($transportManagerApplicationId) {
             $dto->setTransportManagerApplication($transportManagerApplicationId);
-            if ($session->getTransportManagerApplicationOperatorSignature() === true) {
-                $dto->setTransportManagerApplicationOperatorSignature('Y');
-            } else {
-                $dto->setTransportManagerApplicationOperatorSignature('N');
-            }
+            $dto->setRole($role);
         }
         $session->getManager()->getStorage()->clear(\Olcs\Session\DigitalSignature::SESSION_NAME);
         $response = $this->handleCommand($dto);

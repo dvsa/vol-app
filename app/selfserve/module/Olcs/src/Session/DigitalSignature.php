@@ -11,6 +11,7 @@ class DigitalSignature extends \Zend\Session\Container
 {
     const SESSION_NAME = 'DigitalSignature';
 
+
     /**
      * DigitalSignature constructor.
      */
@@ -32,6 +33,11 @@ class DigitalSignature extends \Zend\Session\Container
     public function hasLva()
     {
         return $this->offsetExists('lva');
+    }
+
+    public function hasRole()
+    {
+        return $this->offsetExists('role');
     }
     /**
      * Set Application ID
@@ -87,14 +93,18 @@ class DigitalSignature extends \Zend\Session\Container
         return (int) $this->continuationDetailId;
     }
 
-    /**
-     * setTransportManagerApplicationOperatorSignature
-     * @param $transportManagerApplicationId
-     */
-    public function setTransportManagerApplicationOperatorSignature($transportManagerApplicationId)
+
+    public function getRole()
     {
-        $this->setTransportManagerApplicationId($transportManagerApplicationId);
-        $this->transportManagerApplicationOperatorSignature = true;
+        return $this->role;
+    }
+    /**
+     * setRole
+     * @param $role
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
     }
 
     public function setTransportManagerApplicationId($transportManagerApplicationId)
@@ -107,13 +117,6 @@ class DigitalSignature extends \Zend\Session\Container
         return $this->offsetExists('transportManagerApplicationId');
     }
 
-    /**
-     * @return bool
-     */
-    public function getTransportManagerApplicationOperatorSignature():bool
-    {
-        return (bool) $this->transportManagerApplicationOperatorSignature;
-    }
 
     /**
      * @return mixed
