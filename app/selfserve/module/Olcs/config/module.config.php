@@ -459,7 +459,7 @@ $routes = array(
                             'lva' => '(application|variation)',
                             'applicationId' => '[0-9]+',
                             'transportManagerApplicationId' => '[0-9]+',
-                            'role' =>'(tma_sign_as_tm | tma_sign_as_op | tma_sign_as_tm_op)'
+                            'role' =>'(tma\\_sign\\_as\\_tm| tma_sign_as_op | tma_sign_as_tm_op)'
 
                     ],
                 )
