@@ -70,13 +70,13 @@ class GdsVerifyController extends AbstractController
             }
         }
         $session->getManager()->getStorage()->clear(\Olcs\Session\DigitalSignature::SESSION_NAME);
-
         $response = $this->handleCommand($dto);
         if (!$response->isOk()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('undertakings_not_signed');
         }
 
-        if ($applicationId) {
+
+        if ($applicationId && !$transportManagerApplicationId) {
             return $this->redirect()->toRoute(
                 'lva-application/undertakings',
                 ['application' => $applicationId]
