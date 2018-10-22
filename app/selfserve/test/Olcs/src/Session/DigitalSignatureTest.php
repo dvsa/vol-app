@@ -67,7 +67,6 @@ class DigitalSignatureTest extends m\Adapter\Phpunit\MockeryTestCase
     {
         $this->sut->setRole('__TEST__');
         $this->assertEquals('__TEST__', $this->sut->getRole());
-
     }
 
     public function testGetSetLva()
@@ -84,6 +83,13 @@ class DigitalSignatureTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertTrue($this->sut->hasLva());
     }
 
+    public function testRole()
+    {
+
+        $this->assertEquals(null, $this->sut->getRole());
+        $this->sut->setRole('__TEST__');
+        $this->assertTrue($this->sut->hasRole());
+    }
     /**
      * setUp
      *
