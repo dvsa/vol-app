@@ -63,11 +63,10 @@ class DigitalSignatureTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertTrue($this->sut->hasTransportManagerApplicationId());
     }
 
-    public function testSetGetTransportManagerApplicationOperatorSignature()
+    public function testSetGetRole()
     {
-        $this->sut->setTransportManagerApplicationOperatorSignature(12);
-        $this->assertTrue($this->sut->getTransportManagerApplicationOperatorSignature());
-        $this->assertEquals(12, $this->sut->getTransportManagerApplicationId());
+        $this->sut->setRole('__TEST__');
+        $this->assertEquals('__TEST__', $this->sut->getRole());
     }
 
     public function testGetSetLva()
@@ -84,6 +83,13 @@ class DigitalSignatureTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertTrue($this->sut->hasLva());
     }
 
+    public function testRole()
+    {
+
+        $this->assertEquals(null, $this->sut->getRole());
+        $this->sut->setRole('__TEST__');
+        $this->assertTrue($this->sut->hasRole());
+    }
     /**
      * setUp
      *
