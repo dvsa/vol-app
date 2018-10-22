@@ -459,7 +459,6 @@ $routes = array(
                             'applicationId' => '[0-9]+',
                             'transportManagerApplicationId' => '[0-9]+',
                             'role' =>'(tma\\_sign\\_as\\_tm|tma\\_sign\\_as\\_op|tma\\_sign\\_as\\_top)'
-
                     ],
                 )
             ],
