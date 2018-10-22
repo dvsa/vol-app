@@ -53,6 +53,7 @@ class GdsVerifyController extends AbstractController
         $dto = \Dvsa\Olcs\Transfer\Command\GdsVerify\ProcessSignatureResponse::create(
             ['samlResponse' => $this->getRequest()->getPost('SAMLResponse')]
         );
+
         if ($applicationId) {
             $dto->setApplication($applicationId);
         }
@@ -102,6 +103,7 @@ class GdsVerifyController extends AbstractController
         }
 
 
+
         throw new \RuntimeException('There was an error processing the signature response');
     }
 
@@ -124,7 +126,7 @@ class GdsVerifyController extends AbstractController
         foreach ($types as $key => $value) {
             $methodName = 'set' . ucfirst($key);
             if (method_exists($session, $methodName)) {
-                call_user_func([$session, $methodName], [$value]);
+                call_user_func([$session, $methodName], $value);
             }
         }
     }
