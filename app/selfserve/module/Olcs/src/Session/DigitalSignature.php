@@ -6,7 +6,7 @@ namespace Olcs\Session;
  * Class DigitalSignature
  *
  *
-*/
+ */
 class DigitalSignature extends \Zend\Session\Container
 {
     const SESSION_NAME = 'DigitalSignature';
@@ -39,6 +39,7 @@ class DigitalSignature extends \Zend\Session\Container
     {
         return $this->offsetExists('role');
     }
+
     /**
      * Set Application ID
      *
@@ -58,7 +59,7 @@ class DigitalSignature extends \Zend\Session\Container
      */
     public function getApplicationId()
     {
-        return (int) $this->applicationId;
+        return (int)$this->applicationId;
     }
 
     /**
@@ -90,16 +91,27 @@ class DigitalSignature extends \Zend\Session\Container
      */
     public function getContinuationDetailId()
     {
-        return (int) $this->continuationDetailId;
+        return (int)$this->continuationDetailId;
     }
 
+    public function setApplication($id)
+    {
+        $this->setApplicationId($id);
+    }
+
+    public function setContinuationDetail($id)
+    {
+        $this->setContinuationDetailId($id);
+    }
 
     public function getRole()
     {
         return $this->role;
     }
+
     /**
      * setRole
+     *
      * @param $role
      */
     public function setRole($role)
@@ -121,15 +133,15 @@ class DigitalSignature extends \Zend\Session\Container
     /**
      * @return mixed
      */
-    public function getTransportManagerApplicationId() :int
+    public function getTransportManagerApplicationId(): int
     {
-        return (int) $this->transportManagerApplicationId;
+        return (int)$this->transportManagerApplicationId;
     }
 
     /**
      * @return mixed
      */
-    public function getLva() :?string
+    public function getLva(): ?string
     {
         return $this->lva;
     }
