@@ -771,14 +771,14 @@ $routes = [
             'permits' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => 'permits[/][:action][/:permitid]',
+                    'route' => 'permits[/][:action][/:permitid][/]',
                     'defaults' => [
                         'controller' => 'IrhpPermitApplicationController',
                         'action' => 'index',
-                        'constraints' => [
-                            'id' => '[0-9]+',
-                            'action' => '(index|edit|add)'
-                        ]
+                    ],
+                    'constraints' => [
+                        'id' => '[0-9]+',
+                        'action' => '(index|edit|add|documents|processing|submit|accept|decline|cancel|withdraw)'
                     ]
                 ],
                 'may_terminate' => true,

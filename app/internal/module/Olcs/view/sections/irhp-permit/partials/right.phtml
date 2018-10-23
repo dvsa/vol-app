@@ -15,8 +15,8 @@ $note = $this->placeholder('note')->getValue();
     <h4 class="title">Licence details</h4>
     <p class="small-module__details">
         <a href="<?php echo $this->url('lva-licence', ['licence' => $irhpPermit['licence']['id']], [], false); ?>"><?php echo $this->escapeHtml($irhpPermit['licence']['licNo']); ?></a><br>
-        <?php echo $this->translate($irhpPermit['licence']['licenceType']['id']); ?><br/>
-        <?php echo $this->translate($irhpPermit['licence']['status']['id']); ?>
+        <?php echo $this->escapeHtml($this->translate($irhpPermit['licence']['licenceType']['id'])); ?><br/>
+        <?php echo $this->escapeHtml($this->translate($irhpPermit['licence']['status']['id'])); ?>
     </p>
 </div>
 

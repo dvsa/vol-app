@@ -3,7 +3,7 @@
 namespace Olcs\Controller\Interfaces;
 
 /**
- * BusRegControllerInterface
+ * IrhpPermitApplicationControllerInterface
  */
 interface IrhpPermitApplicationControllerInterface
 {

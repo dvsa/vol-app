@@ -391,6 +391,13 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     }
 
 
+    /**
+     * check for and return an outstanding free from the ['fees'] array on the permit application entity
+     *
+     * @param $fees
+     * @param $type
+     * @return bool
+     */
     protected function getOutstandingFee($fees, $type)
     {
         foreach ($fees as $key => $fee) {

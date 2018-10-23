@@ -127,7 +127,7 @@ class IrhpPermitFurniture implements
             ->setVisible($irhpPermit['canBeWithdrawn']);
 
         $sidebarNav->findOneBy('id', 'irhp-permit-decisions-accept')
-            ->setVisible($irhpPermit['isAwaitingFee']);
+            ->setVisible($irhpPermit['canBeDeclined']);
 
         $sidebarNav->findOneBy('id', 'irhp-permit-decisions-decline')
             ->setVisible($irhpPermit['canBeDeclined']);
