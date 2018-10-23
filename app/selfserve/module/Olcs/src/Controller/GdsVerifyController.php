@@ -2,8 +2,6 @@
 
 namespace Olcs\Controller;
 
-
-use Olcs\Logging\Log\Logger;
 use Olcs\View\Model\Dashboard;
 use Common\Controller\Lva\AbstractController;
 
@@ -121,7 +119,7 @@ class GdsVerifyController extends AbstractController
                 . ' to return to after completing Verify'
             );
         }
-        
+
         foreach ($types as $key => $value) {
             $methodName = 'set' . ucfirst($key);
             if (method_exists($session, $methodName)) {
