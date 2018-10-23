@@ -2,11 +2,5 @@
 $form = $this->placeholder('form')->getValue();
 $licence = $this->placeholder('licence')->getValue();
 
-/*$this->placeholder('pageTitle')->set('<a href="' . $this->placeholder('licenceUrl')->getValue() . '">' . $licence['licNo'] .' / ' . $form->get('fields')->get('id')->getValue() . '</a>');
-$this->placeholder('pageSubtitle')->set('subtitle');
-*/
-
-
-
 echo $this->formErrors($form);
 echo $this->form($form);
