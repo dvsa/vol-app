@@ -96,7 +96,7 @@ class ConfirmationController extends AbstractController
             );
         }
     }
-// fix here
+
     /**
      * is the logged in user just TM, eg not an admin
      *
