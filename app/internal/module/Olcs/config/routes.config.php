@@ -782,26 +782,6 @@ $routes = [
                     ]
                 ],
                 'may_terminate' => true,
-
-                'child_routes' => [
-                    /*'fees' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'fees[/]',
-                            'defaults' => [
-                                'controller' => 'IrhpPermitFeesController',
-                                'action' => 'fees'
-                            ]
-                        ],
-                        'child_routes' => [
-                            'fee_action' => $feeActionRoute,
-                            'fee_type_ajax' => $feeTypeAjaxRoute,
-                            'print-receipt' => $feePrintReceiptRoute,
-                        ],
-                        'may_terminate' => true,
-
-                    ]*/
-                ]
             ],
             'processing' => [
                 'type' => 'segment',
