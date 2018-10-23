@@ -16,50 +16,17 @@ OLCS.ready(function () {
     $("#backToPermitList").click(function (e) {
         if (!confirm("Going back will lose any unsaved changes. Are you sure? ")) {
             e.preventDefault();
+        }else{
+            parent.history.back();
         }
     });
 
-    if ($("#canBeWithdrawn").val()) {
-        $("#withdrawPermitApplication").removeClass("visually-hidden");
-    }
-
-    if ($("#canBeSubmitted").val()) {
-        $("#submitPermitApplication").removeClass("visually-hidden");
-    }
-
-    if ($("#canBeCancelled").val()) {
-        $("#cancelPermitApplication").removeClass("visually-hidden");
-    }
-
-    if ($.inArray($(".permitApplicationStatus").val(), ["permit_app_uc", "permit_app_awaiting", "permit_app_issued"]) !== -1) {
-        $("#withdrawPermitApplication").removeClass("visually-hidden");
-    }
-
-    if ($.inArray($(".permitApplicationStatus").val(), ["permit_app_nys"]) !== -1) {
-        $("#cancelPermitApplication").removeClass("visually-hidden");
+    if ($.inArray($(".permitApplicationStatus").val(), ["permit_app_withdrawn", "permit_app_cancelled", "permit_app_valid", "permit_app_uc"]) > -1) {
+        $("#saveIrhpPermitApplication").addClass("visually-hidden");
     }
 
     $(".permitApplicationStatus").click(function (e) {
         if (!confirm("Going back will lose any unsaved changes. Are you sure?")) {
-            e.preventDefault();
-        }
-    });
-
-    $("#submitPermitApplication").click(function (e) {
-        if (!confirm("Are you sure you wish to submit this application?")) {
-            e.preventDefault();
-        }
-    });
-
-    // Add event handlers for Permits buttons
-    $("#withdrawPermitApplication").click(function (e) {
-        if (!confirm("This will withdraw the application and any fees paid will not be refunded. Are you sure?")) {
-            e.preventDefault();
-        }
-    });
-
-    $("#cancelPermitApplication").click(function (e) {
-        if (!confirm("Are you sure you wish to cancel this application?")) {
             e.preventDefault();
         }
     });

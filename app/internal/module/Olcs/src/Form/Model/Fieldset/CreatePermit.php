@@ -86,6 +86,8 @@ class CreatePermit extends Base
      */
     public $numVehicles;
 
+
+
     /**
      * @Form\Type("Zend\Form\Element\Hidden")
      * @Form\Type("\Common\Form\Elements\Types\Readonly")
@@ -135,7 +137,7 @@ class CreatePermit extends Base
     public $cabotage = null;
 
     /**
-     * @Form\Name("countryIds")
+     * @Form\Name("countrys")
      * @Form\Required(false)
      * @Form\Options({
      *     "label": "The following countries have imposed limits on the number of permits for UK Hauliers. Please select any countries the applicant intends to travel to below.",
@@ -148,7 +150,7 @@ class CreatePermit extends Base
      * })
      * @Form\Attributes({
      *     "class" : "chosen-select-large",
-     *     "id" : "countryIds",
+     *     "id" : "countrys",
      *     "allowWrap":true,
      *     "multiple":"multiple",
      *     "empty": "Select options if applicable",
@@ -157,7 +159,7 @@ class CreatePermit extends Base
      * @Form\Type("DynamicSelect")
      * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
-    public $countryIds = null;
+    public $countrys = null;
 
     /**
      * @Form\Required(false)
@@ -256,4 +258,10 @@ class CreatePermit extends Base
      *
      */
     public $canBeCancelled;
+
+    /**
+     * @Form\Type("Zend\Form\Element\Hidden")
+     *
+     */
+    public $licence;
 }

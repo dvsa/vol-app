@@ -9,8 +9,7 @@ return [
     'settings' => [
         'crud' => [
             'actions' => [
-                'Apply' => ['class' => 'action--primary'],
-                'Edit' => ['requireRows' => true, 'class' => 'action--secondary js-require--one']
+                'Apply' => ['class' => 'action--primary']
             ],
         ],
         'paginate' => [
@@ -43,11 +42,6 @@ return [
             'title' => 'dashboard-table-permit-application-status',
             'name' => 'status',
             'formatter' => 'RefDataStatus'
-        ],
-        [
-            'title' => '',
-            'width' => 'checkbox',
-            'format' => '{{[elements/radio]}}'
-        ],
+        ]
     ],
 ];
