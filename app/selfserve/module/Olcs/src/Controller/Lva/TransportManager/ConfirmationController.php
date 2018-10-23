@@ -96,7 +96,7 @@ class ConfirmationController extends AbstractController
             );
         }
     }
-
+// fix here
     /**
      * is the logged in user just TM, eg not an admin
      *
@@ -104,8 +104,10 @@ class ConfirmationController extends AbstractController
      */
     private function isTransportManagerRole()
     {
-        return ($this->isGranted(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD) &&
-            !$this->isGranted(RefData::PERMISSION_SELFSERVE_LVA));
+        if($this->isGranted(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD)){
+            return true;
+        }
+            return false;
     }
 
     private function getSignatureDate($signature)
