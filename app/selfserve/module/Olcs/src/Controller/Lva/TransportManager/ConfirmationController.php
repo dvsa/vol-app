@@ -104,7 +104,7 @@ class ConfirmationController extends AbstractController
      */
     private function isTransportManagerRole()
     {
-        if($this->isGranted(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD)){
+        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD)) {
             return true;
         }
             return false;
