@@ -24,7 +24,7 @@ class DigitalSignatureTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertTrue($this->sut->hasApplicationId());
     }
 
-    public function testSetGetApplication()
+    public function testSetGetApplicationId()
     {
 
         $this->assertSame(0, $this->sut->getApplicationId());
@@ -40,7 +40,7 @@ class DigitalSignatureTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertTrue($this->sut->hasContinuationDetailId());
     }
 
-    public function testSetGetContinuationDetail()
+    public function testSetGetContinuationDetailId()
     {
 
         $this->assertSame(0, $this->sut->getContinuationDetailId());
@@ -89,6 +89,22 @@ class DigitalSignatureTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertEquals(null, $this->sut->getRole());
         $this->sut->setRole('__TEST__');
         $this->assertTrue($this->sut->hasRole());
+    }
+
+    public function testSetGetApplication()
+    {
+
+        $this->assertSame(0, $this->sut->getApplicationId());
+        $this->sut->setApplication('12');
+        $this->assertSame(12, $this->sut->getApplicationId());
+    }
+
+    public function testSetGetContinuationDetail()
+    {
+
+        $this->assertSame(0, $this->sut->getContinuationDetailId());
+        $this->sut->setContinuationDetail('12');
+        $this->assertSame(12, $this->sut->getContinuationDetailId());
     }
     /**
      * setUp

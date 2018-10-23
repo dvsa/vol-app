@@ -2,7 +2,6 @@
 
 namespace Olcs\Controller;
 
-use Common\Service\Data\RefData;
 use Olcs\View\Model\Dashboard;
 use Common\Controller\Lva\AbstractController;
 
