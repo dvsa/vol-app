@@ -1,0 +1,30 @@
+<?php
+    $operationsPermitted = $this->placeholder('operationsPermitted')->getValue();
+    $stockId = $this->placeholder('stockId')->getValue();
+
+    $accept = ['href' => '', 'class' => 'secondary'];
+    if ( isset($operationsPermitted['acceptPermitted'])
+         && $operationsPermitted['acceptPermitted']) {
+
+        $accept['href'] = 'href="'.$this->url('admin-dashboard/admin-permits/permit-scoring', ['stockId' => $stockId, 'action' => 'accept']).'"';
+        $accept['class'] = 'primary';
+    }
+
+    $run = ['href' => '', 'class' => 'secondary'];
+    if ( isset($operationsPermitted['scoringPermitted'])
+        && $operationsPermitted['scoringPermitted']) {
+
+        $run['href'] = 'href="'.$this->url('admin-dashboard/admin-permits/permit-scoring', ['stockId' => $stockId, 'action' => 'run']).'"';
+        $run['class'] = 'primary';
+    }
+?>
+<div style="float: right;">
+    <a <?php echo $run['href'] ?> class="action--<?php echo $run['class'] ?> large <?php echo empty($run['href']) ? '' : 'js-modal-ajax'?>">
+        Run
+    </a>
+    &nbsp; &nbsp; &nbsp;
+    <a <?php echo $accept['href'] ?> class="action--<?php echo $accept['class'] ?> large <?php echo empty($accept['href']) ? '' : 'js-modal-ajax'?>">
+        Accept
+    </a>
+
+</div>
