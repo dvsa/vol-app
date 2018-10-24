@@ -543,6 +543,22 @@ return [
                                         'action' => 'index',
                                     ],
                                 ],
+                                'may_terminate' => true,
+                            ],
+                            'permit-jurisdiction' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'stocks/:stockId/jurisdiction[/:action][/:id][/]',
+                                    'constraints' => [
+                                        'id' => '[0-9\,]+',
+                                        'action' => '(index|add|edit|delete)'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\IrhpPermitJurisdictionController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                                'may_terminate' => true,
                             ],
                             'trigger' => [
                                 'type' => 'Segment',
@@ -750,6 +766,8 @@ return [
                 Admin\Controller\IrhpPermitRangeController::class,
             Admin\Controller\IrhpPermitSectorController::class =>
                 Admin\Controller\IrhpPermitSectorController::class,
+            Admin\Controller\IrhpPermitJurisdictionController::class =>
+                Admin\Controller\IrhpPermitJurisdictionController::class,
         ],
     ],
     'view_manager' => [
