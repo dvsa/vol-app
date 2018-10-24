@@ -28,11 +28,9 @@ class CreatePermit extends Base
      *     "label": "Permit Type",
      *     "short-label": "Permit Type",
      *     "label_attributes": {"id": "label-permit-type"},
-     * "value_options": {
-     *          "ECMT",
-     *      },
+     *     "service_name": "Common\Service\Data\IrhpPermitType",
      * })
-     * @Form\Type("Select")
+     * @Form\Type("DynamicSelect")
      * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
      */
     public $permitType = null;
