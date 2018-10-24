@@ -32,9 +32,9 @@ class ConfirmationController extends AbstractController
             $confirmationMarkup = 'markup-tma-confirmation-operator';
         }
 
-        $digitalSignature = $this->isTransportManagerRole() ?
-            $this->tma['tmDigitalSignature'] :
-            $this->tma['opDigitalSignature'];
+        $digitalSignature = empty(
+            $this->tma['opDigitalSignature']
+        ) ? $this->tma['tmDigitalSignature'] : $this->tma['opDigitalSignature'];
 
         $params = [
             'content' => $translationHelper->translateReplace(
@@ -107,7 +107,7 @@ class ConfirmationController extends AbstractController
         if ($this->isGranted(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD)) {
             return true;
         }
-            return false;
+        return false;
     }
 
     private function getSignatureDate($signature)
