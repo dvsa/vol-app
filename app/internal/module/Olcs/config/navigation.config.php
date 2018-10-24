@@ -560,6 +560,10 @@ $nav = [
                             'label' => 'IRHP Permits',
                             'route' => 'licence/permits',
                             'use_route_match' => true,
+                            'params' => [
+                                'action' => null,
+                                'id' => null,
+                            ],
                             'pages' => [
                                 [
                                     'id' => 'licence_irhp_permits_edit',
