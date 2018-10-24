@@ -86,7 +86,6 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     ];
 
     // Maps to ID in navgiation-config file to underline correct item in horizontal nav menu
-    protected $navigationId = 'licence_irhp_permits';
 
     // Scripts to include when rendering actions.
     protected $inlineScripts = [
@@ -141,6 +140,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
      */
     public function editAction()
     {
+        $this->setNavigationId('edit');
         $request = $this->getRequest();
         if ($request->isPost() && array_key_exists('back', (array)$this->params()->fromPost()['form-actions'])) {
             return $this->permitDashRedirect();
@@ -264,6 +264,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
      */
     public function documentsAction()
     {
+        $this->setNavigationId('documents');
         return $this->stubAction();
     }
 
@@ -274,6 +275,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
      */
     public function processingAction()
     {
+        $this->setNavigationId('processing');
         return $this->stubAction();
     }
 
@@ -451,5 +453,11 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         $view->setTemplate('sections/irhp-permit/partials/stub');
 
         return $view;
+    }
+    
+    protected function setNavigationId($action)
+    {
+        $navigation = $this->getServiceLocator()->get('Navigation');
+        $navigation->findOneBy('id', 'licence_irhp_permits-'.$action)->setActive();
     }
 }
