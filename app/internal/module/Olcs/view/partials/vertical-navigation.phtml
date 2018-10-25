@@ -8,9 +8,6 @@
             continue;
         }
 
-        // Ensure that the Permit System Settings page is set correctly.
-        $page->route = $page->id;
-
         // Only add the Stock ID parameter if it exists on the parent and $page is not the Permit System Settings page.
         if (array_key_exists('stockId', $page->parent->params)) {
             if (strpos($page->id, 'permits-system-settings') === false) {
@@ -22,6 +19,11 @@
                 if ($matchedRoute[count($matchedRoute) - 1] === $route[count($route) - 1]) {
                     $page->active = true;
                 }
+            }
+
+            if (strpos($page->route, 'stocks') >= 0) {
+                // Ensure that the Permit System Settings page is set correctly.
+                $page->route = $page->id;
             }
         }
 
