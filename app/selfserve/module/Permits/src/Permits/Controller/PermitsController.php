@@ -5,6 +5,7 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 
 use Common\Controller\Traits\GenericReceipt;
 use Common\Controller\Traits\StoredCardsTrait;
+use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtLicence;
@@ -18,6 +19,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
 use Dvsa\Olcs\Transfer\Query\Permits\LastOpenWindow;
 use Dvsa\Olcs\Transfer\Query\Permits\OpenWindows;
+use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
 
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 
@@ -31,6 +33,7 @@ use Common\RefData;
 
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
+use Olcs\Controller\Lva\Traits\DashboardNavigationTrait;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\View\Helper\EcmtSection;
 
@@ -48,6 +51,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     use GenericReceipt;
     use StoredCardsTrait;
     use FlashMessengerTrait;
+    use DashboardNavigationTrait;
 
     const ECMT_APPLICATION_FEE_PRODUCT_REFENCE = 'IRHP_GV_APP_ECMT';
     const ECMT_ISSUING_FEE_PRODUCT_REFENCE = 'IRHP_GV_ECMT_100_PERMIT_FEE';
@@ -71,6 +75,11 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     public function indexAction()
     {
         $eligibleForPermits = $this->isEligibleForPermits();
+        $organisationId = $this->getCurrentOrganisationId();
+
+        //retrieve data displayed in dashboard
+        $response = $this->handleQuery(DashboardQry::create(['id' => $organisationId]));
+        $dashboardData = $response->getResult()['dashboard'];
 
         $view = new ViewModel();
         if (!$eligibleForPermits) {
@@ -83,11 +92,13 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $query = EcmtPermitApplication::create(
             [
                 'order' => 'DESC',
-                'organisation' => $this->getCurrentOrganisationId(),
+                'organisation' => $organisationId,
                 'statusIds' => [
                     RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED,
                     RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION,
                     RefData::PERMIT_APP_STATUS_AWAITING_FEE,
+                    RefData::PERMIT_APP_STATUS_FEE_PAID,
+                    RefData::PERMIT_APP_STATUS_ISSUING,
                 ],
             ]
         );
@@ -117,6 +128,12 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $view->setVariable('applicationsNo', $applicationData['count']);
         $view->setVariable('applicationsTable', $applicationsTable);
         $view->setVariable('issuedTable', $issuedTable);
+
+        // populate the navigation tabs with correct counts got fees and correspondence
+        $this->populateTabCounts(
+            $dashboardData['feeCount'],
+            $dashboardData['correspondenceCount']
+        );
 
         return $view;
     }
@@ -188,14 +205,19 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         if (isset($data['Submit']['SubmitButton'])) {
             $form->setData($data);
             if ($form->isValid()) {
-                $this->redirect()
-                    ->toRoute(
-                        'permits/' . EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE,
-                        ['id' => $this->params()->fromRoute('id', -1)],
-                        [ 'query' => [
-                            'licenceId' => $data['Fields']['EcmtLicence']
-                        ]]
-                    );
+                if ($application['licence']['id'] != $data['Fields']['EcmtLicence']) {
+                    return $this->redirect()
+                        ->toRoute(
+                            'permits/' . EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE,
+                            ['id' => $id],
+                            ['query' => [
+                                'licenceId' => $data['Fields']['EcmtLicence']
+                            ]]
+                        );
+                }
+
+                return $this->redirect()
+                    ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
             } else {
                 $form->get('Fields')->get('EcmtLicence')->setMessages(['isEmpty' => "error.messages.ecmt-licence"]);
             }
@@ -465,9 +487,12 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     {
         $id = $this->params()->fromRoute('id', -1);
 
-        $request = $this->getRequest();
-        $data = (array)$request->getPost();
         $application = $this->getApplication($id);
+        $data = $this->params()->fromPost();
+
+        $query = Licence::create(['id' => $this->params()->fromQuery('licenceId')]);
+        $response = $this->handleQuery($query);
+        $newLicence = $response->getResult();
 
         //Create form from annotations
         $form = $this->getForm('ChangeLicenceForm');
@@ -486,6 +511,10 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
         $formData['Fields']['licenceId'] = $this->getRequest()->getQuery('licenceId');
         $form->setData($formData);
+
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $confirmChangeLabel = $translationHelper->translateReplace('permits.form.change_licence.label', [$newLicence['licNo']]);
+        $form->get('Fields')->get('ConfirmChange')->setLabel($confirmChangeLabel);
 
         $view = new ViewModel();
 
