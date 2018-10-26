@@ -5,6 +5,7 @@ namespace OlcsTest\Data\Mapper;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\TransportManagerApplication as Sut;
+use Common\Service\Entity\TransportManagerApplicationEntityService;
 
 /**
  * @covers \Olcs\Data\Mapper\TransportManagerApplication
@@ -22,11 +23,14 @@ class TransportManagerApplicationTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResultForTable($data));
     }
 
-    public function testMapFromResult()
+    /**
+     * @dataProvider dpTestMapFromResult
+     */
+    public function testMapFromResult($inputStatus, $outputStatus)
     {
         $data = [
             'tmType' => ['id' => 3],
-            'tmApplicationStatus' => ['id' => 4],
+            'tmApplicationStatus' => ['id' => $inputStatus],
             'id' => 5,
             'version' => 6,
             'isOwner' => 1,
@@ -44,7 +48,7 @@ class TransportManagerApplicationTest extends MockeryTestCase
         $expected = [
             'details' => [
                 'tmType' => ['id' => 3],
-                'tmApplicationStatus' => 4,
+                'tmApplicationStatus' => $outputStatus,
                 'id' => 5,
                 'version' => 6,
                 'isOwner' => 1,
@@ -65,6 +69,24 @@ class TransportManagerApplicationTest extends MockeryTestCase
             'application' => 'app'
         ];
         $this->assertEquals($expected, Sut::mapFromResult($data));
+    }
+
+    public function dpTestMapFromResult()
+    {
+        return [
+            [
+                'inputStatus' => TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED,
+                'outputStatus' => TransportManagerApplicationEntityService::STATUS_INCOMPLETE,
+            ],
+            [
+                'inputStatus' => TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED,
+                'outputStatus' => TransportManagerApplicationEntityService::STATUS_INCOMPLETE,
+            ],
+            [
+                'inputStatus' => TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED,
+                'outputStatus' => TransportManagerApplicationEntityService::STATUS_TM_SIGNED,
+            ],
+        ];
     }
 
     public function testMapFromFrom()
