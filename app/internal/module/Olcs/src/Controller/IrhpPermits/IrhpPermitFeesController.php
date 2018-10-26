@@ -15,8 +15,18 @@ use Olcs\Controller\Traits\FeesActionTrait;
  */
 class IrhpPermitFeesController extends AbstractController implements IrhpPermitApplicationControllerInterface, LeftViewProvider
 {
-    use FeesActionTrait,
-        GenericReceipt;
+    use FeesActionTrait {
+        feesAction as traitFeesAction;
+    }
+    use GenericReceipt;
+
+
+    public function feesAction()
+    {
+        $navigation = $this->getServiceLocator()->get('Navigation');
+        $navigation->findOneBy('id', 'licence_irhp_permits-fees')->setActive();
+        return $this->traitFeesAction();
+    }
 
     /**
      * Route (prefix) for fees action redirects
