@@ -17,7 +17,9 @@ return array(
     array(
       'title' => 'dashboard-table-permit-application-num',
       'name' => 'permitsRequired',
-      'formatter' => 'Translate'
+       'formatter' => function ($row) {
+          return $row['permitsRequired'] === null ? 0 : $row['permitsRequired'];
+      }
     ),
     array(
       'title' => 'dashboard-table-permit-application-type',
