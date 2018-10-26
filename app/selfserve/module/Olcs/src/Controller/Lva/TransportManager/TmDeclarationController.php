@@ -3,7 +3,6 @@
 namespace OLCS\Controller\Lva\TransportManager;
 
 use Common\RefData;
-use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Dvsa\Olcs\Transfer\Command;
 use Common\Service\Entity\TransportManagerApplicationEntityService;
 
@@ -14,7 +13,7 @@ class TmDeclarationController extends AbstractDeclarationController
 
     protected function getSignAsRole(): string
     {
-        return $this->tma['isOwner'] === "Y" ? RefData::TMA_SIGN_AS_TM_OP : RefData::TMA_SIGN_AS_TM;
+        return $this->tma['isOwner'] === "N" ? RefData::TMA_SIGN_AS_TM : RefData::TMA_SIGN_AS_TM_OP;
     }
 
     /**
