@@ -13,7 +13,15 @@ class ConfirmationController extends AbstractController
     use ExternalControllerTrait,
         TransportManagerApplicationTrait;
 
+    const TM_MARKUP = 'markup-tma-confirmation-tm';
+
+    const OPERATOR_MARKUP = 'markup-tma-confirmation-operator';
+
     protected $tma;
+
+    protected $markup = self::OPERATOR_MARKUP;
+
+    protected $signature;
 
     /**
      * index action for /transport-manager/:TmaId/confirmation route
@@ -22,26 +30,18 @@ class ConfirmationController extends AbstractController
      */
     public function indexAction()
     {
-        $this->getCurrentUser();
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
 
-        $confirmationMarkup = $this->tma["isOwner"] === "N" ? 'markup-tma-confirmation-tm' :
-            'markup-tma-confirmation-operator';
+        $this->signature = $this->tma['opDigitalSignature'];
 
-        if (!empty($this->tma['opDigitalSignature'])) {
-            $confirmationMarkup = 'markup-tma-confirmation-operator';
-        }
-
-        $digitalSignature = empty(
-            $this->tma['opDigitalSignature']
-        ) ? $this->tma['tmDigitalSignature'] : $this->tma['opDigitalSignature'];
+        $this->setMarkupAndSignatureIfTm();
 
         $params = [
             'content' => $translationHelper->translateReplace(
-                $confirmationMarkup,
+                $this->markup,
                 [
-                    $this->getSignatureFullName($digitalSignature),
-                    $this->getSignatureDate($digitalSignature),
+                    $this->getSignatureFullName($this->signature),
+                    $this->getSignatureDate($this->signature),
                     $this->getBacklink()
                 ]
             ),
@@ -85,9 +85,7 @@ class ConfirmationController extends AbstractController
      */
     private function getBacklink()
     {
-        if ($this->isTransportManagerRole()) {
-            return $this->url()->fromRoute('dashboard');
-        } else {
+        if ($this->isOperatorUserOrAdmin()) {
             return $this->url()->fromRoute(
                 "lva-{$this->lva}/transport_managers",
                 ['application' => $this->getIdentifier()],
@@ -95,16 +93,13 @@ class ConfirmationController extends AbstractController
                 false
             );
         }
+        // in this context, if not an operator the user is a TM
+        return $this->url()->fromRoute('dashboard');
     }
 
-    /**
-     * is the logged in user just TM, eg not an admin
-     *
-     * @return bool
-     */
-    private function isTransportManagerRole()
+    private function isOperatorUserOrAdmin() :bool
     {
-        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD)) {
+        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_DASHBOARD)) {
             return true;
         }
         return false;
@@ -142,5 +137,13 @@ class ConfirmationController extends AbstractController
             return true;
         }
         return false;
+    }
+
+    private function setMarkupAndSignatureIfTm(): void
+    {
+        if ($this->tma['isTmLoggedInUser'] && $this->tma["isOwner"] === "N") {
+            $this->markup = self::TM_MARKUP;
+            $this->signature = $this->tma['tmDigitalSignature'];
+        }
     }
 }
