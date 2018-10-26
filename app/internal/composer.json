@@ -53,10 +53,10 @@
         "doctrine/annotations": "^1.2.3",
         "symfony/Filesystem": "~2.6.0",
         "zf-commons/zfc-rbac": "~2.4.0",
-        "olcs/OlcsCommon": "dev-epic/OLCS-15057",
-        "olcs/olcs-transfer": "dev-epic/OLCS-15057",
+        "olcs/OlcsCommon": "dev-develop",
+        "olcs/olcs-transfer": "dev-develop",
         "olcs/olcs-utils": "dev-develop",
-        "olcs/olcs-auth": "dev-epic/OLCS-15057",
+        "olcs/olcs-auth": "dev-develop",
         "soflomo/purifier": "~0.1.0",
        "olcs/olcs-logging": "dev-develop"
     },
