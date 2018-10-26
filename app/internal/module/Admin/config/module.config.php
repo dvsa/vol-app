@@ -580,7 +580,7 @@ return [
                                     'route' => 'stocks/:stockId/scoring[/:action][/]',
                                     'constraints' => [
                                         'stockId' =>'[0-9\,]+',
-                                        'action' => '(index|accept|run)'
+                                        'action' => '(index|accept|run|status)'
                                     ],
                                     'defaults' => [
                                         'controller' => \Admin\Controller\IrhpPermitScoringController::class,
