@@ -17,9 +17,7 @@ return array(
     array(
       'title' => 'dashboard-table-permit-application-num',
       'name' => 'permitsRequired',
-       'formatter' => function ($row) {
-          return $row['permitsRequired'] === null ? 0 : $row['permitsRequired'];
-      }
+       'formatter' => 'NullableNumber'
     ),
     array(
       'title' => 'dashboard-table-permit-application-type',
