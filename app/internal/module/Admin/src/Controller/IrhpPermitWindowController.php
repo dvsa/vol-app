@@ -2,7 +2,10 @@
 
 namespace Admin\Controller;
 
-use Olcs\Controller\AbstractInternalController;
+use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\FeatureToggle;
+
+use Admin\Controller\AbstractIrhpPermitAdminController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\GetList as ListDto;
@@ -16,14 +19,21 @@ use Zend\View\Model\ViewModel;
 /**
  * IRHP Permits Admin Controller
  */
-class IrhpPermitWindowController extends AbstractInternalController implements LeftViewProvider
+class IrhpPermitWindowController extends AbstractIrhpPermitAdminController implements
+    LeftViewProvider,
+    ToggleAwareInterface
 {
+    protected $toggleConfig = [
+        'default' => [
+            FeatureToggle::ADMIN_PERMITS
+        ],
+    ];
 
     protected $tableName = 'admin-irhp-permit-window';
     protected $defaultTableSortField = 'startDate';
     protected $defaultTableOrderField = 'DESC';
 
-    protected $listVars = ['irhpPermitStock' => 'parentId'];
+    protected $listVars = ['irhpPermitStock' => 'stockId'];
     protected $listDto = ListDto::class;
     protected $itemDto = ItemDto::class;
     protected $formClass = PermitWindowForm::class;
@@ -43,11 +53,9 @@ class IrhpPermitWindowController extends AbstractInternalController implements L
     protected $tableViewTemplate = 'pages/irhp-permit-window/index';
     protected $pageScript= 'irhp-permit-window';
 
-    protected $parentEntity = 'irhpPermitStock';
-
     protected $navigationId = 'admin-dashboard/admin-permits';
 
-    protected $defaultData = ['parentId' => 'route'];
+    protected $defaultData = ['stockId' => 'route'];
 
     /**
      * @var array
@@ -66,12 +74,23 @@ class IrhpPermitWindowController extends AbstractInternalController implements L
         $view = new ViewModel(
             [
                 'navigationId' => 'admin-dashboard/admin-permits',
-                'navigationTitle' => 'Permits'
+                'navigationTitle' => '',
+                'stockId' => $this->params()->fromRoute()['stockId']
             ]
         );
         $view->setTemplate('admin/sections/admin/partials/generic-left');
 
         return $view;
+    }
+
+    public function indexAction()
+    {
+        // If an IRHP Permit Stock ID is not specified then redirect the user to the Permits System Settings page.
+        if (!isset($this->params()->fromRoute()['stockId'])) {
+            $this->redirect()->toRoute('admin-dashboard/admin-permits/permits-system-settings');
+        }
+
+        return parent::indexAction();
     }
 
     public function addAction()

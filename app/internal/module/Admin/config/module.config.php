@@ -3,6 +3,9 @@
 use Admin\Controller\PublishedPublicationController;
 use Zend\Mvc\Router\Http\Segment;
 
+use Admin\Listener\RouteParam\IrhpPermitAdminFurniture;
+use Admin\Listener\RouteParam;
+
 return [
     'router' => [
         'routes' => [
@@ -482,16 +485,80 @@ return [
                             'permits-system-settings' => [
                                 'type' => 'Segment',
                                 'options' => [
-                                    'route' => 'permits-system-settings[/:action][/:id][/]',
+                                    'route' => 'stocks[/:action][/:id][/]',
+                                    'constraints' => [
+                                        'action' => '(index|add|edit|delete)',
+                                        'id' => '[0-9\,]+'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\IrhpPermitStockController::class,
+                                        'action' => 'index'
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                            ],
+                            'permit-range' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'stocks/:stockId/ranges[/:action][/:id][/]',
+                                    'constraints' => [
+                                        'stockId' => '[0-9\,]+',
+                                        'action' => '(index|add|edit|delete)',
+                                        'id' => '[0-9\,]+'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\IrhpPermitRangeController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                                'may_terminate' => true
+                            ],
+                            'permit-windows' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'stocks/:stockId/windows[/:action][/:id][/]',
+                                    'constraints' => [
+                                        'stockId' => '[0-9\,]+',
+                                        'action' => '(index|add|edit|delete)',
+                                        'id' => '[0-9\,]+',
+                                    ],
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\IrhpPermitWindowController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                                'may_terminate' => true
+                            ],
+                            'permit-sectors' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'stocks/:stockId/sectors[/:action][/:id][/]',
+                                    'constraints' => [
+                                        'stockId' => '[0-9\,]+',
+                                        'action' => '(index|add|edit|delete)',
+                                        'id' => '[0-9\,]+',
+                                    ],
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\IrhpPermitSectorController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                            ],
+                            'permit-jurisdiction' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'stocks/:stockId/jurisdiction[/:action][/:id][/]',
                                     'constraints' => [
                                         'id' => '[0-9\,]+',
                                         'action' => '(index|add|edit|delete)'
                                     ],
                                     'defaults' => [
-                                        'controller' => \Admin\Controller\IrhpPermitStockController::class,
+                                        'controller' => \Admin\Controller\IrhpPermitJurisdictionController::class,
                                         'action' => 'index',
                                     ],
                                 ],
+                                'may_terminate' => true,
                             ],
                             'trigger' => [
                                 'type' => 'Segment',
@@ -507,30 +574,30 @@ return [
                                     ],
                                 ],
                             ],
-                            'permit-range' => [
+                            'permit-scoring' => [
                                 'type' => 'Segment',
                                 'options' => [
-                                    'route' => 'permit-range[/:parentId][/:action][/:id][/]',
+                                    'route' => 'stocks/:stockId/scoring[/:action][/]',
                                     'constraints' => [
-                                        'id' => '[0-9\,]+',
-                                        'action' => '(index|add|edit|delete)'
+                                        'stockId' =>'[0-9\,]+',
+                                        'action' => '(index|accept|run)'
                                     ],
                                     'defaults' => [
-                                        'controller' => \Admin\Controller\IrhpPermitRangeController::class,
+                                        'controller' => \Admin\Controller\IrhpPermitScoringController::class,
                                         'action' => 'index',
                                     ],
                                 ],
                             ],
-                            'permit-windows' => [
+                            'exported-reports' => [
                                 'type' => 'Segment',
                                 'options' => [
-                                    'route' => 'permit-windows[/:parentId][/:action][/:id][/]',
+                                    'route' => 'stocks/:stockId/exported-reports[/:action][/]',
                                     'constraints' => [
                                         'id' => '[0-9\,]+',
                                         'action' => '(index|add|edit|delete)'
                                     ],
                                     'defaults' => [
-                                        'controller' => \Admin\Controller\IrhpPermitWindowController::class,
+                                        'controller' => \Admin\Controller\IrhpPermitReportingController::class,
                                         'action' => 'index',
                                     ],
                                 ],
@@ -715,14 +782,24 @@ return [
                 Admin\Controller\DataRetentionReviewController::class,
             Admin\Controller\DataRetention\ExportController::class =>
                 Admin\Controller\DataRetention\ExportController::class,
+            Admin\Controller\DataRetention\RuleAdminController::class =>
+                Admin\Controller\DataRetention\RuleAdminController::class,
             Admin\Controller\PermitsController::class =>
                 Admin\Controller\PermitsController::class,
             Admin\Controller\IrhpPermitStockController::class =>
                 Admin\Controller\IrhpPermitStockController::class,
             Admin\Controller\IrhpPermitWindowController::class =>
                 Admin\Controller\IrhpPermitWindowController::class,
-            Admin\Controller\DataRetention\RuleAdminController::class =>
-                Admin\Controller\DataRetention\RuleAdminController::class
+            Admin\Controller\IrhpPermitRangeController::class =>
+                Admin\Controller\IrhpPermitRangeController::class,
+            Admin\Controller\IrhpPermitSectorController::class =>
+                Admin\Controller\IrhpPermitSectorController::class,
+            Admin\Controller\IrhpPermitJurisdictionController::class =>
+                Admin\Controller\IrhpPermitJurisdictionController::class,
+            Admin\Controller\IrhpPermitScoringController::class =>
+                Admin\Controller\IrhpPermitScoringController::class,
+            Admin\Controller\IrhpPermitReportingController::class =>
+                Admin\Controller\IrhpPermitReportingController::class,
         ],
     ],
     'view_manager' => [
@@ -730,25 +807,31 @@ return [
             'admin/view' => dirname(__DIR__) . '/view',
         ]
     ],
-    'service_manager' => array(
+    'service_manager' => [
         'aliases' => [
             'user-details' => 'UserDetailsNavigation'
         ],
-        'factories' => array(
+        'factories' => [
             'UserDetailsNavigation' => 'Admin\Navigation\UserDetailsNavigationFactory',
-        )
-    ),
+            IrhpPermitAdminFurniture::class => IrhpPermitAdminFurniture::class,
+        ]
+    ],
     'local_forms_path' => [__DIR__ . '/../src/Form/Forms/'],
     //-------- Start navigation -----------------
-    'navigation' => array(
-        'default' => array(
+    'navigation' => [
+        'default' => [
             include __DIR__ . '/navigation.config.php'
-        ),
-        'user-details' => array(
+        ],
+        'user-details' => [
             include __DIR__ . '/navigation-user-details.config.php'
-        )
-    ),
+        ]
+    ],
     //-------- End navigation -----------------
     'local_scripts_path' => [__DIR__ . '/../assets/js/inline/'],
     'my_account_route' => 'admin-dashboard/admin-your-account',
+    'route_param_listeners' => [
+        \Admin\Controller\Interfaces\IrhpPermitStockControllerInterface::class => [
+            RouteParam\IrhpPermitAdminFurniture::class,
+        ],
+    ]
 ];

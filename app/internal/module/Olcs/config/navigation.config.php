@@ -559,7 +559,56 @@ $nav = [
                             'id' => 'licence_irhp_permits',
                             'label' => 'IRHP Permits',
                             'route' => 'licence/permits',
-                            'use_route_match' => true
+                            'use_route_match' => true,
+                            'params' => [
+                                'action' => null,
+                                'id' => null,
+                            ],
+                            'pages' => [
+                                [
+                                    'id' => 'licence_irhp_permits-edit',
+                                    'label' => 'Application details',
+                                    'route' => 'licence/permits',
+                                    'action' => 'edit',
+                                    'params' => [
+                                        'id' => null,
+                                    ],
+                                    'use_route_match' => true,
+                                ],
+                                [
+                                    'id' => 'licence_irhp_permits-documents',
+                                    'label' => 'Docs & attachments',
+                                    'route' => 'licence/permits',
+                                    'action' => 'documents',
+                                    'params' => [
+                                        'action' => 'documents',
+                                        'id' => null,
+                                    ],
+                                    'use_route_match' => true,
+                                ],
+                                [
+                                    'id' => 'licence_irhp_permits-processing',
+                                    'label' => 'Processing',
+                                    'route' => 'licence/permits',
+                                    'action' => 'processing',
+                                    'params' => [
+                                        'action' => 'processing',
+                                        'id' => null,
+                                    ],
+                                    'use_route_match' => true,
+                                ],
+                                [
+                                    'id' => 'licence_irhp_permits-fees',
+                                    'label' => 'Fees',
+                                    'action' => 'fees',
+                                    'route' => 'licence/irhp-fees',
+                                    'params' => [
+                                        'action' => 'fees',
+                                        'id' => null,
+                                    ],
+                                    'use_route_match' => true,
+                                ],
+                            ]
                         ],
                         [
                             'id' => 'licence_documents',
@@ -1054,7 +1103,7 @@ $nav = [
                     )
                 ]
             ]
-        ]
+        ],
     ]
 ];
 

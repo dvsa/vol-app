@@ -752,19 +752,36 @@ $routes = [
                     ],
                 ],
             ],
-            'permits' => [
+            'irhp-fees' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => 'permits[/]',
+                    'route' => 'permits/:permitid/fees[/]',
                     'defaults' => [
-                        'controller' => 'LicencePermitsController',
-                        'action' => 'permits',
+                        'controller' => 'IrhpPermitFeesController',
+                        'action' => 'fees',
                     ]
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-
+                    'fee_action' => $feeActionRoute,
+                    'fee_type_ajax' => $feeTypeAjaxRoute,
+                    'print-receipt' => $feePrintReceiptRoute,
+                ]
+            ],
+            'permits' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'permits[/][:action][/:permitid][/]',
+                    'defaults' => [
+                        'controller' => 'IrhpPermitApplicationController',
+                        'action' => 'index',
+                    ],
+                    'constraints' => [
+                        'id' => '[0-9]+',
+                        'action' => '(index|edit|add|documents|processing|submit|accept|decline|cancel|withdraw)'
+                    ]
                 ],
+                'may_terminate' => true,
             ],
             'processing' => [
                 'type' => 'segment',

@@ -243,6 +243,81 @@ return array(
             ),
         ),
         array(
+            'id' => 'irhp-permits',
+            'label' => 'IRHP Permits',
+            'route' => 'dashboard',
+            'use_route_match' => true,
+            'pages' => array(
+                array(
+                    'id' => 'irhp-permit-quick-actions',
+                    'label' => 'Quick actions',
+                    'route' => 'dashboard',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'irhp-permit-quick-actions-cancel',
+                            'label' => 'Cancel',
+                            'route' => 'licence/permits',
+                            'params' => [
+                                'action' => 'cancel',
+                                'id' => null,
+                            ],
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        )
+                    ),
+                ),
+                array(
+                    'id' => 'irhp-permit-decisions',
+                    'label' => 'Decisions',
+                    'route' => 'dashboard',
+                    'use_route_match' => true,
+                    'pages' => array(
+                        array(
+                            'id' => 'irhp-permit-decisions-submit',
+                            'label' => 'Submit',
+                            'route' => 'licence/permits',
+                            'params' => [
+                                'action' => 'submit'
+                            ],
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'irhp-permit-decisions-withdraw',
+                            'label' => 'Withdraw',
+                            'route' => 'licence/permits',
+                            'params' => [
+                                'action' => 'withdraw'
+                            ],
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'irhp-permit-decisions-accept',
+                            'label' => 'Accept',
+                            'route' => 'licence/permits',
+                            'use_route_match' => true,
+                            'params' => [
+                                'action' => 'accept'
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
+                        ),
+                        array(
+                            'id' => 'irhp-permit-decisions-decline',
+                            'label' => 'Decline',
+                            'route' => 'licence/permits',
+                            'use_route_match' => true,
+                            'params' => [
+                                'action' => 'decline'
+                            ],
+                            'class' => 'action--secondary js-modal-ajax'
+                        )
+                    ),
+                ),
+            ),
+        ),
+        array(
             'id' => 'application',
             'label' => 'Application',
             'route' => 'dashboard',

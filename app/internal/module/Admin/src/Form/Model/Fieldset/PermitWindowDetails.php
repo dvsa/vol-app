@@ -15,7 +15,7 @@ class PermitWindowDetails
     /**
      * @Form\Type("Hidden")
      */
-    public $parentId = null;
+    public $stockId = null;
 
     /**
      * @Form\Required(true)
@@ -42,17 +42,6 @@ class PermitWindowDetails
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
-     * @Form\Validator({
-     *      "name": "DateCompare",
-     *      "options": {
-     *          "has_time": false,
-     *          "allow_empty": true,
-     *          "compare_to":"compareStartDate",
-     *          "operator":"gte",
-     *          "compare_to_label":"todays date",
-     *          "error-message": "Start Dates for windows can not be in the past."
-     *      }
-     * })
      */
     public $startDate = null;
 
@@ -72,9 +61,12 @@ class PermitWindowDetails
      *      "options": {
      *          "has_time": false,
      *          "allow_empty": true,
-     *          "compare_to":"startDate",
-     *          "operator":"gte",
-     *          "compare_to_label":"Start date",
+     *          "compare_to": "startDate",
+     *          "operator": "gte",
+     *          "compare_to_label": "Start date",
+     *          "messageTemplates": {
+     *              "notGreaterThanOrEqual": "Window End Date must be later than Window Start Date"
+     *          }
      *      }
      * })
      */

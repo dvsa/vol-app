@@ -15,7 +15,7 @@ class PermitsHome
 
     /**
      * @Form\Options({
-     *     "label": "<h4>Filter by</h4>",
+     *     "label": "<h4>Filter Applications by:</h4>",
      *     "label_options": {
      *         "disable_html_escape": "true"
      *     }
@@ -46,7 +46,7 @@ class PermitsHome
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary"})
      * @Form\Options({
-     *     "label": "permits-home.submit.filter"
+     *     "label": "Filter"
      * })
      * @Form\Type("\Zend\Form\Element\Button")
      */

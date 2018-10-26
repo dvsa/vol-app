@@ -6,6 +6,9 @@ use Dvsa\Olcs\Transfer\Command\Permits\TriggerProcessEcmtApplications;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 
+use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\FeatureToggle;
+
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\GetList as ListDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Create as CreateDto;
@@ -19,7 +22,7 @@ use Zend\View\Model\ViewModel;
 /**
  * IRHP Permits Admin Controller
  */
-class IrhpPermitStockController extends AbstractInternalController implements LeftViewProvider
+class IrhpPermitStockController extends AbstractInternalController implements LeftViewProvider, ToggleAwareInterface
 {
     /**
      * Holds the navigation ID,
@@ -27,6 +30,12 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
      * represented by a single navigation id.
      */
     protected $navigationId = 'admin-dashboard/admin-permits';
+
+    protected $toggleConfig = [
+        'default' => [
+            FeatureToggle::ADMIN_PERMITS
+        ],
+    ];
 
     /**
      * @var array
@@ -72,7 +81,8 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
         $view = new ViewModel(
             [
                 'navigationId' => 'admin-dashboard/admin-permits',
-                'navigationTitle' => 'Permits'
+                'navigationTitle' => 'Permits system settings',
+                'singleNav' => true
             ]
         );
         $view->setTemplate('admin/sections/admin/partials/generic-left');
@@ -81,7 +91,7 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
     }
 
     /**
-     * Companies house alert list view
+     * Permit Stock Index View
      *
      * @return \Zend\Http\Response|ViewModel
      */
@@ -93,17 +103,16 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
         return parent::indexAction();
     }
 
-    public function triggerAction(){
+    public function triggerAction()
+    {
         $response = $this->handleCommand(TriggerProcessEcmtApplications::create([]));
         $view = new ViewModel(
             [
                 'triggerOutput' => $response->getResult(),
-
             ]
         );
         $view->setTemplate('pages/irhp-permit-stock/index');
 
         return $view;
-
     }
 }
