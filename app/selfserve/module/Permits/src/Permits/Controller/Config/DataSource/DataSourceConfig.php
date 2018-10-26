@@ -10,6 +10,8 @@ use Permits\Data\Mapper\FeeList as FeeListMapper;
 use Permits\Data\Mapper\ApplicationFees as ApplicationFeesMapper;
 use Permits\Data\Mapper\ValidEcmtPermits as ValidEcmtPermitsMapper;
 use Permits\Data\Mapper\CheckAnswers as CheckAnswersMapper;
+use Permits\Controller\Config\DataSource\EcmtConstrainedCountriesList as EcmtConstrainedCountriesDataSource;
+use Permits\Data\Mapper\ValidEcmtPermitConstrainedCountries as EcmtConstrainedCountriesMapper;
 
 /**
  * Holds data source configs that are used regularly
@@ -35,12 +37,22 @@ class DataSourceConfig
 
     const PERMIT_ECMT_VALID = [
         ValidEcmtPermitsDataSource::class => [
-            'mapper' => ValidEcmtPermitsMapper::class
+            'mapper' => ValidEcmtPermitsMapper::class,
+        ],
+        EcmtConstrainedCountriesDataSource::class => [
+            'append' => [
+                ValidEcmtPermitsDataSource::DATA_KEY => EcmtConstrainedCountriesMapper::class
+            ]
         ],
     ];
     const PERMIT_ECMT_UNPAID = [
         UnpaidEcmtPermitsDataSource::class => [
             'mapper' => ValidEcmtPermitsMapper::class
+        ],
+        EcmtConstrainedCountriesDataSource::class => [
+            'append' => [
+                ValidEcmtPermitsDataSource::DATA_KEY => EcmtConstrainedCountriesMapper::class
+            ]
         ],
     ];
     const PERMIT_APP_CHECK_ANSWERS = [
