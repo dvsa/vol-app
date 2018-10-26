@@ -447,6 +447,21 @@ $routes = array(
                     ),
                 )
             ),
+            'transport-manager' =>[
+                'type' => Segment::class,
+                'options' => array(
+                    'route' => '/:lva/:applicationId/transport-manager/:transportManagerApplicationId/:role[/]',
+                    'defaults' => array(
+                        'action' => 'initiate-request',
+                    ),
+                    'constraints' =>[
+                            'lva' => '(application|variation)',
+                            'applicationId' => '[0-9]+',
+                            'transportManagerApplicationId' => '[0-9]+',
+                            'role' =>'(tma\\_sign\\_as\\_tm|tma\\_sign\\_as\\_op|tma\\_sign\\_as\\_top)'
+                    ],
+                )
+            ],
             'process-response' => array(
                 'type' => Segment::class,
                 'options' => array(
@@ -727,8 +742,79 @@ foreach (['application', 'variation'] as $lva) {
                                 'grand_child_id' => '[0-9\,]+'
                             ),
                         )
-                    )
+                    ),
                 )
+            ),
+            'transport_manager_check_answer' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'transport-managers/check-answer/:child_id[/]',
+                    'constraints' => array(
+                        'child_id' => '[0-9]+',
+                        'grand_child_id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'LvaTransportManager/CheckAnswers',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'action' => array(
+                        'type' => 'segment',
+                        'options' => array(
+                            'route' => ':action[/:grand_child_id][/]',
+                            'constraints' => array(
+                                'grand_child_id' => '[0-9\,]+'
+                            ),
+                        )
+                    ),
+                ),
+            ),
+            'transport_manager_tm_declaration' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'transport-managers/tm-declaration/:child_id[/]',
+                    'constraints' => array(
+                        'child_id' => '[0-9]+',
+                        'grand_child_id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'LvaTransportManager/TmDeclaration',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+            ),
+            'transport_manager_operator_declaration' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'transport-managers/operator-declaration/:child_id[/]',
+                    'constraints' => array(
+                        'child_id' => '[0-9]+',
+                        'grand_child_id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'LvaTransportManager/OperatorDeclaration',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+            ),
+            'transport_manager_confirmation' => array(
+                'type' => 'segment',
+                'options' => array(
+                    'route' => 'transport-managers/confirmation/:child_id[/]',
+                    'constraints' => array(
+                        'child_id' => '[0-9]+',
+                        'grand_child_id' => '[0-9]+'
+                    ),
+                    'defaults' => array(
+                        'controller' => 'LvaTransportManager/Confirmation',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
             )
         )
     );
@@ -1020,7 +1106,6 @@ $myAccountNav = array(
         ),
     )
 );
-
 return array(
     'router' => array(
         'routes' => array_merge($routes, $configRoutes),
@@ -1098,6 +1183,10 @@ return array(
                 Olcs\Controller\Lva\DirectorChange\FinancialHistoryController::class,
             'LvaDirectorChange/ConvictionsPenalties'=>
                 \Olcs\Controller\Lva\DirectorChange\ConvictionsPenaltiesController::class,
+            'LvaTransportManager/CheckAnswers' => \OLCS\Controller\Lva\TransportManager\CheckAnswersController::class,
+            'LvaTransportManager/Confirmation' => \OLCS\Controller\Lva\TransportManager\ConfirmationController::class,
+            'LvaTransportManager/OperatorDeclaration' => \OLCS\Controller\Lva\TransportManager\OperatorDeclarationController::class,
+            'LvaTransportManager/TmDeclaration' => \OLCS\Controller\Lva\TransportManager\TmDeclarationController::class,
         ),
         'invokables' => array(
             'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,
@@ -1189,7 +1278,8 @@ return array(
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'generatePeopleList' => \Olcs\View\Helper\GeneratePeopleList::class
+            'generatePeopleList' => \Olcs\View\Helper\GeneratePeopleList::class,
+            'tmCheckAnswersChangeLink' => \Olcs\View\Helper\TmCheckAnswersChangeLink::class
         )
     ),
     'view_manager' => array(
@@ -1391,9 +1481,8 @@ return array(
 
                 // Selfserve search
                 'search-vehicle-external' => ['selfserve-search-vehicle-external'],
-
-                'lva-application/transport_manager_details*' => ['selfserve-tm'],
-                'lva-variation/transport_manager_details*' => ['selfserve-tm'],
+                'lva-application/transport_manager*' => ['selfserve-tm'],
+                'lva-variation/transport_manager*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
                 'search*' => ['*'],
                 'index' => ['*'],

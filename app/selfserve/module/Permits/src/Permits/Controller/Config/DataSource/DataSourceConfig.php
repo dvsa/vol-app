@@ -60,4 +60,9 @@ class DataSourceConfig
             'mapper' => CheckAnswersMapper::class
         ],
     ];
+    const PERMIT_APP_CHECK_ANSWERS = [
+        PermitAppDataSource::class => [
+            'mapper' => CheckAnswersMapper::class
+        ],
+    ];
 }
