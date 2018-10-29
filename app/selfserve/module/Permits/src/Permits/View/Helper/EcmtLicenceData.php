@@ -37,8 +37,8 @@ class EcmtLicenceData extends AbstractHelper
             )
         . '</p>';
 
-        $EcmtLicence = $form->get('Fields')->get('EcmtLicence');
-        $licences = $EcmtLicence->getValueOptions();
+        $ecmtLicence = $form->get('Fields')->get('EcmtLicence');
+        $licences = $ecmtLicence->getValueOptions();
 
         if (count($licences) === 1) {
             if ($licences[0]['value'] !== '' && $licences[0]['hasActiveEcmtApplication']) {
@@ -54,14 +54,12 @@ class EcmtLicenceData extends AbstractHelper
                 if ($licence['value'] !== '' && $licence['hasActiveEcmtApplication']) {
                     if (!empty($application)) {
                         if ($licence['value'] === $application['licence']['id']) {
-                            $EcmtLicence->setValue($licence['value']);
+                            $ecmtLicence->setValue($licence['value']);
                         } else {
-                            $EcmtLicence->unsetValueOption($key);
+                            $ecmtLicence->unsetValueOption($key);
                         }
                     } else {
-                        $EcmtLicence->unsetValueOption($key);
-
-
+                        $ecmtLicence->unsetValueOption($key);
                     }
                 }
             }
