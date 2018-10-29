@@ -560,20 +560,6 @@ return [
                                 ],
                                 'may_terminate' => true,
                             ],
-                            'trigger' => [
-                                'type' => 'Segment',
-                                'options' => [
-                                    'route' => 'trigger[/:action][/:id][/]',
-                                    'constraints' => [
-                                        'id' => '[0-9\,]+',
-                                        'action' => '(index|add|edit|delete)'
-                                    ],
-                                    'defaults' => [
-                                        'controller' => \Admin\Controller\IrhpPermitStockController::class,
-                                        'action' => 'trigger',
-                                    ],
-                                ],
-                            ],
                             'permit-scoring' => [
                                 'type' => 'Segment',
                                 'options' => [
