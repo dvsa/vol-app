@@ -37,47 +37,47 @@
             </div>
 
             <div class="form-group">
-                <dl class="app-check-your-answers app-check-your-answers--long">
-                    <div class="app-check-your-answers__contents">
-                        <dt class="app-check-your-answers__question">
+                <dl >
+                    <div >
+                        <dt >
                             <?php echo $this->escapeHtml($this->translate('permits.page.fee.application.reference')); ?>
                         </dt>
-                        <dd class="app-check-your-answers__answer">
+                        <dd >
                             <?php echo $this->escapeHtml($application['applicationRef']); ?>
                         </dd>
                     </div>
-                    <div class="app-check-your-answers__contents">
-                        <dt class="app-check-your-answers__question">
+                    <div >
+                        <dt >
                             <?php echo $this->escapeHtml($this->translate('permits.page.fee.application.date')); ?>
                         </dt>
-                        <dd class="app-check-your-answers__answer">
+                        <dd >
                             <?php
                                 $date = date_create($application['dateReceived']);
                                 echo $this->escapeHtml(date_format($date, "d F Y"));
                             ?>
                         </dd>
                     </div>
-                    <div class="app-check-your-answers__contents">
-                        <dt class="app-check-your-answers__question">
+                    <div >
+                        <dt >
                             <?php echo $this->escapeHtml($this->translate('permits.page.fee.permit.type')); ?>
                         </dt>
-                        <dd class="app-check-your-answers__answer">
+                        <dd >
                             <?php echo $this->escapeHtml($application['permitType']['description']); ?>
                         </dd>
                     </div>
-                    <div class="app-check-your-answers__contents">
-                        <dt class="app-check-your-answers__question">
+                    <div >
+                        <dt >
                             <?php echo $this->escapeHtml($this->translate('permits.page.fee.permit.validity')); ?>
                         </dt>
-                        <dd class="app-check-your-answers__answer">
+                        <dd >
                             January 2019 to December 2019
                         </dd>
                     </div>
-                    <div class="app-check-your-answers__contents">
-                        <dt class="app-check-your-answers__question">
+                    <div >
+                        <dt >
                             <?php echo $this->escapeHtml($this->translate('permits.page.fee.number.permits')); ?>
                         </dt>
-                        <dd class="app-check-your-answers__answer">
+                        <dd >
                             <?php echo $this->escapeHtml($application['permitsRequired']) . ' x '; ?>
                             <?php
                                 echo $this->currencyFormatter($fee['appFee']);
@@ -85,11 +85,11 @@
                             ?>
                         </dd>
                     </div>
-                    <div class="app-check-your-answers__contents">
-                        <dt class="app-check-your-answers__question">
+                    <div >
+                        <dt >
                             <?php echo $this->escapeHtml($this->translate('permits.page.fee.permit.fee.total')); ?>
                         </dt>
-                        <dd class="app-check-your-answers__answer">
+                        <dd >
                             <?php
                                 echo $this->currencyFormatter($fee['appFee'] * $application['permitsRequired']);
                                 echo $this->escapeHtml($this->translate('permits.page.fee.permit.fee.non-refundable'));
