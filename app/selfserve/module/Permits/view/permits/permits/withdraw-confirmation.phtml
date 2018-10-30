@@ -12,16 +12,14 @@
             <?php echo $this->escapeHtml($title); ?>
           </h1>
           <div class="govuk-panel__body">
-            <?php echo $this->escapeHtml($this->translate('permits.application.withdraw-confirmation.success-2')); ?>
+            <?php echo $this->escapeHtml($this->translate('permits.application.withdraw-confirmation.success')); ?>
             <br><strong><?php echo $this->escapeHtml($data['application']['applicationRef']); ?></strong>
           </div>
         </div>
 
-        <p class="govuk-body">We have sent you a confirmation email.</p>
-
         <?php echo $this->translate('markup-ecmt-withdraw-confirmation'); ?>
 
-        <br>
+        <br />
 
         <p><a href="<?php echo $this->url('permits'); ?>" class="action--primary large"><?php echo $this->escapeHtml($this->translate('permits.button.confirm-cancel-finish')); ?></a></p>
       </div>
