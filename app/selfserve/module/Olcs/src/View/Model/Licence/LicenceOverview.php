@@ -5,6 +5,7 @@
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
+
 namespace Olcs\View\Model\Licence;
 
 use Olcs\View\Model\LvaOverview;
@@ -54,6 +55,39 @@ class LicenceOverview extends LvaOverview
             $this->setVariable('status', 'licence.status.expired');
         }
 
+        $this->setVariable('infoBoxLinks', $this->setInfoBoxLinks($data));
+
         parent::__construct($data, $sections);
+    }
+
+    private function setInfoBoxLinks($data)
+    {
+        $infoBoxLinks = [
+            [
+                'linkUrl' => [
+                    'route' => 'licence-print',
+                    'params' => [],
+                    'options' => [],
+                    'reuseMatchedParams' => true
+                ],
+                'linkText' => 'licence.print'
+            ],
+        ];
+
+        if ($data['isLicenceSurrenderAllowed']) {
+            $surrenderLink = [
+                'linkUrl' => [
+                    'route' => 'licence-print',
+                    'params' => [],
+                    'options' => [],
+                    'reuseMatchedParams' => true
+                ],
+                'linkText' => 'licence.apply-to-surrender'
+            ];
+
+            array_push($infoBoxLinks, $surrenderLink);
+        }
+
+        return $infoBoxLinks;
     }
 }
