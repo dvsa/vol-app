@@ -3,7 +3,7 @@ $irhpPermit = $this->placeholder('irhpPermit')->getValue();
 $note = $this->placeholder('note')->getValue();
 ?>
 <div class="small-module">
-    <h4 class="title">Operator details</h4>
+    <h4 class="title"><?php echo $this->translate('entity-details-nav-operator-details'); ?></h4>
     <p class="small-module__details">
         <a href="<?php echo $this->url('operator/business-details', ['organisation' => $irhpPermit['licence']['organisation']['id']], [], true);?>">
             <?php echo $this->escapeHtml($irhpPermit['licence']['organisation']['name']); ?>
@@ -12,7 +12,7 @@ $note = $this->placeholder('note')->getValue();
 </div>
 
 <div class="small-module">
-    <h4 class="title">Licence details</h4>
+    <h4 class="title"><?php $this->translate('entity-details-nav-licence-details'); ?></h4>
     <p class="small-module__details">
         <a href="<?php echo $this->url('lva-licence', ['licence' => $irhpPermit['licence']['id']], [], false); ?>"><?php echo $this->escapeHtml($irhpPermit['licence']['licNo']); ?></a><br>
         <?php echo $this->escapeHtml($this->translate($irhpPermit['licence']['licenceType']['id'])); ?><br/>
@@ -32,7 +32,7 @@ $nav = $this->navigation('right-sidebar')
 ?>
 <?php if (count($nav->getContainer()) > 0): ?>
     <div class="record-actions">
-        <h4 class="title">Quick actions</h4>
+        <h4 class="title"><?php echo $this->translate('internal-operator-quick-actions'); ?></h4>
         <?php echo $nav; ?>
     </div>
 <?php endif; ?>
@@ -50,7 +50,7 @@ $nav = $this->navigation('right-sidebar')
 ?>
 <?php if (count($nav->getContainer()) > 0): ?>
     <div class="record-actions">
-        <h4 class="title">Decisions</h4>
+        <h4 class="title"><?php echo $this->translate('decisions'); ?></h4>
         <?php echo $nav; ?>
     </div>
 <?php endif; ?>
