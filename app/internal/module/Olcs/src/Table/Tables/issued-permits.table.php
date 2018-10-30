@@ -17,7 +17,7 @@ return [
         [
             'title' => 'dashboard-table-permit-application-ref',
             'name' => 'id',
-            'formatter' => 'InternalLicencePermitReference'
+            'formatter' => 'IssuedPermitLicencePermitReference'
         ],
         [
             'title' => 'dashboard-table-permit-application-num',

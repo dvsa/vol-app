@@ -15,6 +15,7 @@ class IrhpPermitApplication implements MapperInterface
      * Should map data from a result array into an array suitable for a form
      *
      * @param array $data
+     * @return array
      */
     public static function mapFromResult(array $data)
     {

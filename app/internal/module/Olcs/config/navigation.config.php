@@ -612,7 +612,7 @@ $nav = [
                         ],
                         [
                             'id' => 'irhp_permits',
-                            'label' => 'IRHP Permits',
+                            'label' => '',
                             'route' => 'licence/permits',
                             'use_route_match' => true,
                             'params' => [
