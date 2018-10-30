@@ -6,10 +6,10 @@ use Common\Data\Mapper\MapperInterface;
 use Zend\Form\FormInterface;
 
 /**
- * Class IrhpPermit
+ * Class IrhpPermitApplication
  * @package Olcs\Data\Mapper
  */
-class IrhpPermit implements MapperInterface
+class IrhpPermitApplication implements MapperInterface
 {
     /**
      * Should map data from a result array into an array suitable for a form

@@ -782,6 +782,34 @@ $routes = [
                     ]
                 ],
                 'may_terminate' => true,
+                'child_routes' => [
+                    'irhp-permits' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'irhp-permits[/][:irhpPermitId]',
+                            'defaults' => [
+                                'controller' => 'IrhpPermitController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
+                ],
+            ],
+            'irhp-permits' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'permits/:permitid/irhp-permits[/]',
+                    'defaults' => [
+                        'controller' => 'IrhpPermitController',
+                        'action' => 'index',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'fee_action' => $feeActionRoute,
+                    'fee_type_ajax' => $feeTypeAjaxRoute,
+                    'print-receipt' => $feePrintReceiptRoute,
+                ]
             ],
             'processing' => [
                 'type' => 'segment',
