@@ -42,7 +42,7 @@
                         <dt>
                             <?php echo $this->escapeHtml($this->translate('permits.page.fee.application.reference')); ?>
                         </dt>
-                        <dd >
+                        <dd>
                             <?php echo $this->escapeHtml($application['applicationRef']); ?>
                         </dd>
                     </div>
@@ -50,7 +50,7 @@
                         <dt>
                             <?php echo $this->escapeHtml($this->translate('permits.page.fee.application.date')); ?>
                         </dt>
-                        <dd >
+                        <dd>
                             <?php
                                 $date = date_create($application['dateReceived']);
                                 echo $this->escapeHtml(date_format($date, "d F Y"));
@@ -61,7 +61,7 @@
                         <dt>
                             <?php echo $this->escapeHtml($this->translate('permits.page.fee.permit.type')); ?>
                         </dt>
-                        <dd >
+                        <dd>
                             <?php echo $this->escapeHtml($application['permitType']['description']); ?>
                         </dd>
                     </div>
@@ -69,7 +69,7 @@
                         <dt>
                             <?php echo $this->escapeHtml($this->translate('permits.page.fee.permit.validity')); ?>
                         </dt>
-                        <dd >
+                        <dd>
                             January 2019 to December 2019
                         </dd>
                     </div>
@@ -77,7 +77,7 @@
                         <dt>
                             <?php echo $this->escapeHtml($this->translate('permits.page.fee.number.permits')); ?>
                         </dt>
-                        <dd >
+                        <dd>
                             <?php echo $this->escapeHtml($application['permitsRequired']) . ' x '; ?>
                             <?php
                                 echo $this->currencyFormatter($fee['appFee']);
@@ -89,7 +89,7 @@
                         <dt>
                             <?php echo $this->escapeHtml($this->translate('permits.page.fee.permit.fee.total')); ?>
                         </dt>
-                        <dd >
+                        <dd>
                             <?php
                                 echo $this->currencyFormatter($fee['appFee'] * $application['permitsRequired']);
                                 echo $this->escapeHtml($this->translate('permits.page.fee.permit.fee.non-refundable'));
