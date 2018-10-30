@@ -144,7 +144,7 @@ class LicenceOverviewTest extends \PHPUnit_Framework_TestCase
                     ],
                     [
                         'linkUrl' => [
-                            'route' => 'licence-print',
+                            'route' => 'surrender-licence-start',
                             'params' => [],
                             'options' => [],
                             'reuseMatchedParams' => true
