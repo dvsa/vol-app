@@ -43,7 +43,7 @@
     <?php } ?>
     <?php echo $this->partial('partials/google-tag-manager'); ?>
     <?php echo $this->version(); ?>
-    
+
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
     <a class="visually-hidden" id="skipToContent" href="#main"><?php echo $this->translate('skip-content'); ?></a>
@@ -161,7 +161,10 @@
             <?php echo $this->languageLink(); ?>
           </li>
           <li class="global-footer__link">
-            <?php echo $this->translate('built-by'); ?> <a href="<?php echo $this->translate('DVSA-link'); ?>">Driver and Vehicle Standards Agency</a>
+            <?php echo $this->translate('built-by'); ?>
+            <a href="<?php echo $this->translate('DVSA-link'); ?>">
+              <?php echo $this->translate('driver-and-vehicle-standards-agency'); ?>
+            </a>
           </li>
         </ul>
         <div class="global-footer__copyright">
