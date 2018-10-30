@@ -77,7 +77,7 @@ class LicenceOverview extends LvaOverview
         if ($data['isLicenceSurrenderAllowed']) {
             $surrenderLink = [
                 'linkUrl' => [
-                    'route' => 'licence-print',
+                    'route' => 'licence-print', // needs changing once route created
                     'params' => [],
                     'options' => [],
                     'reuseMatchedParams' => true
