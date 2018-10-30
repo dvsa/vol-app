@@ -368,6 +368,19 @@ $routes = array(
             ],
         ],
     ],
+    'surrender-licence-start' => [
+        'type' => Segment::class,
+        'options' => [
+            'route' => '/licence/surrender/start/:licence[/]',
+            'constraints' => [
+                'licence' => '[0-9]+',
+            ],
+            'defaults' => [
+                'controller' => 'LvaLicence/Surrender',
+                'action' => 'index',
+            ],
+        ],
+    ],
     'user-registration' => array(
         'type' => 'segment',
         'options' => array(
@@ -1145,7 +1158,6 @@ return array(
             'LvaLicence/BusinessDetails'            => 'Olcs\Controller\Lva\Licence\BusinessDetailsController',
             'LvaLicence/Addresses'                  => 'Olcs\Controller\Lva\Licence\AddressesController',
             'LvaLicence/People'                     => 'Olcs\Controller\Lva\Licence\PeopleController',
-
             'LvaLicence/OperatingCentres'           => 'Olcs\Controller\Lva\Licence\OperatingCentresController',
             'LvaLicence/TransportManagers'          => Olcs\Controller\Lva\Licence\TransportManagersController::class,
             'LvaLicence/Vehicles'                   => 'Olcs\Controller\Lva\Licence\VehiclesController',
@@ -1187,6 +1199,7 @@ return array(
             'LvaTransportManager/Confirmation' => \OLCS\Controller\Lva\TransportManager\ConfirmationController::class,
             'LvaTransportManager/OperatorDeclaration' => \OLCS\Controller\Lva\TransportManager\OperatorDeclarationController::class,
             'LvaTransportManager/TmDeclaration' => \OLCS\Controller\Lva\TransportManager\TmDeclarationController::class,
+            'LvaLicence/Surrender'                  => Olcs\Controller\Lva\Licence\Surrender\SurrenderStartController::class,
         ),
         'invokables' => array(
             'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,
