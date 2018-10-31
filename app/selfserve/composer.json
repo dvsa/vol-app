@@ -55,7 +55,7 @@
         "zf-commons/zfc-rbac": "~2.4.0",
         "olcs/OlcsCommon": "dev-release/4.192",
         "olcs/olcs-transfer": "dev-release/4.192",
-        "olcs/olcs-utils": "dev-release/4.192",
+        "olcs/olcs-utils": "dev/release/4.192",
         "olcs/olcs-auth": "dev-release/4.192",
         "olcs/olcs-logging": "dev-release/4.192"
 
