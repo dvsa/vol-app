@@ -8,6 +8,8 @@
 
 namespace Olcs\Controller\IrhpPermits;
 
+use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\FeatureToggle;
 use Common\RefData;
 use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Command\Permits\AcceptEcmtPermits;
@@ -30,11 +32,18 @@ use Zend\View\Model\ViewModel;
 
 class IrhpPermitApplicationController extends AbstractInternalController implements
     IrhpPermitApplicationControllerInterface,
-    LeftViewProvider
+    LeftViewProvider,
+    ToggleAwareInterface
 {
 
     const FEE_TYPE_ECMT_APP = 'IRHPGVAPP';
     const FEE_TYPE_ECMT_ISSUE = 'IRHPGVISSUE';
+
+    protected $toggleConfig = [
+        'default' => [
+            FeatureToggle::BACKEND_ECMT
+        ],
+    ];
 
     // Maps the route parameter irhpPermitId to the "id" parameter in the the ById (ItemDTO) query.
     protected $itemParams = ['id' => 'permitid'];
