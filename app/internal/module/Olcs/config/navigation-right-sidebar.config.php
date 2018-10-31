@@ -276,7 +276,7 @@ return array(
                         array(
                             'id' => 'irhp-permit-decisions-submit',
                             'label' => 'Submit',
-                            'route' => 'licence/permits',
+                            'route' => 'licence/permits/submit',
                             'params' => [
                                 'action' => 'submit'
                             ],
@@ -286,7 +286,7 @@ return array(
                         array(
                             'id' => 'irhp-permit-decisions-withdraw',
                             'label' => 'Withdraw',
-                            'route' => 'licence/permits',
+                            'route' => 'licence/permits/withdraw',
                             'params' => [
                                 'action' => 'withdraw'
                             ],
@@ -296,7 +296,7 @@ return array(
                         array(
                             'id' => 'irhp-permit-decisions-accept',
                             'label' => 'Accept',
-                            'route' => 'licence/permits',
+                            'route' => 'licence/permits/accept',
                             'use_route_match' => true,
                             'params' => [
                                 'action' => 'accept'
@@ -306,7 +306,7 @@ return array(
                         array(
                             'id' => 'irhp-permit-decisions-decline',
                             'label' => 'Decline',
-                            'route' => 'licence/permits',
+                            'route' => 'licence/permits/decline',
                             'use_route_match' => true,
                             'params' => [
                                 'action' => 'decline'

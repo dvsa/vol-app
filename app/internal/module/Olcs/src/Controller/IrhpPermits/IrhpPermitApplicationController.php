@@ -44,6 +44,8 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         ],
     ];
 
+    protected $routeIdentifier = 'permits';
+
     // Maps the route parameter irhpPermitId to the "id" parameter in the the ById (ItemDTO) query.
     protected $itemParams = ['id' => 'permitid'];
 
@@ -81,16 +83,24 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     protected $redirectConfig = [
         'add' => [
             'route' => 'licence/permits',
-            'action' => 'index'
+            'action' => 'index',
         ],
         'edit' => [
             'route' => 'licence/permits',
-            'action' => 'index'
+            'action' => 'index',
+        ],
+        'accept' => [
+            'route' => 'licence/permits',
+            'action' => 'index',
         ],
         'decline' => [
             'route' => 'licence/permits',
-            'action' => 'index'
-        ]
+            'action' => 'index',
+        ],
+        'withdraw' => [
+            'route' => 'licence/permits',
+            'action' => 'index',
+        ],
     ];
 
     // Maps to ID in navgiation-config file to underline correct item in horizontal nav menu
@@ -108,6 +118,9 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
      */
     public function indexAction()
     {
+        $navigation = $this->getServiceLocator()->get('Navigation');
+        $navigation->findOneBy('id', 'licence_irhp_permits')->setActive();
+
         $this->handleIndexPost();
         $this->indexIssuedTable();
 
@@ -176,7 +189,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
             if ($postData['action'] === 'Apply') {
                 return $this->redirect()
                     ->toRoute(
-                        'licence/permits',
+                        'licence/permits/add',
                         [
                             'licence' => $this->params()->fromRoute('licence'),
                             'action' => 'add'
@@ -477,7 +490,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
 
         return $view;
     }
-    
+
     protected function setNavigationId($action)
     {
         $navigation = $this->getServiceLocator()->get('Navigation');
