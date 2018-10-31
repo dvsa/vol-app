@@ -14,7 +14,6 @@ class EcmtLicence
      * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--trips",
-     *    "id" : "EcmtLicence",
      * })
      * @Form\Options({
      *      "fieldset-attributes": {"id": "ecmt-licence"},
