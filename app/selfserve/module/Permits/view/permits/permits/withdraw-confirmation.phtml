@@ -17,12 +17,17 @@
           </div>
         </div>
 
-        <?php echo $this->translate('markup-ecmt-withdraw-confirmation'); ?>
-
-        <br />
         <br />
 
-        <p><a href="<?php echo $this->url('permits'); ?>" class="action--primary large"><?php echo $this->escapeHtml($this->translate('permits.button.confirm-cancel-finish')); ?></a></p>
+        <div class="govuk-body">
+          <?php echo $this->translate('markup-ecmt-withdraw-confirmation'); ?>
+        </div>
+
+        <div class="actions-container">
+            <a href="<?php echo $this->url('permits'); ?>" class="action--primary large">
+              <?php echo $this->escapeHtml($this->translate('permits.button.confirm-cancel-finish')); ?>
+            </a>
+        </div>
       </div>
     </div>
   </main>
