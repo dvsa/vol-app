@@ -3,14 +3,14 @@
 namespace Admin\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
-use Olcs\Controller\AbstractInternalController;
+use Admin\Controller\AbstractIrhpPermitAdminController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
 use Common\Category;
 use Common\FeatureToggle;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
 
-class IrhpPermitReportingController extends AbstractInternalController implements LeftViewProvider, ToggleAwareInterface
+class IrhpPermitReportingController extends AbstractIrhpPermitAdminController implements LeftViewProvider, ToggleAwareInterface
 {
     protected $toggleConfig = [
         'default' => [
@@ -33,7 +33,7 @@ class IrhpPermitReportingController extends AbstractInternalController implement
         $view = new ViewModel(
             [
                 'navigationId' => 'admin-dashboard/admin-permits',
-                'navigationTitle' => 'Permits',
+                'navigationTitle' => '',
                 'stockId' => $this->params()->fromRoute()['stockId']
             ]
         );
