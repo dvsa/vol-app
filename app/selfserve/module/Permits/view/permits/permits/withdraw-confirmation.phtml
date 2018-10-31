@@ -3,32 +3,28 @@
     $this->headTitle($this->translate('permits.application.withdraw-confirmation.title'));
 ?>
 
-<div class="govuk-width-container">
-  <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
+<div class="row ecmt">
+    <div class="two-thirds">
         <div class="govuk-panel govuk-panel--confirmation">
-          <h1 class="govuk-panel__title">
-            <?php echo $this->escapeHtml($title); ?>
-          </h1>
-          <div class="govuk-panel__body">
-            <?php echo $this->escapeHtml($this->translate('permits.application.withdraw-confirmation.success')); ?>
-            <br><strong><?php echo $this->escapeHtml($data['application']['applicationRef']); ?></strong>
-          </div>
+            <h1 class="govuk-panel__title">
+                <?php echo $this->escapeHtml($title); ?>
+            </h1>
+            <div class="govuk-panel__body">
+                <?php echo $this->escapeHtml($this->translate('permits.application.withdraw-confirmation.success')); ?>
+                <br><strong><?php echo $this->escapeHtml($data['application']['applicationRef']); ?></strong>
+            </div>
         </div>
 
         <br />
 
         <div class="govuk-body">
-          <?php echo $this->translate('markup-ecmt-withdraw-confirmation'); ?>
+            <?php echo $this->translate('markup-ecmt-withdraw-confirmation'); ?>
         </div>
 
         <div class="actions-container">
-            <a href="<?php echo $this->url('permits'); ?>" class="action--primary large">
-              <?php echo $this->escapeHtml($this->translate('permits.button.confirm-cancel-finish')); ?>
+            <a href="<?php echo $this->url('permits'); ?>" class="action--primary large" role="button">
+                <?php echo $this->escapeHtml($this->translate('permits.button.confirm-cancel-finish')); ?>
             </a>
         </div>
       </div>
-    </div>
-  </main>
 </div>
