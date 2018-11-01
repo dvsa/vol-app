@@ -48,7 +48,12 @@ return [
                             'id' => 'admin-dashboard/admin-printing/irfo-stock-control',
                             'label' => 'IRFO stock control',
                             'route' => 'admin-dashboard/admin-printing/irfo-stock-control',
-                        ]
+                        ],
+                        [
+                            'id' => 'admin-dashboard/admin-printing/irhp-permits',
+                            'label' => 'Print IRHP Permits',
+                            'route' => 'admin-dashboard/admin-printing/irhp-permits',
+                        ],
                     ]
                 ],
                 [
