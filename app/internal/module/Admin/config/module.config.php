@@ -123,6 +123,20 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes' => [
+                            'irhp-permits' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => 'irhp-permits[/:action][/:id][/]',
+                                    'constraints' => [
+                                        'id' => '([0-9]+,?)+',
+                                        'action' => '(print)'
+                                    ],
+                                    'defaults' => [
+                                        'controller' => Admin\Controller\IrhpPermitPrintController::class,
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ],
                             'irfo-stock-control' => [
                                 'type' => 'segment',
                                 'options' => [
@@ -786,6 +800,8 @@ return [
                 Admin\Controller\IrhpPermitScoringController::class,
             Admin\Controller\IrhpPermitReportingController::class =>
                 Admin\Controller\IrhpPermitReportingController::class,
+            Admin\Controller\IrhpPermitPrintController::class =>
+                Admin\Controller\IrhpPermitPrintController::class,
         ],
     ],
     'view_manager' => [
