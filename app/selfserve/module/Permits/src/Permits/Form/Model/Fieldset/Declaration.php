@@ -13,7 +13,6 @@ class Declaration
      * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--declaration",
-     *   "id" : "declaration",
      * })
      * @Form\Options({
      *     "checked_value": "1",
