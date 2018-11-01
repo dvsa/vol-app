@@ -21,9 +21,9 @@
             <?php if ($form->get('Fields')->get('intensityWarning')->getValue() === 'yes'): ?>
                 <?php echo $this->partial('partials/warning-component', ['translationKey' => 'permits.form.intljourney.warning']); ?>
             <?php endif; ?>
-            <fieldset id="international-journey" class="inline" data-group="international-journey">
+            <div class="govuk-form-group">
                 <?php echo $this->form($form); ?>
-            </fieldset>
+            </div>
         </div>
     </div>
 </div>
