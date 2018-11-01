@@ -2,7 +2,7 @@
 
 use Permits\View\Helper\EcmtSection;
 
-$title = 'Permits Home - ';
+$title = $this->translate('permits.page.ecmt.licence.browser.title');
 $this->headTitle($title);
 
 $translator = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');
