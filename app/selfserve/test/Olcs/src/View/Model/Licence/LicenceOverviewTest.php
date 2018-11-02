@@ -20,10 +20,9 @@ class LicenceOverviewTest extends \PHPUnit_Framework_TestCase
     /**
      * Test constructor with set variables
      *
-     * @group licenceOverview
-     * @dataProvider dpReturnInfoBoxLinks
+     * @group        licenceOverview
      */
-    public function testSetVariables($isSurrenderAllowed, $links)
+    public function testSetVariables()
     {
         $data = [
             'licNo' => 1,
@@ -31,8 +30,6 @@ class LicenceOverviewTest extends \PHPUnit_Framework_TestCase
             'expiryDate' => '2015-01-01',
             'status' => ['id' => 'status'],
             'showExpiryWarning' => 'SHOWEXPIRYWARNING',
-            'isLicenceSurrenderAllowed' => $isSurrenderAllowed,
-            'infoBoxLinks' => $links,
         ];
         $overview = new LicenceOverview($data);
         $this->assertEquals($overview->licenceId, 1);
@@ -40,13 +37,10 @@ class LicenceOverviewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($overview->renewalDate, '2015-01-01');
         $this->assertEquals($overview->status, 'status');
         $this->assertEquals($overview->showExpiryWarning, 'SHOWEXPIRYWARNING');
-        $this->assertEquals($overview->infoBoxLinks, $links);
+        $this->assertEquals($overview->returnDefaultInfoBoxLinks(), $this->returnInfoBoxLinks());
     }
 
-    /**
-     * @dataProvider dpReturnInfoBoxLinks
-     */
-    public function testSetVariablesIsExpired($isSurrenderAllowed, $links)
+    public function testSetVariablesIsExpired()
     {
         $data = [
             'licNo' => 1,
@@ -56,21 +50,16 @@ class LicenceOverviewTest extends \PHPUnit_Framework_TestCase
             'isExpired' => true,
             'isExpiring' => true,
             'showExpiryWarning' => 'SHOWEXPIRYWARNING',
-            'isLicenceSurrenderAllowed' => $isSurrenderAllowed,
-            'infoBoxLinks' => $links,
         ];
         $overview = new LicenceOverview($data);
         $this->assertEquals($overview->licenceId, 1);
         $this->assertEquals($overview->startDate, '2014-01-01');
         $this->assertEquals($overview->renewalDate, '2015-01-01');
         $this->assertEquals($overview->status, 'licence.status.expired');
-        $this->assertEquals($overview->infoBoxLinks, $links);
+        $this->assertEquals($overview->returnDefaultInfoBoxLinks(), $this->returnInfoBoxLinks());
     }
 
-    /**
-     * @dataProvider dpReturnInfoBoxLinks
-     */
-    public function testSetVariablesIsExpiring($isSurrenderAllowed, $links)
+    public function testSetVariablesIsExpiring()
     {
         $data = [
             'licNo' => 1,
@@ -80,21 +69,16 @@ class LicenceOverviewTest extends \PHPUnit_Framework_TestCase
             'isExpired' => false,
             'isExpiring' => true,
             'showExpiryWarning' => 'SHOWEXPIRYWARNING',
-            'isLicenceSurrenderAllowed' => $isSurrenderAllowed,
-            'infoBoxLinks' => $links,
         ];
         $overview = new LicenceOverview($data);
         $this->assertEquals($overview->licenceId, 1);
         $this->assertEquals($overview->startDate, '2014-01-01');
         $this->assertEquals($overview->renewalDate, '2015-01-01');
         $this->assertEquals($overview->status, 'licence.status.expiring');
-        $this->assertEquals($overview->infoBoxLinks, $links);
+        $this->assertEquals($overview->returnDefaultInfoBoxLinks(), $this->returnInfoBoxLinks());
     }
 
-    /**
-     * @dataProvider dpReturnInfoBoxLinks
-     */
-    public function testSetVariablesContinuationDetailId($isSurrenderAllowed, $links)
+    public function testSetVariablesContinuationDetailId()
     {
         $data = [
             'licNo' => 1,
@@ -105,54 +89,25 @@ class LicenceOverviewTest extends \PHPUnit_Framework_TestCase
             'isExpiring' => true,
             'showExpiryWarning' => 'SHOWEXPIRYWARNING',
             'continuationMarker' => ['id' => 12345],
-            'isLicenceSurrenderAllowed' => $isSurrenderAllowed,
-            'infoBoxLinks' => $links,
         ];
         $overview = new LicenceOverview($data);
         $this->assertEquals($overview->continuationDetailId, 12345);
-        $this->assertEquals($overview->infoBoxLinks, $links);
+        $this->assertEquals($overview->returnDefaultInfoBoxLinks(), $this->returnInfoBoxLinks());
     }
 
-    public function dpReturnInfoBoxLinks()
+    public function returnInfoBoxLinks()
     {
-        return [
+        return
             [
-                'isSurrenderAllowed' => false,
-                'links' => [
-                    [
-                        'linkUrl' => [
-                            'route' => 'licence-print',
-                            'params' => [],
-                            'options' => [],
-                            'reuseMatchedParams' => true
-                        ],
-                        'linkText' => 'licence.print'
+                [
+                    'linkUrl' => [
+                        'route' => 'licence-print',
+                        'params' => [],
+                        'options' => [],
+                        'reuseMatchedParams' => true
                     ],
-                ]
-            ],
-            [
-                'isSurrenderAllowed' => true,
-                'links' => [
-                    [
-                        'linkUrl' => [
-                            'route' => 'licence-print',
-                            'params' => [],
-                            'options' => [],
-                            'reuseMatchedParams' => true
-                        ],
-                        'linkText' => 'licence.print'
-                    ],
-                    [
-                        'linkUrl' => [
-                            'route' => 'surrender-licence-start',
-                            'params' => [],
-                            'options' => [],
-                            'reuseMatchedParams' => true
-                        ],
-                        'linkText' => 'licence.apply-to-surrender'
-                    ],
-                ]
-            ]
-        ];
+                    'linkText' => 'licence.print'
+                ],
+            ];
     }
 }

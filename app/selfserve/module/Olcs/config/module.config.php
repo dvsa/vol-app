@@ -368,19 +368,6 @@ $routes = array(
             ],
         ],
     ],
-    'surrender-licence-start' => [
-        'type' => Segment::class,
-        'options' => [
-            'route' => '/licence/surrender/start/:licence[/]',
-            'constraints' => [
-                'licence' => '[0-9]+',
-            ],
-            'defaults' => [
-                'controller' => 'LvaLicence/Surrender',
-                'action' => 'index',
-            ],
-        ],
-    ],
     'user-registration' => array(
         'type' => 'segment',
         'options' => array(
@@ -487,6 +474,15 @@ $routes = array(
         )
     ),
 );
+
+$files = glob(__DIR__ . '/selfserve-routes/*.php');
+
+foreach ($files as $config) {
+    $newRoute = include $config;
+    $otherSelfserveRoutes = current($newRoute);
+}
+
+$routes = array_merge($routes, $otherSelfserveRoutes);
 
 $configRoutes['lva-application']['child_routes'] = array_merge(
     $configRoutes['lva-application']['child_routes'],
@@ -1199,7 +1195,6 @@ return array(
             'LvaTransportManager/Confirmation' => \OLCS\Controller\Lva\TransportManager\ConfirmationController::class,
             'LvaTransportManager/OperatorDeclaration' => \OLCS\Controller\Lva\TransportManager\OperatorDeclarationController::class,
             'LvaTransportManager/TmDeclaration' => \OLCS\Controller\Lva\TransportManager\TmDeclarationController::class,
-            'LvaLicence/Surrender'                  => Olcs\Controller\Lva\Licence\Surrender\SurrenderStartController::class,
         ),
         'invokables' => array(
             'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,
@@ -1222,6 +1217,7 @@ return array(
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             Olcs\Controller\Entity\ViewController::class => Olcs\Controller\Entity\ViewController::class,
             Olcs\Controller\GdsVerifyController::class => Olcs\Controller\GdsVerifyController::class,
+            'SurrenderStart' => Olcs\Controller\Licence\Surrender\SurrenderStartController::class,
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',

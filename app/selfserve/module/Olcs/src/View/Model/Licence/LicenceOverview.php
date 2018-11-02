@@ -8,6 +8,7 @@
 
 namespace Olcs\View\Model\Licence;
 
+use Common\Controller\Interfaces\MethodToggleAwareInterface;
 use Olcs\View\Model\LvaOverview;
 
 /**
@@ -25,6 +26,8 @@ class LicenceOverview extends LvaOverview
     protected $template = 'overview-licence';
 
     protected $sectionModel = 'Licence\\LicenceOverviewSection';
+
+    protected $infoBoxLinks;
 
     /**
      * Set the overview data
@@ -47,6 +50,7 @@ class LicenceOverview extends LvaOverview
             $this->setVariable('continuationDetailId', $data['continuationMarker']['id']);
         }
         // If either isExpired or isExpiring flags are set then override the displayed status
+
         if (isset($data['isExpiring']) && $data['isExpiring'] === true) {
             $this->setVariable('status', 'licence.status.expiring');
         }
@@ -54,15 +58,24 @@ class LicenceOverview extends LvaOverview
             $this->setVariable('isExpired', $data['isExpired']);
             $this->setVariable('status', 'licence.status.expired');
         }
-
-        $this->setVariable('infoBoxLinks', $this->setInfoBoxLinks($data));
+        $this->infoBoxLinks = $this->returnDefaultInfoBoxLinks();
 
         parent::__construct($data, $sections);
     }
 
-    private function setInfoBoxLinks($data)
+    public function addInfoBoxLinks(array $additionalInfoBoxLinks): void
     {
-        $infoBoxLinks = [
+        array_push($this->infoBoxLinks, $additionalInfoBoxLinks);
+    }
+
+    public function setInfoBoxLInks(): void
+    {
+        $this->setVariable('infoBoxLinks', $this->infoBoxLinks);
+    }
+
+    public function returnDefaultInfoBoxLinks(): array
+    {
+       return [
             [
                 'linkUrl' => [
                     'route' => 'licence-print',
@@ -73,21 +86,6 @@ class LicenceOverview extends LvaOverview
                 'linkText' => 'licence.print'
             ],
         ];
-
-        if ($data['isLicenceSurrenderAllowed']) {
-            $surrenderLink = [
-                'linkUrl' => [
-                    'route' => 'surrender-licence-start',
-                    'params' => [],
-                    'options' => [],
-                    'reuseMatchedParams' => true
-                ],
-                'linkText' => 'licence.apply-to-surrender'
-            ];
-
-            array_push($infoBoxLinks, $surrenderLink);
-        }
-
-        return $infoBoxLinks;
     }
+
 }

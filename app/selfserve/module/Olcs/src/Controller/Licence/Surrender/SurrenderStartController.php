@@ -1,6 +1,6 @@
 <?php
 
-namespace Olcs\Controller\Lva\Licence\Surrender;
+namespace Olcs\Controller\Licence\Surrender;
 
 use Common\Controller\Lva\AbstractController;
 
