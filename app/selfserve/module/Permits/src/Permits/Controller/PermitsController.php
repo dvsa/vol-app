@@ -478,9 +478,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $totalVehicles = $translationHelper->translateReplace('permits.form.permits-required.hint', [$application['licence']['totAuthVehicles']]);
         $form->get('Fields')->get('permitsRequired')->setOption('hint', $totalVehicles);
 
-        $guidanceMessage = $translationHelper->translateReplace('permits.form.permits-required.fee.guidance', ['£' . $ecmtApplicationFee]);
-
-        return array('form' => $form, 'guidanceMessage' => $guidanceMessage, 'id' => $id, 'ref' => $application['applicationRef']);
+        return array('form' => $form, 'id' => $id, 'ecmtApplicationFee' => $ecmtApplicationFee, 'ref' => $application['applicationRef']);
     }
 
     public function changeLicenceAction()

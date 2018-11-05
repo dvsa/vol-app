@@ -14,14 +14,14 @@ class CheckAnswers
     public static function mapForDisplay(array $data)
     {
         $questions = [
-            'check-answers.page.question.licence',
-            'check-answers.page.question.euro6',
-            'check-answers.page.question.cabotage',
-            'check-answers.page.question.restricted-countries',
-            'check-answers.page.question.permits-required',
-            'check-answers.page.question.trips',
-            'check-answers.page.question.internationalJourneys',
-            'check-answers.page.question.sector'
+            'permits.check-answers.page.question.licence',
+            'permits.form.euro6.label',
+            'permits.form.cabotage.label',
+            'permits.page.restricted-countries.question',
+            'permits.page.permits.required.question',
+            'permits.page.number-of-trips.question',
+            'permits.page.international.journey.question',
+            'permits.page.sector.question'
         ];
 
         $routes = [

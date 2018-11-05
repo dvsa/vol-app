@@ -14,7 +14,6 @@ class PermitsRequired
      * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--permits-required",
-     *   "id" : "PermitsRequired",
      *   "step" : "any"
      * })
      * @Form\Options({
@@ -61,7 +60,7 @@ class PermitsRequired
      *     }
      * })
      *
-     * @Form\Type("Zend\Form\Element\Number")
+     * @Form\Type("Zend\Form\Element\Text")
      */
     public $permitsRequired = null;
 

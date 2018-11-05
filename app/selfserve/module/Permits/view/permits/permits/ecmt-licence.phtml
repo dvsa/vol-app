@@ -30,7 +30,7 @@ $data = $this->ecmtLicenceData($form, $stock, $application);
                 ?>
             </fieldset>
             <?php
-                if (isset($application)) {
+                if (!empty($application)) {
                     echo $this->permitsDashboardLink();
                 }
             ?>

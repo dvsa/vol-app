@@ -23,7 +23,6 @@ class SubmitAccept
     /**
      * @Form\Name("SaveAndReturnButton")
      * @Form\Attributes({
-     *     "class":"action--primary large return-overview",
      *     "id":"save-return-button",
      *     "value":"Save and return to overview",
      * })

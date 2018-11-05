@@ -20,7 +20,6 @@ class InternationalJourney
      * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--international-journey",
-     *    "id" : "InternationalJourney",
      * })
      * @Form\Options({
      *      "label": "",
