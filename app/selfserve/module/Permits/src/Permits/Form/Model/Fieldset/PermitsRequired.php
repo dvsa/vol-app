@@ -11,7 +11,6 @@ class PermitsRequired
 {
     /**
      * @Form\Name("permitsRequired")
-     * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--permits-required",
      *   "step" : "any"

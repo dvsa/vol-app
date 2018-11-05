@@ -10,7 +10,6 @@ class Euro6Emissions
 {
     /**
      * @Form\Name("emissions")
-     * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--euro6",
      *    "id" : "MeetsEuro6",
