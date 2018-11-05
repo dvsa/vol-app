@@ -5,7 +5,7 @@ use Zend\Mvc\Router\Http\Segment;
 return [
     [
         'licence-surrender' => [
-            'type' => /**\Zend\Mvc\Router\Http\Literal::class**/ Segment::class,
+            'type' => Segment::class,
             'options' => [
                 'route' => '/licence/:licence/surrender',
                 'constraints' => [

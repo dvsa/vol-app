@@ -10,8 +10,7 @@ use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Olcs\Controller\Lva\Traits\MethodToggleTrait;
 use Olcs\View\Model\Licence\LicenceOverview;
-use Common\FeatureToggle;
-
+use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 
 /**
  * Licence Overview Controller
@@ -29,7 +28,7 @@ class OverviewController extends AbstractController implements MethodToggleAware
     protected $infoBoxLinks = [];
 
     protected $methodToggles = [
-       'default' => FeatureToggle::SELFSERVE_SURRENDER
+       'addInfoBoxLinks' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
     ];
 
     /**
@@ -53,13 +52,13 @@ class OverviewController extends AbstractController implements MethodToggleAware
         }
 
         $viewModel = new LicenceOverview($data, $this->getAccessibleSections(), $variables);
-//        $viewModel->addInfoBoxLinks($this->getSurrenderLink($data));
+
         $this->togglableMethod(
             $viewModel,
             'addInfoBoxLinks',
             $this->getSurrenderLink($data)
         );
-        $viewModel->setInfoBoxLInks();
+        $viewModel->setInfoBoxLinks();
         return $viewModel;
     }
 

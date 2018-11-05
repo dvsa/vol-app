@@ -68,14 +68,14 @@ class LicenceOverview extends LvaOverview
         array_push($this->infoBoxLinks, $additionalInfoBoxLinks);
     }
 
-    public function setInfoBoxLInks(): void
+    public function setInfoBoxLinks(): void
     {
         $this->setVariable('infoBoxLinks', $this->infoBoxLinks);
     }
 
     public function returnDefaultInfoBoxLinks(): array
     {
-       return [
+        return [
             [
                 'linkUrl' => [
                     'route' => 'licence-print',
@@ -87,5 +87,4 @@ class LicenceOverview extends LvaOverview
             ],
         ];
     }
-
 }

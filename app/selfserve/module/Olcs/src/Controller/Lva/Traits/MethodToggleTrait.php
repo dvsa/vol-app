@@ -14,7 +14,7 @@ trait MethodToggleTrait
 {
     public function togglableMethod($class, $method, ...$args)
     {
-        if ($this->featuresEnabledForMethod($this->methodToggles, $method)){
+        if ($this->featuresEnabledForMethod($this->methodToggles, $method)) {
             call_user_func_array([$class, $method], $args);
         }
     }
