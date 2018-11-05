@@ -65,7 +65,9 @@ class LicenceOverview extends LvaOverview
 
     public function addInfoBoxLinks(array $additionalInfoBoxLinks): void
     {
-        array_push($this->infoBoxLinks, $additionalInfoBoxLinks);
+        if(!empty($additionalInfoBoxLinks)) {
+            array_push($this->infoBoxLinks, $additionalInfoBoxLinks);
+        }
     }
 
     public function setInfoBoxLinks(): void

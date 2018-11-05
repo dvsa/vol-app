@@ -95,7 +95,10 @@ class LicenceOverviewTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeEquals($this->returnExpectedInfoBoxLinks(), 'infoBoxLinks', $overview);
     }
 
-    public function testAddInfoBoxLinks()
+    /**
+     * @dataProvider dpAddInfoBoxLinks
+     */
+    public function testAddInfoBoxLinks($additionalLinks, $expectedLinks)
     {
         $data = [
             'licNo' => 1,
@@ -107,42 +110,10 @@ class LicenceOverviewTest extends \PHPUnit_Framework_TestCase
             'showExpiryWarning' => 'SHOWEXPIRYWARNING',
             'continuationMarker' => ['id' => 12345],
         ];
-        $additionalInfoBoxLinks = [
-            [
-                'linkUrl' => [
-                    'route' => 'additional-route',
-                    'params' => [],
-                    'options' => [],
-                    'reuseMatchedParams' => true
-                ],
-                'linkText' => 'additional-link-text'
-            ],
-        ];
-        $expectedInfoBoxLinks = [
-            [
-                'linkUrl' => [
-                    'route' => 'licence-print',
-                    'params' => [],
-                    'options' => [],
-                    'reuseMatchedParams' => true
-                ],
-                'linkText' => 'licence.print'
-            ],
-            [
-                [
-                    'linkUrl' => [
-                        'route' => 'additional-route',
-                        'params' => [],
-                        'options' => [],
-                        'reuseMatchedParams' => true
-                    ],
-                    'linkText' => 'additional-link-text'
-                ]
-            ],
-        ];
+
         $overview = new LicenceOverview($data);
-        $overview->addInfoBoxLinks($additionalInfoBoxLinks);
-        $this->assertAttributeEquals($expectedInfoBoxLinks, 'infoBoxLinks', $overview);
+        $overview->addInfoBoxLinks($additionalLinks);
+        $this->assertAttributeEquals($expectedLinks, 'infoBoxLinks', $overview);
     }
 
     public function testSetInfoBoxLinks()
@@ -177,5 +148,59 @@ class LicenceOverviewTest extends \PHPUnit_Framework_TestCase
                     'linkText' => 'licence.print'
                 ],
             ];
+    }
+
+    public function dpAddInfoBoxLinks()
+    {
+        return [
+            [
+                'additionalInfoBoxLinks' => [
+                    'linkUrl' => [
+                        'route' => 'additional-route',
+                        'params' => [],
+                        'options' => [],
+                        'reuseMatchedParams' => true
+                    ],
+                    'linkText' => 'additional-link-text'
+                ],
+                'expectedInfoBoxLinks' => [
+                    [
+                        'linkUrl' => [
+                            'route' => 'licence-print',
+                            'params' => [],
+                            'options' => [],
+                            'reuseMatchedParams' => true
+                        ],
+                        'linkText' => 'licence.print'
+                    ],
+                    [
+
+                        'linkUrl' => [
+                            'route' => 'additional-route',
+                            'params' => [],
+                            'options' => [],
+                            'reuseMatchedParams' => true
+                        ],
+                        'linkText' => 'additional-link-text'
+
+                    ]
+                ],
+
+            ],
+            [
+                'additionalInfoBoxLinks' => [],
+                'expectedInfoBoxLinks' => [
+                    [
+                        'linkUrl' => [
+                            'route' => 'licence-print',
+                            'params' => [],
+                            'options' => [],
+                            'reuseMatchedParams' => true
+                        ],
+                        'linkText' => 'licence.print'
+                    ]
+                ]
+            ]
+        ];
     }
 }
