@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Olcs\Controller\Lva\Traits\MethodToggleTrait;
 use Olcs\View\Model\Licence\LicenceOverview;
-use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
+use Common\FeatureToggle;
 
 
 /**
@@ -29,7 +29,7 @@ class OverviewController extends AbstractController implements MethodToggleAware
     protected $infoBoxLinks = [];
 
     protected $methodToggles = [
-       'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
+       'default' => FeatureToggle::SELFSERVE_SURRENDER
     ];
 
     /**
