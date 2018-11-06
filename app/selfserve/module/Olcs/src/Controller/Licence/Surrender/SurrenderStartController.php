@@ -2,12 +2,18 @@
 
 namespace Olcs\Controller\Licence\Surrender;
 
+use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Controller\Lva\AbstractController;
+use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 
-class SurrenderStartController extends AbstractController
+class SurrenderStartController extends AbstractController implements ToggleAwareInterface
 {
+    protected $toggleConfig = [
+        'default' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
+    ];
+
     public function indexAction()
     {
-        die("write stuff here for surrender start page");
+        // to be completed
     }
 }
