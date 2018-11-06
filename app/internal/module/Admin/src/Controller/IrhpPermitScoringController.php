@@ -15,6 +15,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 
 class IrhpPermitScoringController extends AbstractInternalController implements LeftViewProvider, ToggleAwareInterface
 {
@@ -34,6 +35,10 @@ class IrhpPermitScoringController extends AbstractInternalController implements 
         'run' => [
             'action' => 'index'
         ]
+    ];
+
+    protected $inlineScripts = [
+        'indexAction' => ['permits-scoring']
     ];
 
     /**
@@ -94,5 +99,17 @@ class IrhpPermitScoringController extends AbstractInternalController implements 
             'This will run scoring. Are you sure?',
             'Scoring successfully triggered'
         );
+    }
+
+    /**
+     * @return JsonModel
+     */
+    public function statusAction()
+    {
+        $stockOperationsPermitted = $this->handleQuery(
+            StockOperationsPermitted::create([ 'id' => $this->params()->fromRoute('stockId') ])
+        );
+
+        return new JsonModel($stockOperationsPermitted->getResult());
     }
 }
