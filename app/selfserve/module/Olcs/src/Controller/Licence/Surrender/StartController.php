@@ -3,10 +3,10 @@
 namespace Olcs\Controller\Licence\Surrender;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\Controller\Lva\AbstractController;
+use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 
-class SurrenderStartController extends AbstractController implements ToggleAwareInterface
+class StartController extends AbstractSelfserveController implements ToggleAwareInterface
 {
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
@@ -14,6 +14,6 @@ class SurrenderStartController extends AbstractController implements ToggleAware
 
     public function indexAction()
     {
-        // to be completed
+        // @todo  this controller requires unit tests
     }
 }

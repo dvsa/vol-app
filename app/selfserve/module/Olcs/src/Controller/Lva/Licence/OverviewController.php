@@ -137,7 +137,7 @@ class OverviewController extends AbstractController implements MethodToggleAware
         if ($data['isLicenceSurrenderAllowed']) {
             $surrenderLink = [
                 'linkUrl' => [
-                    'route' => 'licence/licence-surrender/start',
+                    'route' => 'licence/surrender/start',
                     'params' => [],
                     'options' => [],
                     'reuseMatchedParams' => true

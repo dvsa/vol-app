@@ -6,26 +6,27 @@ use Zend\Mvc\Router\Http\Segment;
 return [
     [
         'licence' => [
-            'type' => Literal::class,
+            'type' => Segment::class,
             'options' => [
-                'route' => '/licence',
+                'route' => '/licence/:licence[/]',
+                'constraints' => [
+                    'licence' => '[0-9]+',
+                ],
             ],
             'may_terminate' => false,
             'child_routes' => [
-                'licence-surrender' => [
+                'surrender' => [
                     'type' => Segment::class,
                     'options' => [
-                        'route' => '/licence/:licence/surrender',
-                        'constraints' => [
-                            'licence' => '[0-9]+',
-                        ],
+                        'route' => 'surrender[/]',
+
                     ],
                     'may_terminate' => false,
                     'child_routes' => [
                         'start' => [
                             'type' => Segment::class,
                             'options' => [
-                                'route' => '/start',
+                                'route' => 'start[/]',
                                 'defaults' => [
                                     'controller' => 'SurrenderStart',
                                     'action' => 'index',
