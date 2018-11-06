@@ -10,7 +10,6 @@ class Declaration
 {
     /**
      * @Form\Name("declaration")
-     * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--declaration",
      * })

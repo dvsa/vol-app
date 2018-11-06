@@ -10,7 +10,6 @@ class Cabotage
 {
     /**
      * @Form\Name("cabotage")
-     * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--cabotage",
      *   "id" : "WontCabotage",

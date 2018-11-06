@@ -16,7 +16,6 @@ class Trips
     public $intensityWarning = 'no';
 
     /**
-     * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--trips",
      *   "id" : "TripsAbroad",
