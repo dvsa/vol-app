@@ -12,4 +12,8 @@ class FeatureToggleConfig
     const SELFSERVE_ECMT_ENABLED =  [
         FeatureToggle::SELFSERVE_ECMT
     ];
+
+    const SELFSERVE_SURRENDER_ENABLED = [
+        FeatureToggle::SELFSERVE_SURRENDER
+    ];
 }

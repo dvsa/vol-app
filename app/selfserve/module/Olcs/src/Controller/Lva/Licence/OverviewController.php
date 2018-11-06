@@ -2,12 +2,15 @@
 
 namespace Olcs\Controller\Lva\Licence;
 
+use Common\Controller\Interfaces\MethodToggleAwareInterface;
 use Common\Controller\Lva\AbstractController;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Licence\PrintLicence;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use Olcs\Controller\Lva\Traits\MethodToggleTrait;
 use Olcs\View\Model\Licence\LicenceOverview;
+use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 
 /**
  * Licence Overview Controller
@@ -15,12 +18,18 @@ use Olcs\View\Model\Licence\LicenceOverview;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OverviewController extends AbstractController
+class OverviewController extends AbstractController implements MethodToggleAwareInterface
 {
     use LicenceControllerTrait;
+    use MethodToggleTrait;
 
     protected $lva = 'licence';
     protected $location = 'external';
+    protected $infoBoxLinks = [];
+
+    protected $methodToggles = [
+       'addInfoBoxLinks' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
+    ];
 
     /**
      * Licence overview
@@ -42,7 +51,15 @@ class OverviewController extends AbstractController
             $variables['shouldShowCreateVariation'] = false;
         }
 
-        return new LicenceOverview($data, $this->getAccessibleSections(), $variables);
+        $viewModel = new LicenceOverview($data, $this->getAccessibleSections(), $variables);
+
+        $this->togglableMethod(
+            $viewModel,
+            'addInfoBoxLinks',
+            $this->getSurrenderLink($data)
+        );
+        $viewModel->setInfoBoxLinks();
+        return $viewModel;
     }
 
     /**
@@ -98,6 +115,7 @@ class OverviewController extends AbstractController
      * Disable trailers for NI
      *
      * @param bool $keysOnly only return keys?
+     *
      * @return array
      */
     protected function getAccessibleSections($keysOnly = true)
@@ -111,5 +129,22 @@ class OverviewController extends AbstractController
             }
         }
         return $accessibleSections;
+    }
+
+    private function getSurrenderLink($data)
+    {
+        $surrenderLink = [];
+        if ($data['isLicenceSurrenderAllowed']) {
+            $surrenderLink = [
+                'linkUrl' => [
+                    'route' => 'licence/surrender/start',
+                    'params' => [],
+                    'options' => [],
+                    'reuseMatchedParams' => true
+                ],
+                'linkText' => 'licence.apply-to-surrender'
+            ];
+        }
+        return $surrenderLink;
     }
 }

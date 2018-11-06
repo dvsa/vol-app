@@ -5,8 +5,10 @@
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
+
 namespace Olcs\View\Model\Licence;
 
+use Common\Controller\Interfaces\MethodToggleAwareInterface;
 use Olcs\View\Model\LvaOverview;
 
 /**
@@ -24,6 +26,8 @@ class LicenceOverview extends LvaOverview
     protected $template = 'overview-licence';
 
     protected $sectionModel = 'Licence\\LicenceOverviewSection';
+
+    protected $infoBoxLinks;
 
     /**
      * Set the overview data
@@ -46,6 +50,7 @@ class LicenceOverview extends LvaOverview
             $this->setVariable('continuationDetailId', $data['continuationMarker']['id']);
         }
         // If either isExpired or isExpiring flags are set then override the displayed status
+
         if (isset($data['isExpiring']) && $data['isExpiring'] === true) {
             $this->setVariable('status', 'licence.status.expiring');
         }
@@ -53,7 +58,35 @@ class LicenceOverview extends LvaOverview
             $this->setVariable('isExpired', $data['isExpired']);
             $this->setVariable('status', 'licence.status.expired');
         }
+        $this->infoBoxLinks = $this->returnDefaultInfoBoxLinks();
 
         parent::__construct($data, $sections);
+    }
+
+    public function addInfoBoxLinks(array $additionalInfoBoxLinks): void
+    {
+        if (!empty($additionalInfoBoxLinks)) {
+            array_push($this->infoBoxLinks, $additionalInfoBoxLinks);
+        }
+    }
+
+    public function setInfoBoxLinks(): void
+    {
+        $this->setVariable('infoBoxLinks', $this->infoBoxLinks);
+    }
+
+    public function returnDefaultInfoBoxLinks(): array
+    {
+        return [
+            [
+                'linkUrl' => [
+                    'route' => 'licence-print',
+                    'params' => [],
+                    'options' => [],
+                    'reuseMatchedParams' => true
+                ],
+                'linkText' => 'licence.print'
+            ],
+        ];
     }
 }
