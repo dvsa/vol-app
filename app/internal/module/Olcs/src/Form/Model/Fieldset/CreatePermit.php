@@ -65,7 +65,13 @@ class CreatePermit extends Base
      *     "allow_empty" : true,
      * })
      * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Validator({"name":"Zend\Validator\GreaterThan", "options": {"min": 0}})
+     * @Form\Validator({
+     *      "name":"Zend\Validator\GreaterThan",
+     *      "options": {
+     *          "min": 0,
+     *          "breakchainonfailure": true
+     *      }
+     * })
      * @Form\Validator({
      *     "name": "NumberCompare",
      *     "options": {
