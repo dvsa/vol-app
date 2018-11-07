@@ -12,7 +12,6 @@ class SectorList
 
     /**
      * @Form\Name("SectorList")
-     * @Form\Required(true)
      * @Form\Options({
      *     "fieldset-attributes": {"id": "sector-list"},
      *     "fieldset-data-group": "sector-list",
@@ -24,6 +23,15 @@ class SectorList
      *   "class" : "input--trips",
      *   "id" : "EcmtSectorList",
      *   "aria-labelledby" : "SpecialistHaulage",
+     * })
+     * @Form\Validator({
+     *     "name": "Zend\Validator\NotEmpty",
+     *     "options": {
+     *         "message": {
+     *             "isEmpty": "error.messages.international-journey"
+     *         },
+     *         "breakchainonfailure": true
+     *     },
      * })
      * @Form\Type("DynamicRadioHtml")
      */

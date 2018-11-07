@@ -17,7 +17,6 @@ class InternationalJourney
 
     /**
      * @Form\Name("InternationalJourney")
-     * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--international-journey",
      *   "aria-labelledby" : "InternationalJourney",
@@ -28,7 +27,15 @@ class InternationalJourney
      *      "fieldset-data-group": "percentage-type",
      *      "label_attributes": {"class": "form-control form-control--radio"},
      *      "category": "inter_journey_percentage",
-     *      "error-message": "error.messages.international-journey"
+     * })
+     * @Form\Validator({
+     *     "name": "Zend\Validator\NotEmpty",
+     *     "options": {
+     *         "message": {
+     *             "isEmpty": "error.messages.international-journey"
+     *         },
+     *         "breakchainonfailure": true
+     *     },
      * })
      * @Form\Type("DynamicRadio")
      */
