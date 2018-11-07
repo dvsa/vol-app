@@ -37,7 +37,6 @@ class IrhpPermitWindowController extends AbstractIrhpPermitAdminController imple
     protected $listDto = ListDto::class;
     protected $itemDto = ItemDto::class;
     protected $formClass = PermitWindowForm::class;
-    protected $addFormClass = PermitWindowForm::class;
     protected $mapperClass = PermitWindowMapper::class;
     protected $createCommand = CreateDto::class;
     protected $updateCommand = UpdateDto::class;
@@ -91,11 +90,5 @@ class IrhpPermitWindowController extends AbstractIrhpPermitAdminController imple
         }
 
         return parent::indexAction();
-    }
-
-    public function addAction()
-    {
-        $this->defaultData = array_merge($this->defaultData, ['compareStartDate' => date("Y-m-d")]);
-        return parent::addAction();
     }
 }

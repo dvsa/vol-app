@@ -12,6 +12,8 @@ use Zend\Form\FormInterface;
  */
 class IrhpPermitWindow implements MapperInterface
 {
+    CONST PERMIT_WINDOW_DETAILS = 'permitWindowDetails';
+
     /**
      * Should map data from a result array into an array suitable for a form
      *
@@ -21,10 +23,9 @@ class IrhpPermitWindow implements MapperInterface
      */
     public static function mapFromResult(array $data): array
     {
-        $mappedData['permitWindowDetails'] = $data;
-        $mappedData['permitWindowDetails']['stockId'] = isset($data['stockId']) ? $data['stockId'] : $data['irhpPermitStock']['id'];
-        $mappedData['permitWindowDetails']['compareStartDate'] = $data['startDate'];
-        return $mappedData;
+        return [
+            self::PERMIT_WINDOW_DETAILS => $data,
+        ];
     }
 
     /**
@@ -36,9 +37,7 @@ class IrhpPermitWindow implements MapperInterface
      */
     public static function mapFromForm(array $data): array
     {
-        $data['permitWindowDetails']['irhpPermitStock'] = $data['permitWindowDetails']['stockId'];
-        unset($data['permitWindowDetails']['stockId']);
-        return $data['permitWindowDetails'];
+        return $data[self::PERMIT_WINDOW_DETAILS];
     }
 
     /**
@@ -52,6 +51,8 @@ class IrhpPermitWindow implements MapperInterface
      */
     public static function mapFromErrors(FormInterface $form, array $errors): array
     {
+        $form->setMessages([self::PERMIT_WINDOW_DETAILS => $errors['messages']]);
+
         return $errors;
     }
 }
