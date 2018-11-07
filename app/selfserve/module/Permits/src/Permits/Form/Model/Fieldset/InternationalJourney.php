@@ -20,6 +20,7 @@ class InternationalJourney
      * @Form\Required(true)
      * @Form\Attributes({
      *   "class" : "input--international-journey",
+     *   "aria-labelledby" : "InternationalJourney",
      * })
      * @Form\Options({
      *      "label": "",

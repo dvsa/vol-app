@@ -22,7 +22,8 @@ class SectorList
      * })
      * @Form\Attributes({
      *   "class" : "input--trips",
-     *    "id" : "EcmtSectorList",
+     *   "id" : "EcmtSectorList",
+     *   "aria-labelledby" : "SpecialistHaulage",
      * })
      * @Form\Type("DynamicRadioHtml")
      */
