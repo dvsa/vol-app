@@ -99,7 +99,7 @@ class ConfirmationController extends AbstractController
 
     private function isOperatorUserOrAdmin() :bool
     {
-        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_DASHBOARD)) {
+        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_LVA)) {
             return true;
         }
         return false;
