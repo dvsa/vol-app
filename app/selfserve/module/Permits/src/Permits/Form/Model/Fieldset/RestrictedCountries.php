@@ -15,12 +15,11 @@ class RestrictedCountries
      * @Form\Attributes({
      *   "class" : "input--restricted-countries",
      *   "id" : "restrictedCountriesRadio",
+     *   "aria-labelledby" : "restrictedCountries",
      * })
      * @Form\Options({
-     *     "label": "",
-     *     "short-label": "",
      *     "label_attributes":{
-     *          "class" : "form-control form-control--radio form-control--inline restrictedRadio"
+     *          "class" : "form-control form-control--radio form-control--inline restrictedRadio",
      *     },
      *     "value_options":{
      *          "1" : "Yes",
