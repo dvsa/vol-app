@@ -28,15 +28,6 @@ class InternationalJourney
      *      "label_attributes": {"class": "form-control form-control--radio"},
      *      "category": "inter_journey_percentage",
      * })
-     * @Form\Validator({
-     *     "name": "Zend\Validator\NotEmpty",
-     *     "options": {
-     *         "message": {
-     *             "isEmpty": "error.messages.international-journey"
-     *         },
-     *         "breakchainonfailure": true
-     *     },
-     * })
      * @Form\Type("DynamicRadio")
      */
     public $ecmtLicence = null;

@@ -24,15 +24,6 @@ class SectorList
      *   "id" : "EcmtSectorList",
      *   "aria-labelledby" : "SpecialistHaulage",
      * })
-     * @Form\Validator({
-     *     "name": "Zend\Validator\NotEmpty",
-     *     "options": {
-     *         "message": {
-     *             "isEmpty": "error.messages.international-journey"
-     *         },
-     *         "breakchainonfailure": true
-     *     },
-     * })
      * @Form\Type("DynamicRadioHtml")
      */
     public $SectorList;
