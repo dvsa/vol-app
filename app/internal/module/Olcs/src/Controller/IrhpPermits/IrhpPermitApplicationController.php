@@ -398,6 +398,16 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
                     [],
                     true
                 );
+        } elseif ($irhpPermit['isAwaitingFee']) {
+            // There was no outstanding fees for this application (already been paid) so they have been
+            // paid or waived, so allow acceptance to progress.
+            return $this->confirmCommand(
+                new ConfirmItem($this->deleteParams),
+                AcceptEcmtPermits::class,
+                'Are you sure?',
+                'Accept ECMT Permit Offer. Are you sure?',
+                'Permit Application Accepted'
+            );
         }
     }
 
