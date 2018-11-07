@@ -1,14 +1,12 @@
 <div class="tabs">
-  <ul class="tab-list">
+  <div class="tab-list" role="tablist">
   <?php foreach ($this->container as $page): ?>
     <?php if ($page->isVisible(true) && $this->navigation()->accept($page, false)): ?>
-        <li class="tab-list__item<?php if ($page->isActive(true)) { ?> active<?php } ?>">
-        <a href="<?php echo $page->getHref(); ?>">
+        <a href="<?php echo $page->getHref(); ?>" class="tab-list__item<?php if ($page->isActive(true)) { ?> active<?php } ?>" role="tab">
         <?php echo $this->translate($page->getLabel()); ?>
         <?php echo $page->get('count') ? '('.$page->get('count').')' : '';?>
         </a>
-        </li>
     <?php endif; ?>
   <?php endforeach; ?>
-  </ul>
+  </div>
 </div>
