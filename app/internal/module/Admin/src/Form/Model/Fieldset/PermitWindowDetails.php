@@ -15,14 +15,21 @@ class PermitWindowDetails
     use IdTrait;
 
     /**
+     * @Form\Type("Hidden")
+     */
+    public $stockId = null;
+
+    /**
      * @Form\Type("DateTimeSelect")
      * @form\Required(true)
+     * @Form\Attributes({"id":"startDate"})
      * @Form\Options({
-     *     "label": "Start:",
-     *      "create_empty_option": true,
-     *      "max_year_delta": "+1",
-     *      "min_year_delta": "0",
-     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label>Time</label>'HH:mm:ss'</div>'"
+     *     "label": "internal.community_licence.form.start_date",
+     *     "create_empty_option": true,
+     *     "max_year_delta": "+1",
+     *     "min_year_delta": "0",
+     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""startDate"">Time</label>'HH:mm:ss'</div>'",
+     *     "render_delimiters": false
      * })
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
@@ -41,12 +48,14 @@ class PermitWindowDetails
     /**
      * @Form\Type("DateTimeSelect")
      * @Form\Required(true)
+     * @Form\Attributes({"id":"endDate"})
      * @Form\Options({
-     *     "label": "End:",
-     *      "create_empty_option": true,
-     *      "max_year_delta": "+10",
-     *      "min_year_delta": "0",
-     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label>Time</label>'HH:mm:ss'</div>'"
+     *     "label": "internal.community_licence.form.end_date",
+     *     "create_empty_option": true,
+     *     "max_year_delta": "+10",
+     *     "min_year_delta": "0",
+     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""endDate"">Time</label>'HH:mm:ss'</div>'",
+     *     "render_delimiters": false
      * })
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
      * @Form\Validator({
@@ -74,7 +83,7 @@ class PermitWindowDetails
      *                      "has_time": true,
      *                      "compare_to":"startDate",
      *                      "operator":"gt",
-     *                      "compare_to_label": "Start"
+     *                      "compare_to_label": "Start date"
      *                  }
      *              },
      *              {
