@@ -25,7 +25,7 @@ class ValidEcmtPermitConstrainedCountries
 
         $newResults = [];
 
-        foreach ($data['validPermits']['results'] as $permitKey => $permit) {
+        foreach ($data['validPermits']['results'] as $permit) {
             $includedCountryIds = array_column($permit['countries'], 'id');
             $excludedCountryIds = array_diff($allCountryIds, $includedCountryIds);
 

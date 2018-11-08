@@ -36,10 +36,6 @@ class ValidEcmtPermitConstrainedCountriesTest extends \PHPUnit_Framework_TestCas
                 'results' => [
                     0 => [
                         'permitNumber' => 111,
-                        'countries' => [],
-                    ],
-                    1 => [
-                        'permitNumber' => 222,
                         'countries' => [
                             0 => [
                                 'id' => 'AA',
@@ -50,8 +46,17 @@ class ValidEcmtPermitConstrainedCountriesTest extends \PHPUnit_Framework_TestCas
                             2 => [
                                 'id' => 'CC',
                             ],
-                            3 => [
-                                'id' => 'DD',
+
+                        ],
+                    ],
+                    1 => [
+                        'permitNumber' => 222,
+                        'countries' => [
+                            0 => [
+                                'id' => 'AA',
+                            ],
+                            1 => [
+                                'id' => 'BB',
                             ],
                         ],
                     ],
@@ -63,6 +68,10 @@ class ValidEcmtPermitConstrainedCountriesTest extends \PHPUnit_Framework_TestCas
                             ],
                         ],
                     ],
+                    3 => [
+                        'permitNumber' => 444,
+                        'countries' => [],
+                    ],
                 ],
             ],
         ];
@@ -71,21 +80,39 @@ class ValidEcmtPermitConstrainedCountriesTest extends \PHPUnit_Framework_TestCas
             'results' => [
                 0 => [
                     'permitNumber' => 111,
-                    'countries' => [], //there were no countries
+                    'countries' => [], //no exceptions
                 ],
                 1 => [
                     'permitNumber' => 222,
-                    'countries' => [], //all constrained countries covered, extra country "DD" ignored
+                    'countries' => [
+                        0 => [
+                            'id' => 'CC',
+                        ],
+                    ], //countries "AA" and "BB" were matched
                 ],
                 2 => [
                     'permitNumber' => 333,
                     'countries' => [
+                        0 => [
+                            'id' => 'BB',
+                        ],
+                        1 => [
+                            'id' => 'CC',
+                        ], //country "AA" was matched
+                    ],
+                ],
+                3 => [
+                    'permitNumber' => 444,
+                    'countries' => [
+                        0 => [
+                            'id' => 'AA',
+                        ],
                         1 => [
                             'id' => 'BB',
                         ],
                         2 => [
                             'id' => 'CC',
-                        ], //country "AA" was matched
+                        ], //all countries matched
                     ],
                 ],
             ],
