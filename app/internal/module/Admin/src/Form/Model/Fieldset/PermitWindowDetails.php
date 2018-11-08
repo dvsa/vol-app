@@ -32,15 +32,39 @@ class PermitWindowDetails
      *     "render_delimiters": false
      * })
      * @Form\Filter({"name": "DateTimeSelectNullifier"})
-     * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({
-     *     "name": "Date",
-     *     "options": {
-     *         "format": "Y-m-d H:i:s",
-     *         "messages": {
-     *             "dateInvalidDate": "datetime.compare.validation.message.invalid"
-     *         }
-     *     }
+     *      "name": "ValidateIf",
+     *      "options": {
+     *          "context_field": "startDate",
+     *          "context_values": {"-- ::00"},
+     *          "context_truth": false,
+     *          "allow_empty" : false,
+     *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
+     *              {
+     *                  "name": "Date",
+     *                  "options": {
+     *                      "format": "Y-m-d H:i:s",
+     *                      "messages": {
+     *                          "dateInvalidDate": "datetime.compare.validation.message.invalid"
+     *                      }
+     *                  },
+     *                  "break_chain_on_failure": true,
+     *              },
+     *              {
+     *                  "name": "DateCompare",
+     *                  "options": {
+     *                      "has_time": true,
+     *                      "compare_to":"endDate",
+     *                      "operator":"lt",
+     *                      "compare_to_label": "End date"
+     *                  }
+     *              },
+     *              {
+     *                  "name": "DateInFuture",
+     *              }
+     *          }
+     *      }
      * })
      */
     public $startDate = null;
