@@ -12,7 +12,7 @@ use Zend\Form\FormInterface;
  */
 class IrhpPermitWindow implements MapperInterface
 {
-    CONST PERMIT_WINDOW_DETAILS = 'permitWindowDetails';
+    const PERMIT_WINDOW_DETAILS = 'permitWindowDetails';
 
     /**
      * Should map data from a result array into an array suitable for a form
