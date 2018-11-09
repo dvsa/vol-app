@@ -5,7 +5,6 @@ namespace Admin\Controller;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\FeatureToggle;
 
-use Admin\Controller\AbstractIrhpPermitAdminController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\GetList as ListDto;
@@ -37,17 +36,17 @@ class IrhpPermitWindowController extends AbstractIrhpPermitAdminController imple
     protected $listDto = ListDto::class;
     protected $itemDto = ItemDto::class;
     protected $formClass = PermitWindowForm::class;
-    protected $addFormClass = PermitWindowForm::class;
     protected $mapperClass = PermitWindowMapper::class;
     protected $createCommand = CreateDto::class;
     protected $updateCommand = UpdateDto::class;
     protected $deleteCommand = DeleteDto::class;
 
     protected $hasMultiDelete = false;
-    protected $deleteModalTitle = 'Remove IRHP Permit Window';
-    protected $deleteConfirmMessage = 'Are you sure you want to remove this permit window?';
-    protected $deleteSuccessMessage = 'The permit window has been removed';
-    protected $addContentTitle = 'Add permit window';
+    protected $deleteModalTitle = 'Remove Permit Window';
+    protected $deleteConfirmMessage = 'Are you sure you want to remove this Permit Window?';
+    protected $deleteSuccessMessage = 'The Permit Window has been removed';
+    protected $addContentTitle = 'Add Permit Window';
+    protected $addSuccessMessage = 'New Permit Window created';
     protected $indexPageTitle = 'Permits';
 
     protected $tableViewTemplate = 'pages/irhp-permit-window/index';
@@ -91,11 +90,5 @@ class IrhpPermitWindowController extends AbstractIrhpPermitAdminController imple
         }
 
         return parent::indexAction();
-    }
-
-    public function addAction()
-    {
-        $this->defaultData = array_merge($this->defaultData, ['compareStartDate' => date("Y-m-d")]);
-        return parent::addAction();
     }
 }

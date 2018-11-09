@@ -14,7 +14,6 @@ use Olcs\Form\Model\Fieldset\Base;
 class IrhpPermitWindow extends Base
 {
     /**
-     * @Form\Name("permitWindowDetails")
      * @Form\ComposedObject("Admin\Form\Model\Fieldset\PermitWindowDetails")
      */
     public $permitWindowDetails = null;
@@ -22,7 +21,7 @@ class IrhpPermitWindow extends Base
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\FormCrudActionsShort")
+     * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;
 }

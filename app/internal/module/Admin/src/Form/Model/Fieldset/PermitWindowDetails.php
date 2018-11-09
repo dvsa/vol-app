@@ -2,11 +2,13 @@
 
 namespace Admin\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
 use Common\Form\Model\Form\Traits\IdTrait;
+use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore No methods
+ * @Form\Attributes({"class":"table__form"})
+ * @Form\Name("permitWindowDetails")
  */
 class PermitWindowDetails
 {
@@ -18,54 +20,99 @@ class PermitWindowDetails
     public $stockId = null;
 
     /**
-     * @Form\Required(true)
-     * @Form\Attributes({"class":"js-hidden","data-container-class":"js-hidden"})
-     * @Form\Options({
-     *     "create_empty_option": true,
-     *     "render_delimiters": false
-     * })
-     * @Form\Type("DateSelect")
-     * @Form\Name("compareStartDate")
-     */
-    public $compareStartDate = null;
-
-
-    /**
-     * @Form\Required(true)
+     * @Form\Type("DateTimeSelect")
+     * @form\Required(true)
+     * @Form\Attributes({"id":"startDate"})
      * @Form\Options({
      *     "label": "internal.community_licence.form.start_date",
      *     "create_empty_option": true,
+     *     "max_year_delta": "+1",
+     *     "min_year_delta": "0",
+     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""startDate"">Time</label>'HH:mm:ss'</div>'",
      *     "render_delimiters": false
      * })
-     * @Form\Type("DateSelect")
-     * @Form\Name("startDate")
-     * @Form\Filter({"name":"DateSelectNullifier"})
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateTimeSelectNullifier"})
+     * @Form\Validator({
+     *      "name": "ValidateIf",
+     *      "options": {
+     *          "context_field": "startDate",
+     *          "context_values": {"-- ::00"},
+     *          "context_truth": false,
+     *          "allow_empty" : false,
+     *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
+     *              {
+     *                  "name": "Date",
+     *                  "options": {
+     *                      "format": "Y-m-d H:i:s",
+     *                      "messages": {
+     *                          "dateInvalidDate": "datetime.compare.validation.message.invalid"
+     *                      }
+     *                  },
+     *                  "break_chain_on_failure": true,
+     *              },
+     *              {
+     *                  "name": "DateCompare",
+     *                  "options": {
+     *                      "has_time": true,
+     *                      "compare_to":"endDate",
+     *                      "operator":"lt",
+     *                      "compare_to_label": "End date"
+     *                  }
+     *              },
+     *              {
+     *                  "name": "DateInFuture",
+     *              }
+     *          }
+     *      }
+     * })
      */
     public $startDate = null;
 
     /**
+     * @Form\Type("DateTimeSelect")
      * @Form\Required(true)
+     * @Form\Attributes({"id":"endDate"})
      * @Form\Options({
      *     "label": "internal.community_licence.form.end_date",
      *     "create_empty_option": true,
-     *     "render_delimiters": false,
+     *     "max_year_delta": "+10",
+     *     "min_year_delta": "0",
+     *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""endDate"">Time</label>'HH:mm:ss'</div>'",
+     *     "render_delimiters": false
      * })
-     * @Form\Type("DateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Filter({"name": "DateTimeSelectNullifier"})
      * @Form\Validator({
-     *      "name": "DateCompare",
+     *      "name": "ValidateIf",
      *      "options": {
-     *          "has_time": false,
-     *          "allow_empty": true,
-     *          "compare_to": "startDate",
-     *          "operator": "gte",
-     *          "compare_to_label": "Start date",
-     *          "messageTemplates": {
-     *              "notGreaterThanOrEqual": "Window End Date must be later than Window Start Date"
+     *          "context_field": "endDate",
+     *          "context_values": {"-- ::00"},
+     *          "context_truth": false,
+     *          "allow_empty" : false,
+     *          "validators": {
+     *              {"name": "\Common\Validator\Date"},
+     *              {
+     *                  "name": "Date",
+     *                  "options": {
+     *                      "format": "Y-m-d H:i:s",
+     *                      "messages": {
+     *                          "dateInvalidDate": "datetime.compare.validation.message.invalid"
+     *                      }
+     *                  },
+     *                  "break_chain_on_failure": true,
+     *              },
+     *              {
+     *                  "name": "DateCompare",
+     *                  "options": {
+     *                      "has_time": true,
+     *                      "compare_to":"startDate",
+     *                      "operator":"gt",
+     *                      "compare_to_label": "Start date"
+     *                  }
+     *              },
+     *              {
+     *                  "name": "DateInFuture",
+     *              }
      *          }
      *      }
      * })
