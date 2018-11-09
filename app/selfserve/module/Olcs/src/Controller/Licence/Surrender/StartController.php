@@ -12,8 +12,19 @@ class StartController extends AbstractSelfserveController implements ToggleAware
         'default' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
     ];
 
-    public function indexAction()
+    protected $templateConfig = [
+        'index' => 'licence/surrender-index'
+    ];
+
+    public function IndexAction()
     {
-        // @todo  this controller requires unit tests
+        $translateService = $this->getServiceLocator()->get('Helper\Translation');
+        $view = parent::genericAction();
+        $view->setVariable('pageTitle', 'licence.surrender.start.title.psv');
+        $view->setVariable('body', 'markup-licence-surrender-start');
+        $view->setVariable('bodyReplace', [
+            $translateService->translate('licence.surrender.start.cancel.bus')
+        ]);
+        return $view;
     }
 }

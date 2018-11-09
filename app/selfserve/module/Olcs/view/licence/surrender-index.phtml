@@ -1,0 +1,22 @@
+<div class="row">
+    <?php echo $this->flashMessengerAll(); ?>
+    <div class="two-thirds">
+        <?php
+        echo $this->partial(
+            'partials/page-header-simple',
+            [
+                'pageTitle' => $this->translate($pageTitle),
+                'pageSubTitle' => 'OB2013691/1077962',
+                'backUrl' => [
+                    'url' => $this->url('dashboard'),
+                ],
+            ]s
+        );
+        ?>
+        <?php echo $this->translateReplace($body, $bodyReplace) ?>
+
+        <a href="review-contact-details" role="button" class="govuk-button govuk-button--start">
+            Start now
+        </a>
+    </div>
+</div>
