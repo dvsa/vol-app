@@ -20,24 +20,23 @@ class ValidEcmtPermitConstrainedCountries
             return $data;
         }
 
-        $newResults = [];
-        foreach ($data['validPermits']['results'] as $datum) {
-            $constrainedCountries = [];
+        $allCountries = $data['ecmtConstrainedCountries']['results'];
+        $allCountryIds = array_column($allCountries, 'id');
 
-            if (!empty($datum['countries'])) {
-                $allCountries = $data['ecmtConstrainedCountries']['results'];
-                foreach ($allCountries as $key => $row) {
-                    foreach ($datum['countries'] as $key2 => $row2) {
-                        if ($row['id'] == $row2['id']) {
-                            unset($allCountries[$key]);
-                            break;
-                        }
-                    }
+        $newResults = [];
+
+        foreach ($data['validPermits']['results'] as $permit) {
+            $includedCountryIds = array_column($permit['countries'], 'id');
+            $excludedCountryIds = array_diff($allCountryIds, $includedCountryIds);
+
+            $constrainedCountries = [];
+            foreach ($allCountries as $country) {
+                if (in_array($country['id'], $excludedCountryIds)) {
+                    $constrainedCountries[] = $country;
                 }
-                $constrainedCountries = $allCountries;
             }
             $newResults[] = [
-                'permitNumber' => $datum['permitNumber'],
+                'permitNumber' => $permit['permitNumber'],
                 'countries' => $constrainedCountries
             ];
         }
