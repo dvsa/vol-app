@@ -12,7 +12,7 @@ use Zend\Navigation\Navigation as ZendNavigation;
 use Common\Service\Cqrs\Query\QuerySender;
 use Common\FeatureToggle;
 use Common\Rbac\User as RbacUser;
-use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 
 /**
  * Class Navigation
@@ -153,7 +153,7 @@ class Navigation implements ListenerAggregateInterface
             return false;
         }
         //check whether user is allowed to access permits
-        $query = EligibleForPermits::create([]);
+        $query = MyAccount::create([]);
         $response = $this->querySender->send($query)->getResult();
 
         return $response['eligibleForPermits'];
