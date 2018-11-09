@@ -59,7 +59,16 @@ class EcmtLicenceData extends AbstractHelper
                             $ecmtLicence->unsetValueOption($key);
                         }
                     } else {
-                        $ecmtLicence->unsetValueOption($key);
+                        if (count($ecmtLicence->getValueOptions()) === 1) {
+                            $data['title'] = $this->view->translate('permits.page.ecmt.licence.saturated');
+                            $data['copy'] = $translator->translateReplace('markup-ecmt-licence-saturated', [$this->view->url('permits')]);
+                            $data['empty'] = true;
+                            $form->remove('Submit');
+
+                            return $data;
+                        } else {
+                            $ecmtLicence->unsetValueOption($key);
+                        }
                     }
                 }
             }
