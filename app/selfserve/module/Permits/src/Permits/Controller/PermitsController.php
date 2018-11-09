@@ -12,7 +12,7 @@ use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtLicence;
 
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\NextIrhpPermitStock;
-use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
@@ -679,7 +679,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
      */
     private function isEligibleForPermits(): bool
     {
-        $query = EligibleForPermits::create([]);
+        $query = MyAccount::create([]);
         $response = $this->handleQuery($query)->getResult();
 
         return $response['eligibleForPermits'];
