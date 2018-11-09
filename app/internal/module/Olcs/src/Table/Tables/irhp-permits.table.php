@@ -32,14 +32,7 @@ return [
         ],
         [
             'title' => 'Not valid for travel to',
-            'formatter' => function ($row) {
-                $c = [];
-                foreach ($row['constrainedCountries'] as $country) {
-                    $c[] = Escape::html($country['countryDesc']);
-                }
-                $return = empty($c) ? 'No exclusions' : implode(', ', $c);
-                return $return;
-            },
+            'formatter' => 'ConstrainedCountriesList',
         ],
         [
             'title' => 'Ceased Date',
