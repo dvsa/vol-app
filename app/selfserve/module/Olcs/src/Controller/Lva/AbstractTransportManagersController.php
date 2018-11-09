@@ -1315,7 +1315,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             'backLink' => null,
         ];
 
-        return $this->renderTmAction('transport-manager-application.print-sign', null, $tma, $params);
+        return $this->renderTmAction('transport-manager-application.postal', null, $tma, $params);
     }
 
     /**
