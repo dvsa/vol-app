@@ -3,6 +3,7 @@ namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateDeclaration;
+use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
@@ -39,6 +40,13 @@ class DeclarationController extends AbstractSelfserveController implements Toggl
             'command' => UpdateDeclaration::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => EcmtSection::ROUTE_ECMT_FEE,
+            'conditional' => [
+                'command' => EcmtSubmitApplication::class,
+                'params' => 'id',
+                'step' => EcmtSection::ROUTE_ECMT_FEE_WAIVED_SUBMITTED,
+                'field' => 'hasOutstandingFees',
+                'value' => 0
+            ]
         ],
     ];
 }
