@@ -71,7 +71,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     public function indexAction()
     {
         $eligibleForPermits = $this->isEligibleForPermits();
-        $organisationId = $this->getCurrentOrganisationId();
 
         $view = new ViewModel();
         if (!$eligibleForPermits) {
@@ -84,42 +83,39 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $query = EcmtPermitApplication::create(
             [
                 'order' => 'DESC',
-                'organisation' => $organisationId,
+                'organisation' => $this->getCurrentOrganisationId(),
                 'statusIds' => [
                     RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED,
                     RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION,
                     RefData::PERMIT_APP_STATUS_AWAITING_FEE,
                     RefData::PERMIT_APP_STATUS_FEE_PAID,
                     RefData::PERMIT_APP_STATUS_ISSUING,
+                    RefData::PERMIT_APP_STATUS_VALID,
                 ],
             ]
         );
         $response = $this->handleQuery($query);
-        $applicationData = $response->getResult();
+        $data = $response->getResult();
 
-        $applicationsTable = $this->getServiceLocator()
-            ->get('Table')
-            ->prepareTable($this->applicationsTableName, $applicationData['results']);
+        $applicationData = $issuedData = [];
 
-        $query = EcmtPermitApplication::create(
-            [
-                'order' => 'DESC',
-                'organisation' => $organisationId,
-                'statusIds' => [RefData::PERMIT_APP_STATUS_VALID]
-            ]
-        );
-        $response = $this->handleQuery($query);
-        $issuedData = $response->getResult();
+        foreach ($data['results'] as $item) {
+            if ($item['status']['id'] === RefData::PERMIT_APP_STATUS_VALID) {
+                $issuedData[] = $item;
+            } else {
+                $applicationData[] = $item;
+            }
+        }
 
-        $issuedTable = $this->getServiceLocator()
-            ->get('Table')
-            ->prepareTable($this->issuedTableName, $issuedData['results']);
+        $table = $this->getServiceLocator()->get('Table');
+        $issuedTable = $table->prepareTable($this->issuedTableName, $issuedData);
+        $applicationsTable = $table->prepareTable($this->applicationsTableName, $applicationData);
 
         $view->setVariable('isEligible', $eligibleForPermits);
-        $view->setVariable('issuedNo', $issuedData['count']);
-        $view->setVariable('applicationsNo', $applicationData['count']);
-        $view->setVariable('applicationsTable', $applicationsTable);
+        $view->setVariable('issuedNo', count($issuedData));
         $view->setVariable('issuedTable', $issuedTable);
+        $view->setVariable('applicationsNo', count($applicationData));
+        $view->setVariable('applicationsTable', $applicationsTable);
 
         return $view;
     }
