@@ -12,7 +12,6 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\FeatureToggle;
 use Common\RefData;
 use Common\Service\Cqrs\Exception\NotFoundException;
-use Dvsa\Olcs\Transfer\Command\Permits\AcceptEcmtPermits;
 use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
@@ -26,7 +25,7 @@ use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\IrhpPermitApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Data\Mapper\IrhpPermit as IrhpPermitMapper;
+use Olcs\Data\Mapper\IrhpPermitApplication as IrhpPermitApplicationMapper;
 use Olcs\Form\Model\Form\PermitCreate;
 use Zend\View\Model\ViewModel;
 
@@ -61,7 +60,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     protected $itemDto = ItemDto::class;
     protected $formClass = PermitCreate::class;
     protected $addFormClass = PermitCreate::class;
-    protected $mapperClass = IrhpPermitMapper::class;
+    protected $mapperClass = IrhpPermitApplicationMapper::class;
     protected $createCommand = CreateDto::class;
     protected $updateCommand = UpdateDto::class;
 
@@ -122,8 +121,13 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
      */
     public function getLeftView()
     {
-        $view = new ViewModel();
-        $view->setTemplate('sections/irhp-permit/partials/left');
+        $view = new ViewModel(
+            [
+                'navigationId' => 'irhp_permits',
+                'navigationTitle' => 'Application details'
+            ]
+        );
+        $view->setTemplate('admin/sections/admin/partials/generic-left');
 
         return $view;
     }
@@ -199,7 +203,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
             'sort' => 'id',
             'order' => 'ASC',
             'limit' => 50,
-
+            'id' => 1
         ]));
 
         $data = [];
