@@ -20,7 +20,7 @@ class FeePartSuccessfulController extends AbstractSelfserveController implements
     ];
 
     protected $dataSourceConfig = [
-        'default' => DataSourceConfig::PERMIT_APP_WITH_FEES,
+        'default' => DataSourceConfig::PERMIT_APP_FOR_ACCEPT_OR_DECLINE,
     ];
 
     protected $conditionalDisplayConfig = [

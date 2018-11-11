@@ -45,25 +45,21 @@ $translatorHelper = $this->getHelperPluginManager()->getServiceLocator()->get('H
                         <div>
                             <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.permit.validity')); ?></dt>
                             <dd>
-                                <?php
-                                    echo date(\DATE_FORMAT, strtotime($application['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['validFrom']));
-                                    echo ' ' . $this->translate('to') . ' ';
-                                    echo date(\DATE_FORMAT, strtotime($application['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['validTo']));
-                                ?>
+                                <?php echo $this->escapeHtml($application['validityPeriod']); ?>
                             </dd>
                         </div>
                         <div>
                             <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.issuing.fee')); ?></dt>
                             <dd>
-                                <?php echo $application['irhpPermitApplications'][0]['permitsAwarded']; ?> x
-                                <?php echo $this->currencyFormatter($application['issueFee']); ?> <br />
+                                <?php echo $this->escapeHtml($application['issuingFee']); ?>
+                                <br />
                                 <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_UNPAID_PERMITS, [], [], true); ?>">
                                     <?php echo $this->escapeHtml($this->translate('permits.page.view.permits')); ?>
                                 </a>
                             </dd>
 
                             <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.issuing.fee.total')); ?></dt>
-                            <dd><?php echo $this->currencyFormatter($application['totalFee']); ?> <?php echo $this->escapeHtml($this->translate('permits.page.non.refundable')); ?></dd>
+                            <dd><?php echo $this->escapeHtml($application['issuingFeeTotal']); ?></dd>
                         </div>
                         <div>
                             <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.payment.due')); ?></dt>
