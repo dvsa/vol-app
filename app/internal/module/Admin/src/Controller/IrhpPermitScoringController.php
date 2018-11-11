@@ -11,13 +11,13 @@ use Common\FeatureToggle;
 use Dvsa\Olcs\Transfer\Command\Permits\QueueAcceptScoring;
 use Dvsa\Olcs\Transfer\Command\Permits\QueueRunScoring;
 use Dvsa\Olcs\Transfer\Query\Permits\StockOperationsPermitted;
-use Olcs\Controller\AbstractInternalController;
+use Admin\Controller\AbstractIrhpPermitAdminController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 
-class IrhpPermitScoringController extends AbstractInternalController implements LeftViewProvider, ToggleAwareInterface
+class IrhpPermitScoringController extends AbstractIrhpPermitAdminController implements LeftViewProvider, ToggleAwareInterface
 {
     protected $toggleConfig = [
         'default' => [
@@ -49,7 +49,7 @@ class IrhpPermitScoringController extends AbstractInternalController implements 
         $view = new ViewModel(
             [
                 'navigationId' => 'admin-dashboard/admin-permits',
-                'navigationTitle' => 'Permits',
+                'navigationTitle' => '',
                 'stockId' => $this->params()->fromRoute()['stockId']
             ]
         );
