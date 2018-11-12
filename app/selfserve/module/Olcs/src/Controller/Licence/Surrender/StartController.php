@@ -39,8 +39,9 @@ class StartController extends AbstractSelfserveController implements ToggleAware
                 break;
         }
 
-        $view->setVariable('licenceNo', $licence['licNo']);
+        $view->setVariable('licNo', $licence['licNo']);
         $view->setVariable('body', 'markup-licence-surrender-start');
+        $view->setVariable('backUrl', $this->url()->fromRoute('lva-licence', ['licence' => $licence['id']]));
 
         return $view;
     }
