@@ -59,9 +59,6 @@ class PermitWindowDetails
      *                      "operator":"lt",
      *                      "compare_to_label": "End date"
      *                  }
-     *              },
-     *              {
-     *                  "name": "DateInFuture",
      *              }
      *          }
      *      }
