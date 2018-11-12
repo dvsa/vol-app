@@ -39,7 +39,7 @@ class ApplicationFees
      * @param string $date
      * @return string
      */
-    private function calculateDueDate($date)
+    private static function calculateDueDate($date)
     {
         $dueDate = date(\DATE_FORMAT, strtotime('+10 days', strtotime($date)));
         return $dueDate;
