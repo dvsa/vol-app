@@ -37,11 +37,10 @@ class AcceptOrDeclinePermits
      */
     private static function formatValidityPeriod($data)
     {
-        $stock['fromDate'] = $data['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['validFrom'];
-        $stock['toDate'] = $data['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['validTo'];
+        $stock = $data['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
 
-        $fromDate = date(\DATE_FORMAT, strtotime($stock['fromDate']));
-        $toDate = date(\DATE_FORMAT, strtotime($stock['toDate']));
+        $fromDate = date(\DATE_FORMAT, strtotime($stock['validFrom']));
+        $toDate = date(\DATE_FORMAT, strtotime($stock['validTo']));
 
         return $fromDate . ' to ' . $toDate; //@todo: need to translate the word 'to'
     }
