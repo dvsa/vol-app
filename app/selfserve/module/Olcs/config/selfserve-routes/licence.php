@@ -8,9 +8,9 @@ return [
         'licence' => [
             'type' => Segment::class,
             'options' => [
-                'route' => '/licence/:licence[/]',
+                'route' => '/licence/:id[/]',
                 'constraints' => [
-                    'licence' => '[0-9]+',
+                    'id' => '[0-9]+',
                 ],
             ],
             'may_terminate' => false,

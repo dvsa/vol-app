@@ -6,14 +6,14 @@
             'partials/page-header-simple',
             [
                 'pageTitle' => $this->translate($pageTitle),
-                'pageSubTitle' => 'OB2013691/1077962',
+                'pageSubTitle' => $licenceNo,
                 'backUrl' => [
                     'url' => $this->url('dashboard'),
                 ],
             ]
         );
         ?>
-        <?php echo $this->translateReplace($body, $bodyReplace) ?>
+        <?php echo $this->translateReplace($body, $cancelBus) ?>
 
         <a href="review-contact-details" role="button" class="govuk-button govuk-button--start">
             Start now
