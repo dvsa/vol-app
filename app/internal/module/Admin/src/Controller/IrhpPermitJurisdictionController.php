@@ -80,14 +80,7 @@ class IrhpPermitJurisdictionController extends AbstractIrhpPermitAdminController
             if ($postParams['action'] == 'Cancel') {
                 $this->redirect()->toRoute($this->navigationId . '/permits-system-settings');
             } else {
-                $parentId = $this->params()->fromRoute();
-                $trafficAreas = $postParams['trafficAreas'];
-
-                $cmdData = [
-                    'irhpPermitStock' => (int) $parentId,
-                    'trafficAreas' => $trafficAreas
-                ];
-
+                $cmdData = ['trafficAreas' => $postParams['trafficAreas']];
                 $response = $this->handleCommand(Update::create($cmdData));
 
                 if (!$response->isOk()) {

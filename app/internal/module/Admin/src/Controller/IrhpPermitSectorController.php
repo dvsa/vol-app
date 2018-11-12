@@ -81,14 +81,7 @@ class IrhpPermitSectorController extends AbstractIrhpPermitAdminController imple
             if ($postParams['action'] == 'Cancel') {
                 $this->redirect()->toRoute($this->navigationId . '/permits-system-settings');
             } else {
-                $parentId = $this->params()->fromRoute();
-                $sectors = $postParams['sectors'];
-
-                $cmdData = [
-                    'irhpPermitStock' => (int) $parentId,
-                    'sectors' => $sectors
-                ];
-
+                $cmdData = ['sectors' => $postParams['sectors']];
                 $response = $this->handleCommand(Update::create($cmdData));
 
                 if (!$response->isOk()) {
