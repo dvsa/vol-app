@@ -2,10 +2,13 @@
 
 namespace Olcs\Controller\Config\DataSource;
 
-use Dvsa\Olcs\Transfer\Query\Licence\Licence as Licence;
+use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
 
 class Licence extends AbstractDataSource
 {
     const DATA_KEY = 'licence';
-    protected $dto = Licence::class;
+    protected $dto = LicenceDto::class;
+    protected $paramsMap = [
+        'licence' => 'id'
+    ];
 }
