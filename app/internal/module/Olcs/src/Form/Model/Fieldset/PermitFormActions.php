@@ -20,8 +20,8 @@ class PermitFormActions
 
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"backToPermitList"})
-     * @Form\Options({"label": "Back"})
+     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"closeModal"})
+     * @Form\Options({"label": "Cancel"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $back = null;
