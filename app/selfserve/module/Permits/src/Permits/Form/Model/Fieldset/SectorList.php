@@ -12,7 +12,6 @@ class SectorList
 
     /**
      * @Form\Name("SectorList")
-     * @Form\Required(true)
      * @Form\Options({
      *     "fieldset-attributes": {"id": "sector-list"},
      *     "fieldset-data-group": "sector-list",

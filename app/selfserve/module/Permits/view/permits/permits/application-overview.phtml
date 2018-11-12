@@ -23,49 +23,64 @@
             Further <a href=<?php echo $this->translate('permits.link.ecmt.guidance') ?>>guidance on ECMT permits</a> is available on GOV.UK.</p>
 
         <div class="field">
-           <div class="table_wrapper">
-               <ol class="overview__list">
-                   <?php
-                       $sections = $this->ecmtSection($application);
+            <div class="table_wrapper">
+                <ol class="overview__list">
+                    <?php
+                    $sections = $this->ecmtSection($application);
 
-                       foreach ($sections as $section) {
-                           echo $this->render($section);
-                       }
-                   ?>
-               </ol>
+                    foreach ($sections as $section) {
+                        echo $this->render($section);
+                    }
+                    ?>
+                </ol>
             </div>
-            <div class="actions-container new-application--wrapper">
-                <?php if ($application['canBeSubmitted']) { ?>
-                    <p><a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_FEE, [], [], true); ?>" class="action--primary large"><?php echo $this->escapeHtml($this->translate('permits.button.accept-and-continue')); ?></a></p>
-                <?php } ?>
-            </div>
+            <?php
+            if ($application['canBeSubmitted']) {
+                $url = $this->url('permits/' . EcmtSection::ROUTE_ECMT_FEE, [], [], true);
+
+                if (!$application['hasOutstandingFees']) {
+                    $url = $this->url('permits/' . EcmtSection::ROUTE_ECMT_DECLARATION, [], [], true);
+                }
+            ?>
+                <a href="<?php echo $url; ?>" class="govuk-button govuk-!-margin-top-5">
+                    <?php echo $this->escapeHtml($this->translate('permits.button.accept-and-continue')); ?>
+                </a>
+            <?php } ?>
         </div>
     </div>
-<!-- SIDE PANEL -->
+    <!-- SIDE PANEL -->
     <div class="one-third">
         <aside class="sidebar" role="complementary">
 
             <div class="info-box info-box--grey">
                 <h2 class="info-box__heading">Progress</h2>
-                <p><b><?php echo $this->escapeHtml($application['sectionCompletion']['totalCompleted']); ?> of <?php echo $this->escapeHtml($application['sectionCompletion']['totalSections']); ?> complete</b></p>
-                <p><b>Fee per permit </b> <?php echo $this->currencyFormatter($fee['appFee']); ?> <br />(non-refundable)</p>
-                <p><b>Total application fee: </b> <?php echo $this->currencyFormatter($fee['appFee'] * $application['permitsRequired']); ?></p>
+                <p><b><?php echo $this->escapeHtml($application['sectionCompletion']['totalCompleted']); ?>
+                        of <?php echo $this->escapeHtml($application['sectionCompletion']['totalSections']); ?>
+                        complete</b></p>
+                <p><b>Fee per permit </b> <?php echo $this->currencyFormatter($fee['appFee']); ?> <br/>(non-refundable)
+                </p>
+                <p><b>Total application
+                        fee: </b> <?php echo $this->currencyFormatter($fee['appFee'] * $application['permitsRequired']); ?>
+                </p>
                 <p>You can't submit until you've completed all of the sections</p>
             </div>
 
             <div class="info-box info-box--grey">
                 <h2 class="info-box__heading">Application status</h2>
-                <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><?php echo $this->escapeHtml($application['status']['description']); ?></p>
+                <p class="info-box__icon-wrapper"><i
+                            class="info-box__icon selfserve-important"></i><?php echo $this->escapeHtml($application['status']['description']); ?>
+                </p>
                 <?php
-                    if ($application['canBeCancelled']) {
-                ?>
+                if ($application['canBeCancelled']) {
+                    ?>
                     <ul class="info-box__links">
                         <li>
-                            <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_CANCEL_APPLICATION, [], [], true); ?>">Cancel application</a>
+                            <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_CANCEL_APPLICATION, [], [], true); ?>">Cancel
+                                application</a>
                         </li>
                     </ul>
-                <?php
-                    }
+                    <?php
+                }
                 ?>
             </div>
 

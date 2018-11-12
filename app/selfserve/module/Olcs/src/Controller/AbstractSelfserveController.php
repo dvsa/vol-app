@@ -217,6 +217,21 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                     $this->handleResponse($response);
                 }
 
+                if (isset($config['conditional'])) {
+                    if ($this->data['application'][$config['conditional']['field']] === $config['conditional']['value']) {
+                        if (isset($config['conditional']['command'])) {
+                            $conditionalCommand = $config['conditional']['command']::create([
+                                $config['conditional']['params'] => $this->data['application'][$config['conditional']['params']]
+                            ]);
+                            $conditionalResponse = $this->handleCommand($conditionalCommand);
+                            $this->handleResponse($conditionalResponse);
+                        }
+
+                        return $this->redirect()
+                            ->toRoute('permits/' . $config['conditional']['step'], ['id' => $this->data['application']['id']]);
+                    }
+                }
+
                 return $this->handleSaveAndReturnStep($this->postParams, $config['step']);
             }
         }

@@ -12,7 +12,7 @@ use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtLicence;
 
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\NextIrhpPermitStock;
-use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
@@ -71,7 +71,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     public function indexAction()
     {
         $eligibleForPermits = $this->isEligibleForPermits();
-        $organisationId = $this->getCurrentOrganisationId();
 
         $view = new ViewModel();
         if (!$eligibleForPermits) {
@@ -84,42 +83,39 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $query = EcmtPermitApplication::create(
             [
                 'order' => 'DESC',
-                'organisation' => $organisationId,
+                'organisation' => $this->getCurrentOrganisationId(),
                 'statusIds' => [
                     RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED,
                     RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION,
                     RefData::PERMIT_APP_STATUS_AWAITING_FEE,
                     RefData::PERMIT_APP_STATUS_FEE_PAID,
                     RefData::PERMIT_APP_STATUS_ISSUING,
+                    RefData::PERMIT_APP_STATUS_VALID,
                 ],
             ]
         );
         $response = $this->handleQuery($query);
-        $applicationData = $response->getResult();
+        $data = $response->getResult();
 
-        $applicationsTable = $this->getServiceLocator()
-            ->get('Table')
-            ->prepareTable($this->applicationsTableName, $applicationData['results']);
+        $applicationData = $issuedData = [];
 
-        $query = EcmtPermitApplication::create(
-            [
-                'order' => 'DESC',
-                'organisation' => $organisationId,
-                'statusIds' => [RefData::PERMIT_APP_STATUS_VALID]
-            ]
-        );
-        $response = $this->handleQuery($query);
-        $issuedData = $response->getResult();
+        foreach ($data['results'] as $item) {
+            if ($item['status']['id'] === RefData::PERMIT_APP_STATUS_VALID) {
+                $issuedData[] = $item;
+            } else {
+                $applicationData[] = $item;
+            }
+        }
 
-        $issuedTable = $this->getServiceLocator()
-            ->get('Table')
-            ->prepareTable($this->issuedTableName, $issuedData['results']);
+        $table = $this->getServiceLocator()->get('Table');
+        $issuedTable = $table->prepareTable($this->issuedTableName, $issuedData);
+        $applicationsTable = $table->prepareTable($this->applicationsTableName, $applicationData);
 
         $view->setVariable('isEligible', $eligibleForPermits);
-        $view->setVariable('issuedNo', $issuedData['count']);
-        $view->setVariable('applicationsNo', $applicationData['count']);
-        $view->setVariable('applicationsTable', $applicationsTable);
+        $view->setVariable('issuedNo', count($issuedData));
         $view->setVariable('issuedTable', $issuedTable);
+        $view->setVariable('applicationsNo', count($applicationData));
+        $view->setVariable('applicationsTable', $applicationsTable);
 
         return $view;
     }
@@ -148,11 +144,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         }
 
         $form = $this->getForm('EcmtLicenceForm');
-        $query = NextIrhpPermitStock::create(['permitType' => 'permit_ecmt']);
-        $stock = $this->handleQuery($query)->getResult();
-
-        $view = new ViewModel(['form' => $form, 'stock' => $stock, 'application' => []]);
-        $view->setTemplate('permits/ecmt-licence');
 
         $data = $this->params()->fromPost();
         if (isset($data['Submit']['SubmitButton'])) {
@@ -160,15 +151,24 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             $form->setData($data);
             if ($form->isValid()) {
                 $command = CreateEcmtPermitApplication::create(['licence'=> $data['Fields']['EcmtLicence']]);
-                    $response = $this->handleCommand($command);
-                    $insert = $response->getResult();
+                $response = $this->handleCommand($command);
+                $insert = $response->getResult();
 
-                    $this->redirect()
-                        ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $insert['id']['ecmtPermitApplication']]);
+                return $this->redirect()
+                    ->toRoute(
+                        'permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW,
+                        ['id' => $insert['id']['ecmtPermitApplication']]
+                    );
             } else {
                 $form->get('Fields')->get('EcmtLicence')->setMessages(['isEmpty' => "error.messages.ecmt-licence"]);
             }
         }
+
+        $query = NextIrhpPermitStock::create(['permitType' => 'permit_ecmt']);
+        $stock = $this->handleQuery($query)->getResult();
+
+        $view = new ViewModel(['form' => $form, 'stock' => $stock, 'application' => []]);
+        $view->setTemplate('permits/ecmt-licence');
 
         return $view;
     }
@@ -178,13 +178,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
 
-        $query = NextIrhpPermitStock::create(['permitType' => $application['permitType']['id']]);
-        $stock = $this->handleQuery($query)->getResult();
-
         $form = $this->getForm('EcmtLicenceForm');
-
-        $view = new ViewModel(['form' => $form, 'application' => $application, 'stock' => $stock]);
-        $view->setTemplate('permits/ecmt-licence');
 
         $data = $this->params()->fromPost();
 
@@ -208,6 +202,12 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 $form->get('Fields')->get('EcmtLicence')->setMessages(['isEmpty' => "error.messages.ecmt-licence"]);
             }
         }
+
+        $query = NextIrhpPermitStock::create(['permitType' => $application['permitType']['id']]);
+        $stock = $this->handleQuery($query)->getResult();
+
+        $view = new ViewModel(['form' => $form, 'application' => $application, 'stock' => $stock]);
+        $view->setTemplate('permits/ecmt-licence');
 
         return $view;
     }
@@ -264,7 +264,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
                     $command = UpdateEcmtCountries::create(['id' => $id, 'countryIds' => $countryIds]);
                     $this->handleCommand($command);
-                    $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_NO_OF_PERMITS);
+                    return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_NO_OF_PERMITS);
                 } else {
                     //conditional validation failed, restricted countries list should not be empty
                     $form->get('Fields')
@@ -288,13 +288,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
 
-        $trafficArea = $application['licence']['trafficArea'];
-        $trafficAreaName = $trafficArea['name'];
-
-        $licenceTrafficArea = $application['licence']['licNo'] . ' (' . $trafficAreaName . ')';
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $tripsHint = $translationHelper->translateReplace('permits.page.trips.form.hint', [$licenceTrafficArea]);
-
         //Create form from annotations
         $form = $this->getForm('TripsForm');
 
@@ -314,7 +307,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 if ($this->isHighIntensity($application, $data['Fields']['tripsAbroad']) && $data['Fields']['intensityWarning'] === 'no') {
                     $form->get('Fields')->get('intensityWarning')->setValue('yes');
                 } else {
-                    $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
+                    return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
                 }
             }
         }
@@ -369,7 +362,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 if ($data['Fields']['InternationalJourney'] === RefData::ECMT_APP_JOURNEY_OVER_90 && $data['Fields']['intensityWarning'] === 'no') {
                     $form->get('Fields')->get('intensityWarning')->setValue('yes');
                 } else {
-                    $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_SECTORS);
+                    return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_SECTORS);
                 }
             } else {
                 //Custom Error Message
@@ -414,7 +407,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
                     $this->handleCommand($command);
 
-                    $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_CHECK_ANSWERS);
+                    return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_CHECK_ANSWERS);
             } else {
                 //Custom Error Message
                 $form->get('Fields')
@@ -430,9 +423,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     {
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
-
-        $ecmtPermitFees = $this->getEcmtPermitFees();
-        $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
 
         //Create form from annotations
         $form = $this->getForm('PermitsRequiredForm');
@@ -454,15 +444,18 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                         'permitsRequired' => $data['Fields']['permitsRequired']
                     ]
                 );
-                $response = $this->handleCommand($command);
+                $this->handleCommand($command);
 
-                $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_TRIPS);
+                return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_TRIPS);
             }
         }
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $totalVehicles = $translationHelper->translateReplace('permits.form.permits-required.hint', [$application['licence']['totAuthVehicles']]);
         $form->get('Fields')->get('permitsRequired')->setOption('hint', $totalVehicles);
+
+        $ecmtPermitFees = $this->getEcmtPermitFees();
+        $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
 
         return array('form' => $form, 'id' => $id, 'ecmtApplicationFee' => $ecmtApplicationFee, 'ref' => $application['applicationRef']);
     }
@@ -471,12 +464,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     {
         $id = $this->params()->fromRoute('id', -1);
 
-        $application = $this->getApplication($id);
         $data = $this->params()->fromPost();
-
-        $query = Licence::create(['id' => $this->params()->fromQuery('licenceId')]);
-        $response = $this->handleQuery($query);
-        $newLicence = $response->getResult();
 
         //Create form from annotations
         $form = $this->getForm('ChangeLicenceForm');
@@ -486,19 +474,26 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
             if ($form->isValid()) {
                 $command = UpdateEcmtLicence::create(['id' => $id, 'licence' => $data['Fields']['licenceId']]);
-                $response = $this->handleCommand($command);
-                $insert = $response->getResult();
-                $this->redirect()
+                $this->handleCommand($command);
+
+                return $this->redirect()
                     ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
             }
         }
 
-        $formData['Fields']['licenceId'] = $this->getRequest()->getQuery('licenceId');
+        $licenceId = $this->params()->fromQuery('licenceId');
+        $formData['Fields']['licenceId'] = $licenceId;
         $form->setData($formData);
+
+        $query = Licence::create(['id' => $licenceId]);
+        $response = $this->handleQuery($query);
+        $newLicence = $response->getResult();
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $confirmChangeLabel = $translationHelper->translateReplace('permits.form.change_licence.label', [$newLicence['licNo']]);
         $form->get('Fields')->get('ConfirmChange')->setLabel($confirmChangeLabel);
+
+        $application = $this->getApplication($id);
 
         $view = new ViewModel();
 
@@ -679,7 +674,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
      */
     private function isEligibleForPermits(): bool
     {
-        $query = EligibleForPermits::create([]);
+        $query = MyAccount::create([]);
         $response = $this->handleQuery($query)->getResult();
 
         return $response['eligibleForPermits'];
