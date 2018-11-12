@@ -1,5 +1,6 @@
 <?php
 
+use Olcs\Controller\Licence\Surrender\ReviewContactDetailsController;
 use Zend\Mvc\Router\Http\Literal;
 use Zend\Mvc\Router\Http\Segment;
 
@@ -29,6 +30,16 @@ return [
                                 'route' => 'start[/]',
                                 'defaults' => [
                                     'controller' => 'SurrenderStart',
+                                    'action' => 'index',
+                                ],
+                            ],
+                        ],
+                        'review-contact-details' => [
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => ':surrender/review-contact-details[/]',
+                                'defaults' => [
+                                    'controller' => ReviewContactDetailsController::class,
                                     'action' => 'index',
                                 ],
                             ],
