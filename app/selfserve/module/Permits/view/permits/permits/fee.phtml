@@ -2,6 +2,7 @@
     $title = $this->translate('permits.page.fee.title');
     $this->headTitle($title);
     $application = $data['application'];
+    $irhpPermitStock = $application['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
     $fee = $data['irhpFeeList'];
 ?>
 
@@ -70,7 +71,13 @@
                             <?php echo $this->escapeHtml($this->translate('permits.page.fee.permit.validity')); ?>
                         </dt>
                         <dd>
-                            January 2019 to December 2019
+                            <?php echo $this->translateReplace(
+                                'permits.page.fee.permit.validity.dates',
+                                [
+                                    $this->date(strtotime($irhpPermitStock['validFrom']), "d F Y"),
+                                    $this->date(strtotime($irhpPermitStock['validTo']), "d F Y")
+                                ]
+                            ); ?>
                         </dd>
                     </div>
                     <div>
