@@ -26,7 +26,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
         $licence = $this->data['licence'];
         $translateService = $this->getServiceLocator()->get('Helper\Translation');
 
-        $view = parent::genericAction();
+        $view = $this->genericView();
 
         switch ( $licence['goodsOrPsv']['id']) {
             case 'lcat_gv':
