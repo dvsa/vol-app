@@ -33,6 +33,16 @@ return [
                                 ],
                             ],
                         ],
+                        'address-details' => [
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'address-details[/]',
+                                'defaults' => [
+                                    'controller' => 'AddressDetails',
+                                    'action' => 'index',
+                                ],
+                            ],
+                        ],
                     ]
                 ],
             ],
