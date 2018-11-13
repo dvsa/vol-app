@@ -28,6 +28,7 @@ abstract class AbstractDocumentController extends AbstractController
         'busReg'           => 'licence/bus-docs',
         'transportManager' => 'transport-manager/documents',
         'irfoOrganisation' => 'operator/documents',
+        'ecmtPermitApplication' => 'licence/irhp-docs',
     ];
 
     /**
@@ -77,6 +78,8 @@ abstract class AbstractDocumentController extends AbstractController
                 return 'busRegId';
             case 'irfoOrganisation':
                 return 'organisation';
+            case 'ecmtPermitApplication':
+                return 'permitid';
 
             default:
                 return $type;
@@ -136,11 +139,15 @@ abstract class AbstractDocumentController extends AbstractController
 
         if ($ajax) {
             return $this->redirect()->toRouteAjax(
-                $route, $routeParams, ['query' => $this->getRequest()->getQuery()->toArray()]
+                $route,
+                $routeParams,
+                ['query' => $this->getRequest()->getQuery()->toArray()]
             );
         }
         return $this->redirect()->toRoute(
-            $route, $routeParams, ['query' => $this->getRequest()->getQuery()->toArray()]
+            $route,
+            $routeParams,
+            ['query' => $this->getRequest()->getQuery()->toArray()]
         );
     }
 

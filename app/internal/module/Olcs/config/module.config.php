@@ -328,6 +328,7 @@ return array(
             'IrhpPermitApplicationController' => 'Olcs\Controller\IrhpPermits\IrhpPermitApplicationController',
             'IrhpPermitFeesController' => 'Olcs\Controller\IrhpPermits\IrhpPermitFeesController',
             'IrhpPermitController' => 'Olcs\Controller\IrhpPermits\IrhpPermitController',
+            'IrhpDocsController' => 'Olcs\Controller\IrhpPermits\IrhpDocsController',
         ),
         'factories' => [
             TmCntr\Details\TransportManagerDetailsResponsibilityController::class =>

@@ -133,6 +133,10 @@ class DocumentUploadController extends AbstractDocumentController
                 $data['licence'] = $routeParams['licence'];
                 break;
 
+            case 'ecmtPermitApplication':
+                $data['licence'] = $routeParams['licence'];
+                break;
+
             default:
                 break;
         }
@@ -156,7 +160,6 @@ class DocumentUploadController extends AbstractDocumentController
             $messages = $response->getResult()['messages'];
 
             if (isset($messages['ERR_MIME'])) {
-
                 $formMessages = [
                     'details' => [
                         'file' => [
