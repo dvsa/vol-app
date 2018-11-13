@@ -54,9 +54,7 @@ class Trips
      *         }
      *     }
      * })
-
-
-     * @Form\Type("Zend\Form\Element\Number")
+     * @Form\Type("Zend\Form\Element\Text")
      */
     public $tripsAbroad = null;
 }

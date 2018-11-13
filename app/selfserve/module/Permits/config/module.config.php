@@ -337,6 +337,20 @@ return array(
                 ],
                 'may_terminate' => false,
               ],
+              'ecmt-fee-waived-submitted' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/:id/ecmt-fee-waived-submitted[/]',
+                      'defaults' => [
+                          'controller' => SubmittedController::class,
+                          'action'     => 'fee-waived',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
               'ecmt-valid-permits' => [
                 'type'    => 'segment',
                 'options' => [

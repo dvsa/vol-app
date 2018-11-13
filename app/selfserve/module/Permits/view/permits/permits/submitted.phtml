@@ -5,7 +5,13 @@
 
 <div class="row ecmt">
     <div class="two-thirds">
-        <?php echo sprintf($this->translate($this->escapeHtml($partialName)), $this->escapeHtml($this->translate($mainName)), $this->escapeHtml($data['application']['applicationRef']), $receiptUrl); ?>
+        <?php echo sprintf(
+                $this->translate($this->escapeHtml($partialName)),
+                $this->escapeHtml($this->translate($mainName)),
+                $this->escapeHtml($data['application']['applicationRef']),
+                $receiptUrl,
+                $visuallyHidden
+        ); ?>
         <div class="actions-container new-application--wrapper">
             <p>
                 <a href="<?php echo $this->escapeHtml($this->url('permits')); ?>" class="action--primary large" role="button">
