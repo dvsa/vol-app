@@ -5,6 +5,7 @@ namespace Olcs\Controller\Licence\Surrender;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
+use Olcs\Controller\Config\DataSource\DataSourceInterface;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 
 class StartController extends AbstractSelfserveController implements ToggleAwareInterface
@@ -20,9 +21,21 @@ class StartController extends AbstractSelfserveController implements ToggleAware
     protected $dataSourceConfig = [
         'index' => DataSourceConfig::LICENCE
     ];
+    /**
+     * @var DataSourceInterface
+     */
+    private $dataSource;
+
+    public function __construct(DataSourceInterface $dataSource)
+    {
+
+        $this->dataSource = $dataSource;
+
+    }
 
     /**
      * IndexAction
+     *
      * @return array|\Zend\View\Model\ViewModel
      */
     public function indexAction()
@@ -48,6 +61,11 @@ class StartController extends AbstractSelfserveController implements ToggleAware
         $view->setVariable('backUrl', $this->url()->fromRoute('lva-licence', ['licence' => $licence['id']]));
 
         return $view;
+    }
+
+    public function startAction()
+    {
+
     }
 
     private function getGvData()

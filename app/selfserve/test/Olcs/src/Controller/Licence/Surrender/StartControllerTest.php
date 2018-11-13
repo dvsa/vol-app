@@ -1,13 +1,14 @@
 <?php
+
 namespace OlcsTest\Controller\Licence\Surrender;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Licence\Surrender\StartController;
-use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
+use Zend\View\View;
 
 class StartControllerTest extends MockeryTestCase
 {
-    use ControllerTestTrait;
+
 
 
     protected $sut;
@@ -16,12 +17,13 @@ class StartControllerTest extends MockeryTestCase
     public function setUp()
     {
         $this->sut = new StartController();
-        
+        $this->sut->
     }
 
     public function testIndexAction()
     {
-
+        $actual = $this->sut->indexAction();
+        $this->assertInstanceOf(View::class, $actual);
     }
 
     protected function getServiceManager()
