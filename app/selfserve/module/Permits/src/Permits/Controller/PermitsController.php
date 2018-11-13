@@ -423,21 +423,18 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     public function permitsRequiredAction()
     {
         $id = $this->params()->fromRoute('id', -1);
-        $application = $this->getApplication($id);
 
         //Create form from annotations
         $form = $this->getForm('PermitsRequiredForm');
 
-        $existing['Fields']['permitsRequired'] = $application['permitsRequired'];
-        $form->setData($existing);
+        $setDefaultValues = true;
 
         $data = $this->params()->fromPost();
 
         if (!empty($data)) {
-            $data['Fields']['numVehicles'] = $application['licence']['totAuthVehicles'];
-
             //Validate
             $form->setData($data);
+
             if ($form->isValid()) {
                 $command = UpdateEcmtPermitsRequired::create(
                     [
@@ -448,11 +445,29 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 $this->handleCommand($command);
 
                 return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_TRIPS);
+            } else {
+                $setDefaultValues = false;
             }
         }
 
+        $application = $this->getApplication($id);
+        $numberOfVehicles = $application['licence']['totAuthVehicles'];
+
+        if ($setDefaultValues) {
+            $existing = [
+                'Fields' => [
+                    'permitsRequired' => $application['permitsRequired'],
+                    'numVehicles' => $numberOfVehicles,
+                ]
+            ];
+            $form->setData($existing);
+        }
+
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $totalVehicles = $translationHelper->translateReplace('permits.form.permits-required.hint', [$application['licence']['totAuthVehicles']]);
+        $totalVehicles = $translationHelper->translateReplace(
+            'permits.form.permits-required.hint',
+            [$numberOfVehicles]
+        );
         $form->get('Fields')->get('permitsRequired')->setOption('hint', $totalVehicles);
 
         $ecmtPermitFees = $this->getEcmtPermitFees();
@@ -725,7 +740,14 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
      */
     private function getEcmtPermitFees()
     {
-        $query = EcmtPermitFees::create(['productReferences' => [$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE, $this::ECMT_ISSUING_FEE_PRODUCT_REFENCE]]);
+        $query = EcmtPermitFees::create(
+            [
+                'productReferences' => [
+                    self::ECMT_APPLICATION_FEE_PRODUCT_REFENCE,
+                    self::ECMT_ISSUING_FEE_PRODUCT_REFENCE
+                ]
+            ]
+        );
         $response = $this->handleQuery($query);
         return $response->getResult();
     }
