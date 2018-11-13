@@ -21,14 +21,18 @@ class StartController extends AbstractSelfserveController implements ToggleAware
         'index' => DataSourceConfig::LICENCE
     ];
 
-    public function IndexAction()
+    /**
+     * IndexAction
+     * @return array|\Zend\View\Model\ViewModel
+     */
+    public function indexAction()
     {
         $licence = $this->data['licence'];
         $translateService = $this->getServiceLocator()->get('Helper\Translation');
 
         $view = parent::genericAction();
 
-        switch ( $licence['goodsOrPsv']['id']) {
+        switch ($licence['goodsOrPsv']['id']) {
             case 'lcat_gv':
                 $view->setVariables($this->getGvData());
                 break;
@@ -46,7 +50,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
         return $view;
     }
 
-    protected function getGvData()
+    private function getGvData()
     {
         return [
             'pageTitle' => 'licence.surrender.start.title.gv',
@@ -54,7 +58,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
         ];
     }
 
-    protected function getPsvData($translateService)
+    private function getPsvData($translateService)
     {
         return [
             'pageTitle' => 'licence.surrender.start.title.psv',
