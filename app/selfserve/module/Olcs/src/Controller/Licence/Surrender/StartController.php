@@ -5,7 +5,6 @@ namespace Olcs\Controller\Licence\Surrender;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
-use Olcs\Controller\Config\DataSource\DataSourceInterface;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 
 class StartController extends AbstractSelfserveController implements ToggleAwareInterface
@@ -21,48 +20,16 @@ class StartController extends AbstractSelfserveController implements ToggleAware
     protected $dataSourceConfig = [
         'index' => DataSourceConfig::LICENCE
     ];
-    /**
-     * @var DataSourceInterface
-     */
-    private $dataSource;
 
-    public function __construct(DataSourceInterface $dataSource)
-    {
-        $this->dataSource = $dataSource;
-    }
+    protected $formConfig = [
+        'index' => [
+            'startForm' => [
+                    'formClass' => \Olcs\Form\Model\Form\Surrender\Start::class
+            ]
+        ]
+    ];
 
-    public function retrieveData()
-    {
-        $dataSourceConfig = $this->configsForAction('dataSourceConfig');
 
-        //retrieve DTO data
-        foreach ($dataSourceConfig as $dataSource => $config) {
-            /**
-             * @var DataSourceInterface $source
-             * @var QueryInterface $query
-             */
-            $source = $this->dataSource;
-            $query = $source->queryFromParams(array_merge($this->routeParams, $this->queryParams));
-
-            $response = $this->handleQuery($query);
-            $data = $this->handleResponse($response);
-
-            if (isset($config['mapper'])) {
-                $mapper = isset($config['mapper']) ? $config['mapper'] : DefaultMapper::class;
-                $data = $mapper::mapForDisplay($data);
-            }
-            $this->data[$source::DATA_KEY] = $data;
-            if (isset($config['append'])) {
-                foreach ($config['append'] as $appendTo => $mapper) {
-                    $combinedData = [
-                        $appendTo => $this->data[$appendTo],
-                        $source::DATA_KEY => $data
-                    ];
-                    $this->data[$appendTo] = $mapper::mapForDisplay($combinedData);
-                }
-            }
-        }
-    }
     /**
      * IndexAction
      *
@@ -89,13 +56,9 @@ class StartController extends AbstractSelfserveController implements ToggleAware
         $view->setVariable('licNo', $licence['licNo']);
         $view->setVariable('body', 'markup-licence-surrender-start');
         $view->setVariable('backUrl', $this->url()->fromRoute('lva-licence', ['licence' => $licence['id']]));
+        $view->setVariable('startForm', $this->form);
 
         return $view;
-    }
-
-    public function startAction()
-    {
-
     }
 
     private function getGvData()
