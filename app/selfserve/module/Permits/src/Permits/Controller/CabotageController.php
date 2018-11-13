@@ -36,6 +36,8 @@ class CabotageController extends AbstractSelfserveController implements ToggleAw
 
     protected $postConfig = [
         'default' => [
+            'retrieveData' => false,
+            'checkConditionalDisplay' => false,
             'command' => UpdateEcmtCabotage::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => EcmtSection::ROUTE_ECMT_COUNTRIES,

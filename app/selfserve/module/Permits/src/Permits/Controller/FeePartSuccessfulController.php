@@ -37,6 +37,8 @@ class FeePartSuccessfulController extends AbstractSelfserveController implements
 
     protected $postConfig = [
         'generic' => [
+            'retrieveData' => false,
+            'checkConditionalDisplay' => false,
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => EcmtSection::ROUTE_ECMT_PAYMENT_ACTION,
         ]
