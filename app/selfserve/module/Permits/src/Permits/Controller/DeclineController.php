@@ -38,6 +38,8 @@ class DeclineController extends AbstractSelfserveController implements ToggleAwa
 
     protected $postConfig = [
         'generic' => [
+            'retrieveData' => false,
+            'checkConditionalDisplay' => false,
             'command' => DeclineEcmtPermits::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => EcmtSection::ROUTE_ECMT_DECLINE_CONFIRMATION,
