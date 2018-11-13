@@ -286,30 +286,43 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     public function tripsAction()
     {
         $id = $this->params()->fromRoute('id', -1);
-        $application = $this->getApplication($id);
 
         //Create form from annotations
         $form = $this->getForm('TripsForm');
-
-        $existing['Fields']['tripsAbroad'] = $application['trips'];
-        $existing['Fields']['intensityWarning'] = 'no';
-        $form->setData($existing);
+        $setDefaultValues = true;
 
         $data = $this->params()->fromPost();
 
         if (!empty($data)) {
             //Validate
             $form->setData($data);
+            $setDefaultValues = false;
 
             if ($form->isValid()) {
                 $command = UpdateEcmtTrips::create(['id' => $id, 'ecmtTrips' => $data['Fields']['tripsAbroad']]);
                 $this->handleCommand($command);
-                if ($this->isHighIntensity($application, $data['Fields']['tripsAbroad']) && $data['Fields']['intensityWarning'] === 'no') {
+
+                if ($data['Fields']['intensityWarning'] === 'no'
+                    && $this->isHighIntensity($data['Fields']['permitsRequired'], $data['Fields']['tripsAbroad'])
+                ) {
                     $form->get('Fields')->get('intensityWarning')->setValue('yes');
                 } else {
                     return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
                 }
             }
+        }
+
+        $application = $this->getApplication($id);
+
+        if ($setDefaultValues) {
+            $existing = [
+                'Fields' => [
+                    'permitsRequired' => $application['permitsRequired'],
+                    'tripsAbroad' => $application['trips'],
+                    'intensityWarning' => 'no',
+                ]
+            ];
+            $form->setData($existing);
         }
 
         return array(
@@ -320,15 +333,10 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         );
     }
 
-
     // Understand this is a computer property but added to avoid a round-trip to API for simple arithmetic operation.
-    protected function isHighIntensity($application, $tripsAbroad)
+    protected function isHighIntensity($permitsRequired, $tripsAbroad)
     {
-        if (isset($application['permitsRequired'])) {
-            return ($tripsAbroad / $application['permitsRequired']) > 100;
-        } else {
-            return false;
-        }
+        return !empty($permitsRequired) ? ($tripsAbroad / $permitsRequired) > 100 : false;
     }
 
     public function internationalJourneyAction()
