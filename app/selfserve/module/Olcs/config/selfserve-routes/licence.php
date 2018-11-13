@@ -28,7 +28,7 @@ return [
                             'options' => [
                                 'route' => 'start[/]',
                                 'defaults' => [
-                                    'controller' => 'SurrenderStart',
+                                    'controller' => \Olcs\Controller\Licence\Surrender\StartController::class,
                                     'action' => 'index',
                                 ],
                             ],
