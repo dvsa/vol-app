@@ -74,8 +74,8 @@
                             <?php echo $this->translateReplace(
                                 'permits.page.fee.permit.validity.dates',
                                 [
-                                    $this->date(strtotime($irhpPermitStock['validFrom']), "d F Y"),
-                                    $this->date(strtotime($irhpPermitStock['validTo']), "d F Y")
+                                    $this->date(strtotime($irhpPermitStock['validFrom']), 'd F Y'),
+                                    $this->date(strtotime($irhpPermitStock['validTo']), 'd F Y')
                                 ]
                             ); ?>
                         </dd>
