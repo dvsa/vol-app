@@ -331,26 +331,21 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         }
     }
 
-
-
     public function internationalJourneyAction()
     {
         $id = $this->params()->fromRoute('id', -1);
-        $application = $this->getApplication($id);
-        $trafficArea = $application['licence']['trafficArea'];
 
         //Create form from annotations
         $form = $this->getForm('InternationalJourneyForm');
 
-        // read data
-        $form->get('Fields')->get('InternationalJourney')->setValue($application['internationalJourneys']);
-        $form->get('Fields')->get('intensityWarning')->setValue('no');
+        $setDefaultValues = true;
 
         $data = $this->params()->fromPost();
 
         if (is_array($data) && array_key_exists('Submit', $data)) {
             //Validate
             $form->setData($data);
+            $setDefaultValues = false;
 
             if ($form->isValid()) {
                 $commandData = [
@@ -359,7 +354,10 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 ];
                 $command = UpdateInternationalJourney::create($commandData);
                 $this->handleCommand($command);
-                if ($data['Fields']['InternationalJourney'] === RefData::ECMT_APP_JOURNEY_OVER_90 && $data['Fields']['intensityWarning'] === 'no') {
+
+                if ($data['Fields']['InternationalJourney'] === RefData::ECMT_APP_JOURNEY_OVER_90
+                    && $data['Fields']['intensityWarning'] === 'no'
+                ) {
                     $form->get('Fields')->get('intensityWarning')->setValue('yes');
                 } else {
                     return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_SECTORS);
@@ -372,7 +370,19 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             }
         }
 
-        return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef'], 'trafficAreaId' => $trafficArea['id']);
+        $application = $this->getApplication($id);
+
+        if ($setDefaultValues) {
+            $form->get('Fields')->get('InternationalJourney')->setValue($application['internationalJourneys']);
+            $form->get('Fields')->get('intensityWarning')->setValue('no');
+        }
+
+        return array(
+            'form' => $form,
+            'id' => $id,
+            'ref' => $application['applicationRef'],
+            'trafficAreaId' => $application['licence']['trafficArea']['id']
+        );
     }
 
     public function sectorAction()
