@@ -37,7 +37,7 @@ return [
                         'review-contact-details' => [
                             'type' => Segment::class,
                             'options' => [
-                                'route' => ':surrender/review-contact-details[/]',
+                                'route' => ':surrender/review-contact-details[/:action][/]',
                                 'defaults' => [
                                     'controller' => ReviewContactDetailsController::class,
                                     'action' => 'index',
