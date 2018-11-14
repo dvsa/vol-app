@@ -29,7 +29,7 @@ class ReviewContactDetailsController extends AbstractSurrenderController impleme
 
     public function confirmAction()
     {
-        // TODO: here we should change the status and redirect to next step
+        // here we should change the status and redirect to next step
     }
 
     private function getConfirmationForm(): \Common\Form\Form
@@ -57,5 +57,4 @@ class ReviewContactDetailsController extends AbstractSurrenderController impleme
         $form->removeCancel();
         return $form;
     }
-
 }
