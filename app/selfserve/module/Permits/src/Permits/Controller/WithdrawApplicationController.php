@@ -38,6 +38,8 @@ class WithdrawApplicationController extends AbstractSelfserveController implemen
 
     protected $postConfig = [
         'withdraw' => [
+            'retrieveData' => false,
+            'checkConditionalDisplay' => false,
             'command' => WithdrawEcmtPermitApplication::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => EcmtSection::ROUTE_ECMT_WITHDRAW_CONFIRMATION

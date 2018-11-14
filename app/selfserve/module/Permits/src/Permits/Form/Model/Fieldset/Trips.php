@@ -57,4 +57,9 @@ class Trips
      * @Form\Type("Zend\Form\Element\Text")
      */
     public $tripsAbroad = null;
+
+    /**
+     * @Form\Type("Zend\Form\Element\Hidden")
+     */
+    public $permitsRequired;
 }
