@@ -2,62 +2,69 @@
 
 namespace Olcs\Controller\Licence\Surrender;
 
-use Zend\Form\Form;
-use Common\View\Model\Section;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
+use Dvsa\Olcs\Transfer\Query\Licence\LicenceWithCorrespondenceCd as LicenceQuery;
 
 class AbstractSurrenderController extends AbstractSelfserveController implements ToggleAwareInterface
 {
-    /** @var  \Common\Service\Helper\FormHelperService */
-    protected $hlpForm;
-    /** @var  \Common\Service\Helper\FlashMessengerHelperService */
-    protected $hlpFlashMsgr;
-
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
     ];
 
+    protected $pageTemplate = 'pages/licence-surrender';
+
+    /** @var  \Common\Service\Helper\FormHelperService */
+    protected $hlpForm;
+
+    /** @var  \Common\Service\Helper\FlashMessengerHelperService */
+    protected $hlpFlashMsgr;
+
+    protected $licenceId;
+
+    protected $surrenderId;
+
+    protected $licence;
+
+
     public function onDispatch(MvcEvent $e)
     {
+        $this->licenceId = (int)$this->params('licence');
+        $this->surrenderId = (int)$this->params('surrender');
+        $this->licence = $this->getLicence();
         $this->hlpForm = $this->getServiceLocator()->get('Helper\Form');
         $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
         return parent::onDispatch($e);
     }
 
-    protected function render($titleSuffix, Form $form = null, $variables = array())
+    protected function renderView(array $params): ViewModel
     {
-        if ($titleSuffix instanceof ViewModel) {
-            return $titleSuffix;
-        }
+        $content = new ViewModel($params);
+        $content->setTemplate($this->pageTemplate);
 
-        $params = array_merge(
-            array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form),
-            $variables
-        );
+        $view = new ViewModel();
+        $view->setTemplate('layout/layout')
+            ->setTerminal(true)
+            ->addChild($content, 'content');
 
-        return $this->renderView(new Section($params));
+        return $view;
     }
 
-    /**
-     * Render view
-     *
-     * @param Section $section Section
-     *
-     * @return ViewModel
-     */
-    protected function renderView($section)
+    protected function getBackLink(string $route): string
     {
-        $template = $this->getRequest()->isXmlHttpRequest() ? 'ajax' : 'layout';
+        return $this->url()->fromRoute($route, [], [], true);
+    }
 
-        $base = new ViewModel();
-        $base->setTemplate('layout/' . $template)
-            ->setTerminal(true)
-            ->addChild($section, 'content');
 
-        return $base;
+    private function getLicence()
+    {
+        $response = $this->handleQuery(
+            LicenceQuery::create(['id' => (int)$this->params('licence')])
+        );
+
+        return $response->getResult();
     }
 }

@@ -5,31 +5,9 @@ namespace Olcs\Controller\Licence\Surrender;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Data\Mapper\Licence\Surrender\ReviewContactDetails;
 use Common\Service\Helper\TranslationHelperService;
-use Dvsa\Olcs\Transfer\Query\Licence\LicenceWithCorrespondenceCd as LicenceQuery;
-use Olcs\Controller\AbstractSelfserveController;
-use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
-use Zend\Mvc\MvcEvent;
-use Zend\View\Model\ViewModel;
 
-class ReviewContactDetailsController extends AbstractSelfserveController implements ToggleAwareInterface
+class ReviewContactDetailsController extends AbstractSurrenderController implements ToggleAwareInterface
 {
-
-    protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
-    ];
-
-    protected $licenceId;
-    protected $surrenderId;
-    protected $licence;
-
-    public function onDispatch(MvcEvent $e)
-    {
-        $this->licenceId = (int)$this->params('licence');
-        $this->surrenderId = (int)$this->params('surrender');
-        $this->licence = $this->getLicence();
-
-        return parent::onDispatch($e);
-    }
 
     public function indexAction()
     {
@@ -42,29 +20,16 @@ class ReviewContactDetailsController extends AbstractSelfserveController impleme
             'content' => 'licence.surrender.review_contact_details.content',
             'note' => 'licence.surrender.review_contact_details.note',
             'form' => $this->getConfirmationForm(),
-            'backLink' => $this->url()->fromRoute('licence/surrender/start', ['licence' => $this->licence['id']]),
+            'backLink' => $this->getBackLink('licence/surrender/start'),
             'sections' => ReviewContactDetails::makeSections($this->licence, $this->url(), $translator),
         ];
 
-        $view = new ViewModel($params);
-        $view->setTemplate('pages/licence-surrender-reviewContactDetails');
-
-        return $view;
+        return $this->renderView($params);
     }
 
     public function confirmAction()
     {
-        // To be implemented
-    }
-
-
-    private function getLicence()
-    {
-        $response = $this->handleQuery(
-            LicenceQuery::create(['id' => $this->licenceId])
-        );
-
-        return $response->getResult();
+        // TODO: here we should change the status and redirect to next step
     }
 
     private function getConfirmationForm(): \Common\Form\Form
@@ -92,4 +57,5 @@ class ReviewContactDetailsController extends AbstractSelfserveController impleme
         $form->removeCancel();
         return $form;
     }
+
 }

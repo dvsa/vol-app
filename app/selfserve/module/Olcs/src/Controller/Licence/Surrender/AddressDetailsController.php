@@ -6,8 +6,6 @@ use Common\Data\Mapper;
 use Dvsa\Olcs\Transfer\Command\Licence\UpdateAddresses;
 use Dvsa\Olcs\Transfer\Query\Licence\Addresses;
 
-use Zend\Form\Form;
-
 /**
  * Class AddressDetailsController
  *
@@ -52,7 +50,14 @@ class AddressDetailsController extends AbstractSurrenderController
             }
         }
 
-        return $this->render('addresses', $form);
+        $params = [
+            'title' => 'lva.section.title.addresses',
+            'licNo' => $this->licence['licNo'],
+            'form' => $form,
+            'backLink' => $this->getBackLink('licence/surrender/review-contact-details'),
+        ];
+
+        return $this->renderView($params);
     }
 
     /**
