@@ -47,7 +47,7 @@ return [
                         'address-details' => [
                             'type' => Segment::class,
                             'options' => [
-                                'route' => 'address-details[/]',
+                                'route' => ':surrender/address-details[/]',
                                 'defaults' => [
                                     'controller' => Olcs\Controller\Licence\Surrender\AddressDetailsController::class,
                                     'action' => 'index',

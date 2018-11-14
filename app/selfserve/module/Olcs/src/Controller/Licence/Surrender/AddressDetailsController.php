@@ -44,8 +44,7 @@ class AddressDetailsController extends AbstractSurrenderController
                 $response = $this->save($formData);
 
                 if ($response === true) {
-                    // redirect to review your contact details page
-                    return $this->redirect()->refresh();
+                    return $this->redirect()->toRoute('licence/surrender/review-contact-details', [], [], true);
                 }
 
                 return $this->redirect()->refresh();
