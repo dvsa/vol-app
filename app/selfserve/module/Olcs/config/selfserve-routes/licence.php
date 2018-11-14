@@ -40,6 +40,7 @@ return [
                                 'route' => ':surrender/review-contact-details[/:action][/]',
                                 'defaults' => [
                                     'controller' => ReviewContactDetailsController::class,
+                                    'action' => 'index',
                                 ],
                             ],
                         ],
