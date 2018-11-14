@@ -36,6 +36,8 @@ class CheckAnswersController extends AbstractSelfserveController implements Togg
 
     protected $postConfig = [
         'default' => [
+            'retrieveData' => false,
+            'checkConditionalDisplay' => false,
             'command' => UpdateEcmtCheckAnswers::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => EcmtSection::ROUTE_ECMT_DECLARATION,

@@ -38,6 +38,8 @@ class CancelApplicationController extends AbstractSelfserveController implements
 
     protected $postConfig = [
         'cancel' => [
+            'retrieveData' => false,
+            'checkConditionalDisplay' => false,
             'command' => CancelEcmtPermitApplication::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => EcmtSection::ROUTE_ECMT_CANCEL_CONFIRMATION
