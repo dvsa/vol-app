@@ -113,8 +113,12 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * @var array
      */
     protected $templateConfig = [
-        'generic' => '',
-        'cancel' => ''
+        'generic' => [
+            'view' => 'permits/single-question',
+            'browserTitle' => '',
+            'data' => []
+        ],
+        'cancel' => [],
     ];
 
     /**
@@ -159,14 +163,26 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         $view->setVariable('form', $this->form);
         $view->setVariable('forms', $this->forms);
         $view->setVariable('tables', $this->tables);
-        $view->setTemplate($this->templateConfig[$this->action]);
+        $view->setTemplate($this->templateConfig[$this->action]['view']);
 
         return $view;
     }
 
     public function mapDataForDisplay()
     {
-        //
+        if (is_array($this->templateConfig[$this->action])) {
+            foreach ($this->templateConfig[$this->action]['data'] as $key => $var) {
+                $this->data[$key] = $var;
+            }
+        } else {
+            // Until all controllers have been updated to use generic views
+            $this->templateConfig[$this->action] = ['view' => $this->templateConfig[$this->action]];
+        }
+
+        if (!empty($this->templateConfig[$this->action]['browserTitle'])) {
+            $this->getServiceLocator()->get('ViewHelperManager')->get('headTitle')->setSeparator(' - ');
+            $this->getServiceLocator()->get('ViewHelperManager')->get('headTitle')->prepend($this->templateConfig[$this->action]['browserTitle']);
+        }
     }
 
     public function genericAction()

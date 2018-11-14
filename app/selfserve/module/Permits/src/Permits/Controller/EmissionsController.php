@@ -31,7 +31,17 @@ class EmissionsController extends AbstractSelfserveController implements ToggleA
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/euro6-emissions'
+        'generic' => [
+            'view' => 'permits/single-question',
+            'browserTitle' => 'permits.page.euro6.emissions.browser.title',
+            'data' => [
+                'question' => 'permits.page.euro6.emissions.question',
+                'guidance' => [
+                    'permits.page.euro6.emissions.guidance.line.1',
+                    'permits.page.euro6.emissions.guidance.line.2',
+                ]
+            ]
+        ]
     ];
 
     protected $postConfig = [

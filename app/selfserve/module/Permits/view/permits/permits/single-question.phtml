@@ -1,0 +1,36 @@
+<?php echo $this->permitsBackLink(); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <?php echo $this->formErrors($form); ?>
+        <?php if (isset($data['application']['applicationRef'])) { ?>
+            <span class="govuk-caption-xl">
+                <?php echo $this->escapeHtml($data['application']['applicationRef']); ?>
+            </span>
+        <?php } ?>
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                <h1 class="govuk-fieldset__heading">
+                    <?php echo $this->escapeHtml($this->translate($data['question'])); ?>
+                </h1>
+            </legend>
+            <?php if (isset($data['warning'])) { ?>
+                <?php echo $this->partial('partials/warning-component', ['translationKey' => $data['warning']]); ?>
+            <?php } ?>
+            <?php if (isset($data['details'])) { ?>
+                <?php echo $this->partial('partials/details-component', ['details' => $data['details']]); ?>
+            <?php } ?>
+            <?php if (isset($data['guidance'])) { ?>
+                <?php echo $this->partial('partials/guidance-blue-component', ['guidance' => $data['guidance']]); ?>
+            <?php } ?>
+            <?php if (isset($data['bulletList'])) { ?>
+                <p class="govuk-body-l">
+                    <?php echo $this->escapeHtml($this->translate($data['bulletList']['title'])); ?>:
+                </p>
+                <?php echo $this->partial($data['bulletList']['list']); ?>
+            <?php } ?>
+            <div class="govuk-form-group">
+                <?php echo $this->form($form); ?>
+            </div>
+        </fieldset>
+    </div>
+</div>

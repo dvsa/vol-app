@@ -31,7 +31,14 @@ class CabotageController extends AbstractSelfserveController implements ToggleAw
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/cabotage'
+        'generic' => [
+            'view' => 'permits/single-question',
+            'browserTitle' => 'permits.page.cabotage.browser.title',
+            'data' => [
+                'question' => 'permits.page.cabotage.question',
+                'guidance' => 'permits.page.cabotage.guidance'
+            ]
+        ]
     ];
 
     protected $postConfig = [

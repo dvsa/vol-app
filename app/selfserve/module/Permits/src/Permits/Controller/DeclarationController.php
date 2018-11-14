@@ -32,7 +32,17 @@ class DeclarationController extends AbstractSelfserveController implements Toggl
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/declaration'
+        'generic' => [
+            'view' => 'permits/single-question',
+            'browserTitle' => 'permits.page.declaration.browser.title',
+            'data' => [
+                'question' => 'permits.page.declaration.question',
+                'bulletList' => [
+                    'title' => 'permits.page.declaration.bullet.list.title',
+                    'list' => 'en_GB/bullets/markup-ecmt-declaration'
+                ]
+            ]
+        ]
     ];
 
     protected $postConfig = [
