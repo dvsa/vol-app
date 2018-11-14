@@ -61,7 +61,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
         return $view;
     }
 
-    public function createAction()
+    public function startAction()
     {
         exit('test');
     }
