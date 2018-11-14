@@ -1219,6 +1219,7 @@ return array(
             Olcs\Controller\GdsVerifyController::class => Olcs\Controller\GdsVerifyController::class,
             'SurrenderStart' => Olcs\Controller\Licence\Surrender\StartController::class,
             Olcs\Controller\Licence\Surrender\ReviewContactDetailsController::class => Olcs\Controller\Licence\Surrender\ReviewContactDetailsController::class,
+            'AddressDetails' => Olcs\Controller\Licence\Surrender\AddressDetailsController::class,
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -1397,6 +1398,7 @@ return array(
             'lva-licence-addresses' => LvaFormService\Addresses\LicenceAddresses::class,
             'lva-variation-addresses' => LvaFormService\Addresses\VariationAddresses::class,
             'lva-application-addresses' => LvaFormService\Addresses\ApplicationAddresses::class,
+            'licence-surrender-addresses' => Olcs\FormService\Licence\Surrender\Addresses::class,
 
             // Safety
             'lva-licence-safety' => LvaFormService\LicenceSafety::class,

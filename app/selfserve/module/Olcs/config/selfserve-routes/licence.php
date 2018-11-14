@@ -40,6 +40,15 @@ return [
                                 'route' => ':surrender/review-contact-details[/:action][/]',
                                 'defaults' => [
                                     'controller' => ReviewContactDetailsController::class,
+                                ],
+                            ],
+                        ],
+                        'address-details' => [
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'address-details[/]',
+                                'defaults' => [
+                                    'controller' => 'AddressDetails',
                                     'action' => 'index',
                                 ],
                             ],
