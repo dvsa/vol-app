@@ -1,53 +1,49 @@
 <div class="govuk-width-container">
     <div class="govuk-main-wrapper">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                <div class="js-body">
-                    <?php
-                    echo $this->partial(
-                        'partials/page-header-simple',
-                        [
-                            'pageTitle' => $this->translate($this->title),
-                            'pageSubTitle' => $this->licNo,
-                            'backUrl' => [
-                                'url' => $this->backLink,
-                            ],
-                        ]
-                    );
-                    ?>
-                    <div class="row">
-                        <div class="full-width article">
-                            <p class="govuk-body"><?php echo $this->translate($this->content); ?></p>
-                            <div class="govuk-inset-text">
-                                <?php echo $this->translate($this->note); ?>
-                            </div>
-                            <?php echo $this->partialLoop(
-                                'partials/check-answer-section',
-                                $this->sections
-                            ); ?>
-
-                            <?php if (isset($this->form)): ?>
-                                <?php
-                                $this->form->prepare();
-                                echo $this->formErrors($this->form);
-                                echo $this->form($this->form);
-                                ?>
-                            <?php endif; ?>
-
-                            <?php if (isset($this->bottomContent)): ?>
-                                <?php echo $this->bottomContent ?>
-                            <?php endif; ?>
-
-                            <?php
-                            if (isset($this->backLink)): ?>
-                                <p>
-                                    <a href="<?php echo $this->backLink ?>">
-                                        <?php echo $this->translate($this->backText); ?>
-                                    </a>
-                                </p>
-                            <?php endif; ?>
-                        </div>
+        <div class="js-body">
+            <?php
+            echo $this->partial(
+                'partials/page-header-simple',
+                [
+                    'pageTitle' => $this->translate($this->title),
+                    'pageSubTitle' => $this->licNo,
+                    'backUrl' => [
+                        'url' => $this->backLink,
+                    ],
+                ]
+            );
+            ?>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <p class="govuk-body"><?php echo $this->translate($this->content); ?></p>
+                    <div class="govuk-inset-text">
+                        <?php echo $this->translate($this->note); ?>
                     </div>
+                    <?php echo $this->partialLoop(
+                        'partials/check-answer-section',
+                        $this->sections
+                    ); ?>
+
+                    <?php if (isset($this->form)): ?>
+                        <?php
+                        $this->form->prepare();
+                        echo $this->formErrors($this->form);
+                        echo $this->form($this->form);
+                        ?>
+                    <?php endif; ?>
+
+                    <?php if (isset($this->bottomContent)): ?>
+                        <?php echo $this->bottomContent ?>
+                    <?php endif; ?>
+
+                    <?php
+                    if (isset($this->backLink)): ?>
+                        <p>
+                            <a href="<?php echo $this->backLink ?>">
+                                <?php echo $this->translate($this->backText); ?>
+                            </a>
+                        </p>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
