@@ -12,8 +12,12 @@ return [
                 'constraints' => [
                     'licence' => '[0-9]+',
                 ],
+                'defaults'=>[
+                    'controller'=> \Olcs\Controller\Lva\Licence\OverviewController::class,
+                    'action' =>'index'
+                ]
             ],
-            'may_terminate' => false,
+            'may_terminate' => true,
             'child_routes' => [
                 'surrender' => [
                     'type' => Segment::class,
@@ -28,14 +32,43 @@ return [
                             'options' => [
                                 'route' => 'start[/]',
                                 'defaults' => [
-                                    'controller' => \Olcs\Controller\Licence\Surrender\StartController::class,
-                                    'action' => 'index',
+                                   
+                                ]
+                            ],
+
+                            'may_terminate' => false,
+
+
+                            'child_routes' => [
+                                'GET' => [
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'controller' => \Olcs\Controller\Licence\Surrender\StartController::class,
+                                            'action' => 'index',
+                                        ]
+                                    ],
+
                                 ],
+                                'POST' =>
+                                    [
+                                        'type' => \Zend\Mvc\Router\Http\Method::class,
+                                        'options' => [
+
+                                            'verb' => 'POST',
+                                            'defaults' => [
+                                                'controller' => \Olcs\Controller\Licence\Surrender\StartController::class,
+                                                'action' => 'start',
+                                            ]
+                                        ]
+                                    ]
                             ],
                         ],
-                    ]
+                    ],
                 ],
             ],
-        ],
+        ]
     ]
 ];
