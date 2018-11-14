@@ -28,11 +28,7 @@ class AddressDetailsController extends AbstractSurrenderController
             $formData = Mapper\Lva\Addresses::mapFromResult($response->getResult());
         }
 
-        /** @var \Common\Form\Form $form */
-        $form = $this->getServiceLocator()
-            ->get('FormServiceManager')
-            ->get('licence-surrender-addresses')
-            ->getForm()
+        $form = $this->getForm('Licence\Surrender\Addresses')
             ->setData($formData);
 
         $hasProcessed = $this->hlpForm->processAddressLookupForm($form, $request);
@@ -42,11 +38,15 @@ class AddressDetailsController extends AbstractSurrenderController
                 $response = $this->save($formData);
 
                 if ($response === true) {
-                    return $this->redirect()->toRoute('licence/surrender/review-contact-details', [], [], true);
+                    return $this->redirect()->toRoute(
+                        'licence/surrender/review-contact-details',
+                        [],
+                        [],
+                        true
+                    );
                 }
 
                 return $this->redirect()->refresh();
-
             }
         }
 
