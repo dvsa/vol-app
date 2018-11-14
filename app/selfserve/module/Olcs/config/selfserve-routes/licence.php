@@ -49,7 +49,7 @@ return [
                             'options' => [
                                 'route' => 'address-details[/]',
                                 'defaults' => [
-                                    'controller' => 'AddressDetails',
+                                    'controller' => Olcs\Controller\Licence\Surrender\AddressDetailsController::class,
                                     'action' => 'index',
                                 ],
                             ],
