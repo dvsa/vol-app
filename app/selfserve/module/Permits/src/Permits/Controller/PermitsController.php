@@ -218,37 +218,15 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
         //Create form from annotations
         $form = $this->getForm('RestrictedCountriesForm');
-
-        // Read data
-        $application = $this->getApplication($id);
-
-        if (!is_null($application['hasRestrictedCountries'])) {
-            $restrictedCountries = $application['hasRestrictedCountries'] == true ? 1 : 0;
-
-            $form->get('Fields')
-                ->get('restrictedCountries')
-                ->setValue($restrictedCountries);
-        }
-
-        if (count($application['countrys']) > 0) {
-            //Format results from DB before setting values on form
-            $selectedValues = array();
-
-            foreach ($application['countrys'] as $country) {
-                $selectedValues[] = $country['id'];
-            }
-
-            $form->get('Fields')
-                ->get('restrictedCountriesList')
-                ->get('restrictedCountriesList')
-                ->setValue($selectedValues);
-        }
+        $setDefaultValues = true;
 
         $data = $this->params()->fromPost();
 
         if (is_array($data) && array_key_exists('Submit', $data)) {
             //Validate
             $form->setData($data);
+            $setDefaultValues = false;
+
             if ($form->isValid()) {
                 //EXTRA VALIDATION
                 if ((
@@ -277,6 +255,26 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 $form->get('Fields')
                     ->get('restrictedCountries')
                     ->setMessages(['error.messages.restricted.countries']);
+            }
+        }
+
+        // Read data
+        $application = $this->getApplication($id);
+
+        if ($setDefaultValues) {
+            if (!is_null($application['hasRestrictedCountries'])) {
+                $restrictedCountries = $application['hasRestrictedCountries'] == true ? 1 : 0;
+
+                $form->get('Fields')
+                    ->get('restrictedCountries')
+                    ->setValue($restrictedCountries);
+            }
+
+            if (count($application['countrys']) > 0) {
+                $form->get('Fields')
+                    ->get('restrictedCountriesList')
+                    ->get('restrictedCountriesList')
+                    ->setValue(array_column($application['countrys'], 'id'));
             }
         }
 
