@@ -19,7 +19,7 @@ $data = $this->ecmtLicenceData($form, $stock, $application);
                     echo $data['copy'];
 
                     if (count($form->get('Fields')->get('EcmtLicence')->getValueOptions()) === 1) {
-                        $option = $form->get('Fields')->get('EcmtLicence')->getValueOptions()[0];
+                        $option = array_values($form->get('Fields')->get('EcmtLicence')->getValueOptions())[0];
                         $option['selected'] = true;
                         $option['label_attributes'] = ['class' => 'visually-hidden'];
 
@@ -30,7 +30,7 @@ $data = $this->ecmtLicenceData($form, $stock, $application);
                 ?>
             </fieldset>
             <?php
-                if (isset($application)) {
+                if (!empty($application)) {
                     echo $this->permitsDashboardLink();
                 }
             ?>

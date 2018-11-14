@@ -475,6 +475,15 @@ $routes = array(
     ),
 );
 
+$files = glob(__DIR__ . '/selfserve-routes/*.php');
+
+foreach ($files as $config) {
+    $newRoute = include $config;
+    $otherSelfserveRoutes = current($newRoute);
+}
+
+$routes = array_merge($routes, $otherSelfserveRoutes);
+
 $configRoutes['lva-application']['child_routes'] = array_merge(
     $configRoutes['lva-application']['child_routes'],
     array(
@@ -1145,7 +1154,6 @@ return array(
             'LvaLicence/BusinessDetails'            => 'Olcs\Controller\Lva\Licence\BusinessDetailsController',
             'LvaLicence/Addresses'                  => 'Olcs\Controller\Lva\Licence\AddressesController',
             'LvaLicence/People'                     => 'Olcs\Controller\Lva\Licence\PeopleController',
-
             'LvaLicence/OperatingCentres'           => 'Olcs\Controller\Lva\Licence\OperatingCentresController',
             'LvaLicence/TransportManagers'          => Olcs\Controller\Lva\Licence\TransportManagersController::class,
             'LvaLicence/Vehicles'                   => 'Olcs\Controller\Lva\Licence\VehiclesController',
@@ -1209,6 +1217,7 @@ return array(
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             Olcs\Controller\Entity\ViewController::class => Olcs\Controller\Entity\ViewController::class,
             Olcs\Controller\GdsVerifyController::class => Olcs\Controller\GdsVerifyController::class,
+            'SurrenderStart' => Olcs\Controller\Licence\Surrender\StartController::class,
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',

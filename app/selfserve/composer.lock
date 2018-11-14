@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "27da9fb1baf136a1fcd3813416fe1def",
+    "hash": "cb42ebe7a4efdc94935ec976d75a6790",
+    "content-hash": "d6a8f3dc06d98224833abfe85fd10e0c",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1028,11 +1029,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "4.192",
+            "version": "dev-release/4.193a",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "d0dda0660f35bdf8436027e5bb90828d1078ddc2"
+                "reference": "23b52683f938344662b1b80a20ae88830bdf7844"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1046,10 +1047,10 @@
                 "mikey179/vfsstream": "~1.4.0",
                 "mockery/mockery": "~0.9.3",
                 "olcs/olcs-devtools": "dev-master",
-                "olcs/olcs-logging": "dev-release/4.192",
+                "olcs/olcs-logging": "dev-release/4.193a",
                 "olcs/olcs-testhelpers": "dev-develop",
-                "olcs/olcs-transfer": "dev-release/4.192",
-                "olcs/olcs-utils": "dev-release/4.192",
+                "olcs/olcs-transfer": "dev-release/4.193a",
+                "olcs/olcs-utils": "dev-release/4.193a",
                 "soflomo/purifier": "~0.1.0"
             },
             "type": "library",
@@ -1082,20 +1083,20 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2018-10-28T21:17:43+00:00"
+            "time": "2018-11-12 22:12:46"
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.192",
+            "version": "dev-release/4.193a",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "14b193a9cbb94ff64dde9e8267a58a7943e899ec"
+                "reference": "ba1cdd2dd5067a4f0ab754cbbad0fb6df64eedf9"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
-                "olcs/olcs-transfer": "4.192",
-                "olcs/olcscommon": "4.192",
+                "olcs/olcs-transfer": "dev-release/4.193a",
+                "olcs/olcscommon": "dev-release/4.193a",
                 "php": ">=5.4",
                 "zendframework/zendframework": "~2.4.0"
             },
@@ -1130,15 +1131,15 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2018-10-31T21:56:50+00:00"
+            "time": "2018-11-12 21:31:34"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "4.192",
+            "version": "dev-release/4.193a",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git",
-                "reference": "23622c65eee02f6efe048cdaec4d5a418f281bfb"
+                "reference": "e5dbac54343f0cbd9e92f597b5a3fe899534402b"
             },
             "require": {
                 "php": ">=5.4",
@@ -1182,15 +1183,15 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2018-10-04T18:10:18+00:00"
+            "time": "2018-11-12 21:30:29"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.192",
+            "version": "dev-release/4.193a",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
-                "reference": "8b26ac55e10724d2966600bfa57650256e1267af"
+                "reference": "e3e7f4cf56675ce5d5d35233cc99d51f5f7ea104"
             },
             "require": {
                 "php": ">=5.4",
@@ -1228,15 +1229,15 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2018-10-28T20:40:36+00:00"
+            "time": "2018-11-12 21:32:41"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "4.192",
+            "version": "dev-release/4.193a",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-utils.git",
-                "reference": "0bf006d8e8c37a87b3116f363b79f3e6dcc9e2c7"
+                "reference": "0e24c1e80da1742ac3f2d9258c22ddb759aa1c11"
             },
             "require": {
                 "php": ">=5.4",
@@ -1245,7 +1246,7 @@
             "require-dev": {
                 "mockery/mockery": "~0.9.3",
                 "olcs/olcs-devtools": "dev-master",
-                "olcs/olcs-logging": "dev-release/4.192"
+                "olcs/olcs-logging": "dev-release/4.193a"
             },
             "type": "library",
             "autoload": {
@@ -1274,7 +1275,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2018-10-28T20:41:24+00:00"
+            "time": "2018-11-12 21:33:32"
         },
         {
             "name": "psr/log",
@@ -1388,17 +1389,17 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.17",
+            "version": "v3.4.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "0a612e9dfbd2ccce03eb174365f31ecdca930ff6"
+                "reference": "fe9793af008b651c5441bdeab21ede8172dab097"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-debug-0a612e9dfbd2ccce03eb174365f31ecdca930ff6-zip-dd97fc.tar",
-                "reference": "0a612e9dfbd2ccce03eb174365f31ecdca930ff6",
-                "shasum": "f83bfd1be1640c25bfe712f571e45b87c8abb9e5"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-debug-fe9793af008b651c5441bdeab21ede8172dab097-zip-64832a.tar",
+                "reference": "fe9793af008b651c5441bdeab21ede8172dab097",
+                "shasum": "6e36a2b6ac44a9f861e40a40075e22cabfa8f733"
             },
             "require": {
                 "php": "^5.5.9|>=7.0.8",
@@ -1440,7 +1441,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2018-10-02T16:33:53+00:00"
+            "time": "2018-10-31 09:06:03"
         },
         {
             "name": "symfony/filesystem",
@@ -1494,17 +1495,17 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.9.0",
+            "version": "v1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8"
+                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-polyfill-mbstring-d0cd638f4634c16d8df4508e847f14e9e43168b8-zip-940b7f.tar",
-                "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8",
-                "shasum": "575bc9d8f018205b9458b2a221f77fe31cdacf1d"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-polyfill-mbstring-c79c051f5b3a46be09205c73b80b346e4153e494-zip-b04f60.tar",
+                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494",
+                "shasum": "fd2b7461a254b32b345dc917127587b9d32fd19c"
             },
             "require": {
                 "php": ">=5.3.3"
@@ -1549,7 +1550,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2018-08-06T14:22:27+00:00"
+            "time": "2018-09-21 13:07:52"
         },
         {
             "name": "zendframework/zendframework",
@@ -2116,7 +2117,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2018-10-31T16:56:12+00:00"
+            "time": "2018-10-31 16:56:12"
         },
         {
             "name": "pdepend/pdepend",
@@ -3486,17 +3487,17 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.8.46",
+            "version": "v2.8.47",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "fb3469266daaa67a1e6d42fc78fa6cdc254689f6"
+                "reference": "506aaec58da5b042ec23f7de5cc866eb4b57a21e"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-config-fb3469266daaa67a1e6d42fc78fa6cdc254689f6-zip-f5d2df.tar",
-                "reference": "fb3469266daaa67a1e6d42fc78fa6cdc254689f6",
-                "shasum": "9c0b59f0cd89b883bf4120a00a6e1d2210cbfd3b"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-config-506aaec58da5b042ec23f7de5cc866eb4b57a21e-zip-afd6b3.tar",
+                "reference": "506aaec58da5b042ec23f7de5cc866eb4b57a21e",
+                "shasum": "c1c88e2f27e772939fe09f8b4e67443e2d6bed16"
             },
             "require": {
                 "php": ">=5.3.9",
@@ -3539,7 +3540,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2018-09-08T12:44:02+00:00"
+            "time": "2018-10-30 16:24:01"
         },
         {
             "name": "symfony/dependency-injection",
@@ -3606,7 +3607,7 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v4.1.6",
+            "version": "v4.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -3655,7 +3656,7 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.9.0",
+            "version": "v1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",

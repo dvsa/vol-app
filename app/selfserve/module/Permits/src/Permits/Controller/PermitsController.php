@@ -12,14 +12,12 @@ use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtLicence;
 
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\NextIrhpPermitStock;
-use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
-use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
 use Dvsa\Olcs\Transfer\Query\Permits\LastOpenWindow;
 use Dvsa\Olcs\Transfer\Query\Permits\OpenWindows;
-use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
 
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 
@@ -33,7 +31,6 @@ use Common\RefData;
 
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
-use Olcs\Controller\Lva\Traits\DashboardNavigationTrait;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\View\Helper\EcmtSection;
 
@@ -51,7 +48,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     use GenericReceipt;
     use StoredCardsTrait;
     use FlashMessengerTrait;
-    use DashboardNavigationTrait;
 
     const ECMT_APPLICATION_FEE_PRODUCT_REFENCE = 'IRHP_GV_APP_ECMT';
     const ECMT_ISSUING_FEE_PRODUCT_REFENCE = 'IRHP_GV_ECMT_100_PERMIT_FEE';
@@ -75,11 +71,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     public function indexAction()
     {
         $eligibleForPermits = $this->isEligibleForPermits();
-        $organisationId = $this->getCurrentOrganisationId();
-
-        //retrieve data displayed in dashboard
-        $response = $this->handleQuery(DashboardQry::create(['id' => $organisationId]));
-        $dashboardData = $response->getResult()['dashboard'];
 
         $view = new ViewModel();
         if (!$eligibleForPermits) {
@@ -92,48 +83,39 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $query = EcmtPermitApplication::create(
             [
                 'order' => 'DESC',
-                'organisation' => $organisationId,
+                'organisation' => $this->getCurrentOrganisationId(),
                 'statusIds' => [
                     RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED,
                     RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION,
                     RefData::PERMIT_APP_STATUS_AWAITING_FEE,
                     RefData::PERMIT_APP_STATUS_FEE_PAID,
                     RefData::PERMIT_APP_STATUS_ISSUING,
+                    RefData::PERMIT_APP_STATUS_VALID,
                 ],
             ]
         );
         $response = $this->handleQuery($query);
-        $applicationData = $response->getResult();
+        $data = $response->getResult();
 
-        $applicationsTable = $this->getServiceLocator()
-            ->get('Table')
-            ->prepareTable($this->applicationsTableName, $applicationData['results']);
+        $applicationData = $issuedData = [];
 
-        $query = EcmtPermitApplication::create(
-            [
-                'order' => 'DESC',
-                'organisation' => $this->getCurrentOrganisationId(),
-                'statusIds' => [RefData::PERMIT_APP_STATUS_VALID]
-            ]
-        );
-        $response = $this->handleQuery($query);
-        $issuedData = $response->getResult();
+        foreach ($data['results'] as $item) {
+            if ($item['status']['id'] === RefData::PERMIT_APP_STATUS_VALID) {
+                $issuedData[] = $item;
+            } else {
+                $applicationData[] = $item;
+            }
+        }
 
-        $issuedTable = $this->getServiceLocator()
-            ->get('Table')
-            ->prepareTable($this->issuedTableName, $issuedData['results']);
+        $table = $this->getServiceLocator()->get('Table');
+        $issuedTable = $table->prepareTable($this->issuedTableName, $issuedData);
+        $applicationsTable = $table->prepareTable($this->applicationsTableName, $applicationData);
 
         $view->setVariable('isEligible', $eligibleForPermits);
-        $view->setVariable('issuedNo', $issuedData['count']);
-        $view->setVariable('applicationsNo', $applicationData['count']);
-        $view->setVariable('applicationsTable', $applicationsTable);
+        $view->setVariable('issuedNo', count($issuedData));
         $view->setVariable('issuedTable', $issuedTable);
-
-        // populate the navigation tabs with correct counts got fees and correspondence
-        $this->populateTabCounts(
-            $dashboardData['feeCount'],
-            $dashboardData['correspondenceCount']
-        );
+        $view->setVariable('applicationsNo', count($applicationData));
+        $view->setVariable('applicationsTable', $applicationsTable);
 
         return $view;
     }
@@ -162,11 +144,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         }
 
         $form = $this->getForm('EcmtLicenceForm');
-        $query = NextIrhpPermitStock::create(['permitType' => 'permit_ecmt']);
-        $stock = $this->handleQuery($query)->getResult();
-
-        $view = new ViewModel(['form' => $form, 'stock' => $stock, 'application' => []]);
-        $view->setTemplate('permits/ecmt-licence');
 
         $data = $this->params()->fromPost();
         if (isset($data['Submit']['SubmitButton'])) {
@@ -174,15 +151,24 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             $form->setData($data);
             if ($form->isValid()) {
                 $command = CreateEcmtPermitApplication::create(['licence'=> $data['Fields']['EcmtLicence']]);
-                    $response = $this->handleCommand($command);
-                    $insert = $response->getResult();
+                $response = $this->handleCommand($command);
+                $insert = $response->getResult();
 
-                    $this->redirect()
-                        ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $insert['id']['ecmtPermitApplication']]);
+                return $this->redirect()
+                    ->toRoute(
+                        'permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW,
+                        ['id' => $insert['id']['ecmtPermitApplication']]
+                    );
             } else {
                 $form->get('Fields')->get('EcmtLicence')->setMessages(['isEmpty' => "error.messages.ecmt-licence"]);
             }
         }
+
+        $query = NextIrhpPermitStock::create(['permitType' => 'permit_ecmt']);
+        $stock = $this->handleQuery($query)->getResult();
+
+        $view = new ViewModel(['form' => $form, 'stock' => $stock, 'application' => []]);
+        $view->setTemplate('permits/ecmt-licence');
 
         return $view;
     }
@@ -192,13 +178,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $id = $this->params()->fromRoute('id', -1);
         $application = $this->getApplication($id);
 
-        $query = NextIrhpPermitStock::create(['permitType' => $application['permitType']['id']]);
-        $stock = $this->handleQuery($query)->getResult();
-
         $form = $this->getForm('EcmtLicenceForm');
-
-        $view = new ViewModel(['form' => $form, 'application' => $application, 'stock' => $stock]);
-        $view->setTemplate('permits/ecmt-licence');
 
         $data = $this->params()->fromPost();
 
@@ -223,6 +203,12 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             }
         }
 
+        $query = NextIrhpPermitStock::create(['permitType' => $application['permitType']['id']]);
+        $stock = $this->handleQuery($query)->getResult();
+
+        $view = new ViewModel(['form' => $form, 'application' => $application, 'stock' => $stock]);
+        $view->setTemplate('permits/ecmt-licence');
+
         return $view;
     }
 
@@ -232,37 +218,15 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
         //Create form from annotations
         $form = $this->getForm('RestrictedCountriesForm');
-
-        // Read data
-        $application = $this->getApplication($id);
-
-        if (!is_null($application['hasRestrictedCountries'])) {
-            $restrictedCountries = $application['hasRestrictedCountries'] == true ? 1 : 0;
-
-            $form->get('Fields')
-                ->get('restrictedCountries')
-                ->setValue($restrictedCountries);
-        }
-
-        if (count($application['countrys']) > 0) {
-            //Format results from DB before setting values on form
-            $selectedValues = array();
-
-            foreach ($application['countrys'] as $country) {
-                $selectedValues[] = $country['id'];
-            }
-
-            $form->get('Fields')
-                ->get('restrictedCountriesList')
-                ->get('restrictedCountriesList')
-                ->setValue($selectedValues);
-        }
+        $setDefaultValues = true;
 
         $data = $this->params()->fromPost();
 
         if (is_array($data) && array_key_exists('Submit', $data)) {
             //Validate
             $form->setData($data);
+            $setDefaultValues = false;
+
             if ($form->isValid()) {
                 //EXTRA VALIDATION
                 if ((
@@ -278,7 +242,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
                     $command = UpdateEcmtCountries::create(['id' => $id, 'countryIds' => $countryIds]);
                     $this->handleCommand($command);
-                    $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_NO_OF_PERMITS);
+                    return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_NO_OF_PERMITS);
                 } else {
                     //conditional validation failed, restricted countries list should not be empty
                     $form->get('Fields')
@@ -294,43 +258,69 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             }
         }
 
+        // Read data
+        $application = $this->getApplication($id);
+
+        if ($setDefaultValues) {
+            if (!is_null($application['hasRestrictedCountries'])) {
+                $restrictedCountries = $application['hasRestrictedCountries'] == true ? 1 : 0;
+
+                $form->get('Fields')
+                    ->get('restrictedCountries')
+                    ->setValue($restrictedCountries);
+            }
+
+            if (count($application['countrys']) > 0) {
+                $form->get('Fields')
+                    ->get('restrictedCountriesList')
+                    ->get('restrictedCountriesList')
+                    ->setValue(array_column($application['countrys'], 'id'));
+            }
+        }
+
         return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef']);
     }
 
     public function tripsAction()
     {
         $id = $this->params()->fromRoute('id', -1);
-        $application = $this->getApplication($id);
-
-        $trafficArea = $application['licence']['trafficArea'];
-        $trafficAreaName = $trafficArea['name'];
-
-        $licenceTrafficArea = $application['licence']['licNo'] . ' (' . $trafficAreaName . ')';
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $tripsHint = $translationHelper->translateReplace('permits.page.trips.form.hint', [$licenceTrafficArea]);
 
         //Create form from annotations
         $form = $this->getForm('TripsForm');
-
-        $existing['Fields']['tripsAbroad'] = $application['trips'];
-        $existing['Fields']['intensityWarning'] = 'no';
-        $form->setData($existing);
+        $setDefaultValues = true;
 
         $data = $this->params()->fromPost();
 
         if (!empty($data)) {
             //Validate
             $form->setData($data);
+            $setDefaultValues = false;
 
             if ($form->isValid()) {
                 $command = UpdateEcmtTrips::create(['id' => $id, 'ecmtTrips' => $data['Fields']['tripsAbroad']]);
                 $this->handleCommand($command);
-                if ($this->isHighIntensity($application, $data['Fields']['tripsAbroad']) && $data['Fields']['intensityWarning'] === 'no') {
+
+                if ($data['Fields']['intensityWarning'] === 'no'
+                    && $this->isHighIntensity($data['Fields']['permitsRequired'], $data['Fields']['tripsAbroad'])
+                ) {
                     $form->get('Fields')->get('intensityWarning')->setValue('yes');
                 } else {
-                    $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
+                    return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
                 }
             }
+        }
+
+        $application = $this->getApplication($id);
+
+        if ($setDefaultValues) {
+            $existing = [
+                'Fields' => [
+                    'permitsRequired' => $application['permitsRequired'],
+                    'tripsAbroad' => $application['trips'],
+                    'intensityWarning' => 'no',
+                ]
+            ];
+            $form->setData($existing);
         }
 
         return array(
@@ -341,37 +331,27 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         );
     }
 
-
     // Understand this is a computer property but added to avoid a round-trip to API for simple arithmetic operation.
-    protected function isHighIntensity($application, $tripsAbroad)
+    protected function isHighIntensity($permitsRequired, $tripsAbroad)
     {
-        if (isset($application['permitsRequired'])) {
-            return ($tripsAbroad / $application['permitsRequired']) > 100;
-        } else {
-            return false;
-        }
+        return !empty($permitsRequired) ? ($tripsAbroad / $permitsRequired) > 100 : false;
     }
-
-
 
     public function internationalJourneyAction()
     {
         $id = $this->params()->fromRoute('id', -1);
-        $application = $this->getApplication($id);
-        $trafficArea = $application['licence']['trafficArea'];
 
         //Create form from annotations
         $form = $this->getForm('InternationalJourneyForm');
 
-        // read data
-        $form->get('Fields')->get('InternationalJourney')->setValue($application['internationalJourneys']);
-        $form->get('Fields')->get('intensityWarning')->setValue('no');
+        $setDefaultValues = true;
 
         $data = $this->params()->fromPost();
 
         if (is_array($data) && array_key_exists('Submit', $data)) {
             //Validate
             $form->setData($data);
+            $setDefaultValues = false;
 
             if ($form->isValid()) {
                 $commandData = [
@@ -380,10 +360,13 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 ];
                 $command = UpdateInternationalJourney::create($commandData);
                 $this->handleCommand($command);
-                if ($data['Fields']['InternationalJourney'] === RefData::ECMT_APP_JOURNEY_OVER_90 && $data['Fields']['intensityWarning'] === 'no') {
+
+                if ($data['Fields']['InternationalJourney'] === RefData::ECMT_APP_JOURNEY_OVER_90
+                    && $data['Fields']['intensityWarning'] === 'no'
+                ) {
                     $form->get('Fields')->get('intensityWarning')->setValue('yes');
                 } else {
-                    $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_SECTORS);
+                    return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_SECTORS);
                 }
             } else {
                 //Custom Error Message
@@ -393,7 +376,19 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             }
         }
 
-        return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef'], 'trafficAreaId' => $trafficArea['id']);
+        $application = $this->getApplication($id);
+
+        if ($setDefaultValues) {
+            $form->get('Fields')->get('InternationalJourney')->setValue($application['internationalJourneys']);
+            $form->get('Fields')->get('intensityWarning')->setValue('no');
+        }
+
+        return array(
+            'form' => $form,
+            'id' => $id,
+            'ref' => $application['applicationRef'],
+            'trafficAreaId' => $application['licence']['trafficArea']['id']
+        );
     }
 
     public function sectorAction()
@@ -403,38 +398,39 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         //Create form from annotations
         $form = $this->getForm('SpecialistHaulageForm');
 
-        // Read data
-        $application = $this->getApplication($id);
-
-        if (isset($application)) {
-            if (isset($application['sectors'])) {
-                //Format results from DB before setting values on form
-                $selectedValue = $application['sectors']['id'];
-
-                $form->get('Fields')
-                    ->get('SectorList')
-                    ->setValue($selectedValue);
-            }
-        }
+        $setDefaultValues = true;
 
         $data = $this->params()->fromPost();
 
         if (is_array($data) && array_key_exists('Submit', $data)) {
             //Validate
             $form->setData($data);
+
             if ($form->isValid()) {
-                    $sectorID = $data['Fields']['SectorList'];
-                    $command = UpdateSector::create(['id' => $id, 'sector' => $sectorID]);
+                $command = UpdateSector::create(['id' => $id, 'sector' => $data['Fields']['SectorList']]);
+                $this->handleCommand($command);
 
-                    $this->handleCommand($command);
-
-                    $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_CHECK_ANSWERS);
+                return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_CHECK_ANSWERS);
             } else {
                 //Custom Error Message
                 $form->get('Fields')
                     ->get('SectorList')
                     ->setMessages(['error.messages.sector.list']);
+
+                $setDefaultValues = false;
             }
+        }
+
+        // Read data
+        $application = $this->getApplication($id);
+
+        if ($setDefaultValues && isset($application) && isset($application['sectors'])) {
+            //Format results from DB before setting values on form
+            $selectedValue = $application['sectors']['id'];
+
+            $form->get('Fields')
+                ->get('SectorList')
+                ->setValue($selectedValue);
         }
 
         return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef']);
@@ -443,24 +439,18 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     public function permitsRequiredAction()
     {
         $id = $this->params()->fromRoute('id', -1);
-        $application = $this->getApplication($id);
-
-        $ecmtPermitFees = $this->getEcmtPermitFees();
-        $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
 
         //Create form from annotations
         $form = $this->getForm('PermitsRequiredForm');
 
-        $existing['Fields']['permitsRequired'] = $application['permitsRequired'];
-        $form->setData($existing);
+        $setDefaultValues = true;
 
         $data = $this->params()->fromPost();
 
         if (!empty($data)) {
-            $data['Fields']['numVehicles'] = $application['licence']['totAuthVehicles'];
-
             //Validate
             $form->setData($data);
+
             if ($form->isValid()) {
                 $command = UpdateEcmtPermitsRequired::create(
                     [
@@ -468,31 +458,45 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                         'permitsRequired' => $data['Fields']['permitsRequired']
                     ]
                 );
-                $response = $this->handleCommand($command);
+                $this->handleCommand($command);
 
-                $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_TRIPS);
+                return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_TRIPS);
+            } else {
+                $setDefaultValues = false;
             }
         }
 
+        $application = $this->getApplication($id);
+        $numberOfVehicles = $application['licence']['totAuthVehicles'];
+
+        if ($setDefaultValues) {
+            $existing = [
+                'Fields' => [
+                    'permitsRequired' => $application['permitsRequired'],
+                    'numVehicles' => $numberOfVehicles,
+                ]
+            ];
+            $form->setData($existing);
+        }
+
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $totalVehicles = $translationHelper->translateReplace('permits.form.permits-required.hint', [$application['licence']['totAuthVehicles']]);
+        $totalVehicles = $translationHelper->translateReplace(
+            'permits.form.permits-required.hint',
+            [$numberOfVehicles]
+        );
         $form->get('Fields')->get('permitsRequired')->setOption('hint', $totalVehicles);
 
-        $guidanceMessage = $translationHelper->translateReplace('permits.form.permits-required.fee.guidance', ['£' . $ecmtApplicationFee]);
+        $ecmtPermitFees = $this->getEcmtPermitFees();
+        $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
 
-        return array('form' => $form, 'guidanceMessage' => $guidanceMessage, 'id' => $id, 'ref' => $application['applicationRef']);
+        return array('form' => $form, 'id' => $id, 'ecmtApplicationFee' => $ecmtApplicationFee, 'ref' => $application['applicationRef']);
     }
 
     public function changeLicenceAction()
     {
         $id = $this->params()->fromRoute('id', -1);
 
-        $application = $this->getApplication($id);
         $data = $this->params()->fromPost();
-
-        $query = Licence::create(['id' => $this->params()->fromQuery('licenceId')]);
-        $response = $this->handleQuery($query);
-        $newLicence = $response->getResult();
 
         //Create form from annotations
         $form = $this->getForm('ChangeLicenceForm');
@@ -502,19 +506,26 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
             if ($form->isValid()) {
                 $command = UpdateEcmtLicence::create(['id' => $id, 'licence' => $data['Fields']['licenceId']]);
-                $response = $this->handleCommand($command);
-                $insert = $response->getResult();
-                $this->redirect()
+                $this->handleCommand($command);
+
+                return $this->redirect()
                     ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
             }
         }
 
-        $formData['Fields']['licenceId'] = $this->getRequest()->getQuery('licenceId');
+        $licenceId = $this->params()->fromQuery('licenceId');
+        $formData['Fields']['licenceId'] = $licenceId;
         $form->setData($formData);
+
+        $query = Licence::create(['id' => $licenceId]);
+        $response = $this->handleQuery($query);
+        $newLicence = $response->getResult();
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $confirmChangeLabel = $translationHelper->translateReplace('permits.form.change_licence.label', [$newLicence['licNo']]);
         $form->get('Fields')->get('ConfirmChange')->setLabel($confirmChangeLabel);
+
+        $application = $this->getApplication($id);
 
         $view = new ViewModel();
 
@@ -680,7 +691,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
      */
     protected function attachCurrentMessages()
     {
-
         foreach ($this->currentMessages as $namespace => $messages) {
             foreach ($messages as $message) {
                 $this->addMessage($message, $namespace);
@@ -696,7 +706,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
      */
     private function isEligibleForPermits(): bool
     {
-        $query = EligibleForPermits::create([]);
+        $query = MyAccount::create([]);
         $response = $this->handleQuery($query)->getResult();
 
         return $response['eligibleForPermits'];
@@ -746,7 +756,14 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
      */
     private function getEcmtPermitFees()
     {
-        $query = EcmtPermitFees::create(['productReferences' => [$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE, $this::ECMT_ISSUING_FEE_PRODUCT_REFENCE]]);
+        $query = EcmtPermitFees::create(
+            [
+                'productReferences' => [
+                    self::ECMT_APPLICATION_FEE_PRODUCT_REFENCE,
+                    self::ECMT_ISSUING_FEE_PRODUCT_REFENCE
+                ]
+            ]
+        );
         $response = $this->handleQuery($query);
         return $response->getResult();
     }

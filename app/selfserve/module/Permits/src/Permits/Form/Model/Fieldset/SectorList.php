@@ -12,7 +12,6 @@ class SectorList
 
     /**
      * @Form\Name("SectorList")
-     * @Form\Required(true)
      * @Form\Options({
      *     "fieldset-attributes": {"id": "sector-list"},
      *     "fieldset-data-group": "sector-list",
@@ -22,7 +21,8 @@ class SectorList
      * })
      * @Form\Attributes({
      *   "class" : "input--trips",
-     *    "id" : "EcmtSectorList",
+     *   "id" : "EcmtSectorList",
+     *   "aria-labelledby" : "SpecialistHaulage",
      * })
      * @Form\Type("DynamicRadioHtml")
      */

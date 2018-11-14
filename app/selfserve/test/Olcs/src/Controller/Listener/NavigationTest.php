@@ -5,7 +5,7 @@ namespace OlcsTest\Listener;
 use Common\FeatureToggle;
 use Common\Rbac\User as RbacUser;
 use Common\Service\Cqrs\Query\QuerySender;
-use Dvsa\Olcs\Transfer\Query\Organisation\EligibleForPermits;
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Olcs\Controller\Listener\Navigation as NavigationListener;
 use Mockery as m;
 use Zend\Http\Header\Referer as HttpReferer;
@@ -99,7 +99,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
             ->andReturn(['eligibleForPermits' => $eligibleForPermits]);
 
         $this->mockQuerySender->shouldReceive('send')
-            ->with(m::type(EligibleForPermits::class))
+            ->with(m::type(MyAccount::class))
             ->once()
             ->andReturn($httpResponse);
 
@@ -210,7 +210,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
             ->andReturn(['eligibleForPermits' => $eligibleForPermits]);
 
         $this->mockQuerySender->shouldReceive('send')
-            ->with(m::type(EligibleForPermits::class))
+            ->with(m::type(MyAccount::class))
             ->once()
             ->andReturn($httpResponse);
 

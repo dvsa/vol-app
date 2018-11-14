@@ -58,12 +58,14 @@
             <div class="info-box info-box--grey">
                 <h3 class="info-box__heading"><?php echo $this->translate('licence-status'); ?></h3>
                 <p class="info-box__icon-wrapper info-box__text"><i class="info-box__icon selfserve-important"></i><?php echo $this->translate($status); ?></p>
+                <?php foreach ($infoBoxLinks as $link): ?>
                 <ul class="info-box__links">
                     <li>
-                        <a href="<?php echo $this->url('licence-print', [], [], true); ?>"
-                        ><?php echo $this->translate('licence.print'); ?></a>
+                        <a href="<?php echo $this->url($link['linkUrl']['route'], $link['linkUrl']['params'], $link['linkUrl']['options'], $link['linkUrl']['reuseMatchedParams']); ?>"
+                        ><?php echo $this->translate($link['linkText']); ?></a>
                     </li>
                 </ul>
+                <?php endforeach; ?>
             </div>
             <div class="info-box info-box--blue">
                 <h3 class="info-box__heading"><?php echo $this->translate('summary'); ?></h3>
@@ -76,6 +78,6 @@
             </div>
         </aside>
 
-        
+
     </div>
 </div>

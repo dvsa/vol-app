@@ -17,7 +17,7 @@ return array(
     array(
       'title' => 'dashboard-table-permit-application-num',
       'name' => 'permitsRequired',
-      'formatter' => 'Translate'
+       'formatter' => 'NullableNumber'
     ),
     array(
       'title' => 'dashboard-table-permit-application-type',
