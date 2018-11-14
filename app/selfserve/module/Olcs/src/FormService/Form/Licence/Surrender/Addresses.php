@@ -43,6 +43,8 @@ class Addresses extends CommonAddress
 
         $this->getFormHelper()->removeFieldsets($form, $fieldsetsToRemove);
         $this->getFormHelper()->removeFieldList($form, 'form-actions', ['cancel', 'saveAndContinue']);
+        $form->get('correspondence')->setAttribute('id', 'correspondenceAddress');
+        $form->get('contact')->setAttribute('id', 'contactDetails');
         $form->get('form-actions')->get('save')->setAttribute('class', 'action--primary large');
 
         return $form;
