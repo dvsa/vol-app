@@ -3,9 +3,13 @@
 namespace Olcs\Controller\Licence\Surrender;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\Service\Cqrs\Exception\AccessDeniedException;
+use Dvsa\Olcs\Transfer\Command\Surrender\Create;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
+use Zend\Mvc\MvcEvent;
+use Zend\View\Helper\FlashMessenger;
 
 class StartController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -14,7 +18,8 @@ class StartController extends AbstractSelfserveController implements ToggleAware
     ];
 
     protected $templateConfig = [
-        'index' => 'licence/surrender-index'
+        'index' => 'licence/surrender-index',
+        'start' => 'licence/surrender/index'
     ];
 
     protected $dataSourceConfig = [
@@ -24,10 +29,17 @@ class StartController extends AbstractSelfserveController implements ToggleAware
     protected $formConfig = [
         'index' => [
             'startForm' => [
-                    'formClass' => \Olcs\Form\Model\Form\Surrender\Start::class
+                'formClass' => \Olcs\Form\Model\Form\Surrender\Start::class
             ]
         ]
     ];
+    private $translateService;
+
+    public function onDispatch(MvcEvent $e)
+    {
+        $this->translateService = $this->getServiceLocator()->get('Helper\Translation');
+        return parent::onDispatch($e);
+    }
 
 
     /**
@@ -38,8 +50,68 @@ class StartController extends AbstractSelfserveController implements ToggleAware
     public function indexAction()
     {
         $licence = $this->data['licence'];
-        $translateService = $this->getServiceLocator()->get('Helper\Translation');
+        return $this->getView($licence, $this->translateService);
+    }
 
+    /**
+     * startAction
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    public function startAction()
+    {
+        $licNo = $this->params('licence');
+        $hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
+
+        try {
+            $response = $this->handleCommand(Create::create(['id' => $licNo, 'licence' => $licNo]));
+            if ($response->isOk()) {
+                $result = $response->getResult();
+                $this->redirect()->toRoute(
+                    'licence/surrender/review-contact-details',
+                    [
+                        'licence' => $licNo,
+                        'surrender' => $result['id']['surrender']
+                    ]
+                );
+            }
+        } catch (AccessDeniedException $e) {
+            $message = $this->translateService->translate('licence.surrender.already.applied');
+            $hlpFlashMsgr->addWarningMessage($message);
+        } catch (\Exception $e) {
+            $hlpFlashMsgr->addUnknownError();
+        }
+
+        $this->redirect()->refresh();
+    }
+
+
+    private function getGvData()
+    {
+        return [
+            'pageTitle' => 'licence.surrender.start.title.gv',
+            'cancelBus' => ['']
+        ];
+    }
+
+    private function getPsvData($translateService)
+    {
+        return [
+            'pageTitle' => 'licence.surrender.start.title.psv',
+            'cancelBus' => [$translateService->translate('licence.surrender.start.cancel.bus')]
+        ];
+    }
+
+    /**
+     * getView
+     *
+     * @param $licence
+     * @param $translateService
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    private function getView($licence, $translateService): \Zend\View\Model\ViewModel
+    {
         $view = $this->genericView();
 
         switch ($licence['goodsOrPsv']['id']) {
@@ -59,27 +131,5 @@ class StartController extends AbstractSelfserveController implements ToggleAware
         $view->setVariable('startForm', $this->form);
 
         return $view;
-    }
-
-    public function startAction()
-    {
-        exit('test');
-    }
-
-
-    private function getGvData()
-    {
-        return [
-            'pageTitle' => 'licence.surrender.start.title.gv',
-            'cancelBus' => ['']
-        ];
-    }
-
-    private function getPsvData($translateService)
-    {
-        return [
-            'pageTitle' => 'licence.surrender.start.title.psv',
-            'cancelBus' => [$translateService->translate('licence.surrender.start.cancel.bus')]
-        ];
     }
 }

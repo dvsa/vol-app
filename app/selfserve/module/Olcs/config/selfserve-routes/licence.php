@@ -1,7 +1,7 @@
 <?php
 
 use Olcs\Controller\Licence\Surrender\ReviewContactDetailsController;
-use Zend\Mvc\Router\Http\Literal;
+use Olcs\Controller\Licence\Surrender\StartController;
 use Zend\Mvc\Router\Http\Segment;
 
 return [
@@ -19,7 +19,7 @@ return [
                 'surrender' => [
                     'type' => Segment::class,
                     'options' => [
-                        'route' => 'surrender',
+                        'route' => 'surrender[/]',
                     ],
                     'may_terminate' => false,
                     'child_routes' => [
@@ -28,7 +28,6 @@ return [
                             'type' => Segment::class,
                             'options' => [
                                 'route' => '',
-
                             ],
                             'child_routes' => [
                                 'GET' => [
@@ -37,7 +36,7 @@ return [
 
                                         'verb'=>'GET',
                                         'defaults' => [
-                                            'controller' => \Olcs\Controller\Licence\Surrender\StartController::class,
+                                            'controller' => StartController::class,
                                             'action' => 'index',
                                         ],
                                     ],
@@ -48,7 +47,7 @@ return [
 
                                         'verb'=>'POST',
                                         'defaults' => [
-                                            'controller' => \Olcs\Controller\Licence\Surrender\StartController::class,
+                                            'controller' => StartController::class,
                                             'action' => 'start',
                                         ],
                                     ],
