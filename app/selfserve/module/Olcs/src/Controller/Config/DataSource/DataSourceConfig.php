@@ -12,5 +12,4 @@ class DataSourceConfig
     const LICENCE = [
         LicenceDto::class => []
     ];
-
 }
