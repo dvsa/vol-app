@@ -180,8 +180,9 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         }
 
         if (!empty($this->templateConfig[$this->action]['browserTitle'])) {
-            $this->getServiceLocator()->get('ViewHelperManager')->get('headTitle')->setSeparator(' - ');
-            $this->getServiceLocator()->get('ViewHelperManager')->get('headTitle')->prepend($this->templateConfig[$this->action]['browserTitle']);
+            $headTitle = $this->getServiceLocator()->get('ViewHelperManager')->get('headTitle');
+            $headTitle->setSeparator(' - ');
+            $headTitle->prepend($this->templateConfig[$this->action]['browserTitle']);
         }
     }
 

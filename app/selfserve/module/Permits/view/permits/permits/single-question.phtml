@@ -13,16 +13,16 @@
                     <?php echo $this->escapeHtml($this->translate($data['question'])); ?>
                 </h1>
             </legend>
-            <?php if (isset($data['warning'])) { ?>
-                <?php echo $this->partial('partials/warning-component', ['translationKey' => $data['warning']]); ?>
-            <?php } ?>
-            <?php if (isset($data['details'])) { ?>
-                <?php echo $this->partial('partials/details-component', ['details' => $data['details']]); ?>
-            <?php } ?>
-            <?php if (isset($data['guidance'])) { ?>
-                <?php echo $this->partial('partials/guidance-blue-component', ['guidance' => $data['guidance']]); ?>
-            <?php } ?>
-            <?php if (isset($data['bulletList'])) { ?>
+            <?php if (isset($data['warning'])) {
+                 echo $this->partial('partials/warning-component', ['translationKey' => $data['warning']]);
+             }
+             if (isset($data['details'])) {
+                 echo $this->partial('partials/details-component', ['details' => $data['details']]);
+             }
+             if (isset($data['guidance'])) {
+                 echo $this->partial('partials/guidance-blue-component', ['guidance' => $data['guidance']]);
+             }
+             if (isset($data['bulletList'])) { ?>
                 <p class="govuk-body-l">
                     <?php echo $this->escapeHtml($this->translate($data['bulletList']['title'])); ?>:
                 </p>
