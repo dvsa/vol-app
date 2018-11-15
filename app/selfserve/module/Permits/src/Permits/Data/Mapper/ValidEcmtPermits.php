@@ -30,7 +30,7 @@ class ValidEcmtPermits
                 'countries' => $permit['irhpPermitRange']['countrys'],
             ];
         }
-        //var_dump($data['result']);
+
         $firstPermit = $data['result'][0];
         $dueDate = '';
         if (!array_key_exists('permitNumber', $firstPermit)) {
