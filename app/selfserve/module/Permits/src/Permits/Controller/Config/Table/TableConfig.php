@@ -15,4 +15,10 @@ class TableConfig
             'dataSource' => ValidEcmtPermitsDataSource::DATA_KEY
         ]
     ];
+    const UNPAID_APP_OVERVIEW = [
+        'overview-valid-permits' => [
+            'tableName' => 'overview-unpaid-permits',
+            'dataSource' => ValidEcmtPermitsDataSource::DATA_KEY
+        ]
+    ];
 }
