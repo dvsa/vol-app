@@ -1,5 +1,6 @@
 <div class="row">
-    <?php echo $this->flashMessengerAll(); ?>
+
+    <?php echo $this->flashMessengerAll();?>
     <div class="two-thirds">
         <?php
         echo $this->partial(
@@ -13,6 +14,7 @@
             ]
         );
         ?>
+
         <?php echo $this->translateReplace($body, $cancelBus) ?>
 
         <?php echo $this->form($form); ?>

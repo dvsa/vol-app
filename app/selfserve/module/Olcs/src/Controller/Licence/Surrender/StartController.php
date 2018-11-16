@@ -64,20 +64,22 @@ class StartController extends AbstractSelfserveController implements ToggleAware
         $hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
 
         try {
-            $response = $this->handleCommand(Create::create(['id' => $licNo, 'licence' => $licNo]));
+            $response = $this->handleCommand(Create::create(['id' => $licNo]));
             if ($response->isOk()) {
                 $result = $response->getResult();
-                $this->redirect()->toRoute(
-                    'licence/surrender/review-contact-details',
-                    [
-                        'licence' => $licNo,
-                        'surrender' => $result['id']['surrender']
-                    ]
-                );
+                if (!empty($result)) {
+                    $this->redirect()->toRoute(
+                        'licence/surrender/review-contact-details',
+                        [
+                            'licence' => $licNo,
+                            'surrender' => $result['id']['surrender']
+                        ]
+                    );
+                }
             }
         } catch (AccessDeniedException $e) {
             $message = $this->translateService->translate('licence.surrender.already.applied');
-            $hlpFlashMsgr->addWarningMessage($message);
+            $hlpFlashMsgr->addInfoMessage($message);
         } catch (\Exception $e) {
             $hlpFlashMsgr->addUnknownError();
         }

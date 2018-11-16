@@ -150,7 +150,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         return parent::onDispatch($e);
     }
 
-    public function genericView()
+    public function  genericView()
     {
         $view = new ViewModel();
 
