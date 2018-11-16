@@ -1,6 +1,7 @@
 <?php
 
-use Zend\Mvc\Router\Http\Literal;
+use Olcs\Controller\Licence\Surrender\ReviewContactDetailsController;
+use Olcs\Controller\Licence\Surrender\StartController;
 use Zend\Mvc\Router\Http\Segment;
 
 return [
@@ -19,23 +20,63 @@ return [
                     'type' => Segment::class,
                     'options' => [
                         'route' => 'surrender[/]',
-
                     ],
                     'may_terminate' => false,
                     'child_routes' => [
                         'start' => [
+                            'may_terminate' => false,
                             'type' => Segment::class,
                             'options' => [
-                                'route' => 'start[/]',
-                                'defaults' => [
-                                    'controller' => 'SurrenderStart',
-                                    'action' => 'index',
+                                'route' => '',
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+
+                                        'verb'=>'GET',
+                                        'defaults' => [
+                                            'controller' => StartController::class,
+                                            'action' => 'index',
+                                        ],
+                                    ],
+                                ],
+                                'POST' => [
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+
+                                        'verb'=>'POST',
+                                        'defaults' => [
+                                            'controller' => StartController::class,
+                                            'action' => 'start',
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
-                    ]
-                ],
+                    ],
+                    'review-contact-details' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => ':surrender/review-contact-details[/:action][/]',
+                            'defaults' => [
+                                'controller' => ReviewContactDetailsController::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
+                    'address-details' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => ':surrender/address-details[/]',
+                            'defaults' => [
+                                'controller' => Olcs\Controller\Licence\Surrender\AddressDetailsController::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
+                ]
             ],
         ],
-    ]
+    ],
 ];
