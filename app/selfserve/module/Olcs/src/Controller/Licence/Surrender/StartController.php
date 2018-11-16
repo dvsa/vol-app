@@ -18,8 +18,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
     ];
 
     protected $templateConfig = [
-        'index' => 'licence/surrender-index',
-        'start' => 'licence/surrender/index'
+        'index' => 'licence/surrender-index'
     ];
 
     protected $dataSourceConfig = [

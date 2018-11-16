@@ -1115,10 +1115,9 @@ $myAccountNav = array(
         ),
     )
 );
-$routes = array_merge($routes, $configRoutes);
 return array(
     'router' => array(
-        'routes' => $routes,
+        'routes' => array_merge($routes, $configRoutes),
     ),
     'controllers' => array(
         'initializers' => array(
