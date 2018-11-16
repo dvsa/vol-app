@@ -125,7 +125,6 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     protected $postConfig = [];
 
 
-
     /**
      * onDispatch method
      *
@@ -150,7 +149,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         return parent::onDispatch($e);
     }
 
-    public function  genericView()
+    public function genericView()
     {
         $view = new ViewModel();
 
@@ -230,7 +229,10 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                         }
 
                         return $this->redirect()
-                            ->toRoute('permits/' . $config['conditional']['step'], ['id' => $this->data['application']['id']]);
+                            ->toRoute(
+                                'permits/' . $config['conditional']['step'],
+                                ['id' => $this->data['application']['id']]
+                            );
                     }
                 }
 
@@ -273,7 +275,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         foreach ($dataSourceConfig as $dataSource => $config) {
             /**
              * @var DataSourceInterface $source
-             * @var QueryInterface $query
+             * @var QueryInterface      $query
              */
             $source = new $dataSource();
             $query = $source->queryFromParams(array_merge($this->routeParams, $this->queryParams));
@@ -451,7 +453,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * for wider selfserve use. Permits needs to start using VOL standard buttons before this can be truly reusable
      *
      * @param $submittedData - an array of the data submitted by the form
-     * @param $nextStep - the EcmtSection:: route to be taken if the form was submitted normally
+     * @param $nextStep      - the EcmtSection:: route to be taken if the form was submitted normally
      *
      * @return HttpResponse
      */
