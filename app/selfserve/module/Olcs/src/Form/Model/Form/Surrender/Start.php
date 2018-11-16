@@ -16,10 +16,4 @@ class Start
      * @Form\Type("\Zend\Form\Element\Button")
      */
     public $submit = null;
-
-    /**
-     * @Form\Attributes({"type":"hidden"})
-     * @Form\Type("\Zend\Form\Element\Hidden")
-     */
-    public $status = 'test';
 }
