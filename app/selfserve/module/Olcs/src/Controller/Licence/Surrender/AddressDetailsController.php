@@ -21,11 +21,7 @@ class AddressDetailsController extends AbstractSurrenderController
         if ($request->isPost()) {
             $formData = (array)$request->getPost();
         } else {
-            $response = $this->handleQuery(Addresses::create(['id' => $this->params('licence')]));
-            if (!$response->isOk()) {
-                return $this->notFoundAction();
-            }
-            $formData = Mapper\Lva\Addresses::mapFromResult($response->getResult());
+            $formData = Mapper\Licence\Surrender\AddressDetails::mapFromResult($this->licence);
         }
 
         $form = $this->getForm('Licence\Surrender\Addresses')
