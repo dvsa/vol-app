@@ -1399,7 +1399,6 @@ return array(
             'lva-licence-addresses' => LvaFormService\Addresses\LicenceAddresses::class,
             'lva-variation-addresses' => LvaFormService\Addresses\VariationAddresses::class,
             'lva-application-addresses' => LvaFormService\Addresses\ApplicationAddresses::class,
-            'licence-surrender-addresses' => Olcs\FormService\Licence\Surrender\Addresses::class,
 
             // Safety
             'lva-licence-safety' => LvaFormService\LicenceSafety::class,
