@@ -34,13 +34,11 @@ class ReviewContactDetailsController extends AbstractSurrenderController
 
     private function getConfirmationForm(): \Common\Form\Form
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-
         /** @var TranslationHelperService $translator */
         $translator = $this->getServiceLocator()->get('Helper\Translation');
 
         /* @var $form \Common\Form\GenericConfirmation */
-        $form = $formHelper->createForm('GenericConfirmation');
+        $form = $this->hlpForm->createForm('GenericConfirmation');
         $form->setAttribute(
             "action",
             $this->url()->fromRoute(
