@@ -6,7 +6,7 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Data\Mapper\Licence\Surrender\ReviewContactDetails;
 use Common\Service\Helper\TranslationHelperService;
 
-class ReviewContactDetailsController extends AbstractSurrenderController implements ToggleAwareInterface
+class ReviewContactDetailsController extends AbstractSurrenderController
 {
 
     public function indexAction()
