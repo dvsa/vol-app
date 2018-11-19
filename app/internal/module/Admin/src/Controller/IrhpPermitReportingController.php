@@ -2,14 +2,22 @@
 
 namespace Admin\Controller;
 
-use Olcs\Controller\AbstractInternalController;
+use Common\Controller\Interfaces\ToggleAwareInterface;
+use Admin\Controller\AbstractIrhpPermitAdminController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
 use Common\Category;
+use Common\FeatureToggle;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
 
-class IrhpPermitReportingController extends AbstractInternalController implements LeftViewProvider
+class IrhpPermitReportingController extends AbstractIrhpPermitAdminController implements LeftViewProvider, ToggleAwareInterface
 {
+    protected $toggleConfig = [
+        'default' => [
+            FeatureToggle::ADMIN_PERMITS
+        ],
+    ];
+
     protected $navigationId = 'admin-dashboard/admin-permits';
     protected $tableViewTemplate = 'pages/irhp-permit-reporting/index';
     protected $tableName = 'admin-exported-reports';
@@ -25,7 +33,7 @@ class IrhpPermitReportingController extends AbstractInternalController implement
         $view = new ViewModel(
             [
                 'navigationId' => 'admin-dashboard/admin-permits',
-                'navigationTitle' => 'Permits',
+                'navigationTitle' => '',
                 'stockId' => $this->params()->fromRoute()['stockId']
             ]
         );

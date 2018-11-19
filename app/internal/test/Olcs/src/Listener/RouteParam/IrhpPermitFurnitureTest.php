@@ -1,7 +1,7 @@
 <?php
 
 /**
- * IrhpPermit Furniture Test
+ * IrhpPermitApplication Furniture Test
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
@@ -12,7 +12,7 @@ use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
 use Common\Service\Helper\UrlHelperService;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Olcs\Data\Mapper\IrhpPermit;
+use Olcs\Data\Mapper\IrhpPermitApplication;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\IrhpPermitFurniture;
 use Mockery as m;

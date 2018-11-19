@@ -771,7 +771,7 @@ $routes = [
             'permits' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => 'permits[/][:action][/:permitid][/]',
+                    'route' => 'permits[/:action][/:permitid][/]',
                     'defaults' => [
                         'controller' => 'IrhpPermitApplicationController',
                         'action' => 'index',
@@ -781,7 +781,29 @@ $routes = [
                         'action' => '(index|edit|add|documents|processing|submit|accept|decline|cancel|withdraw)'
                     ]
                 ],
+            ],
+            'irhp-permits' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'permits/:permitid/irhp-permits[/][:action][/][:irhpPermitId]',
+                    'defaults' => [
+                        'controller' => 'IrhpPermitController',
+                        'action' => 'index',
+                    ]
+                ],
                 'may_terminate' => true,
+                'child_routes' => [
+                    'irhp-permits' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'irhp-permits[/][:irhpPermitId]',
+                            'defaults' => [
+                                'controller' => 'IrhpPermitController',
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
+                ],
             ],
             'processing' => [
                 'type' => 'segment',

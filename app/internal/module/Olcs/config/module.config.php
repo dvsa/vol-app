@@ -326,7 +326,8 @@ return array(
             'CaseDocumentSlaTargetDateController' => 'Olcs\Controller\Sla\CaseDocumentSlaTargetDateController',
             'LicenceDocumentSlaTargetDateController' => 'Olcs\Controller\Sla\LicenceDocumentSlaTargetDateController',
             'IrhpPermitApplicationController' => 'Olcs\Controller\IrhpPermits\IrhpPermitApplicationController',
-            'IrhpPermitFeesController' => 'Olcs\Controller\IrhpPermits\IrhpPermitFeesController'
+            'IrhpPermitFeesController' => 'Olcs\Controller\IrhpPermits\IrhpPermitFeesController',
+            'IrhpPermitController' => 'Olcs\Controller\IrhpPermits\IrhpPermitController',
         ),
         'factories' => [
             TmCntr\Details\TransportManagerDetailsResponsibilityController::class =>

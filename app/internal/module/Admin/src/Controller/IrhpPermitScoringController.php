@@ -6,16 +6,25 @@
  */
 namespace Admin\Controller;
 
+use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\FeatureToggle;
 use Dvsa\Olcs\Transfer\Command\Permits\QueueAcceptScoring;
 use Dvsa\Olcs\Transfer\Command\Permits\QueueRunScoring;
 use Dvsa\Olcs\Transfer\Query\Permits\StockOperationsPermitted;
-use Olcs\Controller\AbstractInternalController;
+use Admin\Controller\AbstractIrhpPermitAdminController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 
-class IrhpPermitScoringController extends AbstractInternalController implements LeftViewProvider
+class IrhpPermitScoringController extends AbstractIrhpPermitAdminController implements LeftViewProvider, ToggleAwareInterface
 {
+    protected $toggleConfig = [
+        'default' => [
+            FeatureToggle::ADMIN_PERMITS
+        ],
+    ];
+
     protected $navigationId = 'admin-dashboard/admin-permits';
     protected $tableViewTemplate = 'pages/irhp-permit-scoring/index';
 
@@ -28,6 +37,10 @@ class IrhpPermitScoringController extends AbstractInternalController implements 
         ]
     ];
 
+    protected $inlineScripts = [
+        'indexAction' => ['permits-scoring']
+    ];
+
     /**
      * @return ViewModel
      */
@@ -36,7 +49,7 @@ class IrhpPermitScoringController extends AbstractInternalController implements 
         $view = new ViewModel(
             [
                 'navigationId' => 'admin-dashboard/admin-permits',
-                'navigationTitle' => 'Permits',
+                'navigationTitle' => '',
                 'stockId' => $this->params()->fromRoute()['stockId']
             ]
         );
@@ -86,5 +99,17 @@ class IrhpPermitScoringController extends AbstractInternalController implements 
             'This will run scoring. Are you sure?',
             'Scoring successfully triggered'
         );
+    }
+
+    /**
+     * @return JsonModel
+     */
+    public function statusAction()
+    {
+        $stockOperationsPermitted = $this->handleQuery(
+            StockOperationsPermitted::create([ 'id' => $this->params()->fromRoute('stockId') ])
+        );
+
+        return new JsonModel($stockOperationsPermitted->getResult());
     }
 }
