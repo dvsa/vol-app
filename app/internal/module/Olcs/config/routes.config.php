@@ -889,6 +889,74 @@ $routes = [
                     ],
                 ]
             ],
+            'irhp-docs' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'permits/:permitid/docs[/]',
+                    'defaults' => [
+                        'controller' => 'IrhpDocsController',
+                        'action' => 'documents',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'generate' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'generate[/:doc][/]',
+                            'defaults' => [
+                                'type' => 'ecmtPermitApplication',
+                                'controller' => 'DocumentGenerationController',
+                                'action' => 'generate'
+                            ]
+                        ],
+                    ],
+                    'finalise' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'finalise/:doc[/:action][/]',
+                            'defaults' => [
+                                'type' => 'ecmtPermitApplication',
+                                'controller' => 'DocumentFinaliseController',
+                                'action' => 'finalise'
+                            ]
+                        ],
+                    ],
+                    'upload' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'upload[/]',
+                            'defaults' => [
+                                'type' => 'ecmtPermitApplication',
+                                'controller' => 'DocumentUploadController',
+                                'action' => 'upload'
+                            ]
+                        ],
+                    ],
+                    'delete' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'delete/:doc[/]',
+                            'defaults' => [
+                                'type' => 'ecmtPermitApplication',
+                                'controller' => 'IrhpDocsController',
+                                'action' => 'delete-document'
+                            ]
+                        ],
+                    ],
+                    'relink' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'relink/:doc[/]',
+                            'defaults' => [
+                                'type' => 'ecmtPermitApplication',
+                                'controller' => 'DocumentRelinkController',
+                                'action' => 'relink'
+                            ]
+                        ],
+                    ],
+                ],
+            ],
             'processing' => [
                 'type' => 'segment',
                 'options' => [

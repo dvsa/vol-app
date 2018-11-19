@@ -573,12 +573,7 @@ $nav = [
                                 [
                                     'id' => 'licence_irhp_permits-documents',
                                     'label' => 'Docs & attachments',
-                                    'route' => 'licence/permits/docs',
-                                    'action' => 'documents',
-                                    'params' => [
-                                        'action' => 'documents',
-                                        'id' => null,
-                                    ],
+                                    'route' => 'licence/irhp-docs',
                                     'use_route_match' => true,
                                 ],
                                 [

@@ -25,7 +25,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
     /**
      * Process action - Generate
-     * 
+     *
      * @return ViewModel
      */
     public function generateAction()
@@ -43,7 +43,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
     /**
      * Process action - List Template Bookmarks
-     * 
+     *
      * @return ViewModel
      */
     public function listTemplateBookmarksAction()
@@ -112,6 +112,10 @@ class DocumentGenerationController extends AbstractDocumentController
                 $queryData = array_merge($queryData, $this->getCaseData());
                 break;
             case 'busReg':
+                $queryData['licence'] = $routeParams['licence'];
+                break;
+            // fixing irfoOrganisation / organisation ambiguity
+            case 'ecmtPermitApplication':
                 $queryData['licence'] = $routeParams['licence'];
                 break;
             // fixing irfoOrganisation / organisation ambiguity
