@@ -11,7 +11,7 @@ use Zend\View\Helper\AbstractHelper;
  */
 class ChangeAnswerLink extends AbstractHelper
 {
-    private $linkTemplate = '<a href="%s">%s</a>';
+    private $linkTemplate = '<a href="%s">%s<span class="govuk-visually-hidden">%s</span></a>';
 
     /**
      * Link to move from the change answer page to the answer being changed
@@ -21,10 +21,10 @@ class ChangeAnswerLink extends AbstractHelper
      *
      * @return string
      */
-    public function __invoke(string $route, ?string $label = 'common.link.change.label'): string
+    public function __invoke(string $route, string $context, ?string $label = 'common.link.change.label'): string
     {
         $label = $this->view->escapeHtml($this->view->translate($label));
         $url = $this->view->url('permits/' . $route, [], [], true);
-        return sprintf($this->linkTemplate, $url, $label);
+        return sprintf($this->linkTemplate, $url, $label, $context);
     }
 }

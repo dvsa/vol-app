@@ -32,7 +32,7 @@ $application = $data['application'];
                         } ?>
                     </dd>
                     <dd class="app-check-your-answers__change">
-                        <?php echo $this->changeAnswerLink($answer['route']); ?>
+                        <?php echo $this->changeAnswerLink($answer['route'], $this->escapeHtml($this->translate($answer['question']))); ?>
                     </dd>
                 </div>
             <?php } ?>
