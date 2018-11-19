@@ -1,6 +1,7 @@
 <?php
     $title = $this->escapeHtml($this->translate($titleName));
     $this->headTitle($title);
+    $visuallyHidden = isset($visuallyHidden) ? $visuallyHidden : '';
 ?>
 
 <div class="row ecmt">

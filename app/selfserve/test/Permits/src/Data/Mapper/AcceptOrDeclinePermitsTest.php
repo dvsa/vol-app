@@ -22,7 +22,12 @@ class AcceptOrDeclinePermitsTest extends TestCase
             'fees' => [
                 [
                     'isOutstanding' => false,
-                    'isEcmtIssuingFee' => true
+                    'isEcmtIssuingFee' => true,
+                    'grossAmount' => $feeGrossAmount,
+                    'feeType' => [
+                        'displayValue' => $feeDisplayValue
+                    ],
+                    'invoicedDate' => '2018-03-10'
                 ],
                 [
                     'isOutstanding' => true,

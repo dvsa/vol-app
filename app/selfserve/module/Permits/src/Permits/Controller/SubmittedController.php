@@ -40,7 +40,6 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
         $view->setVariable('mainName', 'permits.application.submitted.main');
         $view->setVariable('receiptUrl', $this->url()->fromRoute('permits/ecmt-print-receipt', ['id' => $ecmtApplicationId, 'reference' => $this->params()->fromQuery('receipt_reference')]));
 
-
         return $view;
     }
 
@@ -48,9 +47,17 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
     {
         $ecmtApplicationId = $this->params()->fromRoute('id');
         $view = parent::genericAction();
-        $view->setVariable('partialName', 'markup-ecmt-application-fee-submitted');
+        $partialName =
+            $this->params()->fromQuery('receipt_reference') === 'paidWaived'
+            ? 'markup-ecmt-application-fee-submitted-paid-waived'
+            : 'markup-ecmt-application-fee-submitted';
+        $view->setVariable('partialName', $partialName);
         $view->setVariable('titleName', 'permits.application.fee.submitted.title');
-        $view->setVariable('mainName', 'permits.application.fee.submitted.main');
+        $mainName =
+            $this->params()->fromQuery('receipt_reference') === 'paidWaived'
+                ? 'permits.application.fee.submitted.main.paid.waived'
+                : 'permits.application.fee.submitted.main';
+        $view->setVariable('mainName', $mainName);
         $view->setVariable('receiptUrl', $this->url()->fromRoute('permits/ecmt-print-receipt', ['id' => $ecmtApplicationId, 'reference' => $this->params()->fromQuery('receipt_reference')]));
 
         return $view;

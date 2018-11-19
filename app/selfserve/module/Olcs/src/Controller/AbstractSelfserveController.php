@@ -132,7 +132,6 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      */
     protected $postConfig = [];
 
-
     /**
      * onDispatch method
      *
@@ -240,19 +239,22 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 }
 
                 if (isset($config['conditional'])) {
-                    if ($this->data['application'][$config['conditional']['field']] === $config['conditional']['value']) {
+                    if ($this->data[$config['conditional']['dataKey']][$config['conditional']['field']] === $config['conditional']['value']) {
                         if (isset($config['conditional']['command'])) {
                             $conditionalCommand = $config['conditional']['command']::create([
-                                $config['conditional']['params'] => $this->data['application'][$config['conditional']['params']]
+                                $config['conditional']['params'] => $this->data[$config['conditional']['dataKey']][$config['conditional']['params']]
                             ]);
                             $conditionalResponse = $this->handleCommand($conditionalCommand);
                             $this->handleResponse($conditionalResponse);
                         }
 
+                        $conditionalQueryParams = isset($config['conditional']['query']) ? $config['conditional']['query'] : [];
+
                         return $this->redirect()
                             ->toRoute(
-                                'permits/' . $config['conditional']['step'],
-                                ['id' => $this->data['application']['id']]
+                                $config['conditional']['step'],
+                                ['id' => $this->data[$config['conditional']['dataKey']]['id']],
+                                ['query' => $conditionalQueryParams]
                             );
                     }
                 }
@@ -300,7 +302,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         foreach ($dataSourceConfig as $dataSource => $config) {
             /**
              * @var DataSourceInterface $source
-             * @var QueryInterface      $query
+             * @var QueryInterface $query
              */
             $source = new $dataSource();
             $query = $source->queryFromParams(array_merge($this->routeParams, $this->queryParams));
@@ -346,8 +348,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             }
 
             $form = $this->getForm($config['formClass']);
-
             $form->setData($formData);
+            $form = $this->alterForm($form);
             $this->forms[$name] = $form;
 
             /**
@@ -355,6 +357,17 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
              */
             $this->form = $form;
         }
+    }
+
+    /**
+     * Can be overidden in controller to manipulate
+     *
+     * @param \Common\Form\Form $form
+     * @return \Common\Form\Form
+     */
+    public function alterForm($form)
+    {
+        return $form;
     }
 
     /**
@@ -450,6 +463,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * @todo needs to handle response errors :)
      *
      * @param CqrsResponse $response
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function handleResponseErrors(CqrsResponse $response)
     {
@@ -490,7 +504,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * for wider selfserve use. Permits needs to start using VOL standard buttons before this can be truly reusable
      *
      * @param $submittedData - an array of the data submitted by the form
-     * @param $nextStep      - the EcmtSection:: route to be taken if the form was submitted normally
+     * @param $nextStep - the EcmtSection:: route to be taken if the form was submitted normally
      *
      * @return HttpResponse
      */
@@ -509,11 +523,14 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      *
      * @param string $route
      *
+     * @param array $params
+     * @param array $options
+     * @param bool $reuseMatched
      * @return HttpResponse
      */
     protected function nextStep(string $route): HttpResponse
     {
-        return $this->redirect()->toRoute('permits/' . $route, [], [], true);
+        return $this->redirect()->toRoute($route, [], [], true);
     }
 
     /**
@@ -557,6 +574,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * @param string $method the method we wish to run
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function shouldRunOnGet(string $method): bool
     {
