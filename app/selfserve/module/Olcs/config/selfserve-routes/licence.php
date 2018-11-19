@@ -54,28 +54,28 @@ return [
                                 ],
                             ],
                         ],
-                    ],
-                    'review-contact-details' => [
-                        'type' => Segment::class,
-                        'options' => [
-                            'route' => ':surrender/review-contact-details[/:action][/]',
-                            'defaults' => [
-                                'controller' => ReviewContactDetailsController::class,
-                                'action' => 'index',
+                        'review-contact-details' => [
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => ':surrender/review-contact-details[/:action][/]',
+                                'defaults' => [
+                                    'controller' => ReviewContactDetailsController::class,
+                                    'action' => 'index',
+                                ],
                             ],
                         ],
-                    ],
-                    'address-details' => [
-                        'type' => Segment::class,
-                        'options' => [
-                            'route' => ':surrender/address-details[/]',
-                            'defaults' => [
-                                'controller' => Olcs\Controller\Licence\Surrender\AddressDetailsController::class,
-                                'action' => 'index',
+                        'address-details' => [
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => ':surrender/address-details[/]',
+                                'defaults' => [
+                                    'controller' => Olcs\Controller\Licence\Surrender\AddressDetailsController::class,
+                                    'action' => 'index',
+                                ],
                             ],
                         ],
-                    ],
-                ]
+                    ]
+                ],
             ],
         ],
     ],
