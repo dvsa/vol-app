@@ -781,16 +781,6 @@ $routes = [
                         'action' => 'index',
                     ]
                 ],
-            ],
-            'irhp-permits' => [
-                'type' => 'segment',
-                'options' => [
-                    'route' => 'permits/:permitid/irhp-permits[/][:action][/][:irhpPermitId]',
-                    'defaults' => [
-                        'controller' => 'IrhpPermitController',
-                        'action' => 'index',
-                    ]
-                ],
                 'may_terminate' => true,
                 'child_routes' => [
                     'edit' => [
@@ -888,6 +878,17 @@ $routes = [
                         ]
                     ],
                 ]
+            ],
+            'irhp-permits' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'permits/:permitid/irhp-permits[/][:action][/][:irhpPermitId]',
+                    'defaults' => [
+                        'controller' => 'IrhpPermitController',
+                        'action' => 'index',
+                    ]
+                ],
+                'may_terminate' => true,
             ],
             'irhp-docs' => [
                 'type' => 'segment',

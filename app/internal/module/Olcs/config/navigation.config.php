@@ -590,13 +590,20 @@ $nav = [
                                 [
                                     'id' => 'licence_irhp_permits-fees',
                                     'label' => 'Fees',
-                                    'action' => 'fees',
                                     'route' => 'licence/irhp-fees',
-                                    'params' => [
-                                        'action' => 'fees',
-                                        'id' => null,
-                                    ],
                                     'use_route_match' => true,
+                                    'pages' => [
+                                        [
+                                            'id' => 'licence_irhp_permit-fees_details',
+                                            'label' => 'Fee details',
+                                            'route' => 'licence/irhp-fees/fee_action',
+                                        ],
+                                        [
+                                            'id' => 'licence_irhp_permit-fees_transaction',
+                                            'label' => 'Transaction details',
+                                            'route' => 'licence/irhp-fees/fee_action/transaction',
+                                        ],
+                                    ]
                                 ],
                             ]
                         ],
