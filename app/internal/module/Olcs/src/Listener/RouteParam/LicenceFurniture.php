@@ -70,7 +70,7 @@ class LicenceFurniture implements
 
     /**
      * @param RouteParam $e RouteParam event
-     * 
+     *
      * @throws ResourceNotFoundException
      */
     public function onLicenceFurniture(RouteParam $e)

@@ -146,12 +146,13 @@ class IrhpPermitFurnitureTest extends TestCase
             )
             ->getMock();
 
+        $mockNavigation = m::mock()
+            ->shouldReceive('findOneBy')->once()->with('id', 'irhp_permits')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(true)->getMock()
+            )->getMock();
 
-
-
-
-        $mockNavigation = m::mock();
-        $mockNavigation
+        $mockSidebarNavigation = m::mock();
+        $mockSidebarNavigation
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-permit-quick-actions-cancel')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with(true)->getMock()
             )
@@ -168,11 +169,8 @@ class IrhpPermitFurnitureTest extends TestCase
                 m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
             )->getMock();
 
-
-
-
-        $this->sut->setSidebarNavigationService($mockNavigation);
-
+        $this->sut->setNavigationService($mockNavigation);
+        $this->sut->setSidebarNavigationService($mockSidebarNavigation);
 
         $mockViewHelperManager->shouldReceive('get')
             ->with('Url');
@@ -188,6 +186,7 @@ class IrhpPermitFurnitureTest extends TestCase
     public function testCreateService()
     {
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockNavigation = m::mock();
         $mockQuerySender = m::mock(QuerySender::class);
         $mockCommandSender = m::mock(CommandSender::class);
         $mockSidebar = m::mock();
@@ -196,6 +195,7 @@ class IrhpPermitFurnitureTest extends TestCase
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('QuerySender')->andReturn($mockQuerySender);
         $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);
+        $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mockNavigation);
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($mockSidebar);
 
         $sut = new IrhpPermitFurniture();
@@ -205,5 +205,6 @@ class IrhpPermitFurnitureTest extends TestCase
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
         $this->assertSame($mockQuerySender, $sut->getQuerySender());
         $this->assertSame($mockCommandSender, $sut->getCommandSender());
+        $this->assertSame($mockNavigation, $sut->getNavigationService());
     }
 }

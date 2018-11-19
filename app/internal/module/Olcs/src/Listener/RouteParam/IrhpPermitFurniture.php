@@ -35,7 +35,30 @@ class IrhpPermitFurniture implements
         QuerySenderAwareTrait,
         CommandSenderAwareTrait;
 
+    /**
+     * @var \Zend\Navigation\Navigation
+     */
+    protected $navigationService;
+
     protected $sidebarNavigationService;
+
+    /**
+     * @return \Zend\Navigation\Navigation
+     */
+    public function getNavigationService()
+    {
+        return $this->navigationService;
+    }
+
+    /**
+     * @param \Zend\Navigation\Navigation $navigationService
+     * @return $this
+     */
+    public function setNavigationService($navigationService)
+    {
+        $this->navigationService = $navigationService;
+        return $this;
+    }
 
     /**
      * Get Sidebar Navigation
@@ -71,6 +94,7 @@ class IrhpPermitFurniture implements
         $this->setQuerySender($serviceLocator->get('QuerySender'));
         $this->setCommandSender($serviceLocator->get('CommandSender'));
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
+        $this->setNavigationService($serviceLocator->get('Navigation'));
         $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
 
         return $this;
@@ -111,17 +135,18 @@ class IrhpPermitFurniture implements
         $placeholder->getContainer('pageSubtitle')->set($this->getSubTitle($irhpPermit));
         $placeholder->getContainer('horizontalNavigationId')->set('licence_irhp_permits');
 
+        $this->getNavigationService()->findOneBy('id', 'irhp_permits')
+            ->setVisible(true);
+
         $sidebarNav = $this->getSidebarNavigationService();
 
         // quick actions
         $sidebarNav->findOneBy('id', 'irhp-permit-quick-actions-cancel')
             ->setVisible($irhpPermit['canBeCancelled']);
 
-
         // decisions
         $sidebarNav->findOneBy('id', 'irhp-permit-decisions-submit')
             ->setVisible($irhpPermit['canBeSubmitted']);
-
 
         $sidebarNav->findOneBy('id', 'irhp-permit-decisions-withdraw')
             ->setVisible($irhpPermit['canBeWithdrawn']);
@@ -131,8 +156,6 @@ class IrhpPermitFurniture implements
 
         $sidebarNav->findOneBy('id', 'irhp-permit-decisions-decline')
             ->setVisible($irhpPermit['canBeDeclined']);
-
-
 
         $right = new ViewModel();
         $right->setTemplate('sections/irhp-permit/partials/right');
