@@ -560,25 +560,20 @@ $nav = [
                             'label' => 'IRHP Permits',
                             'route' => 'licence/permits',
                             'use_route_match' => true,
-                            'params' => [
-                                'action' => null,
-                                'id' => null,
-                            ],
                             'pages' => [
                                 [
                                     'id' => 'licence_irhp_permits-edit',
                                     'label' => 'Application details',
-                                    'route' => 'licence/permits',
-                                    'action' => 'edit',
-                                    'params' => [
-                                        'id' => null,
-                                    ],
+                                    'route' => 'licence/permits/edit',
                                     'use_route_match' => true,
+                                    'params' => [
+                                        'action' => 'edit',
+                                    ],
                                 ],
                                 [
                                     'id' => 'licence_irhp_permits-documents',
                                     'label' => 'Docs & attachments',
-                                    'route' => 'licence/permits',
+                                    'route' => 'licence/permits/docs',
                                     'action' => 'documents',
                                     'params' => [
                                         'action' => 'documents',
@@ -589,7 +584,7 @@ $nav = [
                                 [
                                     'id' => 'licence_irhp_permits-processing',
                                     'label' => 'Processing',
-                                    'route' => 'licence/permits',
+                                    'route' => 'licence/permits/processing',
                                     'action' => 'processing',
                                     'params' => [
                                         'action' => 'processing',
@@ -605,6 +600,37 @@ $nav = [
                                     'params' => [
                                         'action' => 'fees',
                                         'id' => null,
+                                    ],
+                                    'use_route_match' => true,
+                                ],
+                            ]
+                        ],
+                        [
+                            'id' => 'irhp_permits',
+                            'label' => 'IRHP Permits',
+                            'route' => 'licence/permits',
+                            'visible' => 0,
+                            'use_route_match' => true,
+                            'params' => [
+                                'action' => null,
+                                'id' => null,
+                            ],
+                            'pages' => [
+                                [
+                                    'id' => 'irhp_permits-application_details',
+                                    'label' => 'Application details',
+                                    'route' => 'licence/permits/edit',
+                                    'params' => [
+                                        'action' => 'edit',
+                                    ],
+                                    'use_route_match' => true,
+                                ],
+                                [
+                                    'id' => 'irhp_permits-permits',
+                                    'label' => 'Permits',
+                                    'route' => 'licence/irhp-permits',
+                                    'params' => [
+                                        'action' => 'index',
                                     ],
                                     'use_route_match' => true,
                                 ],

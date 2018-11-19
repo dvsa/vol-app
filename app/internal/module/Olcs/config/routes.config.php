@@ -771,14 +771,14 @@ $routes = [
             'permits' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => 'permits[/:action][/:permitid][/]',
+                    'route' => 'permits[/]',
                     'defaults' => [
                         'controller' => 'IrhpPermitApplicationController',
                         'action' => 'index',
                     ],
                     'constraints' => [
                         'id' => '[0-9]+',
-                        'action' => '(index|edit|add|documents|processing|submit|accept|decline|cancel|withdraw)'
+                        'action' => 'index',
                     ]
                 ],
             ],
@@ -793,17 +793,101 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'irhp-permits' => [
+                    'edit' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => 'irhp-permits[/][:irhpPermitId]',
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'edit',
+                                'id' => '[0-9]+',
+                            ],
                             'defaults' => [
-                                'controller' => 'IrhpPermitController',
+                                'controller' => 'IrhpPermitApplicationController',
                                 'action' => 'index'
                             ]
-                        ],
+                        ]
                     ],
-                ],
+                    'add' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'add',
+                                'id' => '[0-9]+',
+                            ]
+                        ]
+                    ],
+                    'docs' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'documents',
+                                'id' => '[0-9]+',
+                            ]
+                        ]
+                    ],
+                    'processing' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'processing',
+                                'id' => '[0-9]+',
+                            ]
+                        ]
+                    ],
+                    'submit' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'submit',
+                                'id' => '[0-9]+',
+                            ]
+                        ]
+                    ],
+                    'accept' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'accept',
+                                'id' => '[0-9]+',
+                            ]
+                        ]
+                    ],
+                    'decline' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'decline',
+                                'id' => '[0-9]+',
+                            ]
+                        ]
+                    ],
+                    'cancel' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'cancel',
+                                'id' => '[0-9]+',
+                            ]
+                        ]
+                    ],
+                    'withdraw' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'withdraw',
+                                'id' => '[0-9]+',
+                            ]
+                        ]
+                    ],
+                ]
             ],
             'processing' => [
                 'type' => 'segment',
