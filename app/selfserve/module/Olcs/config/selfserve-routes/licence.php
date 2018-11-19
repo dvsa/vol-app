@@ -27,13 +27,13 @@ return [
                             'may_terminate' => false,
                             'type' => Segment::class,
                             'options' => [
-                                'route' => '',
+                                'route' => 'start[/]',
                             ],
                             'child_routes' => [
                                 'GET' => [
+                                    'may_terminate' => true,
                                     'type' => \Zend\Mvc\Router\Http\Method::class,
                                     'options' => [
-
                                         'verb'=>'GET',
                                         'defaults' => [
                                             'controller' => StartController::class,
@@ -42,9 +42,9 @@ return [
                                     ],
                                 ],
                                 'POST' => [
+                                    'may_terminate' => true,
                                     'type' => \Zend\Mvc\Router\Http\Method::class,
                                     'options' => [
-
                                         'verb'=>'POST',
                                         'defaults' => [
                                             'controller' => StartController::class,
@@ -55,6 +55,7 @@ return [
                             ],
                         ],
                         'review-contact-details' => [
+                            'may_terminate' => true,
                             'type' => Segment::class,
                             'options' => [
                                 'route' => ':surrender/review-contact-details[/:action][/]',
@@ -65,6 +66,7 @@ return [
                             ],
                         ],
                         'address-details' => [
+                            'may_terminate' => true,
                             'type' => Segment::class,
                             'options' => [
                                 'route' => ':surrender/address-details[/]',
