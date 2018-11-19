@@ -8,6 +8,7 @@ use Dvsa\Olcs\Transfer\Command\Surrender\Create;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
+use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Helper\FlashMessenger;
 
@@ -55,7 +56,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
     /**
      * startAction
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Zend\View\Model\ViewModel | Response
      */
     public function startAction()
     {
@@ -67,7 +68,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
             if ($response->isOk()) {
                 $result = $response->getResult();
                 if (!empty($result)) {
-                    $this->redirect()->toRoute(
+                    return $this->redirect()->toRoute(
                         'licence/surrender/review-contact-details',
                         [
                             'licence' => $licNo,
