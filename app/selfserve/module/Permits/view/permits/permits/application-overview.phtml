@@ -19,8 +19,14 @@
         </div>
         <?php echo $this->flashMessengerAll(); ?>
 
-        <p class="extra-space large">You must complete all of the sections to apply for a new permit.<br>
-            Further <a href=<?php echo $this->translate('permits.link.ecmt.guidance') ?>>guidance on ECMT permits</a> is available on GOV.UK.</p>
+        <p class="extra-space large">
+            <?php echo $this->translate('permits.application.overview.complete-all-sections'); ?>
+            <br>
+            <?php
+                $link = $this->translate('permits.link.ecmt.guidance');
+                echo sprintf($this->translate('permits.application.overview.further-guidance'), $link);
+            ?>
+        </p>
 
         <div class="field">
             <div class="table_wrapper">
@@ -53,30 +59,38 @@
         <aside class="sidebar" role="complementary">
 
             <div class="info-box info-box--grey">
-                <h2 class="info-box__heading">Progress</h2>
-                <p><b><?php echo $this->escapeHtml($application['sectionCompletion']['totalCompleted']); ?>
-                        of <?php echo $this->escapeHtml($application['sectionCompletion']['totalSections']); ?>
-                        complete</b></p>
-                <p><b>Fee per permit </b> <?php echo $this->currencyFormatter($fee['appFee']); ?> <br/>(non-refundable)
+                <h3 class="info-box__heading">
+                    <?php echo $this->translate('permits.application.overview.progress'); ?>
+                </h3>
+                <p>
+                    <b><?php echo $this->escapeHtml($application['sectionCompletion']['totalCompleted']); ?>
+                    of
+                    <?php echo $this->escapeHtml($application['sectionCompletion']['totalSections']); ?> complete</b>
                 </p>
-                <p><b>Total application
-                        fee: </b> <?php echo $this->currencyFormatter($fee['appFee'] * $application['permitsRequired']); ?>
+                <p>
+                    <b><?php echo $this->translate('permits.application.overview.fee-per-permit'); ?></b>
+                    <?php echo $this->currencyFormatter($fee['appFee']); ?>
+                    <br />
+                    <?php echo $this->translate('permits.page.non.refundable'); ?>
                 </p>
-                <p>You can't submit until you've completed all of the sections</p>
+                <p>
+                    <b><?php echo $this->translate('permits.application.overview.total-application-fee'); ?></b>
+                    <?php echo $this->currencyFormatter($fee['appFee'] * $application['permitsRequired']); ?>
+                </p>
+                <p><?php echo $this->translate('permits.application.overview.complete-all-sections-warning'); ?></p>
             </div>
 
             <div class="info-box info-box--grey">
-                <h2 class="info-box__heading">Application status</h2>
-                <p class="info-box__icon-wrapper"><i
-                            class="info-box__icon selfserve-important"></i><?php echo $this->escapeHtml($application['status']['description']); ?>
-                </p>
+                <h3 class="info-box__heading"><?php echo $this->translate('permits.page.ecmt.consideration.application.status'); ?></h3>
+                <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><?php echo $this->escapeHtml($application['status']['description']); ?></p>
                 <?php
                 if ($application['canBeCancelled']) {
                     ?>
                     <ul class="info-box__links">
                         <li>
-                            <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_CANCEL_APPLICATION, [], [], true); ?>">Cancel
-                                application</a>
+                            <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_CANCEL_APPLICATION, [], [], true); ?>">
+                                <?php echo $this->translate('permits.application.cancel-application'); ?>
+                            </a>
                         </li>
                     </ul>
                     <?php
