@@ -52,6 +52,13 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     protected $tableConfig = [];
 
     /**
+     * Config for template variables
+     *
+     * @var array
+     */
+    protected $templateVarsConfig = [];
+
+    /**
      * Manage conditional display of actions i.e. should the user be allowed to reach this point
      *
      * @var array
@@ -114,7 +121,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      */
     protected $templateConfig = [
         'generic' => '',
-        'cancel' => ''
+        'question' => 'permits/single-question',
+        'cancel' => '',
     ];
 
     /**
@@ -167,13 +175,26 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
     public function mapDataForDisplay()
     {
-        //
+        foreach ($this->templateVarsConfig[$this->action]['data'] as $key => $var) {
+            $this->data[$key] = $var;
+        }
+
+        if (!empty($this->templateVarsConfig[$this->action]['browserTitle'])) {
+            $headTitle = $this->getServiceLocator()->get('ViewHelperManager')->get('headTitle');
+            $headTitle->setSeparator(' - ');
+            $headTitle->prepend($this->templateVarsConfig[$this->action]['browserTitle']);
+        }
     }
 
     public function genericAction()
     {
         $this->handlePost();
         return $this->genericView();
+    }
+
+    public function questionAction()
+    {
+        return $this->genericAction();
     }
 
     public function cancelAction()
