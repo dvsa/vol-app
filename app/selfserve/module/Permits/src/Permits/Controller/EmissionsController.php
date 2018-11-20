@@ -30,9 +30,8 @@ class EmissionsController extends AbstractSelfserveController implements ToggleA
         'default' => FormConfig::FORM_EMISSIONS,
     ];
 
-    protected $templateConfig = [
-        'generic' => [
-            'view' => 'permits/single-question',
+    protected $templateVarsConfig = [
+        'question' => [
             'browserTitle' => 'permits.page.euro6.emissions.browser.title',
             'data' => [
                 'question' => 'permits.page.euro6.emissions.question',

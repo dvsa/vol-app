@@ -52,6 +52,13 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     protected $tableConfig = [];
 
     /**
+     * Config for template variables
+     *
+     * @var array
+     */
+    protected $templateVarsConfig = [];
+
+    /**
      * Manage conditional display of actions i.e. should the user be allowed to reach this point
      *
      * @var array
@@ -113,12 +120,9 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * @var array
      */
     protected $templateConfig = [
-        'generic' => [
-            'view' => 'permits/single-question',
-            'browserTitle' => '',
-            'data' => []
-        ],
-        'cancel' => [],
+        'generic' => '',
+        'question' => 'permits/single-question',
+        'cancel' => '',
     ];
 
     /**
@@ -163,26 +167,21 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         $view->setVariable('form', $this->form);
         $view->setVariable('forms', $this->forms);
         $view->setVariable('tables', $this->tables);
-        $view->setTemplate($this->templateConfig[$this->action]['view']);
+        $view->setTemplate($this->templateConfig[$this->action]);
 
         return $view;
     }
 
     public function mapDataForDisplay()
     {
-        if (is_array($this->templateConfig[$this->action])) {
-            foreach ($this->templateConfig[$this->action]['data'] as $key => $var) {
-                $this->data[$key] = $var;
-            }
-        } else {
-            // Until all controllers have been updated to use generic views
-            $this->templateConfig[$this->action] = ['view' => $this->templateConfig[$this->action]];
+        foreach ($this->templateVarsConfig[$this->action]['data'] as $key => $var) {
+            $this->data[$key] = $var;
         }
 
-        if (!empty($this->templateConfig[$this->action]['browserTitle'])) {
+        if (!empty($this->templateVarsConfig[$this->action]['browserTitle'])) {
             $headTitle = $this->getServiceLocator()->get('ViewHelperManager')->get('headTitle');
             $headTitle->setSeparator(' - ');
-            $headTitle->prepend($this->templateConfig[$this->action]['browserTitle']);
+            $headTitle->prepend($this->templateVarsConfig[$this->action]['browserTitle']);
         }
     }
 
@@ -190,6 +189,11 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     {
         $this->handlePost();
         return $this->genericView();
+    }
+
+    public function questionAction()
+    {
+        return $this->genericAction();
     }
 
     public function cancelAction()

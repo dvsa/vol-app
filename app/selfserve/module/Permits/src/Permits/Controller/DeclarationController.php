@@ -31,9 +31,8 @@ class DeclarationController extends AbstractSelfserveController implements Toggl
         'default' => FormConfig::FORM_DECLARATION,
     ];
 
-    protected $templateConfig = [
-        'generic' => [
-            'view' => 'permits/single-question',
+    protected $templateVarsConfig = [
+        'question' => [
             'browserTitle' => 'permits.page.declaration.browser.title',
             'data' => [
                 'question' => 'permits.page.declaration.question',
