@@ -2,8 +2,6 @@
 
 namespace Permits\Data\Mapper;
 
-use Common\View\Helper\CurrencyFormatter;
-
 /**
  * Mapper for the FeePartSuccessful / Accept or Decline page
  */
@@ -17,12 +15,12 @@ class AcceptOrDeclinePermits
      */
     public static function mapForDisplay(array $data)
     {
-        $currencyFormatter = new CurrencyFormatter;
         $data = ApplicationFees::mapForDisplay($data);
 
         $data['validityPeriod'] = self::formatValidityPeriod($data);
-        $data['issuingFee'] = $data['irhpPermitApplications'][0]['permitsAwarded'] . ' x ' . $currencyFormatter($data['issueFee']);
-        $data['issuingFeeTotal'] = $currencyFormatter($data['totalFee']);
+        $data['numPermitsAwarded'] = $data['irhpPermitApplications'][0]['permitsAwarded'];
+        $data['issuingFee'] = $data['issueFee'];
+        $data['issuingFeeTotal'] = $data['totalFee'];
 
         return $data;
     }

@@ -59,7 +59,7 @@ $translatorHelper = $this->getHelperPluginManager()->getServiceLocator()->get('H
                         <div>
                             <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.issuing.fee')); ?></dt>
                             <dd>
-                                <?php echo $this->escapeHtml($application['issuingFee']); ?>
+                                <?php echo $this->escapeHtml($application['numPermitsAwarded'] . ' x ' . $this->currencyFormatter($application['issuingFee'])); ?>
                                 <br />
                                 <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_UNPAID_PERMITS, [], [], true); ?>">
                                     <?php echo $this->escapeHtml($this->translate('permits.page.view.permits')); ?>
@@ -67,7 +67,7 @@ $translatorHelper = $this->getHelperPluginManager()->getServiceLocator()->get('H
                             </dd>
 
                             <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.issuing.fee.total')); ?></dt>
-                            <dd><?php echo $this->escapeHtml($this->translateReplace('permits.page.ecmt.fee-part-successful.fee.total.value', [$application['issuingFeeTotal']])); ?></dd>
+                            <dd><?php echo $this->escapeHtml($this->translateReplace('permits.page.ecmt.fee-part-successful.fee.total.value', [$this->currencyFormatter($application['issuingFeeTotal'])])); ?></dd>
                         </div>
                         <div>
                             <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.payment.due')); ?></dt>
