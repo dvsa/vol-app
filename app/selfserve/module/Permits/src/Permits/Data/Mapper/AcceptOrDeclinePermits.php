@@ -13,7 +13,7 @@ class AcceptOrDeclinePermits
      * @param array $data an array of data retrieved from the backend
      * @return array
      */
-    public static function mapForDisplay(array $data)
+    public static function mapForDisplay(array $data): array
     {
         $data = ApplicationFees::mapForDisplay($data);
 
@@ -31,7 +31,7 @@ class AcceptOrDeclinePermits
      * @param array a collection of application data as returned from backend
      * @return array the validity period formatted for display
      */
-    private static function formatValidityPeriod($data)
+    private static function formatValidityPeriod(array $data): array
     {
         $stock = $data['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
 
