@@ -63,7 +63,8 @@
     "require-dev": {
         "olcs/olcs-devtools": "dev-master",
         "mockery/mockery": "~0.9.3",
-        "olcs/olcs-testhelpers": "dev-develop"
+        "olcs/olcs-testhelpers": "dev-develop",
+        "xificurk/phpstan-shim": "^0.10.4"
     },
     "autoload": {
         "classmap": [
