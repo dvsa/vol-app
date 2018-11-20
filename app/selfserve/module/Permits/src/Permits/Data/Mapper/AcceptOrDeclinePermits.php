@@ -3,7 +3,6 @@
 namespace Permits\Data\Mapper;
 
 use Common\View\Helper\CurrencyFormatter;
-use Common\Service\Helper\TranslationHelperService;
 
 /**
  * Mapper for the FeePartSuccessful / Accept or Decline page
