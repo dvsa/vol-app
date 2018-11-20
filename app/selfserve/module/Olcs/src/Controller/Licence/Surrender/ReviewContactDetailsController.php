@@ -20,8 +20,8 @@ class ReviewContactDetailsController extends AbstractSurrenderController
             'content' => 'licence.surrender.review_contact_details.content',
             'note' => 'licence.surrender.review_contact_details.note',
             'form' => $this->getConfirmationForm(),
-            'backLink' => $this->getBackLink('lva-licence'),
-            'sections' => ReviewContactDetails::makeSections($this->licence, $this->url(), $translator),
+            'backLink' => $this->getBackLink('licence/surrender/start/GET'),
+            'sections' => ReviewContactDetails::makeSections($this->licence, $this->url(), $translator)
         ];
 
         return $this->renderView($params);
@@ -50,7 +50,7 @@ class ReviewContactDetailsController extends AbstractSurrenderController
                 ]
             )
         );
-        $submitLabel = $translator->translate('confirm-and-continue');
+        $submitLabel = $translator->translate('approve-details');
         $form->setSubmitLabel($submitLabel);
         $form->removeCancel();
         return $form;
