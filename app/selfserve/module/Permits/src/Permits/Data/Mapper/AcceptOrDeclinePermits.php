@@ -41,6 +41,6 @@ class AcceptOrDeclinePermits
         $validityPeriod['fromDate'] = date(\DATE_FORMAT, strtotime($stock['validFrom']));
         $validityPeriod['toDate'] = date(\DATE_FORMAT, strtotime($stock['validTo']));
 
-        return $validityPeriod; //@todo: need to translate the word 'to'
+        return $validityPeriod;
     }
 }
