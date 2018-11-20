@@ -3,10 +3,7 @@
 namespace PermitsTest\Data\Mapper;
 
 use Permits\Data\Mapper\AcceptOrDeclinePermits;
-use Common\Service\Helper\TranslationHelperService;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Mockery as m;
-use OlcsTest\Bootstrap;
 
 /**
  * AcceptOrDeclinePermitsTest
@@ -15,17 +12,6 @@ use OlcsTest\Bootstrap;
  */
 class AcceptOrDeclinePermitsTest extends TestCase
 {
-    protected $sm;
-    protected $translationService;
-
-    public function setUp()
-    {
-        $this->sm = Bootstrap::getServiceManager();
-        $this->sut = m::mock(AcceptOrDeclinePermits::class)
-            ->makePartial()
-            ->shouldAllowMockingProtectedMethods();
-    }
-
     public function testMapForDisplay()
     {
         $feeDisplayValue = '100';
@@ -79,6 +65,6 @@ class AcceptOrDeclinePermitsTest extends TestCase
         $outputData['issueFee'] = $feeDisplayValue;
         $outputData['totalFee'] = $feeGrossAmount;
 
-        self::assertEquals($outputData, $this->sut::mapForDisplay($inputData));
+        self::assertEquals($outputData, AcceptOrDeclinePermits::mapForDisplay($inputData));
     }
 }

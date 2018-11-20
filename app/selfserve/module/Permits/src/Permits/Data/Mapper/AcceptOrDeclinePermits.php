@@ -31,7 +31,7 @@ class AcceptOrDeclinePermits
      * formats the validity period for display
      *
      * @param array a collection of application data as returned from backend
-     * @return string the validity period formatted for display
+     * @return array the validity period formatted for display
      */
     private static function formatValidityPeriod($data)
     {
