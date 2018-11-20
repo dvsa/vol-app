@@ -159,7 +159,7 @@ class OrganisationTest extends MockeryTestCase
 
         $this->mocNavMenu
             ->shouldReceive('findById')
-            ->with('/^operator_/')
+            ->with(m::pattern('/^operator_/'))
             ->times(5)
             ->andReturn($mockMenuItem);
 
@@ -195,12 +195,12 @@ class OrganisationTest extends MockeryTestCase
         $this->mocNavMenu
             ->shouldReceive('findById')
             ->times(3)
-            ->with('/^unlicensed_operator_/')
+            ->with(m::pattern('/^unlicensed_operator_/'))
             ->andReturn($mockMenuItem)
             //
             ->shouldReceive('findById')
             ->times(2)
-            ->with(('/^operator_/'))
+            ->with(m::pattern('/^operator_/'))
             ->andReturn($mockMenuItem);
 
         $this->mockSideBar->shouldReceive('findById')->never();
