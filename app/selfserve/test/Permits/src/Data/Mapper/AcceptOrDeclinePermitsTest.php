@@ -18,28 +18,12 @@ class AcceptOrDeclinePermitsTest extends TestCase
     protected $sm;
     protected $translationService;
 
-    protected $translations = [
-        'permits.page.non.refundable' => '(non-refundable)'
-    ];
-
     public function setUp()
     {
         $this->sm = Bootstrap::getServiceManager();
         $this->sut = m::mock(AcceptOrDeclinePermits::class)
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
-
-
-        $mockTranslationHelper = m::mock(TranslationHelperService::class);
-        foreach ($this->translations as $translationKey => $translation) {
-            $mockTranslationHelper
-                ->shouldReceive('translate')
-                ->with($translationKey)
-                ->andReturn($translation);
-        }
-
-        $this->sm->setService('Helper\Translation', $mockTranslationHelper);
-        $this->translationService = $this->sm->get('Helper\Translation');
     }
 
     public function testMapForDisplay()
@@ -89,11 +73,11 @@ class AcceptOrDeclinePermitsTest extends TestCase
         $outputData = $inputData;
         $outputData['validityPeriod'] = '10 Mar 1999 to 10 Mar 2020';
         $outputData['issuingFee'] = $permitsAwarded . ' x ' . '£' . $feeDisplayValue;
-        $outputData['issuingFeeTotal'] = '£' . $feeGrossAmount . ' ' . $this->translations['permits.page.non.refundable'];
+        $outputData['issuingFeeTotal'] = '£' . $feeGrossAmount;
         $outputData['dueDate'] = '20 Mar 2018'; //invoiced date +10 days
         $outputData['issueFee'] = $feeDisplayValue;
         $outputData['totalFee'] = $feeGrossAmount;
 
-        self::assertEquals($outputData, $this->sut::mapForDisplay($inputData, $this->translationService));
+        self::assertEquals($outputData, $this->sut::mapForDisplay($inputData));
     }
 }
