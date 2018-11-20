@@ -26,7 +26,6 @@ class DataSourceConfig
     const PERMIT_APP_FOR_ACCEPT_OR_DECLINE = [
         PermitAppDataSource::class => [
             'mapper' => AcceptOrDeclineMapper::class,
-            'mapperUseTranslations' => true
         ],
     ];
 

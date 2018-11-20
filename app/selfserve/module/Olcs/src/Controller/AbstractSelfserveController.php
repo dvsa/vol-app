@@ -289,14 +289,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
             if (isset($config['mapper'])) {
                 $mapper = isset($config['mapper']) ? $config['mapper'] : DefaultMapper::class;
-                if (isset($config['mapperUseTranslations'])
-                    && $config['mapperUseTranslations'] === true) {
-                    $data = $mapper::mapForDisplay($data, $this->getServiceLocator()->get('Helper\Translation'));
-                } else {
-                    $data = $mapper::mapForDisplay($data);
-                }
+                $data = $mapper::mapForDisplay($data);
             }
-
             $this->data[$source::DATA_KEY] = $data;
             if (isset($config['append'])) {
                 foreach ($config['append'] as $appendTo => $mapper) {

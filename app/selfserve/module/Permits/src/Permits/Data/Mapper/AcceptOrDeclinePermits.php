@@ -14,17 +14,16 @@ class AcceptOrDeclinePermits
      * Maps data appropriately for the Definition List on the FeePartSuccessful page
      *
      * @param array $data an array of data retrieved from the backend
-     * @param TranslationHelperService $translatorSrv translation helper
      * @return array
      */
-    public static function mapForDisplay(array $data, TranslationHelperService $translatorSrv)
+    public static function mapForDisplay(array $data)
     {
         $currencyFormatter = new CurrencyFormatter;
         $data = ApplicationFees::mapForDisplay($data);
 
         $data['validityPeriod'] = self::formatValidityPeriod($data);
         $data['issuingFee'] = $data['irhpPermitApplications'][0]['permitsAwarded'] . ' x ' . $currencyFormatter($data['issueFee']);
-        $data['issuingFeeTotal'] = $currencyFormatter($data['totalFee']) . ' ' . $translatorSrv->translate('permits.page.non.refundable');
+        $data['issuingFeeTotal'] = $currencyFormatter($data['totalFee']);
 
         return $data;
     }
