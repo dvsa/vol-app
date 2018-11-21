@@ -57,8 +57,8 @@ class AcceptOrDeclinePermitsTest extends TestCase
         ];
 
         $outputData = $inputData;
-        $outputData['validityPeriod']['fromDate'] = '10 Mar 1999';
-        $outputData['validityPeriod']['toDate'] = '10 Mar 2020';
+        $outputData['validityPeriod']['fromDate'] = '1999-03-10';
+        $outputData['validityPeriod']['toDate'] = '2020-03-10';
         $outputData['numPermitsAwarded'] = $permitsAwarded;
         $outputData['issuingFee'] = $feeDisplayValue;
         $outputData['issuingFeeTotal'] = $feeGrossAmount;
