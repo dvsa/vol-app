@@ -47,16 +47,17 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
     {
         $ecmtApplicationId = $this->params()->fromRoute('id');
         $view = parent::genericAction();
-        $partialName =
-            $this->params()->fromQuery('receipt_reference') === 'paidWaived'
-            ? 'markup-ecmt-application-fee-submitted-paid-waived'
-            : 'markup-ecmt-application-fee-submitted';
+
+        if ($this->params()->fromQuery('receipt_reference') === 'paidWaived') {
+            $partialName = 'markup-ecmt-application-fee-submitted-paid-waived';
+            $mainName = 'permits.application.fee.submitted.main.paid.waived';
+        } else {
+            $partialName = 'markup-ecmt-application-fee-submitted';
+            $mainName = 'permits.application.fee.submitted.main';
+        }
+
         $view->setVariable('partialName', $partialName);
         $view->setVariable('titleName', 'permits.application.fee.submitted.title');
-        $mainName =
-            $this->params()->fromQuery('receipt_reference') === 'paidWaived'
-                ? 'permits.application.fee.submitted.main.paid.waived'
-                : 'permits.application.fee.submitted.main';
         $view->setVariable('mainName', $mainName);
         $view->setVariable('receiptUrl', $this->url()->fromRoute('permits/ecmt-print-receipt', ['id' => $ecmtApplicationId, 'reference' => $this->params()->fromQuery('receipt_reference')]));
 
