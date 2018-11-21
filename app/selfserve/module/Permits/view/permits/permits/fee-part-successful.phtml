@@ -49,8 +49,8 @@ $translatorHelper = $this->getHelperPluginManager()->getServiceLocator()->get('H
                                     echo $this->escapeHtml($this->translateReplace(
                                         'permits.page.ecmt.fee-part-successful.permit.validity.value',
                                         [
-                                            $application['validityPeriod']['fromDate'],
-                                            $application['validityPeriod']['toDate']
+                                            date(\DATE_FORMAT, strtotime($application['validityPeriod']['fromDate'])),
+                                            date(\DATE_FORMAT, strtotime($application['validityPeriod']['toDate']))
                                         ]
                                     ));
                                 ?>

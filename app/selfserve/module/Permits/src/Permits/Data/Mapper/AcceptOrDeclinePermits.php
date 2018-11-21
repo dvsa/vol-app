@@ -17,27 +17,14 @@ class AcceptOrDeclinePermits
     {
         $data = ApplicationFees::mapForDisplay($data);
 
-        $data['validityPeriod'] = self::formatValidityPeriod($data);
+        $stock = $data['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
+
+        $data['validityPeriod']['fromDate'] = $stock['validFrom'];
+        $data['validityPeriod']['toDate'] = $stock['validTo'];
         $data['numPermitsAwarded'] = $data['irhpPermitApplications'][0]['permitsAwarded'];
         $data['issuingFee'] = $data['issueFee'];
         $data['issuingFeeTotal'] = $data['totalFee'];
 
         return $data;
-    }
-
-    /**
-     * formats the validity period for display
-     *
-     * @param array a collection of application data as returned from backend
-     * @return array the validity period formatted for display
-     */
-    private static function formatValidityPeriod(array $data): array
-    {
-        $stock = $data['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
-
-        $validityPeriod['fromDate'] = date(\DATE_FORMAT, strtotime($stock['validFrom']));
-        $validityPeriod['toDate'] = date(\DATE_FORMAT, strtotime($stock['validTo']));
-
-        return $validityPeriod;
     }
 }
