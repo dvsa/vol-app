@@ -523,9 +523,6 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      *
      * @param string $route
      *
-     * @param array $params
-     * @param array $options
-     * @param bool $reuseMatched
      * @return HttpResponse
      */
     protected function nextStep(string $route): HttpResponse

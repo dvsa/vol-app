@@ -40,15 +40,15 @@ class EcmtSection extends AbstractHelper
 
     //cancellation
     const ROUTE_ECMT_CANCEL_APPLICATION = 'permits/ecmt-cancel-application';
-    const ROUTE_ECMT_CANCEL_CONFIRMATION = 'permits/'.self::ROUTE_ECMT_CANCEL_APPLICATION . '/confirmation';
+    const ROUTE_ECMT_CANCEL_CONFIRMATION = self::ROUTE_ECMT_CANCEL_APPLICATION . '/confirmation';
 
     //withdraw
     const ROUTE_ECMT_WITHDRAW_APPLICATION = 'permits/ecmt-withdraw-application';
-    const ROUTE_ECMT_WITHDRAW_CONFIRMATION = 'permits/'.self::ROUTE_ECMT_WITHDRAW_APPLICATION . '/confirmation';
+    const ROUTE_ECMT_WITHDRAW_CONFIRMATION = self::ROUTE_ECMT_WITHDRAW_APPLICATION . '/confirmation';
 
     //decline
-    const ROUTE_ECMT_DECLINE_APPLICATION = 'permits/'.self::ROUTE_ECMT_AWAITING_FEE . '/decline';
-    const ROUTE_ECMT_DECLINE_CONFIRMATION = 'permits/'.self::ROUTE_ECMT_DECLINE_APPLICATION . '/confirmation';
+    const ROUTE_ECMT_DECLINE_APPLICATION = self::ROUTE_ECMT_AWAITING_FEE . '/decline';
+    const ROUTE_ECMT_DECLINE_CONFIRMATION = self::ROUTE_ECMT_DECLINE_APPLICATION . '/confirmation';
 
     /**
      * list of overview routes and the field denoting completion status
