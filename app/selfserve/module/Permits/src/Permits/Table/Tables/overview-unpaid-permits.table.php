@@ -15,12 +15,12 @@ return array(
     'attributes' => array(),
     'columns' => array(
         array(
-                'title' => 'permits.ecmt.page.valid.tableheader.ref',
-                'name' => 'permitNumber',
-                'formatter' => function ($row) {
-                    return '<b>' . Escape::html($row['permitNumber']) . '</b>';
-                },
-            ),
+            'title' => 'permits.ecmt.page.valid.tableheader.ref',
+            'name' => 'permitNumber',
+            'formatter' => function ($row) {
+                return '<b>' . Escape::html($row['permitNumber']) . '</b>';
+            },
+        ),
         array(
             'title' => 'permits.ecmt.page.valid.tableheader.countries',
             'name' => 'countries',
