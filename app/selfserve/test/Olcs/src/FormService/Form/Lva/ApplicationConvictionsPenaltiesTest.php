@@ -64,7 +64,10 @@ class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
         $dataTable = m::mock(ConvictionsPenaltiesData::class);
         $dataTable
             ->shouldReceive('add')
-            ->with(anInstanceOf(Element::class), hasKeyValuePair('priority', integerValue()));
+            ->with(
+                \Hamcrest\Matchers::anInstanceOf(Element::class),
+                \Hamcrest\Matchers::hasKeyValuePair('priority', \Hamcrest\Matchers::integerValue())
+            );
 
         $ConvictionsReadMoreLink = m::mock(ConvictionsPenaltiesReadMoreLink::class);
         $ConvictionsReadMoreLink
