@@ -257,7 +257,7 @@ return array(
                         array(
                             'id' => 'irhp-permit-quick-actions-cancel',
                             'label' => 'Cancel',
-                            'route' => 'licence/permits',
+                            'route' => 'licence/permits/cancel',
                             'params' => [
                                 'action' => 'cancel',
                                 'id' => null,
