@@ -14,6 +14,7 @@ class SubmitConfirm
      * @Form\Attributes({
      *     "type":"submit",
      *     "class":"govuk-button",
+     *     "role":"link"
      * })
      * @Form\Options({
      *     "label":"permits.button.confirm-and-continue",
