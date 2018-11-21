@@ -19,8 +19,8 @@ class AcceptOrDeclinePermits
 
         $stock = $data['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
 
-        $data['validityPeriod']['fromDate'] = $stock['validFrom'];
-        $data['validityPeriod']['toDate'] = $stock['validTo'];
+        $data['validityPeriod']['fromDate'] = strtotime($stock['validFrom']);
+        $data['validityPeriod']['toDate'] = strtotime($stock['validTo']);
         $data['numPermitsAwarded'] = $data['irhpPermitApplications'][0]['permitsAwarded'];
         $data['issuingFee'] = $data['issueFee'];
         $data['issuingFeeTotal'] = $data['totalFee'];
