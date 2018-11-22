@@ -76,6 +76,17 @@ return [
                                 ],
                             ],
                         ],
+                        'declaration' => [
+                            'may_terminate' => true,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => ':surrender/declaration[/]',
+                                'defaults' => [
+                                    'controller' => Olcs\Controller\Licence\Surrender\DeclarationController::class,
+                                    'action' => 'index'
+                                ]
+                            ]
+                        ]
                     ]
                 ],
             ],
