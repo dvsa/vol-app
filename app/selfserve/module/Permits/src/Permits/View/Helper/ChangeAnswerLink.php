@@ -24,7 +24,7 @@ class ChangeAnswerLink extends AbstractHelper
     public function __invoke(string $route, string $context, ?string $label = 'common.link.change.label'): string
     {
         $label = $this->view->escapeHtml($this->view->translate($label));
-        $url = $this->view->url('permits/' . $route, [], [], true);
+        $url = $this->view->url($route, [], [], true);
         return sprintf($this->linkTemplate, $url, $label, $context);
     }
 }
