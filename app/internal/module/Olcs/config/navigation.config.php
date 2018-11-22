@@ -571,6 +571,15 @@ $nav = [
                                     ],
                                 ],
                                 [
+                                    'id' => 'licence_irhp_permits-add',
+                                    'label' => 'Application details',
+                                    'route' => 'licence/permits/add',
+                                    'use_route_match' => true,
+                                    'params' => [
+                                        'action' => 'add',
+                                    ],
+                                ],
+                                [
                                     'id' => 'licence_irhp_permits-documents',
                                     'label' => 'Docs & attachments',
                                     'route' => 'licence/irhp-docs',
