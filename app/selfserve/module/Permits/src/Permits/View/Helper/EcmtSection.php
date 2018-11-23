@@ -12,38 +12,38 @@ use Zend\View\Model\ViewModel;
  */
 class EcmtSection extends AbstractHelper
 {
-    const ROUTE_APPLICATION_OVERVIEW = 'application-overview';
-    const ROUTE_ECMT_LICENCE = 'ecmt-licence';
-    const ROUTE_ECMT_ADD_LICENCE = 'ecmt-add-licence';
-    const ROUTE_ECMT_EURO6 = 'ecmt-euro6';
-    const ROUTE_ECMT_CABOTAGE = 'ecmt-cabotage';
-    const ROUTE_ECMT_COUNTRIES = 'ecmt-countries';
-    const ROUTE_ECMT_TRIPS = 'ecmt-trips';
-    const ROUTE_ECMT_INTERNATIONAL_JOURNEY = 'ecmt-international-journey';
-    const ROUTE_ECMT_SECTORS = 'ecmt-sectors';
-    const ROUTE_ECMT_NO_OF_PERMITS = 'ecmt-no-of-permits';
-    const ROUTE_ECMT_CHECK_ANSWERS = 'ecmt-check-answers';
-    const ROUTE_ECMT_DECLARATION = 'ecmt-declaration';
-    const ROUTE_ECMT_FEE = 'ecmt-fee';
-    const ROUTE_ECMT_SUBMITTED = 'ecmt-submitted';
-    const ROUTE_ECMT_FEE_WAIVED_SUBMITTED = 'ecmt-fee-waived-submitted';
-    const ROUTE_ECMT_CONFIRM_CHANGE = 'ecmt-change-licence';
-    const ROUTE_ECMT_GUIDANCE = 'ecmt-guidance';
-    const ROUTE_ECMT_UNDER_CONSIDERATION = 'ecmt-under-consideration';
-    const ROUTE_ECMT_AWAITING_FEE = 'ecmt-awaiting-fee';
-    const ROUTE_ECMT_UNPAID_PERMITS = 'ecmt-unpaid-permits';
-    const ROUTE_ECMT_PAYMENT_ACTION = 'ecmt-payment';
-    const ROUTE_ECMT_ISSUING = 'ecmt-fee-submitted';
+    const ROUTE_APPLICATION_OVERVIEW = 'permits/application-overview';
+    const ROUTE_ECMT_LICENCE = 'permits/ecmt-licence';
+    const ROUTE_ECMT_ADD_LICENCE = 'permits/ecmt-add-licence';
+    const ROUTE_ECMT_EURO6 = 'permits/ecmt-euro6';
+    const ROUTE_ECMT_CABOTAGE = 'permits/ecmt-cabotage';
+    const ROUTE_ECMT_COUNTRIES = 'permits/ecmt-countries';
+    const ROUTE_ECMT_TRIPS = 'permits/ecmt-trips';
+    const ROUTE_ECMT_INTERNATIONAL_JOURNEY = 'permits/ecmt-international-journey';
+    const ROUTE_ECMT_SECTORS = 'permits/ecmt-sectors';
+    const ROUTE_ECMT_NO_OF_PERMITS = 'permits/ecmt-no-of-permits';
+    const ROUTE_ECMT_CHECK_ANSWERS = 'permits/ecmt-check-answers';
+    const ROUTE_ECMT_DECLARATION = 'permits/ecmt-declaration';
+    const ROUTE_ECMT_FEE = 'permits/ecmt-fee';
+    const ROUTE_ECMT_SUBMITTED = 'permits/ecmt-submitted';
+    const ROUTE_ECMT_FEE_WAIVED_SUBMITTED = 'permits/ecmt-fee-waived-submitted';
+    const ROUTE_ECMT_CONFIRM_CHANGE = 'permits/ecmt-change-licence';
+    const ROUTE_ECMT_GUIDANCE = 'permits/ecmt-guidance';
+    const ROUTE_ECMT_UNDER_CONSIDERATION = 'permits/ecmt-under-consideration';
+    const ROUTE_ECMT_AWAITING_FEE = 'permits/ecmt-awaiting-fee';
+    const ROUTE_ECMT_UNPAID_PERMITS = 'permits/ecmt-unpaid-permits';
+    const ROUTE_ECMT_PAYMENT_ACTION = 'permits/ecmt-payment';
+    const ROUTE_ECMT_ISSUING = 'permits/ecmt-fee-submitted';
 
-    const ROUTE_ECMT_VALID_PERMITS = 'ecmt-valid-permits';
+    const ROUTE_ECMT_VALID_PERMITS = 'permits/ecmt-valid-permits';
 
 
     //cancellation
-    const ROUTE_ECMT_CANCEL_APPLICATION = 'ecmt-cancel-application';
+    const ROUTE_ECMT_CANCEL_APPLICATION = 'permits/ecmt-cancel-application';
     const ROUTE_ECMT_CANCEL_CONFIRMATION = self::ROUTE_ECMT_CANCEL_APPLICATION . '/confirmation';
 
     //withdraw
-    const ROUTE_ECMT_WITHDRAW_APPLICATION = 'ecmt-withdraw-application';
+    const ROUTE_ECMT_WITHDRAW_APPLICATION = 'permits/ecmt-withdraw-application';
     const ROUTE_ECMT_WITHDRAW_CONFIRMATION = self::ROUTE_ECMT_WITHDRAW_APPLICATION . '/confirmation';
 
     //decline
@@ -174,6 +174,7 @@ class EcmtSection extends AbstractHelper
      * @param int   $appId    app id
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function addDisabledConfirmationSections(array $sections, int $appId): array
     {
@@ -241,8 +242,8 @@ class EcmtSection extends AbstractHelper
         $section->setVariable('statusColour', self::COMPLETION_STATUS_COLOUR[$status]);
         $section->setVariable('identifier', $appId);
         $section->setVariable('identifierIndex', 'id');
-        $section->setVariable('name', 'section.name.' . $route);
-        $section->setVariable('route', 'permits/' . $route);
+        $section->setVariable('name', 'section.name.' . str_replace('permits/', '', $route));
+        $section->setVariable('route', $route);
 
         return $section;
     }

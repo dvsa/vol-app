@@ -20,7 +20,8 @@ class ValidPermitsController extends AbstractSelfserveController implements Togg
     ];
 
     protected $tableConfig = [
-        'default' => TableConfig::VALID_APP_OVERVIEW,
+        'valid' => TableConfig::VALID_APP_OVERVIEW,
+        'unpaid' => TableConfig::UNPAID_APP_OVERVIEW,
     ];
 
 

@@ -119,7 +119,7 @@ return array(
                       'route'    => '/:id/ecmt-euro6[/]',
                       'defaults' => [
                           'controller'    => EmissionsController::class,
-                          'action'        => 'generic',
+                          'action'        => 'question',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -133,7 +133,7 @@ return array(
                       'route'    => '/:id/ecmt-cabotage[/]',
                       'defaults' => [
                           'controller'    => CabotageController::class,
-                          'action'        => 'generic',
+                          'action'        => 'question',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -231,7 +231,7 @@ return array(
                       'route'    => '/:id/ecmt-declaration[/]',
                       'defaults' => [
                           'controller'    => DeclarationController::class,
-                          'action'        => 'generic',
+                          'action'        => 'question',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',

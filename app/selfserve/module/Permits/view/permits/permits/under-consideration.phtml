@@ -18,10 +18,21 @@
                 <?php echo $this->table; ?>
             </fieldset>
             <div class="field govuk-hint guidance-blue extra-space large">
-                We will get back to you by <strong><?php echo $this->escapeHtml($this->responseDate); ?></strong>.
+                <?php
+                    $date = $this->escapeHtml($this->responseDate);
+                    echo sprintf($this->translate('permits.page.ecmt.consideration.response-date'), $date);
+                ?>
             </div>
-            <p><a class="action--primary" href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_WITHDRAW_APPLICATION, [], [], true); ?>">Withdraw application</a></p>
-            <p><a href="<?php echo $this->url('permits'); ?>"> <?php echo $this->escapeHtml($this->translate('permits.link.return.to.dashboard')); ?></a></p>
+            <p>
+                <a class="action--primary" href="<?php echo $this->url(EcmtSection::ROUTE_ECMT_WITHDRAW_APPLICATION, [], [], true); ?>">
+                    <?php echo $this->translate('application.withdraw'); ?>
+                </a>
+            </p>
+            <p>
+                <a href="<?php echo $this->url('permits'); ?>">
+                    <?php echo $this->escapeHtml($this->translate('permits.link.return.to.dashboard')); ?>
+                </a>
+            </p>
         </div>
     </div>
 </div>

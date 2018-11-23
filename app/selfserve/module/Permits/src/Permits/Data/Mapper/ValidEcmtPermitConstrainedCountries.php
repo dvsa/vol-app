@@ -37,6 +37,8 @@ class ValidEcmtPermitConstrainedCountries
             }
             $newResults[] = [
                 'permitNumber' => $permit['permitNumber'],
+                'status' => $permit['status'],
+                'issueDate' => $permit['issueDate'],
                 'countries' => $constrainedCountries
             ];
         }

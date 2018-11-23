@@ -40,7 +40,7 @@ $translator = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\
             <?php else: ?>
                 <?php echo $translator->translateReplace('markup-ecmt-permit-guidance', ['open']); ?>
             <?php endif; ?>
-            <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_ADD_LICENCE, [], [], true); ?>" role="button" draggable="false" class="govuk-button govuk-!-margin-top-8">
+            <a href="<?php echo $this->url(EcmtSection::ROUTE_ECMT_ADD_LICENCE, [], [], true); ?>" role="button" draggable="false" class="govuk-button govuk-!-margin-top-8">
                 <?php echo $this->translate('permits.application.overview.button'); ?>
             </a>
         <?php else : ?>

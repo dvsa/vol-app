@@ -52,6 +52,13 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     protected $tableConfig = [];
 
     /**
+     * Config for template variables
+     *
+     * @var array
+     */
+    protected $templateVarsConfig = [];
+
+    /**
      * Manage conditional display of actions i.e. should the user be allowed to reach this point
      *
      * @var array
@@ -114,7 +121,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      */
     protected $templateConfig = [
         'generic' => '',
-        'cancel' => ''
+        'question' => 'permits/single-question',
+        'cancel' => '',
     ];
 
     /**
@@ -166,13 +174,26 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
     public function mapDataForDisplay()
     {
-        //
+        foreach ($this->templateVarsConfig[$this->action]['data'] as $key => $var) {
+            $this->data[$key] = $var;
+        }
+
+        if (!empty($this->templateVarsConfig[$this->action]['browserTitle'])) {
+            $headTitle = $this->getServiceLocator()->get('ViewHelperManager')->get('headTitle');
+            $headTitle->setSeparator(' - ');
+            $headTitle->prepend($this->templateVarsConfig[$this->action]['browserTitle']);
+        }
     }
 
     public function genericAction()
     {
         $this->handlePost();
         return $this->genericView();
+    }
+
+    public function questionAction()
+    {
+        return $this->genericAction();
     }
 
     public function cancelAction()
@@ -218,17 +239,23 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 }
 
                 if (isset($config['conditional'])) {
-                    if ($this->data['application'][$config['conditional']['field']] === $config['conditional']['value']) {
+                    if ($this->data[$config['conditional']['dataKey']][$config['conditional']['field']] === $config['conditional']['value']) {
                         if (isset($config['conditional']['command'])) {
                             $conditionalCommand = $config['conditional']['command']::create([
-                                $config['conditional']['params'] => $this->data['application'][$config['conditional']['params']]
+                                $config['conditional']['params'] => $this->data[$config['conditional']['dataKey']][$config['conditional']['params']]
                             ]);
                             $conditionalResponse = $this->handleCommand($conditionalCommand);
                             $this->handleResponse($conditionalResponse);
                         }
 
+                        $conditionalQueryParams = isset($config['conditional']['query']) ? $config['conditional']['query'] : [];
+
                         return $this->redirect()
-                            ->toRoute('permits/' . $config['conditional']['step'], ['id' => $this->data['application']['id']]);
+                            ->toRoute(
+                                $config['conditional']['step'],
+                                ['id' => $this->data[$config['conditional']['dataKey']]['id']],
+                                ['query' => $conditionalQueryParams]
+                            );
                     }
                 }
 
@@ -321,8 +348,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             }
 
             $form = $this->getForm($config['formClass']);
-
             $form->setData($formData);
+            $form = $this->alterForm($form);
             $this->forms[$name] = $form;
 
             /**
@@ -330,6 +357,17 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
              */
             $this->form = $form;
         }
+    }
+
+    /**
+     * Can be overidden in controller to manipulate
+     *
+     * @param \Common\Form\Form $form
+     * @return \Common\Form\Form
+     */
+    public function alterForm($form)
+    {
+        return $form;
     }
 
     /**
@@ -425,6 +463,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * @todo needs to handle response errors :)
      *
      * @param CqrsResponse $response
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function handleResponseErrors(CqrsResponse $response)
     {
@@ -488,7 +527,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      */
     protected function nextStep(string $route): HttpResponse
     {
-        return $this->redirect()->toRoute('permits/' . $route, [], [], true);
+        return $this->redirect()->toRoute($route, [], [], true);
     }
 
     /**
@@ -532,6 +571,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * @param string $method the method we wish to run
      *
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function shouldRunOnGet(string $method): bool
     {
