@@ -63,6 +63,10 @@ return [
                                     'controller' => ReviewContactDetailsController::class,
                                     'action' => 'index',
                                 ],
+                                'constraints' => [
+                                    'surrender' => '[0-9]+',
+                                    'action' => '[a-z]'
+                                ],
                             ],
                         ],
                         'address-details' => [
@@ -74,6 +78,9 @@ return [
                                     'controller' => Olcs\Controller\Licence\Surrender\AddressDetailsController::class,
                                     'action' => 'index',
                                 ],
+                                'constraints' => [
+                                    'surrender' => '[0-9]+',
+                                ],
                             ],
                         ],
                         'declaration' => [
@@ -84,7 +91,10 @@ return [
                                 'defaults' => [
                                     'controller' => Olcs\Controller\Licence\Surrender\DeclarationController::class,
                                     'action' => 'index'
-                                ]
+                                ],
+                                'constraints' => [
+                                    'surrender' => '[0-9]+',
+                                ],
                             ]
                         ]
                     ]
