@@ -48,6 +48,7 @@ class GdsVerifyController extends AbstractController
         $applicationId = $session->hasApplicationId() ? $session->getApplicationId() : false;
         $continuationDetailId = $session->hasContinuationDetailId() ? $session->getContinuationDetailId() : false;
         $transportManagerApplicationId = $session->hasTransportManagerApplicationId() ? $session->getTransportManagerApplicationId() : false;
+        $surrenderId = $session->hasSurrenderId() ? $session->getSurrenderId() : false;
         $lva = $session->hasLva()? $session->getLva():'application';
         $role = $session->hasRole()?$session->getRole():null;
 
@@ -66,6 +67,9 @@ class GdsVerifyController extends AbstractController
             $dto->setTransportManagerApplication($transportManagerApplicationId);
             $dto->setRole($role);
         }
+
+
+
         $session->getManager()->getStorage()->clear(\Olcs\Session\DigitalSignature::SESSION_NAME);
         $response = $this->handleCommand($dto);
         if (!$response->isOk()) {
@@ -97,6 +101,17 @@ class GdsVerifyController extends AbstractController
                     'action' => 'index'
                 ]
             );
+        }
+
+        if($surrenderId) {
+            return $this->redirect()->toRoute(
+                'surrender/confirmation',
+                [
+                    'surrenderId' => $surrenderId,
+                    'licence' => $licenceId,
+                    'action' => 'index'
+                ]
+            )
         }
 
 
