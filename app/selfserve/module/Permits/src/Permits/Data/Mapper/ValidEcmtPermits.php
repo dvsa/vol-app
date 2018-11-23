@@ -22,9 +22,12 @@ class ValidEcmtPermits
         foreach ($data['result'] as $permit) {
             $cnt++;
             $permitNo = array_key_exists('permitNumber', $permit) ? $permit['permitNumber'] : $cnt;
+            $issueDate = array_key_exists('issueDate', $permit) ? $permit['issueDate'] : '';
             $permits[] = [
                 'permitNumber' => $permitNo,
-                'countries' => $permit['irhpPermitRange']['countrys']
+                'status' => $permit['irhpPermitApplication']['ecmtPermitApplication']['status'],
+                'issueDate' => $issueDate,
+                'countries' => $permit['irhpPermitRange']['countrys'],
             ];
         }
 
