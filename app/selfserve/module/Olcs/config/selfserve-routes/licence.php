@@ -65,7 +65,7 @@ return [
                                 ],
                                 'constraints' => [
                                     'surrender' => '[0-9]+',
-                                    'action' => '[a-z]'
+                                    'action' => '[a-z]+'
                                 ],
                             ],
                         ],
