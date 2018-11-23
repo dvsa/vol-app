@@ -42,10 +42,10 @@
             </div>
             <?php
             if ($application['canBeSubmitted']) {
-                $url = $this->url('permits/' . EcmtSection::ROUTE_ECMT_FEE, [], [], true);
+                $url = $this->url(EcmtSection::ROUTE_ECMT_FEE, [], [], true);
 
                 if (!$application['hasOutstandingFees']) {
-                    $url = $this->url('permits/' . EcmtSection::ROUTE_ECMT_DECLARATION, [], [], true);
+                    $url = $this->url(EcmtSection::ROUTE_ECMT_DECLARATION, [], [], true);
                 }
             ?>
                 <a href="<?php echo $url; ?>" class="govuk-button govuk-!-margin-top-5">
@@ -88,7 +88,7 @@
                     ?>
                     <ul class="info-box__links">
                         <li>
-                            <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_CANCEL_APPLICATION, [], [], true); ?>">
+                            <a href="<?php echo $this->url(EcmtSection::ROUTE_ECMT_CANCEL_APPLICATION, [], [], true); ?>">
                                 <?php echo $this->translate('permits.application.cancel-application'); ?>
                             </a>
                         </li>

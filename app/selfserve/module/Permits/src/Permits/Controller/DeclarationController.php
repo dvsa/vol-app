@@ -51,6 +51,7 @@ class DeclarationController extends AbstractSelfserveController implements Toggl
             'step' => EcmtSection::ROUTE_ECMT_FEE,
             'conditional' => [
                 'command' => EcmtSubmitApplication::class,
+                'dataKey' => 'application',
                 'params' => 'id',
                 'step' => EcmtSection::ROUTE_ECMT_FEE_WAIVED_SUBMITTED,
                 'field' => 'hasOutstandingFees',

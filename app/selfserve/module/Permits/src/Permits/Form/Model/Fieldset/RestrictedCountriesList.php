@@ -28,8 +28,9 @@ class RestrictedCountriesList
      * @Form\Attributes({
      *     "class" : "input--trips",
      *     "id" : "RestrictedCountriesList",
-     *     "allowWrap":true,
-     *     "data-container-class": "form-control__container",
+     *     "allowWrap" : true,
+     *     "data-container-class" : "form-control__container",
+     *     "aria-label" : "permits.page.restricted-countries.hint"
      * })
      * @Form\Type("DynamicMultiCheckbox")
      */
