@@ -22,7 +22,12 @@ class AcceptOrDeclinePermitsTest extends TestCase
             'fees' => [
                 [
                     'isOutstanding' => false,
-                    'isEcmtIssuingFee' => true
+                    'isEcmtIssuingFee' => true,
+                    'grossAmount' => $feeGrossAmount,
+                    'feeType' => [
+                        'displayValue' => $feeDisplayValue
+                    ],
+                    'invoicedDate' => '2018-03-10'
                 ],
                 [
                     'isOutstanding' => true,
@@ -57,8 +62,8 @@ class AcceptOrDeclinePermitsTest extends TestCase
         ];
 
         $outputData = $inputData;
-        $outputData['validityPeriod']['fromDate'] = '10 Mar 1999';
-        $outputData['validityPeriod']['toDate'] = '10 Mar 2020';
+        $outputData['validityPeriod']['fromDate'] = '921024000';
+        $outputData['validityPeriod']['toDate'] = '1583798400';
         $outputData['numPermitsAwarded'] = $permitsAwarded;
         $outputData['issuingFee'] = $feeDisplayValue;
         $outputData['issuingFeeTotal'] = $feeGrossAmount;

@@ -50,7 +50,7 @@ class ReviewContactDetailsController extends AbstractSurrenderController
                 ]
             )
         );
-        $submitLabel = $translator->translate('confirm-and-continue');
+        $submitLabel = $translator->translate('approve-details');
         $form->setSubmitLabel($submitLabel);
         $form->removeCancel();
         return $form;

@@ -36,6 +36,8 @@ class ValidEcmtPermitConstrainedCountriesTest extends \PHPUnit_Framework_TestCas
                 'results' => [
                     0 => [
                         'permitNumber' => 111,
+                        'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
+                        'issueDate' => '2018-10-11 16:40:17',
                         'countries' => [
                             0 => [
                                 'id' => 'AA',
@@ -51,6 +53,8 @@ class ValidEcmtPermitConstrainedCountriesTest extends \PHPUnit_Framework_TestCas
                     ],
                     1 => [
                         'permitNumber' => 222,
+                        'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
+                        'issueDate' => '2018-10-11 16:40:17',
                         'countries' => [
                             0 => [
                                 'id' => 'AA',
@@ -62,6 +66,8 @@ class ValidEcmtPermitConstrainedCountriesTest extends \PHPUnit_Framework_TestCas
                     ],
                     2 => [
                         'permitNumber' => 333,
+                        'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
+                        'issueDate' => '2018-10-11 16:40:17',
                         'countries' => [
                             0 => [
                                 'id' => 'AA',
@@ -70,6 +76,8 @@ class ValidEcmtPermitConstrainedCountriesTest extends \PHPUnit_Framework_TestCas
                     ],
                     3 => [
                         'permitNumber' => 444,
+                        'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
+                        'issueDate' => '2018-10-11 16:40:17',
                         'countries' => [],
                     ],
                 ],
@@ -80,10 +88,14 @@ class ValidEcmtPermitConstrainedCountriesTest extends \PHPUnit_Framework_TestCas
             'results' => [
                 0 => [
                     'permitNumber' => 111,
+                    'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
+                    'issueDate' => '2018-10-11 16:40:17',
                     'countries' => [], //no exceptions
                 ],
                 1 => [
                     'permitNumber' => 222,
+                    'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
+                    'issueDate' => '2018-10-11 16:40:17',
                     'countries' => [
                         0 => [
                             'id' => 'CC',
@@ -92,6 +104,8 @@ class ValidEcmtPermitConstrainedCountriesTest extends \PHPUnit_Framework_TestCas
                 ],
                 2 => [
                     'permitNumber' => 333,
+                    'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
+                    'issueDate' => '2018-10-11 16:40:17',
                     'countries' => [
                         0 => [
                             'id' => 'BB',
@@ -103,6 +117,8 @@ class ValidEcmtPermitConstrainedCountriesTest extends \PHPUnit_Framework_TestCas
                 ],
                 3 => [
                     'permitNumber' => 444,
+                    'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
+                    'issueDate' => '2018-10-11 16:40:17',
                     'countries' => [
                         0 => [
                             'id' => 'AA',

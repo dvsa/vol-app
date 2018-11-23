@@ -25,6 +25,7 @@ class SubmitAccept
      * @Form\Attributes({
      *     "id":"save-return-button",
      *     "value":"Save and return to overview",
+     *     "role":"link"
      * })
      * @Form\Type("Zend\Form\Element\Submit")
      */

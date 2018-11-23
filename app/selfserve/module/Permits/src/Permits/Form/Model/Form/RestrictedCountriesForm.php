@@ -12,6 +12,10 @@ class RestrictedCountriesForm
 {
     /**
      * @Form\Name("Fields")
+     * @Form\Options({
+     *     "label": "permits.page.restricted-countries.question",
+     *     "label_attributes": {"class": "visually-hidden"},
+     * })
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\RestrictedCountries")
      */
     public $fields = null;

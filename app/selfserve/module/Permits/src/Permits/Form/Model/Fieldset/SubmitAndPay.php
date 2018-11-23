@@ -15,6 +15,7 @@ class SubmitAndPay
      *     "class":"action--primary large",
      *     "id":"submit-accept-button",
      *     "value":"permits.button.submit-and-pay",
+     *     "role":"link"
      * })
      * @Form\Type("Zend\Form\Element\Submit")
      */

@@ -19,7 +19,7 @@ class ApplicationFees
     public static function mapForDisplay(array $data)
     {
         foreach ($data['fees'] as $fee) {
-            if ($fee['isOutstanding'] && $fee['isEcmtIssuingFee']) {
+            if ($fee['isEcmtIssuingFee']) {
                 //return first occurence as there should only be one
                 $data['issueFee'] = $fee['feeType']['displayValue'];
                 $data['totalFee'] = $fee['grossAmount'];
