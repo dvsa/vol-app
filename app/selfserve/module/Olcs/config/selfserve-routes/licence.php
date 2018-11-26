@@ -79,7 +79,7 @@ return [
                         'confirmation' => [
                             'type' => Segment::class,
                             'options' => [
-                                'route' => 'sconfirmation[/]',
+                                'route' => 'confirmation[/]',
                                 'defaults' => [
                                     'controller' => 'SurrenderConfirmation',
                                     'action' => 'index',

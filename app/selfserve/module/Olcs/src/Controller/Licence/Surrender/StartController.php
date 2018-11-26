@@ -33,6 +33,8 @@ class StartController extends AbstractSelfserveController implements ToggleAware
             ]
         ]
     ];
+
+    
     private $translateService;
 
     public function onDispatch(MvcEvent $e)
