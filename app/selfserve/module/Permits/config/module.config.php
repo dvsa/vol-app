@@ -2,9 +2,11 @@
 namespace Permits;
 
 use Permits\Controller\CancelApplicationController;
+use Permits\Controller\ConfirmChangeController;
 use Permits\Controller\EmissionsController;
 use Permits\Controller\CabotageController;
 use Permits\Controller\FeePartSuccessfulController;
+use Permits\Controller\LicenceController;
 use Permits\Controller\ValidPermitsController;
 use Permits\Controller\WithdrawApplicationController;
 use Permits\Controller\CheckAnswersController;
@@ -19,6 +21,8 @@ return array(
   'controllers' => array(
     'invokables' => array(
         PermitsController::class => PermitsController::class,
+        ConfirmChangeController::class => ConfirmChangeController::class,
+        LicenceController::class => LicenceController::class,
         EmissionsController::class => EmissionsController::class,
         CabotageController::class => CabotageController::class,
         CheckAnswersController::class => CheckAnswersController::class,
@@ -71,13 +75,13 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-licence' => [
+              'licence' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '[/:id]/ecmt-licence[/]',
+                      'route'    => '[/:id]/licence[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'ecmtLicence',
+                          'controller'    => LicenceController::class,
+                          'action'        => 'question',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -85,27 +89,24 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-add-licence' => [
+              'add-licence' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/ecmt-add-licence[/]',
+                      'route'    => '/licence/add[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
+                          'controller'    => LicenceController::class,
                           'action'        => 'add',
                       ],
-                      'constraints' => [
-                          'id' => '[0-9]+',
-                      ],
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-change-licence' => [
+              'change-licence' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-change-licence[/]',
+                      'route'    => '/:id/change-licence[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'changeLicence',
+                          'controller'    => ConfirmChangeController::class,
+                          'action'        => 'question',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',

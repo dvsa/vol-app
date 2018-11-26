@@ -1,0 +1,9 @@
+<?php echo $this->permitsBackLink('common.link.back.label', false); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
+            <?php echo $this->translate('permits.page.licence.saturated'); ?>
+        </h1>
+        <?php echo $this->translateReplace('markup-ecmt-licence-saturated', [$this->url('permits')]); ?>
+    </div>
+</div>

@@ -19,6 +19,21 @@ use Permits\Data\Mapper\ValidEcmtPermitConstrainedCountries as EcmtConstrainedCo
  */
 class DataSourceConfig
 {
+    const PERMIT_APP_ADD_LICENCE = [
+        OpenWindows::class => [],
+        LastOpenWindow::class => [],
+        LicencesAvailable::class => [
+            'passInUserData' => 'getCurrentOrganisationId'
+        ]
+    ];
+
+    const PERMIT_APP_LICENCE = [
+        PermitAppDataSource::class => [],
+        LicencesAvailable::class => [
+            'passInUserData' => 'getCurrentOrganisationId',
+        ]
+    ];
+
     const PERMIT_APP = [
         PermitAppDataSource::class => [],
     ];

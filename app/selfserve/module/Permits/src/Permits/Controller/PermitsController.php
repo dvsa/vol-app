@@ -40,8 +40,6 @@ use Zend\Mvc\MvcEvent;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitFees;
 use Zend\View\Model\ViewModel;
 
-use DateTime;
-
 class PermitsController extends AbstractSelfserveController implements ToggleAwareInterface
 {
     use ExternalControllerTrait;
@@ -116,98 +114,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $view->setVariable('issuedTable', $issuedTable);
         $view->setVariable('applicationsNo', count($applicationData));
         $view->setVariable('applicationsTable', $applicationsTable);
-
-        return $view;
-    }
-
-    public function addAction()
-    {
-        $currentDateTime = new DateTime();
-        $formattedDateTime = $currentDateTime->format('Y-m-d H:i:s');
-
-        $response = $this->handleQuery(
-            OpenWindows::create(['currentDateTime' => $formattedDateTime])
-        );
-        $result = $this->handleResponse($response);
-
-        if (count($result['windows']) == 0) {
-            $response = $this->handleQuery(
-                LastOpenWindow::create(['currentDateTime' => $formattedDateTime])
-            );
-            $result = $this->handleResponse($response);
-
-            $view = new ViewModel();
-            $view->setVariable('lastOpenWindowDate', $result['results']['endDate']);
-            $view->setTemplate('permits/window-closed');
-
-            return $view;
-        }
-
-        $form = $this->getForm('EcmtLicenceForm');
-
-        $data = $this->params()->fromPost();
-        if (isset($data['Submit']['SubmitButton'])) {
-            //Validate
-            $form->setData($data);
-            if ($form->isValid()) {
-                $command = CreateEcmtPermitApplication::create(['licence'=> $data['Fields']['EcmtLicence']]);
-                $response = $this->handleCommand($command);
-                $insert = $response->getResult();
-
-                return $this->redirect()
-                    ->toRoute(
-                        EcmtSection::ROUTE_APPLICATION_OVERVIEW,
-                        ['id' => $insert['id']['ecmtPermitApplication']]
-                    );
-            } else {
-                $form->get('Fields')->get('EcmtLicence')->setMessages(['isEmpty' => "error.messages.ecmt-licence"]);
-            }
-        }
-
-        $query = NextIrhpPermitStock::create(['permitType' => 'permit_ecmt']);
-        $stock = $this->handleQuery($query)->getResult();
-
-        $view = new ViewModel(['form' => $form, 'stock' => $stock, 'application' => []]);
-        $view->setTemplate('permits/ecmt-licence');
-
-        return $view;
-    }
-
-    public function ecmtLicenceAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-        $application = $this->getApplication($id);
-
-        $form = $this->getForm('EcmtLicenceForm');
-
-        $data = $this->params()->fromPost();
-
-        if (isset($data['Submit']['SubmitButton'])) {
-            $form->setData($data);
-            if ($form->isValid()) {
-                if ($application['licence']['id'] != $data['Fields']['EcmtLicence']) {
-                    return $this->redirect()
-                        ->toRoute(
-                            EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE,
-                            ['id' => $id],
-                            ['query' => [
-                                'licenceId' => $data['Fields']['EcmtLicence']
-                            ]]
-                        );
-                }
-
-                return $this->redirect()
-                    ->toRoute(EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
-            } else {
-                $form->get('Fields')->get('EcmtLicence')->setMessages(['isEmpty' => "error.messages.ecmt-licence"]);
-            }
-        }
-
-        $query = NextIrhpPermitStock::create(['permitType' => $application['permitType']['id']]);
-        $stock = $this->handleQuery($query)->getResult();
-
-        $view = new ViewModel(['form' => $form, 'application' => $application, 'stock' => $stock]);
-        $view->setTemplate('permits/ecmt-licence');
 
         return $view;
     }
@@ -490,50 +396,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
 
         return array('form' => $form, 'id' => $id, 'ecmtApplicationFee' => $ecmtApplicationFee, 'ref' => $application['applicationRef']);
-    }
-
-    public function changeLicenceAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-
-        $data = $this->params()->fromPost();
-
-        //Create form from annotations
-        $form = $this->getForm('ChangeLicenceForm');
-        if (is_array($data) && array_key_exists('Submit', $data)) {
-            //Validate
-            $form->setData($data);
-
-            if ($form->isValid()) {
-                $command = UpdateEcmtLicence::create(['id' => $id, 'licence' => $data['Fields']['licenceId']]);
-                $this->handleCommand($command);
-
-                return $this->redirect()
-                    ->toRoute(EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
-            }
-        }
-
-        $licenceId = $this->params()->fromQuery('licenceId');
-        $formData['Fields']['licenceId'] = $licenceId;
-        $form->setData($formData);
-
-        $query = Licence::create(['id' => $licenceId]);
-        $response = $this->handleQuery($query);
-        $newLicence = $response->getResult();
-
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $confirmChangeLabel = $translationHelper->translateReplace('permits.form.change_licence.label', [$newLicence['licNo']]);
-        $form->get('Fields')->get('ConfirmChange')->setLabel($confirmChangeLabel);
-
-        $application = $this->getApplication($id);
-
-        $view = new ViewModel();
-
-        $view->setVariable('form', $form);
-        $view->setVariable('id', $id);
-        $view->setVariable('ref', $application['applicationRef']);
-
-        return $view;
     }
 
     public function ecmtGuidanceAction()
