@@ -9,7 +9,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Dvsa\Olcs\Transfer\Command\Permits\PrintPermits as PrintPermitsDto;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrint as ListDto;
-
+use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintConfirm as ConfirmListDto;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -32,15 +32,10 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
 
     protected $navigationId = 'admin-dashboard/admin-printing/irhp-permits';
 
-    /**
-     * @var array
-     */
-    protected $inlineScripts = [
-        'indexAction' => ['table-actions'],
-    ];
-
     protected $crudConfig = [
-        'print' => ['requireRows' => true],
+        'confirm' => ['requireRows' => true],
+        'cancel' => ['requireRows' => false],
+        'print' => ['requireRows' => false],
     ];
 
     /**
@@ -62,6 +57,45 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
     }
 
     /**
+     * Confirm Action
+     *
+     * @return ViewModel | \Zend\Http\Response
+     */
+    public function confirmAction()
+    {
+        return $this->index(
+            ConfirmListDto::class,
+            new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id'))]),
+            $this->tableViewPlaceholderName,
+            'admin-irhp-permit-print-confirm',
+            $this->tableViewTemplate
+        );
+    }
+
+    /**
+     * Alter table
+     *
+     * @param \Common\Service\Table\TableBuilder $table table
+     * @param array                              $data  data
+     *
+     * @return \Common\Service\Table\TableBuilder
+     */
+    protected function alterTable($table, $data)
+    {
+        if ($table->hasColumn('sequenceNumber')) {
+            $rows = $table->getRows();
+            array_walk(
+                $rows,
+                function (&$item, $key) {
+                    $item['sequenceNumber'] = $key + 1;
+                }
+            );
+            $table->setRows($rows);
+        }
+        return $table;
+    }
+
+    /**
      * Print Action
      *
      * @return \Zend\Http\Response
@@ -73,5 +107,15 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
             PrintPermitsDto::class,
             'Permits submitted for printing'
         );
+    }
+
+    /**
+     * Cancel Action
+     *
+     * @return \Zend\Http\Response
+     */
+    public function cancelAction()
+    {
+         return $this->redirectTo([]);
     }
 }
