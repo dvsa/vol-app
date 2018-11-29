@@ -3,130 +3,146 @@
 namespace OlcsTest\Session;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 use Olcs\Session\DigitalSignature;
 
 /**
  * Class DigitalSignatureTest
  */
-class DigitalSignatureTest extends m\Adapter\Phpunit\MockeryTestCase
+class DigitalSignatureTest extends TestCase
 {
-    /**
-     * @var DigitalSignature
-     */
-    private $sut;
-
     public function testHasApplicationId()
     {
+        $sut = new DigitalSignature();
 
-        $this->assertFalse($this->sut->hasApplicationId());
-        $this->sut->setApplicationId(12);
-        $this->assertTrue($this->sut->hasApplicationId());
+        $this->assertFalse($sut->hasApplicationId());
+        $sut->setApplicationId(12);
+        $this->assertTrue($sut->hasApplicationId());
     }
 
     public function testSetGetApplicationId()
     {
+        $sut = new DigitalSignature();
+        $sut->setApplicationId('0');
 
-        $this->assertSame(0, $this->sut->getApplicationId());
-        $this->sut->setApplicationId('12');
-        $this->assertSame(12, $this->sut->getApplicationId());
+        $this->assertSame(0, $sut->getApplicationId());
+        $sut->setApplicationId('12');
+        $this->assertSame(12, $sut->getApplicationId());
     }
 
     public function testHasContinuationDetailId()
     {
+        $sut = new DigitalSignature();
+        $sut->setContinuationDetailId(null);
 
-        $this->assertFalse($this->sut->hasContinuationDetailId());
-        $this->sut->setContinuationDetailId(12);
-        $this->assertTrue($this->sut->hasContinuationDetailId());
+        $this->assertFalse($sut->hasContinuationDetailId());
+        $sut->setContinuationDetailId(12);
+        $this->assertTrue($sut->hasContinuationDetailId());
     }
 
     public function testSetGetContinuationDetailId()
     {
+        $sut = new DigitalSignature();
+        $sut->setContinuationDetailId('0');
 
-        $this->assertSame(0, $this->sut->getContinuationDetailId());
-        $this->sut->setContinuationDetailId('12');
-        $this->assertSame(12, $this->sut->getContinuationDetailId());
+        $this->assertSame(0, $sut->getContinuationDetailId());
+        $sut->setContinuationDetailId('12');
+        $this->assertSame(12, $sut->getContinuationDetailId());
     }
 
     public function testSetGetTransportManagerApplicationId()
     {
-        $this->assertSame(0, $this->sut->getTransportManagerApplicationId());
-        $this->sut->setTransportManagerApplicationId('12');
-        $this->assertSame(12, $this->sut->getTransportManagerApplicationId());
+        $sut = new DigitalSignature();
+        $sut->setTransportManagerApplicationId('0');
+
+        $this->assertSame(0, $sut->getTransportManagerApplicationId());
+        $sut->setTransportManagerApplicationId('12');
+        $this->assertSame(12, $sut->getTransportManagerApplicationId());
     }
 
     public function testHasTransportManagerApplicationId()
     {
+        $sut = new DigitalSignature();
+        $sut->setTransportManagerApplicationId('0');
 
-        $this->assertEquals(0, $this->sut->getTransportManagerApplicationId());
-        $this->sut->setTransportManagerApplicationId(7);
-        $this->assertTrue($this->sut->hasTransportManagerApplicationId());
+        $this->assertEquals(0, $sut->getTransportManagerApplicationId());
+        $sut->setTransportManagerApplicationId(7);
+        $this->assertTrue($sut->hasTransportManagerApplicationId());
     }
 
     public function testSetGetRole()
     {
-        $this->sut->setRole('__TEST__');
-        $this->assertEquals('__TEST__', $this->sut->getRole());
+        $sut = new DigitalSignature();
+
+        $sut->setRole('__TEST__');
+        $this->assertEquals('__TEST__', $sut->getRole());
     }
 
     public function testGetSetLva()
     {
-        $this->sut->setLva('application');
-        $this->assertEquals('application', $this->sut->getLva());
+        $sut = new DigitalSignature();
+
+        $sut->setLva('application');
+        $this->assertEquals('application', $sut->getLva());
     }
 
     public function testHasLva()
     {
+        $sut = new DigitalSignature();
+        $sut->setLva(null);
 
-        $this->assertEquals(0, $this->sut->getLva());
-        $this->sut->setLva('__TEST__');
-        $this->assertTrue($this->sut->hasLva());
+        $this->assertEquals(0, $sut->getLva());
+        $sut->setLva('__TEST__');
+        $this->assertTrue($sut->hasLva());
     }
 
     public function testRole()
     {
+        $sut = new DigitalSignature();
+        $sut->setRole(null);
 
-        $this->assertEquals(null, $this->sut->getRole());
-        $this->sut->setRole('__TEST__');
-        $this->assertTrue($this->sut->hasRole());
+        $this->assertEquals(null, $sut->getRole());
+        $sut->setRole('__TEST__');
+        $this->assertTrue($sut->hasRole());
     }
 
     public function testSetGetApplication()
     {
+        $sut = new DigitalSignature();
+        $sut->setApplication('0');
 
-        $this->assertSame(0, $this->sut->getApplicationId());
-        $this->sut->setApplication('12');
-        $this->assertSame(12, $this->sut->getApplicationId());
+        $this->assertSame(0, $sut->getApplicationId());
+        $sut->setApplication('12');
+        $this->assertSame(12, $sut->getApplicationId());
     }
 
     public function testSetGetContinuationDetail()
     {
+        $sut = new DigitalSignature();
+        $sut->setContinuationDetailId('0');
 
-        $this->assertSame(0, $this->sut->getContinuationDetailId());
-        $this->sut->setContinuationDetail('12');
-        $this->assertSame(12, $this->sut->getContinuationDetailId());
+        $this->assertSame(0, $sut->getContinuationDetailId());
+        $sut->setContinuationDetail('12');
+        $this->assertSame(12, $sut->getContinuationDetailId());
     }
 
     public function testSetGetSurrenderId()
     {
+        $sut = new DigitalSignature();
 
-        $this->assertSame(0, $this->sut->getLicenceId());
-        $this->sut->setLicenceId('12');
-        $this->assertSame(12, $this->sut->getLicenceId());
+        $this->assertSame(0, $sut->getLicenceId());
+        $sut->setLicenceId('12');
+        $this->assertSame(12, $sut->getLicenceId());
     }
 
     public function testHasSurrenderId()
     {
-        $this->assertEquals(0, $this->sut->getLicenceId());
-        $this->sut->setLicenceId(7);
-        $this->assertTrue($this->sut->hasLicenceId());
-    }
-    /**
-     * setUp
-     *
-     a*/
-    public function setUp()
-    {
-        $this->sut = new DigitalSignature();
+        $sut = new DigitalSignature();
+        $sut->setLicenceId('0');
+
+        $this->assertEquals(0, $sut->getLicenceId());
+        $sut->setLicenceId(7);
+        $this->assertTrue($sut->hasLicenceId());
     }
 }
