@@ -7,12 +7,13 @@ use Olcs\View\Helper\SubmissionSectionTable;
 use Olcs\View\Helper\SubmissionSectionMultipleTables;
 use Olcs\View\Helper\SubmissionSectionTableFactory;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * Class SubmissionSectionMultipleTables
  * @package OlcsTest\View\Helper
  */
-class SubmissionSectionMultipleTablesTest extends \PHPUnit_Framework_TestCase
+class SubmissionSectionMultipleTablesTest extends TestCase
 {
     /**
      * @dataProvider provideInvoke

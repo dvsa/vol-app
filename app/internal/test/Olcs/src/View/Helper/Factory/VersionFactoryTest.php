@@ -3,8 +3,8 @@
 namespace OlcsTest\View\Helper;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use OlcsTest\Bootstrap;
-use PHPUnit_Framework_TestCase;
 use Olcs\View\Helper\Factory\VersionFactory;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -13,7 +13,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @package OlcsTest\View\Helper\Factory
  * @covers \OLCS\View\Helper\Factory\VersionFactory
  */
-class VersionFactoryTest extends PHPUnit_Framework_TestCase
+class VersionFactoryTest extends TestCase
 {
     /**
      * @var ServiceLocatorInterface

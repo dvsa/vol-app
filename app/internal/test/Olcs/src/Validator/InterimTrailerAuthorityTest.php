@@ -2,10 +2,9 @@
 
 namespace OlcsTest\Validator;
 
-use PHPUnit_Framework_TestCase;
 use Olcs\Validator\InterimTrailerAuthority;
 
-class InterimTrailerAuthorityTest extends PHPUnit_Framework_TestCase
+class InterimTrailerAuthorityTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 

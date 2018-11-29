@@ -3,13 +3,12 @@
 namespace OlcsTest\View\Helper;
 
 use Olcs\View\Helper\Address as AddressHelper;
-use PHPUnit_Framework_TestCase;
 
 /**
  * Class AddressTest
  * @package OlcsTest\View\Helper
  */
-class AddressTest extends PHPUnit_Framework_TestCase
+class AddressTest extends \PHPUnit\Framework\TestCase
 {
     public function testInvoke()
     {

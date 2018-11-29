@@ -2,10 +2,9 @@
 
 namespace OlcsTest\Validator;
 
-use PHPUnit_Framework_TestCase;
 use Olcs\Validator\InterimVehicleAuthority;
 
-class InterimVehicleAuthorityTest extends PHPUnit_Framework_TestCase
+class InterimVehicleAuthorityTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 

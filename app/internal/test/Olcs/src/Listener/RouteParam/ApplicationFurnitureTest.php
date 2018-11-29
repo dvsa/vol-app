@@ -73,7 +73,7 @@ class ApplicationFurnitureTest extends TestCase
 
     public function testOnApplicationFurnitureWithError()
     {
-        $this->setExpectedException(ResourceNotFoundException::class);
+        $this->expectException(ResourceNotFoundException::class);
 
         $event = m::mock(RouteParam::class);
         $event->shouldReceive('getValue')->andReturn(111);

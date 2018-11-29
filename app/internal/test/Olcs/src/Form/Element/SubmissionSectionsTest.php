@@ -7,8 +7,8 @@
  */
 namespace OlcsTest\Form\Element;
 
-use PHPUnit_Framework_TestCase;
 use Olcs\Form\Element\SubmissionSections;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 
 /**
@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
+class SubmissionSectionsTest extends TestCase
 {
     public function testGetInputSpecification()
     {
@@ -110,7 +110,6 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
 
         $this->assertNotEmpty($sut->getSections());
         $this->assertNotEmpty($sut->getSubmissionType());
-
     }
 
     /**
@@ -165,7 +164,6 @@ class SubmissionSectionsTest extends PHPUnit_Framework_TestCase
 
         $this->assertNotEmpty($sut->getSections());
         $this->assertNotEmpty($sut->getSubmissionType());
-
     }
 
     public function getSubmissionSectionsProvider()

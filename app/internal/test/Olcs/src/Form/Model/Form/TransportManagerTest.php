@@ -160,6 +160,12 @@ class TransportManagerTest extends AbstractFormValidationTestCase
         );
     }
 
+    /**
+     * This doesn't perform any assertions as per the documentation for
+     * assertFormElementPostcodeSearch() in AbstractFormValidationTestCase
+     *
+     * @doesNotPerformAssertions
+     */
     public function testHomeSearchPostcode()
     {
         $this->assertFormElementPostcodeSearch(
@@ -236,6 +242,12 @@ class TransportManagerTest extends AbstractFormValidationTestCase
         );
     }
 
+    /**
+    * This doesn't perform any assertions as per the documentation for
+    * assertFormElementPostcodeSearch() in AbstractFormValidationTestCase
+    *
+    * @doesNotPerformAssertions
+    */
     public function testWorkSearchPostcode()
     {
         $this->assertFormElementPostcodeSearch(

@@ -8,7 +8,7 @@ use Olcs\Validator\TypeOfPI;
  * Class TypeOfPITest
  * @package OlcsTest\Validator
  */
-class TypeOfPITest extends \PHPUnit_Framework_TestCase
+class TypeOfPITest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideIsValid

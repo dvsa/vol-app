@@ -165,6 +165,12 @@ class StatementTest extends AbstractFormValidationTestCase
         $this->assertFormElementHidden(['fields', 'version']);
     }
 
+    /**
+     * This doesn't perform any assertions as per the documentation for
+     * assertFormElementPostcodeSearch() in AbstractFormValidationTestCase
+     *
+     * @doesNotPerformAssertions
+     */
     public function testSearchPostcode()
     {
         $this->assertFormElementPostcodeSearch(

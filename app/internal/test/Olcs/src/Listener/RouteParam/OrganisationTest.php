@@ -131,7 +131,7 @@ class OrganisationTest extends MockeryTestCase
             ->andReturn(false);
 
         //  expect
-        $this->setExpectedException(\Common\Exception\ResourceNotFoundException::class);
+        $this->expectException(\Common\Exception\ResourceNotFoundException::class);
 
         //  call
         $event = new RouteParam();

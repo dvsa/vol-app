@@ -8,7 +8,7 @@ use Olcs\Service\Data\PublicInquiryDefinition;
  * Class PublicInquiryDefinitionTest
  * @package OlcsTest\Service\Data
  */
-class PublicInquiryDefinitionTest extends \PHPUnit_Framework_TestCase
+class PublicInquiryDefinitionTest extends \PHPUnit\Framework\TestCase
 {
     private $definitions = [
         ['id' => 12, 'piDefinitionCategory' => 'Category A', 'description' => 'Description 1'],
