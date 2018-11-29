@@ -141,9 +141,6 @@ class GdsVerifyController extends AbstractController
                 call_user_func([$session, $methodName], $value);
             }
         }
-        $hasId = $session->hasSurrenderId();
-        $surr = $session->getSurrenderId();
-
     }
 
     private function getTypeOfRequest($params): array

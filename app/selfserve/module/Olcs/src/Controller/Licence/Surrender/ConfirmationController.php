@@ -8,11 +8,10 @@
 
 namespace Olcs\Controller\Licence\Surrender;
 
-
 class ConfirmationController extends AbstractSurrenderController
 {
     public function indexAction()
     {
-        return 'here';
+        return '@todo stuff here';
     }
 }
