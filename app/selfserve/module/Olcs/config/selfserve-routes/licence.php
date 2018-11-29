@@ -81,7 +81,7 @@ return [
                             'options' => [
                                 'route' => 'confirmation[/]',
                                 'defaults' => [
-                                    'controller' => 'SurrenderConfirmation',
+                                    'controller' => \Olcs\Controller\Licence\Surrender\ConfirmationController::class,
                                     'action' => 'index',
                                 ],
                             ],

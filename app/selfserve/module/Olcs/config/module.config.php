@@ -462,6 +462,18 @@ $routes = array(
                     ],
                 )
             ],
+            'surrender' =>[
+                'type' => Segment::class,
+                'options' => array(
+                    'route' => '/surrender/:surrenderId[/]',
+                    'defaults' => array(
+                        'action' => 'initiate-request',
+                    ),
+                    'constraints' =>[
+                        'surrenderId' => '[0-9]+',
+                    ],
+                )
+            ],
             'process-response' => array(
                 'type' => Segment::class,
                 'options' => array(

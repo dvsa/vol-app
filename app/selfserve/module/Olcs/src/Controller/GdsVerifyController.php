@@ -68,6 +68,9 @@ class GdsVerifyController extends AbstractController
             $dto->setRole($role);
         }
 
+        if ($surrenderId) {
+            $dto->setSurrenderId($surrenderId);
+        }
 
         $session->getManager()->getStorage()->clear(\Olcs\Session\DigitalSignature::SESSION_NAME);
         $response = $this->handleCommand($dto);
@@ -138,6 +141,9 @@ class GdsVerifyController extends AbstractController
                 call_user_func([$session, $methodName], $value);
             }
         }
+        $hasId = $session->hasSurrenderId();
+        $surr = $session->getSurrenderId();
+
     }
 
     private function getTypeOfRequest($params): array
