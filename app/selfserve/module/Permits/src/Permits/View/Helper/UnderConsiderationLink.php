@@ -24,7 +24,7 @@ class UnderConsiderationLink extends AbstractHelper
     public function __invoke(string $route, ?string $label = 'common.link.back.label'): string
     {
         $label = $this->view->escapeHtml($this->view->translate($label));
-        $url = $this->view->url('permits/' . $route, [], [], true);
+        $url = $this->view->url($route, [], [], true);
         return sprintf($this->linkTemplate, $url, $label);
     }
 }
