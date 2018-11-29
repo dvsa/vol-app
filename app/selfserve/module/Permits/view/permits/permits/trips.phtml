@@ -24,6 +24,8 @@ $this->headTitle($title);
                 <?php echo $this->partial('partials/warning-component', ['translationKey' => 'permits.page.number-of-trips.northern-ireland.warning']); ?>
             <?php endif; ?>
 
+            <?php echo $this->partial('partials/guidance-blue-component', ['guidance' => 'permits.page.number-of-trips.guidance']); ?>
+
             <?php echo $this->translate('markup-ecmt-trips-hint.phtml'); ?>
 
             <div class="govuk-form-group">
