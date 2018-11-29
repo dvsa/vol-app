@@ -33,10 +33,10 @@ class CabotageController extends AbstractSelfserveController implements ToggleAw
     protected $templateVarsConfig = [
         'question' => [
             'browserTitle' => 'permits.page.cabotage.browser.title',
-            'data' => [
-                'question' => 'permits.page.cabotage.question',
-                'guidance' => 'permits.page.cabotage.guidance'
-            ]
+            'question' => 'permits.page.cabotage.question',
+            'guidance' => [
+                'permits.page.cabotage.guidance',
+            ],
         ]
     ];
 
