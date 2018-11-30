@@ -118,7 +118,7 @@ class ViewControllerTest extends MockeryTestCase
 
         //  mock permissions
         $this->mockIsGrantedPlgn->shouldReceive('__invoke')
-            ->with(anyOf([RefData::PERMISSION_SELFSERVE_PARTNER_ADMIN, RefData::PERMISSION_SELFSERVE_PARTNER_USER]))
+            ->with(\Hamcrest\Matchers::anyOf([RefData::PERMISSION_SELFSERVE_PARTNER_ADMIN, RefData::PERMISSION_SELFSERVE_PARTNER_USER]))
             ->andReturn(false);
 
         //  call & check
@@ -209,7 +209,7 @@ class ViewControllerTest extends MockeryTestCase
 
         //  mock permissions
         $this->mockIsGrantedPlgn->shouldReceive('__invoke')
-            ->with(anyOf([RefData::PERMISSION_SELFSERVE_PARTNER_ADMIN, RefData::PERMISSION_SELFSERVE_PARTNER_USER]))
+            ->with(\Hamcrest\Matchers::anyOf([RefData::PERMISSION_SELFSERVE_PARTNER_ADMIN, RefData::PERMISSION_SELFSERVE_PARTNER_USER]))
             ->andReturn(true);
 
         //  call & check

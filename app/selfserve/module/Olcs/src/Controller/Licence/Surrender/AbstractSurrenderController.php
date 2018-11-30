@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Licence\Surrender;
 
+use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence as SurrenderQuery;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
@@ -63,6 +64,15 @@ class AbstractSurrenderController extends AbstractSelfserveController implements
     {
         $response = $this->handleQuery(
             LicenceQuery::create(['id' => (int)$this->params('licence')])
+        );
+
+        return $response->getResult();
+    }
+
+    protected function getSurrender()
+    {
+        $response = $this->handleQuery(
+            SurrenderQuery::create(['id' => (int)$this->params('licence')])
         );
 
         return $response->getResult();

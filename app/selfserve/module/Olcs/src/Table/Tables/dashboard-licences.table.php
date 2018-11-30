@@ -8,7 +8,7 @@ return array(
         'empty_message' => 'dashboard-no-licences-text',
         'hide_column_headers' => true,
     ),
-    'settings' => array(),
+    'settings' => ['layout' => 'dashboard-licences'],
     'attributes' => array(),
     'columns' => array(
         array(
