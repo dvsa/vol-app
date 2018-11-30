@@ -155,18 +155,18 @@ class DigitalSignature extends \Zend\Session\Container
     }
 
 
-    public function setSurrenderId(int $surrenderId)
+    public function setLicenceId(int $licenceId)
     {
-        $this->surrenderId = $surrenderId;
+        $this->licenceId = $licenceId;
     }
 
-    public function hasSurrenderId()
+    public function hasLicenceId()
     {
-        return $this->offsetExists('surrenderId');
+        return $this->offsetExists('licenceId');
     }
 
-    public function getSurrenderId():int
+    public function getLicenceId():int
     {
-        return (int) $this->surrenderId;
+        return (int) $this->licenceId;
     }
 }

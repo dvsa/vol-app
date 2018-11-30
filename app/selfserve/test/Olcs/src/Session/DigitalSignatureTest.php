@@ -111,7 +111,7 @@ class DigitalSignatureTest extends m\Adapter\Phpunit\MockeryTestCase
     {
 
         $this->assertSame(0, $this->sut->getSurrenderId());
-        $this->sut->setSurrenderId('12');
+        $this->sut->setLicenceId('12');
         $this->assertSame(12, $this->sut->getSurrenderId());
     }
 
@@ -119,7 +119,7 @@ class DigitalSignatureTest extends m\Adapter\Phpunit\MockeryTestCase
     {
 
         $this->assertEquals(0, $this->sut->getSurrenderId());
-        $this->sut->setSurrenderId(7);
+        $this->sut->setLicenceId(7);
         $this->assertTrue($this->sut->hasSurrenderId());
     }
     /**

@@ -465,12 +465,12 @@ $routes = array(
             'surrender' =>[
                 'type' => Segment::class,
                 'options' => array(
-                    'route' => '/surrender/:surrenderId[/]',
+                    'route' => '/surrender/:licenceId[/]',
                     'defaults' => array(
                         'action' => 'initiate-request',
                     ),
                     'constraints' =>[
-                        'surrenderId' => '[0-9]+',
+                        'licenceId' => '[0-9]+',
                     ],
                 )
             ],

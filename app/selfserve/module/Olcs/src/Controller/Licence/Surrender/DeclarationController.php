@@ -41,7 +41,7 @@ class DeclarationController extends AbstractSurrenderController
             $this->url()->fromRoute(
                 'verify/surrender',
                 [
-                    'surrenderId' => $this->licenceId,
+                    'licenceId' => $this->licenceId,
                 ]
             )
         );
