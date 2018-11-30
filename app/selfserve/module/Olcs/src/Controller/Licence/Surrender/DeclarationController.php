@@ -35,16 +35,17 @@ class DeclarationController extends AbstractSurrenderController
 
     protected function getSignForm(): \Common\Form\Form
     {
-        return $this->getForm(DeclarationSign::class);
-    }
-
-    public function continueAction()
-    {
-        $routeParams = ['surrenderId' => $this->licenceId];
-        $this->redirect()->toRoute(
-            'verify/surrender',
-            $routeParams
+        $form =  $this->getForm(DeclarationSign::class);
+        $form->setAttribute(
+            "action",
+            $this->url()->fromRoute(
+                'verify/surrender',
+                [
+                    'surrenderId' => $this->licenceId,
+                ]
+            )
         );
+        return $form;
     }
 
     protected function getPrintForm(TranslationHelperService $translator): \Common\Form\Form
