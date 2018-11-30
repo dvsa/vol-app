@@ -110,17 +110,17 @@ class DigitalSignatureTest extends m\Adapter\Phpunit\MockeryTestCase
     public function testSetGetSurrenderId()
     {
 
-        $this->assertSame(0, $this->sut->getSurrenderId());
+        $this->assertSame(0, $this->sut->getLicenceId());
         $this->sut->setLicenceId('12');
-        $this->assertSame(12, $this->sut->getSurrenderId());
+        $this->assertSame(12, $this->sut->getLicenceId());
     }
 
     public function testHasSurrenderId()
     {
 
-        $this->assertEquals(0, $this->sut->getSurrenderId());
+        $this->assertEquals(0, $this->sut->getLicenceId());
         $this->sut->setLicenceId(7);
-        $this->assertTrue($this->sut->hasSurrenderId());
+        $this->assertTrue($this->sut->hasLicenceId());
     }
     /**
      * setUp
