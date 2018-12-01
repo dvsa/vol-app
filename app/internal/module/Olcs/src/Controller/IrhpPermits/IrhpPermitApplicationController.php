@@ -288,28 +288,6 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     }
 
     /**
-     * to be implemented in later story - required for NavBar to work without error
-     *
-     * @return ViewModel
-     */
-    public function documentsAction()
-    {
-        $this->setNavigationId('documents');
-        return $this->stubAction();
-    }
-
-    /**
-     * to be implemented in later story - required for NavBar to work without error
-     *
-     * @return ViewModel
-     */
-    public function processingAction()
-    {
-        $this->setNavigationId('processing');
-        return $this->stubAction();
-    }
-
-    /**
      * Handles click of the Submit button on right-sidebar
      *
      * @return \Zend\Http\Response
@@ -480,19 +458,6 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         }
 
         return $response->getResult();
-    }
-
-    /**
-     * Remove this when the processing/documents actions are properly implemented.
-     *
-     * @return ViewModel
-     */
-    protected function stubAction()
-    {
-        $view = new ViewModel();
-        $view->setTemplate('sections/irhp-permit/partials/stub');
-
-        return $view;
     }
 
     protected function setNavigationId($action)

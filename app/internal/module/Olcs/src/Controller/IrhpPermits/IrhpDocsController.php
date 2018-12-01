@@ -2,9 +2,6 @@
 
 namespace Olcs\Controller\IrhpPermits;
 
-use Olcs\Controller\AbstractController;
-use Olcs\Controller\Interfaces\IrhpPermitApplicationControllerInterface;
-use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits as ControllerTraits;
 
 /**
@@ -14,7 +11,7 @@ use Olcs\Controller\Traits as ControllerTraits;
  * @author Dan Eggleston <dan@stolenegg.com>
  * @author Andy Newton <andy@vitri.ltd>
  */
-class IrhpDocsController extends AbstractController implements IrhpPermitApplicationControllerInterface, LeftViewProvider
+class IrhpDocsController extends AbstractIrhpPermitController
 {
     use ControllerTraits\DocumentActionTrait,
         ControllerTraits\DocumentSearchTrait;

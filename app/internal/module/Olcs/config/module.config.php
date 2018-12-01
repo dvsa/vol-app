@@ -329,6 +329,10 @@ return array(
             'IrhpPermitFeesController' => 'Olcs\Controller\IrhpPermits\IrhpPermitFeesController',
             'IrhpPermitController' => 'Olcs\Controller\IrhpPermits\IrhpPermitController',
             'IrhpDocsController' => 'Olcs\Controller\IrhpPermits\IrhpDocsController',
+            \Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController::class =>
+                \Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController::class,
+            \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class =>
+                \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class,
         ),
         'factories' => [
             TmCntr\Details\TransportManagerDetailsResponsibilityController::class =>

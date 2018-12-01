@@ -7,6 +7,8 @@ use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController;
 use Olcs\Controller\Bus\Processing\BusProcessingDecisionController;
 use Olcs\Controller\Bus\Processing\BusProcessingNoteController;
 use Olcs\Controller\Operator\OperatorProcessingNoteController;
+use Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController;
+use Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController;
 use Olcs\Controller\Bus\Details\BusDetailsController;
 use Olcs\Controller\Bus\Service\BusServiceController;
 use Olcs\Controller\SearchController;
@@ -807,26 +809,6 @@ $routes = [
                             ]
                         ]
                     ],
-                    'docs' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => ':action[/:permitid][/]',
-                            'constraints' => [
-                                'action' => 'documents',
-                                'id' => '[0-9]+',
-                            ]
-                        ]
-                    ],
-                    'processing' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => ':action[/:permitid][/]',
-                            'constraints' => [
-                                'action' => 'processing',
-                                'id' => '[0-9]+',
-                            ]
-                        ]
-                    ],
                     'submit' => [
                         'type' => 'segment',
                         'options' => [
@@ -882,7 +864,7 @@ $routes = [
             'irhp-permits' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => 'permits/:permitid/irhp-permits[/][:action][/][:irhpPermitId]',
+                    'route' => 'permits/:permitid/irhp-permits[/:action][/:irhpPermitId][/]',
                     'defaults' => [
                         'controller' => 'IrhpPermitController',
                         'action' => 'index',
@@ -957,6 +939,30 @@ $routes = [
                         ],
                     ],
                 ],
+            ],
+            'irhp-processing' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'permits/:permitid/processing[/]',
+                    'defaults' => [
+                        'controller' => IrhpPermitProcessingOverviewController::class,
+                        'permitid' => '[0-9]+',
+                        'action' => 'index',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'tasks' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'tasks[/]',
+                            'defaults' => [
+                                'controller' => IrhpPermitProcessingTasksController::class,
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
+                ]
             ],
             'processing' => [
                 'type' => 'segment',

@@ -2,12 +2,7 @@
 
 namespace Olcs\Controller\IrhpPermits;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Controller\Traits\GenericReceipt;
-use Common\FeatureToggle;
-use Olcs\Controller\AbstractController;
-use Olcs\Controller\Interfaces\IrhpPermitApplicationControllerInterface;
-use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\FeesActionTrait;
 
 /**
@@ -15,21 +10,12 @@ use Olcs\Controller\Traits\FeesActionTrait;
  *
  * @author Andy Newton>
  */
-class IrhpPermitFeesController extends AbstractController implements
-    IrhpPermitApplicationControllerInterface,
-    LeftViewProvider,
-    ToggleAwareInterface
+class IrhpPermitFeesController extends AbstractIrhpPermitController
 {
     use FeesActionTrait {
         feesAction as traitFeesAction;
     }
     use GenericReceipt;
-
-    protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::BACKEND_ECMT
-        ],
-    ];
 
     public function feesAction()
     {
