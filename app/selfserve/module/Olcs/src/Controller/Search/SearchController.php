@@ -208,6 +208,8 @@ class SearchController extends AbstractController
             ]
         );
 
+        $view->results = null;
+
         $view->setTemplate('layouts/main-search-results.phtml');
 
         $this->getServiceLocator()->get('Script')->loadFile('search-results');
