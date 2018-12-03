@@ -19,8 +19,7 @@
             </fieldset>
             <div class="field govuk-hint guidance-blue extra-space large">
                 <?php
-                    $date = $this->escapeHtml($this->responseDate);
-                    echo sprintf($this->translate('permits.page.ecmt.consideration.response-date'), $date);
+                    echo $this->translate('permits.page.ecmt.consideration.response-date');
                 ?>
             </div>
             <p>
