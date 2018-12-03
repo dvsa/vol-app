@@ -17,6 +17,6 @@ class IrhpPermitProcessingOverviewController extends AbstractIrhpPermitProcessin
         $options = [
             'query' => $this->getRequest()->getQuery()->toArray()
         ];
-        return $this->redirectToRoute('licence/irhp-processing/tasks', [], $options, true);
+        return $this->redirectToRoute('licence/irhp-processing/notes', [], $options, true);
     }
 }

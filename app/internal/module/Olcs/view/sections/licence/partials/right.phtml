@@ -1,7 +1,7 @@
 <?php
 $licence = $this->placeholder('licence')->getValue();
 $note = $this->placeholder('note')->getValue();
-$isPriorityNote = isset($licence['latestNote']['priority']) && $licence['latestNote']['priority'] === 'Y';
+$isPriorityNote = $this->placeholder('isPriorityNote')->getValue();
 ?>
 <div class="small-module">
     <h4 class="title">Operator details</h4>

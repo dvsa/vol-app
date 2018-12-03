@@ -149,6 +149,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->getViewHelperManager()->get('placeholder')
             ->getContainer('note')
             ->set(isset($licence['latestNote']['comment']) ? $licence['latestNote']['comment'] : '');
+        $this->getViewHelperManager()->get('placeholder')
+            ->getContainer('isPriorityNote')
+            ->set(isset($licence['latestNote']['priority']) && $licence['latestNote']['priority'] === 'Y');
 
         $this->showHideButtons($licence);
 
@@ -263,17 +266,15 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             return false;
         }
 
-        if (
-            in_array(
-                $licence['status']['id'],
-                [
-                    RefData::LICENCE_STATUS_REVOKED,
-                    RefData::LICENCE_STATUS_TERMINATED,
-                    RefData::LICENCE_STATUS_SURRENDERED,
-                    RefData::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT
-                ]
-            )
-        ) {
+        if (in_array(
+            $licence['status']['id'],
+            [
+                RefData::LICENCE_STATUS_REVOKED,
+                RefData::LICENCE_STATUS_TERMINATED,
+                RefData::LICENCE_STATUS_SURRENDERED,
+                RefData::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT
+            ]
+        )) {
             $sidebarNav->findById('licence-quick-actions-create-variation')->setVisible(0);
             return false;
         }
