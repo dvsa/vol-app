@@ -619,7 +619,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $view = new ViewModel();
         $view->setVariable('application', $application);
         $view->setVariable('table', $table);
-        $view->setVariable('responseDate', '30 November 2018'); /** @todo this needs to be a system parameter */
 
         return $view;
     }
