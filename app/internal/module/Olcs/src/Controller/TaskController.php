@@ -11,6 +11,7 @@ use Dvsa\Olcs\Transfer\Query\Application\Application;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Task\Task;
+use Dvsa\Olcs\Transfer\Query\Permits\ById as EcmtPermitApplicationById;
 use Olcs\Controller\Traits as ControllerTraits;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
@@ -423,6 +424,13 @@ class TaskController extends AbstractController
                 $route = 'operator/processing/tasks';
                 $params = ['organisation' => $taskTypeId];
                 break;
+            case 'ecmtpermitapplication':
+                $route = 'licence/irhp-processing/tasks';
+                $params = [
+                    'permitid' => $taskTypeId,
+                    'licence' => $this->getLicenceIdForEcmtPermitApplication($taskTypeId),
+                ];
+                break;
             default:
                 // no type - call from the home page, need to redirect back after action
                 $route = 'dashboard';
@@ -527,6 +535,21 @@ class TaskController extends AbstractController
     protected function flattenDataForLicence($data, $taskTypeId)
     {
         $data['licence'] = $taskTypeId;
+        return $data;
+    }
+
+    /**
+     * Flatten data for Ecmt Permit Application
+     *
+     * @param array $data       Data
+     * @param int   $taskTypeId Task type id
+     *
+     * @return array
+     */
+    protected function flattenDataForEcmtpermitapplication($data, $taskTypeId)
+    {
+        $data['ecmtPermitApplication'] = $taskTypeId;
+        $data['licence'] = $this->getLicenceIdForEcmtPermitApplication($taskTypeId);
         return $data;
     }
 
@@ -673,6 +696,8 @@ class TaskController extends AbstractController
                 return ['organisation', $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
             case 'submission':
                 return ['submission', $taskDetails['linkId'], $taskDetails['linkDisplay'], $taskDetails['caseId']];
+            case 'ecmt permit application':
+                return ['ecmtpermitapplication', $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
             default:
                 return [$taskType, $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
         }
@@ -712,6 +737,34 @@ class TaskController extends AbstractController
         $url = $this->url()->fromRoute('lva-licence', ['licence' => $taskTypeId]);
 
         return sprintf('<a href="%s">%s</a>', $url, $linkDisplay ? $linkDisplay : $licence['licNo']);
+    }
+
+    /**
+     * Get link to display in add / edit form for Ecmt Permit Application
+     *
+     * @param int    $taskTypeId  Task type id
+     * @param string $linkDisplay Text to display
+     *
+     * @return string
+     */
+    protected function getLinkForTaskFormForEcmtpermitapplication($taskTypeId, $linkDisplay)
+    {
+        $ecmtPermitApplication = $this->getEcmtPermitApplication($taskTypeId);
+
+        if (!$linkDisplay) {
+            $linkDisplay = sprintf('%s/%d', $ecmtPermitApplication['licence']['licNo'], $taskTypeId);
+        }
+
+        $url = $this->url()->fromRoute(
+            'licence/permits/edit',
+            [
+                'action' => 'edit',
+                'licence' => $ecmtPermitApplication['licence']['id'],
+                'permitid' => $taskTypeId,
+            ]
+        );
+
+        return $this->getLinkMarkup($url, $linkDisplay, $taskTypeId);
     }
 
     /**
@@ -878,5 +931,29 @@ class TaskController extends AbstractController
     protected function getLicenceIdForApplication($id)
     {
         return $this->getApplication($id)['licence']['id'];
+    }
+
+    /**
+     * Get licence id for Ecmt Permit Application
+     *
+     * @param int $id Id
+     *
+     * @return int
+     */
+    protected function getLicenceIdForEcmtPermitApplication($id)
+    {
+        return $this->getEcmtPermitApplication($id)['licence']['id'];
+    }
+
+    /**
+     * Get Ecmt Permit Application
+     *
+     * @param int $id Id
+     *
+     * @return array
+     */
+    protected function getEcmtPermitApplication($id)
+    {
+        return $this->handleQuery(EcmtPermitApplicationById::create(['id' => $id]))->getResult();
     }
 }
