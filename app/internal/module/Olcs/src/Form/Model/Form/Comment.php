@@ -7,7 +7,6 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("Comments")
- * @Form\Options({"label": "Comments"})
  * @Form\Attributes({"method":"post"})
  */
 class Comment
