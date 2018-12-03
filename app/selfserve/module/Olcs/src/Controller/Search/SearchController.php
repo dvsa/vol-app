@@ -345,7 +345,6 @@ class SearchController extends AbstractController
         $index = $this->params()->fromRoute('index');
 
         if (isset($index)) {
-
             $this->getSearchService()->setIndex($index);
 
             // terms filters
