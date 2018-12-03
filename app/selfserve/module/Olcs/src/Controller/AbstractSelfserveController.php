@@ -149,6 +149,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
         /** @todo find a better place for these */
         $this->retrieveData();
+        $this->mergeTemplateVars();
         $this->checkConditionalDisplay();
         $this->retrieveForms();
         $this->retrieveTables();
@@ -160,9 +161,6 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     {
         $view = new ViewModel();
 
-        /** @todo map the data for display */
-        $this->mapDataForDisplay();
-
         $view->setVariable('data', $this->data);
         $view->setVariable('form', $this->form);
         $view->setVariable('forms', $this->forms);
@@ -172,16 +170,15 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         return $view;
     }
 
-    public function mapDataForDisplay()
+    public function mergeTemplateVars()
     {
-        foreach ($this->templateVarsConfig[$this->action]['data'] as $key => $var) {
-            $this->data[$key] = $var;
-        }
+        $templateVars = $this->configsForAction('templateVarsConfig');
+        $this->data = array_merge($this->data, $templateVars);
 
-        if (!empty($this->templateVarsConfig[$this->action]['browserTitle'])) {
+        if (isset($templateVars['browserTitle'])) {
             $headTitle = $this->getServiceLocator()->get('ViewHelperManager')->get('headTitle');
             $headTitle->setSeparator(' - ');
-            $headTitle->prepend($this->templateVarsConfig[$this->action]['browserTitle']);
+            $headTitle->prepend($templateVars['browserTitle']);
         }
     }
 
