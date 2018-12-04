@@ -4,8 +4,9 @@ return [
     'settings' => [
         'crud' => [
             'actions' => [
-                'print' => [
+                'confirm' => [
                     'requireRows' => true,
+                    'label' => 'Continue',
                     'class' => 'action--primary js-require--multiple'
                 ]
             ]

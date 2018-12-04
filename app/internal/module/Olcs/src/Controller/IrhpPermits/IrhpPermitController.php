@@ -8,7 +8,7 @@
 
 namespace Olcs\Controller\IrhpPermits;
 
-use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetList as ListDTO;
+use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByEcmtId as ListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\ById as ItemDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpPermit\Replace as ReplaceDTO;
 use Olcs\Controller\AbstractInternalController;
@@ -30,7 +30,7 @@ class IrhpPermitController extends AbstractInternalController implements
     protected $defaultTableSortField = 'permitNumber';
     protected $defaultTableOrderField = 'DESC';
 
-    protected $listVars = ['irhpPermitApplication' => 'permitid'];
+    protected $listVars = ['ecmtPermitApplication' => 'permitid'];
     protected $listDto = ListDto::class;
     protected $itemDto = ItemDto::class;
 
@@ -94,7 +94,7 @@ class IrhpPermitController extends AbstractInternalController implements
             'sort' => 'id',
             'order' => 'ASC',
             'limit' => 10,
-            'irhpPermitApplication' => $this->params()->fromRoute('permitid')
+            'ecmtPermitApplication' => $this->params()->fromRoute('permitid'),
         ]));
 
         if ($response->getResult()['count'] === 0) {

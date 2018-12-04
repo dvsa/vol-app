@@ -178,4 +178,116 @@ class TaskSearchTraitTest extends MockeryTestCase
 
         $this->sut->traitGetTaskForm($filters);
     }
+
+    /**
+     * @dataProvider dpTestProcessTasksActions
+     */
+    public function testProcessTasksActions($type, $action, $id, $paramName, $expected)
+    {
+        $query = ['query' => 'unit_Query'];
+
+        $mockRequest = m::mock(\Zend\Http\Request::class);
+        $mockRequest->shouldReceive('isPost')->once()->andReturn(true);
+        $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn($query);
+
+        $mockParams = m::mock();
+        $mockParams->shouldReceive('fromPost')->with('action')->andReturn($action);
+        $mockParams->shouldReceive('fromPost')->with('id')->andReturn($id);
+
+        $this->sut
+            ->shouldReceive('getRequest')->andReturn($mockRequest)
+            ->shouldReceive('params')->withNoArgs()->andReturn($mockParams)
+            ->shouldReceive('params')->with($paramName)->andReturn(200)
+            ->shouldReceive('redirect->toRoute')
+            ->with('task_action', $expected, ['query' => $query])
+            ->andReturn('REDIR');
+
+        $this->assertEquals(
+            'REDIR',
+            $this->sut->traitProcessTasksActions($type)
+        );
+    }
+
+    public function dpTestProcessTasksActions()
+    {
+        return [
+            [
+                'type' => '',
+                'action' => 'create task',
+                'id' => null,
+                'paramName' => '',
+                'expected' => ['action' => 'add']
+            ],
+            [
+                'type' => '',
+                'action' => 'edit',
+                'id' => [100],
+                'paramName' => '',
+                'expected' => ['action' => 'edit', 'task' => 100]
+            ],
+            [
+                'type' => '',
+                'action' => 're-assign task',
+                'id' => [100, 101],
+                'paramName' => '',
+                'expected' => ['action' => 'reassign', 'task' => '100-101']
+            ],
+            [
+                'type' => '',
+                'action' => 'close task',
+                'id' => [100, 101],
+                'paramName' => '',
+                'expected' => ['action' => 'close', 'task' => '100-101']
+            ],
+            [
+                'type' => 'organisation',
+                'action' => 'add',
+                'id' => null,
+                'paramName' => 'organisation',
+                'expected' => ['type' => 'organisation', 'typeId' => 200, 'action' => 'add']
+            ],
+            [
+                'type' => 'licence',
+                'action' => 'add',
+                'id' => null,
+                'paramName' => 'licence',
+                'expected' => ['type' => 'licence', 'typeId' => 200, 'action' => 'add']
+            ],
+            [
+                'type' => 'application',
+                'action' => 'add',
+                'id' => null,
+                'paramName' => 'application',
+                'expected' => ['type' => 'application', 'typeId' => 200, 'action' => 'add']
+            ],
+            [
+                'type' => 'transportManager',
+                'action' => 'add',
+                'id' => null,
+                'paramName' => 'transportManager',
+                'expected' => ['type' => 'tm', 'typeId' => 200, 'action' => 'add']
+            ],
+            [
+                'type' => 'busReg',
+                'action' => 'add',
+                'id' => null,
+                'paramName' => 'busRegId',
+                'expected' => ['type' => 'busreg', 'typeId' => 200, 'action' => 'add']
+            ],
+            [
+                'type' => 'case',
+                'action' => 'add',
+                'id' => null,
+                'paramName' => 'case',
+                'expected' => ['type' => 'case', 'typeId' => 200, 'action' => 'add']
+            ],
+            [
+                'type' => 'ecmtpermitapplication',
+                'action' => 'add',
+                'id' => null,
+                'paramName' => 'permitid',
+                'expected' => ['type' => 'ecmtpermitapplication', 'typeId' => 200, 'action' => 'add']
+            ],
+        ];
+    }
 }

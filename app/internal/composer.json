@@ -58,14 +58,15 @@
         "olcs/olcs-utils": "dev-develop",
         "olcs/olcs-auth": "dev-develop",
         "soflomo/purifier": "~0.1.0",
-       "olcs/olcs-logging": "dev-develop"
+        "olcs/olcs-logging": "dev-develop"
     },
     "require-dev": {
         "olcs/olcs-devtools": "dev-master",
-        "mockery/mockery": "~0.9.3",
         "olcs/olcs-testhelpers": "dev-develop",
+        "mockery/mockery": "^1.2",
         "phpstan/phpstan-shim": "^0.10.5",
         "phpstan/phpstan-mockery": "^0.10.2"
+
     },
     "autoload": {
         "classmap": [
