@@ -8,6 +8,7 @@ use Olcs\Controller\Bus\Processing\BusProcessingDecisionController;
 use Olcs\Controller\Bus\Processing\BusProcessingNoteController;
 use Olcs\Controller\Operator\OperatorProcessingNoteController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController;
+use Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController;
 use Olcs\Controller\Bus\Details\BusDetailsController;
 use Olcs\Controller\Bus\Service\BusServiceController;
@@ -952,6 +953,19 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'notes' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'notes[/:action[/:id]][/]',
+                            'constraints' => [
+                                'action' => 'index|details|add|edit|delete',
+                            ],
+                            'defaults' => [
+                                'controller' => IrhpPermitProcessingNoteController::class,
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
                     'tasks' => [
                         'type' => 'segment',
                         'options' => [

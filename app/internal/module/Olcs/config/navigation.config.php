@@ -583,6 +583,12 @@ $nav = [
                                     'use_route_match' => true,
                                     'pages' => [
                                         [
+                                            'id' => 'licence_irhp_permits_processing_notes',
+                                            'label' => 'Notes',
+                                            'route' => 'licence/irhp-processing/notes',
+                                            'use_route_match' => true,
+                                        ],
+                                        [
                                             'id' => 'licence_irhp_permits_processing_tasks',
                                             'label' => 'Tasks',
                                             'route' => 'licence/irhp-processing/tasks',

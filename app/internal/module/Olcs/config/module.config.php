@@ -331,6 +331,8 @@ return array(
             'IrhpDocsController' => 'Olcs\Controller\IrhpPermits\IrhpDocsController',
             \Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController::class =>
                 \Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController::class,
+            \Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController::class =>
+                \Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController::class,
             \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class =>
                 \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class,
         ),
