@@ -8,6 +8,7 @@ use Olcs\Listener\RouteParam\Licence;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
 use Common\RefData;
+use Zend\View\Helper\Container;
 
 /**
  * Class LicenceTest
@@ -78,8 +79,27 @@ class LicenceTest extends TestCase
 
             $mockLicenceService->shouldReceive('setId')->with($licenceId);
 
-            $mockViewHelperManager->shouldReceive('get->getContainer->set')->with($licenceData)->once();
-            $mockViewHelperManager->shouldReceive('get->getContainer->set')->with('latest note')->once();
+            $mockViewHelperManager->shouldReceive('get->getContainer')->with('licence')->andReturn(
+                m::mock(Container::class)
+                ->shouldReceive('set')
+                ->with($licenceData)
+                ->once()
+                ->getMock()
+            );
+            $mockViewHelperManager->shouldReceive('get->getContainer')->with('note')->andReturn(
+                m::mock(Container::class)
+                ->shouldReceive('set')
+                ->with('latest note')
+                ->once()
+                ->getMock()
+            );
+            $mockViewHelperManager->shouldReceive('get->getContainer')->with('isPriorityNote')->andReturn(
+                m::mock(Container::class)
+                ->shouldReceive('set')
+                ->with(true)
+                ->once()
+                ->getMock()
+            );
         }
     }
 
@@ -113,7 +133,7 @@ class LicenceTest extends TestCase
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
             'licenceStatusRules' => [],
-            'latestNote' => ['comment' => 'latest note'],
+            'latestNote' => ['comment' => 'latest note', 'priority' => 'Y'],
             'canHaveInspectionRequest' => false,
         ];
 
@@ -178,7 +198,7 @@ class LicenceTest extends TestCase
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
             'licenceStatusRules' => [],
-            'latestNote' => ['comment' => 'latest note'],
+            'latestNote' => ['comment' => 'latest note', 'priority' => 'Y'],
             'canHaveInspectionRequest' => true,
         ];
 
@@ -216,7 +236,7 @@ class LicenceTest extends TestCase
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
             'licenceStatusRules' => [],
-            'latestNote' => ['comment' => 'latest note'],
+            'latestNote' => ['comment' => 'latest note', 'priority' => 'Y'],
             'canHaveInspectionRequest' => true,
         ];
 
@@ -259,7 +279,7 @@ class LicenceTest extends TestCase
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
             'licenceStatusRules' => [],
-            'latestNote' => ['comment' => 'latest note'],
+            'latestNote' => ['comment' => 'latest note', 'priority' => 'Y'],
             'canHaveInspectionRequest' => true,
         ];
 
@@ -307,7 +327,7 @@ class LicenceTest extends TestCase
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
             'licenceStatusRules' => [],
-            'latestNote' => ['comment' => 'latest note'],
+            'latestNote' => ['comment' => 'latest note', 'priority' => 'Y'],
             'canHaveInspectionRequest' => true,
         ];
 
@@ -357,7 +377,7 @@ class LicenceTest extends TestCase
                     'licenceStatus' => ['id' => 'lsts_suspended'],
                 ]
             ],
-            'latestNote' => ['comment' => 'latest note'],
+            'latestNote' => ['comment' => 'latest note', 'priority' => 'Y'],
             'canHaveInspectionRequest' => true,
         ];
 
@@ -409,7 +429,7 @@ class LicenceTest extends TestCase
                     'licenceStatus' => ['id' => 'lsts_suspended'],
                 ]
             ],
-            'latestNote' => ['comment' => 'latest note'],
+            'latestNote' => ['comment' => 'latest note', 'priority' => 'Y'],
             'canHaveInspectionRequest' => true,
         ];
 
@@ -456,7 +476,7 @@ class LicenceTest extends TestCase
                     'licenceStatus' => ['id' => 'lsts_suspended'],
                 ]
             ],
-            'latestNote' => ['comment' => 'latest note'],
+            'latestNote' => ['comment' => 'latest note', 'priority' => 'Y'],
             'canHaveInspectionRequest' => true,
         ];
 

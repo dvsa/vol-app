@@ -133,7 +133,6 @@ trait TaskSearchTrait
     protected function processTasksActions($type = '')
     {
         if ($this->getRequest()->isPost()) {
-
             $action = strtolower($this->params()->fromPost('action'));
             if ($action === 're-assign task') {
                 $action = 'reassign';
@@ -195,6 +194,12 @@ trait TaskSearchTrait
                     $params = [
                         'type' => 'case',
                         'typeId' => $this->params('case'),
+                    ];
+                    break;
+                case 'ecmtpermitapplication':
+                    $params = [
+                        'type' => 'ecmtpermitapplication',
+                        'typeId' => $this->params('permitid'),
                     ];
                     break;
                 default:

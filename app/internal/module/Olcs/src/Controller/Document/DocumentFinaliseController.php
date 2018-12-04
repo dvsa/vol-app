@@ -266,6 +266,10 @@ class DocumentFinaliseController extends AbstractDocumentController
                 $data['licence'] = $this->params('licence');
                 break;
 
+            case 'ecmtPermitApplication':
+                $data['licence'] = $this->params('licence');
+                break;
+
             default:
                 break;
         }

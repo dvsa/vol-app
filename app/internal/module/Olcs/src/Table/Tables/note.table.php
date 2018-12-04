@@ -49,10 +49,10 @@ return array(
                  */
 
                 switch ($data['noteType']['id']) {
-
                     case 'note_t_lic':
                     case 'note_t_tm':
                     case 'note_t_org':
+                    case 'note_t_permit':
                         return $data['noteType']['description'];
 
                     case 'note_t_app':

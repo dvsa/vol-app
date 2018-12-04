@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "874d290f9c7b433eaa6815dad4c3dd53",
+    "content-hash": "82257e6ecdba6ee30c6fe278e92e5464",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -218,17 +218,17 @@
         },
         {
             "name": "doctrine/common",
-            "version": "v2.9.0",
+            "version": "v2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "a210246d286c77d2b89040f8691ba7b3a713d2c1"
+                "reference": "30e33f60f64deec87df728c02b107f82cdafad9d"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-common-a210246d286c77d2b89040f8691ba7b3a713d2c1-zip-607122.tar",
-                "reference": "a210246d286c77d2b89040f8691ba7b3a713d2c1",
-                "shasum": "7d9b65474838713099df24080e0c08bc2869d9bb"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-common-30e33f60f64deec87df728c02b107f82cdafad9d-zip-1830b6.tar",
+                "reference": "30e33f60f64deec87df728c02b107f82cdafad9d",
+                "shasum": "a65c429cc184d5b51a72a81cf9b6256b53d1e62a"
             },
             "require": {
                 "doctrine/annotations": "^1.0",
@@ -237,7 +237,7 @@
                 "doctrine/event-manager": "^1.0",
                 "doctrine/inflector": "^1.0",
                 "doctrine/lexer": "^1.0",
-                "doctrine/persistence": "^1.0",
+                "doctrine/persistence": "^1.1",
                 "doctrine/reflection": "^1.0",
                 "php": "^7.1"
             },
@@ -250,7 +250,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.9.x-dev"
+                    "dev-master": "2.10.x-dev"
                 }
             },
             "autoload": {
@@ -288,16 +288,14 @@
                     "email": "ocramius@gmail.com"
                 }
             ],
-            "description": "Common Library for Doctrine projects",
-            "homepage": "https://www.doctrine-project.org",
+            "description": "PHP Doctrine Common project is a library that provides additional functionality that other Doctrine projects depend on such as better reflection support, persistence interfaces, proxies, event system and much more.",
+            "homepage": "https://www.doctrine-project.org/projects/common.html",
             "keywords": [
-                "annotations",
-                "collections",
-                "eventmanager",
-                "persistence",
-                "spl"
+                "common",
+                "doctrine",
+                "php"
             ],
-            "time": "2018-07-12T21:16:12+00:00"
+            "time": "2018-11-21T01:24:55+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -779,31 +777,17 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "v2.6.2",
+            "version": "v2.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "d2b4dd71d2a276edd65d0c170375b445f8a4a4a8"
+                "reference": "434820973cadf2da2d66e7184be370084cc32ca8"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-orm-d2b4dd71d2a276edd65d0c170375b445f8a4a4a8-zip-0a750b.tar",
-                "reference": "d2b4dd71d2a276edd65d0c170375b445f8a4a4a8",
-                "shasum": "762954ce75d1a509edced44fac2685f26ea8ec4a"
-            },
-            "archive": {
-                "exclude": [
-                    "!vendor",
-                    "tests",
-                    "*phpunit.xml",
-                    ".travis.yml",
-                    "build.xml",
-                    "build.properties",
-                    "composer.phar",
-                    "vendor/satooshi",
-                    "lib/vendor",
-                    "*.swp"
-                ]
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-orm-434820973cadf2da2d66e7184be370084cc32ca8-zip-ebc83c.tar",
+                "reference": "434820973cadf2da2d66e7184be370084cc32ca8",
+                "shasum": "8549ee7c9ab0a9858aed074bf978a3ad474f2673"
             },
             "require": {
                 "doctrine/annotations": "~1.5",
@@ -871,21 +855,21 @@
                 "database",
                 "orm"
             ],
-            "time": "2018-07-12T20:47:13+00:00"
+            "time": "2018-11-20T23:46:46+00:00"
         },
         {
             "name": "doctrine/persistence",
-            "version": "v1.0.1",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/persistence.git",
-                "reference": "af1ec238659a83e320f03e0e454e200f689b4b97"
+                "reference": "c0f1c17602afc18b4cbd8e1c8125f264c9cf7d38"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-persistence-af1ec238659a83e320f03e0e454e200f689b4b97-zip-f68ace.tar",
-                "reference": "af1ec238659a83e320f03e0e454e200f689b4b97",
-                "shasum": "49b58cf401566c96f5348cbdb8bf3732128f7a34"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-persistence-c0f1c17602afc18b4cbd8e1c8125f264c9cf7d38-zip-c839d7.tar",
+                "reference": "c0f1c17602afc18b4cbd8e1c8125f264c9cf7d38",
+                "shasum": "9403bdd6de72355615e1b4570c2cd36daf035edc"
             },
             "require": {
                 "doctrine/annotations": "^1.0",
@@ -896,17 +880,17 @@
                 "php": "^7.1"
             },
             "conflict": {
-                "doctrine/common": "<2.9@dev"
+                "doctrine/common": "<2.10@dev"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^4.0",
+                "doctrine/coding-standard": "^5.0",
                 "phpstan/phpstan": "^0.8",
                 "phpunit/phpunit": "^7.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -944,12 +928,16 @@
                     "email": "ocramius@gmail.com"
                 }
             ],
-            "description": "Doctrine Persistence abstractions.",
+            "description": "The Doctrine Persistence project is a set of shared interfaces and functionality that the different Doctrine object mappers share.",
             "homepage": "https://doctrine-project.org/projects/persistence.html",
             "keywords": [
+                "mapper",
+                "object",
+                "odm",
+                "orm",
                 "persistence"
             ],
-            "time": "2018-07-12T12:37:50+00:00"
+            "time": "2018-11-21T00:33:13+00:00"
         },
         {
             "name": "doctrine/reflection",
@@ -1075,11 +1063,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/4.193b",
+            "version": "dev-release/4.194a",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "092f3b4ccf244daf40034aca574996e9f95b834f"
+                "reference": "5c8a254b8265eb5da40825229c773f67c7beb6f3"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1091,12 +1079,14 @@
             },
             "require-dev": {
                 "mikey179/vfsstream": "~1.4.0",
-                "mockery/mockery": "~0.9.3",
+                "mockery/mockery": "^1.2",
                 "olcs/olcs-devtools": "dev-master",
-                "olcs/olcs-logging": "dev-release/4.193b",
+                "olcs/olcs-logging": "dev-release/4.194a",
                 "olcs/olcs-testhelpers": "dev-develop",
-                "olcs/olcs-transfer": "dev-release/4.193b",
-                "olcs/olcs-utils": "dev-release/4.193b",
+                "olcs/olcs-transfer": "dev-release/4.194a",
+                "olcs/olcs-utils": "dev-release/4.194a",
+                "phpstan/phpstan-mockery": "^0.10.2",
+                "phpstan/phpstan-shim": "^0.10.5",
                 "soflomo/purifier": "~0.1.0"
             },
             "type": "library",
@@ -1129,26 +1119,28 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2018-11-16T16:04:20+00:00"
+            "time": "2018-12-04T15:20:21+00:00"
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "dev-release/4.193b",
+            "version": "dev-release/4.194a",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "df10f587c38ef6be0b416d4b47eb566a3aeb90a1"
+                "reference": "bf0757b8fc7565a1e1b295c7f530b5418b808aa7"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
-                "olcs/olcs-transfer": "dev-release/4.193b",
-                "olcs/olcscommon": "dev-release/4.193b",
+                "olcs/olcs-transfer": "dev-release/4.194a",
+                "olcs/olcscommon": "dev-release/4.194a",
                 "php": ">=5.4",
                 "zendframework/zendframework": "~2.4.0"
             },
             "require-dev": {
-                "mockery/mockery": "~0.9.3",
-                "olcs/olcs-devtools": "dev-master"
+                "mockery/mockery": "^1.2.0",
+                "olcs/olcs-devtools": "dev-master",
+                "phpstan/phpstan-mockery": "^0.10.2",
+                "phpstan/phpstan-shim": "^0.10.5"
             },
             "type": "library",
             "autoload": {
@@ -1177,15 +1169,15 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2018-11-16T16:04:11+00:00"
+            "time": "2018-12-04T14:34:22+00:00"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "dev-release/4.193b",
+            "version": "dev-release/4.194a",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git",
-                "reference": "e5dbac54343f0cbd9e92f597b5a3fe899534402b"
+                "reference": "5dca04065f8b6c9979bbd2365e16c9b0d6d0c143"
             },
             "require": {
                 "php": ">=5.4",
@@ -1199,8 +1191,10 @@
                 "zendframework/zend-session": "~2.4.0"
             },
             "require-dev": {
-                "mockery/mockery": "~0.9.3",
-                "olcs/olcs-devtools": "dev-master"
+                "mockery/mockery": "^1.2.0",
+                "olcs/olcs-devtools": "dev-master",
+                "phpstan/phpstan-mockery": "^0.10.2",
+                "phpstan/phpstan-shim": "^0.10.5"
             },
             "type": "library",
             "autoload": {
@@ -1229,15 +1223,15 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2018-11-12T21:30:29+00:00"
+            "time": "2018-12-04T14:33:10+00:00"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "dev-release/4.193b",
+            "version": "dev-release/4.194a",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
-                "reference": "9fa7e00cb7a1fd1ebf7b2446cc04faebf42dd2a2"
+                "reference": "3f18db6d8d047fd2e9ae1fc18ab67d3c0c08f31f"
             },
             "require": {
                 "php": ">=5.4",
@@ -1245,8 +1239,10 @@
             },
             "require-dev": {
                 "doctrine/annotations": "^1.2.3",
-                "mockery/mockery": "~0.9.3",
-                "olcs/olcs-devtools": "dev-master"
+                "mockery/mockery": "^1.2.0",
+                "olcs/olcs-devtools": "dev-master",
+                "phpstan/phpstan-mockery": "^0.10.2",
+                "phpstan/phpstan-shim": "^0.10.5"
             },
             "type": "library",
             "autoload": {
@@ -1275,24 +1271,26 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2018-11-16T16:09:40+00:00"
+            "time": "2018-12-04T14:35:34+00:00"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "dev-release/4.193b",
+            "version": "dev-release/4.194a",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-utils.git",
-                "reference": "76bd780974c380f71fd288c37b1f00f9a22770bd"
+                "reference": "516a5e040468280979237858ead953f7d0426ae1"
             },
             "require": {
                 "php": ">=5.4",
                 "zendframework/zendframework": "~2.4.0"
             },
             "require-dev": {
-                "mockery/mockery": "~0.9.3",
+                "mockery/mockery": "^1.2.0",
                 "olcs/olcs-devtools": "dev-master",
-                "olcs/olcs-logging": "dev-release/4.193b"
+                "olcs/olcs-logging": "dev-release/4.194a",
+                "phpstan/phpstan-mockery": "^0.10.2",
+                "phpstan/phpstan-shim": "^0.10.5"
             },
             "type": "library",
             "autoload": {
@@ -1321,21 +1319,21 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2018-11-16T16:04:19+00:00"
+            "time": "2018-12-04T14:36:30+00:00"
         },
         {
             "name": "psr/log",
-            "version": "1.0.2",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
+                "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/psr-log-4ebe3a8bf773a19edfe0a84b6585ba3d401b724d-zip-6434e8.tar",
-                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
-                "shasum": "4ac6dc20c957281fd9ad686ee8c9550c1ab0eef1"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/psr-log-6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd-zip-b599c5.tar",
+                "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
+                "shasum": "4d9fc291c310c5293a695bbaddf9da0506ee16f9"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1368,7 +1366,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10T12:19:37+00:00"
+            "time": "2018-11-20T15:27:04+00:00"
         },
         {
             "name": "soflomo/purifier",
@@ -1488,17 +1486,17 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.18",
+            "version": "v3.4.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "fe9793af008b651c5441bdeab21ede8172dab097"
+                "reference": "2016b3eec2e49c127dd02d0ef44a35c53181560d"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-debug-fe9793af008b651c5441bdeab21ede8172dab097-zip-64832a.tar",
-                "reference": "fe9793af008b651c5441bdeab21ede8172dab097",
-                "shasum": "6e36a2b6ac44a9f861e40a40075e22cabfa8f733"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-debug-2016b3eec2e49c127dd02d0ef44a35c53181560d-zip-d4ffb6.tar",
+                "reference": "2016b3eec2e49c127dd02d0ef44a35c53181560d",
+                "shasum": "cd25d6598b2d9f841848039ee48198c79c3193ab"
             },
             "require": {
                 "php": "^5.5.9|>=7.0.8",
@@ -1540,7 +1538,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2018-10-31T09:06:03+00:00"
+            "time": "2018-11-11T19:48:54+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -1944,20 +1942,20 @@
     "packages-dev": [
         {
             "name": "hamcrest/hamcrest-php",
-            "version": "v1.2.2",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hamcrest/hamcrest-php.git",
-                "reference": "b37020aa976fa52d3de9aa904aa2522dc518f79c"
+                "reference": "776503d3a8e85d4f9a1148614f95b7a608b046ad"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/hamcrest-hamcrest-php-b37020aa976fa52d3de9aa904aa2522dc518f79c-zip-2bc6c0.tar",
-                "reference": "b37020aa976fa52d3de9aa904aa2522dc518f79c",
-                "shasum": "c3e66895d7ec4bb63e10b70b6120fe1951a1231e"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/hamcrest-hamcrest-php-776503d3a8e85d4f9a1148614f95b7a608b046ad-zip-a48af8.tar",
+                "reference": "776503d3a8e85d4f9a1148614f95b7a608b046ad",
+                "shasum": "9532f8ec8017b20d8512b766a83782dcbbfbc5af"
             },
             "require": {
-                "php": ">=5.3.2"
+                "php": "^5.3|^7.0"
             },
             "replace": {
                 "cordoval/hamcrest-php": "*",
@@ -1966,15 +1964,18 @@
             },
             "require-dev": {
                 "phpunit/php-file-iterator": "1.3.3",
-                "satooshi/php-coveralls": "dev-master"
+                "phpunit/phpunit": "~4.0",
+                "satooshi/php-coveralls": "^1.0"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
             "autoload": {
                 "classmap": [
                     "hamcrest"
-                ],
-                "files": [
-                    "hamcrest/Hamcrest.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1985,34 +1986,34 @@
             "keywords": [
                 "test"
             ],
-            "time": "2015-05-11T14:41:42+00:00"
+            "time": "2016-01-20T08:20:44+00:00"
         },
         {
             "name": "mockery/mockery",
-            "version": "0.9.10",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mockery/mockery.git",
-                "reference": "4876fc0c7d9e5da49712554a35c94d84ed1e9ee5"
+                "reference": "100633629bf76d57430b86b7098cd6beb996a35a"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/mockery-mockery-4876fc0c7d9e5da49712554a35c94d84ed1e9ee5-zip-302429.tar",
-                "reference": "4876fc0c7d9e5da49712554a35c94d84ed1e9ee5",
-                "shasum": "c72b77bf0fa468c51b3984ae78f3f36014e94228"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/mockery-mockery-100633629bf76d57430b86b7098cd6beb996a35a-zip-f18966.tar",
+                "reference": "100633629bf76d57430b86b7098cd6beb996a35a",
+                "shasum": "f9fa927d4f1749a208f1291597c47d0fa4d54874"
             },
             "require": {
-                "hamcrest/hamcrest-php": "~1.1",
+                "hamcrest/hamcrest-php": "~2.0",
                 "lib-pcre": ">=7.0",
-                "php": ">=5.3.2"
+                "php": ">=5.6.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.0"
+                "phpunit/phpunit": "~5.7.10|~6.5|~7.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.9.x-dev"
+                    "dev-master": "1.0.x-dev"
                 }
             },
             "autoload": {
@@ -2036,8 +2037,8 @@
                     "homepage": "http://davedevelopment.co.uk"
                 }
             ],
-            "description": "Mockery is a simple yet flexible PHP mock object framework for use in unit testing with PHPUnit, PHPSpec or any other testing framework. Its core goal is to offer a test double framework with a succinct API capable of clearly defining all possible object operations and interactions using a human readable Domain Specific Language (DSL). Designed as a drop in alternative to PHPUnit's phpunit-mock-objects library, Mockery is easy to integrate with PHPUnit and can operate alongside phpunit-mock-objects without the World ending.",
-            "homepage": "http://github.com/padraic/mockery",
+            "description": "Mockery is a simple yet flexible PHP mock object framework",
+            "homepage": "https://github.com/mockery/mockery",
             "keywords": [
                 "BDD",
                 "TDD",
@@ -2050,7 +2051,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2018-11-13T20:50:16+00:00"
+            "time": "2018-10-02T21:52:37+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2153,13 +2154,13 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-testhelpers.git",
-                "reference": "25267308dfa8dc1a29fddf4dfc9ac7480e17ee9d"
+                "reference": "754fb9584ff081c1ddc58e1a8a384c27b7252f08"
             },
             "require": {
                 "php": ">=5.4"
             },
             "require-dev": {
-                "mockery/mockery": "~0.9.2",
+                "mockery/mockery": "^1.2.0",
                 "phpunit/phpunit": "~4.0.1",
                 "squizlabs/php_codesniffer": "~1.5.3"
             },
@@ -2170,7 +2171,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2018-11-14T12:21:26+00:00"
+            "time": "2018-11-27T11:25:24+00:00"
         },
         {
             "name": "pdepend/pdepend",
@@ -2492,6 +2493,99 @@
                 "stub"
             ],
             "time": "2018-08-05T17:53:17+00:00"
+        },
+        {
+            "name": "phpstan/phpstan-mockery",
+            "version": "0.10.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan-mockery.git",
+                "reference": "14d568b6b56c957c9ae5330603303a367b21f0e9"
+            },
+            "dist": {
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpstan-phpstan-mockery-14d568b6b56c957c9ae5330603303a367b21f0e9-zip-2bda4d.tar",
+                "reference": "14d568b6b56c957c9ae5330603303a367b21f0e9",
+                "shasum": "d7b547e34a20713202ea90edab4152f9f8c50e2a"
+            },
+            "require": {
+                "nikic/php-parser": "^4.0",
+                "php": "~7.1",
+                "phpstan/phpdoc-parser": "^0.3",
+                "phpstan/phpstan": "^0.10.3"
+            },
+            "require-dev": {
+                "consistence/coding-standard": "^3.0.1",
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
+                "jakub-onderka/php-parallel-lint": "^1.0",
+                "mockery/mockery": "^1.1",
+                "phing/phing": "^2.16.0",
+                "phpstan/phpstan-phpunit": "^0.10",
+                "phpstan/phpstan-strict-rules": "^0.10",
+                "phpunit/phpunit": "^7.2",
+                "slevomat/coding-standard": "^4.6.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.10-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PHPStan\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan Mockery extension",
+            "time": "2018-09-09T15:22:28+00:00"
+        },
+        {
+            "name": "phpstan/phpstan-shim",
+            "version": "0.10.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan-shim.git",
+                "reference": "c729ee281588bdb73ae50051503a6785aed46721"
+            },
+            "dist": {
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpstan-phpstan-shim-c729ee281588bdb73ae50051503a6785aed46721-zip-131b48.tar",
+                "reference": "c729ee281588bdb73ae50051503a6785aed46721",
+                "shasum": "ffb3640b0c1678339b6913df1ae3b6fd7dc31706"
+            },
+            "require": {
+                "php": "~7.1"
+            },
+            "replace": {
+                "nikic/php-parser": "^4.0.2",
+                "phpstan/phpdoc-parser": "^0.3",
+                "phpstan/phpstan": "self.version"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.10-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan Phar distribution",
+            "time": "2018-12-04T07:53:38+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -3540,17 +3634,17 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.8.47",
+            "version": "v2.8.48",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "506aaec58da5b042ec23f7de5cc866eb4b57a21e"
+                "reference": "7dd5f5040dc04c118d057fb5886563963eb70011"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-config-506aaec58da5b042ec23f7de5cc866eb4b57a21e-zip-afd6b3.tar",
-                "reference": "506aaec58da5b042ec23f7de5cc866eb4b57a21e",
-                "shasum": "c1c88e2f27e772939fe09f8b4e67443e2d6bed16"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-config-7dd5f5040dc04c118d057fb5886563963eb70011-zip-3c7de6.tar",
+                "reference": "7dd5f5040dc04c118d057fb5886563963eb70011",
+                "shasum": "e12b175f40e31996ea2d8ea8af987cb9a7c9a221"
             },
             "require": {
                 "php": ">=5.3.9",
@@ -3593,7 +3687,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2018-10-30T16:24:01+00:00"
+            "time": "2018-11-26T09:38:12+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -3660,17 +3754,17 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v4.1.7",
+            "version": "v4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "1f17195b44543017a9c9b2d437c670627e96ad06"
+                "reference": "e53d477d7b5c4982d0e1bfd2298dbee63d01441d"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-finder-1f17195b44543017a9c9b2d437c670627e96ad06-zip-7f0743.tar",
-                "reference": "1f17195b44543017a9c9b2d437c670627e96ad06",
-                "shasum": "773595aec490cef3552f29db26bd0f55d8b1887a"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-finder-e53d477d7b5c4982d0e1bfd2298dbee63d01441d-zip-ad0939.tar",
+                "reference": "e53d477d7b5c4982d0e1bfd2298dbee63d01441d",
+                "shasum": "83e2e062408a2a42fe29978fbfcc84cada52b259"
             },
             "require": {
                 "php": "^7.1.3"
@@ -3678,7 +3772,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.1-dev"
+                    "dev-master": "4.2-dev"
                 }
             },
             "autoload": {
@@ -3705,7 +3799,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2018-10-03T08:47:56+00:00"
+            "time": "2018-11-11T19:52:12+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",

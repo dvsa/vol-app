@@ -129,7 +129,7 @@ return [
                                     'route' => 'irhp-permits[/:action][/:id][/]',
                                     'constraints' => [
                                         'id' => '([0-9]+,?)+',
-                                        'action' => '(print)'
+                                        'action' => '(confirm|cancel|print)'
                                     ],
                                     'defaults' => [
                                         'controller' => Admin\Controller\IrhpPermitPrintController::class,

@@ -7,6 +7,9 @@ use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController;
 use Olcs\Controller\Bus\Processing\BusProcessingDecisionController;
 use Olcs\Controller\Bus\Processing\BusProcessingNoteController;
 use Olcs\Controller\Operator\OperatorProcessingNoteController;
+use Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController;
+use Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController;
+use Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController;
 use Olcs\Controller\Bus\Details\BusDetailsController;
 use Olcs\Controller\Bus\Service\BusServiceController;
 use Olcs\Controller\SearchController;
@@ -771,39 +774,209 @@ $routes = [
             'permits' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => 'permits[/:action][/:permitid][/]',
+                    'route' => 'permits[/]',
                     'defaults' => [
                         'controller' => 'IrhpPermitApplicationController',
                         'action' => 'index',
                     ],
                     'constraints' => [
                         'id' => '[0-9]+',
-                        'action' => '(index|edit|add|documents|processing|submit|accept|decline|cancel|withdraw)'
+                        'action' => 'index',
                     ]
                 ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'edit' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'edit',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => 'IrhpPermitApplicationController',
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
+                    'add' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'add',
+                                'id' => '[0-9]+',
+                            ]
+                        ]
+                    ],
+                    'submit' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'submit',
+                                'id' => '[0-9]+',
+                            ]
+                        ]
+                    ],
+                    'accept' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'accept',
+                                'id' => '[0-9]+',
+                            ]
+                        ]
+                    ],
+                    'decline' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'decline',
+                                'id' => '[0-9]+',
+                            ]
+                        ]
+                    ],
+                    'cancel' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'cancel',
+                                'id' => '[0-9]+',
+                            ]
+                        ]
+                    ],
+                    'withdraw' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action[/:permitid][/]',
+                            'constraints' => [
+                                'action' => 'withdraw',
+                                'id' => '[0-9]+',
+                            ]
+                        ]
+                    ],
+                ]
             ],
             'irhp-permits' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => 'permits/:permitid/irhp-permits[/][:action][/][:irhpPermitId]',
+                    'route' => 'permits/:permitid/irhp-permits[/:action][/:irhpPermitId][/]',
                     'defaults' => [
                         'controller' => 'IrhpPermitController',
                         'action' => 'index',
                     ]
                 ],
                 'may_terminate' => true,
+            ],
+            'irhp-docs' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'permits/:permitid/docs[/]',
+                    'defaults' => [
+                        'controller' => 'IrhpDocsController',
+                        'action' => 'documents',
+                    ]
+                ],
+                'may_terminate' => true,
                 'child_routes' => [
-                    'irhp-permits' => [
+                    'generate' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => 'irhp-permits[/][:irhpPermitId]',
+                            'route' => 'generate[/:doc][/]',
                             'defaults' => [
-                                'controller' => 'IrhpPermitController',
-                                'action' => 'index'
+                                'type' => 'ecmtPermitApplication',
+                                'controller' => 'DocumentGenerationController',
+                                'action' => 'generate'
+                            ]
+                        ],
+                    ],
+                    'finalise' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'finalise/:doc[/:action][/]',
+                            'defaults' => [
+                                'type' => 'ecmtPermitApplication',
+                                'controller' => 'DocumentFinaliseController',
+                                'action' => 'finalise'
+                            ]
+                        ],
+                    ],
+                    'upload' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'upload[/]',
+                            'defaults' => [
+                                'type' => 'ecmtPermitApplication',
+                                'controller' => 'DocumentUploadController',
+                                'action' => 'upload'
+                            ]
+                        ],
+                    ],
+                    'delete' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'delete/:doc[/]',
+                            'defaults' => [
+                                'type' => 'ecmtPermitApplication',
+                                'controller' => 'IrhpDocsController',
+                                'action' => 'delete-document'
+                            ]
+                        ],
+                    ],
+                    'relink' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'relink/:doc[/]',
+                            'defaults' => [
+                                'type' => 'ecmtPermitApplication',
+                                'controller' => 'DocumentRelinkController',
+                                'action' => 'relink'
                             ]
                         ],
                     ],
                 ],
+            ],
+            'irhp-processing' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'permits/:permitid/processing[/]',
+                    'defaults' => [
+                        'controller' => IrhpPermitProcessingOverviewController::class,
+                        'permitid' => '[0-9]+',
+                        'action' => 'index',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'notes' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'notes[/:action[/:id]][/]',
+                            'constraints' => [
+                                'action' => 'index|details|add|edit|delete',
+                            ],
+                            'defaults' => [
+                                'controller' => IrhpPermitProcessingNoteController::class,
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
+                    'tasks' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'tasks[/]',
+                            'defaults' => [
+                                'controller' => IrhpPermitProcessingTasksController::class,
+                                'action' => 'index'
+                            ]
+                        ]
+                    ],
+                ]
             ],
             'processing' => [
                 'type' => 'segment',

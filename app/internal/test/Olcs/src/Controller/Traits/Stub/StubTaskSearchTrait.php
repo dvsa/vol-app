@@ -30,4 +30,9 @@ class StubTaskSearchTrait
     {
         return $this->currentUser;
     }
+
+    public function traitProcessTasksActions($type)
+    {
+        return $this->processTasksActions($type);
+    }
 }
