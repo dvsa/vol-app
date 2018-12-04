@@ -1217,7 +1217,11 @@ return array(
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             Olcs\Controller\Entity\ViewController::class => Olcs\Controller\Entity\ViewController::class,
             Olcs\Controller\GdsVerifyController::class => Olcs\Controller\GdsVerifyController::class,
-            'SurrenderStart' => Olcs\Controller\Licence\Surrender\StartController::class,
+            Olcs\Controller\Licence\Surrender\ReviewContactDetailsController::class => Olcs\Controller\Licence\Surrender\ReviewContactDetailsController::class,
+            Olcs\Controller\Licence\Surrender\AddressDetailsController::class =>
+            Olcs\Controller\Licence\Surrender\AddressDetailsController::class,
+            Olcs\Controller\Licence\Surrender\StartController::class => Olcs\Controller\Licence\Surrender\StartController::class,
+            Olcs\Controller\Licence\Surrender\DeclarationController::class => Olcs\Controller\Licence\Surrender\DeclarationController::class
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',

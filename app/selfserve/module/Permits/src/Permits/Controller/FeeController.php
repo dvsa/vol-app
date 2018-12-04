@@ -92,19 +92,19 @@ class FeeController extends AbstractSelfserveController implements ToggleAwareIn
         switch ($payment['status']['id']) {
             case RefData::TRANSACTION_STATUS_COMPLETE:
                 return $this->redirect()
-                    ->toRoute('permits/' . $successRoute, ['id' => $id], ['query' => ['receipt_reference' => $this->params()->fromQuery('receipt_reference')]]);
+                    ->toRoute($successRoute, ['id' => $id], ['query' => ['receipt_reference' => $this->params()->fromQuery('receipt_reference')]]);
             case RefData::TRANSACTION_STATUS_CANCELLED:
                 return $this->redirect()
-                    ->toRoute('permits/' . $failureRoute, ['id' => $id]);
+                    ->toRoute($failureRoute, ['id' => $id]);
             case RefData::TRANSACTION_STATUS_FAILED:
                 return $this->redirect()
-                    ->toRoute('permits/' . $failureRoute, ['id' => $id]);
+                    ->toRoute($failureRoute, ['id' => $id]);
             default:
                 break;
         }
 
         return $this->redirect()
-            ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
+            ->toRoute(EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
     }
 
     protected function handlePaymentError($response)

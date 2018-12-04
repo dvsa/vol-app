@@ -21,7 +21,7 @@ class ConditionalDisplayConfig
         PermitAppDataSource::DATA_KEY => [
             'key' => 'canCheckAnswers',
             'value' => true,
-            'route' => 'permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW,
+            'route' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
 

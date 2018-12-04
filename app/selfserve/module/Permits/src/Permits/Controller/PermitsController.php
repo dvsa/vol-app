@@ -156,7 +156,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
                 return $this->redirect()
                     ->toRoute(
-                        'permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW,
+                        EcmtSection::ROUTE_APPLICATION_OVERVIEW,
                         ['id' => $insert['id']['ecmtPermitApplication']]
                     );
             } else {
@@ -188,7 +188,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 if ($application['licence']['id'] != $data['Fields']['EcmtLicence']) {
                     return $this->redirect()
                         ->toRoute(
-                            'permits/' . EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE,
+                            EcmtSection::ROUTE_ECMT_CONFIRM_CHANGE,
                             ['id' => $id],
                             ['query' => [
                                 'licenceId' => $data['Fields']['EcmtLicence']
@@ -197,7 +197,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 }
 
                 return $this->redirect()
-                    ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
+                    ->toRoute(EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
             } else {
                 $form->get('Fields')->get('EcmtLicence')->setMessages(['isEmpty' => "error.messages.ecmt-licence"]);
             }
@@ -509,7 +509,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 $this->handleCommand($command);
 
                 return $this->redirect()
-                    ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
+                    ->toRoute(EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
             }
         }
 
@@ -619,7 +619,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $view = new ViewModel();
         $view->setVariable('application', $application);
         $view->setVariable('table', $table);
-        $view->setVariable('responseDate', '30 November 2018'); /** @todo this needs to be a system parameter */
 
         return $view;
     }
@@ -657,13 +656,13 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         if ($errorMessage !== '') {
             $this->addErrorMessage($errorMessage);
             return $this->redirect()
-                ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
+                ->toRoute(EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
         }
 
         if (!$response->isOk()) {
             $this->addErrorMessage('feeNotPaidError');
             return $this->redirect()
-                ->toRoute('permits/' . EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
+                ->toRoute(EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
         }
 
         // Look up the new payment in order to get the redirect data

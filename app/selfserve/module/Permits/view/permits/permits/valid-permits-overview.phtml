@@ -26,7 +26,7 @@ $translationHelper = $this->getHelperPluginManager()->getServiceLocator()->get('
 
 
         <p><?php  if (isset($returnLink)): ?>
-        <a href="<?php echo $this->url('permits/' . $returnLink, [], [], true) ?>" class="return-overview">
+        <a href="<?php echo $this->url($returnLink, [], [], true) ?>" class="return-overview">
             <?php echo $this->translate('permits.link.return.to.fee.overview'); ?>
         </a>
         <?php  else: ?>

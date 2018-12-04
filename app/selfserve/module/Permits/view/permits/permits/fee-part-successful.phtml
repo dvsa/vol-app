@@ -15,7 +15,14 @@ $translatorHelper = $this->getHelperPluginManager()->getServiceLocator()->get('H
 
             <div class="page-header__wrapper">
                 <h1 class="js-title">
-                    <?php echo $this->escapeHtml($this->translate('permits.page.fee-part-successful.title')); ?>
+                    <?php
+                    if ($data['application']['hasOutstandingFees'] === 0) {
+                        echo $this->escapeHtml($this->translate('waived-paid-permits.page.fee-part-successful.title'));
+                    } else {
+                        echo $this->escapeHtml($this->translate('permits.page.fee-part-successful.title'));
+                    }
+                    ?>
+
                     <?php
                     $markup = ($application['irhpPermitApplications'][0]['permitsAwarded'] === $application['permitsRequired']) ? 'markup-ecmt-fee-successful-hint' : 'markup-ecmt-fee-part-successful-hint';
                     echo $translatorHelper->translateReplace(
@@ -30,39 +37,60 @@ $translatorHelper = $this->getHelperPluginManager()->getServiceLocator()->get('H
             <div class="form-group form-steps ">
                 <div class="form-group">
                     <dl>
-                        <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.reference.number')); ?></dt>
-                        <dd>
-                            <?php echo $this->escapeHtml($application['applicationRef']); ?>
-                        </dd>
+                        <div>
+                            <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.reference.number')); ?></dt>
+                            <dd>
+                                <?php echo $this->escapeHtml($application['applicationRef']); ?>
+                            </dd>
+                        </div>
+                        <div>
+                            <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.permit.type')); ?></dt>
+                            <dd>
+                                <?php echo $this->escapeHtml($application['permitType']['description']); ?>
+                            </dd>
+                        </div>
+                        <div>
+                            <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.permit.validity')); ?></dt>
+                            <dd>
+                                <?php
+                                    echo $this->escapeHtml($this->translateReplace(
+                                        'permits.page.ecmt.fee-part-successful.permit.validity.value',
+                                        [
+                                            date(\DATE_FORMAT, $application['validityPeriod']['fromDate']),
+                                            date(\DATE_FORMAT, $application['validityPeriod']['toDate'])
+                                        ]
+                                    ));
+                                ?>
+                            </dd>
+                        </div>
+                        <?php
+                        if ($data['application']['hasOutstandingFees'] !== 0): ?>
+                            <div>
+                                <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.issuing.fee')); ?></dt>
+                                <dd>
+                                    <?php echo $this->escapeHtml($application['numPermitsAwarded'] . ' x ' . $this->currencyFormatter($application['issuingFee'])); ?>
+                                    <br />
+                                    <a href="<?php echo $this->url(EcmtSection::ROUTE_ECMT_UNPAID_PERMITS, [], [], true); ?>">
+                                        <?php echo $this->escapeHtml($this->translate('permits.page.view.permits')); ?>
+                                    </a>
+                                </dd>
 
-                        <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.permit.type')); ?></dt>
-                        <dd>
-                            <?php echo $this->escapeHtml($application['permitType']['description']); ?>
-                        </dd>
-
-                        <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.permit.validity')); ?></dt>
-                        <dd>
-                            <?php
-                                echo date(\DATE_FORMAT, strtotime($application['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['validFrom']));
-                                echo ' ' . $this->translate('to') . ' ';
-                                echo date(\DATE_FORMAT, strtotime($application['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['validTo']));
-                            ?>
-                        </dd>
-
-                        <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.issuing.fee')); ?></dt>
-                        <dd>
-                            <?php echo $application['irhpPermitApplications'][0]['permitsAwarded']; ?> x
-                            <?php echo $this->currencyFormatter($application['issueFee']); ?> <br />
-                            <a href="<?php echo $this->url('permits/' . EcmtSection::ROUTE_ECMT_UNPAID_PERMITS, [], [], true); ?>">
-                                <?php echo $this->escapeHtml($this->translate('permits.page.view.permits')); ?>
-                            </a>
-                        </dd>
-
-                        <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.issuing.fee.total')); ?></dt>
-                        <dd><?php echo $this->currencyFormatter($application['totalFee']); ?> <?php echo $this->escapeHtml($this->translate('permits.page.non.refundable')); ?></dd>
-
-                        <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.payment.due')); ?></dt>
-                        <dd><?php echo date(\DATE_FORMAT, strtotime($application['dueDate'])); ?></dd>
+                                <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.issuing.fee.total')); ?></dt>
+                                <dd><?php echo $this->escapeHtml($this->translateReplace('permits.page.ecmt.fee-part-successful.fee.total.value', [$this->currencyFormatter($application['issuingFeeTotal'])])); ?></dd>
+                            </div>
+                        <?php endif; ?>
+                        <div>
+                            <dt>
+                                <?php
+                                if ($data['application']['hasOutstandingFees'] === 0) {
+                                    echo $this->escapeHtml($this->translate('waived.paid.permits.page.ecmt.fee-part-successful.payment.due'));
+                                } else {
+                                    echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.payment.due'));
+                                }
+                                ?>
+                            </dt>
+                            <dd><?php echo date(\DATE_FORMAT, strtotime($application['dueDate'])); ?></dd>
+                        </div>
                     </dl>
                 </div>
             </div>

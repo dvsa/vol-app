@@ -22,7 +22,6 @@ class InternationalJourney
      *   "aria-labelledby" : "InternationalJourney",
      * })
      * @Form\Options({
-     *      "label": "",
      *      "fieldset-attributes": {"id": "international-journey"},
      *      "fieldset-data-group": "percentage-type",
      *      "label_attributes": {"class": "form-control form-control--radio"},

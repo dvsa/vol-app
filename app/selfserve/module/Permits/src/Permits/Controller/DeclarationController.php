@@ -31,8 +31,15 @@ class DeclarationController extends AbstractSelfserveController implements Toggl
         'default' => FormConfig::FORM_DECLARATION,
     ];
 
-    protected $templateConfig = [
-        'generic' => 'permits/declaration'
+    protected $templateVarsConfig = [
+        'question' => [
+            'browserTitle' => 'permits.page.declaration.browser.title',
+            'question' => 'permits.page.declaration.question',
+            'bulletList' => [
+                'title' => 'permits.page.declaration.bullet.list.title',
+                'list' => 'en_GB/bullets/markup-ecmt-declaration'
+            ]
+        ]
     ];
 
     protected $postConfig = [
@@ -42,6 +49,7 @@ class DeclarationController extends AbstractSelfserveController implements Toggl
             'step' => EcmtSection::ROUTE_ECMT_FEE,
             'conditional' => [
                 'command' => EcmtSubmitApplication::class,
+                'dataKey' => 'application',
                 'params' => 'id',
                 'step' => EcmtSection::ROUTE_ECMT_FEE_WAIVED_SUBMITTED,
                 'field' => 'hasOutstandingFees',

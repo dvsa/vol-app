@@ -6,7 +6,7 @@
         <div class="guidance">
             <p><?php echo sprintf($this->translate('signin-or-register-text'), $this->url('user-registration')); ?></p>
             <p><?php echo sprintf($this->translate('auth.login.termsAgreed'), $this->url('terms-and-conditions')); ?></p>
-            <hr>
+            <hr aria-hidden="true">
         </div>
         <?php
         echo $this->flashMessengerAll();

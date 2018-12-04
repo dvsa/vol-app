@@ -53,18 +53,20 @@
         "doctrine/annotations": "^1.2.3",
         "symfony/Filesystem": "~2.6.0",
         "zf-commons/zfc-rbac": "~2.4.0",
-        "olcs/OlcsCommon": "dev-release/4.193c",
-        "olcs/olcs-transfer": "dev-release/4.193c",
-        "olcs/olcs-utils": "dev-release/4.193c",
-        "olcs/olcs-auth": "dev-release/4.193c",
-        "olcs/olcs-logging": "dev-release/4.193c"
+        "olcs/OlcsCommon": "dev-release/4.194a",
+        "olcs/olcs-transfer": "dev-release/4.194a",
+        "olcs/olcs-utils": "dev-release/4.194a",
+        "olcs/olcs-auth": "dev-release/4.194a",
+        "olcs/olcs-logging": "dev-release/4.194a"
 
     },
     "require-dev": {
         "olcs/olcs-devtools": "dev-master",
-        "mockery/mockery": "~0.9.3",
         "mikey179/vfsstream": "^1.4.0",
-        "olcs/olcs-testhelpers": "dev-develop"
+        "olcs/olcs-testhelpers": "dev-develop",
+        "phpstan/phpstan-shim": "^0.10.5",
+        "phpstan/phpstan-mockery": "^0.10.2",
+        "mockery/mockery": "^1.2.0"
     },
     "autoload": {
         "classmap": [
