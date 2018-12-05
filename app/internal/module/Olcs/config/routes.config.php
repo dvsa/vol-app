@@ -794,75 +794,16 @@ $routes = [
                             ]
                         ]
                     ],
-                    'edit' => [
+                    'application' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => 'edit/:permitid[/]',
+                            'route' => ':action/:permitid[/]',
                             'constraints' => [
+                                'action' => 'edit|submit|accept|decline|cancel|withdraw',
                                 'permitid' => '[0-9]+',
                             ],
                             'defaults' => [
                                 'action' => 'edit'
-                            ]
-                        ]
-                    ],
-                    'submit' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'submit/:permitid[/]',
-                            'constraints' => [
-                                'permitid' => '[0-9]+',
-                            ],
-                            'defaults' => [
-                                'action' => 'submit'
-                            ]
-                        ]
-                    ],
-                    'accept' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'accept/:permitid[/]',
-                            'constraints' => [
-                                'permitid' => '[0-9]+',
-                            ],
-                            'defaults' => [
-                                'action' => 'accept'
-                            ]
-                        ]
-                    ],
-                    'decline' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'decline/:permitid[/]',
-                            'constraints' => [
-                                'permitid' => '[0-9]+',
-                            ],
-                            'defaults' => [
-                                'action' => 'decline'
-                            ]
-                        ]
-                    ],
-                    'cancel' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'cancel/:permitid[/]',
-                            'constraints' => [
-                                'permitid' => '[0-9]+',
-                            ],
-                            'defaults' => [
-                                'action' => 'cancel'
-                            ]
-                        ]
-                    ],
-                    'withdraw' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'withdraw/:permitid[/]',
-                            'constraints' => [
-                                'permitid' => '[0-9]+',
-                            ],
-                            'defaults' => [
-                                'action' => 'withdraw'
                             ]
                         ]
                     ],

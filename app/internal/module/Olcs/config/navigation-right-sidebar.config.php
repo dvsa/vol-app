@@ -257,10 +257,9 @@ return array(
                         array(
                             'id' => 'irhp-permit-quick-actions-cancel',
                             'label' => 'Cancel',
-                            'route' => 'licence/permits/cancel',
+                            'route' => 'licence/permits/application',
                             'params' => [
                                 'action' => 'cancel',
-                                'id' => null,
                             ],
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
@@ -276,7 +275,7 @@ return array(
                         array(
                             'id' => 'irhp-permit-decisions-submit',
                             'label' => 'Submit',
-                            'route' => 'licence/permits/submit',
+                            'route' => 'licence/permits/application',
                             'params' => [
                                 'action' => 'submit'
                             ],
@@ -286,7 +285,7 @@ return array(
                         array(
                             'id' => 'irhp-permit-decisions-withdraw',
                             'label' => 'Withdraw',
-                            'route' => 'licence/permits/withdraw',
+                            'route' => 'licence/permits/application',
                             'params' => [
                                 'action' => 'withdraw'
                             ],
@@ -296,7 +295,7 @@ return array(
                         array(
                             'id' => 'irhp-permit-decisions-accept',
                             'label' => 'Accept',
-                            'route' => 'licence/permits/accept',
+                            'route' => 'licence/permits/application',
                             'use_route_match' => true,
                             'params' => [
                                 'action' => 'accept'
@@ -306,7 +305,7 @@ return array(
                         array(
                             'id' => 'irhp-permit-decisions-decline',
                             'label' => 'Decline',
-                            'route' => 'licence/permits/decline',
+                            'route' => 'licence/permits/application',
                             'use_route_match' => true,
                             'params' => [
                                 'action' => 'decline'

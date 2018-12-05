@@ -564,7 +564,7 @@ $nav = [
                                 [
                                     'id' => 'licence_irhp_permits-edit',
                                     'label' => 'Application details',
-                                    'route' => 'licence/permits/edit',
+                                    'route' => 'licence/permits/application',
                                     'use_route_match' => true,
                                     'params' => [
                                         'action' => 'edit',
@@ -622,15 +622,11 @@ $nav = [
                             'route' => 'licence/permits',
                             'visible' => 0,
                             'use_route_match' => true,
-                            'params' => [
-                                'action' => null,
-                                'id' => null,
-                            ],
                             'pages' => [
                                 [
                                     'id' => 'irhp_permits-application_details',
                                     'label' => 'Application details',
-                                    'route' => 'licence/permits/edit',
+                                    'route' => 'licence/permits/application',
                                     'params' => [
                                         'action' => 'edit',
                                     ],
@@ -734,15 +730,11 @@ $nav = [
                             'label' => '',
                             'route' => 'licence/permits',
                             'use_route_match' => true,
-                            'params' => [
-                                'action' => null,
-                                'id' => null,
-                            ],
                             'pages' => [
                                 [
                                     'id' => 'irhp_permits-application_details',
                                     'label' => 'Application details',
-                                    'route' => 'licence/permits',
+                                    'route' => 'licence/permits/application',
                                     'params' => [
                                         'action' => 'edit',
                                     ],
