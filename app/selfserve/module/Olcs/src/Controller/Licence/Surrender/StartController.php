@@ -33,6 +33,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
             ]
         ]
     ];
+
     private $translateService;
 
     public function onDispatch(MvcEvent $e)
@@ -40,7 +41,6 @@ class StartController extends AbstractSelfserveController implements ToggleAware
         $this->translateService = $this->getServiceLocator()->get('Helper\Translation');
         return parent::onDispatch($e);
     }
-
 
     /**
      * IndexAction
@@ -86,7 +86,6 @@ class StartController extends AbstractSelfserveController implements ToggleAware
 
         $this->redirect()->refresh();
     }
-
 
     private function getGvData()
     {
