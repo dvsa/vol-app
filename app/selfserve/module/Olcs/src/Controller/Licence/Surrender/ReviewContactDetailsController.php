@@ -46,7 +46,6 @@ class ReviewContactDetailsController extends AbstractSurrenderController
                 [
                     'action' => 'confirm',
                     'licence' => $this->licenceId,
-                    'surrender' => $this->surrenderId
                 ]
             )
         );

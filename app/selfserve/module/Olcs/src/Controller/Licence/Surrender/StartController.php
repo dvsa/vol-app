@@ -4,11 +4,13 @@ namespace Olcs\Controller\Licence\Surrender;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Service\Cqrs\Exception\AccessDeniedException;
+use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Transfer\Command\Surrender\Create;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Zend\Http\Response;
+use Zend\I18n\Translator\Translator;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Helper\FlashMessenger;
 
@@ -72,7 +74,6 @@ class StartController extends AbstractSelfserveController implements ToggleAware
                         'licence/surrender/review-contact-details',
                         [
                             'licence' => $licNo,
-                            'surrender' => $result['id']['surrender']
                         ]
                     );
                 }
@@ -106,8 +107,8 @@ class StartController extends AbstractSelfserveController implements ToggleAware
     /**
      * getView
      *
-     * @param $licence
-     * @param $translateService
+     * @param Licence    $licence
+     * @param Translator $translateService
      *
      * @return \Zend\View\Model\ViewModel
      */
