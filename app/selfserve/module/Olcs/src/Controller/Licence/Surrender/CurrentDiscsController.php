@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Licence\Surrender;
 
 use Common\Service\Helper\TranslationHelperService;
+use Olcs\Form\Model\Form\Surrender\CurrentDiscs\CurrentDiscs;
 
 class CurrentDiscsController extends AbstractSurrenderController
 {
@@ -19,8 +20,11 @@ class CurrentDiscsController extends AbstractSurrenderController
                 'licence.surrender.current_discs.content',
                 [$numberOfDiscs]
             ),
+            'form' => $this->hlpForm->createForm(CurrentDiscs::class),
             'backLink' => $this->getBackLink('licence/surrender/review-contact-details'),
         ];
+
+        $this->getServiceLocator()->get('Script')->loadFiles(['licence-surrender-current-discs']);
 
         return $this->renderView($params);
     }
