@@ -83,13 +83,10 @@ return [
                             'may_terminate' => true,
                             'type' => Segment::class,
                             'options' => [
-                                'route' => ':surrender/current-discs[/]',
+                                'route' => 'current-discs[/]',
                                 'defaults' => [
                                     'controller' => Olcs\Controller\Licence\Surrender\CurrentDiscsController::class,
                                     'action' => 'index'
-                                ],
-                                'constraints' => [
-                                    'surrender' => '[0-9]+',
                                 ],
                             ]
                         ],
