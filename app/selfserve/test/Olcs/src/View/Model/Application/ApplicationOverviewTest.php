@@ -14,7 +14,7 @@ use Olcs\View\Model\Application\ApplicationOverview;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ApplicationOverviewTest extends \PHPUnit\Framework\TestCase
+class ApplicationOverviewTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test constructor with set variables

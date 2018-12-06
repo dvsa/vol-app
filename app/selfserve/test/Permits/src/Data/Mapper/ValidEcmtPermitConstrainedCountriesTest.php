@@ -9,7 +9,7 @@ use Permits\Data\Mapper\ValidEcmtPermitConstrainedCountries;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ValidEcmtPermitConstrainedCountriesTest extends \PHPUnit\Framework\TestCase
+class ValidEcmtPermitConstrainedCountriesTest extends \PHPUnit_Framework_TestCase
 {
     public function testMapForDisplayEmptyData()
     {

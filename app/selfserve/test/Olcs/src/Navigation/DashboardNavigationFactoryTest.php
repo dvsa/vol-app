@@ -10,7 +10,7 @@ use Olcs\Navigation\DashboardNavigationFactory;
  * Class DashboardNavigationFactoryTest
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class DashboardNavigationFactoryTest extends \PHPUnit\Framework\TestCase
+class DashboardNavigationFactoryTest extends PHPUnit_Framework_TestCase
 {
     public function testGetName()
     {
