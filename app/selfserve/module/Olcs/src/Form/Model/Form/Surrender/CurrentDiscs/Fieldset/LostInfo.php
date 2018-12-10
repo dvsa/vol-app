@@ -7,6 +7,7 @@ use Zend\Form\Annotation as Form;
 class LostInfo
 {
     /**
+     * @Form\Name("discLost")
      * @Form\Type("Number")
      * @Form\Options({
      *     "label":"Number of discs lost",
@@ -18,6 +19,7 @@ class LostInfo
     public $numberLost = null;
 
     /**
+     * @Form\Name("lostInfo")
      * @Form\Type("textarea")
      * @Form\Options({
      *     "label":"Please provide details of lost documents",

@@ -33,4 +33,11 @@ class CurrentDiscs
      * @Form\ComposedObject("Olcs\Form\Model\Form\Surrender\CurrentDiscs\Fieldset\Stolen")
      */
     public $stolenSection = null;
+
+    /**
+     * @Form\Attributes({"type":"submit","class":"action--primary large"})
+     * @Form\Options({"label":"Continue"})
+     * @Form\Type("\Zend\Form\Element\Button")
+     */
+    public $submit = null;
 }

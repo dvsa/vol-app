@@ -7,6 +7,7 @@ use Zend\Form\Annotation as Form;
 class InPossessionInfo
 {
     /**
+     * @Form\Name("discDestroyed")
      * @Form\Type("Number")
      * @Form\Options({
      *     "label":"Number of discs you will destroy",

@@ -80,14 +80,34 @@ return [
                             ],
                         ],
                         'current-discs' => [
-                            'may_terminate' => true,
+                            'may_terminate' => false,
                             'type' => Segment::class,
                             'options' => [
                                 'route' => 'current-discs[/]',
-                                'defaults' => [
-                                    'controller' => Olcs\Controller\Licence\Surrender\CurrentDiscsController::class,
-                                    'action' => 'index'
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'controller' => Olcs\Controller\Licence\Surrender\CurrentDiscsController::class,
+                                            'action' => 'index'
+                                        ],
+                                    ],
                                 ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'controller' => Olcs\Controller\Licence\Surrender\CurrentDiscsController::class,
+                                            'action' => 'post'
+                                        ],
+                                    ],
+                                ]
                             ]
                         ],
                         'confirmation' => [
