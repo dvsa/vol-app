@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Licence\Surrender;
 
 use Common\Data\Mapper\Licence\Surrender\CurrentDiscs as CurrentDiscsMapper;
+use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Surrender\Update;
 use Olcs\Form\Model\Form\Surrender\CurrentDiscs\CurrentDiscs;
@@ -55,10 +56,11 @@ class CurrentDiscsController extends AbstractSurrenderController
                 'id' => $this->licenceId,
                 'partial' => false,
                 'version' => $surrender['version'],
+                'status' => RefData::SURRENDER_STATUS_DISCS_COMPLETE,
+
         ];
 
         $dtoData = array_merge($dtoData, CurrentDiscsMapper::mapFromForm($formData));
-
         $response = $this->handleCommand(Update::create($dtoData));
 
         if ($response->isOk()) {
