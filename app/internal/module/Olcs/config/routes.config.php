@@ -794,6 +794,15 @@ $routes = [
                             ]
                         ]
                     ],
+                    'selectType' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'type[/]',
+                            'defaults' => [
+                                'action' => 'selectType'
+                            ]
+                        ]
+                    ],
                     'application' => [
                         'type' => 'segment',
                         'options' => [

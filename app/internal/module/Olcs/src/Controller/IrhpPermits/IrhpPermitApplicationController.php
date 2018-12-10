@@ -39,6 +39,10 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     const FEE_TYPE_ECMT_APP = 'IRHPGVAPP';
     const FEE_TYPE_ECMT_ISSUE = 'IRHPGVISSUE';
 
+    const ECMT_ANNUAL_PERMIT_TYPE_ID = 1;
+    const ECMT_SHORT_TERM_PERMIT_TYPE_ID = 2;
+    const ECMT_REMOVAL_PERMIT_TYPE_ID = 3;
+
     protected $toggleConfig = [
         'default' => [
             FeatureToggle::BACKEND_ECMT
@@ -112,6 +116,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
 
     // Scripts to include when rendering actions.
     protected $inlineScripts = [
+        'indexAction' => ['table-actions'],
         'editAction' => ['permits'],
         'addAction' => ['permits']
     ];
@@ -167,6 +172,35 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     }
 
     /**
+     * Renders modal form, and handles redirect to correct application form for permit type.
+     *
+     * @return \Zend\Http\Response
+     */
+    public function selectTypeAction()
+    {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $permitTypeId = $this->params()->fromPost()['permitType'];
+
+            // Temporary redirect to manually built application forms, when other 2 ECMT manual builds
+            // are done this switch can be added too, when Generic forms system done will just redirect there passing ID
+            switch ($permitTypeId) {
+                case self::ECMT_ANNUAL_PERMIT_TYPE_ID:
+                    return $this->redirect()
+                        ->toRouteAjax(
+                            'licence/permits/add',
+                            ['licence' => $this->params()->fromRoute('licence')],
+                            ['query' => ['permitTypeId' => $permitTypeId]]
+                        );
+            }
+        }
+
+        $form = $this->getForm('SelectPermitType');
+        $this->placeholder()->setPlaceholder('form', $form);
+        $this->placeholder()->setPlaceholder('contentTitle', 'Select Permit Type');
+    }
+
+    /**
      * @return mixed|ViewModel
      */
     public function editAction()
@@ -194,10 +228,9 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
             if ($postData['action'] === 'Apply') {
                 return $this->redirect()
                     ->toRoute(
-                        'licence/permits/add',
+                        'licence/permits/selectType',
                         [
-                            'licence' => $this->params()->fromRoute('licence'),
-                            'action' => 'add'
+                            'licence' => $this->params()->fromRoute('licence')
                         ]
                     );
             }
