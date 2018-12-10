@@ -444,10 +444,10 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             }
 
             return $this->genericView();
-        } else {
-            $route = $route ? $route : 'permits';
-            return $this->redirect()->toRoute($route, [], [], true);
         }
+
+        $route = $route ? $route : 'permits';
+        return $this->redirect()->toRoute($route, [], [], true);
     }
 
     /**
