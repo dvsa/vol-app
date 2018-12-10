@@ -49,7 +49,7 @@ class CurrentDiscsController extends AbstractSurrenderController
         return $this->renderView($params);
     }
 
-    protected function updateSurrender(array $formData)
+    protected function updateSurrender(array $formData): bool
     {
         $surrender = $this->getSurrender();
         $dtoData = [
@@ -76,7 +76,7 @@ class CurrentDiscsController extends AbstractSurrenderController
         return 0;
     }
 
-    protected function buildViewParams(\Common\Form\Form $form)
+    protected function buildViewParams(\Common\Form\Form $form): array
     {
         /** @var TranslationHelperService $translator */
         $translator = $this->getServiceLocator()->get('Helper\Translation');
