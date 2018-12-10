@@ -100,7 +100,18 @@ return [
                                     'action' => 'index'
                                 ],
                             ]
-                        ]
+                        ],
+                        'operator-licence' => [
+                            'may_terminate' => true,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'operator-licence[/]',
+                                'defaults' => [
+                                    'controller' => Olcs\Controller\Licence\Surrender\OperatorLicenceController::class,
+                                    'action' => 'index'
+                                ],
+                            ]
+                        ],
                     ]
                 ],
             ],

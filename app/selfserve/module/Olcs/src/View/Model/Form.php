@@ -8,7 +8,7 @@
 namespace Olcs\View\Model;
 
 use Common\View\AbstractViewModel;
-use Common\Form\Form as FormModel;
+use Zend\Form\Form as ZendForm;
 
 /**
  * Form View Model
@@ -27,9 +27,9 @@ class Form extends AbstractViewModel
     /**
      * Set the form into the view.
      *
-     * @param FormModel $form
+     * @param ZendForm $form
      */
-    public function setForm(FormModel $form)
+    public function setForm(ZendForm $form)
     {
         $this->setVariable('form', $form);
     }
