@@ -25,8 +25,8 @@ class EcmtSection extends AbstractHelper
     const ROUTE_ECMT_CHECK_ANSWERS = 'permits/ecmt-check-answers';
     const ROUTE_ECMT_DECLARATION = 'permits/ecmt-declaration';
     const ROUTE_ECMT_FEE = 'permits/ecmt-fee';
-    const ROUTE_ECMT_SUBMITTED = 'permits/ecmt-submitted';
-    const ROUTE_ECMT_FEE_WAIVED_SUBMITTED = 'permits/ecmt-fee-waived-submitted';
+    const ROUTE_ECMT_SUBMITTED = 'permits/application-submitted';
+    const ROUTE_ECMT_FEE_WAIVED_SUBMITTED = 'permits/fee-waived-application-submitted';
     const ROUTE_CONFIRM_CHANGE = 'permits/change-licence';
     const ROUTE_ECMT_GUIDANCE = 'permits/ecmt-guidance';
     const ROUTE_ECMT_UNDER_CONSIDERATION = 'permits/ecmt-under-consideration';
@@ -43,11 +43,11 @@ class EcmtSection extends AbstractHelper
     const ROUTE_NO_AVAILABLE_LICENCES = 'no-available-licences';
 
     //cancellation
-    const ROUTE_ECMT_CANCEL_APPLICATION = 'permits/ecmt-cancel-application';
+    const ROUTE_ECMT_CANCEL_APPLICATION = 'permits/cancel-application';
     const ROUTE_ECMT_CANCEL_CONFIRMATION = self::ROUTE_ECMT_CANCEL_APPLICATION . '/confirmation';
 
     //withdraw
-    const ROUTE_ECMT_WITHDRAW_APPLICATION = 'permits/ecmt-withdraw-application';
+    const ROUTE_ECMT_WITHDRAW_APPLICATION = 'permits/withdraw-application';
     const ROUTE_ECMT_WITHDRAW_CONFIRMATION = self::ROUTE_ECMT_WITHDRAW_APPLICATION . '/confirmation';
 
     //decline

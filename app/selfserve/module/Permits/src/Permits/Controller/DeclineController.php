@@ -23,21 +23,41 @@ class DeclineController extends AbstractSelfserveController implements ToggleAwa
     ];
 
     protected $conditionalDisplayConfig = [
-        'generic' => ConditionalDisplayConfig::PERMIT_APP_CAN_DECLINE,
+        'decline' => ConditionalDisplayConfig::PERMIT_APP_CAN_DECLINE,
         'confirmation' => ConditionalDisplayConfig::PERMIT_APP_IS_WITHDRAWN, //declined status to follow?
     ];
 
     protected $formConfig = [
-        'generic' => FormConfig::FORM_DECLINE_PERMIT,
+        'decline' => FormConfig::FORM_DECLINE_PERMIT,
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/decline-application',
-        'confirmation' => 'permits/submitted',
+        'decline' => 'permits/single-question',
+        'confirmation' => 'permits/confirmation',
+    ];
+
+    protected $templateVarsConfig = [
+        'decline' => [
+            'browserTitle' => 'permits.page.decline.browser.title',
+            'question' => 'permits.page.decline.question',
+            'bulletList' => [
+                'title' => 'permits.page.decline.bullet.list.title',
+                'list' => 'en_GB/bullets/markup-ecmt-application-decline'
+            ],
+            'backUri' => EcmtSection::ROUTE_ECMT_AWAITING_FEE
+        ],
+        'confirmation' => [
+            'browserTitle' => 'permits.page.confirmation.decline.browser.title',
+            'title' => 'permits.page.confirmation.decline.title',
+            'extraContent' => [
+                'title' => 'permits.page.confirmation.decline.bullet.list.title',
+                'list' => 'en_GB/bullets/markup-ecmt-decline-confirmation'
+            ]
+        ],
     ];
 
     protected $postConfig = [
-        'generic' => [
+        'decline' => [
             'retrieveData' => false,
             'checkConditionalDisplay' => false,
             'command' => DeclineEcmtPermits::class,
