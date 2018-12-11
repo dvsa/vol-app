@@ -75,6 +75,7 @@ class FormConfig
     const FORM_CHECK_ANSWERS = [
         'checkAnswers' => [
             'formClass' => 'CheckAnswersForm',
+            'dataSource' => PermitApplicationDataSource::DATA_KEY,
         ],
     ];
 
