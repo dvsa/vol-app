@@ -65,4 +65,9 @@ class DeclineController extends AbstractSelfserveController implements ToggleAwa
             'step' => EcmtSection::ROUTE_ECMT_DECLINE_CONFIRMATION,
         ],
     ];
+
+    public function declineAction()
+    {
+        return $this->genericAction();
+    }
 }
