@@ -15,7 +15,6 @@ class OperatorLicenceController extends AbstractSurrenderController
             'form' =>  $form,
         ];
 
-        $this->getServiceLocator()->get('Script')->loadFiles(['licence-surrender-operator']);
 
         return $this->renderView($params);
     }

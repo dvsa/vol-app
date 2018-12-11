@@ -10,8 +10,8 @@ use Zend\Form\Annotation as Form;
 class LicenceLost
 {
     /**
-     * @Form\Attributes({
-     *     "value":"licence.surrender.licence.lost.note"
+     * @Form\Options({
+     *     "label":"licence.surrender.operator_licence.lost.note",
      * })
      * @Form\Type("\Common\Form\Elements\Types\HtmlTranslated")
      */
@@ -23,7 +23,9 @@ class LicenceLost
      *     "class" : "govuk-textarea",
      *     "rows" : "5"
      * })
+     * @Form\Options({
+     *     "hint": "licence.surrender.operator_licence.text_area.hint"
+     * })
      */
     public $details = null;
-
 }

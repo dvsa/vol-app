@@ -10,8 +10,8 @@ use Zend\Form\Annotation as Form;
 class LicenceInPossession
 {
     /**
-     * @Form\Attributes({
-     *     "value":"licence.surrender.licence.possession.note",
+     * @Form\Options({
+     *      "label": "licence.surrender.operator_licence.possession.note",
      * })
      * @Form\Type("\Common\Form\Elements\Types\HtmlTranslated")
      */
