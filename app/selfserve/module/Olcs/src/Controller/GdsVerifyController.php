@@ -69,7 +69,7 @@ class GdsVerifyController extends AbstractController
         }
 
         if ($licenceId) {
-            $dto->setLicenceId($licenceId);
+            $dto->setLicence($licenceId);
         }
 
         $session->getManager()->getStorage()->clear(\Olcs\Session\DigitalSignature::SESSION_NAME);
