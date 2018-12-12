@@ -18,8 +18,7 @@ class IndexController extends AbstractController
     public function indexAction()
     {
         $view = new ViewModel();
-        $view->setTemplate('placeholder');
-
+        $view->setTemplate('admin-index');
         $this->setNavigationId('admin-dashboard');
 
         return $this->renderView($view, 'Admin');
