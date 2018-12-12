@@ -6,6 +6,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("licence-lost")
+ * @Form\Options({"prefer_form_input_filter":true})
  */
 class LicenceLost
 {
@@ -18,7 +19,11 @@ class LicenceLost
     public $notice = "LicenceLost";
 
     /**
+     * @Form\Required(true)
      * @Form\Type("\Zend\Form\Element\Textarea")
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Zend\Filter\StringToLower"})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":1}})
      * @Form\Attributes({
      *     "class" : "govuk-textarea",
      *     "rows" : "5"

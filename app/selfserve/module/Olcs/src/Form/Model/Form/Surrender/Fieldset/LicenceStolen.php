@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: parthvyas
- * Date: 06/12/2018
- * Time: 14:54
- */
 
 namespace Olcs\Form\Model\Form\Surrender\Fieldset;
 
@@ -12,6 +6,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("licence-stolen")
+ * @Form\Options({"prefer_form_input_filter":true})
  */
 class LicenceStolen
 {
@@ -24,10 +19,11 @@ class LicenceStolen
     public $notice = "LicenceStolen";
 
     /**
+
      * @Form\Type("\Zend\Form\Element\Textarea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Filter({"name":"Zend\Filter\StringToLower"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":500}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":1}})
      * @Form\Attributes({
      *     "class" : "govuk-textarea",
      *     "rows" : "5"

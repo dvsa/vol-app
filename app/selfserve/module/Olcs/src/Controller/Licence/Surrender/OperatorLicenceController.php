@@ -6,7 +6,20 @@ class OperatorLicenceController extends AbstractSurrenderController
 {
     public function indexAction()
     {
-        $form = $this->hlpForm->createForm(\Olcs\Form\Model\Form\Surrender\OperatorLicence::class);
+
+        $request = $this->getRequest();
+
+        $form = $this->hlpForm->getServiceLocator()
+            ->get('FormServiceManager')
+            ->get(\Common\FormService\Form\Licence\Surrender\OperatorLicence::class)
+            ->getForm("some data");
+
+        if ($request->isPost()){
+            $form->setData((array) $request->getPost());
+            if($form->isValid()){
+                echo "this is valid";
+            }
+        }
 
         $params = [
             'title' => 'licence.surrender.operator_licence.title',
@@ -14,6 +27,7 @@ class OperatorLicenceController extends AbstractSurrenderController
             'backLink' => $this->getBackLink('lva-licence'),
             'form' =>  $form,
         ];
+
 
 
         return $this->renderView($params);
