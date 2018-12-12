@@ -5,6 +5,7 @@ namespace Permits\Controller\Config\Form;
 use Permits\Controller\Config\DataSource\LicencesAvailable as LicencesAvailableDataSource;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitApplicationDataSource;
 use Permits\Data\Mapper\LicencesAvailable as LicencesAvailableMapper;
+use Permits\Data\Mapper\Sectors as SectorsMapper;
 use Permits\Data\Mapper\ChangeLicence as ChangeLicenceMapper;
 
 /**
@@ -65,16 +66,27 @@ class FormConfig
         ],
     ];
 
-    const FORM_DECLARATION = [
-        'declaration' => [
-            'formClass' => 'DeclarationForm',
+    const FORM_SECTORS = [
+        'sectors' => [
+            'formClass' => 'SectorsForm',
             'dataSource' => PermitApplicationDataSource::DATA_KEY,
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => SectorsMapper::class
+            ]
         ],
     ];
 
     const FORM_CHECK_ANSWERS = [
         'checkAnswers' => [
             'formClass' => 'CheckAnswersForm',
+            'dataSource' => PermitApplicationDataSource::DATA_KEY,
+        ],
+    ];
+
+    const FORM_DECLARATION = [
+        'declaration' => [
+            'formClass' => 'DeclarationForm',
             'dataSource' => PermitApplicationDataSource::DATA_KEY,
         ],
     ];

@@ -7,6 +7,7 @@ use Permits\Controller\EmissionsController;
 use Permits\Controller\CabotageController;
 use Permits\Controller\FeePartSuccessfulController;
 use Permits\Controller\LicenceController;
+use Permits\Controller\SectorsController;
 use Permits\Controller\ValidPermitsController;
 use Permits\Controller\WithdrawApplicationController;
 use Permits\Controller\CheckAnswersController;
@@ -25,6 +26,7 @@ return array(
         LicenceController::class => LicenceController::class,
         EmissionsController::class => EmissionsController::class,
         CabotageController::class => CabotageController::class,
+        SectorsController::class => SectorsController::class,
         CheckAnswersController::class => CheckAnswersController::class,
         DeclarationController::class => DeclarationController::class,
         OverviewController::class => OverviewController::class,
@@ -189,8 +191,8 @@ return array(
                   'options' => [
                       'route'    => '/:id/ecmt-sectors[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'sector',
+                          'controller'    => SectorsController::class,
+                          'action'        => 'question',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
