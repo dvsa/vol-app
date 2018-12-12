@@ -36,7 +36,9 @@ class StolenInfo
 
     /**
      * @Form\Name("stolenInfo")
-     * @Form\Required(false)
+     * @Form\Required(true)
+     * @Form\AllowEmpty(true)
+     * @Form\ContinueIfEmpty(true)
      * @Form\Type("textarea")
      * @Form\Options({
      *     "label":"Please provide details of stolen documents",
@@ -45,6 +47,23 @@ class StolenInfo
      * @Form\Attributes({
      *     "class":"govuk-textarea",
      *     "rows":"5"
+     * })
+     * @Form\Validator({
+     *      "name": "ValidateIf",
+     *      "options": {
+     *          "context_field": "stolen",
+     *          "context_values": {"Y"},
+     *          "inject_post_data": "stolenSection->stolen",
+     *          "validators": {
+     *              {
+     *                  "name": "Zend\Validator\StringLength",
+     *                  "options": {
+     *                      "min": 1,
+     *                      "max": 500
+     *                  }
+     *              }
+     *          }
+     *      }
      * })
      */
     public $stolenDetails = null;

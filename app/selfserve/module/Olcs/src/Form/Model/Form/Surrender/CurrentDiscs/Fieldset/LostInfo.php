@@ -36,7 +36,9 @@ class LostInfo
 
     /**
      * @Form\Name("lostInfo")
-     * @Form\Required(false)
+     * @Form\Required(true)
+     * @Form\AllowEmpty(true)
+     * @Form\ContinueIfEmpty(true)
      * @Form\Type("textarea")
      * @Form\Options({
      *     "label": "Please provide details of lost documents",
@@ -45,6 +47,23 @@ class LostInfo
      * @Form\Attributes({
      *     "class": "govuk-textarea",
      *     "rows": "5"
+     * })
+     * @Form\Validator({
+     *      "name": "ValidateIf",
+     *      "options": {
+     *          "context_field": "lost",
+     *          "context_values": {"Y"},
+     *          "inject_post_data": "lostSection->lost",
+     *          "validators": {
+     *              {
+     *                  "name": "Zend\Validator\StringLength",
+     *                  "options": {
+     *                      "min": 1,
+     *                      "max": 500
+     *                  }
+     *              }
+     *          }
+     *      }
      * })
      */
     public $lostDetails = null;
