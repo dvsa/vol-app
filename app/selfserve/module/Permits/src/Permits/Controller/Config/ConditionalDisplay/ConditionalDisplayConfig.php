@@ -3,7 +3,7 @@
 namespace Permits\Controller\Config\ConditionalDisplay;
 
 use Permits\Controller\Config\DataSource\LicencesAvailable;
-use Permits\Controller\Config\DataSource\OpenWindows;
+use Permits\Controller\Config\DataSource\AvailableTypes;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\View\Helper\EcmtSection;
 
@@ -13,7 +13,7 @@ use Permits\View\Helper\EcmtSection;
 class ConditionalDisplayConfig
 {
     const PERMIT_APP_CAN_APPLY = [
-        OpenWindows::DATA_KEY => [
+        AvailableTypes::DATA_KEY => [
             'view' => [
                 'template' => 'permits/window-closed',
             ]

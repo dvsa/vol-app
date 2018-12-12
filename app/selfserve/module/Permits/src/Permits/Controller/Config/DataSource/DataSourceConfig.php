@@ -23,8 +23,16 @@ class DataSourceConfig
         PermitAppDataSource::class => [],
     ];
 
+    const PERMIT_APP_TYPE = [
+        AvailableTypes::class => [],
+        LastOpenWindow::class => [],
+        LicencesAvailable::class => [
+            'passInUserData' => 'getCurrentOrganisationId'
+        ]
+    ];
+
     const PERMIT_APP_ADD_LICENCE = [
-        OpenWindows::class => [],
+        AvailableTypes::class => [],
         LastOpenWindow::class => [],
         LicencesAvailable::class => [
             'passInUserData' => 'getCurrentOrganisationId'

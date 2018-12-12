@@ -17,6 +17,7 @@ use Permits\Controller\OverviewController;
 use Permits\Controller\DeclineController;
 use Permits\Controller\SubmittedController;
 use Permits\Controller\PermitsController;
+use Permits\Controller\TypeController;
 
 return [
   'controllers' => [
@@ -24,6 +25,7 @@ return [
         PermitsController::class => PermitsController::class,
         ConfirmChangeController::class => ConfirmChangeController::class,
         LicenceController::class => LicenceController::class,
+        TypeController::class => TypeController::class,
         EmissionsController::class => EmissionsController::class,
         CabotageController::class => CabotageController::class,
         SectorsController::class => SectorsController::class,
@@ -375,6 +377,31 @@ return [
                   ],
                   'may_terminate' => false,
               ],
+              'type' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/type[/]',
+                      'defaults' => [
+                          'controller'    => TypeController::class,
+                          'action'        => 'question',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
+              'add-licence' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/type/:type/licence/add[/]',
+                      'defaults' => [
+                          'controller'    => LicenceController::class,
+                          'action'        => 'add',
+                      ],
+                      'constraints' => [
+                          'type' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
               'licence' => [
                   'type'    => 'segment',
                   'options' => [
@@ -385,17 +412,6 @@ return [
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
-                      ],
-                  ],
-                  'may_terminate' => false,
-              ],
-              'add-licence' => [
-                  'type'    => 'segment',
-                  'options' => [
-                      'route'    => '/licence/add[/]',
-                      'defaults' => [
-                          'controller'    => LicenceController::class,
-                          'action'        => 'add',
                       ],
                   ],
                   'may_terminate' => false,

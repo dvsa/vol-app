@@ -41,7 +41,7 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
         'add' => [
             'browserTitle' => 'permits.page.licence.browser.title',
             'question' => 'permits.page.licence.question',
-            'backUri' => 'permits'
+            'backUri' => EcmtSection::ROUTE_PERMITS
         ],
         'question' => [
             'browserTitle' => 'permits.page.licence.browser.title',
