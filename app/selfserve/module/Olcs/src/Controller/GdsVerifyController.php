@@ -107,9 +107,9 @@ class GdsVerifyController extends AbstractController
 
         if ($licenceId) {
             return $this->redirect()->toRoute(
-                'surrender/confirmation',
+                'licence/surrender/confirmation',
                 [
-                    'licenceId' => $licenceId,
+                    'licence' => $licenceId,
                     'action' => 'index'
                 ]
             );
