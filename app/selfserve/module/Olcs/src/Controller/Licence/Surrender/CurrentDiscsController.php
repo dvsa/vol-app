@@ -6,6 +6,7 @@ use Common\Data\Mapper\Licence\Surrender\CurrentDiscs as CurrentDiscsMapper;
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Surrender\Update;
+use Dvsa\Olcs\Transfer\Query\Licence\GoodsDiscCount;
 use Olcs\Form\Model\Form\Surrender\CurrentDiscs\CurrentDiscs;
 
 class CurrentDiscsController extends AbstractSurrenderController
@@ -73,7 +74,11 @@ class CurrentDiscsController extends AbstractSurrenderController
 
     protected function getNumberOfDiscs(): int
     {
-        return 0;
+        $response = $this->handleQuery(
+            GoodsDiscCount::create(['id' => (int)$this->params('licence')])
+        );
+        $result = $response->getResult();
+        return $result['discCount'];
     }
 
     protected function buildViewParams(\Common\Form\Form $form): array
