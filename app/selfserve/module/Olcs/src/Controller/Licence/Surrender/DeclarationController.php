@@ -22,7 +22,10 @@ class DeclarationController extends AbstractSurrenderController
         $params = [
             'title' => 'licence.surrender.declaration.title',
             'licNo' => $this->licence['licNo'],
-            'content' => $translator->translateReplace('markup-licence-surrender-declaration', [$this->licence['licNo']]),
+            'content' => $translator->translateReplace(
+                'markup-licence-surrender-declaration',
+                [$this->licence['licNo']]
+            ),
             'form' => $form,
             'backLink' => $this->getBackLink('lva-licence'),
         ];
@@ -32,7 +35,17 @@ class DeclarationController extends AbstractSurrenderController
 
     protected function getSignForm(): \Common\Form\Form
     {
-        return $this->getForm(DeclarationSign::class);
+        $form =  $this->getForm(DeclarationSign::class);
+        $form->setAttribute(
+            "action",
+            $this->url()->fromRoute(
+                'verify/surrender',
+                [
+                    'licenceId' => $this->licenceId,
+                ]
+            )
+        );
+        return $form;
     }
 
     protected function getPrintForm(TranslationHelperService $translator): \Common\Form\Form

@@ -11,7 +11,7 @@ class DigitalSignature extends \Zend\Session\Container
 {
     const SESSION_NAME = 'DigitalSignature';
 
-
+    
     /**
      * DigitalSignature constructor.
      */
@@ -152,5 +152,21 @@ class DigitalSignature extends \Zend\Session\Container
     public function setLva($lva): void
     {
         $this->lva = $lva;
+    }
+
+
+    public function setLicenceId(int $licenceId)
+    {
+        $this->licenceId = $licenceId;
+    }
+
+    public function hasLicenceId()
+    {
+        return $this->offsetExists('licenceId');
+    }
+
+    public function getLicenceId():int
+    {
+        return (int) $this->licenceId;
     }
 }

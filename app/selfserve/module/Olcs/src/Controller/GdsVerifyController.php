@@ -48,8 +48,9 @@ class GdsVerifyController extends AbstractController
         $applicationId = $session->hasApplicationId() ? $session->getApplicationId() : false;
         $continuationDetailId = $session->hasContinuationDetailId() ? $session->getContinuationDetailId() : false;
         $transportManagerApplicationId = $session->hasTransportManagerApplicationId() ? $session->getTransportManagerApplicationId() : false;
-        $lva = $session->hasLva()? $session->getLva():'application';
-        $role = $session->hasRole()?$session->getRole():null;
+        $licenceId = $session->hasLicenceId() ? $session->getLicenceId() : false;
+        $lva = $session->hasLva() ? $session->getLva() : 'application';
+        $role = $session->hasRole() ? $session->getRole() : null;
 
         $dto = \Dvsa\Olcs\Transfer\Command\GdsVerify\ProcessSignatureResponse::create(
             ['samlResponse' => $this->getRequest()->getPost('SAMLResponse')]
@@ -66,6 +67,11 @@ class GdsVerifyController extends AbstractController
             $dto->setTransportManagerApplication($transportManagerApplicationId);
             $dto->setRole($role);
         }
+
+        if ($licenceId) {
+            $dto->setLicence($licenceId);
+        }
+
         $session->getManager()->getStorage()->clear(\Olcs\Session\DigitalSignature::SESSION_NAME);
         $response = $this->handleCommand($dto);
         if (!$response->isOk()) {
@@ -99,6 +105,15 @@ class GdsVerifyController extends AbstractController
             );
         }
 
+        if ($licenceId) {
+            return $this->redirect()->toRoute(
+                'licence/surrender/confirmation',
+                [
+                    'licence' => $licenceId,
+                    'action' => 'index'
+                ]
+            );
+        }
 
 
         throw new \RuntimeException('There was an error processing the signature response');

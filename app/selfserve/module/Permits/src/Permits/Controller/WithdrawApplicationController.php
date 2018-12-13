@@ -2,6 +2,7 @@
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
@@ -41,6 +42,9 @@ class WithdrawApplicationController extends AbstractSelfserveController implemen
             'retrieveData' => false,
             'checkConditionalDisplay' => false,
             'command' => WithdrawEcmtPermitApplication::class,
+            'defaultParams' => [
+                'reason' => RefData::PERMIT_APP_WITHDRAW_REASON_USER,
+            ],
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => EcmtSection::ROUTE_ECMT_WITHDRAW_CONFIRMATION
         ],

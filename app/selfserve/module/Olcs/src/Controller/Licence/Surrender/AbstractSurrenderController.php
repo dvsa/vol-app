@@ -26,7 +26,6 @@ class AbstractSurrenderController extends AbstractSelfserveController implements
 
     protected $licenceId;
 
-    protected $surrenderId;
 
     protected $licence;
 
@@ -34,7 +33,6 @@ class AbstractSurrenderController extends AbstractSelfserveController implements
     public function onDispatch(MvcEvent $e)
     {
         $this->licenceId = (int)$this->params('licence');
-        $this->surrenderId = (int)$this->params('surrender');
         $this->licence = $this->getLicence();
         $this->hlpForm = $this->getServiceLocator()->get('Helper\Form');
         $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');

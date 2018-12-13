@@ -34,7 +34,7 @@ return [
                                     'may_terminate' => true,
                                     'type' => \Zend\Mvc\Router\Http\Method::class,
                                     'options' => [
-                                        'verb'=>'GET',
+                                        'verb' => 'GET',
                                         'defaults' => [
                                             'controller' => StartController::class,
                                             'action' => 'index',
@@ -45,7 +45,7 @@ return [
                                     'may_terminate' => true,
                                     'type' => \Zend\Mvc\Router\Http\Method::class,
                                     'options' => [
-                                        'verb'=>'POST',
+                                        'verb' => 'POST',
                                         'defaults' => [
                                             'controller' => StartController::class,
                                             'action' => 'start',
@@ -58,13 +58,12 @@ return [
                             'may_terminate' => true,
                             'type' => Segment::class,
                             'options' => [
-                                'route' => ':surrender/review-contact-details[/:action][/]',
+                                'route' => 'review-contact-details[/:action][/]',
                                 'defaults' => [
                                     'controller' => ReviewContactDetailsController::class,
                                     'action' => 'index',
                                 ],
                                 'constraints' => [
-                                    'surrender' => '[0-9]+',
                                     'action' => '[a-z]+'
                                 ],
                             ],
@@ -73,13 +72,21 @@ return [
                             'may_terminate' => true,
                             'type' => Segment::class,
                             'options' => [
-                                'route' => ':surrender/address-details[/]',
+                                'route' => 'address-details[/]',
                                 'defaults' => [
                                     'controller' => Olcs\Controller\Licence\Surrender\AddressDetailsController::class,
                                     'action' => 'index',
                                 ],
-                                'constraints' => [
-                                    'surrender' => '[0-9]+',
+                            ],
+                        ],
+                        'confirmation' => [
+                            'type' => Segment::class,
+                            'may_terminate' => true,
+                            'options' => [
+                                'route' => 'confirmation[/]',
+                                'defaults' => [
+                                    'controller' => \Olcs\Controller\Licence\Surrender\ConfirmationController::class,
+                                    'action' => 'index',
                                 ],
                             ],
                         ],
@@ -87,13 +94,10 @@ return [
                             'may_terminate' => true,
                             'type' => Segment::class,
                             'options' => [
-                                'route' => ':surrender/declaration[/]',
+                                'route' => 'declaration[/]',
                                 'defaults' => [
                                     'controller' => Olcs\Controller\Licence\Surrender\DeclarationController::class,
                                     'action' => 'index'
-                                ],
-                                'constraints' => [
-                                    'surrender' => '[0-9]+',
                                 ],
                             ]
                         ]
@@ -102,4 +106,5 @@ return [
             ],
         ],
     ],
+
 ];
