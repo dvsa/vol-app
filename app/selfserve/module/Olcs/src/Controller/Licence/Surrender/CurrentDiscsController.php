@@ -33,14 +33,20 @@ class CurrentDiscsController extends AbstractSurrenderController
         $form->setData($formData);
 
         if ($form->isValid()) {
-            $response = $this->updateSurrender($formData);
-            if ($response) {
-                return $this->redirect()->toRoute(
-                    'licence/surrender/documentation',
-                    [],
-                    [],
-                    true
-                );
+            if ($this->checkDiscCount($form->getData())) {
+                $response = $this->updateSurrender($formData);
+                if ($response) {
+                    return $this->redirect()->toRoute(
+                        'licence/surrender/documentation',
+                        [],
+                        [],
+                        true
+                    );
+                }
+            } else {
+                $messages = $form->getMessages();
+                $messages['header'] = ["disc_count_mismatch" => 'Disc count mismatch'];
+                $form->setMessages($messages);
             }
         }
 
@@ -96,5 +102,22 @@ class CurrentDiscsController extends AbstractSurrenderController
             'form' => $form,
             'backLink' => $this->getBackLink('licence/surrender/review-contact-details'),
         ];
+    }
+
+    protected function checkDiscCount(array $formData): bool
+    {
+        $expectedDiscCount = $this->getNumberOfDiscs();
+        $enteredDiscCount = $this->fetchEnteredDiscCount($formData);
+
+        return $expectedDiscCount == $enteredDiscCount;
+    }
+
+    private function fetchEnteredDiscCount($formData)
+    {
+        $possessionCount = $formData['possessionSection']['possessionInfo']['discDestroyed'] ?? 0;
+        $lostCount = $formData['lostSection']['lostInfo']['discLost'] ?? 0;
+        $stolenCount = $formData['stolenSection']['stolenInfo']['discStolen'] ?? 0;
+
+        return $possessionCount + $lostCount + $stolenCount;
     }
 }
