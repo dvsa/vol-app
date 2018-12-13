@@ -756,7 +756,7 @@ class TaskController extends AbstractController
         }
 
         $url = $this->url()->fromRoute(
-            'licence/permits/edit',
+            'licence/permits/application',
             [
                 'action' => 'edit',
                 'licence' => $ecmtPermitApplication['licence']['id'],

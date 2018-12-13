@@ -759,6 +759,9 @@ $routes = [
                 'type' => 'segment',
                 'options' => [
                     'route' => 'permits/:permitid/fees[/]',
+                    'constraints' => [
+                        'permitid' => '[0-9]+',
+                    ],
                     'defaults' => [
                         'controller' => 'IrhpPermitFeesController',
                         'action' => 'fees',
@@ -778,85 +781,29 @@ $routes = [
                     'defaults' => [
                         'controller' => 'IrhpPermitApplicationController',
                         'action' => 'index',
-                    ],
-                    'constraints' => [
-                        'id' => '[0-9]+',
-                        'action' => 'index',
                     ]
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'edit' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => ':action[/:permitid][/]',
-                            'constraints' => [
-                                'action' => 'edit',
-                                'id' => '[0-9]+',
-                            ],
-                            'defaults' => [
-                                'controller' => 'IrhpPermitApplicationController',
-                                'action' => 'index'
-                            ]
-                        ]
-                    ],
                     'add' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => ':action[/:permitid][/]',
-                            'constraints' => [
-                                'action' => 'add',
-                                'id' => '[0-9]+',
+                            'route' => 'add[/]',
+                            'defaults' => [
+                                'action' => 'add'
                             ]
                         ]
                     ],
-                    'submit' => [
+                    'application' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => ':action[/:permitid][/]',
+                            'route' => ':action/:permitid[/]',
                             'constraints' => [
-                                'action' => 'submit',
-                                'id' => '[0-9]+',
-                            ]
-                        ]
-                    ],
-                    'accept' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => ':action[/:permitid][/]',
-                            'constraints' => [
-                                'action' => 'accept',
-                                'id' => '[0-9]+',
-                            ]
-                        ]
-                    ],
-                    'decline' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => ':action[/:permitid][/]',
-                            'constraints' => [
-                                'action' => 'decline',
-                                'id' => '[0-9]+',
-                            ]
-                        ]
-                    ],
-                    'cancel' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => ':action[/:permitid][/]',
-                            'constraints' => [
-                                'action' => 'cancel',
-                                'id' => '[0-9]+',
-                            ]
-                        ]
-                    ],
-                    'withdraw' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => ':action[/:permitid][/]',
-                            'constraints' => [
-                                'action' => 'withdraw',
-                                'id' => '[0-9]+',
+                                'action' => 'edit|submit|accept|decline|cancel|withdraw',
+                                'permitid' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'action' => 'edit'
                             ]
                         ]
                     ],
@@ -866,6 +813,11 @@ $routes = [
                 'type' => 'segment',
                 'options' => [
                     'route' => 'permits/:permitid/irhp-permits[/:action][/:irhpPermitId][/]',
+                    'constraints' => [
+                        'permitid' => '[0-9]+',
+                        'action' => 'requestReplacement',
+                        'irhpPermitId' => '[0-9]+',
+                    ],
                     'defaults' => [
                         'controller' => 'IrhpPermitController',
                         'action' => 'index',
@@ -877,6 +829,9 @@ $routes = [
                 'type' => 'segment',
                 'options' => [
                     'route' => 'permits/:permitid/docs[/]',
+                    'constraints' => [
+                        'permitid' => '[0-9]+',
+                    ],
                     'defaults' => [
                         'controller' => 'IrhpDocsController',
                         'action' => 'documents',
@@ -945,9 +900,11 @@ $routes = [
                 'type' => 'segment',
                 'options' => [
                     'route' => 'permits/:permitid/processing[/]',
+                    'constraints' => [
+                        'permitid' => '[0-9]+',
+                    ],
                     'defaults' => [
                         'controller' => IrhpPermitProcessingOverviewController::class,
-                        'permitid' => '[0-9]+',
                         'action' => 'index',
                     ]
                 ],
@@ -959,6 +916,7 @@ $routes = [
                             'route' => 'notes[/:action[/:id]][/]',
                             'constraints' => [
                                 'action' => 'index|details|add|edit|delete',
+                                'id' => '[0-9]+',
                             ],
                             'defaults' => [
                                 'controller' => IrhpPermitProcessingNoteController::class,

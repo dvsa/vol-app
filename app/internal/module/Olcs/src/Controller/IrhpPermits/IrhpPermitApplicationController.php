@@ -21,6 +21,7 @@ use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateFullPermitApplication as CreateDTO;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitApplication as UpdateDTO;
 use Dvsa\Olcs\Transfer\Command\Permits\DeclineEcmtPermits as DeclineDTO;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\IrhpPermitApplicationControllerInterface;
@@ -332,8 +333,13 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
      */
     public function withdrawAction()
     {
+        $withdrawParams = [
+            'id' => $this->params()->fromRoute('permitid'),
+            'reason' => RefData::PERMIT_APP_WITHDRAW_REASON_USER,
+        ];
+
         return $this->confirmCommand(
-            new ConfirmItem($this->deleteParams),
+            new AddFormDefaultData($withdrawParams),
             WithdrawEcmtPermitApplication::class,
             'Are you sure?',
             'Withdraw Application. Are you sure?',
