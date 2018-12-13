@@ -24,7 +24,7 @@ class Sectors
         foreach ($mapData['results'] as $option) {
             $selected = false;
 
-            if ($option['id'] === $data['application']['sectors']['id']) {
+            if (isset($data['application']['sectors']['id']) && $option['id'] === $data['application']['sectors']['id']) {
                 $selected = true;
             }
 
