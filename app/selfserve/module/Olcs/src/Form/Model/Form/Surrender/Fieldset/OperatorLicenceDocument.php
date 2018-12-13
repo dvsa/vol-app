@@ -7,13 +7,16 @@ use Zend\Form\Annotation as Form;
 /**
  * @Form\Type("\Common\Form\Elements\Types\RadioVertical")
  * @Form\Name("operator-licence-document")
+ * @Form\Options({
+ *     "radio-element": "licenceDocument"
+ * })
  */
 class OperatorLicenceDocument
 {
     /**
      * @Form\Attributes({
      *     "radios_wrapper_attributes": {"class": "govuk-radios--conditional", "data-module":"radios"}
-     *     })
+     * })
      * @Form\Options({
      *     "label": "",
      *     "label_attributes": {
@@ -23,7 +26,7 @@ class OperatorLicenceDocument
      *          "possession": {
      *              "label": "licence.surrender.operator_licence.possession.label",
      *              "value": "possession",
-     *              "attributes": {"data-aria-controls":"conditional-surrender-licence-possession", "id":"surrender-licence-possession"}
+     *              "attributes": {"data-aria-controls":"conditional-surrender-licence-possession", "id":"surrender-licence-possession"},
      *          },
      *          "lost": {
      *              "label": "licence.surrender.operator_licence.lost.label",
@@ -39,7 +42,7 @@ class OperatorLicenceDocument
      * })
      * @Form\Type("\Common\Form\Elements\Types\Radio")
      */
-    public $radio = null;
+    public $licenceDocument = null;
 
     /**
      * @Form\ComposedObject("\Olcs\Form\Model\Form\Surrender\Fieldset\LicenceInPossession")

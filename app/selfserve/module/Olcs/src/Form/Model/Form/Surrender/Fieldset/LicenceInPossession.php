@@ -6,11 +6,23 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("licence-in-possession")
- * @Form\Options({"prefer_form_input_filter":true})
  */
 class LicenceInPossession
 {
     /**
+     * @Form\AllowEmpty(true)
+     * @Form\ContinueIfEmpty(true)
+     * @Form\Validator({
+     *     "name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "licenceDocument",
+     *          "context_values": {"possession"},
+     *          "inject_post_data" : "operatorLicenceDocument->licenceDocument",
+     *          "validators": {
+     *              {"name": "NotEmpty"}
+     *          }
+     *      }
+     * })
      * @Form\Options({
      *      "label": "licence.surrender.operator_licence.possession.note",
      * })

@@ -6,7 +6,6 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("licence-lost")
- * @Form\Options({"prefer_form_input_filter":true})
  */
 class LicenceLost
 {
@@ -19,11 +18,29 @@ class LicenceLost
     public $notice = "LicenceLost";
 
     /**
-     * @Form\Required(true)
+     * @Form\AllowEmpty(true)
+     * @Form\ContinueIfEmpty(true)
+     * @Form\Validator({
+     *     "name": "ValidateIf",
+     *      "options":{
+     *          "context_field": "licenceDocument",
+     *          "context_values": {"lost"},
+     *          "inject_post_data" : "operatorLicenceDocument->licenceDocument",
+     *          "validators": {
+     *              {
+     *                  "name": "StringLength",
+     *                  "options": {
+     *                      "min" : 0,
+     *                      "max" : 500,
+     *                  }
+     *              },
+     *              {"name": "NotEmpty"}
+     *          }
+     *      }
+     * })
      * @Form\Type("\Zend\Form\Element\Textarea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Filter({"name":"Zend\Filter\StringToLower"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":1}})
      * @Form\Attributes({
      *     "class" : "govuk-textarea",
      *     "rows" : "5"

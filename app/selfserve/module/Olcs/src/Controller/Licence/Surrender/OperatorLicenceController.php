@@ -28,8 +28,6 @@ class OperatorLicenceController extends AbstractSurrenderController
             'form' =>  $form,
         ];
 
-
-
         return $this->renderView($params);
     }
 }
