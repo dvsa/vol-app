@@ -227,7 +227,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 }
 
                 $config = $this->configsForAction('postConfig');
-                $params = array_merge($saveData, $this->fetchHandlePostParams());
+                $params = array_merge($this->fetchHandlePostParams(), $saveData);
 
                 if (isset($config['command'])) {
                     $command = $config['command']::create($params);
@@ -266,8 +266,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      */
     public function fetchHandlePostParams()
     {
-        $params = [];
         $config = $this->configsForAction('postConfig');
+        $params = isset($config['defaultParams']) ? $config['defaultParams'] : [];
 
         if (isset($config['params']['route'])) {
             foreach ($config['params']['route'] as $param) {

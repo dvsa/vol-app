@@ -69,7 +69,7 @@ class GdsVerifyController extends AbstractController
         }
 
         if ($licenceId) {
-            $dto->setLicenceId($licenceId);
+            $dto->setLicence($licenceId);
         }
 
         $session->getManager()->getStorage()->clear(\Olcs\Session\DigitalSignature::SESSION_NAME);
@@ -107,9 +107,9 @@ class GdsVerifyController extends AbstractController
 
         if ($licenceId) {
             return $this->redirect()->toRoute(
-                'surrender/confirmation',
+                'licence/surrender/confirmation',
                 [
-                    'licenceId' => $licenceId,
+                    'licence' => $licenceId,
                     'action' => 'index'
                 ]
             );
