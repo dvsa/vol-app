@@ -26,5 +26,5 @@ class InPossession
      *     "id":"possessionInfo"
      * })
      */
-    public $possessionInfo = null;
+    public $info = null;
 }

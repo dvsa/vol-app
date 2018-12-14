@@ -7,7 +7,7 @@ use Zend\Form\Annotation as Form;
 class StolenInfo
 {
     /**
-     * @Form\Name("discStolen")
+     * @Form\Name("number")
      * @Form\Required(true)
      * @Form\AllowEmpty(true)
      * @Form\ContinueIfEmpty(true)
@@ -32,10 +32,10 @@ class StolenInfo
      *      }
      * })
      */
-    public $numberStolen = null;
+    public $number = null;
 
     /**
-     * @Form\Name("stolenInfo")
+     * @Form\Name("details")
      * @Form\Required(true)
      * @Form\AllowEmpty(true)
      * @Form\ContinueIfEmpty(true)
@@ -66,5 +66,5 @@ class StolenInfo
      *      }
      * })
      */
-    public $stolenDetails = null;
+    public $details = null;
 }

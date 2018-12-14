@@ -25,5 +25,5 @@ class Stolen
      *     "id":"stolenInfo"
      * })
      */
-    public $stolenInfo = null;
+    public $info = null;
 }

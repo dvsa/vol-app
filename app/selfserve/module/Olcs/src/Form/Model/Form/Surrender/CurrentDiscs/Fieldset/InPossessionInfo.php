@@ -7,7 +7,7 @@ use Zend\Form\Annotation as Form;
 class InPossessionInfo
 {
     /**
-     * @Form\Name("discDestroyed")
+     * @Form\Name("number")
      * @Form\Required(true)
      * @Form\AllowEmpty(true)
      * @Form\ContinueIfEmpty(true)
@@ -32,5 +32,5 @@ class InPossessionInfo
      *      }
      * })
      */
-    public $numberDestroy = null;
+    public $number = null;
 }

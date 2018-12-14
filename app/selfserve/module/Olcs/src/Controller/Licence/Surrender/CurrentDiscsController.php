@@ -114,9 +114,9 @@ class CurrentDiscsController extends AbstractSurrenderController
 
     private function fetchEnteredDiscCount($formData)
     {
-        $possessionCount = $formData['possessionSection']['possessionInfo']['discDestroyed'] ?? 0;
-        $lostCount = $formData['lostSection']['lostInfo']['discLost'] ?? 0;
-        $stolenCount = $formData['stolenSection']['stolenInfo']['discStolen'] ?? 0;
+        $possessionCount = $formData['possessionSection']['info']['number'] ?? 0;
+        $lostCount = $formData['lostSection']['info']['number'] ?? 0;
+        $stolenCount = $formData['stolenSection']['info']['number'] ?? 0;
 
         return $possessionCount + $lostCount + $stolenCount;
     }

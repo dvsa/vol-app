@@ -26,5 +26,5 @@ class Lost
      *     "id":"lostInfo"
      * })
      */
-    public $lostInfo = null;
+    public $info = null;
 }
