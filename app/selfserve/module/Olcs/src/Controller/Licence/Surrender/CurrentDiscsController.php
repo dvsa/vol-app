@@ -13,7 +13,6 @@ class CurrentDiscsController extends AbstractSurrenderController
 {
     public function indexAction()
     {
-
         $surrender = $this->getSurrender();
 
         $form = $this->getForm(CurrentDiscs::class);
@@ -32,21 +31,25 @@ class CurrentDiscsController extends AbstractSurrenderController
         $formData = (array)$this->getRequest()->getPost();
         $form->setData($formData);
 
-        if ($form->isValid()) {
-            if ($this->checkDiscCount($form->getData())) {
-                $response = $this->updateSurrender($formData);
-                if ($response) {
-                    return $this->redirect()->toRoute(
-                        'licence/surrender/documentation',
-                        [],
-                        [],
-                        true
-                    );
-                }
-            } else {
-                $messages = $form->getMessages();
-                $messages['header'] = ["disc_count_mismatch" => 'Disc count mismatch'];
-                $form->setMessages($messages);
+
+        $validForm = $form->isValid();
+        if (!$this->checkDiscCount($form->getData())) {
+            $messages = $form->getMessages();
+            $translator = $this->getServiceLocator()->get('Helper\Translation');
+            $messages['headerSection']['header'] = ["disc_count_mismatch" => $translator->translate('licence.surrender.current_discs.disc_count_mismatch') ];
+            $form->setMessages($messages);
+            $validForm = false;
+        }
+
+        if ($validForm) {
+            $response = $this->updateSurrender($formData);
+            if ($response) {
+                return $this->redirect()->toRoute(
+                    'licence/surrender/documentation',
+                    [],
+                    [],
+                    true
+                );
             }
         }
 
@@ -112,7 +115,7 @@ class CurrentDiscsController extends AbstractSurrenderController
         return $expectedDiscCount == $enteredDiscCount;
     }
 
-    private function fetchEnteredDiscCount($formData)
+    private function fetchEnteredDiscCount($formData): int
     {
         $possessionCount = $formData['possessionSection']['info']['number'] ?? 0;
         $lostCount = $formData['lostSection']['info']['number'] ?? 0;

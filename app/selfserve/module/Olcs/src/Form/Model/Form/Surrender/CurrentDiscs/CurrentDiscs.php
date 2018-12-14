@@ -10,7 +10,6 @@ use Zend\Form\Annotation as Form;
  */
 class CurrentDiscs
 {
-
     /**
      * @Form\ComposedObject("Olcs\Form\Model\Form\Surrender\CurrentDiscs\Fieldset\Header")
      */
