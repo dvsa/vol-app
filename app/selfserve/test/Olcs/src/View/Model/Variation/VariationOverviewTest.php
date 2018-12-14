@@ -14,11 +14,11 @@ use Olcs\View\Model\Variation\VariationOverview;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class VariationOverviewTest extends \PHPUnit_Framework_TestCase
+class VariationOverviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test constructor with set variables
-     * 
+     *
      * @group variationOverview
      */
     public function testSetVariables()
