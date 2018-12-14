@@ -1,22 +1,21 @@
 <?php
+
 namespace Permits\Form\Model\Fieldset;
 
 use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("CancelApplication")
+ * @Form\Name("ChangeLicence")
  */
 class ChangeLicence
 {
-
     /**
-     * @Form\Name("licenceId")
+     * @Form\Name("licence")
      * @Form\Required(true)
      * @Form\Type("Hidden")
      */
-    public $licenceId = null;
-
+    public $licence = null;
 
     /**
      * @Form\Name("ConfirmChange")
@@ -35,6 +34,5 @@ class ChangeLicence
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
      */
-
     public $confirmChange = null;
 }

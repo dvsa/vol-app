@@ -43,7 +43,7 @@ class EmissionsController extends AbstractSelfserveController implements ToggleA
 
     protected $postConfig = [
         'default' => [
-            'retrieveData' => false,
+            'retrieveData' => true,
             'checkConditionalDisplay' => false,
             'command' => UpdateEcmtEmissions::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
