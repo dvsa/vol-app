@@ -39,16 +39,19 @@ class LicencesAvailable
 
             $valueOptions[] = [
                 'value' => $option['id'],
-                'label' => $option['licNo'] . '@' . $option['licenceType']['description'] . ' (' . $option['trafficArea'] . ')',
+                'label' => $option['licNo'],
+                'label_attributes' => 'govuk-label govuk-radios__label govuk-label--s',
+                'hint' => $option['licenceType']['description'] . ' (' . $option['trafficArea'] . ')',
                 'selected' => $selected
             ];
         }
 
         if (count($valueOptions) === 1) {
             $valueOptions[0]['label_attributes'] = ['class' => 'visually-hidden'];
+            $valueOptions[0]['hint_attributes'] = ['class' => 'visually-hidden'];
             $valueOptions[0]['selected'] = true;
             $data['question'] = 'permits.page.licence.question.one.licence';
-            $data['questionArgs'] = [str_replace('@', ' ', $valueOptions[0]['label'])];
+            $data['questionArgs'] = [str_replace('@', ' ', $valueOptions[0]['label'] . ' ' . $valueOptions[0]['hint'])];
         }
 
         $form->get('fields')->get('licence')->setValueOptions($valueOptions);
