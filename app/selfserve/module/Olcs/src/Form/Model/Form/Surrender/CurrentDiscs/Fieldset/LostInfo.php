@@ -27,7 +27,24 @@ class LostInfo
      *          "context_values": {"Y"},
      *          "inject_post_data": "lostSection->lost",
      *          "validators": {
-     *              {"name": "Digits"}
+     *              {
+     *                  "name": "Digits",
+     *                  "options": {
+     *                      "break_chain_on_failure": true,
+     *                      "messages": {
+     *                          "digitsStringEmpty": "licence.surrender.current_discs.lost.number.emptyMessage"
+     *                      }
+     *                  }
+     *              },
+     *              {
+     *                  "name": "GreaterThan",
+     *                  "options": {
+     *                      "min": 0,
+     *                      "messages": {
+     *                          "notGreaterThan": "licence.surrender.current_discs.number.greaterThanMessage"
+     *                      }
+     *                  }
+     *              }
      *          }
      *      }
      * })
@@ -59,7 +76,11 @@ class LostInfo
      *                  "name": "Zend\Validator\StringLength",
      *                  "options": {
      *                      "min": 1,
-     *                      "max": 500
+     *                      "max": 500,
+     *                      "messages" : {
+     *                          "stringLengthTooShort": "licence.surrender.current_discs.lost.details.stringLengthTooShort",
+     *                          "stringLengthTooLong": "licence.surrender.current_discs.details.stringLengthTooLong",
+     *                      }
      *                  }
      *              }
      *          }

@@ -27,7 +27,24 @@ class InPossessionInfo
      *          "context_values": {"Y"},
      *          "inject_post_data": "possessionSection->inPossession",
      *          "validators": {
-     *              {"name": "Digits"}
+     *              {
+     *                  "name": "Digits",
+     *                  "options": {
+     *                      "break_chain_on_failure": true,
+     *                      "messages": {
+     *                          "digitsStringEmpty": "licence.surrender.current_discs.destroy.number.emptyMessage"
+     *                      }
+     *                  }
+     *              },
+     *              {
+     *                  "name": "GreaterThan",
+     *                  "options": {
+     *                      "min": 0,
+     *                      "messages": {
+     *                          "notGreaterThan": "licence.surrender.current_discs.number.greaterThanMessage"
+     *                      }
+     *                  }
+     *              }
      *          }
      *      }
      * })

@@ -27,7 +27,24 @@ class StolenInfo
      *          "context_values": {"Y"},
      *          "inject_post_data": "stolenSection->stolen",
      *          "validators": {
-     *              {"name": "Digits"}
+     *              {
+     *                  "name": "Digits",
+     *                  "options": {
+     *                      "break_chain_on_failure": true,
+     *                      "messages": {
+     *                          "digitsStringEmpty": "licence.surrender.current_discs.stolen.number.emptyMessage"
+     *                      }
+     *                  }
+     *              },
+     *              {
+     *                  "name": "GreaterThan",
+     *                  "options": {
+     *                      "min": 0,
+     *                      "messages": {
+     *                          "notGreaterThan": "licence.surrender.current_discs.number.greaterThanMessage"
+     *                      }
+     *                  }
+     *              }
      *          }
      *      }
      * })
@@ -59,7 +76,11 @@ class StolenInfo
      *                  "name": "Zend\Validator\StringLength",
      *                  "options": {
      *                      "min": 1,
-     *                      "max": 500
+     *                      "max": 500,
+     *                      "messages" : {
+     *                          "stringLengthTooShort": "licence.surrender.current_discs.stolen.details.stringLengthTooShort",
+     *                          "stringLengthTooLong": "licence.surrender.current_discs.details.stringLengthTooLong",
+     *                      }
      *                  }
      *              }
      *          }
