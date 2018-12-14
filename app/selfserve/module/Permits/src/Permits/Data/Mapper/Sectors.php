@@ -30,7 +30,9 @@ class Sectors
 
             $valueOptions[] = [
                 'value' => $option['id'],
-                'label' => $option['name'] . '@' . $option['description'],
+                'label' => $option['name'],
+                'hint' => $option['description'],
+                'label_attributes' => 'govuk-label govuk-radios__label govuk-label--s',
                 'selected' => $selected
             ];
         }

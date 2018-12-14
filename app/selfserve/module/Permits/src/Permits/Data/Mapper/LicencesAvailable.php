@@ -22,7 +22,7 @@ class LicencesAvailable
         $isNew = !isset($data['application']);
         $valueOptions = [];
 
-        foreach ($mapData['eligibleEcmtLicences']['result'] as $option) {
+        foreach ($mapData['eligibleEcmtLicences']['result'] as $key => $option) {
             $selected = false;
 
             if (!$option['canMakeEcmtApplication']) {
@@ -39,7 +39,9 @@ class LicencesAvailable
 
             $valueOptions[] = [
                 'value' => $option['id'],
-                'label' => $option['licNo'] . '@' . $option['licenceType']['description'] . ' (' . $option['trafficArea'] . ')',
+                'label' => $option['licNo'],
+                'label_attributes' => 'govuk-label govuk-radios__label govuk-label--s',
+                'hint' => $option['licenceType']['description'] . ' (' . $option['trafficArea'] . ')',
                 'selected' => $selected
             ];
         }

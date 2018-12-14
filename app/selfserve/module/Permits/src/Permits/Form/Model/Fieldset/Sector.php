@@ -12,7 +12,9 @@ class Sector
     /**
      * @Form\Name("sector")
      * @Form\Required(true)
-     * @Form\Attributes({"class": "govuk-radios__input"})
+     * @Form\Attributes({
+     *     "radios_wrapper_attributes": {"data-module":"radios"}
+     * })
      * @Form\Options({
      *      "error-message":"error.messages.licence",
      *      "label_attributes":{"class": "govuk-label govuk-radios__label govuk-label--s"}
