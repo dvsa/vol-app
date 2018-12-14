@@ -13,8 +13,8 @@ use Zend\View\Model\ViewModel;
 class EcmtSection extends AbstractHelper
 {
     const ROUTE_APPLICATION_OVERVIEW = 'permits/application-overview';
-    const ROUTE_ECMT_LICENCE = 'permits/ecmt-licence';
-    const ROUTE_ECMT_ADD_LICENCE = 'permits/ecmt-add-licence';
+    const ROUTE_ADD_LICENCE = 'permits/add-licence';
+    const ROUTE_LICENCE = 'permits/licence';
     const ROUTE_ECMT_EURO6 = 'permits/ecmt-euro6';
     const ROUTE_ECMT_CABOTAGE = 'permits/ecmt-cabotage';
     const ROUTE_ECMT_COUNTRIES = 'permits/ecmt-countries';
@@ -27,7 +27,7 @@ class EcmtSection extends AbstractHelper
     const ROUTE_ECMT_FEE = 'permits/ecmt-fee';
     const ROUTE_ECMT_SUBMITTED = 'permits/ecmt-submitted';
     const ROUTE_ECMT_FEE_WAIVED_SUBMITTED = 'permits/ecmt-fee-waived-submitted';
-    const ROUTE_ECMT_CONFIRM_CHANGE = 'permits/ecmt-change-licence';
+    const ROUTE_CONFIRM_CHANGE = 'permits/change-licence';
     const ROUTE_ECMT_GUIDANCE = 'permits/ecmt-guidance';
     const ROUTE_ECMT_UNDER_CONSIDERATION = 'permits/ecmt-under-consideration';
     const ROUTE_ECMT_AWAITING_FEE = 'permits/ecmt-awaiting-fee';
@@ -37,6 +37,10 @@ class EcmtSection extends AbstractHelper
 
     const ROUTE_ECMT_VALID_PERMITS = 'permits/ecmt-valid-permits';
 
+    // No available windows
+    const ROUTE_WINDOW_CLOSED = 'window-closed';
+    // No available licences remaining
+    const ROUTE_NO_AVAILABLE_LICENCES = 'no-available-licences';
 
     //cancellation
     const ROUTE_ECMT_CANCEL_APPLICATION = 'permits/ecmt-cancel-application';
@@ -54,7 +58,7 @@ class EcmtSection extends AbstractHelper
      * list of overview routes and the field denoting completion status
      */
     const ROUTE_ORDER = [
-        self::ROUTE_ECMT_LICENCE => 'licence',
+        self::ROUTE_LICENCE => 'licence',
         self::ROUTE_ECMT_EURO6 => 'emissions',
         self::ROUTE_ECMT_CABOTAGE => 'cabotage',
         self::ROUTE_ECMT_COUNTRIES => 'countrys',

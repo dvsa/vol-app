@@ -14,15 +14,13 @@ class LicenceSelectionFormTest extends AbstractFormValidationTestCase
     /**
      * @var string The class name of the form being tested
      */
-    protected $formName = \Permits\Form\Model\Form\EcmtLicenceForm::class;
+    protected $formName = \Permits\Form\Model\Form\LicenceForm::class;
 
     public function testLicence()
     {
-        $element = ['Fields', 'EcmtLicence'];
+        $element = ['fields', 'licence'];
 
-        $this->assertFormElementRequired($element, true);
-        $this->assertFormElementAllowEmpty($element, false);
-        $this->assertFormElementType($element, "Zend\Form\Element\Radio");
+        $this->assertFormElementDynamicRadio($element, true);
     }
 
     public function testSubmit()

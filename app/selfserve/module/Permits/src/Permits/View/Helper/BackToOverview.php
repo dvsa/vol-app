@@ -22,7 +22,7 @@ class BackToOverview extends AbstractHelper
      *
      * @return string
      */
-    public function __invoke(?string $label = 'common.link.back.label'): string
+    public function __invoke(?string $label = 'common.link.back.label', bool $withinApplication = true): string
     {
         /**
          * @todo temporary to stop "return to overview" links losing their styling - can be removed following olcs-21034
@@ -30,7 +30,11 @@ class BackToOverview extends AbstractHelper
         $linkClass = (self::BACK_LINK_LABEL === $label ? 'govuk-back-link' : 'govuk-link');
 
         $label = $this->view->escapeHtml($this->view->translate($label));
-        $url = $this->view->url('permits/application-overview', [], [], true);
+        if ($withinApplication) {
+            $url = $this->view->url('permits/application-overview', [], [], true);
+        } else {
+            $url = $this->view->url('permits', [], [], true);
+        }
         return sprintf($this->linkTemplate, $url, $linkClass, $label);
     }
 }

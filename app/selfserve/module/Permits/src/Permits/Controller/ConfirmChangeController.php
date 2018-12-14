@@ -3,6 +3,7 @@ namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCabotage;
+use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtLicence;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
@@ -12,14 +13,14 @@ use Permits\Controller\Config\Params\ParamsConfig;
 
 use Permits\View\Helper\EcmtSection;
 
-class CabotageController extends AbstractSelfserveController implements ToggleAwareInterface
+class ConfirmChangeController extends AbstractSelfserveController implements ToggleAwareInterface
 {
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
     ];
 
     protected $dataSourceConfig = [
-        'default' => DataSourceConfig::PERMIT_APP,
+        'default' => DataSourceConfig::PERMIT_APP_LICENCE,
     ];
 
     protected $conditionalDisplayConfig = [
@@ -27,26 +28,25 @@ class CabotageController extends AbstractSelfserveController implements ToggleAw
     ];
 
     protected $formConfig = [
-        'default' => FormConfig::FORM_CABOTAGE,
+        'default' => FormConfig::FORM_CONFIRM_CHANGE_LICENCE,
     ];
 
     protected $templateVarsConfig = [
         'question' => [
-            'browserTitle' => 'permits.page.cabotage.browser.title',
-            'question' => 'permits.page.cabotage.question',
-            'guidance' => [
-                'permits.page.cabotage.guidance',
-            ],
+            'browserTitle' => 'permits.page.change-licence.browser.title',
+            'question' => 'permits.page.change-licence.question',
+            'bulletList' => [
+                'title' => 'permits.page.change-licence.bullet.list.title',
+                'list' => 'en_GB/bullets/markup-ecmt-licence-change'
+            ]
         ]
     ];
 
     protected $postConfig = [
         'default' => [
-            'retrieveData' => true,
-            'checkConditionalDisplay' => false,
-            'command' => UpdateEcmtCabotage::class,
+            'command' => UpdateEcmtLicence::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
-            'step' => EcmtSection::ROUTE_ECMT_COUNTRIES,
+            'step' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
 }

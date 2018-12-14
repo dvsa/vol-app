@@ -25,7 +25,7 @@ class CheckAnswers
         ];
 
         $routes = [
-            EcmtSection::ROUTE_ECMT_LICENCE,
+            EcmtSection::ROUTE_LICENCE,
             EcmtSection::ROUTE_ECMT_EURO6,
             EcmtSection::ROUTE_ECMT_CABOTAGE,
             EcmtSection::ROUTE_ECMT_COUNTRIES,
