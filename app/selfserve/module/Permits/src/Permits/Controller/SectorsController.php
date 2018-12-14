@@ -2,7 +2,7 @@
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
-use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCheckAnswers;
+use Dvsa\Olcs\Transfer\Command\Permits\UpdateSector;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
@@ -12,32 +12,28 @@ use Permits\Controller\Config\Params\ParamsConfig;
 
 use Permits\View\Helper\EcmtSection;
 
-class CheckAnswersController extends AbstractSelfserveController implements ToggleAwareInterface
+class SectorsController extends AbstractSelfserveController implements ToggleAwareInterface
 {
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
     ];
 
     protected $dataSourceConfig = [
-        'default' => DataSourceConfig::PERMIT_APP_CHECK_ANSWERS,
+        'default' => DataSourceConfig::PERMIT_APP_SECTORS
     ];
 
     protected $conditionalDisplayConfig = [
-        'default' => ConditionalDisplayConfig::PERMIT_APP_CAN_CHECK_ANSWERS,
+        'default' => ConditionalDisplayConfig::PERMIT_APP_NOT_SUBMITTED,
     ];
 
     protected $formConfig = [
-        'default' => FormConfig::FORM_CHECK_ANSWERS,
-    ];
-
-    protected $templateConfig = [
-        'generic' => 'permits/check-answers'
+        'default' => FormConfig::FORM_SECTORS,
     ];
 
     protected $templateVarsConfig = [
-        'generic' => [
-            'browserTitle' => 'permits.page.check-answers.browser.title',
-            'title' => 'permits.page.check-answers.title'
+        'question' => [
+            'browserTitle' => 'permits.page.sectors.browser.title',
+            'question' => 'permits.page.sectors.question',
         ]
     ];
 
@@ -45,9 +41,9 @@ class CheckAnswersController extends AbstractSelfserveController implements Togg
         'default' => [
             'retrieveData' => true,
             'checkConditionalDisplay' => false,
-            'command' => UpdateEcmtCheckAnswers::class,
+            'command' => UpdateSector::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
-            'step' => EcmtSection::ROUTE_ECMT_DECLARATION,
+            'step' => EcmtSection::ROUTE_ECMT_CHECK_ANSWERS,
         ],
     ];
 }

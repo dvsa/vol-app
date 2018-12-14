@@ -21,7 +21,7 @@ class CheckAnswers
             'permits.page.permits.required.question',
             'permits.page.number-of-trips.question',
             'permits.page.international.journey.question',
-            'permits.page.sector.question'
+            'permits.page.sectors.question'
         ];
 
         $routes = [

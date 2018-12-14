@@ -19,6 +19,10 @@ use Permits\Data\Mapper\ValidEcmtPermitConstrainedCountries as EcmtConstrainedCo
  */
 class DataSourceConfig
 {
+    const PERMIT_APP = [
+        PermitAppDataSource::class => [],
+    ];
+
     const PERMIT_APP_ADD_LICENCE = [
         OpenWindows::class => [],
         LastOpenWindow::class => [],
@@ -34,8 +38,15 @@ class DataSourceConfig
         ]
     ];
 
-    const PERMIT_APP = [
+    const PERMIT_APP_SECTORS = [
         PermitAppDataSource::class => [],
+        Sectors::class => []
+    ];
+
+    const PERMIT_APP_CHECK_ANSWERS = [
+        PermitAppDataSource::class => [
+            'mapper' => CheckAnswersMapper::class
+        ],
     ];
 
     const PERMIT_APP_FOR_ACCEPT_OR_DECLINE = [
@@ -67,6 +78,7 @@ class DataSourceConfig
             ]
         ],
     ];
+
     const PERMIT_ECMT_UNPAID = [
         UnpaidEcmtPermitsDataSource::class => [
             'mapper' => ValidEcmtPermitsMapper::class
@@ -75,11 +87,6 @@ class DataSourceConfig
             'append' => [
                 ValidEcmtPermitsDataSource::DATA_KEY => EcmtConstrainedCountriesMapper::class
             ]
-        ],
-    ];
-    const PERMIT_APP_CHECK_ANSWERS = [
-        PermitAppDataSource::class => [
-            'mapper' => CheckAnswersMapper::class
         ],
     ];
 }
