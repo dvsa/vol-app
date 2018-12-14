@@ -3,13 +3,14 @@
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * LicenceStatusMarkerTest
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class LicenceStatusMarkerTest extends \PHPUnit_Framework_TestCase
+class LicenceStatusMarkerTest extends TestCase
 {
     /**
      *

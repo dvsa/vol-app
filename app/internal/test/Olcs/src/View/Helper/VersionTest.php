@@ -3,14 +3,13 @@
 namespace OlcsTest\View\Helper;
 
 use Olcs\View\Helper\Version;
-use PHPUnit_Framework_TestCase;
 
 /**
  * Class VersionTest
  * @package OlcsTest\View\Helper
  * @covers \OLCS\View\Helper\Version
  */
-class VersionTest extends PHPUnit_Framework_TestCase
+class VersionTest extends \PHPUnit\Framework\TestCase
 {
     public function testVersionViewHelper()
     {

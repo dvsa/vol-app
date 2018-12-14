@@ -84,7 +84,7 @@ class BusRegMarkerTest extends TestCase
         $event = new RouteParam();
         $event->setValue($busRegId);
 
-        $this->setExpectedException(\RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
 
         $this->sut->onBusRegMarker($event);
     }

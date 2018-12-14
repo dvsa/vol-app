@@ -87,7 +87,7 @@ class CaseMarkerTest extends TestCase
         $event = new RouteParam();
         $event->setValue(128);
 
-        $this->setExpectedException(\RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
 
         $this->sut->onCase($event);
     }

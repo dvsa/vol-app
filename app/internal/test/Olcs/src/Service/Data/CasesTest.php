@@ -44,7 +44,7 @@ class CasesTest extends AbstractDataServiceTestCase
      */
     public function testFetchListDataWithException()
     {
-        $this->setExpectedException(ResourceNotFoundException::class);
+        $this->expectException(ResourceNotFoundException::class);
 
         $mockTransferAnnotationBuilder = m::mock()
             ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();

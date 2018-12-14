@@ -4,12 +4,13 @@ namespace OlcsTest\Service\Data;
 use Olcs\Service\Data\Submission;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * Class SubmissionTest
  * @package OlcsTest\Service\Data
  */
-class SubmissionTest extends \PHPUnit_Framework_TestCase
+class SubmissionTest extends TestCase
 {
     protected $sut;
 

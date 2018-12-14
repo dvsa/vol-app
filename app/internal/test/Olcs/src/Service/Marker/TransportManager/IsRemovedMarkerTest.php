@@ -3,13 +3,14 @@
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * IsRemovedMarkerTest
  *
  * @author Josh Curtis <josh@josh-curtis.co.uk>
  */
-class IsRemovedMarkerTest extends \PHPUnit_Framework_TestCase
+class IsRemovedMarkerTest extends TestCase
 {
     /**
      *

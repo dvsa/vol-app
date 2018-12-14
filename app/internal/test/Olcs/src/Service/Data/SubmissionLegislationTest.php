@@ -8,7 +8,7 @@ use Olcs\Service\Data\SubmissionLegislation;
  * Class SubmissionLegislationTest
  * @package OlcsTest\Service\Data
  */
-class SubmissionLegislationTest extends \PHPUnit_Framework_TestCase
+class SubmissionLegislationTest extends \PHPUnit\Framework\TestCase
 {
     private $reasons = [
         ['id' => 12, 'description' => 'Description 1', 'isProposeToRevoke' => 'Y'],

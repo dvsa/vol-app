@@ -19,7 +19,7 @@ use Zend\Mvc\MvcEvent;
  * @package OlcsTest\Controller\Application\Processing
  * @covers Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController
  */
-class ApplicationProcessingOverviewControllerTest extends \PHPUnit_Framework_TestCase
+class ApplicationProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCase
 {
     public function testIndexActionRedirects()
     {

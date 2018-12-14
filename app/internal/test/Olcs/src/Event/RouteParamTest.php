@@ -2,14 +2,13 @@
 
 namespace OlcsTest\Event;
 
-use PHPUnit_Framework_TestCase as TestCase;
 use Olcs\Event\RouteParam;
 
 /**
  * Class RouteParamTest
  * @package OlcsTest\Event
  */
-class RouteParamTest extends TestCase
+class RouteParamTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetSetValue()
     {

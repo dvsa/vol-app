@@ -2,15 +2,15 @@
 
 namespace OlcsTest\View\Helper;
 
-use PHPUnit_Framework_TestCase;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * Class MarkersFactoryTest
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class MarkersFactoryTest extends PHPUnit_Framework_TestCase
+class MarkersFactoryTest extends TestCase
 {
     public function testCreateService()
     {

@@ -5,12 +5,13 @@ namespace OlcsTest\View\Helper;
 
 use Olcs\View\Helper\SubmissionSectionDetails;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * Class SubmissionSectionDetails
  * @package OlcsTest\View\Helper
  */
-class SubmissionSectionDetailsTest extends \PHPUnit_Framework_TestCase
+class SubmissionSectionDetailsTest extends TestCase
 {
     /**
      * @dataProvider provideInvoke

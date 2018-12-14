@@ -34,6 +34,12 @@ class RefundFeeTest extends AbstractFormValidationTestCase
         $this->assertFormElementIsRequired(['details', 'customerName'], true);
     }
 
+    /**
+     * This doesn't perform any assertions as per the documentation for
+     * assertFormElementPostcodeSearch() in AbstractFormValidationTestCase
+     *
+     * @doesNotPerformAssertions
+     */
     public function testSearchPostcode()
     {
         $this->assertFormElementPostcodeSearch(['address', 'searchPostcode']);

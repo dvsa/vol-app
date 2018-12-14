@@ -8,7 +8,7 @@ use Olcs\Helper\LicenceProcessingHelper;
  * Class LicenceProcessingHelper Test
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class LicenceProcessingHelperTest extends \PHPUnit_Framework_TestCase
+class LicenceProcessingHelperTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

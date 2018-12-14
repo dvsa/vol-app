@@ -3,13 +3,14 @@
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * BusRegShortNoticeRefusedTest
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class BusRegShortNoticeRefusedTest extends \PHPUnit_Framework_TestCase
+class BusRegShortNoticeRefusedTest extends TestCase
 {
     /**
      *

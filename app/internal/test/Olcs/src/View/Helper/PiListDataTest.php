@@ -9,7 +9,7 @@ use Olcs\View\Helper\PiListData;
  * Class PiListDataTest
  * @package OlcsTest\View\Helper
  */
-class PiListDataTest extends \PHPUnit_Framework_TestCase
+class PiListDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideInvoke

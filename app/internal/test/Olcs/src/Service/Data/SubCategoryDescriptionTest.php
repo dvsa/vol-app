@@ -59,7 +59,7 @@ class SubCategoryDescriptionTest extends AbstractDataServiceTestCase
 
     public function testFetchListDataWithException()
     {
-        $this->setExpectedException(UnexpectedResponseException::class);
+        $this->expectException(UnexpectedResponseException::class);
         $subCategory = 'subCategory';
         $mockTransferAnnotationBuilder = m::mock()
             ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();

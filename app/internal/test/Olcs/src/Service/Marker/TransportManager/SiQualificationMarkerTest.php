@@ -3,13 +3,14 @@
 namespace OlcsTest\Service\Marker\TransportManager;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * SiQualificationMarkerTest
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class SiQualificationMarkerTest extends \PHPUnit_Framework_TestCase
+class SiQualificationMarkerTest extends TestCase
 {
     /**
      *

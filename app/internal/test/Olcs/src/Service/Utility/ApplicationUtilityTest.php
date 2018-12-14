@@ -15,7 +15,7 @@ use Common\Service\Entity\ApplicationEntityService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationUtilityTest extends \PHPUnit_Framework_TestCase
+class ApplicationUtilityTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 

@@ -3,13 +3,14 @@
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\SubmissionActionTypes;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 
 /**
  * Class SubmissionActionTypes Test
  * @package CommonTest\Service
  */
-class SubmissionActionTypesTest extends \PHPUnit_Framework_TestCase
+class SubmissionActionTypesTest extends TestCase
 {
     protected $sut;
 
@@ -95,7 +96,6 @@ class SubmissionActionTypesTest extends \PHPUnit_Framework_TestCase
         $result = $sut->fetchListOptions($context, $useGroups);
 
         $this->assertArrayHasKey('option_id1', $result['sub_st_rec_group1']['options']);
-
     }
 
     public function testFetchListOptionsNoData()

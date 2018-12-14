@@ -29,6 +29,12 @@ class IrfoDetailsTest extends AbstractFormValidationTestCase
         $this->assertFormElementDynamicSelect($element, false);
     }
 
+    /**
+     * This doesn't perform any assertions as per the documentation for
+     * assertFormElementPostcodeSearch() in AbstractFormValidationTestCase
+     *
+     * @doesNotPerformAssertions
+     */
     public function testSearchPostcode()
     {
         $this->assertFormElementPostcodeSearch(['address', 'searchPostcode']);

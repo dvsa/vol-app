@@ -51,7 +51,7 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
         $results = ['results' => 'results'];
 
         $params = $this->context;
-        $dto = Qry::create( $this->context);
+        $dto = Qry::create($this->context);
         $mockTransferAnnotationBuilder = m::mock()
             ->shouldReceive('createQuery')->once()->andReturnUsing(
                 function ($dto) use ($params) {
@@ -151,7 +151,7 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
      */
     public function testFetchListDataWithException()
     {
-        $this->setExpectedException(UnexpectedResponseException::class);
+        $this->expectException(UnexpectedResponseException::class);
         $mockTransferAnnotationBuilder = m::mock()
             ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
 

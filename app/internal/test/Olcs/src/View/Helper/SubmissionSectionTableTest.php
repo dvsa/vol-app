@@ -6,12 +6,13 @@ namespace OlcsTest\View\Helper;
 use Olcs\View\Helper\SubmissionSectionTable;
 use Olcs\View\Helper\SubmissionSectionTableFactory;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * Class SubmissionSectionDetails
  * @package OlcsTest\View\Helper
  */
-class SubmissionSectionTableTest extends \PHPUnit_Framework_TestCase
+class SubmissionSectionTableTest extends TestCase
 {
     /**
      * @dataProvider provideInvoke
@@ -77,7 +78,6 @@ class SubmissionSectionTableTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Olcs\View\Helper\SubmissionSectionTable', $service);
         $this->assertSame($mockTableBuilder, $service->getTableBuilder());
-
     }
 
     public function provideInvoke()
