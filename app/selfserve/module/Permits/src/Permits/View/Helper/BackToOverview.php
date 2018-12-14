@@ -20,9 +20,10 @@ class BackToOverview extends AbstractHelper
      *
      * @param string|null $label Parameters
      *
+     * @param string|null $uri
      * @return string
      */
-    public function __invoke(?string $label = 'common.link.back.label', ?string $uri = 'permits/application-overview'): string
+    public function __invoke(?string $label = 'common.link.back.label', ?string $uri = EcmtSection::ROUTE_APPLICATION_OVERVIEW): string
     {
         /**
          * @todo temporary to stop "return to overview" links losing their styling - can be removed following olcs-21034

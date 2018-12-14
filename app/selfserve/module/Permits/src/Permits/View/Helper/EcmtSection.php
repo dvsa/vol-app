@@ -26,6 +26,7 @@ class EcmtSection extends AbstractHelper
     const ROUTE_ECMT_DECLARATION = 'permits/ecmt-declaration';
     const ROUTE_ECMT_FEE = 'permits/ecmt-fee';
     const ROUTE_ECMT_SUBMITTED = 'permits/application-submitted';
+    const ROUTE_PRINT_RECEIPT = 'permits/print-receipt';
     const ROUTE_ECMT_FEE_WAIVED_SUBMITTED = 'permits/fee-waived-application-submitted';
     const ROUTE_CONFIRM_CHANGE = 'permits/change-licence';
     const ROUTE_ECMT_GUIDANCE = 'permits/ecmt-guidance';

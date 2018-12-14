@@ -6,6 +6,7 @@ use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
+use Permits\View\Helper\EcmtSection;
 
 class SubmittedController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -54,7 +55,7 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
 
     public function genericAction()
     {
-        $this->data['receiptUrl'] = $this->url()->fromRoute('permits/ecmt-print-receipt', ['id' => $this->params()->fromRoute('id'), 'reference' => $this->params()->fromQuery('receipt_reference')]);
+        $this->data['receiptUrl'] = $this->url()->fromRoute(EcmtSection::ROUTE_PRINT_RECEIPT, ['id' => $this->params()->fromRoute('id'), 'reference' => $this->params()->fromQuery('receipt_reference')]);
 
         return parent::genericAction();
     }
@@ -75,7 +76,7 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
         $view->setVariable('partialName', $partialName);
         $view->setVariable('titleName', 'permits.application.fee.submitted.title');
         $view->setVariable('mainName', $mainName);
-        $view->setVariable('receiptUrl', $this->url()->fromRoute('permits/ecmt-print-receipt', ['id' => $ecmtApplicationId, 'reference' => $this->params()->fromQuery('receipt_reference')]));
+        $view->setVariable('receiptUrl', $this->url()->fromRoute(EcmtSection::ROUTE_PRINT_RECEIPT, ['id' => $ecmtApplicationId, 'reference' => $this->params()->fromQuery('receipt_reference')]));
 
         return $view;
     }
