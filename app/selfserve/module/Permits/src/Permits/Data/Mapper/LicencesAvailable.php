@@ -22,7 +22,7 @@ class LicencesAvailable
         $isNew = !isset($data['application']);
         $valueOptions = [];
 
-        foreach ($mapData['eligibleEcmtLicences']['result'] as $key => $option) {
+        foreach ($mapData['eligibleEcmtLicences']['result'] as $option) {
             $selected = false;
 
             if (!$option['canMakeEcmtApplication']) {
@@ -48,9 +48,10 @@ class LicencesAvailable
 
         if (count($valueOptions) === 1) {
             $valueOptions[0]['label_attributes'] = ['class' => 'visually-hidden'];
+            $valueOptions[0]['hint_attributes'] = ['class' => 'visually-hidden'];
             $valueOptions[0]['selected'] = true;
             $data['question'] = 'permits.page.licence.question.one.licence';
-            $data['questionArgs'] = [str_replace('@', ' ', $valueOptions[0]['label'])];
+            $data['questionArgs'] = [str_replace('@', ' ', $valueOptions[0]['label'] . ' ' . $valueOptions[0]['hint'])];
         }
 
         $form->get('fields')->get('licence')->setValueOptions($valueOptions);
