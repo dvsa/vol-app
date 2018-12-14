@@ -5,19 +5,16 @@ namespace Olcs\Form\Model\Form\Surrender\CurrentDiscs;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Attributes({"method":"post", "class":"form"})
+ * @Form\Attributes({"method":"post", "class":"form", "id":"surrender-current-discs"})
  * @Form\Type("\Common\Form\Form")
  */
 class CurrentDiscs
 {
+
     /**
-     * @Form\Options({
-     *     "hint":"Select all options that are relevant to your discs."
-     * })
-     * @Form\Attributes({"value": "markup-licence-surrender-current-disc-form-header"})
-     * @Form\Type("Common\Form\Elements\Types\HtmlTranslated")
+     * @Form\ComposedObject("Olcs\Form\Model\Form\Surrender\CurrentDiscs\Fieldset\Header")
      */
-    public $header = null;
+    public $headerSection = null;
 
     /**
      * @Form\ComposedObject("Olcs\Form\Model\Form\Surrender\CurrentDiscs\Fieldset\InPossession")
