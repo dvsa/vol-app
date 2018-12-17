@@ -360,7 +360,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             if (isset($config['mapper']['type'])) {
                 $this->data = call_user_func_array([$mapperClass, $config['mapper']['type']], [$this->data, $form, $this->getServiceLocator()->get('Helper\Translation')]);
             } else {
-                $formData = $mapperClass::mapFromResult($this->data[$config['dataSource']]);
+                $data = array_key_exists($config['dataSource'], $config) ? $this->data[$config['dataSource']] : $this->data;
+                $formData = $mapperClass::mapFromResult($data);
             }
 
             $form->setData($formData);
