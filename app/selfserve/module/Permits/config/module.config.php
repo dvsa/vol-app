@@ -2,9 +2,12 @@
 namespace Permits;
 
 use Permits\Controller\CancelApplicationController;
+use Permits\Controller\ConfirmChangeController;
 use Permits\Controller\EmissionsController;
 use Permits\Controller\CabotageController;
 use Permits\Controller\FeePartSuccessfulController;
+use Permits\Controller\LicenceController;
+use Permits\Controller\SectorsController;
 use Permits\Controller\ValidPermitsController;
 use Permits\Controller\WithdrawApplicationController;
 use Permits\Controller\CheckAnswersController;
@@ -19,8 +22,11 @@ return [
   'controllers' => [
     'invokables' => [
         PermitsController::class => PermitsController::class,
+        ConfirmChangeController::class => ConfirmChangeController::class,
+        LicenceController::class => LicenceController::class,
         EmissionsController::class => EmissionsController::class,
         CabotageController::class => CabotageController::class,
+        SectorsController::class => SectorsController::class,
         CheckAnswersController::class => CheckAnswersController::class,
         DeclarationController::class => DeclarationController::class,
         OverviewController::class => OverviewController::class,
@@ -369,13 +375,13 @@ return [
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-licence' => [
+              'licence' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '[/:id]/ecmt-licence[/]',
+                      'route'    => '[/:id]/licence[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'ecmtLicence',
+                          'controller'    => LicenceController::class,
+                          'action'        => 'question',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -383,27 +389,24 @@ return [
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-add-licence' => [
+              'add-licence' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/ecmt-add-licence[/]',
+                      'route'    => '/licence/add[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
+                          'controller'    => LicenceController::class,
                           'action'        => 'add',
                       ],
-                      'constraints' => [
-                          'id' => '[0-9]+',
-                      ],
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-change-licence' => [
+              'change-licence' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-change-licence[/]',
+                      'route'    => '/:id/change-licence[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'changeLicence',
+                          'controller'    => ConfirmChangeController::class,
+                          'action'        => 'question',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -486,8 +489,8 @@ return [
                   'options' => [
                       'route'    => '/:id/ecmt-sectors[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'sector',
+                          'controller'    => SectorsController::class,
+                          'action'        => 'question',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -593,10 +596,10 @@ return [
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-submitted' => [
+              'application-submitted' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-submitted[/]',
+                      'route'    => '/:id/application-submitted[/]',
                       'defaults' => [
                           'controller'    => SubmittedController::class,
                           'action'        => 'generic',
@@ -635,10 +638,10 @@ return [
                 ],
                 'may_terminate' => false,
               ],
-              'ecmt-fee-waived-submitted' => [
+              'fee-waived-application-submitted' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-fee-waived-submitted[/]',
+                      'route'    => '/:id/fee-waived-application-submitted[/]',
                       'defaults' => [
                           'controller' => SubmittedController::class,
                           'action'     => 'fee-waived',
@@ -691,10 +694,10 @@ return [
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-cancel-application' => [
+              'cancel-application' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-cancel-application[/]',
+                      'route'    => '/:id/cancel-application[/]',
                       'defaults' => [
                           'controller'    => CancelApplicationController::class,
                           'action'        => 'cancel',
@@ -718,10 +721,10 @@ return [
                       ],
                   ],
               ],
-              'ecmt-withdraw-application' => [
+              'withdraw-application' => [
                     'type' => 'segment',
                     'options' => [
-                        'route' => '/:id/ecmt-withdraw-application[/]',
+                        'route' => '/:id/withdraw-application[/]',
                         'defaults' => [
                             'controller' => WithdrawApplicationController::class,
                             'action' => 'withdraw'
@@ -765,7 +768,7 @@ return [
                               'route'    => 'decline[/]',
                               'defaults' => [
                                   'controller'    => DeclineController::class,
-                                  'action'        => 'generic',
+                                  'action'        => 'decline',
                               ],
                           ],
                           'may_terminate' => true,
@@ -775,8 +778,8 @@ return [
                                   'options' => [
                                       'route'    => 'confirmation[/]',
                                       'defaults' => [
-                                          'controller'    => SubmittedController::class,
-                                          'action'        => 'decline',
+                                          'controller'    => DeclineController::class,
+                                          'action'        => 'confirmation',
                                       ],
                                   ],
                                   'may_terminate' => false,

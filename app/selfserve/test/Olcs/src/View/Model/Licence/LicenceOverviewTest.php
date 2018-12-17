@@ -15,7 +15,7 @@ use Olcs\View\Model\Licence\LicenceOverview;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LicenceOverviewTest extends \PHPUnit_Framework_TestCase
+class LicenceOverviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test constructor with set variables

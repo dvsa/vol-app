@@ -2,7 +2,7 @@
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
-use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCabotage;
+use Dvsa\Olcs\Transfer\Command\Permits\UpdateSector;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
@@ -12,14 +12,14 @@ use Permits\Controller\Config\Params\ParamsConfig;
 
 use Permits\View\Helper\EcmtSection;
 
-class CabotageController extends AbstractSelfserveController implements ToggleAwareInterface
+class SectorsController extends AbstractSelfserveController implements ToggleAwareInterface
 {
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
     ];
 
     protected $dataSourceConfig = [
-        'default' => DataSourceConfig::PERMIT_APP,
+        'default' => DataSourceConfig::PERMIT_APP_SECTORS
     ];
 
     protected $conditionalDisplayConfig = [
@@ -27,16 +27,13 @@ class CabotageController extends AbstractSelfserveController implements ToggleAw
     ];
 
     protected $formConfig = [
-        'default' => FormConfig::FORM_CABOTAGE,
+        'default' => FormConfig::FORM_SECTORS,
     ];
 
     protected $templateVarsConfig = [
         'question' => [
-            'browserTitle' => 'permits.page.cabotage.browser.title',
-            'question' => 'permits.page.cabotage.question',
-            'guidance' => [
-                'permits.page.cabotage.guidance',
-            ],
+            'browserTitle' => 'permits.page.sectors.browser.title',
+            'question' => 'permits.page.sectors.question',
         ]
     ];
 
@@ -44,9 +41,9 @@ class CabotageController extends AbstractSelfserveController implements ToggleAw
         'default' => [
             'retrieveData' => true,
             'checkConditionalDisplay' => false,
-            'command' => UpdateEcmtCabotage::class,
+            'command' => UpdateSector::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
-            'step' => EcmtSection::ROUTE_ECMT_COUNTRIES,
+            'step' => EcmtSection::ROUTE_ECMT_CHECK_ANSWERS,
         ],
     ];
 }

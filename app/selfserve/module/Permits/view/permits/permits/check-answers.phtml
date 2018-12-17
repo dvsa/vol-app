@@ -1,23 +1,15 @@
-<?php
-$title = $this->translate('permits.page.title.check-answers');
-$this->headTitle($title);
-
-$heading = $this->translate('permits.page.title.check-answers-heading');
-$application = $data['application'];
-?>
-
 <?php echo $this->permitsBackLink(); ?>
-<?php echo $this->formErrors($form); ?>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+        <?php echo $this->formErrors($form); ?>
         <span class="govuk-caption-xl">
-            <?php echo $this->escapeHtml($application['applicationRef']); ?>
+            <?php echo $this->escapeHtml($data['application']['applicationRef']); ?>
         </span>
         <h1 class="govuk-heading-xl">
-            <?php echo $this->escapeHtml($heading); ?>
+            <?php echo $this->escapeHtml($this->translate($data['title'])); ?>
         </h1>
         <dl class="app-check-your-answers app-check-your-answers--long">
-            <?php foreach ($application['answers'] as $answer) { ?>
+            <?php foreach ($data['application']['answers'] as $answer) { ?>
                 <div class="app-check-your-answers__contents">
                     <dt class="app-check-your-answers__question">
                         <?php echo $this->escapeHtml($this->translate($answer['question'])); ?>

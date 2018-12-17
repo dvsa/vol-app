@@ -33,8 +33,28 @@ class WithdrawApplicationController extends AbstractSelfserveController implemen
     ];
 
     protected $templateConfig = [
-        'withdraw' => 'permits/withdraw-application',
-        'confirmation' => 'permits/withdraw-confirmation',
+        'withdraw' => 'permits/single-question',
+        'confirmation' => 'permits/confirmation',
+    ];
+
+    protected $templateVarsConfig = [
+        'withdraw' => [
+            'browserTitle' => 'permits.page.withdraw.browser.title',
+            'question' => 'permits.page.withdraw.question',
+            'bulletList' => [
+                'title' => 'permits.page.withdraw.bullet.list.title',
+                'list' => 'en_GB/bullets/markup-ecmt-application-withdraw'
+            ],
+            'backUri' => EcmtSection::ROUTE_ECMT_UNDER_CONSIDERATION
+        ],
+        'confirmation' => [
+            'browserTitle' => 'permits.page.confirmation.withdraw.browser.title',
+            'title' => 'permits.page.confirmation.withdraw.title',
+            'extraContent' => [
+                'title' => 'permits.page.confirmation.withdraw.bullet.list.title',
+                'list' => 'en_GB/bullets/markup-ecmt-withdraw-confirmation'
+            ]
+        ],
     ];
 
     protected $postConfig = [
