@@ -2,7 +2,6 @@
 
 namespace OlcsTest\Form\Model\Form\Surrender;
 
-
 use Common\Form\Elements\InputFilters\ActionButton;
 use Common\Form\Elements\Types\Radio;
 use Common\Form\Elements\Types\HtmlTranslated;

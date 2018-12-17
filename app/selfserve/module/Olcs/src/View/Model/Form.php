@@ -28,6 +28,7 @@ class Form extends AbstractViewModel
      * Set the form into the view.
      *
      * @param ZendForm $form
+     * @return void
      */
     public function setForm(ZendForm $form)
     {

@@ -56,6 +56,7 @@ class OperatorLicenceController extends AbstractSurrenderController
      * Save form data and update surrender status
      *
      * @param array $formData
+     * @return void
      */
     private function saveFormDataAndUpdateSurrenderStatus($formData): void
     {
@@ -76,8 +77,7 @@ class OperatorLicenceController extends AbstractSurrenderController
     private function redirectAfterSave(): Response
     {
         $routeName = 'lva-licence'; // CHNAGE TO REVIEW YOUR DISCS AND DOCS ROUTE NAME
-        if ($this->licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL)
-        {
+        if ($this->licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL) {
             // CHNAGE TO COMMUNITY LICENCE PAGE ROUTE NAME
             $routeName = 'lva-licence';
         }
