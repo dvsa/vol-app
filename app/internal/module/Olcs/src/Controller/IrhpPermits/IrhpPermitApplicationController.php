@@ -18,6 +18,7 @@ use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitApplication\GetList as ListDTO;
 use Dvsa\Olcs\Transfer\Query\Permits\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
+use Dvsa\Olcs\Transfer\Query\Permits\Sectors as SectorsDto;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateFullPermitApplication as CreateDTO;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitApplication as UpdateDTO;
 use Dvsa\Olcs\Transfer\Command\Permits\DeclineEcmtPermits as DeclineDTO;
@@ -284,7 +285,6 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
             );
     }
 
-
     /**
      * Setup required values for Edit form
      *
@@ -297,7 +297,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         $licence = $this->getLicence();
         $formData['fields']['numVehicles'] = $licence['totAuthVehicles'];
         $formData['fields']['numVehiclesLabel'] = $licence['totAuthVehicles'];
-
+        $form = $this->getSectors($form, $formData['fields']['sectors']);
         $form->setData($formData);
         return $form;
     }
@@ -317,7 +317,31 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         $formData['fields']['numVehicles'] = $licence['totAuthVehicles'];
         $formData['fields']['numVehiclesLabel'] = $licence['totAuthVehicles'];
         $formData['fields']['dateReceived'] = date("Y-m-d");
+        $form = $this->getSectors($form);
         $form->setData($formData);
+        return $form;
+    }
+
+    /**
+     * Retrieves sectors list and populates Value options for Add and Edit forms
+     *
+     * @param $form
+     * @param null $selectedSector
+     * @return mixed
+     */
+    protected function getSectors($form, $selectedSector = null)
+    {
+        $response = $this->handleQuery(SectorsDto::create([]));
+        $sectors = [];
+        if ($response->isOk()) {
+            $sectors = $response->getResult();
+        } else {
+            $this->checkResponse($response);
+        }
+
+        $mappedSectors = IrhpPermitApplicationMapper::mapSectors($sectors, $selectedSector);
+        $form->get('fields')->get('sectors')->setValueOptions($mappedSectors);
+
         return $form;
     }
 

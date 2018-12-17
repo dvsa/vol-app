@@ -138,6 +138,11 @@ class IrhpPermitFurniture implements
         $this->getNavigationService()->findOneBy('id', 'irhp_permits')
             ->setVisible(true);
 
+        // If the route has a permitId in it then we are editing or viewing related entities (docs etc)
+        // and do not wish to have "Add" in the horizonal sub - so disable it..
+        $this->getNavigationService()->findOneBy('id', 'licence_irhp_permits-add')
+            ->setVisible(false);
+
         $sidebarNav = $this->getSidebarNavigationService();
 
         // quick actions
