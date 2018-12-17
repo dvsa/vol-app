@@ -32,8 +32,27 @@ class CancelApplicationController extends AbstractSelfserveController implements
     ];
 
     protected $templateConfig = [
-        'cancel' => 'permits/cancel-application',
-        'confirmation' => 'permits/cancel-confirmation',
+        'cancel' => 'permits/single-question',
+        'confirmation' => 'permits/confirmation',
+    ];
+
+    protected $templateVarsConfig = [
+        'cancel' => [
+            'browserTitle' => 'permits.page.cancel.browser.title',
+            'question' => 'permits.page.cancel.question',
+            'bulletList' => [
+                'title' => 'permits.page.cancel.bullet.list.title',
+                'list' => 'en_GB/bullets/markup-ecmt-application-cancel'
+            ]
+        ],
+        'confirmation' => [
+            'browserTitle' => 'permits.page.confirmation.cancel.browser.title',
+            'title' => 'permits.page.confirmation.cancel.title',
+            'extraContent' => [
+                'title' => 'permits.page.confirmation.cancel.bullet.list.title',
+                'list' => 'en_GB/bullets/markup-ecmt-cancel-confirmation'
+            ]
+        ],
     ];
 
     protected $postConfig = [

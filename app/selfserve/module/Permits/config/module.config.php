@@ -596,10 +596,10 @@ return [
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-submitted' => [
+              'application-submitted' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-submitted[/]',
+                      'route'    => '/:id/application-submitted[/]',
                       'defaults' => [
                           'controller'    => SubmittedController::class,
                           'action'        => 'generic',
@@ -638,10 +638,10 @@ return [
                 ],
                 'may_terminate' => false,
               ],
-              'ecmt-fee-waived-submitted' => [
+              'fee-waived-application-submitted' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-fee-waived-submitted[/]',
+                      'route'    => '/:id/fee-waived-application-submitted[/]',
                       'defaults' => [
                           'controller' => SubmittedController::class,
                           'action'     => 'fee-waived',
@@ -694,10 +694,10 @@ return [
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-cancel-application' => [
+              'cancel-application' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-cancel-application[/]',
+                      'route'    => '/:id/cancel-application[/]',
                       'defaults' => [
                           'controller'    => CancelApplicationController::class,
                           'action'        => 'cancel',
@@ -721,10 +721,10 @@ return [
                       ],
                   ],
               ],
-              'ecmt-withdraw-application' => [
+              'withdraw-application' => [
                     'type' => 'segment',
                     'options' => [
-                        'route' => '/:id/ecmt-withdraw-application[/]',
+                        'route' => '/:id/withdraw-application[/]',
                         'defaults' => [
                             'controller' => WithdrawApplicationController::class,
                             'action' => 'withdraw'
@@ -768,7 +768,7 @@ return [
                               'route'    => 'decline[/]',
                               'defaults' => [
                                   'controller'    => DeclineController::class,
-                                  'action'        => 'generic',
+                                  'action'        => 'decline',
                               ],
                           ],
                           'may_terminate' => true,
@@ -778,8 +778,8 @@ return [
                                   'options' => [
                                       'route'    => 'confirmation[/]',
                                       'defaults' => [
-                                          'controller'    => SubmittedController::class,
-                                          'action'        => 'decline',
+                                          'controller'    => DeclineController::class,
+                                          'action'        => 'confirmation',
                                       ],
                                   ],
                                   'may_terminate' => false,
