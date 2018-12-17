@@ -207,7 +207,11 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
     public function genericAction()
     {
-        $this->handlePost();
+        $response = $this->handlePost();
+        if ($response instanceof \Zend\Http\Response) {
+            return $response;
+        }
+
         return $this->genericView();
     }
 
