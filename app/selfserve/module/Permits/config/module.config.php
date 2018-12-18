@@ -582,10 +582,10 @@ return [
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-print-receipt' => [
+              'print-receipt' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-print-receipt[/]:reference',
+                      'route'    => '/:id/print-receipt[/]:reference',
                       'defaults' => [
                           'controller'    => PermitsController::class,
                           'action'        => 'print',
