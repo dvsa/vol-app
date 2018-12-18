@@ -55,18 +55,35 @@ return [
                             ],
                         ],
                         'review-contact-details' => [
-                            'may_terminate' => true,
+                            'may_terminate' => false,
                             'type' => Segment::class,
                             'options' => [
-                                'route' => 'review-contact-details[/:action][/]',
-                                'defaults' => [
-                                    'controller' => ReviewContactDetailsController::class,
-                                    'action' => 'index',
-                                ],
-                                'constraints' => [
-                                    'action' => '[a-z]+'
-                                ],
+                                'route' => 'review-contact-details[/]',
                             ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'controller' => ReviewContactDetailsController::class,
+                                            'action' => 'index'
+                                        ],
+                                    ],
+                                ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'controller' => ReviewContactDetailsController::class,
+                                            'action' => 'post'
+                                        ],
+                                    ],
+                                ]
+                            ]
                         ],
                         'address-details' => [
                             'may_terminate' => true,

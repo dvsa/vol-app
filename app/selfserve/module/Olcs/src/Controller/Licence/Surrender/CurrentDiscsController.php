@@ -5,7 +5,6 @@ namespace Olcs\Controller\Licence\Surrender;
 use Common\Data\Mapper\Licence\Surrender\CurrentDiscs as CurrentDiscsMapper;
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
-use Dvsa\Olcs\Transfer\Command\Surrender\Update;
 use Dvsa\Olcs\Transfer\Query\Licence\GoodsDiscCount;
 use Olcs\Form\Model\Form\Surrender\CurrentDiscs\CurrentDiscs;
 
@@ -36,14 +35,13 @@ class CurrentDiscsController extends AbstractSurrenderController
         if (!$this->checkDiscCount($form->getData())) {
             $messages = $form->getMessages();
             $translator = $this->getServiceLocator()->get('Helper\Translation');
-            $messages['headerSection']['header'] = ["disc_count_mismatch" => $translator->translate('licence.surrender.current_discs.disc_count_mismatch') ];
+            $messages['headerSection']['header'] = ["disc_count_mismatch" => $translator->translate('licence.surrender.current_discs.disc_count_mismatch')];
             $form->setMessages($messages);
             $validForm = false;
         }
 
         if ($validForm) {
-            $response = $this->updateSurrender($formData);
-            if ($response) {
+            if ($this->updateDiscInfo($formData)) {
                 return $this->redirect()->toRoute(
                     'licence/surrender/operator-licence',
                     [],
@@ -53,32 +51,17 @@ class CurrentDiscsController extends AbstractSurrenderController
             }
         }
 
+        $this->hlpFlashMsgr->addUnknownError();
         $params = $this->buildViewParams($form);
         $this->getServiceLocator()->get('Script')->loadFiles(['licence-surrender-current-discs']);
 
         return $this->renderView($params);
     }
 
-    protected function updateSurrender(array $formData): bool
+    protected function updateDiscInfo(array $formData): bool
     {
-        $surrender = $this->getSurrender();
-        $dtoData = [
-                'id' => $this->licenceId,
-                'partial' => false,
-                'version' => $surrender['version'],
-                'status' => RefData::SURRENDER_STATUS_DISCS_COMPLETE,
-
-        ];
-
-        $dtoData = array_merge($dtoData, CurrentDiscsMapper::mapFromForm($formData));
-        $response = $this->handleCommand(Update::create($dtoData));
-
-        if ($response->isOk()) {
-            return true;
-        }
-
-        $this->hlpFlashMsgr->addUnknownError();
-        return false;
+        $data = CurrentDiscsMapper::mapFromForm($formData);
+        return $this->updateSurrender(RefData::SURRENDER_STATUS_DISCS_COMPLETE, $data);
     }
 
     protected function getNumberOfDiscs(): int
@@ -103,7 +86,7 @@ class CurrentDiscsController extends AbstractSurrenderController
                 [$numberOfDiscs]
             ),
             'form' => $form,
-            'backLink' => $this->getBackLink('licence/surrender/review-contact-details'),
+            'backLink' => $this->getBackLink('licence/surrender/review-contact-details/GET'),
         ];
     }
 

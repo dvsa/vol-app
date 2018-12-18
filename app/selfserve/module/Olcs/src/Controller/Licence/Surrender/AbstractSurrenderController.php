@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Licence\Surrender;
 
+use Dvsa\Olcs\Transfer\Command\Surrender\Update;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence as SurrenderQuery;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Common\Controller\Interfaces\ToggleAwareInterface;
@@ -74,5 +75,24 @@ class AbstractSurrenderController extends AbstractSelfserveController implements
         );
 
         return $response->getResult();
+    }
+
+    protected function updateSurrender(string $status, array $extraData = []): bool
+    {
+        $surrender = $this->getSurrender();
+        $dtoData = [
+            'id' => $this->licenceId,
+            'partial' => false,
+            'version' => $surrender['version'],
+            'status' => $status,
+
+        ];
+
+        if (!empty($extraData)) {
+            $dtoData = array_merge($dtoData, $extraData);
+        }
+
+        $response = $this->handleCommand(Update::create($dtoData));
+        return $response->isOk();
     }
 }
