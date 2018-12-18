@@ -139,12 +139,6 @@ class OperatorLicenceTest extends AbstractFormValidationTestCase
         $this->assertFormElementType($notice, ActionButton::class);
     }
 
-    public function testCurrentDiscsLink()
-    {
-        $notice = ['currentDiscsLink'];
-        $this->assertFormElementType($notice, Button::class);
-    }
-
     private function setPost(array $data)
     {
         $_POST = $data;

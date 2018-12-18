@@ -42,6 +42,7 @@
 
                 <?php
                 if (isset($this->backLink)): ?>
+                <?php $this->backLink = isset($this->customLink) ? $this->customLink : $this->backLink; ?>
                     <p>
                         <a href="<?php echo $this->backLink ?>">
                             <?php echo $this->translate($this->backText); ?>

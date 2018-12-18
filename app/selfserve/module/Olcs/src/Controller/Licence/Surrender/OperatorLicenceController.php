@@ -19,17 +19,13 @@ class OperatorLicenceController extends AbstractSurrenderController
 
         $form = $formService->getForm();
 
-        if ($this->hasClickedCurrentDiscsLink()) {
-            $this->redirect()->toRoute('current-discs', [], [], true);
-        }
-
         if ($request->isPost()) {
             $formData = (array)$request->getPost();
             $form->setData($formData);
             if ($form->isValid()) {
                 $this->saveFormDataAndUpdateSurrenderStatus($formData);
             }
-        } else {
+        } elseif ($this->doesSurrenderHaveLicenceDocumentStatus()) {
             $formData = Mapper::mapFromApi($this->getSurrender(), $form);
             $form->setData($formData);
             $formService->setStatus($form, $this->getSurrender());
@@ -41,21 +37,19 @@ class OperatorLicenceController extends AbstractSurrenderController
             // CHANGE ROUTE TO CURRENT DISCS
             'backLink' => $this->getBackLink('lva-licence'),
             'form' => $form,
+            'backText' => 'licence.surrender.operator_licence.return_to_current_discs.link',
+            // CHANGE ROUTE TO CURRENT DISCS
+            'customLink' => $this->getBackLink('lva-licence')
         ];
 
         return $this->renderView($params);
     }
 
-    private function hasClickedCurrentDiscsLink(): bool
-    {
-        return $this->params()->fromPost()['currentDiscsLink'] !== null;
-    }
-
-
     /**
      * Save form data and update surrender status
      *
      * @param array $formData
+     *
      * @return void
      */
     private function saveFormDataAndUpdateSurrenderStatus($formData): void
@@ -82,5 +76,10 @@ class OperatorLicenceController extends AbstractSurrenderController
             $routeName = 'lva-licence';
         }
         return $this->redirect()->toRoute($routeName, [], [], true);
+    }
+
+    private function doesSurrenderHaveLicenceDocumentStatus()
+    {
+        return isset($this->getSurrender()["licenceDocumentStatus"]["id"]);
     }
 }

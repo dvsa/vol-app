@@ -20,11 +20,4 @@ class OperatorLicence
      * @Form\Attributes({"class":"actions-container"})
      */
     public $formActions = null;
-
-    /**
-     * @Form\Attributes({"type":"submit"})
-     * @Form\Options({"label":"licence.surrender.operator_licence.return_to_current_discs.link"})
-     * @Form\Type("\Zend\Form\Element\Button")
-     */
-    public $currentDiscsLink = null;
 }
