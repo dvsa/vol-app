@@ -199,13 +199,12 @@ class CreatePermit extends Base
      * })
      * @Form\Options({
      *      "label": "markup-ecmt-sector-list-label",
-     *      "fieldset-attributes": {"id": "sector-list"},
+     *      "fieldset-attributes": {"id": "sector-list", "class":"inline"},
      *      "fieldset-data-group": "sector-list",
      *      "label_attributes": {"class": "form-control form-control--radio"},
-     *      "service_name": "Common\Service\Data\Sector",
      *      "disable_inarray_validator" : true,
      * })
-     * @Form\Type("DynamicRadio")
+     * @Form\Type("Radio")
      */
     public $sectors = null;
 

@@ -57,4 +57,25 @@ class IrhpPermitApplication implements MapperInterface
 
         return $errors;
     }
+
+    /**
+     * Map retrieved sectors list for form field and set selected value if exists
+     *
+     * @param array $mapData
+     * @param $selectedSector
+     * @return array
+     */
+    public static function mapSectors(array $mapData, $selectedSector)
+    {
+        $valueOptions = [];
+        foreach ($mapData['results'] as $option) {
+            $valueOptions[] = [
+                'value' => $option['id'],
+                'label' => $option['name'],
+                'selected' => (!empty($selectedSector) && $option['id'] === $selectedSector)
+            ];
+        }
+
+        return $valueOptions;
+    }
 }
