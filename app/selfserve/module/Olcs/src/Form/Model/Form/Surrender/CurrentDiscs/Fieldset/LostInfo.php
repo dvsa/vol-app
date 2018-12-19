@@ -65,6 +65,7 @@ class LostInfo
      *     "class": "govuk-textarea",
      *     "rows": "5"
      * })
+     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({
      *      "name": "ValidateIf",
      *      "options": {
