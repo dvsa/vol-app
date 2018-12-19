@@ -61,7 +61,7 @@
 
     },
     "require-dev": {
-        "olcs/olcs-devtools": "dev-master",
+        "olcs/olcs-devtools": "4.195a",
         "mikey179/vfsstream": "^1.4.0",
         "olcs/olcs-testhelpers": "dev-develop",
         "phpstan/phpstan-shim": "^0.10.5",
