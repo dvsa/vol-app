@@ -61,7 +61,7 @@
         "olcs/olcs-logging": "dev-release/4.195b"
     },
     "require-dev": {
-        "olcs/olcs-devtools": "dev-master",
+        "olcs/olcs-devtools": "4.195a",
         "olcs/olcs-testhelpers": "dev-develop",
         "mockery/mockery": "^1.2",
         "phpstan/phpstan-shim": "^0.10.5",
