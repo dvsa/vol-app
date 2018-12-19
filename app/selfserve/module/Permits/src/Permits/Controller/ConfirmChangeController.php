@@ -24,7 +24,7 @@ class ConfirmChangeController extends AbstractSelfserveController implements Tog
     ];
 
     protected $conditionalDisplayConfig = [
-        'default' => ConditionalDisplayConfig::PERMIT_APP_NOT_SUBMITTED,
+        'default' => ConditionalDisplayConfig::PERMIT_APP_CONFIRM_CHANGE,
     ];
 
     protected $formConfig = [
