@@ -80,17 +80,13 @@ class AbstractSurrenderController extends AbstractSelfserveController implements
     protected function updateSurrender(string $status, array $extraData = []): bool
     {
         $surrender = $this->getSurrender();
-        $dtoData = [
+
+        $dtoData = array_merge([
             'id' => $this->licenceId,
             'partial' => false,
             'version' => $surrender['version'],
             'status' => $status,
-
-        ];
-
-        if (!empty($extraData)) {
-            $dtoData = array_merge($dtoData, $extraData);
-        }
+        ], $extraData);
 
         $response = $this->handleCommand(Update::create($dtoData));
         return $response->isOk();
