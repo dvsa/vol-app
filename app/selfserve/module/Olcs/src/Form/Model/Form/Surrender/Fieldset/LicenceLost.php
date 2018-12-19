@@ -40,7 +40,6 @@ class LicenceLost
      * })
      * @Form\Type("\Zend\Form\Element\Textarea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Filter({"name":"Zend\Filter\StringToLower"})
      * @Form\Attributes({
      *     "class" : "govuk-textarea",
      *     "rows" : "5"

@@ -39,7 +39,6 @@ class LicenceStolen
      *      }
      * })
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Filter({"name":"Zend\Filter\StringToLower"})
      * @Form\Type("\Zend\Form\Element\Textarea")
      * @Form\Attributes({
      *     "class" : "govuk-textarea",

@@ -25,7 +25,7 @@ class OperatorLicenceController extends AbstractSurrenderController
             if ($form->isValid()) {
                 $this->saveFormDataAndUpdateSurrenderStatus($formData);
             }
-        } elseif ($this->doesSurrenderHaveLicenceDocumentStatus()) {
+        } elseif ($this->doesFormDataExist()) {
             $formData = Mapper::mapFromApi($this->getSurrender(), $form);
             $form->setData($formData);
             $formService->setStatus($form, $this->getSurrender());
@@ -34,12 +34,10 @@ class OperatorLicenceController extends AbstractSurrenderController
         $params = [
             'title' => 'licence.surrender.operator_licence.title',
             'licNo' => $this->licence['licNo'],
-            // CHANGE ROUTE TO CURRENT DISCS
             'backLink' => $this->getBackLink('lva-licence'),
             'form' => $form,
-            'backText' => 'licence.surrender.operator_licence.return_to_current_discs.link',
-            // CHANGE ROUTE TO CURRENT DISCS
-            'customLink' => $this->getBackLink('lva-licence')
+            'bottomText' => 'licence.surrender.operator_licence.return_to_current_discs.link',
+            'bottomLink' => $this->getBackLink('lva-licence'),
         ];
 
         return $this->renderView($params);
@@ -50,35 +48,34 @@ class OperatorLicenceController extends AbstractSurrenderController
      *
      * @param array $formData
      *
-     * @return void
      */
-    private function saveFormDataAndUpdateSurrenderStatus($formData): void
+    private function saveFormDataAndUpdateSurrenderStatus($formData)
     {
         $dtoData =
             [
                 'id' => $this->params('licence'),
                 'version' => $this->getSurrender()['version'],
+                'status' => RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE,
             ] + Mapper::mapFromForm($formData);
 
         $response = $this->handleCommand(SurrenderUpdate::create($dtoData));
 
         if ($response->isOk()) {
-            $this->handleCommand(SurrenderUpdate::create(['status' => RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE]));
             $this->redirectAfterSave();
         }
+        $this->addErrorMessage('unknown-error');
     }
 
     private function redirectAfterSave(): Response
     {
-        $routeName = 'lva-licence'; // CHNAGE TO REVIEW YOUR DISCS AND DOCS ROUTE NAME
+        $routeName = 'licence/surrender/review';
         if ($this->licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL) {
-            // CHNAGE TO COMMUNITY LICENCE PAGE ROUTE NAME
-            $routeName = 'lva-licence';
+            $routeName = 'licence/surrender/community-licence';
         }
         return $this->redirect()->toRoute($routeName, [], [], true);
     }
 
-    private function doesSurrenderHaveLicenceDocumentStatus()
+    private function doesFormDataExist()
     {
         return isset($this->getSurrender()["licenceDocumentStatus"]["id"]);
     }

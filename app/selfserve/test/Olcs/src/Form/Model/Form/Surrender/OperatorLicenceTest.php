@@ -18,11 +18,11 @@ class OperatorLicenceTest extends AbstractFormValidationTestCase
         $element = ['operatorLicenceDocument', 'licenceDocument'];
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementType($element, Radio::class);
-        $validValues = ['possession','lost','stolen'];
+        $validValues = ['possession', 'lost', 'stolen'];
         foreach ($validValues as $validValue) {
             $this->assertFormElementValid($element, $validValue);
         }
-        $invalidValues = ['one','two','three'];
+        $invalidValues = ['one', 'two', 'three'];
         foreach ($invalidValues as $invalidValue) {
             $this->assertFormElementNotValid($element, $invalidValue, ['notInArray']);
         }
@@ -65,14 +65,17 @@ class OperatorLicenceTest extends AbstractFormValidationTestCase
         $this->clearPost();
     }
 
-    public function testLostContentNotValidLength()
+    /**
+     * @dataProvider dpTestLostContentNotValidLength
+     */
+    public function testLostContentNotValidLength($string)
     {
         $form = $this->getForm();
 
         $data = [
             'operatorLicenceDocument' => [
                 'licenceDocument' => 'lost',
-                'lostContent' => ['details' => str_repeat('acbd ', 101)]
+                'lostContent' => ['details' => $string]
             ]
         ];
         $this->setPost($data);
@@ -82,6 +85,19 @@ class OperatorLicenceTest extends AbstractFormValidationTestCase
         $this->assertFalse($valid);
 
         $this->clearPost();
+    }
+
+    public function dpTestLostContentNotValidLength()
+    {
+        return [
+            [
+                'more_than_500' => str_repeat('acbd ', 101),
+
+            ],
+            [
+                'empty_string' => ''
+            ]
+        ];
     }
 
     public function testStolenContent()

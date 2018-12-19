@@ -112,6 +112,28 @@ return [
                                 ],
                             ]
                         ],
+                        'community-licence' => [
+                            'may_terminate' => true,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'community-licence[/]',
+                                'defaults' => [
+                                    'controller' => Olcs\Controller\Licence\Surrender\CommunityLicenceController::class,
+                                    'action' => 'index'
+                                ],
+                            ]
+                        ],
+                        'review' => [
+                            'may_terminate' => true,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'review[/]',
+                                'defaults' => [
+                                    'controller' => Olcs\Controller\Licence\Surrender\ReviewController::class,
+                                    'action' => 'index'
+                                ],
+                            ]
+                        ],
                     ]
                 ],
             ],
