@@ -51,12 +51,14 @@ class OperatorLicenceController extends AbstractSurrenderController
      */
     private function saveFormDataAndUpdateSurrenderStatus($formData)
     {
-        $dtoData =
+        $data =
             [
                 'id' => $this->params('licence'),
                 'version' => $this->getSurrender()['version'],
                 'status' => RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE,
-            ] + Mapper::mapFromForm($formData);
+            ];
+
+        $dtoData = array_merge($data, Mapper::mapFromForm($formData));
 
         $response = $this->handleCommand(SurrenderUpdate::create($dtoData));
 
