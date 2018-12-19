@@ -59,7 +59,7 @@ class StolenInfo
      * @Form\Type("textarea")
      * @Form\Options({
      *     "label":"Please provide details of stolen documents",
-     *     "hint":"Don’t include personal or financial information, eg your National Insurance number or credit card details."
+     *     "hint":"licence.surrender.current_discs.stolen.details.hint"
      * })
      * @Form\Attributes({
      *     "class":"govuk-textarea",
