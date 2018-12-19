@@ -363,7 +363,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
             if (isset($config['mapper']['type'])) {
                 $this->data = call_user_func_array([$mapperClass, $config['mapper']['type']], [$this->data, $form, $this->getServiceLocator()->get('Helper\Translation')]);
-            } else if (isset($config['dataSource'])) {
+            } elseif (isset($config['dataSource'])) {
                 $formData = $mapperClass::mapFromResult($this->data[$config['dataSource']]);
             }
 
@@ -424,7 +424,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             // Validate result if a key/value condition is defined or if a key is defined
             if (isset($criteria['key']) && isset($criteria['value']) && $data[$criteria['key']] === $criteria['value']) {
                 continue;
-            } else if (isset($criteria['view']) && !empty($data[$source]) && !isset($criteria['key'])) {
+            } elseif (isset($criteria['view']) && !empty($data[$source]) && !isset($criteria['key'])) {
                 continue;
             }
 
@@ -709,7 +709,6 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 ['id' => $this->data[$config['conditional']['dataKey']]['id']],
                 ['query' => $conditionalQueryParams]
             );
-
     }
 
     /**
