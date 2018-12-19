@@ -45,7 +45,6 @@ class ReviewContactDetailsController extends AbstractSurrenderController
     {
         /* @var $form \Common\Form\GenericConfirmation */
         $form = $this->hlpForm->createForm('GenericConfirmation');
-        $form->setAttribute("method", "POST");
         $submitLabel = $translator->translate('approve-details');
         $form->setSubmitLabel($submitLabel);
         $form->removeCancel();
