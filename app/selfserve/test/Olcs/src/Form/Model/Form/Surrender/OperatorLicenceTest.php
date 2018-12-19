@@ -111,7 +111,7 @@ class OperatorLicenceTest extends AbstractFormValidationTestCase
         $this->assertFormElementType($details, Textarea::class);
     }
 
-    public function testStolenContentValidLenght()
+    public function testStolenContentValidLength()
     {
         $form = $this->getForm();
 

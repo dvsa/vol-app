@@ -45,7 +45,7 @@ class LicenceStolen
      *     "rows" : "5"
      * })
      * @Form\Options({
-     *     "hint": "licence.surrender.operator_licence.text_area.hint"
+     *     "hint": "licence.surrender.operator_licence_stolen.text_area.hint"
      * })
      */
     public $details = null;
