@@ -2,8 +2,10 @@
 
 namespace Permits\Controller\Config\Form;
 
+use Permits\Controller\Config\DataSource\AvailableTypes as AvailableTypesDataSource;
 use Permits\Controller\Config\DataSource\LicencesAvailable as LicencesAvailableDataSource;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitApplicationDataSource;
+use Permits\Data\Mapper\AvailableTypes as AvailableTypesMapper;
 use Permits\Data\Mapper\LicencesAvailable as LicencesAvailableMapper;
 use Permits\Data\Mapper\Sectors as SectorsMapper;
 use Permits\Data\Mapper\ChangeLicence as ChangeLicenceMapper;
@@ -17,6 +19,17 @@ class FormConfig
     const FORM_CANCEL_PERMIT_APP_KEY = 'cancelPermitApp';
     const FORM_WITHDRAW_PERMIT_APP_KEY = 'withdrawPermitApp';
     const FORM_OPTIONS = 'mapForFormOptions';
+
+    const FORM_TYPE = [
+        'type' => [
+            'formClass' => 'TypeForm',
+            'dataSource' => AvailableTypesDataSource::DATA_KEY,
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => AvailableTypesMapper::class
+            ]
+        ],
+    ];
 
     const FORM_ADD_LICENCE = [
         'licence' => [

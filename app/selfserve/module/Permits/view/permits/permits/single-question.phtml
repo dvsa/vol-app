@@ -32,5 +32,6 @@
                 <?php echo $this->form($form); ?>
             </div>
         </fieldset>
+        <?php echo isset($data['cancelUri']) ? $this->permitsBackLink('cancel.button', $data['cancelUri']) : ''; ?>
     </div>
 </div>
