@@ -34,10 +34,10 @@ class OperatorLicenceController extends AbstractSurrenderController
         $params = [
             'title' => 'licence.surrender.operator_licence.title',
             'licNo' => $this->licence['licNo'],
-            'backLink' => $this->getBackLink('lva-licence'),
+            'backLink' => $this->getBackLink('licence/surrender/current-discs/GET'),
             'form' => $form,
             'bottomText' => 'licence.surrender.operator_licence.return_to_current_discs.link',
-            'bottomLink' => $this->getBackLink('lva-licence'),
+            'bottomLink' => $this->getBackLink('licence/surrender/current-discs/GET'),
         ];
 
         return $this->renderView($params);
@@ -60,9 +60,7 @@ class OperatorLicenceController extends AbstractSurrenderController
 
         $dtoData = array_merge($data, Mapper::mapFromForm($formData));
 
-        $response = $this->handleCommand(SurrenderUpdate::create($dtoData));
-
-        if ($response->isOk()) {
+        if ($this->updateSurrender(RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE, $data)) {
             $this->redirectAfterSave();
         }
         $this->addErrorMessage('unknown-error');
