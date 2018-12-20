@@ -207,7 +207,11 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
     public function genericAction()
     {
-        $this->handlePost();
+        $response = $this->handlePost();
+        if ($response instanceof \Zend\Http\Response) {
+            return $response;
+        }
+
         return $this->genericView();
     }
 
@@ -359,9 +363,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
             if (isset($config['mapper']['type'])) {
                 $this->data = call_user_func_array([$mapperClass, $config['mapper']['type']], [$this->data, $form, $this->getServiceLocator()->get('Helper\Translation')]);
-            } else {
-                $data = array_key_exists($config['dataSource'], $config) ? $this->data[$config['dataSource']] : $this->data;
-                $formData = $mapperClass::mapFromResult($data);
+            } elseif (isset($config['dataSource'])) {
+                $formData = $mapperClass::mapFromResult($this->data[$config['dataSource']]);
             }
 
             $form->setData($formData);
@@ -421,7 +424,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             // Validate result if a key/value condition is defined or if a key is defined
             if (isset($criteria['key']) && isset($criteria['value']) && $data[$criteria['key']] === $criteria['value']) {
                 continue;
-            } else if (isset($criteria['view']) && !empty($data[$source]) && !isset($criteria['key'])) {
+            } elseif (isset($criteria['view']) && !empty($data[$source]) && !isset($criteria['key'])) {
                 continue;
             }
 
@@ -706,7 +709,6 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 ['id' => $this->data[$config['conditional']['dataKey']]['id']],
                 ['query' => $conditionalQueryParams]
             );
-
     }
 
     /**

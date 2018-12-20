@@ -34,6 +34,18 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const PERMIT_APP_CONFIRM_CHANGE = [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'isNotYetSubmitted',
+            'value' => true
+        ],
+        LicencesAvailable::DATA_KEY => [
+            'key' => 'hasAvailableLicences',
+            'value' => true,
+            'route' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
+        ]
+    ];
+
     const PERMIT_APP_CAN_CHECK_ANSWERS = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'canCheckAnswers',

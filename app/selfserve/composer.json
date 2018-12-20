@@ -58,7 +58,6 @@
         "olcs/olcs-utils": "dev-develop",
         "olcs/olcs-auth": "dev-develop",
         "olcs/olcs-logging": "dev-develop"
-
     },
     "require-dev": {
         "olcs/olcs-devtools": "dev-master",
@@ -66,7 +65,8 @@
         "olcs/olcs-testhelpers": "dev-develop",
         "phpstan/phpstan-shim": "^0.10.5",
         "phpstan/phpstan-mockery": "^0.10.2",
-        "mockery/mockery": "^1.2.0"
+        "mockery/mockery": "^1.2.0",
+        "johnkary/phpunit-speedtrap": "^3.0"
     },
     "autoload": {
         "classmap": [

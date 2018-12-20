@@ -5,21 +5,14 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 
 use Common\Controller\Traits\GenericReceipt;
 use Common\Controller\Traits\StoredCardsTrait;
-use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Common\Util\FlashMessengerTrait;
-use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtLicence;
 
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
-use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\NextIrhpPermitStock;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
-use Dvsa\Olcs\Transfer\Query\Permits\LastOpenWindow;
-use Dvsa\Olcs\Transfer\Query\Permits\OpenWindows;
-
-use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCountries;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitsRequired;
