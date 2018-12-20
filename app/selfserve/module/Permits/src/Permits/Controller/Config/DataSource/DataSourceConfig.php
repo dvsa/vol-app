@@ -28,14 +28,18 @@ class DataSourceConfig
         LastOpenWindow::class => [],
         LicencesAvailable::class => [
             'passInUserData' => 'getCurrentOrganisationId'
-        ]
+        ],
+        NextIrhpPermitStock::class => [],
+        IrhpPermitType::class => []
     ];
 
     const PERMIT_APP_LICENCE = [
         PermitAppDataSource::class => [],
         LicencesAvailable::class => [
             'passInUserData' => 'getCurrentOrganisationId',
-        ]
+        ],
+        NextIrhpPermitStock::class => [],
+        IrhpPermitType::class => []
     ];
 
     const PERMIT_APP_SECTORS = [

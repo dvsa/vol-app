@@ -2,6 +2,8 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Form\Elements\Types\HtmlTranslated;
+use Common\Service\Helper\TranslationHelperService;
 use Permits\Controller\Config\DataSource\LicencesAvailable as LicencesAvailableDataSource;
 
 /**
@@ -14,15 +16,16 @@ class LicencesAvailable
      * @param array $data
      * @param       $form
      *
+     * @param TranslationHelperService $translator
      * @return array
      */
-    public static function mapForFormOptions(array $data, $form)
+    public static function mapForFormOptions(array $data, $form, TranslationHelperService $translator)
     {
         $mapData = $data[LicencesAvailableDataSource::DATA_KEY];
         $isNew = !isset($data['application']);
         $valueOptions = [];
 
-        foreach ($mapData['eligibleEcmtLicences']['result'] as $option) {
+        foreach ($mapData['eligibleEcmtLicences']['result'] as $key => $option) {
             $selected = false;
 
             if (!$option['canMakeEcmtApplication']) {
@@ -33,25 +36,39 @@ class LicencesAvailable
                 }
             }
 
-            if ($option['licenceType']['id'] === \Common\RefData::LICENCE_TYPE_RESTRICTED) {
-                $data['guidance'] = 'permits.form.ecmt-licence.restricted-licence.hint';
-            }
-
-            $valueOptions[] = [
+            $valueOptions[$option['id']] = [
                 'value' => $option['id'],
                 'label' => $option['licNo'],
                 'label_attributes' => 'govuk-label govuk-radios__label govuk-label--s',
                 'hint' => $option['licenceType']['description'] . ' (' . $option['trafficArea'] . ')',
-                'selected' => $selected
+                'selected' => $selected,
+                $option['id'].'Content' => 'en_GB/markup-ecmt-restricted-licence-conditional'
             ];
+
+            $permitTypeName = $data['irhpPermitType']['name']['description'];
+
+            $args = [
+                $permitTypeName,
+                date('d F Y', strtotime($data['nextIrhpPermitStock']['validFrom'])),
+                date('d F Y', strtotime($data['nextIrhpPermitStock']['validTo']))
+            ];
+
+            $data['guidance'] = $translator->translateReplace('permits.page.licence.info', $args);
+
+
+            if ($option['licenceType']['id'] === \Common\RefData::LICENCE_TYPE_RESTRICTED) {
+                $content = new HtmlTranslated($option['id'] . 'Content');
+                $content->setValue('permits.form.ecmt-licence.restricted-licence.hint');
+                $form->get('fields')->add($content);
+            }
         }
 
         if (count($valueOptions) === 1) {
-            $valueOptions[0]['label_attributes'] = ['class' => 'visually-hidden'];
-            $valueOptions[0]['hint_attributes'] = ['class' => 'visually-hidden'];
-            $valueOptions[0]['selected'] = true;
+            $key = array_keys($valueOptions)[0];
             $data['question'] = 'permits.page.licence.question.one.licence';
-            $data['questionArgs'] = [str_replace('@', ' ', $valueOptions[0]['label'] . ' ' . $valueOptions[0]['hint'])];
+            $data['questionArgs'] = [str_replace('@', ' ', $valueOptions[$key]['label'] . ' ' . $valueOptions[$key]['hint'])];
+            $valueOptions[$key]['selected'] = true;
+            $form->get('fields')->get('licence')->setAttribute('radios_wrapper_attributes', ['class' => 'visually-hidden']);
         }
 
         $form->get('fields')->get('licence')->setValueOptions($valueOptions);
