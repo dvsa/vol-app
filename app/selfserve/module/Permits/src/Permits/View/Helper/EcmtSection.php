@@ -17,6 +17,7 @@ class EcmtSection extends AbstractHelper
     const ROUTE_TYPE = 'permits/type';
     const ROUTE_ADD_LICENCE = 'permits/add-licence';
     const ROUTE_LICENCE = 'permits/licence';
+    const ROUTE_CONFIRM_CHANGE = 'permits/change-licence';
     const ROUTE_ECMT_EURO6 = 'permits/ecmt-euro6';
     const ROUTE_ECMT_CABOTAGE = 'permits/ecmt-cabotage';
     const ROUTE_ECMT_COUNTRIES = 'permits/ecmt-countries';
@@ -27,35 +28,23 @@ class EcmtSection extends AbstractHelper
     const ROUTE_ECMT_CHECK_ANSWERS = 'permits/ecmt-check-answers';
     const ROUTE_ECMT_DECLARATION = 'permits/ecmt-declaration';
     const ROUTE_ECMT_FEE = 'permits/ecmt-fee';
-    const ROUTE_ECMT_SUBMITTED = 'permits/application-submitted';
+    const ROUTE_APPLICATION_SUBMITTED = 'permits/application-submitted';
     const ROUTE_PRINT_RECEIPT = 'permits/print-receipt';
-    const ROUTE_ECMT_FEE_WAIVED_SUBMITTED = 'permits/fee-waived-application-submitted';
-    const ROUTE_CONFIRM_CHANGE = 'permits/change-licence';
     const ROUTE_ECMT_GUIDANCE = 'permits/ecmt-guidance';
     const ROUTE_ECMT_UNDER_CONSIDERATION = 'permits/ecmt-under-consideration';
     const ROUTE_ECMT_AWAITING_FEE = 'permits/ecmt-awaiting-fee';
     const ROUTE_ECMT_UNPAID_PERMITS = 'permits/ecmt-unpaid-permits';
     const ROUTE_ECMT_PAYMENT_ACTION = 'permits/ecmt-payment';
-    const ROUTE_ECMT_ISSUING = 'permits/ecmt-fee-submitted';
+    const ROUTE_ISSUE_SUBMITTED = 'permits/issue-submitted';
 
     const ROUTE_ECMT_VALID_PERMITS = 'permits/ecmt-valid-permits';
 
-    // No available windows
-    const ROUTE_WINDOW_CLOSED = 'window-closed';
-    // No available licences remaining
-    const ROUTE_NO_AVAILABLE_LICENCES = 'no-available-licences';
-
-    //cancellation
-    const ROUTE_ECMT_CANCEL_APPLICATION = 'permits/cancel-application';
-    const ROUTE_ECMT_CANCEL_CONFIRMATION = self::ROUTE_ECMT_CANCEL_APPLICATION . '/confirmation';
-
-    //withdraw
-    const ROUTE_ECMT_WITHDRAW_APPLICATION = 'permits/withdraw-application';
-    const ROUTE_ECMT_WITHDRAW_CONFIRMATION = self::ROUTE_ECMT_WITHDRAW_APPLICATION . '/confirmation';
-
-    //decline
-    const ROUTE_ECMT_DECLINE_APPLICATION = self::ROUTE_ECMT_AWAITING_FEE . '/decline';
-    const ROUTE_ECMT_DECLINE_CONFIRMATION = self::ROUTE_ECMT_DECLINE_APPLICATION . '/confirmation';
+    const ROUTE_CANCEL_APPLICATION = 'permits/cancel-application';
+    const ROUTE_CANCEL_CONFIRMATION = self::ROUTE_CANCEL_APPLICATION . '/confirmation';
+    const ROUTE_WITHDRAW_APPLICATION = 'permits/withdraw-application';
+    const ROUTE_WITHDRAW_CONFIRMATION = self::ROUTE_WITHDRAW_APPLICATION . '/confirmation';
+    const ROUTE_DECLINE_APPLICATION = self::ROUTE_ECMT_AWAITING_FEE . '/decline';
+    const ROUTE_DECLINE_CONFIRMATION = self::ROUTE_DECLINE_APPLICATION . '/confirmation';
 
     /**
      * list of overview routes and the field denoting completion status

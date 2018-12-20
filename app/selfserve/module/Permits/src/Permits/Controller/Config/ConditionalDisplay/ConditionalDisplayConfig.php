@@ -117,6 +117,13 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const PERMIT_APP_PAID =  [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'isFeePaid',
+            'value' => true
+        ],
+    ];
+
     const PERMIT_APP_IS_VALID = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'isValid',

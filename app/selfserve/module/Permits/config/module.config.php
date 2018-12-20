@@ -613,12 +613,12 @@ return [
                   'may_terminate' => false,
               ],
               'application-submitted' => [
-                  'type'    => 'segment',
+                  'type' => 'segment',
                   'options' => [
-                      'route'    => '/:id/application-submitted[/]',
+                      'route' => '/:id/application-submitted',
                       'defaults' => [
-                          'controller'    => SubmittedController::class,
-                          'action'        => 'generic',
+                          'controller' => SubmittedController::class,
+                          'action' => 'application-submitted',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -626,41 +626,13 @@ return [
                   ],
                   'may_terminate' => false,
               ],
-                'ecmt-fee-submitted' => [
-                    'type'    => 'segment',
-                    'options' => [
-                        'route'    => '/:id/ecmt-fee-submitted[/]',
-                        'defaults' => [
-                            'controller'    => SubmittedController::class,
-                            'action'        => 'fee-submitted',
-                        ],
-                        'constraints' => [
-                            'id' => '[0-9]+',
-                        ],
-                    ],
-                    'may_terminate' => false,
-                ],
-              'ecmt-decline-submitted' => [
-                'type'    => 'segment',
-                'options' => [
-                    'route'    => '/:id/ecmt-decline-submitted[/]',
-                    'defaults' => [
-                        'controller'    => SubmittedController::class,
-                        'action'        => 'decline',
-                    ],
-                    'constraints' => [
-                        'id' => '[0-9]+',
-                    ],
-                ],
-                'may_terminate' => false,
-              ],
-              'fee-waived-application-submitted' => [
-                  'type'    => 'segment',
+              'issue-submitted' => [
+                  'type' => 'segment',
                   'options' => [
-                      'route'    => '/:id/fee-waived-application-submitted[/]',
+                      'route' => '/:id/issue-submitted',
                       'defaults' => [
                           'controller' => SubmittedController::class,
-                          'action'     => 'fee-waived',
+                          'action' => 'issue-submitted',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',

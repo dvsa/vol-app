@@ -61,7 +61,7 @@ class CancelApplicationController extends AbstractSelfserveController implements
             'checkConditionalDisplay' => false,
             'command' => CancelEcmtPermitApplication::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
-            'step' => EcmtSection::ROUTE_ECMT_CANCEL_CONFIRMATION
+            'step' => EcmtSection::ROUTE_CANCEL_CONFIRMATION
         ],
     ];
 }
