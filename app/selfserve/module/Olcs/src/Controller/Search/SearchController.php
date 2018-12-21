@@ -208,6 +208,8 @@ class SearchController extends AbstractController
             ]
         );
 
+        $view->results = null;
+
         $view->setTemplate('layouts/main-search-results.phtml');
 
         $this->getServiceLocator()->get('Script')->loadFile('search-results');
@@ -343,7 +345,6 @@ class SearchController extends AbstractController
         $index = $this->params()->fromRoute('index');
 
         if (isset($index)) {
-
             $this->getSearchService()->setIndex($index);
 
             // terms filters
