@@ -12,4 +12,9 @@ class Sectors extends AbstractDataSource
 {
     const DATA_KEY = 'sectors';
     protected $dto = SectorsDto::class;
+
+    protected $defaultParamData = [
+        'sort' => 'displayOrder',
+        'order' => 'ASC'
+    ];
 }
