@@ -86,7 +86,6 @@ class AbstractSurrenderController extends AbstractSelfserveController implements
 
         $dtoData = array_merge([
             'id' => $this->licenceId,
-            'partial' => false,
             'version' => $surrender['version'],
             'status' => $status,
         ], $extraData);

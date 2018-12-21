@@ -97,7 +97,7 @@ class CurrentDiscsController extends AbstractSurrenderController
         $expectedDiscCount = $this->getNumberOfDiscs();
         $enteredDiscCount = $this->fetchEnteredDiscCount($formData);
 
-        return $expectedDiscCount == $enteredDiscCount;
+        return $expectedDiscCount === $enteredDiscCount;
     }
 
     private function fetchEnteredDiscCount($formData): int
