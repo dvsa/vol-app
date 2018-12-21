@@ -9,7 +9,7 @@
 namespace Olcs\Controller\Licence\Surrender;
 
 use Common\Service\Helper\TranslationHelperService;
-use Dvsa\Olcs\GdsVerify\Data\Attributes;
+
 
 class ConfirmationController extends AbstractSurrenderController
 {
@@ -38,10 +38,20 @@ class ConfirmationController extends AbstractSurrenderController
 
     private function getSignatureFullName()
     {
-        $attributes = json_decode($this->getSurrender()["digitalSignature"]["attributes"]);
-        if ($attributes instanceof Attributes) {
-            return $attributes->getFullName();
+        $attributes = $this->getSurrender()["digitalSignature"]["attributes"];
+        if(!empty($attributes))
+        {
+            $names = [];
+            if (!empty($attributes['first_name'])) {
+                $names[] = $attributes['first_name'];
+            }
+            if (!empty($attributes['surname'])) {
+                $names[] = $attributes['surname']];
+            }
+
+            return implode(' ', $names);
         }
+
     }
 
     private function getSignatureDate()
