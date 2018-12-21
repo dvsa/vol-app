@@ -12,9 +12,9 @@ class LicenceForm
 {
     /**
      * @Form\Name("fields")
-     * * @Form\Options({
-     *     "label": "permits.page.licence.question",
-     *     "label_attributes": {"class": "visually-hidden"},
+     * @Form\Options({
+     *   "label": "permits.page.licence.question",
+     *   "label_attributes": {"class": "visually-hidden"},
      * })
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\Licence")
      */
