@@ -1235,6 +1235,7 @@ return array(
             Olcs\Controller\Licence\Surrender\StartController::class => Olcs\Controller\Licence\Surrender\StartController::class,
             Olcs\Controller\Licence\Surrender\DeclarationController::class => Olcs\Controller\Licence\Surrender\DeclarationController::class,
             Olcs\Controller\Licence\Surrender\ConfirmationController::class => Olcs\Controller\Licence\Surrender\ConfirmationController::class,
+            Olcs\Controller\Licence\Surrender\CurrentDiscsController::class => Olcs\Controller\Licence\Surrender\CurrentDiscsController::class,
             Olcs\Controller\Licence\Surrender\OperatorLicenceController::class => Olcs\Controller\Licence\Surrender\OperatorLicenceController::class,
             Olcs\Controller\Licence\Surrender\ReviewController::class => Olcs\Controller\Licence\Surrender\ReviewController::class,
             Olcs\Controller\Licence\Surrender\CommunityLicenceController::class => Olcs\Controller\Licence\Surrender\CommunityLicenceController::class,

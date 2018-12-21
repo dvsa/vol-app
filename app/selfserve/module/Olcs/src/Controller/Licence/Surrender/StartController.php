@@ -71,7 +71,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
                 $result = $response->getResult();
                 if (!empty($result)) {
                     return $this->redirect()->toRoute(
-                        'licence/surrender/review-contact-details',
+                        'licence/surrender/review-contact-details/GET',
                         [
                             'licence' => $licNo,
                         ]
