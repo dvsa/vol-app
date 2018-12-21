@@ -38,20 +38,12 @@ class ConfirmationController extends AbstractSurrenderController
 
     private function getSignatureFullName()
     {
+        $names = [];
         $attributes = $this->getSurrender()["digitalSignature"]["attributes"];
-        if(!empty($attributes))
-        {
-            $names = [];
-            if (!empty($attributes['first_name'])) {
-                $names[] = $attributes['first_name'];
-            }
-            if (!empty($attributes['surname'])) {
-                $names[] = $attributes['surname']];
-            }
-
-            return implode(' ', $names);
-        }
-
+        $names[] = $attributes['first_name'] ?? '';
+        $names[] = $attributes['surname'] ?? '';
+        
+        return implode(' ', $names);
     }
 
     private function getSignatureDate()
