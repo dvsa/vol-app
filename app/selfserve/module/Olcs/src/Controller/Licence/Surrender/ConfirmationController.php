@@ -39,9 +39,9 @@ class ConfirmationController extends AbstractSurrenderController
     private function getSignatureFullName()
     {
         $names = [];
-        $attributes = $this->getSurrender()["digitalSignature"]["attributes"];
-        $names[] = $attributes['first_name'] ?? '';
-        $names[] = $attributes['surname'] ?? '';
+        $attributes = json_decode($this->getSurrender()["digitalSignature"]["attributes"]);
+        $names[] = $attributes->firstname ?? '';
+        $names[] = $attributes->surname ?? '';
         
         return implode(' ', $names);
     }
