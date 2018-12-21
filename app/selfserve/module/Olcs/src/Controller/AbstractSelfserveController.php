@@ -261,7 +261,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
                 if (isset($config['conditional'])) {
                     if ($this->data[$config['conditional']['dataKey']][$config['conditional']['field']] === $config['conditional']['value']) {
-                        $this->redirectConditionalPost($config);
+                        return $this->redirectConditionalPost($config);
                     }
                 }
 
