@@ -7,12 +7,11 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("RestrictedCountriesList")
  * @Form\Attributes({
- *     "class" : "restricted-countries-list guidance"
+ *     "class" : "restricted-countries-list"
  * })
  */
 class RestrictedCountriesList
 {
-
     /**
      * @Form\Name("restrictedCountriesList")
      * @Form\Required(false)
