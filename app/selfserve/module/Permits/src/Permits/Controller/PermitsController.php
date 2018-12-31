@@ -128,15 +128,14 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
             if ($form->isValid()) {
                 //EXTRA VALIDATION
-                if ((
-                    $data['Fields']['restrictedCountries'] == 1
-                    && isset($data['Fields']['restrictedCountriesList']['restrictedCountriesList']))
-                    || ($data['Fields']['restrictedCountries'] == 0)
-                ) {
+                if (
+                    ($data['Fields']['restrictedCountries'] == 1
+                    && isset($data['Fields']['yesContent']['restrictedCountriesList']))
+                    || ($data['Fields']['restrictedCountries'] == 0)) {
                     if ($data['Fields']['restrictedCountries'] == 0) {
                         $countryIds = [];
                     } else {
-                        $countryIds = $data['Fields']['restrictedCountriesList']['restrictedCountriesList'];
+                        $countryIds = $data['Fields']['yesContent']['restrictedCountriesList'];
                     }
 
                     $command = UpdateEcmtCountries::create(['id' => $id, 'countryIds' => $countryIds]);
@@ -145,7 +144,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 } else {
                     //conditional validation failed, restricted countries list should not be empty
                     $form->get('Fields')
-                        ->get('restrictedCountriesList')
+                        ->get('yesContent')
                         ->get('restrictedCountriesList')
                         ->setMessages(['error.messages.restricted.countries.list']);
                 }
@@ -171,7 +170,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
             if (count($application['countrys']) > 0) {
                 $form->get('Fields')
-                    ->get('restrictedCountriesList')
+                    ->get('yesContent')
                     ->get('restrictedCountriesList')
                     ->setValue(array_column($application['countrys'], 'id'));
             }
