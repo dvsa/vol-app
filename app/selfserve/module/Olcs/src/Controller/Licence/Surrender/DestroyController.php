@@ -2,11 +2,15 @@
 
 namespace Olcs\Controller\Licence\Surrender;
 
+use Common\Form\Form;
+use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
-use Olcs\Form\Model\Form\Surrender\DeclarationSign;
 
 class DestroyController extends AbstractSurrenderController
 {
+    const MARKUP_ALL = 'markup-licence-surrender-destroy-all-licence';
+    const MARKUP_STANDARD_INTERNATIONAL = 'markup-licence-surrender-destroy-standard-international';
+
     public function indexAction()
     {
         /** @var TranslationHelperService $translator */
@@ -14,7 +18,7 @@ class DestroyController extends AbstractSurrenderController
         $params = [
             'title' => 'licence.surrender.destroy.title',
             'licNo' => $this->licence['licNo'],
-            'content' => 'markup-licence-surrender-destroy-all-licence',
+            'content' => $this->getContent(),
             'form' => $this->getConfirmationForm($translator),
             'backLink' => $this->getBackLink('licence/surrender/review'),
         ];
@@ -27,7 +31,7 @@ class DestroyController extends AbstractSurrenderController
         return $this->redirect()->toRoute('licence/surrender/declaration', [], [], true);
     }
 
-    private function getConfirmationForm(TranslationHelperService $translator): \Common\Form\Form
+    private function getConfirmationForm(TranslationHelperService $translator): Form
     {
         /* @var $form \Common\Form\GenericConfirmation */
         $form = $this->hlpForm->createForm('GenericConfirmation');
@@ -35,5 +39,13 @@ class DestroyController extends AbstractSurrenderController
         $form->setSubmitLabel($submitLabel);
         $form->removeCancel();
         return $form;
+    }
+
+    protected function getContent(): string
+    {
+        if ($this->licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL) {
+            return static::MARKUP_STANDARD_INTERNATIONAL;
+        }
+        return static::MARKUP_ALL;
     }
 }
