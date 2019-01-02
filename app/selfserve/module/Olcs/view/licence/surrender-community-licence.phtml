@@ -1,0 +1,20 @@
+<div class="govuk-grid-row">
+
+    <?php echo $this->flashMessengerAll(); ?>
+    <div class="govuk-!-width-two-thirds">
+        <h1><?php
+        echo $this->partial(
+            'partials/page-header-simple',
+            [
+                'pageTitle' => $this->translate($pageTitle),
+                'pageSubTitle' => $licNo,
+                'backUrl' => [
+                    'url' => $backUrl,
+                ],
+            ]
+        );
+        ?></h1>
+        <div class="govuk-!-width-two-thirds">
+            <?php echo $this->form($form); ?>
+        </div>
+    </div>
