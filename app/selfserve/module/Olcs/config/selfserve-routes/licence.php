@@ -214,6 +214,16 @@ return [
                                 ],
                             ],
                         ],
+                        'declaration-form' => ['may_terminate' => true,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'declaration-form[/]',
+                                'defaults' => [
+                                    'controller' => Olcs\Controller\Licence\Surrender\DeclarationFormController::class,
+                                    'action' => 'index',
+                                ],
+                            ],
+                        ]
                     ]
                 ],
             ],
