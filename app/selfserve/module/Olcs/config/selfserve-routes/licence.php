@@ -1,5 +1,6 @@
 <?php
 
+use Olcs\Controller\Licence\Surrender\DestroyController;
 use Olcs\Controller\Licence\Surrender\ReviewContactDetailsController;
 use Olcs\Controller\Licence\Surrender\StartController;
 use Zend\Mvc\Router\Http\Segment;
@@ -181,6 +182,37 @@ return [
                                     'action' => 'index'
                                 ],
                             ]
+                        ],
+                        'destroy' => [
+                            'may_terminate' => false,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'destroy[/]',
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'controller' => DestroyController::class,
+                                            'action' => 'index',
+                                        ],
+                                    ],
+                                ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'controller' => DestroyController::class,
+                                            'action' => 'continue',
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                     ]
                 ],
