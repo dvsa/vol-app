@@ -45,8 +45,7 @@ class DestroyController extends AbstractSurrenderController
     {
         if ($this->licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL) {
             return static::MARKUP_STANDARD_INTERNATIONAL;
-        } else {
-            return static::MARKUP_ALL;
         }
+        return static::MARKUP_ALL;
     }
 }
