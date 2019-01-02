@@ -16,7 +16,7 @@ class DestroyController extends AbstractSurrenderController
             'licNo' => $this->licence['licNo'],
             'content' => 'markup-licence-surrender-destroy-all-licence',
             'form' => $this->getConfirmationForm($translator),
-            'backLink' => $this->getBackLink('review'),
+            'backLink' => $this->getBackLink('licence/surrender/review'),
         ];
 
         return $this->renderView($params);
@@ -31,7 +31,7 @@ class DestroyController extends AbstractSurrenderController
     {
         /* @var $form \Common\Form\GenericConfirmation */
         $form = $this->hlpForm->createForm('GenericConfirmation');
-        $submitLabel = $translator->translate('continue');
+        $submitLabel = $translator->translate('Continue');
         $form->setSubmitLabel($submitLabel);
         $form->removeCancel();
         return $form;
