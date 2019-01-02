@@ -45,17 +45,6 @@ class LicencesAvailable
                 $option['id'].'Content' => 'en_GB/markup-ecmt-restricted-licence-conditional'
             ];
 
-            $permitTypeName = $data['irhpPermitType']['name']['description'];
-
-            $args = [
-                $permitTypeName,
-                date('d F Y', strtotime($data['nextIrhpPermitStock']['validFrom'])),
-                date('d F Y', strtotime($data['nextIrhpPermitStock']['validTo']))
-            ];
-
-            $data['guidance'] = $translator->translateReplace('permits.page.licence.info', $args);
-
-
             if ($option['licenceType']['id'] === \Common\RefData::LICENCE_TYPE_RESTRICTED) {
                 $content = new HtmlTranslated($option['id'] . 'Content');
                 $content->setValue('permits.form.ecmt-licence.restricted-licence.hint');
