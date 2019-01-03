@@ -214,6 +214,16 @@ return [
                                 ],
                             ],
                         ],
+                        'print-sign-return' => ['may_terminate' => true,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'print-sign-return[/]',
+                                'defaults' => [
+                                    'controller' => Olcs\Controller\Licence\Surrender\PrintSignReturnController::class,
+                                    'action' => 'print',
+                                ],
+                            ],
+                        ]
                     ]
                 ],
             ],
