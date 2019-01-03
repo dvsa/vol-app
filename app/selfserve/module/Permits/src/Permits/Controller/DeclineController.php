@@ -62,7 +62,7 @@ class DeclineController extends AbstractSelfserveController implements ToggleAwa
             'checkConditionalDisplay' => false,
             'command' => DeclineEcmtPermits::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
-            'step' => EcmtSection::ROUTE_ECMT_DECLINE_CONFIRMATION,
+            'step' => EcmtSection::ROUTE_DECLINE_CONFIRMATION,
         ],
     ];
 

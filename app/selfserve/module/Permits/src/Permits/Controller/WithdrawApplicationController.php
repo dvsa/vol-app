@@ -51,7 +51,7 @@ class WithdrawApplicationController extends AbstractSelfserveController implemen
             'browserTitle' => 'permits.page.confirmation.withdraw.browser.title',
             'title' => 'permits.page.confirmation.withdraw.title',
             'extraContent' => [
-                'title' => 'permits.page.confirmation.withdraw.bullet.list.title',
+                'title' => 'permits.page.confirmation.bullet.list.title',
                 'list' => 'en_GB/bullets/markup-ecmt-withdraw-confirmation'
             ]
         ],
@@ -66,7 +66,7 @@ class WithdrawApplicationController extends AbstractSelfserveController implemen
                 'reason' => RefData::PERMIT_APP_WITHDRAW_REASON_USER,
             ],
             'params' => ParamsConfig::ID_FROM_ROUTE,
-            'step' => EcmtSection::ROUTE_ECMT_WITHDRAW_CONFIRMATION
+            'step' => EcmtSection::ROUTE_WITHDRAW_CONFIRMATION
         ],
     ];
 }

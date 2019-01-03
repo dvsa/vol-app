@@ -7,8 +7,7 @@
             <div class="govuk-panel__body">
                 <?php echo $this->escapeHtml($this->translate('permits.page.confirmation.reference')); ?>
                 <br><strong><?php echo $this->escapeHtml($data['application']['applicationRef']); ?></strong>
-                <?php if (isset($data['hasReceipt'])) { ?>
-
+                <?php if (isset($data['receiptUrl']) && !empty($data['receiptUrl'])) { ?>
                     <a href="<?php echo $data['receiptUrl']; ?>" class="govuk-!-font-size-19 govuk-!-margin-top-5 govuk-!-display-block" style="color: #FFFFFF;" target="_blank">View Receipt</a>
                 <?php } ?>
             </div>
