@@ -55,7 +55,7 @@ class CommunityLicenceController extends AbstractSurrenderController
         $possessionLabel = $form->get('communityLicence')->get('possessionContent')->get('notice');
         $possessionLabel->setLabel('licence.surrender.community_licence.possession.note');
         $formActionButton = $form->get('form-actions')->get('submit');
-        $formActionButton->setLabel('licence.surrender.community_licence.save.continue');
+        $formActionButton->setLabel('Save and Continue');
         return $form;
     }
 }
