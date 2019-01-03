@@ -2,7 +2,7 @@
 
     <?php echo $this->flashMessengerAll(); ?>
     <div class="govuk-!-width-two-thirds">
-        <h1><?php
+        <?php
         echo $this->partial(
             'partials/page-header-simple',
             [
@@ -13,8 +13,10 @@
                 ],
             ]
         );
-        ?></h1>
+        ?>
         <div class="govuk-!-width-two-thirds">
             <?php echo $this->form($form); ?>
+
         </div>
+        <p><a href="<?php echo $returnLink;?>" title="return to previous step"><?php echo $this->translate($returnLinkText);?></a> </p>
     </div>

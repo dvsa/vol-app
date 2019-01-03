@@ -22,14 +22,14 @@ class CommunityLicenceController extends AbstractSurrenderController
     {
 
         $surrender = $this->getSurrender();
-
         $view = $this->genericView();
-
         $view->setVariables(
             [
-                'pageTitle' => "Where is your community licence documentation?",//@todo translation string
+                'pageTitle' => 'licence.surrender.community_licence.heading',
                 'licNo' =>$surrender['licence']['licNo'],
-                'backUrl' =>'',
+                'backUrl' =>$this->getBackLink('licence/surrender/operator-licence'),
+                'returnLinkText' =>'licence.surrender.community_licence.return_to_operator.licence.link',
+                'returnLink' => $this->getBackLink('licence/surrender/operator-licence'),
             ]
         );
 
@@ -38,9 +38,11 @@ class CommunityLicenceController extends AbstractSurrenderController
 
     public function alterForm($form)
     {
-        $options = $form->get('communityLicence')->get('communityLicenceDocument')->getOptions();
-        $options['value_options']['possession']['label'] = 'test';
-        $form->get('communityLicence')->get('communityLicenceDocument')->setOptions($options);
+        $possessionLabel = $form->get('communityLicence')->get('possessionContent')->get('notice');
+        $possessionLabel->setLabel('licence.surrender.community_licence.possession.note');
+        $formActionButton = $form->get('form-actions')->get('submit');
+        $formActionButton->setLabel('licence.surrender.community_licence.save.continue');
         return $form;
     }
 }
+
