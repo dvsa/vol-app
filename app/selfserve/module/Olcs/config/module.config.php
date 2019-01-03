@@ -1240,7 +1240,7 @@ return array(
             Olcs\Controller\Licence\Surrender\ReviewController::class => Olcs\Controller\Licence\Surrender\ReviewController::class,
             Olcs\Controller\Licence\Surrender\CommunityLicenceController::class => Olcs\Controller\Licence\Surrender\CommunityLicenceController::class,
             Olcs\Controller\Licence\Surrender\DestroyController::class => Olcs\Controller\Licence\Surrender\DestroyController::class,
-            Olcs\Controller\Licence\Surrender\DeclarationFormController::class => Olcs\Controller\Licence\Surrender\DeclarationFormController::class,
+            Olcs\Controller\Licence\Surrender\PrintSignReturnController::class => Olcs\Controller\Licence\Surrender\PrintSignReturnController::class,
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',

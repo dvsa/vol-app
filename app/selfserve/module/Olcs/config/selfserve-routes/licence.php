@@ -214,13 +214,13 @@ return [
                                 ],
                             ],
                         ],
-                        'declaration-form' => ['may_terminate' => true,
+                        'print-sign-return' => ['may_terminate' => true,
                             'type' => Segment::class,
                             'options' => [
-                                'route' => 'declaration-form[/]',
+                                'route' => 'print-sign-return[/]',
                                 'defaults' => [
-                                    'controller' => Olcs\Controller\Licence\Surrender\DeclarationFormController::class,
-                                    'action' => 'index',
+                                    'controller' => Olcs\Controller\Licence\Surrender\PrintSignReturnController::class,
+                                    'action' => 'print',
                                 ],
                             ],
                         ]

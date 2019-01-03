@@ -5,9 +5,9 @@ namespace Olcs\Controller\Licence\Surrender;
 use Common\RefData;
 use Zend\View\Model\ViewModel;
 
-class DeclarationFormController extends AbstractSurrenderController
+class PrintSignReturnController extends AbstractSurrenderController
 {
-    public function indexAction()
+    public function printAction()
     {
         $translator = $this->getServiceLocator()->get('Helper\Translation');
         $params = [
@@ -22,7 +22,7 @@ class DeclarationFormController extends AbstractSurrenderController
         ];
 
         $view = new ViewModel($params);
-        $view->setTemplate('licence/declarations');
+        $view->setTemplate('licence/surrender-print-sign-return');
 
         $layout = new ViewModel();
         $layout->setTemplate('layouts/simple');
@@ -35,8 +35,8 @@ class DeclarationFormController extends AbstractSurrenderController
     protected function determineTitle()
     {
         if ($this->licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
-            return "licence.surrender.declaration.form.title.gv";
+            return "licence.surrender.print-sign-return.form.title.gv";
         }
-        return "licence.surrender.declaration.form.title.psv";
+        return "licence.surrender.print-sign-return.form.title.psv";
     }
 }
