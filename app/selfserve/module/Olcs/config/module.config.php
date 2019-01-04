@@ -1482,6 +1482,9 @@ return array(
 
             'lva-application-overview-submission' => LvaFormService\ApplicationOverviewSubmission::class,
             'lva-variation-overview-submission' => LvaFormService\VariationOverviewSubmission::class,
+
+            //surrenders
+            'surrender-community-licence' => \Olcs\FormService\Form\Surrender\CommunityLicence::class,
         ],
     ],
     'zfc_rbac' => [
