@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Licence\Surrender;
 
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Surrender\Update;
 use Common\Util;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence as SurrenderQuery;
@@ -40,6 +41,7 @@ class AbstractSurrenderController extends AbstractSelfserveController implements
         $this->licence = $this->getLicence();
         $this->hlpForm = $this->getServiceLocator()->get('Helper\Form');
         $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        $this->data['licence']['isInternationalLicence'] = $this->licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL;
         return parent::onDispatch($e);
     }
 
@@ -93,4 +95,6 @@ class AbstractSurrenderController extends AbstractSelfserveController implements
         $response = $this->handleCommand(Update::create($dtoData));
         return $response->isOk();
     }
+
+
 }
