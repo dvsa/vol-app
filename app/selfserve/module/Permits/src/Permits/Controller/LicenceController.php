@@ -58,6 +58,12 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
         'question' => [
             'params' => ParamsConfig::CONFIRM_CHANGE,
             'step' => EcmtSection::ROUTE_CONFIRM_CHANGE,
+            'conditional' => [
+                'dataKey' => 'application',
+                'value' => 'licence',
+                'step' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
+                'field' => ['licence', 'id'],
+            ]
         ]
     ];
 
