@@ -95,6 +95,4 @@ class AbstractSurrenderController extends AbstractSelfserveController implements
         $response = $this->handleCommand(Update::create($dtoData));
         return $response->isOk();
     }
-
-
 }
