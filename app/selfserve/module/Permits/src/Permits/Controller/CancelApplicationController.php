@@ -49,7 +49,7 @@ class CancelApplicationController extends AbstractSelfserveController implements
             'browserTitle' => 'permits.page.confirmation.cancel.browser.title',
             'title' => 'permits.page.confirmation.cancel.title',
             'extraContent' => [
-                'title' => 'permits.page.confirmation.cancel.bullet.list.title',
+                'title' => 'permits.page.confirmation.bullet.list.title',
                 'list' => 'en_GB/bullets/markup-ecmt-cancel-confirmation'
             ]
         ],
