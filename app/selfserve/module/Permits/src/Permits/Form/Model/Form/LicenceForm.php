@@ -22,7 +22,7 @@ class LicenceForm
 
     /**
      * @Form\Name("Submit")
-     * @Form\ComposedObject("Permits\Form\Model\Fieldset\Submit")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\SubmitOnly")
      */
     public $submit = null;
 }
