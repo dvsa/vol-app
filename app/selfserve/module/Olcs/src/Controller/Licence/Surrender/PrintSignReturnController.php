@@ -3,10 +3,39 @@
 namespace Olcs\Controller\Licence\Surrender;
 
 use Common\RefData;
+use Common\Util\FlashMessengerTrait;
+use Dvsa\Olcs\Transfer\Command\Surrender\SubmitForm;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class PrintSignReturnController
+ *
+ * @package Olcs\Controller\Licence\Surrender
+ */
 class PrintSignReturnController extends AbstractSurrenderController
 {
+
+    use FlashMessengerTrait;
+
+    protected $templateConfig = [
+        'index' => 'licence/surrender-print-sign-return'
+    ];
+
+    public function indexAction()
+    {
+        $view = $this->genericView();
+        $view->setVariables(
+            [
+                'pageTitle' => 'licence.surrender.print-sign-return.page.title',
+                'returnLinkText' => 'return-home-button-text',
+                'returnLink' => $this->getBackLink('lva-licence'),
+                'printLink' => $this->getBackLink('licence/surrender/print-sign-return-print/GET'),
+            ]
+        );
+        return $view;
+    }
+
+
     public function printAction()
     {
         $translator = $this->getServiceLocator()->get('Helper\Translation');
@@ -20,17 +49,28 @@ class PrintSignReturnController extends AbstractSurrenderController
                 [$this->licence['licNo']]
             )
         ];
-
         $view = new ViewModel($params);
-        $view->setTemplate('licence/surrender-print-sign-return');
+        $view->setTemplate('licence/surrender-print-sign-return-form');
 
         $layout = new ViewModel();
         $layout->setTemplate('layouts/simple');
         $layout->setTerminal(true);
         $layout->addChild($view, 'content');
 
-        return $layout;
+        $response = $this->handleCommand(SubmitForm::create(
+            [
+                "id" => $this->licenceId,
+                "version"=>1
+            ]
+        ));
+        if ($response->isOk()) {
+            return $layout;
+        }
+
+        $this->flashMessenger()->addErrorMessage('licence.surrender.print-sign-return.form.error');
+        return $this->redirect()->toRoute('licence/surrender/print-sign-return/GET', [], [], true);
     }
+
 
     protected function determineTitle()
     {
