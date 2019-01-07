@@ -239,7 +239,9 @@ return [
                             'may_terminate' => false,
                             'type' => Segment::class,
                             'options' => [
-                                'route' => 'print-sign-return[/]',
+
+                                'route' => 'print-sign-return[/]'
+
                             ],
                             'child_routes' => [
                                 'GET' => [
@@ -253,11 +255,22 @@ return [
                                         ],
                                     ],
                                 ],
-                                'POST' => [
+                            ],
+                        ],
+                        'print-sign-return-print' => [
+                            'may_terminate' => false,
+                            'type' => Segment::class,
+                            'options' => [
+
+                                'route' => 'print-sign-return/print[/]'
+
+                            ],
+                            'child_routes' => [
+                                'GET' => [
                                     'may_terminate' => true,
                                     'type' => \Zend\Mvc\Router\Http\Method::class,
                                     'options' => [
-                                        'verb' => 'POST',
+                                        'verb' => 'GET',
                                         'defaults' => [
                                             'controller' => PrintSignReturnController::class,
                                             'action' => 'print',

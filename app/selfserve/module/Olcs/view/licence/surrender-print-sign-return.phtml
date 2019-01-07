@@ -1,44 +1,24 @@
-<div class="printable">
-  
-    <div class="printable__address">
-        <p><b><?php echo $this->translate('Return to'); ?>:</b></p>
-        <p><?php echo $this->returnToAddress($isNi, ',<br />'); ?></p>
-    </div>
-    
-    <div class="printable__meta">
-        <dl>
-            <dt><?php echo $this->translate('Licence number'); ?></dt>
-            <dd><?php echo $licNo; ?></dd>
-            <dt><?php echo $this->translate('Operator'); ?></dt>
-            <dd><?php echo $name; ?></dd>
-        </dl>
-    </div>
-    
-    <div class="printable__header">
-        <h2><?php echo $this->translate($title); ?></h2>
-    </div>
-    
-    <div class="printable__section">
-        <p><?php echo $undertakings; ?></p>
+<div class="govuk-grid-row">
 
+    <?php echo $this->flashMessengerAll(); ?>
+    <div class="govuk-!-width-two-thirds">
+        <?php
+        echo $this->partial(
+            'partials/page-header-simple',
+            [
+                'pageTitle' => $this->translate($pageTitle)
+            ]
+        );
+        ?>
+        <div class="govuk-!-width-two-thirds">
+            <p>
+                <?php
+                echo $this->translate('markup-licence-surrender-print-sign-return-content');
+                ?>
+            </p>
+            <div class>
+                <a href="<?php echo $printLink;?>" title="print form" class="download govuk-link govuk-!-font-size-19 print-form"><?php echo $this->translate('print-declaration-form');?></a>
+            </div>
+        </div>
+        <p><a href="<?php echo $returnLink;?>" title="return to home" class="govuk-button" role="button"><?php echo $this->translate($returnLinkText);?></a> </p>
     </div>
-
-    <div class="signature-box">
-        <label for="" class="signature-box__label"><?php echo $this->translate('declaration-sig-label'); ?></label>
-        <input type="text" class="signature-box__input signature" disabled="disabled">
-        <label for="" class="signature-box__label"><?php echo $this->translate('Full name in block capitals'); ?></label>
-        <input type="text" class="signature-box__input name" disabled="disabled">
-        <label for="" class="signature-box__label"><?php echo $this->translate('Date'); ?></label>
-        <input type="text" class="signature-box__input date" disabled="disabled">
-    </div>
-
-    <p>
-        <?php echo $this->translate('declaration-guidance'); ?><br />
-        <b><?php echo $this->translate('Return to'); ?>: </b><?php echo $this->returnToAddress($isNi, ', '); ?>
-    </p>
-
-</div>
-
-<script type="text/javascript">
-    window.print();
-</script>
