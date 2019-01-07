@@ -3,10 +3,14 @@
 namespace Olcs\Controller\Licence\Surrender;
 
 use Common\RefData;
+use Common\Util\FlashMessengerTrait;
+use Dvsa\Olcs\Transfer\Command\Surrender\SubmitForm;
 use Zend\View\Model\ViewModel;
 
 class PrintSignReturnController extends AbstractSurrenderController
 {
+    use FlashMessengerTrait;
+
     public function printAction()
     {
         $translator = $this->getServiceLocator()->get('Helper\Translation');
@@ -28,10 +32,19 @@ class PrintSignReturnController extends AbstractSurrenderController
         $layout->setTerminal(true);
         $layout->addChild($view, 'content');
 
-        if ($this->updateSurrender(RefData::SURRENDER_STATUS_SUBMITTED)) {
+        $response = $this->handleCommand(SubmitForm::create(
+            [
+                "id" => $this->licenceId
+            ]
+        ));
+        if ($response->isOk()) {
             return $layout;
         }
+
+        $this->flashMessenger()->addErrorMessage('licence.surrender.print-sign-return.form.error');
+        return $this->redirect()->toRoute('licence/surrender/print-sign-return/GET', [], [], true);
     }
+
 
     protected function determineTitle()
     {

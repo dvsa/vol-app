@@ -1,6 +1,7 @@
 <?php
 
 use Olcs\Controller\Licence\Surrender\DestroyController;
+use Olcs\Controller\Licence\Surrender\PrintSignReturnController;
 use Olcs\Controller\Licence\Surrender\ReviewContactDetailsController;
 use Olcs\Controller\Licence\Surrender\StartController;
 use Zend\Mvc\Router\Http\Segment;
@@ -234,16 +235,37 @@ return [
                                 ],
                             ],
                         ],
-                        'print-sign-return' => ['may_terminate' => true,
+                        'print-sign-return' => [
+                            'may_terminate' => false,
                             'type' => Segment::class,
                             'options' => [
                                 'route' => 'print-sign-return[/]',
-                                'defaults' => [
-                                    'controller' => Olcs\Controller\Licence\Surrender\PrintSignReturnController::class,
-                                    'action' => 'print',
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'controller' => PrintSignReturnController::class,
+                                            'action' => 'index',
+                                        ],
+                                    ],
+                                ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'controller' => PrintSignReturnController::class,
+                                            'action' => 'print',
+                                        ],
+                                    ],
                                 ],
                             ],
-                        ]
+                        ],
                     ]
                 ],
             ],
