@@ -5,14 +5,14 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("SubmitLicence")
+ * @Form\Name("SubmitOnly")
  */
-class SubmitLicence
+class SubmitOnly
 {
     /**
      * @Form\Name("SubmitButton")
      * @Form\Attributes({
-     *     "class":"action--primary large top",
+     *     "class":"action--primary large",
      *     "id":"submitbutton",
      *     "value":"Save and continue",
      * })

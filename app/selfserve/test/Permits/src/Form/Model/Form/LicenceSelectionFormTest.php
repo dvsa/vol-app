@@ -2,6 +2,7 @@
 
 namespace PermitsTest\Form\Model\Form;
 
+use Common\Form\Elements\Types\Radio;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 
 /**
@@ -14,15 +15,13 @@ class LicenceSelectionFormTest extends AbstractFormValidationTestCase
     /**
      * @var string The class name of the form being tested
      */
-    protected $formName = \Permits\Form\Model\Form\EcmtLicenceForm::class;
+    protected $formName = \Permits\Form\Model\Form\LicenceForm::class;
 
     public function testLicence()
     {
-        $element = ['Fields', 'EcmtLicence'];
-
-        $this->assertFormElementRequired($element, true);
+        $element = ['fields', 'licence'];
         $this->assertFormElementAllowEmpty($element, false);
-        $this->assertFormElementType($element, "Zend\Form\Element\Radio");
+        $this->assertFormElementType($element, Radio::class);
     }
 
     public function testSubmit()

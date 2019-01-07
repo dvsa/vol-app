@@ -1234,7 +1234,13 @@ return array(
             Olcs\Controller\Licence\Surrender\AddressDetailsController::class,
             Olcs\Controller\Licence\Surrender\StartController::class => Olcs\Controller\Licence\Surrender\StartController::class,
             Olcs\Controller\Licence\Surrender\DeclarationController::class => Olcs\Controller\Licence\Surrender\DeclarationController::class,
-            Olcs\Controller\Licence\Surrender\ConfirmationController::class => Olcs\Controller\Licence\Surrender\ConfirmationController::class
+            Olcs\Controller\Licence\Surrender\ConfirmationController::class => Olcs\Controller\Licence\Surrender\ConfirmationController::class,
+            Olcs\Controller\Licence\Surrender\CurrentDiscsController::class => Olcs\Controller\Licence\Surrender\CurrentDiscsController::class,
+            Olcs\Controller\Licence\Surrender\OperatorLicenceController::class => Olcs\Controller\Licence\Surrender\OperatorLicenceController::class,
+            Olcs\Controller\Licence\Surrender\ReviewController::class => Olcs\Controller\Licence\Surrender\ReviewController::class,
+            Olcs\Controller\Licence\Surrender\CommunityLicenceController::class => Olcs\Controller\Licence\Surrender\CommunityLicenceController::class,
+            Olcs\Controller\Licence\Surrender\DestroyController::class => Olcs\Controller\Licence\Surrender\DestroyController::class,
+            Olcs\Controller\Licence\Surrender\PrintSignReturnController::class => Olcs\Controller\Licence\Surrender\PrintSignReturnController::class,
         )
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -1476,6 +1482,9 @@ return array(
 
             'lva-application-overview-submission' => LvaFormService\ApplicationOverviewSubmission::class,
             'lva-variation-overview-submission' => LvaFormService\VariationOverviewSubmission::class,
+
+            //surrenders
+            'surrender-community-licence' => \Olcs\FormService\Form\Surrender\CommunityLicence::class,
         ],
     ],
     'zfc_rbac' => [

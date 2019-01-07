@@ -1,18 +1,18 @@
 <?php
+
 namespace Permits\Form\Model\Form;
 
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("CancelApplication")
+ * @Form\Name("ChangeLicence")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  */
-
 class ChangeLicenceForm
 {
     /**
-     * @Form\Name("Fields")
+     * @Form\Name("fields")
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\ChangeLicence")
      */
     public $fields = null;

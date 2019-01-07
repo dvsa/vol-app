@@ -23,6 +23,40 @@ class DataSourceConfig
         PermitAppDataSource::class => [],
     ];
 
+    const PERMIT_APP_TYPE = [
+        AvailableTypes::class => [],
+        LastOpenWindow::class => [],
+        LicencesAvailable::class => [
+            'passInUserData' => 'getCurrentOrganisationId'
+        ]
+    ];
+
+    const PERMIT_APP_ADD_LICENCE = [
+        AvailableTypes::class => [],
+        LastOpenWindow::class => [],
+        LicencesAvailable::class => [
+            'passInUserData' => 'getCurrentOrganisationId'
+        ]
+    ];
+
+    const PERMIT_APP_LICENCE = [
+        PermitAppDataSource::class => [],
+        LicencesAvailable::class => [
+            'passInUserData' => 'getCurrentOrganisationId',
+        ]
+    ];
+
+    const PERMIT_APP_SECTORS = [
+        PermitAppDataSource::class => [],
+        Sectors::class => []
+    ];
+
+    const PERMIT_APP_CHECK_ANSWERS = [
+        PermitAppDataSource::class => [
+            'mapper' => CheckAnswersMapper::class
+        ],
+    ];
+
     const PERMIT_APP_FOR_ACCEPT_OR_DECLINE = [
         PermitAppDataSource::class => [
             'mapper' => AcceptOrDeclineMapper::class,
@@ -52,6 +86,7 @@ class DataSourceConfig
             ]
         ],
     ];
+
     const PERMIT_ECMT_UNPAID = [
         UnpaidEcmtPermitsDataSource::class => [
             'mapper' => ValidEcmtPermitsMapper::class
@@ -60,11 +95,6 @@ class DataSourceConfig
             'append' => [
                 ValidEcmtPermitsDataSource::DATA_KEY => EcmtConstrainedCountriesMapper::class
             ]
-        ],
-    ];
-    const PERMIT_APP_CHECK_ANSWERS = [
-        PermitAppDataSource::class => [
-            'mapper' => CheckAnswersMapper::class
         ],
     ];
 }

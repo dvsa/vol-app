@@ -2,6 +2,8 @@
 
 namespace Permits\Controller\Config\ConditionalDisplay;
 
+use Permits\Controller\Config\DataSource\LicencesAvailable;
+use Permits\Controller\Config\DataSource\AvailableTypes;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\View\Helper\EcmtSection;
 
@@ -10,11 +12,38 @@ use Permits\View\Helper\EcmtSection;
  */
 class ConditionalDisplayConfig
 {
+    const PERMIT_APP_CAN_APPLY = [
+        AvailableTypes::DATA_KEY => [
+            'view' => [
+                'template' => 'permits/window-closed',
+            ]
+        ],
+        LicencesAvailable::DATA_KEY => [
+            'view' => [
+                'template' => 'permits/not-eligible',
+            ],
+            'key' => 'hasAvailableLicences',
+            'value' => true
+        ]
+    ];
+
     const PERMIT_APP_NOT_SUBMITTED =  [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'isNotYetSubmitted',
             'value' => true
         ],
+    ];
+
+    const PERMIT_APP_CONFIRM_CHANGE = [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'isNotYetSubmitted',
+            'value' => true
+        ],
+        LicencesAvailable::DATA_KEY => [
+            'key' => 'hasAvailableLicences',
+            'value' => true,
+            'route' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
+        ]
     ];
 
     const PERMIT_APP_CAN_CHECK_ANSWERS = [
@@ -84,6 +113,13 @@ class ConditionalDisplayConfig
     const PERMIT_APP_AWAITING_FEE = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'isAwaitingFee',
+            'value' => true
+        ],
+    ];
+
+    const PERMIT_APP_PAID =  [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'isFeePaid',
             'value' => true
         ],
     ];

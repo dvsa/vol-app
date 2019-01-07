@@ -12,9 +12,12 @@ use Zend\View\Model\ViewModel;
  */
 class EcmtSection extends AbstractHelper
 {
+    const ROUTE_PERMITS = 'permits';
     const ROUTE_APPLICATION_OVERVIEW = 'permits/application-overview';
-    const ROUTE_ECMT_LICENCE = 'permits/ecmt-licence';
-    const ROUTE_ECMT_ADD_LICENCE = 'permits/ecmt-add-licence';
+    const ROUTE_TYPE = 'permits/type';
+    const ROUTE_ADD_LICENCE = 'permits/add-licence';
+    const ROUTE_LICENCE = 'permits/licence';
+    const ROUTE_CONFIRM_CHANGE = 'permits/change-licence';
     const ROUTE_ECMT_EURO6 = 'permits/ecmt-euro6';
     const ROUTE_ECMT_CABOTAGE = 'permits/ecmt-cabotage';
     const ROUTE_ECMT_COUNTRIES = 'permits/ecmt-countries';
@@ -25,36 +28,29 @@ class EcmtSection extends AbstractHelper
     const ROUTE_ECMT_CHECK_ANSWERS = 'permits/ecmt-check-answers';
     const ROUTE_ECMT_DECLARATION = 'permits/ecmt-declaration';
     const ROUTE_ECMT_FEE = 'permits/ecmt-fee';
-    const ROUTE_ECMT_SUBMITTED = 'permits/ecmt-submitted';
-    const ROUTE_ECMT_FEE_WAIVED_SUBMITTED = 'permits/ecmt-fee-waived-submitted';
-    const ROUTE_ECMT_CONFIRM_CHANGE = 'permits/ecmt-change-licence';
+    const ROUTE_APPLICATION_SUBMITTED = 'permits/application-submitted';
+    const ROUTE_PRINT_RECEIPT = 'permits/print-receipt';
     const ROUTE_ECMT_GUIDANCE = 'permits/ecmt-guidance';
     const ROUTE_ECMT_UNDER_CONSIDERATION = 'permits/ecmt-under-consideration';
     const ROUTE_ECMT_AWAITING_FEE = 'permits/ecmt-awaiting-fee';
     const ROUTE_ECMT_UNPAID_PERMITS = 'permits/ecmt-unpaid-permits';
     const ROUTE_ECMT_PAYMENT_ACTION = 'permits/ecmt-payment';
-    const ROUTE_ECMT_ISSUING = 'permits/ecmt-fee-submitted';
+    const ROUTE_ISSUE_SUBMITTED = 'permits/issue-submitted';
 
     const ROUTE_ECMT_VALID_PERMITS = 'permits/ecmt-valid-permits';
 
-
-    //cancellation
-    const ROUTE_ECMT_CANCEL_APPLICATION = 'permits/ecmt-cancel-application';
-    const ROUTE_ECMT_CANCEL_CONFIRMATION = self::ROUTE_ECMT_CANCEL_APPLICATION . '/confirmation';
-
-    //withdraw
-    const ROUTE_ECMT_WITHDRAW_APPLICATION = 'permits/ecmt-withdraw-application';
-    const ROUTE_ECMT_WITHDRAW_CONFIRMATION = self::ROUTE_ECMT_WITHDRAW_APPLICATION . '/confirmation';
-
-    //decline
-    const ROUTE_ECMT_DECLINE_APPLICATION = self::ROUTE_ECMT_AWAITING_FEE . '/decline';
-    const ROUTE_ECMT_DECLINE_CONFIRMATION = self::ROUTE_ECMT_DECLINE_APPLICATION . '/confirmation';
+    const ROUTE_CANCEL_APPLICATION = 'permits/cancel-application';
+    const ROUTE_CANCEL_CONFIRMATION = self::ROUTE_CANCEL_APPLICATION . '/confirmation';
+    const ROUTE_WITHDRAW_APPLICATION = 'permits/withdraw-application';
+    const ROUTE_WITHDRAW_CONFIRMATION = self::ROUTE_WITHDRAW_APPLICATION . '/confirmation';
+    const ROUTE_DECLINE_APPLICATION = self::ROUTE_ECMT_AWAITING_FEE . '/decline';
+    const ROUTE_DECLINE_CONFIRMATION = self::ROUTE_DECLINE_APPLICATION . '/confirmation';
 
     /**
      * list of overview routes and the field denoting completion status
      */
     const ROUTE_ORDER = [
-        self::ROUTE_ECMT_LICENCE => 'licence',
+        self::ROUTE_LICENCE => 'licence',
         self::ROUTE_ECMT_EURO6 => 'emissions',
         self::ROUTE_ECMT_CABOTAGE => 'cabotage',
         self::ROUTE_ECMT_COUNTRIES => 'countrys',

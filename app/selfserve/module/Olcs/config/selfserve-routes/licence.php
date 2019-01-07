@@ -1,5 +1,6 @@
 <?php
 
+use Olcs\Controller\Licence\Surrender\DestroyController;
 use Olcs\Controller\Licence\Surrender\ReviewContactDetailsController;
 use Olcs\Controller\Licence\Surrender\StartController;
 use Zend\Mvc\Router\Http\Segment;
@@ -55,18 +56,35 @@ return [
                             ],
                         ],
                         'review-contact-details' => [
-                            'may_terminate' => true,
+                            'may_terminate' => false,
                             'type' => Segment::class,
                             'options' => [
-                                'route' => 'review-contact-details[/:action][/]',
-                                'defaults' => [
-                                    'controller' => ReviewContactDetailsController::class,
-                                    'action' => 'index',
-                                ],
-                                'constraints' => [
-                                    'action' => '[a-z]+'
-                                ],
+                                'route' => 'review-contact-details[/]',
                             ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'controller' => ReviewContactDetailsController::class,
+                                            'action' => 'index'
+                                        ],
+                                    ],
+                                ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'controller' => ReviewContactDetailsController::class,
+                                            'action' => 'post'
+                                        ],
+                                    ],
+                                ]
+                            ]
                         ],
                         'address-details' => [
                             'may_terminate' => true,
@@ -78,6 +96,37 @@ return [
                                     'action' => 'index',
                                 ],
                             ],
+                        ],
+                        'current-discs' => [
+                            'may_terminate' => false,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'current-discs[/]',
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'controller' => Olcs\Controller\Licence\Surrender\CurrentDiscsController::class,
+                                            'action' => 'index'
+                                        ],
+                                    ],
+                                ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'controller' => Olcs\Controller\Licence\Surrender\CurrentDiscsController::class,
+                                            'action' => 'post'
+                                        ],
+                                    ],
+                                ]
+                            ]
                         ],
                         'confirmation' => [
                             'type' => Segment::class,
@@ -100,6 +149,100 @@ return [
                                     'action' => 'index'
                                 ],
                             ]
+                        ],
+                        'operator-licence' => [
+                            'may_terminate' => true,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'operator-licence[/]',
+                                'defaults' => [
+                                    'controller' => Olcs\Controller\Licence\Surrender\OperatorLicenceController::class,
+                                    'action' => 'index'
+                                ],
+                            ]
+                        ],
+                        'community-licence' => [
+                            'may_terminate' => false,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'community-licence[/]',
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'controller' => Olcs\Controller\Licence\Surrender\CommunityLicenceController::class,
+                                            'action' => 'index'
+                                        ],
+                                    ],
+                                ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'controller' => Olcs\Controller\Licence\Surrender\CommunityLicenceController::class,
+                                            'action' => 'submit'
+                                        ],
+                                    ],
+                                ]
+                            ]
+                        ],
+                        'review' => [
+                            'may_terminate' => true,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'review[/]',
+                                'defaults' => [
+                                    'controller' => Olcs\Controller\Licence\Surrender\ReviewController::class,
+                                    'action' => 'index'
+                                ],
+                            ]
+                        ],
+                        'destroy' => [
+                            'may_terminate' => false,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'destroy[/]',
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'controller' => DestroyController::class,
+                                            'action' => 'index',
+                                        ],
+                                    ],
+                                ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'controller' => DestroyController::class,
+                                            'action' => 'continue',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'print-sign-return' => ['may_terminate' => true,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'print-sign-return[/]',
+                                'defaults' => [
+                                    'controller' => Olcs\Controller\Licence\Surrender\PrintSignReturnController::class,
+                                    'action' => 'print',
+                                ],
+                            ],
                         ]
                     ]
                 ],

@@ -42,8 +42,7 @@ class FeePartSuccessfulController extends AbstractSelfserveController implements
                 'command' => AcceptEcmtPermits::class,
                 'dataKey' => 'application',
                 'params' => 'id',
-                'step' => EcmtSection::ROUTE_ECMT_ISSUING,
-                'query' => ['receipt_reference' => 'paidWaived'],
+                'step' => EcmtSection::ROUTE_ISSUE_SUBMITTED,
                 'field' => 'hasOutstandingFees',
                 'value' => 0
             ]
@@ -53,7 +52,7 @@ class FeePartSuccessfulController extends AbstractSelfserveController implements
     public function handlePost()
     {
         if (isset($this->postParams['Submit']['DeclineButton'])) {
-            return $this->nextStep(EcmtSection::ROUTE_ECMT_DECLINE_APPLICATION);
+            return $this->nextStep(EcmtSection::ROUTE_DECLINE_APPLICATION);
         }
 
         return parent::handlePost();

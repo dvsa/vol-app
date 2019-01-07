@@ -20,17 +20,18 @@ class BackToOverview extends AbstractHelper
      *
      * @param string|null $label Parameters
      *
+     * @param string|null $uri
      * @return string
      */
-    public function __invoke(?string $label = 'common.link.back.label'): string
+    public function __invoke(?string $label = 'common.link.back.label', ?string $uri = ''): string
     {
         /**
          * @todo temporary to stop "return to overview" links losing their styling - can be removed following olcs-21034
          */
-        $linkClass = (self::BACK_LINK_LABEL === $label ? 'govuk-back-link' : 'govuk-link');
+        $linkClass = ($label === self::BACK_LINK_LABEL ? 'govuk-back-link' : 'govuk-link');
 
         $label = $this->view->escapeHtml($this->view->translate($label));
-        $url = $this->view->url('permits/application-overview', [], [], true);
+        $url = $this->view->url(empty($uri) ? EcmtSection::ROUTE_APPLICATION_OVERVIEW : $uri, [], [], true);
         return sprintf($this->linkTemplate, $url, $linkClass, $label);
     }
 }

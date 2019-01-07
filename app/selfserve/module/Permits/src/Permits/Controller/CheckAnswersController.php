@@ -34,9 +34,16 @@ class CheckAnswersController extends AbstractSelfserveController implements Togg
         'generic' => 'permits/check-answers'
     ];
 
+    protected $templateVarsConfig = [
+        'generic' => [
+            'browserTitle' => 'permits.page.check-answers.browser.title',
+            'title' => 'permits.page.check-answers.title'
+        ]
+    ];
+
     protected $postConfig = [
         'default' => [
-            'retrieveData' => false,
+            'retrieveData' => true,
             'checkConditionalDisplay' => false,
             'command' => UpdateEcmtCheckAnswers::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,

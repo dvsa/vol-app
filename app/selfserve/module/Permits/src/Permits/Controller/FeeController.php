@@ -82,10 +82,10 @@ class FeeController extends AbstractSelfserveController implements ToggleAwareIn
         $payment = $response->getResult();
 
         if ($this->data['application']['status']['id'] === RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED) {
-            $successRoute = EcmtSection::ROUTE_ECMT_SUBMITTED;
+            $successRoute = EcmtSection::ROUTE_APPLICATION_SUBMITTED;
             $failureRoute = EcmtSection::ROUTE_ECMT_FEE;
         } else {
-            $successRoute = EcmtSection::ROUTE_ECMT_ISSUING;
+            $successRoute = EcmtSection::ROUTE_ISSUE_SUBMITTED;
             $failureRoute = EcmtSection::ROUTE_ECMT_AWAITING_FEE;
         }
 

@@ -2,9 +2,12 @@
 namespace Permits;
 
 use Permits\Controller\CancelApplicationController;
+use Permits\Controller\ConfirmChangeController;
 use Permits\Controller\EmissionsController;
 use Permits\Controller\CabotageController;
 use Permits\Controller\FeePartSuccessfulController;
+use Permits\Controller\LicenceController;
+use Permits\Controller\SectorsController;
 use Permits\Controller\ValidPermitsController;
 use Permits\Controller\WithdrawApplicationController;
 use Permits\Controller\CheckAnswersController;
@@ -14,13 +17,18 @@ use Permits\Controller\OverviewController;
 use Permits\Controller\DeclineController;
 use Permits\Controller\SubmittedController;
 use Permits\Controller\PermitsController;
+use Permits\Controller\TypeController;
 
-return array(
-  'controllers' => array(
-    'invokables' => array(
+return [
+  'controllers' => [
+    'invokables' => [
         PermitsController::class => PermitsController::class,
+        ConfirmChangeController::class => ConfirmChangeController::class,
+        LicenceController::class => LicenceController::class,
+        TypeController::class => TypeController::class,
         EmissionsController::class => EmissionsController::class,
         CabotageController::class => CabotageController::class,
+        SectorsController::class => SectorsController::class,
         CheckAnswersController::class => CheckAnswersController::class,
         DeclarationController::class => DeclarationController::class,
         OverviewController::class => OverviewController::class,
@@ -31,21 +39,319 @@ return array(
         SubmittedController::class => SubmittedController::class,
         CancelApplicationController::class => CancelApplicationController::class,
         WithdrawApplicationController::class => WithdrawApplicationController::class
-    ),
-  ),
-  'router' => array(
-    'routes' => array(
-      'permits' => array(
+    ],
+  ],
+  'router' => [
+    'routes' => [
+      'permits' => [
         'type'    => 'segment',
-        'options' => array(
+        'options' => [
           'route'    => '/permits',
-          'defaults' => array(
+          'defaults' => [
             'controller'    => PermitsController::class,
             'action'        => 'index',
-          ),
-        ),
+          ],
+        ],
           'may_terminate' => true,
           'child_routes' => [
+              'ecmt-short' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/ecmt-short'
+                  ],
+                  'may_terminate' => true,
+                  'child_routes' => [
+                      'overview' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:shortId/overview[/]',
+                              'defaults' => [
+                                  'controller'    => PermitsController::class,
+                                  'action'        => 'index',
+                              ],
+                              'constraints' => [
+                                  'shortId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'emissions' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:shortId/emissions[/]',
+                              'defaults' => [
+                                  'controller'    => PermitsController::class,
+                                  'action'        => 'index',
+                              ],
+                              'constraints' => [
+                                  'shortId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'cabotage' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:shortId/cabotage[/]',
+                              'defaults' => [
+                                  'controller'    => PermitsController::class,
+                                  'action'        => 'index',
+                              ],
+                              'constraints' => [
+                                  'shortId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'countries' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:shortId/countries[/]',
+                              'defaults' => [
+                                  'controller'    => PermitsController::class,
+                                  'action'        => 'index',
+                              ],
+                              'constraints' => [
+                                  'shortId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'startdate' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:shortId/startdate[/]',
+                              'defaults' => [
+                                  'controller'    => PermitsController::class,
+                                  'action'        => 'index',
+                              ],
+                              'constraints' => [
+                                  'shortId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'enddate' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:shortId/enddate[/]',
+                              'defaults' => [
+                                  'controller'    => PermitsController::class,
+                                  'action'        => 'index',
+                              ],
+                              'constraints' => [
+                                  'shortId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'urgency' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:shortId/urgency[/]',
+                              'defaults' => [
+                                  'controller'    => PermitsController::class,
+                                  'action'        => 'index',
+                              ],
+                              'constraints' => [
+                                  'shortId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'benefit' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:shortId/benefit[/]',
+                              'defaults' => [
+                                  'controller'    => PermitsController::class,
+                                  'action'        => 'index',
+                              ],
+                              'constraints' => [
+                                  'shortId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'options' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:shortId/options[/]',
+                              'defaults' => [
+                                  'controller'    => PermitsController::class,
+                                  'action'        => 'index',
+                              ],
+                              'constraints' => [
+                                  'shortId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'criteria' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:shortId/criteria[/]',
+                              'defaults' => [
+                                  'controller'    => PermitsController::class,
+                                  'action'        => 'index',
+                              ],
+                              'constraints' => [
+                                  'shortId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'supporting' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:shortId/supporting[/]',
+                              'defaults' => [
+                                  'controller'    => PermitsController::class,
+                                  'action'        => 'index',
+                              ],
+                              'constraints' => [
+                                  'shortId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'check-answers' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:shortId/check-answers[/]',
+                              'defaults' => [
+                                  'controller'    => CheckAnswersController::class,
+                                  'action'        => 'generic',
+                              ],
+                              'constraints' => [
+                                  'shortId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'declaration' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:shortId/declaration[/]',
+                              'defaults' => [
+                                  'controller'    => DeclarationController::class,
+                                  'action'        => 'question',
+                              ],
+                              'constraints' => [
+                                  'shortId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'fee' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:shortId/fee[/]',
+                              'defaults' => [
+                                  'controller'    => FeeController::class,
+                                  'action'        => 'generic',
+                              ],
+                              'constraints' => [
+                                  'shortId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                  ],
+              ],
+              'ecmt-removal' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/ecmt-removal'
+                  ],
+                  'may_terminate' => true,
+                  'child_routes' => [
+                      'overview' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:removalId/overview[/]',
+                              'defaults' => [
+                                  'controller'    => PermitsController::class,
+                                  'action'        => 'index',
+                              ],
+                              'constraints' => [
+                                  'removalId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'cabotage' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:removalId/cabotage[/]',
+                              'defaults' => [
+                                  'controller'    => PermitsController::class,
+                                  'action'        => 'index',
+                              ],
+                              'constraints' => [
+                                  'removalId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'number' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:removalId/number[/]',
+                              'defaults' => [
+                                  'controller'    => PermitsController::class,
+                                  'action'        => 'index',
+                              ],
+                              'constraints' => [
+                                  'removalId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'check-answers' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:removalId/check-answers[/]',
+                              'defaults' => [
+                                  'controller'    => CheckAnswersController::class,
+                                  'action'        => 'generic',
+                              ],
+                              'constraints' => [
+                                  'removalId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'declaration' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:removalId/declaration[/]',
+                              'defaults' => [
+                                  'controller'    => DeclarationController::class,
+                                  'action'        => 'question',
+                              ],
+                              'constraints' => [
+                                  'removalId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'fee' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => '/:removalId/fee[/]',
+                              'defaults' => [
+                                  'controller'    => FeeController::class,
+                                  'action'        => 'generic',
+                              ],
+                              'constraints' => [
+                                  'removalId' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                  ],
+              ],
               'ecmt-guidance' => [
                   'type'    => 'segment',
                   'options' => [
@@ -71,41 +377,52 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-licence' => [
+              'type' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '[/:id]/ecmt-licence[/]',
+                      'route'    => '/type[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'ecmtLicence',
-                      ],
-                      'constraints' => [
-                          'id' => '[0-9]+',
+                          'controller'    => TypeController::class,
+                          'action'        => 'question',
                       ],
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-add-licence' => [
+              'add-licence' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/ecmt-add-licence[/]',
+                      'route'    => '/type/:type/licence/add[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
+                          'controller'    => LicenceController::class,
                           'action'        => 'add',
                       ],
                       'constraints' => [
+                          'type' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
+              'licence' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '[/:id]/licence[/]',
+                      'defaults' => [
+                          'controller'    => LicenceController::class,
+                          'action'        => 'question',
+                      ],
+                      'constraints' => [
                           'id' => '[0-9]+',
                       ],
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-change-licence' => [
+              'change-licence' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-change-licence[/]',
+                      'route'    => '/:id/change-licence[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'changeLicence',
+                          'controller'    => ConfirmChangeController::class,
+                          'action'        => 'question',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -188,8 +505,8 @@ return array(
                   'options' => [
                       'route'    => '/:id/ecmt-sectors[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'sector',
+                          'controller'    => SectorsController::class,
+                          'action'        => 'question',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -281,10 +598,10 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-print-receipt' => [
+              'print-receipt' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-print-receipt[/]:reference',
+                      'route'    => '/:id/print-receipt[/]:reference',
                       'defaults' => [
                           'controller'    => PermitsController::class,
                           'action'        => 'print',
@@ -295,13 +612,13 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-submitted' => [
-                  'type'    => 'segment',
+              'application-submitted' => [
+                  'type' => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-submitted[/]',
+                      'route' => '/:id/application-submitted',
                       'defaults' => [
-                          'controller'    => SubmittedController::class,
-                          'action'        => 'generic',
+                          'controller' => SubmittedController::class,
+                          'action' => 'application-submitted',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -309,41 +626,13 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
-                'ecmt-fee-submitted' => [
-                    'type'    => 'segment',
-                    'options' => [
-                        'route'    => '/:id/ecmt-fee-submitted[/]',
-                        'defaults' => [
-                            'controller'    => SubmittedController::class,
-                            'action'        => 'fee-submitted',
-                        ],
-                        'constraints' => [
-                            'id' => '[0-9]+',
-                        ],
-                    ],
-                    'may_terminate' => false,
-                ],
-              'ecmt-decline-submitted' => [
-                'type'    => 'segment',
-                'options' => [
-                    'route'    => '/:id/ecmt-decline-submitted[/]',
-                    'defaults' => [
-                        'controller'    => SubmittedController::class,
-                        'action'        => 'decline',
-                    ],
-                    'constraints' => [
-                        'id' => '[0-9]+',
-                    ],
-                ],
-                'may_terminate' => false,
-              ],
-              'ecmt-fee-waived-submitted' => [
-                  'type'    => 'segment',
+              'issue-submitted' => [
+                  'type' => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-fee-waived-submitted[/]',
+                      'route' => '/:id/issue-submitted',
                       'defaults' => [
                           'controller' => SubmittedController::class,
-                          'action'     => 'fee-waived',
+                          'action' => 'issue-submitted',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -393,10 +682,10 @@ return array(
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-cancel-application' => [
+              'cancel-application' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-cancel-application[/]',
+                      'route'    => '/:id/cancel-application[/]',
                       'defaults' => [
                           'controller'    => CancelApplicationController::class,
                           'action'        => 'cancel',
@@ -420,10 +709,10 @@ return array(
                       ],
                   ],
               ],
-              'ecmt-withdraw-application' => [
+              'withdraw-application' => [
                     'type' => 'segment',
                     'options' => [
-                        'route' => '/:id/ecmt-withdraw-application[/]',
+                        'route' => '/:id/withdraw-application[/]',
                         'defaults' => [
                             'controller' => WithdrawApplicationController::class,
                             'action' => 'withdraw'
@@ -467,7 +756,7 @@ return array(
                               'route'    => 'decline[/]',
                               'defaults' => [
                                   'controller'    => DeclineController::class,
-                                  'action'        => 'generic',
+                                  'action'        => 'decline',
                               ],
                           ],
                           'may_terminate' => true,
@@ -477,8 +766,8 @@ return array(
                                   'options' => [
                                       'route'    => 'confirmation[/]',
                                       'defaults' => [
-                                          'controller'    => SubmittedController::class,
-                                          'action'        => 'decline',
+                                          'controller'    => DeclineController::class,
+                                          'action'        => 'confirmation',
                                       ],
                                   ],
                                   'may_terminate' => false,
@@ -488,9 +777,9 @@ return array(
                   ],
               ],
           ],
-      ),
-    ),
-  ),
+      ],
+    ],
+  ],
     /** @todo we don't need all of these different link helpers! OLCS-21512 */
     'view_helpers' => [
         'invokables' => [
@@ -504,14 +793,14 @@ return array(
 
         ],
     ],
-  'view_manager' => array(
-    'template_path_stack' => array(
+  'view_manager' => [
+    'template_path_stack' => [
       'permits' => __DIR__ . '/../view',
-    ),
-  ),
-  'tables' => array(
-    'config' => array(
+    ],
+  ],
+  'tables' => [
+    'config' => [
       __DIR__ . '/../src/Permits/Table/Tables/'
-    )
-  ),
-);
+    ]
+  ],
+];

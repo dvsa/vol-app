@@ -6,6 +6,7 @@ use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
+use Permits\View\Helper\EcmtSection;
 
 class SubmittedController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -18,74 +19,52 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
     ];
 
     protected $conditionalDisplayConfig = [
-        'default' => ConditionalDisplayConfig::PERMIT_APP_UNDER_CONSIDERATION,
-        'decline' => [],
-        'fee-submitted' => [],
-        'fee-waived' => ConditionalDisplayConfig::PERMIT_APP_UNDER_CONSIDERATION
+        'application-submitted' => ConditionalDisplayConfig::PERMIT_APP_UNDER_CONSIDERATION,
+        'issue-submitted' => ConditionalDisplayConfig::PERMIT_APP_PAID,
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/submitted',
-        'decline' => 'permits/submitted',
-        'fee-submitted' => 'permits/submitted',
-        'fee-waived' => 'permits/submitted'
+        'default' => 'permits/confirmation',
     ];
 
-    public function genericAction()
+    protected $templateVarsConfig = [
+        'application-submitted' => [
+            'browserTitle' => 'permits.page.confirmation.application-submitted.browser.title',
+            'title' => 'permits.page.confirmation.application-submitted.title',
+            'extraContent' => [
+                'title' => 'permits.page.confirmation.bullet.list.title',
+                'list' => 'en_GB/bullets/markup-ecmt-application-submitted-confirmation'
+            ],
+            'warning' => 'permits.page.confirmation.submitted.warning',
+            'receiptUrl' => ''
+        ],
+        'issue-submitted' => [
+            'browserTitle' => 'permits.page.confirmation.issue-submitted.browser.title',
+            'title' => 'permits.page.confirmation.issue-submitted.title',
+            'extraContent' => [
+                'title' => 'permits.page.confirmation.bullet.list.title',
+                'list' => 'en_GB/bullets/markup-ecmt-issue-submitted-confirmation'
+            ],
+            'warning' => 'permits.page.confirmation.submitted.warning',
+            'receiptUrl' => ''
+        ],
+    ];
+
+    public function applicationSubmittedAction()
     {
-        $ecmtApplicationId = $this->params()->fromRoute('id');
-        $view = parent::genericAction();
-        $view->setVariable('partialName', 'markup-ecmt-application-submitted');
-        $view->setVariable('titleName', 'permits.application.submitted.title');
-        $view->setVariable('mainName', 'permits.application.submitted.main');
-        $view->setVariable('receiptUrl', $this->url()->fromRoute('permits/ecmt-print-receipt', ['id' => $ecmtApplicationId, 'reference' => $this->params()->fromQuery('receipt_reference')]));
-
-        return $view;
-    }
-
-    public function feeSubmittedAction()
-    {
-        $ecmtApplicationId = $this->params()->fromRoute('id');
-        $view = parent::genericAction();
-
-        if ($this->params()->fromQuery('receipt_reference') === 'paidWaived') {
-            $partialName = 'markup-ecmt-application-fee-submitted-paid-waived';
-            $mainName = 'permits.application.fee.submitted.main.paid.waived';
-        } else {
-            $partialName = 'markup-ecmt-application-fee-submitted';
-            $mainName = 'permits.application.fee.submitted.main';
+        if (!empty($this->params()->fromQuery('receipt_reference'))) {
+            $this->data['receiptUrl'] = $this->url()->fromRoute(EcmtSection::ROUTE_PRINT_RECEIPT, ['id' => $this->params()->fromRoute('id'), 'reference' => $this->params()->fromQuery('receipt_reference')]);
         }
 
-        $view->setVariable('partialName', $partialName);
-        $view->setVariable('titleName', 'permits.application.fee.submitted.title');
-        $view->setVariable('mainName', $mainName);
-        $view->setVariable('receiptUrl', $this->url()->fromRoute('permits/ecmt-print-receipt', ['id' => $ecmtApplicationId, 'reference' => $this->params()->fromQuery('receipt_reference')]));
-
-        return $view;
+        return parent::genericAction();
     }
 
-    public function declineAction()
+    public function issueSubmittedAction()
     {
-        $view = parent::genericAction();
+        if (!empty($this->params()->fromQuery('receipt_reference'))) {
+            $this->data['receiptUrl'] = $this->url()->fromRoute(EcmtSection::ROUTE_PRINT_RECEIPT, ['id' => $this->params()->fromRoute('id'), 'reference' => $this->params()->fromQuery('receipt_reference')]);
+        }
 
-        $view->setVariable('partialName', 'markup-ecmt-decline-submitted');
-        $view->setVariable('titleName', 'permits.decline.submitted.title');
-        $view->setVariable('mainName', 'permits.decline.submitted.main');
-
-        return $view;
-    }
-
-    public function feeWaivedAction()
-    {
-        $view = parent::genericAction();
-        $view->setVariables([
-            'partialName' => 'markup-ecmt-application-submitted',
-            'titleName' => 'permits.application.submitted.title',
-            'mainName' => 'permits.application.submitted.main',
-            'receiptUrl' => '',
-            'visuallyHidden' => 'visually-hidden'
-        ]);
-
-        return $view;
+        return parent::genericAction();
     }
 }

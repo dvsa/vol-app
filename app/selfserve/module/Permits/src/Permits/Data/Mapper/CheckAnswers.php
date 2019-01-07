@@ -21,11 +21,11 @@ class CheckAnswers
             'permits.page.permits.required.question',
             'permits.page.number-of-trips.question',
             'permits.page.international.journey.question',
-            'permits.page.sector.question'
+            'permits.page.sectors.question'
         ];
 
         $routes = [
-            EcmtSection::ROUTE_ECMT_LICENCE,
+            EcmtSection::ROUTE_LICENCE,
             EcmtSection::ROUTE_ECMT_EURO6,
             EcmtSection::ROUTE_ECMT_CABOTAGE,
             EcmtSection::ROUTE_ECMT_COUNTRIES,

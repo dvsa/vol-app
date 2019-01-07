@@ -2,6 +2,8 @@
 
 namespace Olcs\Controller\Licence\Surrender;
 
+use Dvsa\Olcs\Transfer\Command\Surrender\Update;
+use Common\Util;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence as SurrenderQuery;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Common\Controller\Interfaces\ToggleAwareInterface;
@@ -12,6 +14,8 @@ use Dvsa\Olcs\Transfer\Query\Licence\LicenceWithCorrespondenceCd as LicenceQuery
 
 class AbstractSurrenderController extends AbstractSelfserveController implements ToggleAwareInterface
 {
+    use Util\FlashMessengerTrait;
+
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
     ];
@@ -74,5 +78,19 @@ class AbstractSurrenderController extends AbstractSelfserveController implements
         );
 
         return $response->getResult();
+    }
+
+    protected function updateSurrender(string $status, array $extraData = []): bool
+    {
+        $surrender = $this->getSurrender();
+
+        $dtoData = array_merge([
+            'id' => $this->licenceId,
+            'version' => $surrender['version'],
+            'status' => $status,
+        ], $extraData);
+
+        $response = $this->handleCommand(Update::create($dtoData));
+        return $response->isOk();
     }
 }

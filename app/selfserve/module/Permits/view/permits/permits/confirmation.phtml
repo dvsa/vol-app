@@ -1,0 +1,31 @@
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-panel govuk-panel--confirmation">
+            <h1 class="govuk-panel__title">
+                <?php echo $this->escapeHtml($this->translate($data['title'])); ?>
+            </h1>
+            <div class="govuk-panel__body">
+                <?php echo $this->escapeHtml($this->translate('permits.page.confirmation.reference')); ?>
+                <br><strong><?php echo $this->escapeHtml($data['application']['applicationRef']); ?></strong>
+                <?php if (isset($data['receiptUrl']) && !empty($data['receiptUrl'])) { ?>
+                    <a href="<?php echo $data['receiptUrl']; ?>" class="govuk-!-font-size-19 govuk-!-margin-top-5 govuk-!-display-block" style="color: #FFFFFF;" target="_blank">View Receipt</a>
+                <?php } ?>
+            </div>
+        </div>
+
+        <h2 class="govuk-heading-m">
+            <?php echo $this->escapeHtml($this->translate($data['extraContent']['title'])); ?>
+        </h2>
+
+        <?php echo $this->partial($data['extraContent']['list']); ?>
+
+        <?php if (isset($data['warning'])) {
+                 echo $this->partial('partials/warning-component', ['translationKey' => $data['warning']]);
+             }
+         ?>
+
+        <a href="<?php echo $this->url('permits') ?>" role="button" draggable="false" class="govuk-button">
+            <?php echo $this->escapeHtml($this->translate('permits.page.confirmation.finish')); ?>
+        </a>
+    </div>
+</div>
