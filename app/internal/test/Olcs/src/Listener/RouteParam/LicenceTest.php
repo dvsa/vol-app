@@ -109,7 +109,7 @@ class LicenceTest extends TestCase
         $event = new RouteParam();
         $event->setValue(32);
 
-        $this->setExpectedException(\RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
 
         $this->sut->onLicence($event);
     }

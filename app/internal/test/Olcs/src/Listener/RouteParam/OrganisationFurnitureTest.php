@@ -67,7 +67,7 @@ class OrganisationFurnitureTest extends MockeryTestCase
         $event = new RouteParam();
         $event->setValue($id);
 
-        $this->setExpectedException(\Common\Exception\ResourceNotFoundException::class);
+        $this->expectException(\Common\Exception\ResourceNotFoundException::class);
 
         $this->sut->onOrganisation($event);
     }

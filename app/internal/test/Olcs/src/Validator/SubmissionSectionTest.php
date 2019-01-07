@@ -8,7 +8,7 @@ use Olcs\Validator\SubmissionSection;
  * Class SubmissionSection Test
  * @package OlcsTest\Validator
  */
-class SubmissionSectionTest extends \PHPUnit_Framework_TestCase
+class SubmissionSectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @dataProvider provideIsValid

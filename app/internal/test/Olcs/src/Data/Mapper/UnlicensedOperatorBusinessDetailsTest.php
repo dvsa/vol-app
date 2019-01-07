@@ -8,15 +8,15 @@
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Data\Mapper\UnlicensedOperatorBusinessDetails as Sut;
-use PHPUnit_Framework_TestCase;
 
 /**
  * Unlicensed Operator Business Details Mapper Test
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class UnlicensedOperatorBusinessDetailsTest extends PHPUnit_Framework_TestCase
+class UnlicensedOperatorBusinessDetailsTest extends TestCase
 {
     public function testMapFromResult()
     {

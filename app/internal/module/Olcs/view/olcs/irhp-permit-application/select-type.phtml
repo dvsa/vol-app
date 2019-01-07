@@ -1,0 +1,8 @@
+<?php
+    $form = $this->placeholder('form')->getValue();
+    $contentTitle = $this->getPlaceholder('contentTitle')->asString();
+
+    $this->placeholder('contentTitle')->set(trim($contentTitle));
+    echo $this->formErrors($form);
+    echo $this->form($form);
+

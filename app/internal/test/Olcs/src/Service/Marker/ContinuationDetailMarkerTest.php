@@ -3,13 +3,14 @@
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * ContinuationDetailMarkerTest
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class ContinuationDetailMarkerTest extends \PHPUnit_Framework_TestCase
+class ContinuationDetailMarkerTest extends TestCase
 {
     /**
      *

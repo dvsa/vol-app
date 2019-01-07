@@ -67,7 +67,7 @@ class TransportManagerFurnitureTest extends TestCase
 
     public function testOnTransportManagerFurnitureWithError()
     {
-        $this->setExpectedException(ResourceNotFoundException::class);
+        $this->expectException(ResourceNotFoundException::class);
 
         $event = m::mock(RouteParam::class);
         $event->shouldReceive('getValue')->andReturn(111);

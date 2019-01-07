@@ -3,13 +3,14 @@
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * DisqualificationMarkerTest
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DisqualificationMarkerTest extends \PHPUnit_Framework_TestCase
+class DisqualificationMarkerTest extends TestCase
 {
     /**
      *

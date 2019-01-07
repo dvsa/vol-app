@@ -11,6 +11,7 @@ use Dvsa\Olcs\Transfer\Command\Permits\PrintPermits as PrintPermitsDto;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrint as ListDto;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintConfirm as ConfirmListDto;
 use Zend\View\Model\ViewModel;
+use Admin\Form\Model\Form\IrhpPermitPrintFilter as FilterForm;
 
 /**
  * IRHP Permits Stock Print Controller
@@ -29,6 +30,7 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
 
     protected $listVars = [];
     protected $listDto = ListDto::class;
+    protected $filterForm = FilterForm::class;
 
     protected $navigationId = 'admin-dashboard/admin-printing/irhp-permits';
 

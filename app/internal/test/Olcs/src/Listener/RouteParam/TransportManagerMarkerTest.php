@@ -183,7 +183,7 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $event = new RouteParam();
         $event->setValue(18);
 
-        $this->setExpectedException(\RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
 
         $this->sut->onLicenceTransportManagerMarker($event);
     }
@@ -347,7 +347,7 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $event = new RouteParam();
         $event->setValue(534);
 
-        $this->setExpectedException(\RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
 
         $this->sut->onApplicationTransportManagerMarker($event);
     }
@@ -394,7 +394,7 @@ class TransportManagerMarkerTest extends MockeryTestCase
         $event = new RouteParam();
         $event->setValue(534);
 
-        $this->setExpectedException(\RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
 
         $this->sut->onApplicationTransportManagerMarker($event);
     }

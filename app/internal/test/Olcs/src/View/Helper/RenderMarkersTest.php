@@ -2,15 +2,15 @@
 
 namespace OlcsTest\View\Helper;
 
-use PHPUnit_Framework_TestCase;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * Class RenderMarkersTest
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class RenderMarkersTest extends PHPUnit_Framework_TestCase
+class RenderMarkersTest extends TestCase
 {
     /**
      * @var \Olcs\View\Helper\RenderMarkers

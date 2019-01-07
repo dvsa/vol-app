@@ -18,6 +18,7 @@ use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitApplication\GetList as ListDTO;
 use Dvsa\Olcs\Transfer\Query\Permits\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
+use Dvsa\Olcs\Transfer\Query\Permits\Sectors as SectorsDto;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateFullPermitApplication as CreateDTO;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitApplication as UpdateDTO;
 use Dvsa\Olcs\Transfer\Command\Permits\DeclineEcmtPermits as DeclineDTO;
@@ -38,6 +39,10 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
 
     const FEE_TYPE_ECMT_APP = 'IRHPGVAPP';
     const FEE_TYPE_ECMT_ISSUE = 'IRHPGVISSUE';
+
+    const ECMT_ANNUAL_PERMIT_TYPE_ID = 1;
+    const ECMT_SHORT_TERM_PERMIT_TYPE_ID = 2;
+    const ECMT_REMOVAL_PERMIT_TYPE_ID = 3;
 
     protected $toggleConfig = [
         'default' => [
@@ -112,6 +117,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
 
     // Scripts to include when rendering actions.
     protected $inlineScripts = [
+        'indexAction' => ['table-actions'],
         'editAction' => ['permits'],
         'addAction' => ['permits']
     ];
@@ -167,6 +173,35 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     }
 
     /**
+     * Renders modal form, and handles redirect to correct application form for permit type.
+     *
+     * @return \Zend\Http\Response
+     */
+    public function selectTypeAction()
+    {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $permitTypeId = $this->params()->fromPost()['permitType'];
+
+            // Temporary redirect to manually built application forms, when other 2 ECMT manual builds
+            // are done this switch can be added too, when Generic forms system done will just redirect there passing ID
+            switch ($permitTypeId) {
+                case self::ECMT_ANNUAL_PERMIT_TYPE_ID:
+                    return $this->redirect()
+                        ->toRouteAjax(
+                            'licence/permits/add',
+                            ['licence' => $this->params()->fromRoute('licence')],
+                            ['query' => ['permitTypeId' => $permitTypeId]]
+                        );
+            }
+        }
+
+        $form = $this->getForm('SelectPermitType');
+        $this->placeholder()->setPlaceholder('form', $form);
+        $this->placeholder()->setPlaceholder('contentTitle', 'Select Permit Type');
+    }
+
+    /**
      * @return mixed|ViewModel
      */
     public function editAction()
@@ -194,10 +229,9 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
             if ($postData['action'] === 'Apply') {
                 return $this->redirect()
                     ->toRoute(
-                        'licence/permits/add',
+                        'licence/permits/selectType',
                         [
-                            'licence' => $this->params()->fromRoute('licence'),
-                            'action' => 'add'
+                            'licence' => $this->params()->fromRoute('licence')
                         ]
                     );
             }
@@ -251,7 +285,6 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
             );
     }
 
-
     /**
      * Setup required values for Edit form
      *
@@ -264,7 +297,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         $licence = $this->getLicence();
         $formData['fields']['numVehicles'] = $licence['totAuthVehicles'];
         $formData['fields']['numVehiclesLabel'] = $licence['totAuthVehicles'];
-
+        $form = $this->getSectors($form, $formData['fields']['sectors']);
         $form->setData($formData);
         return $form;
     }
@@ -284,7 +317,31 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         $formData['fields']['numVehicles'] = $licence['totAuthVehicles'];
         $formData['fields']['numVehiclesLabel'] = $licence['totAuthVehicles'];
         $formData['fields']['dateReceived'] = date("Y-m-d");
+        $form = $this->getSectors($form);
         $form->setData($formData);
+        return $form;
+    }
+
+    /**
+     * Retrieves sectors list and populates Value options for Add and Edit forms
+     *
+     * @param $form
+     * @param null $selectedSector
+     * @return mixed
+     */
+    protected function getSectors($form, $selectedSector = null)
+    {
+        $response = $this->handleQuery(SectorsDto::create([]));
+        $sectors = [];
+        if ($response->isOk()) {
+            $sectors = $response->getResult();
+        } else {
+            $this->checkResponse($response);
+        }
+
+        $mappedSectors = IrhpPermitApplicationMapper::mapSectors($sectors, $selectedSector);
+        $form->get('fields')->get('sectors')->setValueOptions($mappedSectors);
+
         return $form;
     }
 

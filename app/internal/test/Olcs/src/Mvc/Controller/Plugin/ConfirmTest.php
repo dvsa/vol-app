@@ -3,12 +3,13 @@
 namespace OlcsTest\Mvc\Controller\Plugin;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * Class ComfirmPluginTest
  * @package OlcsTest\Mvc\Controller\Plugin
  */
-class ConfirmTest extends \PHPUnit_Framework_TestCase
+class ConfirmTest extends TestCase
 {
     protected $sut;
 
@@ -95,7 +96,6 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
         $result = $plugin->__invoke('some message', true, 'custom');
 
         $this->assertTrue($result);
-
     }
 
     /**

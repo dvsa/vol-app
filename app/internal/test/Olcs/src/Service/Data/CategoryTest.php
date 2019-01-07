@@ -78,7 +78,7 @@ class CategoryTest extends AbstractDataServiceTestCase
 
     public function testFetchListDataWithException()
     {
-        $this->setExpectedException(UnexpectedResponseException::class);
+        $this->expectException(UnexpectedResponseException::class);
         $mockTransferAnnotationBuilder = m::mock()
             ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
 

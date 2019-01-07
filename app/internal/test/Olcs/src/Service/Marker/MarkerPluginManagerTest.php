@@ -3,13 +3,14 @@
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * MarkerPluginManagerTest
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class MarkerPluginManagerTest extends m\Adapter\Phpunit\MockeryTestCase
+class MarkerPluginManagerTest extends TestCase
 {
     /**
      * @var \Olcs\Service\Marker\MarkerPluginManager
@@ -44,7 +45,7 @@ class MarkerPluginManagerTest extends m\Adapter\Phpunit\MockeryTestCase
     {
         $mockPlugin = m::mock();
 
-        $this->setExpectedException(\RuntimeException::class, 'Must implement MarkerInterface');
+        $this->expectException(\RuntimeException::class, 'Must implement MarkerInterface');
 
         $this->sut->validatePlugin($mockPlugin);
     }

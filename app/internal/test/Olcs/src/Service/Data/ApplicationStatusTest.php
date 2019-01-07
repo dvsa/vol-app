@@ -68,7 +68,7 @@ class ApplicationStatusTest extends AbstractDataServiceTestCase
 
     public function testFetchListDataWithException()
     {
-        $this->setExpectedException(UnexpectedResponseException::class);
+        $this->expectException(UnexpectedResponseException::class);
 
         $this->mockTransferAnnotationBuilder->shouldReceive('createQuery')->once()->andReturn('query');
         $this->mockResp->shouldReceive('isOk')->once()->andReturn(false);

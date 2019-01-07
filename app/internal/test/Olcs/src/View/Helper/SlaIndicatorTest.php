@@ -10,7 +10,7 @@ use Olcs\View\Helper\SlaIndicator;
  *
  * @package OlcsTest\View\Helper
  */
-class SlaIndicatorTest extends \PHPUnit_Framework_TestCase
+class SlaIndicatorTest extends \PHPUnit\Framework\TestCase
 {
     const INACTIVE_HTML = '<span class="status grey">Inactive</span>';
     const FAIL_HTML = '<span class="status red">Fail</span>';

@@ -10,7 +10,7 @@ use Olcs\Helper\ApplicationProcessingHelper;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ApplicationProcessingHelperTest extends \PHPUnit_Framework_TestCase
+class ApplicationProcessingHelperTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

@@ -44,6 +44,8 @@ class SubmissionTest extends AbstractFormValidationTestCase
      * Other methods have been used such as: assertPreConditions and setUpBeforeClass
      * with no difference.  So we have this method to override the missingTest function.
      * Elements are still tested.
+     *
+     * @doesNotPerformAssertions
      */
     final public function testMissingTest($element = null)
     {
@@ -51,6 +53,12 @@ class SubmissionTest extends AbstractFormValidationTestCase
         unset($element);
     }
 
+    /**
+     * This doesn't perform any assertions as per the documentation for
+     * $testedElements on line 30 of AbstractFormValidationTestCase.
+     *
+     * @doesNotPerformAssertions
+     */
     public function testSubmissionsSections()
     {
         $element = ['fields', 'submissionSections'];

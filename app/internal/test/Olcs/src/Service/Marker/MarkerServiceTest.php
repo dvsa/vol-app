@@ -3,13 +3,14 @@
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * MarkerServiceTest
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class MarkerServiceTest extends m\Adapter\Phpunit\MockeryTestCase
+class MarkerServiceTest extends TestCase
 {
     /**
      *

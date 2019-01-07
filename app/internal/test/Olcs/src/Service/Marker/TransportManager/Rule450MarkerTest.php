@@ -3,13 +3,14 @@
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * Rule50MarkerTest
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class Rule450MarkerTest extends \PHPUnit_Framework_TestCase
+class Rule450MarkerTest extends TestCase
 {
     /**
      *

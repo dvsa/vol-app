@@ -70,7 +70,7 @@ class LicenceFurnitureTest extends TestCase
         $event = new RouteParam();
         $event->setValue(32);
 
-        $this->setExpectedException(ResourceNotFoundException::class);
+        $this->expectException(ResourceNotFoundException::class);
 
         $this->sut->onLicenceFurniture($event);
     }

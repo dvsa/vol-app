@@ -12,7 +12,7 @@ class CreatePermit extends Base
 {
     /**
      * @Form\Options({
-     *     "label": "<h4>Permit Application</h4>",
+     *     "label": "<h4>ECMT Annual Permit Application</h4>",
      *     "label_options": {
      *         "disable_html_escape": "true"
      *     }
@@ -21,19 +21,6 @@ class CreatePermit extends Base
      * @Form\Type("\Common\Form\Elements\Types\Html")
      */
     public $title = null;
-
-    /**
-     * @Form\Attributes({"id":"permitType"})
-     * @Form\Options({
-     *     "label": "Permit Type",
-     *     "short-label": "Permit Type",
-     *     "label_attributes": {"id": "label-permit-type"},
-     *     "service_name": "Common\Service\Data\IrhpPermitType",
-     * })
-     * @Form\Type("DynamicSelect")
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
-     */
-    public $permitType = null;
 
     /**
      * @Form\Attributes({"id":"dateReceived"})
@@ -212,13 +199,12 @@ class CreatePermit extends Base
      * })
      * @Form\Options({
      *      "label": "markup-ecmt-sector-list-label",
-     *      "fieldset-attributes": {"id": "sector-list"},
+     *      "fieldset-attributes": {"id": "sector-list", "class":"inline"},
      *      "fieldset-data-group": "sector-list",
      *      "label_attributes": {"class": "form-control form-control--radio"},
-     *      "service_name": "Common\Service\Data\Sector",
      *      "disable_inarray_validator" : true,
      * })
-     * @Form\Type("DynamicRadio")
+     * @Form\Type("Radio")
      */
     public $sectors = null;
 

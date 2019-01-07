@@ -149,6 +149,9 @@ class IrhpPermitFurnitureTest extends TestCase
         $mockNavigation = m::mock()
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp_permits')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with(true)->getMock()
+            )->getMock()
+            ->shouldReceive('findOneBy')->once()->with('id', 'licence_irhp_permits-add')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
             )->getMock();
 
         $mockSidebarNavigation = m::mock();

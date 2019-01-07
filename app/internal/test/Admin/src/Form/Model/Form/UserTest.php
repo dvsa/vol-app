@@ -37,9 +37,13 @@ class UserTest extends AbstractFormValidationTestCase
         $this->assertFormElementHidden(['version']);
     }
 
-    // This is a similar scenario to search postcode elements.  These are
-    // skipped deliberately.  They do not implement any InputFilters and
-    // validated by JS.
+    /**
+     * This is a similar scenario to search postcode elements. These are
+     * skipped deliberately. They do not implement any InputFilters and
+     * validated by JS.
+     *
+     * @doesNotPerformAssertions
+     */
     public function testApplicationTransportManagersApplication()
     {
         $elementHierarchy = ['userType', 'applicationTransportManagers'];
@@ -51,9 +55,8 @@ class UserTest extends AbstractFormValidationTestCase
 
         foreach ($applicationTransportManagerElements as $element) {
             $elementToSkip = array_merge(
-                $elementHierarchy, [
-                    $element,
-                ]
+                $elementHierarchy,
+                [$element]
             );
 
             self::$testedElements[implode($elementToSkip, '.')] = true;

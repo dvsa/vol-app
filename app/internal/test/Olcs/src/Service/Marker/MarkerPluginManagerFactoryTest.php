@@ -3,13 +3,14 @@
 namespace OlcsTest\Service\Marker;
 
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 /**
  * MarkerPluginManagerFactoryTest
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class MarkerPluginManagerFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
+class MarkerPluginManagerFactoryTest extends TestCase
 {
     /**
      * @var \Olcs\Service\Marker\MarkerPluginManager

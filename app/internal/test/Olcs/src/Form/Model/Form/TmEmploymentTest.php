@@ -23,6 +23,12 @@ class TmEmploymentTest extends AbstractFormValidationTestCase
         $this->assertFormElementText($element, null, 90);
     }
 
+    /**
+     * This doesn't perform any assertions as per the documentation for
+     * assertFormElementPostcodeSearch() in AbstractFormValidationTestCase
+     *
+     * @doesNotPerformAssertions
+     */
     public function testSearchPostcode()
     {
         $this->assertFormElementPostcodeSearch(['address', 'searchPostcode']);
