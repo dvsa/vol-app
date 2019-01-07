@@ -7,6 +7,24 @@ use Zend\View\Model\ViewModel;
 
 class PrintSignReturnController extends AbstractSurrenderController
 {
+    protected $templateConfig = [
+        'index' => 'licence/surrender-print-sign-return'
+    ];
+
+    public function indexAction()
+    {
+        $view = $this->genericView();
+        $view->setVariables(
+            [
+                'pageTitle' => 'licence.surrender.print-sign-return.page.title',
+                'returnLinkText' => 'return-home-button-text',
+                'returnLink' => $this->getBackLink('lva-licence'),
+                'printLink' => 'Shaun to update',
+            ]
+        );
+        return $view;
+    }
+
     public function printAction()
     {
         $translator = $this->getServiceLocator()->get('Helper\Translation');
@@ -22,7 +40,7 @@ class PrintSignReturnController extends AbstractSurrenderController
         ];
 
         $view = new ViewModel($params);
-        $view->setTemplate('licence/surrender-print-sign-return');
+        $view->setTemplate('licence/surrender-print-sign-return-form');
 
         $layout = new ViewModel();
         $layout->setTemplate('layouts/simple');
