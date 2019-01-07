@@ -20,7 +20,6 @@ class PrintSignReturnController extends AbstractSurrenderController
                 [$this->licence['licNo']]
             )
         ];
-
         $view = new ViewModel($params);
         $view->setTemplate('licence/surrender-print-sign-return');
 
@@ -29,7 +28,9 @@ class PrintSignReturnController extends AbstractSurrenderController
         $layout->setTerminal(true);
         $layout->addChild($view, 'content');
 
-        return $layout;
+        if ($this->updateSurrender(RefData::SURRENDER_STATUS_SUBMITTED)) {
+            return $layout;
+        }
     }
 
     protected function determineTitle()
