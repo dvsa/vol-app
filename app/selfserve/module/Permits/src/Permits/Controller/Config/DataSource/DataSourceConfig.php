@@ -33,18 +33,20 @@ class DataSourceConfig
     ];
 
     const PERMIT_APP_ADD_LICENCE = [
-        AvailableTypes::class => [],
+        OpenWindows::class => [],
         LastOpenWindow::class => [],
         LicencesAvailable::class => [
             'passInUserData' => 'getCurrentOrganisationId'
-        ]
+        ],
+        IrhpPermitType::class => []
     ];
 
     const PERMIT_APP_LICENCE = [
         PermitAppDataSource::class => [],
         LicencesAvailable::class => [
             'passInUserData' => 'getCurrentOrganisationId',
-        ]
+        ],
+        IrhpPermitType::class => []
     ];
 
     const PERMIT_APP_SECTORS = [

@@ -7,7 +7,12 @@ namespace Permits\Controller\Config\Params;
  */
 class ParamsConfig
 {
-    const NEW_APPLICATION = 'new-application';
+    const NEW_APPLICATION = [
+        'route' => [
+            'type'
+        ],
+    ];
+
     const CONFIRM_CHANGE = 'confirm-change';
 
     const ID_FROM_ROUTE = [

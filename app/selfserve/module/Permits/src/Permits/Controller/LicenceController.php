@@ -2,7 +2,7 @@
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
-use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
+use Dvsa\Olcs\Transfer\Command\IrhpPermitApplication\Create;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
@@ -24,7 +24,7 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
     ];
 
     protected $conditionalDisplayConfig = [
-        'add' => ConditionalDisplayConfig::PERMIT_APP_CAN_APPLY,
+        'add' => ConditionalDisplayConfig::PERMIT_APP_CAN_APPLY_SINGLE,
         'question' => ConditionalDisplayConfig::PERMIT_APP_NOT_SUBMITTED,
     ];
 
@@ -41,7 +41,7 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
         'add' => [
             'browserTitle' => 'permits.page.licence.browser.title',
             'question' => 'permits.page.licence.question',
-            'backUri' => EcmtSection::ROUTE_PERMITS
+            'backUri' => EcmtSection::ROUTE_TYPE
         ],
         'question' => [
             'browserTitle' => 'permits.page.licence.browser.title',
@@ -51,9 +51,10 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
 
     protected $postConfig = [
         'add' => [
-            'command' => CreateEcmtPermitApplication::class,
+            'command' => Create::class,
             'params' => ParamsConfig::NEW_APPLICATION,
-            'step' => EcmtSection::ROUTE_ECMT_EURO6,
+            // @Todo: Replace step with new overview route
+            'step' => 'permits/application',
         ],
         'question' => [
             'params' => ParamsConfig::CONFIRM_CHANGE,
@@ -86,7 +87,7 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
             $response = $this->handleCommand($command);
             $responseDump = $this->handleResponse($response);
             if ($config['params'] === ParamsConfig::NEW_APPLICATION) {
-                $this->redirectParams = ['id' => $responseDump['id']['ecmtPermitApplication']];
+                $this->redirectParams = ['id' => $responseDump['id']['irhpPermitApplication']];
             }
         } else {
             if (isset($config['params'])) {
