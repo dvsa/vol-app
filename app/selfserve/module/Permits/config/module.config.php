@@ -54,6 +54,66 @@ return [
         ],
           'may_terminate' => true,
           'child_routes' => [
+              'application' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/application/:id[/]',
+                      'defaults' => [
+                          'controller'    => PermitsController::class,
+                          'action'        => 'index',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => true,
+                  'child_routes' => [
+                      'number' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'number[/]',
+                              'defaults' => [
+                                  'controller'    => PermitsController::class,
+                                  'action'        => 'index',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'check-answers' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'check-answers[/]',
+                              'defaults' => [
+                                  'controller'    => CheckAnswersController::class,
+                                  'action'        => 'generic',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'declaration' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'declaration[/]',
+                              'defaults' => [
+                                  'controller'    => DeclarationController::class,
+                                  'action'        => 'question',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'fee' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'fee[/]',
+                              'defaults' => [
+                                  'controller'    => FeeController::class,
+                                  'action'        => 'generic',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                  ],
+              ],
               'ecmt-short' => [
                   'type'    => 'segment',
                   'options' => [
