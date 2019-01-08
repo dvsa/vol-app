@@ -2,14 +2,26 @@
 
 namespace Olcs\Controller\Licence\Surrender;
 
+use Common\RefData;
+use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Olcs\Form\Model\Form\Surrender\CommunityLicence;
+use Common\Data\Mapper\Licence\Surrender\CommunityLicence as Mapper;
 
+/**
+ * Class CommunityLicenceController
+ *
+ * @package Olcs\Controller\Licence\Surrender
+ */
 class CommunityLicenceController extends AbstractSurrenderController
 {
     protected $formConfig = [
-        'index' => [
+        'default' => [
             'communityLicenceForm' => [
-                'formClass' => CommunityLicence::class
+                'formClass' => CommunityLicence::class,
+                'mapper' => [
+                    'class' => Mapper::class
+                ],
+                'dataSource' => 'surrender'
             ]
         ]
     ];
@@ -19,10 +31,56 @@ class CommunityLicenceController extends AbstractSurrenderController
         'submit' => 'licence/surrender-community-licence'
     ];
 
+
+    protected $dataSourceConfig = [
+        'default' => DataSourceConfig::SURRENDER
+    ];
+
+    protected $conditionalDisplayConfig = [
+        'default' => [
+            'licence' => [
+                'key' => 'isInternationalLicence',
+                'value' => true,
+                'route' => 'licence/surrender/review'
+            ]
+        ]
+    ];
+
     public function indexAction()
     {
+        $view = $this->createView($this->data['surrender']);
+        return $view;
+    }
 
-        $surrender = $this->getSurrender();
+    public function submitAction()
+    {
+
+        $formData = (array)$this->getRequest()->getPost();
+        $this->form->setData($formData);
+        $validForm = $this->form->isValid();
+        if ($validForm) {
+            $data = Mapper::mapFromForm($formData);
+            if ($this->updateSurrender(RefData::SURRENDER_STATUS_COMM_LIC_DOCS_COMPLETE, $data)) {
+                $routeName = 'licence/surrender/review';
+                $this->nextStep($routeName);
+            }
+        }
+        return $this->createView($this->getSurrender());
+    }
+
+    public function alterForm($form)
+    {
+        $form->get('form-actions')->get('submit')->setLabel('Save and Continue');
+        return $form;
+    }
+
+    /**
+     * @param array $surrender
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    private function createView(array $surrender): \Zend\View\Model\ViewModel
+    {
         $view = $this->genericView();
         $view->setVariables(
             [
@@ -33,29 +91,6 @@ class CommunityLicenceController extends AbstractSurrenderController
                 'returnLink' => $this->getBackLink('licence/surrender/operator-licence'),
             ]
         );
-
         return $view;
-    }
-
-    public function submitAction()
-    {
-        $form = $this->getForm(CommunityLicence::class);
-        $formData = (array)$this->getRequest()->getPost();
-        $form->setData($formData);
-        $validForm = $form->isValid();
-        if ($validForm) {
-            //save data
-            $view = $this->genericView();
-            return $view;
-        }
-    }
-
-    public function alterForm($form)
-    {
-        $possessionLabel = $form->get('communityLicence')->get('possessionContent')->get('notice');
-        $possessionLabel->setLabel('licence.surrender.community_licence.possession.note');
-        $formActionButton = $form->get('form-actions')->get('submit');
-        $formActionButton->setLabel('Save and Continue');
-        return $form;
     }
 }

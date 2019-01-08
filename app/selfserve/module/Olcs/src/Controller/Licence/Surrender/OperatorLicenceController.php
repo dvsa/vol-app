@@ -3,7 +3,6 @@
 namespace Olcs\Controller\Licence\Surrender;
 
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Command\Surrender\Update as SurrenderUpdate;
 use Common\Data\Mapper\Licence\Surrender\OperatorLicence as Mapper;
 use Zend\Http\Response;
 
@@ -62,8 +61,8 @@ class OperatorLicenceController extends AbstractSurrenderController
     private function redirectAfterSave(): Response
     {
         $routeName = 'licence/surrender/review';
-        if ($this->licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL) {
-            $routeName = 'licence/surrender/community-licence';
+        if ($this->data['licence']['isInternationalLicence']) {
+            $routeName = 'licence/surrender/community-licence/GET';
         }
         return $this->redirect()->toRoute($routeName, [], [], true);
     }

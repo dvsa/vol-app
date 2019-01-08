@@ -17,7 +17,7 @@ use Zend\Form\Annotation as Form;
 class CommunityLicence
 {
     /**
-     * @Form\ComposedObject("Olcs\Form\Model\Form\Surrender\Fieldset\CommunityLicence")
+     * @Form\ComposedObject("Olcs\Form\Model\Form\Surrender\Fieldset\CommunityLicenceDocument")
      */
     public $communityLicence = null;
 

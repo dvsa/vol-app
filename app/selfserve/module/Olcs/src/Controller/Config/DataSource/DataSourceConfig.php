@@ -12,4 +12,8 @@ class DataSourceConfig
     const LICENCE = [
         LicenceDto::class => []
     ];
+
+    const SURRENDER = [
+        Surrender::class =>[]
+    ];
 }
