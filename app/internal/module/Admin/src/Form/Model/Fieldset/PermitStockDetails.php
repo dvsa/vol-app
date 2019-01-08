@@ -14,16 +14,31 @@ class PermitStockDetails
 
     /**
      * @Form\Type("DynamicSelect")
-     * @Form\Name("permitType")
-     * @Form\Attributes({"id":"permitType","placeholder":"","class":"medium"})
+     * @Form\Name("irhpPermitType")
+     * @Form\Attributes({"id":"irhpPermitType","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Permit Type",
      *     "disable_inarray_validator": false,
+     *     "empty_option": "Please Select",
      *     "service_name": "Common\Service\Data\IrhpPermitType",
      *     "required": true
      * })
      */
-    public $permitType = null;
+    public $irhpPermitType = null;
+
+    /**
+     * @Form\Type("DynamicSelect")
+     * @Form\Name("country")
+     *
+     * @Form\Attributes({"id":"country","placeholder":"","class":"medium", "data-container-class":"stockCountry js-hidden"})
+     * @Form\Options({
+     *     "label": "Country",
+     *     "disable_inarray_validator": false,
+     *     "empty_option": "Please Select",
+     * })
+     * @Form\Required(false)
+     */
+    public $country = null;
 
     /**
      * @Form\Required(true)
