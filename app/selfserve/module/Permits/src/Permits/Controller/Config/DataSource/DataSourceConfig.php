@@ -4,6 +4,7 @@ namespace Permits\Controller\Config\DataSource;
 
 use Permits\Controller\Config\DataSource\FeeList as FeeListDto;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
+use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\DataSource\ValidEcmtPermits as ValidEcmtPermitsDataSource;
 use Permits\Controller\Config\DataSource\UnpaidEcmtPermits as UnpaidEcmtPermitsDataSource;
 use Permits\Data\Mapper\FeeList as FeeListMapper;
@@ -96,5 +97,9 @@ class DataSourceConfig
                 ValidEcmtPermitsDataSource::DATA_KEY => EcmtConstrainedCountriesMapper::class
             ]
         ],
+    ];
+
+    const IRHP_APP = [
+        IrhpAppDataSource::class => [],
     ];
 }
