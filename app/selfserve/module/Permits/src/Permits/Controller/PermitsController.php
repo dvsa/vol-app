@@ -5,6 +5,7 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 
 use Common\Controller\Traits\GenericReceipt;
 use Common\Controller\Traits\StoredCardsTrait;
+use Dvsa\Olcs\Transfer\Query\ContactDetail\CountrySelectList;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Common\Util\FlashMessengerTrait;
 
@@ -12,7 +13,6 @@ use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
-use Dvsa\Olcs\Transfer\Query\Permits\EcmtCountriesList;
 
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCountries;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitsRequired;
@@ -128,8 +128,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
             if ($form->isValid()) {
                 //EXTRA VALIDATION
-                if (
-                    ($data['Fields']['restrictedCountries'] == 1
+                if (($data['Fields']['restrictedCountries'] == 1
                     && isset($data['Fields']['yesContent']['restrictedCountriesList']))
                     || ($data['Fields']['restrictedCountries'] == 0)) {
                     if ($data['Fields']['restrictedCountries'] == 0) {
@@ -392,7 +391,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
     public function ecmtGuidanceAction()
     {
-        $query = EcmtCountriesList::create(['isEcmtState' => 1]);
+        $query = CountrySelectList::create(['isEcmtState' => 1]);
         $response = $this->handleQuery($query);
         $ecmtCountries = $response->getResult();
 
