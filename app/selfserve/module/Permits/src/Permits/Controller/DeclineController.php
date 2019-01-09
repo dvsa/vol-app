@@ -50,7 +50,7 @@ class DeclineController extends AbstractSelfserveController implements ToggleAwa
             'browserTitle' => 'permits.page.confirmation.decline.browser.title',
             'title' => 'permits.page.confirmation.decline.title',
             'extraContent' => [
-                'title' => 'permits.page.confirmation.decline.bullet.list.title',
+                'title' => 'permits.page.confirmation.bullet.list.title',
                 'list' => 'en_GB/bullets/markup-ecmt-decline-confirmation'
             ]
         ],
