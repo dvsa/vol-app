@@ -110,7 +110,12 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         'cancel' => [
             'route' => 'licence/permits',
             'action' => 'index',
-        ]
+        ],
+         'submit' => [
+            'route' => 'licence/permits',
+            'action' => 'index',
+             ]
+
     ];
 
     // Maps to ID in navgiation-config file to underline correct item in horizontal nav menu
