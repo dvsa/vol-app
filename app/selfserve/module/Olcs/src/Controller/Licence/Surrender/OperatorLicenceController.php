@@ -22,23 +22,13 @@ class OperatorLicenceController extends AbstractSurrenderController
     ];
 
     protected $templateConfig = [
-        'index' => 'licence/surrender-community-licence',
-        'submit' => 'licence/surrender-community-licence'
+        'index' => 'licence/surrender-licence-documents',
+        'submit' => 'licence/surrender-licence-documents'
     ];
 
 
     protected $dataSourceConfig = [
         'default' => DataSourceConfig::SURRENDER
-    ];
-
-    protected $conditionalDisplayConfig = [
-        'default' => [
-            'licence' => [
-                'key' => 'isInternationalLicence',
-                'value' => true,
-                'route' => 'licence/surrender/review'
-            ]
-        ]
     ];
 
     public function indexAction()

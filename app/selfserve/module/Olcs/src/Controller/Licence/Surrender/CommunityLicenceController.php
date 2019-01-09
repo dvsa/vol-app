@@ -27,8 +27,8 @@ class CommunityLicenceController extends AbstractSurrenderController
     ];
 
     protected $templateConfig = [
-        'index' => 'licence/surrender-community-licence',
-        'submit' => 'licence/surrender-community-licence'
+        'index' => 'licence/surrender-licence-documents',
+        'submit' => 'licence/surrender-licence-documents'
     ];
 
 
