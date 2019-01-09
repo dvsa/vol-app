@@ -5,6 +5,7 @@ namespace Permits\Controller\Config\ConditionalDisplay;
 use Permits\Controller\Config\DataSource\LicencesAvailable;
 use Permits\Controller\Config\DataSource\AvailableTypes;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
+use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\View\Helper\EcmtSection;
 
 /**
@@ -29,6 +30,13 @@ class ConditionalDisplayConfig
 
     const PERMIT_APP_NOT_SUBMITTED =  [
         PermitAppDataSource::DATA_KEY => [
+            'key' => 'isNotYetSubmitted',
+            'value' => true
+        ],
+    ];
+
+    const IRHP_APP_NOT_SUBMITTED =  [
+        IrhpAppDataSource::DATA_KEY => [
             'key' => 'isNotYetSubmitted',
             'value' => true
         ],

@@ -1,0 +1,79 @@
+<?php
+    use Permits\View\Helper\IrhpApplicationSection as Section;
+    use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
+
+    $title = $this->translate('permits.irhp-application.overview.title');
+    $this->headTitle($title);
+    $application = $data[IrhpAppDataSource::DATA_KEY];
+?>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="page-header">
+            <p><a href="<?php echo $this->url('permits'); ?>" class="back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
+            <div class="page-header__wrapper">
+                <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($application['applicationRef']); ?></h3>
+                <h1 class="js-title">
+                    <?php echo $this->escapeHtml($this->translate('permits.irhp-application.overview.main')); ?>
+                </h1>
+            </div>
+        </div>
+        <?php echo $this->flashMessengerAll(); ?>
+
+        <p class="govuk-body">
+            <?php echo $this->translate('permits.irhp-application.overview.complete-all-sections'); ?>
+            <br>
+            <?php echo $this->translate('permits.irhp-application.overview.further-guidance'); ?>
+        </p>
+
+        <div class="field">
+            <div class="table_wrapper">
+                <ol class="overview__list">
+                    <?php
+                    $sections = $this->irhpApplicationSection($application);
+
+                    foreach ($sections as $section) {
+                        echo $this->render($section);
+                    }
+                    ?>
+                </ol>
+            </div>
+            <?php
+            if ($application['canBeSubmitted']) {
+                $url = $this->url(Section::ROUTE_FEE, [], [], true);
+
+                if (!$application['hasOutstandingFees']) {
+                    $url = $this->url(Section::ROUTE_DECLARATION, [], [], true);
+                }
+            ?>
+                <a href="<?php echo $url; ?>" class="govuk-button govuk-!-margin-top-5">
+                    <?php echo $this->escapeHtml($this->translate('permits.button.accept-and-continue')); ?>
+                </a>
+            <?php } ?>
+        </div>
+    </div>
+    <!-- SIDE PANEL -->
+    <div class="govuk-grid-column-one-third">
+        <aside class="sidebar" role="complementary">
+
+            <div class="info-box info-box--grey">
+                <h3 class="info-box__heading"><?php echo $this->translate('permits.irhp-application.status.question'); ?></h3>
+                <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><?php echo $this->escapeHtml($application['status']['description']); ?></p>
+                <?php
+                if ($application['canBeCancelled']) {
+                    ?>
+                    <ul class="info-box__links">
+                        <li>
+                            <a href="<?php echo $this->url(Section::ROUTE_CANCEL_APPLICATION, [], [], true); ?>">
+                                <?php echo $this->translate('permits.irhp-application.cancel.question'); ?>
+                            </a>
+                        </li>
+                    </ul>
+                    <?php
+                }
+                ?>
+            </div>
+
+        </aside>
+    </div>
+</div>

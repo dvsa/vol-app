@@ -18,6 +18,7 @@ use Permits\Controller\DeclineController;
 use Permits\Controller\SubmittedController;
 use Permits\Controller\PermitsController;
 use Permits\Controller\TypeController;
+use Permits\Controller\IrhpApplicationController;
 
 return [
   'controllers' => [
@@ -38,7 +39,8 @@ return [
         DeclineController::class => DeclineController::class,
         SubmittedController::class => SubmittedController::class,
         CancelApplicationController::class => CancelApplicationController::class,
-        WithdrawApplicationController::class => WithdrawApplicationController::class
+        WithdrawApplicationController::class => WithdrawApplicationController::class,
+        IrhpApplicationController::class => IrhpApplicationController::class,
     ],
   ],
   'router' => [
@@ -59,8 +61,8 @@ return [
                   'options' => [
                       'route'    => '/application/:id[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'index',
+                          'controller'    => IrhpApplicationController::class,
+                          'action'        => 'generic',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -68,14 +70,24 @@ return [
                   ],
                   'may_terminate' => true,
                   'child_routes' => [
-                      'number' => [
+                      'licence' => [
                           'type'    => 'segment',
                           'options' => [
-                              'route'    => 'number[/]',
-                              'defaults' => [
-                                  'controller'    => PermitsController::class,
-                                  'action'        => 'index',
-                              ],
+                              'route'    => 'licence[/]',
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'countries' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'countries[/]',
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'no-of-permits' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'no-of-permits[/]',
                           ],
                           'may_terminate' => false,
                       ],
@@ -83,10 +95,6 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'check-answers[/]',
-                              'defaults' => [
-                                  'controller'    => CheckAnswersController::class,
-                                  'action'        => 'generic',
-                              ],
                           ],
                           'may_terminate' => false,
                       ],
@@ -94,10 +102,6 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'declaration[/]',
-                              'defaults' => [
-                                  'controller'    => DeclarationController::class,
-                                  'action'        => 'question',
-                              ],
                           ],
                           'may_terminate' => false,
                       ],
@@ -105,12 +109,56 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'fee[/]',
-                              'defaults' => [
-                                  'controller'    => FeeController::class,
-                                  'action'        => 'generic',
-                              ],
                           ],
                           'may_terminate' => false,
+                      ],
+                      'cancel' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'cancel[/]',
+                          ],
+                          'may_terminate' => true,
+                          'child_routes' => [
+                              'confirmation' => [
+                                  'type'    => 'segment',
+                                  'options' => [
+                                      'route'    => 'confirmation[/]',
+                                  ],
+                                  'may_terminate' => false,
+                              ],
+                          ],
+                      ],
+                      'withdraw' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => 'withdraw[/]',
+                            ],
+                            'may_terminate' => true,
+                            'child_routes' => [
+                                'confirmation' => [
+                                    'type'    => 'segment',
+                                    'options' => [
+                                        'route'    => 'confirmation[/]',
+                                    ],
+                                    'may_terminate' => false,
+                                ],
+                            ],
+                      ],
+                      'decline' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'decline[/]',
+                          ],
+                          'may_terminate' => true,
+                          'child_routes' => [
+                              'confirmation' => [
+                                  'type'    => 'segment',
+                                  'options' => [
+                                      'route'    => 'confirmation[/]',
+                                  ],
+                                  'may_terminate' => false,
+                              ],
+                          ],
                       ],
                   ],
               ],
@@ -844,6 +892,7 @@ return [
     'view_helpers' => [
         'invokables' => [
             'ecmtSection' => \Permits\View\Helper\EcmtSection::class,
+            'irhpApplicationSection' => \Permits\View\Helper\IrhpApplicationSection::class,
             'permitsBackLink' => \Permits\View\Helper\BackToOverview::class,
             'saveAndReturnLink' => \Permits\View\Helper\BackToOverview::class,
             'permitsDashboardLink' => \Permits\View\Helper\PermitsDashboardLink::class,
