@@ -4,71 +4,90 @@ namespace Olcs\Controller\Licence\Surrender;
 
 use Common\RefData;
 use Common\Data\Mapper\Licence\Surrender\OperatorLicence as Mapper;
-use Zend\Http\Response;
+use Olcs\Controller\Config\DataSource\DataSourceConfig;
+use Olcs\Form\Model\Form\Surrender\OperatorLicence;
 
 class OperatorLicenceController extends AbstractSurrenderController
 {
+    protected $formConfig = [
+        'default' => [
+            'operator-licence' => [
+                'formClass' => OperatorLicence::class,
+                'mapper' => [
+                    'class' => Mapper::class
+                ],
+                'dataSource' => 'surrender'
+            ]
+        ]
+    ];
+
+    protected $templateConfig = [
+        'index' => 'licence/surrender-community-licence',
+        'submit' => 'licence/surrender-community-licence'
+    ];
+
+
+    protected $dataSourceConfig = [
+        'default' => DataSourceConfig::SURRENDER
+    ];
+
+    protected $conditionalDisplayConfig = [
+        'default' => [
+            'licence' => [
+                'key' => 'isInternationalLicence',
+                'value' => true,
+                'route' => 'licence/surrender/review'
+            ]
+        ]
+    ];
+
     public function indexAction()
     {
-        $request = $this->getRequest();
+        $view = $this->createView($this->data['surrender']);
+        return $view;
+    }
 
-        $formService = $this->hlpForm->getServiceLocator()
-            ->get('FormServiceManager')
-            ->get(\Common\FormService\Form\Licence\Surrender\OperatorLicence::class);
-
-        $form = $formService->getForm();
-
-        if ($request->isPost()) {
-            $formData = (array)$request->getPost();
-            $form->setData($formData);
-            if ($form->isValid()) {
-                $this->saveFormDataAndUpdateSurrenderStatus($formData);
+    public function submitAction()
+    {
+        $formData = (array)$this->getRequest()->getPost();
+        $this->form->setData($formData);
+        $validForm = $this->form->isValid();
+        if ($validForm) {
+            $data = Mapper::mapFromForm($formData);
+            if ($this->updateSurrender(RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE, $data)) {
+                $routeName = 'licence/surrender/review';
+                if ($this->data['licence']['isInternationalLicence']) {
+                    $routeName = 'licence/surrender/community-licence/GET';
+                }
+                $this->nextStep($routeName);
             }
-        } elseif ($this->doesFormDataExist()) {
-            $formData = Mapper::mapFromApi($this->getSurrender(), $form);
-            $form->setData($formData);
-            $formService->setStatus($form, $this->getSurrender());
         }
+        return $this->createView($this->getSurrender());
+    }
 
-        $params = [
-            'title' => 'licence.surrender.operator_licence.title',
-            'licNo' => $this->licence['licNo'],
-            'backLink' => $this->getBackLink('licence/surrender/current-discs/GET'),
-            'form' => $form,
-            'bottomText' => 'licence.surrender.operator_licence.return_to_current_discs.link',
-            'bottomLink' => $this->getBackLink('licence/surrender/current-discs/GET'),
-        ];
-
-        return $this->renderView($params);
+    public function alterForm($form)
+    {
+        $form->get('form-actions')->get('submit')->setLabel('Save and Continue');
+        return $form;
     }
 
     /**
-     * Save form data and update surrender status
+     * @param array $surrender
      *
-     * @param array $formData
-     *
+     * @return \Zend\View\Model\ViewModel
      */
-    private function saveFormDataAndUpdateSurrenderStatus($formData)
+    private function createView(array $surrender): \Zend\View\Model\ViewModel
     {
-        $data = Mapper::mapFromForm($formData);
-
-        if ($this->updateSurrender(RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE, $data)) {
-            $this->redirectAfterSave();
-        }
-        $this->addErrorMessage('unknown-error');
-    }
-
-    private function redirectAfterSave(): Response
-    {
-        $routeName = 'licence/surrender/review';
-        if ($this->data['licence']['isInternationalLicence']) {
-            $routeName = 'licence/surrender/community-licence/GET';
-        }
-        return $this->redirect()->toRoute($routeName, [], [], true);
-    }
-
-    private function doesFormDataExist()
-    {
-        return isset($this->getSurrender()["licenceDocumentStatus"]["id"]);
+        $view = $this->genericView();
+        $view->setVariables(
+            [
+                'pageTitle' => 'licence.surrender.operator_licence.title',
+                'licNo' => $surrender['licence']['licNo'],
+                'backUrl' => $this->getBackLink('licence/surrender/operator-licence/GET'),
+                'returnLinkText' => 'licence.surrender.community_licence.return_to_operator.licence.link',
+                'returnLink' => $this->getBackLink('licence/surrender/operator-licence/GET'),
+            ]
+        );
+        return $view;
     }
 }

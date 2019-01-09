@@ -152,14 +152,34 @@ return [
                             ]
                         ],
                         'operator-licence' => [
-                            'may_terminate' => true,
+                            'may_terminate' => false,
                             'type' => Segment::class,
                             'options' => [
                                 'route' => 'operator-licence[/]',
-                                'defaults' => [
-                                    'controller' => Olcs\Controller\Licence\Surrender\OperatorLicenceController::class,
-                                    'action' => 'index'
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'controller' => Olcs\Controller\Licence\Surrender\OperatorLicenceController::class,
+                                            'action' => 'index'
+                                        ],
+                                    ],
                                 ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'controller' => Olcs\Controller\Licence\Surrender\OperatorLicenceController::class,
+                                            'action' => 'submit'
+                                        ],
+                                    ],
+                                ]
                             ]
                         ],
                         'community-licence' => [
@@ -190,8 +210,8 @@ return [
                                             'action' => 'submit'
                                         ],
                                     ],
-                                ]
-                            ]
+                                ],
+                            ],
                         ],
                         'review' => [
                             'may_terminate' => true,

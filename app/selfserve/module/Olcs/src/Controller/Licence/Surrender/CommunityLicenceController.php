@@ -86,9 +86,9 @@ class CommunityLicenceController extends AbstractSurrenderController
             [
                 'pageTitle' => 'licence.surrender.community_licence.heading',
                 'licNo' => $surrender['licence']['licNo'],
-                'backUrl' => $this->getBackLink('licence/surrender/operator-licence'),
+                'backUrl' => $this->getBackLink('licence/surrender/operator-licence/GET'),
                 'returnLinkText' => 'licence.surrender.community_licence.return_to_operator.licence.link',
-                'returnLink' => $this->getBackLink('licence/surrender/operator-licence'),
+                'returnLink' => $this->getBackLink('licence/surrender/operator-licence/GET'),
             ]
         );
         return $view;

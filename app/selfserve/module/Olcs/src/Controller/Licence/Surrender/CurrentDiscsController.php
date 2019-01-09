@@ -43,7 +43,7 @@ class CurrentDiscsController extends AbstractSurrenderController
         if ($validForm) {
             if ($this->updateDiscInfo($formData)) {
                 return $this->redirect()->toRoute(
-                    'licence/surrender/operator-licence',
+                    'licence/surrender/operator-licence/GET',
                     [],
                     [],
                     true
