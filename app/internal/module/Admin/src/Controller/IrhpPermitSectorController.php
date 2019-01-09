@@ -79,7 +79,7 @@ class IrhpPermitSectorController extends AbstractIrhpPermitAdminController imple
              * Otherwise, save the current Sector Quota values in the databse.
              */
             if ($postParams['action'] == 'Cancel') {
-                $this->redirect()->toRoute($this->navigationId . '/permits-system-settings');
+                $this->redirect()->toRoute($this->navigationId . '/stocks');
             } else {
                 $cmdData = ['sectors' => $postParams['sectors']];
                 $response = $this->handleCommand(Update::create($cmdData));

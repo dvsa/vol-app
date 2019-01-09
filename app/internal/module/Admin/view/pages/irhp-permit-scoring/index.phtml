@@ -1,6 +1,6 @@
 <?php
     $stockId = $this->placeholder('stockId')->getValue();
-    $operationBaseUrl = 'admin-dashboard/admin-permits/permit-scoring';
+    $operationBaseUrl = 'admin-dashboard/admin-permits/scoring';
     $runHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'action' => 'run']);
     $acceptHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'action' => 'accept']);
 ?>

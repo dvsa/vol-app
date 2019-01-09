@@ -78,7 +78,7 @@ class IrhpPermitJurisdictionController extends AbstractIrhpPermitAdminController
              * Otherwise, save the current Permit Number values in the databse.
              */
             if ($postParams['action'] == 'Cancel') {
-                $this->redirect()->toRoute($this->navigationId . '/permits-system-settings');
+                $this->redirect()->toRoute($this->navigationId . '/stocks');
             } else {
                 $cmdData = ['trafficAreas' => $postParams['trafficAreas']];
                 $response = $this->handleCommand(Update::create($cmdData));

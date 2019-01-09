@@ -92,7 +92,7 @@ class IrhpPermitRangeController extends AbstractIrhpPermitAdminController implem
     {
         // If an IRHP Permit Stock ID is not specified then redirect the user to the Permits System Settings page.
         if (!isset($this->params()->fromRoute()['stockId'])) {
-            $this->redirect()->toRoute($this->navigationId . '/permits-system-settings');
+            $this->redirect()->toRoute($this->navigationId . '/stocks');
         }
 
         return parent::indexAction();
