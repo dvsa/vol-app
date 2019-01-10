@@ -6,6 +6,7 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @Form\Name("operator-licence")
+ * @Form\Type("\Common\Form\Form")
  */
 class OperatorLicence
 {

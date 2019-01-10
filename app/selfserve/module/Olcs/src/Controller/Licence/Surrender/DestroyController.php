@@ -13,16 +13,7 @@ class DestroyController extends AbstractSurrenderController
 
     public function indexAction()
     {
-        /** @var TranslationHelperService $translator */
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
-        $params = [
-            'title' => 'licence.surrender.destroy.title',
-            'licNo' => $this->licence['licNo'],
-            'content' => $this->getContent(),
-            'form' => $this->getConfirmationForm($translator),
-            'backLink' => $this->getBackLink('licence/surrender/review'),
-        ];
-
+        $params = $this->getViewVariables();
         return $this->renderView($params);
     }
 
@@ -47,5 +38,23 @@ class DestroyController extends AbstractSurrenderController
             return static::MARKUP_STANDARD_INTERNATIONAL;
         }
         return static::MARKUP_ALL;
+    }
+
+    /**
+     * @return array
+     *
+     */
+    protected function getViewVariables(): array
+    {
+        /** @var TranslationHelperService $translator */
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        return [
+            'title' => 'licence.surrender.destroy.title',
+            'licNo' => $this->licence['licNo'],
+            'content' => $this->getContent(),
+            'form' => $this->getConfirmationForm($translator),
+            'backLink' => $this->getBackLink('licence/surrender/review'),
+        ];
+
     }
 }

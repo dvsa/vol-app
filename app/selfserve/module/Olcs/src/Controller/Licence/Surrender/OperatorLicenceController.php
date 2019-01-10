@@ -4,71 +4,73 @@ namespace Olcs\Controller\Licence\Surrender;
 
 use Common\RefData;
 use Common\Data\Mapper\Licence\Surrender\OperatorLicence as Mapper;
-use Zend\Http\Response;
+use Olcs\Controller\Config\DataSource\DataSourceConfig;
+use Olcs\Form\Model\Form\Surrender\OperatorLicence;
 
 class OperatorLicenceController extends AbstractSurrenderController
 {
+    protected $formConfig = [
+        'default' => [
+            'operator-licence' => [
+                'formClass' => OperatorLicence::class,
+                'mapper' => [
+                    'class' => Mapper::class
+                ],
+                'dataSource' => 'surrender'
+            ]
+        ]
+    ];
+
+    protected $templateConfig = [
+        'default' => 'licence/surrender-licence-documents'
+    ];
+
+
+    protected $dataSourceConfig = [
+        'default' => DataSourceConfig::SURRENDER
+    ];
+
     public function indexAction()
     {
-        $request = $this->getRequest();
-
-        $formService = $this->hlpForm->getServiceLocator()
-            ->get('FormServiceManager')
-            ->get(\Common\FormService\Form\Licence\Surrender\OperatorLicence::class);
-
-        $form = $formService->getForm();
-
-        if ($request->isPost()) {
-            $formData = (array)$request->getPost();
-            $form->setData($formData);
-            if ($form->isValid()) {
-                $this->saveFormDataAndUpdateSurrenderStatus($formData);
-            }
-        } elseif ($this->doesFormDataExist()) {
-            $formData = Mapper::mapFromApi($this->getSurrender(), $form);
-            $form->setData($formData);
-            $formService->setStatus($form, $this->getSurrender());
-        }
-
-        $params = [
-            'title' => 'licence.surrender.operator_licence.title',
-            'licNo' => $this->licence['licNo'],
-            'backLink' => $this->getBackLink('licence/surrender/current-discs/GET'),
-            'form' => $form,
-            'bottomText' => 'licence.surrender.operator_licence.return_to_current_discs.link',
-            'bottomLink' => $this->getBackLink('licence/surrender/current-discs/GET'),
-        ];
-
-        return $this->renderView($params);
+        return $this->createView();
     }
+
+    public function submitAction()
+    {
+        $formData = (array)$this->getRequest()->getPost();
+        $this->form->setData($formData);
+        $validForm = $this->form->isValid();
+        if ($validForm) {
+            $data = Mapper::mapFromForm($formData);
+            if ($this->updateSurrender(RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE, $data)) {
+                $routeName = 'licence/surrender/review';
+                if ($this->data['licence']['isInternationalLicence']) {
+                    $routeName = 'licence/surrender/community-licence/GET';
+                }
+                $this->nextStep($routeName);
+            }
+        }
+        return $this->createView();
+    }
+
+    public function alterForm($form)
+    {
+        $form->get('form-actions')->get('submit')->setLabel('Save and Continue');
+        return $form;
+    }
+
 
     /**
-     * Save form data and update surrender status
-     *
-     * @param array $formData
-     *
+     * @return array
      */
-    private function saveFormDataAndUpdateSurrenderStatus($formData)
+    protected function getViewVariables(): array
     {
-        $data = Mapper::mapFromForm($formData);
-
-        if ($this->updateSurrender(RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE, $data)) {
-            $this->redirectAfterSave();
-        }
-        $this->addErrorMessage('unknown-error');
-    }
-
-    private function redirectAfterSave(): Response
-    {
-        $routeName = 'licence/surrender/review';
-        if ($this->data['licence']['isInternationalLicence']) {
-            $routeName = 'licence/surrender/community-licence/GET';
-        }
-        return $this->redirect()->toRoute($routeName, [], [], true);
-    }
-
-    private function doesFormDataExist()
-    {
-        return isset($this->getSurrender()["licenceDocumentStatus"]["id"]);
+        return [
+            'pageTitle' => 'licence.surrender.operator_licence.title',
+            'licNo' => $this->data['surrender']['licence']['licNo'],
+            'backUrl' => $this->getBackLink('licence/surrender/operator-licence/GET'),
+            'returnLinkText' => 'licence.surrender.operator_licence.return_to_current_discs.link',
+            'returnLink' => $this->getBackLink('licence/surrender/operator-licence/GET'),
+        ];
     }
 }

@@ -7,28 +7,22 @@ use Olcs\Form\Model\Form\Surrender\DeclarationSign;
 
 class DeclarationController extends AbstractSurrenderController
 {
+    protected $form;
+
     public function indexAction()
     {
         $surrender = $this->getSurrender();
+
         /** @var TranslationHelperService $translator */
         $translator = $this->getServiceLocator()->get('Helper\Translation');
 
         if ($surrender['disableSignatures'] === false) {
-            $form = $this->getSignForm();
+            $this->form = $this->getSignForm();
         } else {
-            $form = $this->getPrintForm($translator);
+            $this->form = $this->getPrintForm($translator);
         }
 
-        $params = [
-            'title' => 'licence.surrender.declaration.title',
-            'licNo' => $this->licence['licNo'],
-            'content' => $translator->translateReplace(
-                'markup-licence-surrender-declaration',
-                [$this->licence['licNo']]
-            ),
-            'form' => $form,
-            'backLink' => $this->getBackLink('lva-licence'),
-        ];
+        $params = $this->getViewVariables();
 
         return $this->renderView($params);
     }
@@ -56,5 +50,25 @@ class DeclarationController extends AbstractSurrenderController
         $form->setSubmitLabel($submitLabel);
         $form->removeCancel();
         return $form;
+    }
+
+    /**
+     * @return array
+     *
+     */
+    protected function getViewVariables(): array
+    {
+        /** @var TranslationHelperService $translator */
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        return [
+            'title' => 'licence.surrender.declaration.title',
+            'licNo' => $this->licence['licNo'],
+            'content' => $translator->translateReplace(
+                'markup-licence-surrender-declaration',
+                [$this->licence['licNo']]
+            ),
+            'form' => $this->form,
+            'backLink' => $this->getBackLink('lva-licence'),
+        ];
     }
 }

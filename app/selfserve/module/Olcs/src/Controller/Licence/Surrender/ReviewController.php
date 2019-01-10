@@ -8,4 +8,13 @@ class ReviewController extends AbstractSurrenderController
     {
         return "";
     }
+
+    /**
+     * @return array
+     *
+     */
+    protected function getViewVariables(): array
+    {
+        // TODO: Implement getViewVariables() method.
+    }
 }

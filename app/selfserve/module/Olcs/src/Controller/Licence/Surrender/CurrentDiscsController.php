@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Licence\Surrender;
 
 use Common\Data\Mapper\Licence\Surrender\CurrentDiscs as CurrentDiscsMapper;
+use Common\Form\Form;
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Query\Licence\GoodsDiscCount;
@@ -10,15 +11,20 @@ use Olcs\Form\Model\Form\Surrender\CurrentDiscs\CurrentDiscs;
 
 class CurrentDiscsController extends AbstractSurrenderController
 {
+    /**
+     * @var Form
+     */
+    protected $form;
+
     public function indexAction()
     {
         $surrender = $this->getSurrender();
 
-        $form = $this->getForm(CurrentDiscs::class);
+        $this->form = $this->getForm(CurrentDiscs::class);
         $formData = CurrentDiscsMapper::mapFromResult($surrender);
-        $form->setData($formData);
+        $this->form->setData($formData);
 
-        $params = $this->buildViewParams($form);
+        $params = $this->getViewVariables();
         $this->getServiceLocator()->get('Script')->loadFiles(['licence-surrender-current-discs']);
 
         return $this->renderView($params);
@@ -43,7 +49,7 @@ class CurrentDiscsController extends AbstractSurrenderController
         if ($validForm) {
             if ($this->updateDiscInfo($formData)) {
                 return $this->redirect()->toRoute(
-                    'licence/surrender/operator-licence',
+                    'licence/surrender/operator-licence/GET',
                     [],
                     [],
                     true
@@ -52,7 +58,7 @@ class CurrentDiscsController extends AbstractSurrenderController
         }
 
         $this->hlpFlashMsgr->addUnknownError();
-        $params = $this->buildViewParams($form);
+        $params = $this->getViewVariables();
         $this->getServiceLocator()->get('Script')->loadFiles(['licence-surrender-current-discs']);
 
         return $this->renderView($params);
@@ -73,25 +79,6 @@ class CurrentDiscsController extends AbstractSurrenderController
         return $result['discCount'];
     }
 
-    protected function buildViewParams(\Common\Form\Form $form): array
-    {
-        /** @var TranslationHelperService $translator */
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
-        $numberOfDiscs = $this->getNumberOfDiscs();
-        return [
-            'title' => 'licence.surrender.current_discs.title',
-            'licNo' => $this->licence['licNo'],
-            'content' => $translator->translateReplace(
-                'licence.surrender.current_discs.content',
-                [$numberOfDiscs]
-            ),
-            'form' => $form,
-            'backLink' => $this->getBackLink('licence/surrender/review-contact-details/GET'),
-            'bottomText' => 'common.link.back.label',
-            'bottomLink' => $this->getBackLink('licence/surrender/review-contact-details/GET'),
-        ];
-    }
-
     protected function checkDiscCount(array $formData): bool
     {
         $expectedDiscCount = $this->getNumberOfDiscs();
@@ -109,5 +96,28 @@ class CurrentDiscsController extends AbstractSurrenderController
         $discStolen = $data['discStolen'] ?? 0;
 
         return $discDestroyed + $discLost + $discStolen;
+    }
+
+    /**
+     * @return array
+     *
+     */
+    protected function getViewVariables(): array
+    {
+        /** @var TranslationHelperService $translator */
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        $numberOfDiscs = $this->getNumberOfDiscs();
+        return [
+            'title' => 'licence.surrender.current_discs.title',
+            'licNo' => $this->licence['licNo'],
+            'content' => $translator->translateReplace(
+                'licence.surrender.current_discs.content',
+                [$numberOfDiscs]
+            ),
+            'form' => $this->form,
+            'backLink' => $this->getBackLink('licence/surrender/review-contact-details/GET'),
+            'bottomText' => 'common.link.back.label',
+            'bottomLink' => $this->getBackLink('licence/surrender/review-contact-details/GET'),
+        ];
     }
 }
