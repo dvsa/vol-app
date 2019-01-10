@@ -63,7 +63,6 @@ class AbstractSurrenderController extends AbstractSelfserveController implements
         return $this->url()->fromRoute($route, [], [], true);
     }
 
-
     private function getLicence()
     {
         $response = $this->handleQuery(
