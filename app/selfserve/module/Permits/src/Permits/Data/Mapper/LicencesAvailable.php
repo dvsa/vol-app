@@ -22,15 +22,27 @@ class LicencesAvailable
     public static function mapForFormOptions(array $data, $form, TranslationHelperService $translator)
     {
         $mapData = $data[LicencesAvailableDataSource::DATA_KEY];
-        $isNew = !isset($data['application']);
+        $isNew = !isset($data['application']) && !isset($data['irhpApplication']);
         $valueOptions = [];
+        $isEcmt = false;
+
+        if ($isNew) {
+            $isEcmt = $data['irhpPermitType']['name']['id'] == \Common\RefData::PERMIT_TYPE_ECMT;
+        } else {
+            if (isset($data['application'])) {
+                $isEcmt = true;
+                $application = $data['application'];
+            } else {
+                $application = $data['irhpApplication'];
+            }
+        }
 
         foreach ($mapData['eligibleLicences']['result'] as $key => $option) {
-            $selected = false;
+            $selected = !$isNew ? $option['id'] === $application['licence']['id'] : false;
 
-            if ($data['irhpPermitType']['name']['id'] === \Common\RefData::PERMIT_TYPE_ECMT) {
+            if ($isEcmt) {
                 if (!$option['canMakeEcmtApplication']) {
-                    if ($isNew || $option['id'] !== $data['application']['licence']['id']) {
+                    if ($isNew || $option['id'] !== $application['licence']['id']) {
                         continue;
                     } else {
                         $selected = true;
@@ -54,12 +66,14 @@ class LicencesAvailable
             ];
         }
 
-        if (count($valueOptions) === 1) {
-            $key = array_keys($valueOptions)[0];
-            $data['question'] = 'permits.page.licence.question.one.licence';
-            $data['questionArgs'] = [$valueOptions[$key]['label'] . ' ' . $valueOptions[$key]['hint']];
-            $valueOptions[$key]['selected'] = true;
-            $form->get('fields')->get('licence')->setAttribute('radios_wrapper_attributes', ['class' => 'visually-hidden']);
+        if ($isEcmt) {
+            if (count($valueOptions) === 1) {
+                $key = array_keys($valueOptions)[0];
+                $data['question'] = 'permits.page.licence.question.one.licence';
+                $data['questionArgs'] = [$valueOptions[$key]['label'] . ' ' . $valueOptions[$key]['hint']];
+                $valueOptions[$key]['selected'] = true;
+                $form->get('fields')->get('licence')->setAttribute('radios_wrapper_attributes', ['class' => 'visually-hidden']);
+            }
         }
 
         $form->get('fields')->get('licence')->setValueOptions($valueOptions);

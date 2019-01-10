@@ -138,8 +138,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      *
      * @var array
      */
-    protected $postConfig = [
-    ];
+    protected $postConfig = [];
 
     /**
      * Redirect parameters

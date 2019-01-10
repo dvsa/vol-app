@@ -42,11 +42,17 @@ class DataSourceConfig
     ];
 
     const PERMIT_APP_LICENCE = [
+        IrhpAppDataSource::class => [],
+        LicencesAvailable::class => [
+            'passInUserData' => 'getCurrentOrganisationId',
+        ]
+    ];
+
+    const PERMIT_APP_ECMT_LICENCE = [
         PermitAppDataSource::class => [],
         LicencesAvailable::class => [
             'passInUserData' => 'getCurrentOrganisationId',
-        ],
-        IrhpPermitType::class => []
+        ]
     ];
 
     const PERMIT_APP_SECTORS = [

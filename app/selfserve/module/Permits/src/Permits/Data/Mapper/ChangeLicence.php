@@ -27,12 +27,14 @@ class ChangeLicence
             throw new BadRequestException('No available licences.');
         }
 
-        $selectedLicenceEligible = array_search($data['licence'], array_column($data['eligibleEcmtLicences']['result'], 'id'));
+        $selectedLicenceEligible = array_search($data['licence'], array_column($data['eligibleLicences']['result'], 'id'));
 
         if ($selectedLicenceEligible === false) {
             throw new BadRequestException('User does not own selected licence.');
-        } else if (!$data['eligibleEcmtLicences']['result'][$selectedLicenceEligible]['canMakeEcmtApplication']) {
+        } else if (isset($allData['application']) && !$data['eligibleLicences']['result'][$selectedLicenceEligible]['canMakeEcmtApplication']) {
             throw new BadRequestException('Selected licence already has an active application.');
+//        } else if (isset($allData['irhpApplication']) && !$data['eligibleLicences']['result'][$selectedLicenceEligible]['canMakeIrhpApplication']) {
+//            throw new BadRequestException('Selected licence already has an active application.');
         }
 
         return true;
@@ -53,12 +55,12 @@ class ChangeLicence
 
             $selectedLicenceEligible = array_search(
                 $data['licence'],
-                array_column($mapData['eligibleEcmtLicences']['result'], 'id')
+                array_column($mapData['eligibleLicences']['result'], 'id')
             );
 
             $confirmChangeLabel = $translator->translateReplace(
                 'permits.form.change_licence.label',
-                [$mapData['eligibleEcmtLicences']['result'][$selectedLicenceEligible]['licNo']]
+                [$mapData['eligibleLicences']['result'][$selectedLicenceEligible]['licNo']]
             );
 
             $form->get('fields')->get('ConfirmChange')->setLabel(

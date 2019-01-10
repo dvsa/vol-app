@@ -55,6 +55,17 @@ class FormConfig
         ],
     ];
 
+    const FORM_ECMT_LICENCE = [
+        'licence' => [
+            'formClass' => 'LicenceForm',
+            'dataSource' => IrhpApplicationDataSource::DATA_KEY,
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => LicencesAvailableMapper::class
+            ]
+        ],
+    ];
+
     const FORM_CONFIRM_CHANGE_LICENCE = [
         'licence' => [
             'formClass' => 'ChangeLicenceForm',

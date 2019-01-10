@@ -8,6 +8,7 @@ use Permits\Controller\Config\DataSource\OpenWindows;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\View\Helper\EcmtSection;
+use Permits\View\Helper\IrhpApplicationSection;
 
 /**
  * Holds conditional display configs that are used regularly
@@ -58,7 +59,19 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const PERMIT_APP_CONFIRM_CHANGE = [
+    const PERMIT_APP_CONFIRM_CHANGE_LICENCE = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'isNotYetSubmitted',
+            'value' => true
+        ],
+        LicencesAvailable::DATA_KEY => [
+            'key' => 'hasAvailableLicences',
+            'value' => true,
+            'route' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
+        ]
+    ];
+
+    const PERMIT_APP_CONFIRM_CHANGE_LICENCE_ECMT = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'isNotYetSubmitted',
             'value' => true

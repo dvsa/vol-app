@@ -21,16 +21,19 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
 
     protected $dataSourceConfig = [
         'add' => DataSourceConfig::PERMIT_APP_ADD_LICENCE,
+        'ecmt' => DataSourceConfig::PERMIT_APP_ECMT_LICENCE,
         'question' => DataSourceConfig::PERMIT_APP_LICENCE
     ];
 
     protected $conditionalDisplayConfig = [
         'add' => ConditionalDisplayConfig::PERMIT_APP_CAN_APPLY_SINGLE,
-        'question' => ConditionalDisplayConfig::PERMIT_APP_NOT_SUBMITTED,
+        'ecmt' => ConditionalDisplayConfig::PERMIT_APP_NOT_SUBMITTED,
+        'question' => ConditionalDisplayConfig::IRHP_APP_NOT_SUBMITTED,
     ];
 
     protected $formConfig = [
         'add' => FormConfig::FORM_ADD_LICENCE,
+        'ecmt' => FormConfig::FORM_LICENCE,
         'question' => FormConfig::FORM_LICENCE,
     ];
 
@@ -39,15 +42,15 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
     ];
 
     protected $templateVarsConfig = [
+        'default' => [
+            'browserTitle' => 'permits.page.licence.browser.title',
+            'question' => 'permits.page.licence.question',
+        ],
         'add' => [
             'browserTitle' => 'permits.page.licence.browser.title',
             'question' => 'permits.page.licence.question',
             'backUri' => EcmtSection::ROUTE_TYPE
         ],
-        'question' => [
-            'browserTitle' => 'permits.page.licence.browser.title',
-            'question' => 'permits.page.licence.question',
-        ]
     ];
 
     protected $postConfig = [
@@ -56,13 +59,23 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
             'params' => ParamsConfig::NEW_APPLICATION,
             'step' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ],
-        'question' => [
+        'ecmt' => [
             'params' => ParamsConfig::CONFIRM_CHANGE,
             'step' => EcmtSection::ROUTE_CONFIRM_CHANGE,
             'conditional' => [
                 'dataKey' => 'application',
                 'value' => 'licence',
                 'step' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
+                'field' => ['licence', 'id'],
+            ]
+        ],
+        'question' => [
+            'params' => ParamsConfig::CONFIRM_CHANGE,
+            'step' => IrhpApplicationSection::ROUTE_LICENCE_CONFIRM_CHANGE,
+            'conditional' => [
+                'dataKey' => 'irhpApplication',
+                'value' => 'licence',
+                'step' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
                 'field' => ['licence', 'id'],
             ]
         ]
@@ -74,6 +87,14 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
     public function addAction()
     {
         return $this->genericAction();
+    }
+
+    /**
+     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
+    public function ecmtAction()
+    {
+        return $this->questionAction();
     }
 
     /**
