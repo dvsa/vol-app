@@ -13,7 +13,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
 use Dvsa\Olcs\Transfer\Query\Licence\LicenceWithCorrespondenceCd as LicenceQuery;
 
-class AbstractSurrenderController extends AbstractSelfserveController implements ToggleAwareInterface
+abstract class AbstractSurrenderController extends AbstractSelfserveController implements ToggleAwareInterface
 {
     use Util\FlashMessengerTrait;
 
@@ -93,5 +93,28 @@ class AbstractSurrenderController extends AbstractSelfserveController implements
 
         $response = $this->handleCommand(Update::create($dtoData));
         return $response->isOk();
+    }
+
+    /**
+     * @return array
+     *
+     */
+    abstract protected function getViewVariables(): array;
+
+    /**
+     * @param array $surrender
+     *
+     * @return \Zend\View\Model\ViewModel
+     */
+    protected function createView(): \Zend\View\Model\ViewModel
+    {
+        $view = $this->genericView();
+        $variables = $this->getViewVariables();
+        if (!empty($variables)) {
+            $view->setVariables(
+                $variables
+            );
+        }
+        return $view;
     }
 }

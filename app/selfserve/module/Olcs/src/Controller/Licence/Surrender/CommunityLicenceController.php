@@ -48,8 +48,7 @@ class CommunityLicenceController extends AbstractSurrenderController
 
     public function indexAction()
     {
-        $view = $this->createView($this->data['surrender']);
-        return $view;
+         return $this->createView();
     }
 
     public function submitAction()
@@ -65,7 +64,7 @@ class CommunityLicenceController extends AbstractSurrenderController
                 $this->nextStep($routeName);
             }
         }
-        return $this->createView($this->getSurrender());
+        return $this->createView();
     }
 
     public function alterForm($form)
@@ -74,23 +73,18 @@ class CommunityLicenceController extends AbstractSurrenderController
         return $form;
     }
 
+
     /**
-     * @param array $surrender
-     *
-     * @return \Zend\View\Model\ViewModel
+     * @return array
      */
-    private function createView(array $surrender): \Zend\View\Model\ViewModel
+    protected function getViewVariables(): array
     {
-        $view = $this->genericView();
-        $view->setVariables(
-            [
-                'pageTitle' => 'licence.surrender.community_licence.heading',
-                'licNo' => $surrender['licence']['licNo'],
-                'backUrl' => $this->getBackLink('licence/surrender/operator-licence/GET'),
-                'returnLinkText' => 'licence.surrender.community_licence.return_to_operator.licence.link',
-                'returnLink' => $this->getBackLink('licence/surrender/operator-licence/GET'),
-            ]
-        );
-        return $view;
+        return [
+            'pageTitle' => 'licence.surrender.community_licence.heading',
+            'licNo' => $this->data['surrender']['licence']['licNo'],
+            'backUrl' => $this->getBackLink('licence/surrender/operator-licence/GET'),
+            'returnLinkText' => 'licence.surrender.community_licence.return_to_operator.licence.link',
+            'returnLink' => $this->getBackLink('licence/surrender/operator-licence/GET'),
+        ];
     }
 }
