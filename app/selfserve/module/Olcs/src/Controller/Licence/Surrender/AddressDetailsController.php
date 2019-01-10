@@ -29,7 +29,7 @@ class AddressDetailsController extends AbstractSurrenderController
         $this->form = $this->getForm('Licence\Surrender\Addresses')
             ->setData($formData);
 
-        $hasProcessed = $this->hlpForm->processAddressLookupForm($form, $request);
+        $hasProcessed = $this->hlpForm->processAddressLookupForm($this->form, $request);
 
         if (!$hasProcessed && $request->isPost()) {
             if ($form->isValid()) {
