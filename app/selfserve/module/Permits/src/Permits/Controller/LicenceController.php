@@ -11,6 +11,7 @@ use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
 
 use Permits\View\Helper\EcmtSection;
+use Permits\View\Helper\IrhpApplicationSection;
 
 class LicenceController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -53,8 +54,7 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
         'add' => [
             'command' => Create::class,
             'params' => ParamsConfig::NEW_APPLICATION,
-            // @Todo: Replace step with new overview route
-            'step' => 'permits/application',
+            'step' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ],
         'question' => [
             'params' => ParamsConfig::CONFIRM_CHANGE,
@@ -80,14 +80,20 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
      * @param array $config
      * @param array $params
      */
-    public function handlePostCommand(array $config, array $params)
+    public function handlePostCommand(array &$config, array $params)
     {
         if (isset($config['command'])) {
             $command = $config['command']::create($params);
             $response = $this->handleCommand($command);
             $responseDump = $this->handleResponse($response);
             if ($config['params'] === ParamsConfig::NEW_APPLICATION) {
-                $this->redirectParams = ['id' => $responseDump['id']['irhpPermitApplication']];
+                if (isset($responseDump['id']['ecmtPermitApplication'])) {
+                    $field = 'ecmtPermitApplication';
+                    $config['step'] = EcmtSection::ROUTE_APPLICATION_OVERVIEW;
+                } else {
+                    $field = 'irhpApplication';
+                }
+                $this->redirectParams = ['id' => $responseDump['id'][$field]];
             }
         } else {
             if (isset($config['params'])) {
