@@ -19,7 +19,7 @@ class DestroyController extends AbstractSurrenderController
 
     public function continueAction()
     {
-        return $this->redirect()->toRoute('licence/surrender/declaration', [], [], true);
+        return $this->redirect()->toRoute('licence/surrender/declaration/GET', [], [], true);
     }
 
     private function getConfirmationForm(TranslationHelperService $translator): Form
