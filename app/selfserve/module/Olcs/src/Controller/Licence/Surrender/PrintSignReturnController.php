@@ -23,16 +23,7 @@ class PrintSignReturnController extends AbstractSurrenderController
 
     public function indexAction()
     {
-        $view = $this->genericView();
-        $view->setVariables(
-            [
-                'pageTitle' => 'licence.surrender.print-sign-return.page.title',
-                'returnLinkText' => 'return-home-button-text',
-                'returnLink' => $this->getBackLink('lva-licence'),
-                'printLink' => $this->getBackLink('licence/surrender/print-sign-return-print/GET'),
-            ]
-        );
-        return $view;
+        return $this->createView();
     }
 
 
@@ -78,5 +69,21 @@ class PrintSignReturnController extends AbstractSurrenderController
             return "licence.surrender.print-sign-return.form.title.gv";
         }
         return "licence.surrender.print-sign-return.form.title.psv";
+    }
+
+    /**
+     * @return array
+     *
+     */
+    protected function getViewVariables(): array
+    {
+
+        return
+            [
+                'pageTitle' => 'licence.surrender.print-sign-return.page.title',
+                'returnLinkText' => 'return-home-button-text',
+                'returnLink' => $this->getBackLink('lva-licence'),
+                'printLink' => $this->getBackLink('licence/surrender/print-sign-return-print/GET'),
+            ];
     }
 }

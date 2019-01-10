@@ -13,6 +13,8 @@ use Dvsa\Olcs\Transfer\Query\Licence\Addresses;
  */
 class AddressDetailsController extends AbstractSurrenderController
 {
+    protected $form;
+
     public function indexAction()
     {
         /** @var \Zend\Http\Request $request */
@@ -24,7 +26,7 @@ class AddressDetailsController extends AbstractSurrenderController
             $formData = Mapper\Licence\Surrender\AddressDetails::mapFromResult($this->licence);
         }
 
-        $form = $this->getForm('Licence\Surrender\Addresses')
+        $this->form = $this->getForm('Licence\Surrender\Addresses')
             ->setData($formData);
 
         $hasProcessed = $this->hlpForm->processAddressLookupForm($form, $request);
@@ -46,12 +48,7 @@ class AddressDetailsController extends AbstractSurrenderController
             }
         }
 
-        $params = [
-            'title' => 'lva.section.title.addresses',
-            'licNo' => $this->licence['licNo'],
-            'form' => $form,
-            'backLink' => $this->getBackLink('licence/surrender/review-contact-details'),
-        ];
+        $params = $this->getViewVariables();
 
         return $this->renderView($params);
     }
@@ -82,5 +79,19 @@ class AddressDetailsController extends AbstractSurrenderController
 
         $this->hlpFlashMsgr->addUnknownError();
         return false;
+    }
+
+    /**
+     * @return array
+     *
+     */
+    protected function getViewVariables(): array
+    {
+        return [
+            'title' => 'lva.section.title.addresses',
+            'licNo' => $this->licence['licNo'],
+            'form' => $this->form,
+            'backLink' => $this->getBackLink('licence/surrender/review-contact-details'),
+        ];
     }
 }

@@ -17,22 +17,7 @@ class ConfirmationController extends AbstractSurrenderController
 
     public function indexAction()
     {
-        /** @var $translator TranslationHelperService */
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
-
-        $params = [
-            'content' => $translator->translateReplace(
-                'markup-licence-surrender-confirmation',
-                [
-                    $this->licence['licNo'],
-                    $this->getSignatureFullName(),
-                    $this->getSignatureDate(),
-                    $this->returnDashboardLink()
-                ]
-            ),
-            'backLink' => $this->returnDashboardLink()
-        ];
-
+        $params = $this->getViewVariables();
         return $this->renderView($params);
     }
 
@@ -58,4 +43,25 @@ class ConfirmationController extends AbstractSurrenderController
     }
 
 
+    /**
+     * @return array
+     *
+     */
+    protected function getViewVariables(): array
+    {
+        /** @var $translator TranslationHelperService */
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        return [
+            'content' => $translator->translateReplace(
+                'markup-licence-surrender-confirmation',
+                [
+                    $this->licence['licNo'],
+                    $this->getSignatureFullName(),
+                    $this->getSignatureDate(),
+                    $this->returnDashboardLink()
+                ]
+            ),
+            'backLink' => $this->returnDashboardLink()
+        ];
+    }
 }

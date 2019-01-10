@@ -101,6 +101,7 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
      */
     abstract protected function getViewVariables(): array;
 
+
     /**
      * @param array $surrender
      *

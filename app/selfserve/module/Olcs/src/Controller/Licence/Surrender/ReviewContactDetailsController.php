@@ -11,9 +11,7 @@ class ReviewContactDetailsController extends AbstractSurrenderController
 
     public function indexAction()
     {
-        /** @var TranslationHelperService $translator */
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
-        return $this->renderView($this->getParams($translator));
+        return $this->renderView($this->getViewVariables());
     }
 
     public function postAction()
@@ -23,13 +21,14 @@ class ReviewContactDetailsController extends AbstractSurrenderController
         }
 
         $this->hlpFlashMsgr->addUnknownError();
-        /** @var TranslationHelperService $translator */
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
-        return $this->renderView($this->getParams($translator));
+
+        return $this->renderView($this->getViewVariables());
     }
 
-    protected function getParams(TranslationHelperService $translator): array
+    protected function getViewVariables(): array
     {
+        /** @var TranslationHelperService $translator */
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
         return [
             'title' => 'licence.surrender.review_contact_details.title',
             'licNo' => $this->licence['licNo'],
