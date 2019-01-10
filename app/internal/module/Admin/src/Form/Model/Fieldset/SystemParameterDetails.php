@@ -27,7 +27,7 @@ class SystemParameterDetails
      * @Form\Type("Text")
      * @Form\Required(true)
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":32}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
      */
     public $paramValue = null;
 
