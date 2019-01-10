@@ -73,7 +73,7 @@ class OperatorLicenceController extends AbstractSurrenderController
                 'pageTitle' => 'licence.surrender.operator_licence.title',
                 'licNo' => $surrender['licence']['licNo'],
                 'backUrl' => $this->getBackLink('licence/surrender/operator-licence/GET'),
-                'returnLinkText' => 'licence.surrender.community_licence.return_to_operator.licence.link',
+                'returnLinkText' => 'licence.surrender.operator_licence.return_to_current_discs.link',
                 'returnLink' => $this->getBackLink('licence/surrender/operator-licence/GET'),
             ]
         );
