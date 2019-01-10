@@ -32,12 +32,12 @@ class AddressDetailsController extends AbstractSurrenderController
         $hasProcessed = $this->hlpForm->processAddressLookupForm($this->form, $request);
 
         if (!$hasProcessed && $request->isPost()) {
-            if ($form->isValid()) {
+            if ($this->form->isValid()) {
                 $response = $this->save($formData);
 
                 if ($response === true) {
                     return $this->redirect()->toRoute(
-                        'licence/surrender/review-contact-details',
+                        'licence/surrender/review-contact-details/GET',
                         [],
                         [],
                         true
@@ -91,7 +91,7 @@ class AddressDetailsController extends AbstractSurrenderController
             'title' => 'lva.section.title.addresses',
             'licNo' => $this->licence['licNo'],
             'form' => $this->form,
-            'backLink' => $this->getBackLink('licence/surrender/review-contact-detail/GET'),
+            'backLink' => $this->getBackLink('licence/surrender/review-contact-details/GET'),
         ];
     }
 }
