@@ -32,9 +32,21 @@ class LicenceStolen
      *                  "options": {
      *                      "min" : 0,
      *                      "max" : 500,
+     *                      "messages" : {
+     *                          "stringLengthTooShort": "licence.surrender.operator_licence_stolen.text_area.stringLengthTooShort",
+     *                          "stringLengthTooLong": "licence.surrender.operator_licence_stolen.text_area.stringLengthTooLong",
+     *                          "stringLengthInvalid": "licence.surrender.operator_licence_stolen.text_area.stringLengthTooShort",
+     *                      }
      *                  }
      *              },
-     *              {"name": "NotEmpty"}
+     *              {
+     *                "name": "NotEmpty",
+     *                "options":{
+     *                "messages": {
+     *                          "isEmpty": "licence.surrender.operator_licence_stolen.text_area.empty"
+     *                         }
+     *                    }
+     *              }
      *          }
      *      }
      * })
