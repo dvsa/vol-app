@@ -2,7 +2,8 @@
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
-use Dvsa\Olcs\Transfer\Command\IrhpPermitApplication\Create;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\Create;
+use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
@@ -104,6 +105,9 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
     public function handlePostCommand(array &$config, array $params)
     {
         if (isset($config['command'])) {
+            if ($this->data['irhpPermitType']['name']['id'] === \Common\RefData::PERMIT_TYPE_ECMT) {
+                $config['command'] = CreateEcmtPermitApplication::class;
+            }
             $command = $config['command']::create($params);
             $response = $this->handleCommand($command);
             $responseDump = $this->handleResponse($response);
