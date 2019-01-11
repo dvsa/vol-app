@@ -32,17 +32,17 @@ class CurrentDiscsController extends AbstractSurrenderController
 
     public function postAction()
     {
-        $form = $this->getForm(CurrentDiscs::class);
+        $this->form = $this->getForm(CurrentDiscs::class);
         $formData = (array)$this->getRequest()->getPost();
-        $form->setData($formData);
+        $this->form->setData($formData);
 
 
-        $validForm = $form->isValid();
-        if (!$this->checkDiscCount($form->getData())) {
-            $messages = $form->getMessages();
+        $validForm = $this->form->isValid();
+        if (!$this->checkDiscCount($this->form->getData())) {
+            $messages = $this->form->getMessages();
             $translator = $this->getServiceLocator()->get('Helper\Translation');
             $messages['headerSection']['header'] = ["disc_count_mismatch" => $translator->translate('licence.surrender.current_discs.disc_count_mismatch')];
-            $form->setMessages($messages);
+            $this->form->setMessages($messages);
             $validForm = false;
         }
 
