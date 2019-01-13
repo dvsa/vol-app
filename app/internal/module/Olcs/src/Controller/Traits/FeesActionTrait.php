@@ -19,7 +19,6 @@ use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeType as FeeTypeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList as FeeTypeListQry;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
-use Olcs\Logging\Log\Logger;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Zend\Form\Form;
@@ -483,7 +482,7 @@ trait FeesActionTrait
                 return $this->redirectToList();
             }
 
-            if ($fee['ruleDateBeforeInvoice']) {
+            if ($fee['ruleDateBeforeInvoice'] && !$fee['isAccrualBeforeInvoiceDatePermitted']) {
                 $this->addErrorMessage('fee.rule-before-invoiced-date.error');
                 return $this->redirectToList();
             }
