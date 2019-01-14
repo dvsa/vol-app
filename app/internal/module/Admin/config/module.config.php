@@ -485,6 +485,7 @@ return [
                             ]
                         ]
                     ],
+                    // Admin IRHP Permits
                     'admin-permits' => [
                         'type' => 'Segment',
                         'options' => [
@@ -496,7 +497,8 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes' => [
-                            'permits-system-settings' => [
+                            // All IRHP Permit Stocks
+                            'stocks' => [
                                 'type' => 'Segment',
                                 'options' => [
                                     'route' => 'stocks[/:action][/:id][/]',
@@ -511,7 +513,8 @@ return [
                                 ],
                                 'may_terminate' => true,
                             ],
-                            'permit-range' => [
+                            // IRHP Permit Stock Ranges
+                            'ranges' => [
                                 'type' => 'Segment',
                                 'options' => [
                                     'route' => 'stocks/:stockId/ranges[/:action][/:id][/]',
@@ -527,7 +530,8 @@ return [
                                 ],
                                 'may_terminate' => true
                             ],
-                            'permit-windows' => [
+                            // IRHP Permit Stock Windows
+                            'windows' => [
                                 'type' => 'Segment',
                                 'options' => [
                                     'route' => 'stocks/:stockId/windows[/:action][/:id][/]',
@@ -543,7 +547,8 @@ return [
                                 ],
                                 'may_terminate' => true
                             ],
-                            'permit-sectors' => [
+                            // IRHP Permit Stock Sectors
+                            'sectors' => [
                                 'type' => 'Segment',
                                 'options' => [
                                     'route' => 'stocks/:stockId/sectors[/:action][/:id][/]',
@@ -559,11 +564,13 @@ return [
                                 ],
                                 'may_terminate' => true,
                             ],
-                            'permit-jurisdiction' => [
+                            // IRHP Permit Stock Devolved Administrations
+                            'jurisdiction' => [
                                 'type' => 'Segment',
                                 'options' => [
                                     'route' => 'stocks/:stockId/jurisdiction[/:action][/:id][/]',
                                     'constraints' => [
+                                        'stockId' => '[0-9\,]+',
                                         'id' => '[0-9\,]+',
                                         'action' => '(index|add|edit|delete)'
                                     ],
@@ -574,7 +581,8 @@ return [
                                 ],
                                 'may_terminate' => true,
                             ],
-                            'permit-scoring' => [
+                            // Permit Scoring
+                            'scoring' => [
                                 'type' => 'Segment',
                                 'options' => [
                                     'route' => 'stocks/:stockId/scoring[/:action][/]',

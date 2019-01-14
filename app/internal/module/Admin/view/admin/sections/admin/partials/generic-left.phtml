@@ -7,11 +7,13 @@ if (isset($navigation)): ?>
 endif;
 
 /*
- * If we have a stock ID then we are in a drilled-down state for a Permit Stock as so we need to render a custom
+ * If we have a stock ID then we are in a drilled-down state for a Permit Stock and so we need to render a custom
  * vertical naviagtion partial.
  */
 if (isset($stockId)) {
-    $this->navigation($navigation)->setParams(['stockId' => $stockId]);
+    foreach ($this->navigation($navigation)->getPages() as $page) {
+        $page->setParams(['stockId' => $stockId]);
+    }
 
     echo $this->navigation($navigation)
         ->menu()

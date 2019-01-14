@@ -8,25 +8,6 @@
             continue;
         }
 
-        // Only add the Stock ID parameter if it exists on the parent and $page is not the Permit System Settings page.
-        if (array_key_exists('stockId', $page->parent->params)) {
-            if (strpos($page->id, 'permits-system-settings') === false) {
-                $route = explode('/', $page->route);
-                $matchedRoute = explode('/', $page->routeMatch->getMatchedRouteName());
-                $page->setParams(['stockId' => $page->parent->params['stockId']]);
-
-                // Set the page to active if the navigation is printing the current route.
-                if ($matchedRoute[count($matchedRoute) - 1] === $route[count($route) - 1]) {
-                    $page->active = true;
-                }
-            }
-
-            if (strpos($page->route, 'stocks') >= 0) {
-                // Ensure that the Permit System Settings page is set correctly.
-                $page->route = $page->id;
-            }
-        }
-
         $isActive = $page->isActive(true);
         $isVisible = $page->isVisible(true);
 
