@@ -7,6 +7,7 @@ use Common\Form\Form;
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Query\Licence\GoodsDiscCount;
+use Dvsa\Olcs\Transfer\Query\Licence\PsvDiscCount;
 use Olcs\Form\Model\Form\Surrender\CurrentDiscs\CurrentDiscs;
 
 class CurrentDiscsController extends AbstractSurrenderController
@@ -72,9 +73,14 @@ class CurrentDiscsController extends AbstractSurrenderController
 
     protected function getNumberOfDiscs(): int
     {
-        $response = $this->handleQuery(
-            GoodsDiscCount::create(['id' => (int)$this->params('licence')])
-        );
+
+        if ($this->licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $query = GoodsDiscCount::create(['id' => (int)$this->params('licence')]);
+        } else {
+            $query = PsvDiscCount::create(['id' => (int)$this->params('licence')]);
+        }
+
+        $response = $this->handleQuery($query);
         $result = $response->getResult();
         return $result['discCount'];
     }
