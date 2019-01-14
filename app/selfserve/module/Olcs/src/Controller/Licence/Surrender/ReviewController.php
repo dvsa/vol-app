@@ -45,7 +45,7 @@ class ReviewController extends AbstractSurrenderController
         /** @var TranslationHelperService $translator */
         $translator = $this->getServiceLocator()->get('Helper\Translation');
         return [
-            'title' => 'TEMPORARY page for completeion in OLCS-22260',
+            'title' => 'TEMPORARY page for completion in OLCS-22260',
             'licNo' => $this->licence['licNo'],
             'backLink' => $this->getBackLink('lva-licence'),
             'sections' => ReviewDetails::makeSections($this->licence, $this->url(), $translator),

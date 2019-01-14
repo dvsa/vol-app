@@ -40,7 +40,7 @@ class CommunityLicenceController extends AbstractSurrenderController
             'licence' => [
                 'key' => 'isInternationalLicence',
                 'value' => true,
-                'route' => 'licence/surrender/review'
+                'route' => 'licence/surrender/review/GET'
             ]
         ]
     ];
@@ -59,7 +59,7 @@ class CommunityLicenceController extends AbstractSurrenderController
         if ($validForm) {
             $data = Mapper::mapFromForm($formData);
             if ($this->updateSurrender(RefData::SURRENDER_STATUS_COMM_LIC_DOCS_COMPLETE, $data)) {
-                $routeName = 'licence/surrender/review';
+                $routeName = 'licence/surrender/review/GET';
                 $this->nextStep($routeName);
             }
         }
