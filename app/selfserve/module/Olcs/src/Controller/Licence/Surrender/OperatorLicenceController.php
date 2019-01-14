@@ -43,7 +43,7 @@ class OperatorLicenceController extends AbstractSurrenderController
         if ($validForm) {
             $data = Mapper::mapFromForm($formData);
             if ($this->updateSurrender(RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE, $data)) {
-                $routeName = 'licence/surrender/review';
+                $routeName = 'licence/surrender/review/GET';
                 if ($this->data['licence']['isInternationalLicence']) {
                     $routeName = 'licence/surrender/community-licence/GET';
                 }
