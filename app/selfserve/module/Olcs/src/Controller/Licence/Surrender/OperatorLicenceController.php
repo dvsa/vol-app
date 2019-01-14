@@ -9,6 +9,8 @@ use Olcs\Form\Model\Form\Surrender\OperatorLicence;
 
 class OperatorLicenceController extends AbstractSurrenderController
 {
+    use ReviewRedirect;
+
     protected $formConfig = [
         'default' => [
             'operator-licence' => [
@@ -43,8 +45,8 @@ class OperatorLicenceController extends AbstractSurrenderController
         if ($validForm) {
             $data = Mapper::mapFromForm($formData);
             if ($this->updateSurrender(RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE, $data)) {
-                $routeName = 'licence/surrender/review';
-                if ($this->data['licence']['isInternationalLicence']) {
+                $routeName = 'licence/surrender/review/GET';
+                if ($this->data['licence']['isInternationalLicence'] && $this->data['fromReview'] === false) {
                     $routeName = 'licence/surrender/community-licence/GET';
                 }
                 $this->nextStep($routeName);

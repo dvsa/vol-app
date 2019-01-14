@@ -1,26 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: shaunhare
- * Date: 2019-01-02
- * Time: 14:41
- */
 
 namespace Olcs\Form\Model\Form\Surrender;
 
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("community-licence")
+ * @Form\Name("surrender-review")
  * @Form\Type("\Common\Form\Form")
  */
-class CommunityLicence
+class Review
 {
-    /**
-     * @Form\ComposedObject("Olcs\Form\Model\Form\Surrender\Fieldset\CommunityLicenceDocument")
-     */
-    public $communityLicenceDocument = null;
-
     /**
      * @Form\Name("form-actions")
      * @Form\ComposedObject("Common\Form\Model\Fieldset\SaveButton")

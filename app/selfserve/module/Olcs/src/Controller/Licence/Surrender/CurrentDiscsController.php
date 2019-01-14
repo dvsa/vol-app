@@ -7,10 +7,12 @@ use Common\Form\Form;
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Query\Licence\GoodsDiscCount;
+use Dvsa\Olcs\Transfer\Query\Licence\PsvDiscCount;
 use Olcs\Form\Model\Form\Surrender\CurrentDiscs\CurrentDiscs;
 
 class CurrentDiscsController extends AbstractSurrenderController
 {
+    use ReviewRedirect;
     /**
      * @var Form
      */
@@ -19,7 +21,6 @@ class CurrentDiscsController extends AbstractSurrenderController
     public function indexAction()
     {
         $surrender = $this->getSurrender();
-
         $this->form = $this->getForm(CurrentDiscs::class);
         $formData = CurrentDiscsMapper::mapFromResult($surrender);
         $this->form->setData($formData);
@@ -48,12 +49,11 @@ class CurrentDiscsController extends AbstractSurrenderController
 
         if ($validForm) {
             if ($this->updateDiscInfo($formData)) {
-                return $this->redirect()->toRoute(
-                    'licence/surrender/operator-licence/GET',
-                    [],
-                    [],
-                    true
-                );
+                $nextStep = 'licence/surrender/operator-licence/GET';
+                if ($this->data['fromReview']) {
+                    $nextStep = 'licence/surrender/review/GET';
+                }
+                return $this->nextStep($nextStep);
             }
         }
 
@@ -72,9 +72,14 @@ class CurrentDiscsController extends AbstractSurrenderController
 
     protected function getNumberOfDiscs(): int
     {
-        $response = $this->handleQuery(
-            GoodsDiscCount::create(['id' => (int)$this->params('licence')])
-        );
+
+        if ($this->licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $query = GoodsDiscCount::create(['id' => (int)$this->params('licence')]);
+        } else {
+            $query = PsvDiscCount::create(['id' => (int)$this->params('licence')]);
+        }
+
+        $response = $this->handleQuery($query);
         $result = $response->getResult();
         return $result['discCount'];
     }

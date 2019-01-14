@@ -26,17 +26,30 @@ class CommunityLicenceStolen
      *          "context_field": "communityLicenceDocument",
      *          "context_values": {"stolen"},
      *          "inject_post_data" : "communityLicence->communityLicenceDocument",
-     *          "validators": {
+     *           "validators": {
      *              {
      *                  "name": "StringLength",
      *                  "options": {
      *                      "min" : 0,
      *                      "max" : 500,
+     *                       "break_chain_on_failure": true,
+     *                       "messages" : {
+     *                          "stringLengthTooShort": "licence.surrender.community_licence_stolen.text_area.stringLengthTooShort",
+     *                          "stringLengthTooLong": "licence.surrender.community_licence_stolen.text_area.stringLengthTooLong",
+     *                          "stringLengthInvalid": "licence.surrender.community_licence_stolen.text_area.stringLengthTooShort",
+     *                      }
      *                  }
      *              },
-     *              {"name": "NotEmpty"}
-     *          }
-     *      }
+     *              {
+     *                 "name": "NotEmpty",
+     *                 "options":{
+     *                    "messages": {
+     *                          "isEmpty": "licence.surrender.community_licence_stolen.text_area.empty"
+     *                      }
+     *                 }
+     *              }
+     *          },
+     *     }
      * })
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Type("\Zend\Form\Element\Textarea")

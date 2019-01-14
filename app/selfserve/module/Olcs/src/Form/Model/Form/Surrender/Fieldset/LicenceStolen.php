@@ -23,18 +23,30 @@ class LicenceStolen
      * @Form\Validator({
      *     "name": "ValidateIf",
      *      "options":{
-     *          "context_field": "licenceDocument",
+     *          "context_field": "operatorLicenceDocument",
      *          "context_values": {"stolen"},
-     *          "inject_post_data" : "operatorLicenceDocument->licenceDocument",
+     *          "inject_post_data" : "operatorLicenceDocument->operatorLicenceDocument",
      *          "validators": {
      *              {
      *                  "name": "StringLength",
      *                  "options": {
      *                      "min" : 0,
      *                      "max" : 500,
+     *                      "messages" : {
+     *                          "stringLengthTooShort": "licence.surrender.operator_licence_stolen.text_area.stringLengthTooShort",
+     *                          "stringLengthTooLong": "licence.surrender.operator_licence_stolen.text_area.stringLengthTooLong",
+     *                          "stringLengthInvalid": "licence.surrender.operator_licence_stolen.text_area.stringLengthTooShort",
+     *                      }
      *                  }
      *              },
-     *              {"name": "NotEmpty"}
+     *              {
+     *                "name": "NotEmpty",
+     *                "options":{
+     *                "messages": {
+     *                          "isEmpty": "licence.surrender.operator_licence_stolen.text_area.empty"
+     *                         }
+     *                    }
+     *              }
      *          }
      *      }
      * })

@@ -23,20 +23,33 @@ class LicenceLost
      * @Form\Validator({
      *     "name": "ValidateIf",
      *      "options":{
-     *          "context_field": "licenceDocument",
+     *          "context_field": "operatorLicenceDocument",
      *          "context_values": {"lost"},
-     *          "inject_post_data" : "operatorLicenceDocument->licenceDocument",
+     *          "inject_post_data" : "operatorLicenceDocument->operatorLicenceDocument",
      *          "validators": {
      *              {
      *                  "name": "StringLength",
      *                  "options": {
      *                      "min" : 0,
      *                      "max" : 500,
+     *                      "break_chain_on_failure": true,
+     *                      "messages" : {
+     *                          "stringLengthTooShort": "licence.surrender.operator_licence_lost.text_area.stringLengthTooShort",
+     *                          "stringLengthTooLong": "licence.surrender.operator_licence_lost.text_area.stringLengthTooLong",
+     *                          "stringLengthInvalid": "licence.surrender.operator_licence_lost.text_area.stringLengthToShort",
+     *                      }
      *                  }
      *              },
-     *              {"name": "NotEmpty"}
-     *          }
-     *      }
+     *              {
+     *               "name": "NotEmpty",
+     *                 "options":{
+     *                "messages": {
+     *                          "isEmpty": "licence.surrender.operator_licence_lost.text_area.empty"
+     *                    }
+     *                }
+     *            }
+     *        }
+     *     }
      * })
      * @Form\Type("\Zend\Form\Element\Textarea")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})

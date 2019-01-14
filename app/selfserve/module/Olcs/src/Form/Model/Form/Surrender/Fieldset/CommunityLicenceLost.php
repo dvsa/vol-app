@@ -32,10 +32,24 @@ class CommunityLicenceLost
      *                  "options": {
      *                      "min" : 0,
      *                      "max" : 500,
+     *                       "break_chain_on_failure": true,
+     *                       "messages" : {
+     *                          "stringLengthTooShort": "licence.surrender.community_licence_lost.text_area.stringLengthTooShort",
+     *                          "stringLengthTooLong": "licence.surrender.community_licence_lost.text_area.stringLengthTooLong",
+     *                          "stringLengthInvalid": "licence.surrender.community_licence_lost.text_area.stringLengthTooShort",
+     *                      }
      *                  }
      *              },
-     *              {"name": "NotEmpty"}
-     *          }
+     *              {
+     *                 "name": "NotEmpty",
+     *                 "options":{
+     *                    "messages": {
+     *                          "isEmpty": "licence.surrender.community_licence_lost.text_area.empty"
+     *                      }
+     *                 }
+     *              }
+     *          },
+     *
      *      }
      * })
      * @Form\Type("\Zend\Form\Element\Textarea")
@@ -45,7 +59,8 @@ class CommunityLicenceLost
      *     "rows" : "5"
      * })
      * @Form\Options({
-     *     "hint": "licence.surrender.operator_licence_lost.text_area.hint"
+     *     "hint": "licence.surrender.operator_licence_lost.text_area.hint",
+     *
      * })
      */
     public $details = null;
