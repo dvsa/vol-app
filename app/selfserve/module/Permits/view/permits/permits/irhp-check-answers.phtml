@@ -1,0 +1,78 @@
+<?php echo $this->permitsBackLink('common.link.back.label','permits/application'); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <?php echo $this->formErrors($form); ?>
+        <span class="govuk-caption-xl">
+            <?php echo $this->escapeHtml($data['irhpApplication']['applicationRef']); ?>
+        </span>
+        <h1 class="govuk-heading-xl">
+            <?php echo $this->escapeHtml($this->translate($data['title'])); ?>
+        </h1>
+
+
+        <dl class="app-check-your-answers app-check-your-answers--long">
+            <div class="app-check-your-answers__contents">
+                <dt class="app-check-your-answers__question">
+                    <?php echo $this->escapeHtml($this->translate('Permit type')); ?>
+                </dt>
+                <dd class="app-check-your-answers__answer">
+                    <?php echo $data['irhpApplication']['irhpPermitType']['name']['description']; ?>
+                </dd>
+                <dd class="app-check-your-answers__change"> </dd>
+            </div>
+
+            <div class="app-check-your-answers__contents">
+                <dt class="app-check-your-answers__question">
+                    <?php echo $this->escapeHtml($this->translate('Licence selected')); ?>
+                </dt>
+                <dd class="app-check-your-answers__answer">
+                    <?php echo $data['irhpApplication']['licence']['licNo'] . '<br />('.$data['irhpApplication']['licence']['trafficArea']['name'] . ')'; ?>
+                </dd>
+                <dd class="app-check-your-answers__change">
+                    <?php echo $this->changeAnswerLink('permits/application/licence', $this->escapeHtml($this->translate('Change'))); ?>
+                </dd>
+            </div>
+
+            <div class="app-check-your-answers__contents">
+                <dt class="app-check-your-answers__question">
+                    <?php echo $this->escapeHtml($this->translate('Countries')); ?>
+                </dt>
+                <dd class="app-check-your-answers__answer">
+                    <?php
+                    foreach ($data['irhpApplication']['irhpPermitApplications'] as $application) {
+                        $countries[] = $application['irhpPermitWindow']['irhpPermitStock']['country']['countryDesc'];
+                    }
+                    echo implode(array_unique($countries), ', ');
+                    ?>
+                </dd>
+                <dd class="app-check-your-answers__change">
+                    <?php echo $this->changeAnswerLink('permits/application/countries', $this->escapeHtml($this->translate('Change'))); ?>
+                </dd>
+            </div>
+
+            <div class="app-check-your-answers__contents">
+                <dt class="app-check-your-answers__question">
+                    <?php echo $this->escapeHtml($this->translate('For each country how many permits do you require?')); ?>
+                </dt>
+                <dd class="app-check-your-answers__answer">
+                    <?php
+                    foreach ($data['irhpApplication']['irhpPermitApplications'] as $application) {
+                        echo $application['permitsRequired'] .
+                            ' permits for ' .
+                            $application['irhpPermitWindow']['irhpPermitStock']['country']['countryDesc'] .
+                            ' in ' .
+                            substr($application['irhpPermitWindow']['irhpPermitStock']['validTo'], 0, 4) .
+                            '<br />';
+                    }
+                    ?>
+                </dd>
+                <dd class="app-check-your-answers__change">
+                    <?php echo $this->changeAnswerLink('permits/application/no-of-permits', $this->escapeHtml($this->translate('Change'))); ?>
+                </dd>
+            </div>
+        </dl>
+
+        <?php echo $this->form($form); ?>
+        <?php echo $this->saveAndReturnLink('permits.button.save-return-to-overview','permits/application'); ?>
+    </div>
+</div>
