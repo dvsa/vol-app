@@ -1,4 +1,9 @@
-<?php echo $this->permitsBackLink('common.link.back.label','permits/application'); ?>
+<?php
+
+    use Permits\View\Helper\IrhpApplicationSection as Section;
+
+    echo $this->permitsBackLink('common.link.back.label', Section::ROUTE_APPLICATION_OVERVIEW);
+?>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <?php echo $this->formErrors($form); ?>
@@ -29,7 +34,7 @@
                     <?php echo $data['irhpApplication']['licence']['licNo'] . '<br />('.$data['irhpApplication']['licence']['trafficArea']['name'] . ')'; ?>
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <?php echo $this->changeAnswerLink('permits/application/licence', $this->escapeHtml($this->translate('Change'))); ?>
+                    <?php echo $this->changeAnswerLink(Section::ROUTE_LICENCE, $this->escapeHtml($this->translate('Change'))); ?>
                 </dd>
             </div>
 
@@ -46,7 +51,7 @@
                     ?>
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <?php echo $this->changeAnswerLink('permits/application/countries', $this->escapeHtml($this->translate('Change'))); ?>
+                    <?php echo $this->changeAnswerLink(Section::ROUTE_COUNTRIES, $this->escapeHtml($this->translate('Change'))); ?>
                 </dd>
             </div>
 
@@ -67,12 +72,12 @@
                     ?>
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <?php echo $this->changeAnswerLink('permits/application/no-of-permits', $this->escapeHtml($this->translate('Change'))); ?>
+                    <?php echo $this->changeAnswerLink(Section::ROUTE_NO_OF_PERMITS, $this->escapeHtml($this->translate('Change'))); ?>
                 </dd>
             </div>
         </dl>
 
         <?php echo $this->form($form); ?>
-        <?php echo $this->saveAndReturnLink('permits.button.save-return-to-overview','permits/application'); ?>
+        <?php echo $this->saveAndReturnLink('permits.button.save-return-to-overview', Section::ROUTE_APPLICATION_OVERVIEW); ?>
     </div>
 </div>
