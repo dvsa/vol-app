@@ -42,6 +42,13 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_APP_READY_FOR_NO_OF_PERMITS =  [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'isReadyForNoOfPermits',
+            'value' => true
+        ],
+    ];
+
     const PERMIT_APP_CONFIRM_CHANGE = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'isNotYetSubmitted',

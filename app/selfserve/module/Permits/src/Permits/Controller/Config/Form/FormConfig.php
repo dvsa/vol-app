@@ -5,9 +5,11 @@ namespace Permits\Controller\Config\Form;
 use Permits\Controller\Config\DataSource\AvailableTypes as AvailableTypesDataSource;
 use Permits\Controller\Config\DataSource\LicencesAvailable as LicencesAvailableDataSource;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitApplicationDataSource;
+use Permits\Controller\Config\DataSource\IrhpApplication as IrhpApplicationDataSource;
 use Permits\Data\Mapper\AvailableTypes as AvailableTypesMapper;
 use Permits\Data\Mapper\LicencesAvailable as LicencesAvailableMapper;
 use Permits\Data\Mapper\Sectors as SectorsMapper;
+use Permits\Data\Mapper\NoOfPermits as NoOfPermitsMapper;
 use Permits\Data\Mapper\ChangeLicence as ChangeLicenceMapper;
 
 /**
@@ -131,6 +133,17 @@ class FormConfig
     const FORM_DECLINE_PERMIT = [
         'decline' => [
             'formClass' => 'DeclineApplicationForm',
+        ],
+    ];
+
+    const FORM_NO_OF_PERMITS = [
+        'noOfPermits' => [
+            'formClass' => 'NoOfPermitsForm',
+            'dataSource' => IrhpApplicationDataSource::DATA_KEY,
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => NoOfPermitsMapper::class
+            ]
         ],
     ];
 }
