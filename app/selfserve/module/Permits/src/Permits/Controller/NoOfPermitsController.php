@@ -34,7 +34,7 @@ class NoOfPermitsController extends AbstractSelfserveController implements Toggl
     ];
 
     protected $templateVarsConfig = [
-        'question' => [
+        'default' => [
             'browserTitle' => 'permits.page.bilateral.no-of-permits.browser.title',
             'question' => 'permits.page.bilateral.no-of-permits.question',
             'additionalGuidance' => 'permits.page.bilateral.no-of-permits.additional-guidance',
