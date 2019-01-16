@@ -139,7 +139,6 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * @var array
      */
     protected $postConfig = [
-        'saveAndReturnStep' => EcmtSection::ROUTE_APPLICATION_OVERVIEW
     ];
 
     /**
@@ -272,10 +271,16 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                     }
                 }
 
+                if (isset($config['saveAndReturnStep'])) {
+                    $saveAndReturnStep = $config['saveAndReturnStep'];
+                } else {
+                    $saveAndReturnStep = EcmtSection::ROUTE_APPLICATION_OVERVIEW;
+                }
+
                 return $this->handleSaveAndReturnStep(
                     $this->postParams,
                     $config['step'],
-                    $config['saveAndReturnStep'],
+                    $saveAndReturnStep,
                     $this->redirectParams,
                     $this->redirectOptions
                 );
