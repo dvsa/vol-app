@@ -13,6 +13,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\GetList as ListDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Query\ContactDetail\CountrySelectList as CountrySelectListDTO;
 use Admin\Form\Model\Form\IrhpPermitStock as PermitStockForm;
 use Admin\Data\Mapper\IrhpPermitStock as PermitStockMapper;
 
@@ -41,6 +42,8 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
      */
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
+        'addAction' => ['forms/irhp-permit-stock-modal'],
+        'editAction' => ['forms/irhp-permit-stock-modal'],
     ];
 
     /*
@@ -100,5 +103,59 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
         $this->placeholder()->setPlaceholder('pageTitle', 'Permits');
 
         return parent::indexAction();
+    }
+
+    /**
+     * Setup required values for Add form
+     *
+     * @param $form
+     * @param $formData
+     * @return mixed
+     *
+     */
+    protected function alterFormForAdd($form, $formData)
+    {
+        return $this->retrieveEeaCountries($form);
+    }
+
+    /**
+     * Setup required values for Edit form
+     *
+     * @param $form
+     * @param $formData
+     * @return mixed
+     *
+     */
+    protected function alterFormForEdit($form, $formData)
+    {
+        return $this->retrieveEeaCountries($form);
+    }
+
+    /**
+     * Perform query to retrieve EEA country list for dropdown on add/edit
+     *
+     * @param $form
+     * @return mixed
+     */
+    protected function retrieveEeaCountries($form)
+    {
+        $response = $this->handleQuery(CountrySelectListDTO::create([
+            'isEeaState' => 1,
+        ]));
+
+        if ($response->isOk()) {
+            $data = $response->getResult();
+        } else {
+            $this->handleErrors($response->getResult());
+            $data['results'] = [];
+        }
+
+        $form->get('permitStockDetails')
+            ->get('country')
+            ->setValueOptions(
+                PermitStockMapper::mapCountryOptions($data['results'])
+            );
+
+        return $form;
     }
 }
