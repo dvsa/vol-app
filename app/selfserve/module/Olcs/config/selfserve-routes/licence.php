@@ -1,6 +1,7 @@
 <?php
 
 use Olcs\Controller\Licence\Surrender\DestroyController;
+use Olcs\Controller\Licence\Surrender\InformationChangedController;
 use Olcs\Controller\Licence\Surrender\PrintSignReturnController;
 use Olcs\Controller\Licence\Surrender\ReviewContactDetailsController;
 use Olcs\Controller\Licence\Surrender\StartController;
@@ -292,6 +293,26 @@ return [
                                         'defaults' => [
                                             'controller' => PrintSignReturnController::class,
                                             'action' => 'print',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'information-changed' => [
+                            'may_terminate' => false,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'information-changed[/]'
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'controller' => InformationChangedController::class,
+                                            'action' => 'index',
                                         ],
                                     ],
                                 ],
