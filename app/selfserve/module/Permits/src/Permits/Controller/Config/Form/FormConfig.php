@@ -146,4 +146,11 @@ class FormConfig
             ]
         ],
     ];
+    const FORM_IRHP_CHECK_ANSWERS = [
+        'checkAnswers' => [
+            'formClass' => 'CheckAnswersForm',
+            'dataSource' => IrhpApplicationDataSource::DATA_KEY,
+        ],
+    ];
+
 }
