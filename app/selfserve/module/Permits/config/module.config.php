@@ -19,6 +19,7 @@ use Permits\Controller\SubmittedController;
 use Permits\Controller\PermitsController;
 use Permits\Controller\TypeController;
 use Permits\Controller\IrhpApplicationController;
+use Permits\Controller\NoOfPermitsController;
 
 return [
   'controllers' => [
@@ -41,6 +42,7 @@ return [
         CancelApplicationController::class => CancelApplicationController::class,
         WithdrawApplicationController::class => WithdrawApplicationController::class,
         IrhpApplicationController::class => IrhpApplicationController::class,
+        NoOfPermitsController::class => NoOfPermitsController::class,
     ],
   ],
   'router' => [
@@ -88,6 +90,10 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'no-of-permits[/]',
+                              'defaults' => [
+                                  'controller'    => NoOfPermitsController::class,
+                                  'action'        => 'question',
+                              ],
                           ],
                           'may_terminate' => false,
                       ],
