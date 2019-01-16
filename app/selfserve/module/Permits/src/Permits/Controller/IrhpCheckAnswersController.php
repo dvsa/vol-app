@@ -2,7 +2,7 @@
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
-use Dvsa\Olcs\Transfer\Command\IrhpApplication\Update;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCheckAnswers;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
@@ -44,10 +44,9 @@ class IrhpCheckAnswersController extends AbstractSelfserveController implements 
     protected $postConfig = [
         'default' => [
             'retrieveData' => true,
-            'checkConditionalDisplay' => false,
-            'command' => Update::class,
+            'checkConditionalDisplay' => true,
+            'command' => UpdateCheckAnswers::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
-            'defaultParams' => ['checkedAnswers' => 1],
             'step' => IrhpApplicationSection::ROUTE_DECLARATION,
         ],
     ];
