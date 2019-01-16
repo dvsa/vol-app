@@ -23,7 +23,7 @@
                     <?php echo $this->escapeHtml($this->translate('permits.page.fee.permit.type')); ?>
                 </dt>
                 <dd class="app-check-your-answers__answer">
-                    <?php echo $data['irhpApplication']['irhpPermitType']['name']['description']; ?>
+                    <?php echo $this->escapeHtml($this->translate($data['irhpApplication']['irhpPermitType']['name']['description'])); ?>
                 </dd>
                 <dd class="app-check-your-answers__change"> </dd>
             </div>
@@ -33,7 +33,7 @@
                     <?php echo $this->escapeHtml($this->translate('permits.check-answers.page.question.licence')); ?>
                 </dt>
                 <dd class="app-check-your-answers__answer">
-                    <?php echo $data['irhpApplication']['licence']['licNo'] . '<br />(' . $this->escapeHtml($this->translate($data['irhpApplication']['licence']['trafficArea']['name'])) . ')'; ?>
+                    <?php echo $this->escapeHtml($data['irhpApplication']['licence']['licNo']) . '<br />(' . $this->escapeHtml($this->translate($data['irhpApplication']['licence']['trafficArea']['name'])) . ')'; ?>
                 </dd>
                 <dd class="app-check-your-answers__change">
                     <?php echo $this->changeAnswerLink(Section::ROUTE_LICENCE, $this->escapeHtml($this->translate('common.link.change.label'))); ?>
@@ -70,7 +70,7 @@
                              [
                                 $application['permitsRequired'],
                                 $this->escapeHtml($this->translate($application['irhpPermitWindow']['irhpPermitStock']['country']['countryDesc'])),
-                                substr($application['irhpPermitWindow']['irhpPermitStock']['validTo'], 0, 4)
+                                date('Y', strtotime($application['irhpPermitWindow']['irhpPermitStock']['validTo']))
                              ]
                         ) . '<br />';
                     }
