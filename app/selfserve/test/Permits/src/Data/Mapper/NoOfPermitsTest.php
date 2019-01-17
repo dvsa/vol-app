@@ -30,7 +30,7 @@ class NoOfPermitsTest extends TestCase
             ->andReturn($translatedGuidanceText);
 
         $data = [
-            'irhpApplication' => [
+            'application' => [
                 'irhpPermitType' => [
                     'id' => 4
                 ],
@@ -195,7 +195,7 @@ class NoOfPermitsTest extends TestCase
         $this->expectExceptionMessage('Permit type 3 is not supported by this mapper');
 
         $data = [
-            'irhpApplication' => [
+            'application' => [
                 'irhpPermitType' => [
                     'id' => 3
                 ]
