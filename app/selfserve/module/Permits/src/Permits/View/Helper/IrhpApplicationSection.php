@@ -22,6 +22,7 @@ class IrhpApplicationSection extends AbstractHelper
     const ROUTE_CHECK_ANSWERS = 'permits/application/check-answers';
     const ROUTE_DECLARATION = 'permits/application/declaration';
     const ROUTE_FEE = 'permits/application/fee';
+    const ROUTE_SUBMITTED = 'permits/application/submitted';
 
     const ROUTE_CANCEL_APPLICATION = 'permits/application/cancel';
     const ROUTE_CANCEL_CONFIRMATION = self::ROUTE_CANCEL_APPLICATION . '/confirmation';

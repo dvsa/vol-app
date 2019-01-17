@@ -106,6 +106,13 @@ class FormConfig
         ],
     ];
 
+    const FORM_IRHP_DECLARATION = [
+        'declaration' => [
+            'formClass' => 'DeclarationForm',
+            'dataSource' => IrhpApplicationDataSource::DATA_KEY,
+        ],
+    ];
+
     const FORM_FEE = [
         'fee' => [
             'formClass' => 'FeesForm',

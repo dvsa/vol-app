@@ -1,6 +1,7 @@
 <?php
 namespace Permits;
 
+use Permits\Controller\IrhpApplicationDeclarationController;
 use Permits\Controller\CancelApplicationController;
 use Permits\Controller\ConfirmChangeController;
 use Permits\Controller\EmissionsController;
@@ -44,6 +45,7 @@ return [
         WithdrawApplicationController::class => WithdrawApplicationController::class,
         IrhpApplicationController::class => IrhpApplicationController::class,
         NoOfPermitsController::class => NoOfPermitsController::class,
+        IrhpApplicationDeclarationController::class => IrhpApplicationDeclarationController::class,
         IrhpCheckAnswersController::class => IrhpCheckAnswersController::class,
 
     ],
@@ -115,6 +117,10 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'declaration[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpApplicationDeclarationController::class,
+                                  'action'        => 'question',
+                              ],
                           ],
                           'may_terminate' => false,
                       ],
@@ -122,6 +128,13 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'fee[/]',
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'submitted' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'submitted[/]',
                           ],
                           'may_terminate' => false,
                       ],
