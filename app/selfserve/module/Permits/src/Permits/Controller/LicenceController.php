@@ -91,10 +91,8 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
         } else {
             if (isset($config['params'])) {
                 if ($config['params'] === ParamsConfig::CONFIRM_CHANGE) {
-                    $this->redirectOptions = [
-                        'query' => [
-                            'licence' => $params['licence']
-                        ]
+                    $this->redirectParams = [
+                        'licence' => $params['licence']
                     ];
                 }
             }

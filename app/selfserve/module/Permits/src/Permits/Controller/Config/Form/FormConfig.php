@@ -58,7 +58,7 @@ class FormConfig
     const FORM_CONFIRM_CHANGE_LICENCE = [
         'licence' => [
             'formClass' => 'ChangeLicenceForm',
-            'dataParam' => 'licence',
+            'dataRouteParam' => 'licence',
             'dataSource' => LicencesAvailableDataSource::DATA_KEY,
             'mapper' => [
                 'type' => self::FORM_OPTIONS,
