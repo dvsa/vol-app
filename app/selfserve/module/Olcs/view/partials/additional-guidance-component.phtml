@@ -1,3 +1,11 @@
 <p>
-    <?php echo $this->escapeHtml($this->translate($this->additionalGuidance)); ?>
+    <?php
+
+    if (is_array($this->additionalGuidance) && isset($this->additionalGuidance['disableHtmlEscape']) && ($this->additionalGuidance['disableHtmlEscape'] === true)) {
+        echo $this->translate($this->additionalGuidance['value']);
+    } else {
+        echo $this->escapeHtml($this->translate($this->additionalGuidance));
+    }
+
+    ?>
 </p>
