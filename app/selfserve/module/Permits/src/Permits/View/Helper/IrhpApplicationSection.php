@@ -37,12 +37,6 @@ class IrhpApplicationSection extends AbstractHelper
         self::ROUTE_LICENCE => 'licence',
         self::ROUTE_COUNTRIES => 'countries',
         self::ROUTE_NO_OF_PERMITS => 'permitsRequired',
-    ];
-
-    /**
-     * list of overview routes that are used for confirmation
-     */
-    const CONFIRMATION_ROUTE_ORDER = [
         self::ROUTE_CHECK_ANSWERS => 'checkedAnswers',
         self::ROUTE_DECLARATION => 'declaration',
     ];
@@ -87,116 +81,11 @@ class IrhpApplicationSection extends AbstractHelper
         $sections = [];
         $appId = $application['id'];
 
-        foreach (self::ROUTE_ORDER as $route => $testedField) {
-            $sections[] = $this->createSection($route, $application['sectionCompletion'][$testedField], $appId);
-        }
-
-        if (!$application['sectionCompletion']['allCompleted']) {
-            return $this->addDisabledConfirmationSections($sections, $appId);
-        }
-
-        if (!$application['hasCheckedAnswers']) {
-            return $this->checkAnswersNotStarted($sections, $appId);
-        }
-
-        return $this->checkAnswersCompleted($sections, $appId, $application['hasMadeDeclaration']);
-    }
-
-    /**
-     * confirmation sections if check answers is available but hasn't been started
-     *
-     * @param array $sections existing sections
-     * @param int   $appId    app id
-     *
-     * @return array
-     */
-    private function checkAnswersNotStarted(array $sections, int $appId): array
-    {
-        $sections[] = $this->notStartedSection(self::ROUTE_CHECK_ANSWERS, $appId);
-        $sections[] = $this->cannotStartSection(self::ROUTE_DECLARATION, $appId);
-
-        return $sections;
-    }
-
-    /**
-     * confirmation sections if check answers already completed
-     *
-     * @param array $sections          existing sections
-     * @param int   $appId             app id
-     * @param bool $hasMadeDeclaration whether declaration has been made
-     *
-     * @return array
-     */
-    private function checkAnswersCompleted(array $sections, int $appId, bool $hasMadeDeclaration): array
-    {
-        $sections[] = $this->completedSection(self::ROUTE_CHECK_ANSWERS, $appId);
-
-        if ($hasMadeDeclaration) {
-            $sections[] = $this->completedSection(self::ROUTE_DECLARATION, $appId);
-
-            return $sections;
-        }
-
-        $sections[] = $this->notStartedSection(self::ROUTE_DECLARATION, $appId);
-
-        return $sections;
-    }
-
-    /**
-     * create disabled confirmation sections
-     *
-     * @param array $sections existing sections
-     * @param int   $appId    app id
-     *
-     * @return array
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     */
-    private function addDisabledConfirmationSections(array $sections, int $appId): array
-    {
-        foreach (self::CONFIRMATION_ROUTE_ORDER as $route => $testedField) {
-            $sections[] = $this->cannotStartSection($route, $appId);
+        foreach (self::ROUTE_ORDER as $route => $field) {
+            $sections[] = $this->createSection($route, $application['sectionCompletion'][$field], $appId);
         }
 
         return $sections;
-    }
-
-    /**
-     * Create a section that cannot be started
-     *
-     * @param string $route route
-     * @param int    $appId application id
-     *
-     * @return ViewModel
-     */
-    private function cannotStartSection(string $route, int $appId): ViewModel
-    {
-        return $this->createSection($route, self::SECTION_COMPLETION_CANNOT_START, $appId);
-    }
-
-    /**
-     * Create a section that isn't started but can be
-     *
-     * @param string $route route
-     * @param int    $appId application id
-     *
-     * @return ViewModel
-     */
-    private function notStartedSection(string $route, int $appId): ViewModel
-    {
-        return $this->createSection($route, self::SECTION_COMPLETION_NOT_STARTED, $appId);
-    }
-
-    /**
-     * Create a completed section
-     *
-     * @param string $route route
-     * @param int    $appId application id
-     *
-     * @return ViewModel
-     */
-    private function completedSection(string $route, int $appId): ViewModel
-    {
-        return $this->createSection($route, self::SECTION_COMPLETION_COMPLETED, $appId);
     }
 
     /**

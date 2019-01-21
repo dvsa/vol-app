@@ -19,6 +19,8 @@ use Permits\Controller\SubmittedController;
 use Permits\Controller\PermitsController;
 use Permits\Controller\TypeController;
 use Permits\Controller\IrhpApplicationController;
+use Permits\Controller\NoOfPermitsController;
+use Permits\Controller\IrhpCheckAnswersController;
 
 return [
   'controllers' => [
@@ -41,6 +43,9 @@ return [
         CancelApplicationController::class => CancelApplicationController::class,
         WithdrawApplicationController::class => WithdrawApplicationController::class,
         IrhpApplicationController::class => IrhpApplicationController::class,
+        NoOfPermitsController::class => NoOfPermitsController::class,
+        IrhpCheckAnswersController::class => IrhpCheckAnswersController::class,
+
     ],
   ],
   'router' => [
@@ -88,6 +93,10 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'no-of-permits[/]',
+                              'defaults' => [
+                                  'controller'    => NoOfPermitsController::class,
+                                  'action'        => 'question',
+                              ],
                           ],
                           'may_terminate' => false,
                       ],
@@ -95,6 +104,10 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'check-answers[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpCheckAnswersController::class,
+                                  'action'        => 'generic',
+                              ],
                           ],
                           'may_terminate' => false,
                       ],
@@ -527,13 +540,14 @@ return [
               'change-licence' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/change-licence[/]',
+                      'route'    => '/:id/change-licence[/[:licence]]',
                       'defaults' => [
                           'controller'    => ConfirmChangeController::class,
                           'action'        => 'question',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
+                          'licence' => '[0-9]+'
                       ],
                   ],
                   'may_terminate' => true,
@@ -899,7 +913,6 @@ return [
             'changeAnswerLink' => \Permits\View\Helper\ChangeAnswerLink::class,
             'ecmtLicenceData' => \Permits\View\Helper\EcmtLicenceData::class,
             'underConsiderationLink' => \Permits\View\Helper\UnderConsiderationLink::class,
-
         ],
     ],
   'view_manager' => [

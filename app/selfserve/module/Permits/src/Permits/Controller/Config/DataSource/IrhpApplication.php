@@ -10,6 +10,6 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class IrhpApplication extends AbstractDataSource
 {
-    const DATA_KEY = 'irhpApplication';
+    const DATA_KEY = 'application';
     protected $dto = IrhpApplicationDto::class;
 }

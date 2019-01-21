@@ -138,7 +138,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      *
      * @var array
      */
-    protected $postConfig = [];
+    protected $postConfig = [
+    ];
 
     /**
      * Redirect parameters
@@ -270,7 +271,19 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                     }
                 }
 
-                return $this->handleSaveAndReturnStep($this->postParams, $config['step'], $this->redirectParams, $this->redirectOptions);
+                if (isset($config['saveAndReturnStep'])) {
+                    $saveAndReturnStep = $config['saveAndReturnStep'];
+                } else {
+                    $saveAndReturnStep = EcmtSection::ROUTE_APPLICATION_OVERVIEW;
+                }
+
+                return $this->handleSaveAndReturnStep(
+                    $this->postParams,
+                    $config['step'],
+                    $saveAndReturnStep,
+                    $this->redirectParams,
+                    $this->redirectOptions
+                );
             }
         }
     }
@@ -364,6 +377,10 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
             if (isset($config['dataParam'])) {
                 $this->data[$config['dataParam']] = $this->params()->fromQuery($config['dataParam']);
+            }
+
+            if (isset($config['dataRouteParam'])) {
+                $this->data[$config['dataRouteParam']] = $this->params()->fromRoute($config['dataRouteParam']);
             }
 
             if (isset($config['mapper']['type'])) {
@@ -542,20 +559,28 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * for wider selfserve use. Permits needs to start using VOL standard buttons before this can be truly reusable
      *
      * @param array $submittedData - an array of the data submitted by the form
-     * @param string $nextStep - the EcmtSection:: route to be taken if the form was submitted normally
-     *
+     * @param string $nextStep - the route to be taken if the form was submitted normally
+     * @param string $saveAndReturnStep - the route to be taken is the form was submitted using save and return
      * @param array $params
      * @param array $options
      * @return HttpResponse
      */
-    protected function handleSaveAndReturnStep(array $submittedData, string $nextStep, array $params = [], array $options = []): HttpResponse
-    {
+    protected function handleSaveAndReturnStep(
+        array $submittedData,
+        string $nextStep,
+        $saveAndReturnStep = EcmtSection::ROUTE_APPLICATION_OVERVIEW,
+        array $params = [],
+        array $options = []
+    ): HttpResponse {
         if (array_key_exists('SubmitButton', $submittedData['Submit'])) {
-            //Form was submitted normally so continue on chosen path
-            return $this->nextStep($nextStep, $params, $options);
+            // Form was submitted normally so continue on chosen path
+            $step = $nextStep;
+        } else {
+            // A button other than the primary submit button was clicked so return to overview
+            $step = $saveAndReturnStep;
         }
-        //A button other than the primary submit button was clicked so return to overview
-        return $this->nextStep(EcmtSection::ROUTE_APPLICATION_OVERVIEW, $params, $options);
+
+        return $this->nextStep($step, $params, $options);
     }
 
     /**
