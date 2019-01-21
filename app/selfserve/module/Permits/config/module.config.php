@@ -540,13 +540,14 @@ return [
               'change-licence' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/change-licence[/]',
+                      'route'    => '/:id/change-licence[/[:licence]]',
                       'defaults' => [
                           'controller'    => ConfirmChangeController::class,
                           'action'        => 'question',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
+                          'licence' => '[0-9]+'
                       ],
                   ],
                   'may_terminate' => true,

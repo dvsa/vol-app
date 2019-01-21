@@ -379,6 +379,10 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 $this->data[$config['dataParam']] = $this->params()->fromQuery($config['dataParam']);
             }
 
+            if (isset($config['dataRouteParam'])) {
+                $this->data[$config['dataRouteParam']] = $this->params()->fromRoute($config['dataRouteParam']);
+            }
+
             if (isset($config['mapper']['type'])) {
                 $this->data = call_user_func_array([$mapperClass, $config['mapper']['type']], [$this->data, $form, $this->getServiceLocator()->get('Helper\Translation')]);
             } elseif (isset($config['dataSource'])) {
