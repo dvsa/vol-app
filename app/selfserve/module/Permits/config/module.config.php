@@ -20,6 +20,7 @@ use Permits\Controller\PermitsController;
 use Permits\Controller\TypeController;
 use Permits\Controller\IrhpApplicationController;
 use Permits\Controller\NoOfPermitsController;
+use Permits\Controller\IrhpCheckAnswersController;
 
 return [
   'controllers' => [
@@ -43,6 +44,8 @@ return [
         WithdrawApplicationController::class => WithdrawApplicationController::class,
         IrhpApplicationController::class => IrhpApplicationController::class,
         NoOfPermitsController::class => NoOfPermitsController::class,
+        IrhpCheckAnswersController::class => IrhpCheckAnswersController::class,
+
     ],
   ],
   'router' => [
@@ -101,6 +104,10 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'check-answers[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpCheckAnswersController::class,
+                                  'action'        => 'generic',
+                              ],
                           ],
                           'may_terminate' => false,
                       ],
@@ -905,7 +912,6 @@ return [
             'changeAnswerLink' => \Permits\View\Helper\ChangeAnswerLink::class,
             'ecmtLicenceData' => \Permits\View\Helper\EcmtLicenceData::class,
             'underConsiderationLink' => \Permits\View\Helper\UnderConsiderationLink::class,
-
         ],
     ],
   'view_manager' => [
