@@ -110,4 +110,9 @@ class DataSourceConfig
     const IRHP_APP = [
         IrhpAppDataSource::class => [],
     ];
+
+    const IRHP_APP_COUNTRIES = [
+        IrhpAppDataSource::class => [],
+        AvailableCountries::class => [],
+    ];
 }

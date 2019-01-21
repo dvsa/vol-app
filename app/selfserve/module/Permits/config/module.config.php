@@ -20,6 +20,7 @@ use Permits\Controller\SubmittedController;
 use Permits\Controller\PermitsController;
 use Permits\Controller\TypeController;
 use Permits\Controller\IrhpApplicationController;
+use Permits\Controller\IrhpApplicationCountryController;
 use Permits\Controller\NoOfPermitsController;
 use Permits\Controller\IrhpCheckAnswersController;
 use Permits\Controller\CancelIrhpApplicationController;
@@ -45,6 +46,7 @@ return [
         CancelApplicationController::class => CancelApplicationController::class,
         WithdrawApplicationController::class => WithdrawApplicationController::class,
         IrhpApplicationController::class => IrhpApplicationController::class,
+        IrhpApplicationCountryController::class => IrhpApplicationCountryController::class,
         NoOfPermitsController::class => NoOfPermitsController::class,
         IrhpApplicationDeclarationController::class => IrhpApplicationDeclarationController::class,
         IrhpCheckAnswersController::class => IrhpCheckAnswersController::class,
@@ -109,6 +111,10 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'countries[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpApplicationCountryController::class,
+                                  'action'        => 'question',
+                              ],
                           ],
                           'may_terminate' => false,
                       ],

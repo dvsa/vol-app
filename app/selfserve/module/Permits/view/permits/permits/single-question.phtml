@@ -25,6 +25,9 @@
              if (isset($data['additionalGuidance'])) {
                  echo $this->partial('partials/additional-guidance-component', ['additionalGuidance' => $data['additionalGuidance']]);
              }
+             if (isset($data['hint'])) {
+                 echo $this->partial('partials/hint', ['hint' => $data['hint']]);
+             }
              if (isset($data['bulletList'])) { ?>
                 <p class="govuk-body-l">
                     <?php echo $this->escapeHtml($this->translate($data['bulletList']['title'])); ?>:
