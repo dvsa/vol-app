@@ -50,5 +50,4 @@ class IrhpCheckAnswersController extends AbstractSelfserveController implements 
             'step' => IrhpApplicationSection::ROUTE_DECLARATION,
         ],
     ];
-
 }
