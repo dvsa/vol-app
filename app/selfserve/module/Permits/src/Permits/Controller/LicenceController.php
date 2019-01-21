@@ -83,6 +83,16 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
     ];
 
     /**
+     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
+    public function genericAction()
+    {
+        $this->data['irhpApplication']['ecmt'] = false;
+
+        return parent::genericAction();
+    }
+
+    /**
      * @return \Zend\View\Model\ViewModel
      */
     public function addAction()
@@ -95,7 +105,15 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
      */
     public function ecmtAction()
     {
-        return $this->questionAction();
+        if (isset($this->data['application'])) {
+            $this->data['irhpApplication'] = $this->data['application'];
+
+            $this->data['irhpApplication']['ecmt'] = true;
+
+            unset($this->data['application']);
+        }
+
+        return $this->genericAction();
     }
 
     /**
