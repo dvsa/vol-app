@@ -10,7 +10,7 @@
     <div class="govuk-grid-column-two-thirds">
         <?php echo $this->formErrors($form); ?>
         <span class="govuk-caption-xl">
-            <?php echo $this->escapeHtml($data['irhpApplication']['applicationRef']); ?>
+            <?php echo $this->escapeHtml($data['application']['applicationRef']); ?>
         </span>
         <h1 class="govuk-heading-xl">
             <?php echo $this->escapeHtml($this->translate($data['title'])); ?>
@@ -23,7 +23,7 @@
                     <?php echo $this->escapeHtml($this->translate('permits.page.fee.permit.type')); ?>
                 </dt>
                 <dd class="app-check-your-answers__answer">
-                    <?php echo $this->escapeHtml($this->translate($data['irhpApplication']['irhpPermitType']['name']['description'])); ?>
+                    <?php echo $this->escapeHtml($this->translate($data['application']['irhpPermitType']['name']['description'])); ?>
                 </dd>
                 <dd class="app-check-your-answers__change"> </dd>
             </div>
@@ -33,7 +33,7 @@
                     <?php echo $this->escapeHtml($this->translate('permits.check-answers.page.question.licence')); ?>
                 </dt>
                 <dd class="app-check-your-answers__answer">
-                    <?php echo $this->escapeHtml($data['irhpApplication']['licence']['licNo']) . '<br />(' . $this->escapeHtml($this->translate($data['irhpApplication']['licence']['trafficArea']['name'])) . ')'; ?>
+                    <?php echo $this->escapeHtml($data['application']['licence']['licNo']) . '<br />(' . $this->escapeHtml($this->translate($data['application']['licence']['trafficArea']['name'])) . ')'; ?>
                 </dd>
                 <dd class="app-check-your-answers__change">
                     <?php echo $this->changeAnswerLink(Section::ROUTE_LICENCE, $this->escapeHtml($this->translate('common.link.change.label'))); ?>
@@ -46,7 +46,7 @@
                 </dt>
                 <dd class="app-check-your-answers__answer">
                     <?php
-                    foreach ($data['irhpApplication']['irhpPermitApplications'] as $application) {
+                    foreach ($data['application']['irhpPermitApplications'] as $application) {
                         $countries[] = $this->escapeHtml($this->translate($application['irhpPermitWindow']['irhpPermitStock']['country']['countryDesc']));
                     }
                     echo implode(array_unique($countries), ', ');
@@ -63,7 +63,7 @@
                 </dt>
                 <dd class="app-check-your-answers__answer">
                     <?php
-                    foreach ($data['irhpApplication']['irhpPermitApplications'] as $application) {
+                    foreach ($data['application']['irhpPermitApplications'] as $application) {
 
                         echo $translationHelper->translateReplace(
                             'permits.irhp.application.answers.no-of-permits',
