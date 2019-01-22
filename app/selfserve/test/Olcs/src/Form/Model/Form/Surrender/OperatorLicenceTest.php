@@ -15,7 +15,7 @@ class OperatorLicenceTest extends AbstractFormValidationTestCase
 
     public function testLicenceDocument()
     {
-        $element = ['operatorLicenceDocument', 'licenceDocument'];
+        $element = ['operatorLicenceDocument', 'operatorLicenceDocument'];
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementType($element, Radio::class);
         $validValues = ['possession', 'lost', 'stolen'];
@@ -52,7 +52,7 @@ class OperatorLicenceTest extends AbstractFormValidationTestCase
 
         $data = [
             'operatorLicenceDocument' => [
-                'licenceDocument' => 'lost',
+                'operatorLicenceDocument' => 'lost',
                 'lostContent' => ['details' => str_repeat('acbd ', 100)]
             ]
         ];
@@ -74,7 +74,7 @@ class OperatorLicenceTest extends AbstractFormValidationTestCase
 
         $data = [
             'operatorLicenceDocument' => [
-                'licenceDocument' => 'lost',
+                'operatorLicenceDocument' => 'lost',
                 'lostContent' => ['details' => $string]
             ]
         ];
@@ -117,7 +117,7 @@ class OperatorLicenceTest extends AbstractFormValidationTestCase
 
         $data = [
             'operatorLicenceDocument' => [
-                'licenceDocument' => 'stolen',
+                'operatorLicenceDocument' => 'stolen',
                 'stolenContent' => ['details' => str_repeat('acbd ', 100)]
             ]
         ];
@@ -136,7 +136,7 @@ class OperatorLicenceTest extends AbstractFormValidationTestCase
 
         $data = [
             'operatorLicenceDocument' => [
-                'licenceDocument' => 'stolen',
+                'operatorLicenceDocument' => 'stolen',
                 'stolenContent' => ['details' => str_repeat('acbd ', 101)]
             ]
         ];

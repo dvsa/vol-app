@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @Form\Type("\Common\Form\Elements\Types\RadioVertical")
  * @Form\Name("operator-licence-document")
  * @Form\Options({
- *     "radio-element": "licenceDocument"
+ *     "radio-element": "operatorLicenceDocument"
  * })
  */
 class OperatorLicenceDocument
@@ -42,7 +42,7 @@ class OperatorLicenceDocument
      * })
      * @Form\Type("\Common\Form\Elements\Types\Radio")
      */
-    public $licenceDocument = null;
+    public $operatorLicenceDocument = null;
 
     /**
      * @Form\ComposedObject("\Olcs\Form\Model\Form\Surrender\Fieldset\LicenceInPossession")

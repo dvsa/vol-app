@@ -12,6 +12,7 @@ use Olcs\Form\Model\Form\Surrender\CurrentDiscs\CurrentDiscs;
 
 class CurrentDiscsController extends AbstractSurrenderController
 {
+    use ReviewRedirect;
     /**
      * @var Form
      */
@@ -20,7 +21,6 @@ class CurrentDiscsController extends AbstractSurrenderController
     public function indexAction()
     {
         $surrender = $this->getSurrender();
-
         $this->form = $this->getForm(CurrentDiscs::class);
         $formData = CurrentDiscsMapper::mapFromResult($surrender);
         $this->form->setData($formData);
@@ -49,12 +49,11 @@ class CurrentDiscsController extends AbstractSurrenderController
 
         if ($validForm) {
             if ($this->updateDiscInfo($formData)) {
-                return $this->redirect()->toRoute(
-                    'licence/surrender/operator-licence/GET',
-                    [],
-                    [],
-                    true
-                );
+                $nextStep = 'licence/surrender/operator-licence/GET';
+                if ($this->data['fromReview']) {
+                    $nextStep = 'licence/surrender/review/GET';
+                }
+                return $this->nextStep($nextStep);
             }
         }
 

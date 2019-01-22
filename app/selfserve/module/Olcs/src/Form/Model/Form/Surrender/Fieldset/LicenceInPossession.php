@@ -15,9 +15,9 @@ class LicenceInPossession
      * @Form\Validator({
      *     "name": "ValidateIf",
      *      "options":{
-     *          "context_field": "licenceDocument",
+     *          "context_field": "operatorLicenceDocument",
      *          "context_values": {"possession"},
-     *          "inject_post_data" : "operatorLicenceDocument->licenceDocument",
+     *          "inject_post_data" : "operatorLicenceDocument->operatorLicenceDocument",
      *          "validators": {
      *              {"name": "NotEmpty"}
      *          }

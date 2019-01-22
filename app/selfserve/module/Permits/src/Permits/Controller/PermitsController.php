@@ -1,4 +1,5 @@
 <?php
+
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
@@ -384,9 +385,14 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $form->get('Fields')->get('permitsRequired')->setOption('hint', $totalVehicles);
 
         $ecmtPermitFees = $this->getEcmtPermitFees();
-        $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
+        $ecmtApplicationFee = $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
 
-        return array('form' => $form, 'id' => $id, 'ecmtApplicationFee' => $ecmtApplicationFee, 'ref' => $application['applicationRef']);
+        return array(
+            'form' => $form,
+            'id' => $id,
+            'ecmtApplicationFee' => $ecmtApplicationFee,
+            'ref' => $application['applicationRef']
+        );
     }
 
     public function ecmtGuidanceAction()
@@ -397,7 +403,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
         // Get Fee Data
         $ecmtPermitFees = $this->getEcmtPermitFees();
-        $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
+        $ecmtApplicationFee = $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
         $ecmtIssuingFee = $ecmtPermitFees['fee'][$this::ECMT_ISSUING_FEE_PRODUCT_REFENCE]['fixedValue'];
 
         $view = new ViewModel();
@@ -426,43 +432,43 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         }
 
         $ecmtPermitFees = $this->getEcmtPermitFees();
-        $ecmtApplicationFee =  $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
+        $ecmtApplicationFee = $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
         $ecmtApplicationFeeTotal = $ecmtApplicationFee * $application['permitsRequired'];
 
         /**
          * @todo status view helper and table config shouldn't be in the controller
          * @var \Common\View\Helper\Status $statusHelper
          */
-         $statusHelper = $this->getServiceLocator()->get('ViewHelperManager')->get('status');
+        $statusHelper = $this->getServiceLocator()->get('ViewHelperManager')->get('status');
 
-         $tableData = array(
-             'results' => array(
-                 0 => array(
-                     'applicationDetailsTitle' => 'permits.page.ecmt.consideration.application.status',
-                     'applicationDetailsAnswer' => $statusHelper->__invoke($application['status'])
-                 ),
-                 1 => array(
-                     'applicationDetailsTitle' => 'permits.page.ecmt.consideration.permit.type',
-                     'applicationDetailsAnswer' => $application['permitType']['description']
-                 ),
-                 2 => array(
-                     'applicationDetailsTitle' => 'permits.page.ecmt.consideration.reference.number',
-                     'applicationDetailsAnswer' => $application['applicationRef']
-                 ),
-                 3 => array(
-                     'applicationDetailsTitle' => 'permits.page.ecmt.consideration.application.date',
-                     'applicationDetailsAnswer' => date(\DATE_FORMAT, strtotime($application['dateReceived']))
-                 ),
-                 4 => array(
-                     'applicationDetailsTitle' => 'permits.page.ecmt.consideration.permits.required',
-                     'applicationDetailsAnswer' => $application['permitsRequired']
-                 ),
-                 5 => array(
-                     'applicationDetailsTitle' => 'permits.page.ecmt.consideration.application.fee',
-                     'applicationDetailsAnswer' => '£' . $ecmtApplicationFeeTotal
-                 )
-             )
-         );
+        $tableData = array(
+            'results' => array(
+                0 => array(
+                    'applicationDetailsTitle' => 'permits.page.ecmt.consideration.application.status',
+                    'applicationDetailsAnswer' => $statusHelper->__invoke($application['status'])
+                ),
+                1 => array(
+                    'applicationDetailsTitle' => 'permits.page.ecmt.consideration.permit.type',
+                    'applicationDetailsAnswer' => $application['permitType']['description']
+                ),
+                2 => array(
+                    'applicationDetailsTitle' => 'permits.page.ecmt.consideration.reference.number',
+                    'applicationDetailsAnswer' => $application['applicationRef']
+                ),
+                3 => array(
+                    'applicationDetailsTitle' => 'permits.page.ecmt.consideration.application.date',
+                    'applicationDetailsAnswer' => date(\DATE_FORMAT, strtotime($application['dateReceived']))
+                ),
+                4 => array(
+                    'applicationDetailsTitle' => 'permits.page.ecmt.consideration.permits.required',
+                    'applicationDetailsAnswer' => $application['permitsRequired']
+                ),
+                5 => array(
+                    'applicationDetailsTitle' => 'permits.page.ecmt.consideration.application.fee',
+                    'applicationDetailsAnswer' => '£' . $ecmtApplicationFeeTotal
+                )
+            )
+        );
 
         /** @var \Common\Service\Table\TableBuilder $table */
         $table = $this->getServiceLocator()
@@ -488,7 +494,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $dtoData = [
             'cpmsRedirectUrl' => $redirectUrl,
             'ecmtPermitApplicationId' => $id,
-            'paymentMethod' =>  RefData::FEE_PAYMENT_METHOD_CARD_ONLINE
+            'paymentMethod' => RefData::FEE_PAYMENT_METHOD_CARD_ONLINE
         ];
         $dto = PayOutstandingFees::create($dtoData);
         $response = $this->handleCommand($dto);
@@ -574,7 +580,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     private function referredFromGovUkPermits(MvcEvent $e): bool
     {
         /**
-         * @var HttpRequest $request
+         * @var HttpRequest      $request
          * @var HttpReferer|bool $referer
          */
         $request = $e->getRequest();
@@ -591,11 +597,12 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
      * Returns an application entry by id
      *
      * @param number $id application id
+     *
      * @return array
      */
     private function getApplication($id)
     {
-        $query = ById::create(['id'=>$id]);
+        $query = ById::create(['id' => $id]);
         $response = $this->handleQuery($query);
 
         return $response->getResult();

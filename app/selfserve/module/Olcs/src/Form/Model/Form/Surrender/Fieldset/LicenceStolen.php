@@ -23,9 +23,9 @@ class LicenceStolen
      * @Form\Validator({
      *     "name": "ValidateIf",
      *      "options":{
-     *          "context_field": "licenceDocument",
+     *          "context_field": "operatorLicenceDocument",
      *          "context_values": {"stolen"},
-     *          "inject_post_data" : "operatorLicenceDocument->licenceDocument",
+     *          "inject_post_data" : "operatorLicenceDocument->operatorLicenceDocument",
      *          "validators": {
      *              {
      *                  "name": "StringLength",
