@@ -78,7 +78,7 @@ class ConditionalDisplayConfig
 
     const IRHP_APP_CAN_MAKE_DECLARATION = [
         IrhpAppDataSource::DATA_KEY => [
-            'key' => 'hasCheckedAnswers',
+            'key' => 'canMakeDeclaration',
             'value' => true
         ],
     ];
