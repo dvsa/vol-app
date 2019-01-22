@@ -21,20 +21,24 @@ class ChangeLicence
     public static function validateData(array $allData): bool
     {
         $data = $allData[LicencesAvailableDataSource::DATA_KEY];
-        $data['licence'] = $allData['licence'];
+
+        // Get type from application data
+        $isEcmt = isset($allData['application']['permitType']);
+        $isBilateral = $isEcmt ? false : $allData['application']['irhpPermitType']['name']['id'] === 'permit_annual_bilateral';
+
 
         if (!$data['hasAvailableLicences']) {
             throw new BadRequestException('No available licences.');
         }
 
-        $selectedLicenceEligible = array_search($data['licence'], array_column($data['eligibleLicences']['result'], 'id'));
+        $selectedLicenceEligible = array_search($allData['licence'], array_column($data['eligibleLicences']['result'], 'id'));
 
         if ($selectedLicenceEligible === false) {
             throw new BadRequestException('User does not own selected licence.');
-        } else if (isset($allData['application']) && !$data['eligibleLicences']['result'][$selectedLicenceEligible]['canMakeEcmtApplication']) {
+        } else if ($isEcmt && !$data['eligibleLicences']['result'][$selectedLicenceEligible]['canMakeEcmtApplication']) {
             throw new BadRequestException('Selected licence already has an active application.');
-//        } else if (isset($allData['irhpApplication']) && !$data['eligibleLicences']['result'][$selectedLicenceEligible]['canMakeIrhpApplication']) {
-//            throw new BadRequestException('Selected licence already has an active application.');
+        } else if ($isBilateral && !$data['eligibleLicences']['result'][$selectedLicenceEligible]['canMakeBilateralApplication']) {
+            throw new BadRequestException('Selected licence already has an active application.');
         }
 
         return true;

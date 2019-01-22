@@ -91,10 +91,13 @@ return [
                               'change' => [
                                   'type'    => 'segment',
                                   'options' => [
-                                      'route'    => 'change[/]',
+                                      'route'    => 'change[/[:licence]]',
                                       'defaults' => [
                                           'controller'    => ConfirmChangeController::class,
                                           'action'        => 'question',
+                                      ],
+                                      'constraints' => [
+                                          'licence' => '[0-9]+',
                                       ],
                                   ],
                                   'may_terminate' => true,

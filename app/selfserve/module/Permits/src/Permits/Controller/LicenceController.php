@@ -34,7 +34,7 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
 
     protected $formConfig = [
         'add' => FormConfig::FORM_ADD_LICENCE,
-        'ecmt' => FormConfig::FORM_LICENCE,
+        'ecmt' => FormConfig::FORM_ECMT_LICENCE,
         'question' => FormConfig::FORM_LICENCE,
     ];
 
@@ -74,23 +74,13 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
             'params' => ParamsConfig::CONFIRM_CHANGE,
             'step' => IrhpApplicationSection::ROUTE_LICENCE_CONFIRM_CHANGE,
             'conditional' => [
-                'dataKey' => 'irhpApplication',
+                'dataKey' => 'application',
                 'value' => 'licence',
                 'step' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
                 'field' => ['licence', 'id'],
             ]
         ]
     ];
-
-    /**
-     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
-     */
-    public function genericAction()
-    {
-        $this->data['irhpApplication']['ecmt'] = false;
-
-        return parent::genericAction();
-    }
 
     /**
      * @return \Zend\View\Model\ViewModel
@@ -105,14 +95,6 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
      */
     public function ecmtAction()
     {
-        if (isset($this->data['application'])) {
-            $this->data['irhpApplication'] = $this->data['application'];
-
-            $this->data['irhpApplication']['ecmt'] = true;
-
-            unset($this->data['application']);
-        }
-
         return $this->genericAction();
     }
 

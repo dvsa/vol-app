@@ -76,6 +76,6 @@ class ConfirmChangeController extends AbstractSelfserveController implements Tog
      */
     public function ecmtAction()
     {
-        return $this->questionAction();
+        return $this->genericAction();
     }
 }

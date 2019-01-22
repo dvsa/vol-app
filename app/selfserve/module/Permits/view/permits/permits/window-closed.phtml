@@ -8,7 +8,7 @@
             'markup-permits-window-closed',
             [
                 $data['irhpPermitType']['name']['description'],
-                date('d F Y', strtotime($data['lastOpenWindow']['lastOpenWindow']['endDate']))
+                date('d F Y', strtotime($data['lastOpenWindow']['lastOpenWindow'][0]['endDate']))
             ]
         ); ?>
     </div>

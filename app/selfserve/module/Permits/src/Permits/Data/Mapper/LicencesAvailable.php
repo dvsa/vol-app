@@ -19,36 +19,33 @@ class LicencesAvailable
      * @param TranslationHelperService $translator
      * @return array
      */
-    public static function mapForFormOptions(array $data, $form, TranslationHelperService $translator)
+    public static function mapForFormOptions(array $data, $form)
     {
         $mapData = $data[LicencesAvailableDataSource::DATA_KEY];
-        $isNew = !isset($data['application']) && !isset($data['irhpApplication']);
-        $valueOptions = [];
-        $isEcmt = false;
+        $isNew = !isset($data['application']['licence']);
 
         if ($isNew) {
-            $isEcmt = $data['irhpPermitType']['name']['id'] == \Common\RefData::PERMIT_TYPE_ECMT;
+            $isEcmt = $data['irhpPermitType']['name']['id'] === 'permit_ecmt';
         } else {
-            if (isset($data['application'])) {
-                $isEcmt = true;
-                $application = $data['application'];
-            } else {
-                $application = $data['irhpApplication'];
-            }
+            // Get type from application data
+            $isEcmt = isset($data['application']['permitType']);
         }
 
+        $valueOptions = [];
+        $canMakeKey = $isEcmt ? 'canMakeEcmtApplication' : 'canMakeBilateralApplication';
+
         foreach ($mapData['eligibleLicences']['result'] as $key => $option) {
-            $selected = !$isNew ? $option['id'] === $application['licence']['id'] : false;
+            $selected = !$isNew ? $option['id'] === $data['application']['licence']['id'] : false;
+
+            if (!$option[$canMakeKey]) {
+                if ($isNew || $option['id'] !== $data['application']['licence']['id']) {
+                    continue;
+                } else {
+                    $selected = true;
+                }
+            }
 
             if ($isEcmt) {
-                if (!$option['canMakeEcmtApplication']) {
-                    if ($isNew || $option['id'] !== $application['licence']['id']) {
-                        continue;
-                    } else {
-                        $selected = true;
-                    }
-                }
-
                 if ($option['licenceType']['id'] === \Common\RefData::LICENCE_TYPE_RESTRICTED) {
                     $valueOptions[$option['id']][$option['id'].'Content'] = 'en_GB/markup-ecmt-restricted-licence-conditional';
                     $content = new HtmlTranslated($option['id'] . 'Content');
