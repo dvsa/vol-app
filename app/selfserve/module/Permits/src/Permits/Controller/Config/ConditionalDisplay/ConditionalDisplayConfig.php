@@ -76,6 +76,13 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_APP_CAN_MAKE_DECLARATION = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'canMakeDeclaration',
+            'value' => true
+        ],
+    ];
+
     const PERMIT_APP_CAN_DECLINE = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'canBeDeclined',
