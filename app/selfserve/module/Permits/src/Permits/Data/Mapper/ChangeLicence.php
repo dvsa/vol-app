@@ -35,9 +35,9 @@ class ChangeLicence
 
         if ($selectedLicenceEligible === false) {
             throw new BadRequestException('User does not own selected licence.');
-        } else if ($isEcmt && !$data['eligibleLicences']['result'][$selectedLicenceEligible]['canMakeEcmtApplication']) {
+        } elseif ($isEcmt && !$data['eligibleLicences']['result'][$selectedLicenceEligible]['canMakeEcmtApplication']) {
             throw new BadRequestException('Selected licence already has an active application.');
-        } else if ($isBilateral && !$data['eligibleLicences']['result'][$selectedLicenceEligible]['canMakeBilateralApplication']) {
+        } elseif ($isBilateral && !$data['eligibleLicences']['result'][$selectedLicenceEligible]['canMakeBilateralApplication']) {
             throw new BadRequestException('Selected licence already has an active application.');
         }
 

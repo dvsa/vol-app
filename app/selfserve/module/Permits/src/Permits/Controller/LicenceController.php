@@ -43,14 +43,20 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
     ];
 
     protected $templateVarsConfig = [
-        'default' => [
-            'browserTitle' => 'permits.page.licence.browser.title',
-            'question' => 'permits.page.licence.question',
-        ],
         'add' => [
             'browserTitle' => 'permits.page.licence.browser.title',
             'question' => 'permits.page.licence.question',
             'backUri' => EcmtSection::ROUTE_TYPE
+        ],
+        'ecmt' => [
+            'browserTitle' => 'permits.page.licence.browser.title',
+            'question' => 'permits.page.licence.question',
+            'backUri' => EcmtSection::ROUTE_APPLICATION_OVERVIEW
+        ],
+        'question' => [
+            'browserTitle' => 'permits.page.licence.browser.title',
+            'question' => 'permits.page.licence.question',
+            'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW
         ],
     ];
 

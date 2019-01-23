@@ -50,7 +50,7 @@ class TypeController extends AbstractSelfserveController implements ToggleAwareI
      * @param array $config
      * @param array $params
      */
-    public function handlePostCommand(array $config, array $params)
+    public function handlePostCommand(array &$config, array $params)
     {
         $this->redirectParams = [
             'type' => $params['type']
