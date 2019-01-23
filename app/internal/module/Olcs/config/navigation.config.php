@@ -732,6 +732,19 @@ $nav = [
                             ],
                         ],
                         [
+                            'id' => 'licence_surrender',
+                            'label' => 'Surrender',
+                            'route' => 'licence/fees',
+                            'use_route_match' => true,
+                            'pages' => [
+                                [
+                                    'id' => 'licence_surrender_details',
+                                    'label' => 'Surrender details',
+                                    'route' => 'licence/fees/fee_action',
+                                ]
+                            ],
+                        ],
+                        [
                             'id' => 'irhp_permits',
                             'label' => '',
                             'route' => 'licence/permits',
