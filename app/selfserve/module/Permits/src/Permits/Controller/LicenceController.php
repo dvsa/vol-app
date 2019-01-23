@@ -118,12 +118,13 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
             $response = $this->handleCommand($command);
             $responseDump = $this->handleResponse($response);
             if ($config['params'] === ParamsConfig::NEW_APPLICATION) {
+                $field = 'irhpApplication';
+
                 if (isset($responseDump['id']['ecmtPermitApplication'])) {
                     $field = 'ecmtPermitApplication';
                     $config['step'] = EcmtSection::ROUTE_APPLICATION_OVERVIEW;
-                } else {
-                    $field = 'irhpApplication';
                 }
+
                 $this->redirectParams = ['id' => $responseDump['id'][$field]];
             }
         } else {
