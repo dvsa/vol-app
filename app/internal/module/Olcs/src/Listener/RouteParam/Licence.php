@@ -473,6 +473,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     private function isDigitalSurrender(array $licence)
     {
             $licenceStatus = RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION;
+            if ()
             return $licence;
     }
 }
