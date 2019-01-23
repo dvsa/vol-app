@@ -32,7 +32,7 @@ class Sectors
                 'value' => $option['id'],
                 'label' => $option['name'],
                 'hint' => $option['description'],
-                'label_attributes' => 'govuk-label govuk-radios__label govuk-label--s',
+                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
                 'selected' => $selected
             ];
         }

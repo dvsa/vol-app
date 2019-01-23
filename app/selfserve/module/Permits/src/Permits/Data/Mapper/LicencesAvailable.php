@@ -39,7 +39,7 @@ class LicencesAvailable
             $valueOptions[$option['id']] = [
                 'value' => $option['id'],
                 'label' => $option['licNo'],
-                'label_attributes' => 'govuk-label govuk-radios__label govuk-label--s',
+                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
                 'hint' => $option['licenceType']['description'] . ' (' . $option['trafficArea'] . ')',
                 'selected' => $selected,
                 $option['id'].'Content' => 'en_GB/markup-ecmt-restricted-licence-conditional'

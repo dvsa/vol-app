@@ -27,7 +27,7 @@ class AvailableTypes
             $valueOptions[] = [
                 'value' => $option['id'],
                 'label' => $option['name']['description'],
-                'label_attributes' => 'govuk-label govuk-radios__label govuk-label--s',
+                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
                 'hint' => $option['description'],
             ];
         }
