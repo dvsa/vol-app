@@ -69,6 +69,20 @@ class DeclarationController extends AbstractSurrenderController
             ),
             'form' => $this->form,
             'backLink' => $this->getBackLink('lva-licence'),
+            'bottomLink' => $this->getBottomLinkRouteAndText()['bottomLinkRoute'],
+            'bottomText' => $this->getBottomLinkRouteAndText()['bottomLinkText']
         ];
+    }
+
+    private function getBottomLinkRouteAndText()
+    {
+        if ($this->getSurrender()['disableSignatures'] === false) {
+            return [
+                'bottomLinkRoute' => $this->url()->fromRoute('licence/surrender/print-sign-return/GET', [], [], true),
+                'bottomLinkText' => 'lva.section.title.transport-manager-application.print-sign'
+            ];
+        }
+
+        return null;
     }
 }
