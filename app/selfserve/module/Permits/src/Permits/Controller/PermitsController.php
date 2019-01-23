@@ -14,6 +14,7 @@ use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
 use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetList as IrhpApplication;
 
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCountries;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitsRequired;
@@ -72,7 +73,13 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             return $view;
         }
 
-        $query = EcmtPermitApplication::create(
+        // Get IRHP Applications
+        $response = $this->handleQuery(IrhpApplication::create(['order' => 'DESC']));
+        $data = $response->getResult();
+        $results = isset($data['results']) ? $data['results'] : [];
+
+        // Include ECMT Permit Applications
+        $ecmtQuery = EcmtPermitApplication::create(
             [
                 'order' => 'DESC',
                 'organisation' => $this->getCurrentOrganisationId(),
@@ -86,12 +93,16 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 ],
             ]
         );
-        $response = $this->handleQuery($query);
-        $data = $response->getResult();
+        $ecmtResponse = $this->handleQuery($ecmtQuery);
+        $ecmtData = $ecmtResponse->getResult();
+        $results = array_merge(
+            isset($data['results']) ? $data['results'] : [],
+            $ecmtData['results']
+        );
 
         $applicationData = $issuedData = [];
 
-        foreach ($data['results'] as $item) {
+        foreach ($results as $item) {
             if ($item['status']['id'] === RefData::PERMIT_APP_STATUS_VALID) {
                 $issuedData[] = $item;
             } else {

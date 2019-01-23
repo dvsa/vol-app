@@ -17,12 +17,17 @@ return array(
     array(
       'title' => 'dashboard-table-permit-application-num',
       'name' => 'permitsRequired',
-       'formatter' => 'NullableNumber'
+      'formatter' => 'NullableNumber'
     ),
     array(
       'title' => 'dashboard-table-permit-application-type',
-      'name' => 'permitType',
-      'formatter' => 'RefData'
+      'name' => 'type',
+      'formatter' => function ($row) {
+        // TODO: Remove ternary when ECMT permits are removed.
+        return isset($row['irhpPermitType']) ?
+          $row['irhpPermitType']['name']['description'] :
+          $row['permitType']['description'];
+      }
     ),
     array(
       'title' => 'dashboard-table-permit-application-status',
