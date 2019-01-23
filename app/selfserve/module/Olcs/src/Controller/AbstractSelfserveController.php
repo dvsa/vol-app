@@ -138,8 +138,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      *
      * @var array
      */
-    protected $postConfig = [
-    ];
+    protected $postConfig = [];
 
     /**
      * Redirect parameters
@@ -747,7 +746,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * @param array $config
      * @param array $params
      */
-    protected function handlePostCommand(array $config, array $params)
+    protected function handlePostCommand(array &$config, array $params)
     {
         if (isset($config['command'])) {
             $command = $config['command']::create($params);

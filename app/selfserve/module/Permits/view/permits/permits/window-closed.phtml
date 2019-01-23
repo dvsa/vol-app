@@ -1,27 +1,15 @@
-<?php
-    $this->headTitle($this->translate('permits.application.window-closed.title'));
-
-    $lastOpenWindowDate = \DateTime::createFromFormat(
-        'Y-m-d',
-        substr($data['lastOpenWindow']['results']['endDate'], 0, 10)
-    );
-
-    $markup = sprintf(
-        $this->translate('markup-ecmt-window-closed'),
-        $this->dateFormat(
-            $lastOpenWindowDate,
-            \IntlDateFormatter::LONG,
-            \IntlDateFormatter::NONE
-        )
-    );
-
-?>
 <?php echo $this->permitsBackLink('common.link.back.label', 'permits'); ?>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">
             <?php echo $this->escapeHtml($this->translate('permits.application.window-closed')); ?>
         </h1>
-        <?php echo($markup); ?>
+        <?php echo $this->translateReplace(
+            'markup-permits-window-closed',
+            [
+                $data['irhpPermitType']['name']['description'],
+                date('d F Y', strtotime($data['lastOpenWindow']['lastOpenWindow']['endDate']))
+            ]
+        ); ?>
     </div>
 </div>

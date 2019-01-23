@@ -47,6 +47,17 @@ class FormConfig
     const FORM_LICENCE = [
         'licence' => [
             'formClass' => 'LicenceForm',
+            'dataSource' => IrhpApplicationDataSource::DATA_KEY,
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => LicencesAvailableMapper::class
+            ]
+        ],
+    ];
+
+    const FORM_ECMT_LICENCE = [
+        'licence' => [
+            'formClass' => 'LicenceForm',
             'dataSource' => PermitApplicationDataSource::DATA_KEY,
             'mapper' => [
                 'type' => self::FORM_OPTIONS,

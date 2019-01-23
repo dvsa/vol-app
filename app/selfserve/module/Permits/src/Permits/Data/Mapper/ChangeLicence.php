@@ -21,17 +21,23 @@ class ChangeLicence
     public static function validateData(array $allData): bool
     {
         $data = $allData[LicencesAvailableDataSource::DATA_KEY];
-        $data['licence'] = $allData['licence'];
+
+        // Get type from application data
+        $isEcmt = isset($allData['application']['permitType']);
+        $isBilateral = $isEcmt ? false : $allData['application']['irhpPermitType']['name']['id'] === 'permit_annual_bilateral';
+
 
         if (!$data['hasAvailableLicences']) {
             throw new BadRequestException('No available licences.');
         }
 
-        $selectedLicenceEligible = array_search($data['licence'], array_column($data['eligibleEcmtLicences']['result'], 'id'));
+        $selectedLicenceEligible = array_search($allData['licence'], array_column($data['eligibleLicences']['result'], 'id'));
 
         if ($selectedLicenceEligible === false) {
             throw new BadRequestException('User does not own selected licence.');
-        } else if (!$data['eligibleEcmtLicences']['result'][$selectedLicenceEligible]['canMakeEcmtApplication']) {
+        } elseif ($isEcmt && !$data['eligibleLicences']['result'][$selectedLicenceEligible]['canMakeEcmtApplication']) {
+            throw new BadRequestException('Selected licence already has an active application.');
+        } elseif ($isBilateral && !$data['eligibleLicences']['result'][$selectedLicenceEligible]['canMakeBilateralApplication']) {
             throw new BadRequestException('Selected licence already has an active application.');
         }
 
@@ -53,12 +59,12 @@ class ChangeLicence
 
             $selectedLicenceEligible = array_search(
                 $data['licence'],
-                array_column($mapData['eligibleEcmtLicences']['result'], 'id')
+                array_column($mapData['eligibleLicences']['result'], 'id')
             );
 
             $confirmChangeLabel = $translator->translateReplace(
                 'permits.form.change_licence.label',
-                [$mapData['eligibleEcmtLicences']['result'][$selectedLicenceEligible]['licNo']]
+                [$mapData['eligibleLicences']['result'][$selectedLicenceEligible]['licNo']]
             );
 
             $form->get('fields')->get('ConfirmChange')->setLabel(
